@@ -1,0 +1,21 @@
+[
+  {
+    "modid": "hbm",
+    "name": "HBM's Nuclear Tech Mod",
+    "description": "A mod that adds all kinds of nukes and other things",
+    "version": "${version}",
+    "credits": "HBMMods, creator\nDrillgon200, 1.12.2 port",
+    "logoFile": "",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "HBMMods/The Bobcat"
+    ],
+    "parent": "",
+    "screenshots": [],
+    "dependencies": [
+      "mod_MinecraftForge"
+    ]
+  }
+]
