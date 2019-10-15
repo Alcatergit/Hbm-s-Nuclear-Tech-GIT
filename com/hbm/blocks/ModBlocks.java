@@ -13,8 +13,9 @@ public class ModBlocks {
 
 	public static List<Block> ALL_BLOCKS = new ArrayList<Block>();
 	
-	public static final Block fatduck = new BlockBase(Material.IRON, "fatduck");
+	//public static final Block fatduck = new BlockBase(Material.IRON, "fatduck");
 	public static final Block machine_press = new MachinePress(Material.ANVIL, "machine_press");
+	public static final int guiID_machine_press = 53;
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){

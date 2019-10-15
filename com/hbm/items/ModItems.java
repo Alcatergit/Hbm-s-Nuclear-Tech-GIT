@@ -7,10 +7,16 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.gear.AxeSchrabidium;
 import com.hbm.items.gear.HoeSchrabidium;
 import com.hbm.items.gear.ModAxe;
+import com.hbm.items.gear.ModHoe;
+import com.hbm.items.gear.ModPickaxe;
+import com.hbm.items.gear.ModSpade;
+import com.hbm.items.gear.ModSword;
 import com.hbm.items.gear.PickaxeSchrabidium;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.gear.SpadeSchrabidium;
 import com.hbm.items.gear.SwordSchrabidium;
+import com.hbm.items.special.ItemBlades;
+import com.hbm.items.special.ItemRadioactive;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -26,15 +32,83 @@ public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
+	//Materials
+	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium");
+	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy");
+	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword");
-	// Alloy tools
+	//Tools
+	public static final Item alloy_pickaxe = new ModPickaxe(MainRegistry.enumToolMaterialAlloy, "alloy_pickaxe");
 	public static final Item alloy_axe = new ModAxe(MainRegistry.enumToolMaterialAlloy, "alloy_axe");
-	//Schrab tools
+	public static final Item alloy_hoe = new ModHoe(MainRegistry.enumToolMaterialAlloy, "alloy_hoe");
+	public static final Item alloy_shovel = new ModSpade(MainRegistry.enumToolMaterialAlloy, "alloy_shovel");
+	public static final Item alloy_sword = new ModSword(MainRegistry.enumToolMaterialAlloy, "alloy_sword");
+	
 	public static final Item schrabidium_pickaxe = new PickaxeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_pickaxe");
 	public static final Item schrabidium_axe = new AxeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_axe");
 	public static final Item schrabidium_hoe = new HoeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_hoe");
 	public static final Item schrabidium_shovel = new SpadeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_shovel");
 	public static final Item schrabidium_sword = new SwordSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_sword");
+	
+	//Plates
+	public static final Item plate_iron = new ItemBase("plate_iron");
+	public static final Item plate_steel = new ItemBase("plate_steel");
+	public static final Item plate_gold = new ItemBase("plate_gold");
+	public static final Item plate_lead = new ItemBase("plate_lead");
+	public static final Item plate_copper = new ItemBase("plate_copper");
+	public static final Item plate_advanced_alloy = new ItemBase("plate_advanced_alloy");
+	public static final Item plate_combine_steel = new ItemBase("plate_combine_steel");
+	public static final Item plate_mixed = new ItemBase("plate_mixed");
+	public static final Item plate_paa = new ItemBase("plate_paa");
+	public static final Item plate_dalekanium = new ItemBase("plate_dalekanium");
+	public static final Item plate_euphemium = new ItemBase("plate_euphemium");
+	public static final Item plate_polymer = new ItemBase("plate_polymer");
+	public static final Item plate_kevlar = new ItemBase("plate_kevlar");
+	public static final Item plate_dineutronium = new ItemBase("plate_dineutronium");
+	public static final Item plate_desh = new ItemBase("plate_desh");
+	public static final Item plate_saturnite = new ItemBase("plate_saturnite");
+	public static final Item plate_titanium = new ItemBase("plate_titanium");
+	public static final Item plate_aluminium = new ItemBase("plate_aluminium");
+	public static final Item plate_schrabidium = new ItemBase("plate_schrabidium");
+	
+	//Stamps
+	public static final Item stamp_stone_flat = new ItemBlades("stamp_stone_flat", 5);
+	public static final Item stamp_stone_plate = new ItemBlades("stamp_stone_plate", 5);
+	public static final Item stamp_stone_wire = new ItemBlades("stamp_stone_wire", 5);
+	public static final Item stamp_stone_circuit = new ItemBlades("stamp_stone_circuit", 5);
+	public static final Item stamp_iron_flat = new ItemBlades("stamp_iron_flat", 25);
+	public static final Item stamp_iron_plate = new ItemBlades("stamp_iron_plate", 25);
+	public static final Item stamp_iron_wire = new ItemBlades("stamp_iron_wire", 25);
+	public static final Item stamp_iron_circuit = new ItemBlades("stamp_iron_circuit", 25);
+	public static final Item stamp_steel_flat = new ItemBlades("stamp_steel_flat", 50);
+	public static final Item stamp_steel_plate = new ItemBlades("stamp_steel_plate", 50);
+	public static final Item stamp_steel_wire = new ItemBlades("stamp_steel_wire", 50);
+	public static final Item stamp_steel_circuit = new ItemBlades("stamp_steel_circuit", 50);
+	public static final Item stamp_titanium_flat = new ItemBlades("stamp_titanium_flat", 65);
+	public static final Item stamp_titanium_plate = new ItemBlades("stamp_titanium_plate", 65);
+	public static final Item stamp_titanium_wire = new ItemBlades("stamp_titanium_wire", 65);
+	public static final Item stamp_titanium_circuit = new ItemBlades("stamp_titanium_circuit", 65);
+	public static final Item stamp_obsidian_flat = new ItemBlades("stamp_obsidian_flat", 100);
+	public static final Item stamp_obsidian_plate = new ItemBlades("stamp_obsidian_plate", 100);
+	public static final Item stamp_obsidian_wire = new ItemBlades("stamp_obsidian_wire", 100);
+	public static final Item stamp_obsidian_circuit = new ItemBlades("stamp_obsidian_circuit", 100);
+	public static final Item stamp_schrabidium_flat = new ItemBlades("stamp_schrabidium_flat", 1024);
+	public static final Item stamp_schrabidium_plate = new ItemBlades("stamp_schrabidium_plate", 1024);
+	public static final Item stamp_schrabidium_wire = new ItemBlades("stamp_schrabidium_wire", 1024);
+	public static final Item stamp_schrabidium_circuit = new ItemBlades("stamp_schrabidium_circuit", 1024);
+	public static final Item stamp_357 = new ItemBlades("stamp_357", 512);
+	public static final Item stamp_44 = new ItemBlades("stamp_44", 512);
+	public static final Item stamp_9 = new ItemBlades("stamp_9", 512);
+	public static final Item stamp_50 = new ItemBlades("stamp_50", 512);
+	
+	public static final Item blades_aluminum = new ItemBlades("blades_aluminum", 10);
+	public static final Item blades_gold = new ItemBlades("blades_gold", 25);
+	public static final Item blades_iron = new ItemBlades("blades_iron", 35);
+	public static final Item blades_steel = new ItemBlades("blades_steel", 50);
+	public static final Item blades_titanium = new ItemBlades("blades_titanium", 65);
+	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 85);
+	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 150);
+	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
 	
 	
 	

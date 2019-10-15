@@ -1,7 +1,9 @@
 package com.hbm.main;
 
+import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
@@ -21,6 +23,20 @@ public class CraftingManager {
 	}
 	
 	public static void addCrafting(){
+		//Tools
+		addShapedRecipe(new ItemStack(ModItems.schrabidium_pickaxe, 1), new Object[]{"SSS", " T ", " T ", 'S', ModItems.ingot_schrabidium, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.schrabidium_axe, 1), new Object[]{"SS ", "ST ", " T ", 'S', ModItems.ingot_schrabidium, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.schrabidium_hoe, 1), new Object[]{"SS ", " T ", " T ", 'S', ModItems.ingot_schrabidium, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.schrabidium_shovel, 1), new Object[]{" S ", " T ", " T ", 'S', ModItems.ingot_schrabidium, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.schrabidium_sword, 1), new Object[]{" S ", " S ", " T ", 'S', ModItems.ingot_schrabidium, 'T', Items.STICK});
+		
+		addShapedRecipe(new ItemStack(ModItems.alloy_pickaxe, 1), new Object[]{"SSS", " T ", " T ", 'S', ModItems.ingot_advanced_alloy, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.alloy_axe, 1), new Object[]{"SS ", "ST ", " T ", 'S', ModItems.ingot_advanced_alloy, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.alloy_hoe, 1), new Object[]{"SS ", " T ", " T ", 'S', ModItems.ingot_advanced_alloy, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.alloy_shovel, 1), new Object[]{" S ", " T ", " T ", 'S', ModItems.ingot_advanced_alloy, 'T', Items.STICK});
+		addShapedRecipe(new ItemStack(ModItems.alloy_sword, 1), new Object[]{" S ", " S ", " T ", 'S', ModItems.ingot_advanced_alloy, 'T', Items.STICK});
+		
+		
 		
 	}
 	

@@ -22,18 +22,31 @@ import net.minecraftforge.registries.GameData;
 
 public class TileEntityMachinePress extends TileEntity implements ISidedInventory, ITickable {
 	
-	private int progress = 0;
-	private int power = 0;
-	private int burnTime = 0;
+	public int progress = 0;
+	public int power = 0;
+	public int burnTime = 0;
 	public final static int maxProgress = 200;
 	public final static int maxPower = 700;
-	private int item;
-	private int meta;
+	public int maxBurn = 160;
+	public int item;
+	public int meta;
 	public boolean isRetracting = false;
 	
 	private NonNullList<ItemStack> slots = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
 	
 	private String customName;
+	
+	public int getPowerScaled(int i) {
+		return (power * i) / maxPower;
+	}
+	
+	public int getBurnScaled(int i) {
+		return (burnTime * i) / maxBurn;
+	}
+	
+	public int getProgressScaled(int i) {
+		return (progress * i) / maxProgress;
+	}
 	
 	public int getSizeInventory(){
 		return slots.size();
@@ -45,7 +58,7 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 
 	@Override
 	public String getName() {
-		return this.hasCustomName() ? this.customName : "container.furnace";
+		return this.hasCustomName() ? this.customName : "container.press";
 	}
 
 	@Override
@@ -122,6 +135,9 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 		return i == 2;
 	}
 
+	/**
+	 * 0 is progress, 1 is power, 2 is burn time, 3 is item, 4 is meta
+	 */
 	@Override
 	public int getField(int id) {
 		switch(id){
@@ -140,6 +156,9 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	}
 	}
 
+	/**
+	 * 0 is progress, 1 is power, 2 is burn time, 3 is item, 4 is meta
+	 */
 	@Override
 	public void setField(int id, int value) {	
 		switch(id){
