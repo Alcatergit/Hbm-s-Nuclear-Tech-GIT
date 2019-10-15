@@ -8,6 +8,7 @@ import com.hbm.handler.GuiHandler;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -75,6 +76,7 @@ public class MainRegistry {
     	MinecraftForge.EVENT_BUS.register(new ModEventHandler());
     	MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
+		PacketDispatcher.registerPackets();
 		
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
