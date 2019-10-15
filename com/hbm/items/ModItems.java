@@ -39,6 +39,14 @@ public class ModItems {
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal");
 	public static final Item biomass = new ItemBase("biomass");
+	public static final Item biomass_compressed = new ItemBase("biomass_compressed");
+	public static final Item briquette_lignite = new ItemBase("briquette_lignite");
+	public static final Item coke = new ItemBase("coke");
+	
+	//Powders
+	public static final Item powder_lignite = new ItemBase("powder_lignite");
+	public static final Item powder_coal = new ItemBase("powder_coal");
+	
 	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword");
 	//Tools
