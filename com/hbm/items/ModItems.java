@@ -36,6 +36,10 @@ public class ModItems {
 	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium");
 	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy");
 	
+	//Generic Items
+	public static final Item pellet_coal = new ItemBase("pellet_coal");
+	public static final Item biomass = new ItemBase("biomass");
+	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword");
 	//Tools
 	public static final Item alloy_pickaxe = new ModPickaxe(MainRegistry.enumToolMaterialAlloy, "alloy_pickaxe");

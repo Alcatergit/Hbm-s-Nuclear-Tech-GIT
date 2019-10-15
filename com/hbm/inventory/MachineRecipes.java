@@ -54,24 +54,24 @@ public class MachineRecipes {
 		
 		if(stamps_flat.contains(stamp.getItem())) {
 
-			/*if(mODE(input, "dustCoal"))
+			if(mODE(input, "dustCoal"))
 				return new ItemStack(Items.COAL);
 			if(mODE(input, "dustQuartz"))
-				return new ItemStack(Items.quartz);
+				return new ItemStack(Items.QUARTZ);
 			if(mODE(input, "dustNetherQuartz"))
-				return new ItemStack(Items.quartz);
+				return new ItemStack(Items.QUARTZ);
 			if(mODE(input, "dustLapis"))
-				return new ItemStack(Items.dye, 1, 4);
+				return new ItemStack(Items.DYE, 1, 4);
 			if(mODE(input, "dustDiamond"))
-				return new ItemStack(Items.diamond);
+				return new ItemStack(Items.DIAMOND);
 			if(mODE(input, "dustEmerald"))
-				return new ItemStack(Items.emerald);
+				return new ItemStack(Items.EMERALD);
 			if(input.getItem() == ModItems.pellet_coal)
-				return new ItemStack(Items.diamond);
+				return new ItemStack(Items.DIAMOND);
 			if(input.getItem() == ModItems.biomass)
 				return new ItemStack(ModItems.biomass_compressed);
 			if(input.getItem() == ModItems.powder_lignite)
-				return new ItemStack(ModItems.briquette_lignite);*/
+				return new ItemStack(ModItems.briquette_lignite);
 		}
 		
 		if(stamps_plate.contains(stamp.getItem())) {
