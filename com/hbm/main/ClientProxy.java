@@ -1,14 +1,19 @@
 package com.hbm.main;
 
+import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.items.ModItems;
+import com.hbm.render.entity.FogRenderer;
+import com.hbm.render.factories.EntityFogRenderFactory;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends ServerProxy {
@@ -20,6 +25,8 @@ public class ClientProxy extends ServerProxy {
 	{
 		MinecraftForge.EVENT_BUS.register(new ModEventHandlerClient());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
+			System.out.println("Render manager: " + Minecraft.getMinecraft().getRenderManager());
+		 RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new EntityFogRenderFactory());
 		
 	}
 	@Override

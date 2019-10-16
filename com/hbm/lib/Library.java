@@ -1,5 +1,7 @@
 package com.hbm.lib;
 
+import com.hbm.saveddata.RadEntitySavedData;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +33,17 @@ public class Library {
 		//RadEntitySavedData data = RadEntitySavedData.getData(entity.worldObj);
 		//data.increaseRad(entity, f);
 	}
-	
+	public static void applyRadDirect(Entity e, float f) {
+
+		if(!(e instanceof EntityLivingBase))
+			return;
+		
+		//if(((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
+		//	return;
+		
+		RadEntitySavedData data = RadEntitySavedData.getData(e.world);
+		data.increaseRad(e, f);
+	}
 	
 
 }

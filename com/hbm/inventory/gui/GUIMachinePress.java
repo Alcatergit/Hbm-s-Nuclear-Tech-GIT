@@ -48,4 +48,9 @@ public class GUIMachinePress extends GuiContainer {
 		int k = assembler.getProgressScaled(16);
         this.drawTexturedModalRect(guiLeft + 79, guiTop + 35, 194, 0, 18, k);
 	}
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 }

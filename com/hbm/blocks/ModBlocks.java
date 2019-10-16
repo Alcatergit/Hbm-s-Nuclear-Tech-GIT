@@ -22,7 +22,6 @@ public class ModBlocks {
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){
-			System.out.println("here");
 			ForgeRegistries.BLOCKS.register(block);
 		}
 	}

@@ -7,11 +7,10 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
@@ -19,11 +18,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import net.minecraftforge.registries.GameData;
 
 public class TileEntityMachinePress extends TileEntity implements ISidedInventory, ITickable {
 	
@@ -210,6 +206,40 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
 		return index == 3;
 	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		
+		progress = nbt.getInteger("progress");
+		power = nbt.getInteger("power");
+		burnTime = nbt.getInteger("burnTime");
+		maxBurn = nbt.getInteger("maxBurn");
+		isRetracting = nbt.getBoolean("ret");
+		ItemStackHelper.loadAllItems(nbt, slots);
+		 if (nbt.hasKey("CustomName", 8))
+	        {
+	            this.customName = nbt.getString("CustomName");
+	        }
+	}
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+
+		nbt.setInteger("progress", progress);
+		nbt.setInteger("power", power);
+		nbt.setInteger("burnTime", burnTime);
+		nbt.setInteger("maxBurn", maxBurn);
+		nbt.setBoolean("ret", isRetracting);
+		
+		ItemStackHelper.saveAllItems(nbt, slots);
+		
+		if (this.hasCustomName())
+        {
+            nbt.setString("CustomName", this.customName);
+        }
+		return nbt;
+	}
 
 	@Override
 	public void update() {	
@@ -264,7 +294,8 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 							slots.get(1).setItemDamage(slots.get(1).getItemDamage() + 1);
 							if(slots.get(1).getItemDamage() >= slots.get(1).getMaxDamage())
 								slots.set(1, ItemStack.EMPTY);
-					        this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.assemblerOperate, SoundCategory.BLOCKS, 1.5F, 1.0F, true);
+					    //    this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F, false);
+					        this.world.playSound(null, pos, HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
 						}
 						
 						if(!isRetracting)

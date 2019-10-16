@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.creativetabs.TabTest;
+import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.handler.GuiHandler;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -13,6 +14,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
@@ -23,8 +25,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
@@ -39,6 +41,12 @@ public class MainRegistry {
 	public static Logger logger;
 	
 	public static CreativeTabs tabTest = new TabTest(CreativeTabs.getNextID(), "tabTest");
+	
+	public static boolean enableRads = true;
+	
+	public static float hellRad = 0.1F;
+	public static int fogRad = 100;
+	public static int fogCh = 20;
 	
 	public static int x;
 	public static int y;
@@ -67,8 +75,7 @@ public class MainRegistry {
 
 	public static ToolMaterial enumToolMaterialMultitool = EnumHelper.addToolMaterial("MULTITOOL", 3, 5000, 25F, 5.5F, 25);
 	
-    @SuppressWarnings("deprecation")
-	@EventHandler
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
     	if(logger == null)
@@ -89,7 +96,9 @@ public class MainRegistry {
     	proxy.preInit(event);
     	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-    	GameRegistry.registerTileEntity(TileEntityMachinePress.class, "tileentity_machine_press");
+    	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
+    	
+    	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", 133, this, 1000, 1, true);
     }
 
     @EventHandler
@@ -97,7 +106,6 @@ public class MainRegistry {
     {
     	ModItems.init();
     	ModBlocks.init();
-    	HBMSoundHandler.init();
     }
 
     @EventHandler
