@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.core.config.Property;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,11 +27,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockTaint extends Block {
+	public static final PropertyInteger TEXTURE = PropertyInteger.create("tex", 0, 15);
+	
 	public BlockTaint(Material m, String s) {
 		super(m);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.tabTest);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(TEXTURE, 0));
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
@@ -103,5 +111,19 @@ public class BlockTaint extends Block {
     			world.spawnEntityInWorld(creep);
     		}
     	}
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(TEXTURE);
+	}
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(TEXTURE, meta);
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, TEXTURE);
 	}
 }
