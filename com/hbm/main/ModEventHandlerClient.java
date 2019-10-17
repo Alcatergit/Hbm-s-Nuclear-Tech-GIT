@@ -5,6 +5,8 @@ import com.hbm.blocks.machine.MachinePress;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
+import com.hbm.lib.RefStrings;
+import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderRedstoneSword;
 import com.hbm.render.tileentity.RenderPress;
@@ -14,8 +16,10 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,6 +58,18 @@ public class ModEventHandlerClient {
 		}
 
 	}
-	
+	@SubscribeEvent
+	public void textureStitch(TextureStitchEvent.Pre evt){
+		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke1"));
+		DSmokeRenderer.sprites[1] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke2"));
+		DSmokeRenderer.sprites[2] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke3"));
+		DSmokeRenderer.sprites[3] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke4"));
+		DSmokeRenderer.sprites[4] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke5"));
+		DSmokeRenderer.sprites[5] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke6"));
+		DSmokeRenderer.sprites[6] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke7"));
+		DSmokeRenderer.sprites[7] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particles/d_smoke8"));
+
+		
+	}
 	
 }

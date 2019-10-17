@@ -12,7 +12,10 @@ public class PacketDispatcher {
 	
 	public static final void registerPackets(){
 		int i = 0;
+		//PressPacket
 		wrapper.registerMessage(TEPressPacket.Handler.class, TEPressPacket.class, i++, Side.CLIENT);
+		//Send chunk radiation packet to individual players
+		wrapper.registerMessage(RadSurveyPacket.Handler.class, RadSurveyPacket.class, i++, Side.CLIENT);
 	}
 
 }

@@ -4,12 +4,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.creativetabs.TabTest;
+import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.handler.GuiHandler;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,11 +45,14 @@ public class MainRegistry {
 	public static CreativeTabs tabTest = new TabTest(CreativeTabs.getNextID(), "tabTest");
 	
 	public static boolean enableRads = true;
+	public static boolean enableHardcoreTaint = false;
 	
 	public static float hellRad = 0.1F;
 	public static int fogRad = 100;
 	public static int fogCh = 20;
 	
+	//The heck is this for?
+	public static int cont = 0;
 	public static int x;
 	public static int y;
 	public static int z;
@@ -91,7 +96,7 @@ public class MainRegistry {
 		proxy.registerRenderInfo();
     	ModItems.preInit();
     	ModBlocks.preInit();
-    	
+    	HbmPotion.init();
 
     	proxy.preInit(event);
     	
@@ -99,6 +104,8 @@ public class MainRegistry {
     	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
     	
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", 133, this, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_d_smoke_fx"), EntityDSmokeFX.class, "entity_d_smoke_fx", 66, this, 1000, 1, true);
+
     }
 
     @EventHandler

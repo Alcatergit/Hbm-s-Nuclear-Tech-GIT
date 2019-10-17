@@ -1,8 +1,10 @@
 package com.hbm.main;
 
+import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.items.ModItems;
 import com.hbm.render.entity.FogRenderer;
+import com.hbm.render.factories.EntityDSmokeFXFactory;
 import com.hbm.render.factories.EntityFogRenderFactory;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.tileentity.RenderPress;
@@ -27,6 +29,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 			System.out.println("Render manager: " + Minecraft.getMinecraft().getRenderManager());
 		 RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new EntityFogRenderFactory());
+		 RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new EntityDSmokeFXFactory());
 		
 	}
 	@Override

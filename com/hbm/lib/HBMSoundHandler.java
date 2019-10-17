@@ -13,6 +13,7 @@ public final class HBMSoundHandler {
 	
 	public static SoundEvent assemblerOperate;
 	public static SoundEvent pressOperate;
+	public static SoundEvent laserBang;
 
 	
 	public static void init() {
@@ -20,6 +21,7 @@ public final class HBMSoundHandler {
 		
 		assemblerOperate = register("block.assembleroperate");
 		pressOperate = register("block.pressoperate");
+		laserBang = register("hbm:weapon.laserBang");
 	}
 	
 	public static SoundEvent register(String name) {
