@@ -1,17 +1,32 @@
 package com.hbm.main;
 
+import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.mob.EntityNuclearCreeper;
+import com.hbm.entity.mob.EntityTaintedCreeper;
+import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
+import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.items.ModItems;
+import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.entity.FogRenderer;
-import com.hbm.render.factories.EntityDSmokeFXFactory;
-import com.hbm.render.factories.EntityFogRenderFactory;
+import com.hbm.render.factories.MultiCloudRendererFactory;
+import com.hbm.render.factories.RenderDSmokeFXFactory;
+import com.hbm.render.factories.RenderFalloutRainFactory;
+import com.hbm.render.factories.RenderFogRenderFactory;
+import com.hbm.render.factories.RenderNuclearCreeperFactory;
+import com.hbm.render.factories.RenderSmallNukeMK3Factory;
+import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.tileentity.RenderPress;
+import com.hbm.render.util.HmfModelLoader;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -26,11 +41,17 @@ public class ClientProxy extends ServerProxy {
 	public void registerRenderInfo()
 	{
 		MinecraftForge.EVENT_BUS.register(new ModEventHandlerClient());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
-			System.out.println("Render manager: " + Minecraft.getMinecraft().getRenderManager());
-		 RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new EntityFogRenderFactory());
-		 RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new EntityDSmokeFXFactory());
+		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
 		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new RenderDSmokeFXFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityNukeCloudSmall.class, new RenderSmallNukeMK3Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityTaintedCreeper.class, new RenderTaintedCreeperFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityNuclearCreeper.class, new RenderNuclearCreeperFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFalloutRain.class, new RenderFalloutRainFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.smoke1, ModItems.smoke2, ModItems.smoke3, ModItems.smoke4, ModItems.smoke5, ModItems.smoke6, ModItems.smoke7, ModItems.smoke8}));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8}));
 	}
 	@Override
 	public void registerMissileItems() {

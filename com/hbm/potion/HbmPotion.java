@@ -1,5 +1,8 @@
 package com.hbm.potion;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -96,7 +99,7 @@ public class HbmPotion extends Potion {
 						.isReplaceable(entity.world, pos) && 
 						BlockTaint.hasPosNeightbour(entity.world, pos)) {
 					
-					entity.world.setBlock(x, y, z, ModBlocks.taint, 14, 2);
+					entity.world.setBlockState(pos, ModBlocks.taint.getBlockState().getBaseState().withProperty(BlockTaint.TEXTURE, 14), 2);
 				}
 			} 
 		}

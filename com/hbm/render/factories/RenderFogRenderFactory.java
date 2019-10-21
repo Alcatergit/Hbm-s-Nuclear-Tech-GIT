@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class EntityFogRenderFactory implements IRenderFactory<EntityFogFX> {
+public class RenderFogRenderFactory implements IRenderFactory<EntityFogFX> {
 
 	@Override
 	public Render<EntityFogFX> createRenderFor(RenderManager manager) {

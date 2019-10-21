@@ -122,7 +122,24 @@ public class ModItems {
 	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 150);
 	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
 	
+	//Dummy texture items
+	public static final Item smoke1 = new ItemBase("smoke1");
+	public static final Item smoke2 = new ItemBase("smoke2");
+	public static final Item smoke3 = new ItemBase("smoke3");
+	public static final Item smoke4 = new ItemBase("smoke4");
+	public static final Item smoke5 = new ItemBase("smoke5");
+	public static final Item smoke6 = new ItemBase("smoke6");
+	public static final Item smoke7 = new ItemBase("smoke7");
+	public static final Item smoke8 = new ItemBase("smoke8");
 	
+	public static final Item b_smoke1 = new ItemBase("b_smoke1");
+	public static final Item b_smoke2 = new ItemBase("b_smoke2");
+	public static final Item b_smoke3 = new ItemBase("b_smoke3");
+	public static final Item b_smoke4 = new ItemBase("b_smoke4");
+	public static final Item b_smoke5 = new ItemBase("b_smoke5");
+	public static final Item b_smoke6 = new ItemBase("b_smoke6");
+	public static final Item b_smoke7 = new ItemBase("b_smoke7");
+	public static final Item b_smoke8 = new ItemBase("b_smoke8");
 	
 	public static void preInit(){
 		for(Item item : ALL_ITEMS){

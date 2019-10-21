@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class EntityDSmokeFXFactory implements IRenderFactory<EntityDSmokeFX> {
+public class RenderDSmokeFXFactory implements IRenderFactory<EntityDSmokeFX> {
 
 	@Override
 	public Render<? super EntityDSmokeFX> createRenderFor(RenderManager manager) {

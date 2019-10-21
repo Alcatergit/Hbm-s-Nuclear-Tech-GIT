@@ -110,12 +110,13 @@ int thunder = AuxSavedData.getThunder(event.world);
 						if(entity instanceof EntityCreeper && eRad >= 200 && entity.getHealth() > 0) {
 							
 							if(event.world.rand.nextInt(3) == 0 ) {
-								EntityNuclearCreeper creep = new EntityNuclearCreeper(event.world);
-								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								//TODO
+							//	EntityNuclearCreeper creep = new EntityNuclearCreeper(event.world);
+							//	creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 				        		
 				        		if(!entity.isDead)
 				        			if(!event.world.isRemote)
-				        				event.world.spawnEntityInWorld(creep);
+				        		//		event.world.spawnEntityInWorld(creep);
 				        		entity.setDead();
 							} else {
 								entity.attackEntityFrom(ModDamageSource.radiation, 100F);
@@ -143,7 +144,7 @@ int thunder = AuxSavedData.getThunder(event.world);
 							continue;
 			        	}
 						
-						if(eRad < 200 || entity instanceof EntityNuclearCreeper || entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
+						if(eRad < 200/* || entity instanceof EntityNuclearCreeper */|| entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
 							continue;
 						
 						if(eRad >= 1000) {
@@ -205,11 +206,11 @@ int thunder = AuxSavedData.getThunder(event.world);
 	public void onPlayerDeath(LivingDeathEvent event){
 		RadEntitySavedData eData = RadEntitySavedData.getData(event.getEntityLiving().world);
 		eData.setRadForEntity(event.getEntityLiving(), 0);
-		
-		if(MainRegistry.enableCataclysm) {
-			EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
-			foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
-			event.getEntity().world.spawnEntityInWorld(foeq);
-		}
+		//TODO
+		//if(MainRegistry.enableCataclysm) {
+		//	EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
+		//	foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
+		//	event.getEntity().world.spawnEntityInWorld(foeq);
+		//}
 	}
 }

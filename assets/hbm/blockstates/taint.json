@@ -20,8 +20,7 @@
 			"12": { "textures": { "all": "hbm:blocks/taint_12"}},
 			"13": { "textures": { "all": "hbm:blocks/taint_13"}},
 			"14": { "textures": { "all": "hbm:blocks/taint_14"}},
-			"15": { "textures": { "all": "hbm:blocks/taint_15"}},
-			"__comment": "Different textures"
+			"15": { "textures": { "all": "hbm:blocks/taint_15"}}
 		}
 		
 	}
