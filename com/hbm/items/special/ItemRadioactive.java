@@ -26,6 +26,25 @@ public class ItemRadioactive extends ItemCustomLore {
 
 		if (entity instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) entity;
+			//Strong
+			if(this == ModItems.man_core ||
+					this == ModItems.ingot_u235) {
+				Library.applyRadData(living, 5F/20F * mod);
+			}
+			//Strong Nuggets
+			if(this == ModItems.nugget_u235 ||
+					this == ModItems.nugget_pu239) {
+				Library.applyRadData(living, 3.5F/20F * mod);
+			}
+			//Medium
+			if(this == ModItems.ingot_pu238) {
+				Library.applyRadData(living, 2.5F/20F * mod);
+			}
+			//Meduim Nuggets
+			if(this == ModItems.nugget_pu238 ||
+					this == ModItems.nugget_neptunium) {
+				Library.applyRadData(living, 1F/20F * mod);
+			}
 			// Schrabidic
 			if (this == ModItems.ingot_schrabidium) {
 

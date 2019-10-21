@@ -43,6 +43,10 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModBlocks.machine_press, 1), new Object[] { "IRI", "IPI", "IBI", 'I', "ingotIron", 'R', Blocks.FURNACE, 'B', "blockIron", 'P', Blocks.PISTON });
 		
 		//Generic Items
+		addShapelessRecipe(new ItemStack(ModItems.nugget_u235, 9), new Object[] {"#", '#', ModItems.ingot_u235});
+		addShapedRecipe(new ItemStack(ModItems.ingot_u235, 1), new Object[] {"###", "###", "###", '#', ModItems.nugget_u235});
+		addShapelessRecipe(new ItemStack(ModItems.nugget_pu238, 9), new Object[] {"#", '#', ModItems.ingot_pu238});
+		
 		addShapedOreRecipe(new ItemStack(ModItems.pellet_coal, 1), new Object[] { "PFP", "FOF", "PFP", 'P', "dustCoal", 'F', Items.FLINT, 'O', ModBlocks.gravel_obsidian });
 		addShapedRecipe(new ItemStack(Blocks.TORCH, 8), new Object[] { "L", "S", 'L', ModItems.coke, 'S', Items.STICK });
 		

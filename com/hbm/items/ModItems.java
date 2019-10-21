@@ -36,6 +36,17 @@ public class ModItems {
 	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium");
 	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy");
 	
+	//Radioactive
+	public static final Item nugget_u235 = new ItemRadioactive("nugget_u235");
+	public static final Item nugget_pu238 = new ItemRadioactive("nugget_pu238");
+	public static final Item nugget_pu239 = new ItemRadioactive("nugget_pu239");
+	public static final Item nugget_neptunium = new ItemRadioactive("nugget_neptunium");
+	
+	public static final Item ingot_u235 = new ItemRadioactive("ingot_u235");
+	public static final Item ingot_pu238 = new ItemRadioactive("ingot_put238");
+	
+	public static final Item man_core = new ItemRadioactive("man_core");
+	
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal");
 	public static final Item biomass = new ItemBase("biomass");
