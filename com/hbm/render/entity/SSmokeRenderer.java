@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,10 +42,9 @@ public class SSmokeRenderer extends Render<EntitySSmokeFX> {
 	 * float f1). But JAD is pre 1.5 so doesn't do that.
 	 */
 	@Override
-	public void doRender(EntitySSmokeFX p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_,
+	public void doRender(EntitySSmokeFX fx, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_,
 			float p_76986_9_) {
-		if (p_76986_1_ instanceof EntitySSmokeFX) {
-			EntitySSmokeFX fx = (EntitySSmokeFX) p_76986_1_;
+
 
 			if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
 				item = ModItems.smoke8;
@@ -89,14 +89,14 @@ public class SSmokeRenderer extends Render<EntitySSmokeFX> {
 				//
 				GL11.glScalef(0.25F, 0.25F, 0.25F);
 				//
-				this.bindEntityTexture(p_76986_1_);
+				this.bindEntityTexture(fx);
 				Tessellator tessellator = Tessellator.getInstance();
 
 				this.func_77026_a(tessellator, tex);
 				GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 				GL11.glPopMatrix();
 			}
-		}
+		
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class SSmokeRenderer extends Render<EntitySSmokeFX> {
 	 */
 	@Override
 	protected ResourceLocation getEntityTexture(EntitySSmokeFX e) {
-		return null;
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 
 	private void func_77026_a(Tessellator tes, TextureAtlasSprite tex) {

@@ -3,7 +3,9 @@ package com.hbm.explosion;
 import java.util.Random;
 
 import com.hbm.entity.particle.EntityDSmokeFX;
+import com.hbm.entity.projectile.EntityShrapnel;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 public class ExplosionLarge {
@@ -34,7 +36,7 @@ public class ExplosionLarge {
 			rubble.motionY = 0.75						* (1 + ((count + rand.nextInt(count * 5))) / 25);
 			rubble.motionX = rand.nextGaussian() * 0.75	* (1 + (count / 50));
 			rubble.motionZ = rand.nextGaussian() * 0.75	* (1 + (count / 50));
-			rubble.setMetaBasedOnBlock(Blocks.stone, 0);
+			rubble.setMetaBasedOnBlock(Blocks.STONE, 0);
 			world.spawnEntityInWorld(rubble);
 		}
 	}
@@ -50,7 +52,7 @@ public class ExplosionLarge {
 		shrapnel.motionX = rand.nextGaussian() * 1	* (1 + (count / 50));
 		shrapnel.motionZ = rand.nextGaussian() * 1	* (1 + (count / 50));
 		shrapnel.setTrail(rand.nextInt(3) == 0);
-		world.spawnEntityInWorld(shrapnel);
+		world.spawnEntity(shrapnel);
 	}
 }
 	

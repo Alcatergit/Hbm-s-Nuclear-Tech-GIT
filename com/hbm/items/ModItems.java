@@ -49,6 +49,8 @@ public class ModItems {
 	
 	public static final Item man_core = new ItemRadioactive("man_core");
 	
+	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
+	
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal");
 	public static final Item biomass = new ItemBase("biomass");
