@@ -1,7 +1,10 @@
 package com.hbm.main;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.MachinePress;
+import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
@@ -9,19 +12,20 @@ import com.hbm.lib.RefStrings;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderRedstoneSword;
-import com.hbm.render.tileentity.RenderPress;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ModEventHandlerClient {
@@ -70,6 +74,29 @@ public class ModEventHandlerClient {
 		DSmokeRenderer.sprites[7] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke8"));
 
 		
+	}
+	@SubscribeEvent
+	public void renderWorld(RenderWorldLastEvent evt){
+	
+		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
+		for(Entity e : list){
+			///System.out.println(e instanceof EntityFalloutRain);
+			if(e instanceof IConstantRenderer){
+				
+				float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+				double d0 = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double)partialTicks;
+		        double d1 = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double)partialTicks;
+		        double d2 = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double)partialTicks;
+		        float f = e.prevRotationYaw + (e.rotationYaw - e.prevRotationYaw) * partialTicks;
+		        Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+	            double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
+	            double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
+	            double d5 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;
+		        
+				Render<Entity> r =  Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(e);
+				r.doRender(e, d0 - d3, d1 - d4, d2 - d5, f, partialTicks);
+			}
+		}
 	}
 	
 }

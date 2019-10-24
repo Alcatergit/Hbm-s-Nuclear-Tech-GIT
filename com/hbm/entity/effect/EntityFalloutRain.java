@@ -1,11 +1,10 @@
 package com.hbm.entity.effect;
 
-import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -14,12 +13,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public class EntityFalloutRain extends Entity {
+public class EntityFalloutRain extends Entity implements IConstantRenderer {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
 	public int revProgress;
 	public int radProgress;
@@ -27,15 +28,29 @@ public class EntityFalloutRain extends Entity {
 	public EntityFalloutRain(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
-		this.ignoreFrustumCheck = true;
+		this.ignoreFrustumCheck = false;
 		this.isImmuneToFire = true;
+		
 	}
-
+@Override
+public AxisAlignedBB getRenderBoundingBox() {
+	return new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
+}
+@Override
+public boolean isInRangeToRender3d(double x, double y, double z) {
+	return true;
+}
+@Override
+public boolean isInRangeToRenderDist(double distance) {
+	return true;
+}
 	public EntityFalloutRain(World p_i1582_1_, int maxAge) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.isImmuneToFire = true;
 	}
+	
+	
 
     @Override
 	public void onUpdate() {
@@ -76,6 +91,7 @@ public class EntityFalloutRain extends Entity {
 	        	}
 	        	
 	        	if(radProgress > getScale() * 2D) {
+	        		
 	        		this.setDead();
 	        	}
         	}
@@ -99,7 +115,7 @@ public class EntityFalloutRain extends Entity {
     	for(int y = 255; y >= 0; y--) {
     		pos.setY(y);
     		IBlockState b =  world.getBlockState(pos);
-    		int meta = world.getBlockMetadata(x, y, z);
+    		//int meta = world.getBlockMetadata(x, y, z);
     		
     		if(b.getMaterial() == Material.AIR)
     			continue;
@@ -116,30 +132,30 @@ public class EntityFalloutRain extends Entity {
 			else if(b.getBlock() == Blocks.STONE) {
 				
 				depth++;
-				
-				if(dist < 5)
-					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				else if(dist < 15)
-					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				else if(dist < 75)
-					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
-				else
-					return;
+				//TODO all of this later
+				//if(dist < 5)
+				//	world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
+				//else if(dist < 15)
+				//	world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
+			//	else if(dist < 75)
+				//	world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+			//	else
+			//		return;
 				
     			if(depth > 2)
     				return;
 			
 			}else if(b.getBlock() == Blocks.GRASS) {
-    			world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+    		//	world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
     			return;
     			
     		} else if(b.getBlock() == Blocks.MYCELIUM) {
-    			world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+    		//	world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
     			return;
     		} else if(b.getBlock() == Blocks.SAND) {
     			
     			if(rand.nextInt(60) == 0)
-    				world.setBlockState(pos, meta == 0 ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red);
+    			//	world.setBlockState(pos, meta == 0 ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red);
     			return;
     		}
 
@@ -164,37 +180,37 @@ public class EntityFalloutRain extends Entity {
 			}
 
 			else if (b.getBlock() == Blocks.LOG || b.getBlock() == Blocks.LOG2) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+			//	world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 			}
 
 			else if (b.getBlock() == Blocks.BROWN_MUSHROOM_BLOCK || b.getBlock() == Blocks.RED_MUSHROOM_BLOCK) {
-				if (meta == 10) {
-					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-				} else {
-					world.setBlockToAir(pos);
-				}
+				//if (meta == 10) {
+				//	world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+			//	} else {
+				//	world.setBlockToAir(pos);
+				//}
 			}
 			
-			else if (b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
-				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-			}
+			//else if (b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
+				//world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+			//}
 
-			else if (b.getBlock() == ModBlocks.ore_uranium) {
-				if (rand.nextInt(90) == 0)
-					world.setBlock(pos, ModBlocks.ore_schrabidium.getDefaultState());
-    			return;
-			}
+			//else if (b.getBlock() == ModBlocks.ore_uranium) {
+			//	if (rand.nextInt(90) == 0)
+				//	world.setBlock(pos, ModBlocks.ore_schrabidium.getDefaultState());
+    		//	return;
+			//}
 
-			else if (b.getBlock() == ModBlocks.ore_nether_uranium) {
-				if (rand.nextInt(90) == 0)
-					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-    			return;
+			//else if (b.getBlock() == ModBlocks.ore_nether_uranium) {
+			//	if (rand.nextInt(90) == 0)
+			//		world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+    		//	return;
     			
     		//this piece stops the "stomp" from reaching below ground
-			} else if(b.isNormalCube()) {
-
-				return;
-			}
+			//} else if(b.isNormalCube()) {
+//
+			//	return;
+			//}
     	}
     }
 

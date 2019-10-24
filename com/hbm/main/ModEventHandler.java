@@ -3,6 +3,7 @@ package com.hbm.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -14,6 +15,7 @@ import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadEntitySavedData;
 import com.hbm.saveddata.RadiationSavedData;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -24,6 +26,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
@@ -206,11 +209,19 @@ int thunder = AuxSavedData.getThunder(event.world);
 	public void onPlayerDeath(LivingDeathEvent event){
 		RadEntitySavedData eData = RadEntitySavedData.getData(event.getEntityLiving().world);
 		eData.setRadForEntity(event.getEntityLiving(), 0);
-		//TODO
-		//if(MainRegistry.enableCataclysm) {
+		if(MainRegistry.enableCataclysm) {
 		//	EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
 		//	foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
 		//	event.getEntity().world.spawnEntityInWorld(foeq);
-		//}
+		}
 	}
+	
+	@SubscribeEvent
+	public void onItemRegister(RegistryEvent.Register<Item> evt){
+	}
+	@SubscribeEvent
+	public void onBlockRegister(RegistryEvent.Register<Block> evt){
+	}
+	
+	
 }

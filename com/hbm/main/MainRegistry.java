@@ -3,6 +3,7 @@ package com.hbm.main;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.command.CommandRadiation;
 import com.hbm.creativetabs.TabTest;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -27,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -34,6 +36,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -232,6 +235,7 @@ public class MainRegistry {
     }
     
     @EventHandler
-    public void serverStarting(FMLServerStartedEvent evt){
+    public void serverStarting(FMLServerStartingEvent evt){
+    	evt.registerServerCommand(new CommandRadiation());
     }
 }

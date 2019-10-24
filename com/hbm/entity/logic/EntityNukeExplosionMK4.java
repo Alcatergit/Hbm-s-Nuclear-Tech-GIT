@@ -64,6 +64,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 	    	ExplosionNukeGeneric.dealDamage(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, this.length * 2);
 			
 			if(explosion == null) {
+				
 				explosion = new ExplosionNukeRay(world, (int)this.posX, (int)this.posY, (int)this.posZ, this.strength, this.count, this.speed, this.length);
 				
 				//MainRegistry.logger.info("START: " + System.currentTimeMillis());

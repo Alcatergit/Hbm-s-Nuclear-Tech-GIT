@@ -47,6 +47,11 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.ingot_u235, 1), new Object[] {"###", "###", "###", '#', ModItems.nugget_u235});
 		addShapelessRecipe(new ItemStack(ModItems.nugget_pu238, 9), new Object[] {"#", '#', ModItems.ingot_pu238});
 		
+		addShapelessRecipe(new ItemStack(ModItems.sulfur, 9), new Object[]{"#", '#', ModBlocks.block_sulfur});
+		addShapedRecipe(new ItemStack(ModBlocks.block_sulfur, 1), new Object[] {"###", "###", "###", '#', ModItems.sulfur});
+		addShapelessRecipe(new ItemStack(ModItems.niter, 9), new Object[]{"#", '#', ModBlocks.block_niter});
+		addShapedRecipe(new ItemStack(ModBlocks.block_niter, 1), new Object[] {"###", "###", "###", '#', ModItems.niter});
+
 		addShapedOreRecipe(new ItemStack(ModItems.pellet_coal, 1), new Object[] { "PFP", "FOF", "PFP", 'P', "dustCoal", 'F', Items.FLINT, 'O', ModBlocks.gravel_obsidian });
 		addShapedRecipe(new ItemStack(Blocks.TORCH, 8), new Object[] { "L", "S", 'L', ModItems.coke, 'S', Items.STICK });
 		

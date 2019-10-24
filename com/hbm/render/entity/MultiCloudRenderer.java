@@ -129,7 +129,7 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 		GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buf.putNormal(0.0F, 1.0F, 0.0F);
+		//buf.putNormal(0.0F, 1.0F, 0.0F);
 		buf.pos(0.0F - f5, 0.0F - f6, 0.0D).tex(f, f3).endVertex();
 		buf.pos(f4 - f5, 0.0F - f6, 0.0D).tex(f1, f3).endVertex();
 		buf.pos(f4 - f5, f4 - f6, 0.0D).tex(f1, f2).endVertex();

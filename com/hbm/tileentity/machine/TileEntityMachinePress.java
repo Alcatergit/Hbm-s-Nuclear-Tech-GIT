@@ -1,11 +1,15 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.special.ItemBlades;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -32,6 +36,7 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	public int item;
 	public int meta;
 	public boolean isRetracting = false;
+	public boolean test = false;
 	
 	private NonNullList<ItemStack> slots = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
 	

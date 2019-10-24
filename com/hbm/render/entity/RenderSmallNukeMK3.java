@@ -3,6 +3,7 @@ package com.hbm.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
@@ -71,7 +72,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
         GL11.glTranslatef((float)x, (float)y + 0.25F, (float)z);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_CULL_FACE);
-
+        
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE);
         GL11.glScalef(size, size, size);
 
