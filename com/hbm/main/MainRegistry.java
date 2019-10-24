@@ -3,7 +3,7 @@ package com.hbm.main;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.command.CommandRadiation;
+import com.hbm.command.CommandRadiation;
 import com.hbm.creativetabs.TabTest;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudSmall;

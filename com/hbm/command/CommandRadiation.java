@@ -1,4 +1,4 @@
-package com.hbm.blocks.command;
+package com.hbm.command;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -154,6 +154,15 @@ public class ModItems {
 	public static final Item b_smoke7 = new ItemBase("b_smoke7");
 	public static final Item b_smoke8 = new ItemBase("b_smoke8");
 	
+	public static final Item d_smoke1 = new ItemBase("d_smoke1");
+	public static final Item d_smoke2 = new ItemBase("d_smoke2");
+	public static final Item d_smoke3 = new ItemBase("d_smoke3");
+	public static final Item d_smoke4 = new ItemBase("d_smoke4");
+	public static final Item d_smoke5 = new ItemBase("d_smoke5");
+	public static final Item d_smoke6 = new ItemBase("d_smoke6");
+	public static final Item d_smoke7 = new ItemBase("d_smoke7");
+	public static final Item d_smoke8 = new ItemBase("d_smoke8");
+	
 	public static void preInit(){
 		for(Item item : ALL_ITEMS){
 			ForgeRegistries.ITEMS.register(item);
