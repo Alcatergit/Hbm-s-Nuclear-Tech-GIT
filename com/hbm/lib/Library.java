@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -61,6 +62,18 @@ public class Library {
 			if(world.getBlockState(pos).getBlock() != Blocks.AIR && 
 					world.getBlockState(pos).isNormalCube())
 				return true;
+		
+		return false;
+	}
+
+	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
+		if(player.inventory.armorInventory.get(0).getItem() == shoe && 
+				player.inventory.armorInventory.get(1).getItem() == leg && 
+				player.inventory.armorInventory.get(2).getItem() == chest && 
+				player.inventory.armorInventory.get(3).getItem() == helm)
+		{
+			return true;
+		}
 		
 		return false;
 	}
