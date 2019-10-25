@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionParticleB;
@@ -9,8 +10,10 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -250,6 +253,8 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	public void update() {	
 		if(!world.isRemote)
 		{
+			//String s = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(Blocks.ACACIA_DOOR.getDefaultState()).getParticleTexture().toString();
+			//System.out.println(s.substring(25, (s.indexOf("',"))));
 			if(burnTime > 0) {
 				this.burnTime--;
 				this.power++;

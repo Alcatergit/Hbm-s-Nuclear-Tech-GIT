@@ -3,6 +3,7 @@ package com.hbm.blocks;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 public class BlockBase extends Block {
@@ -15,4 +16,7 @@ public class BlockBase extends Block {
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
+	public Block setSoundType(SoundType sound){
+		return super.setSoundType(sound);
+	}
 }

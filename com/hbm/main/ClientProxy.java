@@ -9,6 +9,7 @@ import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntitySmokeFX;
+import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.items.ModItems;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
@@ -18,6 +19,7 @@ import com.hbm.render.factories.RenderDSmokeFXFactory;
 import com.hbm.render.factories.RenderFalloutRainFactory;
 import com.hbm.render.factories.RenderFogRenderFactory;
 import com.hbm.render.factories.RenderNuclearCreeperFactory;
+import com.hbm.render.factories.RenderRubbleFactory;
 import com.hbm.render.factories.RenderSSmokeFactory;
 import com.hbm.render.factories.RenderSmallNukeMK3Factory;
 import com.hbm.render.factories.RenderTaintedCreeperFactory;
@@ -58,6 +60,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityShrapnel.class, new ShrapnelRendererFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySSmokeFX.class, new RenderSSmokeFactory(ModItems.nuclear_waste));
+		RenderingRegistry.registerEntityRenderingHandler(EntityRubble.class, new RenderRubbleFactory());
 	}
 	@Override
 	public void registerMissileItems() {

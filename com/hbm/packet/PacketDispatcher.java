@@ -16,6 +16,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEPressPacket.Handler.class, TEPressPacket.class, i++, Side.CLIENT);
 		//Send chunk radiation packet to individual players
 		wrapper.registerMessage(RadSurveyPacket.Handler.class, RadSurveyPacket.class, i++, Side.CLIENT);
+		//Packet for rendering of rubble
+		wrapper.registerMessage(ParticleBurstPacket.Handler.class, ParticleBurstPacket.class, i++, Side.CLIENT);
 	}
 
 }

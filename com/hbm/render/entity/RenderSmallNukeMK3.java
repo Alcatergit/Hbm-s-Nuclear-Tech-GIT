@@ -69,17 +69,17 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
 	@Override
 	public void doRender(EntityNukeCloudSmall cloud, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_LIGHTING_BIT);
         GL11.glTranslatef((float)x, (float)y + 0.25F, (float)z);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE);
         GL11.glScalef(size, size, size);
 
 		int age = cloud.age;
         int shockScale = age * 4;
         int fireScale = (int)((age - 25) * 1.5);
-        
+       //cloud.setDead();
         if(age < 50) {
     		GL11.glPushMatrix();
     		GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.9F);
@@ -200,6 +200,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
         
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 	//very professional, i love me some null textures /s

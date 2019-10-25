@@ -1,10 +1,13 @@
 package com.hbm.entity.effect;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
+import net.minecraft.block.BlockHugeMushroom;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -132,30 +135,31 @@ public boolean isInRangeToRenderDist(double distance) {
 			else if(b.getBlock() == Blocks.STONE) {
 				
 				depth++;
-				//TODO all of this later
-				//if(dist < 5)
-				//	world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				//else if(dist < 15)
-				//	world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-			//	else if(dist < 75)
-				//	world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
-			//	else
-			//		return;
+				if(dist < 5)
+					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
+				else if(dist < 15)
+					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
+				else if(dist < 75)
+					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+				else
+					return;
 				
     			if(depth > 2)
     				return;
 			
 			}else if(b.getBlock() == Blocks.GRASS) {
-    		//	world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+    			world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
     			return;
     			
     		} else if(b.getBlock() == Blocks.MYCELIUM) {
-    		//	world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+    			world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
     			return;
     		} else if(b.getBlock() == Blocks.SAND) {
     			
-    			if(rand.nextInt(60) == 0)
-    			//	world.setBlockState(pos, meta == 0 ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red);
+    			if(rand.nextInt(60) == 0){
+    				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
+    				world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red);
+    			}
     			return;
     		}
 
@@ -180,37 +184,38 @@ public boolean isInRangeToRenderDist(double distance) {
 			}
 
 			else if (b.getBlock() == Blocks.LOG || b.getBlock() == Blocks.LOG2) {
-			//	world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 			}
 
 			else if (b.getBlock() == Blocks.BROWN_MUSHROOM_BLOCK || b.getBlock() == Blocks.RED_MUSHROOM_BLOCK) {
-				//if (meta == 10) {
-				//	world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-			//	} else {
-				//	world.setBlockToAir(pos);
-				//}
+				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
+				if (meta == BlockHugeMushroom.EnumType.STEM) {
+					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+				} else {
+					world.setBlockToAir(pos);
+				}
 			}
 			
-			//else if (b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
-				//world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-			//}
+			else if (b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
+				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+			}
 
-			//else if (b.getBlock() == ModBlocks.ore_uranium) {
-			//	if (rand.nextInt(90) == 0)
-				//	world.setBlock(pos, ModBlocks.ore_schrabidium.getDefaultState());
-    		//	return;
-			//}
+			else if (b.getBlock() == ModBlocks.ore_uranium) {
+				if (rand.nextInt(90) == 0)
+					world.setBlock(pos, ModBlocks.ore_schrabidium.getDefaultState());
+    			return;
+			}
 
-			//else if (b.getBlock() == ModBlocks.ore_nether_uranium) {
-			//	if (rand.nextInt(90) == 0)
-			//		world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-    		//	return;
+			else if (b.getBlock() == ModBlocks.ore_nether_uranium) {
+				if (rand.nextInt(90) == 0)
+					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+    			return;
     			
     		//this piece stops the "stomp" from reaching below ground
-			//} else if(b.isNormalCube()) {
-//
-			//	return;
-			//}
+			} else if(b.isNormalCube()) {
+
+				return;
+			}
     	}
     }
 

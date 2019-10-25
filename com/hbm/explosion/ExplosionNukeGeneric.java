@@ -11,8 +11,11 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -376,8 +380,9 @@ public class ExplosionNukeGeneric {
 		}
 		return 0;
 	}
-
+*/
 	public static void waste(World world, int x, int y, int z, int radius) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int r = radius;
 		int r2 = r * r;
 		int r22 = r2 / 2;
@@ -391,99 +396,100 @@ public class ExplosionNukeGeneric {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
-						if (world.getBlock(X, Y, Z) != Blocks.air)
-							wasteDest(world, X, Y, Z);
+						if (world.getBlockState(pos.setPos(X, Y, Z)).getBlock() != Blocks.AIR)
+							wasteDest(world, pos);
 					}
 				}
 			}
 		}
 	}
 
-	public static void wasteDest(World world, int x, int y, int z) {
+	public static void wasteDest(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			int rand;
-			Block b = world.getBlock(x,y,z);
-			if (b == Blocks.wooden_door || b == Blocks.iron_door) {
-				world.setBlock(x, y, z, Blocks.air,0,2);
+			IBlockState bs = world.getBlockState(pos);
+			Block b = bs.getBlock();
+			if (b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 
-			else if (b == Blocks.grass) {
-				world.setBlock(x, y, z, ModBlocks.waste_earth);
+			else if (b == Blocks.GRASS) {
+				world.setBlockState(pos, ModBlocks.waste_earth);
 			}
 
-			else if (b == Blocks.mycelium) {
-				world.setBlock(x, y, z, ModBlocks.waste_mycelium);
+			else if (b == Blocks.MYCELIUM) {
+				world.setBlockState(pos, ModBlocks.waste_mycelium);
 			}
 
-			else if (b == Blocks.sand) {
+			else if (b == Blocks.SAND) {
 				rand = random.nextInt(20);
-				if (rand == 1 && world.getBlockMetadata(x, y, z) == 0) {
-					world.setBlock(x, y, z, ModBlocks.waste_trinitite);
+				if (rand == 1 && bs.getValue(BlockSand.VARIANT) == BlockSand.EnumType.SAND) {
+					world.setBlockState(pos, ModBlocks.waste_trinitite);
 				}
-				if (rand == 1 && world.getBlockMetadata(x, y, z) == 1) {
-					world.setBlock(x, y, z, ModBlocks.waste_trinitite_red);
+				if (rand == 1 && bs.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND) {
+					world.setBlockState(pos, ModBlocks.waste_trinitite_red);
 				}
 			}
 
-			else if (b == Blocks.clay) {
-				world.setBlock(x, y, z, Blocks.hardened_clay);
+			else if (b == Blocks.CLAY) {
+				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
 			}
 
-			else if (b == Blocks.mossy_cobblestone) {
-				world.setBlock(x, y, z, Blocks.coal_ore);
+			else if (b == Blocks.MOSSY_COBBLESTONE) {
+				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.coal_ore) {
+			else if (b == Blocks.COAL_ORE) {
 				rand = random.nextInt(10);
 				if (rand == 1 || rand == 2 || rand == 3) {
-					world.setBlock(x, y, z, Blocks.diamond_ore);
+					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
 				}
 				if (rand == 9) {
-					world.setBlock(x, y, z, Blocks.emerald_ore);
+					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 				}
 			}
 
-			else if (b == Blocks.log || b == Blocks.log2) {
-				world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.LOG || b == Blocks.LOG2) {
+				world.setBlockState(pos, ModBlocks.waste_log);
 			}
 
-			else if (b == Blocks.brown_mushroom_block) {
-				if (world.getBlockMetadata(x, y, z) == 10) {
-					world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.BROWN_MUSHROOM_BLOCK) {
+				if (bs.getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
+					world.setBlockState(pos, ModBlocks.waste_log);
 				} else {
-					world.setBlock(x, y, z, Blocks.air,0,2);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState(),2);
 				}
 			}
 
-			else if (b == Blocks.red_mushroom_block) {
-				if (world.getBlockMetadata(x, y, z) == 10) {
-					world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.RED_MUSHROOM_BLOCK) {
+				if (bs.getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
+					world.setBlockState(pos, ModBlocks.waste_log);
 				} else {
-					world.setBlock(x, y, z, Blocks.air,0,2);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState(),2);
 				}
 			}
 			
-			else if (b.getMaterial() == Material.wood && b.isOpaqueCube() && b != ModBlocks.waste_log) {
-				world.setBlock(x, y, z, ModBlocks.waste_planks);
+			else if (bs.getMaterial() == Material.WOOD && bs.isOpaqueCube() && b != ModBlocks.waste_log) {
+				world.setBlockState(pos, ModBlocks.waste_planks);
 			}
 
 			else if (b == ModBlocks.ore_uranium) {
 				rand = random.nextInt(30);
 				if (rand == 1) {
-					world.setBlock(x, y, z, ModBlocks.ore_schrabidium);
+					world.setBlockState(pos, ModBlocks.ore_schrabidium);
 				}
 			}
 
 			else if (b == ModBlocks.ore_nether_uranium) {
 				rand = random.nextInt(30);
 				if (rand == 1) {
-					world.setBlock(x, y, z, ModBlocks.ore_nether_schrabidium);
+					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium);
 				}
 			}
 
 		}
 	}
-
+/*
 	public static void wasteNoSchrab(World world, int x, int y, int z, int radius) {
 		int r = radius;
 		int r2 = r * r;
