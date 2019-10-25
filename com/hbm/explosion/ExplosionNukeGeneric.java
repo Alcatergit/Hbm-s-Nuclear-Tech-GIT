@@ -414,20 +414,20 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if (b == Blocks.GRASS) {
-				world.setBlockState(pos, ModBlocks.waste_earth);
+				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
 			}
 
 			else if (b == Blocks.MYCELIUM) {
-				world.setBlockState(pos, ModBlocks.waste_mycelium);
+				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 			}
 
 			else if (b == Blocks.SAND) {
 				rand = random.nextInt(20);
 				if (rand == 1 && bs.getValue(BlockSand.VARIANT) == BlockSand.EnumType.SAND) {
-					world.setBlockState(pos, ModBlocks.waste_trinitite);
+					world.setBlockState(pos, ModBlocks.waste_trinitite.getDefaultState());
 				}
 				if (rand == 1 && bs.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND) {
-					world.setBlockState(pos, ModBlocks.waste_trinitite_red);
+					world.setBlockState(pos, ModBlocks.waste_trinitite_red.getDefaultState());
 				}
 			}
 
@@ -450,12 +450,12 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if (b == Blocks.LOG || b == Blocks.LOG2) {
-				world.setBlockState(pos, ModBlocks.waste_log);
+				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 			}
 
 			else if (b == Blocks.BROWN_MUSHROOM_BLOCK) {
 				if (bs.getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.waste_log);
+					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(),2);
 				}
@@ -463,27 +463,27 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.RED_MUSHROOM_BLOCK) {
 				if (bs.getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.waste_log);
+					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(),2);
 				}
 			}
 			
 			else if (bs.getMaterial() == Material.WOOD && bs.isOpaqueCube() && b != ModBlocks.waste_log) {
-				world.setBlockState(pos, ModBlocks.waste_planks);
+				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
 			else if (b == ModBlocks.ore_uranium) {
 				rand = random.nextInt(30);
 				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_schrabidium);
+					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
 				}
 			}
 
 			else if (b == ModBlocks.ore_nether_uranium) {
 				rand = random.nextInt(30);
 				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium);
+					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
 				}
 			}
 

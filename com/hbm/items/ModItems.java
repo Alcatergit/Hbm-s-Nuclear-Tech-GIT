@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.gear.ArmorT45;
 import com.hbm.items.gear.AxeSchrabidium;
 import com.hbm.items.gear.HoeSchrabidium;
 import com.hbm.items.gear.ModAxe;
@@ -22,6 +23,7 @@ import com.hbm.main.MainRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item.ToolMaterial;
@@ -32,6 +34,12 @@ public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
+	//Armor
+	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, "t45_helmet");
+	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, "t45_plate");
+	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, "t45_legs");
+	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, "t45_boots");
+	
 	//Materials
 	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium");
 	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy");
@@ -39,6 +47,7 @@ public class ModItems {
 	public static final Item niter = new ItemBase("niter");
 	
 	//Radioactive
+	public static final Item trinitite = new ItemRadioactive("trinitite");
 	public static final Item nugget_u235 = new ItemRadioactive("nugget_u235");
 	public static final Item nugget_pu238 = new ItemRadioactive("nugget_pu238");
 	public static final Item nugget_pu239 = new ItemRadioactive("nugget_pu239");

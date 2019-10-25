@@ -9,6 +9,7 @@ import com.hbm.world.HugeMush;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -26,6 +27,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.tabTest);
 		this.setTickRandomly(true);
+		this.setSoundType(SoundType.GROUND);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -75,7 +77,7 @@ public class BlockMush extends BlockBush implements IGrowable {
         HugeMush worldgenbigmushroom = null;
 
         worldgenbigmushroom = new HugeMush();
-        worldgenbigmushroom.generate(worldIn, pos, rand);
+        worldgenbigmushroom.generate(worldIn, rand, pos);
         
         return true;
 	}

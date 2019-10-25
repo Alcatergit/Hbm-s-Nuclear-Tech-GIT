@@ -158,7 +158,7 @@ public boolean isInRangeToRenderDist(double distance) {
     			
     			if(rand.nextInt(60) == 0){
     				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-    				world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red);
+    				world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
     			}
     			return;
     		}
@@ -202,7 +202,7 @@ public boolean isInRangeToRenderDist(double distance) {
 
 			else if (b.getBlock() == ModBlocks.ore_uranium) {
 				if (rand.nextInt(90) == 0)
-					world.setBlock(pos, ModBlocks.ore_schrabidium.getDefaultState());
+					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
     			return;
 			}
 

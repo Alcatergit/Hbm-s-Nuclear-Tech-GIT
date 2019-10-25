@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
@@ -13,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -49,6 +51,12 @@ public class BlockOre extends Block {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
+			return ModItems.trinitite;
+		}
+		if(this == ModBlocks.waste_planks) {
+			return Items.COAL;
+		}
 		return Item.getItemFromBlock(this);
 	}
 	
@@ -59,11 +67,15 @@ public class BlockOre extends Block {
 	
 	@Override
 	public int damageDropped(IBlockState state) {
-		return 0;
+		return this == ModBlocks.waste_planks ? 1 : 0;
 	}
 	
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
+		if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red))
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));
+    	}
 		if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_0)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));
@@ -93,6 +105,11 @@ public class BlockOre extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		super.randomDisplayTick(stateIn, worldIn, pos, rand);
+		if (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red)
+        {
+            worldIn.spawnParticle(EnumParticleTypes.TOWN_AURA, pos.getX() + rand.nextFloat(), pos.getY() + 1.1F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+        }
 	}
 	
 	@Override

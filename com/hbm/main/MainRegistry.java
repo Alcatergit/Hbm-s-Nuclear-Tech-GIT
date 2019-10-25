@@ -26,7 +26,9 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -164,6 +166,9 @@ public class MainRegistry {
 	public static int y;
 	public static int z;
 	public static long time;
+	
+	//Armor Materials
+	public static ArmorMaterial enumArmorMaterialT45 = EnumHelper.addArmorMaterial("T45", "T45", 1000, new int[] {2, 5, 4, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	
 	//Tool Materials
 	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial("SCHRABIDIUM", 3, 10000, 50.0F, 100.0F, 200);
