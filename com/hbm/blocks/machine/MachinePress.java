@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
@@ -11,7 +12,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -77,6 +77,7 @@ public class MachinePress extends BlockContainer {
             if (tileentity instanceof TileEntityMachinePress)
             {
                 InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachinePress)tileentity);
+                
                 world.updateComparatorOutputLevel(pos, this);
             }
         

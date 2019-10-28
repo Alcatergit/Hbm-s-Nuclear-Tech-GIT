@@ -25,10 +25,16 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachinePress extends TileEntity implements ISidedInventory, ITickable {
+public class TileEntityMachinePress extends TileEntity implements ITickable, ICapabilityProvider {
 	
 	public int progress = 0;
 	public int power = 0;
@@ -41,7 +47,13 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	public boolean isRetracting = false;
 	public boolean test = false;
 	
-	private NonNullList<ItemStack> slots = NonNullList.<ItemStack>withSize(4, ItemStack.EMPTY);
+	
+	private ItemStackHandler inventory = new ItemStackHandler(4) {
+		protected void onContentsChanged(int slot) {
+			super.onContentsChanged(slot);
+			markDirty();
+		};
+	};
 	
 	private String customName;
 	
@@ -58,162 +70,13 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	}
 	
 	public int getSizeInventory(){
-		return slots.size();
+		return inventory.getSlots();
 	}
 	
 	public ItemStack getStackInSlot(int i){
-		return slots.get(i);
+		return inventory.getStackInSlot(i);
 	}
 
-	@Override
-	public String getName() {
-		return this.hasCustomName() ? this.customName : "container.press";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	@Override
-    public boolean isEmpty()
-    {
-        for (ItemStack itemstack : this.slots)
-        {
-            if (!itemstack.isEmpty())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-	@Override
-    public ItemStack decrStackSize(int index, int count)
-    {
-        return ItemStackHelper.getAndSplit(this.slots, index, count);
-    }
-
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.slots, index);
-	}
-
-	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
-        this.slots.set(index, stack);
-
-        if (stack.getCount() > this.getInventoryStackLimit())
-        {
-            stack.setCount(this.getInventoryStackLimit());
-        }
-		
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this)
-		{
-			return false;
-		}else{
-			return player.getDistanceSqToCenter(pos) <= 64;
-		}
-	}
-
-	@Override
-	public void openInventory(EntityPlayer player) {}
-
-	@Override
-	public void closeInventory(EntityPlayer player) {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		
-		if(stack.getItem() instanceof ItemBlades && i == 1)
-			return true;
-		
-		if(TileEntityFurnace.getItemBurnTime(stack) > 0 && i == 0)
-			return true;
-		
-		return i == 2;
-	}
-
-	/**
-	 * 0 is progress, 1 is power, 2 is burn time, 3 is item, 4 is meta
-	 */
-	@Override
-	public int getField(int id) {
-		switch(id){
-		case 0:
-			return this.progress;
-		case 1:
-			return this.power;
-		case 2:
-			return this.burnTime;
-		case 3:
-			return this.item;
-		case 4:
-			return this.meta;
-		default:
-			return 0;
-	}
-	}
-
-	/**
-	 * 0 is progress, 1 is power, 2 is burn time, 3 is item, 4 is meta
-	 */
-	@Override
-	public void setField(int id, int value) {	
-		switch(id){
-			case 0:
-				this.progress = value;
-				break;
-			case 1:
-				this.power = value;
-				break;
-			case 2:
-				this.burnTime = value;
-				break;
-			case 3:
-				this.item = value;
-				break;
-			case 4:
-				this.meta = value;
-				break;
-			default:
-				break;
-		}
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 5;
-	}
-
-	@Override
-	public void clear() {
-		this.slots.clear();
-	}
-	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
-		return null;
-	}
-
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		return index == 2;
-	}
-
-	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		return index == 3;
-	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -224,7 +87,7 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 		burnTime = nbt.getInteger("burnTime");
 		maxBurn = nbt.getInteger("maxBurn");
 		isRetracting = nbt.getBoolean("ret");
-		ItemStackHelper.loadAllItems(nbt, slots);
+		((ItemStackHandler)inventory).deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 		 if (nbt.hasKey("CustomName", 8))
 	        {
 	            this.customName = nbt.getString("CustomName");
@@ -239,14 +102,18 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 		nbt.setInteger("burnTime", burnTime);
 		nbt.setInteger("maxBurn", maxBurn);
 		nbt.setBoolean("ret", isRetracting);
-		
-		ItemStackHelper.saveAllItems(nbt, slots);
+		nbt.setTag("inventory", ((ItemStackHandler) inventory).serializeNBT());
 		
 		if (this.hasCustomName())
         {
             nbt.setString("CustomName", this.customName);
         }
 		return nbt;
+	}
+	
+	public boolean hasCustomName() {
+		
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	@Override
@@ -264,15 +131,15 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 					power--;
 			}
 			
-			if(slots.get(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(slots.get(0)) > 0) {
-				this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(slots.get(0)) / 8;
-				slots.get(0).shrink(1);;
-				if(slots.get(0).getCount() <= 0) {
+			if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
+				this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
+				inventory.getStackInSlot(0).shrink(1);;
+				if(inventory.getStackInSlot(0).getCount() <= 0) {
 					
-					if(slots.get(0).getItem().getContainerItem() != null)
-						slots.set(0, new ItemStack(slots.get(0).getItem().getContainerItem()));
+					if(inventory.getStackInSlot(0).getItem().getContainerItem() != null)
+						inventory.setStackInSlot(0, new ItemStack(inventory.getStackInSlot(0).getItem().getContainerItem()));
 					else
-						slots.set(0, ItemStack.EMPTY);
+						inventory.setStackInSlot(0, ItemStack.EMPTY);
 				}
 			}
 			
@@ -280,29 +147,29 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 
 				int speed = power * 25 / maxPower;
 				
-				if(slots.get(1) != ItemStack.EMPTY && slots.get(2) != ItemStack.EMPTY) {
-					ItemStack stack = MachineRecipes.getPressResult(slots.get(2).copy(), slots.get(1).copy());
+				if(inventory.getStackInSlot(1) != ItemStack.EMPTY && inventory.getStackInSlot(2) != ItemStack.EMPTY) {
+					ItemStack stack = MachineRecipes.getPressResult(inventory.getStackInSlot(2).copy(), inventory.getStackInSlot(1).copy());
 					if(stack != null &&
-							(slots.get(3) == ItemStack.EMPTY ||
-							(slots.get(3).getItem() == stack.getItem() &&
-							slots.get(3).getCount() + stack.getCount() <= slots.get(3).getMaxStackSize()))) {
+							(inventory.getStackInSlot(3) == ItemStack.EMPTY ||
+							(inventory.getStackInSlot(3).getItem() == stack.getItem() &&
+							inventory.getStackInSlot(3).getCount() + stack.getCount() <= inventory.getStackInSlot(3).getMaxStackSize()))) {
 						
 						if(progress >= maxProgress) {
 							
 							isRetracting = true;
 							
-							if(slots.get(3) == ItemStack.EMPTY)
-								slots.set(3, stack.copy());
+							if(inventory.getStackInSlot(3) == ItemStack.EMPTY)
+								inventory.setStackInSlot(3, stack.copy());
 							else
-								slots.get(3).grow(stack.getCount());;
+								inventory.getStackInSlot(3).grow(stack.getCount());;
 							
-							slots.get(2).shrink(1);;
-							if(slots.get(2).getCount() <= 0)
-								slots.set(2, ItemStack.EMPTY);
+							inventory.getStackInSlot(2).shrink(1);;
+							if(inventory.getStackInSlot(2).getCount() <= 0)
+								inventory.setStackInSlot(2, ItemStack.EMPTY);
 							
-							slots.get(1).setItemDamage(slots.get(1).getItemDamage() + 1);
-							if(slots.get(1).getItemDamage() >= slots.get(1).getMaxDamage())
-								slots.set(1, ItemStack.EMPTY);
+							inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
+							if(inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1).getMaxDamage())
+								inventory.setStackInSlot(1, ItemStack.EMPTY);
 					    //    this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F, false);
 					        this.world.playSound(null, pos, HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
 						}
@@ -328,7 +195,7 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 				progress = 0;
 			}
 			
-			PacketDispatcher.wrapper.sendToAll(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), slots.get(2), progress));
+			PacketDispatcher.wrapper.sendToAll(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress));
 		}
 	}
 
@@ -343,5 +210,22 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	{
 		return 65536.0D;
 	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return true;
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return (T) inventory;
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	
 	
 }
