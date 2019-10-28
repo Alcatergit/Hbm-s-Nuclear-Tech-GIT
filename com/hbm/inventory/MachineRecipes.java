@@ -11,7 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineRecipes {
-	public static List<Item> stamps_flat = new ArrayList<Item>() {{
+	public static List<Item> stamps_flat = new ArrayList<Item>() {/**
+		 * I don't even know what this serial version thing is.
+		 */
+		private static final long serialVersionUID = 4758678372533583790L;
+
+	{
 		add(ModItems.stamp_stone_flat);
 		add(ModItems.stamp_iron_flat);
 		add(ModItems.stamp_steel_flat);
@@ -20,7 +25,12 @@ public class MachineRecipes {
 		add(ModItems.stamp_schrabidium_flat);
 	}};
 	
-	public static List<Item> stamps_plate = new ArrayList<Item>() {{
+	public static List<Item> stamps_plate = new ArrayList<Item>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6373696756798212258L;
+
+	{
 		add(ModItems.stamp_stone_plate);
 		add(ModItems.stamp_iron_plate);
 		add(ModItems.stamp_steel_plate);
@@ -29,7 +39,12 @@ public class MachineRecipes {
 		add(ModItems.stamp_schrabidium_plate);
 	}};
 	
-	public static List<Item> stamps_wire = new ArrayList<Item>() {{
+	public static List<Item> stamps_wire = new ArrayList<Item>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1446284270063893048L;
+
+	{
 		add(ModItems.stamp_stone_wire);
 		add(ModItems.stamp_iron_wire);
 		add(ModItems.stamp_steel_wire);
@@ -38,7 +53,12 @@ public class MachineRecipes {
 		add(ModItems.stamp_schrabidium_wire);
 	}};
 	
-	public static List<Item> stamps_circuit = new ArrayList<Item>() {{
+	public static List<Item> stamps_circuit = new ArrayList<Item>() {/**
+		 * 
+		 */
+		private static final long serialVersionUID = -149968111089313972L;
+
+	{
 		add(ModItems.stamp_stone_circuit);
 		add(ModItems.stamp_iron_circuit);
 		add(ModItems.stamp_steel_circuit);
@@ -197,5 +217,15 @@ public class MachineRecipes {
 		}
 		
 		return false;
+	}
+
+	public static ItemStack getOutputFromTempate(ItemStack stack) {
+		//TODO assembler recipes
+		return new ItemStack(Items.AIR);
+	}
+
+	public static List<ItemStack> getRecipeFromTempate(ItemStack stack) {
+		// TODO Assembler recipes
+		return new ArrayList<ItemStack>();
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.entity.mob.EntityNuclearCreeper;
+import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -113,13 +115,12 @@ int thunder = AuxSavedData.getThunder(event.world);
 						if(entity instanceof EntityCreeper && eRad >= 200 && entity.getHealth() > 0) {
 							
 							if(event.world.rand.nextInt(3) == 0 ) {
-								//TODO
-							//	EntityNuclearCreeper creep = new EntityNuclearCreeper(event.world);
-							//	creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								EntityNuclearCreeper creep = new EntityNuclearCreeper(event.world);
+								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 				        		
 				        		if(!entity.isDead)
 				        			if(!event.world.isRemote)
-				        		//		event.world.spawnEntityInWorld(creep);
+				        				event.world.spawnEntity(creep);
 				        		entity.setDead();
 							} else {
 								entity.attackEntityFrom(ModDamageSource.radiation, 100F);
@@ -206,13 +207,13 @@ int thunder = AuxSavedData.getThunder(event.world);
 	}
 	
 	@SubscribeEvent
-	public void onPlayerDeath(LivingDeathEvent event){
+	public void onLivingDeath(LivingDeathEvent event){
 		RadEntitySavedData eData = RadEntitySavedData.getData(event.getEntityLiving().world);
 		eData.setRadForEntity(event.getEntityLiving(), 0);
 		if(MainRegistry.enableCataclysm) {
-		//	EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
-		//	foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
-		//	event.getEntity().world.spawnEntityInWorld(foeq);
+			EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
+			foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
+			event.getEntity().world.spawnEntity(foeq);
 		}
 	}
 	

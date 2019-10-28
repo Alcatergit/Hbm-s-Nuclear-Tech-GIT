@@ -13,7 +13,7 @@ public class PickaxeSchrabidium extends ItemPickaxe {
 		super(t);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);
 	}
 

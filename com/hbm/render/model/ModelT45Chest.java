@@ -197,6 +197,59 @@ public class ModelT45Chest extends ModelBiped {
 			model.rotateAngleY = y;
 			model.rotateAngleZ = z;
 		}
+		
+		@Override
+		public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+			if (entity instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entity;
+				if (player.isSneaking()) {
+					this.isSneak = true;
+				} else {
+					this.isSneak = false;
+				}
+				
+				
+				//This is done automatically now
+				/*ItemStack itemstack = player.inventory.getCurrentItem();
+				  this.heldItemRight = itemstack != null ? 1 : 0;
+
+				if (itemstack != null && player.getItemInUseCount() > 0) {
+					EnumAction enumaction = itemstack.getItemUseAction();
+
+					if (enumaction == EnumAction.block) {
+						this.heldItemRight = 3;
+					} else if (enumaction == EnumAction.bow) {
+						this.aimedBow = true;
+					}
+				}*/
+			}
+			float s = 1 / 16;
+
+			super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+			this.chest.rotationPointX = this.bipedBody.rotationPointX;
+			this.chest.rotationPointY = this.bipedBody.rotationPointY;
+			this.chest.rotationPointZ = this.bipedBody.rotationPointZ;
+			this.chest.rotateAngleX = this.bipedBody.rotateAngleX;
+			this.chest.rotateAngleY = this.bipedBody.rotateAngleY;
+			this.chest.rotateAngleZ = this.bipedBody.rotateAngleZ;
+			this.leftarm.rotationPointX = this.bipedLeftArm.rotationPointX;
+			this.leftarm.rotationPointY = this.bipedLeftArm.rotationPointY;
+			this.leftarm.rotationPointZ = this.bipedLeftArm.rotationPointZ;
+			this.leftarm.rotateAngleX = this.bipedLeftArm.rotateAngleX;
+			this.leftarm.rotateAngleY = this.bipedLeftArm.rotateAngleY;
+			this.leftarm.rotateAngleZ = this.bipedLeftArm.rotateAngleZ;
+			this.rightarm.rotationPointX = this.bipedRightArm.rotationPointX;
+			this.rightarm.rotationPointY = this.bipedRightArm.rotationPointY;
+			this.rightarm.rotationPointZ = this.bipedRightArm.rotationPointZ;
+			this.rightarm.rotateAngleX = this.bipedRightArm.rotateAngleX;
+			this.rightarm.rotateAngleY = this.bipedRightArm.rotateAngleY;
+			this.rightarm.rotateAngleZ = this.bipedRightArm.rotateAngleZ;
+			
+			if(entity instanceof EntityZombie || entity instanceof EntityPigZombie || entity instanceof EntitySkeleton) {
+				this.leftarm.rotateAngleX -= (90 * Math.PI / 180D);
+				this.rightarm.rotateAngleX -= (90 * Math.PI / 180D);
+			}
+		}
 
 
 		@Override

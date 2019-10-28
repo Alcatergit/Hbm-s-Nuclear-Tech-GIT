@@ -21,7 +21,7 @@ public class BlockMushHuge extends Block {
 		super(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setSoundType(SoundType.GROUND);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

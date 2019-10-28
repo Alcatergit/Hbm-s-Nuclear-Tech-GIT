@@ -253,8 +253,7 @@ public class TileEntityMachinePress extends TileEntity implements ISidedInventor
 	public void update() {	
 		if(!world.isRemote)
 		{
-			//String s = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(Blocks.ACACIA_DOOR.getDefaultState()).getParticleTexture().toString();
-			//System.out.println(s.substring(25, (s.indexOf("',"))));
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 30, pos.getX(), pos.getY(), pos.getZ()));
 			if(burnTime > 0) {
 				this.burnTime--;
 				this.power++;

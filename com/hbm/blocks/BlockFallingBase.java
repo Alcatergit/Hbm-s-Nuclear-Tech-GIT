@@ -12,7 +12,7 @@ public class BlockFallingBase extends BlockFalling {
 		super(m);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setSoundType(type);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

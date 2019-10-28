@@ -43,7 +43,7 @@ public class BlockTaint extends BlockContainer {
 		this.setTickRandomly(true);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TEXTURE, 0));
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

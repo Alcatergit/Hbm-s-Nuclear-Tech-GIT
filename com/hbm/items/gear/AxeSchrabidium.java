@@ -12,7 +12,7 @@ public class AxeSchrabidium extends ItemAxe {
 		super(t, t.getAttackDamage(), -3.2F);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setMaxStackSize(1);
 		ModItems.ALL_ITEMS.add(this);
 	}

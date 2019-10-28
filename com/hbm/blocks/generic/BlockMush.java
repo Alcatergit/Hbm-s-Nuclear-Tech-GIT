@@ -12,6 +12,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,7 +26,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.GROUND);
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -46,6 +47,21 @@ public class BlockMush extends BlockBush implements IGrowable {
         {
             return false;
         }
+	}
+	
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		return this.canBlockStay(world, pos, world.getBlockState(pos));
+	}
+	
+	@Override
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
+	
+	@Override
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+		return this.canBlockStay(world, pos, world.getBlockState(pos));
 	}
 	
 	@Override

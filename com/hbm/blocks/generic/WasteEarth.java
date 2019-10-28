@@ -36,7 +36,7 @@ public class WasteEarth extends Block {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	

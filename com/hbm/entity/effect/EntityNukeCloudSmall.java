@@ -35,6 +35,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
 		this.age = 0;
+		new Exception().printStackTrace();
 	}
 
 	@Override

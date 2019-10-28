@@ -9,10 +9,12 @@ import com.hbm.entity.particle.EntityModFX;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,12 +36,14 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 		textureItems = items;
 		meta = m;
 	}
-	
+	//Trash code, should probably fix later
 	@Override
 	public void doRender(EntityModFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
-		this.getEntityTexture(fx);
+		this.bindEntityTexture(fx);
 		if (tex != null) {
 			GL11.glPushMatrix();
+			//GlStateManager.enableBlend();
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
@@ -80,6 +84,7 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityModFX fx) {
+		
 		Item item = textureItems[0];
 		
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
@@ -114,26 +119,25 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 			item = textureItems[0];
 		}
 		tex = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(new ItemStack(item, 1, meta), null, null).getParticleTexture();
-		return null;
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 
-	private void func_77026_a(Tessellator p_77026_1_, TextureAtlasSprite p_77026_2_) {
-		BufferBuilder buf = p_77026_1_.getBuffer();
-		float f = p_77026_2_.getMinU();
-		float f1 = p_77026_2_.getMaxU();
-		float f2 = p_77026_2_.getMinV();
-		float f3 = p_77026_2_.getMaxV();
+	private void func_77026_a(Tessellator tes, TextureAtlasSprite tas) {
+		BufferBuilder buf = tes.getBuffer();
+		float f = tas.getMinU();
+		float f1 = tas.getMaxU();
+		float f2 = tas.getMinV();
+		float f3 = tas.getMaxV();
 		float f4 = 1.0F;
 		float f5 = 0.5F;
 		float f6 = 0.25F;
 		GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		//buf.putNormal(0.0F, 1.0F, 0.0F);
 		buf.pos(0.0F - f5, 0.0F - f6, 0.0D).tex(f, f3).endVertex();
 		buf.pos(f4 - f5, 0.0F - f6, 0.0D).tex(f1, f3).endVertex();
 		buf.pos(f4 - f5, f4 - f6, 0.0D).tex(f1, f2).endVertex();
 		buf.pos(0.0F - f5, f4 - f6, 0.0D).tex(f, f2).endVertex();
-		p_77026_1_.draw();
+		tes.draw();
 	}
 }

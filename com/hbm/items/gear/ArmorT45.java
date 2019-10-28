@@ -3,6 +3,7 @@ package com.hbm.items.gear;
 import java.util.List;
 
 import com.hbm.items.ModItems;
+import com.hbm.items.special.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelT45Boots;
@@ -15,11 +16,16 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,7 +43,7 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);
 	}
 	
@@ -148,6 +154,60 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
 		if (source != DamageSource.CACTUS && source != DamageSource.DROWN && source != DamageSource.FALL)
 			stack.damageItem(damage * 1, entity);
+	}
+	
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack armor) {
+		if (armor.getItem() == ModItems.t45_plate) {
+			if (armor.getTagCompound() == null) {
+				armor.setTagCompound(new NBTTagCompound());
+				armor.getTagCompound().setInteger("charge", 0);
+			}
+			
+			boolean b = true;
+			
+			if(player.inventory.hasItemStack(new ItemStack(ModItems.fusion_core_infinite))) {
+				armor.getTagCompound().setInteger("charge", (int)ItemBattery.getCharge(ItemBattery.getFullBattery(ModItems.fusion_core)));
+			}
+			
+			if(b)
+			if (armor.getTagCompound().getInteger("charge") <= 0) {
+				for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if (stack != null && stack.getItem() == ModItems.fusion_core
+							&& ItemBattery.getCharge(stack) != 0) {
+						if (armor.getTagCompound().getInteger("charge") == 0) {
+							int j = (int) ItemBattery.getCharge(stack);
+							armor.getTagCompound().setInteger("charge", j);
+							player.inventory.mainInventory.set(i, ItemStack.EMPTY);
+							player.sendMessage(new TextComponentTranslation("[Power Armor recharged]"));
+							break;
+						}
+					}
+				}
+			}
+
+			if (armor.getTagCompound().getInteger("charge") > 0 && Library.checkArmor(player, ModItems.t45_helmet,
+					ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots)) {
+				armor.getTagCompound().setInteger("charge", armor.getTagCompound().getInteger("charge") - 1);
+			}
+		}
+
+		if (Library.checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) && !world.isRemote) {
+			//Probably don't need the null check because it's a non null list, but whatever
+			if (player.inventory.armorInventory.get(2) != null
+					&& player.inventory.armorInventory.get(2).getItem() == ModItems.t45_plate
+					&& player.inventory.armorInventory.get(2).getTagCompound() != null
+					&& player.inventory.armorInventory.get(2).getTagCompound().getInteger("charge") > 0) {
+				player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0, true, false));
+				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30, 1, true, false));
+				player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30, 2, true, false));
+				player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 30, 0, true, false));
+			} else {
+				player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30, 1, true, false));
+				player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30, 0, true, false));
+			}
+		}
 	}
 	
 	@Override

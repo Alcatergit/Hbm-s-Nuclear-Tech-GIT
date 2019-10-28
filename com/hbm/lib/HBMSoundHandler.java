@@ -15,6 +15,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent pressOperate;
 	public static SoundEvent laserBang;
 	public static SoundEvent blockDebris;
+	public static SoundEvent syringeUse;
 
 	
 	public static void init() {
@@ -24,6 +25,7 @@ public final class HBMSoundHandler {
 		pressOperate = register("block.pressoperate");
 		laserBang = register("weapon.laserBang");
 		blockDebris = register("block.debris");
+		syringeUse = register("item.syringe");
 	}
 	
 	public static SoundEvent register(String name) {

@@ -33,7 +33,7 @@ public class BlockOre extends Block {
 		super(materialIn);
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	

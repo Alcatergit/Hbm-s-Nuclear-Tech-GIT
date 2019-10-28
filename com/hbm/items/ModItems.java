@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.food.ItemEnergy;
 import com.hbm.items.gear.ArmorT45;
 import com.hbm.items.gear.AxeSchrabidium;
 import com.hbm.items.gear.HoeSchrabidium;
@@ -16,8 +17,13 @@ import com.hbm.items.gear.PickaxeSchrabidium;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.gear.SpadeSchrabidium;
 import com.hbm.items.gear.SwordSchrabidium;
+import com.hbm.items.gear.WeaponSpecial;
+import com.hbm.items.special.ItemBattery;
 import com.hbm.items.special.ItemBlades;
+import com.hbm.items.special.ItemFuelRod;
 import com.hbm.items.special.ItemRadioactive;
+import com.hbm.items.special.ItemSyringe;
+import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -34,11 +40,34 @@ public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
+	//Syringe
+	public static final Item syringe_empty = new ItemBase("syringe_empty").setFull3D();
+	public static final Item syringe_awesome = new ItemSyringe("syringe_awesome");
+	public static final Item syringe_metal_empty = new ItemBase("syringe_metal_empty").setFull3D();
+	public static final Item syringe_metal_stimpak = new ItemSyringe("syringe_metal_stimpak").setFull3D();
+	
+	//Energy items
+	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50, "battery_schrabidium").setMaxStackSize(1);
+	public static final Item factory_core_titanium = new ItemBattery(70400, 10, 0, "factory_core_titanium").setMaxStackSize(1);
+	public static final Item factory_core_advanced = new ItemBattery(41600, 10, 0, "factory_core_advanced").setMaxStackSize(1);
+	public static final Item dynosphere_desh = new ItemBattery(10000L, 100, 0, "dynosphere_desh").setMaxStackSize(1);
+	public static final Item dynosphere_schrabidium = new ItemBattery(1000000L, 1000, 0, "dynosphere_schrabidium").setMaxStackSize(1);
+	public static final Item dynosphere_euphemium = new ItemBattery(100000000L, 10000, 0, "dynosphere_euphemium").setMaxStackSize(1);
+	public static final Item dynosphere_dineutronium = new ItemBattery(10000000000L, 100000, 0, "dynosphere_dineutronium").setMaxStackSize(1);
+	public static final Item fusion_core = new ItemBattery(200000, 0, 25, "fusion_core").setMaxStackSize(1);
+	public static final Item energy_core = new ItemBattery(100000, 0, 10, "energy_core").setMaxStackSize(1);
+	public static final Item fusion_core_infinite = new ItemBase("fusion_core_infinite").setMaxStackSize(1);
+	
+	//Weapons
+	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
+	
 	//Armor
 	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, "t45_helmet");
 	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, "t45_plate");
 	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, "t45_legs");
 	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, "t45_boots");
+	
+	
 	
 	//Materials
 	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium");
@@ -46,19 +75,24 @@ public class ModItems {
 	public static final Item sulfur = new ItemBase("sulfur");
 	public static final Item niter = new ItemBase("niter");
 	
-	//Radioactive
+	//Radioactive Materials
 	public static final Item trinitite = new ItemRadioactive("trinitite");
 	public static final Item nugget_u235 = new ItemRadioactive("nugget_u235");
 	public static final Item nugget_pu238 = new ItemRadioactive("nugget_pu238");
 	public static final Item nugget_pu239 = new ItemRadioactive("nugget_pu239");
 	public static final Item nugget_neptunium = new ItemRadioactive("nugget_neptunium");
 	
+	public static final Item ingot_uranium = new ItemRadioactive("ingot_uranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_u235 = new ItemRadioactive("ingot_u235");
 	public static final Item ingot_pu238 = new ItemRadioactive("ingot_pu238");
 	
 	public static final Item man_core = new ItemRadioactive("man_core");
 	
 	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
+	
+	//Fuel rods
+	public static final Item rod_empty = new ItemBase("rod_empty").setCreativeTab(MainRegistry.controlTab);
+	public static final Item rod_uranium_fuel = new ItemFuelRod(100000, 15, "rod_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal");
@@ -71,6 +105,11 @@ public class ModItems {
 	public static final Item powder_lignite = new ItemBase("powder_lignite");
 	public static final Item powder_coal = new ItemBase("powder_coal");
 	
+	//Consume
+	public static final Item bottle_opener = new WeaponSpecial(MainRegistry.enumToolMaterialBottleOpener, "bottle_opener").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
+	public static final Item bottle_empty = new ItemBase("bottle_empty").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item bottle_nuka = new ItemEnergy("bottle_nuka").setContainerItem(bottle_empty).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_nuka = new ItemBase("cap_nuka").setCreativeTab(MainRegistry.consumableTab);
 	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword");
 	//Tools
@@ -85,6 +124,9 @@ public class ModItems {
 	public static final Item schrabidium_hoe = new HoeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_hoe");
 	public static final Item schrabidium_shovel = new SpadeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_shovel");
 	public static final Item schrabidium_sword = new SwordSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_sword");
+	
+	//Templates
+	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	
 	//Plates
 	public static final Item plate_iron = new ItemBase("plate_iron");

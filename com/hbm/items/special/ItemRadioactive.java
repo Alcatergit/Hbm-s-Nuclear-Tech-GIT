@@ -46,6 +46,10 @@ public class ItemRadioactive extends ItemCustomLore {
 					this == ModItems.nugget_neptunium) {
 				Library.applyRadData(living, 1F/20F * mod);
 			}
+			//Weak
+			if(this == ModItems.ingot_uranium){
+				Library.applyRadData(living, 0.5F/20F * mod);
+			}
 			//Strong
 			if(this == ModItems.nuclear_waste) {
 				Library.applyRadData(living, 5F/20F * mod);

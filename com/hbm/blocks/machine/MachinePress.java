@@ -32,7 +32,7 @@ public class MachinePress extends BlockContainer {
 		super(m);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 

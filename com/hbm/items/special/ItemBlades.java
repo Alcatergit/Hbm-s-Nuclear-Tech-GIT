@@ -14,7 +14,7 @@ public class ItemBlades extends Item {
 	public ItemBlades(String s, int i){
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(i);
 		ModItems.ALL_ITEMS.add(this);

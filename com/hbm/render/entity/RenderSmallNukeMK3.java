@@ -75,7 +75,6 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
         GL11.glEnable(GL11.GL_CULL_FACE);
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE);
         GL11.glScalef(size, size, size);
-
 		int age = cloud.age;
         int shockScale = age * 4;
         int fireScale = (int)((age - 25) * 1.5);

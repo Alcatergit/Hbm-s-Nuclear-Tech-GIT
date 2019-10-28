@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.interfaces.IConstantRenderer;
 
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -12,8 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityBurningFOEQ extends EntityThrowable {
-
+public class EntityBurningFOEQ extends EntityThrowable implements IConstantRenderer {
+	
 	public EntityBurningFOEQ(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.ignoreFrustumCheck = true;
@@ -21,8 +22,6 @@ public class EntityBurningFOEQ extends EntityThrowable {
 	
 	@Override
 	public void onUpdate() {
-
-
 		this.lastTickPosX = this.prevPosX = posX;
 		this.lastTickPosY = this.prevPosY = posY;
 		this.lastTickPosZ = this.prevPosZ = posZ;
@@ -105,6 +104,5 @@ public class EntityBurningFOEQ extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		
 	}
 }

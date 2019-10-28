@@ -18,7 +18,7 @@ public class WasteLog extends Block {
 		super(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.tabTest);
+		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
@@ -44,7 +44,6 @@ public class WasteLog extends Block {
 	}
 	@Override
 	public Block setSoundType(SoundType sound) {
-		// TODO Auto-generated method stub
 		return super.setSoundType(sound);
 	}
 }

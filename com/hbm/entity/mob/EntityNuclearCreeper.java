@@ -60,7 +60,6 @@ public class EntityNuclearCreeper extends EntityMob {
     private int fuseTime = 75;
     /** Explosion radius for this creeper. */
     private int explosionRadius = 20;
-    private static final String __OBFID = "CL_00001684";
 
     public EntityNuclearCreeper(World p_i1733_1_)
     {

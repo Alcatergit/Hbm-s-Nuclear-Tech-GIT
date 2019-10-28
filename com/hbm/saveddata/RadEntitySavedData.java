@@ -36,7 +36,7 @@ public class RadEntitySavedData extends WorldSavedData {
 		return 0F;
 	}
 	
-public void setRadForEntity(Entity e, float rad) {
+	public void setRadForEntity(Entity e, float rad) {
     	
     	if(!(e instanceof EntityLivingBase))
     		return;
