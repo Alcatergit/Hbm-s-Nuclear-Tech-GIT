@@ -20,7 +20,7 @@ public class RenderFOEQ extends Render<EntityBurningFOEQ> {
 	@Override
 	public void doRender(EntityBurningFOEQ e, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_LIGHTING_BIT);
         GL11.glTranslatef((float)x, (float)y - 10, (float)z);
         GL11.glRotatef(e.prevRotationYaw + (e.rotationYaw - e.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(180, 0F, 0F, 1F);

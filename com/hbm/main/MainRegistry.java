@@ -31,6 +31,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -51,6 +52,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -100,7 +102,7 @@ public class MainRegistry {
 	public static boolean enableBomberShortMode = false;
 	public static boolean enableVaults = true;
 	public static boolean enableRads = true;
-	public static boolean enableCataclysm = true;
+	public static boolean enableCataclysm = false;
 	public static boolean enableExtendedLogging = false;
 	public static boolean enableHardcoreTaint = false;
 	public static boolean enableGuns = true;
@@ -236,8 +238,8 @@ public class MainRegistry {
     	HbmPotion.init();
 
     	proxy.preInit(event);
-    	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+    	GameRegistry.registerTileEntity(TileEntityDiFurnace.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_difurnace"));
     	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
     	int i = 0;
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -260,6 +262,7 @@ public class MainRegistry {
     {
     	ModItems.init();
     	ModBlocks.init();
+    	registerOreDict();
     }
 
     @EventHandler
@@ -274,4 +277,9 @@ public class MainRegistry {
     public void serverStarting(FMLServerStartingEvent evt){
     	evt.registerServerCommand(new CommandRadiation());
     }
+    
+    public void registerOreDict(){
+    	OreDictionary.registerOre("plateGold", ModItems.plate_gold);
+    }
+    
 }

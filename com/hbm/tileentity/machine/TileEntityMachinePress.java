@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -48,7 +50,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	public boolean test = false;
 	
 	
-	private ItemStackHandler inventory = new ItemStackHandler(4) {
+	public ItemStackHandler inventory = new ItemStackHandler(4) {
 		protected void onContentsChanged(int slot) {
 			super.onContentsChanged(slot);
 			markDirty();
@@ -120,7 +122,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	public void update() {	
 		if(!world.isRemote)
 		{
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 30, pos.getX(), pos.getY(), pos.getZ()));
 			if(burnTime > 0) {
 				this.burnTime--;
 				this.power++;
@@ -225,7 +226,18 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		}
 		return super.getCapability(capability, facing);
 	}
-	
-	
+
+	public String getName() {
+		return this.hasCustomName() ? this.customName : "container.press";
+	}
+
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		if(player.world.getTileEntity(this.pos) != this)
+		{
+			return false;
+		}else{
+			return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <=64;
+		}
+	}
 	
 }

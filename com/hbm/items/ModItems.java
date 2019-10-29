@@ -74,6 +74,7 @@ public class ModItems {
 	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy");
 	public static final Item sulfur = new ItemBase("sulfur");
 	public static final Item niter = new ItemBase("niter");
+	public static final Item lignite = new ItemBase("lignite").setCreativeTab(MainRegistry.partsTab);
 	
 	//Radioactive Materials
 	public static final Item trinitite = new ItemRadioactive("trinitite");
@@ -89,6 +90,8 @@ public class ModItems {
 	public static final Item man_core = new ItemRadioactive("man_core");
 	
 	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
+	
+	public static final Item pellet_rtg = new ItemRadioactive("pellet_rtg").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
 	//Fuel rods
 	public static final Item rod_empty = new ItemBase("rod_empty").setCreativeTab(MainRegistry.controlTab);

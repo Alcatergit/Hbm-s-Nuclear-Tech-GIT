@@ -4,9 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotMachineOutput extends Slot {
-	public SlotMachineOutput(EntityPlayer player, IInventory inventory, int i, int j, int k) {
+public class SlotMachineOutput extends SlotItemHandler {
+	public SlotMachineOutput(EntityPlayer player, IItemHandler inventory, int i, int j, int k) {
 		super(inventory, i, j, k);
 	}
 	

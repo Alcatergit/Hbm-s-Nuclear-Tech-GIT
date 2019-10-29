@@ -38,7 +38,8 @@ public class ItemRadioactive extends ItemCustomLore {
 			}
 			//Medium
 			if(this == ModItems.ingot_pu238 ||
-					this == ModItems.trinitite) {
+					this == ModItems.trinitite ||
+					this == ModItems.pellet_rtg) {
 				Library.applyRadData(living, 2.5F/20F * mod);
 			}
 			//Meduim Nuggets

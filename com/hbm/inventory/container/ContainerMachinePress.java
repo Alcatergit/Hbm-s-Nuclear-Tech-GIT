@@ -9,6 +9,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachinePress extends Container {
 
@@ -24,13 +25,13 @@ public class ContainerMachinePress extends Container {
 		nukeBoy = tedf;
 
 		//Coal
-		this.addSlotToContainer(new Slot(tedf, 0, 26, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 53));
 		//Stamp
-		this.addSlotToContainer(new Slot(tedf, 1, 80, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 17));
 		//Input
-		this.addSlotToContainer(new Slot(tedf, 2, 80, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 53));
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf, 3, 140, 35));
+		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 140, 35));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -70,7 +71,7 @@ public class ContainerMachinePress extends Container {
 			
 			if (var5.getCount() == 0)
 			{
-				var4.putStack((ItemStack) null);
+				var4.putStack((ItemStack) ItemStack.EMPTY);
 			}
 			else
 			{

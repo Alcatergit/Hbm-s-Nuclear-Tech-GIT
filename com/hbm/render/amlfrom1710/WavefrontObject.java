@@ -49,7 +49,6 @@ public class WavefrontObject implements IModelCustom
         try
         {
             IResource res = Minecraft.getMinecraft().getResourceManager().getResource(resource);
-            System.out.println("resource: " + res.getResourceLocation() + " " + res.getInputStream());
             loadObjModel(res.getInputStream());
         }
         catch (IOException e)
