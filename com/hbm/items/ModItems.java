@@ -1,7 +1,5 @@
 package com.hbm.items;
 
-import ModItems;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,43 +103,45 @@ public class ModItems {
 	public static final Item man_core = new ItemRadioactive("man_core");
 	
 	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
-	public static final Item nuclear_waste_tiny = new ItemRadioactive("nuclear_waste_tiny").setUnlocalizedName("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":nuclear_waste_tiny");
-	public static final Item waste_uranium = new ItemRadioactive("waste_uranium").setUnlocalizedName("waste_uranium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_uranium");
-	public static final Item waste_thorium = new ItemRadioactive("waste_thorium").setUnlocalizedName("waste_thorium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_thorium");
-	public static final Item waste_plutonium = new ItemRadioactive("waste_plutonium").setUnlocalizedName("waste_plutonium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_plutonium");
-	public static final Item waste_mox = new ItemRadioactive("waste_mox").setUnlocalizedName("waste_mox").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_mox");
-	public static final Item waste_schrabidium = new ItemRadioactive("waste_schrabidium").setUnlocalizedName("waste_schrabidium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_schrabidium");
-	public static final Item waste_uranium_hot = new ItemRadioactive("waste_uranium_hot").setUnlocalizedName("waste_uranium_hot").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_uranium_hot");
-	public static final Item waste_thorium_hot = new ItemRadioactive("waste_thorium_hot").setUnlocalizedName("waste_thorium_hot").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_thorium_hot");
-	public static final Item waste_plutonium_hot = new ItemRadioactive("waste_plutonium_hot").setUnlocalizedName("waste_plutonium_hot").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_plutonium_hot");
-	public static final Item waste_mox_hot = new ItemRadioactive("waste_mox_hot").setUnlocalizedName("waste_mox_hot").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_mox_hot");
-	public static final Item waste_schrabidium_hot = new ItemRadioactive("waste_schrabidium_hot").setUnlocalizedName("waste_schrabidium_hot").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":waste_schrabidium_hot");
-	public static final Item scrap = new ItemBase("scrap").setUnlocalizedName("scrap").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":scrap");
+	public static final Item nuclear_waste_tiny = new ItemRadioactive("nuclear_waste_tiny").setUnlocalizedName("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_uranium = new ItemRadioactive("waste_uranium").setUnlocalizedName("waste_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_thorium = new ItemRadioactive("waste_thorium").setUnlocalizedName("waste_thorium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_plutonium = new ItemRadioactive("waste_plutonium").setUnlocalizedName("waste_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_mox = new ItemRadioactive("waste_mox").setUnlocalizedName("waste_mox").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_schrabidium = new ItemRadioactive("waste_schrabidium").setUnlocalizedName("waste_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_uranium_hot = new ItemRadioactive("waste_uranium_hot").setUnlocalizedName("waste_uranium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_thorium_hot = new ItemRadioactive("waste_thorium_hot").setUnlocalizedName("waste_thorium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_plutonium_hot = new ItemRadioactive("waste_plutonium_hot").setUnlocalizedName("waste_plutonium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_mox_hot = new ItemRadioactive("waste_mox_hot").setUnlocalizedName("waste_mox_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_schrabidium_hot = new ItemRadioactive("waste_schrabidium_hot").setUnlocalizedName("waste_schrabidium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item scrap = new ItemBase("scrap").setUnlocalizedName("scrap").setCreativeTab(MainRegistry.partsTab);
 	public static final Item containment_box = new ItemLeadBox("containment_box").setCreativeTab(null);
 	
 	public static final Item pellet_rtg = new ItemRadioactive("pellet_rtg").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
 	//Fuel rods
 	public static final Item rod_empty = new ItemBase("rod_empty").setCreativeTab(MainRegistry.controlTab);
+	public static final Item rod_dual_empty = new ItemBase("rod_dual_empty").setCreativeTab(MainRegistry.controlTab);
+	public static final Item rod_quad_empty = new ItemBase("rod_quad_empty").setCreativeTab(MainRegistry.controlTab);
 	public static final Item rod_uranium_fuel = new ItemFuelRod(100000, 15, "rod_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_thorium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_thorium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_thorium_fuel_depleted");
-	public static final Item rod_dual_thorium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_dual_thorium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_thorium_fuel_depleted");
-	public static final Item rod_quad_thorium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_quad_thorium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_thorium_fuel_depleted");
-	public static final Item rod_uranium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_uranium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_uranium_fuel_depleted");
-	public static final Item rod_dual_uranium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_dual_uranium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_uranium_fuel_depleted");
-	public static final Item rod_quad_uranium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_quad_uranium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_uranium_fuel_depleted");
-	public static final Item rod_plutonium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_plutonium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_plutonium_fuel_depleted");
-	public static final Item rod_dual_plutonium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_dual_plutonium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_plutonium_fuel_depleted");
-	public static final Item rod_quad_plutonium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_quad_plutonium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_plutonium_fuel_depleted");
-	public static final Item rod_mox_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_mox_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_mox_fuel_depleted");
-	public static final Item rod_dual_mox_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_dual_mox_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_mox_fuel_depleted");
-	public static final Item rod_quad_mox_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_quad_mox_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_mox_fuel_depleted");
-	public static final Item rod_schrabidium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_schrabidium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_schrabidium_fuel_depleted");
-	public static final Item rod_dual_schrabidium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_dual_schrabidium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_schrabidium_fuel_depleted");
-	public static final Item rod_quad_schrabidium_fuel_depleted = new ItemRadioactive().setUnlocalizedName("rod_quad_schrabidium_fuel_depleted").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_schrabidium_fuel_depleted");
-	public static final Item rod_waste = new ItemRadioactive().setUnlocalizedName("rod_waste").setMaxStackSize(1).setCreativeTab(null).setContainerItem(ModItems.rod_empty).setTextureName(RefStrings.MODID + ":rod_waste");
-	public static final Item rod_dual_waste = new ItemRadioactive().setUnlocalizedName("rod_dual_waste").setMaxStackSize(1).setCreativeTab(null).setContainerItem(ModItems.rod_dual_empty).setTextureName(RefStrings.MODID + ":rod_dual_waste");
-	public static final Item rod_quad_waste = new ItemRadioactive().setUnlocalizedName("rod_quad_waste").setMaxStackSize(1).setCreativeTab(null).setContainerItem(ModItems.rod_quad_empty).setTextureName(RefStrings.MODID + ":rod_quad_waste");
+	public static final Item rod_thorium_fuel_depleted = new ItemRadioactive("rod_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_thorium_fuel_depleted = new ItemRadioactive("rod_dual_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_thorium_fuel_depleted = new ItemRadioactive("rod_quad_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_uranium_fuel_depleted = new ItemRadioactive("rod_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_uranium_fuel_depleted = new ItemRadioactive("rod_dual_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_uranium_fuel_depleted = new ItemRadioactive("rod_quad_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_plutonium_fuel_depleted = new ItemRadioactive("rod_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_plutonium_fuel_depleted = new ItemRadioactive("rod_dual_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_plutonium_fuel_depleted = new ItemRadioactive("rod_quad_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_mox_fuel_depleted = new ItemRadioactive("rod_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_mox_fuel_depleted = new ItemRadioactive("rod_dual_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_mox_fuel_depleted = new ItemRadioactive("rod_quad_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_schrabidium_fuel_depleted = new ItemRadioactive("rod_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_schrabidium_fuel_depleted = new ItemRadioactive("rod_dual_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_schrabidium_fuel_depleted = new ItemRadioactive("rod_quad_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_waste = new ItemRadioactive("rod_waste").setCreativeTab(null).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_waste = new ItemRadioactive("rod_dual_waste").setCreativeTab(null).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_waste = new ItemRadioactive("rod_quad_waste").setCreativeTab(null).setContainerItem(ModItems.rod_quad_empty);
 	
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal");
