@@ -11,6 +11,7 @@ import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.blocks.machine.MachinePress;
+import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -59,8 +60,8 @@ public class ModBlocks {
 	public static final Block machine_press = new MachinePress(Material.IRON, "machine_press").setHardness(5.0F).setResistance(10.0F);
 	public static final int guiID_machine_press = 53;
 	
-	public static final Block machine_difurnace_on = new MachineDiFurnace(Material.IRON, "machine_difurnace_on", true);
-	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false);
+	public static final Block machine_difurnace_on = new MachineDiFurnace(Material.IRON, "machine_difurnace_on", true).setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null);
+	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_test_difurnace = 1;
 	
 	public static void preInit(){

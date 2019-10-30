@@ -30,7 +30,7 @@ public class GUITestDiFurnace extends GuiContainer {
 		
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
-		super.renderHoveredToolTip(i, j);
+		
 	}
 
 	@Override
@@ -48,11 +48,18 @@ public class GUITestDiFurnace extends GuiContainer {
 		}
 		
 		int j1 = diFurnace.getDiFurnaceProgressScaled(24);
-		drawTexturedModalRect(guiLeft + 101, guiTop + 35, 176, 14, j1 + 1, 17);
+		if(diFurnace.isProcessing())
+			drawTexturedModalRect(guiLeft + 101, guiTop + 35, 176, 14, j1 + 1, 17);
 		
 		if(diFurnace.hasPower() && diFurnace.canProcess()) {
 			drawTexturedModalRect(guiLeft + 63, guiTop + 37, 176, 0, 14, 14);
 		}
 		
+	}
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

@@ -1,5 +1,6 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -14,6 +15,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -29,6 +31,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -186,8 +189,23 @@ public class MachineDiFurnace extends BlockContainer {
 	}
 	
 	public static void updateBlockState(boolean isProcessing, World world, BlockPos pos){
+		IBlockState i = world.getBlockState(pos);
+		TileEntity entity = world.getTileEntity(pos);
 		keepInventory = true;
-		//TODO actually do the update
+		
+		if(isProcessing && i.getBlock() != ModBlocks.machine_difurnace_on)
+		{
+			world.setBlockState(pos, ModBlocks.machine_difurnace_on.getDefaultState().withProperty(FACING, i.getValue(FACING)), 2);
+		}else if (!isProcessing && i.getBlock() != ModBlocks.machine_difurnace_off){
+			world.setBlockState(pos, ModBlocks.machine_difurnace_off.getDefaultState().withProperty(FACING, i.getValue(FACING)), 2);
+		}
+		
+		keepInventory = false;
+		
+		if(entity != null) {
+			entity.validate();
+			world.setTileEntity(pos, entity);
+		}
 	}
 	
 	@Override

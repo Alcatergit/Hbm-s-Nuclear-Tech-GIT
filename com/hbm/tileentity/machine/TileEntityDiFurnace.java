@@ -204,13 +204,12 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 			return false;
 		}
 		
-		if(inventory.getStackInSlot(3) == null)
+		if(inventory.getStackInSlot(3) == ItemStack.EMPTY)
 		{
 			return true;
 		}
-		
-		if(inventory.getStackInSlot(3) != ItemStack.EMPTY && !inventory.getStackInSlot(3).isItemEqual(itemStack)) {
-
+		if(inventory.getStackInSlot(3).getItem() != ItemStack.EMPTY.getItem() && !inventory.getStackInSlot(3).isItemEqual(itemStack)) {
+			System.out.println(inventory.getStackInSlot(3).getItem());
 			return false;
 		}
 		

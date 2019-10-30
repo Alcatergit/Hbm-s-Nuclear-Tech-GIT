@@ -98,6 +98,7 @@ public class ContainerDiFurnace extends Container {
 			
 			if(this.dualCookTime != this.diFurnace.dualCookTime)
 			{
+				System.out.println("yeet" + diFurnace.dualCookTime);
 				par1.sendWindowProperty(this, 0, this.diFurnace.dualCookTime);
 			}
 			
@@ -115,6 +116,7 @@ public class ContainerDiFurnace extends Container {
 	public void updateProgressBar(int i, int j) {
 		if(i == 0)
 		{
+			System.out.println(this.diFurnace.dualCookTime + " " + j);
 			diFurnace.dualCookTime = j;
 		}
 		if(i == 1)
