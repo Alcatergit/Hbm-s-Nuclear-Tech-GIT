@@ -264,7 +264,7 @@ public class ItemRadioactive extends ItemCustomLore {
 				Library.applyRadData(living, 7.5F/20F * mod);
 				
 				if(living instanceof EntityPlayer && !Library.checkForHazmat((EntityPlayer)living)) {
-					living.addPotionEffect(new PotionEffect(Potion.blindness.id, 60 * 20, 0));
+					living.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60 * 20, 0));
 					living.setFire(5);
 				}
 			}
