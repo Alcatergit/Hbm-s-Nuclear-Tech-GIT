@@ -32,6 +32,8 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
+import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -240,6 +242,8 @@ public class MainRegistry {
 
     	proxy.preInit(event);
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+    	GameRegistry.registerTileEntity(TileEntityDummy.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy"));
+    	GameRegistry.registerTileEntity(TileEntityMachineAssembler.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_assembler"));
     	GameRegistry.registerTileEntity(TileEntityDiFurnace.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_difurnace"));
     	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
     	int i = 0;

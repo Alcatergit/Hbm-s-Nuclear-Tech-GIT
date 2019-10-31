@@ -27,8 +27,10 @@ import com.hbm.render.factories.RenderSmallNukeMK3Factory;
 import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.factories.ShrapnelRendererFactory;
 import com.hbm.render.item.ItemRedstoneSwordRender;
+import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.util.HmfModelLoader;
+import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
@@ -52,6 +54,7 @@ public class ClientProxy extends ServerProxy {
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));

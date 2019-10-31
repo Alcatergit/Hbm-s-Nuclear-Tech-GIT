@@ -9,6 +9,7 @@ import com.hbm.blocks.generic.BlockMushHuge;
 import com.hbm.blocks.generic.BlockOre;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.blocks.machine.DummyBlockAssembler;
 import com.hbm.blocks.machine.MachineAssembler;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.blocks.machine.MachinePress;
@@ -67,6 +68,10 @@ public class ModBlocks {
 	
 	public static final Block machine_assembler = new MachineAssembler(Material.IRON, "machine_assembler").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(100.0F);
 	public static final int guiID_machine_assembler = 48;
+	
+	//Dummy blocks
+	public static final Block dummy_block_assembler = new DummyBlockAssembler(Material.IRON, "dummy_block_assembler").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
+	public static final Block dummy_port_assembler = new DummyBlockAssembler(Material.IRON, "dummy_port_assembler").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){

@@ -8,7 +8,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +28,7 @@ public class DummyBlockAssembler extends BlockContainer implements IDummy {
 
 	public static boolean safeBreak = false;
 	
-	protected DummyBlockAssembler(Material materialIn, String s) {
+	public DummyBlockAssembler(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
