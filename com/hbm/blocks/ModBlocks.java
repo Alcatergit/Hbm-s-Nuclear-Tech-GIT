@@ -9,6 +9,7 @@ import com.hbm.blocks.generic.BlockMushHuge;
 import com.hbm.blocks.generic.BlockOre;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.blocks.machine.MachineAssembler;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.blocks.machine.MachinePress;
 import com.hbm.main.MainRegistry;
@@ -63,6 +64,9 @@ public class ModBlocks {
 	public static final Block machine_difurnace_on = new MachineDiFurnace(Material.IRON, "machine_difurnace_on", true).setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_test_difurnace = 1;
+	
+	public static final Block machine_assembler = new MachineAssembler(Material.IRON, "machine_assembler").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(100.0F);
+	public static final int guiID_machine_assembler = 48;
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){
