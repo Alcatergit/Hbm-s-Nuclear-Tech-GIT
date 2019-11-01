@@ -359,6 +359,26 @@ public class ModItems {
 	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 150);
 	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
 	
+	//Upgrade
+	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
+	public static final Item upgrade_speed_1 = new ItemCustomLore("upgrade_speed_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_speed_2 = new ItemCustomLore("upgrade_speed_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_speed_3 = new ItemCustomLore("upgrade_speed_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_1 = new ItemCustomLore("upgrade_effect_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_2 = new ItemCustomLore("upgrade_effect_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_3 = new ItemCustomLore("upgrade_effect_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_1 = new ItemCustomLore("upgrade_power_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_2 = new ItemCustomLore("upgrade_power_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_3 = new ItemCustomLore("upgrade_power_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_1 = new ItemCustomLore("upgrade_fortune_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_2 = new ItemCustomLore("upgrade_fortune_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_3 = new ItemCustomLore("upgrade_fortune_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_1 = new ItemCustomLore("upgrade_afterburn_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_2 = new ItemCustomLore("upgrade_afterburn_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_3 = new ItemCustomLore("upgrade_afterburn_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_radius = new ItemCustomLore("upgrade_radius").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_health = new ItemCustomLore("upgrade_health").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	
 	//Nuke parts
 	public static final Item gadget_core = new ItemGadget("gadget_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	

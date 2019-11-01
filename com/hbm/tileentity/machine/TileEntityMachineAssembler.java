@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.blocks.machine.MachineAssembler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
@@ -25,12 +26,14 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TileEntityMachineAssembler extends TileEntity implements ITickable, IConsumer {
 
-	public ItemStackHandler inventory = new ItemStackHandler(4) {
+	public ItemStackHandler inventory = new ItemStackHandler(18) {
 		protected void onContentsChanged(int slot) {
 			super.onContentsChanged(slot);
 			markDirty();
@@ -102,7 +105,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		this.speed = 100;
 		
 		for(int i = 1; i < 4; i++) {
-			ItemStack stack = slots[i];
+			ItemStack stack = inventory.getStackInSlot(i);
 			
 			if(stack != null) {
 				if(stack.getItem() == ModItems.upgrade_speed_1) {
@@ -137,29 +140,29 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		if(consumption < 10)
 			consumption = 10;
 		
-		if(!worldObj.isRemote) {
+		if(!world.isRemote) {
 
 			isProgressing = false;
-			power = Library.chargeTEFromItems(slots, 0, power, maxPower);
+			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
-			if(MachineRecipes.getOutputFromTempate(slots[4]) != null && MachineRecipes.getRecipeFromTempate(slots[4]) != null) {
-				this.maxProgress = (ItemAssemblyTemplate.getProcessTime(slots[4]) * speed) / 100;
+			if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) != null && MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) != null) {
+				this.maxProgress = (ItemAssemblyTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
 				
-				if(power >= consumption && removeItems(MachineRecipes.getRecipeFromTempate(slots[4]), cloneItemStackProper(slots))) {
+				if(power >= consumption && removeItems(MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory))) {
 					
-					if(slots[5] == null || (slots[5] != null && slots[5].getItem() == MachineRecipes.getOutputFromTempate(slots[4]).copy().getItem()) && slots[5].stackSize + MachineRecipes.getOutputFromTempate(slots[4]).copy().stackSize <= slots[5].getMaxStackSize()) {
+					if(inventory.getStackInSlot(5) == ItemStack.EMPTY || (inventory.getStackInSlot(5).getItem() != Items.AIR && inventory.getStackInSlot(5).getItem() == MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getItem()) && inventory.getStackInSlot(5).getCount() + MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getCount() <= inventory.getStackInSlot(5).getMaxStackSize()) {
 						progress++;
 						isProgressing = true;
 						
 						if(progress >= maxProgress) {
 							progress = 0;
-							if(slots[5] == null) {
-								slots[5] = MachineRecipes.getOutputFromTempate(slots[4]).copy();
+							if(inventory.getStackInSlot(5).getItem() == Items.AIR) {
+								inventory.setStackInSlot(5, MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy());
 							} else {
-								slots[5].stackSize += MachineRecipes.getOutputFromTempate(slots[4]).copy().stackSize;
+								inventory.getStackInSlot(5).grow(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getCount());
 							}
 							
-							removeItems(MachineRecipes.getRecipeFromTempate(slots[4]), slots);
+							removeItems(MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)), inventory);
 						}
 						
 						power -= consumption;
@@ -169,19 +172,19 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			} else
 				progress = 0;
 			
-			int meta = worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+			int meta = world.getBlockState(pos).getValue(MachineAssembler.FACING);
 			TileEntity te = null;
 			if(meta == 2) {
-				te = worldObj.getTileEntity(xCoord - 2, yCoord, zCoord);
+				te = world.getTileEntity(pos.add(-2, 0, 0));
 			}
 			if(meta == 3) {
-				te = worldObj.getTileEntity(xCoord + 2, yCoord, zCoord);
+				te = world.getTileEntity(pos.add(2, 0, 0));
 			}
 			if(meta == 4) {
-				te = worldObj.getTileEntity(xCoord, yCoord, zCoord + 2);
+				te = world.getTileEntity(pos.add(0, 0, 2));
 			}
 			if(meta == 5) {
-				te = worldObj.getTileEntity(xCoord, yCoord, zCoord - 2);
+				te = world.getTileEntity(pos.add(0, 0, -2));
 			}
 			
 			if(te != null && te instanceof TileEntityChest) {
@@ -210,16 +213,16 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			
 			te = null;
 			if(meta == 2) {
-				te = worldObj.getTileEntity(xCoord + 3, yCoord, zCoord - 1);
+				te = world.getTileEntity(pos.add(3, 0, -1));
 			}
 			if(meta == 3) {
-				te = worldObj.getTileEntity(xCoord - 3, yCoord, zCoord + 1);
+				te = world.getTileEntity(pos.add(-3, 0, 1));
 			}
 			if(meta == 4) {
-				te = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord - 3);
+				te = world.getTileEntity(pos.add(-1, 0, -3));
 			}
 			if(meta == 5) {
-				te = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord + 3);
+				te = world.getTileEntity(pos.add(1, 0, 3));
 			}
 			
 			if(te != null && te instanceof TileEntityChest) {
@@ -262,14 +265,14 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	}
 	
 	//I can't believe that worked.
-	public ItemStack[] cloneItemStackProper(ItemStack[] array) {
-		ItemStack[] stack = new ItemStack[array.length];
+	public ItemStackHandler cloneItemStackProper(IItemHandlerModifiable array) {
+		ItemStackHandler stack = new ItemStackHandler(array.getSlots());
 		
-		for(int i = 0; i < array.length; i++)
-			if(array[i] != null)
-				stack[i] = array[i].copy();
+		for(int i = 0; i < array.getSlots(); i++)
+			if(array.getStackInSlot(i).getItem() != Items.AIR)
+				stack.setStackInSlot(i, array.getStackInSlot(i).copy());
 			else
-				stack[i] = null;
+				stack.setStackInSlot(i, ItemStack.EMPTY);;
 		
 		return stack;
 	}
@@ -291,7 +294,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);
 					sta2.setCount(1);
 				
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).stackSize < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
 						inventory.getStackInSlot(slot).shrink(1);
 						
 						if(inventory.getStackInSlot(slot).isEmpty())
@@ -329,22 +332,22 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	}
 	
 	//Loads assembler's input queue from chests
-	public boolean tryFillAssembler(IInventory inventory, int slot) {
+	public boolean tryFillAssembler(IInventory inv, int slot) {
 		
-		if(MachineRecipes.getOutputFromTempate(slots[4]) == null || MachineRecipes.getRecipeFromTempate(slots[4]) == null)
+		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == null || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
 			return false;
 		else {
-			List<ItemStack> list = MachineRecipes.getRecipeFromTempate(slots[4]);
+			List<ItemStack> list = MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
 			
 			for(int i = 0; i < list.size(); i++)
-				list.get(i).stackSize = 1;
+				list.get(i).setCount(1);
 
 
-			if(inventory.getStackInSlot(slot) == null)
+			if(inv.getStackInSlot(slot) == null)
 				return false;
 			
-			ItemStack stack = inventory.getStackInSlot(slot).copy();
-			stack.stackSize = 1;
+			ItemStack stack = inv.getStackInSlot(slot).copy();
+			stack.setCount(1);
 			
 			boolean flag = false;
 			
@@ -359,22 +362,22 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		
 		for(int i = 6; i < 18; i++) {
 			
-			if(slots[i] != null) {
+			if(inventory.getStackInSlot(i).getItem() != Items.AIR) {
 			
-				ItemStack sta1 = inventory.getStackInSlot(slot).copy();
-				ItemStack sta2 = slots[i].copy();
+				ItemStack sta1 = inv.getStackInSlot(slot).copy();
+				ItemStack sta2 = inventory.getStackInSlot(i).copy();
 				if(sta1 != null && sta2 != null) {
-					sta1.stackSize = 1;
-					sta2.stackSize = 1;
+					sta1.setCount(1);;
+					sta2.setCount(1);;
 			
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && slots[i].stackSize < slots[i].getMaxStackSize()) {
-						ItemStack sta3 = inventory.getStackInSlot(slot).copy();
-						sta3.stackSize--;
-						if(sta3.stackSize <= 0)
-							sta3 = null;
-						inventory.setInventorySlotContents(slot, sta3);
+					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+						ItemStack sta3 = inv.getStackInSlot(slot).copy();
+						sta3.shrink(1);;
+						if(sta3.getCount() <= 0)
+							sta3 = ItemStack.EMPTY;
+						inv.setInventorySlotContents(slot, sta3);
 				
-						slots[i].stackSize++;
+						inventory.getStackInSlot(i).grow(1);;
 						return true;
 					}
 				}
@@ -383,16 +386,16 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		
 		for(int i = 6; i < 18; i++) {
 
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(slots[i] == null && sta2 != null) {
-				sta2.stackSize = 1;
-				slots[i] = sta2.copy();
+			ItemStack sta2 = inv.getStackInSlot(slot).copy();
+			if(inventory.getStackInSlot(i).getItem() == Items.AIR && (sta2 != null && sta2.getItem() != Items.AIR)) {
+				sta2.setCount(1);;
+				inventory.setStackInSlot(i, sta2.copy());
 				
-				ItemStack sta3 = inventory.getStackInSlot(slot).copy();
-				sta3.stackSize--;
-				if(sta3.stackSize <= 0)
-					sta3 = null;
-				inventory.setInventorySlotContents(slot, sta3);
+				ItemStack sta3 = inv.getStackInSlot(slot).copy();
+				sta3.shrink(1);;
+				if(sta3.isEmpty())
+					sta3 = ItemStack.EMPTY;
+				inv.setInventorySlotContents(slot, sta3);
 				
 				return true;
 			}
@@ -402,15 +405,15 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	}
 	
 	//boolean true: remove items, boolean false: simulation mode
-	public boolean removeItems(List<ItemStack> stack, ItemStack[] array) {
+	public boolean removeItems(List<ItemStack> stack, IItemHandlerModifiable array) {
 		
 		if(stack == null)
 			return false;
 		
 		for(int i = 0; i < stack.size(); i++) {
-			for(int j = 0; j < stack.get(i).stackSize; j++) {
+			for(int j = 0; j < stack.get(i).getCount(); j++) {
 				ItemStack sta = stack.get(i).copy();
-				sta.stackSize = 1;
+				sta.setCount(1);
 			
 				if(!canRemoveItemFromArray(sta, array))
 					return false;
@@ -421,7 +424,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		
 	}
 	
-	public boolean canRemoveItemFromArray(ItemStack stack, ItemStack[] array) {
+	public boolean canRemoveItemFromArray(ItemStack stack, IItemHandlerModifiable array) {
 
 		ItemStack st = stack.copy();
 		
@@ -430,15 +433,15 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		
 		for(int i = 6; i < 18; i++) {
 			
-			if(array[i] != null) {
-				ItemStack sta = array[i].copy();
+			if(array.getStackInSlot(i).getItem() != Items.AIR) {
+				ItemStack sta = array.getStackInSlot(i).copy();
 				sta.setCount(1);
 			
-				if(sta != null && isItemAcceptible(sta, st) && array[i].getCount() > 0) {
-					array[i].shrink(1);;
+				if(sta != null && isItemAcceptible(sta, st) && array.getStackInSlot(i).getCount() > 0) {
+					array.getStackInSlot(i).shrink(1);;
 					
-					if(array[i].isEmpty())
-						array[i] = null;
+					if(array.getStackInSlot(i).isEmpty())
+						array.setStackInSlot(i, ItemStack.EMPTY);;
 					
 					return true;
 				}

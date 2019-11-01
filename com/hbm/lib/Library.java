@@ -1,6 +1,7 @@
 package com.hbm.lib;
 
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.items.special.ItemBattery;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.RadEntitySavedData;
@@ -13,6 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class Library {
 
@@ -22,95 +25,151 @@ public class Library {
 	}
 
 	public static void applyRadData(Entity e, float f) {
-		if(!(e instanceof EntityLivingBase))
+		if (!(e instanceof EntityLivingBase))
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		
-	if(entity.isPotionActive(HbmPotion.mutation))
+
+		EntityLivingBase entity = (EntityLivingBase) e;
+
+		if (entity.isPotionActive(HbmPotion.mutation))
 			return;
-		
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
-			
+
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+
 			float koeff = 5.0F;
 			f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player));
 		}
-		
+
 		RadEntitySavedData data = RadEntitySavedData.getData(entity.world);
 		data.increaseRad(entity, f);
 	}
+
 	public static void applyRadDirect(Entity e, float f) {
 
-		if(!(e instanceof EntityLivingBase))
+		if (!(e instanceof EntityLivingBase))
 			return;
-		
-		if(((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
+
+		if (((EntityLivingBase) e).isPotionActive(HbmPotion.mutation))
 			return;
-		
+
 		RadEntitySavedData data = RadEntitySavedData.getData(e.world);
 		data.increaseRad(e, f);
 	}
+
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
-		
+
 		Vec3 vector = Vec3.createVectorHelper(a - x, b - y, c - z);
 		double length = vector.lengthVector();
 		Vec3 nVec = vector.normalize();
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(float i = 0; i < length; i += 0.25F)
-			pos.setPos((int) Math.round(x + (nVec.xCoord * i)), (int) Math.round(y + (nVec.yCoord * i)), (int) Math.round(z + (nVec.zCoord * i)));
-			if(world.getBlockState(pos).getBlock() != Blocks.AIR && 
-					world.getBlockState(pos).isNormalCube())
-				return true;
-		
+		for (float i = 0; i < length; i += 0.25F)
+			pos.setPos((int) Math.round(x + (nVec.xCoord * i)), (int) Math.round(y + (nVec.yCoord * i)),
+					(int) Math.round(z + (nVec.zCoord * i)));
+		if (world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).isNormalCube())
+			return true;
+
 		return false;
 	}
 
 	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
-		if(player.inventory.armorInventory.get(0).getItem() == shoe && 
-				player.inventory.armorInventory.get(1).getItem() == leg && 
-				player.inventory.armorInventory.get(2).getItem() == chest && 
-				player.inventory.armorInventory.get(3).getItem() == helm)
-		{
+		if (player.inventory.armorInventory.get(0).getItem() == shoe
+				&& player.inventory.armorInventory.get(1).getItem() == leg
+				&& player.inventory.armorInventory.get(2).getItem() == chest
+				&& player.inventory.armorInventory.get(3).getItem() == helm) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	public static String getShortNumber(long l) {
-		if(l >= Math.pow(10, 18)) {
+		if (l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "E";
 		}
-		if(l >= Math.pow(10, 15)) {
+		if (l >= Math.pow(10, 15)) {
 			double res = l / Math.pow(10, 15);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "P";
 		}
-		if(l >= Math.pow(10, 12)) {
+		if (l >= Math.pow(10, 12)) {
 			double res = l / Math.pow(10, 12);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "T";
 		}
-		if(l >= Math.pow(10, 9)) {
+		if (l >= Math.pow(10, 9)) {
 			double res = l / Math.pow(10, 9);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "G";
 		}
-		if(l >= Math.pow(10, 6)) {
+		if (l >= Math.pow(10, 6)) {
 			double res = l / Math.pow(10, 6);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "M";
 		}
-		if(l >= Math.pow(10, 3)) {
+		if (l >= Math.pow(10, 3)) {
 			double res = l / Math.pow(10, 3);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "k";
 		}
-		
+
 		return Long.toString(l);
+	}
+
+	public static long chargeTEFromItems(IItemHandler inventory, int index, long power, long maxPower) {
+		if (!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
+			return 0;
+		}
+		long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getDischargeRate();
+
+		while (dR >= 1000000000000L) {
+			if (power + 100000000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+				power += 100000000000000L;
+				dR -= 1000000000000L;
+				((ItemBattery) inventory.getStackInSlot(index).getItem())
+						.dischargeBattery(inventory.getStackInSlot(index), 1000000000000L);
+			} else
+				break;
+		}
+		while (dR >= 1000000000) {
+			if (power + 100000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+				power += 100000000000L;
+				dR -= 1000000000L;
+				((ItemBattery) inventory.getStackInSlot(index).getItem())
+						.dischargeBattery(inventory.getStackInSlot(index), 1000000000);
+			} else
+				break;
+		}
+		while (dR >= 1000000) {
+			if (power + 100000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+				power += 100000000L;
+				dR -= 1000000;
+				((ItemBattery) inventory.getStackInSlot(index).getItem())
+						.dischargeBattery(inventory.getStackInSlot(index), 1000000);
+			} else
+				break;
+		}
+		while (dR >= 1000) {
+			if (power + 100000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+				power += 100000L;
+				dR -= 1000;
+				((ItemBattery) inventory.getStackInSlot(index).getItem())
+						.dischargeBattery(inventory.getStackInSlot(index), 1000);
+			} else
+				break;
+		}
+		while (dR >= 1) {
+			if (power + 100L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+				power += 100L;
+				dR -= 1;
+				((ItemBattery) inventory.getStackInSlot(index).getItem())
+						.dischargeBattery(inventory.getStackInSlot(index), 1);
+			} else
+				break;
+		}
+
+		return power;
 	}
 
 }

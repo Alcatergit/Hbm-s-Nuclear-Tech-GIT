@@ -103,7 +103,7 @@ public class ItemAssemblyTemplate extends Item {
     	}
 	}
 
-	public float getProcessTime(ItemStack stack) {
+	public static int getProcessTime(ItemStack stack) {
 		// TODO process time
 		return 0;
 	}
