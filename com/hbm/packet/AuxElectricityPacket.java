@@ -1,0 +1,74 @@
+package com.hbm.packet;
+
+import com.hbm.interfaces.IConsumer;
+import com.hbm.interfaces.ISource;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class AuxElectricityPacket implements IMessage {
+
+	int x;
+	int y;
+	int z;
+	long charge;
+
+	public AuxElectricityPacket()
+	{
+		
+	}
+
+	public AuxElectricityPacket(BlockPos pos, long charge)
+	{
+		this.x = pos.getX();
+		this.y = pos.getY();
+		this.z = pos.getZ();
+		this.charge = charge;
+	}
+
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		x = buf.readInt();
+		y = buf.readInt();
+		z = buf.readInt();
+		charge = buf.readLong();
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(x);
+		buf.writeInt(y);
+		buf.writeInt(z);
+		buf.writeLong(charge);
+	}
+
+	public static class Handler implements IMessageHandler<AuxElectricityPacket, IMessage> {
+		
+		@Override
+		@SideOnly(Side.CLIENT)
+		public IMessage onMessage(AuxElectricityPacket m, MessageContext ctx) {
+			BlockPos pos = new BlockPos(m.x, m.y, m.z);
+			try {
+			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
+
+			if (te != null && te instanceof IConsumer) {
+					
+				IConsumer gen = (IConsumer) te;
+				gen.setPower(m.charge);
+			} else if (te != null && te instanceof ISource) {
+					
+				ISource gen = (ISource) te;
+				gen.setSPower(m.charge);
+			}
+			} catch (Exception x) { }
+			return null;
+		}
+	}
+}

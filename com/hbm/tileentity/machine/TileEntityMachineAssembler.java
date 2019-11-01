@@ -11,7 +11,10 @@ import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.Library;
+import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.TEAssemblerPacket;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,6 +30,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -52,6 +57,8 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	int age = 0;
 	int consumption = 100;
 	int speed = 100;
+	
+	public boolean oldIsProgressing = false;
 	
 	Random rand = new Random();
 	
@@ -145,7 +152,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			consumption = 10;
 		
 		if(!world.isRemote) {
-
+			oldIsProgressing = isProgressing;
 			isProgressing = false;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
@@ -225,9 +232,10 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				}
 			}
 
-			PacketDispatcher.wrapper.sendToAll(new TEAssemblerPacket(xCoord, yCoord, zCoord, isProgressing));
-			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(xCoord, yCoord, zCoord));
-			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(xCoord, yCoord, zCoord, power));
+			if(oldIsProgressing != isProgressing) 
+				PacketDispatcher.wrapper.sendToAll(new TEAssemblerPacket(pos, isProgressing));
+			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
 		}
 		
 	}
