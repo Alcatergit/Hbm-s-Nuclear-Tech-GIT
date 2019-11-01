@@ -6,6 +6,7 @@ import com.hbm.tileentity.machine.TileEntityDummy;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -37,6 +38,18 @@ public class MultiblockHandler {
 		if(dir == 4)
 			return EnumDirection.West;
 		return EnumDirection.North;
+	}
+	
+	public static EnumFacing intToEnumFacing(int dir){
+		if(dir == 2)
+			return EnumFacing.NORTH;
+		if(dir == 5)
+			return EnumFacing.EAST;
+		if(dir == 3)
+			return EnumFacing.SOUTH;
+		if(dir == 4)
+			return EnumFacing.WEST;
+		return EnumFacing.NORTH;
 	}
 
 	//Approved!

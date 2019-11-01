@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.machine.MachineAssembler;
+import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
@@ -24,8 +25,11 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -187,28 +191,13 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				te = world.getTileEntity(pos.add(0, 0, -2));
 			}
 			
-			if(te != null && te instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest)te;
-				
-				tryFillContainer(chest, 5);
-			}
-			
-			if(te != null && te instanceof TileEntityHopper) {
-				TileEntityHopper hopper = (TileEntityHopper)te;
-
-				tryFillContainer(hopper, 5);
-			}
-			
-			if(te != null && te instanceof TileEntityCrateIron) {
-				TileEntityCrateIron hopper = (TileEntityCrateIron)te;
-
-				tryFillContainer(hopper, 5);
-			}
-			
-			if(te != null && te instanceof TileEntityCrateSteel) {
-				TileEntityCrateSteel hopper = (TileEntityCrateSteel)te;
-
-				tryFillContainer(hopper, 5);
+			if(te != null && te instanceof ICapabilityProvider){
+				ICapabilityProvider capte = (ICapabilityProvider)te;
+				//TODO figure out what direction it really is.
+				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta))){
+					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta));
+					tryFillContainerCap(cap, 5);
+				}
 			}
 			
 			te = null;
@@ -225,36 +214,15 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				te = world.getTileEntity(pos.add(1, 0, 3));
 			}
 			
-			if(te != null && te instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest)te;
-				
-				for(int i = 0; i < chest.getSizeInventory(); i++)
-					if(tryFillAssembler(chest, i))
-						break;
-			}
-			
-			if(te != null && te instanceof TileEntityHopper) {
-				TileEntityHopper hopper = (TileEntityHopper)te;
-
-				for(int i = 0; i < hopper.getSizeInventory(); i++)
-					if(tryFillAssembler(hopper, i))
-						break;
-			}
-			
-			if(te != null && te instanceof TileEntityCrateIron) {
-				TileEntityCrateIron hopper = (TileEntityCrateIron)te;
-
-				for(int i = 0; i < hopper.getSizeInventory(); i++)
-					if(tryFillAssembler(hopper, i))
-						break;
-			}
-			
-			if(te != null && te instanceof TileEntityCrateSteel) {
-				TileEntityCrateSteel hopper = (TileEntityCrateSteel)te;
-
-				for(int i = 0; i < hopper.getSizeInventory(); i++)
-					if(tryFillAssembler(hopper, i))
-						break;
+			if(te != null && te instanceof ICapabilityProvider){
+				ICapabilityProvider capte = (ICapabilityProvider)te;
+				//TODO figure out what direction it really is.
+				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta))){
+					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta));
+					for(int i = 0; i < cap.getSlots(); i++){
+						tryFillAssemblerCap(cap, i);
+					}
+				}
 			}
 
 			PacketDispatcher.wrapper.sendToAll(new TEAssemblerPacket(xCoord, yCoord, zCoord, isProgressing));
@@ -278,17 +246,17 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	}
 	
 	//Unloads output into chests
-	public boolean tryFillContainer(IInventory inventory, int slot) {
+	public boolean tryFillContainer(IInventory inv, int slot) {
 		
-		int size = inventory.getSizeInventory();
+		int size = inv.getSizeInventory();
 
 		for(int i = 0; i < size; i++) {
-			if(inventory.getStackInSlot(i) != null) {
+			if(inv.getStackInSlot(i) != null) {
 				
 				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
 					return false;
 				
-				ItemStack sta1 = inventory.getStackInSlot(i).copy();
+				ItemStack sta1 = inv.getStackInSlot(i).copy();
 				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
 				if(sta1 != null && sta2 != null) {
 					sta1.setCount(1);
@@ -298,11 +266,11 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 						inventory.getStackInSlot(slot).shrink(1);
 						
 						if(inventory.getStackInSlot(slot).isEmpty())
-							inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
+							inventory.setStackInSlot(slot, ItemStack.EMPTY);
 						
 						ItemStack sta3 = inventory.getStackInSlot(i).copy();
 						sta3.grow(1);
-						inventory.setInventorySlotContents(i, sta3);
+						inv.setInventorySlotContents(i, sta3);
 					
 						return true;
 					}
@@ -315,14 +283,67 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				return false;
 			
 			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(inventory.getStackInSlot(i) == null && sta2 != null) {
+			if(inv.getStackInSlot(i) == null && sta2 != null) {
 				sta2.setCount(1);
 				inventory.getStackInSlot(slot).shrink(1);;
 				
 				if(inventory.getStackInSlot(slot).isEmpty())
-					inventory.setInventorySlotContents(slot, ItemStack.EMPTY);;
+					inventory.setStackInSlot(slot, ItemStack.EMPTY);
 				
-				inventory.setInventorySlotContents(i, sta2);
+				inv.setInventorySlotContents(i, sta2);
+					
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	//Unloads output into chests. Capability version.
+	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
+		
+		int size = inv.getSlots();
+
+		for(int i = 0; i < size; i++) {
+			if(inv.getStackInSlot(i) != null) {
+				
+				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+					return false;
+				
+				ItemStack sta1 = inv.getStackInSlot(i).copy();
+				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+				if(sta1 != null && sta2 != null) {
+					sta1.setCount(1);
+					sta2.setCount(1);
+				
+					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+						inventory.getStackInSlot(slot).shrink(1);
+						
+						if(inventory.getStackInSlot(slot).isEmpty())
+							inventory.setStackInSlot(slot, ItemStack.EMPTY);
+						
+						ItemStack sta3 = inventory.getStackInSlot(i).copy();
+						sta3.grow(1);
+						inv.insertItem(i, sta3, false);
+					
+						return true;
+					}
+				}
+			}
+		}
+		for(int i = 0; i < size; i++) {
+			
+			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+				return false;
+			
+			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+			if(inv.getStackInSlot(i) == null && sta2 != null) {
+				sta2.setCount(1);
+				inventory.getStackInSlot(slot).shrink(1);;
+				
+				if(inventory.getStackInSlot(slot).isEmpty())
+					inventory.setStackInSlot(slot, ItemStack.EMPTY);
+				
+				inv.insertItem(i, sta2, false);
 					
 				return true;
 			}
@@ -396,6 +417,78 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				if(sta3.isEmpty())
 					sta3 = ItemStack.EMPTY;
 				inv.setInventorySlotContents(slot, sta3);
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean tryFillAssemblerCap(IItemHandler inv, int slot) {
+		
+		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == null || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
+			return false;
+		else {
+			List<ItemStack> list = MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
+			
+			for(int i = 0; i < list.size(); i++)
+				list.get(i).setCount(1);
+			
+
+			if(inv.getStackInSlot(slot) == null)
+				return false;
+			
+			ItemStack stack = inv.getStackInSlot(slot).copy();
+			stack.setCount(1);
+			
+			boolean flag = false;
+			
+			for(int i = 0; i < list.size(); i++)
+				if(ItemStack.areItemStacksEqual(stack, list.get(i)) && ItemStack.areItemStackTagsEqual(stack, list.get(i)))
+					flag = true;
+			
+			if(!flag)
+				return false;
+			
+		}
+		
+		for(int i = 6; i < 18; i++) {
+			
+			if(inventory.getStackInSlot(i).getItem() != Items.AIR) {
+			
+				ItemStack sta1 = inv.getStackInSlot(slot).copy();
+				ItemStack sta2 = inventory.getStackInSlot(i).copy();
+				if(sta1 != null && sta2 != null) {
+					sta1.setCount(1);;
+					sta2.setCount(1);;
+			
+					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+						ItemStack sta3 = inv.getStackInSlot(slot).copy();
+						sta3.shrink(1);
+						if(sta3.getCount() <= 0)
+							sta3 = ItemStack.EMPTY;
+						inv.extractItem(slot, 1, false);
+				
+						inventory.getStackInSlot(i).grow(1);;
+						return true;
+					}
+				}
+			}
+		}
+		
+		for(int i = 6; i < 18; i++) {
+
+			ItemStack sta2 = inv.getStackInSlot(slot).copy();
+			if(inventory.getStackInSlot(i).getItem() == Items.AIR && (sta2 != null && sta2.getItem() != Items.AIR)) {
+				sta2.setCount(1);;
+				inventory.setStackInSlot(i, sta2.copy());
+				
+				ItemStack sta3 = inv.getStackInSlot(slot).copy();
+				sta3.shrink(1);;
+				if(sta3.isEmpty())
+					sta3 = ItemStack.EMPTY;
+				inv.extractItem(slot, 1, false);
 				
 				return true;
 			}
