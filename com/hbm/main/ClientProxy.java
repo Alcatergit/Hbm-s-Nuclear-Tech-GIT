@@ -26,6 +26,7 @@ import com.hbm.render.factories.RenderSSmokeFactory;
 import com.hbm.render.factories.RenderSmallNukeMK3Factory;
 import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.factories.ShrapnelRendererFactory;
+import com.hbm.render.item.AssemblyTemplateRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderPress;
@@ -91,6 +92,7 @@ public class ClientProxy extends ServerProxy {
 	public void preInit(FMLPreInitializationEvent evt){
 		OBJLoader.INSTANCE.addDomain("hbm");
 		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.instance);
+		ModItems.assembly_template.setTileEntityItemStackRenderer(AssemblyTemplateRender.INSTANCE);
 	}
 	
 }

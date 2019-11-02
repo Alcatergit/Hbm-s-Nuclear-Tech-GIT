@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemAssemblyTemplate.EnumAssemblyTemplate;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.init.Items;
@@ -324,11 +326,49 @@ public class MachineRecipes {
 
 	public static ItemStack getOutputFromTempate(ItemStack stack) {
 		//TODO assembler recipes
-		return new ItemStack(Items.AIR);
+		if(stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
+			return ItemStack.EMPTY;
+		EnumAssemblyTemplate template = ItemAssemblyTemplate.EnumAssemblyTemplate.getEnum(stack.getItemDamage());
+		ItemStack output = ItemStack.EMPTY;
+		if(template.getOutput() != null){
+			return template.getOutput().copy();
+		}
+		switch(template){
+		case IRON_PLATE:
+			output = new ItemStack(ModItems.plate_iron, 2);
+			break;
+		}
+		return output;
 	}
 
 	public static List<ItemStack> getRecipeFromTempate(ItemStack stack) {
-		// TODO Assembler recipes
-		return new ArrayList<ItemStack>();
+		if(stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
+			return null;
+		List<ItemStack> list = new ArrayList<ItemStack>();
+		
+		EnumAssemblyTemplate template = ItemAssemblyTemplate.EnumAssemblyTemplate.getEnum(stack.getItemDamage());
+		if(template.getIngredients() != null){
+			return copyItemStackList(template.getIngredients());
+		}
+		switch(template){
+		case IRON_PLATE:
+			list.add(new ItemStack(Items.IRON_INGOT, 3));
+			break;
+		}
+		
+		if(list.isEmpty()){
+			return null;
+		} else {
+			return list;
+		}
+	}
+	public static List<ItemStack> copyItemStackList(List<ItemStack> list){
+		List<ItemStack> newList = new ArrayList<ItemStack>();
+		if(list == null || list.isEmpty())
+			return newList;
+		for(ItemStack stack : list){
+			newList.add(stack.copy());
+		}
+		return newList;
 	}
 }

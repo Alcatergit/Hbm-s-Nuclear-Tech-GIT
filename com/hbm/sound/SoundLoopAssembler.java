@@ -15,6 +15,7 @@ public class SoundLoopAssembler extends SoundLoopMachine {
 	public SoundLoopAssembler(SoundEvent path, TileEntity te) {
 		super(path, te);
 		list.add(this);
+		
 	}
 
 	@Override

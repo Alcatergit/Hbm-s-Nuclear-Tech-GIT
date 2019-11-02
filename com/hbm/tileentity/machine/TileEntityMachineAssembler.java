@@ -30,6 +30,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +51,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	};
 
 	public long power;
+	public long oldPower;
 	public static final long maxPower = 100000;
 	public int progress;
 	public int maxProgress = 100;
@@ -87,15 +89,16 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		NBTTagList list = nbt.getTagList("items", 10);
-		
 		this.power = nbt.getLong("powerTime");
-		inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
+		this.isProgressing = nbt.getBoolean("progressing");
+		if(nbt.hasKey("inventory"))
+			inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+		nbt.setBoolean("progressing", this.isProgressing);
 		nbt.setLong("powerTime", power);
 		nbt.setTag("inventory", inventory.serializeNBT());
 		return nbt;
@@ -154,11 +157,14 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		if(!world.isRemote) {
 			oldIsProgressing = isProgressing;
 			isProgressing = false;
+			oldPower = power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			
-			if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) != null && MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) != null) {
+			if(power != oldPower){
+				this.markDirty();
+			}
+			if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) != ItemStack.EMPTY && MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) != null) {
 				this.maxProgress = (ItemAssemblyTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
-				
+				this.markDirty();
 				if(power >= consumption && removeItems(MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory))) {
 					
 					if(inventory.getStackInSlot(5) == ItemStack.EMPTY || (inventory.getStackInSlot(5).getItem() != Items.AIR && inventory.getStackInSlot(5).getItem() == MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getItem()) && inventory.getStackInSlot(5).getCount() + MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getCount() <= inventory.getStackInSlot(5).getMaxStackSize()) {
@@ -200,9 +206,9 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			
 			if(te != null && te instanceof ICapabilityProvider){
 				ICapabilityProvider capte = (ICapabilityProvider)te;
-				//TODO figure out what direction it really is.
-				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta))){
-					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta));
+				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
+					System.out.println(MultiblockHandler.intToEnumFacing(meta).rotateY());
+					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 					tryFillContainerCap(cap, 5);
 				}
 			}
@@ -223,17 +229,14 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			
 			if(te != null && te instanceof ICapabilityProvider){
 				ICapabilityProvider capte = (ICapabilityProvider)te;
-				//TODO figure out what direction it really is.
-				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta))){
-					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta));
+				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
+					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 					for(int i = 0; i < cap.getSlots(); i++){
 						tryFillAssemblerCap(cap, i);
 					}
 				}
 			}
-
-			if(oldIsProgressing != isProgressing) 
-				PacketDispatcher.wrapper.sendToAll(new TEAssemblerPacket(pos, isProgressing));
+			PacketDispatcher.wrapper.sendToAllAround(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 80));
 			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
 		}
@@ -323,14 +326,14 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);
 					sta2.setCount(1);
 				
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
 						inventory.getStackInSlot(slot).shrink(1);
 						
 						if(inventory.getStackInSlot(slot).isEmpty())
 							inventory.setStackInSlot(slot, ItemStack.EMPTY);
 						
-						ItemStack sta3 = inventory.getStackInSlot(i).copy();
-						sta3.grow(1);
+						ItemStack sta3 = inv.getStackInSlot(i).copy();
+						sta3.setCount(1);
 						inv.insertItem(i, sta3, false);
 					
 						return true;
@@ -344,7 +347,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				return false;
 			
 			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(inv.getStackInSlot(i) == null && sta2 != null) {
+			if(inv.getStackInSlot(i).getItem() == Items.AIR && sta2 != null) {
 				sta2.setCount(1);
 				inventory.getStackInSlot(slot).shrink(1);;
 				
@@ -363,7 +366,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	//Loads assembler's input queue from chests
 	public boolean tryFillAssembler(IInventory inv, int slot) {
 		
-		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == null || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
+		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == ItemStack.EMPTY || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
 			return false;
 		else {
 			List<ItemStack> list = MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
@@ -435,7 +438,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	
 	public boolean tryFillAssemblerCap(IItemHandler inv, int slot) {
 		
-		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == null || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
+		if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == ItemStack.EMPTY || MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
 			return false;
 		else {
 			List<ItemStack> list = MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
@@ -510,7 +513,6 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		
 		if(stack == null)
 			return false;
-		
 		for(int i = 0; i < stack.size(); i++) {
 			for(int j = 0; j < stack.get(i).getCount(); j++) {
 				ItemStack sta = stack.get(i).copy();
@@ -528,7 +530,6 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	public boolean canRemoveItemFromArray(ItemStack stack, IItemHandlerModifiable array) {
 
 		ItemStack st = stack.copy();
-		
 		if(st == null)
 			return true;
 		
@@ -599,6 +600,10 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	public double getMaxRenderDistanceSquared()
 	{
 		return 65536.0D;
+	}
+	
+	public String getInventoryName() {
+		return this.hasCustomInventoryName() ? this.customName : "container.assembler";
 	}
 
 }

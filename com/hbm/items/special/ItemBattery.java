@@ -26,8 +26,10 @@ public class ItemBattery extends Item {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
+		this.setMaxDamage(100);
 		ModItems.ALL_ITEMS.add(this);
 	}
+	
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {

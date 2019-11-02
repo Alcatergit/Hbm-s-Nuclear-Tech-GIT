@@ -2,10 +2,13 @@ package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.container.ContainerDiFurnace;
+import com.hbm.inventory.container.ContainerMachineAssembler;
 import com.hbm.inventory.container.ContainerMachinePress;
+import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachinePress;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
+import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,6 +38,11 @@ public class GuiHandler implements IGuiHandler {
 				}
 				return null;
 			}
+			case ModBlocks.guiID_machine_assembler:
+				if(entity instanceof TileEntityMachineAssembler){
+					return new ContainerMachineAssembler(player.inventory, (TileEntityMachineAssembler)entity);
+				}
+				return null;
 			}
 		}
 		return null;
@@ -59,6 +67,11 @@ public class GuiHandler implements IGuiHandler {
 				}
 				return null;
 			}
+			case ModBlocks.guiID_machine_assembler:
+				if(entity instanceof TileEntityMachineAssembler){
+					return new GUIMachineAssembler(player.inventory, (TileEntityMachineAssembler)entity);
+				}
+				return null;
 			}
 		}
 		return null;
