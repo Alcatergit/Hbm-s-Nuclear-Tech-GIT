@@ -45,7 +45,8 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 	public void readFromNBT(NBTTagCompound compound) {
 		this.dualPower = compound.getInteger("dualPower");
 		this.dualCookTime = compound.getInteger("cookTime");
-		inventory.deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
+		if(compound.hasKey("inventory"))
+			inventory.deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
 		super.readFromNBT(compound);
 	}
 	
@@ -65,7 +66,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		if(hasPower() && isProcessing())
 		{
 			this.dualPower = this.dualPower - 1;
-			
+			this.markDirty();
 			if(this.dualPower < 0)
 			{
 				this.dualPower = 0;
@@ -73,6 +74,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		}
 		if (this.hasItemPower(inventory.getStackInSlot(2))
 				&& this.dualPower <= (TileEntityDiFurnace.maxPower - TileEntityDiFurnace.getItemPower(inventory.getStackInSlot(2)))) {
+			this.markDirty();
 			this.dualPower += getItemPower(inventory.getStackInSlot(2));
 			if (!inventory.getStackInSlot(2).isEmpty()) {
 				flag1 = true;
@@ -84,7 +86,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		}
 		if (hasPower() && canProcess()) {
 			dualCookTime++;
-
+			this.markDirty();
 			if (this.dualCookTime == TileEntityDiFurnace.processingSpeed) {
 				this.dualCookTime = 0;
 				this.processItem();
@@ -104,8 +106,10 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 			}
 
 			if (!inventory.getStackInSlot(2).isEmpty() && inventory.getStackInSlot(2).getItem() == ModItems.pellet_rtg) {
-
-				this.dualPower = maxPower;
+				if(this.dualPower != maxPower){
+					this.markDirty();
+					this.dualPower = maxPower;
+				}
 			}
 			
 			if(trigger)

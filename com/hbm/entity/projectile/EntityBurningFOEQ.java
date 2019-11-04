@@ -18,6 +18,7 @@ public class EntityBurningFOEQ extends EntityThrowable implements IConstantRende
 	public EntityBurningFOEQ(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.ignoreFrustumCheck = true;
+		
 	}
 	
 	@Override

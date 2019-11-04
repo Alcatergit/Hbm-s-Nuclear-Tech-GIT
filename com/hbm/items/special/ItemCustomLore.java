@@ -426,12 +426,42 @@ public class ItemCustomLore extends Item {
 			list.add("");
 			list.add("Stacks to 16");
 		}
+		if(this == ModItems.ingot_combine_steel)
+		{
+			/*list.add("\"I mean, it's a verb for crying out loud.");
+			list.add("The aliens aren't verbs. They're nouns!\"");
+			list.add("\"Actually, I think it's also the name");
+			list.add("of some kind of farm equipment, like a");
+			list.add("thresher or something.\"");
+			list.add("\"That's even worse. Now we have a word");
+			list.add("that could mean 'to mix things together',");
+			list.add("a piece of farm equipment, and let's see...");
+			list.add("oh yea, it can also mean 'the most advanced");
+			list.add("form of life in the known universe'.\"");
+			list.add("\"So?\"");
+			list.add("\"'So?' C'mon man, they're ALIENS!\"");*/
+			list.add("*insert Civil Protection reference here*");
+		}
+		if(this == ModItems.ingot_euphemium)
+		{
+			list.add("A very special and yet strange element.");
+		}
+		if(this == ModItems.powder_euphemium)
+		{
+			list.add("Pulverized pink.");
+			list.add("Tastes like strawberries.");
+		}
 	}
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		if(this == ModItems.plate_euphemium || 
-    			this == ModItems.powder_neptunium)
+		if(this == ModItems.plate_euphemium || this == ModItems.ingot_euphemium ||
+    			this == ModItems.powder_neptunium || this == ModItems.powder_euphemium ||
+    			this == ModItems.powder_iodine || this == ModItems.powder_astatine ||
+    			this == ModItems.powder_neodymium || this == ModItems.powder_caesium ||
+    			this == ModItems.powder_strontium || this == ModItems.powder_cobalt ||
+    			this == ModItems.powder_bromine || this == ModItems.powder_niobium ||
+    			this == ModItems.powder_tennessine || this == ModItems.powder_cerium)
     	{
     		return EnumRarity.EPIC;
     	}
@@ -440,8 +470,8 @@ public class ItemCustomLore extends Item {
     			this == ModItems.rod_quad_schrabidium || this == ModItems.ingot_schrabidium || 
     			this == ModItems.nugget_schrabidium || this == ModItems.plate_schrabidium || 
     			this == ModItems.cell_sas3 || this == ModItems.powder_schrabidium || 
-    			this == ModItems.wire_schrabidium ||
-    			this == ModItems.plate_saturnite)
+    			this == ModItems.wire_schrabidium || this == ModItems.ingot_saturnite ||
+    			this == ModItems.plate_saturnite || this == ModItems.powder_thorium)
     	{
     		return EnumRarity.RARE;
     	}

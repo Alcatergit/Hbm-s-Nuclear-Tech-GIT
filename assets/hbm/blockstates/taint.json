@@ -1,27 +1,21 @@
 {
-	"forge_marker": 1,
-	"defaults": {
-		"model": "cube_all"
-	},
 	"variants": {
-		"tex": {
-			"0": { "textures": { "all": "hbm:blocks/taint_0"}},
-			"1": { "textures": { "all": "hbm:blocks/taint_1"}},
-			"2": { "textures": { "all": "hbm:blocks/taint_2"}},
-			"3": { "textures": { "all": "hbm:blocks/taint_3"}},
-			"4": { "textures": { "all": "hbm:blocks/taint_4"}},
-			"5": { "textures": { "all": "hbm:blocks/taint_5"}},
-			"6": { "textures": { "all": "hbm:blocks/taint_6"}},
-			"7": { "textures": { "all": "hbm:blocks/taint_7"}},
-			"8": { "textures": { "all": "hbm:blocks/taint_8"}},
-			"9": { "textures": { "all": "hbm:blocks/taint_9"}},
-			"10": { "textures": { "all": "hbm:blocks/taint_10"}},
-			"11": { "textures": { "all": "hbm:blocks/taint_11"}},
-			"12": { "textures": { "all": "hbm:blocks/taint_12"}},
-			"13": { "textures": { "all": "hbm:blocks/taint_13"}},
-			"14": { "textures": { "all": "hbm:blocks/taint_14"}},
-			"15": { "textures": { "all": "hbm:blocks/taint_15"}}
-		}
+			"tex=0": { "model": "hbm:taint_0"},
+			"tex=1": { "model": "hbm:taint_1"},
+			"tex=2": { "model": "hbm:taint_2"},
+			"tex=3": { "model": "hbm:taint_3"},
+			"tex=4": { "model": "hbm:taint_4"},
+			"tex=5": { "model": "hbm:taint_5"},
+			"tex=6": { "model": "hbm:taint_6"},
+			"tex=7": { "model": "hbm:taint_7"},
+			"tex=8": { "model": "hbm:taint_8"},
+			"tex=9": { "model": "hbm:taint_9"},
+			"tex=10": { "model": "hbm:taint_10"},
+			"tex=11": { "model": "hbm:taint_11"},
+			"tex=12": { "model": "hbm:taint_12"},
+			"tex=13": { "model": "hbm:taint_13"},
+			"tex=14": { "model": "hbm:taint_14"},
+			"tex=15": { "model": "hbm:taint_15"}
 		
 	}
 }

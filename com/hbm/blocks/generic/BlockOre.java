@@ -57,11 +57,46 @@ public class BlockOre extends Block {
 		if(this == ModBlocks.waste_planks) {
 			return Items.COAL;
 		}
+		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur){
+			return ModItems.sulfur;
+		}
+		if(this == ModBlocks.ore_niter){
+			return ModItems.niter;
+		}
+		if(this == ModBlocks.ore_fluorite){
+			return ModItems.fluorite;
+		}
+		if(this == ModBlocks.ore_lignite){
+			return ModItems.lignite;
+		}
+		if(this == ModBlocks.ore_rare)
+		{
+			switch(rand.nextInt(6)) {
+			case 0: return ModItems.fragment_actinium;
+			case 1: return ModItems.fragment_cerium;
+			case 2: return ModItems.fragment_cobalt;
+			case 3: return ModItems.fragment_lanthanium;
+			case 4: return ModItems.fragment_neodymium;
+			case 5: return ModItems.fragment_niobium;
+			}
+		}
 		return Item.getItemFromBlock(this);
 	}
 	
 	@Override
-	public int quantityDropped(IBlockState state, int fortune, Random random) {
+	public int quantityDropped(IBlockState state, int fortune, Random rand) {
+		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur){
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.block_niter){
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_fluorite){
+			return 2 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_rare){
+			return 4 + rand.nextInt(8);
+		}
 		return 1;
 	}
 	

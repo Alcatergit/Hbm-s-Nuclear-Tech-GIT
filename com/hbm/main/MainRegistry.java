@@ -31,6 +31,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -246,6 +247,7 @@ public class MainRegistry {
     	GameRegistry.registerTileEntity(TileEntityMachineAssembler.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_assembler"));
     	GameRegistry.registerTileEntity(TileEntityDiFurnace.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_difurnace"));
     	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
+    	GameRegistry.registerTileEntity(TileEntityTaint.class, new ResourceLocation(RefStrings.MODID, "tileentity_taint"));
     	int i = 0;
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -284,8 +286,7 @@ public class MainRegistry {
     }
     
     public void registerOreDict(){
-    	//TODO all oredict items
-    /*	OreDictionary.registerOre("ingotUranium", ModItems.ingot_uranium);
+    	OreDictionary.registerOre("ingotUranium", ModItems.ingot_uranium);
 		OreDictionary.registerOre("ingotUranium233", ModItems.ingot_u233);
 		OreDictionary.registerOre("ingotUranium235", ModItems.ingot_u235);
 		OreDictionary.registerOre("ingotUranium238", ModItems.ingot_u238);
@@ -421,7 +422,7 @@ public class MainRegistry {
 		OreDictionary.registerOre("nuggetLanthanium", ModItems.fragment_lanthanium);
 		OreDictionary.registerOre("nuggetActinium", ModItems.fragment_actinium);
 
-		OreDictionary.registerOre("gemCoal", Items.coal);
+		OreDictionary.registerOre("gemCoal", Items.COAL);
 		OreDictionary.registerOre("gemLignite", ModItems.lignite);
 
 		OreDictionary.registerOre("oreUranium", ModBlocks.ore_uranium);
@@ -438,12 +439,6 @@ public class MainRegistry {
 		OreDictionary.registerOre("oreLead", ModBlocks.ore_lead);
 		OreDictionary.registerOre("oreBeryllium", ModBlocks.ore_beryllium);
 		OreDictionary.registerOre("oreLignite", ModBlocks.ore_lignite);
-		OreDictionary.registerOre("oreAustralium", ModBlocks.ore_australium);
-		OreDictionary.registerOre("oreWeidanium", ModBlocks.ore_weidanium);
-		OreDictionary.registerOre("oreReiium", ModBlocks.ore_reiium);
-		OreDictionary.registerOre("oreUnobtainium", ModBlocks.ore_unobtainium);
-		OreDictionary.registerOre("oreDaffergon", ModBlocks.ore_daffergon);
-		OreDictionary.registerOre("oreVerticium", ModBlocks.ore_verticium);
 		OreDictionary.registerOre("oreRareEarth", ModBlocks.ore_rare);
 
 		OreDictionary.registerOre("oreUranium", ModBlocks.ore_nether_uranium);
@@ -482,13 +477,7 @@ public class MainRegistry {
 		OreDictionary.registerOre("blockSchrabidium", ModBlocks.block_schrabidium);
 		OreDictionary.registerOre("blockCMBSteel", ModBlocks.block_combine_steel);
 		OreDictionary.registerOre("blockMagnetizedTungsten", ModBlocks.block_magnetized_tungsten);
-		OreDictionary.registerOre("blockAustralium", ModBlocks.block_australium);
-		OreDictionary.registerOre("blockWeidanium", ModBlocks.block_weidanium);
-		OreDictionary.registerOre("blockReiium", ModBlocks.block_reiium);
-		OreDictionary.registerOre("blockUnobtainium", ModBlocks.block_unobtainium);
-		OreDictionary.registerOre("blockDaffergon", ModBlocks.block_daffergon);
-		OreDictionary.registerOre("blockVerticium", ModBlocks.block_verticium);
-		OreDictionary.registerOre("blockDesh", ModBlocks.block_desh);*/
+		OreDictionary.registerOre("blockDesh", ModBlocks.block_desh);
     }
     
 }

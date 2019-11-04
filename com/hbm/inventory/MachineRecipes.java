@@ -102,7 +102,7 @@ public class MachineRecipes {
 
 			if(mODE(input, "ingotIron"))
 				return new ItemStack(ModItems.plate_iron);
-			/*if(mODE(input, "ingotGold"))
+			if(mODE(input, "ingotGold"))
 				return new ItemStack(ModItems.plate_gold);
 			if(mODE(input, "ingotTitanium"))
 				return new ItemStack(ModItems.plate_titanium);
@@ -127,7 +127,7 @@ public class MachineRecipes {
 			
 		}
 		
-		if(stamps_wire.contains(stamp.getItem())) {
+		/*if(stamps_wire.contains(stamp.getItem())) {
 
 			if(mODE(input, "ingotAluminum"))
 				return new ItemStack(ModItems.wire_aluminium, 8);
@@ -203,7 +203,7 @@ public class MachineRecipes {
 			if(input.getItem() == ModItems.assembly_actionexpress)
 				return new ItemStack(ModItems.ammo_50ae);
 		} */
-		}
+		
 		return null;
 	}
 	
@@ -325,7 +325,6 @@ public class MachineRecipes {
 	}
 
 	public static ItemStack getOutputFromTempate(ItemStack stack) {
-		//TODO assembler recipes
 		if(stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
 			return ItemStack.EMPTY;
 		EnumAssemblyTemplate template = ItemAssemblyTemplate.EnumAssemblyTemplate.getEnum(stack.getItemDamage());
@@ -334,9 +333,7 @@ public class MachineRecipes {
 			return template.getOutput().copy();
 		}
 		switch(template){
-		case IRON_PLATE:
-			output = new ItemStack(ModItems.plate_iron, 2);
-			break;
+		//Not needed
 		}
 		return output;
 	}
@@ -351,9 +348,7 @@ public class MachineRecipes {
 			return copyItemStackList(template.getIngredients());
 		}
 		switch(template){
-		case IRON_PLATE:
-			list.add(new ItemStack(Items.IRON_INGOT, 3));
-			break;
+		//Not needed
 		}
 		
 		if(list.isEmpty()){

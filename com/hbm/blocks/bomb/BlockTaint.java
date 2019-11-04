@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.core.config.Property;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
-import com.hbm.tileentity.generic.TileEntityBlockTaint;
+import com.hbm.tileentity.generic.TileEntityTaint;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -29,7 +26,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -50,6 +46,7 @@ public class BlockTaint extends BlockContainer {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos1, IBlockState state, Random rand) {
+
 		int meta = state.getValue(TEXTURE);
     	if(!world.isRemote && meta < 15) {
     		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -90,7 +87,7 @@ public class BlockTaint extends BlockContainer {
 	    }
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return null;
+		return NULL_AABB;
 	}
 	
 	@Override
@@ -169,16 +166,8 @@ public class BlockTaint extends BlockContainer {
 		return false;
 	}
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-		return false;
-	}
-	@Override
 	public boolean isTranslucent(IBlockState state) {
 		return true;
-	}
-	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return side == EnumFacing.DOWN;
 	}
 	
 	@Override
@@ -187,14 +176,6 @@ public class BlockTaint extends BlockContainer {
 			world.setBlockToAir(pos);
 	}
 	
-	@Override
-	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.CUTOUT;
-	}
-	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-		return BlockFaceShape.UNDEFINED;
-	}
 	@Override
 	public boolean causesSuffocation(IBlockState state) {
 		return false;
@@ -206,6 +187,6 @@ public class BlockTaint extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityBlockTaint();
+		return new TileEntityTaint();
 	}
 }
