@@ -38,6 +38,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -53,6 +54,9 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void registerRenderInfo()
 	{
+		if(!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
+		Minecraft.getMinecraft().getFramebuffer().enableStencil();
+		
 		MinecraftForge.EVENT_BUS.register(new ModEventHandlerClient());
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
 		

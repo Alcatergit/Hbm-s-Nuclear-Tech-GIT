@@ -11,6 +11,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -63,6 +64,8 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	}
 
 	public int getBurnScaled(int i) {
+		if(maxBurn == 0)
+			return 0;
 		return (burnTime * i) / maxBurn;
 	}
 
@@ -217,6 +220,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+		//return new AxisAlignedBB(pos, pos.add(1, 3, 1));
 	}
 
 	@Override

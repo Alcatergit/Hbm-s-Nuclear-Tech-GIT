@@ -2,6 +2,8 @@ package com.hbm.main;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.interfaces.IConstantRenderer;
@@ -15,6 +17,7 @@ import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderRedstoneSword;
+import com.hbm.render.tileentity.RenderPress;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -22,8 +25,13 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -97,10 +105,8 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent evt) {
-
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
 		for (Entity e : list) {
-			/// System.out.println(e instanceof EntityFalloutRain);
 			if (e instanceof IConstantRenderer) {
 
 				float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
@@ -117,6 +123,12 @@ public class ModEventHandlerClient {
 				r.doRender(e, d0 - d3, d1 - d4, d2 - d5, f, partialTicks);
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void fovUpdate(FOVUpdateEvent evt){
+		RenderPress.fov = evt.getFov();
+		
 	}
 
 }
