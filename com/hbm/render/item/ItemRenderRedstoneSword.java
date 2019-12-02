@@ -58,7 +58,7 @@ public class ItemRenderRedstoneSword implements IBakedModel {
 	
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-		ItemRedstoneSwordRender.instance.type = cameraTransformType;
+		ItemRedstoneSwordRender.INSTANCE.type = cameraTransformType;
 		return IBakedModel.super.handlePerspective(cameraTransformType);
 	}
 

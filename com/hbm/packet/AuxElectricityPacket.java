@@ -33,6 +33,13 @@ public class AuxElectricityPacket implements IMessage {
 		this.charge = charge;
 	}
 
+	public AuxElectricityPacket(int x2, int y2, int z2, long power) {
+		this.x = x2;
+		this.y = y2;
+		this.z = z2;
+		this.charge = power;
+	}
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		x = buf.readInt();

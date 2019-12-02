@@ -116,7 +116,7 @@ public class ModEventHandlerClient {
 		Object obj = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
 		if (obj instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) obj;
-			ItemRedstoneSwordRender.instance.itemModel = model;
+			ItemRedstoneSwordRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(RedstoneSword.rsModel, new ItemRenderRedstoneSword());
 		}
 		Object object = evt.getModelRegistry().getObject(ItemAssemblyTemplate.location);

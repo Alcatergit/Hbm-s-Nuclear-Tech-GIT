@@ -19,7 +19,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class ItemRedstoneSwordRender extends TileEntityItemStackRenderer {
 	
-	public static final ItemRedstoneSwordRender instance = new ItemRedstoneSwordRender();
+	public static final ItemRedstoneSwordRender INSTANCE = new ItemRedstoneSwordRender();
 	
 	public TransformType type;
 	public IBakedModel itemModel;

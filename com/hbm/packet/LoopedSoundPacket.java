@@ -31,6 +31,12 @@ public class LoopedSoundPacket implements IMessage {
 		this.y = pos.getY();
 		this.z = pos.getZ();
 	}
+	
+	public LoopedSoundPacket(int xPos, int yPos, int zPos){
+		x = xPos;
+		y = yPos;
+		z = zPos;
+	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {

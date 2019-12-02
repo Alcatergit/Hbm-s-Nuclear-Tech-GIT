@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
@@ -47,6 +48,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -220,10 +222,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(!world.isRemote)
 		{
 			if(needsUpdate){
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(xCoord, yCoord, zCoord, new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}));
+				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}));
 				needsUpdate = false;
 			}
-			int meta = world.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+			int meta = world.getBlockMetadata(this.pos.getX(), this.pos.getY(), this.pos.getZ());
 			isProgressing = false;
 			
 			age++;
@@ -286,112 +288,64 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			TileEntity te2 = null;
 			
 			if(meta == 2) {
-				te1 = world.getTileEntity(xCoord - 2, yCoord, zCoord);
-				te2 = world.getTileEntity(xCoord + 3, yCoord, zCoord - 1);
+				te1 = world.getTileEntity(pos.getX() - 2, pos.getY(), pos.getZ());
+				te2 = world.getTileEntity(pos.getX() + 3, pos.getY(), pos.getZ() - 1);
 			}
 			if(meta == 3) {
-				te1 = world.getTileEntity(xCoord + 2, yCoord, zCoord);
-				te2 = world.getTileEntity(xCoord - 3, yCoord, zCoord + 1);
+				te1 = world.getTileEntity(pos.getX() + 2, pos.getY(), pos.getZ());
+				te2 = world.getTileEntity(pos.getX() - 3, pos.getY(), pos.getZ() + 1);
 			}
 			if(meta == 4) {
-				te1 = world.getTileEntity(xCoord, yCoord, zCoord + 2);
-				te2 = world.getTileEntity(xCoord - 1, yCoord, zCoord - 3);
+				te1 = world.getTileEntity(pos.add(0, 0, 2));
+				te2 = world.getTileEntity(pos.add(-1, 0, -3));
 			}
 			if(meta == 5) {
-				te1 = world.getTileEntity(xCoord, yCoord, zCoord - 2);
-				te2 = world.getTileEntity(xCoord + 1, yCoord, zCoord + 3);
+				te1 = world.getTileEntity(pos.add(0, 0, -2));
+				te2 = world.getTileEntity(pos.add(1, 0, 3));
 			}
 		
 			
 			tryExchangeTemplates(te1, te2);
 			
-			if(te1 != null && te1 instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest)te1;
-				
-				for(int i = 5; i < 9; i++)
-					tryFillContainer(chest, i);
+			
+			if(te1 != null && te1.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
+				IItemHandler cap = te1.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+				for(int i = 5; i < 9; i ++){
+					tryFillContainerCap(cap, i);
+				}
 			}
 			
-			if(te1 != null && te1 instanceof TileEntityHopper) {
-				TileEntityHopper hopper = (TileEntityHopper)te1;
-
-				for(int i = 5; i < 9; i++)
-					tryFillContainer(hopper, i);
-			}
-			
-			if(te1 != null && te1 instanceof TileEntityCrateIron) {
-				TileEntityCrateIron hopper = (TileEntityCrateIron)te1;
-
-				for(int i = 5; i < 9; i++)
-					tryFillContainer(hopper, i);
-			}
-			
-			if(te1 != null && te1 instanceof TileEntityCrateSteel) {
-				TileEntityCrateSteel hopper = (TileEntityCrateSteel)te1;
-
-				for(int i = 5; i < 9; i++)
-					tryFillContainer(hopper, i);
-			}
-			
-			
-		
-			
-			if(te2 != null && te2 instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest)te2;
-				
-				for(int i = 0; i < chest.getSizeInventory(); i++)
-					if(tryFillAssembler(chest, i))
-						break;
-			}
-			
-			if(te2 != null && te2 instanceof TileEntityHopper) {
-				TileEntityHopper hopper = (TileEntityHopper)te2;
-
-				for(int i = 0; i < hopper.getSizeInventory(); i++)
-					if(tryFillAssembler(hopper, i))
-						break;
-			}
-			
-			if(te2 != null && te2 instanceof TileEntityCrateIron) {
-				TileEntityCrateIron chest = (TileEntityCrateIron)te2;
-				
-				for(int i = 0; i < chest.getSizeInventory(); i++)
-					if(tryFillAssembler(chest, i))
-						break;
-			}
-			
-			if(te2 != null && te2 instanceof TileEntityCrateSteel) {
-				TileEntityCrateSteel hopper = (TileEntityCrateSteel)te2;
-
-				for(int i = 0; i < hopper.getSizeInventory(); i++)
-					if(tryFillAssembler(hopper, i))
-						break;
+			if(te2 != null && te2.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
+				IItemHandler cap = te2.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+				for(int i = 0; i < cap.getSlots(); i ++){
+					tryFillAssemblerCap(cap, i);
+				}
 			}
 			
 			
 			
 			if(isProgressing) {
 				if(meta == 2) {
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(xCoord + 0.375, yCoord + 3, zCoord - 0.625, 1),
-							new TargetPoint(world.provider.dimensionId, xCoord + 0.375, yCoord + 3, zCoord - 0.625, 50));
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(pos.getX() + 0.375, pos.getY() + 3, pos.getZ() - 0.625, 1),
+							new TargetPoint(world.provider.getDimension(), pos.getX() + 0.375, pos.getY() + 3, pos.getZ() - 0.625, 50));
 				}
 				if(meta == 3) {
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(xCoord + 0.625, yCoord + 3, zCoord + 1.625, 1),
-							new TargetPoint(world.provider.dimensionId, xCoord + 0.625, yCoord + 3, zCoord + 1.625, 50));
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(pos.getX() + 0.625, pos.getY() + 3, pos.getZ() + 1.625, 1),
+							new TargetPoint(world.provider.getDimension(), pos.getX() + 0.625, pos.getY() + 3, pos.getZ() + 1.625, 50));
 				}
 				if(meta == 4) {
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(xCoord - 0.625, yCoord + 3, zCoord + 0.625, 1),
-							new TargetPoint(world.provider.dimensionId, xCoord - 0.625, yCoord + 3, zCoord + 0.625, 50));
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(pos.getX() - 0.625, pos.getY() + 3, pos.getZ() + 0.625, 1),
+							new TargetPoint(world.provider.getDimension(), pos.getX() - 0.625, pos.getY() + 3, pos.getZ() + 0.625, 50));
 				}
 				if(meta == 5) {
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(xCoord + 1.625, yCoord + 3, zCoord + 0.375, 1),
-							new TargetPoint(world.provider.dimensionId, xCoord + 1.625, yCoord + 3, zCoord + 0.375, 50));
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(pos.getX() + 1.625, pos.getY() + 3, pos.getZ() + 0.375, 1),
+							new TargetPoint(world.provider.getDimension(), pos.getX() + 1.625, pos.getY() + 3, pos.getZ() + 0.375, 50));
 				}
 			}
 			
-			PacketDispatcher.wrapper.sendToAll(new TEChemplantPacket(xCoord, yCoord, zCoord, isProgressing));
-			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(xCoord, yCoord, zCoord));
-			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(xCoord, yCoord, zCoord, power));
+			PacketDispatcher.wrapper.sendToAll(new TEChemplantPacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing));
+			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
+			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power));
 		}
 		
 	}

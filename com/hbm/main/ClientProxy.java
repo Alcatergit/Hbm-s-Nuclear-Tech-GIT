@@ -6,6 +6,7 @@ import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
+import com.hbm.entity.particle.EntityCloudFX;
 import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
@@ -15,6 +16,7 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.items.ModItems;
+import com.hbm.particle.ParticleContrail;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.entity.FogRenderer;
 import com.hbm.render.entity.RenderBeam5;
@@ -49,9 +51,11 @@ import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -101,7 +105,30 @@ public class ClientProxy extends ServerProxy {
 	}
 	@Override
 	public void particleControl(double x, double y, double z, int type) {
+		World world = Minecraft.getMinecraft().world;
+		TextureManager man = Minecraft.getMinecraft().renderEngine;
 		
+		switch(type) {
+		case 0:
+			
+			for(int i = 0; i < 10; i++) {
+				EntityCloudFX smoke = new EntityCloudFX(world, x + world.rand.nextGaussian(), y + world.rand.nextGaussian(), z + world.rand.nextGaussian(), 0.0, 0.0, 0.0);
+				Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+			}
+			break;
+			
+		case 1:
+			
+			EntityCloudFX smoke = new EntityCloudFX(world, x, y, z, 0.0, 0.1, 0.0);
+			Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+			break;
+			
+		case 2:
+			
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z);
+			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			break;
+		}
 	}
 	//version 2, now with strings!
 	@Override
@@ -112,7 +139,7 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent evt){
 		OBJLoader.INSTANCE.addDomain("hbm");
-		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.instance);
+		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.INSTANCE);
 		ModItems.assembly_template.setTileEntityItemStackRenderer(AssemblyTemplateRender.INSTANCE);
 		ModItems.gun_b92.setTileEntityItemStackRenderer(ItemRenderGunAnim.INSTANCE);
 		ModItems.fluid_tank_full.setTileEntityItemStackRenderer(FluidTankRender.INSTANCE);
