@@ -17,8 +17,5 @@ public class ServerProxy
 
 	public void registerMissileItems() { }
 
-	public void preInit(FMLPreInitializationEvent evt) {
-
-		
-	}
+	public void preInit(FMLPreInitializationEvent evt) {}
 }

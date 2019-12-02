@@ -7,7 +7,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderHelper {
@@ -76,4 +83,46 @@ public class RenderHelper {
 		//System.out.println(right);
 		return new float[]{left, bottom, right, top};
 	}
+	
+	public static void addVertexWithUV(double x, double y, double z, double u, double v){
+		addVertexWithUV(x, y, z, u, v, Tessellator.getInstance());
+	}
+	
+	public static void addVertexWithUV(double x, double y, double z, double u, double v, Tessellator tes){
+		BufferBuilder buf = tes.getBuffer();
+		buf.pos(x, y, z).tex(u, v).endVertex();
+	}
+	public static void startDrawingTexturedQuads(){
+		startDrawingTexturedQuads(Tessellator.getInstance());
+	}
+	public static void startDrawingTexturedQuads(Tessellator tes){
+		tes.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+	}
+	public static void draw(){
+		draw(Tessellator.getInstance());
+	}
+	public static void draw(Tessellator tes){
+		tes.draw();
+	}
+	
+	public static void bindTexture(ResourceLocation resource){
+		Minecraft.getMinecraft().renderEngine.bindTexture(resource);
+	}
+	public static void bindBlockTexture(){
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+	}
+	
+	//Drillgon200: using GLStateManager for this because it caches color values
+	public static void setColor(int color) {
+
+		float red = (float) (color >> 16 & 255) / 255.0F;
+		float green = (float) (color >> 8 & 255) / 255.0F;
+		float blue = (float) (color & 255) / 255.0F;
+		GlStateManager.color(red, green, blue, 1.0F);
+	}
+	public static void resetColor(){
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+	
+	
 }

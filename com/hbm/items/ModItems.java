@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.items.ItemBlockScrap;
 import com.hbm.items.bomb.ItemBoy;
 import com.hbm.items.bomb.ItemFleija;
 import com.hbm.items.bomb.ItemGadget;
@@ -29,24 +30,26 @@ import com.hbm.items.special.ItemBattery;
 import com.hbm.items.special.ItemBlades;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemCustomLore;
+import com.hbm.items.special.ItemFuel;
 import com.hbm.items.special.ItemFuelRod;
 import com.hbm.items.special.ItemRadioactive;
 import com.hbm.items.special.ItemSyringe;
 import com.hbm.items.special.WatzFuel;
+import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemChemistryIcon;
+import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
-import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModItems {
@@ -75,6 +78,13 @@ public class ModItems {
 	public static final Item energy_core = new ItemBattery(100000, 0, 10, "energy_core").setMaxStackSize(1);
 	public static final Item fusion_core_infinite = new ItemBase("fusion_core_infinite").setMaxStackSize(1);
 	
+	//Fluid handling items
+	public static final Item canister_generic = new ItemFluidCanister("canister_fuel", 4000).setCreativeTab(MainRegistry.controlTab);
+	public static final Item canister_napalm = new ItemCustomLore("canister_napalm").setCreativeTab(MainRegistry.controlTab);
+	
+	public static final Item fluid_tank_full = new ItemFluidTank("fluid_tank_full", 4000).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fluid_barrel_full = new ItemFluidTank("fluid_barrel_full", 64000).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fluid_barrel_infinite = new ItemBase("fluid_barrel_infinite").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	//Weapons
 	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
 	
@@ -84,7 +94,8 @@ public class ModItems {
 	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, "t45_legs").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, "t45_boots").setCreativeTab(CreativeTabs.COMBAT);
 	
-	
+	//Guns
+	public static final Item gun_b92 = new GunB92("gun_b92").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Materials
 	public static final Item ingot_schrabidium = new ItemRadioactive("ingot_schrabidium").setCreativeTab(MainRegistry.partsTab);
@@ -113,12 +124,11 @@ public class ModItems {
 	public static final Item lithium = new ItemBase("lithium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item sulfur = new ItemBase("sulfur").setCreativeTab(MainRegistry.partsTab);
 	public static final Item niter = new ItemBase("niter").setCreativeTab(MainRegistry.partsTab);
-	public static final Item lignite = new ItemBase("lignite").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item nugget_schrabidium = new ItemRadioactive("nugget_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_solinium = new ItemRadioactive("nugget_solinium").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item wire_schrabidium = new ItemRadioactive("wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	
 	
 	//Radioactive Materials
 	public static final Item trinitite = new ItemRadioactive("trinitite");
@@ -183,7 +193,8 @@ public class ModItems {
 	public static final Item waste_plutonium_hot = new ItemRadioactive("waste_plutonium_hot").setCreativeTab(MainRegistry.partsTab);
 	public static final Item waste_mox_hot = new ItemRadioactive("waste_mox_hot").setCreativeTab(MainRegistry.partsTab);
 	public static final Item waste_schrabidium_hot = new ItemRadioactive("waste_schrabidium_hot").setCreativeTab(MainRegistry.partsTab);
-	public static final Item scrap = new ItemBase("scrap").setCreativeTab(MainRegistry.partsTab);
+	public static final Item scrap = new ItemFuel("scrap", 800).setCreativeTab(MainRegistry.partsTab);
+	public static final Item dust = new ItemFuel("dust", 400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item containment_box = new ItemLeadBox("containment_box").setCreativeTab(null);
 	
 	public static final Item pellet_rtg = new ItemRadioactive("pellet_rtg").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
@@ -287,15 +298,14 @@ public class ModItems {
 	//Generic Items
 	public static final Item pellet_coal = new ItemBase("pellet_coal").setCreativeTab(MainRegistry.partsTab);
 	public static final Item biomass = new ItemBase("biomass").setCreativeTab(MainRegistry.partsTab);
-	public static final Item biomass_compressed = new ItemBase("biomass_compressed").setCreativeTab(MainRegistry.partsTab);
-	public static final Item briquette_lignite = new ItemBase("briquette_lignite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coke = new ItemBase("coke").setCreativeTab(MainRegistry.partsTab);
+	public static final Item biomass_compressed = new ItemFuel("biomass_compressed", 800).setCreativeTab(MainRegistry.partsTab);
+	public static final Item cordite = new ItemBase("cordite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item neutron_reflector = new ItemBase("neutron_reflector").setCreativeTab(MainRegistry.partsTab);
 	
 	//Powders
-	public static final Item powder_lignite = new ItemBase("powder_lignite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_lignite = new ItemFuel("powder_lignite", 1200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_lead = new ItemBase("powder_lead").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_coal = new ItemBase("powder_coal").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_coal = new ItemFuel("powder_coal", 1600).setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_yellowcake = new ItemRadioactive("powder_yellowcake").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_neptunium = new ItemRadioactive("powder_neptunium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_uranium = new ItemRadioactive("powder_uranium").setCreativeTab(MainRegistry.partsTab);
@@ -336,6 +346,22 @@ public class ModItems {
 	public static final Item powder_niobium = new ItemCustomLore("powder_niobium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_tennessine = new ItemCustomLore("powder_tennessine").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cerium = new ItemCustomLore("powder_cerium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_ice = new ItemCustomLore("powder_ice").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_desh_mix = new ItemBase("powder_desh_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_nitan_mix = new ItemBase("powder_nitan_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_spark_mix = new ItemBase("powder_spark_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_fire = new ItemFuel("powder_fire", 6400).setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_meteorite = new ItemBase("powder_meteorite").setCreativeTab(MainRegistry.partsTab);
+	
+	//Misc
+	public static final Item catalyst_clay = new ItemBase("catalyst_clay").setCreativeTab(MainRegistry.partsTab);
+	
+	//Fuels
+	public static final Item solid_fuel = new ItemFuel("solid_fuel", 3200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item rocket_fuel = new ItemBase("rocket_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item briquette_lignite = new ItemFuel("briquette_lignite", 1600).setCreativeTab(MainRegistry.partsTab);
+	public static final Item coke = new ItemFuel("coke", 3200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item lignite = new ItemFuel("lignite", 1200).setCreativeTab(MainRegistry.partsTab);
 	
 	//Fragments?
 	public static final Item fragment_neodymium = new ItemBase("fragment_neodymium").setCreativeTab(MainRegistry.partsTab);
@@ -373,6 +399,8 @@ public class ModItems {
 	
 	//Templates
 	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item chemistry_template = new ItemChemistryTemplate("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item chemistry_icon = new ItemChemistryIcon("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
 	
 	//Plates
 	public static final Item plate_iron = new ItemBase("plate_iron").setCreativeTab(MainRegistry.partsTab);
@@ -394,6 +422,30 @@ public class ModItems {
 	public static final Item plate_titanium = new ItemBase("plate_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_aluminium = new ItemBase("plate_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_schrabidium = new ItemBase("plate_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	
+	//Circuits
+	public static final Item circuit_raw = new ItemBase("circuit_raw").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_aluminium = new ItemBase("circuit_aluminium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_copper = new ItemBase("circuit_copper").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_red_copper = new ItemBase("circuit_red_copper").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_gold = new ItemBase("circuit_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_schrabidium = new ItemCustomLore("circuit_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier1 = new ItemBase("circuit_targeting_tier1").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier2 = new ItemBase("circuit_targeting_tier2").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier3 = new ItemBase("circuit_targeting_tier3").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier4 = new ItemBase("circuit_targeting_tier4").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier5 = new ItemBase("circuit_targeting_tier5").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit_targeting_tier6 = new ItemBase("circuit_targeting_tier6").setCreativeTab(MainRegistry.partsTab);
+	
+	//Wires
+	public static final Item wire_advanced_alloy = new ItemBase("wire_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_red_copper = new ItemBase("wire_red_copper").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_tungsten = new ItemCustomLore("wire_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_aluminium = new ItemBase("wire_aluminium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_copper = new ItemBase("wire_copper").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_gold = new ItemBase("wire_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_schrabidium = new ItemRadioactive("wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_magnetized_tungsten = new ItemBase("wire_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	
 	//Stamps
 	public static final Item stamp_stone_flat = new ItemBlades("stamp_stone_flat", 5);
@@ -503,12 +555,15 @@ public class ModItems {
 		}
 		
 		for(Block block : ModBlocks.ALL_BLOCKS){
-			ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+			if(block == ModBlocks.block_scrap){
+				ForgeRegistries.ITEMS.register(new ItemBlockScrap(block).setRegistryName(block.getRegistryName()));
+			} else {
+				ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+			}
 		}
 	}
 	
 	public static void init(){
-		
 	}
 	
 	public static void postInit(){

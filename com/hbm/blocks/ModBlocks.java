@@ -10,9 +10,12 @@ import com.hbm.blocks.generic.BlockOre;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.machine.DummyBlockAssembler;
+import com.hbm.blocks.machine.DummyBlockChemplant;
 import com.hbm.blocks.machine.MachineAssembler;
+import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.blocks.machine.MachinePress;
+import com.hbm.blocks.test.TestRender;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -26,8 +29,12 @@ public class ModBlocks {
 	
 	//public static final Block fatduck = new BlockBase(Material.IRON, "fatduck");
 	
-	
+	public static final Block test_render = new TestRender(Material.ROCK, "test_render");
 	public static final Block taint = new BlockTaint(Material.IRON, "taint").setCreativeTab(null).setHardness(15.0F).setResistance(10.0F);
+	
+	//Generic blocks
+	public static final Block asphalt = new BlockBase(Material.ROCK, "asphalt").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(100.0F);
+	public static final Block concrete_smooth = new BlockBase(Material.ROCK, "concrete_smooth").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(4000.0F);
 	
 	//Ores
 	public static final Block ore_uranium = new BlockBase(Material.ROCK, "ore_uranium").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
@@ -62,6 +69,8 @@ public class ModBlocks {
 	public static final Block ore_meteor_lithium = new BlockOre(Material.ROCK, "ore_meteor_lithium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_meteor_starmetal = new BlockOre(Material.ROCK, "ore_meteor_starmetal").setCreativeTab(MainRegistry.blockTab).setHardness(10.0F).setResistance(100.0F);
 	
+	public static final Block ore_oil_sand = new BlockFallingBase(Material.SAND, "ore_oil_sand", SoundType.SAND).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(1.0F);
+	
 	//Material Blocks
 	public static final Block block_niter = new BlockBase(Material.IRON, "block_niter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block block_sulfur = new BlockBase(Material.IRON, "block_sulfur").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
@@ -82,6 +91,11 @@ public class ModBlocks {
 	public static final Block block_magnetized_tungsten = new BlockBase(Material.IRON, "block_magnetized_tungsten").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(35.0F);
 	public static final Block block_desh = new BlockBase(Material.IRON, "block_desh").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
 	public static final Block gravel_obsidian = new BlockFallingBase(Material.IRON, "gravel_obsidian", SoundType.GROUND).setHardness(5.0F).setResistance(600F).setCreativeTab(MainRegistry.blockTab);
+	
+	public static final Block brick_concrete = new BlockBase(Material.ROCK, "brick_concrete").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(6000.0F);
+	public static final Block brick_light = new BlockBase(Material.ROCK, "brick_light").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(1000.0F);
+	public static final Block block_scrap = new BlockFallingBase(Material.SAND, "block_scrap", SoundType.GROUND).setCreativeTab(MainRegistry.blockTab).setHardness(2.5F).setResistance(5.0F);
+	public static final Block brick_obsidian = new BlockBase(Material.ROCK, "brick_obsidian").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(8000.0F);
 	
 	//Radiation blocks
 	public static final Block mush = new BlockMush(Material.PLANTS, "mush").setLightLevel(0.5F).setCreativeTab(MainRegistry.blockTab);
@@ -115,9 +129,15 @@ public class ModBlocks {
 	public static final Block machine_assembler = new MachineAssembler(Material.IRON, "machine_assembler").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(100.0F);
 	public static final int guiID_machine_assembler = 48;
 	
+	public static final Block machine_chemplant = new MachineChemplant(Material.IRON, "machine_chemplant").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_machine_chemplant = 49;
+	
 	//Dummy blocks
 	public static final Block dummy_block_assembler = new DummyBlockAssembler(Material.IRON, "dummy_block_assembler").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
 	public static final Block dummy_port_assembler = new DummyBlockAssembler(Material.IRON, "dummy_port_assembler").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
+	
+	public static final Block dummy_block_chemplant = new DummyBlockChemplant(Material.IRON, "dummy_block_chemplant").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_chemplant = new DummyBlockChemplant(Material.IRON, "dummy_port_chemplant").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){

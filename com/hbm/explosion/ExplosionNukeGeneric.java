@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -315,73 +316,73 @@ public class ExplosionNukeGeneric {
 			}
 		}
 	}
-
-	public static int destruction(World world, int x, int y, int z) {
+*/
+	public static int destruction(World world, BlockPos pos) {
 		int rand;
 		if (!world.isRemote) {
-			Block b = world.getBlock(x,y,z);
-			if (b.getExplosionResistance(null)>=200f) {	//500 is the resistance of liquids
+			IBlockState b = world.getBlockState(pos);
+			if (b.getBlock().getExplosionResistance(world, pos, null, null)>=200f) {	//500 is the resistance of liquids
 				//blocks to be spared
-				int protection = (int)(b.getExplosionResistance(null)/300f);
-				if (b == ModBlocks.brick_concrete) {
+				int protection = (int)(b.getBlock().getExplosionResistance(world, pos, null, null)/300f);
+				if (b.getBlock() == ModBlocks.brick_concrete) {
 					rand = random.nextInt(8);
 					if (rand == 0) {
-						world.setBlock(x, y, z, Blocks.gravel, 0, 3);
+						world.setBlockState(pos, Blocks.GRAVEL.getDefaultState(), 3);
 						return 0;
 					}
-				} else if (b == ModBlocks.brick_light) {
+				} else if (b.getBlock() == ModBlocks.brick_light) {
 					rand = random.nextInt(3);
 					if (rand == 0) {
-						world.setBlock(x, y, z, ModBlocks.waste_planks, 0, 3);
+						world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState(), 3);
 						return 0;
 					}else if (rand == 1){
-						world.setBlock(x,y,z,ModBlocks.block_scrap,0,3);
+						world.setBlockState(pos,ModBlocks.block_scrap.getDefaultState());
 						return 0;
 					}
-				} else if (b == ModBlocks.brick_obsidian) {
+				} else if (b.getBlock() == ModBlocks.brick_obsidian) {
 					rand = random.nextInt(20);
 					if (rand == 0) {
-						world.setBlock(x, y, z, Blocks.obsidian, 0, 3);
+						world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
 					}
-				} else if (b == Blocks.obsidian) {
-					world.setBlock(x, y, z, ModBlocks.gravel_obsidian, 0, 3);
+				} else if (b.getBlock() == Blocks.OBSIDIAN) {
+					world.setBlockState(pos, ModBlocks.gravel_obsidian.getDefaultState(), 3);
 					return 0;
 				} else if(random.nextInt(protection+3)==0){
-					world.setBlock(x, y, z, ModBlocks.block_scrap,0,3);
+					world.setBlockState(pos, ModBlocks.block_scrap.getDefaultState());
 				}
 				return protection;
 			}else{//otherwise, kill the block!
-				world.setBlock(x, y, z, Blocks.air,0, 2);
+				world.setBlockToAir(pos);
 			}
 		}
 		return 0;
 	}
-
-	public static int vaporDest(World world, int x, int y, int z) {
+	
+	public static int vaporDest(World world, BlockPos pos) {
 		if (!world.isRemote) {
-			Block b = world.getBlock(x,y,z);
-			if (b.getExplosionResistance(null)<0.5f //most light things
-					|| b == Blocks.web || b == ModBlocks.red_cable
-					|| b instanceof BlockLiquid) {
-				world.setBlock(x, y, z, Blocks.air,0, 2);
+			IBlockState b = world.getBlockState(pos);
+			if (b.getBlock().getExplosionResistance(world, pos, null, null)<0.5f //most light things
+					|| b.getBlock() == Blocks.WEB /*|| b.getBlock() == ModBlocks.red_cable*/ //TODO cable blocks
+					|| b.getBlock() instanceof BlockLiquid) {
+				world.setBlockToAir(pos);
 				return 0;
-			} else if (b.getExplosionResistance(null)<=3.0f && !b.isOpaqueCube()){
-				if(b != Blocks.chest && b != Blocks.farmland){
+			} else if (b.getBlock().getExplosionResistance(world, pos, null, null)<=3.0f && !b.isOpaqueCube()){
+				if(b.getBlock() != Blocks.CHEST && b.getBlock() != Blocks.FARMLAND){
 					//destroy all medium resistance blocks that aren't chests or farmland
-					world.setBlock(x, y, z, Blocks.air,0,2);
+					world.setBlockToAir(pos);
 					return 0;
 				}
 			}
 			
-			if (b.isFlammable(world, x, y, z, ForgeDirection.UP)
-					&& world.getBlock(x, y + 1, z) == Blocks.air) {
-				world.setBlock(x, y + 1, z, Blocks.fire,0,2);
+			if (b.getBlock().isFlammable(world, pos, EnumFacing.UP)
+					&& world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
+				world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState(),2);
 			}
-			return (int)( b.getExplosionResistance(null)/300f);
+			return (int)( b.getBlock().getExplosionResistance(world, pos, null, null)/300f);
 		}
 		return 0;
 	}
-*/
+
 	public static void waste(World world, int x, int y, int z, int radius) {
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int r = radius;
@@ -512,79 +513,79 @@ public class ExplosionNukeGeneric {
 			}
 		}
 	}
-
-	public static void wasteDestNoSchrab(World world, int x, int y, int z) {
+*/
+	public static void wasteDestNoSchrab(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			int rand;
-
-			if (world.getBlock(x, y, z) == Blocks.glass || world.getBlock(x, y, z) == Blocks.stained_glass
-					|| world.getBlock(x, y, z) == Blocks.wooden_door || world.getBlock(x, y, z) == Blocks.iron_door
-					|| world.getBlock(x, y, z) == Blocks.leaves || world.getBlock(x, y, z) == Blocks.leaves2) {
-				world.setBlock(x, y, z, Blocks.air);
+			Block b = world.getBlockState(pos).getBlock();
+			if (b == Blocks.GLASS || b == Blocks.STAINED_GLASS
+					|| b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR
+					|| b == Blocks.LEAVES || b == Blocks.LEAVES2) {
+				world.setBlockToAir(pos);
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.grass) {
-				world.setBlock(x, y, z, ModBlocks.waste_earth);
+			else if (b == Blocks.GRASS) {
+				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.mycelium) {
-				world.setBlock(x, y, z, ModBlocks.waste_mycelium);
+			else if (b == Blocks.MYCELIUM) {
+				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.sand) {
+			else if (b == Blocks.SAND) {
 				rand = random.nextInt(20);
-				if (rand == 1 && world.getBlockMetadata(x, y, z) == 0) {
-					world.setBlock(x, y, z, ModBlocks.waste_trinitite);
+				if (rand == 1 && world.getBlockState(pos).getValue(BlockSand.VARIANT) == BlockSand.EnumType.SAND) {
+					world.setBlockState(pos, ModBlocks.waste_trinitite.getDefaultState());
 				}
-				if (rand == 1 && world.getBlockMetadata(x, y, z) == 1) {
-					world.setBlock(x, y, z, ModBlocks.waste_trinitite_red);
+				if (rand == 1 && world.getBlockState(pos).getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND) {
+					world.setBlockState(pos, ModBlocks.waste_trinitite_red.getDefaultState());
 				}
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.clay) {
-				world.setBlock(x, y, z, Blocks.hardened_clay);
+			else if (b == Blocks.CLAY) {
+				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.mossy_cobblestone) {
-				world.setBlock(x, y, z, Blocks.coal_ore);
+			else if (b == Blocks.MOSSY_COBBLESTONE) {
+				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.coal_ore) {
+			else if (b == Blocks.COAL_ORE) {
 				rand = random.nextInt(30);
 				if (rand == 1 || rand == 2 || rand == 3) {
-					world.setBlock(x, y, z, Blocks.diamond_ore);
+					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
 				}
 				if (rand == 29) {
-					world.setBlock(x, y, z, Blocks.emerald_ore);
+					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 				}
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.log || world.getBlock(x, y, z) == Blocks.log2) {
-				world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.LOG || b == Blocks.LOG2) {
+				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.planks) {
-				world.setBlock(x, y, z, ModBlocks.waste_planks);
+			else if (b == Blocks.PLANKS) {
+				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.brown_mushroom_block) {
-				if (world.getBlockMetadata(x, y, z) == 10) {
-					world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.BROWN_MUSHROOM_BLOCK) {
+				if (world.getBlockState(pos).getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
+					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
-					world.setBlock(x, y, z, Blocks.air,0,2);
+					world.setBlockToAir(pos);
 				}
 			}
 
-			else if (world.getBlock(x, y, z) == Blocks.red_mushroom_block) {
-				if (world.getBlockMetadata(x, y, z) == 10) {
-					world.setBlock(x, y, z, ModBlocks.waste_log);
+			else if (b == Blocks.RED_MUSHROOM_BLOCK) {
+				if (world.getBlockState(pos).getValue(BlockHugeMushroom.VARIANT) == BlockHugeMushroom.EnumType.STEM) {
+					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
-					world.setBlock(x, y, z, Blocks.air,0,2);
+					world.setBlockToAir(pos);
 				}
 			}
 		}
 	}
-
+/*
 	public static void emp(World world, int x, int y, int z) {
 		if (!world.isRemote) {
 			
@@ -625,20 +626,20 @@ public class ExplosionNukeGeneric {
 				world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
 		}
 	}
-
-	public static void solinium(World world, int x, int y, int z) {
+	*/
+	public static void solinium(World world, BlockPos pos) {
 		if (!world.isRemote) {
-			Block b = world.getBlock(x,y,z);
+			IBlockState b = world.getBlockState(pos);
 			Material m = b.getMaterial();
 			
-			if(b == Blocks.grass || b == Blocks.mycelium || b == ModBlocks.waste_earth || b == ModBlocks.waste_mycelium) {
-				world.setBlock(x, y, z, Blocks.dirt);
+			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_mycelium) {
+				world.setBlockState(pos, Blocks.DIRT.getDefaultState());
 				return;
 			}
 			
-			if(m == Material.cactus || m == Material.coral || m == Material.leaves || m == Material.plants || m == Material.sponge || m == Material.vine || m == Material.gourd || m == Material.wood) {
-				world.setBlockToAir(x, y, z);
+			if(m == Material.CACTUS || m == Material.CORAL || m == Material.LEAVES || m == Material.PLANTS || m == Material.SPONGE || m == Material.VINE || m == Material.GOURD || m == Material.WOOD) {
+				world.setBlockToAir(pos);
 			}
 		}
-	}*/
+	}
 }

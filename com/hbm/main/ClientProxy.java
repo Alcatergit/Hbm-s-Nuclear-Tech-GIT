@@ -1,5 +1,6 @@
 package com.hbm.main;
 
+import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.mob.EntityNuclearCreeper;
@@ -10,11 +11,14 @@ import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.items.ModItems;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.entity.FogRenderer;
+import com.hbm.render.entity.RenderBeam5;
+import com.hbm.render.entity.RenderCloudRainbow;
 import com.hbm.render.factories.MultiCloudRendererFactory;
 import com.hbm.render.factories.RenderBurningFOEQFactory;
 import com.hbm.render.factories.RenderDSmokeFXFactory;
@@ -27,11 +31,18 @@ import com.hbm.render.factories.RenderSmallNukeMK3Factory;
 import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.factories.ShrapnelRendererFactory;
 import com.hbm.render.item.AssemblyTemplateRender;
+import com.hbm.render.item.ChemTemplateRender;
+import com.hbm.render.item.FluidBarrelRender;
+import com.hbm.render.item.FluidCanisterRender;
+import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
+import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.tileentity.RenderTaint;
+import com.hbm.render.tileentity.RenderTestRender;
 import com.hbm.render.util.HmfModelLoader;
+import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
@@ -55,7 +66,7 @@ public class ClientProxy extends ServerProxy {
 	public void registerRenderInfo()
 	{
 		if(!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled())
-		Minecraft.getMinecraft().getFramebuffer().enableStencil();
+			Minecraft.getMinecraft().getFramebuffer().enableStencil();
 		
 		MinecraftForge.EVENT_BUS.register(new ModEventHandlerClient());
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
@@ -63,6 +74,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTaint.class, new RenderTaint());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTestRender.class, new RenderTestRender());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -76,6 +88,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySSmokeFX.class, new RenderSSmokeFactory(ModItems.nuclear_waste));
 		RenderingRegistry.registerEntityRenderingHandler(EntityRubble.class, new RenderRubbleFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBurningFOEQ.class, new RenderBurningFOEQFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityCloudFleijaRainbow.class, RenderCloudRainbow.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityExplosiveBeam.class, RenderBeam5.FACTORY);
 	}
 	@Override
 	public void registerMissileItems() {
@@ -100,6 +114,11 @@ public class ClientProxy extends ServerProxy {
 		OBJLoader.INSTANCE.addDomain("hbm");
 		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.instance);
 		ModItems.assembly_template.setTileEntityItemStackRenderer(AssemblyTemplateRender.INSTANCE);
+		ModItems.gun_b92.setTileEntityItemStackRenderer(ItemRenderGunAnim.INSTANCE);
+		ModItems.fluid_tank_full.setTileEntityItemStackRenderer(FluidTankRender.INSTANCE);
+		ModItems.fluid_barrel_full.setTileEntityItemStackRenderer(FluidBarrelRender.INSTANCE);
+		ModItems.canister_generic.setTileEntityItemStackRenderer(FluidCanisterRender.INSTANCE);
+		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
 	}
 	
 }

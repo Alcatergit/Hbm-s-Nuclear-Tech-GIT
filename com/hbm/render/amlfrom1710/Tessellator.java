@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -96,7 +97,9 @@ public class Tessellator
      */
     public int draw()
     {
-        if (!this.isDrawing)
+    	net.minecraft.client.renderer.Tessellator.getInstance().draw();
+    	return 1;
+       /* if (!this.isDrawing)
         {
             throw new IllegalStateException("Not tesselating!");
         }
@@ -182,7 +185,7 @@ public class Tessellator
             int i = this.rawBufferIndex * 4;
             this.reset();
             return i;
-        }
+        }*/
     }
 
     public TesselatorVertexState getVertexState(float p_147564_1_, float p_147564_2_, float p_147564_3_)
@@ -252,9 +255,9 @@ public class Tessellator
     /**
      * Resets tessellator state and prepares for drawing (with the specified draw mode).
      */
-    public void startDrawing(int p_78371_1_)
+    public void startDrawing(int glMode)
     {
-        if (this.isDrawing)
+       /* if (this.isDrawing)
         {
             throw new IllegalStateException("Already tesselating!");
         }
@@ -268,7 +271,8 @@ public class Tessellator
             this.hasTexture = false;
             this.hasBrightness = false;
             this.isColorDisabled = false;
-        }
+        }*/
+    	net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, DefaultVertexFormats.POSITION_TEX_NORMAL);
     }
 
     /**
@@ -379,19 +383,27 @@ public class Tessellator
     /**
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
      */
-    public void addVertexWithUV(double p_78374_1_, double p_78374_3_, double p_78374_5_, double p_78374_7_, double p_78374_9_)
+    public void addVertexWithUV(double x, double y, double z, double u, double v)
     {
-        this.setTextureUV(p_78374_7_, p_78374_9_);
-        this.addVertex(p_78374_1_, p_78374_3_, p_78374_5_);
+    	if(this.hasNormals)
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).tex(u, v).normal(normalTestX, normalTestY, normalTestZ).endVertex();
+    	else
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).tex(u, v).endVertex();
+        /*this.setTextureUV(p_78374_7_, p_78374_9_);
+        this.addVertex(p_78374_1_, p_78374_3_, p_78374_5_);*/
     }
 
     /**
      * Adds a vertex with the specified x,y,z to the current draw call. It will trigger a draw() if the buffer gets
      * full.
      */
-    public void addVertex(double p_78377_1_, double p_78377_3_, double p_78377_5_)
+    public void addVertex(double x, double y, double z)
     {
-        if (rawBufferIndex >= rawBufferSize - 32) 
+    	if(this.hasNormals)
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).normal(normalTestX, normalTestY, normalTestZ).endVertex();
+    	else
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).endVertex();
+       /* if (rawBufferIndex >= rawBufferSize - 32) 
         {
             if (rawBufferSize == 0)
             {
@@ -431,7 +443,7 @@ public class Tessellator
         this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(p_78377_3_ + this.yOffset));
         this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(p_78377_5_ + this.zOffset));
         this.rawBufferIndex += 8;
-        ++this.vertexCount;
+        ++this.vertexCount;*/
     }
 
     /**
@@ -464,16 +476,21 @@ public class Tessellator
         this.isColorDisabled = true;
     }
 
+    private float normalTestX, normalTestY, normalTestZ;
+    
     /**
      * Sets the normal for the current draw call.
      */
-    public void setNormal(float p_78375_1_, float p_78375_2_, float p_78375_3_)
+    public void setNormal(float x, float y, float z)
     {
         this.hasNormals = true;
-        byte b0 = (byte)((int)(p_78375_1_ * 127.0F));
-        byte b1 = (byte)((int)(p_78375_2_ * 127.0F));
-        byte b2 = (byte)((int)(p_78375_3_ * 127.0F));
-        this.normal = b0 & 255 | (b1 & 255) << 8 | (b2 & 255) << 16;
+      //  byte b0 = (byte)((int)(p_78375_1_ * 127.0F));
+       // byte b1 = (byte)((int)(p_78375_2_ * 127.0F));
+       // byte b2 = (byte)((int)(p_78375_3_ * 127.0F));
+       // this.normal = b0 & 255 | (b1 & 255) << 8 | (b2 & 255) << 16;
+        normalTestX = x;
+        normalTestY = y;
+        normalTestZ = z;
     }
 
     /**

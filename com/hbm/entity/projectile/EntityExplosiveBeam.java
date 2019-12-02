@@ -2,19 +2,24 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -88,7 +93,7 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         }
     }
 	
-	public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
+/*	public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
 		super(p_i1756_1_);
 		EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
 		this.shootingEntity = p_i1756_2_;
@@ -107,8 +112,8 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
 		this.motionY = (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
 		this.shoot(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
 	}
-
-    public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_)
+*/
+    public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, boolean offHand)
     {
         super(p_i1756_1_);
         EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
@@ -116,9 +121,16 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
 
         this.setSize(0.5F, 0.5F);
         this.setLocationAndAngles(p_i1756_2_.posX, p_i1756_2_.posY + p_i1756_2_.getEyeHeight(), p_i1756_2_.posZ, p_i1756_2_.rotationYaw, p_i1756_2_.rotationPitch);
-        this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
-        this.posY -= 0.10000000149011612D;
-        this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        if(offHand){
+        	this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+            this.posY -= 0.10000000149011612D;
+            this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        } else {
+        	this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+            this.posY -= 0.10000000149011612D;
+            this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        }
+        
         this.setPosition(this.posX, this.posY, this.posZ);
         this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI);
         this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI);
@@ -329,7 +341,7 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
             }
             
             this.setPosition(this.posX, this.posY, this.posZ);
-            this.func_145775_I();
+            this.doBlockCollisions();
         }
     }
 
@@ -343,7 +355,9 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         p_70014_1_.setShort("yTile", (short)this.field_145792_e);
         p_70014_1_.setShort("zTile", (short)this.field_145789_f);
         p_70014_1_.setShort("life", (short)this.ticksInGround);
-        p_70014_1_.setByte("inTile", (byte)Block.getStateId(this.field_145790_g));
+        if(field_145790_g != null){
+        	p_70014_1_.setByte("inTile", (byte)Block.getStateId(this.field_145790_g));
+        }
         p_70014_1_.setByte("shake", (byte)this.arrowShake);
         p_70014_1_.setByte("inGround", (byte)(this.inGround ? 1 : 0));
         p_70014_1_.setByte("pickup", (byte)this.canBePickedUp);
@@ -360,7 +374,8 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         this.field_145792_e = p_70037_1_.getShort("yTile");
         this.field_145789_f = p_70037_1_.getShort("zTile");
         this.ticksInGround = p_70037_1_.getShort("life");
-        this.field_145790_g = Block.getStateById(p_70037_1_.getByte("inTile"));
+        if(p_70037_1_.hasKey("inTile"))
+        	this.field_145790_g = Block.getStateById(p_70037_1_.getByte("inTile"));
         this.arrowShake = p_70037_1_.getByte("shake") & 255;
         this.inGround = p_70037_1_.getByte("inGround") == 1;
 
@@ -389,13 +404,6 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         return false;
     }
 
-    @Override
-	@SideOnly(Side.CLIENT)
-    public float getShadowSize()
-    {
-        return 0.0F;
-    }
-
     public void setDamage(double p_70239_1_)
     {
         this.damage = p_70239_1_;
@@ -417,14 +425,14 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     public void setIsCritical(boolean p_70243_1_)
     {
         byte b0 = this.dataManager.get(CRITICAL);
-
+        Tessellator.getInstance();
         if (p_70243_1_)
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
+            this.dataManager.set(CRITICAL, Byte.valueOf((byte)(b0 | 1)));
         }
         else
         {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
+            this.dataManager.set(CRITICAL, Byte.valueOf((byte)(b0 & -2)));
         }
     }
 
@@ -433,15 +441,13 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
      */
     public boolean getIsCritical()
     {
-        byte b0 = this.dataWatcher.getWatchableObjectByte(16);
+        byte b0 = this.dataManager.get(CRITICAL);
         return (b0 & 1) != 0;
     }
     
     private void explode() {
     	if(!world.isRemote) {
-			this.world.playSoundEffect(this.posX, this.posY, this.posZ,
-					"random.explode", 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
-
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0F, this.world.rand.nextFloat() * 0.1F + 0.9F, true);
 			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(this.world);
 			entity.posX = this.posX;
 			entity.posY = this.posY;
@@ -451,13 +457,13 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
 			entity.coefficient = 1.0F;
 			entity.waste = false;
 
-			this.world.spawnEntityInWorld(entity);
+			this.world.spawnEntity(entity);
     		
     		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(this.world, 10);
     		cloud.posX = this.posX;
     		cloud.posY = this.posY;
     		cloud.posZ = this.posZ;
-    		this.world.spawnEntityInWorld(cloud);
+    		this.world.spawnEntity(cloud);
     	}
     }
 }

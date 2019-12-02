@@ -1,21 +1,39 @@
 package com.hbm.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
+import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemAssemblyTemplate.EnumAssemblyTemplate;
+import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
+import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
+import com.hbm.render.item.B92BakedModel;
+import com.hbm.render.item.ChemTemplateBakedModel;
+import com.hbm.render.item.ChemTemplateRender;
+import com.hbm.render.item.FluidBarrelBakedModel;
+import com.hbm.render.item.FluidBarrelRender;
+import com.hbm.render.item.FluidCanisterBakedModel;
+import com.hbm.render.item.FluidCanisterRender;
+import com.hbm.render.item.FluidTankBakedModel;
+import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
+import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.item.ItemRenderRedstoneSword;
 import com.hbm.render.tileentity.RenderPress;
 
@@ -34,6 +52,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -43,6 +62,14 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
+		int i = 0;
+		ResourceLocation[] list = new ResourceLocation[EnumCanister.values().length];
+		for(EnumCanister e : EnumCanister.values()){
+			list[i] = e.getResourceLocation();
+			i++;
+		}
+		ModelLoader.registerItemVariants(ModItems.canister_generic, list);
+		
 		for (Item item : ModItems.ALL_ITEMS) {
 			registerModel(item, 0);
 		}
@@ -56,16 +83,35 @@ public class ModEventHandlerClient {
 	}
 
 	private void registerModel(Item item, int meta) {
-		if (item instanceof IHasCustomModel) {
+		if(item == ModItems.chemistry_icon){
+			for(int i = 0; i < EnumChemistryTemplate.values().length; i ++){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + EnumChemistryTemplate.getEnum(i).getName().toLowerCase(), "inventory"));
+			}
+		} else if(item == ModItems.chemistry_template){
+			for(int i = 0; i < EnumChemistryTemplate.values().length; i++){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			}
+		} else if(item == ModItems.assembly_template){
+			for(int i = 0; i < EnumAssemblyTemplate.values().length; i++){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			}
+		} else if (item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
 		} else {
-			ModelLoader.setCustomModelResourceLocation(item, 0,
-					new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
 	}
 
 	@SubscribeEvent
 	public void modelBaking(ModelBakeEvent evt) {
+		
+		for(EnumCanister e : EnumCanister.values()){
+			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
+			if(o instanceof IBakedModel)
+				e.putRenderModel((IBakedModel) o);
+		}
+		
+		//TODO Sigh... find a better custom model loading system.
 		ResourceManager.init();
 		Object obj = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
 		if (obj instanceof IBakedModel) {
@@ -79,6 +125,39 @@ public class ModEventHandlerClient {
 			AssemblyTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemAssemblyTemplate.location, new AssemblyTemplateBakedModel());
 		}
+		
+		Object object3 = evt.getModelRegistry().getObject(GunB92.b92Model);
+		if (object instanceof IBakedModel) {
+			IBakedModel model = (IBakedModel) object3;
+			ItemRenderGunAnim.INSTANCE.b92ItemModel = model;
+			evt.getModelRegistry().putObject(GunB92.b92Model, new B92BakedModel());
+		}
+		Object object4 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankModel);
+		if(object4 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object4;
+			FluidTankRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankModel, new FluidTankBakedModel());
+		}
+		Object object5 = evt.getModelRegistry().getObject(ItemFluidTank.fluidBarrelModel);
+		if(object5 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object5;
+			FluidBarrelRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemFluidTank.fluidBarrelModel, new FluidBarrelBakedModel());
+		}
+		Object object6 = evt.getModelRegistry().getObject(ItemFluidCanister.fluidCanisterModel);
+		if(object6 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object6;
+			FluidCanisterRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemFluidCanister.fluidCanisterModel, new FluidCanisterBakedModel());
+		}
+		Object object7 = evt.getModelRegistry().getObject(ItemChemistryTemplate.chemModel);
+		if(object7 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object7;
+			ChemTemplateRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemChemistryTemplate.chemModel, new ChemTemplateBakedModel());
+		}
+		
+		
 
 	}
 
@@ -100,6 +179,94 @@ public class ModEventHandlerClient {
 				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke7"));
 		DSmokeRenderer.sprites[7] = evt.getMap()
 				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke8"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/smear_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/smear_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heatingoil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heatingoil_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_flowing"));
+		
+		//Yes yes I know, I spelled 'naphtha' wrong.
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/napatha_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/napatha_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/diesel_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/diesel_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lightoil_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lightoil_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/kerosene_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/kerosene_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gas_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gas_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroleum_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroleum_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitan_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitan_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uf6_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uf6_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/puf6_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/puf6_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sas3_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sas3_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/amat_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/amat_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"));
 
 	}
 
@@ -125,10 +292,6 @@ public class ModEventHandlerClient {
 		}
 	}
 	
-	@SubscribeEvent
-	public void fovUpdate(FOVUpdateEvent evt){
-		RenderPress.fov = evt.getFov();
-		
-	}
 
+	
 }

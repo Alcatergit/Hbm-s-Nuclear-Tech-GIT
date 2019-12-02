@@ -22,6 +22,20 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class Library {
+	
+	public static String HbMinecraft = "192af5d7-ed0f-48d8-bd89-9d41af8524f8";
+	public static String LPkukin = "937c9804-e11f-4ad2-a5b1-42e62ac73077";
+	public static String Dafnik = "3af1c262-61c0-4b12-a4cb-424cc3a9c8c0";
+	public static String a20 = "4729b498-a81c-42fd-8acd-20d6d9f759e0";
+	public static String LordVertice = "a41df45e-13d8-4677-9398-090d3882b74f";
+	public static String CodeRed_ = "912ec334-e920-4dd7-8338-4d9b2d42e0a1";
+	public static String dxmaster769 = "62c168b2-d11d-4dbf-9168-c6cea3dcb20e";
+	public static String Dr_Nostalgia = "e82684a7-30f1-44d2-ab37-41b342be1bbd";
+	public static String Samino2 = "87c3960a-4332-46a0-a929-ef2a488d1cda";
+	public static String Hoboy03new = "d7f29d9c-5103-4f6f-88e1-2632ff95973f";
+	public static String Dragon59MC = "dc23a304-0f84-4e2d-b47d-84c8d3bfbcdb";
+	public static String Steelcourage = "ac49720b-4a9a-4459-a26f-bee92160287a";
+	public static String Drillgon = "41ebd03f-7a12-42f3-b037-0caa4d6f235b";
 
 	public static boolean checkForHazmat(EntityPlayer player) {
 		// TODO Make hazmat armors
@@ -214,6 +228,30 @@ public class Library {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
 		return power;
+	}
+	
+	public static boolean isArrayEmpty(Object[] array) {
+		if(array == null)
+			return true;
+		if(array.length == 0)
+			return true;
+		
+		boolean flag = true;
+		
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] != null)
+				flag = false;
+		}
+		
+		return flag;
+	}
+	
+	//Drillgon200: useless method but whatever
+	public static ItemStack carefulCopy(ItemStack stack) {
+		if(stack == null)
+			return null;
+		else
+			return stack.copy();
 	}
 
 }

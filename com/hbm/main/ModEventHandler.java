@@ -29,12 +29,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -216,6 +218,8 @@ int thunder = AuxSavedData.getThunder(event.world);
 			event.getEntity().world.spawnEntity(foeq);
 		}
 	}
+	
+	//TODO should probably use these bois
 	
 	@SubscribeEvent
 	public void onItemRegister(RegistryEvent.Register<Item> evt){

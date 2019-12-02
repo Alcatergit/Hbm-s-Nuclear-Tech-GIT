@@ -10,13 +10,13 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
@@ -71,13 +71,12 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 		ModItems.ALL_ITEMS.add(this);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		// TODO Find the real way of translating to local
-		String s = ("" + I18n.translateToLocal(this.getUnlocalizedName() + ".name")).trim();
+		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 		ItemStack out = MachineRecipes.getOutputFromTempate(stack);
-		String s1 = ("" + I18n.translateToLocal((out != ItemStack.EMPTY ? out.getUnlocalizedName() : "") + ".name"))
+		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getUnlocalizedName() : "") + ".name"))
 				.trim();
 
 		if (s1 != null) {
@@ -89,7 +88,7 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == this.getCreativeTab()) {
+		if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
 			for (int i = 0; i < EnumAssemblyTemplate.values().length; ++i) {
 				list.add(new ItemStack(this, 1, i));
 			}

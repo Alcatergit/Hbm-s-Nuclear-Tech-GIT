@@ -16,5 +16,6 @@ public class BlockFallingBase extends BlockFalling {
 		this.setSoundType(type);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
+	
 
 }

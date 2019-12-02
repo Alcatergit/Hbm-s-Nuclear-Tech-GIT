@@ -29,17 +29,14 @@ import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePress> {
 
-	private static final float[] IDENTITY_MATRIX =
+	/*private static final float[] IDENTITY_MATRIX =
 			new float[] {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f };
 	
-	private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);
-	public static float fov;
-	boolean bool = false;
-	int renderCount = 0;
+	private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);*/
 
 	public RenderPress() {
 		super();
@@ -49,12 +46,12 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 	public void render(TileEntityMachinePress te, double x, double y, double z, float partialTicks, int destroyStage,
 			float alpha) {
 
-		 GL11.glEnable(GL11.GL_STENCIL_TEST);
+		/* GL11.glEnable(GL11.GL_STENCIL_TEST);
 	        
 	        
 	        GL11.glStencilMask(0xFF);
 	        GL11.glClearStencil(0);
-	        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT /*| GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT*/);
+	        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT );
 	        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
 	        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 	        GL11.glColorMask(false, false, false, false);
@@ -99,7 +96,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
             
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        }
+        }*/
 		GL11.glPushMatrix();
 
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
@@ -110,12 +107,12 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 		GL11.glPopMatrix();
 		renderTileEntityAt2(te, x, y, z, partialTicks);
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glLoadMatrix(oldMatrix);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-		GL11.glDisable(GL11.GL_STENCIL_TEST);
+	//	GL11.glMatrixMode(GL11.GL_PROJECTION);
+	//	GL11.glLoadIdentity();
+		//GL11.glLoadMatrix(oldMatrix);
+		//GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	//	GL11.glViewport(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+	//	GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}
 
 	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f) {
@@ -171,7 +168,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 	 * @param zNear
 	 * @param zFar
 	 */
-	public void setupProjMatrix(float r, float l, float t, float b, float zNear, float zFar){
+	/*public void setupProjMatrix(float r, float l, float t, float b, float zNear, float zFar){
 		
 		float r2, l2, t2, b2, r3, l3, t3, b3;
 		float sine, cotangent, deltaZ;
@@ -238,6 +235,6 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 	}
 	public float normalize(float value, float min, float max){
 		return this.normalize(value, min, max, 1.0f);
-	}
+	}*/
 	
 }

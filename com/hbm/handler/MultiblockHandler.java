@@ -107,7 +107,7 @@ public class MultiblockHandler {
 				for(int c = z - i[5]; c <= z + i[4]; c++) {
 					if(!(a == x && b == y && c == z)) {
 						Block block = world.getBlockState(replace.setPos(a, b, c)).getBlock();
-						if(block != Blocks.AIR && !block.isReplaceable(world, pos)) {
+						if(block != Blocks.AIR && !block.isReplaceable(world, replace)) {
 							placable = false;
 						}
 					}
