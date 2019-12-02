@@ -241,25 +241,25 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			
 			
 	
-			power = Library.chargeTEFromItems(slots, 0, power, maxPower);
+			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			if(inputValidForTank(0, 17))
-				if(FFUtils.fillFromFluidContainer(slots, tanks[0], 17, 19))
+				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19))
 					needsUpdate = true;
 			if(inputValidForTank(1, 18))
-				if(FFUtils.fillFromFluidContainer(slots, tanks[1], 18, 20))
+				if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20))
 					needsUpdate = true;
-			if(FFUtils.fillFluidContainer(slots, tanks[2], 9, 11))
+			if(FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11))
 				needsUpdate = true;
-			if(FFUtils.fillFluidContainer(slots, tanks[3], 10, 12))
+			if(FFUtils.fillFluidContainer(inventory, tanks[3], 10, 12))
 				needsUpdate = true;
 			
 
-			FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(slots[4]);
-			FluidStack[] outputs = MachineRecipes.getFluidOutputFromTempate(slots[4]);
+			FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(inventory.getStackInSlot(4));
+			FluidStack[] outputs = MachineRecipes.getFluidOutputFromTempate(inventory.getStackInSlot(4));
 			
-			if((MachineRecipes.getChemInputFromTempate(slots[4]) != null || !Library.isArrayEmpty(inputs)) && 
-					(MachineRecipes.getChemOutputFromTempate(slots[4]) != null || !Library.isArrayEmpty(outputs))) {
-				this.maxProgress = (ItemChemistryTemplate.getProcessTime(slots[4]) * speed) / 100;
+			if((MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(inputs)) && 
+					(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
+				this.maxProgress = (ItemChemistryTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
 				
 				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(slots[4]), cloneItemStackProper(slots)) && hasFluidsStored(inputs)) {
 					
@@ -288,12 +288,12 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			TileEntity te2 = null;
 			
 			if(meta == 2) {
-				te1 = world.getTileEntity(pos.getX() - 2, pos.getY(), pos.getZ());
-				te2 = world.getTileEntity(pos.getX() + 3, pos.getY(), pos.getZ() - 1);
+				te1 = world.getTileEntity(pos.add(-2, 0, 0));
+				te2 = world.getTileEntity(pos.add(3, 0, -1));
 			}
 			if(meta == 3) {
-				te1 = world.getTileEntity(pos.getX() + 2, pos.getY(), pos.getZ());
-				te2 = world.getTileEntity(pos.getX() - 3, pos.getY(), pos.getZ() + 1);
+				te1 = world.getTileEntity(pos.add(2, 0, 0));
+				te2 = world.getTileEntity(pos.add(-3, 0, 1));
 			}
 			if(meta == 4) {
 				te1 = world.getTileEntity(pos.add(0, 0, 2));
