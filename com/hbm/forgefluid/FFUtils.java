@@ -17,4 +17,9 @@ public class FFUtils {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public static boolean fillFluidContainer(IItemHandlerModifiable inventory, FluidTank fluidTank, int i, int j) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

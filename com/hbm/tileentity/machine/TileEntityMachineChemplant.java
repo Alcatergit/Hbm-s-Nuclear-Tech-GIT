@@ -225,7 +225,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}));
 				needsUpdate = false;
 			}
-			int meta = world.getBlockMetadata(this.pos.getX(), this.pos.getY(), this.pos.getZ());
+			int meta = world.getBlockState(pos).getValue(MachineChemplant.FACING);
 			isProgressing = false;
 			
 			age++;
@@ -261,19 +261,19 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 					(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
 				this.maxProgress = (ItemChemistryTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
 				
-				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(slots[4]), cloneItemStackProper(slots)) && hasFluidsStored(inputs)) {
+				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory)) && hasFluidsStored(inputs)) {
 					
-					if(hasSpaceForItems(MachineRecipes.getChemOutputFromTempate(slots[4])) && hasSpaceForFluids(outputs)) {
+					if(hasSpaceForItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4))) && hasSpaceForFluids(outputs)) {
 						progress++;
 						isProgressing = true;
 						
 						if(progress >= maxProgress) {
 							progress = 0;
 
-							addItems(MachineRecipes.getChemOutputFromTempate(slots[4]));
+							addItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)));
 							addFluids(outputs);
 
-							removeItems(MachineRecipes.getChemInputFromTempate(slots[4]), slots);
+							removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), inventory);
 							removeFluids(inputs);
 						}
 						
@@ -567,14 +567,14 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 	
 	//I can't believe that worked.
-	public ItemStack[] cloneItemStackProper(ItemStack[] array) {
-		ItemStack[] stack = new ItemStack[array.length];
+	public IItemHandlerModifiable cloneItemStackProper(IItemHandlerModifiable array) {
+		IItemHandlerModifiable stack = new ItemStackHandler(array.getSlots());
 		
-		for(int i = 0; i < array.length; i++)
-			if(array[i] != null)
-				stack[i] = array[i].copy();
+		for(int i = 0; i < array.getSlots(); i++)
+			if(array.getStackInSlot(i) != null)
+				stack.setStackInSlot(i, array.getStackInSlot(i).copy());
 			else
-				stack[i] = null;
+				stack.setStackInSlot(i, ItemStack.EMPTY);;
 		
 		return stack;
 	}
