@@ -3,17 +3,15 @@ package com.hbm.command;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.lib.Library;
-import com.hbm.saveddata.RadEntitySavedData;
-import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -105,7 +103,8 @@ public class CommandRadiation extends CommandBase {
 			}
 			if(!isFloat(args[2]))
 				throw new CommandException("New rad value is not a number!");
-			RadEntitySavedData.getData(player.getEntityWorld()).setRadForEntity(player, Float.parseFloat(args[2]));
+			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+				player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(Float.parseFloat(args[2]));
 			sender.sendMessage(new TextComponentTranslation("Set radiation for player " + player.getName() + " to " + Float.parseFloat(args[2]) + "."));
 			return;
 		} else if(args.length == 2 && args[0].equals("player")){
@@ -114,7 +113,8 @@ public class CommandRadiation extends CommandBase {
 			for(String s : server.getOnlinePlayerNames()){
 				EntityPlayerMP player = getPlayer(server, s);
 				if(player != null){
-					RadEntitySavedData.getData(player.getEntityWorld()).setRadForEntity(player, 0);
+					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+						player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(0.0F);
 				}
 			}
 			sender.sendMessage(new TextComponentTranslation("Successfully cleared radiation for all online players!"));

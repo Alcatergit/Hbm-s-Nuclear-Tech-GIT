@@ -1,12 +1,15 @@
 package com.hbm.main;
 
+import java.io.File;
+
+import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
-import com.hbm.entity.particle.EntityCloudFX;
 import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
@@ -16,11 +19,13 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.items.ModItems;
-import com.hbm.particle.ParticleContrail;
+import com.hbm.particle.ParticleCloudFX;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.entity.FogRenderer;
 import com.hbm.render.entity.RenderBeam5;
+import com.hbm.render.entity.RenderCloudFleija;
 import com.hbm.render.entity.RenderCloudRainbow;
+import com.hbm.render.entity.RenderNoCloud;
 import com.hbm.render.factories.MultiCloudRendererFactory;
 import com.hbm.render.factories.RenderBurningFOEQFactory;
 import com.hbm.render.factories.RenderDSmokeFXFactory;
@@ -40,21 +45,36 @@ import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.tileentity.RenderAssembler;
+import com.hbm.render.tileentity.RenderChemplant;
+import com.hbm.render.tileentity.RenderCloudResidue;
+import com.hbm.render.tileentity.RenderNukeFleija;
+import com.hbm.render.tileentity.RenderNukeMan;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.tileentity.RenderTaint;
 import com.hbm.render.tileentity.RenderTestRender;
 import com.hbm.render.util.HmfModelLoader;
+import com.hbm.tileentity.bomb.TileEntityNukeFleija;
+import com.hbm.tileentity.bomb.TileEntityNukeMan;
 import com.hbm.tileentity.deco.TileEntityTestRender;
+import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
+import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleCloud;
+import net.minecraft.client.particle.ParticleExplosionHuge;
+import net.minecraft.client.particle.ParticleMobAppearance;
+import net.minecraft.client.particle.ParticleSmokeLarge;
+import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -65,6 +85,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class ClientProxy extends ServerProxy {
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
+	
+	@Override
+	public File getDataDir() {
+		return Minecraft.getMinecraft().mcDataDir;
+	}
 	
 	@Override
 	public void registerRenderInfo()
@@ -79,6 +104,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTaint.class, new RenderTaint());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTestRender.class, new RenderTestRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineChemplant.class, new RenderChemplant());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCloudResidue.class, new RenderCloudResidue());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeMan.class, new RenderNukeMan());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeFleija.class, new RenderNukeFleija());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -94,6 +123,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBurningFOEQ.class, new RenderBurningFOEQFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityCloudFleijaRainbow.class, RenderCloudRainbow.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityExplosiveBeam.class, RenderBeam5.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityNukeCloudNoShroom.class, RenderNoCloud.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCloudFleija.class, RenderCloudFleija.FACTORY);
 	}
 	@Override
 	public void registerMissileItems() {
@@ -112,21 +143,23 @@ public class ClientProxy extends ServerProxy {
 		case 0:
 			
 			for(int i = 0; i < 10; i++) {
-				EntityCloudFX smoke = new EntityCloudFX(world, x + world.rand.nextGaussian(), y + world.rand.nextGaussian(), z + world.rand.nextGaussian(), 0.0, 0.0, 0.0);
-				Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+			//	EntityCloudFX smoke = new EntityCloudFX.Factory().createParticle(-1, world, x + world.rand.nextGaussian(), y + world.rand.nextGaussian(), z + world.rand.nextGaussian(), 0.0, 0.0, 0.0);
+			//	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
 			}
 			break;
 			
 		case 1:
+			//This is actually a vanilla particle, change later.
+			ParticleCloudFX smoke = new ParticleCloudFX(world, x, y, z, 0.0, 0.1, 0.0).setTexMetaItems(0, ModItems.cloud1, ModItems.cloud2, ModItems.cloud3, ModItems.cloud4, ModItems.cloud5, ModItems.cloud6, ModItems.cloud7, ModItems.cloud8);
+			Particle s = new ParticleCloud.Factory().createParticle(EnumParticleTypes.CLOUD.getParticleID(), world, x, y, z, 0.0, 0.1, 0.0);
+			Minecraft.getMinecraft().effectRenderer.addEffect(s);
 			
-			EntityCloudFX smoke = new EntityCloudFX(world, x, y, z, 0.0, 0.1, 0.0);
-			Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
 			break;
 			
 		case 2:
 			
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z);
-			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+		//	ParticleContrail contrail = new ParticleContrail(man, world, x, y, z);
+		//	Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 			break;
 		}
 	}

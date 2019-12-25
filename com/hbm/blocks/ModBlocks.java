@@ -3,7 +3,10 @@ package com.hbm.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.blocks.bomb.NukeFleija;
+import com.hbm.blocks.bomb.NukeMan;
 import com.hbm.blocks.generic.BlockMush;
 import com.hbm.blocks.generic.BlockMushHuge;
 import com.hbm.blocks.generic.BlockOre;
@@ -31,6 +34,7 @@ public class ModBlocks {
 	
 	public static final Block test_render = new TestRender(Material.ROCK, "test_render");
 	public static final Block taint = new BlockTaint(Material.IRON, "taint").setCreativeTab(null).setHardness(15.0F).setResistance(10.0F);
+	public static final Block residue = new BlockCloudResidue(Material.IRON, "residue").setHardness(0.5F).setResistance(0.5F).setCreativeTab(null);
 	
 	//Generic blocks
 	public static final Block asphalt = new BlockBase(Material.ROCK, "asphalt").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(100.0F);
@@ -118,6 +122,13 @@ public class ModBlocks {
 	public static final Block sellafield_3 = new BlockOre(Material.ROCK, 4.0F, 40.0F, "sellafield_3").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block sellafield_4 = new BlockOre(Material.ROCK, 5.0F, 50.0F, "sellafield_4").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block sellafield_core = new BlockOre(Material.ROCK, 10.0F, 150.0F, "sellafield_core").setSoundType(SoundType.STONE).setHardness(10.0F).setCreativeTab(MainRegistry.blockTab);
+	
+	//Bombs
+	public static final Block nuke_man = new NukeMan(Material.IRON, "nuke_man").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
+	public static final int guiID_nuke_man = 6;
+	
+	public static final Block nuke_fleija = new NukeFleija(Material.IRON, "nuke_fleija").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
+	public static final int guiID_nuke_fleija = 17;
 	
 	public static final Block machine_press = new MachinePress(Material.IRON, "machine_press").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_press = 53;

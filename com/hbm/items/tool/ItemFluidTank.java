@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFluidTank extends Item implements IHasCustomModel {
 
@@ -70,6 +72,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 		String s1 = null;// ("" +

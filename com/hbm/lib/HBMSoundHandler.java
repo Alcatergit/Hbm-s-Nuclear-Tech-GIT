@@ -18,6 +18,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent syringeUse;
 	public static SoundEvent sparkShoot;
 	public static SoundEvent b92Reload;
+	public static SoundEvent techBleep;
+	public static SoundEvent techBoop;
 	
 	public static void init() {
 		
@@ -29,6 +31,8 @@ public final class HBMSoundHandler {
 		syringeUse = register("item.syringe");
 		sparkShoot = register("weapon.sparkShoot");
 		b92Reload = register("weapon.b92Reload");
+		techBleep = register("item.techBleep");
+		techBoop = register("item.techBoop");
 	}
 	
 	public static SoundEvent register(String name) {

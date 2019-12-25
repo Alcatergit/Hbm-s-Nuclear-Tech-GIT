@@ -69,7 +69,7 @@ public class BlockTaint extends BlockContainer {
 		    }
     	}
 	}
-	
+	//Drillgon200: Ah yes, spelling.
 	 public static boolean hasPosNeightbour(World world, BlockPos pos) {
 	    	Block b0 = world.getBlockState(pos.add(1, 0, 0)).getBlock();
 	    	Block b1 = world.getBlockState(pos.add(0, 1, 0)).getBlock();
@@ -147,7 +147,7 @@ public class BlockTaint extends BlockContainer {
 	}
 	@Override
 	public boolean isCollidable() {
-		return false;
+		return true;
 	}
 	@Override
 	public boolean isBlockNormalCube(IBlockState state) {
@@ -172,7 +172,7 @@ public class BlockTaint extends BlockContainer {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if(!BlockTaint.hasPosNeightbour(world, pos))
+		if(!BlockTaint.hasPosNeightbour(world, pos) && !world.isRemote)
 			world.setBlockToAir(pos);
 	}
 	

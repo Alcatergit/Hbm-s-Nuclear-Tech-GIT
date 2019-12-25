@@ -48,6 +48,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -79,7 +80,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
 	
-	public ItemStack previousTemplate = null;
+	public ItemStack previousTemplate = ItemStack.EMPTY;
+	//Drillgon200: Yeah I don't even know what I was doing originally
+	public ItemStack previousTemplate2 = ItemStack.EMPTY;
 	
 	Random rand = new Random();
 	
@@ -94,10 +97,17 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		tankTypes = new Fluid[]{null, null, null, null};
 	}
 	
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(world.getTileEntity(pos) != this)
+		{
+			return false;
+		}else{
+			return player.getDistanceSqToCenter(pos) <=128;
+		}
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(world.isRemote)
-			return;
 		super.readFromNBT(nbt);
 		String[] types;
 		
@@ -176,8 +186,11 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	@Override
 	public void update() {
 		
+		needsTankTypeUpdate = previousTemplate2 != inventory.getStackInSlot(4);
+		previousTemplate2 = inventory.getStackInSlot(4);
 		this.consumption = 100;
 		this.speed = 100;
+		
 		
 		for(int i = 1; i < 4; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
@@ -219,9 +232,11 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(this.needsTankTypeUpdate)
 			setContainers();
 		
+		
 		if(!world.isRemote)
 		{
 			if(needsUpdate){
+				this.markDirty();
 				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}));
 				needsUpdate = false;
 			}
@@ -240,7 +255,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			}
 			
 			
-	
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			if(inputValidForTank(0, 17))
 				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19))
@@ -260,7 +274,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if((MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(inputs)) && 
 					(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
 				this.maxProgress = (ItemChemistryTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
-				
 				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory)) && hasFluidsStored(inputs)) {
 					
 					if(hasSpaceForItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4))) && hasSpaceForFluids(outputs)) {
@@ -269,7 +282,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 						
 						if(progress >= maxProgress) {
 							progress = 0;
-
+							this.markDirty();
 							addItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)));
 							addFluids(outputs);
 
@@ -366,7 +379,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			boolean filledContainer = false;
 			//Check if there's an existing template and an open slot
 			for(int i = 0; i < iTe1.getSlots(); i++){
-				if(iTe1.getStackInSlot(i) == null){
+				if(iTe1.getStackInSlot(i) == null || iTe1.getStackInSlot(i) == ItemStack.EMPTY){
 					openSlot = true;
 					
 				}
@@ -377,15 +390,16 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			}
 			//Check if there's a template in input
 			for(int i = 0; i < iTe2.getSlots(); i++){
-				if(iTe2.getStackInSlot(i) != null && iTe2.getStackInSlot(i).getItem() instanceof ItemChemistryTemplate){
+				if((iTe2.getStackInSlot(i) != null && iTe2.getStackInSlot(i) != ItemStack.EMPTY) && iTe2.getStackInSlot(i).getItem() instanceof ItemChemistryTemplate){
 					if(openSlot && existingTemplate){
 						filledContainer = tryFillContainerCap(iTe1, 4);
 						
 					}
-					if(filledContainer){
-					ItemStack copy = iTe2.getStackInSlot(i).copy();
-					iTe2.setStackInSlot(i, ItemStack.EMPTY);
-					this.inventory.setStackInSlot(4, copy);
+					if(filledContainer || existingTemplate == false){
+						this.markDirty();
+						ItemStack copy = iTe2.getStackInSlot(i).copy();
+						iTe2.setStackInSlot(i, ItemStack.EMPTY);
+						this.inventory.setStackInSlot(4, copy);
 					}
 				}
 				
@@ -398,7 +412,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 
 	private boolean validateTe(TileEntity te) {
-		return te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		return te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 	}
 
 	private void setContainers() {
@@ -457,8 +471,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
 				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];
 			}
+			
 			//Drillgon200: I really hope fluid container registry comes back.
 		}
+		
 		return false;
 	}
 	
@@ -476,9 +492,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	public boolean hasSpaceForFluids(FluidStack[] fluids) {
 		if(Library.isArrayEmpty(fluids))
 			return true;
-		
-		if(((fluids[0] == null || fluids[0] != null && tanks[2].fill(fluids[0], false) <= 0) && 
-				(fluids[1] == null || fluids[1] != null && tanks[3].fill(fluids[1], false) <= 0)))
+		if(((fluids[0] == null || fluids[0] != null && tanks[2].fill(fluids[0], false) == fluids[0].amount) && 
+				(fluids[1] == null || fluids[1] != null && tanks[3].fill(fluids[1], false) == fluids[1].amount)))
 			return true;
 		
 		return false;
@@ -560,10 +575,14 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 	
 	public void addFluids(FluidStack[] stacks) {
-		if(stacks[0] != null)
-			tanks[2].fill(stacks[1], true);
-		if(stacks[1] != null)
+		if(stacks[0] != null){
+			tanks[2].fill(stacks[0], true);
+			needsUpdate = true;
+		}
+		if(stacks[1] != null){
 			tanks[3].fill(stacks[1], true);
+			needsUpdate = true;
+		}
 	}
 	
 	//I can't believe that worked.
@@ -640,7 +659,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			int size = inv.getSlots();
 
 			for(int i = 0; i < size; i++) {
-				if(inv.getStackInSlot(i) != null) {
+				if(inv.getStackInSlot(i) != null && inv.getStackInSlot(i) != ItemStack.EMPTY) {
 					
 					if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
 						return false;
@@ -777,7 +796,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			return false;
 		else {
 			List<ItemStack> list = MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4));
-			
+			if(list == null)
+				return false;
 			for(int i = 0; i < list.size(); i++)
 				list.get(i).setCount(1);
 			
@@ -847,12 +867,11 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		public boolean removeItems(List<ItemStack> stack, IItemHandlerModifiable array) {
 			
 			if(stack == null)
-				return false;
+				return true;
 			for(int i = 0; i < stack.size(); i++) {
 				for(int j = 0; j < stack.get(i).getCount(); j++) {
 					ItemStack sta = stack.get(i).copy();
 					sta.setCount(1);
-				
 					if(!canRemoveItemFromArray(sta, array))
 						return false;
 				}
@@ -1065,5 +1084,16 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			return null;
 		}
 		
+	}
+
+	public ItemStack getStackInSlot(int i) {
+		return inventory.getStackInSlot(i);
+	}
+
+	public boolean hasCustomInventoryName() {
+		return this.customName != null && this.customName.length() > 0;
+	}
+	public String getInventoryName() {
+		return this.hasCustomInventoryName() ? this.customName : "container.chemplant";
 	}
 }

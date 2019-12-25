@@ -1,12 +1,8 @@
 package com.hbm.main;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
@@ -14,7 +10,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemAssemblyTemplate.EnumAssemblyTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.tool.ItemFluidTank;
@@ -35,33 +30,29 @@ import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.item.ItemRenderRedstoneSword;
-import com.hbm.render.tileentity.RenderPress;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
+		System.out.println("MODEL REGISTER");
 		int i = 0;
 		ResourceLocation[] list = new ResourceLocation[EnumCanister.values().length];
 		for(EnumCanister e : EnumCanister.values()){
@@ -89,10 +80,6 @@ public class ModEventHandlerClient {
 			}
 		} else if(item == ModItems.chemistry_template){
 			for(int i = 0; i < EnumChemistryTemplate.values().length; i++){
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
-		} else if(item == ModItems.assembly_template){
-			for(int i = 0; i < EnumAssemblyTemplate.values().length; i++){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
 		} else if (item instanceof IHasCustomModel) {
@@ -291,7 +278,13 @@ public class ModEventHandlerClient {
 			}
 		}
 	}
-	
+	@SubscribeEvent
+	public void clientDisconnectFromServer(ClientDisconnectionFromServerEvent e){
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ItemAssemblyTemplate.recipesBackup != null){
+			ItemAssemblyTemplate.recipes = ItemAssemblyTemplate.recipesBackup;
+			ItemAssemblyTemplate.recipesBackup = null;
+		}
+	}
 
 	
 }

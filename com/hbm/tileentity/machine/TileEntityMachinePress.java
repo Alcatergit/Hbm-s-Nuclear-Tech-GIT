@@ -60,6 +60,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	private String customName;
 
 	public int getPowerScaled(int i) {
+		System.out.println(burnTime);
 		return (power * i) / maxPower;
 	}
 

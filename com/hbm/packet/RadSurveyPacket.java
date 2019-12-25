@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.saveddata.RadEntitySavedData;
+import com.hbm.capability.RadiationCapability;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -44,10 +44,8 @@ public class RadSurveyPacket implements IMessage {
 			try {
 				
 				EntityPlayer player = Minecraft.getMinecraft().player;
-				RadEntitySavedData data = RadEntitySavedData.getData(player.world);
-				
-				data.setRadForEntity(player, m.rad);
-				
+				if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+					player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(m.rad);
 			} catch (Exception x) { }
 			return null;
 		}

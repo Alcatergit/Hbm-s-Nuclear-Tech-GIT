@@ -3,21 +3,23 @@ package com.hbm.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.AssemblerRecipeSyncPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.RadSurveyPacket;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.AuxSavedData;
-import com.hbm.saveddata.RadEntitySavedData;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -29,22 +31,24 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerConnectionFromClientEvent;
 
 public class ModEventHandler {
 
+	public static final ResourceLocation ENT_RAD_LOC = new ResourceLocation(RefStrings.MODID, "RADIATION");
+	
 	@SubscribeEvent
 	public void soundRegistering(RegistryEvent.Register<SoundEvent> evt){
 		HBMSoundHandler.init();
@@ -54,9 +58,15 @@ public class ModEventHandler {
 	}
 	
 	@SubscribeEvent
+	public void attachRadCap(AttachCapabilitiesEvent<Entity> e) {
+		if(e.getObject() instanceof EntityLivingBase)
+			e.addCapability(ENT_RAD_LOC, new RadiationCapability.EntityRadiationProvider());
+	}
+	
+	@SubscribeEvent
 	public void worldTick(WorldTickEvent event){
 		if(event.world != null && !event.world.isRemote && MainRegistry.enableRads) {
-int thunder = AuxSavedData.getThunder(event.world);
+			int thunder = AuxSavedData.getThunder(event.world);
 			
 			if(thunder > 0)
 				AuxSavedData.setThunder(event.world, thunder - 1);
@@ -64,11 +74,6 @@ int thunder = AuxSavedData.getThunder(event.world);
 			if(!event.world.loadedEntityList.isEmpty()) {
 
 				RadiationSavedData data = RadiationSavedData.getData(event.world);
-				RadEntitySavedData eData = RadEntitySavedData.getData(event.world);
-				
-				if(eData.worldObj == null) {
-					eData.worldObj = event.world;
-				}
 				
 				if(data.worldObj == null) {
 					data.worldObj = event.world;
@@ -77,7 +82,10 @@ int thunder = AuxSavedData.getThunder(event.world);
 				for(Object o : event.world.playerEntities) {
 					
 					EntityPlayer player = (EntityPlayer)o;
-					PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(eData.getRadFromEntity(player)), (EntityPlayerMP) player);
+					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+						PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads()), (EntityPlayerMP) player);
+					else
+						PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(0.0F), (EntityPlayerMP) player);
 				}
 				
 				if(event.world.getTotalWorldTime() % 20 == 0) {
@@ -89,7 +97,12 @@ int thunder = AuxSavedData.getThunder(event.world);
 				
 				for(Object e : oList) {
 					if(e instanceof EntityLivingBase) {
-						
+						RadiationCapability.IEntityRadioactive entRad = null;
+						if(((EntityLivingBase)e).hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)){
+							entRad = ((EntityLivingBase)e).getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
+						} else {
+							continue;
+						}
 						//effect for radiation
 						EntityLivingBase entity = (EntityLivingBase) e;
 
@@ -112,7 +125,7 @@ int thunder = AuxSavedData.getThunder(event.world);
 							}
 						}
 						
-						float eRad = eData.getRadFromEntity(entity);
+						float eRad = entRad.getRads();
 						
 						if(entity instanceof EntityCreeper && eRad >= 200 && entity.getHealth() > 0) {
 							
@@ -155,7 +168,7 @@ int thunder = AuxSavedData.getThunder(event.world);
 						
 						if(eRad >= 1000) {
 							if(entity.attackEntityFrom(ModDamageSource.radiation, 1000))
-								eData.setRadForEntity(entity, 0);
+								entRad.setRads(0);
 						} else if(eRad >= 800) {
 				        	if(event.world.rand.nextInt(300) == 0)
 				            	entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 30, 0));
@@ -210,13 +223,19 @@ int thunder = AuxSavedData.getThunder(event.world);
 	
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent event){
-		RadEntitySavedData eData = RadEntitySavedData.getData(event.getEntityLiving().world);
-		eData.setRadForEntity(event.getEntityLiving(), 0);
+		if(event.getEntity().hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+			event.getEntity().getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(0.0F);;
 		if(MainRegistry.enableCataclysm) {
 			EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
 			foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
 			event.getEntity().world.spawnEntity(foeq);
 		}
+	}
+	
+	@SubscribeEvent
+	public void clientJoinServer(PlayerLoggedInEvent e){
+		if(e.player instanceof EntityPlayerMP)
+			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
 	}
 	
 	//TODO should probably use these bois
@@ -227,6 +246,8 @@ int thunder = AuxSavedData.getThunder(event.world);
 	@SubscribeEvent
 	public void onBlockRegister(RegistryEvent.Register<Block> evt){
 	}
-	
+	@SubscribeEvent
+	public void onRecipeRegister(RegistryEvent.Register<IRecipe> evt){
+	}
 	
 }

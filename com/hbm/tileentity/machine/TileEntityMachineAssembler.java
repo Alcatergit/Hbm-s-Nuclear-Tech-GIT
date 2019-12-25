@@ -208,7 +208,6 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			if(te != null && te instanceof ICapabilityProvider){
 				ICapabilityProvider capte = (ICapabilityProvider)te;
 				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
-					System.out.println(MultiblockHandler.intToEnumFacing(meta).rotateY());
 					IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 					tryFillContainerCap(cap, 5);
 				}

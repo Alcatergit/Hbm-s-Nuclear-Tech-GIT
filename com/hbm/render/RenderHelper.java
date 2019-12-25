@@ -87,6 +87,9 @@ public class RenderHelper {
 	public static void addVertexWithUV(double x, double y, double z, double u, double v){
 		addVertexWithUV(x, y, z, u, v, Tessellator.getInstance());
 	}
+	public static void addVertex(double x, double y, double z){
+		Tessellator.getInstance().getBuffer().pos(x, y, z).endVertex();
+	}
 	
 	public static void addVertexWithUV(double x, double y, double z, double u, double v, Tessellator tes){
 		BufferBuilder buf = tes.getBuffer();
@@ -94,6 +97,9 @@ public class RenderHelper {
 	}
 	public static void startDrawingTexturedQuads(){
 		startDrawingTexturedQuads(Tessellator.getInstance());
+	}
+	public static void startDrawingQuads(){
+		Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 	}
 	public static void startDrawingTexturedQuads(Tessellator tes){
 		tes.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

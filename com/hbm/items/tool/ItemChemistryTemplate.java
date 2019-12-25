@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 
@@ -115,6 +117,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		 String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 	        String s1 = ("" + I18n.format("chem." + EnumChemistryTemplate.getEnum(stack.getItemDamage()).name())).trim();
@@ -129,7 +132,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if(tab == this.getCreativeTab()){
+		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
 			for (int i = 0; i < EnumChemistryTemplate.values().length; ++i)
 	        {
 	            list.add(new ItemStack(this, 1, i));

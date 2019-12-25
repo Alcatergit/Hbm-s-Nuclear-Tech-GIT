@@ -1,5 +1,8 @@
 package com.hbm.main;
 
+import java.io.File;
+
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy
@@ -18,4 +21,8 @@ public class ServerProxy
 	public void registerMissileItems() { }
 
 	public void preInit(FMLPreInitializationEvent evt) {}
+	
+	public File getDataDir(){
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
+	}
 }

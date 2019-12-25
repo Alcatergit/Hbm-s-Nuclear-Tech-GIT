@@ -35,8 +35,11 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 
 	@SideOnly(Side.CLIENT)
 	private ModelT45Helmet helmet;
+	@SideOnly(Side.CLIENT)
 	private ModelT45Chest plate;
+	@SideOnly(Side.CLIENT)
 	private ModelT45Legs legs;
+	@SideOnly(Side.CLIENT)
 	private ModelT45Boots boots;
 	
 	public ArmorT45(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String s) {
@@ -61,6 +64,7 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		if (this == ModItems.t45_helmet) {
 			if (armorSlot == EntityEquipmentSlot.HEAD) {

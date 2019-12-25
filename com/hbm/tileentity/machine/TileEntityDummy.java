@@ -21,9 +21,11 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("tx", target.getX());
-		compound.setInteger("ty", target.getY());
-		compound.setInteger("tz", target.getZ());
+		if(target != null){
+			compound.setInteger("tx", target.getX());
+			compound.setInteger("ty", target.getY());
+			compound.setInteger("tz", target.getZ());
+		}
 		return compound;
 	}
 	@Override

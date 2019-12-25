@@ -1,11 +1,11 @@
 package com.hbm.lib;
 
+import com.hbm.capability.RadiationCapability;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.saveddata.RadEntitySavedData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,10 +16,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class Library {
 	
@@ -41,6 +41,20 @@ public class Library {
 		// TODO Make hazmat armors
 		return false;
 	}
+	
+	public static void damageSuit(EntityPlayer player, int slot, int amount) {
+		
+		if(player.inventory.armorInventory.get(slot) == ItemStack.EMPTY)
+			return;
+		
+		int j = player.inventory.armorInventory.get(slot).getItemDamage();
+		player.inventory.armorInventory.get(slot).setItemDamage(j += amount);
+
+		if(player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage())
+		{
+			player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
+		}
+	}
 
 	public static void applyRadData(Entity e, float f) {
 		if (!(e instanceof EntityLivingBase))
@@ -58,20 +72,24 @@ public class Library {
 			f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player));
 		}
 
-		RadEntitySavedData data = RadEntitySavedData.getData(entity.world);
-		data.increaseRad(entity, f);
+		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)){
+			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
+			ent.increaseRads(f);
+		}
 	}
 
-	public static void applyRadDirect(Entity e, float f) {
+	public static void applyRadDirect(Entity entity, float f) {
 
-		if (!(e instanceof EntityLivingBase))
+		if (!(entity instanceof EntityLivingBase))
 			return;
 
-		if (((EntityLivingBase) e).isPotionActive(HbmPotion.mutation))
+		if (((EntityLivingBase) entity).isPotionActive(HbmPotion.mutation))
 			return;
 
-		RadEntitySavedData data = RadEntitySavedData.getData(e.world);
-		data.increaseRad(e, f);
+		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)){
+			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
+			ent.increaseRads(f);
+		}
 	}
 
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
@@ -254,4 +272,26 @@ public class Library {
 			return stack.copy();
 	}
 
+	public static RayTraceResult rayTrace(EntityPlayer player, double d, float f) {
+        Vec3d vec3 = getPosition(f, player);
+        vec3 = vec3.addVector(0D, (double)player.eyeHeight, 0D);
+        Vec3d vec31 = player.getLook(f);
+        Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
+        return player.world.rayTraceBlocks(vec3, vec32, false, false, true);
+	}
+	
+    public static Vec3d getPosition(float par1, EntityPlayer player) {
+        if (par1 == 1.0F)
+        {
+            return new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
+        }
+        else
+        {
+            double d0 = player.prevPosX + (player.posX - player.prevPosX) * par1;
+            double d1 = player.prevPosY + (player.posY - player.prevPosY) * par1 + (player.getEyeHeight() - player.getDefaultEyeHeight());
+            double d2 = player.prevPosZ + (player.posZ - player.prevPosZ) * par1;
+            return new Vec3d(d0, d1, d2);
+        }
+    }
+	
 }

@@ -21,6 +21,7 @@ public class B92BakedModel implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		
 		return type != TransformType.GUI ? Collections.emptyList() : ItemRenderGunAnim.INSTANCE.b92ItemModel.getQuads(state, side, rand);
 	}
 

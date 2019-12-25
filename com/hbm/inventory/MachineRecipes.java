@@ -7,9 +7,10 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.items.tool.ItemChemistryTemplate;
-import com.hbm.items.tool.ItemAssemblyTemplate.EnumAssemblyTemplate;
 import com.hbm.main.MainRegistry;
+import com.mojang.realmsclient.gui.ChatFormatting;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -335,13 +336,16 @@ public class MachineRecipes {
 	public static ItemStack getOutputFromTempate(ItemStack stack) {
 		if (stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
 			return ItemStack.EMPTY;
-		EnumAssemblyTemplate template = ItemAssemblyTemplate.EnumAssemblyTemplate.getEnum(stack.getItemDamage());
+		
+		int type = ItemAssemblyTemplate.getTagWithRecipeNumber(stack).getInteger("type");
+		if(type >= ItemAssemblyTemplate.recipes.size())
+			return ItemStack.EMPTY;
+		AssemblerRecipe template = ItemAssemblyTemplate.recipes.get(type);
+		if(template == null)
+			return ItemStack.EMPTY;
 		ItemStack output = ItemStack.EMPTY;
 		if (template.getOutput() != null) {
 			return template.getOutput().copy();
-		}
-		switch (template) {
-		// Not needed
 		}
 		return output;
 	}
@@ -349,14 +353,16 @@ public class MachineRecipes {
 	public static List<ItemStack> getRecipeFromTempate(ItemStack stack) {
 		if (stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
 			return null;
+		
+		int type = ItemAssemblyTemplate.getTagWithRecipeNumber(stack).getInteger("type");
 		List<ItemStack> list = new ArrayList<ItemStack>();
-
-		EnumAssemblyTemplate template = ItemAssemblyTemplate.EnumAssemblyTemplate.getEnum(stack.getItemDamage());
-		if (template.getIngredients() != null) {
-			return copyItemStackList(template.getIngredients());
-		}
-		switch (template) {
-		// Not needed
+		if(type >= ItemAssemblyTemplate.recipes.size())
+			return null;
+		AssemblerRecipe template = ItemAssemblyTemplate.recipes.get(type);
+		if(template == null)
+			return null;
+		if (template.getInputs() != null) {
+			return copyItemStackList(template.getInputs());
 		}
 
 		if (list.isEmpty()) {

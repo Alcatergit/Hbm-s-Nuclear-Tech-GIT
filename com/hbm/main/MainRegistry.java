@@ -3,6 +3,7 @@ package com.hbm.main;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.RadiationCapability;
 import com.hbm.command.CommandRadiation;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
@@ -13,8 +14,10 @@ import com.hbm.creativetabs.NukeTab;
 import com.hbm.creativetabs.PartsTab;
 import com.hbm.creativetabs.TemplateTab;
 import com.hbm.creativetabs.WeaponTab;
+import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
@@ -32,14 +35,20 @@ import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.GuiHandler;
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.tileentity.bomb.TileEntityNukeFleija;
+import com.hbm.tileentity.bomb.TileEntityNukeMan;
 import com.hbm.tileentity.deco.TileEntityTestRender;
+import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
+import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -49,8 +58,10 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -73,6 +84,8 @@ public class MainRegistry {
 	public static MainRegistry instance;
 	
 	public static Logger logger;
+	
+	
 	
 	//Creative Tabs
 	//ingots, nuggets, wires, machine parts
@@ -243,6 +256,7 @@ public class MainRegistry {
 		
 		proxy.registerRenderInfo();
 		
+		CapabilityManager.INSTANCE.register(RadiationCapability.IEntityRadioactive.class, new RadiationCapability.EntityRadioactiveStorage(), RadiationCapability.EntityRadioactive.FACTORY);
 		ModForgeFluids.init();
     	ModItems.preInit();
     	ModBlocks.preInit();
@@ -255,6 +269,11 @@ public class MainRegistry {
     	GameRegistry.registerTileEntity(TileEntityMachinePress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_press"));
     	GameRegistry.registerTileEntity(TileEntityTaint.class, new ResourceLocation(RefStrings.MODID, "tileentity_taint"));
     	GameRegistry.registerTileEntity(TileEntityTestRender.class, new ResourceLocation(RefStrings.MODID, "tileentity_testrenderer"));
+    	GameRegistry.registerTileEntity(TileEntityMachineChemplant.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_chemplant"));
+    	GameRegistry.registerTileEntity(TileEntityDummyFluidPort.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy_fluid_port"));
+    	GameRegistry.registerTileEntity(TileEntityCloudResidue.class, new ResourceLocation(RefStrings.MODID, "tileentity_cloud_residue"));
+    	GameRegistry.registerTileEntity(TileEntityNukeMan.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_man"));
+    	GameRegistry.registerTileEntity(TileEntityNukeFleija.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_fleija"));
     	int i = 0;
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -272,6 +291,8 @@ public class MainRegistry {
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_explosive_beam"), EntityExplosiveBeam.class, "entity_explosive_beam", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tainted_creeper"), EntityTaintedCreeper.class, "entity_tainted_creeper", i++, MainRegistry.instance, 80, 3, true, 0x813b9b, 0xd71fdd);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_creeper"), EntityNuclearCreeper.class, "entity_nuclear_creeper", i++, MainRegistry.instance, 80, 3, true, 0x204131, 0x75CE00);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_cloud_no"), EntityNukeCloudNoShroom.class, "entity_nuke_cloud_no", i++, MainRegistry.instance, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cloud_fleija"), EntityCloudFleija.class, "entity_cloud_fleija", i++, MainRegistry.instance, 1000, 1, true);
     }
 
     @EventHandler
@@ -287,6 +308,7 @@ public class MainRegistry {
     {
     	ModItems.postInit();
     	ModBlocks.postInit();
+    	ItemAssemblyTemplate.loadRecipesFromConfig();
     	CraftingManager.init();
     }
     

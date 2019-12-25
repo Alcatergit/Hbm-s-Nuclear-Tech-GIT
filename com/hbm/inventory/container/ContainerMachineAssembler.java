@@ -71,7 +71,7 @@ private TileEntityMachineAssembler nukeBoy;
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
-		ItemStack var3 = null;
+		ItemStack var3 = ItemStack.EMPTY;
 		Slot var4 = (Slot) this.inventorySlots.get(par2);
 		
 		if (var4 != null && var4.getHasStack())
@@ -82,12 +82,12 @@ private TileEntityMachineAssembler nukeBoy;
             if (par2 <= 17) {
 				if (!this.mergeItemStack(var5, 18, this.inventorySlots.size(), true))
 				{
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!this.mergeItemStack(var5, 6, 18, false))
 				if (!this.mergeItemStack(var5, 0, 4, false))
-					return null;
+					return ItemStack.EMPTY;
 			
 			if (var5.getCount() == 0)
 			{

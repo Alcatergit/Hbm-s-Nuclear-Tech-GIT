@@ -28,6 +28,11 @@ public class PacketDispatcher {
 		wrapper.registerMessage(AuxParticlePacket.Handler.class, AuxParticlePacket.class, i++, Side.CLIENT);
 		//Chemplant packet
 		wrapper.registerMessage(TEChemplantPacket.Handler.class, TEChemplantPacket.class, i++, Side.CLIENT);
+		//Syncing fluid tanks
+		wrapper.registerMessage(FluidTankPacket.Handler.class, FluidTankPacket.class, i++, Side.CLIENT);
+		//Assembler Recipe Sync Packet, so clients can see the right recipes
+		wrapper.registerMessage(AssemblerRecipeSyncPacket.Handler.class, AssemblerRecipeSyncPacket.class, i++, Side.CLIENT);
+		
 	}
 
 }

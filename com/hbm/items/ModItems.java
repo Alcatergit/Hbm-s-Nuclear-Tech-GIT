@@ -8,6 +8,7 @@ import com.hbm.blocks.items.ItemBlockScrap;
 import com.hbm.items.bomb.ItemBoy;
 import com.hbm.items.bomb.ItemFleija;
 import com.hbm.items.bomb.ItemGadget;
+import com.hbm.items.bomb.ItemMan;
 import com.hbm.items.bomb.ItemManMike;
 import com.hbm.items.bomb.ItemMike;
 import com.hbm.items.bomb.ItemSolinium;
@@ -39,9 +40,13 @@ import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemChemistryIcon;
 import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.tool.ItemDetonator;
 import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
+import com.hbm.items.tool.ItemMultiDetonator;
+import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -86,6 +91,10 @@ public class ModItems {
 	public static final Item fluid_barrel_full = new ItemFluidTank("fluid_barrel_full", 64000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_barrel_infinite = new ItemBase("fluid_barrel_infinite").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	//Weapons
+	public static final Item detonator = new ItemDetonator("detonator").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
+	public static final Item detonator_multi = new ItemMultiDetonator("detonator_multi").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
+	public static final Item detonator_laser = new ItemLaserDetonator("detonator_laser").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
+	
 	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
 	
 	//Armor
@@ -179,7 +188,7 @@ public class ModItems {
 	public static final Item ingot_hes = new ItemRadioactive("ingot_hes").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_les = new ItemRadioactive("ingot_les").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item man_core = new ItemManMike("man_core");
+	
 	
 	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
 	public static final Item nuclear_waste_tiny = new ItemRadioactive("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);
@@ -352,6 +361,7 @@ public class ModItems {
 	public static final Item powder_spark_mix = new ItemBase("powder_spark_mix").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_fire = new ItemFuel("powder_fire", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_meteorite = new ItemBase("powder_meteorite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_cloud = new ItemBase("powder_cloud").setCreativeTab(MainRegistry.partsTab);
 	
 	//Misc
 	public static final Item catalyst_clay = new ItemBase("catalyst_clay").setCreativeTab(MainRegistry.partsTab);
@@ -507,6 +517,10 @@ public class ModItems {
 	public static final Item upgrade_health = new ItemCustomLore("upgrade_health").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	
 	//Nuke parts
+	public static final Item man_core = new ItemManMike("man_core");
+	public static final Item man_explosive8 = new ItemManMike("man_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item man_igniter = new ItemMan("man_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	
 	public static final Item gadget_core = new ItemGadget("gadget_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item boy_bullet = new ItemBoy("boy_bullet").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
@@ -516,7 +530,9 @@ public class ModItems {
 	
 	public static final Item tsar_core = new ItemTsar("tsar_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
+	public static final Item fleija_igniter = new ItemFleija("fleija_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item fleija_propellant = new ItemFleija("fleija_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item fleija_core = new ItemFleija("fleija_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item solinium_core = new ItemSolinium("solinium_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
@@ -547,6 +563,15 @@ public class ModItems {
 	public static final Item d_smoke6 = new ItemBase("d_smoke6").setCreativeTab(null);
 	public static final Item d_smoke7 = new ItemBase("d_smoke7").setCreativeTab(null);
 	public static final Item d_smoke8 = new ItemBase("d_smoke8").setCreativeTab(null);
+	
+	public static final Item cloud1 = new ItemBase("cloud1").setCreativeTab(null);
+	public static final Item cloud2 = new ItemBase("cloud2").setCreativeTab(null);
+	public static final Item cloud3 = new ItemBase("cloud3").setCreativeTab(null);
+	public static final Item cloud4 = new ItemBase("cloud4").setCreativeTab(null);
+	public static final Item cloud5 = new ItemBase("cloud5").setCreativeTab(null);
+	public static final Item cloud6 = new ItemBase("cloud6").setCreativeTab(null);
+	public static final Item cloud7 = new ItemBase("cloud7").setCreativeTab(null);
+	public static final Item cloud8 = new ItemBase("cloud8").setCreativeTab(null);
 	
 	public static void preInit(){
 		for(Item item : ALL_ITEMS){

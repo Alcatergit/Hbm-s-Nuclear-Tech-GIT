@@ -23,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class DummyBlockChemplant extends BlockContainer implements IDummy {
@@ -50,7 +51,7 @@ public class DummyBlockChemplant extends BlockContainer implements IDummy {
     		if(te != null && te instanceof TileEntityDummy) {
     			BlockPos abc = ((TileEntityDummy)te).target;
     			//world.getBlock(a, b, c).breakBlock(world, a, b, c, block, i);
-    			if(!world.isRemote)
+    			if(!world.isRemote && abc != null)
     				world.destroyBlock(abc, true);
     		}
     	}
@@ -65,6 +66,25 @@ public class DummyBlockChemplant extends BlockContainer implements IDummy {
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.INVISIBLE;
+	}
+	
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
+		return false;
+	}
+	
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
+	
+	@Override
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
+	@Override
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		return false;
 	}
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
@@ -87,6 +107,8 @@ public class DummyBlockChemplant extends BlockContainer implements IDummy {
     		TileEntity te = world.getTileEntity(pos);
     		if(te != null && te instanceof TileEntityDummy) {
     			BlockPos abc = ((TileEntityDummy)te).target;
+    			if(abc == null)
+    				return false;
     			TileEntityMachineChemplant entity = (TileEntityMachineChemplant) world.getTileEntity(abc);
     			if(entity != null)
     			{
