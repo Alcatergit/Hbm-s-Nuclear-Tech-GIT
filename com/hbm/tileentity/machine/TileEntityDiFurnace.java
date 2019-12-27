@@ -63,7 +63,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		boolean flag = this.hasPower();
 		boolean flag1 = false;
 		
-		if(hasPower() && isProcessing())
+		if(flag && isProcessing())
 		{
 			this.dualPower = this.dualPower - 1;
 			this.markDirty();
@@ -84,7 +84,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 				}
 			}
 		}
-		if (hasPower() && canProcess()) {
+		if (flag && canProcess()) {
 			dualCookTime++;
 			this.markDirty();
 			if (this.dualCookTime == TileEntityDiFurnace.processingSpeed) {
@@ -100,7 +100,7 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		{
 			boolean trigger = true;
 			
-			if(hasPower() && canProcess() && this.dualCookTime == 0)
+			if(flag && canProcess() && this.dualCookTime == 0)
 			{
 				trigger = false;
 			}

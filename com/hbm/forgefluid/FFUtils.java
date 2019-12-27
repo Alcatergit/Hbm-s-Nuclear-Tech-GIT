@@ -35,8 +35,7 @@ public class FFUtils {
 	 * @param offsetX - where the starting x of the rectangle should be on screen
 	 * @param offsetY - where the starting y of the rectangle should be on screen
 	 */
-	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY,
-			int offsetX, int offsetY) {
+	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY) {
 		RenderHelper.bindBlockTexture();
 		
 		if (tank.getFluid() != null) {
@@ -192,12 +191,15 @@ public class FFUtils {
 				|| slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
+		
 		if (FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
+			
 			moveItems(slots, slot1, slot2);
 			return false;
 		}
 		if (slots.getStackInSlot(slot1).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 			boolean returnValue = false;
+			
 			IFluidHandlerItem ifhi = slots.getStackInSlot(slot1)
 					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 			if (ifhi != null && (tank.getFluid() == null || FluidUtil.getFluidContained(slots.getStackInSlot(slot1))
@@ -205,7 +207,8 @@ public class FFUtils {
 				tank.fill(ifhi.drain(Math.min(6000, tank.getCapacity() - tank.getFluidAmount()), true), true);
 				returnValue = true;
 			}
-			if (FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
+			if (ifhi.drain(Integer.MAX_VALUE, false) == null) {
+				
 				moveItems(slots, slot1, slot2);
 			}
 			return returnValue;
@@ -251,7 +254,9 @@ public class FFUtils {
 
 	private static boolean moveItems(IItemHandlerModifiable slots, int in, int out) {
 		if (slots.getStackInSlot(in) != null && !slots.getStackInSlot(in).isEmpty()) {
-
+			if(slots.getStackInSlot(in).getItem().hasContainerItem(slots.getStackInSlot(in))){
+				slots.setStackInSlot(in, slots.getStackInSlot(in).getItem().getContainerItem(slots.getStackInSlot(in)));
+			}
 			if (slots.getStackInSlot(out) == null || slots.getStackInSlot(out).isEmpty()) {
 
 				slots.setStackInSlot(out, slots.getStackInSlot(in));

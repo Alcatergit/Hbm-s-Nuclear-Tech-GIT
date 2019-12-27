@@ -32,7 +32,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(FluidTankPacket.Handler.class, FluidTankPacket.class, i++, Side.CLIENT);
 		//Assembler Recipe Sync Packet, so clients can see the right recipes
 		wrapper.registerMessage(AssemblerRecipeSyncPacket.Handler.class, AssemblerRecipeSyncPacket.class, i++, Side.CLIENT);
-		
+		//Universal package for machine gauges and states
+		wrapper.registerMessage(AuxGaugePacket.Handler.class, AuxGaugePacket.class, i++, Side.CLIENT);
 	}
 
 }

@@ -4,11 +4,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.container.ContainerDiFurnace;
 import com.hbm.inventory.container.ContainerMachineAssembler;
 import com.hbm.inventory.container.ContainerMachineChemplant;
+import com.hbm.inventory.container.ContainerMachineCoal;
 import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.inventory.container.ContainerNukeFleija;
 import com.hbm.inventory.container.ContainerNukeMan;
 import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachineChemplant;
+import com.hbm.inventory.gui.GUIMachineCoal;
 import com.hbm.inventory.gui.GUIMachinePress;
 import com.hbm.inventory.gui.GUINukeFleija;
 import com.hbm.inventory.gui.GUINukeMan;
@@ -18,6 +20,7 @@ import com.hbm.tileentity.bomb.TileEntityNukeMan;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
+import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,6 +66,10 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityNukeFleija){
 					return new ContainerNukeFleija(player.inventory, (TileEntityNukeFleija)entity);
 				}
+			case ModBlocks.guiID_machine_coal:
+				if(entity instanceof TileEntityMachineCoal){
+					return new ContainerMachineCoal(player.inventory, (TileEntityMachineCoal)entity);
+				}
 			}
 
 		}
@@ -102,6 +109,10 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_nuke_fleija:
 				if(entity instanceof TileEntityNukeFleija){
 					return new GUINukeFleija(player.inventory, (TileEntityNukeFleija)entity);
+				}
+			case ModBlocks.guiID_machine_coal:
+				if(entity instanceof TileEntityMachineCoal){
+					return new GUIMachineCoal(player.inventory, (TileEntityMachineCoal)entity);
 				}
 			}
 

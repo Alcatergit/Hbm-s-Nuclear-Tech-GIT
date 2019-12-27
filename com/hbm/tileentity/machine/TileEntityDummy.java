@@ -4,8 +4,10 @@ import com.hbm.interfaces.IMultiBlock;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 
 public class TileEntityDummy extends TileEntity implements ITickable {
 
@@ -35,6 +37,22 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 		int y = compound.getInteger("ty");
 		int z = compound.getInteger("tz");
 		this.target = new BlockPos(x, y, z);
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(world.getTileEntity(target) != null){
+			return world.getTileEntity(target).hasCapability(capability, facing);
+		}
+		return false;
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(world.getTileEntity(target) != null){
+			return world.getTileEntity(target).getCapability(capability, facing);
+		}
+		return null;
 	}
 	
 }

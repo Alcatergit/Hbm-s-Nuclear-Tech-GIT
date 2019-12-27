@@ -2,6 +2,7 @@ package com.hbm.lib;
 
 import com.hbm.capability.RadiationCapability;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.potion.HbmPotion;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class Library {
 	
@@ -153,9 +155,11 @@ public class Library {
 		return Long.toString(l);
 	}
 
+	//Drillgon200: Just realized I copied the wrong method. God dang it.
+	//It works though. Not sure why, but it works.
 	public static long chargeTEFromItems(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
 		if (!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
-			return 0;
+			return power;
 		}
 		long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getDischargeRate();
 
@@ -248,6 +252,98 @@ public class Library {
 		return power;
 	}
 	
+	public static long chargeItemsFromTE(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
+		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+			
+			long dR = ((ItemBattery)inventory.getStackInSlot(index).getItem()).getChargeRate();
+
+			while(dR >= 1000000000000L) {
+				if(power - 100000000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery)inventory.getStackInSlot(index).getItem()).getMaxCharge())
+				{
+					power -= 100000000000000L;
+					dR -= 1000000000000L;
+					((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000000L);
+				} else break;
+			}
+			while(dR >= 1000000000) {
+				if(power - 100000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery)inventory.getStackInSlot(index).getItem()).getMaxCharge())
+				{
+					power -= 100000000000L;
+					dR -= 1000000000;
+					((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000);
+				} else break;
+			}
+			while(dR >= 1000000) {
+				if(power - 100000000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery)inventory.getStackInSlot(index).getItem()).getMaxCharge())
+				{
+					power -= 100000000;
+					dR -= 1000000;
+					((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000);
+				} else break;
+			}
+			while(dR >= 1000) {
+				if(power - 100000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery)inventory.getStackInSlot(index).getItem()).getMaxCharge())
+				{
+					power -= 100000;
+					dR -= 1000;
+					((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000);
+				} else break;
+			}
+			while(dR >= 1) {
+				if(power - 100 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery)inventory.getStackInSlot(index).getItem()).getMaxCharge())
+				{
+					power -= 100;
+					dR -= 1;
+					((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1);
+				} else break;
+			}
+
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_schrabidium_charged));
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_euphemium_charged));
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
+		}
+		//TODO these tools
+		/*
+		for(int i = 0; i < 50; i++)
+			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_sword && inventory.getStackInSlot(index).getItemDamage() > 0)
+			{
+				power -= 10;
+				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
+			} else break;
+	
+		for(int i = 0; i < 50; i++)
+			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_pickaxe && inventory.getStackInSlot(index).getItemDamage() > 0)
+			{
+				power -= 10;
+				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
+			} else break;
+	
+		for(int i = 0; i < 50; i++)
+			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_axe && inventory.getStackInSlot(index).getItemDamage() > 0)
+			{
+				power -= 10;
+				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
+			} else break;
+	
+		for(int i = 0; i < 50; i++)
+			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_shovel && inventory.getStackInSlot(index).getItemDamage() > 0)
+			{
+				power -= 10;
+				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
+			} else break;
+		*/
+		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+			ItemBattery.updateDamage(inventory.getStackInSlot(index));
+		}
+		
+		return power;
+	}
+	
 	public static boolean isArrayEmpty(Object[] array) {
 		if(array == null)
 			return true;
@@ -293,5 +389,12 @@ public class Library {
             return new Vec3d(d0, d1, d2);
         }
     }
+
+	
+
+	public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
