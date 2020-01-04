@@ -52,7 +52,6 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
-		System.out.println("MODEL REGISTER");
 		int i = 0;
 		ResourceLocation[] list = new ResourceLocation[EnumCanister.values().length];
 		for(EnumCanister e : EnumCanister.values()){
@@ -254,7 +253,9 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"));
-
+		
+		//evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_still"));
+		//evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_flowing"));
 	}
 
 	@SubscribeEvent

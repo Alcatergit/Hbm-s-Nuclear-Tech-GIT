@@ -41,12 +41,16 @@ public class RadSurveyPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(RadSurveyPacket m, MessageContext ctx) {
-			try {
-				
-				EntityPlayer player = Minecraft.getMinecraft().player;
-				if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-					player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(m.rad);
-			} catch (Exception x) { }
+			
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				try {
+					
+					EntityPlayer player = Minecraft.getMinecraft().player;
+					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+						player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(m.rad);
+				} catch (Exception x) { }
+			});
+			
 			return null;
 		}
 	}

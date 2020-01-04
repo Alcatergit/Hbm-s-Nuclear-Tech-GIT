@@ -2,9 +2,16 @@ package com.hbm.forgefluid;
 
 import java.awt.Color;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.fluid.ToxicBlock;
+import com.hbm.blocks.fluid.ToxicFluid;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -62,6 +69,10 @@ public class ModForgeFluids {
 	public static final Fluid xenon = new Fluid("hbmxenon", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"), null, Color.WHITE);
 	public static final Fluid balefire = new Fluid("hbmbalefire", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"), null, Color.WHITE);
 	
+	//Block fluids
+	public static final Fluid toxic_fluid = new ToxicFluid().setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773).setBlock(ModBlocks.toxic_block);
+	
+	
 	public static void init(){
 		FluidRegistry.registerFluid(steam);
 		FluidRegistry.registerFluid(hotsteam);
@@ -113,5 +124,12 @@ public class ModForgeFluids {
 		FluidRegistry.registerFluid(oxygen);
 		FluidRegistry.registerFluid(xenon);
 		FluidRegistry.registerFluid(balefire);
+		
+		FluidRegistry.registerFluid(toxic_fluid);
+		ModBlocks.toxic_block = new ToxicBlock(ModForgeFluids.toxic_fluid, ModBlocks.fluidtoxic.setReplaceable(), ModDamageSource.radiation, "toxic_block").setResistance(500F);
+	}
+	
+	public static void setStateMappers() {
+		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 	}
 }

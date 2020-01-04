@@ -80,10 +80,14 @@ public class FluidTankPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(FluidTankPacket m, MessageContext ctx) {
-			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+			
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 				if (te != null && te instanceof ITankPacketAcceptor) {
 					((ITankPacketAcceptor)te).recievePacket(m.tags);
 				}
+			});
+			
 
 			return null;
 		}

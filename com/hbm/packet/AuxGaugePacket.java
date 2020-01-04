@@ -2,7 +2,7 @@ package com.hbm.packet;
 
 
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
-
+import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -59,181 +59,186 @@ public class AuxGaugePacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(AuxGaugePacket m, MessageContext ctx) {
-			try {
-				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+			
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				try {
+					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-				//TODO Drillgon200: Right then... this should be handled with an interface.
-				
-				/*if (te instanceof TileEntityAMSLimiter) {
-					TileEntityAMSLimiter limiter = (TileEntityAMSLimiter)te;
-					if(m.id == 0)
-						limiter.locked = m.value == 1;
-					else if(m.id == 1)
-						limiter.efficiency = m.value;
-				}
-				if (te instanceof TileEntityAMSEmitter) {
-					TileEntityAMSEmitter emitter = (TileEntityAMSEmitter)te;
-					if(m.id == 0)
-						emitter.locked = m.value == 1;
-					else if(m.id == 1)
-						emitter.efficiency = m.value;
-				}
-				if (te instanceof TileEntityAMSBase) {
-					TileEntityAMSBase base = (TileEntityAMSBase)te;
+					//Drillgon200: Right then... this should be handled with an interface.
 					
-					if(m.id == 0)
-						base.locked = m.value == 1;
-					else if(m.id == 1)
-						base.color = m.value;
-					else if(m.id == 2)
-						base.efficiency = m.value;
-					else if(m.id == 3)
-						base.field = m.value;
-				}
-				if (te instanceof TileEntityTurretCIWS) {
-					TileEntityTurretCIWS cwis = (TileEntityTurretCIWS)te;
-					
-					cwis.rotation = m.value;
-				}
-				if (te instanceof TileEntityTurretCheapo) {
-					TileEntityTurretCheapo cwis = (TileEntityTurretCheapo)te;
-					
-					cwis.rotation = m.value;
-				}
-				if (te instanceof TileEntityMachineSeleniumEngine) {
-					TileEntityMachineSeleniumEngine selenium = (TileEntityMachineSeleniumEngine)te;
+					/*if (te instanceof TileEntityAMSLimiter) {
+						TileEntityAMSLimiter limiter = (TileEntityAMSLimiter)te;
+						if(m.id == 0)
+							limiter.locked = m.value == 1;
+						else if(m.id == 1)
+							limiter.efficiency = m.value;
+					}
+					if (te instanceof TileEntityAMSEmitter) {
+						TileEntityAMSEmitter emitter = (TileEntityAMSEmitter)te;
+						if(m.id == 0)
+							emitter.locked = m.value == 1;
+						else if(m.id == 1)
+							emitter.efficiency = m.value;
+					}
+					if (te instanceof TileEntityAMSBase) {
+						TileEntityAMSBase base = (TileEntityAMSBase)te;
+						
+						if(m.id == 0)
+							base.locked = m.value == 1;
+						else if(m.id == 1)
+							base.color = m.value;
+						else if(m.id == 2)
+							base.efficiency = m.value;
+						else if(m.id == 3)
+							base.field = m.value;
+					}
+					if (te instanceof TileEntityTurretCIWS) {
+						TileEntityTurretCIWS cwis = (TileEntityTurretCIWS)te;
+						
+						cwis.rotation = m.value;
+					}
+					if (te instanceof TileEntityTurretCheapo) {
+						TileEntityTurretCheapo cwis = (TileEntityTurretCheapo)te;
+						
+						cwis.rotation = m.value;
+					}
+					if (te instanceof TileEntityMachineSeleniumEngine) {
+						TileEntityMachineSeleniumEngine selenium = (TileEntityMachineSeleniumEngine)te;
 
-					if(m.id == 0)
-						selenium.pistonCount = m.value;
-					if(m.id == 1)
+						if(m.id == 0)
+							selenium.pistonCount = m.value;
+						if(m.id == 1)
+							selenium.powerCap = m.value;
+					}
+					if (te instanceof TileEntityMachineDiesel) {
+						TileEntityMachineDiesel selenium = (TileEntityMachineDiesel)te;
+						
 						selenium.powerCap = m.value;
-				}
-				if (te instanceof TileEntityMachineDiesel) {
-					TileEntityMachineDiesel selenium = (TileEntityMachineDiesel)te;
-					
-					selenium.powerCap = m.value;
-				}
-				if (te instanceof TileEntityMachineReactorSmall) {
-					TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall)te;
-					
-					if(m.id == 0)
-						reactor.rods = m.value;
-					if(m.id == 1)
-						reactor.retracting = m.value == 1;
-					if(m.id == 2)
-						reactor.coreHeat = m.value;
-					if(m.id == 3)
-						reactor.hullHeat = m.value;
-				}
-				if (te instanceof TileEntityBomber) {
-					TileEntityBomber bomber = (TileEntityBomber)te;
-					
-					if(m.id == 0)
-						bomber.yaw = m.value;
-					if(m.id == 1)
-						bomber.pitch = m.value;
-					if(m.id == 2)
-						bomber.type = m.value;
-				}
-				if (te instanceof TileEntityRadioRec) {
-					TileEntityRadioRec radio = (TileEntityRadioRec)te;
-					
-					if(m.id == 0)
-						radio.isOn = (m.value == 1);
-					if(m.id == 1)
-						radio.freq = ((double)m.value) / 10D;
-				}
-				if (te instanceof TileEntityMachineGasCent) {
-					TileEntityMachineGasCent cent = (TileEntityMachineGasCent)te;
+					}
+					*/if (te instanceof TileEntityMachineReactorSmall) {
+						TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall)te;
+						
+						if(m.id == 0)
+							reactor.rods = m.value;
+						if(m.id == 1)
+							reactor.retracting = m.value == 1;
+						if(m.id == 2)
+							reactor.coreHeat = m.value;
+						if(m.id == 3)
+							reactor.hullHeat = m.value;
+					}
+					/*if (te instanceof TileEntityBomber) {
+						TileEntityBomber bomber = (TileEntityBomber)te;
+						
+						if(m.id == 0)
+							bomber.yaw = m.value;
+						if(m.id == 1)
+							bomber.pitch = m.value;
+						if(m.id == 2)
+							bomber.type = m.value;
+					}
+					if (te instanceof TileEntityRadioRec) {
+						TileEntityRadioRec radio = (TileEntityRadioRec)te;
+						
+						if(m.id == 0)
+							radio.isOn = (m.value == 1);
+						if(m.id == 1)
+							radio.freq = ((double)m.value) / 10D;
+					}
+					if (te instanceof TileEntityMachineGasCent) {
+						TileEntityMachineGasCent cent = (TileEntityMachineGasCent)te;
 
-					if(m.id == 0)
-						cent.progress = m.value;
-					if(m.id == 1)
-						cent.isProgressing = m.value == 1;
-				}
-				if (te instanceof TileEntityMachineCentrifuge) {
-					TileEntityMachineCentrifuge cent = (TileEntityMachineCentrifuge)te;
-					
-					if(m.id == 0)
-						cent.dualCookTime = m.value;
-					if(m.id == 1)
-						cent.isProgressing = m.value == 1;
-				}
-				if (te instanceof TileEntityMachineBoiler) {
-					TileEntityMachineBoiler boiler = (TileEntityMachineBoiler)te;
-					
-					if(m.id == 0)
-						boiler.heat = m.value;
-					if(m.id == 1)
-						boiler.burnTime = m.value;
-				}*/
-				if (te instanceof TileEntityMachineCoal) {
-					TileEntityMachineCoal coalgen = (TileEntityMachineCoal)te;
-					
-					if(m.id == 0)
-						coalgen.burnTime = m.value;
-				}
-			/*	if (te instanceof TileEntityMachineElectricFurnace) {
-					TileEntityMachineElectricFurnace furn = (TileEntityMachineElectricFurnace)te;
-					
-					if(m.id == 0)
-						furn.dualCookTime = m.value;
-				}
-				if (te instanceof TileEntityMachineArcFurnace) {
-					TileEntityMachineArcFurnace furn = (TileEntityMachineArcFurnace)te;
-					
-					if(m.id == 0)
-						furn.dualCookTime = m.value;
-				}
-				if (te instanceof TileEntityMachineBoilerElectric) {
-					TileEntityMachineBoilerElectric boiler = (TileEntityMachineBoilerElectric)te;
-					
-					if(m.id == 0)
-						boiler.heat = m.value;
-				}
-				if (te instanceof TileEntityNukeCustom) {
-					TileEntityNukeCustom nuke = (TileEntityNukeCustom)te;
-					
-					nuke.falls = m.value == 1;
-				}
-				if (te instanceof TileEntityNukeN45) {
-					TileEntityNukeN45 nuke = (TileEntityNukeN45)te;
-					
-					nuke.primed = m.value == 1;
-				}
-				if (te instanceof TileEntityMachineReactorLarge) {
-					TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)te;
+						if(m.id == 0)
+							cent.progress = m.value;
+						if(m.id == 1)
+							cent.isProgressing = m.value == 1;
+					}
+					if (te instanceof TileEntityMachineCentrifuge) {
+						TileEntityMachineCentrifuge cent = (TileEntityMachineCentrifuge)te;
+						
+						if(m.id == 0)
+							cent.dualCookTime = m.value;
+						if(m.id == 1)
+							cent.isProgressing = m.value == 1;
+					}
+					if (te instanceof TileEntityMachineBoiler) {
+						TileEntityMachineBoiler boiler = (TileEntityMachineBoiler)te;
+						
+						if(m.id == 0)
+							boiler.heat = m.value;
+						if(m.id == 1)
+							boiler.burnTime = m.value;
+					}*/
+					if (te instanceof TileEntityMachineCoal) {
+						TileEntityMachineCoal coalgen = (TileEntityMachineCoal)te;
+						
+						if(m.id == 0)
+							coalgen.burnTime = m.value;
+					}
+				/*	if (te instanceof TileEntityMachineElectricFurnace) {
+						TileEntityMachineElectricFurnace furn = (TileEntityMachineElectricFurnace)te;
+						
+						if(m.id == 0)
+							furn.dualCookTime = m.value;
+					}
+					if (te instanceof TileEntityMachineArcFurnace) {
+						TileEntityMachineArcFurnace furn = (TileEntityMachineArcFurnace)te;
+						
+						if(m.id == 0)
+							furn.dualCookTime = m.value;
+					}
+					if (te instanceof TileEntityMachineBoilerElectric) {
+						TileEntityMachineBoilerElectric boiler = (TileEntityMachineBoilerElectric)te;
+						
+						if(m.id == 0)
+							boiler.heat = m.value;
+					}
+					if (te instanceof TileEntityNukeCustom) {
+						TileEntityNukeCustom nuke = (TileEntityNukeCustom)te;
+						
+						nuke.falls = m.value == 1;
+					}
+					if (te instanceof TileEntityNukeN45) {
+						TileEntityNukeN45 nuke = (TileEntityNukeN45)te;
+						
+						nuke.primed = m.value == 1;
+					}
+					if (te instanceof TileEntityMachineReactorLarge) {
+						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)te;
 
-					if(m.id == 0)
-						reactor.rods = m.value;
-					if(m.id == 1)
-						reactor.coreHeat = m.value;
-					if(m.id == 2)
-						reactor.hullHeat = m.value;
-					if(m.id == 3)
-						reactor.size = m.value;
-					if(m.id == 4)
-						reactor.fuel = m.value;
-					if(m.id == 5)
-						reactor.waste = m.value;
-					if(m.id == 6)
-						reactor.type = ReactorFuelType.getEnum(m.value);
-				}
-				if (te instanceof TileEntityCompactLauncher) {
-					TileEntityCompactLauncher launcher = (TileEntityCompactLauncher)te;
-					
-					launcher.solid = m.value;
-				}
-				if (te instanceof TileEntityLaunchTable) {
-					TileEntityLaunchTable launcher = (TileEntityLaunchTable)te;
-					
-					if(m.id == 0)
+						if(m.id == 0)
+							reactor.rods = m.value;
+						if(m.id == 1)
+							reactor.coreHeat = m.value;
+						if(m.id == 2)
+							reactor.hullHeat = m.value;
+						if(m.id == 3)
+							reactor.size = m.value;
+						if(m.id == 4)
+							reactor.fuel = m.value;
+						if(m.id == 5)
+							reactor.waste = m.value;
+						if(m.id == 6)
+							reactor.type = ReactorFuelType.getEnum(m.value);
+					}
+					if (te instanceof TileEntityCompactLauncher) {
+						TileEntityCompactLauncher launcher = (TileEntityCompactLauncher)te;
+						
 						launcher.solid = m.value;
-					if(m.id == 1)
-						launcher.padSize = PartSize.values()[m.value];
-				}*/
-				
-			} catch (Exception x) {}
+					}
+					if (te instanceof TileEntityLaunchTable) {
+						TileEntityLaunchTable launcher = (TileEntityLaunchTable)te;
+						
+						if(m.id == 0)
+							launcher.solid = m.value;
+						if(m.id == 1)
+							launcher.padSize = PartSize.values()[m.value];
+					}*/
+					
+				} catch (Exception x) {}
+			});
+			
+			
 			return null;
 		}
 	}

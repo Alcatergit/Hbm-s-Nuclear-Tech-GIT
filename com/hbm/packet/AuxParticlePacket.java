@@ -1,6 +1,7 @@
 package com.hbm.packet;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -47,12 +48,14 @@ public class AuxParticlePacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(AuxParticlePacket m, MessageContext ctx) {
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				try {
+					
+					MainRegistry.proxy.particleControl(m.x, m.y, m.z, m.type);
+					
+				} catch(Exception x) { }
+			});
 			
-			try {
-				
-				MainRegistry.proxy.particleControl(m.x, m.y, m.z, m.type);
-				
-			} catch(Exception x) { }
 			
 			return null;
 		}

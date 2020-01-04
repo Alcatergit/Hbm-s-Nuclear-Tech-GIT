@@ -52,7 +52,6 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	};
 
 	public long power;
-	public long oldPower;
 	public static final long maxPower = 100000;
 	public int progress;
 	public int maxProgress = 100;
@@ -60,8 +59,6 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	int age = 0;
 	int consumption = 100;
 	int speed = 100;
-	
-	public boolean oldIsProgressing = false;
 	
 	Random rand = new Random();
 	
@@ -92,6 +89,8 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		super.readFromNBT(nbt);
 		this.power = nbt.getLong("powerTime");
 		this.isProgressing = nbt.getBoolean("progressing");
+		detectPower = power + 1;
+		detectIsProgressing = !isProgressing;
 		if(nbt.hasKey("inventory"))
 			inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 	}
@@ -156,16 +155,10 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			consumption = 10;
 		
 		if(!world.isRemote) {
-			oldIsProgressing = isProgressing;
 			isProgressing = false;
-			oldPower = power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			if(power != oldPower){
-				this.markDirty();
-			}
 			if(MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) != ItemStack.EMPTY && MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) != null) {
 				this.maxProgress = (ItemAssemblyTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
-				this.markDirty();
 				if(power >= consumption && removeItems(MachineRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory))) {
 					
 					if(inventory.getStackInSlot(5) == ItemStack.EMPTY || (inventory.getStackInSlot(5).getItem() != Items.AIR && inventory.getStackInSlot(5).getItem() == MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getItem()) && inventory.getStackInSlot(5).getCount() + MachineRecipes.getOutputFromTempate(inventory.getStackInSlot(4)).copy().getCount() <= inventory.getStackInSlot(5).getMaxStackSize()) {
@@ -236,13 +229,15 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					}
 				}
 			}
-			PacketDispatcher.wrapper.sendToAllAround(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 80));
-			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
+			
+			detectAndSendChanges();
+			
 		}
 		
 	}
 	
+
+
 	//I can't believe that worked.
 	public ItemStackHandler cloneItemStackProper(IItemHandlerModifiable array) {
 		ItemStackHandler stack = new ItemStackHandler(array.getSlots());
@@ -608,12 +603,34 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) inventory : null;
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+	
+	private long detectPower;
+	private boolean detectIsProgressing;
+	
+	private void detectAndSendChanges() {
+		
+		PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
+		
+		
+		boolean mark = false;
+		if(detectPower != power){
+			mark = true;
+			detectPower = power;
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(detectIsProgressing != isProgressing){
+			mark = true;
+			detectIsProgressing = isProgressing;
+			PacketDispatcher.wrapper.sendToAllAround(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(mark)
+			markDirty();
 	}
 }

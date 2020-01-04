@@ -7,6 +7,8 @@ import com.hbm.tileentity.machine.TileEntityDummy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -289,4 +291,58 @@ public class FFUtils {
 	public static TextureAtlasSprite getTextureFromFluid(Fluid f){
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
 	}
+
+	public static boolean containsFluid(ItemStack stack, Fluid fluid) {
+		if(FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid)
+			return true;
+		return false;
+	}
+
+	public static NBTTagList serializeTankArray(FluidTank[] tanks) {
+		NBTTagList list = new NBTTagList();
+		for(int i = 0; i < tanks.length; i ++){
+			if(tanks[i] != null){
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("tank", (byte)i);
+				tanks[i].writeToNBT(tag);
+				list.appendTag(tag);
+			}
+		}
+		return list;
+	}
+
+	public static void deserializeTankArray(NBTTagList tankList, FluidTank[] tanks) {
+		for(int i = 0; i < tankList.tagCount(); i ++){
+			NBTTagCompound tag = tankList.getCompoundTagAt(i);
+			byte b0 = tag.getByte("tank");
+			if(b0 >= 0 && b0 < tanks.length){
+				tanks[b0].readFromNBT(tag);
+			}
+		}
+	}
+	
+	public static boolean areTanksEqual(FluidTank tank1, FluidTank tank2){
+		if(tank1 == null || tank2 == null){
+			return false;
+		}
+		if(tank1.getFluid() == null ^ tank2.getFluid() == null){
+			return false;
+		}
+		if(tank1.getFluid() == null && tank2.getFluid() == null){
+			return true;
+		}
+		if(tank1.getFluid().amount == tank2.getFluid().amount &&
+				tank1.getFluid().getFluid() == tank2.getFluid().getFluid() &&
+				tank1.getCapacity() == tank2.getCapacity()){
+			return true;
+		}
+		return false;
+	}
+	
+	public static FluidTank copyTank(FluidTank tank){
+		if(tank == null)
+			return null;
+		return new FluidTank(tank.getFluid() != null ? tank.getFluid().copy() : null, tank.getCapacity());
+	}
+	
 }

@@ -6,7 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
+import com.hbm.tileentity.machine.TileEntityDummyPort;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 
 import net.minecraft.block.Block;
@@ -41,7 +41,7 @@ public class DummyBlockChemplant extends BlockContainer implements IDummy {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return this == ModBlocks.dummy_port_chemplant ? new TileEntityDummyFluidPort() : new TileEntityDummy();
+		return this == ModBlocks.dummy_port_chemplant ? new TileEntityDummyPort() : new TileEntityDummy();
 	}
 
 	@Override

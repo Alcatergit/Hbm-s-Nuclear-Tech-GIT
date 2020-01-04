@@ -472,12 +472,13 @@ public class ItemCustomLore extends Item {
     			this == ModItems.cell_sas3 || this == ModItems.powder_schrabidium || 
     			this == ModItems.wire_schrabidium || this == ModItems.ingot_saturnite ||
     			this == ModItems.plate_saturnite || this == ModItems.powder_thorium ||
-    			this == ModItems.circuit_schrabidium)
+    			this == ModItems.circuit_schrabidium || this == ModItems.gun_revolver_schrabidium_ammo)
     	{
     		return EnumRarity.RARE;
     	}
     	
-    	if(this == ModItems.plate_paa)
+    	if(this == ModItems.plate_paa || this == ModItems.gun_mp_ammo
+    			|| this == ModItems.gun_revolver_cursed_ammo)
     	{
     		return EnumRarity.UNCOMMON;
     	}

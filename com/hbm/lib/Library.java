@@ -1,13 +1,25 @@
 package com.hbm.lib;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hbm.blocks.ModBlocks;
+import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
 import com.hbm.capability.RadiationCapability;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.interfaces.IConductor;
+import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.conductor.TileEntityCable;
+import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityMachineBattery;
+import com.hbm.tileentity.machine.TileEntityMachineTransformer;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,32 +27,76 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class Library {
 	
 	public static String HbMinecraft = "192af5d7-ed0f-48d8-bd89-9d41af8524f8";
+	public static String TacoRedneck = "5aee1e3d-3767-4987-a222-e7ce1fbdf88e";
+	//Earl0fPudding
 	public static String LPkukin = "937c9804-e11f-4ad2-a5b1-42e62ac73077";
 	public static String Dafnik = "3af1c262-61c0-4b12-a4cb-424cc3a9c8c0";
+	//anna20
 	public static String a20 = "4729b498-a81c-42fd-8acd-20d6d9f759e0";
+	public static String rodolphito = "c3f5e449-6d8c-4fe3-acc9-47ef50e7e7ae";
 	public static String LordVertice = "a41df45e-13d8-4677-9398-090d3882b74f";
+	//twillycorn
 	public static String CodeRed_ = "912ec334-e920-4dd7-8338-4d9b2d42e0a1";
 	public static String dxmaster769 = "62c168b2-d11d-4dbf-9168-c6cea3dcb20e";
 	public static String Dr_Nostalgia = "e82684a7-30f1-44d2-ab37-41b342be1bbd";
 	public static String Samino2 = "87c3960a-4332-46a0-a929-ef2a488d1cda";
 	public static String Hoboy03new = "d7f29d9c-5103-4f6f-88e1-2632ff95973f";
 	public static String Dragon59MC = "dc23a304-0f84-4e2d-b47d-84c8d3bfbcdb";
-	public static String Steelcourage = "ac49720b-4a9a-4459-a26f-bee92160287a";
+	public static String SteelCourage = "ac49720b-4a9a-4459-a26f-bee92160287a";
+	public static String Ducxkskiziko = "122fe98f-be19-49ca-a96b-d4dee4f0b22e";
 	public static String Drillgon = "41ebd03f-7a12-42f3-b037-0caa4d6f235b";
 
+	public static List<String> superuser = new ArrayList<String>();
+	
+	//Drillgon200: Not like super users are used for anything, but they could in the future I guess.
+	public static void initSuperusers(){
+		superuser.add(HbMinecraft);
+		superuser.add(TacoRedneck);
+		superuser.add(LPkukin);
+		superuser.add(Dafnik);
+		superuser.add(a20);
+		superuser.add(rodolphito);
+		//Drillgon200: Pretty sure he did install NEI.
+		superuser.add(Ducxkskiziko);
+		superuser.add(Drillgon);
+	}
 	public static boolean checkForHazmat(EntityPlayer player) {
-		// TODO Make hazmat armors
+		if(checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || 
+				checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || 
+				checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey) || 
+				checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) || 
+				checkArmor(player, ModItems.schrabidium_helmet, ModItems.schrabidium_plate, ModItems.schrabidium_legs, ModItems.schrabidium_boots) || 
+				checkForHaz2(player)) {
+			
+			return true;
+		}
+		
+		if(player.isPotionActive(HbmPotion.mutation))
+			return true;
+		
+		return false;
+	}
+	
+	//Drillgon200: Is there a reason for this method? I don't know and I don't care to find out.
+	public static boolean checkForHaz2(EntityPlayer player) {
+		
+		if(checkArmor(player, ModItems.hazmat_paa_helmet, ModItems.hazmat_paa_plate, ModItems.hazmat_paa_legs, ModItems.hazmat_paa_boots) || 
+				checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
+		{
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -392,9 +448,317 @@ public class Library {
 
 	
 
+  //Flut-Füll gesteuerter Energieübertragungsalgorithmus
+  	//Flood fill controlled energy transmission algorithm
+
 	public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {
-		// TODO Auto-generated method stub
+		Block block = worldObj.getBlockState(pos).getBlock();
+		TileEntity tileentity = worldObj.getTileEntity(pos);
+
+		//Factories
+		//TODO update this when I add more machines
+		/*if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlock(x, y + 1, z) == ModBlocks.factory_titanium_core)
+		{
+			tileentity = worldObj.getTileEntity(x, y + 1, z);
+		}
+		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlock(x, y - 1, z) == ModBlocks.factory_titanium_core)
+		{
+			tileentity = worldObj.getTileEntity(x, y - 1, z);
+		}
+		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlock(x, y + 1, z) == ModBlocks.factory_advanced_core)
+		{
+			tileentity = worldObj.getTileEntity(x, y + 1, z);
+		}
+		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlock(x, y - 1, z) == ModBlocks.factory_advanced_core)
+		{
+			tileentity = worldObj.getTileEntity(x, y - 1, z);
+		}
+		//Derrick
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x + 1, y, z) == ModBlocks.machine_well)
+		{
+			tileentity = worldObj.getTileEntity(x + 1, y, z);
+		}
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x - 1, y, z) == ModBlocks.machine_well)
+		{
+			tileentity = worldObj.getTileEntity(x - 1, y, z);
+		}
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x, y, z + 1) == ModBlocks.machine_well)
+		{
+			tileentity = worldObj.getTileEntity(x, y, z + 1);
+		}
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x, y, z - 1) == ModBlocks.machine_well)
+		{
+			tileentity = worldObj.getTileEntity(x, y, z - 1);
+		}
+		//Mining Drill
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x + 1, y, z) == ModBlocks.machine_drill)
+		{
+			tileentity = worldObj.getTileEntity(x + 1, y, z);
+		}
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x - 1, y, z) == ModBlocks.machine_drill)
+		{
+			tileentity = worldObj.getTileEntity(x - 1, y, z);
+		}
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x, y, z + 1) == ModBlocks.machine_drill)
+		{
+			tileentity = worldObj.getTileEntity(x, y, z + 1);
+		}
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x, y, z - 1) == ModBlocks.machine_drill)
+		{
+			tileentity = worldObj.getTileEntity(x, y, z - 1);
+		}*/
+		//Assembler
+		if(block == ModBlocks.dummy_port_assembler)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
+		}
+		//Chemplant
+		if(block == ModBlocks.dummy_port_chemplant)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
+		}
+		//Refinery
+		/*if(block == ModBlocks.dummy_port_refinery)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+		}
+		//Pumpjack
+		if(block == ModBlocks.dummy_port_pumpjack)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+		}
+		//AMS Limiter
+		if(block == ModBlocks.dummy_port_ams_limiter)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+		}
+		//AMS Emitter
+		if(block == ModBlocks.dummy_port_ams_emitter)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+		}
+		//Launchers
+		if(block == ModBlocks.dummy_port_compact_launcher || block == ModBlocks.dummy_port_launch_table)
+		{
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+		}*/
+		
+		if(tileentity instanceof IConductor)
+		{
+			if(tileentity instanceof TileEntityCable)
+			{
+				if(Library.checkUnionList(((TileEntityCable)tileentity).uoteab, that))
+				{
+					for(int i = 0; i < ((TileEntityCable)tileentity).uoteab.size(); i++)
+					{
+						if(((TileEntityCable)tileentity).uoteab.get(i).source == that)
+						{
+							if(((TileEntityCable)tileentity).uoteab.get(i).ticked != newTact)
+							{
+								((TileEntityCable)tileentity).uoteab.get(i).ticked = newTact;
+								that.ffgeua(pos.up(), that.getTact());
+								that.ffgeua(pos.down(), that.getTact());
+								that.ffgeua(pos.west(), that.getTact());
+								that.ffgeua(pos.east(), that.getTact());
+								that.ffgeua(pos.north(), that.getTact());
+								that.ffgeua(pos.south(), that.getTact());
+							}
+						}
+					}
+				} else {
+					((TileEntityCable)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+				}
+			}
+			//TODO coated wire
+			/*if(tileentity instanceof TileEntityWireCoated)
+			{
+				if(Library.checkUnionList(((TileEntityWireCoated)tileentity).uoteab, that))
+				{
+					for(int i = 0; i < ((TileEntityWireCoated)tileentity).uoteab.size(); i++)
+					{
+						if(((TileEntityWireCoated)tileentity).uoteab.get(i).source == that)
+						{
+							if(((TileEntityWireCoated)tileentity).uoteab.get(i).ticked != newTact)
+							{
+								((TileEntityWireCoated)tileentity).uoteab.get(i).ticked = newTact;
+								that.ffgeua(pos.up(), that.getTact());
+								that.ffgeua(pos.down(), that.getTact());
+								that.ffgeua(pos.west(), that.getTact());
+								that.ffgeua(pos.east(), that.getTact());
+								that.ffgeua(pos.north(), that.getTact());
+								that.ffgeua(pos.south(), that.getTact());
+							}
+						}
+					}
+				} else {
+					((TileEntityWireCoated)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+				}
+			}*/
+			//TODO Cable switch
+			/*if(tileentity instanceof TileEntityCableSwitch)
+			{
+				if(tileentity.getBlockMetadata() == 1) {
+					if(Library.checkUnionList(((TileEntityCableSwitch)tileentity).uoteab, that))
+					{
+						for(int i = 0; i < ((TileEntityCableSwitch)tileentity).uoteab.size(); i++)
+						{
+							if(((TileEntityCableSwitch)tileentity).uoteab.get(i).source == that)
+							{
+								if(((TileEntityCableSwitch)tileentity).uoteab.get(i).ticked != newTact)
+								{
+									((TileEntityCableSwitch)tileentity).uoteab.get(i).ticked = newTact;
+									that.ffgeua(pos.up(), that.getTact());
+									that.ffgeua(pos.down(), that.getTact());
+									that.ffgeua(pos.west(), that.getTact());
+									that.ffgeua(pos.east(), that.getTact());
+									that.ffgeua(pos.north(), that.getTact());
+									that.ffgeua(pos.south(), that.getTact());
+								}
+							}
+						}
+					} else {
+						((TileEntityCableSwitch)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+					}
+				} else {
+					((TileEntityCableSwitch)tileentity).uoteab.clear();
+				}
+			}*/
+			//TODO Pylon
+		/*	if(tileentity instanceof TileEntityPylonRedWire)
+			{
+				if(Library.checkUnionList(((TileEntityPylonRedWire)tileentity).uoteab, that))
+				{
+					for(int i = 0; i < ((TileEntityPylonRedWire)tileentity).uoteab.size(); i++)
+					{
+						if(((TileEntityPylonRedWire)tileentity).uoteab.get(i).source == that)
+						{
+							if(((TileEntityPylonRedWire)tileentity).uoteab.get(i).ticked != newTact)
+							{
+								((TileEntityPylonRedWire)tileentity).uoteab.get(i).ticked = newTact;
+								for(int j = 0; j < ((TileEntityPylonRedWire)tileentity).connected.size(); j++) {
+									TileEntityPylonRedWire pylon = ((TileEntityPylonRedWire)tileentity).connected.get(j);
+									if(pylon != null) {
+										that.ffgeua(pylon.xCoord + 1, pylon.yCoord, pylon.zCoord, that.getTact());
+										that.ffgeua(pylon.xCoord - 1, pylon.yCoord, pylon.zCoord, that.getTact());
+										that.ffgeua(pylon.xCoord, pylon.yCoord + 1, pylon.zCoord, that.getTact());
+										that.ffgeua(pylon.xCoord, pylon.yCoord - 1, pylon.zCoord, that.getTact());
+										that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord + 1, that.getTact());
+										that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord - 1, that.getTact());
+										
+										that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord, that.getTact());
+									}
+								}
+							}
+						}
+					}
+				} else {
+					((TileEntityPylonRedWire)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+				}
+			}*/
+		}
+		
+		//TE will not be added as consumer if:
+		// -TE is the source (will not send to itself)
+		// -TE is already full
+		// -TE is a battery set to output only
+		// -TE as well as source are transformers of the same frequency
+		if(tileentity instanceof IConsumer && newTact && !(tileentity instanceof TileEntityMachineBattery && ((TileEntityMachineBattery)tileentity).conducts) &&
+				tileentity != that && ((IConsumer)tileentity).getPower() < ((IConsumer)tileentity).getMaxPower() &&
+				!(tileentity instanceof TileEntityMachineTransformer && that instanceof TileEntityMachineTransformer &&
+						((TileEntityMachineTransformer)tileentity).delay == ((TileEntityMachineTransformer)that).delay))
+		{
+			that.getList().add((IConsumer)tileentity);
+		}
+		
+		if(!newTact)
+		{
+			int size = that.getList().size();
+			if(size > 0)
+			{
+				long part = that.getSPower() / size;
+				for(IConsumer consume : that.getList())
+				{
+					if(consume.getPower() < consume.getMaxPower())
+					{
+						if(consume.getMaxPower() - consume.getPower() >= part)
+						{
+							that.setSPower(that.getSPower()-part);
+							consume.setPower(consume.getPower() + part);
+						} else {
+							that.setSPower(that.getSPower() - (consume.getMaxPower() - consume.getPower()));
+							consume.setPower(consume.getMaxPower());
+						}
+					}
+				}
+			}
+			that.clearList();
+		}
 		
 	}
+
+	/**Itemstack equality method except it accounts for possible null stacks and doesn't check if empty */
+	public static boolean areItemsEqual(ItemStack stackA, ItemStack stackB) {
+		if(stackA == null & stackB == null)
+			return true;
+		else if((stackA == null && stackB != null) || (stackA != null && stackB == null))
+			return false;
+		else
+			return stackA.getMetadata() == stackB.getMetadata() && stackA.getItem() == stackB.getItem();
+	}
+	
+	public static boolean checkCableConnectables(World world, BlockPos pos)
+	{
+		TileEntity tileentity = world.getTileEntity(pos);
+		Block b = world.getBlockState(pos).getBlock();
+		//TODO update this when I add more machines
+		if((tileentity != null && (tileentity instanceof IConductor ||
+				tileentity instanceof IConsumer ||
+				tileentity instanceof ISource)) ||
+				//b == ModBlocks.fusion_center ||
+				//b == ModBlocks.factory_titanium_conductor ||
+				//b == ModBlocks.factory_advanced_conductor ||
+				//b == ModBlocks.watz_conductor ||
+				//b == ModBlocks.fwatz_hatch ||
+				//b == ModBlocks.dummy_port_igenerator ||
+				//b == ModBlocks.dummy_port_cyclotron ||
+				//b == ModBlocks.dummy_port_well ||
+				//b == ModBlocks.dummy_port_flare ||
+				//b == ModBlocks.dummy_port_drill ||
+				b == ModBlocks.dummy_port_assembler ||
+				b == ModBlocks.dummy_port_chemplant// ||
+			//	b == ModBlocks.dummy_port_refinery ||
+			//	b == ModBlocks.dummy_port_pumpjack ||
+			//	b == ModBlocks.dummy_port_turbofan ||
+			//	b == ModBlocks.dummy_port_ams_limiter ||
+			//	b == ModBlocks.dummy_port_ams_emitter ||
+			//	b == ModBlocks.dummy_port_ams_base ||
+			//	b == ModBlocks.dummy_port_radgen ||
+			//	b == ModBlocks.dummy_port_compact_launcher ||
+			//	b == ModBlocks.dummy_port_launch_table
+				)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean checkUnionList(List<UnionOfTileEntitiesAndBooleans> list, ISource that) {
+		
+		for(UnionOfTileEntitiesAndBooleans union : list)
+		{
+			if(union.source == that)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//////  //////  //////  //////  //////  ////        //////  //////  //////
+	//      //  //  //        //    //      //  //      //      //      //    
+	////    //////  /////     //    ////    ////        ////    //  //  //  //
+	//      //  //     //     //    //      //  //      //      //  //  //  //
+	//////  //  //  /////     //    //////  //  //      //////  //////  //////
 	
 }

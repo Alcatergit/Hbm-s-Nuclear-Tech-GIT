@@ -6,6 +6,7 @@ import java.util.List;
 import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -40,6 +41,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -221,6 +223,16 @@ public class ModEventHandler {
 		}
 	}
 	
+	//Drillgon200: So 1.12.2's going to ignore ISpecialArmor if the damage is unblockable, huh?
+	@SubscribeEvent
+	public void onEntityHurt(LivingHurtEvent e){
+		if(e.getEntityLiving() instanceof EntityPlayer && e.getSource().isUnblockable()){
+			if(Library.checkArmor((EntityPlayer)e.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)){
+				e.setCanceled(true);
+			}
+		}
+	}
+	
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent event){
 		if(event.getEntity().hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
@@ -238,7 +250,7 @@ public class ModEventHandler {
 			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
 	}
 	
-	//TODO should probably use these bois
+	//TODO should probably use these.
 	
 	@SubscribeEvent
 	public void onItemRegister(RegistryEvent.Register<Item> evt){

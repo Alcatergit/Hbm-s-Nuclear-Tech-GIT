@@ -7,6 +7,7 @@ import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.special.ItemBlades;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
@@ -31,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -60,7 +62,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	private String customName;
 
 	public int getPowerScaled(int i) {
-		System.out.println(burnTime);
 		return (power * i) / maxPower;
 	}
 
@@ -82,20 +83,28 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		return inventory.getStackInSlot(i);
 	}
 
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
 		progress = nbt.getInteger("progress");
+		detectProgress = progress + 1;
 		power = nbt.getInteger("power");
+		detectPower = power + 1;
 		burnTime = nbt.getInteger("burnTime");
+		detectBurnTime = burnTime + 1;
 		maxBurn = nbt.getInteger("maxBurn");
+		detectMaxBurn = maxBurn + 1;
 		isRetracting = nbt.getBoolean("ret");
+		detectIsRetracting = !isRetracting;
 		if (nbt.hasKey("inventory"))
 			((ItemStackHandler) inventory).deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 		if (nbt.hasKey("CustomName", 8)) {
 			this.customName = nbt.getString("CustomName");
 		}
+		detectCustomName = customName == null ? "" : null;
+		detectItem = null;
 	}
 
 	@Override
@@ -125,7 +134,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	public void update() {
 		if (!world.isRemote) {
 			if (burnTime > 0) {
-				this.markDirty();
 				this.burnTime--;
 				this.power++;
 				if (power > maxPower)
@@ -137,7 +145,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 			if (inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0
 					&& TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
-				this.markDirty();
 				this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
 				inventory.getStackInSlot(0).shrink(1);
 				
@@ -162,7 +169,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 							|| (inventory.getStackInSlot(3).getItem() == stack.getItem()
 									&& inventory.getStackInSlot(3).getCount() + stack.getCount() <= inventory
 											.getStackInSlot(3).getMaxStackSize()))) {
-						this.markDirty();
 						if (progress >= maxProgress) {
 
 							isRetracting = true;
@@ -201,7 +207,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 				if (isRetracting){
 					progress -= speed;
-					this.markDirty();
 				}
 			} else {
 				isRetracting = true;
@@ -210,13 +215,13 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			if (progress <= 0) {
 				isRetracting = false;
 				progress = 0;
-				this.markDirty();
 			}
 
-			PacketDispatcher.wrapper.sendToAll(
-					new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress));
+			detectAndSendChanges();
 		}
 	}
+
+	
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -237,11 +242,10 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		return super.hasCapability(capability, facing);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return (T) inventory;
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -256,6 +260,53 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		} else {
 			return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64;
 		}
+	}
+	
+	private int detectProgress;
+	private int detectPower;
+	private int detectBurnTime;
+	private int detectMaxBurn;
+	private boolean detectIsRetracting;
+	private String detectCustomName;
+	private ItemStack detectItem;
+	
+	private void detectAndSendChanges() {
+		
+		boolean mark = false;
+		boolean needsPressPacket = false;
+		if(detectProgress != progress){
+			mark = true;
+			needsPressPacket = true;
+			detectProgress = progress;
+		}
+		if(detectPower != power){
+			mark = true;
+			detectPower = power;
+		}
+		if(detectBurnTime != burnTime){
+			mark = true;
+			detectBurnTime = burnTime;
+		}
+		if(detectMaxBurn != maxBurn){
+			mark = true;
+			detectMaxBurn = maxBurn;
+		}
+		if(detectIsRetracting != isRetracting){
+			mark = true;
+			detectIsRetracting = isRetracting;
+		}
+		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))){
+			mark = true;
+			detectCustomName = customName;
+		}
+		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)){
+			detectItem = inventory.getStackInSlot(2).copy();
+			needsPressPacket = true;
+		}
+		if(mark)
+			markDirty();
+		if(needsPressPacket)
+			PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 	}
 
 }

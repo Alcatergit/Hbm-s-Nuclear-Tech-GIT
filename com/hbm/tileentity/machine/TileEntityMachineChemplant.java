@@ -112,7 +112,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		String[] types;
 		
 		this.power = nbt.getLong("powerTime");
-
+		detectPower = power + 1;
+		isProgressing = nbt.getBoolean("progressing");
+		detectIsProgressing = !isProgressing;
+		
 		tanks[0].readFromNBT(nbt.getCompoundTag("input1"));
 		tanks[1].readFromNBT(nbt.getCompoundTag("input2"));
 		tanks[2].readFromNBT(nbt.getCompoundTag("output1"));
@@ -144,12 +147,16 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 	}
 	
+	
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setLong("powerTime", power);
 		String[] types = new String[]{tankTypes[0] != null ? tankTypes[0].getName() : "empty", tankTypes[1] != null ? tankTypes[1].getName() : "empty", tankTypes[2] != null ? tankTypes[2].getName() : "empty", tankTypes[3] != null ? tankTypes[3].getName() : "empty"};
 
+		nbt.setBoolean("progressing", isProgressing);
+		
 		NBTTagCompound input1 = new NBTTagCompound();
 		NBTTagCompound input2 = new NBTTagCompound();
 		NBTTagCompound output1 = new NBTTagCompound();
@@ -236,8 +243,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(!world.isRemote)
 		{
 			if(needsUpdate){
-				this.markDirty();
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}));
+				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;
 			}
 			int meta = world.getBlockState(pos).getValue(MachineChemplant.FACING);
@@ -257,15 +263,11 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			if(inputValidForTank(0, 17))
-				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19))
-					needsUpdate = true;
+				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
 			if(inputValidForTank(1, 18))
-				if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20))
-					needsUpdate = true;
-			if(FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11))
-				needsUpdate = true;
-			if(FFUtils.fillFluidContainer(inventory, tanks[3], 10, 12))
-				needsUpdate = true;
+				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
+			FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11);
+			FFUtils.fillFluidContainer(inventory, tanks[3], 10, 12);
 			
 
 			FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(inventory.getStackInSlot(4));
@@ -282,7 +284,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 						
 						if(progress >= maxProgress) {
 							progress = 0;
-							this.markDirty();
 							addItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)));
 							addFluids(outputs);
 
@@ -356,13 +357,13 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 				}
 			}
 			
-			PacketDispatcher.wrapper.sendToAll(new TEChemplantPacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing));
-			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
-			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power));
+			detectAndSendChanges();
 		}
 		
 	}
 	
+	
+
 	public boolean tryExchangeTemplates(TileEntity te1, TileEntity te2) {
 		//validateTe sees if it's a valid inventory tile entity
 		boolean te1Valid = validateTe(te1);
@@ -396,7 +397,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 						
 					}
 					if(filledContainer || existingTemplate == false){
-						this.markDirty();
 						ItemStack copy = iTe2.getStackInSlot(i).copy();
 						iTe2.setStackInSlot(i, ItemStack.EMPTY);
 						this.inventory.setStackInSlot(4, copy);
@@ -438,7 +438,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if((inputs[0] != null && tanks[0].getFluid() == null) || tanks[0].getFluid() != null && tanks[0].getFluid().getFluid() != tankTypes[0]){
 				tanks[0].setFluid(null);
 				if(needsTankTypeUpdate){
-					needsUpdate = true;
 					needsTankTypeUpdate = false;
 				}
 			}
@@ -446,19 +445,15 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if((inputs[1] != null && tanks[1].getFluid() == null) || tanks[1].getFluid() != null && tanks[1].getFluid().getFluid() != tankTypes[1]){
 				tanks[1].setFluid(null);
 				if(needsTankTypeUpdate){
-					needsUpdate = true;
 					needsTankTypeUpdate = false;
 				}
 			}
 			if((outputs[0] != null && tanks[2].getFluid() == null) || tanks[2].getFluid() != null && tanks[2].getFluid().getFluid() != tankTypes[2]){
 				tanks[2].setFluid(null);
-				if(needsTankTypeUpdate)
-					needsUpdate = true;
 			}
 			if((outputs[1] != null && tanks[3].getFluid() == null) || tanks[3].getFluid() != null && tanks[3].getFluid().getFluid() != tankTypes[3]){
 				tanks[3].setFluid(null);
 				if(needsTankTypeUpdate){
-					needsUpdate = true;
 					needsTankTypeUpdate = false;
 				}
 			}
@@ -504,11 +499,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			return;
 		if(fluids[0] != null){
 			tanks[0].drain(fluids[0].amount, true);
-			this.needsUpdate = true;
 		}
 		if(fluids[1] != null){
 			tanks[1].drain(fluids[1].amount, true);
-			this.needsUpdate = true;
 		}
 	}
 	
@@ -577,11 +570,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	public void addFluids(FluidStack[] stacks) {
 		if(stacks[0] != null){
 			tanks[2].fill(stacks[0], true);
-			needsUpdate = true;
 		}
 		if(stacks[1] != null){
 			tanks[3].fill(stacks[1], true);
-			needsUpdate = true;
 		}
 	}
 	
@@ -992,12 +983,14 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)inventory : capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? (T)(new ChemplantFluidHandler(tanks, tankTypes)) : null;
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) :
+			capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new ChemplantFluidHandler(tanks, tankTypes)) :
+				super.getCapability(capability, facing);
 	}
 	
 	@Override
@@ -1047,11 +1040,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(resource == null)
 				return 0;
 			if(tankTypes[0] != null && resource.getFluid() == tankTypes[0]) {
-				needsUpdate = true;
 				return tanks[0].fill(resource, doFill);
 			}
 			if(tankTypes[1] != null && resource.getFluid() == tankTypes[1]){
-				needsUpdate = true;
 				return tanks[1].fill(resource, doFill);
 			}
 			return 0;
@@ -1062,11 +1053,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(resource == null)
 				return null;
 			if (resource.isFluidEqual(tanks[2].getFluid())) {
-				needsUpdate = true;
 				return tanks[2].drain(resource.amount, doDrain);
 			}
 			if (resource.isFluidEqual(tanks[3].getFluid())) {
-				needsUpdate = true;
 				return tanks[3].drain(resource.amount, doDrain);
 			}
 			return null;
@@ -1075,10 +1064,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		@Override
 		public FluidStack drain(int maxDrain, boolean doDrain) {
 			if (tanks[2].getFluid() != null) {
-				needsUpdate = true;
 				return tanks[2].drain(maxDrain, doDrain);
 			} else if(tanks[3].getFluid() != null){
-				needsUpdate = true;
 				return tanks[3].drain(maxDrain, doDrain);
 			}
 			return null;
@@ -1095,5 +1082,52 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : "container.chemplant";
+	}
+	
+	private long detectPower;
+	private boolean detectIsProgressing;
+	private FluidTank[] detectTanks = new FluidTank[]{null, null, null, null};
+	
+	private void detectAndSendChanges() {
+		
+		PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
+		
+		
+		boolean mark = false;
+		
+		if(detectIsProgressing != isProgressing){
+			mark = true;
+			detectIsProgressing = isProgressing;
+			PacketDispatcher.wrapper.sendToAllAround(new TEChemplantPacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(detectPower != power){
+			mark = true;
+			detectPower = power;
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(!FFUtils.areTanksEqual(detectTanks[0], tanks[0])){
+			detectTanks[0] = FFUtils.copyTank(tanks[0]);
+			mark = true;
+			needsUpdate = true;
+		}
+		if(!FFUtils.areTanksEqual(detectTanks[1], tanks[1])){
+			detectTanks[1] = FFUtils.copyTank(tanks[1]);
+			mark = true;
+			needsUpdate = true;
+		}
+		if(!FFUtils.areTanksEqual(detectTanks[2], tanks[2])){
+			detectTanks[2] = FFUtils.copyTank(tanks[2]);
+			mark = true;
+			needsUpdate = true;
+		}
+		if(!FFUtils.areTanksEqual(detectTanks[3], tanks[3])){
+			detectTanks[3] = FFUtils.copyTank(tanks[3]);
+			mark = true;
+			needsUpdate = true;
+		}
+		
+		
+		if(mark)
+			markDirty();
 	}
 }

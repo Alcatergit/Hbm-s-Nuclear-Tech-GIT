@@ -1,27 +1,45 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerConverterHeRf;
+import com.hbm.inventory.container.ContainerConverterRfHe;
 import com.hbm.inventory.container.ContainerDiFurnace;
 import com.hbm.inventory.container.ContainerMachineAssembler;
+import com.hbm.inventory.container.ContainerMachineBattery;
 import com.hbm.inventory.container.ContainerMachineChemplant;
 import com.hbm.inventory.container.ContainerMachineCoal;
+import com.hbm.inventory.container.ContainerMachineGenerator;
 import com.hbm.inventory.container.ContainerMachinePress;
+import com.hbm.inventory.container.ContainerMachineRTG;
+import com.hbm.inventory.container.ContainerMachineReactorSmall;
 import com.hbm.inventory.container.ContainerNukeFleija;
 import com.hbm.inventory.container.ContainerNukeMan;
+import com.hbm.inventory.gui.GUIConverterHeRf;
+import com.hbm.inventory.gui.GUIConverterRfHe;
 import com.hbm.inventory.gui.GUIMachineAssembler;
+import com.hbm.inventory.gui.GUIMachineBattery;
 import com.hbm.inventory.gui.GUIMachineChemplant;
 import com.hbm.inventory.gui.GUIMachineCoal;
+import com.hbm.inventory.gui.GUIMachineGenerator;
 import com.hbm.inventory.gui.GUIMachinePress;
+import com.hbm.inventory.gui.GUIMachineRTG;
+import com.hbm.inventory.gui.GUIMachineReactorSmall;
 import com.hbm.inventory.gui.GUINukeFleija;
 import com.hbm.inventory.gui.GUINukeMan;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
+import com.hbm.tileentity.machine.TileEntityConverterHeRf;
+import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
+import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
+import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
+import com.hbm.tileentity.machine.TileEntityMachineRTG;
+import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -70,6 +88,30 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineCoal){
 					return new ContainerMachineCoal(player.inventory, (TileEntityMachineCoal)entity);
 				}
+			case ModBlocks.guiID_machine_generator:
+				if(entity instanceof TileEntityMachineGenerator){
+					return new ContainerMachineGenerator(player.inventory, (TileEntityMachineGenerator)entity);
+				}
+			case ModBlocks.guiID_reactor_small:
+				if(entity instanceof TileEntityMachineReactorSmall){
+					return new ContainerMachineReactorSmall(player.inventory, (TileEntityMachineReactorSmall)entity);
+				}
+			case ModBlocks.guiID_machine_rtg:
+				if(entity instanceof TileEntityMachineRTG){
+					return new ContainerMachineRTG(player.inventory, (TileEntityMachineRTG)entity);
+				}
+			case ModBlocks.guiID_machine_battery:
+				if(entity instanceof TileEntityMachineBattery){
+					return new ContainerMachineBattery(player.inventory, (TileEntityMachineBattery)entity);
+				}
+			case ModBlocks.guiID_converter_he_rf:
+				if(entity instanceof TileEntityConverterHeRf){
+					return new ContainerConverterHeRf(player.inventory, (TileEntityConverterHeRf)entity);
+				}
+			case ModBlocks.guiID_converter_rf_he:
+				if(entity instanceof TileEntityConverterRfHe){
+					return new ContainerConverterRfHe(player.inventory, (TileEntityConverterRfHe)entity);
+				}
 			}
 
 		}
@@ -113,6 +155,30 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_machine_coal:
 				if(entity instanceof TileEntityMachineCoal){
 					return new GUIMachineCoal(player.inventory, (TileEntityMachineCoal)entity);
+				}
+			case ModBlocks.guiID_machine_generator:
+				if(entity instanceof TileEntityMachineGenerator){
+					return new GUIMachineGenerator(player.inventory, (TileEntityMachineGenerator)entity);
+				}
+			case ModBlocks.guiID_reactor_small:
+				if(entity instanceof TileEntityMachineReactorSmall){
+					return new GUIMachineReactorSmall(player.inventory, (TileEntityMachineReactorSmall)entity);
+				}
+			case ModBlocks.guiID_machine_rtg:
+				if(entity instanceof TileEntityMachineRTG){
+					return new GUIMachineRTG(player.inventory, (TileEntityMachineRTG)entity);
+				}
+			case ModBlocks.guiID_machine_battery:
+				if(entity instanceof TileEntityMachineBattery){
+					return new GUIMachineBattery(player.inventory, (TileEntityMachineBattery)entity);
+				}
+			case ModBlocks.guiID_converter_he_rf:
+				if(entity instanceof TileEntityConverterHeRf){
+					return new GUIConverterHeRf(player.inventory, (TileEntityConverterHeRf)entity);
+				}
+			case ModBlocks.guiID_converter_rf_he:
+				if(entity instanceof TileEntityConverterRfHe){
+					return new GUIConverterRfHe(player.inventory, (TileEntityConverterRfHe)entity);
 				}
 			}
 

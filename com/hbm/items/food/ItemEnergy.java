@@ -37,14 +37,20 @@ public class ItemEnergy extends Item {
 			if (player.capabilities.isCreativeMode) {
 				stack.shrink(1);
 			}
+			if(this == ModItems.bottle_cherry)
+        	{
+        		player.heal(6F);
+                player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30 * 20, 0));
+                player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30 * 20, 2));
+                Library.applyRadDirect(player, 5.0F);
+        	}
 			if (this == ModItems.bottle_nuka) {
 				player.heal(4F);
 				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30 * 20, 1));
 				player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 30 * 20, 1));
 				Library.applyRadDirect(player, 5.0F);
 			}
-			// TODO bottle cherry
-			if (/* this == ModItems.bottle_cherry || */ this == ModItems.bottle_nuka) {
+			if ( this == ModItems.bottle_cherry ||  this == ModItems.bottle_nuka) {
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.cap_nuka));
 				if (stack.isEmpty()) {
 					return new ItemStack(ModItems.bottle_empty);
@@ -79,5 +85,9 @@ public class ItemEnergy extends Item {
 		if (this == ModItems.bottle_nuka) {
 			list.add("Contains about 210 kcal and 1500 mSv.");
 		}
+		if(this == ModItems.bottle_cherry)
+    	{
+            list.add("Now with severe radiation poisoning in every seventh bottle!");
+    	}
 	}
 }

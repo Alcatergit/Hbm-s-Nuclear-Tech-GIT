@@ -1,6 +1,7 @@
 package com.hbm.entity.particle;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.explosion.ExplosionChaos;
 
 import net.minecraft.util.math.BlockPos;
@@ -79,10 +80,9 @@ public class EntityCloudFX extends EntityModFX {
 	
 				if(rand.nextInt(5) != 0) {
 					this.setDead();
-					//TODO cloud thing
-				//	if(BlockCloudResidue.hasPosNeightbour(world, (int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions)) && world.getBlockState(new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions))).getBlock().isReplaceable(world, new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions)))) {
-				//		world.setBlockState((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions), ModBlocks.residue.getDefaultState());
-				//	}
+					if(BlockCloudResidue.hasPosNeightbour(world, new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions))) && world.getBlockState(new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions))).getBlock().isReplaceable(world, new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions)))) {
+						world.setBlockState(new BlockPos((int) (posX - motionX/subdivisions), (int) (posY - motionY/subdivisions), (int) (posZ - motionZ/subdivisions)), ModBlocks.residue.getDefaultState());
+					}
 				}
 				
 				this.posX -= this.motionX/subdivisions;

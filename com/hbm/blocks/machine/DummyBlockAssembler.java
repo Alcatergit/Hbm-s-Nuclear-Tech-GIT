@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityDummyPort;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
 import net.minecraft.block.BlockContainer;
@@ -38,7 +39,7 @@ public class DummyBlockAssembler extends BlockContainer implements IDummy {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDummy();
+		return this == ModBlocks.dummy_port_assembler ? new TileEntityDummyPort() : new TileEntityDummy();
 	}
 
 	@Override

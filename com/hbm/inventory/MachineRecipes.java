@@ -86,7 +86,6 @@ public class MachineRecipes {
 	};
 
 	public static ItemStack getPressResult(ItemStack input, ItemStack stamp) {
-		// TODO Finish press results
 		if (input == null || stamp == null)
 			return null;
 
@@ -141,71 +140,82 @@ public class MachineRecipes {
 
 		}
 
-		/*
-		 * if(stamps_wire.contains(stamp.getItem())) {
-		 * 
-		 * if(mODE(input, "ingotAluminum")) return new
-		 * ItemStack(ModItems.wire_aluminium, 8); if(mODE(input, "ingotCopper"))
-		 * return new ItemStack(ModItems.wire_copper, 8); if(mODE(input,
-		 * "ingotTungsten")) return new ItemStack(ModItems.wire_tungsten, 8);
-		 * if(mODE(input, "ingotRedAlloy")) return new
-		 * ItemStack(ModItems.wire_red_copper, 8); if(mODE(input,
-		 * "ingotRedstoneAlloy")) return new ItemStack(ModItems.wire_red_copper,
-		 * 8); if(mODE(input, "ingotGold")) return new
-		 * ItemStack(ModItems.wire_gold, 8); if(mODE(input, "ingotSchrabidium"))
-		 * return new ItemStack(ModItems.wire_schrabidium, 8); if(mODE(input,
-		 * "ingotAdvanced")) return new ItemStack(ModItems.wire_advanced_alloy,
-		 * 8); if(mODE(input, "ingotAdvancedAlloy")) return new
-		 * ItemStack(ModItems.wire_advanced_alloy, 8); if(mODE(input,
-		 * "ingotMagnetizedTungsten")) return new
-		 * ItemStack(ModItems.wire_magnetized_tungsten, 8); }
-		 * 
-		 * if(stamps_circuit.contains(stamp.getItem())) {
-		 * 
-		 * if(input.getItem() == ModItems.circuit_raw) return new
-		 * ItemStack(ModItems.circuit_aluminium); }
-		 * 
-		 * if(stamp.getItem() == ModItems.stamp_357) {
-		 * 
-		 * if(input.getItem() == ModItems.assembly_iron) return new
-		 * ItemStack(ModItems.gun_revolver_iron_ammo); if(input.getItem() ==
-		 * ModItems.assembly_steel) return new
-		 * ItemStack(ModItems.gun_revolver_ammo); if(input.getItem() ==
-		 * ModItems.assembly_lead) return new
-		 * ItemStack(ModItems.gun_revolver_lead_ammo); if(input.getItem() ==
-		 * ModItems.assembly_gold) return new
-		 * ItemStack(ModItems.gun_revolver_gold_ammo); if(input.getItem() ==
-		 * ModItems.assembly_schrabidium) return new
-		 * ItemStack(ModItems.gun_revolver_schrabidium_ammo); if(input.getItem()
-		 * == ModItems.assembly_nightmare) return new
-		 * ItemStack(ModItems.gun_revolver_nightmare_ammo); if(input.getItem()
-		 * == ModItems.assembly_desh) return new
-		 * ItemStack(ModItems.ammo_357_desh);
-		 * 
-		 * if(mODE(input, "ingotSteel")) return new
-		 * ItemStack(ModItems.gun_revolver_cursed_ammo); }
-		 * 
-		 * if(stamp.getItem() == ModItems.stamp_44) {
-		 * 
-		 * if(input.getItem() == ModItems.assembly_nopip) return new
-		 * ItemStack(ModItems.ammo_44); }
-		 * 
-		 * if(stamp.getItem() == ModItems.stamp_9) {
-		 * 
-		 * if(input.getItem() == ModItems.assembly_smg) return new
-		 * ItemStack(ModItems.ammo_9mm); if(input.getItem() ==
-		 * ModItems.assembly_uzi) return new ItemStack(ModItems.ammo_22lr);
-		 * if(mODE(input, "ingotGold")) return new
-		 * ItemStack(ModItems.gun_mp_ammo); if(input.getItem() ==
-		 * ModItems.assembly_lacunae) return new ItemStack(ModItems.ammo_5mm); }
-		 * 
-		 * if(stamp.getItem() == ModItems.stamp_50) {
-		 * 
-		 * if(input.getItem() == ModItems.assembly_calamity) return new
-		 * ItemStack(ModItems.ammo_50bmg); if(input.getItem() ==
-		 * ModItems.assembly_actionexpress) return new
-		 * ItemStack(ModItems.ammo_50ae); }
-		 */
+		if (stamps_wire.contains(stamp.getItem())) {
+
+			if (mODE(input, "ingotAluminum"))
+				return new ItemStack(ModItems.wire_aluminium, 8);
+			if (mODE(input, "ingotCopper"))
+				return new ItemStack(ModItems.wire_copper, 8);
+			if (mODE(input, "ingotTungsten"))
+				return new ItemStack(ModItems.wire_tungsten, 8);
+			if (mODE(input, "ingotRedAlloy"))
+				return new ItemStack(ModItems.wire_red_copper, 8);
+			if (mODE(input, "ingotRedstoneAlloy"))
+				return new ItemStack(ModItems.wire_red_copper, 8);
+			if (mODE(input, "ingotGold"))
+				return new ItemStack(ModItems.wire_gold, 8);
+			if (mODE(input, "ingotSchrabidium"))
+				return new ItemStack(ModItems.wire_schrabidium, 8);
+			if (mODE(input, "ingotAdvanced"))
+				return new ItemStack(ModItems.wire_advanced_alloy, 8);
+			if (mODE(input, "ingotAdvancedAlloy"))
+				return new ItemStack(ModItems.wire_advanced_alloy, 8);
+			if (mODE(input, "ingotMagnetizedTungsten"))
+				return new ItemStack(ModItems.wire_magnetized_tungsten, 8);
+		}
+
+		if (stamps_circuit.contains(stamp.getItem())) {
+
+			if (input.getItem() == ModItems.circuit_raw)
+				return new ItemStack(ModItems.circuit_aluminium);
+		}
+
+		if (stamp.getItem() == ModItems.stamp_357) {
+
+			if (input.getItem() == ModItems.assembly_iron)
+				return new ItemStack(ModItems.gun_revolver_iron_ammo);
+			if (input.getItem() == ModItems.assembly_steel)
+				return new ItemStack(ModItems.gun_revolver_ammo);
+			if (input.getItem() == ModItems.assembly_lead)
+				return new ItemStack(ModItems.gun_revolver_lead_ammo);
+			if (input.getItem() == ModItems.assembly_gold)
+				return new ItemStack(ModItems.gun_revolver_gold_ammo);
+			if (input.getItem() == ModItems.assembly_schrabidium)
+				return new ItemStack(ModItems.gun_revolver_schrabidium_ammo);
+			if (input.getItem() == ModItems.assembly_nightmare)
+				return new ItemStack(ModItems.gun_revolver_nightmare_ammo);
+			if (input.getItem() == ModItems.assembly_desh)
+				return new ItemStack(ModItems.ammo_357_desh);
+
+			if (mODE(input, "ingotSteel"))
+				return new ItemStack(ModItems.gun_revolver_cursed_ammo);
+		}
+
+		if (stamp.getItem() == ModItems.stamp_44) {
+
+			if (input.getItem() == ModItems.assembly_nopip)
+				return new ItemStack(ModItems.ammo_44);
+		}
+
+		if (stamp.getItem() == ModItems.stamp_9) {
+
+			if (input.getItem() == ModItems.assembly_smg)
+				return new ItemStack(ModItems.ammo_9mm);
+			if (input.getItem() == ModItems.assembly_uzi)
+				return new ItemStack(ModItems.ammo_22lr);
+			if (mODE(input, "ingotGold"))
+				return new ItemStack(ModItems.gun_mp_ammo);
+			if (input.getItem() == ModItems.assembly_lacunae)
+				return new ItemStack(ModItems.ammo_5mm);
+		}
+
+		if (stamp.getItem() == ModItems.stamp_50) {
+
+			if (input.getItem() == ModItems.assembly_calamity)
+				return new ItemStack(ModItems.ammo_50bmg);
+			if (input.getItem() == ModItems.assembly_actionexpress)
+				return new ItemStack(ModItems.ammo_50ae);
+		}
 
 		return null;
 	}
@@ -218,84 +228,64 @@ public class MachineRecipes {
 
 		if (item == null || item2 == null)
 			return null;
-		// TODO all the other items in these recipes.
-		
-		  if (MainRegistry.enableDebugMode) { if (item.getItem() ==
-		  Items.IRON_INGOT && item2.getItem() == Items.QUARTZ || item.getItem()
-		  == Items.QUARTZ && item2.getItem() == Items.IRON_INGOT) { return new
-		  ItemStack(ModBlocks.test_render, 1); } }
-		  
-		  if (mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) &&
-		  mODE(item2, "gemCoal") || mODE(item, "gemCoal") && mODE(item2, new
-		  String[] {"ingotTungsten", "dustTungsten"})) { return new
-		  ItemStack(ModItems.neutron_reflector, 2); }
-		  
-		  if (mODE(item, new String[] {"ingotLead", "dustLead"}) && mODE(item2,
-		  new String[] {"ingotCopper", "dustCopper"}) || mODE(item, new
-		  String[] {"ingotCopper", "dustCopper"}) && mODE(item2, new String[]
-		  {"ingotLead", "dustLead"})) { return new
-		  ItemStack(ModItems.neutron_reflector, 4); }
-		  
-		  if (mODE(item, "plateLead") && mODE(item2, "plateCopper") ||
-		  mODE(item, "plateCopper") && mODE(item2, "plateLead")) { return new
-		  ItemStack(ModItems.neutron_reflector, 1); }
-		  
-		  if (mODE(item, new String[] {"ingotIron", "dustIron"}) && mODE(item2,
-		  new String[] {"gemCoal", "dustCoal"}) || mODE(item, new String[]
-		  {"gemCoal", "dustCoal"}) && mODE(item2, new String[] {"ingotIron",
-		  "dustIron"})) { return new ItemStack(ModItems.ingot_steel, 2); }
-		  
-		  if (mODE(item, new String[] {"ingotCopper", "dustCopper"}) &&
-		  item2.getItem() == Items.REDSTONE || item.getItem() == Items.REDSTONE
-		  && mODE(item2, new String[] {"ingotCopper", "dustCopper"})) { return
-		  new ItemStack(ModItems.ingot_red_copper, 2); }
-		  
-		  if (item.getItem() == ModItems.canister_generic && item2.getItem() ==
-		  Items.SLIME_BALL || item.getItem() == Items.SLIME_BALL &&
-		  item2.getItem() == ModItems.canister_generic) { return new
-		  ItemStack(ModItems.canister_napalm, 1); }
-		  
-		  if (mODE(item, new String[] {"ingotRedstoneAlloy",
-		  "dustRedstoneAlloy"}) && mODE(item2, new String[] {"ingotSteel",
-		  "dustSteel"}) || mODE(item, new String[] {"ingotSteel", "dustSteel"})
-		  && mODE(item2, new String[] {"ingotRedstoneAlloy",
-		  "dustRedstoneAlloy"})) { return new
-		  ItemStack(ModItems.ingot_advanced_alloy, 2); }
-		  
-		  if (mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) &&
-		  mODE(item2, "nuggetSchrabidium") || mODE(item, "nuggetSchrabidium")
-		  && mODE(item2, new String[] {"ingotTungsten", "dustTungsten"})) {
-		  return new ItemStack(ModItems.ingot_magnetized_tungsten, 1); }
-		 
-		if (item.getItem() == ModItems.plate_mixed && mODE(item2, "plateGold")
-				|| mODE(item, "plateGold") && item2.getItem() == ModItems.plate_mixed) {
+
+		if (MainRegistry.enableDebugMode) {
+			if (item.getItem() == Items.IRON_INGOT && item2.getItem() == Items.QUARTZ || item.getItem() == Items.QUARTZ && item2.getItem() == Items.IRON_INGOT) {
+				return new ItemStack(ModBlocks.test_render, 1);
+			}
+		}
+
+		if (mODE(item, new String[] { "ingotTungsten", "dustTungsten" }) && mODE(item2, "gemCoal") || mODE(item, "gemCoal") && mODE(item2, new String[] { "ingotTungsten", "dustTungsten" })) {
+			return new ItemStack(ModItems.neutron_reflector, 2);
+		}
+
+		if (mODE(item, new String[] { "ingotLead", "dustLead" }) && mODE(item2, new String[] { "ingotCopper", "dustCopper" }) || mODE(item, new String[] { "ingotCopper", "dustCopper" }) && mODE(item2, new String[] { "ingotLead", "dustLead" })) {
+			return new ItemStack(ModItems.neutron_reflector, 4);
+		}
+
+		if (mODE(item, "plateLead") && mODE(item2, "plateCopper") || mODE(item, "plateCopper") && mODE(item2, "plateLead")) {
+			return new ItemStack(ModItems.neutron_reflector, 1);
+		}
+
+		if (mODE(item, new String[] { "ingotIron", "dustIron" }) && mODE(item2, new String[] { "gemCoal", "dustCoal" }) || mODE(item, new String[] { "gemCoal", "dustCoal" }) && mODE(item2, new String[] { "ingotIron", "dustIron" })) {
+			return new ItemStack(ModItems.ingot_steel, 2);
+		}
+
+		if (mODE(item, new String[] { "ingotCopper", "dustCopper" }) && item2.getItem() == Items.REDSTONE || item.getItem() == Items.REDSTONE && mODE(item2, new String[] { "ingotCopper", "dustCopper" })) {
+			return new ItemStack(ModItems.ingot_red_copper, 2);
+		}
+
+		if (item.getItem() == ModItems.canister_generic && item2.getItem() == Items.SLIME_BALL || item.getItem() == Items.SLIME_BALL && item2.getItem() == ModItems.canister_generic) {
+			return new ItemStack(ModItems.canister_napalm, 1);
+		}
+
+		if (mODE(item, new String[] { "ingotRedstoneAlloy", "dustRedstoneAlloy" }) && mODE(item2, new String[] { "ingotSteel", "dustSteel" }) || mODE(item, new String[] { "ingotSteel", "dustSteel" }) && mODE(item2, new String[] { "ingotRedstoneAlloy", "dustRedstoneAlloy" })) {
+			return new ItemStack(ModItems.ingot_advanced_alloy, 2);
+		}
+
+		if (mODE(item, new String[] { "ingotTungsten", "dustTungsten" }) && mODE(item2, "nuggetSchrabidium") || mODE(item, "nuggetSchrabidium") && mODE(item2, new String[] { "ingotTungsten", "dustTungsten" })) {
+			return new ItemStack(ModItems.ingot_magnetized_tungsten, 1);
+		}
+
+		if (item.getItem() == ModItems.plate_mixed && mODE(item2, "plateGold") || mODE(item, "plateGold") && item2.getItem() == ModItems.plate_mixed) {
 			return new ItemStack(ModItems.plate_paa, 2);
 		}
 
-		
-		  if (mODE(item, new String[] {"ingotSteel", "dustSteel"}) &&
-		  mODE(item2, new String[] {"ingotTungsten", "dustTungsten"}) ||
-		  mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) &&
-		  mODE(item2, new String[] {"ingotSteel", "dustSteel"})) { return new
-		  ItemStack(ModItems.ingot_dura_steel, 2); }
-		  
-		  if (mODE(item, new String[] {"ingotSteel", "dustSteel"}) &&
-		  item2.getItem() == ModItems.powder_cobalt || item.getItem() ==
-		  ModItems.powder_cobalt && mODE(item2, new String[] {"ingotSteel",
-		  "dustSteel"})) { return new ItemStack(ModItems.ingot_dura_steel, 2);
-		  }
-		  
-		  if (mODE(item, new String[] {"ingotDuraSteel", "dustDuraSteel"}) &&
-		  item2.getItem() == ModItems.powder_meteorite || item.getItem() ==
-		  ModItems.powder_meteorite && mODE(item2, new String[]
-		  {"ingotDuraSteel", "dustDuraSteel"})) { return new
-		  ItemStack(ModItems.ingot_starmetal, 2); }
-		  
-		  if (mODE(item, new String[] {"dustCobalt"}) && item2.getItem() ==
-		  ModItems.ingot_starmetal || item.getItem() ==
-		  ModItems.ingot_starmetal && mODE(item2, new String[] {"dustCobalt"}))
-		  { return new ItemStack(ModItems.ingot_saturnite, 2); }
-		 
+		if (mODE(item, new String[] { "ingotSteel", "dustSteel" }) && mODE(item2, new String[] { "ingotTungsten", "dustTungsten" }) || mODE(item, new String[] { "ingotTungsten", "dustTungsten" }) && mODE(item2, new String[] { "ingotSteel", "dustSteel" })) {
+			return new ItemStack(ModItems.ingot_dura_steel, 2);
+		}
+
+		if (mODE(item, new String[] { "ingotSteel", "dustSteel" }) && item2.getItem() == ModItems.powder_cobalt || item.getItem() == ModItems.powder_cobalt && mODE(item2, new String[] { "ingotSteel", "dustSteel" })) {
+			return new ItemStack(ModItems.ingot_dura_steel, 2);
+		}
+
+		if (mODE(item, new String[] { "ingotDuraSteel", "dustDuraSteel" }) && item2.getItem() == ModItems.powder_meteorite || item.getItem() == ModItems.powder_meteorite && mODE(item2, new String[] { "ingotDuraSteel", "dustDuraSteel" })) {
+			return new ItemStack(ModItems.ingot_starmetal, 2);
+		}
+
+		if (mODE(item, new String[] { "dustCobalt" }) && item2.getItem() == ModItems.ingot_starmetal || item.getItem() == ModItems.ingot_starmetal && mODE(item2, new String[] { "dustCobalt" })) {
+			return new ItemStack(ModItems.ingot_saturnite, 2);
+		}
 
 		return null;
 	}
@@ -336,12 +326,12 @@ public class MachineRecipes {
 	public static ItemStack getOutputFromTempate(ItemStack stack) {
 		if (stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
 			return ItemStack.EMPTY;
-		
+
 		int type = ItemAssemblyTemplate.getTagWithRecipeNumber(stack).getInteger("type");
-		if(type >= ItemAssemblyTemplate.recipes.size())
+		if (type >= ItemAssemblyTemplate.recipes.size())
 			return ItemStack.EMPTY;
 		AssemblerRecipe template = ItemAssemblyTemplate.recipes.get(type);
-		if(template == null)
+		if (template == null)
 			return ItemStack.EMPTY;
 		ItemStack output = ItemStack.EMPTY;
 		if (template.getOutput() != null) {
@@ -353,13 +343,13 @@ public class MachineRecipes {
 	public static List<ItemStack> getRecipeFromTempate(ItemStack stack) {
 		if (stack == null || !(stack.getItem() instanceof ItemAssemblyTemplate))
 			return null;
-		
+
 		int type = ItemAssemblyTemplate.getTagWithRecipeNumber(stack).getInteger("type");
 		List<ItemStack> list = new ArrayList<ItemStack>();
-		if(type >= ItemAssemblyTemplate.recipes.size())
+		if (type >= ItemAssemblyTemplate.recipes.size())
 			return null;
 		AssemblerRecipe template = ItemAssemblyTemplate.recipes.get(type);
-		if(template == null)
+		if (template == null)
 			return null;
 		if (template.getInputs() != null) {
 			return copyItemStackList(template.getInputs());
@@ -696,15 +686,15 @@ public class MachineRecipes {
 
 		return input;
 	}
-	
-public static ItemStack[] getChemOutputFromTempate(ItemStack stack) {
-		
-		if(stack == null || !(stack.getItem() instanceof ItemChemistryTemplate))
+
+	public static ItemStack[] getChemOutputFromTempate(ItemStack stack) {
+
+		if (stack == null || !(stack.getItem() instanceof ItemChemistryTemplate))
 			return null;
-		
+
 		ItemStack[] output = new ItemStack[4];
-		
-		switch(ItemChemistryTemplate.EnumChemistryTemplate.getEnum(stack.getItemDamage())) {
+
+		switch (ItemChemistryTemplate.EnumChemistryTemplate.getEnum(stack.getItemDamage())) {
 		case ASPHALT:
 			output[0] = new ItemStack(ModBlocks.asphalt, 4);
 			output[1] = new ItemStack(ModBlocks.asphalt, 4);
@@ -726,215 +716,215 @@ public static ItemStack[] getChemOutputFromTempate(ItemStack stack) {
 		case CIRCUIT_5:
 			output[0] = new ItemStack(ModItems.circuit_schrabidium, 1);
 			break;
-        case SF_OIL:
+		case SF_OIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case SF_HEAVYOIL:
+		case SF_HEAVYOIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case SF_SMEAR:
+		case SF_SMEAR:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case SF_HEATINGOIL:
+		case SF_HEATINGOIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case SF_RECLAIMED:
+		case SF_RECLAIMED:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case SF_PETROIL:
+		case SF_PETROIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_LUBRICANT:
+		case SF_LUBRICANT:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_NAPHTHA:
+		case SF_NAPHTHA:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_DIESEL:
+		case SF_DIESEL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_LIGHTOIL:
+		case SF_LIGHTOIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_KEROSENE:
+		case SF_KEROSENE:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_GAS:
+		case SF_GAS:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_PETROLEUM:
+		case SF_PETROLEUM:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_BIOGAS:
+		case SF_BIOGAS:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-    	case SF_BIOFUEL:
+		case SF_BIOFUEL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);
 			output[1] = new ItemStack(ModItems.solid_fuel, 1);
 			break;
-        case POLYMER:
+		case POLYMER:
 			output[0] = new ItemStack(ModItems.ingot_polymer, 1);
-        	break;
-        case YELLOWCAKE:
+			break;
+		case YELLOWCAKE:
 			output[0] = new ItemStack(ModItems.powder_yellowcake, 1);
-        	break;
-        case DYN_SCHRAB:
+			break;
+		case DYN_SCHRAB:
 			output[0] = new ItemStack(ModItems.ingot_schrabidium, 1);
-        	break;
-        case DYN_EUPH:
+			break;
+		case DYN_EUPH:
 			output[0] = new ItemStack(ModItems.ingot_euphemium, 1);
-        	break;
-        case DYN_DNT:
+			break;
+		case DYN_DNT:
 			output[0] = new ItemStack(ModItems.ingot_dineutronium, 1);
-        	break;
-        case CORDITE:
+			break;
+		case CORDITE:
 			output[0] = new ItemStack(ModItems.cordite, 4);
-        	break;
-        case KEVLAR:
+			break;
+		case KEVLAR:
 			output[0] = new ItemStack(ModItems.plate_kevlar, 4);
-        	break;
-        case SOLID_FUEL:
+			break;
+		case SOLID_FUEL:
 			output[0] = new ItemStack(ModItems.rocket_fuel, 1);
-        	break;
+			break;
 		default:
 			break;
 		}
-		
+
 		return output;
 	}
-	
+
 	public static FluidStack[] getFluidOutputFromTempate(ItemStack stack) {
-		
-		if(stack == null || !(stack.getItem() instanceof ItemChemistryTemplate))
+
+		if (stack == null || !(stack.getItem() instanceof ItemChemistryTemplate))
 			return null;
-		
+
 		FluidStack[] output = new FluidStack[2];
-		
-		switch(ItemChemistryTemplate.EnumChemistryTemplate.getEnum(stack.getItemDamage())) {
-        case FP_HEAVYOIL:
+
+		switch (ItemChemistryTemplate.EnumChemistryTemplate.getEnum(stack.getItemDamage())) {
+		case FP_HEAVYOIL:
 			output[0] = new FluidStack(ModForgeFluids.bitumen, 300);
 			output[1] = new FluidStack(ModForgeFluids.smear, 700);
 			break;
-        case FP_SMEAR:
+		case FP_SMEAR:
 			output[0] = new FluidStack(ModForgeFluids.heatingoil, 600);
 			output[1] = new FluidStack(ModForgeFluids.lubricant, 400);
 			break;
-        case FP_NAPHTHA:
+		case FP_NAPHTHA:
 			output[0] = new FluidStack(ModForgeFluids.heatingoil, 400);
 			output[1] = new FluidStack(ModForgeFluids.diesel, 600);
 			break;
-        case FP_LIGHTOIL:
+		case FP_LIGHTOIL:
 			output[0] = new FluidStack(ModForgeFluids.diesel, 400);
 			output[1] = new FluidStack(ModForgeFluids.kerosene, 600);
 			break;
-        case FR_REOIL:
+		case FR_REOIL:
 			output[0] = new FluidStack(ModForgeFluids.reclaimed, 800);
 			break;
-        case FR_PETROIL:
+		case FR_PETROIL:
 			output[0] = new FluidStack(ModForgeFluids.petroil, 1000);
 			break;
-        case FC_BITUMEN:
+		case FC_BITUMEN:
 			output[0] = new FluidStack(ModForgeFluids.oil, 1000);
 			output[1] = new FluidStack(ModForgeFluids.petroleum, 200);
 			break;
-        case FC_I_NAPHTHA:
+		case FC_I_NAPHTHA:
 			output[0] = new FluidStack(ModForgeFluids.naphtha, 800);
 			break;
-        case FC_GAS_PETROLEUM:
+		case FC_GAS_PETROLEUM:
 			output[0] = new FluidStack(ModForgeFluids.petroleum, 800);
 			break;
-        case FC_DIESEL_KEROSENE:
+		case FC_DIESEL_KEROSENE:
 			output[0] = new FluidStack(ModForgeFluids.kerosene, 400);
 			break;
-        case FC_KEROSENE_PETROLEUM:
+		case FC_KEROSENE_PETROLEUM:
 			output[0] = new FluidStack(ModForgeFluids.petroleum, 800);
 			break;
-        case CC_OIL:
+		case CC_OIL:
 			output[0] = new FluidStack(ModForgeFluids.oil, 2000);
 			break;
-        case CC_I:
+		case CC_I:
 			output[0] = new FluidStack(ModForgeFluids.smear, 1600);
 			break;
-        case CC_HEATING:
+		case CC_HEATING:
 			output[0] = new FluidStack(ModForgeFluids.heatingoil, 1800);
 			break;
-        case CC_HEAVY:
+		case CC_HEAVY:
 			output[0] = new FluidStack(ModForgeFluids.heavyoil, 1800);
 			break;
-        case CC_NAPHTHA:
+		case CC_NAPHTHA:
 			output[0] = new FluidStack(ModForgeFluids.naphtha, 2000);
 			break;
-        case COOLANT:
+		case COOLANT:
 			output[0] = new FluidStack(ModForgeFluids.coolant, 2000);
 			break;
-        case CRYOGEL:
+		case CRYOGEL:
 			output[0] = new FluidStack(ModForgeFluids.cryogel, 2000);
 			break;
-        case PEROXIDE:
+		case PEROXIDE:
 			output[0] = new FluidStack(ModForgeFluids.acid, 800);
 			break;
-        case DEUTERIUM:
+		case DEUTERIUM:
 			output[0] = new FluidStack(ModForgeFluids.deuterium, 500);
-        	break;
-        case STEAM:
+			break;
+		case STEAM:
 			output[0] = new FluidStack(ModForgeFluids.steam, 1000);
-        	break;
-        case BP_BIOGAS:
+			break;
+		case BP_BIOGAS:
 			output[0] = new FluidStack(ModForgeFluids.biogas, 4000);
-        	break;
-        case BP_BIOFUEL:
+			break;
+		case BP_BIOFUEL:
 			output[0] = new FluidStack(ModForgeFluids.biofuel, 1000);
-        	break;
-        case UF6:
+			break;
+		case UF6:
 			output[0] = new FluidStack(ModForgeFluids.uf6, 1000);
-        	break;
-        case PUF6:
+			break;
+		case PUF6:
 			output[0] = new FluidStack(ModForgeFluids.puf6, 1000);
-        	break;
-        case SAS3:
+			break;
+		case SAS3:
 			output[0] = new FluidStack(ModForgeFluids.sas3, 1000);
-        	break;
-        case NITAN:
+			break;
+		case NITAN:
 			output[0] = new FluidStack(ModForgeFluids.nitan, 1000);
-        	break;
-        case OIL_SAND:
+			break;
+		case OIL_SAND:
 			output[0] = new FluidStack(ModForgeFluids.bitumen, 1000);
-        	break;
-        case DYN_SCHRAB:
+			break;
+		case DYN_SCHRAB:
 			output[0] = new FluidStack(ModForgeFluids.watz, 50);
-        	break;
-        case DYN_EUPH:
+			break;
+		case DYN_EUPH:
 			output[0] = new FluidStack(ModForgeFluids.watz, 100);
-        	break;
-        case DYN_DNT:
+			break;
+		case DYN_DNT:
 			output[0] = new FluidStack(ModForgeFluids.watz, 150);
-        	break;
-        case ELECTROLYSIS:
+			break;
+		case ELECTROLYSIS:
 			output[0] = new FluidStack(ModForgeFluids.hydrogen, 400);
 			output[1] = new FluidStack(ModForgeFluids.oxygen, 400);
-        	break;
-        case XENON:
+			break;
+		case XENON:
 			output[0] = new FluidStack(ModForgeFluids.xenon, 50);
-        	break;
+			break;
 		default:
 			break;
 		}
-		
+
 		return output;
 	}
-	
+
 }

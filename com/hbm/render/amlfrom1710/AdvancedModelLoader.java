@@ -1,5 +1,4 @@
 package com.hbm.render.amlfrom1710;
-// TODO: Move this package to net.minecraftforge.model in 1.8
 
 import java.util.Collection;
 import java.util.Map;

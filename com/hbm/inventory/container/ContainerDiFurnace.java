@@ -48,6 +48,7 @@ public class ContainerDiFurnace extends Container {
 	}
 	
 	//What is this!?
+	//Drillgon200: ^ Literally wrote basically the same comment 10 seconds ago.
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {

@@ -30,7 +30,6 @@ public class SpecialContainerFillLists {
 			return renderPair.getRight();
 		}
 		public void putRenderModel(IBakedModel model){
-			System.out.println("fatduck" + model);
 			renderPair.setValue(model);
 		}
 		public ModelResourceLocation getResourceLocation(){

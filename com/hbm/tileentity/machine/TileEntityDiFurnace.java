@@ -20,6 +20,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapabilityProvider {
 
+	
 	public int dualCookTime;
 	public int dualPower;
 	public static final int maxPower = 12800;
@@ -45,6 +46,8 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 	public void readFromNBT(NBTTagCompound compound) {
 		this.dualPower = compound.getInteger("dualPower");
 		this.dualCookTime = compound.getInteger("cookTime");
+		this.detectDualCookTime = this.dualCookTime;
+		this.detectDualPower = this.dualPower;
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
 		super.readFromNBT(compound);
@@ -61,12 +64,10 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 	@Override
 	public void update() {
 		boolean flag = this.hasPower();
-		boolean flag1 = false;
 		
 		if(flag && isProcessing())
 		{
 			this.dualPower = this.dualPower - 1;
-			this.markDirty();
 			if(this.dualPower < 0)
 			{
 				this.dualPower = 0;
@@ -74,10 +75,8 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		}
 		if (this.hasItemPower(inventory.getStackInSlot(2))
 				&& this.dualPower <= (TileEntityDiFurnace.maxPower - TileEntityDiFurnace.getItemPower(inventory.getStackInSlot(2)))) {
-			this.markDirty();
 			this.dualPower += getItemPower(inventory.getStackInSlot(2));
 			if (!inventory.getStackInSlot(2).isEmpty()) {
-				flag1 = true;
 				inventory.getStackInSlot(2).shrink(1);
 				if (inventory.getStackInSlot(2).isEmpty()) {
 					inventory.setStackInSlot(2, inventory.getStackInSlot(2).getItem().getContainerItem(inventory.getStackInSlot(2)));
@@ -86,11 +85,9 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 		}
 		if (flag && canProcess()) {
 			dualCookTime++;
-			this.markDirty();
 			if (this.dualCookTime == TileEntityDiFurnace.processingSpeed) {
 				this.dualCookTime = 0;
 				this.processItem();
-				flag1 = true;
 			}
 		} else {
 			dualCookTime = 0;
@@ -107,23 +104,17 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 
 			if (!inventory.getStackInSlot(2).isEmpty() && inventory.getStackInSlot(2).getItem() == ModItems.pellet_rtg) {
 				if(this.dualPower != maxPower){
-					this.markDirty();
 					this.dualPower = maxPower;
 				}
 			}
 			
 			if(trigger)
             {
-                flag1 = true;
                 MachineDiFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);
             }
 		}
 		
-		if(flag1)
-		{
-			this.markDirty();
-		}
-		
+		this.detectAndSendChanges();
 	}
 	
 	public boolean hasItemPower(ItemStack itemStack) {
@@ -150,22 +141,6 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 			
 			return 0;
 		}
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return (T) inventory;
-		}
-		return super.getCapability(capability, facing);
 	}
 
 	public void setCustomInventoryName(String displayName) {
@@ -257,6 +232,39 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 	
 	public boolean isProcessing() {
 		return this.dualCookTime > 0;
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	private int detectDualCookTime;
+	private int detectDualPower;
+	
+	private void detectAndSendChanges() {
+		boolean mark = false;
+		if(detectDualCookTime != dualCookTime){
+			mark = true;
+			detectDualCookTime = dualCookTime;
+		}
+		if(detectDualPower != dualPower){
+			mark = true;
+			detectDualPower = dualPower;
+		}
+		if(mark)
+			markDirty();
 	}
 
 }

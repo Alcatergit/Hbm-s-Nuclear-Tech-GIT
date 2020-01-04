@@ -35,6 +35,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -109,14 +110,12 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 		if(!world.isRemote)
 		{
 			if (needsUpdate) {
-				markDirty();
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}));
+				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;
 			}
 			//Water
 			if(this.inputValidForTank(-1, 0))
-				if(FFUtils.fillFromFluidContainer(inventory, tank, 0, 3))
-					needsUpdate = true;
+				FFUtils.fillFromFluidContainer(inventory, tank, 0, 3);
 
 			//Battery Item
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
@@ -133,13 +132,15 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
                 MachineCoal.updateBlockState(this.burnTime > 0, this.world, this.pos);
             }
 			
-			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power));
-			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), burnTime, 0));
+			
 			
 			generate();
+			detectAndSendChanges();
 		}
 	}
 	
+	
+
 	public void generate() {
 		
 		if(inventory.getStackInSlot(1) != ItemStack.EMPTY && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(1)) > 0 && burnTime <= 0)
@@ -163,7 +164,6 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 			if(tank.getFluidAmount() > 0)
 			{
 				tank.drain(1, true);
-				needsUpdate = true;
 				
 				if(power + 25 <= maxPower)
 				{
@@ -214,6 +214,10 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		
 		this.power = nbt.getLong("powerTime");
+		detectPower = power + 1;
+		this.burnTime = nbt.getInteger("burnTime");
+		detectBurnTime = burnTime + 1;
+		
 		tank.readFromNBT(nbt);
 		
 		
@@ -222,6 +226,8 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("powerTime", power);
+		nbt.setInteger("burnTime", burnTime);
+		
 		tank.writeToNBT(nbt);
 		NBTTagCompound tag = inventory.serializeNBT();
 		nbt.setTag("inventory", tag);
@@ -313,8 +319,6 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if (isValidFluid(resource)) {
-			if(tank.fill(resource, false) > 0)
-				needsUpdate = true;
 			return tank.fill(resource, doFill);
 		}
 		return 0;
@@ -336,5 +340,30 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 		return stack.getFluid() == FluidRegistry.WATER;
 	}
 
+	private long detectPower;
+	private int detectBurnTime;
+	private FluidTank detectTank = null;
+	
+	private void detectAndSendChanges() {
+		boolean mark = false;
+		
+		if(detectPower != power){
+			mark = true;
+			detectPower = power;
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(detectBurnTime != burnTime){
+			mark = true;
+			detectBurnTime = burnTime;
+			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), burnTime, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		}
+		if(!FFUtils.areTanksEqual(tank, detectTank)){
+			mark = true;
+			detectTank = FFUtils.copyTank(tank);
+			needsUpdate = true;
+		}
+		if(mark)
+			markDirty();
+	}
 	
 }

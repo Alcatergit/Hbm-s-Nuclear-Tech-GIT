@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/battery_potato_top",
+		"front": "hbm:blocks/battery_potato_front",
+		"side": "hbm:blocks/battery_potato_side"
+	}
+}

@@ -5,9 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.animations.Animation;
-import com.hbm.render.animations.AnimationBuilder;
-import com.hbm.render.animations.AnimationPart;
 import com.hbm.render.model.ModelB92;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 
 public class ItemRenderGunAnim extends TileEntityItemStackRenderer {
 
-	public static final Animation b92Ani = AnimationBuilder.createNewAnimation(4).addPart(50*9).addPart(50*5).rotations(0, 0, 0.65449875*-90).translations(1.3089975*-0.5, 1.3089975*-0.5, 0).addPart(50*10).rotations(0, 0, 0.65449875*-90).translations(1.3089975*-0.5, 1.3089975*-0.5, 0).type(AnimationPart.AnimationType.STATIC).addPart(50*5).rotations(0, 0, 0.65449875*-90).translations(1.3089975*-0.5, 1.3089975*-0.5, 0).setInverse().build();
 	
 	public static final ItemRenderGunAnim INSTANCE = new ItemRenderGunAnim();
 

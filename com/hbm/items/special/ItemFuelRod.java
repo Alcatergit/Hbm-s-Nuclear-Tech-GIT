@@ -42,6 +42,14 @@ public class ItemFuelRod extends ItemRadioactive {
 		return stack.getTagCompound().getInteger("life");
 	}
 	
+	public int getMaxLifeTime() {
+		return lifeTime;
+	}
+	
+	public int getHeatPerTick(){
+		return heat;
+	}
+	
 	public static void updateDamage(ItemStack stack){
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());

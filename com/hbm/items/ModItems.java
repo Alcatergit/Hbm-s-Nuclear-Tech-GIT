@@ -14,9 +14,14 @@ import com.hbm.items.bomb.ItemMike;
 import com.hbm.items.bomb.ItemSolinium;
 import com.hbm.items.bomb.ItemTsar;
 import com.hbm.items.food.ItemEnergy;
+import com.hbm.items.gear.ArmorEuphemium;
+import com.hbm.items.gear.ArmorHazmat;
+import com.hbm.items.gear.ArmorModel;
+import com.hbm.items.gear.ArmorSchrabidium;
 import com.hbm.items.gear.ArmorT45;
 import com.hbm.items.gear.AxeSchrabidium;
 import com.hbm.items.gear.HoeSchrabidium;
+import com.hbm.items.gear.ModArmor;
 import com.hbm.items.gear.ModAxe;
 import com.hbm.items.gear.ModHoe;
 import com.hbm.items.gear.ModPickaxe;
@@ -33,6 +38,7 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.items.special.ItemFuel;
 import com.hbm.items.special.ItemFuelRod;
+import com.hbm.items.special.ItemPotatos;
 import com.hbm.items.special.ItemRadioactive;
 import com.hbm.items.special.ItemSyringe;
 import com.hbm.items.special.WatzFuel;
@@ -46,6 +52,7 @@ import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
 import com.hbm.items.tool.ItemMultiDetonator;
+import com.hbm.items.weapon.ItemAmmo;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
@@ -55,6 +62,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModItems {
@@ -82,6 +90,94 @@ public class ModItems {
 	public static final Item fusion_core = new ItemBattery(200000, 0, 25, "fusion_core").setMaxStackSize(1);
 	public static final Item energy_core = new ItemBattery(100000, 0, 10, "energy_core").setMaxStackSize(1);
 	public static final Item fusion_core_infinite = new ItemBase("fusion_core_infinite").setMaxStackSize(1);
+	public static final Item battery_generic = new ItemBattery(50, 1, 1).setUnlocalizedName("battery_generic").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_generic_new");
+	public static final Item battery_advanced = new ItemBattery(200, 5, 5).setUnlocalizedName("battery_advanced").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_advanced_new");
+	public static final Item battery_lithium = new ItemBattery(2500, 10, 10).setUnlocalizedName("battery_lithium").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_lithium");
+	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50).setUnlocalizedName("battery_schrabidium")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_schrabidium_new");
+	public static final Item battery_spark = new ItemBattery(1000000, 20000, 20000).setUnlocalizedName("battery_spark").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark");
+	public static final Item battery_creative = new Item().setUnlocalizedName("battery_creative").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_creative_new");
+
+	public static final Item battery_red_cell = new ItemBattery(150, 1, 1).setUnlocalizedName("battery_red_cell").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_red_cell");
+	public static final Item battery_red_cell_6 = new ItemBattery(150 * 6, 1, 1).setUnlocalizedName("battery_red_cell_6").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_red_cell_6");
+	public static final Item battery_red_cell_24 = new ItemBattery(150 * 24, 1, 1).setUnlocalizedName("battery_red_cell_24")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_red_cell_24");
+	public static final Item battery_advanced_cell = new ItemBattery(600, 5, 5).setUnlocalizedName("battery_advanced_cell")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_advanced_cell");
+	public static final Item battery_advanced_cell_4 = new ItemBattery(600 * 4, 5, 5).setUnlocalizedName("battery_advanced_cell_4")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_advanced_cell_4");
+	public static final Item battery_advanced_cell_12 = new ItemBattery(600 * 12, 5, 5).setUnlocalizedName("battery_advanced_cell_12")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_advanced_cell_12");
+	public static final Item battery_lithium_cell = new ItemBattery(7500, 10, 10).setUnlocalizedName("battery_lithium_cell")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_lithium_cell");
+	public static final Item battery_lithium_cell_3 = new ItemBattery(7500 * 3, 10, 10).setUnlocalizedName("battery_lithium_cell_3")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_lithium_cell_3");
+	public static final Item battery_lithium_cell_6 = new ItemBattery(7500 * 6, 10, 10).setUnlocalizedName("battery_lithium_cell_6")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_lithium_cell_6");
+	public static final Item battery_schrabidium_cell = new ItemBattery(30000, 50, 50).setUnlocalizedName("battery_schrabidium_cell")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell");
+	public static final Item battery_schrabidium_cell_2 = new ItemBattery(30000 * 2, 50, 50).setUnlocalizedName("battery_schrabidium_cell_2")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell_2");
+	public static final Item battery_schrabidium_cell_4 = new ItemBattery(30000 * 4, 50, 50).setUnlocalizedName("battery_schrabidium_cell_4")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell_4");
+	public static final Item battery_spark_cell_6 = new ItemBattery(1000000 * 6, 20000, 20000).setUnlocalizedName("battery_spark_cell_6")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_spark_cell_6");
+	public static final Item battery_spark_cell_25 = new ItemBattery(1000000 * 25, 20000, 20000).setUnlocalizedName("battery_spark_cell_25")
+			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_spark_cell_25");
+	public static final Item battery_spark_cell_100 = new ItemBattery(1000000L * 100L, 20000, 20000)
+			.setUnlocalizedName("battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
+			.setTextureName(RefStrings.MODID + ":battery_spark_cell_100");
+	public static final Item battery_spark_cell_1000 = new ItemBattery(1000000L * 1000L, 200000, 200000)
+			.setUnlocalizedName("battery_spark_cell_1000").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_1000");
+	public static final Item battery_spark_cell_2500 = new ItemBattery(1000000L * 2500L, 200000, 200000)
+			.setUnlocalizedName("battery_spark_cell_2500").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_2500");
+	public static final Item battery_spark_cell_10000 = new ItemBattery(1000000L * 10000L, 2000000, 2000000)
+			.setUnlocalizedName("battery_spark_cell_10000").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_10000");
+	public static final Item battery_spark_cell_power = new ItemBattery(1000000L * 1000000L, 2000000, 2000000)
+			.setUnlocalizedName("battery_spark_cell_power").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_power");
+
+	public static final Item battery_potato = new ItemBattery(1, 0, 1).setUnlocalizedName("battery_potato").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_potato");
+	public static final Item battery_potatos = new ItemPotatos(50, 0, 1).setUnlocalizedName("battery_potatos").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_potatos");
+	public static final Item battery_su = new ItemBattery(15, 0, 1).setUnlocalizedName("battery_su").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_su");
+	public static final Item battery_su_l = new ItemBattery(35, 0, 1).setUnlocalizedName("battery_su_l").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_su_l");
+	public static final Item battery_steam = new ItemBattery(600, 3, 60).setUnlocalizedName("battery_steam").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_steam");
+	public static final Item battery_steam_large = new ItemBattery(1000, 5, 100).setUnlocalizedName("battery_steam_large").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_steam_large");
+	public static final Item fusion_core = new ItemBattery(200000, 0, 25).setUnlocalizedName("fusion_core").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_core");
+	public static final Item fusion_core_infinite = new Item().setUnlocalizedName("fusion_core_infinite").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_core_infinite");
+	public static final Item energy_core = new ItemBattery(100000, 0, 10).setUnlocalizedName("energy_core").setMaxStackSize(1)
+			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":energy_core");
 	
 	//Fluid handling items
 	public static final Item canister_generic = new ItemFluidCanister("canister_fuel", 4000).setCreativeTab(MainRegistry.controlTab);
@@ -98,10 +194,57 @@ public class ModItems {
 	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
 	
 	//Armor
+	public static final Item hazmat_helmet = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet").setMaxStackSize(1);
+	public static final Item hazmat_plate = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.CHEST, "hazmat_plate").setMaxStackSize(1);
+	public static final Item hazmat_legs = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.LEGS, "hazmat_legs").setMaxStackSize(1);
+	public static final Item hazmat_boots = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.FEET, "hazmat_boots").setMaxStackSize(1);
+	
+	public static final Item hazmat_helmet_red = new ArmorModel(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_red").setMaxStackSize(1);
+	public static final Item hazmat_plate_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.CHEST, "hazmat_plate_red").setMaxStackSize(1);
+	public static final Item hazmat_legs_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.LEGS, "hazmat_legs_red").setMaxStackSize(1);
+	public static final Item hazmat_boots_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.FEET, "hazmat_boots_red").setMaxStackSize(1);
+	
+	public static final Item hazmat_helmet_grey = new ArmorModel(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_grey").setMaxStackSize(1);
+	public static final Item hazmat_plate_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.CHEST, "hazmat_plate_grey").setMaxStackSize(1);
+	public static final Item hazmat_legs_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.LEGS, "hazmat_legs_grey").setMaxStackSize(1);
+	public static final Item hazmat_boots_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.FEET, "hazmat_boots_grey").setMaxStackSize(1);
+	
+	public static final Item hazmat_paa_helmet = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.HEAD, "hazmat_paa_helmet").setMaxStackSize(1);
+	public static final Item hazmat_paa_plate = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.CHEST, "hazmat_paa_plate").setMaxStackSize(1);
+	public static final Item hazmat_paa_legs = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.LEGS, "hazmat_paa_legs").setMaxStackSize(1);
+	public static final Item hazmat_paa_boots = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.FEET, "hazmat_paa_boots").setMaxStackSize(1);
+	
+	public static final Item schrabidium_helmet = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.HEAD, "schrabidium_helmet").setMaxStackSize(1);
+	public static final Item schrabidium_plate = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, "schrabidium_plate").setMaxStackSize(1);
+	public static final Item schrabidium_legs = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.LEGS, "schrabidium_legs").setMaxStackSize(1);
+	public static final Item schrabidium_boots = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.FEET, "schrabidium_boots").setMaxStackSize(1);
+	
+	public static final Item euphemium_helmet = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.HEAD, "euphemium_helmet").setMaxStackSize(1);
+	public static final Item euphemium_plate = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.CHEST, "euphemium_plate").setMaxStackSize(1);
+	public static final Item euphemium_legs = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.LEGS, "euphemium_legs").setMaxStackSize(1);
+	public static final Item euphemium_boots = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.FEET, "euphemium_boots").setMaxStackSize(1);
+	
+	public static final Item jackt = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt").setMaxStackSize(1);
+	public static final Item jackt2 = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt2").setMaxStackSize(1);
+	
+	public static final Item alloy_helmet = new ModArmor(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.HEAD, "alloy_helmet").setMaxStackSize(1);
+	public static final Item alloy_plate = new ModArmor(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.CHEST, "alloy_plate").setMaxStackSize(1);
+	public static final Item alloy_legs = new ModArmor(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.LEGS, "alloy_legs").setMaxStackSize(1);
+	public static final Item alloy_boots = new ModArmor(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.FEET, "alloy_boots").setMaxStackSize(1);
+	
+	public static final Item steel_helmet = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.HEAD, "steel_helmet").setMaxStackSize(1);
+	public static final Item steel_plate = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "steel_plate").setMaxStackSize(1);
+	public static final Item steel_legs = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.LEGS, "steel_legs").setMaxStackSize(1);
+	public static final Item steel_boots = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.FEET, "steel_boots").setMaxStackSize(1);
+	
 	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, "t45_helmet").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, "t45_plate").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, "t45_legs").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, "t45_boots").setCreativeTab(CreativeTabs.COMBAT);
+	
+	public static final Item goggles = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "goggles").setMaxStackSize(1);
+	public static final Item gas_mask = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask").setMaxStackSize(1);
+	public static final Item gas_mask_m65 = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_m65").setMaxStackSize(1);
 	
 	//Guns
 	public static final Item gun_b92 = new GunB92("gun_b92").setCreativeTab(MainRegistry.weaponTab);
@@ -391,6 +534,7 @@ public class ModItems {
 	public static final Item bottle_opener = new WeaponSpecial(MainRegistry.enumToolMaterialBottleOpener, "bottle_opener").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
 	public static final Item bottle_empty = new ItemBase("bottle_empty").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item bottle_nuka = new ItemEnergy("bottle_nuka").setContainerItem(bottle_empty).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item bottle_cherry = new ItemEnergy("bottle_cherry").setContainerItem(ModItems.bottle_empty).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item cap_nuka = new ItemBase("cap_nuka").setCreativeTab(MainRegistry.consumableTab);
 	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword").setCreativeTab(CreativeTabs.COMBAT);
@@ -495,6 +639,37 @@ public class ModItems {
 	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 85);
 	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 150);
 	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
+	
+	//Gun ammo assemblies and ammo
+	public static final Item assembly_iron = new ItemBase("assembly_iron").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_steel = new ItemBase("assembly_steel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_lead = new ItemBase("assembly_lead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_gold = new ItemBase("assembly_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_schrabidium = new ItemBase("assembly_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_nightmare = new ItemBase("assembly_nightmare").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_desh = new ItemBase("assembly_desh").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_nopip = new ItemBase("assembly_nopip").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_smg = new ItemBase("assembly_smg").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_uzi = new ItemBase("assembly_uzi").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_actionexpress = new ItemBase("assembly_actionexpress").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_calamity = new ItemBase("assembly_calamity").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_lacunae = new ItemBase("assembly_lacunae").setCreativeTab(MainRegistry.partsTab);
+	
+	public static final Item gun_revolver_iron_ammo = new ItemBase("gun_revolver_iron_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_ammo = new ItemBase("gun_revolver_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_lead_ammo = new ItemBase("gun_revolver_lead_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_gold_ammo = new ItemBase("gun_revolver_gold_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_schrabidium_ammo = new ItemRadioactive("gun_revolver_schrabidium_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_nightmare_ammo = new ItemCustomLore("gun_revolver_nightmare_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_357_desh = new ItemAmmo("ammo_357_desh").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_cursed_ammo = new ItemCustomLore("gun_revolver_cursed_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_44 = new ItemAmmo("ammo_44").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_9mm = new ItemAmmo("ammo_9mm").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_22lr = new ItemAmmo("ammo_22lr").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_mp_ammo = new ItemCustomLore("gun_mp_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_5mm = new ItemAmmo("ammo_5mm").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_50bmg = new ItemAmmo("ammo_50bmg").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_50ae = new ItemAmmo("ammo_50ae").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Upgrade
 	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);

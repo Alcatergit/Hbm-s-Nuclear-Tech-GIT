@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -29,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -105,7 +107,6 @@ public class ExplosionNukeGeneric {
 	*/
 	public static void dealDamage(World world, int x, int y, int z, int bombStartStrength) {
 		float f = bombStartStrength;
-		HashSet hashset = new HashSet();
 		int i;
 		int j;
 		int k;
@@ -114,7 +115,6 @@ public class ExplosionNukeGeneric {
 		double d7;
 		double wat = bombStartStrength
 		;
-		boolean isOccupied = false;
 
 		// bombStartStrength *= 2.0F;
 		i = MathHelper.floor(x - wat - 1.0D);
@@ -123,8 +123,7 @@ public class ExplosionNukeGeneric {
 		int i2 = MathHelper.floor(y + wat + 1.0D);
 		int l = MathHelper.floor(z - wat - 1.0D);
 		int j2 = MathHelper.floor(z + wat + 1.0D);
-		List list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-		Vec3 vec3 = Vec3.createVectorHelper(x, y, z);
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for (int i1 = 0; i1 < list.size(); ++i1) {
 			Entity entity = (Entity) list.get(i1);
@@ -141,11 +140,10 @@ public class ExplosionNukeGeneric {
 						!(entity instanceof EntityNukeCloudSmall)
 					//	&& !(entity instanceof EntityMIRV) && !(entity instanceof EntityMiniNuke)
 					//	&& !(entity instanceof EntityMiniMIRV) && !(entity instanceof EntityGrenadeASchrab)
-					//	&& !(entity instanceof EntityGrenadeNuclear) && !(entity instanceof EntityExplosiveBeam)
-						&& !(entity instanceof EntityPlayer)
-					//			&& Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet,
-						//				ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
-						){
+					//	&& !(entity instanceof EntityGrenadeNuclear) 
+						&& !(entity instanceof EntityExplosiveBeam)
+						&& !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
+						{
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
@@ -362,7 +360,7 @@ public class ExplosionNukeGeneric {
 		if (!world.isRemote) {
 			IBlockState b = world.getBlockState(pos);
 			if (b.getBlock().getExplosionResistance(world, pos, null, null)<0.5f //most light things
-					|| b.getBlock() == Blocks.WEB /*|| b.getBlock() == ModBlocks.red_cable*/ //TODO cable blocks
+					|| b.getBlock() == Blocks.WEB || b.getBlock() == ModBlocks.red_cable
 					|| b.getBlock() instanceof BlockLiquid) {
 				world.setBlockToAir(pos);
 				return 0;
@@ -491,8 +489,12 @@ public class ExplosionNukeGeneric {
 
 		}
 	}
-/*
-	public static void wasteNoSchrab(World world, int x, int y, int z, int radius) {
+
+	public static void wasteNoSchrab(World world, BlockPos pos, int radius) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		MutableBlockPos mpos = new BlockPos.MutableBlockPos(pos);
 		int r = radius;
 		int r2 = r * r;
 		int r22 = r2 / 2;
@@ -506,14 +508,15 @@ public class ExplosionNukeGeneric {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
-						if (world.getBlock(X, Y, Z) != Blocks.air)
-							wasteDestNoSchrab(world, X, Y, Z);
+						mpos.setPos(X, Y, Z);
+						if (world.getBlockState(mpos).getBlock() != Blocks.AIR)
+							wasteDestNoSchrab(world, mpos);
 					}
 				}
 			}
 		}
 	}
-*/
+
 	public static void wasteDestNoSchrab(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			int rand;

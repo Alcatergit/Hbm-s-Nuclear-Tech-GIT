@@ -48,6 +48,15 @@ public class ContainerMachinePress extends Container {
 	}
 	
 	@Override
+	public void addListener(IContainerListener crafting) {
+		super.addListener(crafting);
+		crafting.sendWindowProperty(this, 0, this.nukeBoy.power);
+		crafting.sendWindowProperty(this, 1, this.nukeBoy.progress);
+		crafting.sendWindowProperty(this, 2, this.nukeBoy.burnTime);
+		crafting.sendWindowProperty(this, 3, this.nukeBoy.maxBurn);
+	}
+	
+	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
 		ItemStack var3 = null;

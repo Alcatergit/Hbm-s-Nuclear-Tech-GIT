@@ -12,9 +12,15 @@ import net.minecraftforge.common.capabilities.Capability;
 public class TileEntityDummy extends TileEntity implements ITickable {
 
 	public BlockPos target;
+	boolean needsMark = true;
+	
 	@Override
 	public void update() {
 		if(!this.world.isRemote) {
+			if(needsMark){
+				markDirty();
+				needsMark = false;
+			}
     		if(!(this.world.getBlockState(target).getBlock() instanceof IMultiBlock)) {
     			world.destroyBlock(pos, false);
     		}
@@ -39,20 +45,6 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 		this.target = new BlockPos(x, y, z);
 	}
 	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(world.getTileEntity(target) != null){
-			return world.getTileEntity(target).hasCapability(capability, facing);
-		}
-		return false;
-	}
 	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(world.getTileEntity(target) != null){
-			return world.getTileEntity(target).getCapability(capability, facing);
-		}
-		return null;
-	}
 	
 }

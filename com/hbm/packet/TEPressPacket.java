@@ -64,23 +64,27 @@ public class TEPressPacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(TEPressPacket m, MessageContext ctx) {
-			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+			
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-			if (te != null && te instanceof TileEntityMachinePress) {
-					
-				TileEntityMachinePress gen = (TileEntityMachinePress) te;
-				gen.item = m.item;
-				gen.meta = m.meta;
-				gen.progress = m.progress;
-			}
-			//TODO epress
-			/*if (te != null && te instanceof TileEntityMachineEPress) {
-					
-				TileEntityMachineEPress gen = (TileEntityMachineEPress) te;
-				gen.item = m.item;
-				gen.meta = m.meta;
-				gen.progress = m.progress;
-			}*/
+				if (te != null && te instanceof TileEntityMachinePress) {
+						
+					TileEntityMachinePress gen = (TileEntityMachinePress) te;
+					gen.item = m.item;
+					gen.meta = m.meta;
+					gen.progress = m.progress;
+				}
+				//TODO epress
+				/*if (te != null && te instanceof TileEntityMachineEPress) {
+						
+					TileEntityMachineEPress gen = (TileEntityMachineEPress) te;
+					gen.item = m.item;
+					gen.meta = m.meta;
+					gen.progress = m.progress;
+				}*/
+			});
+			
 			return null;
 		}
 	}
