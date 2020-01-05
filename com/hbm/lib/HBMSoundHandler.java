@@ -23,6 +23,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent reactorStart;
 	public static SoundEvent reactorStop;
 	public static SoundEvent chemplantOperate;
+	public static SoundEvent potatOSRandom;
 	
 	public static void init() {
 		
@@ -39,6 +40,7 @@ public final class HBMSoundHandler {
 		reactorStart = register("block.reactorStart");
 		reactorStop = register("block.reactorStop");
 		chemplantOperate = register("block.chemplantOperate");
+		potatOSRandom = register("potatos.random");
 	}
 	
 	public static SoundEvent register(String name) {

@@ -214,6 +214,9 @@ public class Library {
 	//Drillgon200: Just realized I copied the wrong method. God dang it.
 	//It works though. Not sure why, but it works.
 	public static long chargeTEFromItems(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
+		if(inventory.getStackInSlot(index).getItem() == ModItems.fusion_core_infinite || inventory.getStackInSlot(index).getItem() == ModItems.battery_creative){
+			return maxPower;
+		}
 		if (!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
 			return power;
 		}
@@ -223,8 +226,7 @@ public class Library {
 			if (power + 100000000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100000000000000L;
 				dR -= 1000000000000L;
-				((ItemBattery) inventory.getStackInSlot(index).getItem())
-						.dischargeBattery(inventory.getStackInSlot(index), 1000000000000L);
+				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000000000L);
 			} else
 				break;
 		}
@@ -264,44 +266,7 @@ public class Library {
 			} else
 				break;
 		}
-		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
-		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_schrabidium_charged));
-		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_euphemium_charged));
-		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
-		//TODO these tools
-/*
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.elec_sword && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-	
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.elec_pickaxe && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-	
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.elec_axe && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-	
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() == ModItems.elec_shovel && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-		*/
+		
 		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}

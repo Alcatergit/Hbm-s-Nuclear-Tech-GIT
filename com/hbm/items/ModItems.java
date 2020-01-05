@@ -53,7 +53,6 @@ import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.items.weapon.ItemAmmo;
-import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -76,7 +75,6 @@ public class ModItems {
 	public static final Item syringe_metal_stimpak = new ItemSyringe("syringe_metal_stimpak").setFull3D().setCreativeTab(MainRegistry.consumableTab);
 	
 	//Energy items
-	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50, "battery_schrabidium").setMaxStackSize(1);
 	public static final Item factory_core_titanium = new ItemBattery(70400, 10, 0, "factory_core_titanium").setMaxStackSize(1);
 	public static final Item factory_core_advanced = new ItemBattery(41600, 10, 0, "factory_core_advanced").setMaxStackSize(1);
 	public static final Item dynosphere_desh = new ItemBattery(10000L, 100, 0, "dynosphere_desh").setMaxStackSize(1);
@@ -90,94 +88,38 @@ public class ModItems {
 	public static final Item fusion_core = new ItemBattery(200000, 0, 25, "fusion_core").setMaxStackSize(1);
 	public static final Item energy_core = new ItemBattery(100000, 0, 10, "energy_core").setMaxStackSize(1);
 	public static final Item fusion_core_infinite = new ItemBase("fusion_core_infinite").setMaxStackSize(1);
-	public static final Item battery_generic = new ItemBattery(50, 1, 1).setUnlocalizedName("battery_generic").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_generic_new");
-	public static final Item battery_advanced = new ItemBattery(200, 5, 5).setUnlocalizedName("battery_advanced").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_advanced_new");
-	public static final Item battery_lithium = new ItemBattery(2500, 10, 10).setUnlocalizedName("battery_lithium").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_lithium");
-	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50).setUnlocalizedName("battery_schrabidium")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_schrabidium_new");
-	public static final Item battery_spark = new ItemBattery(1000000, 20000, 20000).setUnlocalizedName("battery_spark").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark");
-	public static final Item battery_creative = new Item().setUnlocalizedName("battery_creative").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_creative_new");
+	public static final Item battery_advanced = new ItemBattery(200, 5, 5, "battery_advanced").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium = new ItemBattery(2500, 10, 10, "battery_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50, "battery_schrabidium").setMaxStackSize(1);
+	public static final Item battery_spark = new ItemBattery(1000000, 20000, 20000, "battery_spark").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_creative = new ItemBase("battery_creative").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
-	public static final Item battery_red_cell = new ItemBattery(150, 1, 1).setUnlocalizedName("battery_red_cell").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_red_cell");
-	public static final Item battery_red_cell_6 = new ItemBattery(150 * 6, 1, 1).setUnlocalizedName("battery_red_cell_6").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_red_cell_6");
-	public static final Item battery_red_cell_24 = new ItemBattery(150 * 24, 1, 1).setUnlocalizedName("battery_red_cell_24")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_red_cell_24");
-	public static final Item battery_advanced_cell = new ItemBattery(600, 5, 5).setUnlocalizedName("battery_advanced_cell")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_advanced_cell");
-	public static final Item battery_advanced_cell_4 = new ItemBattery(600 * 4, 5, 5).setUnlocalizedName("battery_advanced_cell_4")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_advanced_cell_4");
-	public static final Item battery_advanced_cell_12 = new ItemBattery(600 * 12, 5, 5).setUnlocalizedName("battery_advanced_cell_12")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_advanced_cell_12");
-	public static final Item battery_lithium_cell = new ItemBattery(7500, 10, 10).setUnlocalizedName("battery_lithium_cell")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_lithium_cell");
-	public static final Item battery_lithium_cell_3 = new ItemBattery(7500 * 3, 10, 10).setUnlocalizedName("battery_lithium_cell_3")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_lithium_cell_3");
-	public static final Item battery_lithium_cell_6 = new ItemBattery(7500 * 6, 10, 10).setUnlocalizedName("battery_lithium_cell_6")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_lithium_cell_6");
-	public static final Item battery_schrabidium_cell = new ItemBattery(30000, 50, 50).setUnlocalizedName("battery_schrabidium_cell")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell");
-	public static final Item battery_schrabidium_cell_2 = new ItemBattery(30000 * 2, 50, 50).setUnlocalizedName("battery_schrabidium_cell_2")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell_2");
-	public static final Item battery_schrabidium_cell_4 = new ItemBattery(30000 * 4, 50, 50).setUnlocalizedName("battery_schrabidium_cell_4")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_schrabidium_cell_4");
-	public static final Item battery_spark_cell_6 = new ItemBattery(1000000 * 6, 20000, 20000).setUnlocalizedName("battery_spark_cell_6")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_spark_cell_6");
-	public static final Item battery_spark_cell_25 = new ItemBattery(1000000 * 25, 20000, 20000).setUnlocalizedName("battery_spark_cell_25")
-			.setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_spark_cell_25");
-	public static final Item battery_spark_cell_100 = new ItemBattery(1000000L * 100L, 20000, 20000)
-			.setUnlocalizedName("battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab)
-			.setTextureName(RefStrings.MODID + ":battery_spark_cell_100");
-	public static final Item battery_spark_cell_1000 = new ItemBattery(1000000L * 1000L, 200000, 200000)
-			.setUnlocalizedName("battery_spark_cell_1000").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_1000");
-	public static final Item battery_spark_cell_2500 = new ItemBattery(1000000L * 2500L, 200000, 200000)
-			.setUnlocalizedName("battery_spark_cell_2500").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_2500");
-	public static final Item battery_spark_cell_10000 = new ItemBattery(1000000L * 10000L, 2000000, 2000000)
-			.setUnlocalizedName("battery_spark_cell_10000").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_10000");
-	public static final Item battery_spark_cell_power = new ItemBattery(1000000L * 1000000L, 2000000, 2000000)
-			.setUnlocalizedName("battery_spark_cell_power").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_spark_cell_power");
+	public static final Item battery_red_cell = new ItemBattery(150, 1, 1, "battery_red_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_red_cell_6 = new ItemBattery(150 * 6, 1, 1, "battery_red_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_red_cell_24 = new ItemBattery(150 * 24, 1, 1, "battery_red_cell_24").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell = new ItemBattery(600, 5, 5, "battery_advanced_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell_4 = new ItemBattery(600 * 4, 5, 5, "battery_advanced_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell_12 = new ItemBattery(600 * 12, 5, 5, "battery_advanced_cell_12").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell = new ItemBattery(7500, 10, 10, "battery_lithium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell_3 = new ItemBattery(7500 * 3, 10, 10, "battery_lithium_cell_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell_6 = new ItemBattery(7500 * 6, 10, 10, "battery_lithium_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell = new ItemBattery(30000, 50, 50, "battery_schrabidium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell_2 = new ItemBattery(30000 * 2, 50, 50, "battery_schrabidium_cell_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell_4 = new ItemBattery(30000 * 4, 50, 50, "battery_schrabidium_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_6 = new ItemBattery(1000000 * 6, 20000, 20000, "battery_spark_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_25 = new ItemBattery(1000000 * 25, 20000, 20000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_100 = new ItemBattery(1000000L * 100L, 20000, 20000, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_1000 = new ItemBattery(1000000L * 1000L, 200000, 200000, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_2500 = new ItemBattery(1000000L * 2500L, 200000, 200000, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_10000 = new ItemBattery(1000000L * 10000L, 2000000, 2000000, "battery_spark_cell_10000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_power = new ItemBattery(1000000L * 1000000L, 2000000, 2000000, "battery_spark_cell_power").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
-	public static final Item battery_potato = new ItemBattery(1, 0, 1).setUnlocalizedName("battery_potato").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_potato");
-	public static final Item battery_potatos = new ItemPotatos(50, 0, 1).setUnlocalizedName("battery_potatos").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_potatos");
-	public static final Item battery_su = new ItemBattery(15, 0, 1).setUnlocalizedName("battery_su").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_su");
-	public static final Item battery_su_l = new ItemBattery(35, 0, 1).setUnlocalizedName("battery_su_l").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_su_l");
-	public static final Item battery_steam = new ItemBattery(600, 3, 60).setUnlocalizedName("battery_steam").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_steam");
-	public static final Item battery_steam_large = new ItemBattery(1000, 5, 100).setUnlocalizedName("battery_steam_large").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":battery_steam_large");
-	public static final Item fusion_core = new ItemBattery(200000, 0, 25).setUnlocalizedName("fusion_core").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_core");
-	public static final Item fusion_core_infinite = new Item().setUnlocalizedName("fusion_core_infinite").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":fusion_core_infinite");
-	public static final Item energy_core = new ItemBattery(100000, 0, 10).setUnlocalizedName("energy_core").setMaxStackSize(1)
-			.setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":energy_core");
+	public static final Item battery_potato = new ItemBattery(1, 0, 1, "battery_potato").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_potatos = new ItemPotatos(50, 0, 1, "battery_potatos").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_su = new ItemBattery(15, 0, 1, "battery_su").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_su_l = new ItemBattery(35, 0, 1, "battery_su_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_steam = new ItemBattery(600, 3, 60, "battery_steam").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_steam_large = new ItemBattery(1000, 5, 100, "battery_steam_large").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	//Fluid handling items
 	public static final Item canister_generic = new ItemFluidCanister("canister_fuel", 4000).setCreativeTab(MainRegistry.controlTab);

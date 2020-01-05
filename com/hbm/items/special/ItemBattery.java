@@ -37,6 +37,7 @@ public class ItemBattery extends Item {
 		if(stack.hasTagCompound())
 			charge = ItemBattery.getCharge(stack);
 		
+		
 		if(stack.getItem() != ModItems.fusion_core && 
 				stack.getItem() != ModItems.factory_core_titanium && 
 				stack.getItem() != ModItems.factory_core_advanced && 
