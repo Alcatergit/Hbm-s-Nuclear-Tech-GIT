@@ -36,6 +36,12 @@ public class PacketDispatcher {
 		wrapper.registerMessage(AuxGaugePacket.Handler.class, AuxGaugePacket.class, i++, Side.CLIENT);
 		//Universal button packet
 		wrapper.registerMessage(AuxButtonPacket.Handler.class, AuxButtonPacket.class, i++, Side.SERVER);
+		//For handling fluid tank type updates
+		wrapper.registerMessage(FluidTypePacketTest.Handler.class, FluidTypePacketTest.class, i++, Side.CLIENT);
+		//Fluid pipe type update for rendering
+		wrapper.registerMessage(TEFluidTypePacketTest.Handler.class, TEFluidTypePacketTest.class, i++, Side.CLIENT);
+		//Client request update packet in case they load the new tile entity and the server doesn't know it needs an update and doesn't send any packets
+		wrapper.registerMessage(ClientRequestUpdatePacket.Handler.class, ClientRequestUpdatePacket.class, i++, Side.SERVER);
 	}
 
 }

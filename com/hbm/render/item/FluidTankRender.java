@@ -41,13 +41,10 @@ public class FluidTankRender extends TileEntityItemStackRenderer {
 
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = Tessellator.getInstance().getBuffer();
-		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-		for (EnumFacing enumfacing : EnumFacing.values()) {
-			Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
-					itemModel.getQuads((IBlockState) null, enumfacing, 0L), -1, stack);
-		}
-		Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
-				itemModel.getQuads((IBlockState) null, (EnumFacing) null, 0L), -1, stack);
+		GL11.glPushMatrix();
+		GL11.glTranslated(0.5, 0.5, 0.5);
+		Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
+		GL11.glPopMatrix();
 
 		final double HALF_A_PIXEL = 0.03125;
 		final double PIX = 0.0625;
@@ -57,7 +54,6 @@ public class FluidTankRender extends TileEntityItemStackRenderer {
 			lava = Minecraft.getMinecraft().getTextureMapBlocks()
 					.getAtlasSprite(f.getFluid().getStill().toString());
 
-		tes.draw();
 		if (lava != null) {
 			RenderHelper.setColor(f.getFluid().getColor(f));
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -73,10 +69,11 @@ public class FluidTankRender extends TileEntityItemStackRenderer {
 			buf.pos(9 * PIX, 11 * PIX, 0).tex(maxU, maxV).endVertex();
 			buf.pos(7 * PIX, 11 * PIX, 0).tex(minU, maxV).endVertex();
 
-			buf.pos(7 * PIX, 5 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(9 * PIX, 5 * PIX, -PIX).tex(maxU, minV).endVertex();
-			buf.pos(9 * PIX, 11 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			buf.pos(7 * PIX, 5 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(7 * PIX, 11 * PIX, -PIX).tex(minU, maxV).endVertex();
+			buf.pos(9 * PIX, 11 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			
 			tes.draw();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			

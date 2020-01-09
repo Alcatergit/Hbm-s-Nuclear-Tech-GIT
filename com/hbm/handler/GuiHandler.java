@@ -12,6 +12,7 @@ import com.hbm.inventory.container.ContainerMachineGenerator;
 import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.inventory.container.ContainerMachineRTG;
 import com.hbm.inventory.container.ContainerMachineReactorSmall;
+import com.hbm.inventory.container.ContainerMachineTurbine;
 import com.hbm.inventory.container.ContainerNukeFleija;
 import com.hbm.inventory.container.ContainerNukeMan;
 import com.hbm.inventory.gui.GUIConverterHeRf;
@@ -24,6 +25,7 @@ import com.hbm.inventory.gui.GUIMachineGenerator;
 import com.hbm.inventory.gui.GUIMachinePress;
 import com.hbm.inventory.gui.GUIMachineRTG;
 import com.hbm.inventory.gui.GUIMachineReactorSmall;
+import com.hbm.inventory.gui.GUIMachineTurbine;
 import com.hbm.inventory.gui.GUINukeFleija;
 import com.hbm.inventory.gui.GUINukeMan;
 import com.hbm.inventory.gui.GUITestDiFurnace;
@@ -40,6 +42,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
+import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -112,6 +115,10 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityConverterRfHe){
 					return new ContainerConverterRfHe(player.inventory, (TileEntityConverterRfHe)entity);
 				}
+			case ModBlocks.guiID_machine_turbine:
+				if(entity instanceof TileEntityMachineTurbine){
+					return new ContainerMachineTurbine(player.inventory, (TileEntityMachineTurbine)entity);
+				}
 			}
 
 		}
@@ -179,6 +186,10 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_converter_rf_he:
 				if(entity instanceof TileEntityConverterRfHe){
 					return new GUIConverterRfHe(player.inventory, (TileEntityConverterRfHe)entity);
+				}
+			case ModBlocks.guiID_machine_turbine:
+				if(entity instanceof TileEntityMachineTurbine){
+					return new GUIMachineTurbine(player.inventory, (TileEntityMachineTurbine)entity);
 				}
 			}
 

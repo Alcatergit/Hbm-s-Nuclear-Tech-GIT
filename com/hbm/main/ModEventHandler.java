@@ -1,11 +1,13 @@
 package com.hbm.main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
@@ -42,6 +44,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -66,7 +69,37 @@ public class ModEventHandler {
 	}
 	
 	@SubscribeEvent
+	public void worldUnload(WorldEvent.Unload e){
+		Iterator<FFPipeNetwork> itr = MainRegistry.allPipeNetworks.iterator();
+		while (itr.hasNext()) {
+			FFPipeNetwork net = itr.next();
+			if (net.getNetworkWorld() == e.getWorld()) {
+				net.destroySoft();
+				itr.remove();
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void worldSave(WorldEvent.Save e){
+		//TODO save pipe networks?
+	}
+	
+	@SubscribeEvent
 	public void worldTick(WorldTickEvent event){
+		if (!MainRegistry.allPipeNetworks.isEmpty()) {
+			Iterator<FFPipeNetwork> itr = MainRegistry.allPipeNetworks.iterator();
+			while (itr.hasNext()) {
+				FFPipeNetwork net = itr.next();
+				if (net != null)
+					net.updateTick();
+				if(net.getPipes().isEmpty()){
+					net.destroySoft();
+					itr.remove();
+				}
+					
+			}
+		}
 		if(event.world != null && !event.world.isRemote && MainRegistry.enableRads) {
 			int thunder = AuxSavedData.getThunder(event.world);
 			

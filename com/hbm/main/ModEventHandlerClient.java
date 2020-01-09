@@ -13,6 +13,7 @@ import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.entity.DSmokeRenderer;
@@ -21,6 +22,8 @@ import com.hbm.render.item.AssemblyTemplateRender;
 import com.hbm.render.item.B92BakedModel;
 import com.hbm.render.item.ChemTemplateBakedModel;
 import com.hbm.render.item.ChemTemplateRender;
+import com.hbm.render.item.FFIdentifierModel;
+import com.hbm.render.item.FFIdentifierRender;
 import com.hbm.render.item.FluidBarrelBakedModel;
 import com.hbm.render.item.FluidBarrelRender;
 import com.hbm.render.item.FluidCanisterBakedModel;
@@ -142,7 +145,12 @@ public class ModEventHandlerClient {
 			ChemTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemChemistryTemplate.chemModel, new ChemTemplateBakedModel());
 		}
-		
+		Object object8 = evt.getModelRegistry().getObject(ItemForgeFluidIdentifier.identifierModel);
+		if(object8 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object8;
+			FFIdentifierRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
+		}
 		
 
 	}

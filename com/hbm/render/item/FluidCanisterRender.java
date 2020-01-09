@@ -33,16 +33,10 @@ public class FluidCanisterRender extends TileEntityItemStackRenderer {
 		
 		RenderHelper.bindBlockTexture();
 		
-		Tessellator tes = Tessellator.getInstance();
-		BufferBuilder buf = Tessellator.getInstance().getBuffer();
-		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-		for (EnumFacing enumfacing : EnumFacing.values()) {
-			Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
-					model.getQuads((IBlockState) null, enumfacing, 0L), -1, stack);
-		}
-		Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
-				model.getQuads((IBlockState) null, (EnumFacing) null, 0L), -1, stack);
-		tes.draw();
+		GL11.glPushMatrix();
+		GL11.glTranslated(0.5, 0.5, 0.5);
+		Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
+		GL11.glPopMatrix();
 		super.renderByItem(stack);
 	}
 	

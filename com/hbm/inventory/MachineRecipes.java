@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -925,6 +926,20 @@ public class MachineRecipes {
 		}
 
 		return output;
+	}
+
+	// return: Fluid, amount produced, amount required, HE produced
+	public static Object[] getTurbineOutput(Fluid type) {
+
+		if (type == ModForgeFluids.steam) {
+			return new Object[] { FluidRegistry.WATER, 5, 500, 50 };
+		} else if (type == ModForgeFluids.hotsteam) {
+			return new Object[] { ModForgeFluids.steam, 50, 5, 100 };
+		} else if (type == ModForgeFluids.superhotsteam) {
+			return new Object[] { ModForgeFluids.hotsteam, 50, 5, 150 };
+		}
+
+		return null;
 	}
 
 }

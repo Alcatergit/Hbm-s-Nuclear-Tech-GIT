@@ -17,6 +17,7 @@ import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.machine.BlockCable;
 import com.hbm.blocks.machine.BlockConverterHeRf;
 import com.hbm.blocks.machine.BlockConverterRfHe;
+import com.hbm.blocks.machine.BlockFluidDuct;
 import com.hbm.blocks.machine.DummyBlockAssembler;
 import com.hbm.blocks.machine.DummyBlockChemplant;
 import com.hbm.blocks.machine.DummyBlockMachine;
@@ -30,6 +31,7 @@ import com.hbm.blocks.machine.MachinePress;
 import com.hbm.blocks.machine.MachineRTG;
 import com.hbm.blocks.machine.MachineReactorSmall;
 import com.hbm.blocks.machine.MachineTransformer;
+import com.hbm.blocks.machine.MachineTurbine;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.lib.ModDamageSource;
@@ -194,8 +196,12 @@ public class ModBlocks {
 	public static final Block machine_rtg_grey = new MachineRTG(Material.IRON, "machine_rtg_grey").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_rtg = 42;
 	
+	public static final Block machine_turbine = new MachineTurbine(Material.IRON, "machine_turbine").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_machine_turbine = 74;
+	
 	//Cables
 	public static final Block red_cable = new BlockCable(Material.IRON, "red_cable").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//Fluids
 	public static final Material fluidtoxic = new MaterialLiquid(MapColor.GREEN);

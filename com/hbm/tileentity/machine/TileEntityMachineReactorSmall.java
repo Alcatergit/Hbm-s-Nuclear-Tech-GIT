@@ -4,11 +4,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemFuelRod;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.RadiationSavedData;
@@ -38,10 +40,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineReactorSmall extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineReactorSmall extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IClientRequestUpdator {
 
 	//4 blocks when extended + 5 pixels tall
 	private static final AxisAlignedBB SMALL_REACTOR_BB = new AxisAlignedBB(0, 0, 0, 1, 4 + 5*0.0625, 1);
@@ -60,11 +63,14 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
 	public int compression = 0;
+	private boolean clientRequestUpdate = false;
 	
 	private double decayMod = 1.0D;
 	private double coreHeatMod = 1.0D;
 	private double hullHeatMod = 1.0D;
 	private double conversionMod = 1.0D;
+	
+	private boolean firstUpdate = true;
 
 	//private static final int[] slots_top = new int[] { 0 };
 	//private static final int[] slots_bottom = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 16 };
@@ -109,7 +115,8 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		tankTypes[1] = ModForgeFluids.coolant;
 		tanks[2] = new FluidTank(8000);
 		tankTypes[2] = ModForgeFluids.steam;
-		needsUpdate = false;
+		needsUpdate = true;
+		
 	}
 	
 	public String getInventoryName() {
@@ -185,6 +192,11 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	
 	@Override
 	public void update() {
+		if(firstUpdate){
+			if(world.isRemote)
+				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
+			firstUpdate = false;
+		}
 		if (!world.isRemote) {
 			age++;
 			if (age >= 20) {
@@ -749,46 +761,60 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	private void detectAndSendChanges() {
 
 		boolean mark = false;
-		if(detectHeat != coreHeat){
-			mark = true;
+		if(detectHeat != coreHeat || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), coreHeat, 2), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectHeat = coreHeat;
 		}
-		if(detectHullHeat != hullHeat){
-			mark = true;
+		if(detectHullHeat != hullHeat || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), hullHeat, 3), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectHullHeat = hullHeat;
 		}
-		if(detectRods != rods){
-			mark = true;
+		if(detectRods != rods || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), rods, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectRods = rods;
 		}
-		if(detectRetracting != retracting){
-			mark = true;
+		if(detectRetracting != retracting || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), retracting ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectRetracting = retracting;
 		}
-		if(detectCompression != compression){
-			mark = true;
+		if(detectCompression != compression || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			detectCompression = compression;
 		}
-		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0])){
-			mark = true;
+		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0]) || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			needsUpdate = true;
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1])){
-			mark = true;
+		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1]) || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			needsUpdate = true;
 			detectTanks[1] = FFUtils.copyTank(tanks[1]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[2], detectTanks[2])){
-			mark = true;
+		if(!FFUtils.areTanksEqual(tanks[2], detectTanks[2]) || clientRequestUpdate){
+			if(!clientRequestUpdate)
+				mark = true;
 			needsUpdate = true;
 			detectTanks[2] = FFUtils.copyTank(tanks[2]);
 		}
+		clientRequestUpdate = false;
 		if(mark)
 			markDirty();
+	}
+
+	@Override
+	public void requestClientUpdate() {
+		this.clientRequestUpdate = true;
 	}
 }

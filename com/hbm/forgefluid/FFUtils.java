@@ -1,5 +1,6 @@
 package com.hbm.forgefluid;
 
+import com.hbm.interfaces.IFluidPipe;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
@@ -21,6 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
+//Drillgon200: This is Library.java except for fluids
 //Drillgon200: Let's hope this works without bugs in 1.12.2...
 //Drillgon200: Still mad they removed the fluid container registry.
 public class FFUtils {
@@ -289,6 +291,9 @@ public class FFUtils {
 		}
 	}
 	public static TextureAtlasSprite getTextureFromFluid(Fluid f){
+		if(f == null){
+			return null;
+		}
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
 	}
 
@@ -343,6 +348,16 @@ public class FFUtils {
 		if(tank == null)
 			return null;
 		return new FluidTank(tank.getFluid() != null ? tank.getFluid().copy() : null, tank.getCapacity());
+	}
+	
+	public static boolean checkFluidConnectables(World world, BlockPos pos, FFPipeNetwork net) {
+		TileEntity tileentity = world.getTileEntity(pos);
+		if (tileentity != null && tileentity instanceof IFluidPipe && ((IFluidPipe) tileentity).getNetworkTrue() == net)
+			return true;
+		if (tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+			return true;
+		}
+		return false;
 	}
 	
 }

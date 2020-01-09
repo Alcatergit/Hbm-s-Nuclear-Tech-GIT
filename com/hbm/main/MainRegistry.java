@@ -1,5 +1,8 @@
 package com.hbm.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -32,6 +35,7 @@ import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
+import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
@@ -44,6 +48,7 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
 import com.hbm.tileentity.conductor.TileEntityCable;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
@@ -61,6 +66,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineTransformer;
+import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -97,7 +103,7 @@ public class MainRegistry {
 	
 	public static Logger logger;
 	
-	
+	public static List<FFPipeNetwork> allPipeNetworks = new ArrayList<FFPipeNetwork>();
 	
 	//Creative Tabs
 	//ingots, nuggets, wires, machine parts
@@ -310,6 +316,8 @@ public class MainRegistry {
     	GameRegistry.registerTileEntity(TileEntityMachineTransformer.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_transformer"));
     	GameRegistry.registerTileEntity(TileEntityConverterHeRf.class, new ResourceLocation(RefStrings.MODID, "tileentity_converter_he_rf"));
     	GameRegistry.registerTileEntity(TileEntityConverterRfHe.class, new ResourceLocation(RefStrings.MODID, "tileentity_converter_rf_he"));
+    	GameRegistry.registerTileEntity(TileEntityMachineTurbine.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_turbine"));
+    	GameRegistry.registerTileEntity(TileEntityFFFluidDuct.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_fluidduct"));
     	int i = 0;
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
     	EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);

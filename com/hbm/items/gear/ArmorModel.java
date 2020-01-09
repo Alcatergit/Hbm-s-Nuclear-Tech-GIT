@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
-import com.hbm.render.item.ModelM65;
 import com.hbm.render.model.ModelGasMask;
 import com.hbm.render.model.ModelGoggles;
+import com.hbm.render.model.ModelM65;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;

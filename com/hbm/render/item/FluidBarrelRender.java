@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -33,14 +34,18 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = Tessellator.getInstance().getBuffer();
-		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+		GL11.glPushMatrix();
+		GL11.glTranslated(0.5, 0.5, 0.5);
+		Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
+		GL11.glPopMatrix();
+		/*buf.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 		for (EnumFacing enumfacing : EnumFacing.values()) {
 			Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
 					itemModel.getQuads((IBlockState) null, enumfacing, 0L), -1, stack);
 		}
 		Minecraft.getMinecraft().getRenderItem().renderQuads(buf,
 				itemModel.getQuads((IBlockState) null, (EnumFacing) null, 0L), -1, stack);
-		tes.draw();
+		tes.draw();*/
 		final double HALF_A_PIXEL = 0.03125;
 		final double PIX = 0.0625;
 		FluidStack f = FluidUtil.getFluidContained(stack);
@@ -65,10 +70,11 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 			buf.pos(9 * PIX, 9 * PIX, 0).tex(maxU, maxV).endVertex();
 			buf.pos(7 * PIX, 9 * PIX, 0).tex(minU, maxV).endVertex();
 
-			buf.pos(7 * PIX, 3 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(9 * PIX, 3 * PIX, -PIX).tex(maxU, minV).endVertex();
-			buf.pos(9 * PIX, 9 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			buf.pos(7 * PIX, 3 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(7 * PIX, 9 * PIX, -PIX).tex(minU, maxV).endVertex();
+			buf.pos(9 * PIX, 9 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			
 			
 			maxU = lava.getInterpolatedU(10);
 			minU = lava.getInterpolatedU(9);
@@ -80,10 +86,11 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 			buf.pos(10 * PIX, 12 * PIX, 0).tex(maxU, maxV).endVertex();
 			buf.pos(9 * PIX, 12 * PIX, 0).tex(minU, maxV).endVertex();
 
-			buf.pos(9 * PIX, 11 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(10 * PIX, 11 * PIX, -PIX).tex(maxU, minV).endVertex();
-			buf.pos(10 * PIX, 12 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			buf.pos(9 * PIX, 11 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(9 * PIX, 12 * PIX, -PIX).tex(minU, maxV).endVertex();
+			buf.pos(10 * PIX, 12 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			
 			
 			maxU = lava.getInterpolatedU(9);
 			minU = lava.getInterpolatedU(8);
@@ -95,10 +102,11 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 			buf.pos(9 * PIX, 13 * PIX, 0).tex(maxU, maxV).endVertex();
 			buf.pos(8 * PIX, 13 * PIX, 0).tex(minU, maxV).endVertex();
 
-			buf.pos(8 * PIX, 12 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(9 * PIX, 12 * PIX, -PIX).tex(maxU, minV).endVertex();
-			buf.pos(9 * PIX, 13 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			buf.pos(8 * PIX, 12 * PIX, -PIX).tex(minU, minV).endVertex();
 			buf.pos(8 * PIX, 13 * PIX, -PIX).tex(minU, maxV).endVertex();
+			buf.pos(9 * PIX, 13 * PIX, -PIX).tex(maxU, maxV).endVertex();
+			
 			
 			tes.draw();
 			GL11.glEnable(GL11.GL_LIGHTING);

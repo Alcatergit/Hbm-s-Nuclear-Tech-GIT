@@ -40,6 +40,7 @@ import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.factories.ShrapnelRendererFactory;
 import com.hbm.render.item.AssemblyTemplateRender;
 import com.hbm.render.item.ChemTemplateRender;
+import com.hbm.render.item.FFIdentifierRender;
 import com.hbm.render.item.FluidBarrelRender;
 import com.hbm.render.item.FluidCanisterRender;
 import com.hbm.render.item.FluidTankRender;
@@ -49,6 +50,7 @@ import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderCable;
 import com.hbm.render.tileentity.RenderChemplant;
 import com.hbm.render.tileentity.RenderCloudResidue;
+import com.hbm.render.tileentity.RenderFluidDuct;
 import com.hbm.render.tileentity.RenderNukeFleija;
 import com.hbm.render.tileentity.RenderNukeMan;
 import com.hbm.render.tileentity.RenderPress;
@@ -59,6 +61,7 @@ import com.hbm.render.util.HmfModelLoader;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
 import com.hbm.tileentity.conductor.TileEntityCable;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
@@ -115,6 +118,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeFleija.class, new RenderNukeFleija());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineReactorSmall.class, new RenderSmallReactor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCable.class, new RenderCable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuct.class, new RenderFluidDuct());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -188,6 +192,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.fluid_barrel_full.setTileEntityItemStackRenderer(FluidBarrelRender.INSTANCE);
 		ModItems.canister_generic.setTileEntityItemStackRenderer(FluidCanisterRender.INSTANCE);
 		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
+		ModItems.forge_fluid_identifier.setTileEntityItemStackRenderer(FFIdentifierRender.INSTANCE);
 	}
 	
 }

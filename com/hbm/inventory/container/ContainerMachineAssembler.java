@@ -18,12 +18,10 @@ private TileEntityMachineAssembler nukeBoy;
 
 	private int progress;
 	private int maxProgress;
-	private boolean isProgressing;
 	
 	public ContainerMachineAssembler(InventoryPlayer invPlayer, TileEntityMachineAssembler tedf) {
 		progress = 0;
 		nukeBoy = tedf;
-		isProgressing = false;
 
 		//Battery
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 18));

@@ -1,4 +1,4 @@
-package com.hbm.render.item;
+package com.hbm.render.model;
 
 import org.lwjgl.opengl.GL11;
 

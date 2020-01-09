@@ -129,6 +129,14 @@ public class RenderHelper {
 	public static void resetColor(){
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
+
+	public static void startDrawingColored(int i) {
+		Tessellator.getInstance().getBuffer().begin(i, DefaultVertexFormats.POSITION_COLOR);
+	}
+	
+	public static void addVertexColor(double x, double y, double z, int red, int green, int blue, int alpha){
+		Tessellator.getInstance().getBuffer().pos(x, y, z).color(red, green, blue, alpha).endVertex();;
+	}
 	
 	
 }

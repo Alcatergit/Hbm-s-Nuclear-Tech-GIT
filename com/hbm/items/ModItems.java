@@ -48,6 +48,7 @@ import com.hbm.items.tool.ItemChemistryIcon;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemDetonator;
 import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
@@ -117,7 +118,7 @@ public class ModItems {
 	public static final Item battery_potato = new ItemBattery(1, 0, 1, "battery_potato").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_potatos = new ItemPotatos(50, 0, 1, "battery_potatos").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_su = new ItemBattery(15, 0, 1, "battery_su").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_su_l = new ItemBattery(35, 0, 1, "battery_su_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_su_l = new ItemBattery(35, 0, 1, "battery_su_l").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_steam = new ItemBattery(600, 3, 60, "battery_steam").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_steam_large = new ItemBattery(1000, 5, 100, "battery_steam_large").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
@@ -632,6 +633,9 @@ public class ModItems {
 	public static final Item upgrade_afterburn_3 = new ItemCustomLore("upgrade_afterburn_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_radius = new ItemCustomLore("upgrade_radius").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_health = new ItemCustomLore("upgrade_health").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	
+	//Special tools
+	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	
 	//Nuke parts
 	public static final Item man_core = new ItemManMike("man_core");
