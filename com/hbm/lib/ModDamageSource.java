@@ -1,5 +1,7 @@
 package com.hbm.lib;
 
+import com.hbm.entity.projectile.EntityBullet;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -35,14 +37,14 @@ public class ModDamageSource extends DamageSource {
 	public ModDamageSource(String p_i1566_1_) {
 		super(p_i1566_1_);
 	}
-  /*  public static DamageSource causeBulletDamage(EntityBullet p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeBulletDamage(EntityBullet p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("revolverBullet", p_76353_0_, p_76353_1_)).setProjectile();
     }
-    public static DamageSource causeBulletDamage(EntityBulletBase base, Entity ent)
+   /* public static DamageSource causeBulletDamage(EntityBulletBase base, Entity ent)
     {
         return (new EntityDamageSourceIndirect("revolverBullet", base, ent)).setProjectile();
-    }
+    }*/
     public static DamageSource causeDisplacementDamage(EntityBullet p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("chopperBullet", p_76353_0_, p_76353_1_)).setProjectile();
@@ -51,7 +53,7 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("tau", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }
-    public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
+   /* public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("cmb", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }

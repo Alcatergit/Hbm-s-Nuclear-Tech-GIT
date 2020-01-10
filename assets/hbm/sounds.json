@@ -49,9 +49,9 @@
     "item.spray": {"category": "player", "sounds": [{"name": "hbm:tool/spray", "stream": false}]},
     "item.repair": {"category": "player", "sounds": ["hbm:tool/repair1", "hbm:tool/repair2", "hbm:tool/repair3", "hbm:tool/repair4", "hbm:tool/repair5", "hbm:tool/repair6", "hbm:tool/repair7"]},
 
-	"music.recordLambdaCore": {"category": "record", "sounds": [{"name": "hbm:music/recordLambdaCore", "stream": true}]},
-	"music.recordSectorSweep": {"category": "record", "sounds": [{"name": "hbm:music/recordSectorSweep", "stream": true}]},
-	"music.recordVortalCombat": {"category": "record", "sounds": [{"name": "hbm:music/recordVortalCombat", "stream": true}]},
+	"music.recordlambdacore": {"category": "record", "sounds": [{"name": "hbm:music/recordlambdacore", "stream": true}]},
+	"music.recordsectorsweep": {"category": "record", "sounds": [{"name": "hbm:music/recordsectorsweep", "stream": true}]},
+	"music.recordvortalcombat": {"category": "record", "sounds": [{"name": "hbm:music/recordvortalcombat", "stream": true}]},
 
 	"weapon.tauShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/tauShoot", "stream": false}]},
 	"weapon.tauChargeLoop2": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop2", "stream": true}]},

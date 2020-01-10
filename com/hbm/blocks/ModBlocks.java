@@ -7,6 +7,7 @@ import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.blocks.bomb.NukeFleija;
 import com.hbm.blocks.bomb.NukeMan;
+import com.hbm.blocks.bomb.TurretCheapo;
 import com.hbm.blocks.fluid.ToxicBlock;
 import com.hbm.blocks.fluid.ToxicFluid;
 import com.hbm.blocks.generic.BlockMush;
@@ -151,6 +152,8 @@ public class ModBlocks {
 	public static final Block nuke_fleija = new NukeFleija(Material.IRON, "nuke_fleija").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_fleija = 17;
 	
+	//Turrets
+	public static final Block turret_cheapo = new TurretCheapo(Material.IRON, "turret_cheapo").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.weaponTab);
 	
 	//Machines
 	public static final Block machine_battery_potato = new MachineBattery(Material.IRON, 10000, "machine_battery_potato").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

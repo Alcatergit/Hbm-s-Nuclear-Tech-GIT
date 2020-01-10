@@ -24,6 +24,14 @@ public final class HBMSoundHandler {
 	public static SoundEvent reactorStop;
 	public static SoundEvent chemplantOperate;
 	public static SoundEvent potatOSRandom;
+	public static SoundEvent weaponSpinDown;
+	public static SoundEvent weaponSpinUp;
+	public static SoundEvent sawShoot;
+	public static SoundEvent reloadTurret;
+	
+	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
+	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
+	public static SoundEvent vortalCombat = registerBypass("music.recordvortalcombat");
 	
 	public static void init() {
 		
@@ -41,6 +49,11 @@ public final class HBMSoundHandler {
 		reactorStop = register("block.reactorStop");
 		chemplantOperate = register("block.chemplantOperate");
 		potatOSRandom = register("potatos.random");
+		weaponSpinDown = register("weapon.spindown");
+		weaponSpinUp = register("weapon.spinup");
+		sawShoot = register("weapon.sawShoot");
+		reloadTurret = register("weapon.reloadTurret");
+		
 	}
 	
 	public static SoundEvent register(String name) {
@@ -49,4 +62,13 @@ public final class HBMSoundHandler {
 		ALL_SOUNDS.add(e);
 		return e;
 	}
+	
+	public static SoundEvent registerBypass(String name){
+		SoundEvent e = new SoundEvent(new ResourceLocation(RefStrings.MODID, name));
+		e.setRegistryName(name);
+		ForgeRegistries.SOUND_EVENTS.register(e);
+		return e;
+	}
+	
+	public static void loadClass(){}
 }

@@ -15,6 +15,7 @@ import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntitySmokeFX;
+import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityRubble;
@@ -28,6 +29,7 @@ import com.hbm.render.entity.RenderBeam5;
 import com.hbm.render.entity.RenderCloudFleija;
 import com.hbm.render.entity.RenderCloudRainbow;
 import com.hbm.render.entity.RenderNoCloud;
+import com.hbm.render.entity.RenderRocket;
 import com.hbm.render.factories.MultiCloudRendererFactory;
 import com.hbm.render.factories.RenderBurningFOEQFactory;
 import com.hbm.render.factories.RenderDSmokeFXFactory;
@@ -49,6 +51,7 @@ import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderCable;
+import com.hbm.render.tileentity.RenderCheapoTurret;
 import com.hbm.render.tileentity.RenderChemplant;
 import com.hbm.render.tileentity.RenderCloudResidue;
 import com.hbm.render.tileentity.RenderFluidDuct;
@@ -61,6 +64,7 @@ import com.hbm.render.tileentity.RenderTestRender;
 import com.hbm.render.util.HmfModelLoader;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
+import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.deco.TileEntityTestRender;
@@ -123,6 +127,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineReactorSmall.class, new RenderSmallReactor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCable.class, new RenderCable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuct.class, new RenderFluidDuct());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTurretCheapo.class, new RenderCheapoTurret());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -140,6 +145,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityExplosiveBeam.class, RenderBeam5.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeCloudNoShroom.class, RenderNoCloud.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCloudFleija.class, RenderCloudFleija.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, RenderRocket.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 	}
@@ -154,20 +160,17 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void particleControl(double x, double y, double z, int type) {
 		World world = Minecraft.getMinecraft().world;
-		TextureManager man = Minecraft.getMinecraft().renderEngine;
 		
 		switch(type) {
 		case 0:
 			
 			for(int i = 0; i < 10; i++) {
-			//	EntityCloudFX smoke = new EntityCloudFX.Factory().createParticle(-1, world, x + world.rand.nextGaussian(), y + world.rand.nextGaussian(), z + world.rand.nextGaussian(), 0.0, 0.0, 0.0);
-			//	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+				Particle smoke = new ParticleCloud.Factory().createParticle(EnumParticleTypes.CLOUD.getParticleID(), world, x + world.rand.nextGaussian(), y + world.rand.nextGaussian(), z + world.rand.nextGaussian(), 0.0, 0.0, 0.0);
+				Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
 			}
 			break;
 			
 		case 1:
-			//This is actually a vanilla particle, change later.
-			ParticleCloudFX smoke = new ParticleCloudFX(world, x, y, z, 0.0, 0.1, 0.0).setTexMetaItems(0, ModItems.cloud1, ModItems.cloud2, ModItems.cloud3, ModItems.cloud4, ModItems.cloud5, ModItems.cloud6, ModItems.cloud7, ModItems.cloud8);
 			Particle s = new ParticleCloud.Factory().createParticle(EnumParticleTypes.CLOUD.getParticleID(), world, x, y, z, 0.0, 0.1, 0.0);
 			Minecraft.getMinecraft().effectRenderer.addEffect(s);
 			

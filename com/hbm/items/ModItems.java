@@ -38,6 +38,7 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.items.special.ItemFuel;
 import com.hbm.items.special.ItemFuelRod;
+import com.hbm.items.special.ItemModRecord;
 import com.hbm.items.special.ItemPotatos;
 import com.hbm.items.special.ItemRadioactive;
 import com.hbm.items.special.ItemSyringe;
@@ -53,7 +54,11 @@ import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
 import com.hbm.items.tool.ItemMultiDetonator;
+import com.hbm.items.tool.ItemTurretControl;
 import com.hbm.items.weapon.ItemAmmo;
+import com.hbm.items.weapon.ItemTurretAmmo;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -135,6 +140,10 @@ public class ModItems {
 	public static final Item detonator_laser = new ItemLaserDetonator("detonator_laser").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
+	
+	//Turret
+	public static final Item turret_control = new ItemTurretControl("turret_control").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_cheapo_ammo = new ItemTurretAmmo(ModBlocks.turret_cheapo, 100, "turret_cheapo_ammo").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Armor
 	public static final Item hazmat_helmet = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet").setMaxStackSize(1);
@@ -613,6 +622,7 @@ public class ModItems {
 	public static final Item ammo_5mm = new ItemAmmo("ammo_5mm").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg = new ItemAmmo("ammo_50bmg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50ae = new ItemAmmo("ammo_50ae").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_rpg_ammo = new ItemBase("gun_rpg_ammo").setUnlocalizedName("gun_rpg_ammo").setCreativeTab(null);
 	
 	//Upgrade
 	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
@@ -656,6 +666,14 @@ public class ModItems {
 	public static final Item fleija_core = new ItemFleija("fleija_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item solinium_core = new ItemSolinium("solinium_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	
+	//Music
+	public static final Item record_lc = new ItemModRecord("lc", HBMSoundHandler.lambdaCore, "record_lc").setCreativeTab(CreativeTabs.MISC);
+	public static final Item record_ss = new ItemModRecord("ss", HBMSoundHandler.sectorSweep, "record_ss").setCreativeTab(CreativeTabs.MISC);
+	public static final Item record_vc = new ItemModRecord("vc", HBMSoundHandler.vortalCombat, "record_vc").setCreativeTab(CreativeTabs.MISC);
+	
+	//Weird items
+	public static final Item flame_pony = new ItemCustomLore("flame_pony").setCreativeTab(MainRegistry.partsTab);
 	
 	//Dummy texture items
 	public static final Item smoke1 = new ItemBase("smoke1").setCreativeTab(null);

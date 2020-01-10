@@ -26,6 +26,12 @@ public class ItemCustomLore extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 
+		if(this == ModItems.flame_pony)
+		{
+			//list.add("Blue horse beats yellow horse, look it up!");
+			list.add("Yellow horse beats blue horse, that's a proven fact!");
+		}
+		
 		if(this == ModItems.ingot_neptunium)
 		{
 			if(MainRegistry.polaroidID == 11) {
