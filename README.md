@@ -1,4 +1,4 @@
-Drillgon200's 1.12.2 port of the HBM's Nuclear Tech mod for minecraft 1.7.10. If you've somehow found this page and want to try the latest version, put a comment here or message me on Discord (Discord username is Drillgon200#0288) and I'll make a build and upload it.
+1.12.2 port of the HBM's Nuclear Tech mod for minecraft 1.7.10. If you've somehow found this page and want to try the latest version, put a comment here or message me on Discord (Discord username is Drillgon200#0288) and I'll make a build and upload it.
 
 # Hbm-s-Nuclear-Tech-GIT
 
