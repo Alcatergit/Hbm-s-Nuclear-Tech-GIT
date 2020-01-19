@@ -1,6 +1,8 @@
 package com.hbm.packet;
 
 
+import com.hbm.tileentity.machine.TileEntityMachineBoiler;
+import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 
@@ -161,14 +163,14 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 1)
 							cent.isProgressing = m.value == 1;
 					}
-					if (te instanceof TileEntityMachineBoiler) {
+					*/if (te instanceof TileEntityMachineBoiler) {
 						TileEntityMachineBoiler boiler = (TileEntityMachineBoiler)te;
 						
 						if(m.id == 0)
 							boiler.heat = m.value;
 						if(m.id == 1)
 							boiler.burnTime = m.value;
-					}*/
+					}
 					if (te instanceof TileEntityMachineCoal) {
 						TileEntityMachineCoal coalgen = (TileEntityMachineCoal)te;
 						
@@ -187,13 +189,13 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 0)
 							furn.dualCookTime = m.value;
 					}
-					if (te instanceof TileEntityMachineBoilerElectric) {
+					*/if (te instanceof TileEntityMachineBoilerElectric) {
 						TileEntityMachineBoilerElectric boiler = (TileEntityMachineBoilerElectric)te;
 						
 						if(m.id == 0)
 							boiler.heat = m.value;
 					}
-					if (te instanceof TileEntityNukeCustom) {
+					/*if (te instanceof TileEntityNukeCustom) {
 						TileEntityNukeCustom nuke = (TileEntityNukeCustom)te;
 						
 						nuke.falls = m.value == 1;

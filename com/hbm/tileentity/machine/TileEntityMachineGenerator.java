@@ -16,8 +16,10 @@ import com.hbm.items.special.ItemBattery;
 import com.hbm.items.special.ItemFuelRod;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.EnumParticlePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.particle.EnumHbmParticles;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -124,6 +126,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 		
 		if(!world.isRemote)
 		{
+			
 			if(needsUpdate) {
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;

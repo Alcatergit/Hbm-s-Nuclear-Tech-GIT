@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_oil"
+		},
+		"title": {
+			"translate": "hbm.achievement.oil"
+		},
+		"description": {
+			"translate": "hbm.achievement.oil.desc"
+		}
+	},
+	"parent": "hbm:bobchemistry",
+	"criteria": {
+		"craft_difurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "hbm:machine_boiler_electric_off"
+					}
+				]
+			}
+		}
+	}
+}

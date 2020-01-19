@@ -1,8 +1,10 @@
 package com.hbm.packet;
 
 import com.hbm.interfaces.IClientRequestUpdator;
+import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

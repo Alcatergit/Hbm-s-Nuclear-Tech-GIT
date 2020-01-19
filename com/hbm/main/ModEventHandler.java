@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.hbm.capability.RadiationCapability;
+import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.forgefluid.FFPipeNetwork;
@@ -42,6 +43,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -77,6 +79,13 @@ public class ModEventHandler {
 				net.destroySoft();
 				itr.remove();
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void enteringChunk(EnteringChunk evt){
+		if(evt.getEntity() instanceof EntityMissileBaseAdvanced){
+			((EntityMissileBaseAdvanced) evt.getEntity()).loadNeighboringChunks(evt.getNewChunkX(), evt.getNewChunkZ());
 		}
 	}
 	

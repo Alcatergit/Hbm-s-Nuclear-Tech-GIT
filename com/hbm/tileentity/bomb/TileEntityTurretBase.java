@@ -4,46 +4,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.bomb.TurretBase;
+import com.hbm.entity.logic.EntityBomber;
+import com.hbm.entity.missile.EntityMissileBaseAdvanced;
+import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.lib.Library;
+import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.TETurretCIWSPacket;
+import com.hbm.packet.TETurretPacket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityTurretBase extends TileEntity implements ITickable {
+public class TileEntityTurretBase extends TileEntity implements ITickable, IClientRequestUpdator {
 
 	public double rotationYaw;
 	public double rotationPitch;
+
 	public double oldRotationYaw = 0.0D;
 	public double oldRotationPitch = 0.0D;
 	public boolean isAI = false;
 	public List<String> players = new ArrayList<String>();
 	public int use;
 	public int ammo = 0;
+	private boolean firstUpdate = true;
 
 	@Override
 	public void update() {
+		if (firstUpdate) {
+			if (world.isRemote) {
+				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
+			}
+			firstUpdate = false;
+		}
 		if (isAI) {
 
 			Object[] iter = world.loadedEntityList.toArray();
 			double radius = 1000;
-			// TODO these turrets
-			/*if(this instanceof TileEntityTurretFlamer)
-				radius /= 2;
-			if(this instanceof TileEntityTurretSpitfire)
+			// Drillgon200: 3 works better, ammo doesn't get wasted on mobs
+			// outside the turret range
+			if (this instanceof TileEntityTurretFlamer)
+				radius /= 3;
+			if (this instanceof TileEntityTurretSpitfire)
 				radius *= 3;
-			if(this instanceof TileEntityTurretCIWS)
-				radius *= 250;*/
+			if (this instanceof TileEntityTurretCIWS)
+				radius *= 250;
 			Entity target = null;
 			for (int i = 0; i < iter.length; i++) {
 				Entity e = (Entity) iter[i];
-				if (isInSight(e)) {
+				if (e.isEntityAlive() && isInSight(e)) {
 					double distance = e.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 					if (distance < radius) {
 						radius = distance;
@@ -55,8 +73,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 			if (target != null) {
 
 				Vec3d turret = new Vec3d(target.posX - (pos.getX() + 0.5), target.posY + target.getEyeHeight() - (pos.getY() + 1), target.posZ - (pos.getZ() + 0.5));
-				// TODO turrets
-				if (/*this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretSpitfire || */this instanceof TileEntityTurretCheapo) {
+				if (this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretSpitfire || this instanceof TileEntityTurretCheapo) {
 					turret = new Vec3d(target.posX - (pos.getX() + 0.5), target.posY + target.getEyeHeight() - (pos.getY() + 1.5), target.posZ - (pos.getZ() + 0.5));
 				}
 
@@ -90,7 +107,9 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 			}
 		}
 
-		// TODO not sure if this is needed, ask bob
+		if (!world.isRemote)
+			detectAndSendChanges();
+		// not sure if this is needed, ask bob
 		// if(!world.isRemote)
 		// PacketDispatcher.wrapper.sendToAll(new TETurretPacket(pos.getX(),
 		// pos.getY(), pos.getZ(), rotationYaw, rotationPitch));
@@ -98,33 +117,30 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 	}
 
 	private boolean isInSight(Entity e) {
-		// TODO missiles and bomber and CIWS
-		if (!(e instanceof EntityLivingBase) /*&& !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber)*/)
+		if (!(e instanceof EntityLivingBase) && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber))
 			return false;
 
-		// if(this instanceof TileEntityTurretCIWS && !(e instanceof
-		// EntityMissileBaseAdvanced) && !(e instanceof EntityBomber))
-		// return false;
-
+		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber))
+			return false;
 		if (e instanceof EntityPlayer && players.contains((((EntityPlayer) e).getUniqueID().toString())))
 			return false;
 
+		if (this instanceof TileEntityTurretTau)
+			return true;
+		if(e instanceof EntityBomber && !((EntityBomber)e).isBomberAlive())
+			return false;
+
 		Vec3d turret;
-		// TODO these turrets
-		// if(this instanceof TileEntityTurretSpitfire || this instanceof
-		// TileEntityTurretCIWS || this instanceof TileEntityTurretCheapo)
-		// turret = new Vec3d(pos.getX() + 0.5, yCoord + 1.5, zCoord + 0.5);
-		// else
-		turret = new Vec3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+		if (this instanceof TileEntityTurretSpitfire || this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretCheapo)
+			turret = new Vec3d(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
+		else
+			turret = new Vec3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 
 		Vec3d entity = new Vec3d(e.posX, e.posY + e.getEyeHeight(), e.posZ);
 		Vec3d side = new Vec3d(entity.x - turret.x, entity.y - turret.y, entity.z - turret.z);
 		side = side.normalize();
 
 		Vec3d check = new Vec3d(turret.x + side.x, turret.y + side.y, turret.z + side.z);
-		// TODO Tau
-		// if(this instanceof TileEntityTurretTau)
-		// return true;
 
 		return !Library.isObstructed(world, check.x, check.y, check.z, entity.x, entity.y, entity.z);
 	}
@@ -142,8 +158,11 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		rotationYaw = nbt.getDouble("yaw");
+		detectYaw = rotationYaw + 1;
 		rotationPitch = nbt.getDouble("pitch");
+		detectPit = rotationPitch + 1;
 		isAI = nbt.getBoolean("AI");
+		detectIsAI = !isAI;
 		ammo = nbt.getInteger("ammo");
 
 		int playercount = nbt.getInteger("playercount");
@@ -168,5 +187,65 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 			nbt.setString("player_" + i, players.get(i));
 		}
 		return super.writeToNBT(nbt);
+	}
+
+	private int detectAmmo;
+	private boolean detectIsAI;
+	public boolean playerListChanged = true;
+	private double detectPit;
+	private double detectYaw;
+
+	private void detectAndSendChanges() {
+		boolean mark = false;
+		if (isAI != detectIsAI) {
+			PacketDispatcher.wrapper.sendToAll(new TETurretPacket(pos.getX(), pos.getY(), pos.getZ(), isAI));
+			detectIsAI = isAI;
+			mark = true;
+		}
+		if (ammo != detectAmmo) {
+			detectAmmo = ammo;
+			mark = true;
+		}
+		if (playerListChanged) {
+			for (EntityPlayer player : this.world.playerEntities) {
+				if (player instanceof EntityPlayerMP)
+					((EntityPlayerMP) player).connection.sendPacket(new SPacketUpdateTileEntity(pos, 0, writeToNBT(new NBTTagCompound())));
+			}
+			playerListChanged = false;
+			mark = true;
+		}
+		if (isAI && this instanceof TileEntityTurretCIWS && (detectPit != rotationPitch || detectYaw != rotationYaw)) {
+			detectYaw = rotationYaw;
+			detectPit = rotationPitch;
+			PacketDispatcher.wrapper.sendToAllAround(new TETurretCIWSPacket(pos.getX(), pos.getY(), pos.getZ(), rotationYaw, rotationPitch), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
+		}
+		if (mark)
+			this.markDirty();
+	}
+
+	// Drillgon200: Maybe this actually works well if you don't have a gui that
+	// constantly updates
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		this.readFromNBT(tag);
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 0, this.getUpdateTag());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public void requestClientUpdate() {
+		// for(EntityPlayer player : this.world.playerEntities){
+		// if(player instanceof EntityPlayerMP)
+		// ((EntityPlayerMP)player).connection.sendPacket(new
+		// SPacketUpdateTileEntity(pos, 0, writeToNBT(new NBTTagCompound())));
+		// }
 	}
 }

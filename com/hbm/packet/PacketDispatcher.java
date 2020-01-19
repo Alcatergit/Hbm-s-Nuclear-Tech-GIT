@@ -42,6 +42,18 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEFluidTypePacketTest.Handler.class, TEFluidTypePacketTest.class, i++, Side.CLIENT);
 		//Client request update packet in case they load the new tile entity and the server doesn't know it needs an update and doesn't send any packets
 		wrapper.registerMessage(ClientRequestUpdatePacket.Handler.class, ClientRequestUpdatePacket.class, i++, Side.SERVER);
+		//Turret basic packet for making the client has the right ammo amounts
+		wrapper.registerMessage(TETurretPacket.Handler.class, TETurretPacket.class, i++, Side.CLIENT);
+		//CIWS has a really long range, so stuff might not even exist on client, so rotation needs to be sent
+		wrapper.registerMessage(TETurretCIWSPacket.Handler.class, TETurretCIWSPacket.class, i++, Side.CLIENT);
+		//Packet for updating the bomber flying sound, I think
+		wrapper.registerMessage(LoopedEntitySoundPacket.Handler.class, LoopedEntitySoundPacket.class, i++, Side.CLIENT);
+		//Missile type for render sync with client
+		wrapper.registerMessage(TEMissilePacket.Handler.class, TEMissilePacket.class, i++, Side.CLIENT);
+		//Packet for sending designator data to server
+		wrapper.registerMessage(ItemDesignatorPacket.Handler.class, ItemDesignatorPacket.class, i++, Side.SERVER);
+		//New particle packet
+		wrapper.registerMessage(EnumParticlePacket.Handler.class, EnumParticlePacket.class, i++, Side.CLIENT);
 	}
 
 }

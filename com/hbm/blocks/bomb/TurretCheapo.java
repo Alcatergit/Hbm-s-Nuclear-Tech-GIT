@@ -54,7 +54,6 @@ public class TurretCheapo extends TurretBase {
 				bullet.motionZ = vector.z * 3;
 
 				bullet.damage = rand.nextInt(11) + 5;
-
 				world.spawnEntity(bullet);
 			}
 			world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.sawShoot, SoundCategory.BLOCKS, 3.0F, 1.0F, true);

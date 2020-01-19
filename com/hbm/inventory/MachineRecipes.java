@@ -942,4 +942,21 @@ public class MachineRecipes {
 		return null;
 	}
 
+	// return: FluidType, amount produced, amount required, heat required (°C * 100)
+	public static Object[] getBoilerOutput(Fluid type) {
+
+		if (type == FluidRegistry.WATER) {
+			return new Object[] { ModForgeFluids.steam, 500, 5, 10000 };
+		} else if (type == ModForgeFluids.steam) {
+			return new Object[] { ModForgeFluids.hotsteam, 5, 50, 30000 };
+		} else if (type == ModForgeFluids.hotsteam) {
+			return new Object[] { ModForgeFluids.superhotsteam, 5, 50, 45000 };
+		} else if (type == ModForgeFluids.oil) {
+			return new Object[] { ModForgeFluids.hotoil, 5, 5, 35000 };
+		} else {
+			return null;
+		}
+
+	}
+
 }

@@ -16,6 +16,7 @@ import com.hbm.items.tool.ItemFluidTank;
 import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.RefStrings;
+import com.hbm.particle.ParticleDSmokeFX;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
@@ -36,8 +37,10 @@ import com.hbm.render.item.ItemRenderRedstoneSword;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -53,8 +56,11 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class ModEventHandlerClient {
 
+	
+	
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
+		
 		int i = 0;
 		ResourceLocation[] list = new ResourceLocation[EnumCanister.values().length];
 		for(EnumCanister e : EnumCanister.values()){
@@ -157,22 +163,15 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void textureStitch(TextureStitchEvent.Pre evt) {
-		DSmokeRenderer.sprites[0] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
-		DSmokeRenderer.sprites[1] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke2"));
-		DSmokeRenderer.sprites[2] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke3"));
-		DSmokeRenderer.sprites[3] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke4"));
-		DSmokeRenderer.sprites[4] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke5"));
-		DSmokeRenderer.sprites[5] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke6"));
-		DSmokeRenderer.sprites[6] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke7"));
-		DSmokeRenderer.sprites[7] = evt.getMap()
-				.registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke8"));
+		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
+		DSmokeRenderer.sprites[1] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke2"));
+		DSmokeRenderer.sprites[2] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke3"));
+		DSmokeRenderer.sprites[3] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke4"));
+		DSmokeRenderer.sprites[4] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke5"));
+		DSmokeRenderer.sprites[5] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke6"));
+		DSmokeRenderer.sprites[6] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke7"));
+		DSmokeRenderer.sprites[7] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke8"));
+		ParticleDSmokeFX.sprites = DSmokeRenderer.sprites;
 		
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"));
@@ -261,10 +260,16 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcar"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcarflipv"));
+		
+		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		
 		//evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_still"));
 		//evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_flowing"));
 	}
+	
+	public static TextureAtlasSprite contrail;
 
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent evt) {

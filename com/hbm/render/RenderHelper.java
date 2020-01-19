@@ -1,22 +1,34 @@
 package com.hbm.render;
 
 import java.nio.FloatBuffer;
+
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
+
+import com.hbm.entity.missile.EntityCarrier;
+import com.hbm.entity.missile.EntityMissileAntiBallistic;
+import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+@SideOnly(Side.CLIENT)
 public class RenderHelper {
 	
 	/**
@@ -84,6 +96,19 @@ public class RenderHelper {
 		return new float[]{left, bottom, right, top};
 	}
 	
+	
+	public static TextureAtlasSprite getItemTexture(Item item, int meta){
+		return getItemTexture(new ItemStack(item, 1, meta));
+	}
+	
+	public static TextureAtlasSprite getItemTexture(Item item){
+		return getItemTexture(item, 0);
+	}
+	
+	public static TextureAtlasSprite getItemTexture(ItemStack item){
+		return Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, null, null).getParticleTexture();
+	}
+	
 	public static void addVertexWithUV(double x, double y, double z, double u, double v){
 		addVertexWithUV(x, y, z, u, v, Tessellator.getInstance());
 	}
@@ -137,6 +162,98 @@ public class RenderHelper {
 	public static void addVertexColor(double x, double y, double z, int red, int green, int blue, int alpha){
 		Tessellator.getInstance().getBuffer().pos(x, y, z).color(red, green, blue, alpha).endVertex();;
 	}
+
+
+	public static void renderAll(IBakedModel boxcar) {
+		Tessellator tes = Tessellator.getInstance();
+		BufferBuilder buf = tes.getBuffer();
+		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL);
+    	for(BakedQuad quad : boxcar.getQuads(null, null, 0)){
+    		buf.addVertexData(quad.getVertexData());
+    	}
+    	tes.draw();
+		
+	}
 	
+	/**
+	 * Helper method for getting the real render position from a missile, which updates its position more than once per game tick.
+	 * @param missile - the missile to get the actual render pos from
+	 * @param partialTicks - render partial ticks
+	 * @return A three element double array, containing the render pos x at index 0, y at index 1, and z at index 2
+	 */
+	public static double[] getRenderPosFromMissile(EntityMissileBaseAdvanced missile, float partialTicks){
+		if(missile.prevPosX2 == 0){
+			missile.prevPosX2 = missile.posX;
+		}
+		if(missile.prevPosY2 == 0){
+			missile.prevPosY2 = missile.posY;
+		}
+		if(missile.prevPosZ2 == 0){
+			missile.prevPosZ2 = missile.posZ;
+		}
+		double d0 = missile.prevPosX2 + (missile.posX - missile.prevPosX2) * (double) partialTicks;
+		double d1 = missile.prevPosY2 + (missile.posY - missile.prevPosY2) * (double) partialTicks;
+		double d2 = missile.prevPosZ2 + (missile.posZ - missile.prevPosZ2) * (double) partialTicks;
+		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
+		double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
+		double d5 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
+		
+		return new double[]{d0 - d3, d1 - d4, d2 - d5};
+	}
+	
+	/**
+	 * Helper method for getting the real render position from a missile, which updates its position more than once per game tick.
+	 * @param missile - the missile to get the actual render pos from
+	 * @param partialTicks - render partial ticks
+	 * @return A three element double array, containing the render pos x at index 0, y at index 1, and z at index 2
+	 */
+	public static double[] getRenderPosFromMissile(EntityMissileAntiBallistic missile, float partialTicks){
+		if(missile.prevPosX2 == 0){
+			missile.prevPosX2 = missile.posX;
+		}
+		if(missile.prevPosY2 == 0){
+			missile.prevPosY2 = missile.posY;
+		}
+		if(missile.prevPosZ2 == 0){
+			missile.prevPosZ2 = missile.posZ;
+		}
+		double d0 = missile.prevPosX2 + (missile.posX - missile.prevPosX2) * (double) partialTicks;
+		double d1 = missile.prevPosY2 + (missile.posY - missile.prevPosY2) * (double) partialTicks;
+		double d2 = missile.prevPosZ2 + (missile.posZ - missile.prevPosZ2) * (double) partialTicks;
+		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
+		double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
+		double d5 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
+		
+		return new double[]{d0 - d3, d1 - d4, d2 - d5};
+	}
+	
+	/**
+	 * Helper method for getting the real render position from a missile, which updates its position more than once per game tick.
+	 * @param missile - the missile to get the actual render pos from
+	 * @param partialTicks - render partial ticks
+	 * @return A three element double array, containing the render pos x at index 0, y at index 1, and z at index 2
+	 */
+	public static double[] getRenderPosFromMissile(EntityCarrier missile, float partialTicks){
+		if(missile.prevPosX2 == 0){
+			missile.prevPosX2 = missile.posX;
+		}
+		if(missile.prevPosY2 == 0){
+			missile.prevPosY2 = missile.posY;
+		}
+		if(missile.prevPosZ2 == 0){
+			missile.prevPosZ2 = missile.posZ;
+		}
+		double d0 = missile.prevPosX2 + (missile.posX - missile.prevPosX2) * (double) partialTicks;
+		double d1 = missile.prevPosY2 + (missile.posY - missile.prevPosY2) * (double) partialTicks;
+		double d2 = missile.prevPosZ2 + (missile.posZ - missile.prevPosZ2) * (double) partialTicks;
+		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
+		double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
+		double d5 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
+		
+		return new double[]{d0 - d3, d1 - d4, d2 - d5};
+	}
 	
 }

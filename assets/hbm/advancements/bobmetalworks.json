@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_metalworks"
+		},
+		"title": {
+			"translate": "hbm.achievement.metalworks"
+		},
+		"description": {
+			"translate": "hbm.achievement.metalworks.desc"
+		}
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"craft_difurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "hbm:machine_difurnace_off"
+					}
+				]
+			}
+		}
+	}
+}

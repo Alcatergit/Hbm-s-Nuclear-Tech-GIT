@@ -43,6 +43,8 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 		if (tex != null) {
 			GL11.glPushMatrix();
 			//GlStateManager.enableBlend();
+			GL11.glPushAttrib(GL11.GL_ALPHA_BITS | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_LIGHTING_BIT);
+			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -78,13 +80,13 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 			}
 			
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+			GL11.glPopAttrib();
 			GL11.glPopMatrix();
 		}
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityModFX fx) {
-		
 		Item item = textureItems[0];
 		
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {

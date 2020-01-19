@@ -4,10 +4,10 @@ itemGroup.tabBlocks=Blocs et machines NTM
 itemGroup.tabNuke=Bombes et engins NTM
 itemGroup.tabMachine=Patrons NTM
 
-achievement.sacrifice=Sororicide
-achievement.sacrifice.desc=Affrontez le feu et vivez.
-achievement.impossible=Littéralement impossible
-achievement.impossible.desc=Vous ne pouvez pas obtenir cette réussite.
+hbm.achievement.sacrifice=Sororicide
+hbm.achievement.sacrifice.desc=Affrontez le feu et vivez.
+hbm.achievement.impossible=Littéralement impossible
+hbm.achievement.impossible.desc=Vous ne pouvez pas obtenir cette réussite.
 
 potion.hbm_taint=Contaminé
 

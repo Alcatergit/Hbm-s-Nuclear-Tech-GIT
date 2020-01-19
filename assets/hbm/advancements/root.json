@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "hbm:motor"
+        },
+        "title": {
+            "translate": "hbm.advancement.root"
+        },
+        "description": {
+            "translate": "hbm.advancement.root.desc"
+        },
+        "background": "minecraft:textures/blocks/stone.png",
+        "show_toast": false,
+        "announce_to_chat": false,
+	"hidden": true
+    },
+    "criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "minecraft:crafting_table"
+                    }
+                ]
+            }
+        }
+    }
+}

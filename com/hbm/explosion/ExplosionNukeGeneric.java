@@ -5,13 +5,18 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
+import com.hbm.interfaces.IConsumer;
+import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
+import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockLiquid;
@@ -32,7 +37,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class ExplosionNukeGeneric {
 
@@ -83,8 +91,9 @@ public class ExplosionNukeGeneric {
 			}
 		}
 	}
-
+*/
 	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int r = bombStartStrength;
 		int r2 = r * r;
 		int r22 = r2 / 2;
@@ -98,13 +107,14 @@ public class ExplosionNukeGeneric {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22) {
-						emp(world, X, Y, Z);
+						pos.setPos(X, Y, Z);
+						emp(world, pos);
 					}
 				}
 			}
 		}
 	}
-	*/
+	
 	public static void dealDamage(World world, int x, int y, int z, int bombStartStrength) {
 		float f = bombStartStrength;
 		int i;
@@ -172,19 +182,15 @@ public class ExplosionNukeGeneric {
 
 		bombStartStrength = (int) f;
 	}
-/*
+
 	public static void succ(World world, int x, int y, int z, int radius) {
-		float f = radius;
-		HashSet hashset = new HashSet();
 		int i;
 		int j;
 		int k;
 		double d5;
 		double d6;
 		double d7;
-		double wat = radius
-		;
-		boolean isOccupied = false;
+		double wat = radius;
 
 		// bombStartStrength *= 2.0F;
 		i = MathHelper.floor(x - wat - 1.0D);
@@ -193,8 +199,7 @@ public class ExplosionNukeGeneric {
 		int i2 = MathHelper.floor(y + wat + 1.0D);
 		int l = MathHelper.floor(z - wat - 1.0D);
 		int j2 = MathHelper.floor(z + wat + 1.0D);
-		List list = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(i, k, l, j, i2, j2));
-		Vec3 vec3 = Vec3.createVectorHelper(x, y, z);
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for (int i1 = 0; i1 < list.size(); ++i1) {
 			Entity entity = (Entity) list.get(i1);
@@ -209,9 +214,7 @@ public class ExplosionNukeGeneric {
 				d6 = entity.posY + entity.getEyeHeight() - y;
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if (d9 < wat && !(entity instanceof EntityPlayer
-								&& Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet,
-										ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
+				if (d9 < wat && !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
@@ -228,17 +231,13 @@ public class ExplosionNukeGeneric {
 	}
 
 	public static boolean dedify(World world, int x, int y, int z, int radius) {
-		float f = radius;
-		HashSet hashset = new HashSet();
 		int i;
 		int j;
 		int k;
 		double d5;
 		double d6;
 		double d7;
-		double wat = radius
-		;
-		boolean isOccupied = false;
+		double wat = radius;
 
 		// bombStartStrength *= 2.0F;
 		i = MathHelper.floor(x - wat - 1.0D);
@@ -247,8 +246,7 @@ public class ExplosionNukeGeneric {
 		int i2 = MathHelper.floor(y + wat + 1.0D);
 		int l = MathHelper.floor(z - wat - 1.0D);
 		int j2 = MathHelper.floor(z + wat + 1.0D);
-		List list = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(i, k, l, j, i2, j2));
-		Vec3 vec3 = Vec3.createVectorHelper(x, y, z);
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for (int i1 = 0; i1 < list.size(); ++i1) {
 			Entity entity = (Entity) list.get(i1);
@@ -268,19 +266,18 @@ public class ExplosionNukeGeneric {
 					// double d10 = (double)world.getBlockDensity(vec3,
 					// entity.boundingBox);
 					// if(d10 > 0) isOccupied = true;
-					double d11 = (1.0D - d4);// * d10;
 
-					if(entity instanceof EntityItem && ((EntityItem)entity).getEntityItem().getItem() == ModItems.flame_pony) {
+					if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.flame_pony) {
 						entity.setDead();
 						return true;
 					}
-					if(entity instanceof EntityItem && ((EntityItem)entity).getEntityItem().getItem() == ModItems.pellet_antimatter) {
+					//TODO antimatter cluster
+					/*if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.pellet_antimatter) {
 						entity.setDead();
 						return true;
-					}
+					}*/
 						
-					if (!(entity instanceof EntityPlayerMP
-							&& ((EntityPlayerMP) entity).theItemInWorldManager.getGameType() == GameType.CREATIVE)) {
+					if (!(entity instanceof EntityPlayerMP && ((EntityPlayerMP) entity).interactionManager.getGameType() == GameType.CREATIVE)) {
 						entity.attackEntityFrom(ModDamageSource.blackhole, 1000F);
 					}
 					
@@ -295,7 +292,7 @@ public class ExplosionNukeGeneric {
 		return false;
 	}
 
-	public static void vapor(World world, int x, int y, int z, int bombStartStrength) {
+	/*public static void vapor(World world, int x, int y, int z, int bombStartStrength) {
 		int r = bombStartStrength * 2;
 		int r2 = r * r;
 		int r22 = r2 / 2;
@@ -588,48 +585,55 @@ public class ExplosionNukeGeneric {
 			}
 		}
 	}
-/*
-	public static void emp(World world, int x, int y, int z) {
+
+	public static void emp(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			
-			Block b = world.getBlock(x,y,z);
-			TileEntity te = world.getTileEntity(x, y, z);
+			Block b = world.getBlockState(pos).getBlock();
+			TileEntity te = world.getTileEntity(pos);
 			
 			if (te != null && te instanceof ISource) {
 				
 				((ISource)te).setSPower(0);
 				
 				if(random.nextInt(5) < 1)
-					world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
+					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 			}
 			if (te != null && te instanceof IConsumer) {
 				
 				((IConsumer)te).setPower(0);
 				
 				if(random.nextInt(5) < 1)
-					world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
+					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 			}
 			if (te != null && te instanceof IEnergyProvider) {
 
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.UP, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.UP), false);
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.DOWN, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.DOWN), false);
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.NORTH, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.NORTH), false);
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.SOUTH, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.SOUTH), false);
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.EAST, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.EAST), false);
-				((IEnergyProvider)te).extractEnergy(ForgeDirection.WEST, ((IEnergyProvider)te).getEnergyStored(ForgeDirection.WEST), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.UP, ((IEnergyProvider)te).getEnergyStored(EnumFacing.UP), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.DOWN, ((IEnergyProvider)te).getEnergyStored(EnumFacing.DOWN), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.NORTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.NORTH), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.SOUTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.SOUTH), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.EAST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.EAST), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.WEST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.WEST), false);
 				
 				if(random.nextInt(5) <= 1)
-					world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
+					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 			}
 			if (te != null && te instanceof TileEntityTurretBase) {
 
 				((TileEntityTurretBase)te).ammo = 0;
 			}
-			if((b == ModBlocks.fusion_conductor || b == ModBlocks.fwatz_conductor || b == ModBlocks.fusion_motor || b == ModBlocks.fusion_heater || b == ModBlocks.fwatz_computer) && random.nextInt(10) == 0)
-				world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
+			if(te != null && te.hasCapability(CapabilityEnergy.ENERGY, null)){
+				IEnergyStorage handle = te.getCapability(CapabilityEnergy.ENERGY, null);
+				handle.extractEnergy(handle.getEnergyStored(), false);
+				if(random.nextInt(5) <= 1)
+					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
+			}
+			//TODO fusion stuff
+			//if((b == ModBlocks.fusion_conductor || b == ModBlocks.fwatz_conductor || b == ModBlocks.fusion_motor || b == ModBlocks.fusion_heater || b == ModBlocks.fwatz_computer) && random.nextInt(10) == 0)
+			//	world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
 		}
 	}
-	*/
+	
 	public static void solinium(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			IBlockState b = world.getBlockState(pos);

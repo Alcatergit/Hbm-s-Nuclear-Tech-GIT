@@ -9,7 +9,9 @@ import com.hbm.interfaces.ISource;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.EnumParticlePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.particle.EnumHbmParticles;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -115,7 +117,6 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 	public void update() {
 		if(world.getBlockState(pos).getBlock() instanceof MachineBattery && !world.isRemote) {
 			this.maxPower = ((MachineBattery)world.getBlockState(pos).getBlock()).getMaxPower();
-			
 			conducts = world.isBlockIndirectlyGettingPowered(pos) > 0;
 		
 			if(this.conducts)

@@ -16,6 +16,11 @@ public class TileEntityTaint extends TileEntity {
 	}
 	
 	@Override
+	public boolean hasFastRenderer() {
+		return super.hasFastRenderer();
+	}
+	
+	@Override
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
 	}

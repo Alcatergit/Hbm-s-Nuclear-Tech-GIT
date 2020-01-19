@@ -22,12 +22,11 @@ public class RenderCheapoTurret extends TileEntitySpecialRenderer<TileEntityTurr
 		
 		double yaw = 0;
 		double pitch = 0;
-		yaw = te.rotationYaw - (te.oldRotationYaw - te.rotationYaw)*partialTicks;
-		pitch = te.rotationPitch - (te.oldRotationPitch - te.rotationPitch)*partialTicks;
-		if(!te.isAI){
-			yaw = Minecraft.getMinecraft().player.rotationYaw;
-			pitch = Minecraft.getMinecraft().player.rotationPitch;
-		}
+		yaw = te.rotationYaw + (te.oldRotationYaw - te.rotationYaw)*partialTicks;
+		pitch = te.rotationPitch + (te.oldRotationPitch - te.rotationPitch)*partialTicks;
+		yaw = te.rotationYaw;
+		pitch = te.rotationPitch;
+		
 		
 		if (pitch < -30)
 			pitch = -30;

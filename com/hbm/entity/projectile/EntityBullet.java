@@ -7,6 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 
@@ -55,6 +56,10 @@ public class EntityBullet extends Entity implements IProjectile {
 	private static final DataParameter<Boolean> CHOPPER = EntityDataManager.createKey(EntityBullet.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityBullet.class, DataSerializers.BOOLEAN);
 
+	private double prevMotionX;
+	private double prevMotionY;
+	private double prevMotionZ;
+	
 	private int field_145791_d = -1;
 	private int field_145792_e = -1;
 	private int field_145789_f = -1;
@@ -74,7 +79,6 @@ public class EntityBullet extends Entity implements IProjectile {
 	public double damage;
 	/** The amount of knockback an arrow applies when it hits a mob. */
 	private int knockbackStrength;
-	private static final String __OBFID = "CL_00001715";
 	private int dmgMin = 0;
 	private int dmgMax = 1;
 	private boolean isTau = false;
@@ -260,6 +264,16 @@ public class EntityBullet extends Entity implements IProjectile {
 
 	@Override
 	public void onUpdate() {
+		if(this.firstUpdate){
+			this.prevMotionX = motionX;
+			this.prevMotionY = motionY;
+			this.prevMotionZ = motionZ;
+		}
+		if(this.getIsCritical()){
+			this.motionX = prevMotionX;
+			this.motionY = prevMotionY;
+			this.motionZ = prevMotionZ;
+		}
 		super.onUpdate();
 
 		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
@@ -302,16 +316,21 @@ public class EntityBullet extends Entity implements IProjectile {
 			++this.ticksInAir;
 			Vec3d vec31 = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d vec3 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			//Drillgon200: Yeah I don't know if this is the best way, but at least bullets can hit entities that are closer than three blocks now.
+			vec31 = new Vec3d(this.posX - this.motionX, this.posY - this.motionY, this.posZ - this.motionZ);
+			
 			RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec31, vec3, false, true, false);
 			vec31 = new Vec3d(this.posX, this.posY, this.posZ);
 			vec3 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
+			vec31 = new Vec3d(this.posX - this.motionX, this.posY - this.motionY, this.posZ - this.motionZ);
+			
 			if (movingobjectposition != null) {
 				vec3 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y, movingobjectposition.hitVec.z);
 			}
 
 			Entity entity = null;
-			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D));
 			double d0 = 0.0D;
 			int i;
 			float f1;
@@ -319,9 +338,9 @@ public class EntityBullet extends Entity implements IProjectile {
 			for (i = 0; i < list.size(); ++i) {
 				Entity entity1 = (Entity) list.get(i);
 
-				if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5)) {
+				if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity)) {
 					f1 = 0.3F;
-					AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().expand(f1, f1, f1);
+					AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().grow(f1);
 					RayTraceResult movingobjectposition1 = axisalignedbb1.calculateIntercept(vec31, vec3);
 
 					if (movingobjectposition1 != null) {
@@ -443,8 +462,7 @@ public class EntityBullet extends Entity implements IProjectile {
 								if (this.shootingEntity != null && movingobjectposition.entityHit != this.shootingEntity && movingobjectposition.entityHit instanceof EntityPlayer && this.shootingEntity instanceof EntityPlayerMP) {
 									((EntityPlayerMP) this.shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
 								}
-								//TODO boxcar
-								/*if (this.pip) {
+								if (this.pip) {
 									if (!world.isRemote) {
 										EntityBoxcar pippo = new EntityBoxcar(world);
 										pippo.posX = movingobjectposition.entityHit.posX;
@@ -456,11 +474,11 @@ public class EntityBullet extends Entity implements IProjectile {
 											world.spawnEntity(fx);
 										}
 
-										world.spawnEntityInWorld(pippo);
+										world.spawnEntity(pippo);
 									}
 
-									world.playSoundEffect(movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, "hbm:alarm.trainHorn", 100F, 1F);
-								}*/
+									world.playSound(movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 100F, 1F, true);
+								}
 							}
 
 							if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
@@ -763,6 +781,25 @@ public class EntityBullet extends Entity implements IProjectile {
 		this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(x, z) * 180.0D / Math.PI);
 		this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(y, f3) * 180.0D / Math.PI);
 		this.ticksInGround = 0;
+	}
+	
+	@Override
+	public boolean handleWaterMovement() {
+		double x = this.motionX;
+		double y = this.motionY;
+		double z = this.motionZ;
+		boolean b = super.handleWaterMovement();
+		if(this.getIsCritical()){
+			this.motionX = x;
+			this.motionY = y;
+			this.motionZ = z;
+		}
+		return b;
+	}
+	
+	@Override
+	public boolean isPushedByWater() {
+		return !this.getIsCritical();
 	}
 
 	@SideOnly(Side.CLIENT)

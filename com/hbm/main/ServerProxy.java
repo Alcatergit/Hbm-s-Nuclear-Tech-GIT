@@ -3,6 +3,7 @@ package com.hbm.main;
 import java.io.File;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy
@@ -24,5 +25,9 @@ public class ServerProxy
 	
 	public File getDataDir(){
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
+	}
+	
+	public void postInit(FMLPostInitializationEvent e){
+		
 	}
 }

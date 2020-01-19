@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_assembly"
+		},
+		"title": {
+			"translate": "hbm.achievement.assembly"
+		},
+		"description": {
+			"translate": "hbm.achievement.assembly.desc"
+		}
+	},
+	"parent": "hbm:bobmetalworks",
+	"criteria": {
+		"craft_difurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "hbm:machine_assembler"
+					}
+				]
+			}
+		}
+	}
+}

@@ -14,10 +14,9 @@ public class MissileTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		//TODO missile system
-		//if(ModItems.missile_nuclear != null){
-		//	return new ItemStack(ModItems.missile_nuclear);
-		//}
+		if(ModItems.missile_nuclear != null){
+			return new ItemStack(ModItems.missile_nuclear);
+		}
 		return new ItemStack(Items.IRON_PICKAXE);
 	}
 

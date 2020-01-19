@@ -22,7 +22,6 @@ public class DSmokeRenderer extends Render<EntityDSmokeFX> {
 	public static TextureAtlasSprite[] sprites = new TextureAtlasSprite[8];
 	private TextureAtlasSprite sprite;
 	private int field_94150_f;
-	private static final String __OBFID = "CL_00001008";
 
 	public DSmokeRenderer(RenderManager renderManager) {
 		super(renderManager);

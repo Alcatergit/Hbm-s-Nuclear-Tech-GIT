@@ -58,8 +58,6 @@ public class ItemTurretControl extends Item {
 						TileEntityTurretBase turret = (TileEntityTurretBase) te;
 
 						if (!turret.isAI) {
-							turret.oldRotationYaw = player.prevRotationYawHead;
-							turret.oldRotationPitch = player.prevRotationPitch;
 							turret.rotationYaw = player.rotationYaw;
 							turret.rotationPitch = player.rotationPitch;
 
@@ -67,20 +65,12 @@ public class ItemTurretControl extends Item {
 								turret.rotationPitch = -60;
 							if (turret.rotationPitch > 30)
 								turret.rotationPitch = 30;
-							if (turret.oldRotationPitch < -60)
-								turret.oldRotationPitch = -60;
-							if (turret.oldRotationPitch > 30)
-								turret.oldRotationPitch = 30;
 
 							if (turret instanceof TileEntityTurretCheapo) {
 								if (turret.rotationPitch < -30)
 									turret.rotationPitch = -30;
 								if (turret.rotationPitch > 15)
 									turret.rotationPitch = 15;
-								if (turret.oldRotationPitch < -30)
-									turret.oldRotationPitch = -30;
-								if (turret.oldRotationPitch > 15)
-									turret.oldRotationPitch = 15;
 							}
 						}
 					}

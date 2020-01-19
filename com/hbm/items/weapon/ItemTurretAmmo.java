@@ -42,6 +42,8 @@ public class ItemTurretAmmo extends Item {
 				((TileEntityTurretBase)worldIn.getTileEntity(pos)).ammo += count;
             	ItemStack stack = player.getHeldItem(hand);
             	stack.shrink(1);
+            	
+            	player.setHeldItem(hand, stack.copy());
             	if(stack.isEmpty())
             		player.inventory.deleteStack(stack);
     			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.reloadTurret, SoundCategory.PLAYERS, 1.0F, 1.0F, true);

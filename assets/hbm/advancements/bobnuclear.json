@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_nuclear"
+		},
+		"title": {
+			"translate": "hbm.achievement.nuclear"
+		},
+		"description": {
+			"translate": "hbm.achievement.nuclear.desc"
+		}
+	},
+	"parent": "hbm:boboil",
+	"criteria": {
+		"craft_difurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "hbm:ingot_uranium_fuel"
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_chemistry"
+		},
+		"title": {
+			"translate": "hbm.achievement.chemistry"
+		},
+		"description": {
+			"translate": "hbm.achievement.chemistry.desc"
+		}
+	},
+	"parent": "hbm:bobassembly",
+	"criteria": {
+		"craft_difurnace": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "hbm:brick_concrete"
+					}
+				]
+			}
+		}
+	}
+}

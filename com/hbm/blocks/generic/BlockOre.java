@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -80,6 +81,14 @@ public class BlockOre extends Block {
 			case 5: return ModItems.fragment_niobium;
 			}
 		}
+		if(this == ModBlocks.frozen_planks)
+		{
+			return Items.SNOWBALL;
+		}
+		if(this == ModBlocks.frozen_dirt)
+		{
+			return Items.SNOWBALL;
+		}
 		return Item.getItemFromBlock(this);
 	}
 	
@@ -107,6 +116,10 @@ public class BlockOre extends Block {
 	
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
+		if (entity instanceof EntityLivingBase && this == ModBlocks.frozen_dirt)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 2 * 60 * 20, 2));
+    	}
 		if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red))
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));

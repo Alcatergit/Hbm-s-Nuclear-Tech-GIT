@@ -1,6 +1,7 @@
 package com.hbm.lib;
 
 import com.hbm.entity.projectile.EntityBullet;
+import com.hbm.entity.projectile.EntityFire;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
@@ -84,12 +85,12 @@ public class ModDamageSource extends DamageSource {
     public static DamageSource causeDischargeDamage(EntityDischarge p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("electrified", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
-    }
+    }*/
     public static DamageSource causeFireDamage(EntityFire p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("flamethrower", p_76353_0_, p_76353_1_)).setFireDamage().setDamageBypassesArmor();
     }
-    public static DamageSource causePlasmaDamage(EntityPlasmaBeam p_76353_0_, Entity p_76353_1_)
+    /*public static DamageSource causePlasmaDamage(EntityPlasmaBeam p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("plasma", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }

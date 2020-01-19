@@ -14,6 +14,7 @@ import com.hbm.items.bomb.ItemMike;
 import com.hbm.items.bomb.ItemSolinium;
 import com.hbm.items.bomb.ItemTsar;
 import com.hbm.items.food.ItemEnergy;
+import com.hbm.items.gear.ArmorAsbestos;
 import com.hbm.items.gear.ArmorEuphemium;
 import com.hbm.items.gear.ArmorHazmat;
 import com.hbm.items.gear.ArmorModel;
@@ -45,8 +46,12 @@ import com.hbm.items.special.ItemSyringe;
 import com.hbm.items.special.WatzFuel;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemBombCaller;
 import com.hbm.items.tool.ItemChemistryIcon;
 import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.tool.ItemDesignator;
+import com.hbm.items.tool.ItemDesignatorManual;
+import com.hbm.items.tool.ItemDesignatorRange;
 import com.hbm.items.tool.ItemDetonator;
 import com.hbm.items.tool.ItemFluidTank;
 import com.hbm.items.tool.ItemForgeFluidIdentifier;
@@ -54,6 +59,8 @@ import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemLeadBox;
 import com.hbm.items.tool.ItemMultiDetonator;
+import com.hbm.items.tool.ItemTurretBiometry;
+import com.hbm.items.tool.ItemTurretChip;
 import com.hbm.items.tool.ItemTurretControl;
 import com.hbm.items.weapon.ItemAmmo;
 import com.hbm.items.weapon.ItemTurretAmmo;
@@ -73,6 +80,9 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
+	
+	
+	public static final int guiID_item_designator = 100;
 	
 	//Syringe
 	public static final Item syringe_empty = new ItemBase("syringe_empty").setFull3D().setCreativeTab(MainRegistry.consumableTab);
@@ -139,10 +149,22 @@ public class ModItems {
 	public static final Item detonator_multi = new ItemMultiDetonator("detonator_multi").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	public static final Item detonator_laser = new ItemLaserDetonator("detonator_laser").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo");
+	public static final Item bomb_caller = new ItemBombCaller("bomb_caller").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
+	
+	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Turret
 	public static final Item turret_control = new ItemTurretControl("turret_control").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_chip = new ItemTurretChip("turret_chip").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_biometry = new ItemTurretBiometry("turret_biometry").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_light_ammo = new ItemTurretAmmo(ModBlocks.turret_light, 100, "turret_light_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_heavy_ammo = new ItemTurretAmmo(ModBlocks.turret_heavy, 25, "turret_heavy_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_rocket_ammo = new ItemTurretAmmo(ModBlocks.turret_rocket, 8, "turret_rocket_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_flamer_ammo = new ItemTurretAmmo(ModBlocks.turret_flamer, 200, "turret_flamer_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_tau_ammo = new ItemTurretAmmo(ModBlocks.turret_tau, 100, "turret_tau_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_spitfire_ammo = new ItemTurretAmmo(ModBlocks.turret_spitfire, 2, "turret_spitfire_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item turret_cwis_ammo = new ItemTurretAmmo(ModBlocks.turret_cwis, 250, "turret_cwis_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item turret_cheapo_ammo = new ItemTurretAmmo(ModBlocks.turret_cheapo, 100, "turret_cheapo_ammo").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Armor
@@ -165,6 +187,11 @@ public class ModItems {
 	public static final Item hazmat_paa_plate = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.CHEST, "hazmat_paa_plate").setMaxStackSize(1);
 	public static final Item hazmat_paa_legs = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.LEGS, "hazmat_paa_legs").setMaxStackSize(1);
 	public static final Item hazmat_paa_boots = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.FEET, "hazmat_paa_boots").setMaxStackSize(1);
+	
+	public static final Item asbestos_helmet = new ArmorAsbestos(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.HEAD, "asbestos_helmet").setMaxStackSize(1);
+	public static final Item asbestos_plate = new ArmorAsbestos(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "asbestos_plate").setMaxStackSize(1);
+	public static final Item asbestos_legs = new ArmorAsbestos(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.LEGS, "asbestos_legs").setMaxStackSize(1);
+	public static final Item asbestos_boots = new ArmorAsbestos(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.FEET, "asbestos_boots").setMaxStackSize(1);
 	
 	public static final Item schrabidium_helmet = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.HEAD, "schrabidium_helmet").setMaxStackSize(1);
 	public static final Item schrabidium_plate = new ArmorSchrabidium(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, "schrabidium_plate").setMaxStackSize(1);
@@ -456,10 +483,14 @@ public class ModItems {
 	public static final Item powder_spark_mix = new ItemBase("powder_spark_mix").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_fire = new ItemFuel("powder_fire", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_meteorite = new ItemBase("powder_meteorite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_magic = new ItemBase("powder_magic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cloud = new ItemBase("powder_cloud").setCreativeTab(MainRegistry.partsTab);
 	
-	//Misc
+	//Misc/crafting items
+	public static final Item toothpicks = new ItemBase("toothpicks").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ducttape = new ItemBase("ducttape").setUnlocalizedName("ducttape").setCreativeTab(MainRegistry.partsTab);
 	public static final Item catalyst_clay = new ItemBase("catalyst_clay").setCreativeTab(MainRegistry.partsTab);
+	public static final Item motor = new ItemBase("motor").setCreativeTab(MainRegistry.partsTab);
 	
 	//Fuels
 	public static final Item solid_fuel = new ItemFuel("solid_fuel", 3200).setCreativeTab(MainRegistry.partsTab);
@@ -622,7 +653,7 @@ public class ModItems {
 	public static final Item ammo_5mm = new ItemAmmo("ammo_5mm").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg = new ItemAmmo("ammo_50bmg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50ae = new ItemAmmo("ammo_50ae").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_rpg_ammo = new ItemBase("gun_rpg_ammo").setUnlocalizedName("gun_rpg_ammo").setCreativeTab(null);
+	public static final Item gun_rpg_ammo = new ItemBase("gun_rpg_ammo").setCreativeTab(null);
 	
 	//Upgrade
 	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
@@ -667,6 +698,58 @@ public class ModItems {
 	
 	public static final Item solinium_core = new ItemSolinium("solinium_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
+	//Missiles
+	public static final Item designator = new ItemDesignator("designator").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item designator_range = new ItemDesignatorRange("designator_range").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item designator_manual = new ItemDesignatorManual("designator_manual").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	
+	public static final Item missile_generic = new ItemBase("missile_generic").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_incendiary = new ItemBase("missile_incendiary").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_cluster = new ItemBase("missile_cluster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_buster = new ItemBase("missile_buster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_strong = new ItemBase("missile_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_incendiary_strong = new ItemBase("missile_incendiary_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_cluster_strong = new ItemBase("missile_cluster_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_buster_strong = new ItemBase("missile_buster_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_emp_strong = new ItemBase("missile_emp_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_burst = new ItemBase("missile_burst").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_inferno = new ItemBase("missile_inferno").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_rain = new ItemBase("missile_rain").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_drill = new ItemBase("missile_drill").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_nuclear = new ItemBase("missile_nuclear").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_nuclear_cluster = new ItemBase("missile_nuclear_cluster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_endo = new ItemBase("missile_endo").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_exo = new ItemBase("missile_exo").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_doomsday = new ItemBase("missile_doomsday").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_taint = new ItemBase("missile_taint").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_micro = new ItemBase("missile_micro").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_bhole = new ItemBase("missile_bhole").setUnlocalizedName("missile_bhole").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_schrabidium = new ItemBase("missile_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_emp = new ItemBase("missile_emp").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_anti_ballistic = new ItemBase("missile_anti_ballistic").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_carrier = new ItemBase("missile_carrier").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	
+	public static final Item warhead_generic_small = new ItemBase("warhead_generic_small").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_incendiary_small = new ItemBase("warhead_incendiary_small").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_cluster_small = new ItemBase("warhead_cluster_small").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_buster_small = new ItemBase("warhead_buster_small").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_generic_medium = new ItemBase("warhead_generic_medium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_incendiary_medium = new ItemBase("warhead_incendiary_medium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_cluster_medium = new ItemBase("warhead_cluster_medium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_buster_medium = new ItemBase("warhead_buster_medium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_generic_large = new ItemBase("warhead_generic_large").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_incendiary_large = new ItemBase("warhead_incendiary_large").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_cluster_large = new ItemBase("warhead_cluster_large").setUnlocalizedName("warhead_cluster_large").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_buster_large = new ItemBase("warhead_buster_large").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_nuclear = new ItemBase("warhead_nuclear").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_mirv = new ItemBase("warhead_mirv").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_thermo_endo = new ItemBase("warhead_thermo_endo").setCreativeTab(MainRegistry.partsTab);
+	public static final Item warhead_thermo_exo = new ItemBase("warhead_thermo_exo").setCreativeTab(MainRegistry.partsTab);
+	public static final Item thruster_small = new ItemBase("thruster_small").setCreativeTab(MainRegistry.partsTab);
+	public static final Item thruster_medium = new ItemBase("thruster_medium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item thruster_large = new ItemBase("thruster_large").setCreativeTab(MainRegistry.partsTab);
+	public static final Item hull_small_aluminium = new ItemBase("hull_small_aluminium").setCreativeTab(MainRegistry.partsTab);
+	
 	//Music
 	public static final Item record_lc = new ItemModRecord("lc", HBMSoundHandler.lambdaCore, "record_lc").setCreativeTab(CreativeTabs.MISC);
 	public static final Item record_ss = new ItemModRecord("ss", HBMSoundHandler.sectorSweep, "record_ss").setCreativeTab(CreativeTabs.MISC);
@@ -676,6 +759,12 @@ public class ModItems {
 	public static final Item flame_pony = new ItemCustomLore("flame_pony").setCreativeTab(MainRegistry.partsTab);
 	
 	//Dummy texture items
+	public static final Item bob_metalworks = new ItemBase("bob_metalworks").setCreativeTab(null);
+	public static final Item bob_assembly = new ItemBase("bob_assembly").setCreativeTab(null);
+	public static final Item bob_chemistry = new ItemBase("bob_chemistry").setCreativeTab(null);
+	public static final Item bob_oil = new ItemBase("bob_oil").setCreativeTab(null);
+	public static final Item bob_nuclear = new ItemBase("bob_nuclear").setCreativeTab(null);
+	
 	public static final Item smoke1 = new ItemBase("smoke1").setCreativeTab(null);
 	public static final Item smoke2 = new ItemBase("smoke2").setCreativeTab(null);
 	public static final Item smoke3 = new ItemBase("smoke3").setCreativeTab(null);
@@ -711,6 +800,53 @@ public class ModItems {
 	public static final Item cloud6 = new ItemBase("cloud6").setCreativeTab(null);
 	public static final Item cloud7 = new ItemBase("cloud7").setCreativeTab(null);
 	public static final Item cloud8 = new ItemBase("cloud8").setCreativeTab(null);
+	
+	public static final Item gasflame1 = new ItemBase("gasflame1").setCreativeTab(null);
+	public static final Item gasflame2 = new ItemBase("gasflame2").setCreativeTab(null);
+	public static final Item gasflame3 = new ItemBase("gasflame3").setCreativeTab(null);
+	public static final Item gasflame4 = new ItemBase("gasflame4").setCreativeTab(null);
+	public static final Item gasflame5 = new ItemBase("gasflame5").setCreativeTab(null);
+	public static final Item gasflame6 = new ItemBase("gasflame6").setCreativeTab(null);
+	public static final Item gasflame7 = new ItemBase("gasflame7").setCreativeTab(null);
+	public static final Item gasflame8 = new ItemBase("gasflame8").setCreativeTab(null);
+	
+	public static final Item flame_1 = new ItemBase("flame_1").setCreativeTab(null);
+	public static final Item flame_2 = new ItemBase("flame_2").setCreativeTab(null);
+	public static final Item flame_3 = new ItemBase("flame_3").setCreativeTab(null);
+	public static final Item flame_4 = new ItemBase("flame_4").setCreativeTab(null);
+	public static final Item flame_5 = new ItemBase("flame_5").setCreativeTab(null);
+	public static final Item flame_6 = new ItemBase("flame_6").setCreativeTab(null);
+	public static final Item flame_7 = new ItemBase("flame_7").setCreativeTab(null);
+	public static final Item flame_8 = new ItemBase("flame_8").setCreativeTab(null);
+	public static final Item flame_9 = new ItemBase("flame_9").setCreativeTab(null);
+	public static final Item flame_10 = new ItemBase("flame_10").setCreativeTab(null);
+	
+	public static final Item orange1 = new ItemBase("orange1").setCreativeTab(null);
+	public static final Item orange2 = new ItemBase("orange2").setCreativeTab(null);
+	public static final Item orange3 = new ItemBase("orange3").setCreativeTab(null);
+	public static final Item orange4 = new ItemBase("orange4").setCreativeTab(null);
+	public static final Item orange5 = new ItemBase("orange5").setCreativeTab(null);
+	public static final Item orange6 = new ItemBase("orange6").setCreativeTab(null);
+	public static final Item orange7 = new ItemBase("orange7").setCreativeTab(null);
+	public static final Item orange8 = new ItemBase("orange8").setCreativeTab(null);
+	
+	public static final Item pc1 = new ItemBase("pc1").setCreativeTab(null);
+	public static final Item pc2 = new ItemBase("pc2").setCreativeTab(null);
+	public static final Item pc3 = new ItemBase("pc3").setCreativeTab(null);
+	public static final Item pc4 = new ItemBase("pc4").setCreativeTab(null);
+	public static final Item pc5 = new ItemBase("pc5").setCreativeTab(null);
+	public static final Item pc6 = new ItemBase("pc6").setCreativeTab(null);
+	public static final Item pc7 = new ItemBase("pc7").setCreativeTab(null);
+	public static final Item pc8 = new ItemBase("pc8").setCreativeTab(null);
+	
+	public static final Item chlorine1 = new ItemBase("chlorine1").setCreativeTab(null);
+	public static final Item chlorine2 = new ItemBase("chlorine2").setCreativeTab(null);
+	public static final Item chlorine3 = new ItemBase("chlorine3").setCreativeTab(null);
+	public static final Item chlorine4 = new ItemBase("chlorine4").setCreativeTab(null);
+	public static final Item chlorine5 = new ItemBase("chlorine5").setCreativeTab(null);
+	public static final Item chlorine6 = new ItemBase("chlorine6").setCreativeTab(null);
+	public static final Item chlorine7 = new ItemBase("chlorine7").setCreativeTab(null);
+	public static final Item chlorine8 = new ItemBase("chlorine8").setCreativeTab(null);
 	
 	public static void preInit(){
 		for(Item item : ALL_ITEMS){

@@ -27,7 +27,27 @@ public final class HBMSoundHandler {
 	public static SoundEvent weaponSpinDown;
 	public static SoundEvent weaponSpinUp;
 	public static SoundEvent sawShoot;
+	public static SoundEvent rpgShoot;
+	public static SoundEvent rifleShoot;
+	public static SoundEvent defabShoot;
+	public static SoundEvent flamethrowerIgnite;
+	public static SoundEvent flamethrowerShoot;
+	public static SoundEvent tauShoot;
+	public static SoundEvent oldExplosion;
+	public static SoundEvent ciwsSpindown;
+	public static SoundEvent ciwsSpinup;
+	public static SoundEvent ciwsFiringLoop;
 	public static SoundEvent reloadTurret;
+	public static SoundEvent planeShotDown;
+	public static SoundEvent bombWhistle;
+	public static SoundEvent planeCrash;
+	public static SoundEvent missileTakeoff;
+	public static SoundEvent bomberSmallLoop;
+	public static SoundEvent bomberLoop;
+	public static SoundEvent stingerLockon;
+	public static SoundEvent trainHorn;
+	public static SoundEvent bombDet;
+	public static SoundEvent rocketTakeoff;
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
@@ -52,7 +72,27 @@ public final class HBMSoundHandler {
 		weaponSpinDown = register("weapon.spindown");
 		weaponSpinUp = register("weapon.spinup");
 		sawShoot = register("weapon.sawShoot");
+		rpgShoot = register("weapon.rpgShoot");
 		reloadTurret = register("weapon.reloadTurret");
+		rifleShoot = register("weapon.rifleShoot");
+		defabShoot = register("weapon.defabShoot");
+		flamethrowerIgnite = register("weapon.flamethrowerIgnite");
+		flamethrowerShoot = register("weapon.flamethrowerShoot");
+		tauShoot = register("weapon.tauShoot");
+		oldExplosion = register("entity.oldExplosion");
+		ciwsSpindown = register("weapon.ciwsSpindown");
+		ciwsSpinup = register("weapon.ciwsSpinup");
+		ciwsFiringLoop = register("weapon.ciwsFiringLoop");
+		planeShotDown = register("entity.planeShotDown");
+		bombWhistle = register("entity.bombWhistle");
+		planeCrash = register("entity.planeCrash");
+		missileTakeoff = register("weapon.missileTakeOff");
+		bomberSmallLoop = register("entity.bomberSmallLoop");
+		bomberLoop = register("entity.bomberLoop");
+		stingerLockon = register("weapon.stingerLockOn");
+		trainHorn = register("alarm.trainHorn");
+		bombDet = register("entity.bombDet");
+		rocketTakeoff = register("entity.rocketTakeoff");
 		
 	}
 	
