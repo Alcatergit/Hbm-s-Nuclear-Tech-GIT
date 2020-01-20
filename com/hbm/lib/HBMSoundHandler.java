@@ -3,6 +3,8 @@ package com.hbm.lib;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.handler.GunConfiguration;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -48,6 +50,26 @@ public final class HBMSoundHandler {
 	public static SoundEvent trainHorn;
 	public static SoundEvent bombDet;
 	public static SoundEvent rocketTakeoff;
+	public static SoundEvent silencerShoot;
+	public static SoundEvent rpgReload;
+	public static SoundEvent reloadGrenade;
+	public static SoundEvent reloadShotgun;
+	public static SoundEvent reloadMag;
+	public static SoundEvent reloadRifle;
+	public static SoundEvent reloadRevolver;
+	public static SoundEvent boatWeapon;
+	public static SoundEvent ricochet;
+	public static SoundEvent grenadeBounce;
+	public static SoundEvent alarmGambit;
+	public static SoundEvent revolverShoot;
+	public static SoundEvent heavyShoot;
+	public static SoundEvent schrabidiumShoot;
+	public static SoundEvent revolverShootAlt;
+	public static SoundEvent hkShoot;
+	public static SoundEvent shotgunShoot;
+	public static SoundEvent uziShoot;
+	public static SoundEvent calShoot;
+	public static SoundEvent lacunaeShoot;
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
@@ -93,6 +115,27 @@ public final class HBMSoundHandler {
 		trainHorn = register("alarm.trainHorn");
 		bombDet = register("entity.bombDet");
 		rocketTakeoff = register("entity.rocketTakeoff");
+		silencerShoot = register("weapon.silencerShoot");
+		GunConfiguration.RSOUND_LAUNCHER = rpgReload = register("weapon.rpgReload");
+		GunConfiguration.RSOUND_GRENADE = reloadGrenade = register("weapon.hkReload");
+		GunConfiguration.RSOUND_SHOTGUN = reloadShotgun = register("weapon.shotgunReload");
+		GunConfiguration.RSOUND_MAG = reloadMag = register("weapon.magReload");
+		GunConfiguration.RSOUND_RIFLE = reloadRifle = register("");
+		GunConfiguration.RSOUND_REVOLVER = reloadRevolver = register("weapon.revolverReload");
+		boatWeapon = register("weapon.boat");
+		ricochet = register("weapon.ricochet");
+		grenadeBounce = register("weapon.gBounce");
+		alarmGambit = register("alarm.gambit");
+		revolverShoot = register("weapon.revolverShoot");
+		heavyShoot = register("weapon.heavyShoot");
+		schrabidiumShoot = register("hbm:weapon.schrabidiumShoot");
+		revolverShootAlt = register("weapon.revolverShootAlt");
+		hkShoot = register("weapon.hkShoot");
+		shotgunShoot = register("weapon.shotgunShoot");
+		uziShoot = register("weapon.uziShoot");
+		calShoot = register("weapon.calShoot");
+		lacunaeShoot = register("weapon.lacunaeShoot");
+		
 		
 	}
 	

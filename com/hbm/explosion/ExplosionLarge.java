@@ -8,10 +8,14 @@ import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -102,6 +106,61 @@ public class ExplosionLarge {
 			shrapnel.motionZ = rand.nextGaussian() * 1 * (1 + (count / 50));
 			shrapnel.setTrail(rand.nextInt(3) == 0);
 			world.spawnEntity(shrapnel);
+		}
+	}
+	
+	public static void jolt(World world, double posX, double posY, double posZ, double strength, int count, double vel) {
+		
+		for(int j = 0; j < count; j++) {
+			
+			double phi = rand.nextDouble() * (Math.PI * 2);
+			double costheta = rand.nextDouble() * 2 - 1;
+			double theta = Math.acos(costheta);
+			double x = Math.sin( theta) * Math.cos( phi );
+			double y = Math.sin( theta) * Math.sin( phi );
+			double z = Math.cos( theta );
+				
+			Vec3d vec = new Vec3d(x, y, z);
+			MutableBlockPos pos = new BlockPos.MutableBlockPos();
+			
+			for(int i = 0; i < strength; i ++) {
+				double x0 = posX + (vec.x * i);
+				double y0 = posY + (vec.y * i);
+				double z0 = posZ + (vec.z * i);
+				pos.setPos((int)x0, (int)y0, (int)z0);
+				
+				if(!world.isRemote) {
+					IBlockState blockstate = world.getBlockState(pos);
+					Block block = blockstate.getBlock();
+					if(blockstate.getMaterial().isLiquid()) {
+						world.setBlockToAir(pos);
+					}
+					
+					if(block != Blocks.AIR) {
+						
+						if(block.getExplosionResistance(world, pos, null, null) > 70)
+							continue;
+			            
+			            EntityRubble rubble = new EntityRubble(world);
+						rubble.posX = x0 + 0.5F;
+						rubble.posY = y0 + 0.5F;
+						rubble.posZ = z0 + 0.5F;
+						rubble.setMetaBasedOnBlock(block, block.getMetaFromState(blockstate));
+						
+						Vec3d vec4 = new Vec3d(posX - rubble.posX, posY - rubble.posY, posZ - rubble.posZ);
+						vec4.normalize();
+
+						rubble.motionX = vec4.x * vel;
+						rubble.motionY = vec4.y * vel;
+						rubble.motionZ = vec4.z * vel;
+						
+						world.spawnEntity(rubble);
+					
+						world.setBlockToAir(pos);
+						break;
+					}
+				}
+			}
 		}
 	}
 	

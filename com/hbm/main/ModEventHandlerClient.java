@@ -31,9 +31,12 @@ import com.hbm.render.item.FluidCanisterBakedModel;
 import com.hbm.render.item.FluidCanisterRender;
 import com.hbm.render.item.FluidTankBakedModel;
 import com.hbm.render.item.FluidTankRender;
+import com.hbm.render.item.GunRevolverBakedModel;
+import com.hbm.render.item.GunRevolverRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.item.ItemRenderRedstoneSword;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -157,7 +160,12 @@ public class ModEventHandlerClient {
 			FFIdentifierRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
 		}
-		
+		Object object9 = evt.getModelRegistry().getObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"));
+		if(object9 instanceof IBakedModel){
+			IBakedModel model = (IBakedModel)object9;
+			GunRevolverRender.INSTANCE.revolverModel = model;
+			evt.getModelRegistry().putObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"),  new GunRevolverBakedModel());
+		}
 
 	}
 

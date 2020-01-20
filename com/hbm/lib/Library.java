@@ -23,6 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -745,6 +746,27 @@ public class Library {
 		}
 
 		return false;
+	}
+
+	public static boolean hasInventoryItem(InventoryPlayer inventory, Item ammo) {
+		for(int i = 0; i < inventory.getSizeInventory(); i++){
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static void consumeInventoryItem(InventoryPlayer inventory, Item ammo) {
+		for(int i = 0; i < inventory.getSizeInventory(); i++){
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo && !stack.isEmpty()){
+				stack.shrink(1);
+				inventory.setInventorySlotContents(i, stack.copy());
+				return;
+			}
+		}
 	}
 
 	//////  //////  //////  //////  //////  ////        //////  //////  //////

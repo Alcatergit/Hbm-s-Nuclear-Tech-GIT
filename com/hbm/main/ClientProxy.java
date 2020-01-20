@@ -58,7 +58,9 @@ import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.entity.projectile.EntityBullet;
+import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.entity.projectile.EntityDuchessGambit;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityRocket;
@@ -72,12 +74,14 @@ import com.hbm.render.entity.GasFlameRenderer;
 import com.hbm.render.entity.RenderAAShell;
 import com.hbm.render.entity.RenderBeam5;
 import com.hbm.render.entity.RenderBlackHole;
+import com.hbm.render.entity.RenderBoat;
 import com.hbm.render.entity.RenderBomber;
 import com.hbm.render.entity.RenderBombletSelena;
 import com.hbm.render.entity.RenderBombletTheta;
 import com.hbm.render.entity.RenderBombletZeta;
 import com.hbm.render.entity.RenderBoxcar;
 import com.hbm.render.entity.RenderBullet;
+import com.hbm.render.entity.RenderBulletMk2;
 import com.hbm.render.entity.RenderCloudFleija;
 import com.hbm.render.entity.RenderCloudRainbow;
 import com.hbm.render.entity.RenderEMPBlast;
@@ -129,6 +133,7 @@ import com.hbm.render.item.FFIdentifierRender;
 import com.hbm.render.item.FluidBarrelRender;
 import com.hbm.render.item.FluidCanisterRender;
 import com.hbm.render.item.FluidTankRender;
+import com.hbm.render.item.GunRevolverRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.tileentity.RenderAssembler;
@@ -297,6 +302,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMissileAntiBallistic.class, RenderMissileAB.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBooster.class, RenderBoosterMissile.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCarrier.class, RenderCarrierMissile.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBulletBase.class, RenderBulletMk2.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDuchessGambit.class, RenderBoat.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 	}
@@ -351,6 +358,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.canister_generic.setTileEntityItemStackRenderer(FluidCanisterRender.INSTANCE);
 		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
 		ModItems.forge_fluid_identifier.setTileEntityItemStackRenderer(FFIdentifierRender.INSTANCE);
+		ModItems.gun_revolver.setTileEntityItemStackRenderer(GunRevolverRender.INSTANCE);
 	}
 	
 	public static IBakedModel boxcar;

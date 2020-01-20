@@ -23,6 +23,7 @@ public class ItemAmmo extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		//TODO uncomment this when done with bullets
 		//12 GAUGE
 				/*if(this == ModItems.ammo_12gauge_incendiary) {
 					list.add(TextFormatting.BLUE + "+ Incendiary");
