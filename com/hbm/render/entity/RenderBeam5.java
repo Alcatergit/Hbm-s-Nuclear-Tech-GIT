@@ -31,6 +31,7 @@ public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 		BufferBuilder buf = tessellator.getBuffer();
 		
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -78,6 +79,7 @@ public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 		}
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 	

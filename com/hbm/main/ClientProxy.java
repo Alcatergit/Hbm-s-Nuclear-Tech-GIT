@@ -67,11 +67,14 @@ import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRocketHoming;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
+import com.hbm.entity.projectile.EntitySparkBeam;
+import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.entity.GasFlameRenderer;
 import com.hbm.render.entity.RenderAAShell;
+import com.hbm.render.entity.RenderBeam4;
 import com.hbm.render.entity.RenderBeam5;
 import com.hbm.render.entity.RenderBlackHole;
 import com.hbm.render.entity.RenderBoat;
@@ -136,6 +139,14 @@ import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.GunRevolverRender;
 import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderGunAnim;
+import com.hbm.render.item.ItemRenderGunAnim2;
+import com.hbm.render.item.ItemRenderOverkill;
+import com.hbm.render.item.ItemRenderRevolverCursed;
+import com.hbm.render.item.ItemRenderRevolverGold;
+import com.hbm.render.item.ItemRenderRevolverIron;
+import com.hbm.render.item.ItemRenderRevolverLead;
+import com.hbm.render.item.ItemRenderRevolverNightmare;
+import com.hbm.render.item.ItemRenderRevolverSchrabidium;
 import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderCIWSTurret;
 import com.hbm.render.tileentity.RenderCable;
@@ -219,6 +230,8 @@ public class ClientProxy extends ServerProxy {
 		
 		MinecraftForge.EVENT_BUS.register(new ModEventHandlerClient());
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
+		
+		HbmShaderManager.loadShaders();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
@@ -304,6 +317,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCarrier.class, RenderCarrierMissile.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBulletBase.class, RenderBulletMk2.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDuchessGambit.class, RenderBoat.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySparkBeam.class, RenderBeam4.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 	}
@@ -359,6 +373,19 @@ public class ClientProxy extends ServerProxy {
 		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
 		ModItems.forge_fluid_identifier.setTileEntityItemStackRenderer(FFIdentifierRender.INSTANCE);
 		ModItems.gun_revolver.setTileEntityItemStackRenderer(GunRevolverRender.INSTANCE);
+		ModItems.gun_revolver_nightmare.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());
+		ModItems.gun_revolver_nightmare2.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());
+		ModItems.gun_revolver_iron.setTileEntityItemStackRenderer(new ItemRenderRevolverIron());
+		ModItems.gun_revolver_gold.setTileEntityItemStackRenderer(new ItemRenderRevolverGold());
+		ModItems.gun_revolver_lead.setTileEntityItemStackRenderer(new ItemRenderRevolverLead());
+		ModItems.gun_revolver_schrabidium.setTileEntityItemStackRenderer(new ItemRenderRevolverSchrabidium());
+		ModItems.gun_revolver_cursed.setTileEntityItemStackRenderer(new ItemRenderRevolverCursed());
+		ModItems.gun_revolver_pip.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_revolver_nopip.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_revolver_blackjack.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_revolver_red.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_lever_action.setTileEntityItemStackRenderer(new ItemRenderGunAnim2());
+		ModItems.gun_spark.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 	}
 	
 	public static IBakedModel boxcar;

@@ -61,6 +61,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	@Override
 	public void doRender(EntityBulletBase bullet, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
+		
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 		GL11.glRotatef(bullet.prevRotationYaw + (bullet.rotationYaw - bullet.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(bullet.prevRotationPitch + (bullet.rotationPitch - bullet.prevRotationPitch) * partialTicks + 180, 0.0F, 0.0F, 1.0F);
@@ -188,6 +189,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	
 	private void renderFlechette() {
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		
@@ -253,15 +255,16 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
+        GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 	
 	private void renderDart(int style) {
 		
+		
 		float red = 1F;
 		float green = 1F;
 		float blue = 1F;
-		
 		switch(style) {
 		case BulletConfiguration.BOLT_LASER: red = 1F; green = 0F; blue = 0F; break;
 		case BulletConfiguration.BOLT_NIGHTMARE: red = 1F; green = 1F; blue = 0F; break;
@@ -269,6 +272,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		}
 		
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -354,6 +358,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(true);
 		
+        GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 

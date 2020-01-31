@@ -18,6 +18,7 @@ public class RenderRocketTurret extends TileEntitySpecialRenderer<TileEntityTurr
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
+		//TODO there's a math helper funtion specifically for this. Use it.
 		//Drillgon200: Maybe I'll fix this later
 		/*if((te.rotationYaw > 0 && te.oldRotationYaw < 0)){
 			te.oldRotationYaw = 360+te.oldRotationYaw;

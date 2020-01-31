@@ -1,46 +1,25 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.explosion.ExplosionLarge;
-import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.inventory.MachineRecipes;
-import com.hbm.items.special.ItemBlades;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxParticlePacket;
-import com.hbm.packet.EnumParticlePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
-import com.hbm.particle.EnumHbmParticles;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachinePress extends TileEntity implements ITickable, ICapabilityProvider {
@@ -54,7 +33,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	public int item;
 	public int meta;
 	public boolean isRetracting = false;
-	public boolean test = false;
+	public boolean test = true;
 
 	public ItemStackHandler inventory = new ItemStackHandler(4) {
 		protected void onContentsChanged(int slot) {
@@ -136,6 +115,12 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 	@Override
 	public void update() {
+	/*	if(test){
+			Vec3d bottomLeft = new Vec3d(pos.getX(), pos.getY() + 5, pos.getZ());
+			Portal portal = new Mirror(world, bottomLeft, bottomLeft.addVector(1, 0, 0), bottomLeft.addVector(0, 1, 0), bottomLeft.addVector(1, 1, 0), null);
+			System.out.println(portal);
+			test = false;
+		}*/
 		if (!world.isRemote) {
 			if (burnTime > 0) {
 				this.burnTime--;

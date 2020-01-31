@@ -82,17 +82,20 @@ import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRocketHoming;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
+import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.portals.DummyRenderEntity;
 import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
@@ -135,6 +138,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -191,8 +195,6 @@ public class MainRegistry {
 	public static CreativeTabs weaponTab = new WeaponTab(CreativeTabs.getNextID(), "tabWeapon");
 	//drinks, kits, tools
 	public static CreativeTabs consumableTab = new ConsumableTab(CreativeTabs.getNextID(), "tabConsumable");
-	
-	
 	
 	public static boolean enableDebugMode = true;
 	public static boolean enableMycelium = false;
@@ -289,7 +291,9 @@ public class MainRegistry {
 
 	public static int generalOverride = 11;
 	public static int polaroidID = 1;
-
+	
+	public static boolean useShaders = true;
+	
 	public static int taintID = 62;
 	public static int radiationID = 63;
 	public static int bangID = 64;
@@ -441,6 +445,7 @@ public class MainRegistry {
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_emp_blast"), EntityEMPBlast.class, "entity_emp_blast", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bullet_mk2"), EntityBulletBase.class, "entity_bullet_mk2", i++, MainRegistry.instance, 250, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_duchessgambit"), EntityDuchessGambit.class, "entity_duchessgambit", i++, MainRegistry.instance, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_spark_beam"), EntitySparkBeam.class, "entity_spark_beam", i++, MainRegistry.instance, 1000, 1, true);
 	    
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_generic"), EntityMissileGeneric.class, "entity_missile_generic", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_incendiary"), EntityMissileIncendiary.class, "entity_missile_incendiary", i++, MainRegistry.instance, 1000, 1, true);
@@ -481,6 +486,8 @@ public class MainRegistry {
 	            }
 	        }
 	    });
+	    
+	    
     }
 
     @EventHandler

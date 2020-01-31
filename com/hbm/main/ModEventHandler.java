@@ -284,6 +284,12 @@ public class ModEventHandler {
 			foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
 			event.getEntity().world.spawnEntity(foeq);
 		}
+		if(event.getEntityLiving() instanceof EntityPlayer){
+			if(Library.checkArmor((EntityPlayer)event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)){
+				event.setCanceled(true);
+				event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
+			}
+		}
 	}
 	
 	@SubscribeEvent

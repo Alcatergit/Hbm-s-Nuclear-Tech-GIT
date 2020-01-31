@@ -14,10 +14,9 @@ public class WeaponTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		//TODO gun
-		//if(ModItems.gun_lever_action != null){
-		//	return new ItemStack(ModItems.gun_lever_action);
-		//}
+		if(ModItems.gun_lever_action != null){
+			return new ItemStack(ModItems.gun_lever_action);
+		}
 		return new ItemStack(Items.IRON_PICKAXE);
 	}
 

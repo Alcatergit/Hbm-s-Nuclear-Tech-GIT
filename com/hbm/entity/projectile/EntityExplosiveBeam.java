@@ -52,14 +52,16 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     public EntityExplosiveBeam(World p_i1753_1_)
     {
         super(p_i1753_1_);
-        EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
+        if(p_i1753_1_.isRemote)
+        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.setSize(0.5F, 0.5F);
     }
 
     public EntityExplosiveBeam(World p_i1754_1_, double p_i1754_2_, double p_i1754_4_, double p_i1754_6_)
     {
         super(p_i1754_1_);
-        EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
+        if(p_i1754_1_.isRemote)
+        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.setSize(0.5F, 0.5F);
         this.setPosition(p_i1754_2_, p_i1754_4_, p_i1754_6_);
     }
@@ -67,7 +69,8 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     public EntityExplosiveBeam(World p_i1755_1_, EntityLivingBase p_i1755_2_, EntityLivingBase p_i1755_3_, float p_i1755_4_, float p_i1755_5_)
     {
         super(p_i1755_1_);
-        EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
+        if(p_i1755_1_.isRemote)
+        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.shootingEntity = p_i1755_2_;
 
         if (p_i1755_2_ instanceof EntityPlayer)
@@ -116,7 +119,8 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, boolean offHand)
     {
         super(p_i1756_1_);
-        EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
+        if(p_i1756_1_.isRemote)
+        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.shootingEntity = p_i1756_2_;
 
         this.setSize(0.5F, 0.5F);

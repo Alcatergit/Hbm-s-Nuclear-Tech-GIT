@@ -47,7 +47,7 @@ public class EntityDuchessGambit extends EntityThrowable {
 		if(motionY < -1.5)
 			motionY = -1.5;
         
-        if(this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)) != Blocks.AIR)
+        if(!this.world.isRemote && this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getBlock() != Blocks.AIR)
         {
             this.world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F, true);
     		this.setDead();

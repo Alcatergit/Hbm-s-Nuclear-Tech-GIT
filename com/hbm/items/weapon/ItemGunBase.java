@@ -19,6 +19,7 @@ import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -30,6 +31,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -43,10 +45,19 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	public GunConfiguration mainConfig;
 	public GunConfiguration altConfig;
 
+	
+	//Drillgon200: true if mouse 1 has been pressed for the right hand
 	@SideOnly(Side.CLIENT)
-	public boolean m1;// = false;
+	public boolean m1r;// = false;
+	//Drillgon200: true if mouse 2 has been pressed for the right hand
 	@SideOnly(Side.CLIENT)
-	public boolean m2;// = false;
+	public boolean m2r;// = false;
+	//Drillgon200: true if mouse 1 has been pressed for the left hand
+	@SideOnly(Side.CLIENT)
+	public boolean m1l;// = false;
+	//Drillgon200: true if mouse 2 has been pressed for the left hand
+	@SideOnly(Side.CLIENT)
+	public boolean m2l;// = false;
 
 	public ItemGunBase(GunConfiguration config, String s) {
 		mainConfig = config;
@@ -84,23 +95,38 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			}
 		}
 	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return oldStack.getItem() != newStack.getItem();
+	}
 
 	@SideOnly(Side.CLIENT)
 	private void updateClient(ItemStack stack, World world, EntityPlayer entity, int slot, EnumHand hand) {
 
 		boolean clickLeft = Mouse.isButtonDown(0);
 		boolean clickRight = Mouse.isButtonDown(1);
-		boolean left = m1;
-		boolean right = m2;
+		boolean left = m1r;
+		boolean right = m2r;
+		boolean leftleft = m1l;
+		boolean leftright = m2l;
 
 		if (hand != null) {
-			if (left && right) {
+			if (left && right && hand == EnumHand.MAIN_HAND) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
 				// setIsMouseDown(stack, false);
 				// setIsAltDown(stack, false);
-				m1 = false;
-				m2 = false;
+				m1r = false;
+				m2r = false;
+			}
+			if(leftleft && leftright && hand == EnumHand.OFF_HAND){
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
+				// setIsMouseDown(stack, false);
+				// setIsAltDown(stack, false);
+				m1l = false;
+				m2l = false;
 			}
 
 			/*if(!left && !right) {
@@ -116,15 +142,27 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			}*/
 
 			if (left && !clickLeft) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, EnumHand.MAIN_HAND));
 				// setIsMouseDown(stack, false);
-				m1 = false;
+				m1r = false;
+			}
+			
+			if (leftleft && !clickLeft) {
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, EnumHand.OFF_HAND));
+				// setIsMouseDown(stack, false);
+				m1l = false;
 			}
 
 			if (right && !clickRight) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, EnumHand.MAIN_HAND));
 				// setIsAltDown(stack, false);
-				m2 = false;
+				m2r = false;
+			}
+			
+			if (leftright && !clickRight) {
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, EnumHand.OFF_HAND));
+				// setIsAltDown(stack, false);
+				m2l = false;
 			}
 
 			if (mainConfig.reloadType != GunConfiguration.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
@@ -139,11 +177,19 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 			if (left) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
-				m1 = false;
+				m1r = false;
 			}
 			if (right) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
-				m2 = false;
+				m2r = false;
+			}
+			if(leftleft){
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
+				m1l = false;
+			}
+			if(leftright){
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
+				m2l = false;
 			}
 		}
 	}
@@ -152,10 +198,18 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 		if (getDelay(stack) > 0 && hand != null)
 			setDelay(stack, getDelay(stack) - 1);
+		if(getIsMouseDown(stack) && getDelay(stack) < mainConfig.rateOfFire - 3)
+			shootNext(stack, true);
+		if (MainRegistry.enableGuns && mainConfig.firingMode == GunConfiguration.FIRE_AUTO && getIsMouseDown(stack) && tryShoot(stack, world, player, hand != null)) {
 
-		if (MainRegistry.enableGuns && mainConfig.firingMode == 1 && getIsMouseDown(stack) && tryShoot(stack, world, player, hand != null)) {
-
-			fire(stack, world, player);
+			fire(stack, world, player, hand);
+			setDelay(stack, mainConfig.rateOfFire);
+			// setMag(stack, getMag(stack) - 1);
+			useUpAmmo(player, stack);
+		}
+		
+		if (mainConfig.firingMode == GunConfiguration.FIRE_MANUAL && (getIsMouseDown(stack) || shouldShootNext(stack)) && tryShoot(stack, world, player, hand != null)) {
+			fire(stack, world, player, hand);
 			setDelay(stack, mainConfig.rateOfFire);
 			// setMag(stack, getMag(stack) - 1);
 			useUpAmmo(player, stack);
@@ -184,8 +238,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 	// called every time the gun shoots, overridden to change bullet
 	// entity/special additions
-	private void fire(ItemStack stack, World world, EntityPlayer player) {
-
+	private void fire(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+		shootNext(stack, false);
 		BulletConfiguration config = null;
 
 		if (mainConfig.reloadType == GunConfiguration.RELOAD_NONE) {
@@ -201,7 +255,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 				bullets += world.rand.nextInt(config.bulletsMax - config.bulletsMin);
 
 			for (int i = 0; i < bullets; i++) {
-				spawnProjectile(world, player, stack, BulletConfigSyncingUtil.getKey(config));
+				spawnProjectile(world, player, stack, BulletConfigSyncingUtil.getKey(config), hand);
 			}
 
 			setItemWear(stack, getItemWear(stack) + config.wear);
@@ -212,17 +266,16 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 		// ItemStack(ModItems.gun_revolver_gold_ammo));
 	}
 
-	private void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config) {
+	private void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand) {
 
-		EntityBulletBase bullet = new EntityBulletBase(world, config, player);
+		EntityBulletBase bullet = new EntityBulletBase(world, config, player, hand);
 		world.spawnEntity(bullet);
 	}
 
 	// called on click (server side, called by mouse packet)
-	public void startAction(ItemStack stack, World world, EntityPlayer player, boolean main) {
-
+	public void startAction(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
 		if (mainConfig.firingMode == GunConfiguration.FIRE_MANUAL && getIsMouseDown(stack) && tryShoot(stack, world, player, main)) {
-			fire(stack, world, player);
+			fire(stack, world, player, hand);
 			setDelay(stack, mainConfig.rateOfFire);
 			// setMag(stack, getMag(stack) - 1);
 			useUpAmmo(player, stack);
@@ -230,7 +283,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	// called on click release
-	public void endAction(ItemStack stack, World world, EntityPlayer player, boolean main) {
+	public void endAction(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
 
 	}
 
@@ -253,7 +306,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 				if (count == 0)
 					setIsReloading(stack, false);
-
+				else
+					shootNext(stack, false);
 				for (int i = 0; i < count; i++) {
 
 					if (getMag(stack) < mainConfig.ammoCap) {
@@ -297,7 +351,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 				// load new type if bullets are present
 				if (ammo != null) {
-
+					shootNext(stack, false);
 					int count = 1;
 
 					if (mainConfig.reloadType == 1) {
@@ -442,6 +496,15 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 		
 		return null;
 	}*/
+	
+	//Drillgon200: So you can shoot twice and have it fire twice better
+	public static boolean shouldShootNext(ItemStack stack){
+		return readNBT(stack, "shootNext") == 1 ? true : false;
+	}
+	
+	public static void shootNext(ItemStack stack, boolean b){
+		writeNBT(stack, "shootNext", b ? 1 : 0);
+	}
 
 	/// sets reload cycle to config defult ///
 	public static void resetReloadCycle(ItemStack stack) {
@@ -531,12 +594,14 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 	/// NBT utility ///
 	private static void writeNBT(ItemStack stack, String key, int value) {
-
+		
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 
 		stack.getTagCompound().setInteger(key, value);
 	}
+	
+	
 
 	private static int readNBT(ItemStack stack, String key) {
 

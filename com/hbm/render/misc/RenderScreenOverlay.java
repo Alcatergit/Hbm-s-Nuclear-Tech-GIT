@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -109,12 +110,15 @@ public class RenderScreenOverlay {
 		Minecraft.getMinecraft().renderEngine.bindTexture(hud);
 	}
 	
-	public static void renderAmmo(ScaledResolution resolution, Gui gui, Item ammo, int count, int max, int dura) {
+	public static void renderAmmo(ScaledResolution resolution, Gui gui, Item ammo, int count, int max, int dura, EnumHand hand) {
 		
 		GL11.glPushMatrix();
         
 		int pX = resolution.getScaledWidth() / 2 + 62 + 36;
 		int pZ = resolution.getScaledHeight() - 21;
+		if(hand == EnumHand.OFF_HAND){
+			pX -= 277;
+		}
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
         gui.drawTexturedModalRect(pX, pZ + 16, 94, 0, 52, 3);
@@ -130,6 +134,7 @@ public class RenderScreenOverlay {
         itemRenderer.renderItemAndEffectIntoGUI(null, new ItemStack(ammo), pX, pZ);
         RenderHelper.disableStandardItemLighting();
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        GL11.glEnable(GL11.GL_BLEND);
         
         GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(hud);

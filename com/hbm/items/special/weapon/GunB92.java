@@ -64,7 +64,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if(entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_b92){
+		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_b92) {
 			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		if (!entityLiving.isSneaking()) {
@@ -108,11 +108,10 @@ public class GunB92 extends Item implements IHasCustomModel {
 						worldIn.spawnEntity(entityarrow1);
 					}
 
-				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ,
-						HBMSoundHandler.sparkShoot, SoundCategory.AMBIENT, 5.0F, 1.0F);
-				//Well that was a failure. Maybe I'll make it work one day
-				//if(worldIn.isRemote)
-				//	ItemRenderGunAnim.b92Ani.start();
+				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.sparkShoot, SoundCategory.AMBIENT, 5.0F, 1.0F);
+				// Well that was a failure. Maybe I'll make it work one day
+				// if(worldIn.isRemote)
+				// ItemRenderGunAnim.b92Ani.start();
 				setAnim(stack, 1);
 				setPower(stack, 0);
 			}
@@ -122,21 +121,19 @@ public class GunB92 extends Item implements IHasCustomModel {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean b) {
-		
+
 		int j = getAnim(stack);
 		if (j > 0) {
 			{
-				
+
 				if (j < 30) {
 					setAnim(stack, j + 1);
-					
+
 				} else
 					setAnim(stack, 0);
 
-				
 				if (j == 15) {
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.b92Reload,
-							SoundCategory.AMBIENT, 2.0F, 0.9F);
+					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.b92Reload, SoundCategory.AMBIENT, 2.0F, 0.9F);
 					setPower(stack, getPower(stack) + 1);
 
 					if (getPower(stack) > 10) {
@@ -144,9 +141,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 						setPower(stack, 0);
 
 						if (!world.isRemote) {
-							world.playSound(null, entity.posX, entity.posY, entity.posZ,
-									SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0f,
-									world.rand.nextFloat() * 0.1F + 0.9F);
+							world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
 							EntityNukeExplosionMK3 exp = new EntityNukeExplosionMK3(world);
 							exp.posX = entity.posX;
@@ -168,7 +163,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 					}
 				}
 			}
-			
+
 		}
 
 	}
@@ -306,9 +301,9 @@ public class GunB92 extends Item implements IHasCustomModel {
 		i -= 10;
 
 		if (i < 6)
-			return rad * (i-1+partialTicks);
+			return rad * (i - 1 + partialTicks);
 		if (i > 14)
-			return rad * (5 - (i+partialTicks - 15));
+			return rad * (5 - (i + partialTicks - 15));
 		return rad * 5;
 	}
 
@@ -319,9 +314,9 @@ public class GunB92 extends Item implements IHasCustomModel {
 		i -= 10;
 
 		if (i < 10)
-			return (i+partialTicks) / 10;
+			return (i + partialTicks) / 10;
 		else
-			return 2 - ((i+partialTicks) / 10);
+			return 2 - ((i + partialTicks) / 10);
 	}
 
 	public static float getTransFromAnim(ItemStack stack, float partialTicks) {
@@ -331,10 +326,10 @@ public class GunB92 extends Item implements IHasCustomModel {
 		i -= 10;
 
 		if (i > 4 && i < 10)
-			return (i+partialTicks - 5) * 0.05F;
+			return (i + partialTicks - 5) * 0.05F;
 
 		if (i > 9 && i < 15)
-			return (10 * 0.05F) - ((i+partialTicks - 5) * 0.05F);
+			return (10 * 0.05F) - ((i + partialTicks - 5) * 0.05F);
 
 		return 0;
 	}

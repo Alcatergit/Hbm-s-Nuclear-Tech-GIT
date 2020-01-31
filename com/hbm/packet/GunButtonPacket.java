@@ -48,36 +48,38 @@ public class GunButtonPacket implements IMessage {
 
 			@Override
 			public IMessage onMessage(GunButtonPacket m, MessageContext ctx) {
-				
-				if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-					return null;
-				
-				EntityPlayer p = ctx.getServerHandler().player;
-				
-				if(p.getHeldItem(m.hand) != null && p.getHeldItem(m.hand).getItem() instanceof ItemGunBase) {
+				ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
+					if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+						return;
 					
-					ItemGunBase item = (ItemGunBase)p.getHeldItem(m.hand).getItem();
+					EntityPlayer p = ctx.getServerHandler().player;
 					
-					switch(m.button) {
-					case 0: ItemGunBase.setIsMouseDown(p.getHeldItem(m.hand), m.state);
-							if(m.state)
-								item.startAction(p.getHeldItem(m.hand), p.world, p, true);
-							else
-								item.endAction(p.getHeldItem(m.hand), p.world, p, true);
-							break;
-							
-					case 1: ItemGunBase.setIsAltDown(p.getHeldItem(m.hand), m.state);
-							if(m.state)
-								item.startAction(p.getHeldItem(m.hand), p.world, p, false);
-							else
-								item.endAction(p.getHeldItem(m.hand), p.world, p, false);
-							break;
-							
-					case 2: ItemGunBase.setIsReloading(p.getHeldItem(m.hand), true);
-							ItemGunBase.resetReloadCycle(p.getHeldItem(m.hand));
-							break;
+					if(p.getHeldItem(m.hand) != null && p.getHeldItem(m.hand).getItem() instanceof ItemGunBase) {
+						
+						ItemGunBase item = (ItemGunBase)p.getHeldItem(m.hand).getItem();
+						
+						switch(m.button) {
+						case 0: ItemGunBase.setIsMouseDown(p.getHeldItem(m.hand), m.state);
+								if(m.state)
+									item.startAction(p.getHeldItem(m.hand), p.world, p, true, m.hand);
+								else
+									item.endAction(p.getHeldItem(m.hand), p.world, p, true, m.hand);
+								break;
+								
+						case 1: ItemGunBase.setIsAltDown(p.getHeldItem(m.hand), m.state);
+								if(m.state)
+									item.startAction(p.getHeldItem(m.hand), p.world, p, false, m.hand);
+								else
+									item.endAction(p.getHeldItem(m.hand), p.world, p, false, m.hand);
+								break;
+								
+						case 2: ItemGunBase.setIsReloading(p.getHeldItem(m.hand), true);
+								ItemGunBase.resetReloadCycle(p.getHeldItem(m.hand));
+								break;
+						}
 					}
-				}
+				});
+				
 				
 				//System.out.println(m.button + ": " + m.state);
 				

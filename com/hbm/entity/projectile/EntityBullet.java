@@ -337,7 +337,11 @@ public class EntityBullet extends Entity implements IProjectile {
 
 			for (i = 0; i < list.size(); ++i) {
 				Entity entity1 = (Entity) list.get(i);
-
+				if(entity1 instanceof EntityBullet){
+					if(((EntityBullet)entity1).shootingEntity == this.shootingEntity){
+						continue;
+					}
+				}
 				if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity)) {
 					f1 = 0.3F;
 					AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().grow(f1);
