@@ -128,7 +128,7 @@ public final class HBMSoundHandler {
 		alarmGambit = register("alarm.gambit");
 		revolverShoot = register("weapon.revolverShoot");
 		heavyShoot = register("weapon.heavyShoot");
-		schrabidiumShoot = register("hbm:weapon.schrabidiumShoot");
+		schrabidiumShoot = register("weapon.schrabidiumShoot");
 		revolverShootAlt = register("weapon.revolverShootAlt");
 		hkShoot = register("weapon.hkShoot");
 		shotgunShoot = register("weapon.shotgunShoot");
@@ -153,5 +153,4 @@ public final class HBMSoundHandler {
 		return e;
 	}
 	
-	public static void loadClass(){}
 }

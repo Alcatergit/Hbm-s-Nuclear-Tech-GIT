@@ -24,6 +24,8 @@ import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityRagingVortex;
+import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.logic.EntityEMP;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
@@ -78,6 +80,7 @@ import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityDuchessGambit;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFire;
+import com.hbm.entity.projectile.EntityModBeam;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRocketHoming;
 import com.hbm.entity.projectile.EntityRubble;
@@ -166,6 +169,11 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
 
+	static {
+		HBMSoundHandler.init();
+		FluidRegistry.enableUniversalBucket();
+	}
+	
 	@SidedProxy(clientSide = RefStrings.CLIENTSIDE, serverSide = RefStrings.SERVERSIDE)
 	public static ServerProxy proxy;
 	
@@ -173,6 +181,8 @@ public class MainRegistry {
 	public static MainRegistry instance;
 	
 	public static Logger logger;
+	
+	
 	
 	public static List<FFPipeNetwork> allPipeNetworks = new ArrayList<FFPipeNetwork>();
 	
@@ -341,14 +351,12 @@ public class MainRegistry {
 
 	public static ToolMaterial enumToolMaterialMultitool = EnumHelper.addToolMaterial("MULTITOOL", 3, 5000, 25F, 5.5F, 25);
 	
-	static {
-		FluidRegistry.enableUniversalBucket();
-	}
+	
 	
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	HBMSoundHandler.loadClass();
+    	
     	if(logger == null)
     		logger = event.getModLog();
     	MinecraftForge.EVENT_BUS.register(new ModEventHandler());
@@ -446,6 +454,9 @@ public class MainRegistry {
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bullet_mk2"), EntityBulletBase.class, "entity_bullet_mk2", i++, MainRegistry.instance, 250, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_duchessgambit"), EntityDuchessGambit.class, "entity_duchessgambit", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_spark_beam"), EntitySparkBeam.class, "entity_spark_beam", i++, MainRegistry.instance, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mod_beam"), EntityModBeam.class, "entity_mod_beam", i++, MainRegistry.instance, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_vortex"), EntityVortex.class, "entity_vortex", i++, MainRegistry.instance, 1000, 1, true);
+	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_raging_vortex"), EntityRagingVortex.class, "entity_raging_vortex", i++, MainRegistry.instance, 1000, 1, true);
 	    
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_generic"), EntityMissileGeneric.class, "entity_missile_generic", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_incendiary"), EntityMissileIncendiary.class, "entity_missile_incendiary", i++, MainRegistry.instance, 1000, 1, true);
@@ -473,6 +484,7 @@ public class MainRegistry {
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_ab"), EntityMissileAntiBallistic.class, "entity_missile_ab", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_carrier"), EntityCarrier.class, "entity_carrier", i++, MainRegistry.instance, 1000, 1, true);
 	    EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_booster"), EntityBooster.class, "entity_booster", i++, MainRegistry.instance, 1000, 1, true);
+	    
 	    
 	    ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 			

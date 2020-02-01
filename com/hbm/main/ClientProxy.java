@@ -11,6 +11,8 @@ import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityRagingVortex;
+import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.logic.EntityEMP;
 import com.hbm.entity.missile.EntityBombletSelena;
@@ -63,6 +65,7 @@ import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityDuchessGambit;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFire;
+import com.hbm.entity.projectile.EntityModBeam;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRocketHoming;
 import com.hbm.entity.projectile.EntityRubble;
@@ -76,6 +79,7 @@ import com.hbm.render.entity.GasFlameRenderer;
 import com.hbm.render.entity.RenderAAShell;
 import com.hbm.render.entity.RenderBeam4;
 import com.hbm.render.entity.RenderBeam5;
+import com.hbm.render.entity.RenderBeam6;
 import com.hbm.render.entity.RenderBlackHole;
 import com.hbm.render.entity.RenderBoat;
 import com.hbm.render.entity.RenderBomber;
@@ -91,8 +95,10 @@ import com.hbm.render.entity.RenderEMPBlast;
 import com.hbm.render.entity.RenderEmpty;
 import com.hbm.render.entity.RenderFireProjectile;
 import com.hbm.render.entity.RenderNoCloud;
+import com.hbm.render.entity.RenderRagingVortex;
 import com.hbm.render.entity.RenderRocket;
 import com.hbm.render.entity.RenderSRocket;
+import com.hbm.render.entity.RenderVortex;
 import com.hbm.render.entity.TSmokeRenderer;
 import com.hbm.render.entity.missile.RenderBoosterMissile;
 import com.hbm.render.entity.missile.RenderCarrierMissile;
@@ -147,6 +153,7 @@ import com.hbm.render.item.ItemRenderRevolverIron;
 import com.hbm.render.item.ItemRenderRevolverLead;
 import com.hbm.render.item.ItemRenderRevolverNightmare;
 import com.hbm.render.item.ItemRenderRevolverSchrabidium;
+import com.hbm.render.item.RenderGunB93;
 import com.hbm.render.tileentity.RenderAssembler;
 import com.hbm.render.tileentity.RenderCIWSTurret;
 import com.hbm.render.tileentity.RenderCable;
@@ -318,6 +325,9 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBulletBase.class, RenderBulletMk2.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDuchessGambit.class, RenderBoat.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySparkBeam.class, RenderBeam4.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityModBeam.class, RenderBeam6.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityVortex.class, RenderVortex.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityRagingVortex.class, RenderRagingVortex.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 	}
@@ -386,6 +396,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_revolver_red.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 		ModItems.gun_lever_action.setTileEntityItemStackRenderer(new ItemRenderGunAnim2());
 		ModItems.gun_spark.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_b93.setTileEntityItemStackRenderer(new RenderGunB93());
 	}
 	
 	public static IBakedModel boxcar;

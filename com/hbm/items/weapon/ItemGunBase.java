@@ -12,6 +12,7 @@ import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -260,8 +261,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 			setItemWear(stack, getItemWear(stack) + config.wear);
 		}
-		world.playSound(player.posX, player.posY, player.posZ, mainConfig.firingSound, SoundCategory.PLAYERS, 1.0F, mainConfig.firingPitch, true);
-
+		world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.firingSound, SoundCategory.PLAYERS, 1.0F, mainConfig.firingPitch);
 		// player.inventory.addItemStackToInventory(new
 		// ItemStack(ModItems.gun_revolver_gold_ammo));
 	}
@@ -317,14 +317,14 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 							setMag(stack, getMag(stack) + 1);
 						} else {
 							setIsReloading(stack, false);
-							world.playSound(player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+							world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							break;
 						}
 					}
 
 					if (getMag(stack) == mainConfig.ammoCap) {
 						setIsReloading(stack, false);
-						world.playSound(player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+						world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						break;
 					} else {
 						resetReloadCycle(stack);
@@ -368,14 +368,14 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 								setMag(stack, getMag(stack) + 1);
 							} else {
 								setIsReloading(stack, false);
-								world.playSound(player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+								world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
 								break;
 							}
 						}
 
 						if (getMag(stack) == mainConfig.ammoCap) {
 							setIsReloading(stack, false);
-							world.playSound(player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+							world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							break;
 						} else {
 							resetReloadCycle(stack);

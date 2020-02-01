@@ -65,6 +65,7 @@ import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.items.tool.ItemTurretBiometry;
 import com.hbm.items.tool.ItemTurretChip;
 import com.hbm.items.tool.ItemTurretControl;
+import com.hbm.items.weapon.GunB93;
 import com.hbm.items.weapon.GunSpark;
 import com.hbm.items.weapon.ItemAmmo;
 import com.hbm.items.weapon.ItemGunBase;
@@ -83,6 +84,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ModItems {
+	
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
@@ -232,6 +234,7 @@ public class ModItems {
 	
 	//Guns
 	public static final Item gun_b92 = new GunB92("gun_b92").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_b93 = new GunB93("gun_b93").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item gun_revolver_iron = new ItemGunBase(Gun357MagnumFactory.getRevolverIronConfig(), "gun_revolver_iron").setMaxDamage(100).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver = new ItemGunBase(Gun357MagnumFactory.getRevolverConfig(), "gun_revolver").setCreativeTab(MainRegistry.weaponTab);

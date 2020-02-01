@@ -219,6 +219,7 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_revolver_red, reg);
 		swapModelsNoGui(ModItems.gun_lever_action, reg);
 		swapModelsNoGui(ModItems.gun_spark, reg);
+		swapModelsNoGui(ModItems.gun_b93, reg);
 	}
 	
 	public void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg){

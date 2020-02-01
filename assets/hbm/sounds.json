@@ -59,7 +59,7 @@
     "weapon.revolverShootAlt": {"category": "player", "sounds": [{"name": "hbm:weapon/revolverShootAlt", "stream": false}]},
 	"weapon.heavyShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/heavyShoot", "stream": false}]},
 	"weapon.shotgunShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/shotgunShoot", "stream": false}]},
-	"weapon.schrabidiumShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/schrabidiumShoot", "stream": false}]},
+	"weapon.schrabidiumshoot": {"category": "player", "sounds": [{"name": "hbm:weapon/schrabidiumShoot", "stream": false}]},
 	"weapon.osiprShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/osiprShoot", "stream": false}]},
 	"weapon.osiprAltFire": {"category": "player", "sounds": [{"name": "hbm:weapon/osiprAltFire", "stream": false}]},
 	"weapon.osiprCharging": {"category": "player", "sounds": [{"name": "hbm:weapon/osiprCharging", "stream": false}]},

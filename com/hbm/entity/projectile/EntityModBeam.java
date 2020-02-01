@@ -2,14 +2,20 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityRagingVortex;
+import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.explosion.ExplosionLarge;
+import com.hbm.main.MainRegistry;
+import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
@@ -19,6 +25,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -29,15 +37,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityExplosiveBeam extends Entity implements IProjectile
-{
-	public static final DataParameter<Byte> CRITICAL  = EntityDataManager.createKey(EntityExplosiveBeam.class, DataSerializers.BYTE);
+public class EntityModBeam extends Entity implements IProjectile {
+
+	public static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityModBeam.class, DataSerializers.BOOLEAN);
 	
-    private int field_145791_d = -1;
+	private int field_145791_d = -1;
     private int field_145792_e = -1;
     private int field_145789_f = -1;
     public double gravity = 0.0D;
-    private IBlockState field_145790_g;
+    private Block field_145790_g;
+    private int inData;
     private boolean inGround;
     /** 1 if the player can pick up the arrow */
     public int canBePickedUp;
@@ -48,29 +57,27 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     private int ticksInGround;
     private int ticksInAir;
     private double damage = 2.0D;
+    /** The amount of knockback an arrow applies when it hits a mob. */
+    private int knockbackStrength;
+    private static final String __OBFID = "CL_00001715";
+    public int mode = 0;
 
-    public EntityExplosiveBeam(World p_i1753_1_)
+    public EntityModBeam(World p_i1753_1_)
     {
         super(p_i1753_1_);
-        if(p_i1753_1_.isRemote)
-        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.setSize(0.5F, 0.5F);
     }
 
-    public EntityExplosiveBeam(World p_i1754_1_, double p_i1754_2_, double p_i1754_4_, double p_i1754_6_)
+    public EntityModBeam(World p_i1754_1_, double p_i1754_2_, double p_i1754_4_, double p_i1754_6_)
     {
         super(p_i1754_1_);
-        if(p_i1754_1_.isRemote)
-        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.setSize(0.5F, 0.5F);
         this.setPosition(p_i1754_2_, p_i1754_4_, p_i1754_6_);
     }
 
-    public EntityExplosiveBeam(World p_i1755_1_, EntityLivingBase p_i1755_2_, EntityLivingBase p_i1755_3_, float p_i1755_4_, float p_i1755_5_)
+    public EntityModBeam(World p_i1755_1_, EntityLivingBase p_i1755_2_, EntityLivingBase p_i1755_3_, float p_i1755_4_, float p_i1755_5_)
     {
         super(p_i1755_1_);
-        if(p_i1755_1_.isRemote)
-        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.shootingEntity = p_i1755_2_;
 
         if (p_i1755_2_ instanceof EntityPlayer)
@@ -96,9 +103,9 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         }
     }
 	
-/*	public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
+	/*public EntityModBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
 		super(p_i1756_1_);
-		EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
+		this.renderDistanceWeight = 10.0D;
 		this.shootingEntity = p_i1756_2_;
 
 		this.setSize(0.5F, 0.5F);
@@ -108,31 +115,30 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
 		this.posY -= 0.10000000149011612D;
 		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
 		this.setPosition(this.posX, this.posY, this.posZ);
+		this.yOffset = 0.0F;
 		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI)
 				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
 		this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI)
 				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
 		this.motionY = (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.shoot(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
-	}
-*/
-    public EntityExplosiveBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, boolean offHand)
+		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
+	}*/
+
+    public EntityModBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, EnumHand hand)
     {
         super(p_i1756_1_);
-        if(p_i1756_1_.isRemote)
-        	EntityExplosiveBeam.setRenderDistanceWeight(10.0D);
         this.shootingEntity = p_i1756_2_;
 
         this.setSize(0.5F, 0.5F);
         this.setLocationAndAngles(p_i1756_2_.posX, p_i1756_2_.posY + p_i1756_2_.getEyeHeight(), p_i1756_2_.posZ, p_i1756_2_.rotationYaw, p_i1756_2_.rotationPitch);
-        if(offHand){
-        	this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
-            this.posY -= 0.10000000149011612D;
-            this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
-        } else {
+        if(hand == EnumHand.MAIN_HAND){
         	this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
             this.posY -= 0.10000000149011612D;
             this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        } else {
+        	this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+            this.posY -= 0.10000000149011612D;
+            this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
         }
         
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -143,7 +149,7 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         this.shoot(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
     }
 
-    public EntityExplosiveBeam(World world, int x, int y, int z, double mx, double my, double mz, double grav) {
+    public EntityModBeam(World world, int x, int y, int z, double mx, double my, double mz, double grav) {
         super(world);
     	this.posX = x + 0.5F;
     	this.posY = y + 0.5F;
@@ -159,7 +165,7 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     @Override
 	protected void entityInit()
     {
-        this.dataManager.register(CRITICAL, Byte.valueOf((byte)0));
+        this.getDataManager().register(CRITICAL, false);
     }
 
     /**
@@ -185,6 +191,17 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(p_70186_1_, p_70186_5_) * 180.0D / Math.PI);
         this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(p_70186_3_, f3) * 180.0D / Math.PI);
         this.ticksInGround = 0;
+    }
+
+    /**
+     * Sets the position and rotation. Only difference from the other one is no bounding on the rotation. Args: posX,
+     * posY, posZ, yaw, pitch
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
+    	this.setPosition(x, y, z);
+    	this.setRotation(yaw, pitch);
     }
 
     /**
@@ -229,9 +246,11 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
             //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
-        IBlockState block = this.world.getBlockState(new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f));
+        BlockPos pos = new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f);
+        IBlockState blockstate = world.getBlockState(pos);
+        Block block = blockstate.getBlock();
 
-        if (block.getMaterial() != Material.AIR)
+        if (blockstate.getMaterial() != Material.AIR)
         {
     		this.setDead();
     		explode();
@@ -256,14 +275,14 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
             }
 
             Entity entity = null;
-            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
+            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D));
             double d0 = 0.0D;
             int i;
             float f1;
 
             for (i = 0; i < list.size(); ++i)
             {
-                Entity entity1 = list.get(i);
+                Entity entity1 = (Entity)list.get(i);
 
                 if (entity1.canBeCollidedWith() && (entity1 != this.shootingEntity || this.ticksInAir >= 5))
                 {
@@ -314,14 +333,22 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
                         k += this.rand.nextInt(k / 2 + 2);
                     }
                     
-                    explode();
+                    if(movingobjectposition.entityHit instanceof EntityLivingBase) {
+                    	((EntityLivingBase)movingobjectposition.entityHit).addPotionEffect(new PotionEffect(HbmPotion.bang, 60, 0));
+                    } else {
+                    	explode();
+                    }
+                    
+                	this.setDead();
                 }
                 else
                 {
+                	IBlockState newState = world.getBlockState(movingobjectposition.getBlockPos());
                     this.field_145791_d = movingobjectposition.getBlockPos().getX();
                     this.field_145792_e = movingobjectposition.getBlockPos().getY();
                     this.field_145789_f = movingobjectposition.getBlockPos().getZ();
-                    this.field_145790_g = this.world.getBlockState(new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f));
+                    this.field_145790_g = newState.getBlock();
+                    this.inData = newState.getBlock().getMetaFromState(newState);
                 }
             }
 
@@ -360,13 +387,13 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         p_70014_1_.setShort("yTile", (short)this.field_145792_e);
         p_70014_1_.setShort("zTile", (short)this.field_145789_f);
         p_70014_1_.setShort("life", (short)this.ticksInGround);
-        if(field_145790_g != null){
-        	p_70014_1_.setByte("inTile", (byte)Block.getStateId(this.field_145790_g));
-        }
+        p_70014_1_.setByte("inTile", (byte)Block.getIdFromBlock(this.field_145790_g));
+        p_70014_1_.setByte("inData", (byte)this.inData);
         p_70014_1_.setByte("shake", (byte)this.arrowShake);
         p_70014_1_.setByte("inGround", (byte)(this.inGround ? 1 : 0));
         p_70014_1_.setByte("pickup", (byte)this.canBePickedUp);
         p_70014_1_.setDouble("damage", this.damage);
+        p_70014_1_.setInteger("mode", this.mode);
     }
 
     /**
@@ -379,10 +406,11 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         this.field_145792_e = p_70037_1_.getShort("yTile");
         this.field_145789_f = p_70037_1_.getShort("zTile");
         this.ticksInGround = p_70037_1_.getShort("life");
-        if(p_70037_1_.hasKey("inTile"))
-        	this.field_145790_g = Block.getStateById(p_70037_1_.getByte("inTile"));
+        this.field_145790_g = Block.getBlockById(p_70037_1_.getByte("inTile") & 255);
+        this.inData = p_70037_1_.getByte("inData") & 255;
         this.arrowShake = p_70037_1_.getByte("shake") & 255;
         this.inGround = p_70037_1_.getByte("inGround") == 1;
+        this.mode = p_70037_1_.getInteger("mode");
 
         if (p_70037_1_.hasKey("damage", 99))
         {
@@ -419,26 +447,28 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
         return this.damage;
     }
 
+    /**
+     * Sets the amount of knockback the arrow applies when it hits a mob.
+     */
+    public void setKnockbackStrength(int p_70240_1_)
+    {
+        this.knockbackStrength = p_70240_1_;
+    }
+
+    /**
+     * If returns false, the item will not inflict any damage against entities.
+     */
     @Override
     public boolean canBeAttackedWithItem() {
     	return false;
     }
-    
+
     /**
      * Whether the arrow has a stream of critical hit particles flying behind it.
      */
-    public void setIsCritical(boolean p_70243_1_)
+    public void setIsCritical(boolean crit)
     {
-        byte b0 = this.dataManager.get(CRITICAL);
-        Tessellator.getInstance();
-        if (p_70243_1_)
-        {
-            this.dataManager.set(CRITICAL, Byte.valueOf((byte)(b0 | 1)));
-        }
-        else
-        {
-            this.dataManager.set(CRITICAL, Byte.valueOf((byte)(b0 & -2)));
-        }
+        this.getDataManager().set(CRITICAL, crit);
     }
 
     /**
@@ -446,29 +476,100 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
      */
     public boolean getIsCritical()
     {
-        byte b0 = this.dataManager.get(CRITICAL);
-        return (b0 & 1) != 0;
+        return this.getDataManager().get(CRITICAL);
     }
     
     private void explode() {
     	if(!world.isRemote) {
-			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0F, this.world.rand.nextFloat() * 0.1F + 0.9F, true);
-			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(this.world);
-			entity.posX = this.posX;
-			entity.posY = this.posY;
-			entity.posZ = this.posZ;
-			entity.destructionRange = 10;
-			entity.speed = 25;
-			entity.coefficient = 1.0F;
-			entity.waste = false;
-
-			this.world.spawnEntity(entity);
     		
-    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(this.world, 10);
-    		cloud.posX = this.posX;
-    		cloud.posY = this.posY;
-    		cloud.posZ = this.posZ;
-    		this.world.spawnEntity(cloud);
+    		if(mode == 0) {
+    			ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, false);
+    		} else if( mode == 1) {
+    			ExplosionLarge.explodeFire(world, posX, posY, posZ, 10, true, false, false);
+    		} else if(mode == 2) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	
+				EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(this.world);
+				entity.posX = this.posX;
+				entity.posY = this.posY;
+				entity.posZ = this.posZ;
+				entity.destructionRange = 10;
+				entity.speed = 25;
+				entity.coefficient = 1.0F;
+				entity.waste = false;
+	
+				this.world.spawnEntity(entity);
+	    		
+	    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(this.world, 10);
+	    		cloud.posX = this.posX;
+	    		cloud.posY = this.posY;
+	    		cloud.posZ = this.posZ;
+	    		this.world.spawnEntity(cloud);
+    		} else if(mode == 3) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	
+				EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(this.world);
+				entity.posX = this.posX;
+				entity.posY = this.posY;
+				entity.posZ = this.posZ;
+				entity.destructionRange = 20;
+				entity.speed = 25;
+				entity.coefficient = 1.0F;
+				entity.waste = false;
+	
+				this.world.spawnEntity(entity);
+	    		
+	    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(this.world, 20);
+	    		cloud.posX = this.posX;
+	    		cloud.posY = this.posY;
+	    		cloud.posZ = this.posZ;
+	    		this.world.spawnEntity(cloud);
+    		} else if(mode == 4) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		EntityVortex vortex = new EntityVortex(this.world, 1F);
+	    		vortex.posX = this.posX;
+	    		vortex.posY = this.posY;
+	    		vortex.posZ = this.posZ;
+	    		this.world.spawnEntity(vortex);
+    		} else if(mode == 5) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		EntityVortex vortex = new EntityVortex(this.world, 2.5F);
+	    		vortex.posX = this.posX;
+	    		vortex.posY = this.posY;
+	    		vortex.posZ = this.posZ;
+	    		this.world.spawnEntity(vortex);
+    		} else if(mode == 6) {
+    			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		EntityRagingVortex vortex = new EntityRagingVortex(this.world, 2.5F);
+	    		vortex.posX = this.posX;
+	    		vortex.posY = this.posY;
+	    		vortex.posZ = this.posZ;
+	    		this.world.spawnEntity(vortex);
+    		} else if(mode == 7) {
+    			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		EntityRagingVortex vortex = new EntityRagingVortex(this.world, 5F);
+	    		vortex.posX = this.posX;
+	    		vortex.posY = this.posY;
+	    		vortex.posZ = this.posZ;
+	    		this.world.spawnEntity(vortex);
+    		} else if(mode == 8) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		EntityBlackHole vortex = new EntityBlackHole(this.world, 2F);
+	    		vortex.posX = this.posX;
+	    		vortex.posY = this.posY;
+	    		vortex.posZ = this.posZ;
+	    		this.world.spawnEntity(vortex);
+    		} else {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
+	    		
+	    		this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.gadgetRadius, posX, posY, posZ));
+	    		this.world.spawnEntity(EntityNukeCloudSmall.statFac(world, posX, posY, posZ, MainRegistry.gadgetRadius));
+    		}
     	}
     }
 }

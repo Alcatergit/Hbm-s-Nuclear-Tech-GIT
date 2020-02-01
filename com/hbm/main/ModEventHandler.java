@@ -58,7 +58,7 @@ public class ModEventHandler {
 	
 	@SubscribeEvent
 	public void soundRegistering(RegistryEvent.Register<SoundEvent> evt){
-		HBMSoundHandler.init();
+		
 		for(SoundEvent e : HBMSoundHandler.ALL_SOUNDS){
 			evt.getRegistry().register(e);
 		}
