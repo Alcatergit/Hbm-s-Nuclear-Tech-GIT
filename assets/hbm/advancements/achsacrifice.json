@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:burnt_bark"
+		},
+		"title": {
+			"translate": "hbm.achievement.sacrifice"
+		},
+		"description": {
+			"translate": "hbm.achievement.sacrifice.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

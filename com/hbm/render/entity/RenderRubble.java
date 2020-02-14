@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelRubble;
@@ -14,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderRubble extends Render<EntityRubble> {

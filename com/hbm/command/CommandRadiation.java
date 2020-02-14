@@ -103,9 +103,12 @@ public class CommandRadiation extends CommandBase {
 			}
 			if(!isFloat(args[2]))
 				throw new CommandException("New rad value is not a number!");
+			float newRads = Float.parseFloat(args[2]);
+			if(newRads < 0.0F)
+				newRads = 0.0F;
 			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(Float.parseFloat(args[2]));
-			sender.sendMessage(new TextComponentTranslation("Set radiation for player " + player.getName() + " to " + Float.parseFloat(args[2]) + "."));
+				player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).setRads(newRads);
+			sender.sendMessage(new TextComponentTranslation("Set radiation for player " + player.getName() + " to " + newRads + "."));
 			return;
 		} else if(args.length == 2 && args[0].equals("player")){
 			throw new CommandException("Please enter new rad value!");

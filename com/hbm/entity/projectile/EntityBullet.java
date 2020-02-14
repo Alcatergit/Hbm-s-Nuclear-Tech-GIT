@@ -3,13 +3,15 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.ParticleBurstPacket;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,9 +37,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -75,13 +77,9 @@ public class EntityBullet extends Entity implements IProjectile {
 	/** The owner of this arrow. */
 	public Entity shootingEntity;
 	private int ticksInGround;
-	private int ticksInAir;
 	public double damage;
 	/** The amount of knockback an arrow applies when it hits a mob. */
 	private int knockbackStrength;
-	private int dmgMin = 0;
-	private int dmgMax = 1;
-	private boolean isTau = false;
 	private boolean instakill = false;
 	private boolean rad = false;
 	public boolean antidote = false;
@@ -127,7 +125,7 @@ public class EntityBullet extends Entity implements IProjectile {
 		}
 	}
 
-	public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, boolean rad) {
+	public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, boolean rad, EnumHand hand) {
 		this(world);
 		this.shootingEntity = shooter;
 
@@ -137,9 +135,16 @@ public class EntityBullet extends Entity implements IProjectile {
 
 		this.setSize(0.5F, 0.5F);
 		this.setLocationAndAngles(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.posY -= 0.10000000149011612D;
-		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		if(hand == EnumHand.MAIN_HAND){
+			this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		} else {
+			this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		}
+		
 		this.setPosition(this.posX, this.posY, this.posZ);
 		this.setRenderYawOffset(0.0F);
 		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
@@ -153,7 +158,7 @@ public class EntityBullet extends Entity implements IProjectile {
 		this.rad = rad;
 	}
 
-	public EntityBullet(World world, EntityLivingBase shooter, float velocity) {
+	public EntityBullet(World world, EntityLivingBase shooter, float velocity, EnumHand hand) {
 		this(world);
 		this.shootingEntity = shooter;
 
@@ -163,9 +168,16 @@ public class EntityBullet extends Entity implements IProjectile {
 
 		this.setSize(0.5F, 0.5F);
 		this.setLocationAndAngles(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.posY -= 0.10000000149011612D;
-		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		if(hand == EnumHand.MAIN_HAND){
+			this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		} else {
+			this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		}
+		
 		this.setPosition(this.posX, this.posY, this.posZ);
 		this.setRenderYawOffset(0.0F);
 		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
@@ -174,7 +186,7 @@ public class EntityBullet extends Entity implements IProjectile {
 		this.setThrowableHeading2(this.motionX, this.motionY, this.motionZ, velocity * 1.5F, 1.0F);
 	}
 
-	public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, String isTau) {
+	public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, String isTau, EnumHand hand) {
 		this(world);
 		this.shootingEntity = shooter;
 
@@ -184,9 +196,16 @@ public class EntityBullet extends Entity implements IProjectile {
 
 		this.setSize(0.5F, 0.5F);
 		this.setLocationAndAngles(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.posY -= 0.10000000149011612D;
-		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		if(hand == EnumHand.MAIN_HAND){
+			this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		} else {
+			this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+			this.posY -= 0.10000000149011612D;
+			this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		}
+		
 		this.setPosition(this.posX, this.posY, this.posZ);
 		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
 		this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
@@ -198,8 +217,7 @@ public class EntityBullet extends Entity implements IProjectile {
 	}
 
 	// why the living shit did i make isTau a string? who knows, who cares.
-	// TODO tau grenade
-	/*public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, String isTau, EntityGrenadeTau grenade) {
+	public EntityBullet(World world, EntityLivingBase shooter, float velocity, int dmgMin, int dmgMax, boolean instakill, String isTau, EntityGrenadeTau grenade) {
 		this(world);
 		this.shootingEntity = shooter;
 	
@@ -215,7 +233,7 @@ public class EntityBullet extends Entity implements IProjectile {
 		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, velocity * 1.5F, 1.0F);
 		this.setTau(isTau.equals("tauDay"));
 		this.setIsCritical(true);
-	}*/
+	}
 
 	public EntityBullet(World world, int x, int y, int z, double mx, double my, double mz, double grav) {
 		super(world);
@@ -277,7 +295,6 @@ public class EntityBullet extends Entity implements IProjectile {
 		super.onUpdate();
 
 		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
-			float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 			// this.prevRotationPitch = this.rotationPitch =
 			// (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
@@ -301,6 +318,8 @@ public class EntityBullet extends Entity implements IProjectile {
 
 			if (block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.GLASS_PANE || block == Blocks.STAINED_GLASS_PANE) {
 				this.world.setBlockToAir(new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f));
+				//Drillgon200: add particle burst packet so the glass doesn't just disappear.
+				PacketDispatcher.wrapper.sendToAll(new ParticleBurstPacket(field_145791_d, field_145792_e, field_145789_f, Block.getIdFromBlock(block), block.getMetaFromState(blockstate)));
 				this.world.playSound(this.field_145791_d, this.field_145792_e, this.field_145789_f, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
 			}
 		}
@@ -313,7 +332,6 @@ public class EntityBullet extends Entity implements IProjectile {
 			this.setDead();
 
 		} else {
-			++this.ticksInAir;
 			Vec3d vec31 = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d vec3 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			//Drillgon200: Yeah I don't know if this is the best way, but at least bullets can hit entities that are closer than three blocks now.
@@ -457,6 +475,7 @@ public class EntityBullet extends Entity implements IProjectile {
 										movingobjectposition.entityHit.addVelocity(this.motionX * this.knockbackStrength * 0.6000000238418579D / f4, 0.1D, this.motionZ * this.knockbackStrength * 0.6000000238418579D / f4);
 									}
 								}
+								
 
 								if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) {
 									EnchantmentHelper.applyThornEnchantments(entitylivingbase, this.shootingEntity);
@@ -472,16 +491,16 @@ public class EntityBullet extends Entity implements IProjectile {
 										pippo.posX = movingobjectposition.entityHit.posX;
 										pippo.posY = movingobjectposition.entityHit.posY + 50;
 										pippo.posZ = movingobjectposition.entityHit.posZ;
-
 										for (int j = 0; j < 50; j++) {
 											EntityBSmokeFX fx = new EntityBSmokeFX(world, pippo.posX + (rand.nextDouble() - 0.5) * 4, pippo.posY + (rand.nextDouble() - 0.5) * 12, pippo.posZ + (rand.nextDouble() - 0.5) * 4, 0, 0, 0);
 											world.spawnEntity(fx);
 										}
 
 										world.spawnEntity(pippo);
+										
+										world.playSound(null, movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 10000F, 1F);
 									}
-
-									world.playSound(movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 100F, 1F, true);
+									
 								}
 							}
 
@@ -551,7 +570,7 @@ public class EntityBullet extends Entity implements IProjectile {
 			if (this.getIsCritical()) {
 				for (i = 0; i < 8; ++i) {
 					if (!this.getIsTau())
-						this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, this.posX + this.motionX * i / 8.0D, this.posY + this.motionY * i / 8.0D, this.posZ + this.motionZ * i / 8.0D, 0, 0, 0/*-this.motionX, -this.motionY + 0.2D, -this.motionZ*/);
+						this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, true, this.posX + this.motionX * i / 8.0D, this.posY + this.motionY * i / 8.0D, this.posZ + this.motionZ * i / 8.0D, 0, 0, 0/*-this.motionX, -this.motionY + 0.2D, -this.motionZ*/);
 					else
 						this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.posX + this.motionX * i / 8.0D, this.posY + this.motionY * i / 8.0D, this.posZ + this.motionZ * i / 8.0D, 0, 0, 0/*-this.motionX, -this.motionY + 0.2D, -this.motionZ*/);
 				}

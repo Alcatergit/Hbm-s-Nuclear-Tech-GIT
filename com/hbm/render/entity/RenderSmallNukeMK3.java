@@ -3,7 +3,6 @@ package com.hbm.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;

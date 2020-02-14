@@ -3,11 +3,8 @@ package com.hbm.handler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntSupplier;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.BufferUtils;
@@ -28,7 +25,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderManager;
@@ -93,6 +89,8 @@ public class HbmShaderManager {
 	public static void renderGauss() {
 		// Drillgon200: I don't know why I have to do this but shaders only work
 		// if I do.
+		if(!MainRegistry.useShaders)
+			return;
 		GlStateManager.disableBlend();
 
 		if (firstRun || Minecraft.getMinecraft().displayWidth != displayWidth || Minecraft.getMinecraft().displayHeight != displayHeight) {
@@ -126,7 +124,6 @@ public class HbmShaderManager {
 			fbo9.createBindFramebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 			fbo9.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
 		}
-		
 		GlStateManager.matrixMode(GL11.GL_PROJECTION);
 		GlStateManager.pushMatrix();
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -205,6 +202,7 @@ public class HbmShaderManager {
 		GL11.glPopMatrix();
 		GlStateManager.enableDepth();
 		GlStateManager.enableLighting();
+		GlStateManager.enableAlpha();
 	}
 	
 	public static void stealDepthBuffer() {
@@ -256,6 +254,8 @@ public class HbmShaderManager {
 	}
 
 	public static void loadShaders() {
+		if(!MainRegistry.useShaders)
+			return;
 		gaussFbo = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
 		fbo0 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16, true);
 		fbo1 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16, true);

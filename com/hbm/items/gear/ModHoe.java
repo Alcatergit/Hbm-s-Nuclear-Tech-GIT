@@ -3,7 +3,6 @@ package com.hbm.items.gear;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemHoe;
 
 public class ModHoe extends ItemHoe {

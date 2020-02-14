@@ -3,7 +3,6 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.VectorUtil;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
@@ -14,14 +13,11 @@ import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
@@ -377,10 +373,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	// for when a bullet dies by hitting a block
 	private void onBlockImpact(BlockPos pos) {
-		if (pos.getY() < 0)
-			return;
 		if (!world.isRemote)
 			this.setDead();
+		
 
 		IBlockState blockstate = world.getBlockState(pos);
 		Block block = blockstate.getBlock();
@@ -455,7 +450,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		if (config.nuke > 0 && !world.isRemote) {
 			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, config.nuke, posX, posY, posZ));
 
-			if (MainRegistry.polaroidID == 11) {
+			/*if (MainRegistry.polaroidID == 11) {
 				if (rand.nextInt(100) >= 0) {
 					ExplosionParticleB.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
 				} else {
@@ -467,7 +462,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				} else {
 					ExplosionParticle.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
 				}
-			}
+			}*/
 		}
 
 		if (config.destroysBlocks && !world.isRemote) {
@@ -493,7 +488,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	// for when a bullet dies by hitting an entity
 	private void onEntityImpact(Entity e) {
 		onEntityHurt(e);
-		onBlockImpact(new BlockPos(-1, -1, -1));
+		onBlockImpact(new BlockPos(e));
 
 		if (config.boxcar && !world.isRemote) {
 			EntityBoxcar pippo = new EntityBoxcar(world);
@@ -507,7 +502,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			}
 			world.spawnEntity(pippo);
 
-			world.playSound(pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 100F, 1F, true);
+			world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 100F, 1F);
 		}
 
 		if (config.boat && !world.isRemote) {
@@ -522,7 +517,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			}
 			world.spawnEntity(pippo);
 
-			world.playSound(pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.boatWeapon, SoundCategory.HOSTILE, 100F, 1F, true);
+			world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.boatWeapon, SoundCategory.HOSTILE, 100F, 1F);
 		}
 	}
 

@@ -8,14 +8,9 @@ import com.hbm.blocks.fluid.ToxicFluid;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModForgeFluids {
 

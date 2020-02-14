@@ -33,7 +33,7 @@ public class RenderEMPBlast extends Render<EntityEMPBlast> {
 		GL11.glTranslated(x, y, z);
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glScalef(entity.scale, 1F, entity.scale);
+        GL11.glScalef(entity.scale+partialTicks, 1F, entity.scale+partialTicks);
         
         bindTexture(ringTexture);
         ringModel.renderAll();

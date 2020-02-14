@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.explosion.ExplosionNukeRay.FloatTriplet;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.init.Blocks;

@@ -49,7 +49,7 @@ public class EntityDuchessGambit extends EntityThrowable {
         
         if(!this.world.isRemote && this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getBlock() != Blocks.AIR)
         {
-            this.world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F, true);
+            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F);
     		this.setDead();
     			
     		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 5, posY - 2, posZ - 9, posX + 5, posY + 2, posZ + 9));

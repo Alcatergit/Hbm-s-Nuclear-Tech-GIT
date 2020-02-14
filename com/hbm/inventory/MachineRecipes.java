@@ -10,8 +10,6 @@ import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.main.MainRegistry;
-import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

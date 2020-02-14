@@ -26,6 +26,7 @@ public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
 		super(worldIn);
 		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
+		new Exception().printStackTrace();
 	}
 
 	@Override
@@ -50,8 +51,8 @@ public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
         Block b = this.world.getBlockState(pos).getBlock();
         if(b != Blocks.AIR && b != Blocks.WATER && b != Blocks.FLOWING_WATER && !b.isReplaceable(world, pos))
         {
-            this.world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.oldExplosion, SoundCategory.HOSTILE, 10000.0F, 0.5F + this.rand.nextFloat() * 0.1F, true);
-    		this.setDead();
+            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.oldExplosion, SoundCategory.HOSTILE, 10000.0F, 0.5F + this.rand.nextFloat() * 0.1F);
+            this.setDead();
         	ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 3);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 2.5);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 2);

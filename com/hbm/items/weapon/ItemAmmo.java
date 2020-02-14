@@ -23,9 +23,8 @@ public class ItemAmmo extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		//TODO uncomment this when done with bullets
 		//12 GAUGE
-				/*if(this == ModItems.ammo_12gauge_incendiary) {
+				if(this == ModItems.ammo_12gauge_incendiary) {
 					list.add(TextFormatting.BLUE + "+ Incendiary");
 					list.add(TextFormatting.RED + "- Increased wear");
 				}
@@ -67,7 +66,7 @@ public class ItemAmmo extends Item {
 				if(this == ModItems.ammo_20gauge_wither) {
 					list.add(TextFormatting.BLUE + "+ Increased damage");
 					list.add(TextFormatting.BLUE + "+ Withering");
-				}*/
+				}
 				
 				//.357 MAGNUM
 				if(this == ModItems.ammo_357_desh) {
@@ -76,7 +75,7 @@ public class ItemAmmo extends Item {
 				}
 
 				//.44 MAGNUM
-				/*if(this == ModItems.ammo_44_ap) {
+				if(this == ModItems.ammo_44_ap) {
 					list.add(TextFormatting.BLUE + "+ Increased damage");
 					list.add(TextFormatting.RED + "- Increased wear");
 				}
@@ -224,6 +223,6 @@ public class ItemAmmo extends Item {
 				}
 				if(this == ModItems.ammo_folly_du) {
 					list.add(TextFormatting.BLUE + "+ Howitzer 17kg U238 shell");
-				}*/
+				}
 	}
 }

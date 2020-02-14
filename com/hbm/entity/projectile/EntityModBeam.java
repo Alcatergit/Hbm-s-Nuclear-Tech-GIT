@@ -58,8 +58,6 @@ public class EntityModBeam extends Entity implements IProjectile {
     private int ticksInAir;
     private double damage = 2.0D;
     /** The amount of knockback an arrow applies when it hits a mob. */
-    private int knockbackStrength;
-    private static final String __OBFID = "CL_00001715";
     public int mode = 0;
 
     public EntityModBeam(World p_i1753_1_)
@@ -241,14 +239,12 @@ public class EntityModBeam extends Entity implements IProjectile {
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
         BlockPos pos = new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f);
         IBlockState blockstate = world.getBlockState(pos);
-        Block block = blockstate.getBlock();
 
         if (blockstate.getMaterial() != Material.AIR)
         {
@@ -319,7 +315,6 @@ public class EntityModBeam extends Entity implements IProjectile {
             }
 
             float f2;
-            float f4;
 
             if (movingobjectposition != null)
             {
@@ -358,7 +353,6 @@ public class EntityModBeam extends Entity implements IProjectile {
             f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-            float f3 = 0.99F;
             f1 = 0.05F;
 
             if (this.isInWater())
@@ -447,13 +441,6 @@ public class EntityModBeam extends Entity implements IProjectile {
         return this.damage;
     }
 
-    /**
-     * Sets the amount of knockback the arrow applies when it hits a mob.
-     */
-    public void setKnockbackStrength(int p_70240_1_)
-    {
-        this.knockbackStrength = p_70240_1_;
-    }
 
     /**
      * If returns false, the item will not inflict any damage against entities.

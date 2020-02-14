@@ -10,8 +10,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
-import com.hbm.tileentity.machine.TileEntityMachineAssembler;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -20,12 +18,10 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -163,7 +159,7 @@ public class NukeMan extends BlockContainer implements IBomb {
 		if(world.getTileEntity(new BlockPos(x, y, z)) instanceof TileEntityNukeMan)
 			((TileEntityNukeMan)world.getTileEntity(new BlockPos(x, y, z))).clearSlots();
 		//world.spawnParticle("hugeexplosion", x, y, z, 0, 0, 0); //spawns a huge explosion particle
-		world.playSound(x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F, true);
+		world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 		/*ExplosionNukeGeneric.detonateTestBomb(world, x, y, z, 175);
 		ExplosionNukeGeneric.vapor(world, x, y, z, 195);
 		ExplosionNukeGeneric.waste(world, x, y, z, 250);

@@ -28,6 +28,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -97,7 +98,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
         }
     }
 
-    public EntityRocketHoming(World world, EntityLivingBase shooter, float velocity)
+    public EntityRocketHoming(World world, EntityLivingBase shooter, float velocity, EnumHand hand)
     {
     	this(world);
         this.shootingEntity = shooter;
@@ -109,9 +110,16 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
         this.setSize(0.5F, 0.5F);
         this.setLocationAndAngles(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-        this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
-        this.posY -= 0.10000000149011612D;
-        this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        if(hand == EnumHand.MAIN_HAND){
+        	this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+            this.posY -= 0.10000000149011612D;
+            this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        } else {
+        	this.posX += MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+            this.posY -= 0.10000000149011612D;
+            this.posZ += MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F;
+        }
+        
         this.setPosition(this.posX, this.posY, this.posZ);
         this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI);
         this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI);
@@ -189,13 +197,11 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
         BlockPos pos = new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f);
         IBlockState blockstate = this.world.getBlockState(pos);
-        Block block = blockstate.getBlock();
         
         if (blockstate.getMaterial() != Material.AIR)
         {
@@ -456,7 +462,6 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
             //this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
             //this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-            float f3 = 0.99F;
             f1 = 0.05F;
 
             if (this.isInWater())
@@ -467,7 +472,6 @@ public class EntityRocketHoming extends Entity implements IProjectile {
                     this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * f4, this.posY - this.motionY * f4, this.posZ - this.motionZ * f4, this.motionX, this.motionY, this.motionZ);
                 }
 
-                f3 = 0.8F;
             }
 
             if (this.isWet())

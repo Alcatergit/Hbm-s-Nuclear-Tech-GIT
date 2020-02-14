@@ -277,7 +277,7 @@ public class EntityTaintedCreeper extends EntityMob {
 
         if (itemstack != null && itemstack.getItem() == Items.FLINT_AND_STEEL)
         {
-        	this.world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
+        	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
             player.swingArm(hand);
 
             if (!this.world.isRemote)

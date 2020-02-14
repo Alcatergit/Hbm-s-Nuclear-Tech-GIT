@@ -3,7 +3,6 @@ package com.hbm.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.handler.BulletConfigSyncingUtil.ConfigKeyPair;
 import com.hbm.handler.guncfg.BulletConfigFactory;
 import com.hbm.handler.guncfg.Gun12GaugeFactory;
 import com.hbm.handler.guncfg.Gun20GaugeFactory;

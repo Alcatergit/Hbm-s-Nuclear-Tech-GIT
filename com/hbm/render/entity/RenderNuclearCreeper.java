@@ -7,7 +7,6 @@ import com.hbm.lib.RefStrings;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelCreeper;
-import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

@@ -70,6 +70,28 @@ public final class HBMSoundHandler {
 	public static SoundEvent uziShoot;
 	public static SoundEvent calShoot;
 	public static SoundEvent lacunaeShoot;
+	public static SoundEvent fatmanShoot;
+	public static SoundEvent osiprShoot;
+	public static SoundEvent zomgShoot;
+	public static SoundEvent jetpackTank;
+	public static SoundEvent nullTau;
+	public static SoundEvent immolatorIgnite;
+	public static SoundEvent immolatorShoot;
+	public static SoundEvent defabSpinup;
+	public static SoundEvent cryolatorShoot;
+	public static SoundEvent singFlyby;
+	public static SoundEvent osiprCharging;
+	public static SoundEvent leverActionReload;
+	public static SoundEvent follyOpen;
+	public static SoundEvent follyReload;
+	public static SoundEvent follyClose;
+	public static SoundEvent follyFire;
+	public static SoundEvent follyBuzzer;
+	public static SoundEvent follyAquired;
+	public static SoundEvent chopperDrop;
+	public static SoundEvent crateBreak;
+	public static SoundEvent alarmAutopilot;
+	public static SoundEvent itemUnpack;
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
@@ -112,7 +134,7 @@ public final class HBMSoundHandler {
 		bomberSmallLoop = register("entity.bomberSmallLoop");
 		bomberLoop = register("entity.bomberLoop");
 		stingerLockon = register("weapon.stingerLockOn");
-		trainHorn = register("alarm.trainHorn");
+		trainHorn = register("alarm.trainhorn");
 		bombDet = register("entity.bombDet");
 		rocketTakeoff = register("entity.rocketTakeoff");
 		silencerShoot = register("weapon.silencerShoot");
@@ -135,6 +157,28 @@ public final class HBMSoundHandler {
 		uziShoot = register("weapon.uziShoot");
 		calShoot = register("weapon.calShoot");
 		lacunaeShoot = register("weapon.lacunaeShoot");
+		fatmanShoot = register("weapon.fatmanShoot");
+		osiprShoot = register("weapon.osiprShoot");
+		zomgShoot = register("weapon.zomgShoot");
+		jetpackTank = register("item.jetpackTank");
+		nullTau = register("misc.nullTau");
+		immolatorIgnite = register("weapon.immolatorIgnite");
+		immolatorShoot = register("weapon.immolatorShoot");
+		defabSpinup = register("weapon.defabSpinup");
+		cryolatorShoot = register("weapon.cryolatorShoot");
+		singFlyby = register("weapon.singFlyby");
+		osiprCharging = register("weapon.osiprCharging");
+		leverActionReload = register("weapon.leverActionReload");
+		follyOpen = register("weapon.follyOpen");
+		follyReload = register("weapon.follyReload");
+		follyClose = register("weapon.follyClose");
+		follyFire = register("weapon.follyFire");
+		follyBuzzer = register("weapon.follyBuzzer");
+		follyAquired = register("weapon.follyAquired");
+		chopperDrop = register("entity.chopperDrop");
+		crateBreak = register("block.crateBreak");
+		alarmAutopilot = register("alarm.autopilot");
+		itemUnpack = register("item.unpack");
 		
 		
 	}

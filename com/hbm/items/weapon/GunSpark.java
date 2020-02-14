@@ -3,7 +3,6 @@ package com.hbm.items.weapon;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -11,11 +10,8 @@ import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumAction;

@@ -3,7 +3,6 @@ package com.hbm.items.special;
 import java.util.List;
 
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,6 +25,16 @@ public class ItemCustomLore extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 
+		if(this == ModItems.gun_super_shotgun)
+		{
+			list.add("It's super broken!");
+		}
+		
+		if(this == ModItems.burnt_bark)
+		{
+			list.add("A piece of bark from an exploded golden oak tree.");
+		}
+		
 		if(this == ModItems.flame_pony)
 		{
 			//list.add("Blue horse beats yellow horse, look it up!");
@@ -457,6 +466,12 @@ public class ItemCustomLore extends Item {
 			list.add("Pulverized pink.");
 			list.add("Tastes like strawberries.");
 		}
+		if(this == ModItems.nugget_euphemium)
+		{
+			list.add("A small piece of a pink metal.");
+			list.add("It's properties are still unknown,");
+			list.add("DEAL WITH IT carefully.");
+		}
 	}
 	
 	@Override
@@ -467,7 +482,8 @@ public class ItemCustomLore extends Item {
     			this == ModItems.powder_neodymium || this == ModItems.powder_caesium ||
     			this == ModItems.powder_strontium || this == ModItems.powder_cobalt ||
     			this == ModItems.powder_bromine || this == ModItems.powder_niobium ||
-    			this == ModItems.powder_tennessine || this == ModItems.powder_cerium)
+    			this == ModItems.powder_tennessine || this == ModItems.powder_cerium ||
+    			this == ModItems.nugget_euphemium)
     	{
     		return EnumRarity.EPIC;
     	}

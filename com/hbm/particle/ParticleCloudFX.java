@@ -2,14 +2,12 @@ package com.hbm.particle;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockCloudResidue;
-import com.hbm.entity.particle.EntityModFX;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;

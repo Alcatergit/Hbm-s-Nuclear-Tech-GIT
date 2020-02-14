@@ -52,7 +52,6 @@ public class EntitySparkBeam extends Entity implements IProjectile {
     private double damage = 2.0D;
     /** The amount of knockback an arrow applies when it hits a mob. */
     private int knockbackStrength;
-    private static final String __OBFID = "CL_00001715";
     
 
     public EntitySparkBeam(World p_i1753_1_)
@@ -232,18 +231,15 @@ public class EntitySparkBeam extends Entity implements IProjectile {
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
         BlockPos bulletTilePos = new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f);
 		IBlockState blockstate = this.world.getBlockState(bulletTilePos);
-		Block block = blockstate.getBlock();
 
         if (blockstate.getMaterial() != Material.AIR)
         {
-        	AxisAlignedBB axisalignedbb = blockstate.getCollisionBoundingBox(this.world, bulletTilePos);
         	if(!world.isRemote) {
         		ExplosionLarge.explode(world, posX, posY, posZ, 50, true, true, true);
         	}
@@ -401,7 +397,6 @@ public class EntitySparkBeam extends Entity implements IProjectile {
             f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-            float f3 = 0.99F;
             f1 = 0.05F;
 
             if (this.isInWater())

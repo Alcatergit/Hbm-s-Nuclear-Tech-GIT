@@ -39,7 +39,6 @@ public class InventoryHelper {
         while (!stack.isEmpty())
         {
             EntityItem entityitem = new EntityItem(worldIn, x + (double)f, y + (double)f1, z + (double)f2, stack.splitStack(RANDOM.nextInt(21) + 10));
-            float f3 = 0.05F;
             entityitem.motionX = RANDOM.nextGaussian() * 0.05000000074505806D;
             entityitem.motionY = RANDOM.nextGaussian() * 0.05000000074505806D + 0.20000000298023224D;
             entityitem.motionZ = RANDOM.nextGaussian() * 0.05000000074505806D;

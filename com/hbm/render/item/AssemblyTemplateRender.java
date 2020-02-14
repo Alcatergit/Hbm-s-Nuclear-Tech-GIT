@@ -7,7 +7,6 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;

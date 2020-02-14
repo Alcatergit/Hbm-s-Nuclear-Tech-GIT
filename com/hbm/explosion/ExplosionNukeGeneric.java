@@ -1,6 +1,5 @@
 package com.hbm.explosion;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -8,12 +7,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
+import com.hbm.entity.projectile.EntityMiniMIRV;
+import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
 import cofh.redstoneflux.api.IEnergyProvider;
@@ -148,8 +148,8 @@ public class ExplosionNukeGeneric {
 				if (d9 < wat && !(entity instanceof EntityOcelot) &&
 					//TODO All this random nuke stuff
 						!(entity instanceof EntityNukeCloudSmall)
-					//	&& !(entity instanceof EntityMIRV) && !(entity instanceof EntityMiniNuke)
-					//	&& !(entity instanceof EntityMiniMIRV) && !(entity instanceof EntityGrenadeASchrab)
+					/*	&& !(entity instanceof EntityMIRV*/ && !(entity instanceof EntityMiniNuke)
+						&& !(entity instanceof EntityMiniMIRV)/* && !(entity instanceof EntityGrenadeASchrab)*/
 					//	&& !(entity instanceof EntityGrenadeNuclear) 
 						&& !(entity instanceof EntityExplosiveBeam)
 						&& !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
@@ -536,8 +536,7 @@ public class ExplosionNukeGeneric {
 				rand = random.nextInt(20);
 				if (rand == 1 && world.getBlockState(pos).getValue(BlockSand.VARIANT) == BlockSand.EnumType.SAND) {
 					world.setBlockState(pos, ModBlocks.waste_trinitite.getDefaultState());
-				}
-				if (rand == 1 && world.getBlockState(pos).getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND) {
+				} else if (rand == 1 && world.getBlockState(pos).getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND) {
 					world.setBlockState(pos, ModBlocks.waste_trinitite_red.getDefaultState());
 				}
 			}

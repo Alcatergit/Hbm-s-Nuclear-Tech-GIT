@@ -13,7 +13,11 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class BakedModelNoGui implements IBakedModel {
 
@@ -50,7 +54,14 @@ public class BakedModelNoGui implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return renderer.type != TransformType.GUI ? ItemOverrideList.NONE : renderer.itemModel.getOverrides();
+		return renderer.type != TransformType.GUI ? new ItemOverrideList(Collections.emptyList()){
+			@Override
+			public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
+				renderer.entity = entity;
+				renderer.world = world;
+				return super.handleItemState(originalModel, stack, world, entity);
+			}
+		} : renderer.itemModel.getOverrides();
 	}
 
 	@Override

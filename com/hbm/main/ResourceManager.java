@@ -1,19 +1,10 @@
 package com.hbm.main;
 
-import java.io.FileNotFoundException;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
 
 public class ResourceManager {
 
@@ -103,6 +94,11 @@ public class ResourceManager {
 	public static final IModelCustom sphere_iuv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_iuv.obj"));
 	public static final IModelCustom sphere_uv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.obj"));
 	public static final IModelCustom sphere_uv_anim = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.hmf"));
+	
+	//Guns
+	public static final IModelCustom hk69 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/weapons/hk69.obj"));
+	
+	
 	////Textures TEs
 	
 	

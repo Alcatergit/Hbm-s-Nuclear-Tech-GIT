@@ -6,6 +6,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.handler.HbmShaderManager;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.item.ItemRenderOverkill;
 
 import net.minecraft.client.Minecraft;
@@ -14,8 +15,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 public class ModelSpark extends ModelBase {
 
@@ -151,47 +150,81 @@ public class ModelSpark extends ModelBase {
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		BarrelMain.render(f5);
 		PlateFront.render(f5);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		Sight.render(f5);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 		Grip.render(f5);
-		
+
 		PlateBack.render(f5);
 		Body.render(f5);
 		Handle1.render(f5);
 		Handle2.render(f5);
-		
-		
-		
-		FloatBuffer buf1 = BufferUtils.createFloatBuffer(16);
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buf1);
-		//HbmShaderManager.testBuf1 = buf1;
-		FloatBuffer buf2 = BufferUtils.createFloatBuffer(16);
-		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, buf2);
-		//HbmShaderManager.testBuf2 = buf2;
-		
-		
-		
-		HbmShaderManager.gaussRenderers.add(() -> {
+
+		if (MainRegistry.useShaders) {
+			FloatBuffer buf1 = BufferUtils.createFloatBuffer(16);
+			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buf1);
+			// HbmShaderManager.testBuf1 = buf1;
+			FloatBuffer buf2 = BufferUtils.createFloatBuffer(16);
+			GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, buf2);
+			// HbmShaderManager.testBuf2 = buf2;
+
+			HbmShaderManager.gaussRenderers.add(() -> {
+				GL11.glMatrixMode(GL11.GL_PROJECTION);
+				GL11.glLoadMatrix(buf2);
+				GL11.glMatrixMode(GL11.GL_MODELVIEW);
+				GL11.glLoadMatrix(buf1);
+
+				Minecraft.getMinecraft().renderEngine.bindTexture(ItemRenderOverkill.sparkLoc);
+				GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
+				GlStateManager.disableBlend();
+				GlStateManager.disableAlpha();
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+				GlStateManager.disableLighting();
+				GlStateManager.depthMask(true);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.disableLighting();
+
+				Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+				HbmShaderManager.useShader(HbmShaderManager.gauss);
+				HbmShaderManager.WORLD_TIME.assign(HbmShaderManager.gauss);
+				BarrelSide.render(f5);
+				Cell1.render(f5);
+				Cell2.render(f5);
+				Cell3.render(f5);
+				Cell4.render(f5);
+				Cell5.render(f5);
+				Cell8.render(f5);
+				Cell7.render(f5);
+				Cell6.render(f5);
+				HbmShaderManager.releaseShader();
+
+				Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
+				GlStateManager.depthMask(true);
+				GlStateManager.disableBlend();
+				GlStateManager.enableLighting();
+				GlStateManager.enableAlpha();
+				GL11.glPopAttrib();
+			});
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadMatrix(buf2);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadMatrix(buf1);
-			
+
 			Minecraft.getMinecraft().renderEngine.bindTexture(ItemRenderOverkill.sparkLoc);
 			GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
 			GlStateManager.disableBlend();
-	        GlStateManager.disableAlpha();
-	        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-	        GlStateManager.disableLighting();
-	        GlStateManager.depthMask(true);
-	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-	        GlStateManager.disableLighting();
-	        
-	        Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-	        HbmShaderManager.useShader(HbmShaderManager.gauss);
-	        HbmShaderManager.WORLD_TIME.assign(HbmShaderManager.gauss);
+			GlStateManager.disableAlpha();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+			GlStateManager.disableLighting();
+			GlStateManager.depthMask(true);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.disableLighting();
+
+			Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+			HbmShaderManager.useShader(HbmShaderManager.gauss);
+			HbmShaderManager.WORLD_TIME.assign(HbmShaderManager.gauss);
 			BarrelSide.render(f5);
 			Cell1.render(f5);
 			Cell2.render(f5);
@@ -202,54 +235,27 @@ public class ModelSpark extends ModelBase {
 			Cell7.render(f5);
 			Cell6.render(f5);
 			HbmShaderManager.releaseShader();
-			
+
 			Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-	        GlStateManager.depthMask(true);
-	        GlStateManager.disableBlend();
-	        GlStateManager.enableLighting();
-	        GlStateManager.enableAlpha();
+			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+			GlStateManager.enableAlpha();
 			GL11.glPopAttrib();
-		});
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadMatrix(buf2);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadMatrix(buf1);
-		
-		Minecraft.getMinecraft().renderEngine.bindTexture(ItemRenderOverkill.sparkLoc);
-		GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
-		GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        GlStateManager.disableLighting();
-        GlStateManager.depthMask(true);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableLighting();
-        
-        Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
-        HbmShaderManager.useShader(HbmShaderManager.gauss);
-        HbmShaderManager.WORLD_TIME.assign(HbmShaderManager.gauss);
-		BarrelSide.render(f5);
-		Cell1.render(f5);
-		Cell2.render(f5);
-		Cell3.render(f5);
-		Cell4.render(f5);
-		Cell5.render(f5);
-		Cell8.render(f5);
-		Cell7.render(f5);
-		Cell6.render(f5);
-		HbmShaderManager.releaseShader();
-		
-		Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.enableAlpha();
-		GL11.glPopAttrib();
-		//for(Runnable r : HbmShaderManager.gaussRenderers)
-		//	r.run();
-		HbmShaderManager.renderGauss();
-		
+			// for(Runnable r : HbmShaderManager.gaussRenderers)
+			// r.run();
+			HbmShaderManager.renderGauss();
+		} else {
+			BarrelSide.render(f5);
+			Cell1.render(f5);
+			Cell2.render(f5);
+			Cell3.render(f5);
+			Cell4.render(f5);
+			Cell5.render(f5);
+			Cell8.render(f5);
+			Cell7.render(f5);
+			Cell6.render(f5);
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

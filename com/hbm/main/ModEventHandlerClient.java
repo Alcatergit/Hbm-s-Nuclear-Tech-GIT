@@ -3,14 +3,11 @@ package com.hbm.main;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.handler.HbmShaderManager;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
@@ -28,9 +25,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.particle.ParticleDSmokeFX;
-import com.hbm.portals.Mirror;
-import com.hbm.portals.Portal;
-import com.hbm.portals.PortalManager;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
@@ -61,8 +55,6 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
@@ -86,7 +78,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -95,11 +86,12 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
+@SuppressWarnings("deprecation")
 public class ModEventHandlerClient {
 
 	private Field debugViewDirection = null;
 	private Field debugView = null;
-	
+
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
 
@@ -132,6 +124,8 @@ public class ModEventHandlerClient {
 			for (int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
+		} else if (item == ModItems.polaroid) {
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName() + "_" + MainRegistry.polaroidID, "inventory"));
 		} else if (item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
 		} else {
@@ -148,7 +142,8 @@ public class ModEventHandlerClient {
 				e.putRenderModel((IBakedModel) o);
 		}
 
-		// TODO Sigh... find a better custom model loading system.
+		//Drillgon200: Sigh... find a better custom model loading system.
+		//Drillgon200: Removed todo, found a better way. Now I just have to deal with all these ugly things. That can wait.
 		ResourceManager.init();
 		Object obj = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
 		if (obj instanceof IBakedModel) {
@@ -220,17 +215,58 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_lever_action, reg);
 		swapModelsNoGui(ModItems.gun_spark, reg);
 		swapModelsNoGui(ModItems.gun_b93, reg);
+		swapModelsNoGui(ModItems.gun_rpg, reg);
+		swapModelsNoGui(ModItems.gun_karl, reg);
+		swapModelsNoGui(ModItems.gun_panzerschreck, reg);
+		swapModelsNoGui(ModItems.gun_hk69, reg);
+		swapModelsNoGui(ModItems.gun_fatman, reg);
+		swapModelsNoGui(ModItems.gun_proto, reg);
+		swapModelsNoGui(ModItems.gun_mirv, reg);
+		swapModelsNoGui(ModItems.gun_bf, reg);
+		swapModelsNoGui(ModItems.gun_zomg, reg);
+		swapModelsNoGui(ModItems.gun_xvl1456, reg);
+		swapModelsNoGui(ModItems.gun_hp, reg);
+		swapModelsNoGui(ModItems.gun_defabricator, reg);
+		swapModelsNoGui(ModItems.gun_uboinik, reg);
+		swapModelsNoGui(ModItems.gun_euthanasia, reg);
+		swapModelsNoGui(ModItems.gun_stinger, reg);
+		swapModelsNoGui(ModItems.gun_skystinger, reg);
+		swapModelsNoGui(ModItems.gun_mp, reg);
+		swapModelsNoGui(ModItems.gun_cryolator, reg);
+		swapModelsNoGui(ModItems.gun_jack, reg);
+		swapModelsNoGui(ModItems.gun_immolator, reg);
+		swapModelsNoGui(ModItems.gun_osipr, reg);
+		swapModelsNoGui(ModItems.gun_emp, reg);
+		swapModelsNoGui(ModItems.gun_revolver_inverted, reg);
+		swapModelsNoGui(ModItems.gun_lever_action_sonata, reg);
+		swapModelsNoGui(ModItems.gun_bolt_action_saturnite, reg);
+		swapModelsNoGui(ModItems.gun_folly, reg);
+		swapModelsNoGui(ModItems.gun_dampfmaschine, reg);
+		swapModelsNoGui(ModItems.gun_revolver_saturnite, reg);
+		swapModelsNoGui(ModItems.gun_calamity, reg);
+		swapModelsNoGui(ModItems.gun_calamity_dual, reg);
+		swapModelsNoGui(ModItems.gun_minigun, reg);
+		swapModelsNoGui(ModItems.gun_avenger, reg);
+		swapModelsNoGui(ModItems.gun_lacunae, reg);
+		swapModelsNoGui(ModItems.gun_lever_action_dark, reg);
+		swapModelsNoGui(ModItems.gun_bolt_action, reg);
+		swapModelsNoGui(ModItems.gun_bolt_action_green, reg);
+		swapModelsNoGui(ModItems.gun_uzi, reg);
+		swapModelsNoGui(ModItems.gun_uzi_silencer, reg);
+		swapModelsNoGui(ModItems.gun_uzi_saturnite, reg);
+		swapModelsNoGui(ModItems.gun_uzi_saturnite_silencer, reg);
+		swapModelsNoGui(ModItems.gun_mp40, reg);
 	}
-	
-	public void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg){
+
+	public void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
 		IBakedModel model = reg.getObject(loc);
 		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
-		if(render instanceof TEISRBase){
-			((TEISRBase)render).itemModel = model;
-			reg.putObject(loc, new BakedModelNoGui((TEISRBase)render));
+		if (render instanceof TEISRBase) {
+			((TEISRBase) render).itemModel = model;
+			reg.putObject(loc, new BakedModelNoGui((TEISRBase) render));
 		}
-		
+
 	}
 
 	@SubscribeEvent
@@ -345,6 +381,7 @@ public class ModEventHandlerClient {
 
 	public static TextureAtlasSprite contrail;
 	int renderCount = 0;
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
@@ -365,44 +402,46 @@ public class ModEventHandlerClient {
 				r.doRender(e, d0 - d3, d1 - d4, d2 - d5, f, partialTicks);
 			}
 		}
-	//	renderCount ++;
-	//	if(renderCount <= 1)
-			//PortalManager.ALL_RENDER_PORTALS.forEach(Portal::render);
-	//	else
-		//	renderCount = 0;
+		// renderCount ++;
+		// if(renderCount <= 1)
+		// PortalManager.ALL_RENDER_PORTALS.forEach(Portal::render);
+		// else
+		// renderCount = 0;
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void renderLast(TickEvent.RenderTickEvent evt){
-		if(evt.phase == Phase.END){
-			//if(OpenGlHelper.shadersSupported && MainRegistry.useShaders)
-			//	if(Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.gun_spark)
-					//HbmShaderManager.renderGauss();
-			//PortalManager.ALL_RENDER_PORTALS.forEach((Portal p) -> {System.out.println(p);});
-			
+	public void renderLast(TickEvent.RenderTickEvent evt) {
+		if (evt.phase == Phase.END) {
+			// if(OpenGlHelper.shadersSupported && MainRegistry.useShaders)
+			// if(Minecraft.getMinecraft().player != null &&
+			// Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem()
+			// == ModItems.gun_spark)
+			// HbmShaderManager.renderGauss();
+			// PortalManager.ALL_RENDER_PORTALS.forEach((Portal p) ->
+			// {System.out.println(p);});
+
 		}
-		if(evt.phase == Phase.START){
-			//HbmShaderManager.stealDepthBuffer();
+		if (evt.phase == Phase.START) {
+			// HbmShaderManager.stealDepthBuffer();
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
-		
+
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(this.debugViewDirection == null){
-			//Drillgon200: Oof, OfbReflect didn't work.
+		if (this.debugViewDirection == null) {
+			// Drillgon200: Oof, OfbReflect didn't work.
 			this.debugViewDirection = ReflectionHelper.findField(EntityRenderer.class, "debugViewDirection", "field_175079_V");
 			debugViewDirection.setAccessible(true);
 		}
-		if(this.debugView == null){
-			//Drillgon200: Oof, OfbReflect didn't work.
+		if (this.debugView == null) {
+			// Drillgon200: Oof, OfbReflect didn't work.
 			this.debugView = ReflectionHelper.findField(EntityRenderer.class, "debugView", "field_175078_W");
 			debugView.setAccessible(true);
 		}
-		if(player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
-			if(player.ticksExisted > 5 * 60 * 20){
+		if (player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
+			if (player.ticksExisted > 5 * 60 * 20) {
 				try {
 					debugViewDirection.setInt(Minecraft.getMinecraft().entityRenderer, 4);
 					debugView.setBoolean(Minecraft.getMinecraft().entityRenderer, true);
@@ -412,76 +451,78 @@ public class ModEventHandlerClient {
 					e.printStackTrace();
 				}
 			}
-		
-		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
-			
-			ItemGunBase gun = ((ItemGunBase)player.getHeldItem(EnumHand.MAIN_HAND).getItem());
+
+		if (event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+
+			ItemGunBase gun = ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem());
 			GunConfiguration gcfg = gun.mainConfig;
 			BulletConfiguration bcfg = BulletConfigSyncingUtil.pullConfig(gun.mainConfig.config.get(ItemGunBase.getMagType(player.getHeldItem(EnumHand.MAIN_HAND))));
-			
+
 			Item ammo = bcfg.ammo;
 			int count = ItemGunBase.getMag(player.getHeldItem(EnumHand.MAIN_HAND));
 			int max = gcfg.ammoCap;
-			
-			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
+
+			if (gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
 				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.MAIN_HAND));
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
 			}
-			
+
 			int dura = ItemGunBase.getItemWear(player.getHeldItem(EnumHand.MAIN_HAND)) * 50 / gcfg.durability;
-			
+
 			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, EnumHand.MAIN_HAND);
-			//RenderScreenOverlay.renderRadCounter(event.resolution, 0, Minecraft.getMinecraft().ingameGUI);
+			// RenderScreenOverlay.renderRadCounter(event.resolution, 0,
+			// Minecraft.getMinecraft().ingameGUI);
 		}
-		
-		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
-			
-			ItemGunBase gun = ((ItemGunBase)player.getHeldItem(EnumHand.OFF_HAND).getItem());
+
+		if (event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+
+			ItemGunBase gun = ((ItemGunBase) player.getHeldItem(EnumHand.OFF_HAND).getItem());
 			GunConfiguration gcfg = gun.mainConfig;
 			BulletConfiguration bcfg = BulletConfigSyncingUtil.pullConfig(gun.mainConfig.config.get(ItemGunBase.getMagType(player.getHeldItem(EnumHand.OFF_HAND))));
-			
+
 			Item ammo = bcfg.ammo;
 			int count = ItemGunBase.getMag(player.getHeldItem(EnumHand.OFF_HAND));
 			int max = gcfg.ammoCap;
-			
-			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
+
+			if (gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
 				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.OFF_HAND));
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
 			}
-			
-			int dura = ItemGunBase.getItemWear(player.getHeldItem(EnumHand.OFF_HAND)) * 50 / gcfg.durability;
-			
-			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, EnumHand.OFF_HAND);
-			//RenderScreenOverlay.renderRadCounter(event.resolution, 0, Minecraft.getMinecraft().ingameGUI);
-		}
-		
-		if(event.getType() == ElementType.HOTBAR) {
-			//TODO geiger counter
-			/*if(player.inventory.hasItem(ModItems.geiger_counter)) {
 
+			int dura = ItemGunBase.getItemWear(player.getHeldItem(EnumHand.OFF_HAND)) * 50 / gcfg.durability;
+
+			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, EnumHand.OFF_HAND);
+			// RenderScreenOverlay.renderRadCounter(event.resolution, 0,
+			// Minecraft.getMinecraft().ingameGUI);
+		}
+
+		if (event.getType() == ElementType.HOTBAR) {
+			// TODO geiger counter
+			/*if(player.inventory.hasItem(ModItems.geiger_counter)) {
+			
 				float rads = 0;
 				float abs = 0;
-
+			
 				RadEntitySavedData data = RadEntitySavedData.getData(player.worldObj);
 				rads = data.getRadFromEntity(player);
 				
 				RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
 			}*/
 		}
-		
-		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {
+
+		if (event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {
 			event.setCanceled(true);
-			
-			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
-				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
-			if(!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon){
-				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon)player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
+
+			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
+				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
+			if (!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void preRenderPlayer(RenderPlayerEvent.Pre evt) {
 		// event.setCanceled(true);
@@ -493,17 +534,16 @@ public class ModEventHandlerClient {
 		if (cloak != null)
 			RenderAccessoryUtility.loadCape(info, cloak);
 	}
-	
+
 	@SubscribeEvent
-	public void preRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event){
-		if(event.getEntity() instanceof AbstractClientPlayer){
+	public void preRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event) {
+		if (event.getEntity() instanceof AbstractClientPlayer) {
 			RenderPlayer renderer = (RenderPlayer) event.getRenderer();
 			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
-			
 
 			if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
-				renderer.getMainModel().bipedRightArm.rotateAngleY = 90;
+				//renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
 			}
 			if (player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
@@ -512,47 +552,45 @@ public class ModEventHandlerClient {
 	}
 
 	@SubscribeEvent
-	public void clickHandler(MouseEvent event){	
+	public void clickHandler(MouseEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		
-		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
-			
-			if(event.getButton() == 0)
+
+		if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+
+			if (event.getButton() == 0)
 				event.setCanceled(true);
-			
-			ItemGunBase item = (ItemGunBase)player.getHeldItem(EnumHand.MAIN_HAND).getItem();
-			
-			if(event.getButton() == 0 && !item.m1r && !item.m2r) {
+
+			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
+
+			if (event.getButton() == 0 && !item.m1r && !item.m2r) {
 				item.m1r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.MAIN_HAND));
-				//System.out.println("M1");
-			}
-			else if(event.getButton() == 1 && !item.m2r && !item.m1r) {
+				// System.out.println("M1");
+			} else if (event.getButton() == 1 && !item.m2r && !item.m1r) {
 				item.m2r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.MAIN_HAND));
-				//System.out.println("M2");
+				// System.out.println("M2");
 			}
 		}
-		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
-			
-			if(event.getButton() == 0)
+		if (player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+
+			if (event.getButton() == 0)
 				event.setCanceled(true);
-			
-			ItemGunBase item = (ItemGunBase)player.getHeldItem(EnumHand.OFF_HAND).getItem();
-			if(event.getButton() == 0 && !item.m1l && !item.m2l) {
+
+			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.OFF_HAND).getItem();
+			if (event.getButton() == 0 && !item.m1l && !item.m2l) {
 				item.m1l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.OFF_HAND));
-				
-				//System.out.println("M1");
-			}
-			else if(event.getButton() == 1 && !item.m2l && !item.m1l) {
+
+				// System.out.println("M1");
+			} else if (event.getButton() == 1 && !item.m2l && !item.m1l) {
 				item.m2l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.OFF_HAND));
-				//System.out.println("M2");
+				// System.out.println("M2");
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void clientDisconnectFromServer(ClientDisconnectionFromServerEvent e) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ItemAssemblyTemplate.recipesBackup != null) {

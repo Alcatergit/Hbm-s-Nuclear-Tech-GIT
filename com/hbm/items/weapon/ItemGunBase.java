@@ -12,19 +12,15 @@ import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +28,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -199,8 +194,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 		if (getDelay(stack) > 0 && hand != null)
 			setDelay(stack, getDelay(stack) - 1);
-		if(getIsMouseDown(stack) && getDelay(stack) < mainConfig.rateOfFire - 3)
-			shootNext(stack, true);
 		if (MainRegistry.enableGuns && mainConfig.firingMode == GunConfiguration.FIRE_AUTO && getIsMouseDown(stack) && tryShoot(stack, world, player, hand != null)) {
 
 			fire(stack, world, player, hand);
@@ -209,12 +202,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			useUpAmmo(player, stack);
 		}
 		
-		if (mainConfig.firingMode == GunConfiguration.FIRE_MANUAL && (getIsMouseDown(stack) || shouldShootNext(stack)) && tryShoot(stack, world, player, hand != null)) {
-			fire(stack, world, player, hand);
-			setDelay(stack, mainConfig.rateOfFire);
-			// setMag(stack, getMag(stack) - 1);
-			useUpAmmo(player, stack);
-		}
+		
 
 		if (getIsReloading(stack) && hand != null) {
 			reload(stack, world, player, hand);
@@ -240,7 +228,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	// called every time the gun shoots, overridden to change bullet
 	// entity/special additions
 	private void fire(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		shootNext(stack, false);
 		BulletConfiguration config = null;
 
 		if (mainConfig.reloadType == GunConfiguration.RELOAD_NONE) {
@@ -306,8 +293,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 				if (count == 0)
 					setIsReloading(stack, false);
-				else
-					shootNext(stack, false);
 				for (int i = 0; i < count; i++) {
 
 					if (getMag(stack) < mainConfig.ammoCap) {
@@ -351,7 +336,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 				// load new type if bullets are present
 				if (ammo != null) {
-					shootNext(stack, false);
 					int count = 1;
 
 					if (mainConfig.reloadType == 1) {
@@ -448,7 +432,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	public static BulletConfiguration getBeltCfg(EntityPlayer player, ItemStack stack) {
 
 		ItemGunBase gun = (ItemGunBase) stack.getItem();
-		Item ammo = getBeltType(player, stack);
 
 		for (Integer config : gun.mainConfig.config) {
 
@@ -496,15 +479,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 		
 		return null;
 	}*/
-	
-	//Drillgon200: So you can shoot twice and have it fire twice better
-	public static boolean shouldShootNext(ItemStack stack){
-		return readNBT(stack, "shootNext") == 1 ? true : false;
-	}
-	
-	public static void shootNext(ItemStack stack, boolean b){
-		writeNBT(stack, "shootNext", b ? 1 : 0);
-	}
 
 	/// sets reload cycle to config defult ///
 	public static void resetReloadCycle(ItemStack stack) {

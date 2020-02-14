@@ -50,6 +50,7 @@ public class ItemRenderOverkill extends TEISRBase {
 		folly = new ModelFolly();*/
 	}
 
+	//Drillgon200: Oh god this class is messy. I'm going to stop using the same item renderer to render every powerful gun.
 	@Override
 	public void renderByItem(ItemStack stack) {
 		if (stack.getItem() == ModItems.gun_revolver_pip)
@@ -104,6 +105,8 @@ public class ItemRenderOverkill extends TEISRBase {
 			break;
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
+		case HEAD:
+		case FIXED:
 		case GROUND:
 			GL11.glTranslated(0.45, 0.25, 0.5);
 			GL11.glRotated(-90, 0, 1, 0);

@@ -1,10 +1,7 @@
 package com.hbm.creativetabs;
 
-import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class NukeTab extends CreativeTabs {

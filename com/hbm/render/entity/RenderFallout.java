@@ -20,13 +20,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.IRenderHandler;
 
@@ -70,7 +67,12 @@ public class RenderFallout extends Render<EntityFalloutRain> {
        // System.out.println(entity + " " + entity.getScale());
         //new Exception().printStackTrace();
         GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_LIGHTING_BIT);
         GL11.glDisable(GL11.GL_CULL_FACE);
+        //Drillgon200: It doesn't work when I use GLStateManager...
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        
+        GlStateManager.disableLighting();
         Entity ent = this.mc.getRenderViewEntity();
         Vec3 vector = Vec3.createVectorHelper(ent.posX - entity.posX,
                 ent.posY - entity.posY, ent.posZ - entity.posZ);
@@ -88,6 +90,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
  
             lastTime = time;
         }
+        GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
    

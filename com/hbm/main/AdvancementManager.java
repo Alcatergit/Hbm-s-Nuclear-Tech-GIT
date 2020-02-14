@@ -85,6 +85,7 @@ public class AdvancementManager {
 		bobChemistry = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobchemistry"));
 		bobOil = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "boboil"));
 		bobNuclear = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobnuclear"));
+		achSacrifice = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsacrifice"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

@@ -6,7 +6,6 @@ import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;

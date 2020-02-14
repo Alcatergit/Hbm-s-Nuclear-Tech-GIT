@@ -2,7 +2,12 @@ package com.hbm.lib;
 
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.entity.projectile.EntityCombineBall;
+import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.entity.projectile.EntityFire;
+import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityPlasmaBeam;
+import com.hbm.entity.projectile.EntityRainbow;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
@@ -55,7 +60,7 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("tau", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }
-   /* public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("cmb", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }
@@ -79,19 +84,19 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("subAtomic5", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }
-    public static DamageSource euthanized(Entity p_76353_0_, Entity p_76353_1_)
+    /*public static DamageSource euthanized(Entity p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("euthanized", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
-    public static DamageSource causeDischargeDamage(EntityDischarge p_76353_0_, Entity p_76353_1_)
+    */public static DamageSource causeDischargeDamage(EntityDischarge p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("electrified", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
-    }*/
+    }
     public static DamageSource causeFireDamage(EntityFire p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("flamethrower", p_76353_0_, p_76353_1_)).setFireDamage().setDamageBypassesArmor();
     }
-    /*public static DamageSource causePlasmaDamage(EntityPlasmaBeam p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causePlasmaDamage(EntityPlasmaBeam p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("plasma", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
@@ -99,7 +104,7 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("ice", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
-    public static DamageSource causeLaserDamage(EntityLaserBeam p_76353_0_, Entity p_76353_1_)
+    /*public static DamageSource causeLaserDamage(EntityLaserBeam p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("laser", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }

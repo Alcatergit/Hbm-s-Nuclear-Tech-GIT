@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -224,7 +222,6 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
 
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
-            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
             //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
@@ -300,7 +297,6 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
             }
 
             float f2;
-            float f4;
 
             if (movingobjectposition != null)
             {
@@ -331,7 +327,6 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
             f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 
-            float f3 = 0.99F;
             f1 = 0.05F;
 
             if (this.isInWater())

@@ -18,7 +18,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -40,11 +39,15 @@ public class WeaponSpecial extends ItemSword {
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		return super.getRarity(stack);
+		if(this == ModItems.ullapool_caber) {
+			return EnumRarity.UNCOMMON;
+		}
+		return EnumRarity.COMMON;
 	}
 	
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		World world = target.world;
 		if(this == ModItems.bottle_opener) {
 			if (!target.world.isRemote)
         	{
@@ -59,6 +62,14 @@ public class WeaponSpecial extends ItemSword {
 					target.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 1 * 60 * 20, 0));
         	}
         	target.playSound(SoundEvents.BLOCK_ANVIL_LAND, 3.0F, 1.0F);
+		}
+		if(this == ModItems.ullapool_caber) {
+			if (!world.isRemote)
+        	{
+				world.createExplosion(null, target.posX, target.posY, target.posZ, 7.5F, true);
+        	}
+			
+			stack.damageItem(505, attacker);
 		}
 		return false;
 	}
@@ -83,6 +94,10 @@ public class WeaponSpecial extends ItemSword {
 		if(this == ModItems.bottle_opener) {
 			list.add("My very own bottle opener.");
 			list.add("Use with caution!");
+		}
+		if(this == ModItems.ullapool_caber) {
+			list.add("High-yield Scottish face removal.");
+			list.add("A sober person would throw it...");
 		}
 	}
 

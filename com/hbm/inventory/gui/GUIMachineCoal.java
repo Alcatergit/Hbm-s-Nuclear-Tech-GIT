@@ -8,7 +8,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;

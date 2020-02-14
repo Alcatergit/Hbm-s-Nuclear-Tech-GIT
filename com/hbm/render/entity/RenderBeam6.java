@@ -30,6 +30,7 @@ public class RenderBeam6 extends Render<EntityModBeam> {
 	public void doRender(EntityModBeam rocket, double x, double y, double z, float entityYaw, float partialTicks) {
 		// float radius = 0.12F;
 		// float radius = 0.06F;
+		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
 		float radius = 0.175F;
 		int distance = 2;
 		Tessellator tessellator = Tessellator.getInstance();
@@ -77,6 +78,7 @@ public class RenderBeam6 extends Render<EntityModBeam> {
 		tessellator.draw();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 

@@ -1,7 +1,5 @@
 package com.hbm.packet;
 
-import java.nio.charset.Charset;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;

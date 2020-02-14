@@ -89,6 +89,10 @@ public class BlockOre extends Block {
 		{
 			return Items.SNOWBALL;
 		}
+		if(this == ModBlocks.ore_nether_fire)
+		{
+			return rand.nextInt(2) == 0 ? ModItems.powder_fire : Items.BLAZE_POWDER;
+		}
 		return Item.getItemFromBlock(this);
 	}
 	
@@ -105,6 +109,10 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.ore_rare){
 			return 4 + rand.nextInt(8);
+		}
+		if(this == ModBlocks.ore_nether_fire)
+		{
+			return 2 + rand.nextInt(3);
 		}
 		return 1;
 	}

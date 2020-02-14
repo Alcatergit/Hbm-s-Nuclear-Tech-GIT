@@ -1,7 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.hbm.entity.particle.EntityGasFlameFX;
@@ -13,17 +11,12 @@ import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.CombatRules;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class TurretCIWS extends TurretBase {
 

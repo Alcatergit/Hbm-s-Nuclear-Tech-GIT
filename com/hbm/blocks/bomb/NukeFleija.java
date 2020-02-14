@@ -9,8 +9,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
-import com.hbm.tileentity.bomb.TileEntityNukeMan;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -110,7 +108,7 @@ public class NukeFleija extends BlockContainer implements IBomb {
 		if (!world.isRemote)
 		{
 			//world.spawnParticle("hugeexplosion", x, y, z, 0, 0, 0);
-			world.playSound(x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F, true);
+			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
 			
 			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(world);
     		entity.posX = x;

@@ -33,7 +33,8 @@ public class RenderDecoBlock extends TileEntitySpecialRenderer<TileEntityDecoBlo
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			// ResourceManager.boxcar.renderAll();
-			RenderHelper.renderAll(ClientProxy.boxcar);
+			//RenderHelper.renderAll(ClientProxy.boxcar);
+			GL11.glCallList(ClientProxy.boxcarCalllist);
 
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
