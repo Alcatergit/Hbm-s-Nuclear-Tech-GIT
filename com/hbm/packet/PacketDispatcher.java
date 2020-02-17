@@ -56,6 +56,10 @@ public class PacketDispatcher {
 		wrapper.registerMessage(EnumParticlePacket.Handler.class, EnumParticlePacket.class, i++, Side.CLIENT);
 		//Gun firing packet
 		wrapper.registerMessage(GunButtonPacket.Handler.class, GunButtonPacket.class, i++, Side.SERVER);
+		//Packet sent for every connected electricity pole, for wire rendering
+		wrapper.registerMessage(TEPylonSenderPacket.Handler.class, TEPylonSenderPacket.class, i++, Side.CLIENT);
+		//Resets connection list in client-sided pole rendering
+		wrapper.registerMessage(TEPylonDestructorPacket.Handler.class, TEPylonDestructorPacket.class, i++, Side.CLIENT);
 	}
 
 }

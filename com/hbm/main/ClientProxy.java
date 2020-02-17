@@ -253,6 +253,7 @@ import com.hbm.render.tileentity.RenderCheapoTurret;
 import com.hbm.render.tileentity.RenderChemplant;
 import com.hbm.render.tileentity.RenderCloudResidue;
 import com.hbm.render.tileentity.RenderDecoBlock;
+import com.hbm.render.tileentity.RenderEPress;
 import com.hbm.render.tileentity.RenderFlamerTurret;
 import com.hbm.render.tileentity.RenderFluidDuct;
 import com.hbm.render.tileentity.RenderHeavyTurret;
@@ -261,6 +262,7 @@ import com.hbm.render.tileentity.RenderLightTurret;
 import com.hbm.render.tileentity.RenderNukeFleija;
 import com.hbm.render.tileentity.RenderNukeMan;
 import com.hbm.render.tileentity.RenderPress;
+import com.hbm.render.tileentity.RenderPylon;
 import com.hbm.render.tileentity.RenderRocketTurret;
 import com.hbm.render.tileentity.RenderSmallReactor;
 import com.hbm.render.tileentity.RenderSpitfireTurret;
@@ -287,8 +289,10 @@ import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
+import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
+import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -357,6 +361,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTurretCIWS.class, new RenderCIWSTurret());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoBlock.class, new RenderDecoBlock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLaunchPad.class, new RenderLaunchPadTier1());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineEPress.class, new RenderEPress());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPylonRedWire.class, new RenderPylon());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));

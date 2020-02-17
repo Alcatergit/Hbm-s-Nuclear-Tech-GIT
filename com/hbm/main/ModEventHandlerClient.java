@@ -8,6 +8,7 @@ import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.handler.HbmShaderManager;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
@@ -55,6 +56,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
@@ -407,6 +409,11 @@ public class ModEventHandlerClient {
 		// PortalManager.ALL_RENDER_PORTALS.forEach(Portal::render);
 		// else
 		// renderCount = 0;
+		if(OpenGlHelper.shadersSupported && MainRegistry.useShaders)
+			// if(Minecraft.getMinecraft().player != null &&
+			// Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem()
+			// == ModItems.gun_spark)
+			 HbmShaderManager.renderGauss();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

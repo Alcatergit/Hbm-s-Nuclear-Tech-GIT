@@ -80,6 +80,7 @@ import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.items.tool.ItemTurretBiometry;
 import com.hbm.items.tool.ItemTurretChip;
 import com.hbm.items.tool.ItemTurretControl;
+import com.hbm.items.tool.ItemWiring;
 import com.hbm.items.weapon.GunB93;
 import com.hbm.items.weapon.GunBaleFlare;
 import com.hbm.items.weapon.GunBoltAction;
@@ -412,7 +413,7 @@ public class ModItems {
 	public static final Item ingot_hes = new ItemRadioactive("ingot_hes").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_les = new ItemRadioactive("ingot_les").setCreativeTab(MainRegistry.partsTab);
 	
-	
+	public static final Item wiring_red_copper = new ItemWiring("wiring_red_copper").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item nuclear_waste = new ItemRadioactive("nuclear_waste");
 	public static final Item nuclear_waste_tiny = new ItemRadioactive("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);

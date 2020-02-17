@@ -55,17 +55,10 @@ public class HbmShaderManager {
 	});
 
 	public static Framebuffer gaussFbo;
-
-	public static Framebuffer fbo0;
-	public static Framebuffer fbo1;
-	public static Framebuffer fbo2;
-	public static Framebuffer fbo3;
-	public static Framebuffer fbo4;
-	public static Framebuffer fbo5;
+	
 	public static Framebuffer fbo6;
 	public static Framebuffer fbo7;
 	public static Framebuffer fbo8;
-	public static Framebuffer fbo9;
 
 	public static List<Runnable> gaussRenderers = new ArrayList<Runnable>();
 	private static boolean firstRun = false;
@@ -100,20 +93,7 @@ public class HbmShaderManager {
 
 			gaussFbo.createBindFramebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 			gaussFbo.setFramebufferColor(0.0F, 0.0F, 0.0F, 1.0F);
-
-			fbo0.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16);
-			fbo0.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-			fbo1.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16);
-			fbo1.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-			fbo2.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 8, Minecraft.getMinecraft().displayHeight / 8);
-			fbo2.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-			fbo3.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 8, Minecraft.getMinecraft().displayHeight / 8);
-			fbo3.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-
-			fbo4.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 4, Minecraft.getMinecraft().displayHeight / 4);
-			fbo4.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-			fbo5.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 4, Minecraft.getMinecraft().displayHeight / 4);
-			fbo5.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
+			
 			fbo6.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2);
 			fbo6.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
 			fbo7.createBindFramebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2);
@@ -121,8 +101,6 @@ public class HbmShaderManager {
 
 			fbo8.createBindFramebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 			fbo8.setFramebufferColor(0.0F, 0.0F, 0.0F, 1.0F);
-			fbo9.createBindFramebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-			fbo9.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
 		}
 		GlStateManager.matrixMode(GL11.GL_PROJECTION);
 		GlStateManager.pushMatrix();
@@ -257,16 +235,9 @@ public class HbmShaderManager {
 		if(!MainRegistry.useShaders)
 			return;
 		gaussFbo = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
-		fbo0 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16, true);
-		fbo1 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 16, Minecraft.getMinecraft().displayHeight / 16, true);
-		fbo2 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 8, Minecraft.getMinecraft().displayHeight / 8, true);
-		fbo3 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 8, Minecraft.getMinecraft().displayHeight / 8, true);
-		fbo4 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 4, Minecraft.getMinecraft().displayHeight / 4, true);
-		fbo5 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 4, Minecraft.getMinecraft().displayHeight / 4, true);
 		fbo6 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2, true);
 		fbo7 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2, true);
 		fbo8 = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
-		fbo9 = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
 		gauss = createShader("gauss.frag", "gauss.vert");
 		hGauss = createShader("vGauss.frag", "vGauss.vert");
 		vGauss = createShader("hGauss.frag", "hGauss.vert");

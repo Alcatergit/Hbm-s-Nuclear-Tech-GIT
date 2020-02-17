@@ -1,0 +1,272 @@
+package com.hbm.tileentity.machine;
+
+import com.hbm.interfaces.IClientRequestUpdator;
+import com.hbm.interfaces.IConsumer;
+import com.hbm.inventory.MachineRecipes;
+import com.hbm.items.special.ItemBattery;
+import com.hbm.items.special.ItemBlades;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
+import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.ClientRequestUpdatePacket;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.TEPressPacket;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+
+public class TileEntityMachineEPress extends TileEntity implements ITickable, IConsumer, IClientRequestUpdator {
+
+	public ItemStackHandler inventory;
+
+	public int progress = 0;
+	public long power = 0;
+	public final static int maxProgress = 200;
+	public final static long maxPower = 50000;
+	public int item;
+	public int meta;
+	boolean isRetracting = false;
+	boolean requestUpdate = true;
+	boolean firstUpdate = true;
+
+	private String customName;
+
+	//Fail-safe
+	int age;
+	
+	public TileEntityMachineEPress() {
+		inventory = new ItemStackHandler(4) {
+			
+			
+			
+			@Override
+			public boolean isItemValid(int slot, ItemStack stack) {
+				if(stack.getItem() instanceof ItemBlades && slot == 1)
+					return true;
+				if(stack.getItem() instanceof ItemBattery && slot == 0)
+					return true;
+				return slot == 2;
+			}
+		};
+	}
+
+	public String getInventoryName() {
+		return this.hasCustomInventoryName() ? this.customName : "container.epress";
+	}
+
+	public boolean hasCustomInventoryName() {
+		return this.customName != null && this.customName.length() > 0;
+	}
+
+	public void setCustomName(String name) {
+		this.customName = name;
+	}
+
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if (world.getTileEntity(pos) != this) {
+			return false;
+		} else {
+			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
+		}
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setInteger("progress", progress);
+		compound.setLong("power", power);
+		compound.setBoolean("ret", isRetracting);
+		compound.setTag("inventory", inventory.serializeNBT());
+		if(customName != null)
+			compound.setString("customname", customName);
+		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		progress = compound.getInteger("progress");
+		power = compound.getInteger("power");
+		isRetracting = compound.getBoolean("ret");
+		if(compound.hasKey("inventory"))
+			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		if(compound.hasKey("customname"))
+			customName = compound.getString("customname");
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public void update() {
+		if(firstUpdate){
+			if(world.isRemote){
+				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
+			}
+			firstUpdate = false;
+		}
+		if(!world.isRemote)
+		{
+			age ++;
+			if(age % 200 == 0)
+				requestUpdate = true;
+			if(age > 10000)
+				age = 0;
+			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
+			
+			if(power >= 100) {
+
+				int speed = 25;
+				
+				if(!inventory.getStackInSlot(1).isEmpty() && !inventory.getStackInSlot(2).isEmpty()) {
+					ItemStack stack = MachineRecipes.getPressResult(inventory.getStackInSlot(2).copy(), inventory.getStackInSlot(1).copy());
+					if(stack != null &&
+							(inventory.getStackInSlot(3).isEmpty() ||
+							(inventory.getStackInSlot(3).getItem() == stack.getItem() &&
+									inventory.getStackInSlot(3).getCount() + stack.getCount() <= inventory.getStackInSlot(3).getMaxStackSize()))) {
+						
+						power -= 100;
+						
+						if(progress >= maxProgress) {
+							
+							isRetracting = true;
+							
+							if(inventory.getStackInSlot(3).isEmpty())
+								inventory.setStackInSlot(3, stack.copy());
+							else
+								inventory.getStackInSlot(3).grow(stack.getCount());
+							
+							inventory.getStackInSlot(2).shrink(1);;
+							if(inventory.getStackInSlot(2).isEmpty())
+								inventory.setStackInSlot(2, ItemStack.EMPTY);
+							
+							inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
+							if(inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1).getMaxDamage())
+								inventory.setStackInSlot(1, ItemStack.EMPTY);
+
+					        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
+						}
+						
+						if(!isRetracting)
+							progress += speed;
+						
+					} else {
+						isRetracting = true;
+					}
+				} else {
+					isRetracting = true;
+				}
+
+				if(isRetracting)
+					progress -= speed;
+			} else {
+				isRetracting = true;
+			}
+			
+			if(progress <= 0) {
+				isRetracting = false;
+				progress = 0;
+			}
+
+			detectAndSendChanges();
+		}
+	}
+	
+	private int detectProgress;
+	private long detectPower;
+	private boolean detectIsRetracting;
+	private String detectCustomName;
+	private ItemStack detectItem;
+	
+	protected void detectAndSendChanges(){
+		boolean mark = false;
+		boolean needsPressPacket = false;
+		if(detectProgress != progress || requestUpdate){
+			mark = true;
+			needsPressPacket = true;
+			detectProgress = progress;
+		}
+		if(detectPower != power || requestUpdate){
+			mark = true;
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+			detectPower = power;
+		}
+		if(detectIsRetracting != isRetracting || requestUpdate){
+			mark = true;
+			detectIsRetracting = isRetracting;
+		}
+		if(((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))) || requestUpdate){
+			mark = true;
+			detectCustomName = customName;
+		}
+		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem) || requestUpdate){
+			detectItem = inventory.getStackInSlot(2).copy();
+			needsPressPacket = true;
+		}
+		if(mark)
+			markDirty();
+		if(needsPressPacket)
+			PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+		
+	}
+	
+	public long getPowerScaled(int i) {
+		return (power * i) / maxPower;
+	}
+
+	public int getProgressScaled(int i) {
+		return (progress * i) / maxProgress;
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(pos, pos.add(1, 3, 1));
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared()
+	{
+		return 65536.0D;
+	}
+	
+	@Override
+	public void setPower(long i) {
+		power = i;
+		
+	}
+
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
+
+	@Override
+	public void requestClientUpdate() {
+		this.requestUpdate = true;
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+}

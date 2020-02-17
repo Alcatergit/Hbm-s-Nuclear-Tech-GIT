@@ -37,12 +37,14 @@ import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.blocks.machine.MachineCoal;
 import com.hbm.blocks.machine.MachineDiFurnace;
+import com.hbm.blocks.machine.MachineEPress;
 import com.hbm.blocks.machine.MachineGenerator;
 import com.hbm.blocks.machine.MachinePress;
 import com.hbm.blocks.machine.MachineRTG;
 import com.hbm.blocks.machine.MachineReactorSmall;
 import com.hbm.blocks.machine.MachineTransformer;
 import com.hbm.blocks.machine.MachineTurbine;
+import com.hbm.blocks.machine.PylonRedWire;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -186,6 +188,7 @@ public class ModBlocks {
 	public static final int guiID_machine_boiler = 72;
 	public static final int guiID_machine_boiler_electric = 73;
 	
+	public static final Block red_pylon = new PylonRedWire(Material.IRON, "red_pylon").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_battery_potato = new MachineBattery(Material.IRON, 10000, "machine_battery_potato").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_battery = new MachineBattery(Material.IRON, 1000000, "machine_battery").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_lithium_battery = new MachineBattery(Material.IRON, 15000000, "machine_lithium_battery").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -205,6 +208,8 @@ public class ModBlocks {
 	
 	public static final Block machine_press = new MachinePress(Material.IRON, "machine_press").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_press = 53;
+	public static final Block machine_epress = new MachineEPress(Material.IRON, "machine_epress").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_machine_epress = 81;
 	
 	public static final Block machine_difurnace_on = new MachineDiFurnace(Material.IRON, "machine_difurnace_on", true).setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

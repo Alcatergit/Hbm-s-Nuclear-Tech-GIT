@@ -67,16 +67,15 @@ public class MachinePress extends BlockContainer {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState block) {
 
-            TileEntity tileentity = world.getTileEntity(pos);
+		TileEntity tileentity = world.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityMachinePress)
-            {
-                InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachinePress)tileentity);
-                
-                world.updateComparatorOutputLevel(pos, this);
-            }
-        
-        super.breakBlock(world, pos, block);
+		if (tileentity instanceof TileEntityMachinePress) {
+			InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachinePress) tileentity);
+
+			world.updateComparatorOutputLevel(pos, this);
+		}
+
+		super.breakBlock(world, pos, block);
 	}
 
 	

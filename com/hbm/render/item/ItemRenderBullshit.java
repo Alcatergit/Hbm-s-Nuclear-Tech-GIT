@@ -76,6 +76,8 @@ public class ItemRenderBullshit extends TEISRBase {
 		Minecraft.getMinecraft().renderEngine.bindTexture(spark_rl);
 		GL11.glScalef(4/3F, 4/3F, 4/3F);
 		GL11.glTranslatef(-0.5F, 0.0F, 0.0F);
+		if(type == TransformType.FIRST_PERSON_LEFT_HAND || type == TransformType.FIRST_PERSON_RIGHT_HAND)
+			sparkPlug.renderingInFirstPerson = true;
 		sparkPlug.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		Minecraft.getMinecraft().renderEngine.bindTexture(pip_rl);
 		GL11.glTranslatef(0.0F, 0.2F, 0.0F);

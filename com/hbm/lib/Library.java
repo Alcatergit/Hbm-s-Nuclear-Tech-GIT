@@ -18,6 +18,7 @@ import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineTransformer;
+import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -629,8 +630,7 @@ public class Library {
 					((TileEntityCableSwitch)tileentity).uoteab.clear();
 				}
 			}*/
-			// TODO Pylon
-			/*	if(tileentity instanceof TileEntityPylonRedWire)
+				if(tileentity instanceof TileEntityPylonRedWire)
 				{
 					if(Library.checkUnionList(((TileEntityPylonRedWire)tileentity).uoteab, that))
 					{
@@ -644,14 +644,14 @@ public class Library {
 									for(int j = 0; j < ((TileEntityPylonRedWire)tileentity).connected.size(); j++) {
 										TileEntityPylonRedWire pylon = ((TileEntityPylonRedWire)tileentity).connected.get(j);
 										if(pylon != null) {
-											that.ffgeua(pylon.xCoord + 1, pylon.yCoord, pylon.zCoord, that.getTact());
-											that.ffgeua(pylon.xCoord - 1, pylon.yCoord, pylon.zCoord, that.getTact());
-											that.ffgeua(pylon.xCoord, pylon.yCoord + 1, pylon.zCoord, that.getTact());
-											that.ffgeua(pylon.xCoord, pylon.yCoord - 1, pylon.zCoord, that.getTact());
-											that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord + 1, that.getTact());
-											that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord - 1, that.getTact());
+											that.ffgeua(pylon.getPos().east(), that.getTact());
+											that.ffgeua(pylon.getPos().west(), that.getTact());
+											that.ffgeua(pylon.getPos().up(), that.getTact());
+											that.ffgeua(pylon.getPos().down(), that.getTact());
+											that.ffgeua(pylon.getPos().south(), that.getTact());
+											that.ffgeua(pylon.getPos().north(), that.getTact());
 											
-											that.ffgeua(pylon.xCoord, pylon.yCoord, pylon.zCoord, that.getTact());
+											that.ffgeua(pylon.getPos(), that.getTact());
 										}
 									}
 								}
@@ -660,7 +660,7 @@ public class Library {
 					} else {
 						((TileEntityPylonRedWire)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 					}
-				}*/
+				}
 		}
 
 		// TE will not be added as consumer if:

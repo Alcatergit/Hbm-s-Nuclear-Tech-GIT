@@ -100,8 +100,10 @@ public class ItemRenderOverkill extends TEISRBase {
 
 			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red)
 				pip.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(stack.getItem() == ModItems.gun_spark)
+			if(stack.getItem() == ModItems.gun_spark){
+				sparkPlug.renderingInFirstPerson = true;
 				sparkPlug.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			}
 			break;
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:

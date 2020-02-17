@@ -18,6 +18,8 @@ import net.minecraft.entity.Entity;
 
 public class ModelSpark extends ModelBase {
 
+	public boolean renderingInFirstPerson;
+	
 	ModelRenderer BarrelMain;
 	ModelRenderer BarrelSide;
 	ModelRenderer PlateFront;
@@ -175,7 +177,7 @@ public class ModelSpark extends ModelBase {
 				GL11.glLoadMatrix(buf1);
 
 				Minecraft.getMinecraft().renderEngine.bindTexture(ItemRenderOverkill.sparkLoc);
-				GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
+				GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_COLOR_BUFFER_BIT);
 				GlStateManager.disableBlend();
 				GlStateManager.disableAlpha();
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
@@ -206,13 +208,16 @@ public class ModelSpark extends ModelBase {
 				GlStateManager.enableAlpha();
 				GL11.glPopAttrib();
 			});
+			//Stupid hack because minecraft doesn't have an event for rendering the hand.
+			if(this.renderingInFirstPerson)
+				HbmShaderManager.renderGauss();
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadMatrix(buf2);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadMatrix(buf1);
 
 			Minecraft.getMinecraft().renderEngine.bindTexture(ItemRenderOverkill.sparkLoc);
-			GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
+			GL11.glPushAttrib(GL11.GL_CURRENT_BIT | GL11.GL_COLOR_BUFFER_BIT);
 			GlStateManager.disableBlend();
 			GlStateManager.disableAlpha();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
@@ -242,9 +247,7 @@ public class ModelSpark extends ModelBase {
 			GlStateManager.enableLighting();
 			GlStateManager.enableAlpha();
 			GL11.glPopAttrib();
-			// for(Runnable r : HbmShaderManager.gaussRenderers)
-			// r.run();
-			HbmShaderManager.renderGauss();
+			
 		} else {
 			BarrelSide.render(f5);
 			Cell1.render(f5);
@@ -256,6 +259,7 @@ public class ModelSpark extends ModelBase {
 			Cell7.render(f5);
 			Cell6.render(f5);
 		}
+		this.renderingInFirstPerson = false;
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

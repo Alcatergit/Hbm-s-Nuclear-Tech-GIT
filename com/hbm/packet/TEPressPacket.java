@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import io.netty.buffer.ByteBuf;
@@ -75,14 +76,13 @@ public class TEPressPacket implements IMessage {
 					gen.meta = m.meta;
 					gen.progress = m.progress;
 				}
-				//TODO epress
-				/*if (te != null && te instanceof TileEntityMachineEPress) {
+				if (te != null && te instanceof TileEntityMachineEPress) {
 						
 					TileEntityMachineEPress gen = (TileEntityMachineEPress) te;
 					gen.item = m.item;
 					gen.meta = m.meta;
 					gen.progress = m.progress;
-				}*/
+				}
 			});
 			
 			return null;
