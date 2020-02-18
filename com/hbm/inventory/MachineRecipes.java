@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
@@ -957,4 +958,347 @@ public class MachineRecipes {
 
 	}
 
+	public static ItemStack[] getCentrifugeProcessingResult(ItemStack item) {
+		return getCentrifugeOutput(item);
+	}
+
+	public static ItemStack[] getCentrifugeOutput(ItemStack item) {
+
+		ItemStack[] test = new ItemStack[] { new ItemStack(Items.APPLE, 3), new ItemStack(Items.LEATHER, 1),
+				new ItemStack(Items.SUGAR, 3), new ItemStack(Items.BLAZE_POWDER, 2) };
+
+		ItemStack[] uranF = new ItemStack[] { new ItemStack(ModItems.nugget_u235, 1),
+				new ItemStack(ModItems.nugget_u238, 2), new ItemStack(ModItems.nugget_pu239, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 2) };
+		ItemStack[] plutoniumF = new ItemStack[] { new ItemStack(ModItems.nugget_pu239, 1),
+				new ItemStack(ModItems.nugget_pu240, 1), new ItemStack(ModItems.nugget_lead, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 3) };
+		ItemStack[] moxF = new ItemStack[] { new ItemStack(ModItems.nugget_pu239, 1),
+				new ItemStack(ModItems.nugget_neptunium, 1), new ItemStack(ModItems.nugget_u238, 2),
+				new ItemStack(ModItems.nuclear_waste_tiny, 2) };
+		ItemStack[] schrabidiumF = new ItemStack[] { new ItemStack(ModItems.nugget_beryllium, 1),
+				new ItemStack(ModItems.nugget_lead, 1), new ItemStack(ModItems.nugget_solinium, 1),
+				new ItemStack(ModItems.nuclear_waste_tiny, 3) };
+		ItemStack[] thoriumF = new ItemStack[] { new ItemStack(ModItems.nugget_u238, 1),
+				new ItemStack(ModItems.nugget_th232, 1), new ItemStack(ModItems.nugget_u233, 3),
+				new ItemStack(ModItems.nuclear_waste_tiny, 1) };
+		
+		ItemStack[] cloud = new ItemStack[] { new ItemStack(ModItems.powder_copper, 1),
+				new ItemStack(ModItems.sulfur, 1), new ItemStack(ModItems.dust, 1),
+				new ItemStack(ModItems.dust, 1) };
+
+		ItemStack[] coal = new ItemStack[] { new ItemStack(ModItems.powder_coal, 2),
+				new ItemStack(ModItems.powder_coal, 2), new ItemStack(ModItems.powder_coal, 2),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] lignite = new ItemStack[] { new ItemStack(ModItems.powder_lignite, 2),
+				new ItemStack(ModItems.powder_lignite, 2), new ItemStack(ModItems.powder_lignite, 2),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] iron = new ItemStack[] { new ItemStack(ModItems.powder_iron, 1),
+				new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.powder_iron, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] gold = new ItemStack[] { new ItemStack(ModItems.powder_gold, 1),
+				new ItemStack(ModItems.powder_gold, 1), new ItemStack(ModItems.powder_gold, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] diamond = new ItemStack[] { new ItemStack(ModItems.powder_diamond, 1),
+				new ItemStack(ModItems.powder_diamond, 1), new ItemStack(ModItems.powder_diamond, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] emerald = new ItemStack[] { new ItemStack(ModItems.powder_emerald, 1),
+				new ItemStack(ModItems.powder_emerald, 1), new ItemStack(ModItems.powder_emerald, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] titanium = new ItemStack[] { new ItemStack(ModItems.powder_titanium, 1),
+				new ItemStack(ModItems.powder_titanium, 1), new ItemStack(ModItems.powder_iron, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] quartz = new ItemStack[] { new ItemStack(ModItems.powder_quartz, 1),
+				new ItemStack(ModItems.powder_quartz, 1), new ItemStack(ModItems.powder_lithium_tiny, 1),
+				new ItemStack(Blocks.NETHERRACK, 1) };
+		ItemStack[] tungsten = new ItemStack[] { new ItemStack(ModItems.powder_tungsten, 1),
+				new ItemStack(ModItems.powder_tungsten, 1), new ItemStack(ModItems.powder_iron, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] copper = new ItemStack[] { new ItemStack(ModItems.powder_copper, 1),
+				new ItemStack(ModItems.powder_copper, 1), new ItemStack(ModItems.powder_gold, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] aluminium = new ItemStack[] { new ItemStack(ModItems.powder_aluminium, 1),
+				new ItemStack(ModItems.powder_aluminium, 1), new ItemStack(ModItems.powder_iron, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] lead = new ItemStack[] { new ItemStack(ModItems.powder_lead, 1),
+				new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.powder_gold, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] schrabidium = new ItemStack[] { new ItemStack(ModItems.powder_schrabidium, 1),
+				new ItemStack(ModItems.powder_schrabidium, 1), new ItemStack(ModItems.nugget_solinium, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] rare = new ItemStack[] { new ItemStack(ModItems.powder_desh_mix, 1),
+				new ItemStack(ModItems.powder_actinium_tiny, 1), new ItemStack(ModItems.powder_lanthanium_tiny, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] plutonium = new ItemStack[] { new ItemStack(ModItems.powder_plutonium, 1),
+				new ItemStack(ModItems.powder_plutonium, 1), new ItemStack(ModItems.powder_uranium, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] uranium = new ItemStack[] { new ItemStack(ModItems.powder_uranium, 1),
+				new ItemStack(ModItems.powder_uranium, 1), new ItemStack(ModItems.powder_thorium, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] thorium = new ItemStack[] { new ItemStack(ModItems.powder_thorium, 1),
+				new ItemStack(ModItems.powder_thorium, 1), new ItemStack(ModItems.powder_uranium, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] beryllium = new ItemStack[] { new ItemStack(ModItems.powder_beryllium, 1),
+				new ItemStack(ModItems.powder_beryllium, 1), new ItemStack(ModItems.powder_emerald, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] redstone = new ItemStack[] { new ItemStack(Items.REDSTONE, 3),
+				new ItemStack(Items.REDSTONE, 3), new ItemStack(ModItems.powder_lithium_tiny, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] tikite = new ItemStack[] { new ItemStack(ModItems.powder_plutonium, 2),
+				new ItemStack(ModItems.powder_cobalt, 2), new ItemStack(ModItems.powder_nitan_mix, 1),
+				new ItemStack(Blocks.END_STONE, 1) };
+		ItemStack[] lapis = new ItemStack[] { new ItemStack(ModItems.powder_lapis, 3),
+				new ItemStack(ModItems.powder_lapis, 3), new ItemStack(ModItems.powder_cobalt, 1),
+				new ItemStack(Blocks.GRAVEL, 1) };
+		ItemStack[] starmetal = new ItemStack[] { new ItemStack(ModItems.powder_dura_steel, 3),
+				new ItemStack(ModItems.powder_astatine, 1), new ItemStack(ModItems.powder_cobalt, 2),
+				new ItemStack(Blocks.GRAVEL, 1) };
+
+		if (MainRegistry.enableDebugMode) {
+			if (item.getItem() == Item.getItemFromBlock(ModBlocks.test_render)) {
+				return test;
+			}
+		}
+
+		if (item.getItem() == ModItems.waste_uranium) {
+			return uranF;
+		}
+
+		if (item.getItem() == ModItems.waste_thorium) {
+			return thoriumF;
+		}
+
+		/*if (item.getItem() == ModItems.rod_dual_uranium_fuel_depleted) {
+			return uran2;
+		}
+
+		if (item.getItem() == ModItems.rod_quad_uranium_fuel_depleted) {
+			return uran3;
+		}*/
+
+		if (item.getItem() == ModItems.waste_plutonium) {
+			return plutoniumF;
+		}
+
+		/*if (item.getItem() == ModItems.rod_dual_plutonium_fuel_depleted) {
+			return plutonium2;
+		}
+
+		if (item.getItem() == ModItems.rod_quad_plutonium_fuel_depleted) {
+			return plutonium3;
+		}*/
+
+		if (item.getItem() == ModItems.waste_mox) {
+			return moxF;
+		}
+
+		/*if (item.getItem() == ModItems.rod_dual_mox_fuel_depleted) {
+			return mox2;
+		}
+
+		if (item.getItem() == ModItems.rod_quad_mox_fuel_depleted) {
+			return mox3;
+		}*/
+
+		if (item.getItem() == ModItems.waste_schrabidium) {
+			return schrabidiumF;
+		}
+
+		/*if (item.getItem() == ModItems.rod_dual_schrabidium_fuel_depleted) {
+			return schrabidium2;
+		}
+
+		if (item.getItem() == ModItems.rod_quad_schrabidium_fuel_depleted) {
+			return schrabidium3;
+		}*/
+
+		if (item.getItem() == ModItems.powder_cloud) {
+			return cloud;
+		}
+
+		if (mODE(item, "oreCoal")) {
+			return coal;
+		}
+
+		if (mODE(item, "oreLignite")) {
+			return lignite;
+		}
+
+		if (mODE(item, "oreIron")) {
+			return iron;
+		}
+
+		if (mODE(item, "oreGold")) {
+			return gold;
+		}
+
+		if (mODE(item, "oreDiamond")) {
+			return diamond;
+		}
+
+		if (mODE(item, "oreEmerald")) {
+			return emerald;
+		}
+
+		if (mODE(item, "oreUranium")) {
+			return uranium;
+		}
+
+		if (mODE(item, "oreThorium")) {
+			return thorium;
+		}
+
+		if (mODE(item, "orePlutonium")) {
+			return plutonium;
+		}
+
+		if (mODE(item, "oreTitanium")) {
+			return titanium;
+		}
+
+		if (mODE(item, "oreTungsten")) {
+			return tungsten;
+		}
+
+		if (mODE(item, "oreLead")) {
+			return lead;
+		}
+
+		if (mODE(item, "oreBeryllium")) {
+			return beryllium;
+		}
+
+		if (mODE(item, "oreAluminum")) {
+			return aluminium;
+		}
+
+		if (mODE(item, "oreSchrabidium")) {
+			return schrabidium;
+		}
+
+		if (mODE(item, "oreQuartz") || mODE(item, "oreNetherQuartz")) {
+			return quartz;
+		}
+
+		if (item.getItem() == Item.getItemFromBlock(ModBlocks.ore_rare)) {
+			return rare;
+		}
+
+		if (mODE(item, "oreCopper")) {
+			return copper;
+		}
+
+		if (mODE(item, "oreRedstone")) {
+			return redstone;
+		}
+
+		if (item.getItem() == Item.getItemFromBlock(ModBlocks.ore_tikite)) {
+			return tikite;
+		}
+
+		if (mODE(item, "oreLapis")) {
+			return lapis;
+		}
+
+		if (mODE(item, "oreStarmetal")) {
+			return starmetal;
+		}
+
+		return null;
+	}
+	
+public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
+		
+		List<GasCentOutput> list = new ArrayList<GasCentOutput>();
+		if(fluid == null){
+			return null;
+		} else if(fluid == FluidRegistry.LAVA){
+			list.add(new GasCentOutput(1, new ItemStack(ModBlocks.gravel_obsidian), 1));
+			list.add(new GasCentOutput(2, new ItemStack(Blocks.GRAVEL), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_lithium), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_iron, 2), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.uf6){
+			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_u238), 1));
+			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_u238), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_u235), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.fluorite), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.puf6){
+			list.add(new GasCentOutput(3, new ItemStack(ModItems.nugget_pu238), 1));
+			list.add(new GasCentOutput(2, new ItemStack(ModItems.nugget_pu239), 2));
+			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_pu240), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.fluorite), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.watz){
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_schrabidium), 1));
+			list.add(new GasCentOutput(3, new ItemStack(ModItems.nugget_uranium), 2));
+			list.add(new GasCentOutput(3, new ItemStack(ModItems.powder_iron), 3));
+			list.add(new GasCentOutput(3, new ItemStack(ModItems.powder_copper), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.sas3){
+			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_schrabidium), 1));
+			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_schrabidium), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.sulfur), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.sulfur), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.coolant){
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 1));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.cryogel){
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_ice), 1));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_ice), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.niter), 4));
+			return list;
+		} else if(fluid == ModForgeFluids.nitan){
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 1));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 3));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 4));
+			return list;
+		}
+		
+		return null;
+	}
+	
+	public static class GasCentOutput {
+		public int weight;
+		public ItemStack output;
+		public int slot;
+		
+		public GasCentOutput(int w, ItemStack s, int i) {
+			weight = w;
+			output = s;
+			slot = i;
+		}
+	}
+
+
+	public static int getFluidConsumedGasCent(Fluid fluid) {
+		if(fluid == null)
+			return 0;
+		else if(fluid == FluidRegistry.LAVA)
+			return 1000;
+		else if(fluid == ModForgeFluids.uf6)
+			return 100;
+		else if(fluid == ModForgeFluids.puf6)
+			return 100;
+		else if(fluid == ModForgeFluids.watz)
+			return 100;
+		else if(fluid == ModForgeFluids.sas3)
+			return 100;
+		else if(fluid == ModForgeFluids.coolant)
+			return 2000;
+		else if(fluid == ModForgeFluids.cryogel)
+			return 1000;
+		else if(fluid == ModForgeFluids.nitan)
+			return 500;
+		else
+			return 100;
+	}
+	
 }

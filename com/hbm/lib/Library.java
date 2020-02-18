@@ -19,6 +19,7 @@ import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineTransformer;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.machine.TileEntityWireCoated;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -576,8 +577,7 @@ public class Library {
 					((TileEntityCable) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 				}
 			}
-			// TODO coated wire
-			/*if(tileentity instanceof TileEntityWireCoated)
+			if(tileentity instanceof TileEntityWireCoated)
 			{
 				if(Library.checkUnionList(((TileEntityWireCoated)tileentity).uoteab, that))
 				{
@@ -600,7 +600,7 @@ public class Library {
 				} else {
 					((TileEntityWireCoated)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 				}
-			}*/
+			}
 			// TODO Cable switch
 			/*if(tileentity instanceof TileEntityCableSwitch)
 			{

@@ -98,6 +98,8 @@ public class ResourceManager {
 	//Guns
 	public static final IModelCustom hk69 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/weapons/hk69.obj"));
 	
+	//Centrifuge
+	public static final IModelCustom centrifuge_new = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/centrifuge_new.obj"));
 	
 	////Textures TEs
 	

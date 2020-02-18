@@ -1,6 +1,7 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerCentrifuge;
 import com.hbm.inventory.container.ContainerConverterHeRf;
 import com.hbm.inventory.container.ContainerConverterRfHe;
 import com.hbm.inventory.container.ContainerDiFurnace;
@@ -12,6 +13,7 @@ import com.hbm.inventory.container.ContainerMachineBoilerElectric;
 import com.hbm.inventory.container.ContainerMachineChemplant;
 import com.hbm.inventory.container.ContainerMachineCoal;
 import com.hbm.inventory.container.ContainerMachineEPress;
+import com.hbm.inventory.container.ContainerMachineGasCent;
 import com.hbm.inventory.container.ContainerMachineGenerator;
 import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.inventory.container.ContainerMachineRTG;
@@ -19,6 +21,8 @@ import com.hbm.inventory.container.ContainerMachineReactorSmall;
 import com.hbm.inventory.container.ContainerMachineTurbine;
 import com.hbm.inventory.container.ContainerNukeFleija;
 import com.hbm.inventory.container.ContainerNukeMan;
+import com.hbm.inventory.container.ContainerPuF6Tank;
+import com.hbm.inventory.container.ContainerUF6Tank;
 import com.hbm.inventory.gui.GUIConverterHeRf;
 import com.hbm.inventory.gui.GUIConverterRfHe;
 import com.hbm.inventory.gui.GUILaunchPadTier1;
@@ -26,14 +30,18 @@ import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachineBattery;
 import com.hbm.inventory.gui.GUIMachineBoiler;
 import com.hbm.inventory.gui.GUIMachineBoilerElectric;
+import com.hbm.inventory.gui.GUIMachineCentrifuge;
 import com.hbm.inventory.gui.GUIMachineChemplant;
 import com.hbm.inventory.gui.GUIMachineCoal;
 import com.hbm.inventory.gui.GUIMachineEPress;
+import com.hbm.inventory.gui.GUIMachineGasCent;
 import com.hbm.inventory.gui.GUIMachineGenerator;
 import com.hbm.inventory.gui.GUIMachinePress;
+import com.hbm.inventory.gui.GUIMachinePuF6Tank;
 import com.hbm.inventory.gui.GUIMachineRTG;
 import com.hbm.inventory.gui.GUIMachineReactorSmall;
 import com.hbm.inventory.gui.GUIMachineTurbine;
+import com.hbm.inventory.gui.GUIMachineUF6Tank;
 import com.hbm.inventory.gui.GUINukeFleija;
 import com.hbm.inventory.gui.GUINukeMan;
 import com.hbm.inventory.gui.GUIScreenDesignator;
@@ -49,14 +57,18 @@ import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
+import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
+import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
+import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
+import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -163,6 +175,22 @@ public class GuiHandler implements IGuiHandler {
 					return new ContainerMachineEPress(player.inventory, (TileEntityMachineEPress) entity);
 				}
 				return null;
+			case ModBlocks.guiID_centrifuge:
+				if(entity instanceof TileEntityMachineCentrifuge){
+					return new ContainerCentrifuge(player.inventory, (TileEntityMachineCentrifuge) entity);
+				}
+			case ModBlocks.guiID_gascent:
+				if(entity instanceof TileEntityMachineGasCent){
+					return new ContainerMachineGasCent(player.inventory, (TileEntityMachineGasCent) entity);
+				}
+			case ModBlocks.guiID_uf6_tank:
+				if(entity instanceof TileEntityMachineUF6Tank){
+					return new ContainerUF6Tank(player.inventory, (TileEntityMachineUF6Tank) entity);
+				}
+			case ModBlocks.guiID_puf6_tank:
+				if(entity instanceof TileEntityMachinePuF6Tank){
+					return new ContainerPuF6Tank(player.inventory, (TileEntityMachinePuF6Tank) entity);
+				}
 			}
 
 		}
@@ -265,7 +293,22 @@ public class GuiHandler implements IGuiHandler {
 					return new GUIMachineEPress(player.inventory, (TileEntityMachineEPress) entity);
 				}
 				return null;
-
+			case ModBlocks.guiID_centrifuge:
+				if(entity instanceof TileEntityMachineCentrifuge){
+					return new GUIMachineCentrifuge(player.inventory, (TileEntityMachineCentrifuge) entity);
+				}
+			case ModBlocks.guiID_gascent:
+				if(entity instanceof TileEntityMachineGasCent){
+					return new GUIMachineGasCent(player.inventory, (TileEntityMachineGasCent) entity);
+				}
+			case ModBlocks.guiID_uf6_tank:
+				if(entity instanceof TileEntityMachineUF6Tank){
+					return new GUIMachineUF6Tank(player.inventory, (TileEntityMachineUF6Tank) entity);
+				}
+			case ModBlocks.guiID_puf6_tank:
+				if(entity instanceof TileEntityMachinePuF6Tank){
+					return new GUIMachinePuF6Tank(player.inventory, (TileEntityMachinePuF6Tank) entity);
+				}
 			}
 
 		} else {

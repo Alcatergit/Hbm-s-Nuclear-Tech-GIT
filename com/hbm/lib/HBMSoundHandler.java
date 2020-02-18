@@ -92,10 +92,13 @@ public final class HBMSoundHandler {
 	public static SoundEvent crateBreak;
 	public static SoundEvent alarmAutopilot;
 	public static SoundEvent itemUnpack;
+	public static SoundEvent centrifugeOperate;
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
 	public static SoundEvent vortalCombat = registerBypass("music.recordvortalcombat");
+
+	
 	
 	public static void init() {
 		
@@ -179,6 +182,7 @@ public final class HBMSoundHandler {
 		crateBreak = register("block.crateBreak");
 		alarmAutopilot = register("alarm.autopilot");
 		itemUnpack = register("item.unpack");
+		centrifugeOperate = register("block.centrifugeOperate");
 		
 		
 	}

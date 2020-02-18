@@ -327,14 +327,17 @@ public class FFUtils {
 	}
 	
 	public static boolean areTanksEqual(FluidTank tank1, FluidTank tank2){
-		if(tank1 == null || tank2 == null){
-			return false;
+		if(tank1 == null && tank2 == null){
+			return true;
 		}
-		if(tank1.getFluid() == null ^ tank2.getFluid() == null){
+		if(tank1 == null ^ tank2 == null){
 			return false;
 		}
 		if(tank1.getFluid() == null && tank2.getFluid() == null){
 			return true;
+		}
+		if(tank1.getFluid() == null ^ tank2.getFluid() == null){
+			return false;
 		}
 		if(tank1.getFluid().amount == tank2.getFluid().amount &&
 				tank1.getFluid().getFluid() == tank2.getFluid().getFluid() &&

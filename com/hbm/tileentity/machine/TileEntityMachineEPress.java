@@ -50,7 +50,11 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	public TileEntityMachineEPress() {
 		inventory = new ItemStackHandler(4) {
 			
-			
+			@Override
+			protected void onContentsChanged(int slot) {
+				markDirty();
+				super.onContentsChanged(slot);
+			}
 			
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
@@ -117,7 +121,7 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 		if(!world.isRemote)
 		{
 			age ++;
-			if(age % 200 == 0)
+			if(age % 300 == 0)
 				requestUpdate = true;
 			if(age > 10000)
 				age = 0;

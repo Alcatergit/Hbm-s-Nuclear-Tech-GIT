@@ -3,7 +3,9 @@ package com.hbm.packet;
 
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
+import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
+import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 
 import io.netty.buffer.ByteBuf;
@@ -147,7 +149,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 1)
 							radio.freq = ((double)m.value) / 10D;
 					}
-					if (te instanceof TileEntityMachineGasCent) {
+					*/if (te instanceof TileEntityMachineGasCent) {
 						TileEntityMachineGasCent cent = (TileEntityMachineGasCent)te;
 
 						if(m.id == 0)
@@ -163,7 +165,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 1)
 							cent.isProgressing = m.value == 1;
 					}
-					*/if (te instanceof TileEntityMachineBoiler) {
+					if (te instanceof TileEntityMachineBoiler) {
 						TileEntityMachineBoiler boiler = (TileEntityMachineBoiler)te;
 						
 						if(m.id == 0)

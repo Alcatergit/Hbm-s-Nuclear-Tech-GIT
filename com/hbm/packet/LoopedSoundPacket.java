@@ -2,9 +2,12 @@ package com.hbm.packet;
 
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.sound.SoundLoopAssembler;
+import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
+import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
+import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -140,7 +143,7 @@ public class LoopedSoundPacket implements IMessage {
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(new ResourceLocation("hbm:block.broadcast" + (Math.abs(j) % 3 + 1)), te));
 				}
 				
-				if (te != null && te instanceof TileEntityMachineCentrifuge) {
+				*/if (te != null && te instanceof TileEntityMachineCentrifuge) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {
@@ -148,10 +151,9 @@ public class LoopedSoundPacket implements IMessage {
 							flag = false;
 					}
 					
-					int j = te.xCoord + te.zCoord + te.yCoord;
 					
-					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineCentrifuge)te).isProgressing)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(new ResourceLocation("hbm:block.centrifugeOperate"), te));
+					if(flag && te.getWorld().isRemote && ((TileEntityMachineCentrifuge)te).isProgressing)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(HBMSoundHandler.centrifugeOperate, te));
 				}
 				
 				if (te != null && te instanceof TileEntityMachineGasCent) {
@@ -162,11 +164,9 @@ public class LoopedSoundPacket implements IMessage {
 							flag = false;
 					}
 					
-					int j = te.xCoord + te.zCoord + te.yCoord;
-					
-					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineGasCent)te).isProgressing)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(new ResourceLocation("hbm:block.centrifugeOperate"), te));
-				}*/
+					if(flag && te.getWorld().isRemote && ((TileEntityMachineGasCent)te).isProgressing)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(HBMSoundHandler.centrifugeOperate, te));
+				}
 			});
 			
 			

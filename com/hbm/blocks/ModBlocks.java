@@ -29,22 +29,28 @@ import com.hbm.blocks.machine.BlockConverterHeRf;
 import com.hbm.blocks.machine.BlockConverterRfHe;
 import com.hbm.blocks.machine.BlockFluidDuct;
 import com.hbm.blocks.machine.DummyBlockAssembler;
+import com.hbm.blocks.machine.DummyBlockCentrifuge;
 import com.hbm.blocks.machine.DummyBlockChemplant;
 import com.hbm.blocks.machine.DummyBlockMachine;
 import com.hbm.blocks.machine.MachineAssembler;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.blocks.machine.MachineBoiler;
+import com.hbm.blocks.machine.MachineCentrifuge;
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.blocks.machine.MachineCoal;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.blocks.machine.MachineEPress;
+import com.hbm.blocks.machine.MachineGasCent;
 import com.hbm.blocks.machine.MachineGenerator;
 import com.hbm.blocks.machine.MachinePress;
+import com.hbm.blocks.machine.MachinePuF6Tank;
 import com.hbm.blocks.machine.MachineRTG;
 import com.hbm.blocks.machine.MachineReactorSmall;
 import com.hbm.blocks.machine.MachineTransformer;
 import com.hbm.blocks.machine.MachineTurbine;
+import com.hbm.blocks.machine.MachineUF6Tank;
 import com.hbm.blocks.machine.PylonRedWire;
+import com.hbm.blocks.machine.WireCoated;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -240,8 +246,20 @@ public class ModBlocks {
 	public static final Block launch_pad = new LaunchPad(Material.IRON, "launch_pad").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final int guiID_launch_pad = 19;
 	
+	public static final Block machine_centrifuge = new MachineCentrifuge(Material.IRON, "machine_centrifuge").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_centrifuge = 5;
+	
+	public static final Block machine_gascent = new MachineGasCent(Material.IRON, "machine_gascent").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_gascent = 71;
+	
+	public static final Block machine_uf6_tank = new MachineUF6Tank(Material.IRON, "machine_uf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_uf6_tank = 7;
+	public static final Block machine_puf6_tank = new MachinePuF6Tank(Material.IRON, "machine_puf6_tank").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_puf6_tank = 8;
+	
 	//Cables
 	public static final Block red_cable = new BlockCable(Material.IRON, "red_cable").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block red_wire_coated = new WireCoated(Material.IRON, "red_wire_coated").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//Fluids
@@ -262,6 +280,13 @@ public class ModBlocks {
 	
 	public static final Block dummy_block_reactor_small = new DummyBlockMachine(Material.IRON, "dummy_block_reactor_small", false, guiID_reactor_small, machine_reactor_small).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final Block dummy_port_reactor_small = new DummyBlockMachine(Material.IRON, "dummy_port_reactor_small", true, guiID_reactor_small, machine_reactor_small).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	
+	public static final Block dummy_block_centrifuge = new DummyBlockCentrifuge(Material.IRON, "dummy_block_centrifuge").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	
+	public static final Block dummy_block_gascent = new DummyBlockMachine(Material.IRON, "dummy_block_gascent", false, guiID_gascent, machine_gascent).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	
+	public static final Block dummy_block_uf6 = new DummyBlockMachine(Material.IRON, "dummy_block_uf6", false, guiID_uf6_tank, machine_uf6_tank).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_block_puf6 = new DummyBlockMachine(Material.IRON, "dummy_block_puf6", false, guiID_puf6_tank, machine_puf6_tank).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){
