@@ -29,6 +29,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemCassette;
 import com.hbm.items.tool.ItemCassette.TrackType;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
@@ -85,6 +86,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEndGateway;
 import net.minecraft.tileentity.TileEntityEndPortal;
@@ -327,7 +329,18 @@ public class ModEventHandlerClient {
 	
 	@SubscribeEvent
 	public void itemColorsEvent(ColorHandlerEvent.Item evt){
-		evt.getItemColors().registerItemColorHandler((IItemColor)ModItems.siren_track, ModItems.siren_track);
+		evt.getItemColors().registerItemColorHandler((ItemStack stack, int tintIndex) -> {
+			if(tintIndex == 1) {
+				int j = TrackType.getEnum(stack.getItemDamage()).getColor();
+
+				if(j < 0) {
+					j = 0xFFFFFF;
+				}
+
+				return j;
+			}
+			return 0xFFFFFF;
+		}, ModItems.siren_track);
 	}
 
 	@SubscribeEvent

@@ -30,6 +30,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCell extends ItemRadioactive {
 
@@ -119,6 +121,7 @@ public class ItemCell extends ItemRadioactive {
     }
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
 		if(f == null){

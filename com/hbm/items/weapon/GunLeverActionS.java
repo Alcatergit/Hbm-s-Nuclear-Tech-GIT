@@ -32,6 +32,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GunLeverActionS extends Item {
 
@@ -139,6 +141,7 @@ public class GunLeverActionS extends Item {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		if(MainRegistry.polaroidID == 11)
 			return ("" + I18n.format(this.getUnlocalizedName() + "_2.name")).trim();

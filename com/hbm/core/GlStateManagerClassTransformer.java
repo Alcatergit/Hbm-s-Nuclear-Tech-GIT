@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.hbm.main.ModEventHandlerClient;
-import com.sun.xml.internal.ws.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 

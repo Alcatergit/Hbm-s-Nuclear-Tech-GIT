@@ -260,6 +260,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -270,6 +271,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
@@ -704,7 +706,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_gas_fx"), EntityGasFX.class, "entity_gas_fx", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_oil_spill"), EntityOilSpill.class, "entity_oil_spill", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_oil_spill_fx"), EntityOilSpillFX.class, "entity_oil_spill_fx", i++, MainRegistry.instance, 1000, 1, true);
-		
+
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
 			@Override
@@ -750,13 +752,14 @@ public class MainRegistry {
 		shaders.setComment("Experimental, don't use");
 		useShaders = shaders.getBoolean(false);
 
-		if(!OpenGlHelper.shadersSupported) {
-			logger.log(Level.WARN, "GLSL shaders are not supported; not using shaders");
-			useShaders = false;
-		} else if(!GLContext.getCapabilities().OpenGL30) {
-			logger.log(Level.WARN, "OpenGL 3.0 is not supported; not using shaders");
-			useShaders = false;
-		}
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
+			if(!OpenGlHelper.shadersSupported) {
+				logger.log(Level.WARN, "GLSL shaders are not supported; not using shaders");
+				useShaders = false;
+			} else if(!GLContext.getCapabilities().OpenGL30) {
+				logger.log(Level.WARN, "OpenGL 3.0 is not supported; not using shaders");
+				useShaders = false;
+			}
 
 		final String CATEGORY_OREGEN = "02_ores";
 		Property PuraniumSpawn = config.get(CATEGORY_OREGEN, "2.00_uraniumSpawnrate", 6);
