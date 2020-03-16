@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.projectile.EntityDuchessGambit;
 import com.hbm.main.ResourceManager;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +25,7 @@ public class RenderBoat extends Render<EntityDuchessGambit> {
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 
 		GL11.glTranslatef(0, 0, -1.0F);
         

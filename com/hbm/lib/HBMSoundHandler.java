@@ -90,15 +90,57 @@ public final class HBMSoundHandler {
 	public static SoundEvent follyAquired;
 	public static SoundEvent chopperDrop;
 	public static SoundEvent crateBreak;
-	public static SoundEvent alarmAutopilot;
 	public static SoundEvent itemUnpack;
 	public static SoundEvent centrifugeOperate;
+	public static SoundEvent buttonNo;
+	public static SoundEvent buttonYes;
+	public static SoundEvent railgunFire;
+	public static SoundEvent railgunOrientation;
+	public static SoundEvent railgunCharge;
+	public static SoundEvent shutdown;
+	public static SoundEvent broadcast1;
+	public static SoundEvent broadcast2;
+	public static SoundEvent broadcast3;
+	public static SoundEvent geiger1;
+	public static SoundEvent geiger2;
+	public static SoundEvent geiger3;
+	public static SoundEvent geiger4;
+	public static SoundEvent geiger5;
+	public static SoundEvent geiger6;
+	public static SoundEvent lockOpen;
+	public static SoundEvent pinBreak;
+	public static SoundEvent pinUnlock;
+	public static SoundEvent lockHang;
+	public static SoundEvent vaultScrapeNew;
+	public static SoundEvent vaultThudNew;
+	public static SoundEvent minerOperate;
+	
+	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
+	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
+	public static SoundEvent alarmAMSSiren = registerBypass("alarm.amsSiren");
+	public static SoundEvent alarmBlastDoor = registerBypass("alarm.blastDoorAlarm");
+	public static SoundEvent alarmAPCLoop = registerBypass("alarm.apcLoop");
+	public static SoundEvent alarmKlaxon = registerBypass("alarm.klaxon");
+	public static SoundEvent alarmFoKlaxonA = registerBypass("alarm.foKlaxonA");
+	public static SoundEvent alarmFoKlaxonB = registerBypass("alarm.foKlaxonB");
+	public static SoundEvent alarmRegular = registerBypass("alarm.regularSiren");
+	public static SoundEvent alarmClassic = registerBypass("alarm.classic");
+	public static SoundEvent alarmBank = registerBypass("alarm.bankAlarm");
+	public static SoundEvent alarmBeep = registerBypass("alarm.beepSiren");
+	public static SoundEvent alarmContainer = registerBypass("alarm.containerAlarm");
+	public static SoundEvent alarmSweep = registerBypass("alarm.sweepSiren");
+	public static SoundEvent alarmStrider = registerBypass("alarm.striderSiren");
+	public static SoundEvent alarmAirRaid = registerBypass("alarm.airRaid");
+	public static SoundEvent alarmNostromo = registerBypass("alarm.nostromoSiren");
+	public static SoundEvent alarmEas = registerBypass("alarm.easAlarm");
+	public static SoundEvent alarmAPCPass = registerBypass("alarm.apcPass");
+	public static SoundEvent alarmRazorTrain = registerBypass("alarm.razortrainHorn");
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
 	public static SoundEvent vortalCombat = registerBypass("music.recordvortalcombat");
 
-	
+	public static SoundEvent[] geigerSounds;
 	
 	public static void init() {
 		
@@ -180,11 +222,33 @@ public final class HBMSoundHandler {
 		follyAquired = register("weapon.follyAquired");
 		chopperDrop = register("entity.chopperDrop");
 		crateBreak = register("block.crateBreak");
-		alarmAutopilot = register("alarm.autopilot");
 		itemUnpack = register("item.unpack");
 		centrifugeOperate = register("block.centrifugeOperate");
+		buttonNo = register("block.buttonNo");
+		buttonYes = register("block.buttonYes");
+		railgunFire = register("block.railgunFire");
+		railgunOrientation = register("block.railgunOrientation");
+		railgunCharge = register("block.railgunCharge");
+		shutdown = register("block.shutdown");
+		broadcast1 = register("block.broadcast1");
+		broadcast2 = register("block.broadcast2");
+		broadcast3 = register("block.broadcast3");
+		geiger1 = register("item.geiger1");
+		geiger2 = register("item.geiger2");
+		geiger3 = register("item.geiger3");
+		geiger4 = register("item.geiger4");
+		geiger5 = register("item.geiger5");
+		geiger6 = register("item.geiger6");
+		lockOpen = register("block.lockOpen");
+		pinBreak = register("item.pinBreak");
+		pinUnlock = register("item.pinUnlock");
+		lockHang = register("block.lockHang");
+		vaultScrapeNew = register("block.vaultScrapeNew");
+		vaultThudNew = register("block.vaultThudNew");
+		minerOperate = register("block.minerOperate");
 		
 		
+		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}
 	
 	public static SoundEvent register(String name) {

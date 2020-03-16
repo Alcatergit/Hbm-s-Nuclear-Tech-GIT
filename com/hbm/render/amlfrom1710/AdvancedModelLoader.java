@@ -3,12 +3,12 @@ package com.hbm.render.amlfrom1710;
 import java.util.Collection;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.google.common.collect.Maps;
 
 /**
  * Common interface for advanced model loading from files, based on file suffix

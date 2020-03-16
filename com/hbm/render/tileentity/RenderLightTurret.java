@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.bomb.TileEntityTurretLight;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -14,7 +15,7 @@ public class RenderLightTurret extends TileEntitySpecialRenderer<TileEntityTurre
 	public void render(TileEntityTurretLight te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		
@@ -33,7 +34,7 @@ public class RenderLightTurret extends TileEntitySpecialRenderer<TileEntityTurre
     {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
@@ -51,7 +52,7 @@ public class RenderLightTurret extends TileEntitySpecialRenderer<TileEntityTurre
     {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y + 1, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 

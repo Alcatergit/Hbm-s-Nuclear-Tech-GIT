@@ -1,7 +1,6 @@
 package com.hbm.render;
 
 import java.nio.FloatBuffer;
-
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL11;
@@ -255,5 +254,7 @@ public class RenderHelper {
 		
 		return new double[]{d0 - d3, d1 - d4, d2 - d5};
 	}
+	
+	
 	
 }

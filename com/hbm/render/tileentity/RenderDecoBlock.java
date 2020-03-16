@@ -5,9 +5,9 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
@@ -25,7 +25,7 @@ public class RenderDecoBlock extends TileEntitySpecialRenderer<TileEntityDecoBlo
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glRotatef(180, 0F, 0F, 1F);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		if (te.getWorld().getBlockState(te.getPos()).getBlock() == ModBlocks.boxcar) {
 			GL11.glTranslatef(0, 0, -1.5F);
 			GL11.glRotated(90, 1, 0, 0);

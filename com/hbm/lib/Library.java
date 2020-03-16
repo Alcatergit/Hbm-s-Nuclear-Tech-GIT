@@ -15,6 +15,7 @@ import com.hbm.items.special.ItemBattery;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.conductor.TileEntityCable;
+import com.hbm.tileentity.conductor.TileEntityCableSwitch;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineTransformer;
@@ -75,24 +76,23 @@ public class Library {
 		superuser.add(Ducxkskiziko);
 		superuser.add(Drillgon);
 	}
-	
+
 	public static boolean checkForAsbestos(EntityPlayer player) {
-		
-		if(checkArmor(player, ModItems.asbestos_helmet, ModItems.asbestos_plate, ModItems.asbestos_legs, ModItems.asbestos_boots))
-		{
+
+		if(checkArmor(player, ModItems.asbestos_helmet, ModItems.asbestos_plate, ModItems.asbestos_legs, ModItems.asbestos_boots)) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	public static boolean checkForHazmat(EntityPlayer player) {
-		if (checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey) || checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) || checkArmor(player, ModItems.schrabidium_helmet, ModItems.schrabidium_plate, ModItems.schrabidium_legs, ModItems.schrabidium_boots) || checkForHaz2(player)) {
+		if(checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey) || checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) || checkArmor(player, ModItems.schrabidium_helmet, ModItems.schrabidium_plate, ModItems.schrabidium_legs, ModItems.schrabidium_boots) || checkForHaz2(player)) {
 
 			return true;
 		}
 
-		if (player.isPotionActive(HbmPotion.mutation))
+		if(player.isPotionActive(HbmPotion.mutation))
 			return true;
 
 		return false;
@@ -102,7 +102,7 @@ public class Library {
 	// care to find out.
 	public static boolean checkForHaz2(EntityPlayer player) {
 
-		if (checkArmor(player, ModItems.hazmat_paa_helmet, ModItems.hazmat_paa_plate, ModItems.hazmat_paa_legs, ModItems.hazmat_paa_boots) || checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+		if(checkArmor(player, ModItems.hazmat_paa_helmet, ModItems.hazmat_paa_plate, ModItems.hazmat_paa_legs, ModItems.hazmat_paa_boots) || checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 			return true;
 		}
 
@@ -111,34 +111,34 @@ public class Library {
 
 	public static void damageSuit(EntityPlayer player, int slot, int amount) {
 
-		if (player.inventory.armorInventory.get(slot) == ItemStack.EMPTY)
+		if(player.inventory.armorInventory.get(slot) == ItemStack.EMPTY)
 			return;
 
 		int j = player.inventory.armorInventory.get(slot).getItemDamage();
 		player.inventory.armorInventory.get(slot).setItemDamage(j += amount);
 
-		if (player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage()) {
+		if(player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage()) {
 			player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
 		}
 	}
 
 	public static void applyRadData(Entity e, float f) {
-		if (!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase))
 			return;
 
 		EntityLivingBase entity = (EntityLivingBase) e;
 
-		if (entity.isPotionActive(HbmPotion.mutation))
+		if(entity.isPotionActive(HbmPotion.mutation))
 			return;
 
-		if (entity instanceof EntityPlayer) {
+		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 
 			float koeff = 5.0F;
 			f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player));
 		}
 
-		if (entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
+		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
 			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
 			ent.increaseRads(f);
 		}
@@ -146,13 +146,13 @@ public class Library {
 
 	public static void applyRadDirect(Entity entity, float f) {
 
-		if (!(entity instanceof EntityLivingBase))
+		if(!(entity instanceof EntityLivingBase))
 			return;
 
-		if (((EntityLivingBase) entity).isPotionActive(HbmPotion.mutation))
+		if(((EntityLivingBase) entity).isPotionActive(HbmPotion.mutation))
 			return;
 
-		if (entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
+		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
 			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
 			ent.increaseRads(f);
 		}
@@ -164,105 +164,93 @@ public class Library {
 		double length = vector.lengthVector();
 		Vec3 nVec = vector.normalize();
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for (float i = 0; i < length; i += 0.25F) {
+		for(float i = 0; i < length; i += 0.25F) {
 			pos.setPos((int) Math.round(x + (nVec.xCoord * i)), (int) Math.round(y + (nVec.yCoord * i)), (int) Math.round(z + (nVec.zCoord * i)));
-			if (world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).isNormalCube())
+			if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).isNormalCube())
 				return true;
 		}
 		return false;
 	}
 
 	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
-		if (player.inventory.armorInventory.get(0).getItem() == shoe && player.inventory.armorInventory.get(1).getItem() == leg && player.inventory.armorInventory.get(2).getItem() == chest && player.inventory.armorInventory.get(3).getItem() == helm) {
+		if(player.inventory.armorInventory.get(0).getItem() == shoe && player.inventory.armorInventory.get(1).getItem() == leg && player.inventory.armorInventory.get(2).getItem() == chest && player.inventory.armorInventory.get(3).getItem() == helm) {
 			return true;
 		}
 
 		return false;
 	}
-	
-	public static boolean checkArmorPiece(EntityPlayer player, Item armor, int slot)
-	{
-		if(player.inventory.armorInventory.get(slot) != null &&
-				player.inventory.armorInventory.get(slot).getItem() == armor) 
-		{
+
+	public static boolean checkArmorPiece(EntityPlayer player, Item armor, int slot) {
+		if(player.inventory.armorInventory.get(slot) != null && player.inventory.armorInventory.get(slot).getItem() == armor) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public static boolean checkForGasMask(EntityPlayer player) {
 
-		if(checkArmorPiece(player, ModItems.hazmat_helmet, 3))
-		{
+		if(checkArmorPiece(player, ModItems.hazmat_helmet, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_red, 3))
-		{
+		if(checkArmorPiece(player, ModItems.hazmat_helmet_red, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_grey, 3))
-		{
+		if(checkArmorPiece(player, ModItems.hazmat_helmet_grey, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.hazmat_paa_helmet, 3))
-		{
+		if(checkArmorPiece(player, ModItems.hazmat_paa_helmet, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.gas_mask, 3))
-		{
+		if(checkArmorPiece(player, ModItems.gas_mask, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.gas_mask_m65, 3))
-		{
+		if(checkArmorPiece(player, ModItems.gas_mask_m65, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.t45_helmet, 3))
-		{
+		if(checkArmorPiece(player, ModItems.t45_helmet, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.schrabidium_helmet, 3))
-		{
+		if(checkArmorPiece(player, ModItems.schrabidium_helmet, 3)) {
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.euphemium_helmet, 3))
-		{
+		if(checkArmorPiece(player, ModItems.euphemium_helmet, 3)) {
 			return true;
 		}
-		
+
 		if(player.isPotionActive(HbmPotion.mutation))
 			return true;
-		
+
 		return false;
 	}
 
 	public static String getShortNumber(long l) {
-		if (l >= Math.pow(10, 18)) {
+		if(l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "E";
 		}
-		if (l >= Math.pow(10, 15)) {
+		if(l >= Math.pow(10, 15)) {
 			double res = l / Math.pow(10, 15);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "P";
 		}
-		if (l >= Math.pow(10, 12)) {
+		if(l >= Math.pow(10, 12)) {
 			double res = l / Math.pow(10, 12);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "T";
 		}
-		if (l >= Math.pow(10, 9)) {
+		if(l >= Math.pow(10, 9)) {
 			double res = l / Math.pow(10, 9);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "G";
 		}
-		if (l >= Math.pow(10, 6)) {
+		if(l >= Math.pow(10, 6)) {
 			double res = l / Math.pow(10, 6);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "M";
 		}
-		if (l >= Math.pow(10, 3)) {
+		if(l >= Math.pow(10, 3)) {
 			double res = l / Math.pow(10, 3);
 			res = Math.round(res * 100.0) / 100.0;
 			return res + "k";
@@ -274,48 +262,48 @@ public class Library {
 	// Drillgon200: Just realized I copied the wrong method. God dang it.
 	// It works though. Not sure why, but it works.
 	public static long chargeTEFromItems(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
-		if (inventory.getStackInSlot(index).getItem() == ModItems.fusion_core_infinite || inventory.getStackInSlot(index).getItem() == ModItems.battery_creative) {
+		if(inventory.getStackInSlot(index).getItem() == ModItems.fusion_core_infinite || inventory.getStackInSlot(index).getItem() == ModItems.battery_creative) {
 			return maxPower;
 		}
-		if (!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
+		if(!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
 			return power;
 		}
 		long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getDischargeRate();
 
-		while (dR >= 1000000000000L) {
-			if (power + 100000000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+		while(dR >= 1000000000000L) {
+			if(power + 100000000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100000000000000L;
 				dR -= 1000000000000L;
 				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000000000L);
 			} else
 				break;
 		}
-		while (dR >= 1000000000) {
-			if (power + 100000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+		while(dR >= 1000000000) {
+			if(power + 100000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100000000000L;
 				dR -= 1000000000L;
 				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000000);
 			} else
 				break;
 		}
-		while (dR >= 1000000) {
-			if (power + 100000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+		while(dR >= 1000000) {
+			if(power + 100000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100000000L;
 				dR -= 1000000;
 				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000);
 			} else
 				break;
 		}
-		while (dR >= 1000) {
-			if (power + 100000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+		while(dR >= 1000) {
+			if(power + 100000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100000L;
 				dR -= 1000;
 				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000);
 			} else
 				break;
 		}
-		while (dR >= 1) {
-			if (power + 100L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
+		while(dR >= 1) {
+			if(power + 100L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
 				power += 100L;
 				dR -= 1;
 				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1);
@@ -323,51 +311,51 @@ public class Library {
 				break;
 		}
 
-		if (inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
 		return power;
 	}
 
 	public static long chargeItemsFromTE(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
-		if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 
 			long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getChargeRate();
 
-			while (dR >= 1000000000000L) {
-				if (power - 100000000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
+			while(dR >= 1000000000000L) {
+				if(power - 100000000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
 					power -= 100000000000000L;
 					dR -= 1000000000000L;
 					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000000L);
 				} else
 					break;
 			}
-			while (dR >= 1000000000) {
-				if (power - 100000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
+			while(dR >= 1000000000) {
+				if(power - 100000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
 					power -= 100000000000L;
 					dR -= 1000000000;
 					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000);
 				} else
 					break;
 			}
-			while (dR >= 1000000) {
-				if (power - 100000000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
+			while(dR >= 1000000) {
+				if(power - 100000000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
 					power -= 100000000;
 					dR -= 1000000;
 					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000);
 				} else
 					break;
 			}
-			while (dR >= 1000) {
-				if (power - 100000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
+			while(dR >= 1000) {
+				if(power - 100000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
 					power -= 100000;
 					dR -= 1000;
 					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000);
 				} else
 					break;
 			}
-			while (dR >= 1) {
-				if (power - 100 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
+			while(dR >= 1) {
+				if(power - 100 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
 					power -= 100;
 					dR -= 1;
 					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1);
@@ -375,13 +363,13 @@ public class Library {
 					break;
 			}
 
-			if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
-			if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_schrabidium_charged));
-			if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_euphemium_charged));
-			if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
 		// TODO these tools
@@ -414,7 +402,7 @@ public class Library {
 				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
 			} else break;
 		*/
-		if (inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
 
@@ -422,15 +410,15 @@ public class Library {
 	}
 
 	public static boolean isArrayEmpty(Object[] array) {
-		if (array == null)
+		if(array == null)
 			return true;
-		if (array.length == 0)
+		if(array.length == 0)
 			return true;
 
 		boolean flag = true;
 
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] != null)
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] != null)
 				flag = false;
 		}
 
@@ -439,7 +427,7 @@ public class Library {
 
 	// Drillgon200: useless method but whatever
 	public static ItemStack carefulCopy(ItemStack stack) {
-		if (stack == null)
+		if(stack == null)
 			return null;
 		else
 			return stack.copy();
@@ -454,7 +442,7 @@ public class Library {
 	}
 
 	public static Vec3d getPosition(float par1, EntityPlayer player) {
-		if (par1 == 1.0F) {
+		if(par1 == 1.0F) {
 			return new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
 		} else {
 			double d0 = player.prevPosX + (player.posX - player.prevPosX) * par1;
@@ -524,20 +512,20 @@ public class Library {
 			tileentity = worldObj.getTileEntity(x, y, z - 1);
 		}*/
 		// Assembler
-		if (block == ModBlocks.dummy_port_assembler) {
+		if(block == ModBlocks.dummy_port_assembler) {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy) worldObj.getTileEntity(pos)).target);
 		}
 		// Chemplant
-		if (block == ModBlocks.dummy_port_chemplant) {
+		if(block == ModBlocks.dummy_port_chemplant) {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy) worldObj.getTileEntity(pos)).target);
 		}
 		// Refinery
-		/*if(block == ModBlocks.dummy_port_refinery)
+		if(block == ModBlocks.dummy_port_refinery)
 		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
 		//Pumpjack
-		if(block == ModBlocks.dummy_port_pumpjack)
+		/*if(block == ModBlocks.dummy_port_pumpjack)
 		{
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
 		}
@@ -557,12 +545,12 @@ public class Library {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
 		}*/
 
-		if (tileentity instanceof IConductor) {
-			if (tileentity instanceof TileEntityCable) {
-				if (Library.checkUnionList(((TileEntityCable) tileentity).uoteab, that)) {
-					for (int i = 0; i < ((TileEntityCable) tileentity).uoteab.size(); i++) {
-						if (((TileEntityCable) tileentity).uoteab.get(i).source == that) {
-							if (((TileEntityCable) tileentity).uoteab.get(i).ticked != newTact) {
+		if(tileentity instanceof IConductor) {
+			if(tileentity instanceof TileEntityCable) {
+				if(Library.checkUnionList(((TileEntityCable) tileentity).uoteab, that)) {
+					for(int i = 0; i < ((TileEntityCable) tileentity).uoteab.size(); i++) {
+						if(((TileEntityCable) tileentity).uoteab.get(i).source == that) {
+							if(((TileEntityCable) tileentity).uoteab.get(i).ticked != newTact) {
 								((TileEntityCable) tileentity).uoteab.get(i).ticked = newTact;
 								that.ffgeua(pos.up(), that.getTact());
 								that.ffgeua(pos.down(), that.getTact());
@@ -577,17 +565,12 @@ public class Library {
 					((TileEntityCable) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 				}
 			}
-			if(tileentity instanceof TileEntityWireCoated)
-			{
-				if(Library.checkUnionList(((TileEntityWireCoated)tileentity).uoteab, that))
-				{
-					for(int i = 0; i < ((TileEntityWireCoated)tileentity).uoteab.size(); i++)
-					{
-						if(((TileEntityWireCoated)tileentity).uoteab.get(i).source == that)
-						{
-							if(((TileEntityWireCoated)tileentity).uoteab.get(i).ticked != newTact)
-							{
-								((TileEntityWireCoated)tileentity).uoteab.get(i).ticked = newTact;
+			if(tileentity instanceof TileEntityWireCoated) {
+				if(Library.checkUnionList(((TileEntityWireCoated) tileentity).uoteab, that)) {
+					for(int i = 0; i < ((TileEntityWireCoated) tileentity).uoteab.size(); i++) {
+						if(((TileEntityWireCoated) tileentity).uoteab.get(i).source == that) {
+							if(((TileEntityWireCoated) tileentity).uoteab.get(i).ticked != newTact) {
+								((TileEntityWireCoated) tileentity).uoteab.get(i).ticked = newTact;
 								that.ffgeua(pos.up(), that.getTact());
 								that.ffgeua(pos.down(), that.getTact());
 								that.ffgeua(pos.west(), that.getTact());
@@ -598,22 +581,16 @@ public class Library {
 						}
 					}
 				} else {
-					((TileEntityWireCoated)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+					((TileEntityWireCoated) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 				}
 			}
-			// TODO Cable switch
-			/*if(tileentity instanceof TileEntityCableSwitch)
-			{
+			if(tileentity instanceof TileEntityCableSwitch) {
 				if(tileentity.getBlockMetadata() == 1) {
-					if(Library.checkUnionList(((TileEntityCableSwitch)tileentity).uoteab, that))
-					{
-						for(int i = 0; i < ((TileEntityCableSwitch)tileentity).uoteab.size(); i++)
-						{
-							if(((TileEntityCableSwitch)tileentity).uoteab.get(i).source == that)
-							{
-								if(((TileEntityCableSwitch)tileentity).uoteab.get(i).ticked != newTact)
-								{
-									((TileEntityCableSwitch)tileentity).uoteab.get(i).ticked = newTact;
+					if(Library.checkUnionList(((TileEntityCableSwitch) tileentity).uoteab, that)) {
+						for(int i = 0; i < ((TileEntityCableSwitch) tileentity).uoteab.size(); i++) {
+							if(((TileEntityCableSwitch) tileentity).uoteab.get(i).source == that) {
+								if(((TileEntityCableSwitch) tileentity).uoteab.get(i).ticked != newTact) {
+									((TileEntityCableSwitch) tileentity).uoteab.get(i).ticked = newTact;
 									that.ffgeua(pos.up(), that.getTact());
 									that.ffgeua(pos.down(), that.getTact());
 									that.ffgeua(pos.west(), that.getTact());
@@ -624,43 +601,38 @@ public class Library {
 							}
 						}
 					} else {
-						((TileEntityCableSwitch)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
+						((TileEntityCableSwitch) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 					}
 				} else {
-					((TileEntityCableSwitch)tileentity).uoteab.clear();
+					((TileEntityCableSwitch) tileentity).uoteab.clear();
 				}
-			}*/
-				if(tileentity instanceof TileEntityPylonRedWire)
-				{
-					if(Library.checkUnionList(((TileEntityPylonRedWire)tileentity).uoteab, that))
-					{
-						for(int i = 0; i < ((TileEntityPylonRedWire)tileentity).uoteab.size(); i++)
-						{
-							if(((TileEntityPylonRedWire)tileentity).uoteab.get(i).source == that)
-							{
-								if(((TileEntityPylonRedWire)tileentity).uoteab.get(i).ticked != newTact)
-								{
-									((TileEntityPylonRedWire)tileentity).uoteab.get(i).ticked = newTact;
-									for(int j = 0; j < ((TileEntityPylonRedWire)tileentity).connected.size(); j++) {
-										TileEntityPylonRedWire pylon = ((TileEntityPylonRedWire)tileentity).connected.get(j);
-										if(pylon != null) {
-											that.ffgeua(pylon.getPos().east(), that.getTact());
-											that.ffgeua(pylon.getPos().west(), that.getTact());
-											that.ffgeua(pylon.getPos().up(), that.getTact());
-											that.ffgeua(pylon.getPos().down(), that.getTact());
-											that.ffgeua(pylon.getPos().south(), that.getTact());
-											that.ffgeua(pylon.getPos().north(), that.getTact());
-											
-											that.ffgeua(pylon.getPos(), that.getTact());
-										}
+			}
+			if(tileentity instanceof TileEntityPylonRedWire) {
+				if(Library.checkUnionList(((TileEntityPylonRedWire) tileentity).uoteab, that)) {
+					for(int i = 0; i < ((TileEntityPylonRedWire) tileentity).uoteab.size(); i++) {
+						if(((TileEntityPylonRedWire) tileentity).uoteab.get(i).source == that) {
+							if(((TileEntityPylonRedWire) tileentity).uoteab.get(i).ticked != newTact) {
+								((TileEntityPylonRedWire) tileentity).uoteab.get(i).ticked = newTact;
+								for(int j = 0; j < ((TileEntityPylonRedWire) tileentity).connected.size(); j++) {
+									TileEntityPylonRedWire pylon = ((TileEntityPylonRedWire) tileentity).connected.get(j);
+									if(pylon != null) {
+										that.ffgeua(pylon.getPos().east(), that.getTact());
+										that.ffgeua(pylon.getPos().west(), that.getTact());
+										that.ffgeua(pylon.getPos().up(), that.getTact());
+										that.ffgeua(pylon.getPos().down(), that.getTact());
+										that.ffgeua(pylon.getPos().south(), that.getTact());
+										that.ffgeua(pylon.getPos().north(), that.getTact());
+
+										that.ffgeua(pylon.getPos(), that.getTact());
 									}
 								}
 							}
 						}
-					} else {
-						((TileEntityPylonRedWire)tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 					}
+				} else {
+					((TileEntityPylonRedWire) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
 				}
+			}
 		}
 
 		// TE will not be added as consumer if:
@@ -668,17 +640,17 @@ public class Library {
 		// -TE is already full
 		// -TE is a battery set to output only
 		// -TE as well as source are transformers of the same frequency
-		if (tileentity instanceof IConsumer && newTact && !(tileentity instanceof TileEntityMachineBattery && ((TileEntityMachineBattery) tileentity).conducts) && tileentity != that && ((IConsumer) tileentity).getPower() < ((IConsumer) tileentity).getMaxPower() && !(tileentity instanceof TileEntityMachineTransformer && that instanceof TileEntityMachineTransformer && ((TileEntityMachineTransformer) tileentity).delay == ((TileEntityMachineTransformer) that).delay)) {
+		if(tileentity instanceof IConsumer && newTact && !(tileentity instanceof TileEntityMachineBattery && ((TileEntityMachineBattery) tileentity).conducts) && tileentity != that && ((IConsumer) tileentity).getPower() < ((IConsumer) tileentity).getMaxPower() && !(tileentity instanceof TileEntityMachineTransformer && that instanceof TileEntityMachineTransformer && ((TileEntityMachineTransformer) tileentity).delay == ((TileEntityMachineTransformer) that).delay)) {
 			that.getList().add((IConsumer) tileentity);
 		}
 
-		if (!newTact) {
+		if(!newTact) {
 			int size = that.getList().size();
-			if (size > 0) {
+			if(size > 0) {
 				long part = that.getSPower() / size;
-				for (IConsumer consume : that.getList()) {
-					if (consume.getPower() < consume.getMaxPower()) {
-						if (consume.getMaxPower() - consume.getPower() >= part) {
+				for(IConsumer consume : that.getList()) {
+					if(consume.getPower() < consume.getMaxPower()) {
+						if(consume.getMaxPower() - consume.getPower() >= part) {
 							that.setSPower(that.getSPower() - part);
 							consume.setPower(consume.getPower() + part);
 						} else {
@@ -698,9 +670,9 @@ public class Library {
 	 * doesn't check if empty
 	 */
 	public static boolean areItemsEqual(ItemStack stackA, ItemStack stackB) {
-		if (stackA == null & stackB == null)
+		if(stackA == null & stackB == null)
 			return true;
-		else if ((stackA == null && stackB != null) || (stackA != null && stackB == null))
+		else if((stackA == null && stackB != null) || (stackA != null && stackB == null))
 			return false;
 		else
 			return stackA.getMetadata() == stackB.getMetadata() && stackA.getItem() == stackB.getItem();
@@ -710,7 +682,7 @@ public class Library {
 		TileEntity tileentity = world.getTileEntity(pos);
 		Block b = world.getBlockState(pos).getBlock();
 		// TODO update this when I add more machines
-		if ((tileentity != null && (tileentity instanceof IConductor || tileentity instanceof IConsumer || tileentity instanceof ISource)) ||
+		if((tileentity != null && (tileentity instanceof IConductor || tileentity instanceof IConsumer || tileentity instanceof ISource)) ||
 				// b == ModBlocks.fusion_center ||
 				// b == ModBlocks.factory_titanium_conductor ||
 				// b == ModBlocks.factory_advanced_conductor ||
@@ -721,14 +693,14 @@ public class Library {
 				// b == ModBlocks.dummy_port_well ||
 				// b == ModBlocks.dummy_port_flare ||
 				// b == ModBlocks.dummy_port_drill ||
-		b == ModBlocks.dummy_port_assembler || b == ModBlocks.dummy_port_chemplant// ||
-		// b == ModBlocks.dummy_port_refinery ||
+		b == ModBlocks.dummy_port_assembler || b == ModBlocks.dummy_port_chemplant ||
+		 b == ModBlocks.dummy_port_refinery ||
 		// b == ModBlocks.dummy_port_pumpjack ||
 		// b == ModBlocks.dummy_port_turbofan ||
 		// b == ModBlocks.dummy_port_ams_limiter ||
 		// b == ModBlocks.dummy_port_ams_emitter ||
 		// b == ModBlocks.dummy_port_ams_base ||
-		// b == ModBlocks.dummy_port_radgen ||
+		 b == ModBlocks.dummy_port_radgen //||
 		// b == ModBlocks.dummy_port_compact_launcher ||
 		// b == ModBlocks.dummy_port_launch_table
 		) {
@@ -739,8 +711,8 @@ public class Library {
 
 	public static boolean checkUnionList(List<UnionOfTileEntitiesAndBooleans> list, ISource that) {
 
-		for (UnionOfTileEntitiesAndBooleans union : list) {
-			if (union.source == that) {
+		for(UnionOfTileEntitiesAndBooleans union : list) {
+			if(union.source == that) {
 				return true;
 			}
 		}
@@ -749,9 +721,9 @@ public class Library {
 	}
 
 	public static boolean hasInventoryItem(InventoryPlayer inventory, Item ammo) {
-		for(int i = 0; i < inventory.getSizeInventory(); i++){
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(stack.getItem() == ammo){
+			if(stack.getItem() == ammo) {
 				return true;
 			}
 		}
@@ -759,9 +731,9 @@ public class Library {
 	}
 
 	public static void consumeInventoryItem(InventoryPlayer inventory, Item ammo) {
-		for(int i = 0; i < inventory.getSizeInventory(); i++){
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(stack.getItem() == ammo && !stack.isEmpty()){
+			if(stack.getItem() == ammo && !stack.isEmpty()) {
 				stack.shrink(1);
 				inventory.setInventorySlotContents(i, stack.copy());
 				return;
@@ -769,10 +741,10 @@ public class Library {
 		}
 	}
 
-	//////  //////  //////  //////  //////  ////        //////  //////  //////
-	//      //  //  //        //    //      //  //      //      //      //    
-	////    //////  /////     //    ////    ////        ////    //  //  //  //
-	//      //  //     //     //    //      //  //      //      //  //  //  //
-	//////  //  //  /////     //    //////  //  //      //////  //////  //////
+	////// ////// ////// ////// ////// //// ////// ////// //////
+	// // // // // // // // // // //
+	//// ////// ///// // //// //// //// // // // //
+	// // // // // // // // // // // // //
+	////// // // ///// // ////// // // ////// ////// //////
 
 }

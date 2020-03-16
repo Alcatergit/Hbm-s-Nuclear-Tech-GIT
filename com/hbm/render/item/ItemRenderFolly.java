@@ -3,13 +3,11 @@ package com.hbm.render.item;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.weapon.GunFolly;
-import com.hbm.items.weapon.GunLeverActionS;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelFolly;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 

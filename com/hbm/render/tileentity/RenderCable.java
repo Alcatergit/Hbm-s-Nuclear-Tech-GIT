@@ -6,6 +6,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.conductor.TileEntityCable;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -20,7 +21,7 @@ public class RenderCable extends TileEntitySpecialRenderer<TileEntityCable> {
 	@Override
 	public void render(TileEntityCable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glTranslated(x, y, z);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		this.bindTexture(texture);
 		drawCore(te);
 		;
@@ -32,7 +33,7 @@ public class RenderCable extends TileEntitySpecialRenderer<TileEntityCable> {
 			}
 		}
 		GL11.glTranslated(-x, -y, -z);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 	
 	public void drawCore(TileEntity tileentity) {

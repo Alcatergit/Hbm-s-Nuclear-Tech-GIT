@@ -8,6 +8,7 @@ import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.util.HmfController;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -38,7 +39,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 	public void render(TileEntityMachineChemplant te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		switch(te.getBlockMetadata())
@@ -69,7 +70,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 	public void renderExtras(TileEntity tileEntity, double x, double y, double z, float f) {
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		TileEntityMachineChemplant chem = (TileEntityMachineChemplant)tileEntity;
@@ -131,7 +132,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 
         bindTexture(fluidTexture);
 
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         if(chem.tanks[0].getFluid() != null) {
         	ResourceLocation test;
         	if(chem.tanks[0].getFluid().getFluid() == FluidRegistry.LAVA || chem.tanks[0].getFluid().getFluid() == FluidRegistry.WATER){
@@ -202,7 +203,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 	        }
 	        GL11.glPopMatrix();
         }
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         
         HmfController.resetMod();
 

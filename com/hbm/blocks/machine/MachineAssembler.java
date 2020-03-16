@@ -2,6 +2,14 @@ package com.hbm.blocks.machine;
 
 import java.util.Random;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.MultiblockHandler;
+import com.hbm.interfaces.IMultiBlock;
+import com.hbm.lib.InventoryHelper;
+import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityMachineAssembler;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -18,14 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import com.hbm.blocks.ModBlocks;
-import com.hbm.handler.MultiblockHandler;
-import com.hbm.interfaces.IMultiBlock;
-import com.hbm.lib.InventoryHelper;
-import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
 public class MachineAssembler extends BlockContainer implements IMultiBlock {
 
@@ -79,45 +79,42 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos,
-			EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player,
-			ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
 		int i = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
-		if (i == 0) {
+		if(i == 0) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 5), 2);
-			if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionEast,
-						ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionEast)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionEast, ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
 				world.setBlockState(pos.add(-1, 0, 0), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te = world.getTileEntity(pos.add(-1, 0, 0));
-				if (te instanceof TileEntityDummy) {
+				if(te instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(-1, 0, 1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te2 = world.getTileEntity(pos.add(-1, 0, 1));
-				if (te2 instanceof TileEntityDummy) {
+				if(te2 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te2;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(2, 0, 0), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te3 = world.getTileEntity(pos.add(2, 0, 0));
-				if (te3 instanceof TileEntityDummy) {
+				if(te3 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te3;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(2, 0, 1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te4 = world.getTileEntity(pos.add(2, 0, 1));
-				if (te4 instanceof TileEntityDummy) {
+				if(te4 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te4;
 					dummy.target = pos;
 				}
@@ -127,35 +124,34 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 			} else
 				world.destroyBlock(pos, true);
 		}
-		if (i == 1) {
+		if(i == 1) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 3), 2);
-			if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionSouth,
-						ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionSouth)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionSouth, ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
 				world.setBlockState(pos.add(0, 0, -1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te = world.getTileEntity(pos.add(0, 0, -1));
-				if (te instanceof TileEntityDummy) {
+				if(te instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(-1, 0, -1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te2 = world.getTileEntity(pos.add(-1, 0, -1));
-				if (te2 instanceof TileEntityDummy) {
+				if(te2 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te2;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(0, 0, 2), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te3 = world.getTileEntity(pos.add(0, 0, 2));
-				if (te3 instanceof TileEntityDummy) {
+				if(te3 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te3;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(-1, 0, 2), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te4 = world.getTileEntity(pos.add(-1, 0, 2));
-				if (te4 instanceof TileEntityDummy) {
+				if(te4 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te4;
 					dummy.target = pos;
 				}
@@ -165,35 +161,34 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 			} else
 				world.destroyBlock(pos, true);
 		}
-		if (i == 2) {
+		if(i == 2) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 4), 2);
-			if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionWest,
-						ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionWest)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionWest, ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
 				world.setBlockState(pos.add(1, 0, 0), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te = world.getTileEntity(pos.add(1, 0, 0));
-				if (te instanceof TileEntityDummy) {
+				if(te instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(1, 0, -1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te2 = world.getTileEntity(pos.add(1, 0, -1));
-				if (te2 instanceof TileEntityDummy) {
+				if(te2 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te2;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(-2, 0, 0), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te3 = world.getTileEntity(pos.add(-2, 0, 0));
-				if (te3 instanceof TileEntityDummy) {
+				if(te3 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te3;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(-2, 0, -1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te4 = world.getTileEntity(pos.add(-2, 0, -1));
-				if (te4 instanceof TileEntityDummy) {
+				if(te4 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te4;
 					dummy.target = pos;
 				}
@@ -203,35 +198,34 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 			} else
 				world.destroyBlock(pos, true);
 		}
-		if (i == 3) {
+		if(i == 3) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 2), 2);
-			if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionNorth,
-						ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionNorth)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionNorth, ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
 				world.setBlockState(pos.add(0, 0, 1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te = world.getTileEntity(pos.add(0, 0, 1));
-				if (te instanceof TileEntityDummy) {
+				if(te instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(1, 0, 1), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te2 = world.getTileEntity(pos.add(1, 0, 1));
-				if (te2 instanceof TileEntityDummy) {
+				if(te2 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te2;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(0, 0, -2), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te3 = world.getTileEntity(pos.add(0, 0, -2));
-				if (te3 instanceof TileEntityDummy) {
+				if(te3 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te3;
 					dummy.target = pos;
 				}
 				world.setBlockState(pos.add(1, 0, -2), ModBlocks.dummy_port_assembler.getDefaultState());
 				TileEntity te4 = world.getTileEntity(pos.add(1, 0, -2));
-				if (te4 instanceof TileEntityDummy) {
+				if(te4 instanceof TileEntityDummy) {
 					TileEntityDummy dummy = (TileEntityDummy) te4;
 					dummy.target = pos;
 				}
@@ -245,20 +239,18 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		if (!keepInventory) {
+		if(!keepInventory) {
 			TileEntity tileentity = world.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityMachineAssembler)
-            {
-                InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachineAssembler)tileentity);
-                
-                world.updateComparatorOutputLevel(pos, this);
-            }
+			if(tileentity instanceof TileEntityMachineAssembler) {
+				InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachineAssembler) tileentity);
+
+				world.updateComparatorOutputLevel(pos, this);
+			}
 		}
 
 		super.breakBlock(world, pos, state);
 	}
-	
 
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -272,7 +264,7 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		if(meta >= 2 && meta <=5)
+		if(meta >= 2 && meta <= 5)
 			return this.getDefaultState().withProperty(FACING, meta);
 		return this.getDefaultState().withProperty(FACING, 2);
 	}

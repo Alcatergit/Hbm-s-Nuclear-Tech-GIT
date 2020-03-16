@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.BufferUtils;
@@ -71,6 +72,11 @@ public class HbmShaderManager {
 	// Vertical gaussian for two pass blur
 	public static int vGauss;
 	public static int combine;
+	
+	//Flashlight stuff for making sure the beam doesn't go past any geometry
+	public static int flashlightBeam;
+	public static int flashlightWorld;
+	public static int deferredFlashlight;
 
 	//public static FloatBuffer testBuf1;
 	//public static FloatBuffer testBuf2;
@@ -127,7 +133,6 @@ public class HbmShaderManager {
 		TARGET_HEIGHT.assign(vGauss);
 		renderFBOAlpha(gaussFbo, fbo6.framebufferWidth, fbo6.framebufferHeight);
 		releaseShader();
-		
 		
 		
 		
@@ -242,6 +247,9 @@ public class HbmShaderManager {
 		hGauss = createShader("vGauss.frag", "vGauss.vert");
 		vGauss = createShader("hGauss.frag", "hGauss.vert");
 		combine = createShader("combine.frag", "combine.vert");
+		flashlightBeam = createShader("flashlightbeam.frag", "flashlightbeam.vert");
+		flashlightWorld = createShader("flashlightworld.frag", "flashlightworld.vert");
+		deferredFlashlight = createShader("deferredflashlight.frag", "deferredflashlight.vert");
 	}
 
 	private static int createShader(String frag, String vert) {
@@ -256,6 +264,7 @@ public class HbmShaderManager {
 		OpenGlHelper.glLinkProgram(prog);
 		if (OpenGlHelper.glGetProgrami(prog, OpenGlHelper.GL_LINK_STATUS) == GL11.GL_FALSE) {
 			MainRegistry.logger.log(Level.ERROR, "Error creating shader " + frag + " " + vert);
+			MainRegistry.logger.error(OpenGlHelper.glGetProgramInfoLog(prog, 32768));
 			return 0;
 		}
 
@@ -371,6 +380,12 @@ public class HbmShaderManager {
 
 	public static interface FloatSupplier {
 		public float getAsFloat();
+	}
+
+	public static boolean isActiveShader(int prog) {
+		if(GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) == prog)
+			return true;
+		return false;
 	}
 
 }

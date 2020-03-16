@@ -7,6 +7,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -34,13 +35,19 @@ public class RenderCloudFleija extends Render<EntityCloudFleija> {
 	public void doRender(EntityCloudFleija cloud, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
         GL11.glTranslatef((float)x, (float)y, (float)z);
+        GlStateManager.disableLighting();
         GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableCull();
         GL11.glDisable(GL11.GL_CULL_FACE);
         
         GL11.glScalef(cloud.age, cloud.age, cloud.age);
         
         bindTexture(blastTexture);
         blastModel.renderAll();
+        GlStateManager.enableCull();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GlStateManager.enableLighting();
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
 	}
 	

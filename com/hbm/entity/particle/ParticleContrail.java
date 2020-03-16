@@ -6,8 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ModEventHandlerClient;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -69,9 +71,9 @@ public class ParticleContrail extends Particle {
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDepthMask(false);
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.depthMask(false);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		
 		this.theRenderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -126,11 +128,11 @@ public class ParticleContrail extends Particle {
 		
 		}
 		GL11.glPolygonOffset(0.0F, 0.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 		/*GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDepthMask(false);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -161,7 +163,7 @@ public class ParticleContrail extends Particle {
 		}
 		Tessellator.getInstance().draw();
 		GL11.glPolygonOffset(0.0F, 0.0F);
-		GL11.glEnable(GL11.GL_LIGHTING);*/
+		GlStateManager.enableLighting();*/
 	}
 
 	@Override

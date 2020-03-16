@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/seal_frame",
+		"front": "hbm:blocks/seal_controller",
+		"side": "hbm:blocks/seal_frame"
+	}
+}

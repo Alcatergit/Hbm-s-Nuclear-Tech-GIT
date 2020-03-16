@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.EntityGrenadeTau;
+import com.hbm.blocks.machine.BlockSeal;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
@@ -56,8 +57,10 @@ import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
+import com.hbm.entity.logic.EntityBlast;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.logic.EntityEMP;
+import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.missile.EntityBombletTheta;
@@ -94,7 +97,9 @@ import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
 import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.entity.particle.EntityFogFX;
+import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.entity.particle.EntityGasFlameFX;
+import com.hbm.entity.particle.EntityOilSpillFX;
 import com.hbm.entity.particle.EntityOrangeFX;
 import com.hbm.entity.particle.EntityPinkCloudFX;
 import com.hbm.entity.particle.EntitySSmokeFX;
@@ -117,7 +122,9 @@ import com.hbm.entity.projectile.EntityLN2;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.entity.projectile.EntityModBeam;
+import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityPlasmaBeam;
+import com.hbm.entity.projectile.EntityRailgunBlast;
 import com.hbm.entity.projectile.EntityRainbow;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRocketHoming;
@@ -130,8 +137,10 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.entity.ElectricityRenderer;
 import com.hbm.render.entity.GasFlameRenderer;
+import com.hbm.render.entity.GasRenderer;
 import com.hbm.render.entity.RenderAAShell;
 import com.hbm.render.entity.RenderBaleflare;
 import com.hbm.render.entity.RenderBeam;
@@ -162,7 +171,9 @@ import com.hbm.render.entity.RenderRagingVortex;
 import com.hbm.render.entity.RenderRainbow;
 import com.hbm.render.entity.RenderRocket;
 import com.hbm.render.entity.RenderSRocket;
+import com.hbm.render.entity.RenderTom;
 import com.hbm.render.entity.RenderVortex;
+import com.hbm.render.entity.SpillRenderer;
 import com.hbm.render.entity.TSmokeRenderer;
 import com.hbm.render.entity.missile.RenderBoosterMissile;
 import com.hbm.render.entity.missile.RenderCarrierMissile;
@@ -211,6 +222,7 @@ import com.hbm.render.item.ItemRedstoneSwordRender;
 import com.hbm.render.item.ItemRenderBFLauncher;
 import com.hbm.render.item.ItemRenderBullshit;
 import com.hbm.render.item.ItemRenderCalamity;
+import com.hbm.render.item.ItemRenderCell;
 import com.hbm.render.item.ItemRenderCryolator;
 import com.hbm.render.item.ItemRenderEMPRay;
 import com.hbm.render.item.ItemRenderEuthanasia;
@@ -247,36 +259,53 @@ import com.hbm.render.item.ItemRenderXVL1456;
 import com.hbm.render.item.ItemRenderZOMG;
 import com.hbm.render.item.RenderGunB93;
 import com.hbm.render.tileentity.RenderAssembler;
+import com.hbm.render.tileentity.RenderBlastDoor;
+import com.hbm.render.tileentity.RenderBroadcaster;
 import com.hbm.render.tileentity.RenderCIWSTurret;
 import com.hbm.render.tileentity.RenderCable;
 import com.hbm.render.tileentity.RenderCentrifuge;
 import com.hbm.render.tileentity.RenderCheapoTurret;
 import com.hbm.render.tileentity.RenderChemplant;
 import com.hbm.render.tileentity.RenderCloudResidue;
+import com.hbm.render.tileentity.RenderCyclotron;
 import com.hbm.render.tileentity.RenderDecoBlock;
+import com.hbm.render.tileentity.RenderDerrick;
 import com.hbm.render.tileentity.RenderEPress;
 import com.hbm.render.tileentity.RenderFlamerTurret;
 import com.hbm.render.tileentity.RenderFluidDuct;
+import com.hbm.render.tileentity.RenderFluidTank;
 import com.hbm.render.tileentity.RenderGasCent;
+import com.hbm.render.tileentity.RenderGasDuct;
+import com.hbm.render.tileentity.RenderGasFlare;
+import com.hbm.render.tileentity.RenderGeiger;
 import com.hbm.render.tileentity.RenderHeavyTurret;
 import com.hbm.render.tileentity.RenderLaunchPadTier1;
 import com.hbm.render.tileentity.RenderLightTurret;
+import com.hbm.render.tileentity.RenderMiningDrill;
 import com.hbm.render.tileentity.RenderNukeFleija;
 import com.hbm.render.tileentity.RenderNukeMan;
+import com.hbm.render.tileentity.RenderOilDuct;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.tileentity.RenderPuF6Tank;
+import com.hbm.render.tileentity.RenderPumpjack;
 import com.hbm.render.tileentity.RenderPylon;
+import com.hbm.render.tileentity.RenderRadGen;
+import com.hbm.render.tileentity.RenderRailgun;
+import com.hbm.render.tileentity.RenderRefinery;
 import com.hbm.render.tileentity.RenderRocketTurret;
+import com.hbm.render.tileentity.RenderSelenium;
 import com.hbm.render.tileentity.RenderSmallReactor;
 import com.hbm.render.tileentity.RenderSpitfireTurret;
 import com.hbm.render.tileentity.RenderTaint;
 import com.hbm.render.tileentity.RenderTauTurret;
 import com.hbm.render.tileentity.RenderTestRender;
 import com.hbm.render.tileentity.RenderUF6Tank;
+import com.hbm.render.tileentity.RenderVaultDoor;
 import com.hbm.render.util.HmfModelLoader;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
+import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
 import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
 import com.hbm.tileentity.bomb.TileEntityTurretFlamer;
@@ -287,24 +316,40 @@ import com.hbm.tileentity.bomb.TileEntityTurretSpitfire;
 import com.hbm.tileentity.bomb.TileEntityTurretTau;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
+import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
+import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
+import com.hbm.tileentity.machine.TileEntityBlastDoor;
+import com.hbm.tileentity.machine.TileEntityBroadcaster;
+import com.hbm.tileentity.machine.TileEntityGeiger;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
+import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
+import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
+import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
+import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
+import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
+import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
+import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
+import com.hbm.tileentity.machine.TileEntityMachineRefinery;
+import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleCloud;
+import net.minecraft.client.particle.ParticleFirework;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -359,6 +404,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineReactorSmall.class, new RenderSmallReactor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCable.class, new RenderCable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuct.class, new RenderFluidDuct());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFOilDuct.class, new RenderOilDuct());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFGasDuct.class, new RenderGasDuct());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTurretCheapo.class, new RenderCheapoTurret());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTurretRocket.class, new RenderRocketTurret());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTurretLight.class, new RenderLightTurret());
@@ -375,6 +422,20 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasCent.class, new RenderGasCent());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineUF6Tank.class, new RenderUF6Tank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePuF6Tank.class, new RenderPuF6Tank());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRailgun.class, new RenderRailgun());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineFluidTank.class, new RenderFluidTank());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRefinery.class, new RenderRefinery());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCyclotron.class, new RenderCyclotron());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBroadcaster.class, new RenderBroadcaster());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeiger.class, new RenderGeiger());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVaultDoor.class, new RenderVaultDoor());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlastDoor.class, new RenderBlastDoor());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSeleniumEngine.class, new RenderSelenium());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadGen.class, new RenderRadGen());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineOilWell.class, new RenderDerrick());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpjack.class, new RenderPumpjack());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasFlare.class, new RenderGasFlare());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningDrill.class, new RenderMiningDrill());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -502,8 +563,15 @@ public class ClientProxy extends ServerProxy {
 		registerGrenadeRenderer(EntityGrenadeIFSpark.class, ModItems.grenade_if_spark);
 		registerGrenadeRenderer(EntityGrenadeIFHopwire.class, ModItems.grenade_if_hopwire);
 		registerGrenadeRenderer(EntityGrenadeIFNull.class, ModItems.grenade_if_null);
+		RenderingRegistry.registerEntityRenderingHandler(EntityRailgunBlast.class, RenderTom.RAIL_FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlast.class, RenderEmpty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityNukeExplosionMK3.class, RenderEmpty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGasFX.class, GasRenderer.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityOilSpill.class, RenderEmpty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityOilSpillFX.class, SpillRenderer.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.seal_controller, new StateMap.Builder().ignore(BlockSeal.ACTIVATED).build());
 	}
 	
 	private <E extends Entity> void registerGrenadeRenderer(Class<E> clazz, Item grenade) {
@@ -548,6 +616,30 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void spawnParticle(double x, double y, double z, String type, float args[]) {
 		
+	}
+	
+	@Override
+	public void spawnSFX(World world, double posX, double posY, double posZ, int type, Vec3 payload) {
+		int pow = 250;
+		float angle = 25;
+		float base = 0.5F;
+		for(int i = 0; i < pow; i++) {
+
+			float momentum = base * world.rand.nextFloat();
+			float sway = (pow - i) / (float)pow;
+			Vec3 vec = Vec3.createVectorHelper(((Vec3)payload).xCoord, ((Vec3)payload).yCoord, ((Vec3)payload).zCoord);
+			vec.rotateAroundZ((float) (angle * world.rand.nextGaussian() * sway * Math.PI / 180D));
+			vec.rotateAroundY((float) (angle * world.rand.nextGaussian() * sway * Math.PI / 180D));
+			
+			ParticleFirework.Spark blast = new ParticleFirework.Spark(world, posX, posY, posZ, vec.xCoord * momentum, vec.yCoord * momentum, vec.zCoord * momentum, Minecraft.getMinecraft().effectRenderer);
+			
+			if(world.rand.nextBoolean())
+				blast.setColor(0x0088EA);
+			else
+				blast.setColor(0x52A8E6);
+			
+			Minecraft.getMinecraft().effectRenderer.addEffect(blast);
+		}
 	}
 	
 	@Override
@@ -617,6 +709,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_uzi_saturnite.setTileEntityItemStackRenderer(new ItemRenderUzi());
 		ModItems.gun_uzi_saturnite_silencer.setTileEntityItemStackRenderer(new ItemRenderUzi());
 		ModItems.gun_mp40.setTileEntityItemStackRenderer(new ItemRenderMP40());
+		ModItems.cell.setTileEntityItemStackRenderer(new ItemRenderCell());
 	}
 	
 	public static IBakedModel boxcar;

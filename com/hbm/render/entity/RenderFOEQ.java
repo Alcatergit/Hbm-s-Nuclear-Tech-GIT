@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.main.ResourceManager;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,7 @@ public class RenderFOEQ extends Render<EntityBurningFOEQ> {
         GL11.glRotatef(180, 0F, 0F, 1F);
         GL11.glRotatef(e.prevRotationPitch + (e.rotationPitch - e.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
 		//GL11.glScaled(5, 5, 5);
         GL11.glEnable(GL11.GL_CULL_FACE);
 		bindTexture(ResourceManager.sat_foeq_burning_tex);

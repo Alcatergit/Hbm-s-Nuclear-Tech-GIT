@@ -8,6 +8,7 @@ import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -33,7 +34,7 @@ public class FFIdentifierRender extends TileEntityItemStackRenderer {
 		if(fluidIcon != null){
 			GL11.glPushMatrix();
 			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.disableLighting();
 			GL11.glTranslated(0, 0, 0.5+HALF_A_PIXEL);
 			
 
@@ -114,7 +115,7 @@ public class FFIdentifierRender extends TileEntityItemStackRenderer {
 			
 			
 			RenderHelper.draw();
-			
+			GlStateManager.enableLighting();
 			GL11.glPopAttrib();
 			GL11.glPopMatrix();
 		}

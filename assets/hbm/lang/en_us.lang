@@ -342,6 +342,8 @@ tile.machine_satlinker.name=Satellite ID Manager
 container.satLinker=SatLink Device
 tile.machine_telelinker.name=Turret Telemetry Linker
 container.teleLinker=TelLink Device
+tile.railgun_plasma.name=Railgun
+container.railgun=Railgun
 
 item.turret_control.name=Turret Controller
 item.turret_chip.name=Turret AI-Chip
@@ -2308,3 +2310,5 @@ tile.cheater_virus_seed.name=Unstable Euphemium Schrabide Block
 item.mysteryshovel.name=Brittle Spade
 tile.ntm_dirt.name=Dirt
 item.memory.name=item.null.name
+
+item.charge_railgun.name=Deuterium Plasma Capsule

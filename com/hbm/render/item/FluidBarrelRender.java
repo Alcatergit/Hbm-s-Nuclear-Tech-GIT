@@ -6,6 +6,7 @@ import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -54,7 +55,7 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 		
 		if (lava != null) {
 			RenderHelper.setColor(f.getFluid().getColor(f));
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.disableLighting();
 			float maxU = lava.getInterpolatedU(9);
 			float minU = lava.getInterpolatedU(7);
 			float maxV = lava.getInterpolatedV(9);
@@ -106,7 +107,7 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 			
 			
 			tes.draw();
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GlStateManager.enableLighting();
 			
 		}
 		

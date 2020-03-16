@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.hbm.capability.RadiationCapability;
-import com.hbm.entity.missile.EntityMissileBaseAdvanced;
+import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.forgefluid.FFPipeNetwork;
@@ -83,8 +83,8 @@ public class ModEventHandler {
 	
 	@SubscribeEvent
 	public void enteringChunk(EnteringChunk evt){
-		if(evt.getEntity() instanceof EntityMissileBaseAdvanced){
-			((EntityMissileBaseAdvanced) evt.getEntity()).loadNeighboringChunks(evt.getNewChunkX(), evt.getNewChunkZ());
+		if(evt.getEntity() instanceof IChunkLoader){
+			((IChunkLoader)evt.getEntity()).loadNeighboringChunks(evt.getNewChunkX(), evt.getNewChunkZ());
 		}
 	}
 	

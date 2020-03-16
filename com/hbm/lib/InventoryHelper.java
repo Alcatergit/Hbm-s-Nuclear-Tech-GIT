@@ -16,6 +16,8 @@ public class InventoryHelper {
 	public static final Random RANDOM = new Random();
 
 	public static void dropInventoryItems(World world, BlockPos pos, ICapabilityProvider t) {
+		if(t == null)
+			return;
 		if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN))
 			return;
 		IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);

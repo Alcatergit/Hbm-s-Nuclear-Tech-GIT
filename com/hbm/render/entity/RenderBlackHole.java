@@ -10,6 +10,7 @@ import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -37,7 +38,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef((entity.ticksExisted % 360) * 10, 1, 1, 1);
-    	GL11.glDisable(GL11.GL_LIGHTING);
+    	GlStateManager.disableLighting();
     	GL11.glDisable(GL11.GL_CULL_FACE);
     	
     	float size = entity.getDataManager().get(EntityBlackHole.SIZE);

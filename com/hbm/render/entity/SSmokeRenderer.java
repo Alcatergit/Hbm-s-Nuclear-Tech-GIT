@@ -8,6 +8,7 @@ import com.hbm.items.ModItems;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -110,7 +111,7 @@ public class SSmokeRenderer extends Render<EntitySSmokeFX> {
 
 	private void func_77026_a(Tessellator tes, TextureAtlasSprite tex) {
 		BufferBuilder buf = tes.getBuffer();
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		float f = tex.getMinU();
 		float f1 = tex.getMaxU();
 		float f2 = tex.getMinV();
@@ -126,7 +127,7 @@ public class SSmokeRenderer extends Render<EntitySSmokeFX> {
 		buf.pos(f4 - f5, f4 - f6, 0.0D).tex(f1, f2).endVertex();
 		buf.pos(0.0F - f5, f4 - f6, 0.0D).tex(f, f2).endVertex();
 		tes.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 
 }

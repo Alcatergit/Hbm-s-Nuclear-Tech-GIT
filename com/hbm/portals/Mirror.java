@@ -60,7 +60,7 @@ public class Mirror extends Portal {
         j = Math.max(j, 60);
         long k = System.nanoTime() - System.nanoTime();
         long l = Math.max((long)(1000000000 / j / 4) - k, 0L);
-        Minecraft.getMinecraft().entityRenderer.renderWorld(Minecraft.getMinecraft().getRenderPartialTicks(), l);
+        Minecraft.getMinecraft().entityRenderer.renderWorld(Minecraft.getMinecraft().getRenderPartialTicks(), System.nanoTime() + l);
         GL11.glRotated(180, 0, 1, 0);
         GL11.glRotated(mirroredYaw, 0, 1, 0);
         Minecraft.getMinecraft().getRenderManager().renderViewEntity = oldRenderViewEntity;

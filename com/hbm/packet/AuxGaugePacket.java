@@ -1,17 +1,24 @@
 package com.hbm.packet;
 
 
+import com.hbm.main.MainRegistry;
+import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
+import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
+import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -106,7 +113,7 @@ public class AuxGaugePacket implements IMessage {
 						
 						cwis.rotation = m.value;
 					}
-					if (te instanceof TileEntityMachineSeleniumEngine) {
+					*/if (te instanceof TileEntityMachineSeleniumEngine) {
 						TileEntityMachineSeleniumEngine selenium = (TileEntityMachineSeleniumEngine)te;
 
 						if(m.id == 0)
@@ -114,7 +121,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 1)
 							selenium.powerCap = m.value;
 					}
-					if (te instanceof TileEntityMachineDiesel) {
+					/*if (te instanceof TileEntityMachineDiesel) {
 						TileEntityMachineDiesel selenium = (TileEntityMachineDiesel)te;
 						
 						selenium.powerCap = m.value;
@@ -179,7 +186,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 0)
 							coalgen.burnTime = m.value;
 					}
-				/*	if (te instanceof TileEntityMachineElectricFurnace) {
+					if (te instanceof TileEntityMachineElectricFurnace) {
 						TileEntityMachineElectricFurnace furn = (TileEntityMachineElectricFurnace)te;
 						
 						if(m.id == 0)
@@ -191,7 +198,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 0)
 							furn.dualCookTime = m.value;
 					}
-					*/if (te instanceof TileEntityMachineBoilerElectric) {
+					if (te instanceof TileEntityMachineBoilerElectric) {
 						TileEntityMachineBoilerElectric boiler = (TileEntityMachineBoilerElectric)te;
 						
 						if(m.id == 0)
@@ -238,7 +245,23 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 1)
 							launcher.padSize = PartSize.values()[m.value];
 					}*/
+					if (te != null && te instanceof TileEntityRailgun) {
+						
+						TileEntityRailgun gen = (TileEntityRailgun) te;
+						
+						if(m.id == 0) {
+							Vec3 vec = Vec3.createVectorHelper(5.5, 0, 0);
+							vec.rotateAroundZ((float) (gen.pitch * Math.PI / 180D));
+							vec.rotateAroundY((float) (gen.yaw * Math.PI / 180D));
+		
+							double fX = gen.getPos().getX() + 0.5 + vec.xCoord;
+							double fY = gen.getPos().getY() + 1 + vec.yCoord;
+							double fZ = gen.getPos().getZ() + 0.5 + vec.zCoord;
+							
+							MainRegistry.proxy.spawnSFX(gen.getWorld(), fX, fY, fZ, 0, vec.normalize());
+						}
 					
+					}
 				} catch (Exception x) {}
 			});
 			

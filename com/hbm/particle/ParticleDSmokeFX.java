@@ -3,6 +3,7 @@ package com.hbm.particle;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

@@ -7,6 +7,7 @@ import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,7 +27,7 @@ public class RenderNukeMan extends TileEntitySpecialRenderer<TileEntityNukeMan> 
 	public void render(TileEntityNukeMan te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		switch(te.getBlockMetadata())
 		{
@@ -43,7 +44,7 @@ public class RenderNukeMan extends TileEntitySpecialRenderer<TileEntityNukeMan> 
         bindTexture(manTexture);
         manModel.renderAll();
         
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
 
         GL11.glPopMatrix();
 	}

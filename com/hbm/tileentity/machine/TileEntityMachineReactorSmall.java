@@ -43,7 +43,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityMachineReactorSmall extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IClientRequestUpdator {
 
 	//4 blocks when extended + 5 pixels tall
-	private static final AxisAlignedBB SMALL_REACTOR_BB = new AxisAlignedBB(0, 0, 0, 1, 4 + 5*0.0625, 1);
+	private static final AxisAlignedBB SMALL_REACTOR_BB = new AxisAlignedBB(0, 0, 0, 1, 5, 1);
 	
 	public ItemStackHandler inventory;
 

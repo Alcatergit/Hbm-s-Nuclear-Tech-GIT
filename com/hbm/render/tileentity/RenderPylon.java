@@ -65,7 +65,7 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylonRedWir
 
 	public void drawPowerLine(double x, double y, double z, double a, double b, double c) {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buf = tessellator.getBuffer();
@@ -90,7 +90,7 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylonRedWir
 		buf.pos(a, b, c + 0.05F).color(0.73333333333F, 0.08235294117F, 0.06666666666F, 1.0F).endVertex();
 		buf.pos(a, b, c - 0.05F).color(0.73333333333F, 0.08235294117F, 0.06666666666F, 1.0F).endVertex();
 		tessellator.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}

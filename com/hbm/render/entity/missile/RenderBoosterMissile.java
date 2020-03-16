@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.missile.EntityBooster;
 import com.hbm.main.ResourceManager;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,7 @@ public class RenderBoosterMissile extends Render<EntityBooster> {
         GL11.glRotatef(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
 
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(2F, 2F, 2F);
         

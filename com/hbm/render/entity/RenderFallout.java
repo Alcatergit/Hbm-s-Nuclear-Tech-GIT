@@ -64,11 +64,9 @@ public class RenderFallout extends Render<EntityFalloutRain> {
 	}
     @Override
     public void doRender(EntityFalloutRain entity, double x, double y, double z, float entityYaw, float partialTicks) {
-       // System.out.println(entity + " " + entity.getScale());
-        //new Exception().printStackTrace();
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_LIGHTING_BIT);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableCull();
         //Drillgon200: It doesn't work when I use GLStateManager...
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         
@@ -90,6 +88,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
  
             lastTime = time;
         }
+        GlStateManager.enableCull();
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }

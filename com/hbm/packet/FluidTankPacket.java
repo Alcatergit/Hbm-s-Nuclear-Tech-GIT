@@ -1,5 +1,7 @@
 package com.hbm.packet;
 
+import com.hbm.interfaces.ITankPacketAcceptor;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,8 +15,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.hbm.interfaces.ITankPacketAcceptor;
 
 public class FluidTankPacket implements IMessage {
 
@@ -35,6 +35,10 @@ public class FluidTankPacket implements IMessage {
 		this.z = z;
 		this.tanks = tanks;
 		this.length = tanks.length;
+	}
+	
+	public FluidTankPacket(BlockPos pos, FluidTank[] tanks){
+		this(pos.getX(), pos.getY(), pos.getZ(), tanks);
 	}
 
 	@Override

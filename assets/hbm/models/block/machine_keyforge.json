@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"top": "hbm:blocks/machine_keyforge_top",
+		"bottom": "hbm:blocks/machine_keyforge_bottom",
+		"side": "hbm:blocks/machine_keyforge_side"
+	}
+}

@@ -1,8 +1,13 @@
 package com.hbm.tileentity.machine;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+
 import com.hbm.interfaces.IMultiBlock;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -19,11 +24,12 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 				markDirty();
 				needsMark = false;
 			}
-    		if(!(this.world.getBlockState(target).getBlock() instanceof IMultiBlock)) {
+    		if(target != null && !(this.world.getBlockState(target).getBlock() instanceof IMultiBlock)) {
     			world.destroyBlock(pos, false);
     		}
     	}
 	}
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
@@ -34,6 +40,7 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 		}
 		return compound;
 	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
@@ -43,6 +50,14 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 		this.target = new BlockPos(x, y, z);
 	}
 	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+	}
 	
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
 	
 }

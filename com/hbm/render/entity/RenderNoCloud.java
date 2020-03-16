@@ -10,6 +10,7 @@ import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -56,7 +57,7 @@ public class RenderNoCloud extends Render<EntityNukeCloudNoShroom> {
 	private void renderRing(EntityNukeCloudNoShroom entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
         GL11.glTranslatef((float)x, (float)y, (float)z);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
     	GL11.glTranslatef(0.0F, 18F, 0.0F);
     	//ring += 0.1F;

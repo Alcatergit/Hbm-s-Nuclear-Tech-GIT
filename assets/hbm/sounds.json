@@ -158,5 +158,10 @@
     "alarm.easAlarm": {"category": "record", "sounds": [{"name": "hbm:alarm/easAlarm", "stream": false}]},
     "alarm.airRaid": {"category": "record", "sounds": [{"name": "hbm:alarm/airRaid", "stream": true}]},
     "alarm.classic": {"category": "record", "sounds": [{"name": "hbm:alarm/classicSiren", "stream": true}]},
-    "alarm.gambit": {"category": "record", "sounds": [{"name": "hbm:alarm/gambit", "stream": true}]}
+    "alarm.gambit": {"category": "record", "sounds": [{"name": "hbm:alarm/gambit", "stream": true}]},
+    "block.railgunOrientation": {"category": "block", "sounds": [{"name": "hbm:block/railgunOrientation", "stream": false}]},
+    "block.railgunFire": {"category": "block", "sounds": [{"name": "hbm:block/railgunFire", "stream": false}]},
+    "block.railgunCharge": {"category": "block", "sounds": [{"name": "hbm:block/railgunCharge", "stream": false}]},
+    "block.buttonYes": {"category": "block", "sounds": [{"name": "hbm:block/buttonYes", "stream": false}]},
+    "block.buttonNo": {"category": "block", "sounds": [{"name": "hbm:block/buttonNo", "stream": false}]}
 }

@@ -2,7 +2,6 @@ package com.hbm.render.item;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.items.ModItems;
 import com.hbm.items.weapon.GunLeverActionS;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelLeverAction;

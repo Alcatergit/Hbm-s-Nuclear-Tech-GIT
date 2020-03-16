@@ -10,7 +10,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;

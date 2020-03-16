@@ -3,6 +3,7 @@ package com.hbm.items.tool;
 import java.util.List;
 
 import com.hbm.forgefluid.HbmFluidHandlerCanister;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
@@ -49,10 +50,10 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (this == ModItems.canister_generic) {
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if (this == ModItems.canister_generic && f != null && f.getFluid() == ModForgeFluids.diesel) {
 			tooltip.add("All hail the spout!");
 		}
-		FluidStack f = FluidUtil.getFluidContained(stack);
 		tooltip.add((f == null ? "0" : f.amount) + "/" + cap + " mb");
 	}
 	

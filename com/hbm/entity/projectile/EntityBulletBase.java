@@ -179,7 +179,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		vecDestination = new Vec3d(this.posX + this.motionX * this.config.velocity, this.posY + this.motionY * this.config.velocity, this.posZ + this.motionZ * this.config.velocity);
 
 		Entity victim = null;
-		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX * this.config.velocity, this.motionY * this.config.velocity, this.motionZ * this.config.velocity).grow(1.0D));
+		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(Math.abs(this.motionX * this.config.velocity), Math.abs(this.motionY * this.config.velocity), Math.abs(this.motionZ * this.config.velocity)).grow(1.0D));
 
 		double d0 = 0.0D;
 		int i;

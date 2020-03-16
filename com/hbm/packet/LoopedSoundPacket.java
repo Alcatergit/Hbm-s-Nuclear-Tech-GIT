@@ -2,16 +2,21 @@ package com.hbm.packet;
 
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.sound.SoundLoopAssembler;
+import com.hbm.sound.SoundLoopBroadcaster;
 import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
+import com.hbm.sound.SoundLoopMiner;
+import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
+import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -69,7 +74,7 @@ public class LoopedSoundPacket implements IMessage {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 
 				
-			/*	if (te != null && te instanceof TileEntityMachineMiningDrill) {
+				if (te != null && te instanceof TileEntityMachineMiningDrill) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopMiner.list.size(); i++)  {
@@ -77,10 +82,10 @@ public class LoopedSoundPacket implements IMessage {
 							flag = false;
 					}
 					
-					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineMiningDrill)te).torque > 0.2F)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopMiner(new ResourceLocation("hbm:block.minerOperate"), te));
+					if(flag && te.getWorld().isRemote && ((TileEntityMachineMiningDrill)te).torque > 0.2F)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopMiner(HBMSoundHandler.minerOperate, te));
 				}
-				*/
+				
 				if (te != null && te instanceof TileEntityMachineChemplant) {
 					
 					boolean flag = true;
@@ -129,7 +134,7 @@ public class LoopedSoundPacket implements IMessage {
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(new ResourceLocation("hbm:block.turbofanOperate"), te));
 				}
 				
-				if (te != null && te instanceof TileEntityBroadcaster) {
+				*/if (te != null && te instanceof TileEntityBroadcaster) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopBroadcaster.list.size(); i++)  {
@@ -137,13 +142,29 @@ public class LoopedSoundPacket implements IMessage {
 							flag = false;
 					}
 					
-					int j = te.xCoord + te.zCoord + te.yCoord;
+					int j = te.getPos().getX() + te.getPos().getY() + te.getPos().getZ();
+					int rand = Math.abs(j) % 3 + 1;
+					SoundEvent sound;
+					switch(rand){
+					case 1:
+						sound = HBMSoundHandler.broadcast1;
+						break;
+					case 2:
+						sound = HBMSoundHandler.broadcast2;
+						break;
+					case 3:
+						sound = HBMSoundHandler.broadcast3;
+						break;
+					default:
+						sound = HBMSoundHandler.broadcast1;
+						break;
+					}
 					
-					if(flag && te.getWorldObj().isRemote)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(new ResourceLocation("hbm:block.broadcast" + (Math.abs(j) % 3 + 1)), te));
+					if(flag && te.getWorld().isRemote)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
 				}
 				
-				*/if (te != null && te instanceof TileEntityMachineCentrifuge) {
+				if (te != null && te instanceof TileEntityMachineCentrifuge) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {

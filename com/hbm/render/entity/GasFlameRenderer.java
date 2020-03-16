@@ -10,6 +10,7 @@ import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.items.ModItems;
 import com.hbm.render.RenderHelper;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -81,6 +82,7 @@ public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 		if (icon != null) {
 			GL11.glPushMatrix();
 			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+			GlStateManager.disableLighting();
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);

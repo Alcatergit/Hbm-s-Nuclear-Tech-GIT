@@ -1,10 +1,23 @@
 package com.hbm.main;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.flashlight.Flashlight;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
@@ -16,6 +29,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.tool.ItemCassette.TrackType;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.tool.ItemFluidCanister;
@@ -26,10 +40,12 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.particle.ParticleDSmokeFX;
+import com.hbm.render.FakeWorldRenderer;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
 import com.hbm.render.item.B92BakedModel;
+import com.hbm.render.item.BakedModelCustom;
 import com.hbm.render.item.BakedModelNoGui;
 import com.hbm.render.item.ChemTemplateBakedModel;
 import com.hbm.render.item.ChemTemplateRender;
@@ -59,16 +75,24 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.chunk.RenderChunk;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityEndGateway;
+import net.minecraft.tileentity.TileEntityEndPortal;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.MouseEvent;
@@ -99,16 +123,24 @@ public class ModEventHandlerClient {
 
 		int i = 0;
 		ResourceLocation[] list = new ResourceLocation[EnumCanister.values().length];
-		for (EnumCanister e : EnumCanister.values()) {
+		for(EnumCanister e : EnumCanister.values()) {
 			list[i] = e.getResourceLocation();
 			i++;
 		}
 		ModelLoader.registerItemVariants(ModItems.canister_generic, list);
 
-		for (Item item : ModItems.ALL_ITEMS) {
+		i = 0;
+		ResourceLocation[] list2 = new ResourceLocation[EnumCell.values().length];
+		for(EnumCell e : EnumCell.values()) {
+			list2[i] = e.getResourceLocation();
+			i++;
+		}
+		ModelLoader.registerItemVariants(ModItems.cell, list2);
+
+		for(Item item : ModItems.ALL_ITEMS) {
 			registerModel(item, 0);
 		}
-		for (Block block : ModBlocks.ALL_BLOCKS) {
+		for(Block block : ModBlocks.ALL_BLOCKS) {
 			registerBlockModel(block, 0);
 		}
 	}
@@ -118,17 +150,21 @@ public class ModEventHandlerClient {
 	}
 
 	private void registerModel(Item item, int meta) {
-		if (item == ModItems.chemistry_icon) {
-			for (int i = 0; i < EnumChemistryTemplate.values().length; i++) {
+		if(item == ModItems.chemistry_icon) {
+			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + EnumChemistryTemplate.getEnum(i).getName().toLowerCase(), "inventory"));
 			}
-		} else if (item == ModItems.chemistry_template) {
-			for (int i = 0; i < EnumChemistryTemplate.values().length; i++) {
+		} else if(item == ModItems.chemistry_template) {
+			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
-		} else if (item == ModItems.polaroid) {
+		} else if(item == ModItems.siren_track){
+			for(int i = 0; i < TrackType.values().length; i ++){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			}
+		} else if(item == ModItems.polaroid) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName() + "_" + MainRegistry.polaroidID, "inventory"));
-		} else if (item instanceof IHasCustomModel) {
+		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
 		} else {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
@@ -138,66 +174,72 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void modelBaking(ModelBakeEvent evt) {
 
-		for (EnumCanister e : EnumCanister.values()) {
+		for(EnumCanister e : EnumCanister.values()) {
 			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
-			if (o instanceof IBakedModel)
+			if(o instanceof IBakedModel)
+				e.putRenderModel((IBakedModel) o);
+		}
+		for(EnumCell e : EnumCell.values()) {
+			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
+			if(o instanceof IBakedModel)
 				e.putRenderModel((IBakedModel) o);
 		}
 
-		//Drillgon200: Sigh... find a better custom model loading system.
-		//Drillgon200: Removed todo, found a better way. Now I just have to deal with all these ugly things. That can wait.
+		// Drillgon200: Sigh... find a better custom model loading system.
+		// Drillgon200: Removed todo, found a better way. Now I just have to
+		// deal with all these ugly things. That can wait.
 		ResourceManager.init();
 		Object obj = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
-		if (obj instanceof IBakedModel) {
+		if(obj instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) obj;
 			ItemRedstoneSwordRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(RedstoneSword.rsModel, new ItemRenderRedstoneSword());
 		}
 		Object object = evt.getModelRegistry().getObject(ItemAssemblyTemplate.location);
-		if (object instanceof IBakedModel) {
+		if(object instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object;
 			AssemblyTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemAssemblyTemplate.location, new AssemblyTemplateBakedModel());
 		}
 
 		Object object3 = evt.getModelRegistry().getObject(GunB92.b92Model);
-		if (object instanceof IBakedModel) {
+		if(object instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object3;
 			ItemRenderGunAnim.INSTANCE.b92ItemModel = model;
 			evt.getModelRegistry().putObject(GunB92.b92Model, new B92BakedModel());
 		}
 		Object object4 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankModel);
-		if (object4 instanceof IBakedModel) {
+		if(object4 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object4;
 			FluidTankRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankModel, new FluidTankBakedModel());
 		}
 		Object object5 = evt.getModelRegistry().getObject(ItemFluidTank.fluidBarrelModel);
-		if (object5 instanceof IBakedModel) {
+		if(object5 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object5;
 			FluidBarrelRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidBarrelModel, new FluidBarrelBakedModel());
 		}
 		Object object6 = evt.getModelRegistry().getObject(ItemFluidCanister.fluidCanisterModel);
-		if (object6 instanceof IBakedModel) {
+		if(object6 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object6;
 			FluidCanisterRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidCanister.fluidCanisterModel, new FluidCanisterBakedModel());
 		}
 		Object object7 = evt.getModelRegistry().getObject(ItemChemistryTemplate.chemModel);
-		if (object7 instanceof IBakedModel) {
+		if(object7 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object7;
 			ChemTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemChemistryTemplate.chemModel, new ChemTemplateBakedModel());
 		}
 		Object object8 = evt.getModelRegistry().getObject(ItemForgeFluidIdentifier.identifierModel);
-		if (object8 instanceof IBakedModel) {
+		if(object8 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object8;
 			FFIdentifierRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
 		}
 		Object object9 = evt.getModelRegistry().getObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"));
-		if (object9 instanceof IBakedModel) {
+		if(object9 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object9;
 			GunRevolverRender.INSTANCE.revolverModel = model;
 			evt.getModelRegistry().putObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"), new GunRevolverBakedModel());
@@ -258,17 +300,34 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_uzi_saturnite, reg);
 		swapModelsNoGui(ModItems.gun_uzi_saturnite_silencer, reg);
 		swapModelsNoGui(ModItems.gun_mp40, reg);
+		swapModels(ModItems.cell, reg);
+	}
+
+	public void swapModels(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
+		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
+		IBakedModel model = reg.getObject(loc);
+		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
+		if(render instanceof TEISRBase) {
+			((TEISRBase) render).itemModel = model;
+			reg.putObject(loc, new BakedModelCustom((TEISRBase) render));
+		}
+
 	}
 
 	public void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
 		IBakedModel model = reg.getObject(loc);
 		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
-		if (render instanceof TEISRBase) {
+		if(render instanceof TEISRBase) {
 			((TEISRBase) render).itemModel = model;
 			reg.putObject(loc, new BakedModelNoGui((TEISRBase) render));
 		}
 
+	}
+	
+	@SubscribeEvent
+	public void itemColorsEvent(ColorHandlerEvent.Item evt){
+		evt.getItemColors().registerItemColorHandler((IItemColor)ModItems.siren_track, ModItems.siren_track);
 	}
 
 	@SubscribeEvent
@@ -387,8 +446,8 @@ public class ModEventHandlerClient {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
-		for (Entity e : list) {
-			if (e instanceof IConstantRenderer) {
+		for(Entity e : list) {
+			if(e instanceof IConstantRenderer) {
 
 				float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
 				double d0 = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) partialTicks;
@@ -404,32 +463,156 @@ public class ModEventHandlerClient {
 				r.doRender(e, d0 - d3, d1 - d4, d2 - d5, f, partialTicks);
 			}
 		}
-		// renderCount ++;
-		// if(renderCount <= 1)
-		// PortalManager.ALL_RENDER_PORTALS.forEach(Portal::render);
-		// else
-		// renderCount = 0;
-		if(OpenGlHelper.shadersSupported && MainRegistry.useShaders)
-			// if(Minecraft.getMinecraft().player != null &&
-			// Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem()
-			// == ModItems.gun_spark)
-			 HbmShaderManager.renderGauss();
+		if(OpenGlHelper.shadersSupported && MainRegistry.useShaders) {
+			HbmShaderManager.renderGauss();
+			Flashlight.ALL_RENDER_FLASHLIGHTS.forEach(Flashlight::renderBeam);
+		}
+		sentUniforms = false;
+
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent
+	public void drawScreenPre(DrawScreenEvent.Pre evt) {
+		if(!MainRegistry.useShaders || renderingDepthOnly)
+			return;
+		HbmShaderManager.releaseShader();
+	}
+
+	public static Map<TileEntity, Flashlight> tester = new HashMap<TileEntity, Flashlight>();
+
+	@SubscribeEvent
 	public void renderLast(TickEvent.RenderTickEvent evt) {
-		if (evt.phase == Phase.END) {
-			// if(OpenGlHelper.shadersSupported && MainRegistry.useShaders)
-			// if(Minecraft.getMinecraft().player != null &&
-			// Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem()
-			// == ModItems.gun_spark)
-			// HbmShaderManager.renderGauss();
-			// PortalManager.ALL_RENDER_PORTALS.forEach((Portal p) ->
-			// {System.out.println(p);});
+		if(evt.phase == Phase.END) {
 
 		}
-		if (evt.phase == Phase.START) {
-			// HbmShaderManager.stealDepthBuffer();
+		if(evt.phase == Phase.START) {
+			if(MainRegistry.useShaders) {
+				FakeWorldRenderer.INSTANCE.rendererUpdateCount++;
+				Flashlight.ALL_RENDER_FLASHLIGHTS.clear();
+				Iterator<Entry<TileEntity, Flashlight>> itr = tester.entrySet().iterator();
+				while(itr.hasNext()) {
+					Entry<TileEntity, Flashlight> entry = itr.next();
+					if(entry.getKey().isInvalid()) {
+						itr.remove();
+						continue;
+					}
+					Flashlight.ALL_RENDER_FLASHLIGHTS.add(entry.getValue());
+				}
+				Flashlight.ALL_RENDER_FLASHLIGHTS.forEach(Flashlight::generateShadowMap);
+				GL13.glActiveTexture(GL13.GL_TEXTURE5);
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, Flashlight.depthTexture);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			}
+		}
+	}
+
+	private static boolean sentUniforms = false;
+	public static boolean renderingDepthOnly = false;
+
+	// Called from asm via coremod, in ChunkRenderContainer#preRenderChunk
+	public static void preRenderChunk(RenderChunk chunk) {
+		if(!MainRegistry.useShaders || renderingDepthOnly)
+			return;
+		GL20.glUniform3i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "chunkPos"), chunk.getPosition().getX(), chunk.getPosition().getY(), chunk.getPosition().getZ());
+	}
+
+	// Called from asm via coremod, in Profiler#endStartSection
+	public static void profilerStart(String name) {
+		if(!MainRegistry.useShaders || renderingDepthOnly)
+			return;
+		if(name.equals("terrain")) {
+			HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightmap"), 1);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "flashlightDepth"), 6);
+			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+
+			if(!sentUniforms) {
+				Flashlight.setUniforms();
+				sentUniforms = true;
+			}
+		}
+		if(name.equals("sky")) {
+			HbmShaderManager.releaseShader();
+		}
+		if(name.equals("particles")) {
+			HbmShaderManager.releaseShader();
+		}
+		if(name.equals("litParticles")) {
+			if(!HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
+				HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
+				GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightmap"), 1);
+				GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "flashlightDepth"), 6);
+				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+			}
+		}
+		if(name.equals("weather")) {
+			HbmShaderManager.releaseShader();
+		}
+		if(name.equals("hand")) {
+			HbmShaderManager.releaseShader();
+		}
+		if(name.equals("translucent")) {
+			HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightmap"), 1);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "flashlightDepth"), 6);
+			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+		}
+		if(name.equals("gui")) {
+			HbmShaderManager.releaseShader();
+		}
+	}
+
+	// Called from asm via coremod, in RenderManager#renderEntity
+	public static void onEntityRender(Entity e) {
+		if(!MainRegistry.useShaders || renderingDepthOnly)
+			return;
+		if(!HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
+			HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightmap"), 1);
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "flashlightDepth"), 6);
+			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+		} else {
+			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+		}
+		if(e instanceof EntityLivingBase) {
+			EntityLivingBase living = (EntityLivingBase) e;
+			if(living.deathTime > 0 || living.hurtTime > 0) {
+				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 0.0F, 0.0F, 0.3F);
+			} else {
+				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+			}
+		}
+	}
+
+	// Called from asm via coremod, in TileEntityRendererDispatcher#render
+	public static void onTileEntityRender(TileEntity t) {
+		if(!MainRegistry.useShaders || renderingDepthOnly)
+			return;
+		if(t instanceof TileEntityEndPortal || t instanceof TileEntityEndGateway) {
+			HbmShaderManager.releaseShader();
+		} else {
+			if(!HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
+				HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
+				GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightmap"), 1);
+				GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "flashlightDepth"), 6);
+				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+			} else {
+				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
+			}
+		}
+	}
+
+	// Called from asm via coremod, in GlStateManager#disableLighting
+	public static void onLightingDisable() {
+		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightingEnabled"), 0);
+		}
+	}
+
+	// Called from asm via coremod, in GlStateManager#enableLighting
+	public static void onLightingEnable() {
+		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
+			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightingEnabled"), 1);
 		}
 	}
 
@@ -437,29 +620,29 @@ public class ModEventHandlerClient {
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if (this.debugViewDirection == null) {
+		if(this.debugViewDirection == null) {
 			// Drillgon200: Oof, OfbReflect didn't work.
 			this.debugViewDirection = ReflectionHelper.findField(EntityRenderer.class, "debugViewDirection", "field_175079_V");
 			debugViewDirection.setAccessible(true);
 		}
-		if (this.debugView == null) {
+		if(this.debugView == null) {
 			// Drillgon200: Oof, OfbReflect didn't work.
 			this.debugView = ReflectionHelper.findField(EntityRenderer.class, "debugView", "field_175078_W");
 			debugView.setAccessible(true);
 		}
-		if (player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
-			if (player.ticksExisted > 5 * 60 * 20) {
+		if(player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
+			if(player.ticksExisted > 5 * 60 * 20) {
 				try {
 					debugViewDirection.setInt(Minecraft.getMinecraft().entityRenderer, 4);
 					debugView.setBoolean(Minecraft.getMinecraft().entityRenderer, true);
-				} catch (IllegalArgumentException e) {
+				} catch(IllegalArgumentException e) {
 					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch(IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
 
-		if (event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
 			ItemGunBase gun = ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem());
 			GunConfiguration gcfg = gun.mainConfig;
@@ -469,7 +652,7 @@ public class ModEventHandlerClient {
 			int count = ItemGunBase.getMag(player.getHeldItem(EnumHand.MAIN_HAND));
 			int max = gcfg.ammoCap;
 
-			if (gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
+			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
 				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.MAIN_HAND));
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
@@ -482,7 +665,7 @@ public class ModEventHandlerClient {
 			// Minecraft.getMinecraft().ingameGUI);
 		}
 
-		if (event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 
 			ItemGunBase gun = ((ItemGunBase) player.getHeldItem(EnumHand.OFF_HAND).getItem());
 			GunConfiguration gcfg = gun.mainConfig;
@@ -492,7 +675,7 @@ public class ModEventHandlerClient {
 			int count = ItemGunBase.getMag(player.getHeldItem(EnumHand.OFF_HAND));
 			int max = gcfg.ammoCap;
 
-			if (gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
+			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
 				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.OFF_HAND));
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
@@ -505,7 +688,7 @@ public class ModEventHandlerClient {
 			// Minecraft.getMinecraft().ingameGUI);
 		}
 
-		if (event.getType() == ElementType.HOTBAR) {
+		if(event.getType() == ElementType.HOTBAR) {
 			// TODO geiger counter
 			/*if(player.inventory.hasItem(ModItems.geiger_counter)) {
 			
@@ -519,12 +702,12 @@ public class ModEventHandlerClient {
 			}*/
 		}
 
-		if (event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {
+		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {
 			event.setCanceled(true);
 
-			if (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
+			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
 				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
-			if (!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+			if(!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
 			}
 		}
@@ -538,21 +721,21 @@ public class ModEventHandlerClient {
 		ResourceLocation cloak = RenderAccessoryUtility.getCloakFromPlayer(player);
 		// GL11.glRotated(180, 1, 0, 0);
 		NetworkPlayerInfo info = Minecraft.getMinecraft().getConnection().getPlayerInfo(player.getUniqueID());
-		if (cloak != null)
+		if(cloak != null)
 			RenderAccessoryUtility.loadCape(info, cloak);
 	}
 
 	@SubscribeEvent
 	public void preRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event) {
-		if (event.getEntity() instanceof AbstractClientPlayer) {
+		if(event.getEntity() instanceof AbstractClientPlayer) {
 			RenderPlayer renderer = (RenderPlayer) event.getRenderer();
 			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
 
-			if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+			if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
-				//renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
+				// renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
 			}
-			if (player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		}
@@ -562,35 +745,35 @@ public class ModEventHandlerClient {
 	public void clickHandler(MouseEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 
-		if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
-			if (event.getButton() == 0)
+			if(event.getButton() == 0)
 				event.setCanceled(true);
 
 			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
 
-			if (event.getButton() == 0 && !item.m1r && !item.m2r) {
+			if(event.getButton() == 0 && !item.m1r && !item.m2r) {
 				item.m1r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.MAIN_HAND));
 				// System.out.println("M1");
-			} else if (event.getButton() == 1 && !item.m2r && !item.m1r) {
+			} else if(event.getButton() == 1 && !item.m2r && !item.m1r) {
 				item.m2r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.MAIN_HAND));
 				// System.out.println("M2");
 			}
 		}
-		if (player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 
-			if (event.getButton() == 0)
+			if(event.getButton() == 0)
 				event.setCanceled(true);
 
 			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.OFF_HAND).getItem();
-			if (event.getButton() == 0 && !item.m1l && !item.m2l) {
+			if(event.getButton() == 0 && !item.m1l && !item.m2l) {
 				item.m1l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.OFF_HAND));
 
 				// System.out.println("M1");
-			} else if (event.getButton() == 1 && !item.m2l && !item.m1l) {
+			} else if(event.getButton() == 1 && !item.m2l && !item.m1l) {
 				item.m2l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.OFF_HAND));
 				// System.out.println("M2");
@@ -600,7 +783,7 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void clientDisconnectFromServer(ClientDisconnectionFromServerEvent e) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ItemAssemblyTemplate.recipesBackup != null) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && ItemAssemblyTemplate.recipesBackup != null) {
 			ItemAssemblyTemplate.recipes = ItemAssemblyTemplate.recipesBackup;
 			ItemAssemblyTemplate.recipesBackup = null;
 		}

@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"top": "hbm:blocks/machine_spp_blank",
+		"bottom": "hbm:blocks/machine_spp_t_bottom",
+		"side": "hbm:blocks/machine_spp_t_side"
+	}
+}

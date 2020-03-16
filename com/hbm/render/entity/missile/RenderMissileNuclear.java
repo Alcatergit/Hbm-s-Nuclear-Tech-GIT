@@ -6,6 +6,7 @@ import com.hbm.entity.missile.EntityMissileNuclear;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +24,7 @@ public class RenderMissileNuclear extends Render<EntityMissileNuclear> {
 	public void doRender(EntityMissileNuclear missile, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
         double[] renderPos = RenderHelper.getRenderPosFromMissile(missile, partialTicks);
         x = renderPos[0];
         y = renderPos[1];

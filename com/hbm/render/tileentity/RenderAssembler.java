@@ -7,6 +7,7 @@ import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -34,7 +35,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
     {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		switch(tileEntity.getBlockMetadata())
@@ -66,7 +67,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
     {
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		switch(tileEntity.getBlockMetadata())
@@ -117,7 +118,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 	public void renderCogs(TileEntityMachineAssembler tileEntity, double x, double y, double z, float f) {
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		switch(tileEntity.getBlockMetadata())

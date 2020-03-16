@@ -357,7 +357,9 @@ public class FFUtils {
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity != null && tileentity instanceof IFluidPipe && ((IFluidPipe) tileentity).getNetworkTrue() == net)
 			return true;
+		System.out.println(tileentity);
 		if (tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+			
 			return true;
 		}
 		return false;

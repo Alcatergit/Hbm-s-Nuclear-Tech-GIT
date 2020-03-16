@@ -14,6 +14,7 @@ import com.hbm.packet.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -46,7 +47,7 @@ public class GUIScreenDesignator extends GuiScreen {
         this.drawDefaultBackground();
         this.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
         this.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
     }
     
     public void initGui()
@@ -118,12 +119,12 @@ public class GUIScreenDesignator extends GuiScreen {
 
 		String x = String.valueOf(shownX);
 		String z = String.valueOf(shownZ);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		this.fontRenderer.drawString("X: " + x, 
 				guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth("X: " + x) / 2, guiTop + 50, 4210752);
 		this.fontRenderer.drawString("Z: " + z, 
 				guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth("Z: " + z) / 2, guiTop + 50 + 18 * 4, 4210752);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {

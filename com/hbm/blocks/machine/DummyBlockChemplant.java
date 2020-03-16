@@ -91,8 +91,7 @@ public class DummyBlockChemplant extends BlockContainer implements IDummy {
 	}
     
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-    		EntityPlayer player) {
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
     	return new ItemStack(Item.getItemFromBlock(ModBlocks.machine_chemplant));
     }
 	

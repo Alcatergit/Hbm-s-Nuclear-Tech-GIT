@@ -181,6 +181,7 @@ public class MachineBoiler extends BlockContainer {
 				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineBoilerElectric) tileentity);
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
+			
 		}
 		super.breakBlock(worldIn, pos, state);
 	}

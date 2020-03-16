@@ -7,6 +7,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +24,7 @@ public class RenderFluidDuct extends TileEntitySpecialRenderer<TileEntityFFFluid
 	@Override
 	public void render(TileEntityFFFluidDuct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glTranslated(x, y, z);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		this.bindTexture(texture);
 		drawCore(te);
 		for (int i = 0; i < te.connections.length; i++) {
@@ -32,7 +33,7 @@ public class RenderFluidDuct extends TileEntitySpecialRenderer<TileEntityFFFluid
 			}
 		}
 		GL11.glTranslated(-x, -y, -z);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 	
 	public void drawCore(TileEntity tileentity) {

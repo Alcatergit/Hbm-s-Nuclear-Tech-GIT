@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL12;
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.lib.RefStrings;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -28,7 +29,7 @@ public class FogRenderer extends Render<EntityFogFX> {
 		GL11.glPushAttrib(GL11.GL_CURRENT_BIT);
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		//GL11.glScalef(0.5F, 0.5F, 0.5F);
 		GL11.glScalef(7.5F, 7.5F, 7.5F);
 		
@@ -96,7 +97,7 @@ public class FogRenderer extends Render<EntityFogFX> {
 			GL11.glTranslatef((float) -dX, (float) -dY, (float) -dZ);
 		}
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
       //  GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
         GL11.glPopAttrib();

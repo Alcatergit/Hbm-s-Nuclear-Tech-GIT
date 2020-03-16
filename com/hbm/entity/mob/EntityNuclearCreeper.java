@@ -1,6 +1,5 @@
 package com.hbm.entity.mob;
 
-import java.util.HashSet;
 import java.util.List;
 
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -10,8 +9,6 @@ import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -211,7 +208,6 @@ public class EntityNuclearCreeper extends EntityMob {
         }
 		int strength = 1;
 		float f = strength;
-        HashSet hashset = new HashSet();
         int i;
         int j;
         int k;
@@ -219,7 +215,6 @@ public class EntityNuclearCreeper extends EntityMob {
         double d6;
         double d7;
         double wat = f*2;
-        boolean isOccupied = false;
         
 
         strength *= 2.0F;
@@ -230,7 +225,6 @@ public class EntityNuclearCreeper extends EntityMob {
         int l = MathHelper.floor(this.posZ - wat - 1.0D);
         int j2 = MathHelper.floor(this.posZ + wat + 1.0D);
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-        Vec3 vec3 = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
 
         for (int i1 = 0; i1 < list.size(); ++i1)
         {
@@ -415,7 +409,6 @@ public class EntityNuclearCreeper extends EntityMob {
     {
         if (!this.world.isRemote)
         {
-            boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
             if (this.getPowered())
             {

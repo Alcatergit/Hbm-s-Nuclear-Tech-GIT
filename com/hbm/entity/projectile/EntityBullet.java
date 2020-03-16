@@ -348,7 +348,7 @@ public class EntityBullet extends Entity implements IProjectile {
 			}
 
 			Entity entity = null;
-			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(1.0D));
+			List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(Math.abs(this.motionX), Math.abs(this.motionY), Math.abs(this.motionZ)).grow(1.0D));
 			double d0 = 0.0D;
 			int i;
 			float f1;

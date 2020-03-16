@@ -4,14 +4,16 @@
  */
 package cofh.redstoneflux.internal;
 
-import cofh.redstoneflux.RedstoneFluxProps;
-import com.google.common.collect.ImmutableSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.google.common.collect.ImmutableSet;
+
+import cofh.redstoneflux.RedstoneFluxProps;
 
 public class OldAPIChecker {
 
@@ -83,6 +85,7 @@ public class OldAPIChecker {
 
 		String loadPath = "<unknown>";
 		try {
+			@SuppressWarnings("rawtypes")
 			Class c = Class.forName(clazz);
 			ClassLoader loader = c.getClassLoader();
 			if (loader == null) {

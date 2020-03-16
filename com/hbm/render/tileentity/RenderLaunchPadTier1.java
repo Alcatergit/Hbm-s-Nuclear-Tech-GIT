@@ -8,6 +8,7 @@ import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,7 +33,7 @@ public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLa
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		/*switch(tileEntity.getBlockMetadata())
 		{

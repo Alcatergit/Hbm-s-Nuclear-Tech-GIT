@@ -14,6 +14,7 @@ import com.hbm.render.model.ModelGrenade;
 import com.hbm.render.model.ModelRocket;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -191,7 +192,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		
         GL11.glScalef(1F/16F, 1F/16F, 1F/16F);
         GL11.glScalef(-1, 1, 1);
@@ -275,7 +276,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -354,7 +355,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(true);
 		

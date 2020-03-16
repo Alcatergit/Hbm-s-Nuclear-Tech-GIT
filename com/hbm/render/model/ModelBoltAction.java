@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -204,7 +205,7 @@ public class ModelBoltAction extends ModelBase {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ALPHA_BITS);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buf = tessellator.getBuffer();
@@ -213,7 +214,7 @@ public class ModelBoltAction extends ModelBase {
         buf.pos(-150, 0, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();;
         tessellator.draw();
         
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glPopAttrib();
 		GL11.glPopMatrix();

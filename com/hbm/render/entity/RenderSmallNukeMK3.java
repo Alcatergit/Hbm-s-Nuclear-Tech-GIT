@@ -8,6 +8,7 @@ import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -70,7 +71,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_LIGHTING_BIT);
         GL11.glTranslatef((float)x, (float)y + 0.25F, (float)z);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE);
         GL11.glScalef(size, size, size);
@@ -196,7 +197,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
 			GL11.glPopMatrix();
         }
         
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glPopAttrib();
 		GL11.glPopMatrix();

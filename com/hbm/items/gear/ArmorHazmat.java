@@ -8,6 +8,7 @@ import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -68,11 +69,11 @@ public class ArmorHazmat extends ItemArmor {
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks) {
 		if(this != ModItems.hazmat_helmet /*&& this != ModItems.hazmat_paa_helmet*/)
     		return;
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableDepth();
         GL11.glDepthMask(false);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GlStateManager.disableAlpha();
         Minecraft.getMinecraft().getTextureManager().bindTexture(hazmatBlur);
         RenderHelper.startDrawingTexturedQuads();
         RenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
@@ -81,8 +82,8 @@ public class ArmorHazmat extends ItemArmor {
         RenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
         RenderHelper.draw();
         GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GlStateManager.enableDepth();
+        GlStateManager.enableAlpha();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		super.renderHelmetOverlay(stack, player, resolution, partialTicks);
 	}

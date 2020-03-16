@@ -7,6 +7,7 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -27,7 +28,7 @@ public class AssemblyTemplateRender extends TileEntityItemStackRenderer {
 				GL11.glPushMatrix();
 				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 				GL11.glTranslated(0.5, 0.5, 0);
-				GL11.glEnable(GL11.GL_LIGHTING);
+				GlStateManager.enableLighting();
 				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(MachineRecipes.getOutputFromTempate(stack), Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
 				model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
 				Minecraft.getMinecraft().getRenderItem().renderItem(MachineRecipes.getOutputFromTempate(stack), model);

@@ -1,6 +1,7 @@
 package com.hbm.packet;
 
 import com.hbm.interfaces.IClientRequestUpdator;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,10 @@ public class ClientRequestUpdatePacket implements IMessage {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+	
+	public ClientRequestUpdatePacket(BlockPos pos){
+		this(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override

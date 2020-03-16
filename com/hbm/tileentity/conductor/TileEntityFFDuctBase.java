@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -65,6 +66,7 @@ public class TileEntityFFDuctBase extends TileEntity implements IFluidPipe, IFlu
 			detectAndSendChanges();
 			
 		this.updateConnections();
+		//System.out.println(connections[2]);
 		if(needsBuildNetwork){
 			//this.getNetwork();
 			//this.checkOtherNetworks();
@@ -180,7 +182,7 @@ public class TileEntityFFDuctBase extends TileEntity implements IFluidPipe, IFlu
 	}
 	
 	private void detectAndSendChanges() {
-		PacketDispatcher.wrapper.sendToAll(new TEFluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), type));
+		PacketDispatcher.wrapper.sendToAllAround(new TEFluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 		markDirty();
 	}
 

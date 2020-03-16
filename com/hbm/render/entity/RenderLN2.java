@@ -11,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -123,7 +124,7 @@ public class RenderLN2 extends Render<EntityLN2> {
 	
 	private void func_77026_a(TextureAtlasSprite p_77026_2_)
     {
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
         float f = p_77026_2_.getMinU();
         float f1 = p_77026_2_.getMaxU();
         float f2 = p_77026_2_.getMinV();
@@ -140,7 +141,7 @@ public class RenderLN2 extends Render<EntityLN2> {
         RenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
         RenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
         RenderHelper.draw();
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
     }
 
 }

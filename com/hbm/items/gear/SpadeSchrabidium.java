@@ -4,8 +4,8 @@ import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
 
 public class SpadeSchrabidium extends ItemSpade {
 	public SpadeSchrabidium(ToolMaterial t, String s){

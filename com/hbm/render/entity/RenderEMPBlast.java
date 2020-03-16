@@ -7,6 +7,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +32,7 @@ public class RenderEMPBlast extends Render<EntityEMPBlast> {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GL11.glTranslated(x, y, z);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GlStateManager.disableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(entity.scale+partialTicks, 1F, entity.scale+partialTicks);
         

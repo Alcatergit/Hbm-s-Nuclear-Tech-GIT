@@ -6,6 +6,7 @@ import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -27,7 +28,7 @@ public class RenderEPress extends TileEntitySpecialRenderer<TileEntityMachineEPr
 	public void render(TileEntityMachineEPress te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		
 		switch(te.getBlockMetadata()) {
@@ -53,7 +54,7 @@ public class RenderEPress extends TileEntitySpecialRenderer<TileEntityMachineEPr
 	public void renderTileEntityAt2(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1 + 1 - 0.125, z + 0.5D);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GlStateManager.enableLighting();
 			GL11.glRotatef(180, 0F, 1F, 0F);
 			
 			switch(tileentity.getBlockMetadata()) {
@@ -83,7 +84,7 @@ public class RenderEPress extends TileEntitySpecialRenderer<TileEntityMachineEPr
 	public void renderTileEntityAt3(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1, z + 0.5);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			GlStateManager.enableLighting();
 			GL11.glRotatef(180, 0F, 1F, 0F);
 			
 			switch(tileentity.getBlockMetadata()) {

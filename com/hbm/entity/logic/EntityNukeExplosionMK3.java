@@ -109,6 +109,8 @@ public class EntityNukeExplosionMK3 extends Entity {
 	public void onUpdate() {
         super.onUpdate();
         	
+        if(world.isRemote)
+        	return;
         if(!this.did)
         {
     		if(MainRegistry.enableExtendedLogging && !world.isRemote)

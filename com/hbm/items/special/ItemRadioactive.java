@@ -1,5 +1,6 @@
 package com.hbm.items.special;
 
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
@@ -11,6 +12,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class ItemRadioactive extends ItemCustomLore {
 
@@ -21,10 +23,10 @@ public class ItemRadioactive extends ItemCustomLore {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		doRadiationDamage(entityIn, stack.getCount());
+		doRadiationDamage(entityIn, stack.getCount(), stack);
 	}
 
-	public void doRadiationDamage(Entity entity, float mod) {
+	public void doRadiationDamage(Entity entity, float mod, ItemStack stack) {
 
 		//Ultra Deadly: Watz Fuel
     	//Strong: U235, Pu239, Pu240, all fuels except Schrabidium
@@ -186,7 +188,7 @@ public class ItemRadioactive extends ItemCustomLore {
 			
 			//Tritium
 
-			if (this == ModItems.cell_tritium || 
+			if ((this instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == ModForgeFluids.tritium) || 
 					this == ModItems.rod_tritium || 
 					this == ModItems.rod_dual_tritium || 
 					this == ModItems.rod_quad_tritium || 
@@ -221,7 +223,7 @@ public class ItemRadioactive extends ItemCustomLore {
 					this == ModItems.ingot_schrabidium_fuel || 
 					this == ModItems.ingot_hes || 
 					this == ModItems.ingot_les || 
-					this == ModItems.cell_sas3 || 
+					(this instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == ModForgeFluids.sas3) || 
 					this == ModItems.fleija_propellant || 
 					this == ModItems.solinium_core || 
 					this == ModItems.rod_schrabidium || 

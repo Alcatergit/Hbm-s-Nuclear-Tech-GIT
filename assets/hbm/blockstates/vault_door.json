@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:vault_door" },
+     	   	"facing=south": { "model": "hbm:vault_door", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:vault_door", "y": 270 },
+      		"facing=east":  { "model": "hbm:vault_door", "y": 90 }
+	}
+}

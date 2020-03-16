@@ -2,6 +2,7 @@ package com.hbm.items.weapon;
 
 import java.util.List;
 import java.util.Random;
+
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityRainbow;

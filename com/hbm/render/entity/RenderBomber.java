@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.main.ResourceManager;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +31,7 @@ public class RenderBomber extends Render<EntityBomber> {
         //ayy lmao
         //GL11.glRotatef(System.currentTimeMillis() / 5 % 360, 1F, 0F, 0F);
 
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
         
         

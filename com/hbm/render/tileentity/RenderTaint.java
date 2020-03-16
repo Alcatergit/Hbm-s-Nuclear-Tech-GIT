@@ -6,6 +6,7 @@ import com.hbm.tileentity.generic.TileEntityTaint;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -39,7 +40,7 @@ public class RenderTaint extends TileEntitySpecialRenderer<TileEntityTaint> {
 		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("hbm:textures/blocks/taint_" + te.getBlockMetadata() + ".png"));
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float f6 = world.getLightBrightness(te.getPos());
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		if (side2) {
 
 			buf.pos(0.0F + d2, 0.0F, 0.0D).tex(f, f3).color(f6, f6, f6, 1.0F).endVertex();

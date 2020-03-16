@@ -137,7 +137,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 				if (FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3))
 					needsUpdate = true;
 
-			if (FFUtils.fillFluidContainer(inventory, tanks[1], 4, 5))
+			if (FFUtils.fillFluidContainer(inventory, tanks[1], 5, 6))
 				needsUpdate = true;
 
 			Object[] outs;

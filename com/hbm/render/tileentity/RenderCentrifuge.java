@@ -19,7 +19,7 @@ public class RenderCentrifuge extends TileEntitySpecialRenderer<TileEntityMachin
 	public void render(TileEntityMachineCentrifuge te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GlStateManager.enableLighting();
 		switch(te.getBlockMetadata())
 		{

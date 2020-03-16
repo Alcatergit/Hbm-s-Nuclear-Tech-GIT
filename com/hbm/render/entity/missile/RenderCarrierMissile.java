@@ -6,6 +6,7 @@ import com.hbm.entity.missile.EntityCarrier;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +31,7 @@ public class RenderCarrierMissile extends Render<EntityCarrier> {
 		GL11.glTranslated(x, y, z);
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		
-        GL11.glEnable(GL11.GL_LIGHTING);
+        GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glScalef(2F, 2F, 2F);
 		bindTexture(ResourceManager.missileCarrier_tex);
