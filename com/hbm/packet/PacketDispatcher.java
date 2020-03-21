@@ -76,6 +76,12 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEPumpjackPacket.Handler.class, TEPumpjackPacket.class, i++, Side.CLIENT);
 		//Mining drill rotation for rendering
 		wrapper.registerMessage(TEDrillPacket.Handler.class, TEDrillPacket.class, i++, Side.CLIENT);
+		//Turbofan spin for rendering
+		wrapper.registerMessage(TETurbofanPacket.Handler.class, TETurbofanPacket.class, i++, Side.CLIENT);
+		//Machine type for marker rendering
+		wrapper.registerMessage(TEStructurePacket.Handler.class, TEStructurePacket.class, i++, Side.CLIENT);
+		//Mega packet for large reactor so it doesn't use quite as much network traffic
+		wrapper.registerMessage(LargeReactorPacket.Handler.class, LargeReactorPacket.class, i++, Side.CLIENT);
 	}
 
 }

@@ -92,7 +92,7 @@ public class WasteEarth extends Block {
 	public void updateTick(World world, BlockPos pos1, IBlockState state, Random rand) {
 		if(this.radIn > 0){
 			RadiationSavedData.incrementRad(world, pos1.getX(), pos1.getZ(), this.radIn, this.radMax);
-			world.scheduleBlockUpdate(pos1, state.getBlock(), this.tickRate(world), 40);
+			world.scheduleUpdate(pos1, state.getBlock(), this.tickRate(world));
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos().setPos(pos1.getX(), pos1.getY(), pos1.getZ());
 		if((this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) && world.getBlockState(pos.add(0, 1, 0)).getBlock() == Blocks.AIR && rand.nextInt(10) == 0)

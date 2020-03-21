@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 
@@ -34,6 +35,10 @@ public class AuxButtonPacket implements IMessage {
 		this.z = z;
 		this.value = value;
 		this.id = id;
+	}
+	
+	public AuxButtonPacket(BlockPos pos, int value, int id){
+		this(pos.getX(), pos.getY(), pos.getZ(), value, id);
 	}
 
 	@Override
@@ -99,7 +104,7 @@ public class AuxButtonPacket implements IMessage {
 							control.auto = m.value == 1;
 						
 					}
-					/*TileEntity reac = p.worldObj.getTileEntity(m.x, m.y, m.z);
+					TileEntity reac = p.world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 					if (reac instanceof TileEntityMachineReactorLarge) {
 						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)reac;
 						
@@ -112,7 +117,7 @@ public class AuxButtonPacket implements IMessage {
 						}
 					}
 					
-					if (te instanceof TileEntityMachineMissileAssembly) {
+					/*if (te instanceof TileEntityMachineMissileAssembly) {
 						TileEntityMachineMissileAssembly assembly = (TileEntityMachineMissileAssembly)te;
 						
 						assembly.construct();

@@ -290,15 +290,19 @@ import com.hbm.render.tileentity.RenderPuF6Tank;
 import com.hbm.render.tileentity.RenderPumpjack;
 import com.hbm.render.tileentity.RenderPylon;
 import com.hbm.render.tileentity.RenderRadGen;
+import com.hbm.render.tileentity.RenderRadioRec;
+import com.hbm.render.tileentity.RenderRadiobox;
 import com.hbm.render.tileentity.RenderRailgun;
 import com.hbm.render.tileentity.RenderRefinery;
 import com.hbm.render.tileentity.RenderRocketTurret;
 import com.hbm.render.tileentity.RenderSelenium;
 import com.hbm.render.tileentity.RenderSmallReactor;
 import com.hbm.render.tileentity.RenderSpitfireTurret;
+import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.tileentity.RenderTaint;
 import com.hbm.render.tileentity.RenderTauTurret;
 import com.hbm.render.tileentity.RenderTestRender;
+import com.hbm.render.tileentity.RenderTurbofan;
 import com.hbm.render.tileentity.RenderUF6Tank;
 import com.hbm.render.tileentity.RenderVaultDoor;
 import com.hbm.render.util.HmfModelLoader;
@@ -342,8 +346,12 @@ import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineRefinery;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
+import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.machine.TileEntityRadioRec;
+import com.hbm.tileentity.machine.TileEntityRadiobox;
+import com.hbm.tileentity.machine.TileEntityStructureMarker;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
 import net.minecraft.client.Minecraft;
@@ -436,6 +444,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePumpjack.class, new RenderPumpjack());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasFlare.class, new RenderGasFlare());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiningDrill.class, new RenderMiningDrill());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineTurbofan.class, new RenderTurbofan());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRadiobox.class, new RenderRadiobox());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRadioRec.class, new RenderRadioRec());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityStructureMarker.class, new RenderStructureMarker());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -571,6 +583,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityOilSpillFX.class, SpillRenderer.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.mud_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.seal_controller, new StateMap.Builder().ignore(BlockSeal.ACTIVATED).build());
 	}
 	

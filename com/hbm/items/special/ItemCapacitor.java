@@ -33,11 +33,11 @@ public class ItemCapacitor extends Item {
 			tooltip.add("Does not work in creative mode!");
 			tooltip.add("[Needed for Schrabidium Synthesis]");
 		}
-		/*if (this == ModItems.titanium_filter) {
+		if (this == ModItems.titanium_filter) {
 			tooltip.add("Can be used to remove waste");
 			tooltip.add("from a watz reactor!");
 			tooltip.add("[Needed for Watz Reaction]");
-		}*/
+		}
 	}
 	
 	@Override

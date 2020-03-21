@@ -543,7 +543,7 @@ tile.fusion_center.name=Central Magnet Piece
 tile.fusion_motor.name=Magnet Motor Piece
 tile.fusion_heater.name=Plasma Heater
 tile.fusion_hatch.name=Fusion Reactor Access Hatch
-tile.fusion_core.name=Fusion Reactor Control
+tile.fusion_core_block.name=Fusion Reactor Control
 tile.plasma.name=Plasma
 container.fusionMultiblock=Big Fusion Reactor
 
@@ -2105,13 +2105,13 @@ item.pellet_advanced.name=Advanced Watz Performance Improver
 item.titanium_filter.name=Titanium Filter
 
 tile.mud_block.name=Poisonous Mud
-fluid.mud_fluid=Poisonous Mud
+fluid.hbmmud_fluid=Poisonous Mud
 item.bucket_mud.name=Bucket of Poisonous Mud
 tile.acid_block.name=Acid
-fluid.acid_fluid=Acid
+fluid.hbmacid_fluid=Acid
 item.bucket_acid.name=Bucket of Acid
 tile.toxic_block.name=Stereotypical Green Ooze
-fluid.toxic_fluid=Stereotypical Green Ooze
+fluid.hbmtoxic_fluid=Stereotypical Green Ooze
 item.bucket_toxic.name=Bucket of Stereotypical Green Ooze
 item.tank_waste_0.name=Mud Container
 item.tank_waste_1.name=Mud Container

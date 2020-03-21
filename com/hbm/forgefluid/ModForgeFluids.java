@@ -3,6 +3,8 @@ package com.hbm.forgefluid;
 import java.awt.Color;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.fluid.MudBlock;
+import com.hbm.blocks.fluid.MudFluid;
 import com.hbm.blocks.fluid.ToxicBlock;
 import com.hbm.blocks.fluid.ToxicFluid;
 import com.hbm.lib.ModDamageSource;
@@ -69,7 +71,7 @@ public class ModForgeFluids {
 	
 	//Block fluids
 	public static final Fluid toxic_fluid = new ToxicFluid().setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773).setBlock(ModBlocks.toxic_block);
-	
+	public static final Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773).setBlock(ModBlocks.mud_block);
 	
 	public static void init(){
 		FluidRegistry.registerFluid(steam);
@@ -124,7 +126,9 @@ public class ModForgeFluids {
 		FluidRegistry.registerFluid(balefire);
 		
 		FluidRegistry.registerFluid(toxic_fluid);
-		ModBlocks.toxic_block = new ToxicBlock(ModForgeFluids.toxic_fluid, ModBlocks.fluidtoxic.setReplaceable(), ModDamageSource.radiation, "toxic_block").setResistance(500F);
+		FluidRegistry.registerFluid(mud_fluid);
+		ModBlocks.toxic_block = new ToxicBlock(ModForgeFluids.toxic_fluid, ModBlocks.fluidtoxic, ModDamageSource.radiation, "toxic_block").setResistance(500F);
+		ModBlocks.mud_block = new MudBlock(ModForgeFluids.mud_fluid, ModBlocks.fluidmud, ModDamageSource.mudPoisoning, "mud_block").setResistance(500F);
 	}
 	
 }

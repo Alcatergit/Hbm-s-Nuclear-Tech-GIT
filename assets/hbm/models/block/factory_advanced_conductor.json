@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "hbm:blocks/factory_advanced_hull",
+		"end": "hbm:blocks/factory_advanced_conductor"
+	}
+}

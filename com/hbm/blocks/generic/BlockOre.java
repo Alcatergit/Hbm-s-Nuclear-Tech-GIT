@@ -257,8 +257,7 @@ public class BlockOre extends Block {
         }
 		if(this.radIn > 0){
 			RadiationSavedData.incrementRad(worldIn, pos.getX(), pos.getZ(), radIn, radMax);
-			//I don't know what the priority is, but I saw someone online made it 40, so I guess I'll do that
-			worldIn.scheduleBlockUpdate(pos, state.getBlock(), this.tickRate(worldIn), 40);
+			worldIn.scheduleUpdate(pos, state.getBlock(), this.tickRate(worldIn));
 		}
 	}
 	

@@ -29,7 +29,7 @@ public abstract class GuiInfoContainer extends GuiContainer {
 	
 	public void drawCustomInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, String[] text) {
 		if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY)
-			this.drawHoveringText(Arrays.asList(text), x, y);
+			this.drawHoveringText(Arrays.asList(text), mouseX, mouseY);
 	}
 	
 	public void drawCustomInfoStat(int mouseX, int mouseY, int x, int y, int width, int height, int tPosX, int tPosY, String[] text) {

@@ -31,6 +31,15 @@ public class ItemCustomLore extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 
+		if(this == ModItems.overfuse)
+		{
+			list.add("Say what?");
+		}
+		if(this == ModItems.tritium_deuterium_cake)
+		{
+			list.add("Not actual cake, but great");
+			list.add("universal fusion fuel!");
+		}
 		if(this == ModItems.pin) {
 			list.add("Can be used with a screwdriver to pick locks.");
 			if(Minecraft.getMinecraft().player != null) {

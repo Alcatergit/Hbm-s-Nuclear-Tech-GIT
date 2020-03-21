@@ -11,6 +11,7 @@ import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
+import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 
@@ -45,6 +46,11 @@ public class AuxGaugePacket implements IMessage {
 		this.z = z;
 		this.value = value;
 		this.id = id;
+	}
+	
+	public AuxGaugePacket(BlockPos pos, int value, int id)
+	{
+		this(pos.getX(), pos.getY(), pos.getZ(), value, id);
 	}
 
 	@Override
@@ -214,25 +220,13 @@ public class AuxGaugePacket implements IMessage {
 						
 						nuke.primed = m.value == 1;
 					}
-					if (te instanceof TileEntityMachineReactorLarge) {
+					*/if (te instanceof TileEntityMachineReactorLarge) {
 						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)te;
 
 						if(m.id == 0)
-							reactor.rods = m.value;
-						if(m.id == 1)
-							reactor.coreHeat = m.value;
-						if(m.id == 2)
-							reactor.hullHeat = m.value;
-						if(m.id == 3)
 							reactor.size = m.value;
-						if(m.id == 4)
-							reactor.fuel = m.value;
-						if(m.id == 5)
-							reactor.waste = m.value;
-						if(m.id == 6)
-							reactor.type = ReactorFuelType.getEnum(m.value);
 					}
-					if (te instanceof TileEntityCompactLauncher) {
+					/*if (te instanceof TileEntityCompactLauncher) {
 						TileEntityCompactLauncher launcher = (TileEntityCompactLauncher)te;
 						
 						launcher.solid = m.value;

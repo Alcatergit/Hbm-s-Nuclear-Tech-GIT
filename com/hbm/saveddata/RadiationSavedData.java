@@ -1,20 +1,21 @@
 package com.hbm.saveddata;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldSavedData;
 
 public class RadiationSavedData extends WorldSavedData {
-	public List<RadiationSaveStructure> contamination = new ArrayList<RadiationSaveStructure>();
+	public Map<ChunkPos, RadiationSaveStructure> contamination = new HashMap<ChunkPos, RadiationSaveStructure>();
 	
 	private static RadiationSavedData openInstance;
 	
@@ -38,7 +39,7 @@ public class RadiationSavedData extends WorldSavedData {
     
     public void createEntry(int x, int y, float rad) {
     	
-    	contamination.add(new RadiationSaveStructure(x, y, rad));
+    	contamination.put(new ChunkPos(x, y), new RadiationSaveStructure(x, y, rad));
         this.markDirty();
     }
     
@@ -55,19 +56,13 @@ public class RadiationSavedData extends WorldSavedData {
     }
     
     public void setRadForCoord(int x, int y, float radiation) {
-    	
-    	RadiationSaveStructure entry = null;
-    	
-    	for(RadiationSaveStructure rad : contamination)
-    		if(rad.chunkX == x && rad.chunkY == y) {
-    			entry = rad;
-    			break;
-    		}
+    	ChunkPos pos = new ChunkPos(x, y);
+    	RadiationSaveStructure entry = contamination.get(pos);
     	
     	if(entry == null) {
 
     		entry = new RadiationSaveStructure(x, y, radiation);
-        	contamination.add(entry);
+        	contamination.put(pos, entry);
     	}
     	
     	entry.radiation = radiation;
@@ -76,19 +71,15 @@ public class RadiationSavedData extends WorldSavedData {
     }
     
     public RadiationSaveStructure getRadFromCoord(int x, int y) {
-    	
-    	for(RadiationSaveStructure rad : contamination)
-    		if(rad.chunkX == x && rad.chunkY == y)
-    			return rad;
-    	
-    	return null;
+    	ChunkPos pos = new ChunkPos(x, y);
+    	return contamination.get(pos);
     }
     
     public float getRadNumFromCoord(int x, int y) {
-    	
-    	for(RadiationSaveStructure rad : contamination)
-    		if(rad.chunkX == x && rad.chunkY == y)
-    			return rad.radiation;
+    	ChunkPos pos = new ChunkPos(x, y);
+    	RadiationSaveStructure rad = contamination.get(pos);
+    	if(rad != null)
+    		return rad.radiation;
     	
     	if(worldObj != null && worldObj.provider instanceof WorldProviderHell)
     		return MainRegistry.hellRad;
@@ -98,11 +89,11 @@ public class RadiationSavedData extends WorldSavedData {
     
     public void updateSystem() {
     	
-    	List<RadiationSaveStructure> tempList = new ArrayList<RadiationSaveStructure>(contamination);
+    	Map<ChunkPos, RadiationSaveStructure> tempList = new HashMap<ChunkPos, RadiationSaveStructure>(contamination);
     	
     	contamination.clear();
     	
-    	for(RadiationSaveStructure struct : tempList) {
+    	for(RadiationSaveStructure struct : tempList.values()) {
     		
     		if(struct.radiation != 0) {
 
@@ -172,7 +163,7 @@ public class RadiationSavedData extends WorldSavedData {
 			RadiationSaveStructure struct = new RadiationSaveStructure();
 			struct.readFromNBT(nbt, i);
 			
-			contamination.add(struct);
+			contamination.put(new ChunkPos(struct.chunkX, struct.chunkY), struct);
 		}
 	}
 

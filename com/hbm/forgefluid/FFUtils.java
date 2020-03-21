@@ -102,7 +102,7 @@ public class FFUtils {
 	
 	/**
 	 * Renders tank info, like fluid type and millibucket amount. Same as the hbm
-	 * one, just centrallized to a utility file.
+	 * one, just centralized to a utility file.
 	 * 
 	 * @param gui       - the gui to render the fluid info on
 	 * @param mouseX    - the cursor's x position
@@ -357,7 +357,6 @@ public class FFUtils {
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity != null && tileentity instanceof IFluidPipe && ((IFluidPipe) tileentity).getNetworkTrue() == net)
 			return true;
-		System.out.println(tileentity);
 		if (tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			
 			return true;

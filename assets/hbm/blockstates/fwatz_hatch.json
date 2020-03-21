@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:fwatz_hatch" },
+     	   	"facing=south": { "model": "hbm:fwatz_hatch", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:fwatz_hatch", "y": 270 },
+      		"facing=east":  { "model": "hbm:fwatz_hatch", "y": 90 }
+	}
+}

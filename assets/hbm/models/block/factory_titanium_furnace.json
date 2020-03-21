@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "hbm:blocks/factory_titanium_furnace",
+		"top": "hbm:blocks/factory_titanium_hull",
+		"side": "hbm:blocks/factory_titanium_hull"
+	}
+}

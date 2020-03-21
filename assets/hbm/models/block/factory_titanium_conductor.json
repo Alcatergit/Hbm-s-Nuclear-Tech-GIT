@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "hbm:blocks/factory_titanium_hull",
+		"end": "hbm:blocks/factory_titanium_conductor"
+	}
+}

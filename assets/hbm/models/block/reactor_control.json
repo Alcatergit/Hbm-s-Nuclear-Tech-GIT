@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "hbm:blocks/reactor_control_side",
+		"end": "hbm:blocks/reactor_control_top"
+	}
+}

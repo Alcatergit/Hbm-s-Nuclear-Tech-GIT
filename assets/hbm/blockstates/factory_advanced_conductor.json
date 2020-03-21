@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"activated=true": { "model": "hbm:factory_advanced_conductor" },
+     	   	"activated=false": { "model": "hbm:factory_advanced_conductor" }
+	}
+}

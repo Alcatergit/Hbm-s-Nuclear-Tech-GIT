@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "hbm:blocks/fwatz_hatch",
+		"top": "hbm:blocks/fwatz_scaffold",
+		"side": "hbm:blocks/fwatz_scaffold"
+	}
+}

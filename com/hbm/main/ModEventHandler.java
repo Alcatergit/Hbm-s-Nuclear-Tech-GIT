@@ -206,7 +206,7 @@ public class ModEventHandler {
 							continue;
 			        	}
 						
-						if(eRad < 200/* || entity instanceof EntityNuclearCreeper */|| entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
+						if(eRad < 200 || entity instanceof EntityNuclearCreeper || entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
 							continue;
 						
 						if(eRad >= 1000) {

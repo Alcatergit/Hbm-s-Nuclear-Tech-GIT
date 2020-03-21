@@ -223,9 +223,10 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 		}
 		if(detectPower != power){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectPower = power;
 		}
+		//Drillgon200: This system is buggy, changes don't always get sent correctly when they should, or the wrong changes get sent
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		
 		if(mark)
 			markDirty();

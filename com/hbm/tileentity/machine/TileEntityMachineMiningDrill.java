@@ -537,6 +537,7 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 		return hardness < 70 && hardness >= 0;
 	}
 
+	//TODO Drillgon200: Fix this absolute mess
 	/**
 	 * returns true if there has been a successful mining operation returns
 	 * false if no block could be mined and the drill is ready to extend

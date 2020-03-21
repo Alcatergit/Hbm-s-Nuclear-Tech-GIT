@@ -51,7 +51,6 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-		
 		if(diFurnace.power > 0) {
 			int i = (int)diFurnace.getPowerRemainingScaled(52);
 			drawTexturedModalRect(guiLeft + 62, guiTop + 69 - i, 176, 52 - i, 52, i);

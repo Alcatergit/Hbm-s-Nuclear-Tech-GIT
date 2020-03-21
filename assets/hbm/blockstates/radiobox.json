@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"facing=north,state=false": { "model": "hbm:radiobox" },
+		"facing=south,state=false": { "model": "hbm:radiobox", "y": 180 },
+		"facing=west,state=false": { "model": "hbm:radiobox", "y": 270 },
+		"facing=east,state=false": { "model": "hbm:radiobox", "y": 90 },
+		"facing=north,state=true": { "model": "hbm:radiobox" },
+		"facing=south,state=true": { "model": "hbm:radiobox", "y": 180 },
+		"facing=west,state=true": { "model": "hbm:radiobox", "y": 270 },
+		"facing=east,state=true": { "model": "hbm:radiobox", "y": 90 }
+	}
+}

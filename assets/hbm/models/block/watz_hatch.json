@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"front": "hbm:blocks/watz_hatch",
+		"top": "hbm:blocks/reinforced_brick",
+		"side": "hbm:blocks/reinforced_brick"
+	}
+}
