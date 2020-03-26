@@ -38,7 +38,6 @@ public class NukeMan extends BlockContainer implements IBomb {
 	public static final PropertyInteger FACING = PropertyInteger.create("facing", 2, 5);
 	
 	private static boolean keepInventory = false;
-	private final Random rand = new Random();
 	
 	public NukeMan(Material materialIn, String s) {
 		super(materialIn);

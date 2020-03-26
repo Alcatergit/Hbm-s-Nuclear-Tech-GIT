@@ -1,5 +1,6 @@
 package com.hbm.explosion;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -24,8 +25,10 @@ import com.hbm.potion.HbmPotion;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
@@ -38,11 +41,122 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ExplosionChaos {
 
+	private final static Random random = new Random();
 	private static Random rand = new Random();
+	
+	public static void explode(World world, int x, int y, int z, int bombStartStrength) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int r = bombStartStrength;
+		int r2 = r * r;
+		int r22 = r2 / 2;
+		for (int xx = -r; xx < r; xx++) {
+			int X = xx + x;
+			int XX = xx * xx;
+			for (int yy = -r; yy < r; yy++) {
+				int Y = yy + y;
+				int YY = XX + yy * yy;
+				for (int zz = -r; zz < r; zz++) {
+					int Z = zz + z;
+					int ZZ = YY + zz * zz;
+					if (ZZ < r22) {
+						destruction(world, pos.setPos(X, Y, Z));
+					}
+				}
+			}
+		}
+	}
+	
+	public static void destruction(World world, BlockPos pos) {
+
+		Block b = world.getBlockState(pos).getBlock();
+		if (b == Blocks.BEDROCK || b == ModBlocks.reinforced_brick
+				|| b == ModBlocks.reinforced_sand
+				|| b == ModBlocks.reinforced_glass
+				|| b == ModBlocks.reinforced_lamp_on
+				|| b == ModBlocks.reinforced_lamp_off) {
+
+		} else {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		}
+	}
+	
+	public static void spawnExplosion(World world, int x, int y, int z, int bound) {
+
+		int randX;
+		int randY;
+		int randZ;
+
+		for (int i = 0; i < 25; i++) {
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x + randX, y + randY, z + randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x + randX, y + randY, z + randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x + randX, y - randY, z + randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x - randX, y + randY, z + randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x + randX, y + randY, z - randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x + randX, y - randY, z + randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x - randX, y + randY, z + randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x + randX, y + randY, z - randZ,
+			// 5);
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x - randX, y - randY, z + randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x - randX, y - randY, z + randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x - randX, y + randY, z - randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x - randX, y + randY, z - randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x + randX, y - randY, z - randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x + randX, y - randY, z - randZ,
+			// 5);
+
+			randX = random.nextInt(bound);
+			randY = random.nextInt(bound);
+			randZ = random.nextInt(bound);
+
+			world.createExplosion(null, x - randX, y - randY, z - randZ, 10.0F, true);
+			// ExplosionChaos.explode(world, x - randX, y - randY, z - randZ,
+			// 5);
+		}
+	}
 	
 	//Drillgon200: Descriptive method names anyone?
 	public static void c(World world, int x, int y, int z, int bombStartStrength) {
@@ -705,5 +819,94 @@ public class ExplosionChaos {
 			
 			world.spawnEntity(fx);
 		}
+	}
+	
+	public static void floater(World world, BlockPos pos, int radi, int height){
+		floater(world, pos.getX(), pos.getY(), pos.getZ(), radi, height);
+	}
+	
+	public static void floater(World world, int x, int y, int z, int radi, int height) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		IBlockState save;
+
+		int r = radi;
+		int r2 = r * r;
+		int r22 = r2 / 2;
+		for (int xx = -r; xx < r; xx++) {
+			int X = xx + x;
+			int XX = xx * xx;
+			for (int yy = -r; yy < r; yy++) {
+				int Y = yy + y;
+				int YY = XX + yy * yy;
+				for (int zz = -r; zz < r; zz++) {
+					int Z = zz + z;
+					int ZZ = YY + zz * zz;
+					if (ZZ < r22) {
+						pos.setPos(X, Y, Z);
+						save = world.getBlockState(pos);
+						world.setBlockState(pos, Blocks.AIR.getDefaultState());
+						if (save.getBlock() != Blocks.AIR) {
+							world.setBlockState(pos.setPos(X, Y + height, Z), save);
+						}
+					}
+				}
+			}
+		}
+
+	}
+	
+	public static void move(World world, BlockPos pos, int radius, int a, int b, int c){
+		move(world, pos.getX(), pos.getY(), pos.getZ(), radius, a, b, c);
+	}
+
+	public static void move(World world, int x, int y, int z, int radius, int a, int b, int c) {
+		float f = radius;
+		int i;
+		int j;
+		int k;
+		double d5;
+		double d6;
+		double d7;
+		double wat = radius;
+		int rand = 0;
+
+		radius *= 2.0F;
+		i = MathHelper.floor(x - wat - 1.0D);
+		j = MathHelper.floor(x + wat + 1.0D);
+		k = MathHelper.floor(y - wat - 1.0D);
+		int i2 = MathHelper.floor(y + wat + 1.0D);
+		int l = MathHelper.floor(z - wat - 1.0D);
+		int j2 = MathHelper.floor(z + wat + 1.0D);
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
+
+		for (int i1 = 0; i1 < list.size(); ++i1) {
+			Entity entity = (Entity) list.get(i1);
+			double d4 = entity.getDistance(x, y, z) / radius;
+
+			if (d4 <= 1.0D) {
+				d5 = entity.posX - x;
+				d6 = entity.posY + entity.getEyeHeight() - y;
+				d7 = entity.posZ - z;
+				if (entity instanceof EntityLiving && !(entity instanceof EntitySheep)) {
+					rand = random.nextInt(2);
+					if (rand == 0) {
+						((EntityLiving) entity).setCustomNameTag("Dinnerbone");
+					} else {
+						((EntityLiving) entity).setCustomNameTag("Grumm");
+					}
+				}
+
+				if (entity instanceof EntitySheep) {
+					((EntityLiving) entity).setCustomNameTag("jeb_");
+				}
+
+				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
+				if (d9 < wat) {
+					entity.setPosition(entity.posX += a, entity.posY += b, entity.posZ += c);
+				}
+			}
+		}
+
+		radius = (int) f;
 	}
 }

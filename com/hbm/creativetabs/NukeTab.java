@@ -1,7 +1,10 @@
 package com.hbm.creativetabs;
 
+import com.hbm.blocks.ModBlocks;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class NukeTab extends CreativeTabs {
@@ -13,10 +16,9 @@ public class NukeTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		//TODO bomb
-	//	if(ModBlocks.float_bomb != null){
-		//	return new ItemStack(Item.getItemFromBlock(ModBlocks.float_bomb));
-	//	}
+		if(ModBlocks.float_bomb != null){
+			return new ItemStack(Item.getItemFromBlock(ModBlocks.float_bomb));
+		}
 		return new ItemStack(Items.IRON_PICKAXE);
 	}
 

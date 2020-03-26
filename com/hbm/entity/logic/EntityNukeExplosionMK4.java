@@ -41,14 +41,13 @@ public class EntityNukeExplosionMK4 extends Entity {
 
 	@Override
 	public void onUpdate() {
-
 		if(strength == 0) {
 			this.setDead();
 			return;
 		}
 
 		if(!world.isRemote && fallout && explosion != null) {
-			RadiationSavedData data = RadiationSavedData.getData(world);
+			RadiationSavedData.getData(world);
 
 			// float radMax = (float) (length / 2F * Math.pow(length, 2) / 35F);
 			float radMax = Math.min((float) (length / 2F * Math.pow(length, 1.5) / 35F), 15000);

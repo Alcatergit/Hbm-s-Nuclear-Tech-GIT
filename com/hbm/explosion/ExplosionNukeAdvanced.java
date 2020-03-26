@@ -93,6 +93,7 @@ public class ExplosionNukeAdvanced
 		this.lastposZ = this.leg == 0 ? this.element : this.leg == 1 ? this.shell : this.leg == 2 ? -this.element : -this.shell;
 		this.n++;
 		return this.n > this.nlimit; //return whether we are done or not
+		
 	}
 
 	private void breakColumn(int x, int z)

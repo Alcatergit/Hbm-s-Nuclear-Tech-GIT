@@ -31,6 +31,36 @@ public class ItemCustomLore extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 
+		if(this == ModItems.powder_poison)
+		{
+			list.add("Used in multi purpose bombs:");
+			list.add("Warning: Poisonous!");
+		}
+		if(this == ModItems.pellet_cluster)
+		{
+			list.add("Used in multi purpose bombs:");
+			list.add("Adds some extra boom!");
+		}
+
+		if(this == ModItems.powder_fire)
+		{
+			list.add("Used in multi purpose bombs:");
+			list.add("Incendiary bombs are fun!");
+		}
+		if(this == ModItems.pellet_gas)
+		{
+			list.add("Used in multi purpose bombs:");
+			list.add("*cough cough* Halp pls!");
+		}
+		if(this == ModItems.igniter)
+		{
+			list.add("(Used by right-clicking the Prototype)");
+			list.add("It's a green metal handle with a");
+			list.add("bright red button and a small lid.");
+			list.add("At the bottom, the initials N.E. are");
+			list.add("engraved. Whoever N.E. was, he had");
+			list.add("a great taste in shades of green.");
+		}
 		if(this == ModItems.overfuse)
 		{
 			list.add("Say what?");

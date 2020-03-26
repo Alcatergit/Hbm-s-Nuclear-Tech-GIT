@@ -38,8 +38,7 @@ public class ReinforcedBlock extends Block {
 		IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
 
-        //TODO reinforced glass
-        if (/*this == ModBlocks.reinforced_glass || */this == ModBlocks.fwatz_tank)
+        if (this == ModBlocks.reinforced_glass || this == ModBlocks.fwatz_tank)
         {
             if (blockState != iblockstate)
             {

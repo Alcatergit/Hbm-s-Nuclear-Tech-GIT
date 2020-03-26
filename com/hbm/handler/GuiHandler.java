@@ -1,6 +1,7 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerBombMulti;
 import com.hbm.inventory.container.ContainerCentrifuge;
 import com.hbm.inventory.container.ContainerConverterHeRf;
 import com.hbm.inventory.container.ContainerConverterRfHe;
@@ -40,12 +41,22 @@ import com.hbm.inventory.container.ContainerMachineSchrabidiumTransmutator;
 import com.hbm.inventory.container.ContainerMachineSelenium;
 import com.hbm.inventory.container.ContainerMachineShredder;
 import com.hbm.inventory.container.ContainerMachineSiren;
+import com.hbm.inventory.container.ContainerMachineTeleLinker;
 import com.hbm.inventory.container.ContainerMachineTeleporter;
 import com.hbm.inventory.container.ContainerMachineTurbine;
 import com.hbm.inventory.container.ContainerMachineTurbofan;
+import com.hbm.inventory.container.ContainerNukeBoy;
+import com.hbm.inventory.container.ContainerNukeCustom;
 import com.hbm.inventory.container.ContainerNukeFleija;
 import com.hbm.inventory.container.ContainerNukeFurnace;
+import com.hbm.inventory.container.ContainerNukeGadget;
 import com.hbm.inventory.container.ContainerNukeMan;
+import com.hbm.inventory.container.ContainerNukeMike;
+import com.hbm.inventory.container.ContainerNukeN2;
+import com.hbm.inventory.container.ContainerNukeN45;
+import com.hbm.inventory.container.ContainerNukePrototype;
+import com.hbm.inventory.container.ContainerNukeSolinium;
+import com.hbm.inventory.container.ContainerNukeTsar;
 import com.hbm.inventory.container.ContainerPuF6Tank;
 import com.hbm.inventory.container.ContainerRailgun;
 import com.hbm.inventory.container.ContainerReactor;
@@ -56,6 +67,7 @@ import com.hbm.inventory.container.ContainerSafe;
 import com.hbm.inventory.container.ContainerUF6Tank;
 import com.hbm.inventory.container.ContainerWasteDrum;
 import com.hbm.inventory.container.ContainerWatzCore;
+import com.hbm.inventory.gui.GUIBombMulti;
 import com.hbm.inventory.gui.GUIConverterHeRf;
 import com.hbm.inventory.gui.GUIConverterRfHe;
 import com.hbm.inventory.gui.GUICoreAdvanced;
@@ -96,13 +108,23 @@ import com.hbm.inventory.gui.GUIMachineSchrabidiumTransmutator;
 import com.hbm.inventory.gui.GUIMachineSelenium;
 import com.hbm.inventory.gui.GUIMachineShredder;
 import com.hbm.inventory.gui.GUIMachineSiren;
+import com.hbm.inventory.gui.GUIMachineTeleLinker;
 import com.hbm.inventory.gui.GUIMachineTeleporter;
 import com.hbm.inventory.gui.GUIMachineTurbine;
 import com.hbm.inventory.gui.GUIMachineTurbofan;
 import com.hbm.inventory.gui.GUIMachineUF6Tank;
+import com.hbm.inventory.gui.GUINukeBoy;
+import com.hbm.inventory.gui.GUINukeCustom;
 import com.hbm.inventory.gui.GUINukeFleija;
 import com.hbm.inventory.gui.GUINukeFurnace;
+import com.hbm.inventory.gui.GUINukeGadget;
 import com.hbm.inventory.gui.GUINukeMan;
+import com.hbm.inventory.gui.GUINukeMike;
+import com.hbm.inventory.gui.GUINukeN2;
+import com.hbm.inventory.gui.GUINukeN45;
+import com.hbm.inventory.gui.GUINukePrototype;
+import com.hbm.inventory.gui.GUINukeSolinium;
+import com.hbm.inventory.gui.GUINukeTsar;
 import com.hbm.inventory.gui.GUIRailgun;
 import com.hbm.inventory.gui.GUIReactorControl;
 import com.hbm.inventory.gui.GUIReactorMultiblock;
@@ -113,9 +135,19 @@ import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIWasteDrum;
 import com.hbm.inventory.gui.GUIWatzCore;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.bomb.TileEntityBombMulti;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
+import com.hbm.tileentity.bomb.TileEntityNukeBoy;
+import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
+import com.hbm.tileentity.bomb.TileEntityNukeGadget;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
+import com.hbm.tileentity.bomb.TileEntityNukeMike;
+import com.hbm.tileentity.bomb.TileEntityNukeN2;
+import com.hbm.tileentity.bomb.TileEntityNukeN45;
+import com.hbm.tileentity.bomb.TileEntityNukePrototype;
+import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
+import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.machine.TileEntityConverterHeRf;
 import com.hbm.tileentity.machine.TileEntityConverterRfHe;
@@ -158,6 +190,7 @@ import com.hbm.tileentity.machine.TileEntityMachineSchrabidiumTransmutator;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntityMachineShredder;
 import com.hbm.tileentity.machine.TileEntityMachineSiren;
+import com.hbm.tileentity.machine.TileEntityMachineTeleLinker;
 import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
@@ -422,6 +455,50 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityFWatzCore){
 					return new ContainerFWatzCore(player.inventory, (TileEntityFWatzCore)entity);
 				}
+			case ModBlocks.guiID_nuke_gadget:
+				if(entity instanceof TileEntityNukeGadget){
+					return new ContainerNukeGadget(player.inventory, (TileEntityNukeGadget)entity);
+				}
+			case ModBlocks.guiID_nuke_boy:
+				if(entity instanceof TileEntityNukeBoy){
+					return new ContainerNukeBoy(player.inventory, (TileEntityNukeBoy)entity);
+				}
+			case ModBlocks.guiID_nuke_mike:
+				if(entity instanceof TileEntityNukeMike){
+					return new ContainerNukeMike(player.inventory, (TileEntityNukeMike)entity);
+				}
+			case ModBlocks.guiID_nuke_tsar:
+				if(entity instanceof TileEntityNukeTsar){
+					return new ContainerNukeTsar(player.inventory, (TileEntityNukeTsar)entity);
+				}
+			case ModBlocks.guiID_nuke_prototype:
+				if(entity instanceof TileEntityNukePrototype){
+					return new ContainerNukePrototype(player.inventory, (TileEntityNukePrototype)entity);
+				}
+			case ModBlocks.guiID_nuke_solinium:
+				if(entity instanceof TileEntityNukeSolinium){
+					return new ContainerNukeSolinium(player.inventory, (TileEntityNukeSolinium)entity);
+				}
+			case ModBlocks.guiID_nuke_n2:
+				if(entity instanceof TileEntityNukeN2){
+					return new ContainerNukeN2(player.inventory, (TileEntityNukeN2)entity);
+				}
+			case ModBlocks.guiID_nuke_n45:
+				if(entity instanceof TileEntityNukeN45){
+					return new ContainerNukeN45(player.inventory, (TileEntityNukeN45)entity);
+				}
+			case ModBlocks.guiID_nuke_custom:
+				if(entity instanceof TileEntityNukeCustom){
+					return new ContainerNukeCustom(player.inventory, (TileEntityNukeCustom)entity);
+				}
+			case ModBlocks.guiID_bomb_multi:
+				if(entity instanceof TileEntityBombMulti){
+					return new ContainerBombMulti(player.inventory, (TileEntityBombMulti)entity);
+				}
+			case ModBlocks.guiID_telelinker:
+				if(entity instanceof TileEntityMachineTeleLinker){
+					return new ContainerMachineTeleLinker(player.inventory, (TileEntityMachineTeleLinker)entity);
+				}
 			}
 		
 		}
@@ -671,6 +748,50 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_fwatz_multiblock:
 				if(entity instanceof TileEntityFWatzCore){
 					return new GUIFWatzCore(player.inventory, (TileEntityFWatzCore)entity);
+				}
+			case ModBlocks.guiID_nuke_gadget:
+				if(entity instanceof TileEntityNukeGadget){
+					return new GUINukeGadget(player.inventory, (TileEntityNukeGadget)entity);
+				}
+			case ModBlocks.guiID_nuke_boy:
+				if(entity instanceof TileEntityNukeBoy){
+					return new GUINukeBoy(player.inventory, (TileEntityNukeBoy)entity);
+				}
+			case ModBlocks.guiID_nuke_mike:
+				if(entity instanceof TileEntityNukeMike){
+					return new GUINukeMike(player.inventory, (TileEntityNukeMike)entity);
+				}
+			case ModBlocks.guiID_nuke_tsar:
+				if(entity instanceof TileEntityNukeTsar){
+					return new GUINukeTsar(player.inventory, (TileEntityNukeTsar)entity);
+				}
+			case ModBlocks.guiID_nuke_prototype:
+				if(entity instanceof TileEntityNukePrototype){
+					return new GUINukePrototype(player.inventory, (TileEntityNukePrototype)entity);
+				}
+			case ModBlocks.guiID_nuke_solinium:
+				if(entity instanceof TileEntityNukeSolinium){
+					return new GUINukeSolinium(player.inventory, (TileEntityNukeSolinium)entity);
+				}
+			case ModBlocks.guiID_nuke_n2:
+				if(entity instanceof TileEntityNukeN2){
+					return new GUINukeN2(player.inventory, (TileEntityNukeN2)entity);
+				}
+			case ModBlocks.guiID_nuke_n45:
+				if(entity instanceof TileEntityNukeN45){
+					return new GUINukeN45(player.inventory, (TileEntityNukeN45)entity);
+				}
+			case ModBlocks.guiID_nuke_custom:
+				if(entity instanceof TileEntityNukeCustom){
+					return new GUINukeCustom(player.inventory, (TileEntityNukeCustom)entity);
+				}
+			case ModBlocks.guiID_bomb_multi:
+				if(entity instanceof TileEntityBombMulti){
+					return new GUIBombMulti(player.inventory, (TileEntityBombMulti)entity);
+				}
+			case ModBlocks.guiID_telelinker:
+				if(entity instanceof TileEntityMachineTeleLinker){
+					return new GUIMachineTeleLinker(player.inventory, (TileEntityMachineTeleLinker)entity);
 				}
 			}
 

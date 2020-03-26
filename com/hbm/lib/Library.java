@@ -460,57 +460,56 @@ public class Library {
 		TileEntity tileentity = worldObj.getTileEntity(pos);
 
 		// Factories
-		// TODO update this when I add more machines
-		/*if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlock(x, y + 1, z) == ModBlocks.factory_titanium_core)
+		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlockState(pos.up()).getBlock() == ModBlocks.factory_titanium_core)
 		{
-			tileentity = worldObj.getTileEntity(x, y + 1, z);
+			tileentity = worldObj.getTileEntity(pos.up());
 		}
-		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlock(x, y - 1, z) == ModBlocks.factory_titanium_core)
+		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlockState(pos.down()).getBlock() == ModBlocks.factory_titanium_core)
 		{
-			tileentity = worldObj.getTileEntity(x, y - 1, z);
+			tileentity = worldObj.getTileEntity(pos.down());
 		}
-		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlock(x, y + 1, z) == ModBlocks.factory_advanced_core)
+		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlockState(pos.up()).getBlock() == ModBlocks.factory_advanced_core)
 		{
-			tileentity = worldObj.getTileEntity(x, y + 1, z);
+			tileentity = worldObj.getTileEntity(pos.up());
 		}
-		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlock(x, y - 1, z) == ModBlocks.factory_advanced_core)
+		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlockState(pos.down()).getBlock() == ModBlocks.factory_advanced_core)
 		{
-			tileentity = worldObj.getTileEntity(x, y - 1, z);
+			tileentity = worldObj.getTileEntity(pos.down());
 		}
 		//Derrick
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x + 1, y, z) == ModBlocks.machine_well)
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(1, 0, 0)).getBlock() == ModBlocks.machine_well)
 		{
-			tileentity = worldObj.getTileEntity(x + 1, y, z);
+			tileentity = worldObj.getTileEntity(pos.add(1, 0, 0));
 		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x - 1, y, z) == ModBlocks.machine_well)
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(-1, 0, 0)).getBlock() == ModBlocks.machine_well)
 		{
-			tileentity = worldObj.getTileEntity(x - 1, y, z);
+			tileentity = worldObj.getTileEntity(pos.add(-1, 0, 0));
 		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x, y, z + 1) == ModBlocks.machine_well)
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(0, 0, 1)).getBlock() == ModBlocks.machine_well)
 		{
-			tileentity = worldObj.getTileEntity(x, y, z + 1);
+			tileentity = worldObj.getTileEntity(pos.add(0, 0, 1));
 		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlock(x, y, z - 1) == ModBlocks.machine_well)
+		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(0, 0, -1)).getBlock() == ModBlocks.machine_well)
 		{
-			tileentity = worldObj.getTileEntity(x, y, z - 1);
+			tileentity = worldObj.getTileEntity(pos.add(0, 0, -1));
 		}
 		//Mining Drill
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x + 1, y, z) == ModBlocks.machine_drill)
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(1, 0, 0)).getBlock() == ModBlocks.machine_drill)
 		{
-			tileentity = worldObj.getTileEntity(x + 1, y, z);
+			tileentity = worldObj.getTileEntity(pos.add(1, 0, 0));
 		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x - 1, y, z) == ModBlocks.machine_drill)
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(-1, 0, 0)).getBlock() == ModBlocks.machine_drill)
 		{
-			tileentity = worldObj.getTileEntity(x - 1, y, z);
+			tileentity = worldObj.getTileEntity(pos.add(-1, 0, 0));
 		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x, y, z + 1) == ModBlocks.machine_drill)
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(0, 0, 1)).getBlock() == ModBlocks.machine_drill)
 		{
-			tileentity = worldObj.getTileEntity(x, y, z + 1);
+			tileentity = worldObj.getTileEntity(pos.add(0, 0, 1));
 		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlock(x, y, z - 1) == ModBlocks.machine_drill)
+		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(0, 0, -1)).getBlock() == ModBlocks.machine_drill)
 		{
-			tileentity = worldObj.getTileEntity(x, y, z - 1);
-		}*/
+			tileentity = worldObj.getTileEntity(pos.add(0, 0, -1));
+		}
 		// Assembler
 		if(block == ModBlocks.dummy_port_assembler) {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy) worldObj.getTileEntity(pos)).target);
@@ -525,12 +524,12 @@ public class Library {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
 		//Pumpjack
-		/*if(block == ModBlocks.dummy_port_pumpjack)
+		if(block == ModBlocks.dummy_port_pumpjack)
 		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
 		//AMS Limiter
-		if(block == ModBlocks.dummy_port_ams_limiter)
+		/*if(block == ModBlocks.dummy_port_ams_limiter)
 		{
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
 		}
@@ -539,6 +538,7 @@ public class Library {
 		{
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
 		}
+		//TODO launchers
 		//Launchers
 		if(block == ModBlocks.dummy_port_compact_launcher || block == ModBlocks.dummy_port_launch_table)
 		{
@@ -683,21 +683,20 @@ public class Library {
 		Block b = world.getBlockState(pos).getBlock();
 		// TODO update this when I add more machines
 		if((tileentity != null && (tileentity instanceof IConductor || tileentity instanceof IConsumer || tileentity instanceof ISource)) ||
-				// b == ModBlocks.fusion_center ||
-				// b == ModBlocks.factory_titanium_conductor ||
-				// b == ModBlocks.factory_advanced_conductor ||
-				// b == ModBlocks.watz_conductor ||
-				// b == ModBlocks.fwatz_hatch ||
-				// b == ModBlocks.dummy_port_igenerator ||
-				// b == ModBlocks.dummy_port_cyclotron ||
-				// b == ModBlocks.dummy_port_well ||
-				// b == ModBlocks.dummy_port_flare ||
-				// b == ModBlocks.dummy_port_drill ||
+				 b == ModBlocks.fusion_center ||
+				 b == ModBlocks.factory_titanium_conductor ||
+				 b == ModBlocks.factory_advanced_conductor ||
+				 b == ModBlocks.watz_conductor ||
+				 b == ModBlocks.fwatz_hatch ||
+				 b == ModBlocks.dummy_port_cyclotron ||
+				 b == ModBlocks.dummy_port_well ||
+				 b == ModBlocks.dummy_port_flare ||
+				 b == ModBlocks.dummy_port_drill ||
 		b == ModBlocks.dummy_port_assembler || b == ModBlocks.dummy_port_chemplant ||
 		 b == ModBlocks.dummy_port_refinery ||
-		// b == ModBlocks.dummy_port_pumpjack ||
-		// b == ModBlocks.dummy_port_turbofan ||
-		// b == ModBlocks.dummy_port_ams_limiter ||
+		 b == ModBlocks.dummy_port_pumpjack ||
+		 b == ModBlocks.dummy_port_turbofan ||
+		 //b == ModBlocks.dummy_port_ams_limiter ||
 		// b == ModBlocks.dummy_port_ams_emitter ||
 		// b == ModBlocks.dummy_port_ams_base ||
 		 b == ModBlocks.dummy_port_radgen //||
@@ -741,10 +740,10 @@ public class Library {
 		}
 	}
 
-	////// ////// ////// ////// ////// //// ////// ////// //////
-	// // // // // // // // // // //
-	//// ////// ///// // //// //// //// // // // //
-	// // // // // // // // // // // // //
-	////// // // ///// // ////// // // ////// ////// //////
+	//////  //////  //////  //////  //////  ////        //////  //////  //////
+	//      //  //  //        //    //      //  //      //      //      //    
+	////    //////  /////     //    ////    ////        ////    //  //  //  //
+	//      //  //     //     //    //      //  //      //      //  //  //  //
+	//////  //  //  /////     //    //////  //  //      //////  //////  //////
 
 }

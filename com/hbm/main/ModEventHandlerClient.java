@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.flashlight.Flashlight;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
@@ -37,6 +38,7 @@ import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemFluidTank;
 import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.items.weapon.ItemGunBase;
+import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -774,17 +776,15 @@ public class ModEventHandlerClient {
 		}
 
 		if(event.getType() == ElementType.HOTBAR) {
-			// TODO geiger counter
-			/*if(player.inventory.hasItem(ModItems.geiger_counter)) {
+			if(Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
 			
 				float rads = 0;
-				float abs = 0;
 			
-				RadEntitySavedData data = RadEntitySavedData.getData(player.worldObj);
-				rads = data.getRadFromEntity(player);
+				if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+					rads = player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).getRads();
 				
 				RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
-			}*/
+			}
 		}
 
 		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {

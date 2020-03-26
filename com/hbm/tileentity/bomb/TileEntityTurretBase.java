@@ -106,13 +106,11 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 				use = 0;
 			}
 		}
-
-		if (!world.isRemote)
+		if (!world.isRemote){
 			detectAndSendChanges();
-		// not sure if this is needed, ask bob
-		// if(!world.isRemote)
-		// PacketDispatcher.wrapper.sendToAll(new TETurretPacket(pos.getX(),
-		// pos.getY(), pos.getZ(), rotationYaw, rotationPitch));
+			//if(!isAI)
+				//PacketDispatcher.wrapper.sendToAllAround(new TETurretPacket2(pos.getX(), pos.getY(), pos.getZ(), rotationYaw, rotationPitch), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
+		}
 
 	}
 

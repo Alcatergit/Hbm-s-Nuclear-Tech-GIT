@@ -6,6 +6,8 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.grenade.EntityGrenadeASchrab;
+import com.hbm.entity.grenade.EntityGrenadeNuclear;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
@@ -123,8 +125,7 @@ public class ExplosionNukeGeneric {
 		double d5;
 		double d6;
 		double d7;
-		double wat = bombStartStrength
-		;
+		double wat = bombStartStrength;
 
 		// bombStartStrength *= 2.0F;
 		i = MathHelper.floor(x - wat - 1.0D);
@@ -148,9 +149,9 @@ public class ExplosionNukeGeneric {
 				if (d9 < wat && !(entity instanceof EntityOcelot) &&
 					//TODO All this random nuke stuff
 						!(entity instanceof EntityNukeCloudSmall)
-					/*	&& !(entity instanceof EntityMIRV*/ && !(entity instanceof EntityMiniNuke)
-						&& !(entity instanceof EntityMiniMIRV)/* && !(entity instanceof EntityGrenadeASchrab)*/
-					//	&& !(entity instanceof EntityGrenadeNuclear) 
+						/*&& !(entity instanceof EntityMIRV */&& !(entity instanceof EntityMiniNuke)
+						&& !(entity instanceof EntityMiniMIRV) && !(entity instanceof EntityGrenadeASchrab)
+						&& !(entity instanceof EntityGrenadeNuclear) 
 						&& !(entity instanceof EntityExplosiveBeam)
 						&& !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
 						{
@@ -271,11 +272,10 @@ public class ExplosionNukeGeneric {
 						entity.setDead();
 						return true;
 					}
-					//TODO antimatter cluster
-					/*if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.pellet_antimatter) {
+					if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.pellet_antimatter) {
 						entity.setDead();
 						return true;
-					}*/
+					}
 						
 					if (!(entity instanceof EntityPlayerMP && ((EntityPlayerMP) entity).interactionManager.getGameType() == GameType.CREATIVE)) {
 						entity.attackEntityFrom(ModDamageSource.blackhole, 1000F);

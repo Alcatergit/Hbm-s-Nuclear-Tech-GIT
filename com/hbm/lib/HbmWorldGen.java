@@ -205,7 +205,6 @@ public class HbmWorldGen implements IWorldGenerator {
 		// TODO Structures.
 		if(MainRegistry.enableDungeons) {
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
-
 			if(rand.nextInt(25) == 0) {
 				int randPosX = i + rand.nextInt(16);
 				int randPosY = rand.nextInt(25);

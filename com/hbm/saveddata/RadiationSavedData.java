@@ -1,6 +1,7 @@
 package com.hbm.saveddata;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.hbm.entity.particle.EntityFogFX;
@@ -170,9 +171,11 @@ public class RadiationSavedData extends WorldSavedData {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("radCount", contamination.size());
-		
-		for(int i = 0; i < contamination.size(); i++) {
-			contamination.get(i).writeToNBT(nbt, i);
+		int i = 0;
+		Iterator<RadiationSaveStructure> itr = contamination.values().iterator();
+		while(itr.hasNext()){
+			itr.next().writeToNBT(nbt, i);
+			i++;
 		}
 		return nbt;
 	}

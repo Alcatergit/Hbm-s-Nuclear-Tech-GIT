@@ -12,10 +12,8 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerMachineFluidTank extends Container {
 
 	private TileEntityMachineFluidTank diFurnace;
-	private int power;
 	
 	public ContainerMachineFluidTank(InventoryPlayer invPlayer, TileEntityMachineFluidTank tedf) {
-		power = 0;
 		//What the heck is a diFurnace
 		diFurnace = tedf;
 		

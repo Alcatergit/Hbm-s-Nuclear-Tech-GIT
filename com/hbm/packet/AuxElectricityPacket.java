@@ -2,7 +2,6 @@ package com.hbm.packet;
 
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
-import com.hbm.tileentity.machine.TileEntityMachineBattery;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

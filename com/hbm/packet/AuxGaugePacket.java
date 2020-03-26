@@ -3,6 +3,7 @@ package com.hbm.packet;
 
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.bomb.TileEntityNukeN45;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
@@ -19,7 +20,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -215,12 +215,12 @@ public class AuxGaugePacket implements IMessage {
 						
 						nuke.falls = m.value == 1;
 					}
-					if (te instanceof TileEntityNukeN45) {
+					*/if (te instanceof TileEntityNukeN45) {
 						TileEntityNukeN45 nuke = (TileEntityNukeN45)te;
 						
 						nuke.primed = m.value == 1;
 					}
-					*/if (te instanceof TileEntityMachineReactorLarge) {
+					if (te instanceof TileEntityMachineReactorLarge) {
 						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)te;
 
 						if(m.id == 0)

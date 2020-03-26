@@ -60,7 +60,6 @@ public class ItemTurretControl extends Item {
 						if (!turret.isAI) {
 							turret.rotationYaw = player.rotationYaw;
 							turret.rotationPitch = player.rotationPitch;
-
 							if (turret.rotationPitch < -60)
 								turret.rotationPitch = -60;
 							if (turret.rotationPitch > 30)

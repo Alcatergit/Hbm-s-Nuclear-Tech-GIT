@@ -27,8 +27,8 @@ public class RenderRocketTurret extends TileEntitySpecialRenderer<TileEntityTurr
 		if((te.rotationYaw < 0 && te.oldRotationYaw > 0)){
 			te.oldRotationYaw = te.oldRotationYaw-360;
 		}*/
-		double yaw = te.oldRotationYaw /*+ (te.rotationYaw - te.oldRotationYaw)*partialTicks*/;
-		double pitch = te.oldRotationPitch /*+ (te.rotationPitch - te.oldRotationPitch)*partialTicks*/;
+		double yaw = te.rotationYaw/*te.oldRotationYaw + (te.rotationYaw - te.oldRotationYaw)*partialTicks*/;
+		double pitch = te.rotationPitch/*te.oldRotationPitch /*+ (te.rotationPitch - te.oldRotationPitch)*partialTicks*/;
 		
 		this.bindTexture(ResourceManager.turret_heavy_base_tex);
         ResourceManager.turret_heavy_base.renderAll();

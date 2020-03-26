@@ -5,8 +5,6 @@ import java.util.List;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 
-import glmath.glm.vec._3.Vec3;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;

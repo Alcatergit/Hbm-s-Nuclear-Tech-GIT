@@ -26,7 +26,7 @@ import net.minecraftforge.fluids.FluidUtil;
 public class ItemFluidCanister extends Item implements IHasCustomModel {
 
 	public static final ModelResourceLocation fluidCanisterModel = new ModelResourceLocation(RefStrings.MODID + ":canister_empty", "inventory");
-	private int cap;
+	public int cap;
 	
 	
 	public ItemFluidCanister(String s, int cap){
@@ -79,5 +79,13 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	@Override
 	public ModelResourceLocation getResourceLocation() {
 		return fluidCanisterModel;
+	}
+	
+	public static boolean isFullCanister(ItemStack stack, Fluid fluid){
+		if(stack != null){
+			if(stack.getItem() instanceof ItemFluidCanister && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == ((ItemFluidCanister)stack.getItem()).cap)
+				return true;
+		}
+		return false;
 	}
 }
