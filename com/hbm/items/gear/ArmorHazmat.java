@@ -67,7 +67,7 @@ public class ArmorHazmat extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks) {
-		if(this != ModItems.hazmat_helmet /*&& this != ModItems.hazmat_paa_helmet*/)
+		if(this != ModItems.hazmat_helmet && this != ModItems.hazmat_paa_helmet)
     		return;
 		GlStateManager.disableDepth();
         GL11.glDepthMask(false);

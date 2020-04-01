@@ -1,7 +1,10 @@
 package com.hbm.packet;
 
+import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
@@ -117,7 +120,7 @@ public class AuxButtonPacket implements IMessage {
 						}
 					}
 					
-					/*if (te instanceof TileEntityMachineMissileAssembly) {
+					if (te instanceof TileEntityMachineMissileAssembly) {
 						TileEntityMachineMissileAssembly assembly = (TileEntityMachineMissileAssembly)te;
 						
 						assembly.construct();
@@ -127,7 +130,7 @@ public class AuxButtonPacket implements IMessage {
 						TileEntityLaunchTable launcher = (TileEntityLaunchTable)te;
 						
 						launcher.padSize = PartSize.values()[m.value];
-					}*/
+					}
 					
 					if (te instanceof TileEntityRailgun) {
 						TileEntityRailgun gun = (TileEntityRailgun)te;

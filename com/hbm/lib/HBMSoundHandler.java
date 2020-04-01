@@ -114,6 +114,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent vaultScrapeNew;
 	public static SoundEvent vaultThudNew;
 	public static SoundEvent minerOperate;
+	public static SoundEvent missileAssembly2;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -246,6 +247,7 @@ public final class HBMSoundHandler {
 		vaultScrapeNew = register("block.vaultScrapeNew");
 		vaultThudNew = register("block.vaultThudNew");
 		minerOperate = register("block.minerOperate");
+		missileAssembly2 = register("block.missileAssembly2");
 		
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};

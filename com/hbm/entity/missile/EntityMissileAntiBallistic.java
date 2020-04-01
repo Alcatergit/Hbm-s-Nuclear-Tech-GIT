@@ -63,7 +63,7 @@ public class EntityMissileAntiBallistic extends Entity {
 				List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 5, posY - 5, posZ - 5, posX + 5, posY + 5, posZ + 5));
 
 				for(Entity e : list) {
-					if(e instanceof EntityMissileBaseAdvanced) {
+					if(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom) {
 						ExplosionLarge.explode(world, posX, posY, posZ, 15F, true, false, true);
 						this.setDead();
 						return;
@@ -120,7 +120,7 @@ public class EntityMissileAntiBallistic extends Entity {
 		double closest = 1000D;
 		
 		for(Entity e : list) {
-			if(e instanceof EntityMissileBaseAdvanced) {
+			if(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom) {
 				double dis = Math.sqrt(Math.pow(e.posX - posX, 2) + Math.pow(e.posY - posY, 2) + Math.pow(e.posZ - posZ, 2));
 				
 				if(dis < closest) {

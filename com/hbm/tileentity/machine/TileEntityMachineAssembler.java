@@ -609,19 +609,18 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	
 	private void detectAndSendChanges() {
 		
-		PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
-		
+		PacketDispatcher.wrapper.sendToAllTracking(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllTracking(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		
 		boolean mark = false;
 		if(detectPower != power){
 			mark = true;
 			detectPower = power;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
 		if(detectIsProgressing != isProgressing){
 			mark = true;
 			detectIsProgressing = isProgressing;
-			PacketDispatcher.wrapper.sendToAllAround(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
 		if(mark)
 			markDirty();

@@ -1,8 +1,12 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerAMSBase;
+import com.hbm.inventory.container.ContainerAMSEmitter;
+import com.hbm.inventory.container.ContainerAMSLimiter;
 import com.hbm.inventory.container.ContainerBombMulti;
 import com.hbm.inventory.container.ContainerCentrifuge;
+import com.hbm.inventory.container.ContainerCompactLauncher;
 import com.hbm.inventory.container.ContainerConverterHeRf;
 import com.hbm.inventory.container.ContainerConverterRfHe;
 import com.hbm.inventory.container.ContainerCoreAdvanced;
@@ -14,6 +18,7 @@ import com.hbm.inventory.container.ContainerElectricFurnace;
 import com.hbm.inventory.container.ContainerFWatzCore;
 import com.hbm.inventory.container.ContainerFusionMultiblock;
 import com.hbm.inventory.container.ContainerLaunchPadTier1;
+import com.hbm.inventory.container.ContainerLaunchTable;
 import com.hbm.inventory.container.ContainerMachineArcFurnace;
 import com.hbm.inventory.container.ContainerMachineAssembler;
 import com.hbm.inventory.container.ContainerMachineBattery;
@@ -30,6 +35,7 @@ import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.inventory.container.ContainerMachineGenerator;
 import com.hbm.inventory.container.ContainerMachineKeyForge;
 import com.hbm.inventory.container.ContainerMachineMiningDrill;
+import com.hbm.inventory.container.ContainerMachineMissileAssembly;
 import com.hbm.inventory.container.ContainerMachineOilWell;
 import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.inventory.container.ContainerMachinePumpjack;
@@ -67,6 +73,9 @@ import com.hbm.inventory.container.ContainerSafe;
 import com.hbm.inventory.container.ContainerUF6Tank;
 import com.hbm.inventory.container.ContainerWasteDrum;
 import com.hbm.inventory.container.ContainerWatzCore;
+import com.hbm.inventory.gui.GUIAMSBase;
+import com.hbm.inventory.gui.GUIAMSEmitter;
+import com.hbm.inventory.gui.GUIAMSLimiter;
 import com.hbm.inventory.gui.GUIBombMulti;
 import com.hbm.inventory.gui.GUIConverterHeRf;
 import com.hbm.inventory.gui.GUIConverterRfHe;
@@ -86,6 +95,7 @@ import com.hbm.inventory.gui.GUIMachineCMBFactory;
 import com.hbm.inventory.gui.GUIMachineCentrifuge;
 import com.hbm.inventory.gui.GUIMachineChemplant;
 import com.hbm.inventory.gui.GUIMachineCoal;
+import com.hbm.inventory.gui.GUIMachineCompactLauncher;
 import com.hbm.inventory.gui.GUIMachineCyclotron;
 import com.hbm.inventory.gui.GUIMachineEPress;
 import com.hbm.inventory.gui.GUIMachineElectricFurnace;
@@ -94,7 +104,9 @@ import com.hbm.inventory.gui.GUIMachineGasCent;
 import com.hbm.inventory.gui.GUIMachineGasFlare;
 import com.hbm.inventory.gui.GUIMachineGenerator;
 import com.hbm.inventory.gui.GUIMachineKeyForge;
+import com.hbm.inventory.gui.GUIMachineLaunchTable;
 import com.hbm.inventory.gui.GUIMachineMiningDrill;
+import com.hbm.inventory.gui.GUIMachineMissileAssembly;
 import com.hbm.inventory.gui.GUIMachineOilWell;
 import com.hbm.inventory.gui.GUIMachinePress;
 import com.hbm.inventory.gui.GUIMachinePuF6Tank;
@@ -136,7 +148,9 @@ import com.hbm.inventory.gui.GUIWasteDrum;
 import com.hbm.inventory.gui.GUIWatzCore;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
+import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
+import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
@@ -149,6 +163,9 @@ import com.hbm.tileentity.bomb.TileEntityNukePrototype;
 import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityAMSBase;
+import com.hbm.tileentity.machine.TileEntityAMSEmitter;
+import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityConverterHeRf;
 import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
@@ -176,6 +193,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineKeyForge;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
+import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
@@ -499,6 +517,30 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineTeleLinker){
 					return new ContainerMachineTeleLinker(player.inventory, (TileEntityMachineTeleLinker)entity);
 				}
+			case ModBlocks.guiID_missile_assembly:
+				if(entity instanceof TileEntityMachineMissileAssembly){
+					return new ContainerMachineMissileAssembly(player.inventory, (TileEntityMachineMissileAssembly)entity);
+				}
+			case ModBlocks.guiID_compact_launcher:
+				if(entity instanceof TileEntityCompactLauncher){
+					return new ContainerCompactLauncher(player.inventory, (TileEntityCompactLauncher)entity);
+				}
+			case ModBlocks.guiID_launch_table:
+				if(entity instanceof TileEntityLaunchTable){
+					return new ContainerLaunchTable(player.inventory, (TileEntityLaunchTable)entity);
+				}
+			case ModBlocks.guiID_ams_base:
+				if(entity instanceof TileEntityAMSBase){
+					return new ContainerAMSBase(player.inventory, (TileEntityAMSBase)entity);
+				}
+			case ModBlocks.guiID_ams_emitter:
+				if(entity instanceof TileEntityAMSEmitter){
+					return new ContainerAMSEmitter(player.inventory, (TileEntityAMSEmitter)entity);
+				}
+			case ModBlocks.guiID_ams_limiter:
+				if(entity instanceof TileEntityAMSLimiter){
+					return new ContainerAMSLimiter(player.inventory, (TileEntityAMSLimiter)entity);
+				}
 			}
 		
 		}
@@ -792,6 +834,30 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_telelinker:
 				if(entity instanceof TileEntityMachineTeleLinker){
 					return new GUIMachineTeleLinker(player.inventory, (TileEntityMachineTeleLinker)entity);
+				}
+			case ModBlocks.guiID_missile_assembly:
+				if(entity instanceof TileEntityMachineMissileAssembly){
+					return new GUIMachineMissileAssembly(player.inventory, (TileEntityMachineMissileAssembly)entity);
+				}
+			case ModBlocks.guiID_compact_launcher:
+				if(entity instanceof TileEntityCompactLauncher){
+					return new GUIMachineCompactLauncher(player.inventory, (TileEntityCompactLauncher)entity);
+				}
+			case ModBlocks.guiID_launch_table:
+				if(entity instanceof TileEntityLaunchTable){
+					return new GUIMachineLaunchTable(player.inventory, (TileEntityLaunchTable)entity);
+				}
+			case ModBlocks.guiID_ams_base:
+				if(entity instanceof TileEntityAMSBase){
+					return new GUIAMSBase(player.inventory, (TileEntityAMSBase)entity);
+				}
+			case ModBlocks.guiID_ams_emitter:
+				if(entity instanceof TileEntityAMSEmitter){
+					return new GUIAMSEmitter(player.inventory, (TileEntityAMSEmitter)entity);
+				}
+			case ModBlocks.guiID_ams_limiter:
+				if(entity instanceof TileEntityAMSLimiter){
+					return new GUIAMSLimiter(player.inventory, (TileEntityAMSLimiter)entity);
 				}
 			}
 

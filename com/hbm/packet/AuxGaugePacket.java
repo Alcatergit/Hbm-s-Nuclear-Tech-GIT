@@ -1,10 +1,19 @@
 package com.hbm.packet;
 
 
+import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
+import com.hbm.tileentity.bomb.TileEntityLaunchTable;
+import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeN45;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
+import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
+import com.hbm.tileentity.machine.TileEntityAMSBase;
+import com.hbm.tileentity.machine.TileEntityAMSEmitter;
+import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
@@ -15,6 +24,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
+import com.hbm.tileentity.machine.TileEntityRadioRec;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -81,9 +91,7 @@ public class AuxGaugePacket implements IMessage {
 				try {
 					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-					//Drillgon200: Right then... this should be handled with an interface.
-					
-					/*if (te instanceof TileEntityAMSLimiter) {
+					if (te instanceof TileEntityAMSLimiter) {
 						TileEntityAMSLimiter limiter = (TileEntityAMSLimiter)te;
 						if(m.id == 0)
 							limiter.locked = m.value == 1;
@@ -119,7 +127,7 @@ public class AuxGaugePacket implements IMessage {
 						
 						cwis.rotation = m.value;
 					}
-					*/if (te instanceof TileEntityMachineSeleniumEngine) {
+					if (te instanceof TileEntityMachineSeleniumEngine) {
 						TileEntityMachineSeleniumEngine selenium = (TileEntityMachineSeleniumEngine)te;
 
 						if(m.id == 0)
@@ -161,8 +169,8 @@ public class AuxGaugePacket implements IMessage {
 							radio.isOn = (m.value == 1);
 						if(m.id == 1)
 							radio.freq = ((double)m.value) / 10D;
-					}
-					*/if (te instanceof TileEntityMachineGasCent) {
+					}*/
+					if (te instanceof TileEntityMachineGasCent) {
 						TileEntityMachineGasCent cent = (TileEntityMachineGasCent)te;
 
 						if(m.id == 0)
@@ -210,12 +218,12 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 0)
 							boiler.heat = m.value;
 					}
-					/*if (te instanceof TileEntityNukeCustom) {
+					if (te instanceof TileEntityNukeCustom) {
 						TileEntityNukeCustom nuke = (TileEntityNukeCustom)te;
 						
 						nuke.falls = m.value == 1;
 					}
-					*/if (te instanceof TileEntityNukeN45) {
+					if (te instanceof TileEntityNukeN45) {
 						TileEntityNukeN45 nuke = (TileEntityNukeN45)te;
 						
 						nuke.primed = m.value == 1;
@@ -226,7 +234,7 @@ public class AuxGaugePacket implements IMessage {
 						if(m.id == 0)
 							reactor.size = m.value;
 					}
-					/*if (te instanceof TileEntityCompactLauncher) {
+					if (te instanceof TileEntityCompactLauncher) {
 						TileEntityCompactLauncher launcher = (TileEntityCompactLauncher)te;
 						
 						launcher.solid = m.value;
@@ -238,7 +246,7 @@ public class AuxGaugePacket implements IMessage {
 							launcher.solid = m.value;
 						if(m.id == 1)
 							launcher.padSize = PartSize.values()[m.value];
-					}*/
+					}
 					if (te != null && te instanceof TileEntityRailgun) {
 						
 						TileEntityRailgun gen = (TileEntityRailgun) te;

@@ -4,7 +4,9 @@ import java.io.File;
 
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -25,7 +27,7 @@ public class ServerProxy
 	
 	public void spawnSFX(World world, double posX, double posY, double posZ, int type, Vec3 payload) { }
 
-	public void registerMissileItems() { }
+	public void registerMissileItems(IRegistry<ModelResourceLocation, IBakedModel> reg) { }
 
 	public void preInit(FMLPreInitializationEvent evt) {}
 	

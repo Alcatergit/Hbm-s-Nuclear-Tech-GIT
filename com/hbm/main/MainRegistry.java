@@ -92,6 +92,7 @@ import com.hbm.entity.missile.EntityMissileBurst;
 import com.hbm.entity.missile.EntityMissileBusterStrong;
 import com.hbm.entity.missile.EntityMissileCluster;
 import com.hbm.entity.missile.EntityMissileClusterStrong;
+import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.entity.missile.EntityMissileDoomsday;
 import com.hbm.entity.missile.EntityMissileDrill;
 import com.hbm.entity.missile.EntityMissileEMP;
@@ -156,6 +157,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.MissileStruct;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.ShredderRecipe;
 import com.hbm.items.ModItems;
@@ -167,9 +169,11 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
+import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityCrashedBomb;
 import com.hbm.tileentity.bomb.TileEntityLandmine;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
+import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
@@ -202,6 +206,9 @@ import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.deco.TileEntityVent;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
+import com.hbm.tileentity.machine.TileEntityAMSBase;
+import com.hbm.tileentity.machine.TileEntityAMSEmitter;
+import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityChlorineSeal;
@@ -241,6 +248,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineKeyForge;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
+import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
@@ -262,6 +270,7 @@ import com.hbm.tileentity.machine.TileEntityMachineTransformer;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
+import com.hbm.tileentity.machine.TileEntityMultiblock;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
@@ -307,9 +316,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.DataSerializerEntry;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -646,6 +657,13 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCrashedBomb.class, new ResourceLocation(RefStrings.MODID, "tileentity_crashed_bomb"));
 		GameRegistry.registerTileEntity(TileEntityLandmine.class, new ResourceLocation(RefStrings.MODID, "tileentity_landmine"));
 		GameRegistry.registerTileEntity(TileEntityMachineTeleLinker.class, new ResourceLocation(RefStrings.MODID, "tileentity_telelinker"));
+		GameRegistry.registerTileEntity(TileEntityMachineMissileAssembly.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_missile_assembly"));
+		GameRegistry.registerTileEntity(TileEntityCompactLauncher.class, new ResourceLocation(RefStrings.MODID, "tileentity_compact_launcher"));
+		GameRegistry.registerTileEntity(TileEntityMultiblock.class, new ResourceLocation(RefStrings.MODID, "tileentity_launcher_multiblock"));
+		GameRegistry.registerTileEntity(TileEntityLaunchTable.class, new ResourceLocation(RefStrings.MODID, "tileentity_launch_table"));
+		GameRegistry.registerTileEntity(TileEntityAMSEmitter.class, new ResourceLocation(RefStrings.MODID, "tileentity_ams_emitter"));
+		GameRegistry.registerTileEntity(TileEntityAMSLimiter.class, new ResourceLocation(RefStrings.MODID, "tileentity_ams_limiter"));
+		GameRegistry.registerTileEntity(TileEntityAMSBase.class, new ResourceLocation(RefStrings.MODID, "tileentity_ams_base"));
 		int i = 0;
 		//TODO if hunter chopper is bigger than 2 block radius, change World.MAX_ENTITY_RADIUS
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -780,6 +798,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_cloud_big"), EntityNukeCloudBig.class, "entity_nuke_cloud_big", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_explosion_advanced"), EntityNukeExplosionPlus.class, "entity_nuke_explosion_advanced", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_falling_bomb"), EntityFallingNuke.class, "entity_falling_bomb", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_custom_missile"), EntityMissileCustom.class, "entity_custom_missile", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -794,6 +813,7 @@ public class MainRegistry {
 			}
 		});
 
+		ForgeRegistries.DATA_SERIALIZERS.register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
 	}
 
 	public static void loadConfig(FMLPreInitializationEvent event) {

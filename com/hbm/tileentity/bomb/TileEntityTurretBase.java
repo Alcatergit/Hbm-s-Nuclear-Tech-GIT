@@ -6,6 +6,7 @@ import java.util.List;
 import com.hbm.blocks.bomb.TurretBase;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
+import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.lib.Library;
 import com.hbm.packet.ClientRequestUpdatePacket;
@@ -118,7 +119,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 		if (!(e instanceof EntityLivingBase) && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber))
 			return false;
 
-		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber))
+		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom) && !(e instanceof EntityBomber))
 			return false;
 		if (e instanceof EntityPlayer && players.contains((((EntityPlayer) e).getUniqueID().toString())))
 			return false;

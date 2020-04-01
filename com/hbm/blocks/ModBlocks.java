@@ -11,9 +11,11 @@ import com.hbm.blocks.bomb.BombFlameWar;
 import com.hbm.blocks.bomb.BombFloat;
 import com.hbm.blocks.bomb.BombMulti;
 import com.hbm.blocks.bomb.BombThermo;
+import com.hbm.blocks.bomb.CompactLauncher;
 import com.hbm.blocks.bomb.DetCord;
 import com.hbm.blocks.bomb.Landmine;
 import com.hbm.blocks.bomb.LaunchPad;
+import com.hbm.blocks.bomb.LaunchTable;
 import com.hbm.blocks.bomb.NukeBoy;
 import com.hbm.blocks.bomb.NukeCustom;
 import com.hbm.blocks.bomb.NukeFleija;
@@ -53,98 +55,7 @@ import com.hbm.blocks.generic.ReinforcedLamp;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.generic.YellowBarrel;
-import com.hbm.blocks.machine.BlastDoor;
-import com.hbm.blocks.machine.BlockCable;
-import com.hbm.blocks.machine.BlockConverterHeRf;
-import com.hbm.blocks.machine.BlockConverterRfHe;
-import com.hbm.blocks.machine.BlockDecon;
-import com.hbm.blocks.machine.BlockFluidDuct;
-import com.hbm.blocks.machine.BlockGasDuct;
-import com.hbm.blocks.machine.BlockHatch;
-import com.hbm.blocks.machine.BlockOilDuct;
-import com.hbm.blocks.machine.BlockReactor;
-import com.hbm.blocks.machine.BlockRotatable;
-import com.hbm.blocks.machine.BlockSeal;
-import com.hbm.blocks.machine.CableSwitch;
-import com.hbm.blocks.machine.DummyBlockAssembler;
-import com.hbm.blocks.machine.DummyBlockBlast;
-import com.hbm.blocks.machine.DummyBlockCentrifuge;
-import com.hbm.blocks.machine.DummyBlockChemplant;
-import com.hbm.blocks.machine.DummyBlockCyclotron;
-import com.hbm.blocks.machine.DummyBlockDrill;
-import com.hbm.blocks.machine.DummyBlockFlare;
-import com.hbm.blocks.machine.DummyBlockFluidTank;
-import com.hbm.blocks.machine.DummyBlockMachine;
-import com.hbm.blocks.machine.DummyBlockPumpjack;
-import com.hbm.blocks.machine.DummyBlockRadGen;
-import com.hbm.blocks.machine.DummyBlockRefinery;
-import com.hbm.blocks.machine.DummyBlockTurbofan;
-import com.hbm.blocks.machine.DummyBlockVault;
-import com.hbm.blocks.machine.DummyBlockWell;
-import com.hbm.blocks.machine.FWatzCore;
-import com.hbm.blocks.machine.FWatzHatch;
-import com.hbm.blocks.machine.FactoryCoreAdvanced;
-import com.hbm.blocks.machine.FactoryCoreTitanium;
-import com.hbm.blocks.machine.FactoryHatch;
-import com.hbm.blocks.machine.FusionCore;
-import com.hbm.blocks.machine.FusionHatch;
-import com.hbm.blocks.machine.GasDuctSolid;
-import com.hbm.blocks.machine.GeigerCounter;
-import com.hbm.blocks.machine.MachineAmgen;
-import com.hbm.blocks.machine.MachineArcFurnace;
-import com.hbm.blocks.machine.MachineAssembler;
-import com.hbm.blocks.machine.MachineBattery;
-import com.hbm.blocks.machine.MachineBoiler;
-import com.hbm.blocks.machine.MachineCMBFactory;
-import com.hbm.blocks.machine.MachineCentrifuge;
-import com.hbm.blocks.machine.MachineChemplant;
-import com.hbm.blocks.machine.MachineCoal;
-import com.hbm.blocks.machine.MachineCyclotron;
-import com.hbm.blocks.machine.MachineDiFurnace;
-import com.hbm.blocks.machine.MachineEPress;
-import com.hbm.blocks.machine.MachineElectricFurnace;
-import com.hbm.blocks.machine.MachineFluidTank;
-import com.hbm.blocks.machine.MachineGasCent;
-import com.hbm.blocks.machine.MachineGasFlare;
-import com.hbm.blocks.machine.MachineGenerator;
-import com.hbm.blocks.machine.MachineKeyForge;
-import com.hbm.blocks.machine.MachineMiningDrill;
-import com.hbm.blocks.machine.MachineNukeFurnace;
-import com.hbm.blocks.machine.MachineOilWell;
-import com.hbm.blocks.machine.MachinePress;
-import com.hbm.blocks.machine.MachinePuF6Tank;
-import com.hbm.blocks.machine.MachinePumpjack;
-import com.hbm.blocks.machine.MachineRTG;
-import com.hbm.blocks.machine.MachineRadGen;
-import com.hbm.blocks.machine.MachineReactor;
-import com.hbm.blocks.machine.MachineReactorControl;
-import com.hbm.blocks.machine.MachineReactorSmall;
-import com.hbm.blocks.machine.MachineRefinery;
-import com.hbm.blocks.machine.MachineRtgFurnace;
-import com.hbm.blocks.machine.MachineSchrabidiumTransmutator;
-import com.hbm.blocks.machine.MachineSeleniumEngine;
-import com.hbm.blocks.machine.MachineShredder;
-import com.hbm.blocks.machine.MachineSiren;
-import com.hbm.blocks.machine.MachineTeleLinker;
-import com.hbm.blocks.machine.MachineTeleporter;
-import com.hbm.blocks.machine.MachineTransformer;
-import com.hbm.blocks.machine.MachineTurbine;
-import com.hbm.blocks.machine.MachineTurbofan;
-import com.hbm.blocks.machine.MachineUF6Tank;
-import com.hbm.blocks.machine.OilDuctSolid;
-import com.hbm.blocks.machine.PinkCloudBroadcaster;
-import com.hbm.blocks.machine.PylonRedWire;
-import com.hbm.blocks.machine.RadioRec;
-import com.hbm.blocks.machine.Radiobox;
-import com.hbm.blocks.machine.ReactorCore;
-import com.hbm.blocks.machine.ReactorHatch;
-import com.hbm.blocks.machine.SPPBottom;
-import com.hbm.blocks.machine.SPPTop;
-import com.hbm.blocks.machine.VaultDoor;
-import com.hbm.blocks.machine.WasteDrum;
-import com.hbm.blocks.machine.WatzCore;
-import com.hbm.blocks.machine.WatzHatch;
-import com.hbm.blocks.machine.WireCoated;
+import com.hbm.blocks.machine.*;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -528,6 +439,11 @@ public class ModBlocks {
 	
 	public static final Block marker_structure = new BlockMarker(Material.IRON, "marker_structure").setHardness(0.0F).setResistance(0.0F).setLightLevel(1.0F).setCreativeTab(MainRegistry.machineTab);
 	
+	public static final Block struct_launcher = new BlockBase(Material.IRON, "struct_launcher").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_scaffold = new BlockBase(Material.IRON, "struct_scaffold").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_launcher_core = new BlockStruct(Material.IRON, "struct_launcher_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_launcher_core_large = new BlockStruct(Material.IRON, "struct_launcher_core_large").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	
 	public static final int guiID_factory_titanium = 24;
 	public static final Block factory_titanium_hull = new BlockBase(Material.IRON, "factory_titanium_hull").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block factory_titanium_furnace = new FactoryHatch(Material.IRON, "factory_titanium_furnace").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -575,6 +491,22 @@ public class ModBlocks {
 	public static final Block fwatz_core = new FWatzCore(Material.IRON, "fwatz_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block fwatz_plasma = new BlockPlasma(Material.IRON, "fwatz_plasma").setHardness(5.0F).setResistance(6000.0F).setLightLevel(1.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_fwatz_multiblock = 33;
+	
+	//Drillgon200: AMS won't be removed after all
+	public static final Block ams_base = new BlockAMSBase(Material.IRON, "ams_base").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block ams_emitter = new BlockAMSEmitter(Material.IRON, "ams_emitter").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block ams_limiter = new BlockAMSLimiter(Material.IRON, "ams_limiter").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_ams_base = 54;
+	public static final int guiID_ams_emitter = 55;
+	public static final int guiID_ams_limiter = 56;
+	
+	public static final Block machine_missile_assembly = new MachineMissileAssembly(Material.IRON, "machine_missile_assembly").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block compact_launcher = new CompactLauncher(Material.IRON, "compact_launcher").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block launch_table = new LaunchTable(Material.IRON, "launch_table").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block soyuz_launcher = new SoyuzLauncher(Material.IRON, "soyuz_launcher").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final int guiID_missile_assembly = 83;
+	public static final int guiID_compact_launcher = 85;
+	public static final int guiID_launch_table = 84;
 	
 	public static final Block absorber = new BlockAbsorber(Material.IRON, 2.5F, "absorber").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block absorber_red = new BlockAbsorber(Material.IRON, 10F, "absorber_red").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -658,6 +590,18 @@ public class ModBlocks {
 	
 	public static final Block dummy_block_turbofan = new DummyBlockTurbofan(Material.IRON, "dummy_block_turbofan").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final Block dummy_port_turbofan = new DummyBlockTurbofan(Material.IRON, "dummy_port_turbofan").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	
+	public static final Block dummy_plate_compact_launcher = new DummyBlockMachine(Material.IRON, "dummy_plate_compact_launcher", false, guiID_compact_launcher, compact_launcher).setBounds(0, 16, 0, 16, 16, 16).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_compact_launcher = new DummyBlockMachine(Material.IRON, "dummy_port_compact_launcher", true, guiID_compact_launcher, compact_launcher).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_plate_launch_table = new DummyBlockMachine(Material.IRON, "dummy_plate_launch_table", false, guiID_launch_table, launch_table).setBounds(0, 16, 0, 16, 16, 16).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_launch_table = new DummyBlockMachine(Material.IRON, "dummy_port_launch_table", true, guiID_launch_table, launch_table).setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	
+	public static final Block dummy_block_ams_limiter = new DummyBlockAMSLimiter(Material.IRON, "dummy_block_ams_limiter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_ams_limiter = new DummyBlockAMSLimiter(Material.IRON, "dummy_port_ams_limiter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_block_ams_emitter = new DummyBlockAMSEmitter(Material.IRON, "dummy_block_ams_emitter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_ams_emitter = new DummyBlockAMSEmitter(Material.IRON, "dummy_port_ams_emitter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_block_ams_base = new DummyBlockAMSBase(Material.IRON, "dummy_block_ams_base").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+	public static final Block dummy_port_ams_base = new DummyBlockAMSBase(Material.IRON, "dummy_port_ams_base").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	
 	public static void preInit(){
 		for(Block block : ALL_BLOCKS){

@@ -68,6 +68,7 @@ import com.hbm.render.item.ItemRenderRedstoneSword;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
+import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
 
 import net.minecraft.block.Block;
@@ -306,9 +307,11 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_uzi_saturnite_silencer, reg);
 		swapModelsNoGui(ModItems.gun_mp40, reg);
 		swapModels(ModItems.cell, reg);
+		
+		MainRegistry.proxy.registerMissileItems(reg);
 	}
 
-	public void swapModels(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
+	public static void swapModels(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
 		IBakedModel model = reg.getObject(loc);
 		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
@@ -319,7 +322,7 @@ public class ModEventHandlerClient {
 
 	}
 
-	public void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
+	public static void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
 		IBakedModel model = reg.getObject(loc);
 		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
@@ -524,6 +527,9 @@ public class ModEventHandlerClient {
 		RenderStructureMarker.fwatz[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_computer");
 		RenderStructureMarker.fwatz[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_core");
 		RenderStructureMarker.fwatz[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_core");
+		
+		RenderMultiblock.structLauncher = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
+		RenderMultiblock.structScaffold = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 		
 	}
 

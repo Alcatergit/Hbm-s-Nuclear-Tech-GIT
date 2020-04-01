@@ -31,6 +31,23 @@ public class ItemCustomLore extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 
+		
+		if(this == ModItems.ams_focus_limiter)
+		{
+			list.add("Maximum performance for restriction field:");
+			list.add("Standard cooling, no energy bonus.");
+		}
+		
+		if(this == ModItems.ams_focus_booster)
+		{
+			list.add("Weaker restriction field and core energy injection:");
+			list.add("More heat generation, extra energy.");
+		}
+		
+		if(this == ModItems.ams_muzzle)
+		{
+			list.add("...it emits an energy-beam thingy.");
+		}
 		if(this == ModItems.powder_poison)
 		{
 			list.add("Used in multi purpose bombs:");

@@ -175,11 +175,11 @@ public class HbmModelObject implements IModelCustom {
 
         if (currentGroupObject != null)
         {
-            tessellator.startDrawing(currentGroupObject.glDrawingMode);
+        	tessellator.startDrawing(currentGroupObject.glDrawingMode);
         }
         else
         {
-            tessellator.startDrawing(GL11.GL_TRIANGLES);
+        	tessellator.startDrawing(GL11.GL_TRIANGLES);
         }
         tessellateAll(tessellator);
 

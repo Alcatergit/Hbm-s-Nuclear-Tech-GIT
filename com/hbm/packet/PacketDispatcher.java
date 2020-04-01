@@ -82,6 +82,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEStructurePacket.Handler.class, TEStructurePacket.class, i++, Side.CLIENT);
 		//Mega packet for large reactor so it doesn't use quite as much network traffic
 		wrapper.registerMessage(LargeReactorPacket.Handler.class, LargeReactorPacket.class, i++, Side.CLIENT);
+		//Packet to send missile multipart information to TEs
+		wrapper.registerMessage(TEMissileMultipartPacket.Handler.class, TEMissileMultipartPacket.class, i++, Side.CLIENT);
 	}
 
 }

@@ -174,7 +174,7 @@ public class WavefrontObject implements IModelCustom
 
         if (currentGroupObject != null)
         {
-            tessellator.startDrawing(currentGroupObject.glDrawingMode);
+        	tessellator.startDrawing(currentGroupObject.glDrawingMode);
         }
         else
         {

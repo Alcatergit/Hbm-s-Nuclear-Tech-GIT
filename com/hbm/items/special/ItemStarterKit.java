@@ -37,7 +37,6 @@ public class ItemStarterKit extends Item {
     			world.spawnEntity(new EntityItem(world, p.posX, p.posY + p.eyeHeight, p.posZ, p.inventory.armorInventory.get(i)));
     		}
     	}
-
     	switch(tier) {
     	case 0:
 	    	p.inventory.armorInventory.set(3, new ItemStack(ModItems.hazmat_helmet));

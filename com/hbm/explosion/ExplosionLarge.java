@@ -8,6 +8,7 @@ import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
+import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -261,6 +262,16 @@ public class ExplosionLarge {
 			shrapnel.motionX = rand.nextGaussian() * 1	* (1 + (count / 50)) * 0.15F;
 			shrapnel.motionZ = rand.nextGaussian() * 1	* (1 + (count / 50)) * 0.15F;
 			world.spawnEntity(shrapnel);
+		}
+	}
+	
+	public static void buster(World world, double x, double y, double z, Vec3 vector, float strength, float depth) {
+		
+		vector = vector.normalize();
+		
+		for(int i = 0; i < depth; i += 2) {
+			
+			world.createExplosion((Entity)null, x + vector.xCoord * i, y + vector.yCoord * i, z + vector.zCoord * i, strength, true);
 		}
 	}
 }

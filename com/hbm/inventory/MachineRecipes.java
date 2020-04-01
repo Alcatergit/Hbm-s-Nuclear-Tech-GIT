@@ -7,8 +7,6 @@ import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.MachineRecipes.DictCouple;
-import com.hbm.inventory.MachineRecipes.ShredderRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemAssemblyTemplate;

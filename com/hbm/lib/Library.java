@@ -529,21 +529,20 @@ public class Library {
 			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
 		//AMS Limiter
-		/*if(block == ModBlocks.dummy_port_ams_limiter)
+		if(block == ModBlocks.dummy_port_ams_limiter)
 		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
 		//AMS Emitter
 		if(block == ModBlocks.dummy_port_ams_emitter)
 		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
 		}
-		//TODO launchers
 		//Launchers
 		if(block == ModBlocks.dummy_port_compact_launcher || block == ModBlocks.dummy_port_launch_table)
 		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetX, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetY, ((TileEntityDummy)worldObj.getTileEntity(x, y, z)).targetZ);
-		}*/
+			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
+		}
 
 		if(tileentity instanceof IConductor) {
 			if(tileentity instanceof TileEntityCable) {
@@ -681,7 +680,6 @@ public class Library {
 	public static boolean checkCableConnectables(World world, BlockPos pos) {
 		TileEntity tileentity = world.getTileEntity(pos);
 		Block b = world.getBlockState(pos).getBlock();
-		// TODO update this when I add more machines
 		if((tileentity != null && (tileentity instanceof IConductor || tileentity instanceof IConsumer || tileentity instanceof ISource)) ||
 				 b == ModBlocks.fusion_center ||
 				 b == ModBlocks.factory_titanium_conductor ||
@@ -696,12 +694,12 @@ public class Library {
 		 b == ModBlocks.dummy_port_refinery ||
 		 b == ModBlocks.dummy_port_pumpjack ||
 		 b == ModBlocks.dummy_port_turbofan ||
-		 //b == ModBlocks.dummy_port_ams_limiter ||
-		// b == ModBlocks.dummy_port_ams_emitter ||
-		// b == ModBlocks.dummy_port_ams_base ||
-		 b == ModBlocks.dummy_port_radgen //||
-		// b == ModBlocks.dummy_port_compact_launcher ||
-		// b == ModBlocks.dummy_port_launch_table
+		 b == ModBlocks.dummy_port_ams_limiter ||
+		 b == ModBlocks.dummy_port_ams_emitter ||
+		 b == ModBlocks.dummy_port_ams_base ||
+		 b == ModBlocks.dummy_port_radgen ||
+		 b == ModBlocks.dummy_port_compact_launcher ||
+		 b == ModBlocks.dummy_port_launch_table
 		) {
 			return true;
 		}

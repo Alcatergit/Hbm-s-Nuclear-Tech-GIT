@@ -161,7 +161,10 @@ public class RenderHelper {
 	public static void addVertexColor(double x, double y, double z, int red, int green, int blue, int alpha){
 		Tessellator.getInstance().getBuffer().pos(x, y, z).color(red, green, blue, alpha).endVertex();;
 	}
-
+	
+	public static void addVertexColor(double x, double y, double z, float red, float green, float blue, float alpha){
+		Tessellator.getInstance().getBuffer().pos(x, y, z).color(red, green, blue, alpha).endVertex();;
+	}
 
 	public static void renderAll(IBakedModel boxcar) {
 		Tessellator tes = Tessellator.getInstance();
