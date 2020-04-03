@@ -3,6 +3,7 @@ package com.hbm.main;
 import com.hbm.lib.RefStrings;
 
 import net.minecraft.advancements.Advancement;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -86,11 +87,17 @@ public class AdvancementManager {
 		bobOil = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "boboil"));
 		bobNuclear = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobnuclear"));
 		achSacrifice = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsacrifice"));
+		achFOEQ = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfoeq"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){
 		for(String s : player.getAdvancements().getProgress(a).getRemaningCriteria()){
 			player.getAdvancements().grantCriterion(a, s);
 		}
+	}
+	
+	public static void grantAchievement(EntityPlayer player, Advancement a){
+		if(player instanceof EntityPlayerMP)
+			grantAchievement((EntityPlayerMP)player, a);
 	}
 }

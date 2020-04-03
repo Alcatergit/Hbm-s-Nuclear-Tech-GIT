@@ -526,7 +526,7 @@ public class ItemCustomLore extends Item {
 			return EnumRarity.RARE;
 		}
 
-		if(this == ModItems.plate_paa || this == ModItems.gun_mp_ammo || this == ModItems.gun_revolver_cursed_ammo) {
+		if(this == ModItems.plate_paa || this == ModItems.gun_mp_ammo || this == ModItems.gun_revolver_cursed_ammo || this == ModItems.powder_power) {
 			return EnumRarity.UNCOMMON;
 		}
 

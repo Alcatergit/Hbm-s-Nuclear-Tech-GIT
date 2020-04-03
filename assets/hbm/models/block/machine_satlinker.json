@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/machine_satlinker_top",
+		"side": "hbm:blocks/machine_satlinker_side"
+	}
+}

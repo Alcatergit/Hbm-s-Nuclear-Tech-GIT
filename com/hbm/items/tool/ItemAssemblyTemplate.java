@@ -211,7 +211,8 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				FileWriter write = new FileWriter(recipeConfig);
 				write.write("# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
 						  + "# Example for iron plates: 30;minecraft:iron_ingot,0,3;hbm:plate_iron,0,2\n"
-						  + "# One line per recipe. I don't know what will happen if you mess up the formatting, so try not to do that.\n");
+						  + "# One line per recipe. I don't know what will happen if you mess up the formatting, so try not to do that.\n"
+						  + "# Don't add recipes with overlapping results, that's almost guaranteed to screw something up.\n");
 				addConfigRecipes(write);
 				write.close();
 				

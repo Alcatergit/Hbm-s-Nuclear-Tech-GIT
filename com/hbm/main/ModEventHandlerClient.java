@@ -539,6 +539,7 @@ public class ModEventHandlerClient {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
+		ClientProxy.renderingConstant = true;
 		for(Entity e : list) {
 			if(e instanceof IConstantRenderer) {
 
@@ -556,6 +557,7 @@ public class ModEventHandlerClient {
 				r.doRender(e, d0 - d3, d1 - d4, d2 - d5, f, partialTicks);
 			}
 		}
+		ClientProxy.renderingConstant = false;
 		if(OpenGlHelper.shadersSupported && MainRegistry.useShaders) {
 			HbmShaderManager.renderGauss();
 			Flashlight.ALL_RENDER_FLASHLIGHTS.forEach(Flashlight::renderBeam);

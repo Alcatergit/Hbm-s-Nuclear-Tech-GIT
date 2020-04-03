@@ -84,6 +84,11 @@ public class PacketDispatcher {
 		wrapper.registerMessage(LargeReactorPacket.Handler.class, LargeReactorPacket.class, i++, Side.CLIENT);
 		//Packet to send missile multipart information to TEs
 		wrapper.registerMessage(TEMissileMultipartPacket.Handler.class, TEMissileMultipartPacket.class, i++, Side.CLIENT);
+		//Packets for syncing satellite data with the client only satellite gui
+		wrapper.registerMessage(SatelliteRequestPacket.Handler.class, SatelliteRequestPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(SatelliteResponsePacket.Handler.class, SatelliteResponsePacket.class, i++, Side.CLIENT);
+		//Signals server to perform orbital strike
+		wrapper.registerMessage(SatLaserPacket.Handler.class, SatLaserPacket.class, i++, Side.SERVER);
 	}
 
 }

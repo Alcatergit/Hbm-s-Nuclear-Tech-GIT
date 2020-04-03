@@ -3,7 +3,10 @@ package com.hbm.entity.missile;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemSatChip;
 import com.hbm.main.AdvancementManager;
+import com.hbm.saveddata.SatelliteSaveData;
+import com.hbm.saveddata.SatelliteSaveData.SatelliteType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -123,41 +126,34 @@ public class EntityCarrier extends EntityThrowable {
 				}
 			}
 			
-			//TODO whole satellite system
-			/*if(payload.getItem() == ModItems.sat_foeq) {
-				for(Object p : world.playerEntities)
-					((EntityPlayer)p).triggerAchievement(MainRegistry.achFOEQ);
+			if(payload.getItem() == ModItems.sat_foeq) {
+				for(EntityPlayer p : world.playerEntities)
+					AdvancementManager.grantAchievement(p, AdvancementManager.achFOEQ);
 			}
 			
 			if(payload.getItem() instanceof ItemSatChip) {
-			    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
-			    if(data == null) {
-			        world.perWorldStorage.setData("satellites", new SatelliteSavedData(world));
-			        
-			        data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
-			    }
+			    SatelliteSaveData data = SatelliteSaveData.getData(world);
 
 			    int freq = ItemSatChip.getFreq(payload);
 			    
 			    if(!data.isFreqTaken(freq)) {
 				    if(payload.getItem() == ModItems.sat_mapper)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.MAPPER, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.MAPPER);
 				    if(payload.getItem() == ModItems.sat_scanner)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.SCANNER, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.SCANNER);
 				    if(payload.getItem() == ModItems.sat_radar)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.RADAR, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.RADAR);
 				    if(payload.getItem() == ModItems.sat_laser)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.LASER, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.LASER);
 				    if(payload.getItem() == ModItems.sat_foeq)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.RELAY, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.RELAY);
 				    if(payload.getItem() == ModItems.sat_resonator)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.RESONATOR, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.RESONATOR);
 				    if(payload.getItem() == ModItems.sat_miner)
-					    data.satellites.add(new SatelliteSaveStructure(freq, SatelliteType.MINER, this.dimension));
+				    	data.addSatellite(freq, SatelliteType.MINER);
 
-				    data.markDirty();
 			    }
-			}*/
+			}
 		}
 		
 		this.setDead();

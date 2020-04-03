@@ -61,6 +61,7 @@ import com.hbm.entity.grenade.EntityGrenadeStrong;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.logic.EntityBlast;
 import com.hbm.entity.logic.EntityBomber;
+import com.hbm.entity.logic.EntityDeathBlast;
 import com.hbm.entity.logic.EntityEMP;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
@@ -69,6 +70,7 @@ import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.missile.EntityBombletTheta;
 import com.hbm.entity.missile.EntityBooster;
 import com.hbm.entity.missile.EntityCarrier;
+import com.hbm.entity.missile.EntityMinerRocket;
 import com.hbm.entity.missile.EntityMissileAntiBallistic;
 import com.hbm.entity.missile.EntityMissileBHole;
 import com.hbm.entity.missile.EntityMissileBunkerBuster;
@@ -166,12 +168,14 @@ import com.hbm.render.entity.RenderBulletMk2;
 import com.hbm.render.entity.RenderCloudFleija;
 import com.hbm.render.entity.RenderCloudRainbow;
 import com.hbm.render.entity.RenderCloudSolinium;
+import com.hbm.render.entity.RenderDeathBlast;
 import com.hbm.render.entity.RenderEMPBlast;
 import com.hbm.render.entity.RenderEmpty;
 import com.hbm.render.entity.RenderFallingNuke;
 import com.hbm.render.entity.RenderFireProjectile;
 import com.hbm.render.entity.RenderFlare;
 import com.hbm.render.entity.RenderLN2;
+import com.hbm.render.entity.RenderMinerRocket;
 import com.hbm.render.entity.RenderMiniMIRV;
 import com.hbm.render.entity.RenderMiniNuke;
 import com.hbm.render.entity.RenderNoCloud;
@@ -326,6 +330,7 @@ import com.hbm.render.tileentity.RenderRadiobox;
 import com.hbm.render.tileentity.RenderRailgun;
 import com.hbm.render.tileentity.RenderRefinery;
 import com.hbm.render.tileentity.RenderRocketTurret;
+import com.hbm.render.tileentity.RenderSatDock;
 import com.hbm.render.tileentity.RenderSelenium;
 import com.hbm.render.tileentity.RenderSmallReactor;
 import com.hbm.render.tileentity.RenderSoyuzLauncher;
@@ -396,6 +401,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineRefinery;
+import com.hbm.tileentity.machine.TileEntityMachineSatDock;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
@@ -439,6 +445,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class ClientProxy extends ServerProxy {
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
+	
+	//Drillgon200: This is stupid, but I'm lazy
+	public static boolean renderingConstant = false;
 	
 	@Override
 	public File getDataDir() {
@@ -523,6 +532,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAMSEmitter.class, new RenderAMSEmitter());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAMSBase.class, new RenderAMSBase());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAMSLimiter.class, new RenderAMSLimiter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSatDock.class, new RenderSatDock());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -661,6 +671,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeExplosionPlus.class, RenderEmpty.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFallingNuke.class, RenderFallingNuke.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMissileCustom.class, RenderMissileCustom.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDeathBlast.class, RenderDeathBlast.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMinerRocket.class, RenderMinerRocket.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.mud_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());

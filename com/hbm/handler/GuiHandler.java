@@ -43,6 +43,7 @@ import com.hbm.inventory.container.ContainerMachineRTG;
 import com.hbm.inventory.container.ContainerMachineRadGen;
 import com.hbm.inventory.container.ContainerMachineReactorSmall;
 import com.hbm.inventory.container.ContainerMachineRefinery;
+import com.hbm.inventory.container.ContainerMachineSatLinker;
 import com.hbm.inventory.container.ContainerMachineSchrabidiumTransmutator;
 import com.hbm.inventory.container.ContainerMachineSelenium;
 import com.hbm.inventory.container.ContainerMachineShredder;
@@ -70,6 +71,7 @@ import com.hbm.inventory.container.ContainerReactorControl;
 import com.hbm.inventory.container.ContainerReactorMultiblock;
 import com.hbm.inventory.container.ContainerRtgFurnace;
 import com.hbm.inventory.container.ContainerSafe;
+import com.hbm.inventory.container.ContainerSatDock;
 import com.hbm.inventory.container.ContainerUF6Tank;
 import com.hbm.inventory.container.ContainerWasteDrum;
 import com.hbm.inventory.container.ContainerWatzCore;
@@ -116,6 +118,7 @@ import com.hbm.inventory.gui.GUIMachineRadGen;
 import com.hbm.inventory.gui.GUIMachineReactor;
 import com.hbm.inventory.gui.GUIMachineReactorSmall;
 import com.hbm.inventory.gui.GUIMachineRefinery;
+import com.hbm.inventory.gui.GUIMachineSatLinker;
 import com.hbm.inventory.gui.GUIMachineSchrabidiumTransmutator;
 import com.hbm.inventory.gui.GUIMachineSelenium;
 import com.hbm.inventory.gui.GUIMachineShredder;
@@ -142,7 +145,9 @@ import com.hbm.inventory.gui.GUIReactorControl;
 import com.hbm.inventory.gui.GUIReactorMultiblock;
 import com.hbm.inventory.gui.GUIRtgFurnace;
 import com.hbm.inventory.gui.GUISafe;
+import com.hbm.inventory.gui.GUISatDock;
 import com.hbm.inventory.gui.GUIScreenDesignator;
+import com.hbm.inventory.gui.GUIScreenSatInterface;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIWasteDrum;
 import com.hbm.inventory.gui.GUIWatzCore;
@@ -204,6 +209,8 @@ import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineRefinery;
+import com.hbm.tileentity.machine.TileEntityMachineSatDock;
+import com.hbm.tileentity.machine.TileEntityMachineSatLinker;
 import com.hbm.tileentity.machine.TileEntityMachineSchrabidiumTransmutator;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntityMachineShredder;
@@ -541,6 +548,14 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityAMSLimiter){
 					return new ContainerAMSLimiter(player.inventory, (TileEntityAMSLimiter)entity);
 				}
+			case ModBlocks.guiID_satlinker:
+				if(entity instanceof TileEntityMachineSatLinker){
+					return new ContainerMachineSatLinker(player.inventory, (TileEntityMachineSatLinker)entity);
+				}
+			case ModBlocks.guiID_dock:
+				if(entity instanceof TileEntityMachineSatDock){
+					return new ContainerSatDock(player.inventory, (TileEntityMachineSatDock)entity);
+				}
 			}
 		
 		}
@@ -859,6 +874,14 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityAMSLimiter){
 					return new GUIAMSLimiter(player.inventory, (TileEntityAMSLimiter)entity);
 				}
+			case ModBlocks.guiID_satlinker:
+				if(entity instanceof TileEntityMachineSatLinker){
+					return new GUIMachineSatLinker(player.inventory, (TileEntityMachineSatLinker)entity);
+				}
+			case ModBlocks.guiID_dock:
+				if(entity instanceof TileEntityMachineSatDock){
+					return new GUISatDock(player.inventory, (TileEntityMachineSatDock)entity);
+				}
 			}
 
 		} else {
@@ -867,6 +890,8 @@ public class GuiHandler implements IGuiHandler {
 			switch (ID) {
 			case ModItems.guiID_item_designator:
 				return new GUIScreenDesignator(player, x);
+			case ModItems.guiID_item_sat_interface:
+				return new GUIScreenSatInterface(player);
 			}
 		}
 		return null;
