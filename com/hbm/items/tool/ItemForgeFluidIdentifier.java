@@ -85,6 +85,14 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 		else
 			return null;
 	}
+	
+	public static ItemStack getStackFromFluid(Fluid f){
+		ItemStack stack = new ItemStack(ModItems.forge_fluid_identifier, 1, 0);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setString("fluidtype", f.getName());
+		stack.setTagCompound(tag);
+		return stack;
+	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

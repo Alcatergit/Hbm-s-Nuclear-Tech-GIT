@@ -73,6 +73,7 @@ import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemBombCaller;
 import com.hbm.items.tool.ItemCassette;
+import com.hbm.items.tool.ItemCatalog;
 import com.hbm.items.tool.ItemChemistryIcon;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemCounterfitKeys;
@@ -88,10 +89,12 @@ import com.hbm.items.tool.ItemKey;
 import com.hbm.items.tool.ItemLaserDetonator;
 import com.hbm.items.tool.ItemLeadBox;
 import com.hbm.items.tool.ItemLock;
+import com.hbm.items.tool.ItemMeteorRemote;
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.items.tool.ItemReactorSensor;
 import com.hbm.items.tool.ItemSatChip;
 import com.hbm.items.tool.ItemSatInterface;
+import com.hbm.items.tool.ItemTemplateFolder;
 import com.hbm.items.tool.ItemTurretBiometry;
 import com.hbm.items.tool.ItemTurretChip;
 import com.hbm.items.tool.ItemTurretControl;
@@ -150,9 +153,10 @@ public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
-	
+	public static final int guiID_item_folder = 99;
 	public static final int guiID_item_designator = 100;
 	public static final int guiID_item_sat_interface = 101;
+	public static final int guiID_item_bobmazon = 103;
 	
 	//Syringe
 	public static final Item syringe_empty = new ItemBase("syringe_empty").setFull3D().setCreativeTab(MainRegistry.consumableTab);
@@ -269,6 +273,7 @@ public class ModItems {
 	public static final Item linker = new ItemTeleLink("linker").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
 	public static final Item bomb_caller = new ItemBombCaller("bomb_caller").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
+	public static final Item meteor_remote = new ItemMeteorRemote("meteor_remote").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
 	public static final Item reactor_sensor = new ItemReactorSensor("reactor_sensor").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
 	//Armor
@@ -709,6 +714,14 @@ public class ModItems {
 	public static final Item bottle_nuka = new ItemEnergy("bottle_nuka").setContainerItem(bottle_empty).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item bottle_cherry = new ItemEnergy("bottle_cherry").setContainerItem(ModItems.bottle_empty).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item cap_nuka = new ItemBase("cap_nuka").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_quantum = new ItemBase("cap_quantum").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_sparkle = new ItemBase("cap_sparkle").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_rad = new ItemBase("cap_rad").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_korl = new ItemBase("cap_korl").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_fritz = new ItemBase("cap_fritz").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_sunset = new ItemBase("cap_sunset").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cap_star = new ItemBase("cap_star").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item ring_pull = new ItemBase("ring_pull").setCreativeTab(MainRegistry.consumableTab);
 	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword").setCreativeTab(CreativeTabs.COMBAT);
 	//Tools
@@ -725,9 +738,16 @@ public class ModItems {
 	public static final Item schrabidium_sword = new SwordSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_sword").setCreativeTab(CreativeTabs.COMBAT);
 	
 	//Templates
+	public static final Item template_folder = new ItemTemplateFolder("template_folder").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item chemistry_template = new ItemChemistryTemplate("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item chemistry_icon = new ItemChemistryIcon("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
+	
+	public static final Item bobmazon_materials = new ItemCatalog("bobmazon_materials").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item bobmazon_machines = new ItemCatalog("bobmazon_machines").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item bobmazon_weapons = new ItemCatalog("bobmazon_weapons").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item bobmazon_tools = new ItemCatalog("bobmazon_tools").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item bobmazon_hidden = new ItemCatalog("bobmazon_hidden").setMaxStackSize(1).setCreativeTab(null);
 	
 	//Plates
 	public static final Item plate_iron = new ItemBase("plate_iron").setCreativeTab(MainRegistry.partsTab);

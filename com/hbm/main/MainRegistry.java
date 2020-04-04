@@ -82,6 +82,7 @@ import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.logic.EntityNukeExplosionPlus;
 import com.hbm.entity.logic.IChunkLoader;
+import com.hbm.entity.missile.EntityBobmazon;
 import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.missile.EntityBombletTheta;
 import com.hbm.entity.missile.EntityBooster;
@@ -141,6 +142,7 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFallingNuke;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.entity.projectile.EntityModBeam;
@@ -156,6 +158,7 @@ import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
@@ -242,6 +245,7 @@ import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
+import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
@@ -670,6 +674,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityAMSBase.class, new ResourceLocation(RefStrings.MODID, "tileentity_ams_base"));
 		GameRegistry.registerTileEntity(TileEntityMachineSatLinker.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_sat_linker"));
 		GameRegistry.registerTileEntity(TileEntityMachineSatDock.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_sat_dock"));
+		GameRegistry.registerTileEntity(TileEntityMachineDiesel.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_diesel"));
 		int i = 0;
 		//TODO if hunter chopper is bigger than 2 block radius, change World.MAX_ENTITY_RADIUS
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -807,6 +812,8 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_custom_missile"), EntityMissileCustom.class, "entity_custom_missile", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser_blast"), EntityDeathBlast.class, "entity_laser_blast", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_miner_rocket"), EntityMinerRocket.class, "entity_miner_rocket", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_meteor"), EntityMeteor.class, "entity_meteor", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bobmazon"), EntityBobmazon.class, "entity_bobmazon", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -1169,6 +1176,9 @@ public class MainRegistry {
 	public void serverStarting(FMLServerStartingEvent evt) {
 		evt.registerServerCommand(new CommandRadiation());
 		AdvancementManager.init(evt.getServer());
+		//MUST be initialized AFTER achievements!!
+		BobmazonOfferFactory.reset();
+		BobmazonOfferFactory.init();
 	}
 
 	public void registerOreDict() {

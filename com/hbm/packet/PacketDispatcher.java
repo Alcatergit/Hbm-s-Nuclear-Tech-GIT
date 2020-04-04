@@ -89,6 +89,10 @@ public class PacketDispatcher {
 		wrapper.registerMessage(SatelliteResponsePacket.Handler.class, SatelliteResponsePacket.class, i++, Side.CLIENT);
 		//Signals server to perform orbital strike
 		wrapper.registerMessage(SatLaserPacket.Handler.class, SatLaserPacket.class, i++, Side.SERVER);
+		//Signals server to consume items and create template
+		wrapper.registerMessage(ItemFolderPacket.Handler.class, ItemFolderPacket.class, i++, Side.SERVER);
+		//Signals server to buy offer from bobmazon
+		wrapper.registerMessage(ItemBobmazonPacket.Handler.class, ItemBobmazonPacket.class, i++, Side.SERVER);
 	}
 
 }

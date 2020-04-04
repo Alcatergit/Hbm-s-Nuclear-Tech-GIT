@@ -331,6 +331,9 @@ public class ModBlocks {
 	public static final Block machine_coal_on = new MachineCoal(Material.IRON, "machine_coal_on", true).setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final int guiID_machine_coal = 22;
 	
+	public static final Block machine_diesel = new MachineDiesel(Material.IRON, "machine_diesel").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_machine_diesel = 31;
+	
 	public static final Block machine_generator = new MachineGenerator(Material.IRON, "machine_generator").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final int guiID_machine_generator = 15;
 	

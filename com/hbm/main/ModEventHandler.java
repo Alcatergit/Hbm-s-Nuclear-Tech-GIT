@@ -3,11 +3,13 @@ package com.hbm.main;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemAssemblyTemplate;
@@ -40,6 +42,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -54,6 +57,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 public class ModEventHandler {
 
 	public static final ResourceLocation ENT_RAD_LOC = new ResourceLocation(RefStrings.MODID, "RADIATION");
+	
+	public static boolean showMessage = true;
+	public static int meteorShower = 0;
+	public static Random rand = new Random();
 	
 	@SubscribeEvent
 	public void soundRegistering(RegistryEvent.Register<SoundEvent> evt){
@@ -108,6 +115,42 @@ public class ModEventHandler {
 					
 			}
 		}
+		
+		if (event.world != null && !event.world.isRemote && event.world.provider.isSurfaceWorld()
+				&& MainRegistry.enableMeteorStrikes) {
+			if (event.world.rand.nextInt(meteorShower > 0 ? MainRegistry.meteorShowerChance : MainRegistry.meteorStrikeChance) == 0) {
+				if (!event.world.playerEntities.isEmpty()) {
+					EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
+
+					if (p != null && p.dimension == 0) {
+						EntityMeteor meteor = new EntityMeteor(event.world);
+						meteor.posX = p.posX + event.world.rand.nextInt(201) - 100;
+						meteor.posY = 384;
+						meteor.posZ = p.posZ + event.world.rand.nextInt(201) - 100;
+						meteor.motionX = event.world.rand.nextDouble() - 0.5;
+						meteor.motionY = -2.5;
+						meteor.motionZ = event.world.rand.nextDouble() - 0.5;
+						event.world.spawnEntity(meteor);
+					}
+				}
+			}
+
+			if (meteorShower > 0) {
+				meteorShower--;
+				if (meteorShower == 0 && MainRegistry.enableDebugMode)
+					MainRegistry.logger.info("Ended meteor shower.");
+			}
+
+			if (event.world.rand.nextInt(MainRegistry.meteorStrikeChance * 100) == 0
+					&& MainRegistry.enableMeteorShowers) {
+				meteorShower = (int) (MainRegistry.meteorShowerDuration * 0.75
+						+ MainRegistry.meteorShowerDuration * 0.25 * event.world.rand.nextFloat());
+
+				if (MainRegistry.enableDebugMode)
+					MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);
+			}
+		}
+		
 		if(event.world != null && !event.world.isRemote && MainRegistry.enableRads) {
 			int thunder = AuxSavedData.getThunder(event.world);
 			
@@ -295,6 +338,12 @@ public class ModEventHandler {
 	public void clientJoinServer(PlayerLoggedInEvent e){
 		if(e.player instanceof EntityPlayerMP)
 			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
+		
+		
+		if (showMessage) {
+			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.7.10!"));
+		}
+		showMessage = false;
 	}
 	
 	//TODO should probably use these.

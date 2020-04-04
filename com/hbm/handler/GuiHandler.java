@@ -28,6 +28,7 @@ import com.hbm.inventory.container.ContainerMachineCMBFactory;
 import com.hbm.inventory.container.ContainerMachineChemplant;
 import com.hbm.inventory.container.ContainerMachineCoal;
 import com.hbm.inventory.container.ContainerMachineCyclotron;
+import com.hbm.inventory.container.ContainerMachineDiesel;
 import com.hbm.inventory.container.ContainerMachineEPress;
 import com.hbm.inventory.container.ContainerMachineFluidTank;
 import com.hbm.inventory.container.ContainerMachineGasCent;
@@ -99,6 +100,7 @@ import com.hbm.inventory.gui.GUIMachineChemplant;
 import com.hbm.inventory.gui.GUIMachineCoal;
 import com.hbm.inventory.gui.GUIMachineCompactLauncher;
 import com.hbm.inventory.gui.GUIMachineCyclotron;
+import com.hbm.inventory.gui.GUIMachineDiesel;
 import com.hbm.inventory.gui.GUIMachineEPress;
 import com.hbm.inventory.gui.GUIMachineElectricFurnace;
 import com.hbm.inventory.gui.GUIMachineFluidTank;
@@ -146,8 +148,10 @@ import com.hbm.inventory.gui.GUIReactorMultiblock;
 import com.hbm.inventory.gui.GUIRtgFurnace;
 import com.hbm.inventory.gui.GUISafe;
 import com.hbm.inventory.gui.GUISatDock;
+import com.hbm.inventory.gui.GUIScreenBobmazon;
 import com.hbm.inventory.gui.GUIScreenDesignator;
 import com.hbm.inventory.gui.GUIScreenSatInterface;
+import com.hbm.inventory.gui.GUIScreenTemplateFolder;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIWasteDrum;
 import com.hbm.inventory.gui.GUIWatzCore;
@@ -190,6 +194,7 @@ import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
+import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
@@ -556,6 +561,10 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineSatDock){
 					return new ContainerSatDock(player.inventory, (TileEntityMachineSatDock)entity);
 				}
+			case ModBlocks.guiID_machine_diesel:
+				if(entity instanceof TileEntityMachineDiesel){
+					return new ContainerMachineDiesel(player.inventory, (TileEntityMachineDiesel)entity);
+				}
 			}
 		
 		}
@@ -882,16 +891,25 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineSatDock){
 					return new GUISatDock(player.inventory, (TileEntityMachineSatDock)entity);
 				}
+			case ModBlocks.guiID_machine_diesel:
+				if(entity instanceof TileEntityMachineDiesel){
+					return new GUIMachineDiesel(player.inventory, (TileEntityMachineDiesel)entity);
+				}
 			}
 
 		} else {
 			// CLIENTONLY GUIS
 
 			switch (ID) {
+			case ModItems.guiID_item_folder:
+				return new GUIScreenTemplateFolder(player);
 			case ModItems.guiID_item_designator:
 				return new GUIScreenDesignator(player, x);
 			case ModItems.guiID_item_sat_interface:
 				return new GUIScreenSatInterface(player);
+			case ModItems.guiID_item_bobmazon:
+				if(BobmazonOfferFactory.getOffers(player.getHeldItemMainhand()) != null)
+					return new GUIScreenBobmazon(player, BobmazonOfferFactory.getOffers(player.getHeldItemMainhand()));
 			}
 		}
 		return null;
