@@ -230,6 +230,7 @@ import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
 import com.hbm.tileentity.machine.TileEntityDummyPort;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityFWatzHatch;
+import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityFusionHatch;
 import com.hbm.tileentity.machine.TileEntityFusionMultiblock;
 import com.hbm.tileentity.machine.TileEntityGeiger;
@@ -261,6 +262,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -675,6 +677,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineSatLinker.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_sat_linker"));
 		GameRegistry.registerTileEntity(TileEntityMachineSatDock.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_sat_dock"));
 		GameRegistry.registerTileEntity(TileEntityMachineDiesel.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_diesel"));
+		GameRegistry.registerTileEntity(TileEntityForceField.class, new ResourceLocation(RefStrings.MODID, "tileentity_force_field"));
+		GameRegistry.registerTileEntity(TileEntityMachineRadar.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
 		int i = 0;
 		//TODO if hunter chopper is bigger than 2 block radius, change World.MAX_ENTITY_RADIUS
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);

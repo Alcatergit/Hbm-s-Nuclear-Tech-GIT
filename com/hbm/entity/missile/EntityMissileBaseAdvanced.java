@@ -9,6 +9,7 @@ import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -107,8 +108,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 		ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
 		ExplosionLarge.spawnShrapnelShower(world, posX, posY, posZ, motionX, motionY, motionZ, 15, 0.075);
 		ExplosionLarge.spawnMissileDebris(world, posX, posY, posZ, motionX, motionY, motionZ, 0.25, getDebris(), getDebrisRareDrop());
-		// TODO radar
-		// TileEntityMachineRadar.allMissiles.remove(this);
+		TileEntityMachineRadar.allMissiles.remove(this);
 	}
 
 	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
@@ -199,11 +199,10 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 	@Override
 	public void onUpdate() {
 		// super.onUpdate();
-		// TODO radar
-		// if(!world.isRemote) {
-		// TileEntityMachineRadar.allMissiles.remove(this);
-		// TileEntityMachineRadar.allMissiles.add(this);
-		// }
+		 if(!world.isRemote) {
+			 TileEntityMachineRadar.allMissiles.remove(this);
+			 TileEntityMachineRadar.allMissiles.add(this);
+		 }
 
 		// if(!worldObj.loadedEntityList.contains(this))
 		// worldObj.loadedEntityList.add(this);

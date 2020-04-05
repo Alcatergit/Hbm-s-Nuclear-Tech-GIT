@@ -16,6 +16,7 @@ import com.hbm.inventory.container.ContainerCrateSteel;
 import com.hbm.inventory.container.ContainerDiFurnace;
 import com.hbm.inventory.container.ContainerElectricFurnace;
 import com.hbm.inventory.container.ContainerFWatzCore;
+import com.hbm.inventory.container.ContainerForceField;
 import com.hbm.inventory.container.ContainerFusionMultiblock;
 import com.hbm.inventory.container.ContainerLaunchPadTier1;
 import com.hbm.inventory.container.ContainerLaunchTable;
@@ -42,6 +43,7 @@ import com.hbm.inventory.container.ContainerMachinePress;
 import com.hbm.inventory.container.ContainerMachinePumpjack;
 import com.hbm.inventory.container.ContainerMachineRTG;
 import com.hbm.inventory.container.ContainerMachineRadGen;
+import com.hbm.inventory.container.ContainerMachineRadar;
 import com.hbm.inventory.container.ContainerMachineReactorSmall;
 import com.hbm.inventory.container.ContainerMachineRefinery;
 import com.hbm.inventory.container.ContainerMachineSatLinker;
@@ -87,6 +89,7 @@ import com.hbm.inventory.gui.GUICoreTitanium;
 import com.hbm.inventory.gui.GUICrateIron;
 import com.hbm.inventory.gui.GUICrateSteel;
 import com.hbm.inventory.gui.GUIFWatzCore;
+import com.hbm.inventory.gui.GUIForceField;
 import com.hbm.inventory.gui.GUIFusionMultiblock;
 import com.hbm.inventory.gui.GUILaunchPadTier1;
 import com.hbm.inventory.gui.GUIMachineArcFurnace;
@@ -117,6 +120,7 @@ import com.hbm.inventory.gui.GUIMachinePuF6Tank;
 import com.hbm.inventory.gui.GUIMachinePumpjack;
 import com.hbm.inventory.gui.GUIMachineRTG;
 import com.hbm.inventory.gui.GUIMachineRadGen;
+import com.hbm.inventory.gui.GUIMachineRadar;
 import com.hbm.inventory.gui.GUIMachineReactor;
 import com.hbm.inventory.gui.GUIMachineReactorSmall;
 import com.hbm.inventory.gui.GUIMachineRefinery;
@@ -183,6 +187,7 @@ import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
+import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityFusionMultiblock;
 import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -210,6 +215,7 @@ import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -565,6 +571,14 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineDiesel){
 					return new ContainerMachineDiesel(player.inventory, (TileEntityMachineDiesel)entity);
 				}
+			case ModBlocks.guiID_forcefield:
+				if(entity instanceof TileEntityForceField){
+					return new ContainerForceField(player.inventory, (TileEntityForceField)entity);
+				}
+			case ModBlocks.guiID_radar:
+				if(entity instanceof TileEntityMachineRadar){
+					return new ContainerMachineRadar(player.inventory, (TileEntityMachineRadar)entity);
+				}
 			}
 		
 		}
@@ -894,6 +908,14 @@ public class GuiHandler implements IGuiHandler {
 			case ModBlocks.guiID_machine_diesel:
 				if(entity instanceof TileEntityMachineDiesel){
 					return new GUIMachineDiesel(player.inventory, (TileEntityMachineDiesel)entity);
+				}
+			case ModBlocks.guiID_forcefield:
+				if(entity instanceof TileEntityForceField){
+					return new GUIForceField(player.inventory, (TileEntityForceField)entity);
+				}
+			case ModBlocks.guiID_radar:
+				if(entity instanceof TileEntityMachineRadar){
+					return new GUIMachineRadar(player.inventory, (TileEntityMachineRadar)entity);
 				}
 			}
 

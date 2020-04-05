@@ -17,6 +17,7 @@ import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.WarheadType;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -127,6 +128,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 	private void killMissile() {
         ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
         ExplosionLarge.spawnShrapnelShower(world, posX, posY, posZ, motionX, motionY, motionZ, 15, 0.075);
+        TileEntityMachineRadar.allMissiles.remove(this);
     }
 	
 	@Override
@@ -275,6 +277,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 	
 	@Override
 	public void onUpdate() {
+		
+		if(!world.isRemote) {
+			 TileEntityMachineRadar.allMissiles.remove(this);
+			 TileEntityMachineRadar.allMissiles.add(this);
+		 }
+		
 		this.getDataManager().set(HEALTH, this.health);
 		if(world.isRemote)
 			template = this.getDataManager().get(TEMPLATE);

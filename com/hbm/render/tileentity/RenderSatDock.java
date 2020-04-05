@@ -11,6 +11,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class RenderSatDock extends TileEntitySpecialRenderer<TileEntityMachineSatDock> {
 
 	@Override
+	public boolean isGlobalRenderer(TileEntityMachineSatDock te) {
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntityMachineSatDock te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);

@@ -29,6 +29,7 @@ public class EntityMissileAntiBallistic extends Entity {
 	
 	@Override
     public void onUpdate() {
+		
 		this.prevPosX2 = this.posX;
         this.prevPosY2 = this.posY;
         this.prevPosZ2 = this.posZ;

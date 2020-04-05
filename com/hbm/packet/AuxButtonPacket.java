@@ -4,6 +4,7 @@ import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -94,13 +95,13 @@ public class AuxButtonPacket implements IMessage {
 						}
 					}
 					
-					if (te instanceof TileEntityForceField) {
+					*/if (te instanceof TileEntityForceField) {
 						TileEntityForceField field = (TileEntityForceField)te;
 						
 						field.isOn = !field.isOn;
 					}
 					
-					*/if (te instanceof TileEntityReactorControl) {
+					if (te instanceof TileEntityReactorControl) {
 						TileEntityReactorControl control = (TileEntityReactorControl)te;
 						
 						if(m.id == 1)

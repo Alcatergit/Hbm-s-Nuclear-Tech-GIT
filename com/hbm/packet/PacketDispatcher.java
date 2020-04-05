@@ -93,6 +93,12 @@ public class PacketDispatcher {
 		wrapper.registerMessage(ItemFolderPacket.Handler.class, ItemFolderPacket.class, i++, Side.SERVER);
 		//Signals server to buy offer from bobmazon
 		wrapper.registerMessage(ItemBobmazonPacket.Handler.class, ItemBobmazonPacket.class, i++, Side.SERVER);
+		//Update packet for force field
+		wrapper.registerMessage(TEFFPacket.Handler.class, TEFFPacket.class, i++, Side.CLIENT);
+		//Siren packet for looped sounds Drillgon200: Wrong descriptions, but eh, whatever.
+		wrapper.registerMessage(TERadarPacket.Handler.class, TERadarPacket.class, i++, Side.CLIENT);
+		//Siren packet for looped sounds
+		wrapper.registerMessage(TERadarDestructorPacket.Handler.class, TERadarDestructorPacket.class, i++, Side.CLIENT);
 	}
 
 }
