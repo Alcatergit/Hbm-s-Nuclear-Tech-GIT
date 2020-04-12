@@ -9,7 +9,6 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -110,7 +109,7 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 					fillFluidInit();
 				}
 			if (needsUpdate) {
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+				PacketDispatcher.wrapper.sendToAllTracking(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 				needsUpdate = false;
 			}
 
@@ -173,7 +172,6 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if (this.canFill(resource.getFluid())) {		
-			needsUpdate = true;
 			return tank.fill(resource, doFill);
 		}
 		return 0;
@@ -185,7 +183,6 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 			return null;
 		}
 		if (this.canDrain(resource.getFluid())) {
-			needsUpdate = true;
 			return tank.drain(resource.amount, doDrain);
 		}
 		return null;
@@ -194,7 +191,6 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if (this.canDrain(null)) {
-			needsUpdate = true;
 			return tank.drain(maxDrain, doDrain);
 		}
 		return null;

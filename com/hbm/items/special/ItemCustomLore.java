@@ -30,8 +30,31 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
-
+		if(this == ModItems.crystal_horn)
+		{
+			if(MainRegistry.polaroidID == 11)
+				list.add("An actual horn.");
+			else
+				list.add("Not an actual horn.");
+		}
 		
+		if(this == ModItems.crystal_charred)
+		{
+			if(MainRegistry.polaroidID == 11)
+				list.add("Also a real horn. Weird, right?");
+			else
+				list.add("High quality silicate, slightly burned.");
+		}
+		if(this == ModItems.ingot_asbestos)
+		{
+			list.add(TextFormatting.ITALIC + "\"Filled with life, self-doubt and asbestos. That comes with the air.\"");
+		}
+		if(this == ModItems.entanglement_kit)
+		{
+			list.add("Teleporter crafting item.");
+			list.add("Enables dimension-shifting via");
+			list.add("beryllium-enhanced resource scanner.");
+		}
 		if(this == ModItems.ams_focus_limiter)
 		{
 			list.add("Maximum performance for restriction field:");

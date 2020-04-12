@@ -372,6 +372,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	private void getInteractionForBlock(BlockPos pos) {
 		
 		Block b = world.getBlockState(pos).getBlock();
+		TileEntity te = world.getTileEntity(pos);
 		
 		if(b == Blocks.LAVA || b == Blocks.FLOWING_LAVA) {
 			hullHeatMod *= 3;
@@ -390,16 +391,15 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 				tanks[0].drain(50, true);
 				tanks[1].fill(new FluidStack(tankTypes[1], 5), true);
 			}
-			//TODO breeding reactor and nuke furnace
-		//} else if(te instanceof TileEntityMachineReactor) {
-		//	TileEntityMachineReactor reactor = (TileEntityMachineReactor)te;
-		//	if(reactor.dualPower < 1 && this.coreHeat > 0)
-		//		reactor.dualPower = 1;
+		} else if(te instanceof TileEntityMachineReactor) {
+			TileEntityMachineReactor reactor = (TileEntityMachineReactor)te;
+			if(reactor.dualPower < 1 && this.coreHeat > 0)
+				reactor.dualPower = 1;
 			
-		//} else if(te instanceof TileEntityNukeFurnace) {
-		//	TileEntityNukeFurnace reactor = (TileEntityNukeFurnace)te;
-		//	if(reactor.dualPower < 1 && this.coreHeat > 0)
-		//		reactor.dualPower = 1;
+		} else if(te instanceof TileEntityNukeFurnace) {
+			TileEntityNukeFurnace reactor = (TileEntityNukeFurnace)te;
+			if(reactor.dualPower < 1 && this.coreHeat > 0)
+				reactor.dualPower = 1;
 			
 		} else if(b == ModBlocks.block_uranium) {
 			coreHeatMod *= 1.05;

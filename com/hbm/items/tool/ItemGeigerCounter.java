@@ -106,8 +106,7 @@ public class ItemGeigerCounter extends Item {
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(world.getBlockState(pos).getBlock() == ModBlocks.block_red_copper) {
     		Library.consumeInventoryItem(player.inventory, ModItems.geiger_counter);
-    		//TODO survey scanner
-    		//player.inventory.addItemStackToInventory(new ItemStack(ModItems.survey_scanner));
+    		player.inventory.addItemStackToInventory(new ItemStack(ModItems.survey_scanner));
     		return EnumActionResult.SUCCESS;
     	}
     	

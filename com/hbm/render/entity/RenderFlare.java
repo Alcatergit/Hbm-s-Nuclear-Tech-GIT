@@ -104,7 +104,6 @@ public  class  RenderFlare <E extends Entity> extends Render<E> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(E entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

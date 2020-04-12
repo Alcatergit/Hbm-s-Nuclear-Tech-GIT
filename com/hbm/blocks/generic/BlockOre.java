@@ -126,17 +126,17 @@ public class BlockOre extends Block {
 			case 16: return ModItems.ingot_lanthanium;
 			case 17: return ModItems.ingot_actinium;
 			case 18: return Item.getItemFromBlock(ModBlocks.block_meteor);
-			//case 19: return Item.getItemFromBlock(ModBlocks.fusion_heater);
-			//case 20: return Item.getItemFromBlock(ModBlocks.fusion_core);
-			//case 21: return Item.getItemFromBlock(ModBlocks.watz_element);
-			//case 22: return Item.getItemFromBlock(ModBlocks.ore_rare);
-			//case 23: return Item.getItemFromBlock(ModBlocks.fusion_conductor);
-			//case 24: return Item.getItemFromBlock(ModBlocks.reactor_computer);
-			//case 25: return Item.getItemFromBlock(ModBlocks.machine_diesel);
+			case 19: return Item.getItemFromBlock(ModBlocks.fusion_heater);
+			case 20: return Item.getItemFromBlock(ModBlocks.fusion_core);
+			case 21: return Item.getItemFromBlock(ModBlocks.watz_element);
+			case 22: return Item.getItemFromBlock(ModBlocks.ore_rare);
+			case 23: return Item.getItemFromBlock(ModBlocks.fusion_conductor);
+			case 24: return Item.getItemFromBlock(ModBlocks.reactor_computer);
+			case 25: return Item.getItemFromBlock(ModBlocks.machine_diesel);
 			case 26: return Item.getItemFromBlock(ModBlocks.machine_rtg_grey);
 			case 27: return ModItems.pellet_rtg;
 			case 28: return ModItems.pellet_rtg_weak;
-			//case 29: return ModItems.rtg_unit;
+			case 29: return ModItems.rtg_unit;
 			case 30: return ModItems.gun_spark_ammo;
 			case 31: return ModItems.gun_fatman_ammo;
 			case 32: return ModItems.gun_mirv_ammo;
@@ -148,6 +148,38 @@ public class BlockOre extends Block {
 		if(this == ModBlocks.ore_nether_fire)
 		{
 			return rand.nextInt(2) == 0 ? ModItems.powder_fire : Items.BLAZE_POWDER;
+		}
+		if(this == ModBlocks.deco_aluminium)
+		{
+			return ModItems.ingot_aluminium;
+		}
+		if(this == ModBlocks.deco_beryllium)
+		{
+			return ModItems.ingot_beryllium;
+		}
+		if(this == ModBlocks.deco_lead)
+		{
+			return ModItems.ingot_lead;
+		}
+		if(this == ModBlocks.deco_red_copper)
+		{
+			return ModItems.ingot_red_copper;
+		}
+		if(this == ModBlocks.deco_steel)
+		{
+			return ModItems.ingot_steel;
+		}
+		if(this == ModBlocks.deco_titanium)
+		{
+			return ModItems.ingot_titanium;
+		}
+		if(this == ModBlocks.deco_tungsten)
+		{
+			return ModItems.ingot_tungsten;
+		}
+		if(this == ModBlocks.deco_asbestos)
+		{
+			return ModItems.ingot_asbestos;
 		}
 		return Item.getItemFromBlock(this);
 	}

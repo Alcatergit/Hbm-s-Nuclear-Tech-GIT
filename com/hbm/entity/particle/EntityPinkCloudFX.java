@@ -1,7 +1,11 @@
 package com.hbm.entity.particle;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.PinkCloudBroadcaster;
+import com.hbm.blocks.machine.RadioRec;
 import com.hbm.explosion.ExplosionChaos;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -74,12 +78,11 @@ public class EntityPinkCloudFX extends EntityModFX {
 			this.posY += this.motionY/subdivisions;
 			this.posZ += this.motionZ/subdivisions;
 			BlockPos pos = new BlockPos((int) posX, (int) posY, (int) posZ);
-			//TODO broadcasters
-			/*if(world.getBlockState(pos).getBlock() == ModBlocks.radiorec) {
+			if(world.getBlockState(pos).getBlock() == ModBlocks.radiorec) {
 				this.setDead();
-				int meta = world.getBlockMetadata((int) posX, (int) posY, (int) posZ);
-				world.setBlock((int) posX, (int) posY, (int) posZ, ModBlocks.broadcaster_pc, meta, 2);
-			}*/
+				EnumFacing e = world.getBlockState(pos).getValue(RadioRec.FACING);
+				world.setBlockState(pos, ModBlocks.broadcaster_pc.getDefaultState().withProperty(PinkCloudBroadcaster.FACING, e), 2);
+			}
 			
 			if (world.getBlockState(pos).isNormalCube()) {
 	

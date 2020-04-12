@@ -1,5 +1,7 @@
 package com.hbm.packet;
 
+import java.util.List;
+
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
 
 import io.netty.buffer.ByteBuf;
@@ -17,23 +19,18 @@ public class TERadarPacket implements IMessage {
 	int x;
 	int y;
 	int z;
-	int conX;
-	int conY;
-	int conZ;
-	int alt;
+	List<int[]> missiles;
+	int[][] missiles2;
 
 	public TERadarPacket() {
 
 	}
 
-	public TERadarPacket(BlockPos pos, int conX, int conY, int conZ, int alt) {
+	public TERadarPacket(BlockPos pos, List<int[]> missiles) {
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
-		this.conX = conX;
-		this.conY = conY;
-		this.conZ = conZ;
-		this.alt = alt;
+		this.missiles = missiles;
 	}
 
 	@Override
@@ -41,10 +38,15 @@ public class TERadarPacket implements IMessage {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
-		conX = buf.readInt();
-		conY = buf.readInt();
-		conZ = buf.readInt();
-		alt = buf.readInt();
+		int size = buf.readInt();
+		missiles2 = new int[size][];
+		for(int i = 0; i < size; i ++){
+			int mX = buf.readInt();
+			int mZ = buf.readInt();
+			int type = buf.readInt();
+			int mY = buf.readInt();
+			missiles2[i] = new int[]{mX, mZ, type, mY};
+		}
 	}
 
 	@Override
@@ -52,10 +54,13 @@ public class TERadarPacket implements IMessage {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
-		buf.writeInt(conX);
-		buf.writeInt(conY);
-		buf.writeInt(conZ);
-		buf.writeInt(alt);
+		buf.writeInt(missiles.size());
+		for(int[] missile : missiles){
+			buf.writeInt(missile[0]);
+			buf.writeInt(missile[1]);
+			buf.writeInt(missile[2]);
+			buf.writeInt(missile[3]);
+		}
 	}
 
 	public static class Handler implements IMessageHandler<TERadarPacket, IMessage> {
@@ -70,7 +75,10 @@ public class TERadarPacket implements IMessage {
 					if (te != null && te instanceof TileEntityMachineRadar) {
 
 						TileEntityMachineRadar radar = (TileEntityMachineRadar) te;
-						radar.nearbyMissiles.add(new int[]{m.conX, m.conY, m.conZ, m.alt});
+						radar.nearbyMissiles.clear();
+						for(int[] i : m.missiles2){
+							radar.nearbyMissiles.add(i);
+						}
 					}
 				} catch (Exception x) {
 				}

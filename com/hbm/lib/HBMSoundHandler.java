@@ -116,6 +116,17 @@ public final class HBMSoundHandler {
 	public static SoundEvent minerOperate;
 	public static SoundEvent missileAssembly2;
 	public static SoundEvent sonarPing;
+	public static SoundEvent radawayUse;
+	public static SoundEvent gasmaskScrew;
+	public static SoundEvent spray;
+	public static SoundEvent repair;
+	public static SoundEvent nullChopper;
+	public static SoundEvent chopperCharge;
+	public static SoundEvent nullCrashing;
+	public static SoundEvent chopperDamage;
+	public static SoundEvent nullMine;
+	public static SoundEvent openDoor;
+	public static SoundEvent closeDoor;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -250,7 +261,17 @@ public final class HBMSoundHandler {
 		minerOperate = register("block.minerOperate");
 		missileAssembly2 = register("block.missileAssembly2");
 		sonarPing = register("block.sonarPing");
-		
+		radawayUse = register("item.radaway");
+		gasmaskScrew = register("item.gasmaskScrew");
+		spray = register("item.spray");
+		repair = register("item.repair");
+		nullChopper = register("misc.nullChopper");
+		chopperCharge = register("entity.chopperCharge");
+		nullCrashing = register("misc.nullCrashing");
+		chopperDamage = register("entity.chopperDamage");
+		nullMine = register("misc.nullMine");
+		openDoor = register("block.openDoor");
+		closeDoor = register("block.closeDoor");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionThermo;
+import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.AdvancementManager;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -16,11 +19,13 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -540,14 +545,12 @@ public class EntityPlasmaBeam extends Entity implements IProjectile {
     }
     
     private boolean surviveImmolation(EntityPlayer player) {
-    	//TODO geiger counter and bottle sparkle
-    	/*if(player instanceof EntityPlayerMP && Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_pip) && Library.hasInventoryItem(player.inventory, ModItems.bottle_sparkle) && Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
+    	if(player instanceof EntityPlayerMP && Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_pip) && Library.hasInventoryItem(player.inventory, ModItems.bottle_sparkle) && Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
     		AdvancementManager.grantAchievement((EntityPlayerMP) player, AdvancementManager.achSacrifice);
     		player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 3 * 20, 6));
     		return true;
     	} else {
     		return false;
-    	}*/
-    	return false;
+    	}
     }
 }

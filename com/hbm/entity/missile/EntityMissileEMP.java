@@ -3,6 +3,7 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.items.ModItems;
@@ -48,9 +49,7 @@ public class EntityMissileEMP extends EntityMissileBaseAdvanced {
 
 	@Override
 	public ItemStack getDebrisRareDrop() {
-		//TODO EMP bomb
-		//return new ItemStack(ModBlocks.emp_bomb, 1);
-		return ItemStack.EMPTY;
+		return new ItemStack(ModBlocks.emp_bomb, 1);
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.calc.VectorUtil;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
@@ -471,9 +473,8 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		} else if (config.doesBreakGlass && !world.isRemote) {
 			if (block == Blocks.GLASS || block == Blocks.GLASS_PANE || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE)
 				world.destroyBlock(pos, false);
-			// TODO red barrel
-			// if(world.getBlock(bX, bY, bZ) == ModBlocks.red_barrel)
-			// ((RedBarrel) ModBlocks.red_barrel).explode(world, bX, bY, bZ);
+			 if(block == ModBlocks.red_barrel)
+			 ((RedBarrel) ModBlocks.red_barrel).explode(world, pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

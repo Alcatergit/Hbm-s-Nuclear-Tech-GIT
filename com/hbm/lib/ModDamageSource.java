@@ -85,11 +85,11 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("subAtomic5", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }
-    /*public static DamageSource euthanized(Entity p_76353_0_, Entity p_76353_1_)
+    public static DamageSource euthanized(Entity p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("euthanized", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
-    */public static DamageSource causeDischargeDamage(EntityDischarge p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeDischargeDamage(EntityDischarge p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("electrified", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }

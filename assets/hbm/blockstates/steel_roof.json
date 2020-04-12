@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:steel_roof" },
+     	   	"facing=south": { "model": "hbm:steel_roof", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:steel_roof", "y": 270 },
+      		"facing=east":  { "model": "hbm:steel_roof", "y": 90 }
+	}
+}

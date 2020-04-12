@@ -3,7 +3,9 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.EntityGrenadeTau;
+import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.items.ModItems;
@@ -311,10 +313,9 @@ public class EntityBullet extends Entity implements IProjectile {
 				this.inGround = true;
 			}
 
-			//TODO red barrel
-			/*if (block == ModBlocks.red_barrel) {
+			if (block == ModBlocks.red_barrel) {
 				((RedBarrel) block).explode(world, this.field_145791_d, this.field_145792_e, this.field_145789_f);
-			}*/
+			}
 
 			if (block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.GLASS_PANE || block == Blocks.STAINED_GLASS_PANE) {
 				this.world.setBlockToAir(new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f));

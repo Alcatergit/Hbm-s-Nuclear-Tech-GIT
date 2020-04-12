@@ -163,5 +163,7 @@
     "block.railgunFire": {"category": "block", "sounds": [{"name": "hbm:block/railgunFire", "stream": false}]},
     "block.railgunCharge": {"category": "block", "sounds": [{"name": "hbm:block/railgunCharge", "stream": false}]},
     "block.buttonYes": {"category": "block", "sounds": [{"name": "hbm:block/buttonYes", "stream": false}]},
-    "block.buttonNo": {"category": "block", "sounds": [{"name": "hbm:block/buttonNo", "stream": false}]}
+    "block.buttonNo": {"category": "block", "sounds": [{"name": "hbm:block/buttonNo", "stream": false}]},
+    "block.openDoor": {"category": "block", "sounds": ["hbm:block/door_open_1", "hbm:block/door_open_2"]},
+	"block.closeDoor": {"category": "block", "sounds": ["hbm:block/door_close_1", "hbm:block/door_close_2"]}
 }

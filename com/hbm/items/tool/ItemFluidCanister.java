@@ -5,12 +5,14 @@ import java.util.List;
 import com.hbm.forgefluid.HbmFluidHandlerCanister;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -22,6 +24,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFluidCanister extends Item implements IHasCustomModel {
 
@@ -42,10 +46,14 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		if(FluidUtil.getFluidContained(stack) == null)
-			return "Empty Canister";
-		return super.getItemStackDisplayName(stack);
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if(f == null) {
+			return I18n.format("item.canister_empty.name");
+		} else {
+			return I18n.format(EnumCanister.getEnumFromFluid(f.getFluid()).getTranslateKey());
+		}
 	}
 	
 	@Override
@@ -87,5 +95,13 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 				return true;
 		}
 		return false;
+	}
+	
+	public static ItemStack getFullCanister(Fluid f){
+		ItemStack stack = new ItemStack(ModItems.canister_generic, 1, 0);
+		stack.setTagCompound(new NBTTagCompound());
+		if(f != null && EnumCanister.contains(f))
+			stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, 4000).writeToNBT(new NBTTagCompound()));
+		return stack;
 	}
 }

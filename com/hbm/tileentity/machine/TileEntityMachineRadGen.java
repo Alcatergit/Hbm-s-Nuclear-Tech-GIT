@@ -248,7 +248,7 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 		if(item == ModItems.waste_mox) return 150;
 		if(item == ModItems.waste_schrabidium) return 150;
 		if(item == Item.getItemFromBlock(ModBlocks.block_waste)) return 1000;
-		//if(item == Item.getItemFromBlock(ModBlocks.yellow_barrel)) return 900;
+		if(item == Item.getItemFromBlock(ModBlocks.yellow_barrel)) return 900;
 		if(item == ModItems.trinitite) return 80;
 		//if(item == Item.getItemFromBlock(ModBlocks.block_trinitite)) return 800;
 

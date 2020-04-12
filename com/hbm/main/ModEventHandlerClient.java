@@ -8,17 +8,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.flashlight.Flashlight;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
@@ -30,7 +28,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemCassette;
 import com.hbm.items.tool.ItemCassette.TrackType;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
@@ -81,7 +78,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.chunk.RenderChunk;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -89,6 +85,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -136,13 +133,22 @@ public class ModEventHandlerClient {
 		ModelLoader.registerItemVariants(ModItems.canister_generic, list);
 
 		i = 0;
-		ResourceLocation[] list2 = new ResourceLocation[EnumCell.values().length];
+		list = new ResourceLocation[EnumCell.values().length];
 		for(EnumCell e : EnumCell.values()) {
-			list2[i] = e.getResourceLocation();
+			list[i] = e.getResourceLocation();
 			i++;
 		}
-		ModelLoader.registerItemVariants(ModItems.cell, list2);
+		ModelLoader.registerItemVariants(ModItems.cell, list);
 
+		i = 0;
+		list = new ResourceLocation[EnumGasCanister.values().length];
+		for(EnumGasCanister e : EnumGasCanister.values()) {
+			list[i] = e.getResourceLocation();
+			i++;
+		}
+		ModelLoader.registerItemVariants(ModItems.cell, list);
+		
+		
 		for(Item item : ModItems.ALL_ITEMS) {
 			registerModel(item, 0);
 		}
@@ -156,6 +162,9 @@ public class ModEventHandlerClient {
 	}
 
 	private void registerModel(Item item, int meta) {
+		if(item == Items.AIR)
+			return;
+		
 		if(item == ModItems.chemistry_icon) {
 			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + EnumChemistryTemplate.getEnum(i).getName().toLowerCase(), "inventory"));
@@ -168,6 +177,11 @@ public class ModEventHandlerClient {
 			for(int i = 0; i < TrackType.values().length; i ++){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
+		} else if(item == ModItems.ingot_u238m2){
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(RefStrings.MODID + ":hs-elements", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 2, new ModelResourceLocation(RefStrings.MODID + ":hs-arsenic", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 3, new ModelResourceLocation(RefStrings.MODID + ":hs-vault", "inventory"));
 		} else if(item == ModItems.polaroid) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName() + "_" + MainRegistry.polaroidID, "inventory"));
 		} else if(item instanceof IHasCustomModel) {
@@ -186,6 +200,11 @@ public class ModEventHandlerClient {
 				e.putRenderModel((IBakedModel) o);
 		}
 		for(EnumCell e : EnumCell.values()) {
+			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
+			if(o instanceof IBakedModel)
+				e.putRenderModel((IBakedModel) o);
+		}
+		for(EnumGasCanister e : EnumGasCanister.values()) {
 			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
 			if(o instanceof IBakedModel)
 				e.putRenderModel((IBakedModel) o);
@@ -307,6 +326,7 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_uzi_saturnite_silencer, reg);
 		swapModelsNoGui(ModItems.gun_mp40, reg);
 		swapModels(ModItems.cell, reg);
+		swapModels(ModItems.gas_canister, reg);
 		
 		MainRegistry.proxy.registerMissileItems(reg);
 	}

@@ -12,14 +12,11 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 public class DSmokeRenderer extends Render<EntityDSmokeFX> {
-	private Item field_94151_a;
 	public static TextureAtlasSprite[] sprites = new TextureAtlasSprite[8];
 	private TextureAtlasSprite sprite;
-	private int field_94150_f;
 
 	public DSmokeRenderer(RenderManager renderManager) {
 		super(renderManager);

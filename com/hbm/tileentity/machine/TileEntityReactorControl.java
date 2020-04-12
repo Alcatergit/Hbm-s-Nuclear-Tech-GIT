@@ -107,8 +107,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		int zCoord = inventory.getStackInSlot(0).getTagCompound().getInteger("z");
         		BlockPos possibleReactor = new BlockPos(xCoord, yCoord, zCoord);
         		Block b = world.getBlockState(possibleReactor).getBlock();
-        		//TODO Reactor computer
-        		if(b == ModBlocks.machine_reactor_small /*|| b == ModBlocks.reactor_computer*/) {
+        		if(b == ModBlocks.machine_reactor_small || b == ModBlocks.reactor_computer) {
         			link = possibleReactor;
         		} else if(b == ModBlocks.dummy_block_reactor_small || b == ModBlocks.dummy_port_reactor_small) {
         			link = ((TileEntityDummy)world.getTileEntity(possibleReactor)).target;
@@ -158,8 +157,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		if(auto && (water < 100 || cool < 100 || coreHeat > (50000 * 0.95)) && fuel > 0) {
         			reactor.retracting = true;
         		}
-        		//TODO large reactor
-        	} /*else if(link != null && world.getTileEntity(link) instanceof TileEntityMachineReactorLarge && ((TileEntityMachineReactorLarge)world.getTileEntity(link)).checkBody()) {
+        	} else if(link != null && world.getTileEntity(link) instanceof TileEntityMachineReactorLarge && ((TileEntityMachineReactorLarge)world.getTileEntity(link)).checkBody()) {
         		TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)world.getTileEntity(link);
         		
         		hullHeat = reactor.hullHeat;
@@ -205,7 +203,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         			reactor.rods = 0;
         		}
         		
-        	}*/ else {
+        	} else {
         		hullHeat = 0;
         		coreHeat = 0;
         		fuel = 0;

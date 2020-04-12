@@ -26,8 +26,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineMissileAssembly extends TileEntity implements ITickable {
 
-	//TODO Should the CIWS shoot down custom missiles?
-	
 	public ItemStackHandler inventory;
 	
 	public MissileStruct load;

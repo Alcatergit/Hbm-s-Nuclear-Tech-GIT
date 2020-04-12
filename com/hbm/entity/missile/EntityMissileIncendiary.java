@@ -40,7 +40,6 @@ public class EntityMissileIncendiary extends EntityMissileBaseAdvanced {
 		return new ItemStack(ModItems.warhead_incendiary_small);
 	}
 
-	//TODO figure out what the heck this actually is
 	@Override
 	public EnumMissileType getMissileType() {
 		return EnumMissileType.TIER1;

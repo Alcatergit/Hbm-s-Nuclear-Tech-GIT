@@ -114,6 +114,13 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 		list.add((f == null ? "0" : f.amount) + "/" + cap + " mb");
 
 	}
+	
+	public static ItemStack getFullBarrel(Fluid f){
+		ItemStack stack = new ItemStack(ModItems.fluid_barrel_full, 1, 0);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 64000).writeToNBT(new NBTTagCompound()));
+		return stack;
+	}
 
 
 }

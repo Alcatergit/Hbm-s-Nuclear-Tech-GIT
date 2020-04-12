@@ -97,7 +97,6 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 	
 	@Override
 	public void update() {
-		boolean flag = this.hasPower();
 		boolean flag1 = false;
 		
 		if(!world.isRemote)

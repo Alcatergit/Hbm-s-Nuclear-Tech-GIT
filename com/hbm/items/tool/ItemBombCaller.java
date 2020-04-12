@@ -168,4 +168,10 @@ public class ItemBombCaller extends Item {
 		}
 		stack.getTagCompound().setInteger("callerType", type.ordinal());
 	}
+	
+	public static ItemStack getStack(EnumCallerType type){
+		ItemStack stack = new ItemStack(ModItems.bomb_caller, 1, 0);
+		setCallerType(stack, type);
+		return stack;
+	}
 }

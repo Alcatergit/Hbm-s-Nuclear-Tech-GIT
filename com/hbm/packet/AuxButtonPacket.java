@@ -70,6 +70,8 @@ public class AuxButtonPacket implements IMessage {
 			ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
 				EntityPlayer p = ctx.getServerHandler().player;
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
+				if(!p.world.isBlockLoaded(pos))
+					return;
 				//try {
 					TileEntity te = p.world.getTileEntity(pos);
 					

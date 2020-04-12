@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.blocks.machine.BlockSeal;
 import com.hbm.entity.effect.EntityBlackHole;
@@ -97,6 +98,8 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.mob.EntityCyberCrab;
+import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
@@ -120,6 +123,7 @@ import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.entity.projectile.EntityDuchessGambit;
@@ -141,6 +145,7 @@ import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntitySchrab;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
+import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
@@ -168,15 +173,18 @@ import com.hbm.render.entity.RenderBombletZeta;
 import com.hbm.render.entity.RenderBoxcar;
 import com.hbm.render.entity.RenderBullet;
 import com.hbm.render.entity.RenderBulletMk2;
+import com.hbm.render.entity.RenderChopperMine;
 import com.hbm.render.entity.RenderCloudFleija;
 import com.hbm.render.entity.RenderCloudRainbow;
 import com.hbm.render.entity.RenderCloudSolinium;
+import com.hbm.render.entity.RenderCyberCrab;
 import com.hbm.render.entity.RenderDeathBlast;
 import com.hbm.render.entity.RenderEMPBlast;
 import com.hbm.render.entity.RenderEmpty;
 import com.hbm.render.entity.RenderFallingNuke;
 import com.hbm.render.entity.RenderFireProjectile;
 import com.hbm.render.entity.RenderFlare;
+import com.hbm.render.entity.RenderHunterChopper;
 import com.hbm.render.entity.RenderLN2;
 import com.hbm.render.entity.RenderMeteor;
 import com.hbm.render.entity.RenderMinerRocket;
@@ -246,6 +254,7 @@ import com.hbm.render.item.ItemRenderEMPRay;
 import com.hbm.render.item.ItemRenderEuthanasia;
 import com.hbm.render.item.ItemRenderFatMan;
 import com.hbm.render.item.ItemRenderFolly;
+import com.hbm.render.item.ItemRenderGasCanister;
 import com.hbm.render.item.ItemRenderGunAnim;
 import com.hbm.render.item.ItemRenderGunAnim2;
 import com.hbm.render.item.ItemRenderGunDefab;
@@ -325,6 +334,8 @@ import com.hbm.render.tileentity.RenderNukePrototype;
 import com.hbm.render.tileentity.RenderNukeSolinium;
 import com.hbm.render.tileentity.RenderNukeTsar;
 import com.hbm.render.tileentity.RenderOilDuct;
+import com.hbm.render.tileentity.RenderPoleSatelliteReceiver;
+import com.hbm.render.tileentity.RenderPoleTop;
 import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.tileentity.RenderPuF6Tank;
 import com.hbm.render.tileentity.RenderPumpjack;
@@ -381,6 +392,8 @@ import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
+import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
+import com.hbm.tileentity.deco.TileEntityDecoPoleTop;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
@@ -421,7 +434,9 @@ import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
+import net.minecraft.block.BlockDirt;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.client.particle.ParticleFirework;
@@ -543,6 +558,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSatDock.class, new RenderSatDock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceField.class, new RenderMachineForceField());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadar.class, new RenderRadar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleTop.class, new RenderPoleTop());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleSatelliteReceiver.class, new RenderPoleSatelliteReceiver());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -685,10 +702,18 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMinerRocket.class, RenderMinerRocket.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMeteor.class, RenderMeteor.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBobmazon.class, RenderBobmazon.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCyberCrab.class, RenderCyberCrab.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityHunterChopper.class, RenderHunterChopper.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChopperMine.class, RenderChopperMine.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityWaterSplash.class, RenderEmpty.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.door_metal, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.door_office, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.mud_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.seal_controller, new StateMap.Builder().ignore(BlockSeal.ACTIVATED).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.ntm_dirt, new StateMap.Builder().ignore(BlockDirt.SNOWY).ignore(BlockDirt.VARIANT).build());
 	}
 	
 	private <E extends Entity> void registerGrenadeRenderer(Class<E> clazz, Item grenade) {
@@ -863,6 +888,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_uzi_saturnite_silencer.setTileEntityItemStackRenderer(new ItemRenderUzi());
 		ModItems.gun_mp40.setTileEntityItemStackRenderer(new ItemRenderMP40());
 		ModItems.cell.setTileEntityItemStackRenderer(new ItemRenderCell());
+		ModItems.gas_canister.setTileEntityItemStackRenderer(new ItemRenderGasCanister());
 	}
 	
 	public static IBakedModel boxcar;

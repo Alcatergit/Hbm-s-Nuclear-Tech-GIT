@@ -13,11 +13,6 @@ public class TileEntityDecoBlock extends TileEntity {
 	}
 	
 	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return super.shouldRenderInPass(pass);
-	}
-	
-	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared()
 	{

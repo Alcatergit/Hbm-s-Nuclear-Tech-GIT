@@ -12,7 +12,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TERadarDestructorPacket;
 import com.hbm.packet.TERadarPacket;
 
 import net.minecraft.entity.Entity;
@@ -172,11 +171,9 @@ public class TileEntityMachineRadar extends TileEntity implements ITickable, ICo
 	
 	private void sendMissileData() {
 		
-		PacketDispatcher.wrapper.sendToAllAround(new TERadarDestructorPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		//PacketDispatcher.wrapper.sendToAllAround(new TERadarDestructorPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		
-		for(int[] e : this.nearbyMissiles) {
-			PacketDispatcher.wrapper.sendToAllAround(new TERadarPacket(pos, e[0], e[1], e[2], e[3]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		}
+		PacketDispatcher.wrapper.sendToAllAround(new TERadarPacket(pos, nearbyMissiles), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 	}
 	
 	public long getPowerScaled(long i) {

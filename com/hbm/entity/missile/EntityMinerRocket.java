@@ -88,13 +88,9 @@ public class EntityMinerRocket extends Entity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
 	}
 }

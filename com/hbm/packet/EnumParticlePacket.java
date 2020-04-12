@@ -18,7 +18,6 @@ public class EnumParticlePacket implements IMessage {
 	int count;
 	
 	public EnumParticlePacket() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public EnumParticlePacket(EnumHbmParticles particle, double x, double y, double z, int count, double strength) {

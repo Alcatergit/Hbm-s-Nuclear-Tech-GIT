@@ -1,14 +1,19 @@
 package com.hbm.items.special;
 
 import java.util.List;
+import java.util.Random;
 
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.JetpackBooster;
 import com.hbm.items.gear.JetpackBreak;
 import com.hbm.items.gear.JetpackRegular;
 import com.hbm.items.gear.JetpackVectorized;
+import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
+import com.hbm.potion.HbmPotion;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -29,6 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSyringe extends Item {
 
+	Random rand = new Random();
+	
 	public ItemSyringe(String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
@@ -39,6 +46,24 @@ public class ItemSyringe extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		if(this == ModItems.syringe_antidote)
+		{
+            if (!world.isRemote)
+            {
+            	player.clearActivePotions();
+            
+            	player.getHeldItem(hand).shrink(1);
+            	world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if (player.getHeldItem(hand).isEmpty()) {
+					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_empty));
+				}
+
+            	if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
+				}
+            }
+		}
 		if (this == ModItems.syringe_awesome) {
 			if (!world.isRemote) {
 				player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 50 * 20, 9));
@@ -53,7 +78,7 @@ public class ItemSyringe extends Item {
 				player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 4));
 
 				player.getHeldItem(hand).shrink(1);
-				player.playSound(HBMSoundHandler.syringeUse, 1.0F, 1.0F);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				if (player.getHeldItem(hand).isEmpty()) {
 					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_empty));
@@ -64,12 +89,35 @@ public class ItemSyringe extends Item {
 				}
 			}
 		}
+		
+		if(this == ModItems.syringe_poison)
+		{
+            if (!world.isRemote)
+            {
+            	if(rand.nextInt(2) == 0)
+            		player.attackEntityFrom(ModDamageSource.euthanizedSelf, 30);
+            	else
+            		player.attackEntityFrom(ModDamageSource.euthanizedSelf2, 30);
+                
+            	player.getHeldItem(hand).shrink(1);
+                world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+                if (player.getHeldItem(hand).isEmpty()) {
+					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_empty));
+				}
+
+				if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
+				}
+            }
+		}
+		
 		if (this == ModItems.syringe_metal_stimpak) {
 			if (!world.isRemote) {
 				player.heal(5);
 
 				player.getHeldItem(hand).shrink(1);
-				player.playSound(HBMSoundHandler.syringeUse, 1.0F, 1.0F);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				if (player.getHeldItem(hand).isEmpty()) {
 					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_metal_empty));
 				}
@@ -79,6 +127,164 @@ public class ItemSyringe extends Item {
 				}
 			}
 		}
+		
+		if(this == ModItems.syringe_metal_medx)
+		{
+            if (!world.isRemote)
+            {
+            	player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4 * 60 * 20, 2));
+            	
+            	player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+				if (player.getHeldItem(hand).isEmpty()) {
+					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_metal_empty));
+				}
+
+				if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+				}
+            }
+		}
+		
+		if(this == ModItems.syringe_metal_psycho)
+		{
+            if (!world.isRemote)
+            {
+            	player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 2 * 60 * 20, 0));
+            	player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2 * 60 * 20, 0));
+            	
+            	player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+				if (player.getHeldItem(hand).isEmpty()) {
+					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_metal_empty));
+				}
+
+				if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+				}
+            }
+		}
+		
+		if(this == ModItems.syringe_metal_super)
+		{
+            if (!world.isRemote)
+            {
+            	player.heal(25);
+            	player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10 * 20, 0));
+            
+            	player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+				if (player.getHeldItem(hand).isEmpty()) {
+					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_metal_empty));
+				}
+
+				if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+				}
+            }
+		}
+		
+		if(this == ModItems.med_bag)
+		{
+            if (!world.isRemote)
+            {
+            	player.setHealth(player.getMaxHealth());
+            	
+        		player.removePotionEffect(MobEffects.BLINDNESS);
+        		player.removePotionEffect(MobEffects.NAUSEA);
+        		player.removePotionEffect(MobEffects.MINING_FATIGUE);
+        		player.removePotionEffect(MobEffects.HUNGER);
+        		player.removePotionEffect(MobEffects.SLOWNESS);
+        		player.removePotionEffect(MobEffects.POISON);
+        		player.removePotionEffect(MobEffects.WEAKNESS);
+        		player.removePotionEffect(MobEffects.WITHER);
+        		player.removePotionEffect(HbmPotion.radiation);
+            
+        		player.getHeldItem(hand).shrink(1);
+        		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+            }
+		}
+		
+		if(this == ModItems.radaway)
+		{
+            if (!world.isRemote)
+            {
+				if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(140F);
+            
+				player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+            }
+		}
+		
+		if(this == ModItems.radaway_strong)
+		{
+            if (!world.isRemote)
+            {
+            	if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(350F);
+            
+				player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+            }
+		}
+		
+		if(this == ModItems.radaway_flush)
+		{
+            if (!world.isRemote)
+            {
+            	if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(1000F);
+            
+				player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+            }
+		}
+		
+		if(this == ModItems.syringe_taint)
+		{
+            if (!world.isRemote)
+            {
+                player.addPotionEffect(new PotionEffect(HbmPotion.taint, 60 * 20, 0));
+                player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
+            
+                player.getHeldItem(hand).shrink(1);
+				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            }
+
+        	if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty)))
+        	{
+        		player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+        	}
+
+        	if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.bottle2_empty)))
+        	{
+        		player.dropItem(new ItemStack(ModItems.bottle2_empty, 1, 0), false);
+        	}
+		}
+		
+		if(this == ModItems.gas_mask_filter &&
+				(player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask || player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask_m65))
+		{
+            if (!world.isRemote)
+            {
+            	if(player.inventory.armorInventory.get(3).getItemDamage() == 0)
+            		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+            	
+            	player.inventory.armorInventory.get(3).setItemDamage(0);
+
+		        world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.gasmaskScrew, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		        player.getHeldItem(hand).shrink(1);
+            	return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+            }
+		}
+		
 		if (this == ModItems.jetpack_tank && (player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_boost || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_break || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_fly || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_vector)) {
 			if (!world.isRemote) {
 				ItemStack jetpack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
@@ -109,6 +315,43 @@ public class ItemSyringe extends Item {
 				}
 			}
 		}
+		if(this == ModItems.gun_kit_1 || this == ModItems.gun_kit_2)
+		{
+            if (!world.isRemote)
+            {
+    			float repair = 0;
+    			
+    			if(this == ModItems.gun_kit_1) {
+    				repair = 0.1F;
+    		        world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.spray, SoundCategory.PLAYERS, 1.0F, 1.0F);
+    			}
+    			if(this == ModItems.gun_kit_2) {
+    				repair = 0.5F;
+    		        world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.repair, SoundCategory.PLAYERS, 1.0F, 1.0F);
+    			}
+    			
+            	for(int i = 0; i < 9; i++) {
+            		
+            		ItemStack gun = player.inventory.mainInventory.get(i);
+            		
+            		if(gun != null && gun.getItem() instanceof ItemGunBase) {
+            			
+            			int full = ((ItemGunBase)gun.getItem()).mainConfig.durability;
+            			int wear = ItemGunBase.getItemWear(gun);
+            			
+            			int nWear = (int) (wear - (full * repair));
+            			
+            			if(nWear < 0)
+            				nWear = 0;
+            			
+            			ItemGunBase.setItemWear(gun, nWear);
+            		}
+            	}
+            
+            	player.getHeldItem(hand).shrink(1);
+            }
+		}
+		
 		return ActionResult.<ItemStack> newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	}
 
@@ -131,6 +374,26 @@ public class ItemSyringe extends Item {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase attacker) {
+		World world = entity.world;
+		if(this == ModItems.syringe_antidote)
+		{
+            if (!entity.world.isRemote)
+            {
+            	entity.clearActivePotions();
+            
+            	stack.shrink(1);
+            	world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
 		if (this == ModItems.syringe_awesome) {
 			if (!entity.world.isRemote) {
 				entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 50 * 20, 9));
@@ -146,7 +409,7 @@ public class ItemSyringe extends Item {
 
 				stack.shrink(1);
 				;
-				entity.playSound(HBMSoundHandler.syringeUse, 1.0F, 1.0F);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				if (attacker instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) attacker;
@@ -156,13 +419,33 @@ public class ItemSyringe extends Item {
 				}
 			}
 		}
+		
+		if(this == ModItems.syringe_poison)
+		{
+            if (!world.isRemote)
+            {
+            	entity.attackEntityFrom(ModDamageSource.euthanized(attacker, attacker), 30);
+                
+            	stack.shrink(1);
+            	world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
+		
 		if (this == ModItems.syringe_metal_stimpak) {
 			if (!entity.world.isRemote) {
 				entity.heal(5);
 
 				stack.shrink(1);
-				;
-				entity.playSound(HBMSoundHandler.syringeUse, 1.0F, 1.0F);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				if (attacker instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) attacker;
@@ -172,16 +455,139 @@ public class ItemSyringe extends Item {
 				}
 			}
 		}
+		
+		if(this == ModItems.syringe_metal_medx)
+		{
+            if (!world.isRemote)
+            {
+            	entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 4 * 60 * 20, 2));
+            	
+            	stack.shrink(1);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
+		
+		if(this == ModItems.syringe_metal_psycho)
+		{
+            if (!world.isRemote)
+            {
+            	entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 2 * 60 * 20, 0));
+            	entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2 * 60 * 20, 0));
+            	
+            	stack.shrink(1);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
+		
+		if(this == ModItems.syringe_metal_super)
+		{
+            if (!world.isRemote)
+            {
+            	entity.heal(25);
+            	entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10 * 20, 0));
+            
+            	stack.shrink(1);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
+		
+		if(this == ModItems.syringe_taint)
+		{
+            if (!world.isRemote)
+            {
+            	entity.addPotionEffect(new PotionEffect(HbmPotion.taint, 60 * 20, 0));
+            	entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
+            
+            	stack.shrink(1);
+				world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            	if(attacker instanceof EntityPlayer)
+            	{
+            		EntityPlayer player = (EntityPlayer)attacker;
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_metal_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.syringe_metal_empty, 1, 0), false);
+            		}
+            		if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.bottle2_empty)))
+            		{
+            			player.dropItem(new ItemStack(ModItems.bottle2_empty, 1, 0), false);
+            		}
+            	}
+            }
+		}
+		
 		return false;
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(this == ModItems.syringe_antidote) {
+			tooltip.add("Removes all potion effects");
+		}
 		if (this == ModItems.syringe_awesome) {
 			tooltip.add("Every good effect for 50 seconds");
 		}
 		if (this == ModItems.syringe_metal_stimpak) {
 			tooltip.add("Heals 2.5 hearts");
+		}
+		if(this == ModItems.syringe_metal_medx) {
+			tooltip.add("Resistance III for 4 minutes");
+		}
+		if(this == ModItems.syringe_metal_psycho) {
+			tooltip.add("Resistance I for 2 minutes");
+			tooltip.add("Strength I for 2 minutes");
+		}
+		if(this == ModItems.syringe_metal_super) {
+			tooltip.add("Heals 25 hearts");
+			tooltip.add("Slowness I for 10 seconds");
+		}
+		if(this == ModItems.syringe_poison) {
+			tooltip.add("Deadly");
+		}
+		if(this == ModItems.syringe_taint) {
+			tooltip.add("Tainted I for 60 seconds");
+			tooltip.add("Nausea I for 5 seconds");
+			tooltip.add("Cloud damage + taint = tainted heart effect");
+		}
+		if(this == ModItems.med_bag) {
+			tooltip.add("Full heal, regardless of max health");
+			tooltip.add("Removes negative effects");
+		}
+		if(this == ModItems.radaway) {
+			tooltip.add("Removes 140 RAD");
+		}
+		if(this == ModItems.radaway_strong) {
+			tooltip.add("Removes 350 RAD");
+		}
+		if(this == ModItems.radaway_flush) {
+			tooltip.add("Removes 1000 RAD");
 		}
 	}
 }

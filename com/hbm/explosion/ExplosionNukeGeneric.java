@@ -627,9 +627,8 @@ public class ExplosionNukeGeneric {
 				if(random.nextInt(5) <= 1)
 					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 			}
-			//TODO fusion stuff
-			//if((b == ModBlocks.fusion_conductor || b == ModBlocks.fwatz_conductor || b == ModBlocks.fusion_motor || b == ModBlocks.fusion_heater || b == ModBlocks.fwatz_computer) && random.nextInt(10) == 0)
-			//	world.setBlock(x, y, z, ModBlocks.block_electrical_scrap);
+			if((b == ModBlocks.fusion_conductor || b == ModBlocks.fwatz_conductor || b == ModBlocks.fusion_motor || b == ModBlocks.fusion_heater || b == ModBlocks.fwatz_computer) && random.nextInt(10) == 0)
+				world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 		}
 	}
 	

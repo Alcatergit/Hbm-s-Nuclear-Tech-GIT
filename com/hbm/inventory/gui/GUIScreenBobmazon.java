@@ -292,7 +292,6 @@ public class GUIScreenBobmazon extends GuiScreen {
 		NUCLEAR(AdvancementManager.bobNuclear);
 		
 		private Requirement(Advancement achievement) {
-			System.out.println("tester + " + achievement);
 			this.achievement = achievement;
 		}
 		

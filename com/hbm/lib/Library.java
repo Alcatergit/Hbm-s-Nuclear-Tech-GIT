@@ -1,12 +1,16 @@
 package com.hbm.lib;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
 import com.hbm.capability.RadiationCapability;
+import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.interfaces.IConductor;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
@@ -23,24 +27,34 @@ import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityWireCoated;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class Library {
 
+	static Random rand = new Random();
+	
 	public static String HbMinecraft = "192af5d7-ed0f-48d8-bd89-9d41af8524f8";
 	public static String TacoRedneck = "5aee1e3d-3767-4987-a222-e7ce1fbdf88e";
 	// Earl0fPudding
@@ -744,4 +758,78 @@ public class Library {
 	//      //  //     //     //    //      //  //      //      //  //  //  //
 	//////  //  //  /////     //    //////  //  //      //////  //////  //////
 
+	public static EntityLivingBase getClosestEntityForChopper(World world, double x, double y, double z, double radius) {
+		double d4 = -1.0D;
+		EntityLivingBase entityplayer = null;
+
+		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+			if (world.loadedEntityList.get(i) instanceof EntityLivingBase && !(world.loadedEntityList.get(i) instanceof EntityHunterChopper)) {
+				EntityLivingBase entityplayer1 = (EntityLivingBase) world.loadedEntityList.get(i);
+
+				if (entityplayer1.isEntityAlive() && !(entityplayer1 instanceof EntityPlayer && ((EntityPlayer)entityplayer1).capabilities.disableDamage)) {
+					double d5 = entityplayer1.getDistanceSq(x, y, z);
+					double d6 = radius;
+
+					if (entityplayer1.isSneaking()) {
+						d6 = radius * 0.800000011920929D;
+					}
+
+					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+						d4 = d5;
+						entityplayer = entityplayer1;
+					}
+				}
+			}
+		}
+
+		return entityplayer;
+	}
+	
+	//Drillgon200: Loot tables? I don't have time for that!
+	public static void generateChestContents(Random p_76293_0_, WeightedRandomChestContentFrom1710[] p_76293_1_, ICapabilityProvider p_76293_2_, int p_76293_3_)
+    {
+		if(p_76293_2_.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+			IItemHandler test = p_76293_2_.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			if(test instanceof IItemHandlerModifiable){
+				IItemHandlerModifiable inventory = (IItemHandlerModifiable)test;
+				
+				for (int j = 0; j < p_76293_3_; ++j)
+		        {
+					WeightedRandomChestContentFrom1710 weightedrandomchestcontent = (WeightedRandomChestContentFrom1710)WeightedRandom.getRandomItem(p_76293_0_, Arrays.asList(p_76293_1_));
+		            ItemStack[] stacks = weightedrandomchestcontent.generateChestContent(p_76293_0_, inventory);
+
+		            for (ItemStack item : stacks)
+		            {
+		            	inventory.setStackInSlot(p_76293_0_.nextInt(inventory.getSlots()), item);
+		            }
+		        }
+			}
+		}
+        
+    }
+	
+	public static Block getRandomConcrete() {
+		int i = rand.nextInt(100);
+
+		if(i < 5)
+			return ModBlocks.brick_concrete_broken;
+		if(i < 20)
+			return ModBlocks.brick_concrete_cracked;
+		if(i < 50)
+			return ModBlocks.brick_concrete_mossy;
+		
+		return ModBlocks.brick_concrete;
+	}
+	
+	public static void placeDoorWithoutCheck(World worldIn, BlockPos pos, EnumFacing facing, Block door, boolean isRightHinge)
+    {
+        BlockPos blockpos2 = pos.up();
+        boolean flag2 = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos2);
+        IBlockState iblockstate = door.getDefaultState().withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.HINGE, isRightHinge ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT).withProperty(BlockDoor.POWERED, Boolean.valueOf(flag2)).withProperty(BlockDoor.OPEN, Boolean.valueOf(flag2));
+        worldIn.setBlockState(pos, iblockstate.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER), 2);
+        worldIn.setBlockState(blockpos2, iblockstate.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2);
+        worldIn.notifyNeighborsOfStateChange(pos, door, false);
+        worldIn.notifyNeighborsOfStateChange(blockpos2, door, false);
+    }
+	
 }

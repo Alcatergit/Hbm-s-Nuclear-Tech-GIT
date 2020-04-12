@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class ModForgeFluids {
 
-	//TODO temps and stuff
 	public static final Fluid steam = new Fluid("hbmsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"), null, Color.WHITE);
 	public static final Fluid hotsteam = new Fluid("hbmhotsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_flowing"), null, Color.WHITE);
 	public static final Fluid superhotsteam = new Fluid("hbmsuperhotsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_flowing"), null, Color.WHITE);
@@ -26,7 +25,7 @@ public class ModForgeFluids {
 	public static final Fluid tritium = new Fluid("hbmtritium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_flowing"), null, Color.WHITE);
 	
 	public static final Fluid oil = new Fluid("hbmoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_flowing"), null, Color.WHITE);
-	public static final Fluid hotoil = new Fluid("hbmhotoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_flowing"), null, Color.WHITE);
+	public static final Fluid hotoil = new Fluid("hbmhotoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_flowing"), null, Color.WHITE).setTemperature(623);
 
 	public static final Fluid heavyoil = new Fluid("hbmheavyoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_flowing"), null, Color.WHITE);
 	public static final Fluid bitumen = new Fluid("hbmbitumen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_flowing"), null, Color.WHITE);
@@ -61,11 +60,11 @@ public class ModForgeFluids {
 	public static final Fluid aschrab = new Fluid("hbmaschrab", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_flowing"), null, Color.WHITE);
 	
 	public static final Fluid acid = new Fluid("hbmacid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_flowing"), null, Color.WHITE);
-	public static final Fluid watz = new Fluid("hbmwatz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE);
+	public static final Fluid watz = new Fluid("hbmwatz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static final Fluid cryogel = new Fluid("hbmcryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE);
 	
-	public static final Fluid hydrogen = new Fluid("hbmhydrogen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_flowing"), null, Color.WHITE);
-	public static final Fluid oxygen = new Fluid("hbmoxygen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_flowing"), null, Color.WHITE);
+	public static final Fluid hydrogen = new Fluid("hbmhydrogen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_flowing"), null, Color.WHITE).setTemperature(20);
+	public static final Fluid oxygen = new Fluid("hbmoxygen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_flowing"), null, Color.WHITE).setTemperature(70);
 	public static final Fluid xenon = new Fluid("hbmxenon", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"), null, Color.WHITE);
 	public static final Fluid balefire = new Fluid("hbmbalefire", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"), null, Color.WHITE);
 	

@@ -10,8 +10,10 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GLContext;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.capability.RadiationCapability;
+import com.hbm.command.CommandHbm;
 import com.hbm.command.CommandRadiation;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
@@ -113,6 +115,8 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.mob.EntityCyberCrab;
+import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
@@ -135,6 +139,7 @@ import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
+import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.entity.projectile.EntityDuchessGambit;
@@ -156,6 +161,7 @@ import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntitySchrab;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
+import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BobmazonOfferFactory;
@@ -207,6 +213,9 @@ import com.hbm.tileentity.conductor.TileEntityFFGasDuctSolid;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuctSolid;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
+import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
+import com.hbm.tileentity.deco.TileEntityDecoPoleTop;
+import com.hbm.tileentity.deco.TileEntityGeysir;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.deco.TileEntityVent;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
@@ -265,6 +274,7 @@ import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
+import com.hbm.tileentity.machine.TileEntityMachineReactorLarge.ReactorFuelType;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineRefinery;
 import com.hbm.tileentity.machine.TileEntityMachineSPP;
@@ -295,16 +305,15 @@ import com.hbm.tileentity.machine.TileEntityWasteDrum;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
 import com.hbm.tileentity.machine.TileEntityWatzHatch;
 import com.hbm.tileentity.machine.TileEntityWireCoated;
-import com.hbm.tileentity.machine.TileEntityMachineReactorLarge.ReactorFuelType;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -679,8 +688,10 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineDiesel.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_diesel"));
 		GameRegistry.registerTileEntity(TileEntityForceField.class, new ResourceLocation(RefStrings.MODID, "tileentity_force_field"));
 		GameRegistry.registerTileEntity(TileEntityMachineRadar.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
+		GameRegistry.registerTileEntity(TileEntityDecoPoleTop.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_poletop"));
+		GameRegistry.registerTileEntity(TileEntityDecoPoleSatelliteReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_pole_satellite_receiver"));
+		GameRegistry.registerTileEntity(TileEntityGeysir.class, new ResourceLocation(RefStrings.MODID, "tileentity_geyser"));
 		int i = 0;
-		//TODO if hunter chopper is bigger than 2 block radius, change World.MAX_ENTITY_RADIUS
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_d_smoke_fx"), EntityDSmokeFX.class, "entity_d_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
@@ -818,6 +829,11 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_miner_rocket"), EntityMinerRocket.class, "entity_miner_rocket", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_meteor"), EntityMeteor.class, "entity_meteor", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bobmazon"), EntityBobmazon.class, "entity_bobmazon", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cybercrab"), EntityCyberCrab.class, "entity_cybercrab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0x444444);
+		//Drillgon200: The hunter chopper is messed up and janky and I don't know what to about it. I'd probably have to recode the whole thing, and I don't have time for that.
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_hunter_chopper"), EntityHunterChopper.class, "entity_hunter_chopper", i++, MainRegistry.instance, 1000, 1, true, 0x000020, 0x2D2D72);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_chopper_mine"), EntityChopperMine.class, "entity_chopper_mine", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_water_splash"), EntityWaterSplash.class, "entity_water_splash", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -1173,12 +1189,17 @@ public class MainRegistry {
 		ItemAssemblyTemplate.loadRecipesFromConfig();
 		CraftingManager.init();
 		loadShredderRecipes();
+		BlockCrate.setDrops();
+		//Drillgon200: expand the max entity radius for the hunter chopper
+		if(World.MAX_ENTITY_RADIUS < 5)
+			World.MAX_ENTITY_RADIUS = 5;
 		proxy.postInit(event);
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
 		evt.registerServerCommand(new CommandRadiation());
+		evt.registerServerCommand(new CommandHbm());
 		AdvancementManager.init(evt.getServer());
 		//MUST be initialized AFTER achievements!!
 		BobmazonOfferFactory.reset();
