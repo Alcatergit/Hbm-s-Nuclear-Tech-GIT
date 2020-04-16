@@ -1,8 +1,11 @@
 package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import com.hbm.flashlight.Flashlight;
+import com.hbm.handler.HbmShaderManager;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
@@ -10,6 +13,8 @@ import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -18,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.ForgeHooksClient;
 
@@ -93,6 +99,13 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		    
 		    GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		}*/
+		
+		if(te.getPos().getX() % 2 == 0){
+			HbmShaderManager.useDissolveShader(Library.remap((float)Math.sin((te.getWorld().getTotalWorldTime() + partialTicks)/10), -1F, 1F, 0F, 1F));
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		}
+		
 		GL11.glPushMatrix();
 
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
@@ -103,6 +116,11 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 		GL11.glPopMatrix();
 		renderTileEntityAt2(te, x, y, z, partialTicks);
+		if(te.getPos().getX() % 2 == 0){
+			GlStateManager.disableBlend();
+			HbmShaderManager.releaseShader2();
+		}
+		
 		// GL11.glMatrixMode(GL11.GL_PROJECTION);
 		// GL11.glLoadIdentity();
 		// GL11.glLoadMatrix(oldMatrix);

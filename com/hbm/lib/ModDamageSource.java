@@ -6,6 +6,8 @@ import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityLaserBeam;
+import com.hbm.entity.projectile.EntityMinerBeam;
 import com.hbm.entity.projectile.EntityPlasmaBeam;
 import com.hbm.entity.projectile.EntityRainbow;
 
@@ -105,14 +107,14 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("ice", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
-    /*public static DamageSource causeLaserDamage(EntityLaserBeam p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeLaserDamage(EntityLaserBeam p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("laser", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
     }
     public static DamageSource causeLaserDamage(EntityMinerBeam p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("laser", p_76353_0_, p_76353_1_)).setDamageBypassesArmor();
-    }*/
+    }
     
     public static boolean getIsBullet(DamageSource source) {
     	if(source instanceof EntityDamageSourceIndirect)

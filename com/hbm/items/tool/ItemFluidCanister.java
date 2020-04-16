@@ -3,9 +3,9 @@ package com.hbm.items.tool;
 import java.util.List;
 
 import com.hbm.forgefluid.HbmFluidHandlerCanister;
+import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
-import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
@@ -44,6 +44,10 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		ModItems.ALL_ITEMS.add(this);
 	}
 	
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return isFullOrEmpty(stack) ? 64 : 1;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -62,7 +66,10 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		if (this == ModItems.canister_generic && f != null && f.getFluid() == ModForgeFluids.diesel) {
 			tooltip.add("All hail the spout!");
 		}
-		tooltip.add((f == null ? "0" : f.amount) + "/" + cap + " mb");
+		String s = (f == null ? "0" : f.amount) + "/" + cap + " mb";
+		if(stack.getCount() > 1)
+			s = stack.getCount() + "x " + s;
+		tooltip.add(s);
 	}
 	
 	@Override
@@ -97,11 +104,28 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		return false;
 	}
 	
-	public static ItemStack getFullCanister(Fluid f){
-		ItemStack stack = new ItemStack(ModItems.canister_generic, 1, 0);
+	public static ItemStack getFullCanister(Fluid f, int amount){
+		ItemStack stack = new ItemStack(ModItems.canister_generic, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
 		if(f != null && EnumCanister.contains(f))
 			stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, 4000).writeToNBT(new NBTTagCompound()));
 		return stack;
+	}
+	
+	public static ItemStack getFullCanister(Fluid f){
+		return getFullCanister(f, 1);
+	}
+	
+	public static boolean isFullOrEmpty(ItemStack stack){
+		if(stack.hasTagCompound() && stack.getItem() == ModItems.canister_generic){
+			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
+			if(f == null)
+				return true;
+			return f.amount == 4000 || f.amount == 0;
+			
+		} else if(stack.getItem() == ModItems.canister_generic){
+			return true;
+		}
+		return false;
 	}
 }

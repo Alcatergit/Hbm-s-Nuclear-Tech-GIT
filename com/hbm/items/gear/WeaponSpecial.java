@@ -2,14 +2,17 @@ package com.hbm.items.gear;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import com.google.common.collect.Multimap;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -22,6 +25,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,6 +43,9 @@ public class WeaponSpecial extends ItemSword {
 	
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
+		if(this == ModItems.schrabidium_hammer) {
+			return EnumRarity.RARE;
+		}
 		if(this == ModItems.ullapool_caber) {
 			return EnumRarity.UNCOMMON;
 		}
@@ -48,6 +55,13 @@ public class WeaponSpecial extends ItemSword {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		World world = target.world;
+		if(this == ModItems.schrabidium_hammer) {
+			if (!world.isRemote)
+        	{
+				target.setHealth(0.0F);
+        	}
+        	world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, 3.0F, 0.1F);
+		}
 		if(this == ModItems.bottle_opener) {
 			if (!target.world.isRemote)
         	{
@@ -80,8 +94,12 @@ public class WeaponSpecial extends ItemSword {
 	}
 	
 	@Override
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-		return super.getItemAttributeModifiers(equipmentSlot);
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
+		if(slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND){
+			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Weapon modifier", -0.5, 1));
+		}
+		return map;
 	}
 	
 	@Override
@@ -91,6 +109,10 @@ public class WeaponSpecial extends ItemSword {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.schrabidium_hammer) {
+			list.add("Even though it says \"+1000000000");
+			list.add("damage\", it's actually \"onehit anything\"");
+		}
 		if(this == ModItems.bottle_opener) {
 			list.add("My very own bottle opener.");
 			list.add("Use with caution!");

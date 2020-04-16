@@ -12,6 +12,7 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.init.Blocks;
@@ -258,7 +259,7 @@ public class MachineRecipes {
 			return new ItemStack(ModItems.ingot_red_copper, 2);
 		}
 
-		if (item.getItem() == ModItems.canister_generic && item2.getItem() == Items.SLIME_BALL || item.getItem() == Items.SLIME_BALL && item2.getItem() == ModItems.canister_generic) {
+		if (ItemFluidCanister.isFullCanister(item, ModForgeFluids.diesel) && item2.getItem() == Items.SLIME_BALL || item.getItem() == Items.SLIME_BALL && ItemFluidCanister.isFullCanister(item2, ModForgeFluids.diesel)) {
 			return new ItemStack(ModItems.canister_napalm, 1);
 		}
 
@@ -1845,8 +1846,8 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_quartz, 1);
 			if(mODE(item, "dustBeryllium"))
 				return new ItemStack(ModItems.powder_coal, 1);
-			//if(item.getItem() == ModItems.powder_schrabidium)
-			//	return new ItemStack(ModItems.powder_reiium, 1);
+			if(item.getItem() == ModItems.powder_schrabidium)
+				return new ItemStack(ModItems.powder_reiium, 1);
 			if(item.getItem() == ModItems.powder_lithium)
 				return new ItemStack(ModItems.powder_coal, 1);
 			if(item.getItem() == ModItems.powder_iodine)
@@ -1855,8 +1856,8 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_uranium, 1);
 			if(item.getItem() == ModItems.powder_caesium)
 				return new ItemStack(ModItems.powder_lanthanium, 1);
-			//if(item.getItem() == ModItems.powder_reiium)
-			//	return new ItemStack(ModItems.powder_weidanium, 1);
+			if(item.getItem() == ModItems.powder_reiium)
+				return new ItemStack(ModItems.powder_weidanium, 1);
 			if(mODE(item, "dustCobalt"))
 				return new ItemStack(ModItems.powder_copper, 1);
 			if(item.getItem() == ModItems.powder_cerium)
@@ -1899,8 +1900,8 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_actinium, 1);
 			if(item.getItem() == ModItems.powder_caesium)
 				return new ItemStack(ModItems.powder_neodymium, 1);
-			//if(item.getItem() == ModItems.powder_weidanium)
-			//	return new ItemStack(ModItems.powder_australium, 1);
+			if(item.getItem() == ModItems.powder_weidanium)
+				return new ItemStack(ModItems.powder_australium, 1);
 			if(item.getItem() == ModItems.powder_strontium)
 				return new ItemStack(ModItems.powder_niobium, 1);
 			if(item.getItem() == ModItems.powder_bromine)
@@ -1949,8 +1950,8 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_tungsten, 1);
 			if(item.getItem() == ModItems.powder_neodymium)
 				return new ItemStack(ModItems.powder_tungsten, 1);
-			//if(item.getItem() == ModItems.powder_australium)
-			//	return new ItemStack(ModItems.powder_verticium, 1);
+			if(item.getItem() == ModItems.powder_australium)
+				return new ItemStack(ModItems.powder_verticium, 1);
 			if(item.getItem() == ModItems.powder_strontium)
 				return new ItemStack(ModItems.powder_iodine, 1);
 			if(mODE(item, "dustCobalt"))
@@ -2007,16 +2008,16 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_plutonium, 1);
 			if(item.getItem() == ModItems.powder_caesium)
 				return new ItemStack(ModItems.powder_tungsten, 1);
-			//if(item.getItem() == ModItems.powder_verticium)
-			//	return new ItemStack(ModItems.powder_unobtainium, 1);
+			if(item.getItem() == ModItems.powder_verticium)
+				return new ItemStack(ModItems.powder_unobtainium, 1);
 			if(mODE(item, "dustCobalt"))
 				return new ItemStack(ModItems.powder_iodine, 1);
 			if(item.getItem() == ModItems.powder_bromine)
 				return new ItemStack(ModItems.powder_caesium, 1);
 			if(item.getItem() == ModItems.powder_niobium)
 				return new ItemStack(ModItems.powder_cerium, 1);
-			//if(item.getItem() == ModItems.powder_tennessine)
-			//	return new ItemStack(ModItems.powder_reiium, 1);
+			if(item.getItem() == ModItems.powder_tennessine)
+				return new ItemStack(ModItems.powder_reiium, 1);
 			if(item.getItem() == ModItems.powder_cerium)
 				return new ItemStack(ModItems.powder_lead, 1);
 			if(item.getItem() == ModItems.powder_actinium)
@@ -2033,8 +2034,8 @@ public static List<GasCentOutput> getGasCentOutput(Fluid fluid) {
 				return new ItemStack(ModItems.powder_schrabidium, 1);
 			if(item.getItem() == ModItems.powder_neptunium)
 				return new ItemStack(ModItems.powder_schrabidium, 1);
-			//if(item.getItem() == ModItems.powder_unobtainium)
-			//	return new ItemStack(ModItems.powder_daffergon, 1);
+			if(item.getItem() == ModItems.powder_unobtainium)
+				return new ItemStack(ModItems.powder_daffergon, 1);
 			if(ItemCell.isFullCell(item, ModForgeFluids.amat))
 				return ItemCell.getFullCell(ModForgeFluids.aschrab);
 		}

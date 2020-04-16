@@ -24,7 +24,7 @@ public class ItemRenderRedstoneSword implements IBakedModel {
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	@Override

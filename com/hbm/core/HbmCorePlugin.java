@@ -15,17 +15,17 @@ public class HbmCorePlugin implements IFMLLoadingPlugin {
 		File file = new File("./config/hbm/hbm.cfg");
 		if(file.exists()){
 			Configuration config = new Configuration(file);
-			if(!config.get("01_general", "1.21_enableShaders", false).getBoolean()){
-				System.out.println("Shaders are disabled! Not applying transformers!");
-				return new String[]{};
+			if(config.get("01_general", "1.21_enableShaders", false).getBoolean()){
+				
+				return new String[]{"com.hbm.core.ProfilerClassTransformer", 
+						"com.hbm.core.ChunkRenderContainerClassTransformer", 
+						"com.hbm.core.RenderManagerClassTransformer", 
+						"com.hbm.core.TileEntityRendererDispatcherClassTransformer", 
+						"com.hbm.core.GlStateManagerClassTransformer"};
 			}
 		}
-		
-		return new String[]{"com.hbm.core.ProfilerClassTransformer", 
-				"com.hbm.core.ChunkRenderContainerClassTransformer", 
-				"com.hbm.core.RenderManagerClassTransformer", 
-				"com.hbm.core.TileEntityRendererDispatcherClassTransformer", 
-				"com.hbm.core.GlStateManagerClassTransformer"};
+		System.out.println("Shaders are disabled! Not applying transformers!");
+		return new String[]{/*"com.hbm.core.FramebufferClassTransformer"*/};
 	}
 
 	@Override

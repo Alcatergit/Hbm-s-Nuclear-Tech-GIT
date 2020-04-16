@@ -13,12 +13,17 @@ import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.Level;
 
+import com.google.common.collect.Lists;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.temp;
+import com.hbm.main.temp.EnumAssemblyTemplate;
 
+import glmath.benchmark.Test;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -30,10 +35,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import scala.actors.threadpool.Arrays;
 
 public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 
@@ -204,6 +211,10 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	public static void loadRecipesFromConfig() {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
 		blockRegistry = GameRegistry.findRegistry(Block.class);
+		
+		for(EnumAssemblyTemplate e : temp.EnumAssemblyTemplate.values()){
+			recipes.add(new AssemblerRecipe(temp.getProcessTime(e), temp.getRecipeFromTempate(e), temp.getOutputFromTempate(e)));
+		}
 		File recipeConfig = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/assemblerConfig.cfg");
 		if (!recipeConfig.exists())
 			try {
@@ -314,6 +325,6 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 		return null;
 	}
 	private static void addConfigRecipes(FileWriter write) throws IOException {
-			write.write("30;minecraft:iron_ingot,0,3;hbm:plate_iron,0,2\n");
+			write.write("\n");
 	}
 }

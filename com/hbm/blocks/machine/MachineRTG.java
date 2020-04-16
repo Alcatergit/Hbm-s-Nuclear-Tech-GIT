@@ -40,7 +40,6 @@ public class MachineRTG extends BlockContainer {
 		} else if(!player.isSneaking())
 		{
 			if(world.getTileEntity(pos) instanceof TileEntityMachineRTG) {
-				TileEntityMachineRTG entity = (TileEntityMachineRTG) world.getTileEntity(pos);
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_rtg, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;

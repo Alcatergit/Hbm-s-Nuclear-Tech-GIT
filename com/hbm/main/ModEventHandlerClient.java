@@ -327,6 +327,16 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_mp40, reg);
 		swapModels(ModItems.cell, reg);
 		swapModels(ModItems.gas_canister, reg);
+		swapModelsNoGui(ModItems.multitool_dig, reg);
+		swapModelsNoGui(ModItems.multitool_silk, reg);
+		swapModelsNoGui(ModItems.multitool_ext, reg);
+		swapModelsNoGui(ModItems.multitool_miner, reg);
+		swapModelsNoGui(ModItems.multitool_hit, reg);
+		swapModelsNoGui(ModItems.multitool_beam, reg);
+		swapModelsNoGui(ModItems.multitool_sky, reg);
+		swapModelsNoGui(ModItems.multitool_mega, reg);
+		swapModelsNoGui(ModItems.multitool_joule, reg);
+		swapModelsNoGui(ModItems.multitool_decon, reg);
 		
 		MainRegistry.proxy.registerMissileItems(reg);
 	}

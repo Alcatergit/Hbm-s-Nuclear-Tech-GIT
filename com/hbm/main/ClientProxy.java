@@ -131,7 +131,9 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFallingNuke;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityLaserBeam;
 import com.hbm.entity.projectile.EntityMeteor;
+import com.hbm.entity.projectile.EntityMinerBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.entity.projectile.EntityModBeam;
@@ -159,6 +161,8 @@ import com.hbm.render.entity.GasRenderer;
 import com.hbm.render.entity.RenderAAShell;
 import com.hbm.render.entity.RenderBaleflare;
 import com.hbm.render.entity.RenderBeam;
+import com.hbm.render.entity.RenderBeam2;
+import com.hbm.render.entity.RenderBeam3;
 import com.hbm.render.entity.RenderBeam4;
 import com.hbm.render.entity.RenderBeam5;
 import com.hbm.render.entity.RenderBeam6;
@@ -269,6 +273,7 @@ import com.hbm.render.item.ItemRenderMP40;
 import com.hbm.render.item.ItemRenderMinigun;
 import com.hbm.render.item.ItemRenderMissile;
 import com.hbm.render.item.ItemRenderMissilePart;
+import com.hbm.render.item.ItemRenderMultitool;
 import com.hbm.render.item.ItemRenderOSIPR;
 import com.hbm.render.item.ItemRenderOverkill;
 import com.hbm.render.item.ItemRenderRevolverCursed;
@@ -436,7 +441,6 @@ import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
 import net.minecraft.block.BlockDirt;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.client.particle.ParticleFirework;
@@ -706,6 +710,8 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityHunterChopper.class, RenderHunterChopper.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChopperMine.class, RenderChopperMine.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWaterSplash.class, RenderEmpty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMinerBeam.class, RenderBeam3.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLaserBeam.class, RenderBeam2.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
@@ -889,6 +895,16 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_mp40.setTileEntityItemStackRenderer(new ItemRenderMP40());
 		ModItems.cell.setTileEntityItemStackRenderer(new ItemRenderCell());
 		ModItems.gas_canister.setTileEntityItemStackRenderer(new ItemRenderGasCanister());
+		ModItems.multitool_dig.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_silk.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_ext.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_miner.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_hit.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_beam.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_sky.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_mega.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_joule.setTileEntityItemStackRenderer(new ItemRenderMultitool());
+		ModItems.multitool_decon.setTileEntityItemStackRenderer(new ItemRenderMultitool());
 	}
 	
 	public static IBakedModel boxcar;

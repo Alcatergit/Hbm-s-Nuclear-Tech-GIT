@@ -8,7 +8,6 @@ import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
 
 import net.minecraft.block.BlockContainer;
@@ -96,7 +95,7 @@ public class MachineCyclotron extends BlockContainer implements IMultiBlock {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 
 		if(tileentity instanceof TileEntityMachineCyclotron) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineCyclotron) tileentity);
+			InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityMachineCyclotron) tileentity).dropProvider);
 			worldIn.updateComparatorOutputLevel(pos, this);
 		}
 		super.breakBlock(worldIn, pos, state);

@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,13 @@ import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -38,7 +43,15 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 				int id = buf.readInt();
 				int meta = buf.readInt();
 				int amount = buf.readInt();
-				inputs.add(new ItemStack(Item.getItemById(id), amount, meta));
+				ItemStack stack = new ItemStack(Item.getItemById(id), amount, meta);
+				if(buf.readBoolean()){
+					try {
+						stack.setTagCompound(CompressedStreamTools.read(new ByteBufInputStream(buf), new NBTSizeTracker(2097152L)));
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+				inputs.add(stack);
 			}
 			int id = buf.readInt();
 			int meta = buf.readInt();
@@ -53,12 +66,24 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(recipes.size());
 		for(int i = 0; i < recipes.size(); i ++){
-			buf.writeInt(recipes.get(i).getInputs().size());
-			for(int j = 0; j < recipes.get(i).getInputs().size(); j ++){
-				AssemblerRecipe recipe = recipes.get(i);
-				buf.writeInt(Item.getIdFromItem(recipe.getInputs().get(j).getItem()));
-				buf.writeInt(recipe.getInputs().get(j).getMetadata());
-				buf.writeInt(recipe.getInputs().get(j).getCount());
+			AssemblerRecipe recipe = recipes.get(i);
+			List<ItemStack> inputs = recipe.getInputs();
+			buf.writeInt(inputs.size());
+			for(int j = 0; j < inputs.size(); j ++){
+				ItemStack stack = inputs.get(j);
+				buf.writeInt(Item.getIdFromItem(stack.getItem()));
+				buf.writeInt(stack.getMetadata());
+				buf.writeInt(stack.getCount());
+				if(stack.hasTagCompound()){
+					buf.writeBoolean(true);
+					try {
+						CompressedStreamTools.write(stack.getTagCompound(), new ByteBufOutputStream(buf));
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					buf.writeBoolean(false);
+				}
 			}
 			buf.writeInt(Item.getIdFromItem(recipes.get(i).getOutput().getItem()));
 			buf.writeInt(recipes.get(i).getOutput().getMetadata());

@@ -544,7 +544,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	public boolean isItemAcceptible(ItemStack stack1, ItemStack stack2) {
 		
 		if(stack1 != null && stack2 != null) {
-			if(ItemStack.areItemStacksEqual(stack1, stack2))
+			if(areStacksEqual(stack1, stack2))
 				return true;
 		
 			int[] ids1 = OreDictionary.getOreIDs(stack1);
@@ -559,6 +559,13 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		}
 		
 		return false;
+	}
+	
+	//Drillgon200: Method so I can check stuff like containing a fluid without checking if the compound tags are exactly equal, that way
+	//it's more compatible with capabilities.
+	private boolean areStacksEqual(ItemStack sta1, ItemStack sta2){
+		return Library.areItemStacksCompatible(sta2, sta1);
+		//return ItemStack.areItemStacksEqual(sta1, sta2);
 	}
 
 	@Override

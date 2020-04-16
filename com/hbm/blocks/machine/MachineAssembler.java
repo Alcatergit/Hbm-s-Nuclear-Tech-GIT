@@ -31,7 +31,6 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 
 	public static final PropertyInteger FACING = PropertyInteger.create("facing", 2, 5);
 
-	private final Random field_149933_a = new Random();
 	private static boolean keepInventory;
 
 	public MachineAssembler(Material materialIn, String s) {

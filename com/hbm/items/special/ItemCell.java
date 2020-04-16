@@ -7,6 +7,7 @@ import com.hbm.blocks.bomb.BlockCrashedBomb;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.HbmFluidHandlerCell;
+import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
@@ -18,15 +19,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -84,6 +82,11 @@ public class ItemCell extends ItemRadioactive {
 		return false;
 	}
 
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return isFullOrEmpty(stack) ? 64 : 1;
+	}
+	
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
@@ -157,7 +160,11 @@ public class ItemCell extends ItemRadioactive {
 
 	public static boolean isEmptyCell(ItemStack stack) {
 		if(stack != null) {
-			if(stack.getItem() == ModItems.cell && (FluidUtil.getFluidContained(stack) == null || FluidUtil.getFluidContained(stack).amount < 1)) {
+			if(stack.getItem() == ModItems.cell && stack.getTagCompound() != null) {
+				FluidStack s = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerCell.FLUID_NBT_KEY));
+				if(s == null || s.amount <= 0)
+					return true;
+			} else if (stack.getItem() == ModItems.cell && stack.getTagCompound() == null){
 				return true;
 			}
 		}
@@ -172,53 +179,31 @@ public class ItemCell extends ItemRadioactive {
 		return false;
 	}
 
-	public static ItemStack getFullCell(Fluid fluid) {
+	public static ItemStack getFullCell(Fluid fluid, int amount) {
 		if(EnumCell.contains(fluid)) {
-			ItemStack stack = new ItemStack(ModItems.cell, 1, 0);
+			ItemStack stack = new ItemStack(ModItems.cell, amount, 0);
 			stack.setTagCompound(new NBTTagCompound());
 			stack.getTagCompound().setTag(HbmFluidHandlerCell.FLUID_NBT_KEY, new FluidStack(fluid, 1000).writeToNBT(new NBTTagCompound()));
 			return stack;
 		}
 		return ItemStack.EMPTY;
 	}
-
-	public static class CellRecipe implements IRecipe {
-
-		@Override
-		public IRecipe setRegistryName(ResourceLocation name) {
-			return null;
+	
+	public static ItemStack getFullCell(Fluid fluid) {
+		return getFullCell(fluid, 1);
+	}
+	
+	public static boolean isFullOrEmpty(ItemStack stack){
+		if(stack.hasTagCompound() && stack.getItem() == ModItems.cell){
+			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
+			if(f == null)
+				return true;
+			return f.amount == 1000 || f.amount == 0;
+			
+		} else if(stack.getItem() == ModItems.cell){
+			return true;
 		}
-
-		@Override
-		public ResourceLocation getRegistryName() {
-			return null;
-		}
-
-		@Override
-		public Class<IRecipe> getRegistryType() {
-			return null;
-		}
-
-		@Override
-		public boolean matches(InventoryCrafting inv, World worldIn) {
-			return false;
-		}
-
-		@Override
-		public ItemStack getCraftingResult(InventoryCrafting inv) {
-			return null;
-		}
-
-		@Override
-		public boolean canFit(int width, int height) {
-			return false;
-		}
-
-		@Override
-		public ItemStack getRecipeOutput() {
-			return null;
-		}
-
+		return false;
 	}
 
 }

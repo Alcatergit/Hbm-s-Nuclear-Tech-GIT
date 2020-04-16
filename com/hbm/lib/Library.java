@@ -35,9 +35,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
@@ -831,5 +832,113 @@ public class Library {
         worldIn.notifyNeighborsOfStateChange(pos, door, false);
         worldIn.notifyNeighborsOfStateChange(blockpos2, door, false);
     }
+	
+	public static float remap(float num, float min1, float max1, float min2, float max2){
+		return ((num - min1) / (max1 - min1)) * (max2 - min2) + min2;
+	}
+	
+	public static boolean areItemStacksEqualIgnoreCount(ItemStack a, ItemStack b){
+		if (a.isEmpty() && b.isEmpty())
+        {
+            return true;
+        }
+        else
+        {
+            if(!a.isEmpty() && !b.isEmpty()){
+
+                if (a.getItem() != b.getItem())
+                {
+                    return false;
+                }
+                else if (a.getMetadata() != b.getMetadata())
+                {
+                    return false;
+                }
+                else if (a.getTagCompound() == null && b.getTagCompound() != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return (a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound())) && a.areCapsCompatible(b);
+                }
+            }
+        }
+		return false;
+	}
+	
+	/*
+	 * Same as ItemStack.areItemStacksEqual, except the second one's tag only has to contain all the first one's tag, rather than being exactly equal.
+	 */
+	public static boolean areItemStacksCompatible(ItemStack base, ItemStack toTest){
+		if (base.isEmpty() && toTest.isEmpty())
+        {
+            return true;
+        }
+        else
+        {
+            if(!base.isEmpty() && !toTest.isEmpty()){
+
+            	if(base.getCount() != toTest.getCount()){
+            		return false;
+            	} 
+            	else if (base.getItem() != toTest.getItem())
+                {
+                    return false;
+                }
+                else if (base.getMetadata() != toTest.getMetadata())
+                {
+                    return false;
+                }
+                else if (base.getTagCompound() == null && toTest.getTagCompound() != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return (base.getTagCompound() == null || tagContainsOther(base.getTagCompound(), toTest.getTagCompound())) && base.areCapsCompatible(toTest);
+                }
+            }
+        }
+		return false;
+	}
+	
+	/**
+	 * Returns true if the second compound contains all the tags and values of the first one, but it can have more. This helps with intermod compatibility
+	 */
+	public static boolean tagContainsOther(NBTTagCompound tester, NBTTagCompound container){
+		if(tester == null && container == null){
+			return true;
+		} if(tester == null ^ container == null){
+			return false;
+		} else {
+			for(String s : tester.getKeySet()){
+				if(!container.hasKey(s)){
+					return false;
+				} else {
+					NBTBase nbt1 = tester.getTag(s);
+					NBTBase nbt2 = container.getTag(s);
+					if(nbt1 instanceof NBTTagCompound && nbt2 instanceof NBTTagCompound){
+						if(!tagContainsOther((NBTTagCompound)nbt1, (NBTTagCompound) nbt2))
+							return false;
+					} else {
+						if(!nbt1.equals(nbt2))
+							return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	public static List<int[]> getBlockPosInPath(BlockPos pos, int length, Vec3 vec0) {
+		List<int[]> list = new ArrayList<int[]>();
+		
+		for(int i = 0; i <= length; i++) {
+			list.add(new int[] { (int)(pos.getX() + (vec0.xCoord * i)), pos.getY(), (int)(pos.getZ() + (vec0.zCoord * i)), i });
+		}
+		
+		return list;
+	}
 	
 }

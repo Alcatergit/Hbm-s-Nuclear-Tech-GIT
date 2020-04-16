@@ -25,18 +25,21 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineCyclotron extends TileEntity implements ITickable, ISource {
@@ -52,6 +55,7 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 	public int age = 0;
 	public List<IConsumer> list = new ArrayList<IConsumer>();
 	Random rand = new Random();
+	public ICapabilityProvider dropProvider;
 
 	//private static final int[] slots_top = new int[] { 0 };
 	//private static final int[] slots_bottom = new int[] { 0, 0 };
@@ -66,6 +70,19 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 				markDirty();
 				super.onContentsChanged(slot);
 			}
+		};
+		dropProvider = new ICapabilityProvider(){
+
+			@Override
+			public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+			}
+
+			@Override
+			public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : null;
+			}
+			
 		};
 	}
 	
@@ -110,7 +127,7 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 	
 	@Override
 	public void update() {
-if (!world.isRemote) {
+		if (!world.isRemote) {
 			
 			age++;
 			if(age >= 20)
@@ -229,8 +246,8 @@ if (!world.isRemote) {
 		ItemStack stack2 = MachineRecipes.getCyclotronOutput(inventory.getStackInSlot(1), inventory.getStackInSlot(4));
 		ItemStack stack3 = MachineRecipes.getCyclotronOutput(inventory.getStackInSlot(2), inventory.getStackInSlot(5));
 		
-		if(stack1 != null && hasSpaceForItem(stack1.getItem())) {
-			addItemPlox(stack1.getItem());
+		if(stack1 != null && hasSpaceForItem(stack1)) {
+			addItemPlox(stack1);
 			inventory.getStackInSlot(0).shrink(1);
 			inventory.getStackInSlot(3).shrink(1);
 			if(inventory.getStackInSlot(0).isEmpty())
@@ -238,8 +255,8 @@ if (!world.isRemote) {
 			if(inventory.getStackInSlot(3).isEmpty())
 				inventory.setStackInSlot(3, ItemStack.EMPTY);
 		}
-		if(stack2 != null && hasSpaceForItem(stack2.getItem())) {
-			addItemPlox(stack2.getItem());
+		if(stack2 != null && hasSpaceForItem(stack2)) {
+			addItemPlox(stack2);
 			inventory.getStackInSlot(1).shrink(1);
 			inventory.getStackInSlot(4).shrink(1);
 			if(inventory.getStackInSlot(1).isEmpty())
@@ -247,8 +264,8 @@ if (!world.isRemote) {
 			if(inventory.getStackInSlot(4).isEmpty())
 				inventory.setStackInSlot(4, ItemStack.EMPTY);
 		}
-		if(stack3 != null && hasSpaceForItem(stack3.getItem())) {
-			addItemPlox(stack3.getItem());
+		if(stack3 != null && hasSpaceForItem(stack3)) {
+			addItemPlox(stack3);
 			inventory.getStackInSlot(2).shrink(1);
 			inventory.getStackInSlot(5).shrink(1);
 			if(inventory.getStackInSlot(2).isEmpty())
@@ -259,7 +276,7 @@ if (!world.isRemote) {
 		
 		if(!inventory.getStackInSlot(0).isEmpty() && stack1 == null) {
 			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(0)))
-				if(hasSpaceForItem() && useCell())
+				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
 					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
 
 			inventory.getStackInSlot(0).shrink(1);
@@ -270,7 +287,7 @@ if (!world.isRemote) {
 		
 		if(!inventory.getStackInSlot(1).isEmpty() && stack1 == null) {
 			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(1)))
-				if(hasSpaceForItem() && useCell())
+				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
 					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
 			
 			inventory.getStackInSlot(1).shrink(1);
@@ -281,7 +298,7 @@ if (!world.isRemote) {
 		
 		if(!inventory.getStackInSlot(2).isEmpty() && stack1 == null) {
 			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(2)))
-				if(hasSpaceForItem() && useCell())
+				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
 					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
 
 			inventory.getStackInSlot(2).shrink(1);
@@ -310,9 +327,19 @@ if (!world.isRemote) {
 		return false;
 	}
 	
-	public boolean hasSpaceForItem() {
-		
+	public boolean hasSpaceForItem(ItemStack item){
 		if(inventory.getStackInSlot(11).isEmpty() || inventory.getStackInSlot(12).isEmpty() || inventory.getStackInSlot(13).isEmpty() || inventory.getStackInSlot(14).isEmpty() || inventory.getStackInSlot(15).isEmpty())
+			return true;
+
+		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(11)) && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize())
+			return true;
+		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(12)) && inventory.getStackInSlot(12).getCount() < inventory.getStackInSlot(12).getMaxStackSize())
+			return true;
+		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(13)) && inventory.getStackInSlot(13).getCount() < inventory.getStackInSlot(13).getMaxStackSize())
+			return true;
+		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(14)) && inventory.getStackInSlot(14).getCount() < inventory.getStackInSlot(14).getMaxStackSize())
+			return true;
+		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(15)) && inventory.getStackInSlot(15).getCount() < inventory.getStackInSlot(15).getMaxStackSize())
 			return true;
 		
 		return false;
@@ -372,7 +399,16 @@ if (!world.isRemote) {
 	}
 	
 	public void addItemPlox(ItemStack stack) {
-		if(inventory.getStackInSlot(11).isEmpty()) {
+		for(int i = 11; i < 16; i ++){
+			if(inventory.getStackInSlot(i).isEmpty()) {
+				inventory.setStackInSlot(i, stack);
+				return;
+			} else if(Library.areItemStacksEqualIgnoreCount(stack, inventory.getStackInSlot(i)) && stack.getCount() + inventory.getStackInSlot(i).getCount() <= inventory.getStackInSlot(i).getMaxStackSize()){
+				inventory.getStackInSlot(i).grow(stack.getCount());
+				return;
+			}
+		}
+		/*if(inventory.getStackInSlot(11).isEmpty()) {
 			inventory.setStackInSlot(11, stack);
 			return;
 		}
@@ -391,7 +427,7 @@ if (!world.isRemote) {
 		if(inventory.getStackInSlot(15).isEmpty()) {
 			inventory.setStackInSlot(15, stack);
 			return;
-		}
+		}*/
 	}
 	
 	public boolean hasFuse() {
