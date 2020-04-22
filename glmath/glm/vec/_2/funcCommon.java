@@ -10,7 +10,6 @@ import glmath.glm.vec._2.bool.Vec2bool;
 import glmath.glm.vec._2.i.Vec2i;
 
 /**
- * TODO ldexp, frexp, modf, roundEven, trunc
  *
  * @author GBarbieri
  */
@@ -304,7 +303,6 @@ abstract class funcCommon extends BooleanOperators {
         return mod((Vec2) this, y, result);
     }
 
-    // TODO check floor return type
     public static Vec2 mod(Vec2 x, Vec2 y, Vec2 result) {
         result.x = (float) (x.x - y.x * Glm.floor(x.x / y.x));
         result.y = (float) (x.y - y.y * Glm.floor(x.y / y.y));

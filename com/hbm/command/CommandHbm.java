@@ -81,7 +81,6 @@ public class CommandHbm extends CommandBase {
 			}
 		}
 	}
-	//TODO learn last two parts of fiddle song
 
 	protected List<String> getSubCommands() {
 		return Lists.newArrayList("subcommands", "gen");

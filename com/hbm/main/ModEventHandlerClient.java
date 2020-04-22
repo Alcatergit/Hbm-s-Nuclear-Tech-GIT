@@ -182,7 +182,7 @@ public class ModEventHandlerClient {
 			ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(RefStrings.MODID + ":hs-elements", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(item, 2, new ModelResourceLocation(RefStrings.MODID + ":hs-arsenic", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(item, 3, new ModelResourceLocation(RefStrings.MODID + ":hs-vault", "inventory"));
-		} else if(item == ModItems.polaroid) {
+		} else if(item == ModItems.polaroid || item == ModItems.glitch) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName() + "_" + MainRegistry.polaroidID, "inventory"));
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
@@ -337,6 +337,11 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.multitool_mega, reg);
 		swapModelsNoGui(ModItems.multitool_joule, reg);
 		swapModelsNoGui(ModItems.multitool_decon, reg);
+		swapModelsNoGui(ModItems.big_sword, reg);
+		swapModelsNoGui(ModItems.shimmer_sledge, reg);
+		swapModelsNoGui(ModItems.shimmer_axe, reg);
+		swapModels(ModItems.ff_fluid_duct, reg);
+		swapModels(ModItems.fluid_icon, reg);
 		
 		MainRegistry.proxy.registerMissileItems(reg);
 	}

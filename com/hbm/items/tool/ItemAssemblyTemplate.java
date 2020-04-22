@@ -7,23 +7,25 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import org.apache.logging.log4j.Level;
 
-import com.google.common.collect.Lists;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.temp;
 import com.hbm.main.temp.EnumAssemblyTemplate;
 
-import glmath.benchmark.Test;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -35,12 +37,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
-import scala.actors.threadpool.Arrays;
 
 public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 
@@ -50,43 +50,6 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	private static IForgeRegistry<Item> itemRegistry;
 	private static IForgeRegistry<Block> blockRegistry;
 
-	// TODO Yeah, uh, this a big one. I'll do it later.
-/*	public enum EnumAssemblyTemplate {
-		IRON_PLATE(30, Arrays.asList(new ItemStack(Items.IRON_INGOT, 3)), new ItemStack(ModItems.plate_iron, 2));
-
-		private EnumAssemblyTemplate() {
-		}
-
-		private EnumAssemblyTemplate(int time, List<ItemStack> ingredients, ItemStack output) {
-			this.time = time;
-			this.ingredients = ingredients;
-			this.output = output;
-		}
-
-		private int time = 0;
-		private List<ItemStack> ingredients = null;
-		private ItemStack output = null;
-
-		public static EnumAssemblyTemplate getEnum(int i) {
-			return EnumAssemblyTemplate.values()[i];
-		}
-
-		public List<ItemStack> getIngredients() {
-			return this.ingredients;
-		}
-
-		public int getTime() {
-			return this.time;
-		}
-
-		public ItemStack getOutput() {
-			return this.output;
-		}
-
-		public String getName() {
-			return this.toString();
-		}
-	}*/
 
 	public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
 	public static List<AssemblerRecipe> recipesBackup = null;
@@ -127,6 +90,14 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				list.add(stack);
 			}
 		}
+	}
+	
+	public static ItemStack getTemplate(int id){
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("type", id);
+		ItemStack stack = new ItemStack(ModItems.assembly_template, 1, 0);
+		stack.setTagCompound(tag);
+		return stack;
 	}
 
 	@Override
@@ -223,7 +194,11 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				write.write("# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
 						  + "# Example for iron plates: 30;minecraft:iron_ingot,0,3;hbm:plate_iron,0,2\n"
 						  + "# One line per recipe. I don't know what will happen if you mess up the formatting, so try not to do that.\n"
-						  + "# Don't add recipes with overlapping results, that's almost guaranteed to screw something up.\n");
+						  + "# Don't add recipes with overlapping results, that's almost guaranteed to screw something up.\n"
+						  + "#\n"
+						  + "# To remove a recipe, use the format: \n"
+						  + "# remove hbm:plate_iron,0,2\n"
+						  + "# This will remove any recipe with the output of two iron plates");
 				addConfigRecipes(write);
 				write.close();
 				
@@ -245,8 +220,10 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				lineCount ++;
 				if(currentLine.startsWith("#") || currentLine.length() == 0)
 					continue;
-				
-				parseRecipe(currentLine, lineCount);
+				if(currentLine.startsWith("remove"))
+					parseRemoval(currentLine, lineCount);
+				else
+					parseRecipe(currentLine, lineCount);
 			}
 		} catch (FileNotFoundException e) {
 			MainRegistry.logger.log(Level.ERROR, "Could not find assembler config file! This should never happen.");
@@ -261,6 +238,27 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				} catch (IOException e) {}
 		}
 		
+	}
+	
+	public static void parseRemoval(String currentLine, int line){
+		String[] parts = currentLine.split(" ");
+		if(parts.length != 2){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler recipe removal on line " + line + ": does not have three parts. Skipping...");
+			return;
+		}
+		ItemStack stack = parseItemStack(parts[1]);
+		if(stack == null){
+			MainRegistry.logger.log(Level.WARN, "Could not parse input itemstack from \"" + parts[1] + "\" on line " + line + ". Skipping...");
+			return;
+		}
+		Iterator<AssemblerRecipe> itr = recipes.iterator();
+		while(itr.hasNext()){
+			AssemblerRecipe recipe = itr.next();
+			ItemStack test = recipe.getOutput();
+			if(test.getItem() == stack.getItem() && test.getMetadata() == stack.getMetadata() && test.getCount() == stack.getCount()){
+				itr.remove();
+			}
+		}
 	}
 
 	private static void parseRecipe(String currentLine, int line) {

@@ -56,7 +56,6 @@ public class Mat3 extends matrixQuery {
         this(f, 0);
     }
 
-    // TODO transpose
     public Mat3(float[] f, int offset) {
         this(
                 f[offset + 0], f[offset + 1], f[offset + 2],

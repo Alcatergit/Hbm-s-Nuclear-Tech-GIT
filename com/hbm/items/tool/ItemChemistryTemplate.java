@@ -289,7 +289,7 @@ public static int getProcessTime(ItemStack stack) {
     		
     		for(int i = 0; i < 2; i++)
     			if(outF[i] != null)
-    				list.add(outF[i].amount + "mB " + I18n.format(outF[i].getFluid().getUnlocalizedName()));
+    				list.add(outF[i].amount + "mB " + outF[i].getFluid().getLocalizedName(outF[i]));
     		
     		list.add("Inputs:");
     		
@@ -299,7 +299,7 @@ public static int getProcessTime(ItemStack stack) {
     		
     		for(int i = 0; i < 2; i++)
     			if(inF[i] != null)
-    				list.add(inF[i].amount + "mB " + I18n.format(inF[i].getFluid().getUnlocalizedName()));
+    				list.add(inF[i].amount + "mB " + inF[i].getFluid().getLocalizedName(inF[i]));
     		
     		list.add("Production time:");
         	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " seconds");

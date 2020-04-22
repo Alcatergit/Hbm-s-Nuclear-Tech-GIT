@@ -5,8 +5,13 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.google.common.collect.Multimap;
+import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -15,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -27,6 +33,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class WeaponSpecial extends ItemSword {
@@ -48,6 +56,9 @@ public class WeaponSpecial extends ItemSword {
 		}
 		if(this == ModItems.ullapool_caber) {
 			return EnumRarity.UNCOMMON;
+		}
+		if(this == ModItems.shimmer_sledge || this == ModItems.shimmer_axe) {
+			return EnumRarity.EPIC;
 		}
 		return EnumRarity.COMMON;
 	}
@@ -77,6 +88,37 @@ public class WeaponSpecial extends ItemSword {
         	}
         	target.playSound(SoundEvents.BLOCK_ANVIL_LAND, 3.0F, 1.0F);
 		}
+		if(this == ModItems.shimmer_sledge) {
+			Vec3d vec = attacker.getLookVec();
+			double dX = vec.x * 5;
+			double dY = vec.y * 5;
+			double dZ = vec.z * 5;
+
+			target.motionX += dX;
+			target.motionY += dY;
+			target.motionZ += dZ;
+        	world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.bang, SoundCategory.PLAYERS, 3.0F, 1.F);
+		}
+    	
+		if(this == ModItems.shimmer_axe) {
+			
+			target.setHealth(target.getHealth() / 2);
+			
+			world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.slice, SoundCategory.PLAYERS, 3.0F, 1.F);
+		}
+		if(this == ModItems.wrench) {
+
+			Vec3d vec = attacker.getLookVec();
+			
+			double dX = vec.x * 0.5;
+			double dY = vec.y * 0.5;
+			double dZ = vec.z * 0.5;
+
+			target.motionX += dX;
+			target.motionY += dY;
+			target.motionZ += dZ;
+        	world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, 3.0F, 0.75F);
+		}
 		if(this == ModItems.ullapool_caber) {
 			if (!world.isRemote)
         	{
@@ -85,26 +127,105 @@ public class WeaponSpecial extends ItemSword {
 			
 			stack.damageItem(505, attacker);
 		}
+		if(this == ModItems.memespoon) {
+
+			if(attacker.fallDistance >= 2) {
+				world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.bang, SoundCategory.PLAYERS, 3.0F, 0.75F);
+				target.setHealth(0);
+			}
+			
+			if(!(attacker instanceof EntityPlayer))
+				return false;
+			
+			if(attacker.fallDistance >= 20 && !((EntityPlayer)attacker).capabilities.isCreativeMode) {
+				if(!world.isRemote) {
+					world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 100, target.posX, target.posY, target.posZ));
+
+					EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, 100 * 0.005F);
+					entity2.posX = target.posX;
+					entity2.posY = target.posY;
+					entity2.posZ = target.posZ;
+					world.spawnEntity(entity2);
+				}
+			}
+		}
 		return false;
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(this == ModItems.shimmer_sledge) {
+			if(world.getBlockState(pos).getBlock() != Blocks.AIR) {
+				
+				EntityRubble rubble = new EntityRubble(world);
+				rubble.posX = pos.getX() + 0.5F;
+				rubble.posY = pos.getY();
+				rubble.posZ = pos.getZ() + 0.5F;
+				
+				rubble.setMetaBasedOnBlock(world.getBlockState(pos).getBlock(), (world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos))));
+				
+				Vec3d vec = player.getLookVec();
+				double dX = vec.x * 5;
+				double dY = vec.y * 5;
+				double dZ = vec.z * 5;
+
+				rubble.motionX += dX;
+				rubble.motionY += dY;
+				rubble.motionZ += dZ;
+	        	world.playSound(null, rubble.posX, rubble.posY, rubble.posZ, HBMSoundHandler.bang, SoundCategory.PLAYERS, 3.0F, 1.0F);
+				
+	        	if(!world.isRemote) {
+	        		
+	        		world.spawnEntity(rubble);
+					world.destroyBlock(pos, false);
+	        	}
+			}
+			return EnumActionResult.SUCCESS;
+		}
+		
+		if(this == ModItems.shimmer_axe) {
+
+        	world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.kaping, SoundCategory.PLAYERS, 3.0F, 1.0F);
+
+        	if(!world.isRemote) {
+				if(world.getBlockState(pos).getBlock() != Blocks.AIR) {
+					world.destroyBlock(pos, false);
+				}
+				if(world.getBlockState(pos.up()).getBlock() != Blocks.AIR) {
+					world.destroyBlock(pos.up(), false);
+				}
+				if(world.getBlockState(pos.down()).getBlock() != Blocks.AIR) {
+					world.destroyBlock(pos.down(), false);
+				}
+        	}
+			return EnumActionResult.SUCCESS;
+		}
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 	
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
 		if(slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND){
-			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Weapon modifier", -0.5, 1));
+			if(this == ModItems.schrabidium_hammer) {
+				map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Weapon modifier", -0.5, 1));
+			}
+			if(this == ModItems.wrench || this == ModItems.wrench_flipped) {
+				map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Weapon modifier", -0.1, 1));
+			}
 		}
 		return map;
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public void onUpdate(ItemStack stack, World worldIn, Entity entity, int itemSlot, boolean isSelected) {
+		if(entity instanceof EntityPlayer) {
+    		if(Library.checkForFiend((EntityPlayer) entity)) {
+    			AdvancementManager.grantAchievement(((EntityPlayer) entity), AdvancementManager.achFiend);
+    		} else if(Library.checkForFiend2((EntityPlayer) entity)) {
+        		AdvancementManager.grantAchievement(((EntityPlayer) entity), AdvancementManager.achFiend2);
+        	}
+    	}
 	}
 	
 	@Override
@@ -120,6 +241,36 @@ public class WeaponSpecial extends ItemSword {
 		if(this == ModItems.ullapool_caber) {
 			list.add("High-yield Scottish face removal.");
 			list.add("A sober person would throw it...");
+		}
+		if(this == ModItems.wrench) {
+			list.add("Mechanic Richard");
+		}
+		if(this == ModItems.wrench_flipped) {
+			list.add("Wrench 2: The Wrenchening");
+		}
+		if(this == ModItems.memespoon) {
+			list.add(TextFormatting.DARK_GRAY + "Level 10 Shovel");
+			list.add(TextFormatting.AQUA + "Deals crits while the wielder is rocket jumping");
+			list.add(TextFormatting.RED + "20% slower firing speed");
+			list.add(TextFormatting.RED + "No random critical hits");
+		}
+		if(this == ModItems.shimmer_sledge) {
+			if(MainRegistry.polaroidID == 11) {
+				list.add("shimmer no");
+				list.add("drop that hammer");
+				list.add("you're going to hurt somebody");
+				list.add("shimmer no");
+				list.add("shimmer pls");
+			} else {
+				list.add("Breaks everything, even portals.");
+			}
+		}
+		if(this == ModItems.shimmer_axe) {
+			if(MainRegistry.polaroidID == 11) {
+				list.add("shim's toolbox does an e-x-p-a-n-d");
+			} else {
+				list.add("Timber!");
+			}
 		}
 	}
 

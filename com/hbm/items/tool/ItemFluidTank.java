@@ -120,7 +120,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static ItemStack getFullBarrel(Fluid f, int amount){
 		ItemStack stack = new ItemStack(ModItems.fluid_barrel_full, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 64000).writeToNBT(new NBTTagCompound()));
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 16000).writeToNBT(new NBTTagCompound()));
 		return stack;
 	}
 	
@@ -128,18 +128,29 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 		return getFullBarrel(f, 1);
 	}
 	
+	public static ItemStack getFullTank(Fluid f, int amount){
+		ItemStack stack = new ItemStack(ModItems.fluid_tank_full, amount, 0);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
+		return stack;
+	}
+	
+	public static ItemStack getFullTank(Fluid f){
+		return getFullTank(f, 1);
+	}
+	
 	public static boolean isFullOrEmpty(ItemStack stack){
 		if(stack.hasTagCompound() && stack.getItem() == ModItems.fluid_barrel_full){
 			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
 			if(f == null)
 				return true;
-			return f.amount == 64000 || f.amount == 0;
+			return f.amount == 16000 || f.amount == 0;
 			
 		} else if(stack.hasTagCompound() && stack.getItem() == ModItems.fluid_tank_full){
 			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
 			if(f == null)
 				return true;
-			return f.amount == 4000 || f.amount == 0;
+			return f.amount == 1000 || f.amount == 0;
 		} else if(stack.getItem() == ModItems.fluid_barrel_full || stack.getItem() == ModItems.fluid_tank_full){
 			return true;
 		}

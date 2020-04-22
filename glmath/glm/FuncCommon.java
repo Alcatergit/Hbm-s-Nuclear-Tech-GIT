@@ -44,7 +44,6 @@ import glmath.joou.ULong;
 import glmath.joou.UShort;
 
 /**
- * TODO frexp, ldexp, modf,
  *
  * @author elect
  */
@@ -765,7 +764,7 @@ abstract class FuncCommon extends FuncRelational {
 
     public static Vec2i floatBitsToUInt(Vec2 v, Vec2i res) {
         if (v.x < 0 || v.y < 0) {
-            throw new NumberFormatException("Value is out of range : "); //TODO print
+            throw new NumberFormatException("Value is out of range : ");
         }
         res.x = (int) (Double.doubleToLongBits(v.x) & UInt.MAX_VALUE);
         res.y = (int) (Double.doubleToLongBits(v.y) & UInt.MAX_VALUE);
@@ -778,7 +777,7 @@ abstract class FuncCommon extends FuncRelational {
 
     public static Vec3i floatBitsToUInt(Vec3 v, Vec3i res) {
         if (v.x < 0 || v.y < 0 || v.z < 0) {
-            throw new NumberFormatException("Value is out of range : "); //TODO print
+            throw new NumberFormatException("Value is out of range : "); 
         }
         res.x = (int) (Double.doubleToLongBits(v.x) & UInt.MAX_VALUE);
         res.y = (int) (Double.doubleToLongBits(v.y) & UInt.MAX_VALUE);
@@ -792,7 +791,7 @@ abstract class FuncCommon extends FuncRelational {
 
     public static Vec4i floatBitsToUInt(Vec4 v, Vec4i res) {
         if (v.x < 0 || v.y < 0 || v.z < 0 || v.w < 0) {
-            throw new NumberFormatException("Value is out of range : "); //TODO print
+            throw new NumberFormatException("Value is out of range : ");
         }
         res.x = (int) (Double.doubleToLongBits(v.x) & UInt.MAX_VALUE);
         res.y = (int) (Double.doubleToLongBits(v.y) & UInt.MAX_VALUE);

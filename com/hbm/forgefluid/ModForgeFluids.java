@@ -35,6 +35,7 @@ public class ModForgeFluids {
 	public static final Fluid reclaimed = new Fluid("hbmreclaimed", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_flowing"), null, Color.WHITE);
 	public static final Fluid petroil = new Fluid("hbmpetroil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_flowing"), null, Color.WHITE);
 	
+	//Drillgon200: Bruh I spelled this wrong, too.
 	public static final Fluid lubricant = new Fluid("hbmlubircant", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_flowing"), null, Color.WHITE);
 	
 	//Yes yes I know, I spelled 'naphtha' wrong.

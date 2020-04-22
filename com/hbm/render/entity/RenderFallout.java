@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -34,10 +33,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
 	float[] rainXCoords;
 	float[] rainYCoords;
 	private int rendererUpdateCount;
-	private DynamicTexture lightmapTexture;
-	private ResourceLocation locationLightMap;
 	long lastTime = System.nanoTime();
-	private static final ResourceLocation SNOW_TEXTURES = new ResourceLocation("textures/environment/snow.png");
 	private static final ResourceLocation falloutTexture = new ResourceLocation(RefStrings.MODID, "textures/entity/fallout.png");
 	
 	public RenderFallout(RenderManager renderManager) {
@@ -147,7 +143,6 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                 b0 = 10;
             }
  
-            boolean flag = false;
             byte b1 = -1;
             float f5 = this.rendererUpdateCount + p_78474_1_;
  
@@ -156,8 +151,6 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             }
  
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            flag = false;
- 
             for (int l = i3 - b0; l <= i3 + b0; ++l) {
                 for (int i1 = k2 - b0; i1 <= k2 + b0; ++i1) {
                     int j1 = (l - i3 + 16) * 32 + i1 - k2 + 16;
@@ -189,7 +182,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                         if (l1 != i2) {
                             pos.setY(l1);
                             this.random.setSeed(i1 * i1 * 3121 + i1 * 45238971 ^ l * l * 418711 + l * 13761);
-                            float f9 = biomegenbase.getTemperature(pos);
+                            biomegenbase.getTemperature(pos);
                             float f10;
                             double d4;
  
@@ -254,7 +247,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                                 float f14 = MathHelper.sqrt(d4 * d4 + d5 * d5) / b0;
                                 float f15 = 1.0F;
                                 BufferBuilder buf = tessellator.getBuffer();
-                                int bright = (int)(worldclient.getLightBrightness(pos.setPos(i1, j2, l)) * 3 + 15728880 / 4);
+                                worldclient.getLightBrightness(pos.setPos(i1, j2, l));
                             //  buf.putBrightness4(bright, bright, bright, bright);
                                 buf.setTranslation(-d0 * 1.0D, -d1 * 1.0D, -d2 * 1.0D);
                                

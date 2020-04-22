@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:shimmer_sledge"
+		},
+		"title": {
+			"translate": "hbm.achievement.fiend"
+		},
+		"description": {
+			"translate": "hbm.achievement.fiend.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

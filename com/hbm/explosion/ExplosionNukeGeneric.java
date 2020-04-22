@@ -8,6 +8,7 @@ import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.grenade.EntityGrenadeASchrab;
 import com.hbm.entity.grenade.EntityGrenadeNuclear;
+import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
@@ -147,9 +148,8 @@ public class ExplosionNukeGeneric {
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
 				if(!Library.isObstructed(world, x, y, z, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ))
 				if (d9 < wat && !(entity instanceof EntityOcelot) &&
-					//TODO All this random nuke stuff
 						!(entity instanceof EntityNukeCloudSmall)
-						/*&& !(entity instanceof EntityMIRV */&& !(entity instanceof EntityMiniNuke)
+						&& !(entity instanceof EntityMIRV) && !(entity instanceof EntityMiniNuke)
 						&& !(entity instanceof EntityMiniMIRV) && !(entity instanceof EntityGrenadeASchrab)
 						&& !(entity instanceof EntityGrenadeNuclear) 
 						&& !(entity instanceof EntityExplosiveBeam)

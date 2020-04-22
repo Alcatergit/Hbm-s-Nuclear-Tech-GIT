@@ -21,7 +21,8 @@ public class SpecialContainerFillLists {
 		KEROSENE(ModForgeFluids.kerosene, new ModelResourceLocation(RefStrings.MODID + ":canister_kerosene", "inventory")),
 		NITAN(ModForgeFluids.nitan, new ModelResourceLocation(RefStrings.MODID + ":canister_superfuel", "inventory")),
 		BIOFUEL(ModForgeFluids.biofuel, new ModelResourceLocation(RefStrings.MODID + ":canister_biofuel", "inventory")),
-		CANOLA(ModForgeFluids.lubricant, new ModelResourceLocation(RefStrings.MODID + ":canister_canola", "inventory"));
+		CANOLA(ModForgeFluids.lubricant, new ModelResourceLocation(RefStrings.MODID + ":canister_canola", "inventory")),
+		REOIL(ModForgeFluids.reclaimed, new ModelResourceLocation(RefStrings.MODID + ":canister_reoil", "inventory"));
 		
 		private Fluid fluid;
 		private Pair<ModelResourceLocation, IBakedModel> renderPair;

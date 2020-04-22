@@ -124,7 +124,6 @@ abstract class noise extends FuncRelational {
 //        return mod289((x * 34 + 1) * x);
 //    }
 //
-//    // TODO check floor return type
 //    private static float mod289(float x) {
 //        return (float) (x - glm.Glm.floor(x * 1 / 289) * 289);
 //    }
@@ -133,7 +132,6 @@ abstract class noise extends FuncRelational {
 //        return mod289_(new Vec4(x).mul(34).add(1).mul(x));
 //    }
 //
-//    // TODO check floor return type
 //    private static Vec4 mod289_(Vec4 v) {
 //        Vec4 result = new Vec4();
 //        result.x = (float) (v.x - glm.Glm.floor(v.x * 1 / 289) * 289);

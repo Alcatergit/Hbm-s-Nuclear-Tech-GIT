@@ -262,7 +262,6 @@ abstract class funcCommon extends ArithmeticOperators {
         return mod((Vec3i) this, y, result);
     }
 
-    // TODO check floor return type
     public static Vec3i mod(Vec3i x, Vec3i y, Vec3i result) {
         result.x = (int) (x.x - y.x * Glm.floor(x.x / y.x));
         result.y = (int) (x.y - y.y * Glm.floor(x.y / y.y));

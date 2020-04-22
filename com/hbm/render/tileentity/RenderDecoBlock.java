@@ -103,6 +103,160 @@ public class RenderDecoBlock extends TileEntitySpecialRenderer<TileEntityDecoBlo
 			GlStateManager.enableCull();
 			bindTexture(ResourceManager.duchessgambit_tex);
 			ResourceManager.duchessgambit.renderAll();
+		} else if(block == ModBlocks.sat_radar) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_base_tex);
+			ResourceManager.sat_base.renderAll();
+			bindTexture(ResourceManager.sat_radar_tex);
+			ResourceManager.sat_radar.renderAll();
+		} else if(block == ModBlocks.sat_resonator) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_base_tex);
+			ResourceManager.sat_base.renderAll();
+			bindTexture(ResourceManager.sat_resonator_tex);
+			ResourceManager.sat_resonator.renderAll();
+		} else if(block == ModBlocks.sat_scanner) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_base_tex);
+			ResourceManager.sat_base.renderAll();
+			bindTexture(ResourceManager.sat_scanner_tex);
+			ResourceManager.sat_scanner.renderAll();
+		} else if(block == ModBlocks.sat_mapper) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_base_tex);
+			ResourceManager.sat_base.renderAll();
+			bindTexture(ResourceManager.sat_mapper_tex);
+			ResourceManager.sat_mapper.renderAll();
+		} else if(block == ModBlocks.sat_laser) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_base_tex);
+			ResourceManager.sat_base.renderAll();
+			bindTexture(ResourceManager.sat_laser_tex);
+			ResourceManager.sat_laser.renderAll();
+		} else if(block == ModBlocks.sat_foeq) {
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
+
+			GL11.glRotated(90, 0, 1, 0);
+
+			switch(te.getBlockMetadata()) {
+			case 4:
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2:
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 5:
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+			case 3:
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			}
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			bindTexture(ResourceManager.sat_foeq_tex);
+			ResourceManager.sat_foeq.renderAll();
 		}
 		GL11.glPopMatrix();
 	}

@@ -45,11 +45,10 @@ public class Vec4ui extends FuncRelational {
         this(la, 0);
     }
 
-    public Vec4ui(long[] la, int offset) { // TODO rename offset also the other classes
+    public Vec4ui(long[] la, int offset) { 
         this(la[offset + 0], la[offset + 1], la[offset + 2], la[offset + 3]);
     }
 
-    // TODO apply buffers constructor also to the other classes
     public Vec4ui(ByteBuffer bb) {
         this(bb, 0);
     }

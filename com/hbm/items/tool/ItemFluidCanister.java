@@ -108,7 +108,7 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		ItemStack stack = new ItemStack(ModItems.canister_generic, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
 		if(f != null && EnumCanister.contains(f))
-			stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, 4000).writeToNBT(new NBTTagCompound()));
+			stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
 		return stack;
 	}
 	
@@ -121,7 +121,7 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
 			if(f == null)
 				return true;
-			return f.amount == 4000 || f.amount == 0;
+			return f.amount == 1000 || f.amount == 0;
 			
 		} else if(stack.getItem() == ModItems.canister_generic){
 			return true;

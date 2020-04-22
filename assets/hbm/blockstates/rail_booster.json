@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "shape=north_south":  { "model": "hbm:booster_rail_flat" },
+        "shape=east_west":  { "model": "hbm:booster_rail_flat", "y": 90 },
+        "shape=ascending_east": { "model": "hbm:booster_rail_raised_ne", "y": 90 },
+        "shape=ascending_west": { "model": "hbm:booster_rail_raised_sw", "y": 90 },
+        "shape=ascending_north": { "model": "hbm:booster_rail_raised_ne" },
+        "shape=ascending_south": { "model": "hbm:booster_rail_raised_sw" }
+    }
+}

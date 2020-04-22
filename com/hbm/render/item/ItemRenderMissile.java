@@ -14,6 +14,8 @@ public class ItemRenderMissile extends TEISRBase {
 	@Override
 	public void renderByItem(ItemStack item) {
 		MissileMultipart missile = MissileMultipart.loadFromStruct(ItemCustomMissile.getStruct(item));
+		if(missile == null)
+			return;
 		GL11.glPushMatrix();
 		//GL11.glTranslated(0.5, 0.5, 0.5);
 		switch(type) {

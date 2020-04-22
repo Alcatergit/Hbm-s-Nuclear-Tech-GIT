@@ -702,11 +702,10 @@ public class ExplosionChaos {
 					if(ZZ < r22 + world.rand.nextInt(r22 / 2)) {
 						pos.setPos(X, Y, Z);
 						Block block = world.getBlockState(pos).getBlock();
-						// TODO statue
-						if(block != Blocks.BEDROCK/* && world.getBlockState(pos).getBlock() != ModBlocks.statue_elb
+						if(block != Blocks.BEDROCK && world.getBlockState(pos).getBlock() != ModBlocks.statue_elb
 													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_g
 													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_w
-													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_f*/)
+													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_f)
 							world.setBlockState(pos, ModBlocks.plasma.getDefaultState());
 					}
 				}
@@ -988,5 +987,51 @@ public class ExplosionChaos {
 			world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
 		}
 
+	}
+	
+	public static void hardenVirus(World world, int x, int y, int z, int bombStartStrength) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int r = bombStartStrength;
+		int r2 = r * r;
+		int r22 = r2 / 2;
+		for (int xx = -r; xx < r; xx++) {
+			int X = xx + x;
+			int XX = xx * xx;
+			for (int yy = -r; yy < r; yy++) {
+				int Y = yy + y;
+				int YY = XX + yy * yy;
+				for (int zz = -r; zz < r; zz++) {
+					int Z = zz + z;
+					int ZZ = YY + zz * zz;
+					if (ZZ < r22) {
+						if (world.getBlockState(pos.setPos(X, Y, Z)).getBlock() == ModBlocks.crystal_virus)
+							world.setBlockState(pos.setPos(X, Y, Z), ModBlocks.crystal_hardened.getDefaultState());
+					}
+				}
+			}
+		}
+	}
+
+	public static void spreadVirus(World world, int x, int y, int z, int bombStartStrength) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int r = bombStartStrength;
+		int r2 = r * r;
+		int r22 = r2 / 2;
+		for (int xx = -r; xx < r; xx++) {
+			int X = xx + x;
+			int XX = xx * xx;
+			for (int yy = -r; yy < r; yy++) {
+				int Y = yy + y;
+				int YY = XX + yy * yy;
+				for (int zz = -r; zz < r; zz++) {
+					int Z = zz + z;
+					int ZZ = YY + zz * zz;
+					if (ZZ < r22) {
+						if (rand.nextInt(15) == 0 && world.getBlockState(pos.setPos(X, Y, Z)).getBlock() != Blocks.AIR)
+							world.setBlockState(pos.setPos(X, Y, Z), ModBlocks.cheater_virus_seed.getDefaultState());
+					}
+				}
+			}
+		}
 	}
 }

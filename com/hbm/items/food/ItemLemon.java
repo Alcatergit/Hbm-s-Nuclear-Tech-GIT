@@ -8,8 +8,11 @@ import com.hbm.items.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 public class ItemLemon extends ItemFood {
@@ -24,7 +27,7 @@ public class ItemLemon extends ItemFood {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		/*if(this == ModItems.lemon) {
+		if(this == ModItems.lemon) {
 			list.add("Eh, good enough.");
 		}
 		
@@ -67,7 +70,7 @@ public class ItemLemon extends ItemFood {
 		
 		if(this == ModItems.loop_stew) {
 			list.add("A very, very healthy breakfast.");
-		}*/
+		}
 		
 		if(this == ModItems.twinkie) {
 			list.add("Expired 600 years ago!");
@@ -209,19 +212,19 @@ public class ItemLemon extends ItemFood {
 	
 	@Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-		/*if(this == ModItems.med_ipecac || this == ModItems.med_ptsd) {
-			player.addPotionEffect(new PotionEffect(Potion.hunger.id, 50, 49));
+		if(this == ModItems.med_ipecac || this == ModItems.med_ptsd) {
+			player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 50, 49));
 		}
 		
 		if(this == ModItems.med_schizophrenia) {
 		}
 		
 		if(this == ModItems.loop_stew) {
-			player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 20 * 20, 1));
-			player.addPotionEffect(new PotionEffect(Potion.resistance.id, 60 * 20, 2));
-			player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60 * 20, 1));
-			player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 20 * 20, 2));
-		}*/
+			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 * 20, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 60 * 20, 2));
+			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60 * 20, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 20 * 20, 2));
+		}
 		
 		if(this == ModItems.canned_beef || 
 				this == ModItems.canned_tuna || 
@@ -258,8 +261,8 @@ public class ItemLemon extends ItemFood {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		ItemStack sta = super.onItemUseFinish(stack, worldIn, entityLiving);
         
-       /* if(this == ModItems.loop_stew)
-        	return new ItemStack(Items.bowl);*/
+        if(this == ModItems.loop_stew)
+        	return new ItemStack(Items.BOWL);
         
 
     	

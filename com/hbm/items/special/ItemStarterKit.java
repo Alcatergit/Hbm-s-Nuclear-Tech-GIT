@@ -7,6 +7,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemFluidTank;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
@@ -20,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 public class ItemStarterKit extends Item {
@@ -427,6 +429,15 @@ public class ItemStarterKit extends Item {
 		if(this == ModItems.stealth_boy)
 		{
 			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30 * 20, 0, false, false));
+		}
+		
+		if(this == ModItems.letter && world.isRemote)
+		{
+			if(player.getUniqueID().toString().equals(Library.a20)) {
+				player.sendMessage(new TextComponentTranslation("Error: null reference @ com.hbm.items.ItemStarterKit.class, please report this to the modder!"));
+			} else {
+				player.sendMessage(new TextComponentTranslation("You rip the letter in half; nothing happens."));
+			}
 		}
 		
 		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.itemUnpack, SoundCategory.PLAYERS, 1.0F, 1.0F);

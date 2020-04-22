@@ -10,7 +10,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 
@@ -74,7 +74,7 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 		list.add("");
 		list.add("Universal fluid identifier for:");
 		if (f != null)
-			list.add("   " + I18n.format(f.getUnlocalizedName()));
+			list.add("   " + f.getLocalizedName(new FluidStack(f, 1000)));
 		else
 			list.add("   " + "ERROR - bad data");
 	}

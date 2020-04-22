@@ -13,7 +13,6 @@ import net.minecraft.util.math.MathHelper;
 
 public class RenderTaintedCreeper extends RenderLiving<EntityTaintedCreeper> {
 
-	private static final ResourceLocation armoredCreeperTextures = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper_armor_taint.png");
     private static final ResourceLocation creeperTextures = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper_tainted.png");
 	
 	public RenderTaintedCreeper(RenderManager rendermanagerIn) {

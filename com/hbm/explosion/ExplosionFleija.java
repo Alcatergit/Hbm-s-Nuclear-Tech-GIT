@@ -1,5 +1,7 @@
 package com.hbm.explosion;
 
+import com.hbm.blocks.generic.DecoBlockAlt;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -98,7 +100,7 @@ public class ExplosionFleija
 			for (int y = (int)(dist / this.explosionCoefficient2); y > -dist / this.explosionCoefficient; y--)
 			{
 				pos.setPos(this.posX+x, this.posY+y, this.posZ+z);
-				if(!(this.worldObj.getBlockState(pos).getBlock() == Blocks.BEDROCK && this.posY+y <= 0) /*&& !(this.worldObj.getBlockState(pos).getBlock() instanceof DecoBlockAlt)*/)//TODO Create statue
+				if(!(this.worldObj.getBlockState(pos).getBlock() == Blocks.BEDROCK && this.posY+y <= 0) && !(this.worldObj.getBlockState(pos).getBlock() instanceof DecoBlockAlt))
 					this.worldObj.setBlockToAir(pos);
 			}
 		}

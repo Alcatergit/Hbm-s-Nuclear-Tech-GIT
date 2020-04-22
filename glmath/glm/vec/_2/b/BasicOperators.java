@@ -8,7 +8,6 @@ package glmath.glm.vec._2.b;
 import glmath.glm.Glm;
 
 /**
- * TODO public Vec2b add_(int b) also in Glm?
  *
  * @author GBarbieri
  */

@@ -88,7 +88,7 @@ public class MachineRecipes {
 			add(ModItems.stamp_schrabidium_circuit);
 		}
 	};
-
+	
 	public static ItemStack getPressResult(ItemStack input, ItemStack stamp) {
 		if (input == null || stamp == null)
 			return null;

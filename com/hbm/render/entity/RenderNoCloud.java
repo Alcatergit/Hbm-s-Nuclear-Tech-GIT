@@ -23,26 +23,16 @@ public class RenderNoCloud extends Render<EntityNukeCloudNoShroom> {
 
 	public static final IRenderFactory<EntityNukeCloudNoShroom> FACTORY = (RenderManager man) -> {return new RenderNoCloud(man);};
 	
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/NukeCloudSmall.obj");
-	private IModelCustom blastModel;
-    private ResourceLocation blastTexture;
 	private static final ResourceLocation ringModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/Ring.obj");
 	private IModelCustom ringModel;
     private ResourceLocation ringTexture;
-	private static final ResourceLocation ringBigModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/RingBig.obj");
-	private IModelCustom ringBigModel;
-    private ResourceLocation ringBigTexture;
     public float scale = 0;
     public float ring = 0;
 	
 	protected RenderNoCloud(RenderManager renderManager) {
 		super(renderManager);
-		blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-    	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/NukeCloudFire.png");
     	ringModel = AdvancedModelLoader.loadModel(ringModelRL);
     	ringTexture = new ResourceLocation(RefStrings.MODID, "textures/models/Ring2.png");
-    	ringBigModel = AdvancedModelLoader.loadModel(ringBigModelRL);
-    	ringBigTexture = new ResourceLocation(RefStrings.MODID, "textures/models/Ring2.png");
     	scale = 0;
     	ring = 0;
 	}

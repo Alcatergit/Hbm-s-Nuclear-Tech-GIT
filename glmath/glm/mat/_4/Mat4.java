@@ -45,7 +45,6 @@ public class Mat4 extends matrixQuery {
         this(f, 0);
     }
 
-    // TODO transpose
     public Mat4(float[] f, int offset) {
         this(
                 f[offset + 0], f[offset + 1], f[offset + 2], f[offset + 3],
@@ -413,7 +412,6 @@ public class Mat4 extends matrixQuery {
         return Glm.compareFloatEquals(m33, other.m33, maxUlps);
     }
 
-    // TODO also other class
     public Mat3 toMat3_() {
         return toMat3(new Mat3());
     }

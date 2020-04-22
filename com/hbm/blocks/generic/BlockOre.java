@@ -105,9 +105,8 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.block_meteor_treasure)
 		{
-			//TODO update this when I add the items the glitch uses
 			switch(rand.nextInt(36)) {
-			//case 0: return ModItems.coil_advanced_alloy;
+			case 0: return ModItems.coil_advanced_alloy;
 			case 1: return ModItems.plate_advanced_alloy;
 			case 2: return ModItems.powder_desh_mix;
 			case 3: return ModItems.ingot_desh;
@@ -118,7 +117,7 @@ public class BlockOre extends Block {
 			case 8: return ModItems.ingot_plutonium;
 			case 9: return ModItems.ingot_thorium_fuel;
 			case 10: return ModItems.ingot_u233;
-			//case 11: return ModItems.turbine_tungsten;
+			case 11: return ModItems.turbine_tungsten;
 			case 12: return ModItems.ingot_dura_steel;
 			case 13: return ModItems.ingot_polymer;
 			case 14: return ModItems.ingot_tungsten;
@@ -142,7 +141,7 @@ public class BlockOre extends Block {
 			case 32: return ModItems.gun_mirv_ammo;
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
-			//case 35: return ModItems.glitch;
+			case 35: return ModItems.glitch;
 			}
 		}
 		if(this == ModBlocks.ore_nether_fire)

@@ -18,7 +18,6 @@ abstract class funcMatrix {
 
     public static final int SIZE = 4 * 4 * Float.BYTES;
 
-    // TODO invert?
     public Mat4 inverse() {
         return inverse((Mat4) this);
     }

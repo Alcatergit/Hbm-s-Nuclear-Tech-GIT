@@ -127,6 +127,10 @@ public final class HBMSoundHandler {
 	public static SoundEvent nullMine;
 	public static SoundEvent openDoor;
 	public static SoundEvent closeDoor;
+	public static SoundEvent bang;
+	public static SoundEvent slice;
+	public static SoundEvent kaping;
+	public static SoundEvent pipePlaced;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -272,6 +276,10 @@ public final class HBMSoundHandler {
 		nullMine = register("misc.nullMine");
 		openDoor = register("block.openDoor");
 		closeDoor = register("block.closeDoor");
+		bang = register("weapon.bang");
+		slice = register("weapon.slice");
+		kaping = register("weapon.kapeng");
+		pipePlaced = register("block.pipePlaced");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

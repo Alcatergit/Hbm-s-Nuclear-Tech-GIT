@@ -51,6 +51,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class Library {
 
@@ -122,6 +123,20 @@ public class Library {
 		}
 
 		return false;
+	}
+	
+	public static boolean checkForHeld(EntityPlayer player, Item item) {
+		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
+	}
+	
+	public static boolean checkForFiend(EntityPlayer player) {
+		
+		return checkArmorPiece(player, ModItems.jackt, 2) && checkForHeld(player, ModItems.shimmer_sledge);
+	}
+	
+	public static boolean checkForFiend2(EntityPlayer player) {
+		
+		return checkArmorPiece(player, ModItems.jackt2, 2) && checkForHeld(player, ModItems.shimmer_axe);
 	}
 
 	public static void damageSuit(EntityPlayer player, int slot, int amount) {
@@ -387,8 +402,7 @@ public class Library {
 			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
-		// TODO these tools
-		/*
+		
 		for(int i = 0; i < 50; i++)
 			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_sword && inventory.getStackInSlot(index).getItemDamage() > 0)
 			{
@@ -416,7 +430,7 @@ public class Library {
 				power -= 10;
 				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
 			} else break;
-		*/
+		
 		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
@@ -867,10 +881,10 @@ public class Library {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Same as ItemStack.areItemStacksEqual, except the second one's tag only has to contain all the first one's tag, rather than being exactly equal.
 	 */
-	public static boolean areItemStacksCompatible(ItemStack base, ItemStack toTest){
+	public static boolean areItemStacksCompatible(ItemStack base, ItemStack toTest, boolean shouldCompareSize){
 		if (base.isEmpty() && toTest.isEmpty())
         {
             return true;
@@ -879,14 +893,14 @@ public class Library {
         {
             if(!base.isEmpty() && !toTest.isEmpty()){
 
-            	if(base.getCount() != toTest.getCount()){
+            	if(shouldCompareSize && base.getCount() != toTest.getCount()){
             		return false;
             	} 
             	else if (base.getItem() != toTest.getItem())
                 {
                     return false;
                 }
-                else if (base.getMetadata() != toTest.getMetadata())
+                else if (base.getMetadata() != toTest.getMetadata() && !(base.getMetadata() == OreDictionary.WILDCARD_VALUE))
                 {
                     return false;
                 }
@@ -901,6 +915,10 @@ public class Library {
             }
         }
 		return false;
+	}
+	
+	public static boolean areItemStacksCompatible(ItemStack base, ItemStack toTest){
+		return areItemStacksCompatible(base, toTest, true);
 	}
 	
 	/**
@@ -938,6 +956,12 @@ public class Library {
 			list.add(new int[] { (int)(pos.getX() + (vec0.xCoord * i)), pos.getY(), (int)(pos.getZ() + (vec0.zCoord * i)), i });
 		}
 		
+		return list;
+	}
+
+	public static List<ItemStack> copyItemStackList(List<ItemStack> inputs) {
+		List<ItemStack> list = new ArrayList<ItemStack>();
+		inputs.forEach(stack -> {list.add(stack.copy());});
 		return list;
 	}
 	

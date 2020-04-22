@@ -8,7 +8,6 @@ import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.WarheadType;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,6 +61,8 @@ public class ItemCustomMissile extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(!stack.hasTagCompound() || stack.getTagCompound().hasNoTags())
+			return;
 		ItemMissile chip = (ItemMissile) Item.getItemById(readFromNBT(stack, "chip"));
 		ItemMissile warhead = (ItemMissile) Item.getItemById(readFromNBT(stack, "warhead"));
 		ItemMissile fuselage = (ItemMissile) Item.getItemById(readFromNBT(stack, "fuselage"));
@@ -93,7 +94,7 @@ public class ItemCustomMissile extends Item {
 	
 	public static MissileStruct getStruct(ItemStack stack) {
 		
-		if(stack == null || !(stack.getItem() instanceof ItemCustomMissile))
+		if(stack == null || stack.isEmpty() || stack.getTagCompound().hasNoTags() || !(stack.getItem() instanceof ItemCustomMissile))
 			return null;
 		
 		ItemMissile warhead = (ItemMissile) Item.getItemById(readFromNBT(stack, "warhead"));

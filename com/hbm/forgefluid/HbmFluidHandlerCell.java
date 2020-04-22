@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerItem {
 
-public static final String FLUID_NBT_KEY = "HbmFluidKey";
+	public static final String FLUID_NBT_KEY = "HbmFluidKey";
 	
 	@Nonnull
 	private ItemStack container;

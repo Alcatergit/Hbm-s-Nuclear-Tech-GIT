@@ -369,6 +369,10 @@ public class ItemSyringe extends Item {
 		if (this == ModItems.syringe_awesome) {
 			return EnumRarity.UNCOMMON;
 		}
+		if(this == ModItems.euphemium_stopper)
+    	{
+    		return EnumRarity.EPIC;
+    	}
 		return EnumRarity.COMMON;
 	}
 
@@ -540,6 +544,15 @@ public class ItemSyringe extends Item {
             			player.dropItem(new ItemStack(ModItems.bottle2_empty, 1, 0), false);
             		}
             	}
+            }
+		}
+		if(this == ModItems.euphemium_stopper)
+		{
+            if (!world.isRemote)
+            {
+            	entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 30 * 20, 9));
+            	entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30 * 20, 9));
+            	entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30 * 20, 9));
             }
 		}
 		

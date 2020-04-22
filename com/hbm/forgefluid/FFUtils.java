@@ -2,6 +2,7 @@ package com.hbm.forgefluid;
 
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.inventory.gui.GuiInfoContainer;
+import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
@@ -217,6 +218,9 @@ public class FFUtils {
 			return false;
 		}
 
+		if(slots.getStackInSlot(slot1).getItem() == ModItems.fluid_barrel_infinite && tank.getFluid() != null){
+			return tank.fill(new FluidStack(tank.getFluid(), 10), true) > 0 ? true : false;
+		}
 		if(FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
 
 			moveItems(slots, slot1, slot2);

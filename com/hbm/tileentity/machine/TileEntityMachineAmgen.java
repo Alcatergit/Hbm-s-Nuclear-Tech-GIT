@@ -59,14 +59,13 @@ public class TileEntityMachineAmgen extends TileEntity implements ITickable, ISo
 			} else if(block == ModBlocks.machine_geo) {
 				
 				Block b = world.getBlockState(pos.down()).getBlock();
-				//TODO geysers
-				/*if(b == ModBlocks.geysir_water) {
+				if(b == ModBlocks.geysir_water) {
 					power += 75;
 				} else if(b == ModBlocks.geysir_chlorine) {
 					power += 100;
 				} else if(b == ModBlocks.geysir_vapor) {
 					power += 50;
-				} else*/ if(b == Blocks.LAVA) {
+				} else if(b == Blocks.LAVA) {
 					power += 100;
 					
 					if(world.rand.nextInt(1200) == 0) {

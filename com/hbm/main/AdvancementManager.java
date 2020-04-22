@@ -88,6 +88,8 @@ public class AdvancementManager {
 		bobNuclear = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobnuclear"));
 		achSacrifice = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsacrifice"));
 		achFOEQ = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfoeq"));
+		achFiend = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfiend"));
+		achFiend2 = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfiend2"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

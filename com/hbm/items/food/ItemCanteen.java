@@ -1,0 +1,96 @@
+package com.hbm.items.food;
+
+import java.util.List;
+
+import com.hbm.items.ModItems;
+import com.hbm.main.MainRegistry;
+
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
+
+public class ItemCanteen extends Item {
+
+	public ItemCanteen(int cooldown, String s) {
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
+		this.setMaxDamage(cooldown);
+		
+		ModItems.ALL_ITEMS.add(this);
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (stack.getItemDamage() > 0)
+			stack.setItemDamage(stack.getItemDamage() - 1);
+	}
+	
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+		stack.setItemDamage(stack.getMaxDamage());
+
+		if (this == ModItems.canteen_13) {
+			entityLiving.heal(5F);
+		}
+		if (this == ModItems.canteen_vodka) {
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10 * 20, 0));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * 20, 2));
+		}
+
+		return stack;
+	}
+	
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 10;
+	}
+	
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.DRINK;
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if(playerIn.getHeldItem(handIn).getItemDamage() == 0)
+			playerIn.setActiveHand(handIn);
+		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(this == ModItems.canteen_13)
+    	{
+			tooltip.add("Cooldown: 1 minute");
+			tooltip.add("Restores 2.5 hearts");
+			tooltip.add("");
+			
+    		if(MainRegistry.polaroidID == 11)
+    			tooltip.add("You sip a sip from your trusty Vault 13 SIPPP");
+    		else
+    			tooltip.add("You take a sip from your trusty Vault 13 canteen.");
+    	}
+    	if(this == ModItems.canteen_vodka)
+    	{
+    		tooltip.add("Cooldown: 3 minutes");
+    		tooltip.add("Nausea I for 10 seconds");
+			tooltip.add("Strength III for 30 seconds");
+			tooltip.add("");
+			
+    		if(MainRegistry.polaroidID == 11)
+    			//list.add("Why sipp when you can succ?");
+    			tooltip.add("Time to get hammered & sickled!");
+    		else
+    			tooltip.add("Smells like disinfectant, tastes like disinfectant.");
+    	}
+	}
+}

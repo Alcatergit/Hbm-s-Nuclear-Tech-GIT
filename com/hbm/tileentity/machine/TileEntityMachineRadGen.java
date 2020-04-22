@@ -241,7 +241,6 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 		if(item == ModItems.rod_dual_schrabidium) return 1440;
 		if(item == ModItems.rod_quad_schrabidium) return 2880;
 		
-		//TODO commented out radioactive blocks
 		if(item == ModItems.nuclear_waste) return 100;
 		if(item == ModItems.waste_uranium) return 150;
 		if(item == ModItems.waste_plutonium) return 150;
@@ -250,7 +249,7 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 		if(item == Item.getItemFromBlock(ModBlocks.block_waste)) return 1000;
 		if(item == Item.getItemFromBlock(ModBlocks.yellow_barrel)) return 900;
 		if(item == ModItems.trinitite) return 80;
-		//if(item == Item.getItemFromBlock(ModBlocks.block_trinitite)) return 800;
+		if(item == Item.getItemFromBlock(ModBlocks.block_trinitite)) return 800;
 
 		if(item == Item.getItemFromBlock(ModBlocks.sellafield_0)) return 1000;
 		if(item == Item.getItemFromBlock(ModBlocks.sellafield_1)) return 2000;
@@ -281,7 +280,7 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 		if(item == ModItems.rod_dual_waste) return 1200;
 		if(item == ModItems.rod_quad_waste) return 4800;
 
-		//if(item == Item.getItemFromBlock(ModBlocks.block_yellowcake)) return 1000;
+		if(item == Item.getItemFromBlock(ModBlocks.block_yellowcake)) return 1000;
 		if(item == Item.getItemFromBlock(ModBlocks.mush)) return 10;
 		if(item == Item.getItemFromBlock(ModBlocks.waste_earth)) return 25;
 		if(item == Item.getItemFromBlock(ModBlocks.waste_mycelium)) return 150;

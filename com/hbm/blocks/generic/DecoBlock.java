@@ -175,8 +175,7 @@ public class DecoBlock extends BlockContainer {
 			list.add(new ItemStack(ModItems.plate_steel, 15 + rand.nextInt(31)));
 			list.add(new ItemStack(Items.IRON_INGOT, 5 + rand.nextInt(11)));
 			list.add(new ItemStack(ModBlocks.block_steel, 1 + rand.nextInt(3)));
-			//list.add(new ItemStack(ModBlocks.crate, 1 + rand.nextInt(6)));
-			//TODO crate
+			list.add(new ItemStack(ModBlocks.crate, 1 + rand.nextInt(6)));
 			for (int i1 = 0; i1 < list.size(); ++i1) {
 				ItemStack itemstack = list.get(i1).copy();
 

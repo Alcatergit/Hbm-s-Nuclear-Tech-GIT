@@ -41,7 +41,8 @@ public class AdvancedModelLoader {
      * @throws IllegalArgumentException if the resource name cannot be understood
      * @throws ModelFormatException if the underlying model handler cannot parse the model format
      */
-    public static IModelCustom loadModel(ResourceLocation resource) throws IllegalArgumentException, ModelFormatException
+    @SuppressWarnings("deprecation")
+	public static IModelCustom loadModel(ResourceLocation resource) throws IllegalArgumentException, ModelFormatException
     {
         String name = resource.getResourcePath();
         int i = name.lastIndexOf('.');

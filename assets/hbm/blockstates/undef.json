@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:undef" },
+     	   	"facing=south": { "model": "hbm:undef", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:undef", "y": 270 },
+      		"facing=east":  { "model": "hbm:undef", "y": 90 }
+	}
+}

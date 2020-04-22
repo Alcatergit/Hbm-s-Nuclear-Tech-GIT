@@ -30,6 +30,18 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.book_of_)
+		{
+			list.add("Denn wer den Walzer richtig tritt,");
+			list.add("der ist auch für den Abgang fit.");
+		}
+		if(this == ModItems.watch)
+		{
+			list.add("A small blue pocket watch.");
+			list.add("It's glass has a few cracks in it,");
+			list.add("and some shards are missing.");
+			list.add("It stopped ticking at 2:34.");
+		}
 		if(this == ModItems.crystal_horn)
 		{
 			if(MainRegistry.polaroidID == 11)
@@ -541,7 +553,8 @@ public class ItemCustomLore extends Item {
 
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		if(this == ModItems.plate_euphemium || this == ModItems.ingot_euphemium || this == ModItems.powder_neptunium || this == ModItems.powder_euphemium || this == ModItems.powder_iodine || this == ModItems.powder_astatine || this == ModItems.powder_neodymium || this == ModItems.powder_caesium || this == ModItems.powder_strontium || this == ModItems.powder_cobalt || this == ModItems.powder_bromine || this == ModItems.powder_niobium || this == ModItems.powder_tennessine || this == ModItems.powder_cerium || this == ModItems.nugget_euphemium || this == ModItems.rod_quad_euphemium) {
+		if(this == ModItems.plate_euphemium || this == ModItems.ingot_euphemium || this == ModItems.powder_neptunium || this == ModItems.powder_euphemium || this == ModItems.powder_iodine || this == ModItems.powder_astatine || this == ModItems.powder_neodymium || this == ModItems.powder_caesium || this == ModItems.powder_strontium || this == ModItems.powder_cobalt || this == ModItems.powder_bromine || this == ModItems.powder_niobium || this == ModItems.powder_tennessine || this == ModItems.powder_cerium || this == ModItems.nugget_euphemium || this == ModItems.rod_quad_euphemium || 
+				this == ModItems.watch) {
 			return EnumRarity.EPIC;
 		}
 
