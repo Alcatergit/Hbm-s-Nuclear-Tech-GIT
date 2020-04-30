@@ -19,7 +19,7 @@ public class TileEntityReactorHatch extends TileEntity implements IFluidHandler 
 		TileEntityMachineReactorLarge fillable = this.getReactorTE(world, pos);
 		if(fillable != null)
 			return fillable.getTankProperties();
-		return null;
+		return new IFluidTankProperties[]{};
 	}
 
 	@Override
@@ -50,11 +50,12 @@ public class TileEntityReactorHatch extends TileEntity implements IFluidHandler 
 		EnumFacing e = world.getBlockState(pos).getValue(ReactorHatch.FACING);
 		if(e == EnumFacing.NORTH)
 		{
-			if(world.getTileEntity(pos.add(0, 0, 2)) != null && world.getTileEntity(pos.add(0, 0, 2)) instanceof TileEntityMachineReactorLarge)
+			TileEntity reactor = world.getTileEntity(pos.add(0, 0, 2));
+			if(reactor instanceof TileEntityMachineReactorLarge)
 			{
-				if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, 2))).checkBody())
+				if(((TileEntityMachineReactorLarge)reactor).checkBody())
 				{
-					return (TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, 2));
+					return (TileEntityMachineReactorLarge)reactor;
 				} else {
 					return null;
 				}
@@ -64,11 +65,12 @@ public class TileEntityReactorHatch extends TileEntity implements IFluidHandler 
 		}
 		if(e == EnumFacing.SOUTH)
 		{
-			if(world.getTileEntity(pos.add(0, 0, -2)) != null && world.getTileEntity(pos.add(0, 0, -2)) instanceof TileEntityMachineReactorLarge)
+			TileEntity reactor = world.getTileEntity(pos.add(0, 0, -2));
+			if(reactor instanceof TileEntityMachineReactorLarge)
 			{
-				if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, -2))).checkBody())
+				if(((TileEntityMachineReactorLarge)reactor).checkBody())
 				{
-					return (TileEntityMachineReactorLarge)world.getTileEntity(pos.add(0, 0, -2));
+					return (TileEntityMachineReactorLarge)reactor;
 				} else {
 					return null;
 				}
@@ -78,11 +80,12 @@ public class TileEntityReactorHatch extends TileEntity implements IFluidHandler 
 		}
 		if(e == EnumFacing.WEST)
 		{
-			if(world.getTileEntity(pos.add(2, 0, 0)) != null && world.getTileEntity(pos.add(2, 0, 0)) instanceof TileEntityMachineReactorLarge)
+			TileEntity reactor = world.getTileEntity(pos.add(2, 0, 0));
+			if(reactor instanceof TileEntityMachineReactorLarge)
 			{
-				if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(2, 0, 0))).checkBody())
+				if(((TileEntityMachineReactorLarge)reactor).checkBody())
 				{
-					return (TileEntityMachineReactorLarge)world.getTileEntity(pos.add(2, 0, 0));
+					return (TileEntityMachineReactorLarge)reactor;
 				} else {
 					return null;
 				}
@@ -92,11 +95,12 @@ public class TileEntityReactorHatch extends TileEntity implements IFluidHandler 
 		}
 		if(e == EnumFacing.EAST)
 		{
-			if(world.getTileEntity(pos.add(-2, 0, 0)) != null && world.getTileEntity(pos.add(-2, 0, 0)) instanceof TileEntityMachineReactorLarge)
+			TileEntity reactor = world.getTileEntity(pos.add(-2, 0, 0));
+			if(reactor instanceof TileEntityMachineReactorLarge)
 			{
-				if(((TileEntityMachineReactorLarge)world.getTileEntity(pos.add(-2, 0, 0))).checkBody())
+				if(((TileEntityMachineReactorLarge)reactor).checkBody())
 				{
-					return (TileEntityMachineReactorLarge)world.getTileEntity(pos.add(-2, 0, 0));
+					return (TileEntityMachineReactorLarge)reactor;
 				} else {
 					return null;
 				}

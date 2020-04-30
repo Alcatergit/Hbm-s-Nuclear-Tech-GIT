@@ -1,7 +1,6 @@
 package com.hbm.handler.jei;
 
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
-import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.lib.RefStrings;
 
 import mezz.jei.api.IGuiHelper;

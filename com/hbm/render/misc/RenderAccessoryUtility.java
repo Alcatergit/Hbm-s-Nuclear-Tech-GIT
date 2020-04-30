@@ -11,6 +11,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class RenderAccessoryUtility {
 
@@ -78,7 +79,10 @@ public class RenderAccessoryUtility {
 	}
 	
 	public static void loadCape(NetworkPlayerInfo info, ResourceLocation rl){
-		Map<Type, ResourceLocation> playerTextures = ObfuscationReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures");
+		//Map<Type, ResourceLocation> playerTextures = ObfuscationReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures");
+		@SuppressWarnings("deprecation")
+		Map<Type, ResourceLocation> playerTextures = ReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures", "field_187107_a");
+		
 		playerTextures.put(Type.CAPE, rl);
 	}
 }

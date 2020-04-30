@@ -59,6 +59,6 @@ public class GUIWatzCore extends GuiInfoContainer {
 		int l = (int)diFurnace.getPowerScaled(70);
 		drawTexturedModalRect(guiLeft + 152, guiTop + 106 - 18 - l, 192, 70 - l, 16, l);
 		
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 70, 134, 106 - 34);
+		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 70, 134, 116);
 	}
 }

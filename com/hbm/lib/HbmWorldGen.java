@@ -226,6 +226,9 @@ public class HbmWorldGen implements IWorldGenerator {
 		}
 
 		if(MainRegistry.enableDungeons) {
+			//Drillgon200: Helps with cascading world gen.
+			i += 8;
+			j += 8;
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
 			
 			if (biome == Biomes.PLAINS || biome == Biomes.DESERT) {

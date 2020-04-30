@@ -122,7 +122,7 @@ public class FFPipeNetwork implements IFluidHandler {
 		
 		for(IFluidHandler consume : consumers){
 			i++;
-			if(internalNetworkTank.getFluid() != null){
+			if(internalNetworkTank.getFluid() != null && consume != null){
 				internalNetworkTank.drain(consume.fill(new FluidStack(internalNetworkTank.getFluid().getFluid(), i<consumers.size()?part:lastPart), true), true);
 			}
 		}

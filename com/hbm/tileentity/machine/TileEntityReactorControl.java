@@ -82,6 +82,8 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
 		redstoned = compound.getBoolean("red");
 		auto = compound.getBoolean("auto");
 		lastRods = compound.getInteger("lastRods");
+		if(compound.hasKey("link"))
+			link = BlockPos.fromLong(compound.getLong("link"));
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
@@ -92,6 +94,8 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
 		compound.setBoolean("red", redstoned);
 		compound.setBoolean("auto", auto);
 		compound.setInteger("lastRods", lastRods);
+		if(link != null)
+			compound.setLong("link", link.toLong());
 		compound.setTag("inventroy", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}

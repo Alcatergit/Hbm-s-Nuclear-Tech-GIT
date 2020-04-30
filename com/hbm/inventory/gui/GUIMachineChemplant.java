@@ -87,9 +87,9 @@ public class GUIMachineChemplant extends GuiInfoContainer {
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		
-		FFUtils.drawLiquid(chemplant.tanks[0], guiLeft, guiTop, zLevel, 16, 34, 8, 52);
-		FFUtils.drawLiquid(chemplant.tanks[1], guiLeft, guiTop, zLevel, 16, 34, 26, 52);
-		FFUtils.drawLiquid(chemplant.tanks[2], guiLeft, guiTop, zLevel, 16, 34, 134, 52);
-		FFUtils.drawLiquid(chemplant.tanks[3], guiLeft, guiTop, zLevel, 16, 34, 152, 52);
+		FFUtils.drawLiquid(chemplant.tanks[0], guiLeft, guiTop, zLevel, 16, 34, 8, 80);
+		FFUtils.drawLiquid(chemplant.tanks[1], guiLeft, guiTop, zLevel, 16, 34, 26, 80);
+		FFUtils.drawLiquid(chemplant.tanks[2], guiLeft, guiTop, zLevel, 16, 34, 134, 80);
+		FFUtils.drawLiquid(chemplant.tanks[3], guiLeft, guiTop, zLevel, 16, 34, 152, 80);
 	}
 }

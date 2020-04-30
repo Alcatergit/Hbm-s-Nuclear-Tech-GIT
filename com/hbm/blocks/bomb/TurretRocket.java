@@ -61,7 +61,7 @@ public class TurretRocket extends TurretBase {
 				world.spawnEntity(fx);
 			}
 
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.rpgShoot, SoundCategory.BLOCKS, 1.0F, 0.75F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.rpgShoot, SoundCategory.BLOCKS, 1.0F, 0.75F);
 			
 			flag = true;
 		}

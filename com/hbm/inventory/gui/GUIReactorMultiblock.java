@@ -223,7 +223,7 @@ public class GUIReactorMultiblock extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 80, guiTop + 108, 0, offset, i, 4);
 		}
 
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 8, 88);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 26, 88);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 8, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 26, 116);
 	}
 }

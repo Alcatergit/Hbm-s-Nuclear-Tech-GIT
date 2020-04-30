@@ -89,7 +89,7 @@ public class NuclearReactor extends WorldGenerator {
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 1), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 0, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 1, y + 0, z + 2), Block1.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 2), ModBlocks.fluid_duct.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 2, y + 0, z + 2), ModBlocks.fluid_duct_mk2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 0, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 0, z + 3), Block1.getDefaultState(), 3);
@@ -189,7 +189,7 @@ public class NuclearReactor extends WorldGenerator {
 		world.setBlockState(pos.setPos(x + 4, y + 4, z + 1), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 4, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 1, y + 4, z + 2), Block1.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 2), ModBlocks.fluid_duct.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 2, y + 4, z + 2), ModBlocks.fluid_duct_mk2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 4, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 4, z + 2), Block1.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 4, z + 3), Block1.getDefaultState(), 3);

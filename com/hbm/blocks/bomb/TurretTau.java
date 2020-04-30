@@ -60,7 +60,7 @@ public class TurretTau extends TurretBase {
 				world.spawnEntity(bullet);
 			}
 
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.tauShoot, SoundCategory.BLOCKS, 1.0F, 0.5F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.tauShoot, SoundCategory.BLOCKS, 1.0F, 0.5F);
 			
 			flag = true;
 		}

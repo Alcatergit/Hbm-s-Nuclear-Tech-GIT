@@ -111,6 +111,6 @@ public class GUIMachineSelenium extends GuiInfoContainer {
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 80 + 36, 70);
+		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 80 + 36, 98);
 	}
 }

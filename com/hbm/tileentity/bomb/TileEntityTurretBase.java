@@ -216,7 +216,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 		if (isAI && this instanceof TileEntityTurretCIWS && (detectPit != rotationPitch || detectYaw != rotationYaw)) {
 			detectYaw = rotationYaw;
 			detectPit = rotationPitch;
-			PacketDispatcher.wrapper.sendToAllAround(new TETurretCIWSPacket(pos.getX(), pos.getY(), pos.getZ(), rotationYaw, rotationPitch), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
+			PacketDispatcher.wrapper.sendToAllTracking(new TETurretCIWSPacket(pos.getX(), pos.getY(), pos.getZ(), rotationYaw, rotationPitch), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
 		}
 		if (mark)
 			this.markDirty();

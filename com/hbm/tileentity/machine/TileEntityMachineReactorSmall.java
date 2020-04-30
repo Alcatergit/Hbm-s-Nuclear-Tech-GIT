@@ -215,21 +215,21 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			if (retracting && rods > 0) {
 
 				if (rods == rodsMax)
-					this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.75F, true);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.75F);
 				rods--;
 
 				if (rods == 0)
-					this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 			if (!retracting && rods < rodsMax) {
 
 				if (rods == 0)
-					this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.75F, true);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.75F);
 
 				rods++;
 
 				if (rods == rodsMax)
-					this.world.playSound(pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 
 			if (rods >= rodsMax)

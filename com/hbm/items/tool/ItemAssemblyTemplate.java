@@ -17,15 +17,11 @@ import org.apache.logging.log4j.Level;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.temp;
 import com.hbm.main.temp.EnumAssemblyTemplate;
 
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;

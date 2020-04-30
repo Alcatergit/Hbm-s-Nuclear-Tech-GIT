@@ -57,12 +57,12 @@ public class GUIMachineRefinery extends GuiInfoContainer {
 		int j = (int)refinery.getPowerScaled(52);
 		drawTexturedModalRect(guiLeft + 8, guiTop + 70 - j, 176, 52 - j, 16, j);
 		
-		FFUtils.drawLiquid(refinery.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 26, 70);
+		FFUtils.drawLiquid(refinery.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 26, 98);
 		
-		FFUtils.drawLiquid(refinery.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 80, 70);
-		FFUtils.drawLiquid(refinery.tanks[2], guiLeft, guiTop, zLevel, 16, 52, 98, 70);
-		FFUtils.drawLiquid(refinery.tanks[3], guiLeft, guiTop, zLevel, 16, 52, 116, 70);
-		FFUtils.drawLiquid(refinery.tanks[4], guiLeft, guiTop, zLevel, 16, 52, 134, 70);
+		FFUtils.drawLiquid(refinery.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 80, 98);
+		FFUtils.drawLiquid(refinery.tanks[2], guiLeft, guiTop, zLevel, 16, 52, 98, 98);
+		FFUtils.drawLiquid(refinery.tanks[3], guiLeft, guiTop, zLevel, 16, 52, 116, 98);
+		FFUtils.drawLiquid(refinery.tanks[4], guiLeft, guiTop, zLevel, 16, 52, 134, 98);
 		
 		//refinery.tanks[0].renderTank(this, guiLeft + 26, guiTop + 70, refinery.tanks[0].getTankType().textureX() * FluidTank.x, refinery.tanks[0].getTankType().textureY() * FluidTank.y, 16, 52);
 	//	refinery.tanks[0].renderTank(this, guiLeft + 26 + 16, guiTop + 70, refinery.tanks[0].getTankType().textureX() * FluidTank.x, refinery.tanks[0].getTankType().textureY() * FluidTank.y, 16, 52);

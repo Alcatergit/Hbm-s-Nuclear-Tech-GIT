@@ -33,6 +33,8 @@ public class ItemBattery extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		if(stack.getItem() == ModItems.battery_creative)
+			return;
 		long charge = maxCharge;
 		if(stack.hasTagCompound())
 			charge = ItemBattery.getCharge(stack);
@@ -83,6 +85,8 @@ public class ItemBattery extends Item {
     }
 	
 	public void chargeBattery(ItemStack stack, long i) {
+		if(stack.getItem() == ModItems.battery_creative)
+			return;
     	if(stack.getItem() instanceof ItemBattery) {
     		if(stack.hasTagCompound()) {
     			stack.getTagCompound().setLong("charge", stack.getTagCompound().getLong("charge") + i);
@@ -94,6 +98,8 @@ public class ItemBattery extends Item {
     }
     
     public void setCharge(ItemStack stack, long i) {
+    	if(stack.getItem() == ModItems.battery_creative)
+			return;
     	if(stack.getItem() instanceof ItemBattery) {
     		if(stack.hasTagCompound()) {
     			stack.getTagCompound().setLong("charge", i);
@@ -105,6 +111,8 @@ public class ItemBattery extends Item {
     }
     
     public void dischargeBattery(ItemStack stack, long i) {
+    	if(stack.getItem() == ModItems.battery_creative)
+			return;
     	if(stack.getItem() instanceof ItemBattery) {
     		if(stack.hasTagCompound()) {
     			stack.getTagCompound().setLong("charge", stack.getTagCompound().getLong("charge") - i);
@@ -116,6 +124,8 @@ public class ItemBattery extends Item {
     }
     
     public static long getCharge(ItemStack stack) {
+    	if(stack.getItem() == ModItems.battery_creative)
+			return Long.MAX_VALUE;
     	if(stack.getItem() instanceof ItemBattery) {
     		if(stack.hasTagCompound()) {
     			return stack.getTagCompound().getLong("charge");
@@ -171,7 +181,8 @@ public class ItemBattery extends Item {
     }
 	
 	public static void updateDamage(ItemStack stack) {
-		
+		if(stack.getItem() == ModItems.battery_creative)
+			return;
 		if(!stack.hasTagCompound()) {
 			stack = getFullBattery(stack.getItem()).copy();
 		}

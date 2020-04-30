@@ -57,8 +57,8 @@ public class GUIFusionMultiblock extends GuiInfoContainer {
 		if(diFurnace.isRunning())
 			drawTexturedModalRect(guiLeft + 80, guiTop + 18, 240, 0, 16, 16);
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 70, 8, 88);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 134, 88);
-		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 16, 70, 152, 88);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 70, 8, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 134, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 16, 70, 152, 116);
 	}
 }

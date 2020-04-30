@@ -649,6 +649,7 @@ public class ModBlocks {
 	public static final Block gas_duct_solid = new GasDuctSolid(Material.IRON, "gas_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block gas_duct = new BlockGasDuct(Material.IRON, "gas_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block fluid_duct_mk2 = new BlockFluidPipeMk2(Material.IRON, "fluid_duct_mk2").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//Fluids
 	public static final Material fluidtoxic = new MaterialLiquid(MapColor.GREEN).setReplaceable();

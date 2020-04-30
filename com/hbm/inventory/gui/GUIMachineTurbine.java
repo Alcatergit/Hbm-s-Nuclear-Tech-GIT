@@ -76,7 +76,7 @@ public class GUIMachineTurbine extends GuiInfoContainer {
 	//	}
 		
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 62, 96);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 96);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 62, 97);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 97);
 	}
 }

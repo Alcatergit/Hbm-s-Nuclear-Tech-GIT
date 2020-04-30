@@ -60,8 +60,8 @@ public class GUIFWatzCore extends GuiInfoContainer {
 		int m = diFurnace.getSingularityType();
 		drawTexturedModalRect(guiLeft + 98, guiTop + 109, 240, 4 * m, 16, 4);
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 70, 8, 88);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 134, 88);
-		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 16, 70, 152, 88);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 70, 8, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 134, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 16, 70, 152, 116);
 	}
 }

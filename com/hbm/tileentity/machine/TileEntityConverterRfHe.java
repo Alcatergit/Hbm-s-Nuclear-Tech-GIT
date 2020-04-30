@@ -68,16 +68,17 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 				power += 1;
 			}
 			detectAndSendChanges();
+			age++;
+			if(age >= 20)
+			{
+				age = 0;
+			}
+			
+			if(age == 9 || age == 19)
+				ffgeuaInit();
 		}
 			
-		age++;
-		if(age >= 20)
-		{
-			age = 0;
-		}
 		
-		if(age == 9 || age == 19)
-			ffgeuaInit();
 		
 		
 	}

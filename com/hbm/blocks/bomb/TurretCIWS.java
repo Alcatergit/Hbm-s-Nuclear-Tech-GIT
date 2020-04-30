@@ -45,7 +45,7 @@ public class TurretCIWS extends TurretBase {
 		TileEntityTurretCIWS te = (TileEntityTurretCIWS)world.getTileEntity(pos);
 		
 		if(i == 0 && te.spin < 10)
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.ciwsSpinup, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.ciwsSpinup, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		
 		if(te.spin < 35)
 			te.spin += 5;
@@ -74,7 +74,7 @@ public class TurretCIWS extends TurretBase {
 				world.spawnEntity(smoke);
 			}
 
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.ciwsFiringLoop, SoundCategory.BLOCKS, 1.0F, 1.25F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.ciwsFiringLoop, SoundCategory.BLOCKS, 1.0F, 1.25F);
 			
 			flag = true;
 		}
@@ -126,7 +126,7 @@ public class TurretCIWS extends TurretBase {
 		TileEntityTurretCIWS te = (TileEntityTurretCIWS)world.getTileEntity(pos);
 		
 		if(te.spin > 10)
-			world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.ciwsSpindown, SoundCategory.BLOCKS, 1.0F, 1.0F, true);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.ciwsSpindown, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		
 	}
 

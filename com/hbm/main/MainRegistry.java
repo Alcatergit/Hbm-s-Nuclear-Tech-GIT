@@ -171,7 +171,6 @@ import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
-import com.hbm.handler.MissileStruct;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.ShredderRecipe;
 import com.hbm.items.ModItems;
@@ -211,6 +210,7 @@ import com.hbm.tileentity.bomb.TileEntityTurretTau;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityCableSwitch;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuctSolid;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
@@ -341,11 +341,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.DataSerializerEntry;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -727,6 +725,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityGeysir.class, new ResourceLocation(RefStrings.MODID, "tileentity_geyser"));
 		GameRegistry.registerTileEntity(TileEntityObjTester.class, new ResourceLocation(RefStrings.MODID, "tileentity_obj_tester"));
 		GameRegistry.registerTileEntity(TileEntityDecoBlockAlt.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_block_alt"));
+		GameRegistry.registerTileEntity(TileEntityFFFluidDuctMk2.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_fludi_duct_mk2"));
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -887,7 +886,7 @@ public class MainRegistry {
 			}
 		});
 
-		ForgeRegistries.DATA_SERIALIZERS.register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
+		//ForgeRegistries.DATA_SERIALIZERS.register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
 	}
 
 	public static void loadConfig(FMLPreInitializationEvent event) {

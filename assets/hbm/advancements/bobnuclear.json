@@ -12,15 +12,8 @@
 	},
 	"parent": "hbm:boboil",
 	"criteria": {
-		"craft_difurnace": {
-			"trigger": "minecraft:inventory_changed",
-			"conditions": {
-				"items": [
-					{
-						"item": "hbm:ingot_uranium_fuel"
-					}
-				]
-			}
+		"impossible": {
+			"trigger": "minecraft:impossible"
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -10,7 +12,9 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +31,11 @@ public class RailgunPlasma extends BlockContainer {
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("Uses Deuterium Plasma Capsules");
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 
 import net.minecraft.block.Block;
@@ -53,6 +54,11 @@ public class ItemWandD extends Item {
 					if(world.isRemote)
 						player.sendMessage(new TextComponentTranslation(te.connected.get(i).getPos().getX() + " " + te.connected.get(i).getPos().getY() + " " + te.connected.get(i).getPos().getZ()));
 			}
+			
+		}
+		if(b == ModBlocks.fluid_duct_mk2){
+			System.out.println("client: " + world.isRemote + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork() + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork().size());
+			System.out.println(((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).connections);
 		}
 		
 		MainRegistry.time = System.currentTimeMillis();

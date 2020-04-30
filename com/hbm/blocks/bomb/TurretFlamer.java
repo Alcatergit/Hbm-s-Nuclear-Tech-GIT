@@ -59,9 +59,9 @@ boolean flag = false;
 			}
 			
 			if(i == 0)
-				world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerIgnite, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerIgnite, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			else
-				world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			
 			flag = true;
 		}

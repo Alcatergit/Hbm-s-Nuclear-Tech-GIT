@@ -321,6 +321,7 @@ import com.hbm.render.tileentity.RenderDerrick;
 import com.hbm.render.tileentity.RenderEPress;
 import com.hbm.render.tileentity.RenderFlamerTurret;
 import com.hbm.render.tileentity.RenderFluidDuct;
+import com.hbm.render.tileentity.RenderFluidDuctMk2;
 import com.hbm.render.tileentity.RenderFluidTank;
 import com.hbm.render.tileentity.RenderGasCent;
 import com.hbm.render.tileentity.RenderGasDuct;
@@ -402,6 +403,7 @@ import com.hbm.tileentity.bomb.TileEntityTurretSpitfire;
 import com.hbm.tileentity.bomb.TileEntityTurretTau;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
@@ -576,6 +578,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleSatelliteReceiver.class, new RenderPoleSatelliteReceiver());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityObjTester.class, new RenderObjTester());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoBlockAlt.class, new RenderDecoBlockAlt());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuctMk2.class, new RenderFluidDuctMk2());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));

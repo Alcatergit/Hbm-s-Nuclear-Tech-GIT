@@ -72,7 +72,7 @@ boolean flag = false;
 				world.spawnEntity(smoke);
 			}
 
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.oldExplosion, SoundCategory.BLOCKS, 1.0F, 0.5F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.oldExplosion, SoundCategory.BLOCKS, 1.0F, 0.5F);
 			
 			flag = true;
 		}

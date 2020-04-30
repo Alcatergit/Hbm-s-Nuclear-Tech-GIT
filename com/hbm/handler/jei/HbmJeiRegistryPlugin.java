@@ -2,7 +2,6 @@ package com.hbm.handler.jei;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
@@ -33,7 +32,6 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 			ItemStack stack = (ItemStack) focus.getValue();
 			if(JEIConfig.ASSEMBLY.equals(recipeCategory.getUid())) {
 				if(focus.getMode() == Mode.INPUT) {
-					long time = System.nanoTime();
 					List<T> list = (List<T>) ItemAssemblyTemplate.recipes.stream().filter(recipe -> {
 						for(ItemStack input : recipe.getInputs()) {
 							if(Library.areItemStacksEqualIgnoreCount(input, stack))
@@ -41,7 +39,6 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 						}
 						return false;
 					}).map(recipe -> new AssemblerRecipeWrapper(recipe)).collect(Collectors.toList());
-					System.out.println(System.nanoTime() - time);
 					return list;
 				} else if(focus.getMode() == Mode.OUTPUT) {
 					return (List<T>) ItemAssemblyTemplate.recipes.stream().filter(recipe -> Library.areItemStacksEqualIgnoreCount(recipe.getOutput(), stack)).map(recipe -> new AssemblerRecipeWrapper(recipe)).collect(Collectors.toList());

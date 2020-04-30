@@ -12,15 +12,8 @@
 	},
 	"parent": "hbm:bobchemistry",
 	"criteria": {
-		"craft_difurnace": {
-			"trigger": "minecraft:inventory_changed",
-			"conditions": {
-				"items": [
-					{
-						"item": "hbm:machine_boiler_electric_off"
-					}
-				]
-			}
+		"impossible": {
+			"trigger": "minecraft:impossible"
 		}
 	}
 }

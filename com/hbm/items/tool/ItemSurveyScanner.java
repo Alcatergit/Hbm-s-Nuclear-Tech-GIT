@@ -64,7 +64,10 @@ public class ItemSurveyScanner extends Item {
 	public int getLevel(IBlockState state, int i) {
 		Block b = state.getBlock();
 		if(i == 0) {
-			int[] ids = OreDictionary.getOreIDs(new ItemStack(b, 1, b.getMetaFromState(state)));
+			ItemStack stack = new ItemStack(b, 1, b.getMetaFromState(state));
+			if(stack.isEmpty())
+				return 0;
+			int[] ids = OreDictionary.getOreIDs(stack);
 				
 			for(int j = 0; j < ids.length; j++) {
 					

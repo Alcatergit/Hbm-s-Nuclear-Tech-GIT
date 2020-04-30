@@ -65,7 +65,7 @@ public class GUIMachineOilWell extends GuiInfoContainer {
 		if(l == 2)
 			drawTexturedModalRect(guiLeft + 44, guiTop + 90, 224, 52, 16, 16);
 		
-		FFUtils.drawLiquid(derrick.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 80, 70);
-		FFUtils.drawLiquid(derrick.tanks[1], guiLeft, guiTop, zLevel, 34, 52, 80, 124);
+		FFUtils.drawLiquid(derrick.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 80, 98);
+		FFUtils.drawLiquid(derrick.tanks[1], guiLeft, guiTop, zLevel, 34, 52, 80, 152);
 	}
 }

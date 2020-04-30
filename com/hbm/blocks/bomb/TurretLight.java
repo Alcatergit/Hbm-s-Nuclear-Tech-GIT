@@ -59,7 +59,7 @@ public class TurretLight extends TurretBase {
 				world.spawnEntity(bullet);
 			}
 
-			world.playSound(x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.rifleShoot, SoundCategory.BLOCKS, 1.0F, 0.5F + rand.nextFloat() * 0.25F, true);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.rifleShoot, SoundCategory.BLOCKS, 1.0F, 0.5F + rand.nextFloat() * 0.25F);
 			
 			flag = true;
 		}

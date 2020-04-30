@@ -102,4 +102,12 @@ public class AdvancementManager {
 		if(player instanceof EntityPlayerMP)
 			grantAchievement((EntityPlayerMP)player, a);
 	}
+	
+	public static boolean hasAdvancement(EntityPlayer player, Advancement a){
+		if(player instanceof EntityPlayerMP){
+			return ((EntityPlayerMP)player).getAdvancements().getProgress(a).isDone();
+		}
+		return false;
+	}
+	
 }

@@ -8,6 +8,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -99,6 +100,10 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te != null && te instanceof TileEntityFFFluidDuct) {
 			TileEntityFFFluidDuct duct = (TileEntityFFFluidDuct) te;
+			duct.setType(getType(player.getHeldItem(hand)));
+		}
+		if (te != null && te instanceof TileEntityFFFluidDuctMk2) {
+			TileEntityFFFluidDuctMk2 duct = (TileEntityFFFluidDuctMk2) te;
 			duct.setType(getType(player.getHeldItem(hand)));
 		}
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);

@@ -1,6 +1,7 @@
 package com.hbm.forgefluid;
 
 import com.hbm.interfaces.IFluidPipe;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -53,6 +54,7 @@ public class FFUtils {
 	 *            - where the starting y of the rectangle should be on screen
 	 */
 	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY) {
+		offsetY -= 44;
 		RenderHelper.bindBlockTexture();
 
 		if(tank.getFluid() != null) {
@@ -87,7 +89,7 @@ public class FFUtils {
 			for(int j = 0; j < sizeX; j += 16) {
 				int drawX = Math.min(16, sizeX - j);
 				int drawY = Math.min(16, level - i);
-				drawScaledTexture(liquidIcon, guiLeft + offsetX + j, offsetY - i + (16 - drawY), drawX, drawY, zLevel);
+				drawScaledTexture(liquidIcon, guiLeft + offsetX + j, guiTop + offsetY - i + (16 - drawY), drawX, drawY, zLevel);
 			}
 		}
 		RenderHelper.draw();
@@ -380,6 +382,16 @@ public class FFUtils {
 			return true;
 		if(tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean checkFluidConnectablesMk2(World world, BlockPos pos, Fluid type) {
+		TileEntity tileentity = world.getTileEntity(pos);
+		if(tileentity != null && tileentity instanceof IFluidPipeMk2 && ((IFluidPipeMk2) tileentity).getType() == type)
+			return true;
+		if(tileentity != null && !(tileentity instanceof IFluidPipeMk2) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			return true;
 		}
 		return false;

@@ -3,7 +3,7 @@ package com.hbm.items.tool;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
+import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -75,9 +75,9 @@ public class ItemFFFluidDuct extends Item {
         }
         else
         {
-            world.setBlockState(pos, ModBlocks.fluid_duct.getDefaultState());
-            if(world.getTileEntity(pos) instanceof TileEntityFFFluidDuct) {
-            	((TileEntityFFFluidDuct)world.getTileEntity(pos)).setType(getFluidFromStack(stack));;
+            world.setBlockState(pos, ModBlocks.fluid_duct_mk2.getDefaultState());
+            if(world.getTileEntity(pos) instanceof TileEntityFFFluidDuctMk2) {
+            	((TileEntityFFFluidDuctMk2)world.getTileEntity(pos)).setType(getFluidFromStack(stack));;
             }
             stack.shrink(1);
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pipePlaced, SoundCategory.PLAYERS, 1.0F, 0.65F + world.rand.nextFloat() * 0.2F);

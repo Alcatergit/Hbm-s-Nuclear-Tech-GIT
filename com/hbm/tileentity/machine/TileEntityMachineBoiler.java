@@ -13,6 +13,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -159,13 +160,14 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 
 			if (burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(4)) > 0) {
 				burnTime = (int) (TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(4)) * 0.25);
+				Item containerItem = inventory.getStackInSlot(4).getItem().getContainerItem();
 				inventory.getStackInSlot(4).shrink(1);
-				;
+				
 
 				if (inventory.getStackInSlot(4).isEmpty()) {
 
-					if (inventory.getStackInSlot(4).getItem().getContainerItem() != null)
-						inventory.setStackInSlot(4, new ItemStack(inventory.getStackInSlot(4).getItem().getContainerItem()));
+					if (containerItem != null)
+						inventory.setStackInSlot(4, new ItemStack(containerItem));
 					else
 						inventory.setStackInSlot(4, ItemStack.EMPTY);
 				}

@@ -239,7 +239,7 @@ public class ModItems {
 	public static final Item battery_lithium = new ItemBattery(2500, 10, 10, "battery_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50, "battery_schrabidium").setMaxStackSize(1);
 	public static final Item battery_spark = new ItemBattery(1000000, 20000, 20000, "battery_spark").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_creative = new ItemBase("battery_creative").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_creative = new ItemBattery(0, 0, 0, "battery_creative").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
 	public static final Item battery_red_cell = new ItemBattery(150, 1, 1, "battery_red_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_red_cell_6 = new ItemBattery(150 * 6, 1, 1, "battery_red_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);

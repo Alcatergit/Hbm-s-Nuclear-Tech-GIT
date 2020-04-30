@@ -12,15 +12,8 @@
 	},
 	"parent": "hbm:root",
 	"criteria": {
-		"craft_difurnace": {
-			"trigger": "minecraft:inventory_changed",
-			"conditions": {
-				"items": [
-					{
-						"item": "hbm:machine_difurnace_off"
-					}
-				]
-			}
+		"impossible": {
+			"trigger": "minecraft:impossible"
 		}
 	}
 }
