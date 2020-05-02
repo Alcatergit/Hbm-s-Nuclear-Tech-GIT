@@ -4,6 +4,9 @@ import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
+import com.hbm.items.special.ItemCell;
+import com.hbm.items.tool.ItemFluidCanister;
+import com.hbm.items.tool.ItemFluidTank;
 import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
@@ -219,6 +222,9 @@ public class FFUtils {
 		if(slots == null || tank == null || slots.getSlots() < slot1 || slots.getSlots() < slot2 || slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
+		
+		if(trySpecialFillFromFluidContainer(slots, tank, slot1, slot2))
+			return true;
 
 		if(slots.getStackInSlot(slot1).getItem() == ModItems.fluid_barrel_infinite && tank.getFluid() != null){
 			return tank.fill(new FluidStack(tank.getFluid(), 10), true) > 0 ? true : false;
@@ -245,6 +251,62 @@ public class FFUtils {
 		return false;
 	}
 
+	//Ah yes, hacky special methods to make stacks drain.
+	private static boolean trySpecialFillFromFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){
+		ItemStack in = slots.getStackInSlot(slot1);
+		ItemStack out = slots.getStackInSlot(slot2);
+		
+		//Fluid Tank override
+		if(in.getItem() == ModItems.fluid_tank_full && tank.fill(FluidUtil.getFluidContained(in), false) == 1000 && ((ItemFluidTank.isEmptyTank(out) && out.getCount() < 64) || out.isEmpty())){
+			tank.fill(FluidUtil.getFluidContained(in), true);
+			in.shrink(1);
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, new ItemStack(ModItems.fluid_tank_full));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Fluid barrel override
+		if(in.getItem() == ModItems.fluid_barrel_full && tank.fill(FluidUtil.getFluidContained(in), false) == 16000 && ((ItemFluidTank.isEmptyBarrel(out) && out.getCount() < 64) || out.isEmpty())){
+			tank.fill(FluidUtil.getFluidContained(in), true);
+			in.shrink(1);
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, new ItemStack(ModItems.fluid_barrel_full));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Canister override
+		if(in.getItem() == ModItems.canister_generic && tank.fill(FluidUtil.getFluidContained(in), false) == 1000 && ((ItemFluidCanister.isEmptyCanister(out) && out.getCount() < 64) || out.isEmpty())){
+			tank.fill(FluidUtil.getFluidContained(in), true);
+			in.shrink(1);
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, new ItemStack(ModItems.canister_generic));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Cell override
+		if(in.getItem() == ModItems.cell && tank.fill(FluidUtil.getFluidContained(in), false) == 1000 && ((ItemCell.isEmptyCell(out) && out.getCount() < 64) || out.isEmpty())){
+			tank.fill(FluidUtil.getFluidContained(in), true);
+			in.shrink(1);
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, new ItemStack(ModItems.cell));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Fills a tank from a fluid handler item.
 	 * 
@@ -261,6 +323,10 @@ public class FFUtils {
 		if(slots == null || tank == null || tank.getFluid() == null || slots.getSlots() < slot1 || slots.getSlots() < slot2 || slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
+		
+		if(trySpecialFillFluidContainer(slots, tank, slot1, slot2))
+			return true;
+		
 		if(slots.getStackInSlot(slot1).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 			boolean returnValue = false;
 			IFluidHandlerItem ifhi = FluidUtil.getFluidHandler(slots.getStackInSlot(slot1));
@@ -279,6 +345,74 @@ public class FFUtils {
 			}
 			return returnValue;
 		}
+		return false;
+	}
+	
+	//Ah yes, hacky special methods to make stacks drain.
+	private static boolean trySpecialFillFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){
+		ItemStack in = slots.getStackInSlot(slot1);
+		ItemStack out = slots.getStackInSlot(slot2);
+		
+		//Fluid Tank override
+		if(in.getItem() == ModItems.fluid_tank_full && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ((ItemFluidTank.isFullTank(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())){
+			FluidStack f = tank.drain(1000, true);
+			if(f == null)
+				return false;
+			in.shrink(1);
+			
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, ItemFluidTank.getFullTank(f.getFluid()));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Fluid barrel override
+		if(in.getItem() == ModItems.fluid_barrel_full && tank.drain(16000, false) != null && tank.drain(16000, false).amount == 16000 && ((ItemFluidTank.isFullBarrel(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())){
+			FluidStack f = tank.drain(16000, true);
+			if(f == null)
+				return false;
+			in.shrink(1);
+			
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, ItemFluidTank.getFullBarrel(f.getFluid()));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Canister override
+		if(in.getItem() == ModItems.canister_generic && SpecialContainerFillLists.EnumCanister.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ((ItemFluidCanister.isFullCanister(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())){
+			FluidStack f = tank.drain(1000, true);
+			if(f == null)
+				return false;
+			in.shrink(1);
+			
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, ItemFluidCanister.getFullCanister(f.getFluid()));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
+		//Cell override
+		if(in.getItem() == ModItems.cell && SpecialContainerFillLists.EnumCell.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ((ItemCell.isFullCell(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())){
+			FluidStack f = tank.drain(1000, true);
+			if(f == null)
+				return false;
+			in.shrink(1);
+			
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, ItemCell.getFullCell(f.getFluid()));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+		
 		return false;
 	}
 

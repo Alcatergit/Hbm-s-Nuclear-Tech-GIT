@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -120,9 +121,9 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 		if (!world.isRemote) {
 			if (needsUpdate) {
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }));
 				needsUpdate = false;
 			}
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			age++;
 			if (age >= 20) {
 				age = 0;
@@ -212,7 +213,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	protected boolean inputValidForTank(int tank, int slot) {
 
-		if (inventory.getStackInSlot(slot).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+		if (isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
 			return true;
 		}
 		return false;

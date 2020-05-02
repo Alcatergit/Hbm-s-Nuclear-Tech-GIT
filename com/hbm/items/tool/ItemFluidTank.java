@@ -157,5 +157,31 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 		return false;
 	}
 
+	public static boolean isEmptyTank(ItemStack out) {
+		if(out.getItem() == ModItems.fluid_tank_full && FluidUtil.getFluidContained(out) == null)
+			return true;
+		return false;
+	}
+
+	public static boolean isFullTank(ItemStack stack, Fluid fluid) {
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if(stack.getItem() == ModItems.fluid_tank_full && f != null && f.getFluid() == fluid && f.amount == 1000)
+			return true;
+		return false;
+	}
+	
+	public static boolean isEmptyBarrel(ItemStack out) {
+		if(out.getItem() == ModItems.fluid_barrel_full && FluidUtil.getFluidContained(out) == null)
+			return true;
+		return false;
+	}
+
+	public static boolean isFullBarrel(ItemStack stack, Fluid fluid) {
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if(stack.getItem() == ModItems.fluid_barrel_full && f != null && f.getFluid() == fluid && f.amount == 16000)
+			return true;
+		return false;
+	}
+
 
 }

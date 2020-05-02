@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.machine.MachineReactor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
+import com.hbm.lib.ItemStackHandlerWrapper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -25,9 +26,9 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 	public static final int processingSpeed = 1000;
 	public boolean runsOnRtg = false;
 	
-	//private static final int[] slots_top = new int[] {1};
-	//private static final int[] slots_bottom = new int[] {2, 0};
-	//private static final int[] slots_side = new int[] {0};
+	private static final int[] slots_top = new int[] {1};
+	private static final int[] slots_bottom = new int[] {2, 0};
+	private static final int[] slots_side = new int[] {0};
 	
 	private String customName;
 	
@@ -270,7 +271,30 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			if(facing.getHorizontalIndex() >= 0){
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, slots_side));
+			} else if(facing == EnumFacing.DOWN){
+				
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, slots_bottom){
+					
+					@Override
+					public ItemStack extractItem(int slot, int amount, boolean simulate) {
+						Item item = inventory.getStackInSlot(slot).getItem();
+						if(slot == 2 || item == ModItems.rod_empty || item == ModItems.rod_dual_empty || item == ModItems.rod_quad_empty)
+							return super.extractItem(slot, amount, simulate);
+						return ItemStack.EMPTY;
+					}
+					
+				});
+				
+			} else if(facing == EnumFacing.UP){
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, slots_top));
+			} else {
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			}
+		}
+		return super.getCapability(capability, facing);
 	}
 	
 	@Override

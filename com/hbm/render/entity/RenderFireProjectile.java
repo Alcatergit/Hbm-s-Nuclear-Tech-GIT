@@ -89,10 +89,9 @@ public class RenderFireProjectile extends Render<EntityFire> {
         if (iicon != null)
         {
             GL11.glPushMatrix();
-            GL11.glPushAttrib(GL11.GL_LIGHTING);
             GlStateManager.disableLighting();
             GL11.glTranslatef((float)x, (float)y, (float)z);
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableRescaleNormal();
             GL11.glScalef(0.5F, 0.5F, 0.5F);
             GL11.glScalef(7.5F, 7.5F, 7.5F);
             GL11.glTranslatef(0.0F, -0.25F, 0.0F);
@@ -100,8 +99,8 @@ public class RenderFireProjectile extends Render<EntityFire> {
             Tessellator tessellator = Tessellator.getInstance();
 
             this.func_77026_a(tessellator, iicon);
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glPopAttrib();
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.enableLighting();
             GL11.glPopMatrix();
         }
 	}

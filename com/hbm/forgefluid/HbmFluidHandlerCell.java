@@ -67,7 +67,7 @@ public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerIt
 		if(contained == null){
 			if(!this.canFillEmpty(resource))
 				return 0;
-			filled = Math.min(Math.min(cap, resource.amount), 10);
+			filled = Math.min(cap, resource.amount);
 			if(doFill){
 				setFluid(new FluidStack(resource.getFluid(), filled));
 			}
@@ -77,7 +77,7 @@ public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerIt
 		if(contained.getFluid() != resource.getFluid())
 			return 0;
 		
-		filled = Math.min(Math.min(cap-contained.amount, resource.amount), 10);
+		filled = Math.min(cap-contained.amount, resource.amount);
 		if(doFill){
 			setFluid(new FluidStack(contained.getFluid(), filled+contained.amount));
 		}

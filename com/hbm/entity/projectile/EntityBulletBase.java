@@ -46,6 +46,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -155,6 +156,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		this.getDataManager().register(BULLETCONFIG, 0);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onUpdate() {
 
@@ -240,7 +242,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 					try {
 						if (lastDamage == null)
-							lastDamage = ObfuscationReflectionHelper.findField(EntityLivingBase.class, "lastDamage");
+							lastDamage = ReflectionHelper.findField(EntityLivingBase.class, "lastDamage", "field_110153_bc");
 
 						float dmg = (float) damage + lastDamage.getFloat(victim);
 

@@ -330,11 +330,13 @@ public class ItemSyringe extends Item {
     		        world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.repair, SoundCategory.PLAYERS, 1.0F, 1.0F);
     			}
     			
-            	for(int i = 0; i < 9; i++) {
+            	for(int i = 0; i < 10; i++) {
             		
             		ItemStack gun = player.inventory.mainInventory.get(i);
+            		if(i == 9)
+            			gun = player.getHeldItemOffhand();
             		
-            		if(gun != null && gun.getItem() instanceof ItemGunBase) {
+            		if(gun.getItem() instanceof ItemGunBase) {
             			
             			int full = ((ItemGunBase)gun.getItem()).mainConfig.durability;
             			int wear = ItemGunBase.getItemWear(gun);

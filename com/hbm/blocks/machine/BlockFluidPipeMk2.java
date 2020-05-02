@@ -20,6 +20,7 @@ public class BlockFluidPipeMk2 extends BlockContainer {
 	private static final float p = 1F / 16F;
 	private static final AxisAlignedBB DUCT_BB = new AxisAlignedBB(11 * p / 2, 11 * p / 2, 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2);
 	
+	
 	public BlockFluidPipeMk2(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);

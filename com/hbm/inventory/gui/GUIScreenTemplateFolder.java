@@ -23,6 +23,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -204,7 +206,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		
 		public void drawIcon(boolean b) {
 			try {
-		        GlStateManager.disableLighting();
+		        RenderHelper.enableGUIStandardItemLighting();
 				if(stack != null) {
 					if(stack.getItem() == ModItems.assembly_template)
 						itemRender.renderItemAndEffectIntoGUI(player, MachineRecipes.getOutputFromTempate(stack), xPos + 1, yPos + 1);
@@ -213,7 +215,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 					else
 						itemRender.renderItemAndEffectIntoGUI(player, stack, xPos + 1, yPos + 1);
 				}
-		        GlStateManager.enableLighting();
+				RenderHelper.disableStandardItemLighting();
 			} catch(Exception x) { }
 		}
 		

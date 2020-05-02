@@ -10,6 +10,7 @@ import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PipeUpdatePacket;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,6 +48,8 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			type = f;
 			world.notifyNeighborsOfStateChange(pos, blockType, true);
 			world.neighborChanged(pos, blockType, pos);
+			IBlockState state = world.getBlockState(pos);
+			world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
 			rebuildNetworks(world, pos);
 			if(world instanceof WorldServer) {
 				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(MathHelper.floor(pos.getX()) >> 4, MathHelper.floor(pos.getZ()) >> 4);

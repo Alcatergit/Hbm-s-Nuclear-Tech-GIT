@@ -51,6 +51,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -524,7 +525,8 @@ public class EntityBullet extends Entity implements IProjectile {
 							if (movingobjectposition.entityHit instanceof EntityLivingBase) {
 
 								try {
-									Field lastDamage = ObfuscationReflectionHelper.findField(EntityLivingBase.class, "lastDamage");
+									@SuppressWarnings("deprecation")
+									Field lastDamage = ReflectionHelper.findField(EntityLivingBase.class, "lastDamage", "field_110153_bc");
 
 									float dmg = (float) damage + lastDamage.getFloat(movingobjectposition.entityHit);
 

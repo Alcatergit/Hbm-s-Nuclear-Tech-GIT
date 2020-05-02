@@ -98,7 +98,8 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	
 	public static boolean isFullCanister(ItemStack stack, Fluid fluid){
 		if(stack != null){
-			if(stack.getItem() instanceof ItemFluidCanister && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == ((ItemFluidCanister)stack.getItem()).cap)
+			FluidStack f = FluidUtil.getFluidContained(stack);
+			if(stack.getItem() instanceof ItemFluidCanister && f != null && f.getFluid() == fluid && f.amount == ((ItemFluidCanister)stack.getItem()).cap)
 				return true;
 		}
 		return false;
@@ -126,6 +127,12 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		} else if(stack.getItem() == ModItems.canister_generic){
 			return true;
 		}
+		return false;
+	}
+
+	public static boolean isEmptyCanister(ItemStack out) {
+		if(out.getItem() == ModItems.canister_generic && FluidUtil.getFluidContained(out) == null)
+			return true;
 		return false;
 	}
 }
