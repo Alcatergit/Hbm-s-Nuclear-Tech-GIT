@@ -6,6 +6,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.render.amlfrom1710.Vec3;
 
+import net.minecraft.client.renderer.GlStateManager;
+
 public class RenderSparks {
 
 	public static void renderSpark(int seed, double x, double y, double z, float length, int min, int max, int color1, int color2) {
@@ -19,9 +21,9 @@ public class RenderSparks {
 		float b2 = (color2 & 255)/255F;
 		
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glLineWidth(3F);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableLighting();
+		GlStateManager.glLineWidth(3F);
 		
 
 		Random rand = new Random(seed);
@@ -47,7 +49,7 @@ public class RenderSparks {
 			y = prevY + dir.yCoord;
 			z = prevZ + dir.zCoord;
 
-			//Drillgon200: Neither tessellator or buffer builder worked, and I'm too lazy to try and fix it.
+			//Drillgon200: Neither tessellator nor buffer builder worked, and I'm too lazy to try and fix it.
 			GL11.glLineWidth(5F);
 			GL11.glBegin(3);
 			GL11.glColor4f(r1, g1, b1, 1.0F);
@@ -64,8 +66,8 @@ public class RenderSparks {
 			
 		}
 
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
 		GL11.glPopMatrix();
 	}
 

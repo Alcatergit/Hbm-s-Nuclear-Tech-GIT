@@ -22,8 +22,8 @@ public class RenderAMSLimiter extends TileEntitySpecialRenderer<TileEntityAMSLim
 	public void render(TileEntityAMSLimiter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.enableLighting();
+        GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		GL11.glRotatef(-90, 0F, 1F, 0F);
 		switch(te.getBlockMetadata())
@@ -50,14 +50,15 @@ public class RenderAMSLimiter extends TileEntitySpecialRenderer<TileEntityAMSLim
 
         GL11.glPopMatrix();
         renderTileEntityAt2(te, x, y, z, partialTicks);
+        GlStateManager.enableCull();
 	}
 	
 	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f)
     {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.enableLighting();
+        GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		GL11.glRotatef(-90, 0F, 1F, 0F);
 		

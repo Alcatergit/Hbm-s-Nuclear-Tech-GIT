@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -88,11 +87,59 @@ public class MachineMiningDrill extends BlockContainer implements IMultiBlock {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		//int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		EnumFacing e = placer.getHorizontalFacing().getOpposite();
 		world.setBlockState(pos, state.withProperty(FACING, e));
 
-		if (i == 0) {
+		if(e.getAxis() == EnumFacing.Axis.X){
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.drillDimension)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.drillDimension, ModBlocks.dummy_block_drill);
+				
+				//
+				DummyBlockDrill.safeBreak = true;
+				world.setBlockState(pos.add(1, 0, 0), ModBlocks.dummy_port_drill.getDefaultState());
+				TileEntity te = world.getTileEntity(pos.add(1, 0, 0));
+				if(te instanceof TileEntityDummy) {
+					TileEntityDummy dummy = (TileEntityDummy)te;
+					dummy.target = pos;
+				}
+				world.setBlockState(pos.add(-1, 0, 0), ModBlocks.dummy_port_drill.getDefaultState());
+				TileEntity te2 = world.getTileEntity(pos.add(-1, 0, 0));
+				if(te instanceof TileEntityDummy) {
+					TileEntityDummy dummy = (TileEntityDummy)te2;
+					dummy.target = pos;
+				}
+				DummyBlockDrill.safeBreak = false;
+				//
+				
+			} else
+				world.destroyBlock(pos, true);
+		} else if(e.getAxis() == EnumFacing.Axis.Z){
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.drillDimension)) {
+				MultiblockHandler.fillUp(world, pos, MultiblockHandler.drillDimension, ModBlocks.dummy_block_drill);
+				
+				//
+				DummyBlockDrill.safeBreak = true;
+				world.setBlockState(pos.add(0, 0, 1), ModBlocks.dummy_port_drill.getDefaultState());
+				TileEntity te = world.getTileEntity(pos.add(0, 0, 1));
+				if(te instanceof TileEntityDummy) {
+					TileEntityDummy dummy = (TileEntityDummy)te;
+					dummy.target = pos;
+				}
+				world.setBlockState(pos.add(0, 0, -1), ModBlocks.dummy_port_drill.getDefaultState());
+				TileEntity te2 = world.getTileEntity(pos.add(0, 0, -1));
+				if(te2 instanceof TileEntityDummy) {
+					TileEntityDummy dummy = (TileEntityDummy)te2;
+					dummy.target = pos;
+				}
+				DummyBlockDrill.safeBreak = false;
+				//
+				
+			} else
+				world.destroyBlock(pos, true);
+		}
+		
+		/*if (i == 0) {
 			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.drillDimension)) {
 				MultiblockHandler.fillUp(world, pos, MultiblockHandler.drillDimension, ModBlocks.dummy_block_drill);
 				
@@ -187,7 +234,7 @@ public class MachineMiningDrill extends BlockContainer implements IMultiBlock {
 				
 			} else
 				world.destroyBlock(pos, true);
-		}
+		}*/
 	}
 	
 	@Override

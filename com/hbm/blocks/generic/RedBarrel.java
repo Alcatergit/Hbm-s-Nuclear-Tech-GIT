@@ -1,5 +1,6 @@
 package com.hbm.blocks.generic;
 
+import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -9,8 +10,10 @@ import com.hbm.explosion.ExplosionThermo;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +32,11 @@ public class RedBarrel extends Block {
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("Static fluid barrel");
 	}
 	
 	@Override

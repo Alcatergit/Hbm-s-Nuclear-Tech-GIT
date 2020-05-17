@@ -37,4 +37,10 @@ public class BlockAbsorber extends Block {
     	world.scheduleUpdate(pos, this, this.tickRate(world));
 	}
 	
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(worldIn, pos, state);
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
+	
 }

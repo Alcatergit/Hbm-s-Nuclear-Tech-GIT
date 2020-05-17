@@ -87,7 +87,7 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		EnumFacing e = placer.getHorizontalFacing().getOpposite();
 		world.setBlockState(pos, state.withProperty(FACING, e));
-		if (e == EnumFacing.NORTH) {
+		if (e == EnumFacing.EAST) {
 			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionEast)) {
 				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionEast, ModBlocks.dummy_block_radgen);
 				
@@ -141,7 +141,7 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 			} else
 				world.destroyBlock(pos, true);
 		}
-		if (e == EnumFacing.EAST) {
+		if (e == EnumFacing.NORTH) {
 			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionNorth)) {
 				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionNorth, ModBlocks.dummy_block_radgen);
 				

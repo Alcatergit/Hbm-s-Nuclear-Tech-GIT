@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.main.ResourceManager;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 public class TomPronter {
@@ -15,8 +16,8 @@ public class TomPronter {
 	public static void prontTom(int type) {
 		GL11.glPushMatrix();
 
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableCull();
+		GlStateManager.disableLighting();
 		GL11.glRotatef(180F, 1F, 0F, 0F);
 		GL11.glScalef(1F, 2F, 1F);
 		
@@ -27,9 +28,9 @@ public class TomPronter {
 		
     	HmfController.setMod(50000D, 2500D);
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GlStateManager.disableAlpha();
 
         float rot = -System.currentTimeMillis() / 10 % 360;
 		//GL11.glScalef(1.2F, 2F, 1.2F);
@@ -55,11 +56,11 @@ public class TomPronter {
 			GL11.glScalef(-1.015F, 0.9F, 1.015F);
         }
 		
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
 
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
         HmfController.resetMod();
 		
 		GL11.glPopMatrix();

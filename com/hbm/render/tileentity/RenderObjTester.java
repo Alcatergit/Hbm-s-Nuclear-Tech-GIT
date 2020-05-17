@@ -19,7 +19,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         
-        SoyuzPronter.prontSoyuz();
+        SoyuzPronter.prontSoyuz(0);
 
         GL11.glPopMatrix();
 	}

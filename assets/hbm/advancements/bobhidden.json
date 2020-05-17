@@ -1,0 +1,19 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:gun_dampfmaschine"
+		},
+		"title": {
+			"translate": "hbm.achievement.hidden"
+		},
+		"description": {
+			"translate": "hbm.achievement.hidden.desc"
+		}
+	},
+	"parent": "hbm:bobnuclear",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

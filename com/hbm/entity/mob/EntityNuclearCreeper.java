@@ -45,7 +45,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityNuclearCreeper extends EntityMob {
 	private static final DataParameter<Integer> STATE = EntityDataManager.<Integer>createKey(EntityNuclearCreeper.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> POWERED = EntityDataManager.<Boolean>createKey(EntityNuclearCreeper.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> POWERED = EntityDataManager.<Boolean>createKey(EntityNuclearCreeper.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IGNITED = EntityDataManager.<Boolean>createKey(EntityNuclearCreeper.class, DataSerializers.BOOLEAN);
 	/**
      * Time when this creeper was last in an active state (Messed up code here, probably causes creeper animation to go

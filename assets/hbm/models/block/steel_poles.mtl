@@ -2,4 +2,4 @@ newmtl SteelPolesMTL
 d 1.0
 Ka 0.0 0.0 0.0
 Kd 1.0 1.0 1.0
-map_Kd hbm:blocks/steel_beam
+map_Kd hbm:blocks/steel_beam_flipped

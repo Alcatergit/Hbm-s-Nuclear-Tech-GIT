@@ -7,13 +7,13 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.inventory.MachineRecipes;
+import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatLaserPacket;
-import com.hbm.packet.SatelliteRequestPacket;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteSaveStructure;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteType;
+import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
+import com.hbm.saveddata.satellites.Satellite.Interfaces;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -27,19 +27,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GUIScreenSatInterface extends GuiScreen {
 	
-    protected static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_sat_interface.png");
+    protected static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/satellites/gui_sat_interface.png");
     protected int xSize = 216;
     protected int ySize = 216;
     protected int guiLeft;
     protected int guiTop;
     private final EntityPlayer player;
-    public SatelliteSaveStructure connectedSat;
     int x;
     int z;
     
@@ -53,15 +51,15 @@ public class GUIScreenSatInterface extends GuiScreen {
 
     protected void mouseClicked(int i, int j, int k) {
     	
-    	if(connectedSat != null && connectedSat.type == SatelliteType.LASER) {
+    	if(ItemSatInterface.currentSat != null && ItemSatInterface.currentSat.ifaceAcs.contains(InterfaceActions.CAN_CLICK)) {
 
     		if(i >= this.guiLeft + 8 && i < this.guiLeft + 208 && j >= this.guiTop + 8 && j < this.guiTop + 208 && player != null) {
+    			
     			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.techBleep, 1.0F));
     			
-
     			int x = this.x - guiLeft + i - 8 - 100;
     			int z = this.z - guiTop + j - 8 - 100;
-				PacketDispatcher.wrapper.sendToServer(new SatLaserPacket(x, z, connectedSat.satelliteID));
+    			PacketDispatcher.wrapper.sendToServer(new SatLaserPacket(x, z, ItemSatInterface.getFreq(player.getHeldItemMainhand())));
     		}
     	}
     }
@@ -75,6 +73,12 @@ public class GUIScreenSatInterface extends GuiScreen {
         GlStateManager.enableLighting();
     }
     
+    @Override
+    public void drawBackground(int tint) {
+    	super.drawDefaultBackground();
+    	super.drawBackground(tint);
+    }
+    
     public void initGui()
     {
         super.initGui();
@@ -83,14 +87,6 @@ public class GUIScreenSatInterface extends GuiScreen {
         
         x = (int) player.posX;
         z = (int) player.posZ;
-	    
-        PacketDispatcher.wrapper.sendToServer(new SatelliteRequestPacket());
-	   /* if(ItemSatInterface.satData != null && player.getHeldItemMainhand().getItem() == ModItems.sat_interface) {
-
-			int freq = ItemSatChip.getFreq(player.getHeldItemMainhand());
-			
-			connectedSat = ItemSatInterface.satData.getSatFromFreq(freq);
-	    }*/
     }
 	
 	@Override
@@ -100,8 +96,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 	
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 
-    	if(connectedSat != null && connectedSat.type == SatelliteType.LASER) {
-
+    	if(ItemSatInterface.currentSat != null && ItemSatInterface.currentSat.ifaceAcs.contains(InterfaceActions.SHOW_COORDS)) {
     		
     		if(i >= this.guiLeft + 8 && i < this.guiLeft + 208 && j >= this.guiTop + 8 && j < this.guiTop + 208 && player != null) {
 
@@ -117,27 +112,23 @@ public class GUIScreenSatInterface extends GuiScreen {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		if(connectedSat == null) {
+		if(ItemSatInterface.currentSat == null) {
 			drawNotConnected();
-		//} else if(connectedSat.satDim != player.dimension) {
-		//	drawNoService();
 		} else {
-			switch(connectedSat.type) {
+			
+			if(ItemSatInterface.currentSat.satIface != Interfaces.SAT_PANEL) {
+				drawNoService();
+				return;
+			}
 
-			case LASER:
-			case MAPPER:
-				drawMap(); break;
-				
-			case RADAR:
-				drawRadar(); break;
-				
-			case SCANNER:
-				drawScan(); break;
-				
-			case RELAY:
-			case RESONATOR:
-			case MINER:
-				drawNoService(); break;
+			if(ItemSatInterface.currentSat.ifaceAcs.contains(InterfaceActions.HAS_MAP)) {
+				drawMap();
+			}
+			if(ItemSatInterface.currentSat.ifaceAcs.contains(InterfaceActions.HAS_ORES)) {
+				drawScan();
+			}
+			if(ItemSatInterface.currentSat.ifaceAcs.contains(InterfaceActions.HAS_RADAR)) {
+				drawRadar();
 			}
 		}
 	}
@@ -159,14 +150,14 @@ public class GUIScreenSatInterface extends GuiScreen {
 	private int[][] map = new int[200][200];
 	
 	private void drawMap() {
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		
 		World world = player.world;
 		
 		for(int i = -100; i < 100; i++) {
 			int x = this.x + i;
 			int z = this.z + scanPos - 100;
 			int y = world.getHeight(x, z) - 1;
-			map[i + 100][scanPos] = world.getBlockState(pos.setPos(x, y, z)).getMaterial().getMaterialMapColor().colorValue;
+			map[i + 100][scanPos] = world.getBlockState(new BlockPos(x, y, z)).getMaterial().getMaterialMapColor().colorValue;
 		}
 		prontMap();
 		progresScan();
@@ -175,13 +166,13 @@ public class GUIScreenSatInterface extends GuiScreen {
 	private void drawScan() {
 		
 		World world = player.world;
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		
 		for(int i = -100; i < 100; i++) {
 			int x = this.x + i;
 			int z = this.z + scanPos - 100;
 			
 			for(int j = 255; j >= 0; j--) {
-				IBlockState state = world.getBlockState(pos.setPos(x, j, z));
+				IBlockState state = world.getBlockState(new BlockPos(x, j, z));
 				int c = getColorFromBlock(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
 				
 				if(c != 0) {
@@ -196,7 +187,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 	
 	private int getColorFromBlock(ItemStack stack) {
 		
-		if(stack == null || stack.getItem() == null || stack.isEmpty())
+		if(stack == null || stack.getItem() == null/* || stack.getItemDamage() < 0*/)
 			return 0;
 
 		if(MachineRecipes.mODE(stack, "oreCoal"))

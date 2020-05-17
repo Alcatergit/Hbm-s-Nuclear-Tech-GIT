@@ -32,6 +32,7 @@ public static GunConfiguration getCalamityConfig() {
 		config.durability = 2000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
 		config.firingSound = HBMSoundHandler.calShoot;
+		config.reloadSoundEnd = false;
 		
 		config.name = "Maxim gun";
 		config.manufacturer = "Hiram Maxim";
@@ -41,6 +42,7 @@ public static GunConfiguration getCalamityConfig() {
 		config.config.add(BulletConfigSyncingUtil.BMG50_INCENDIARY);
 		config.config.add(BulletConfigSyncingUtil.BMG50_EXPLOSIVE);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
+		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
 		
 		return config;
 	}
@@ -75,6 +77,7 @@ public static GunConfiguration getCalamityConfig() {
 		config.config.add(BulletConfigSyncingUtil.BMG50_INCENDIARY);
 		config.config.add(BulletConfigSyncingUtil.BMG50_EXPLOSIVE);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
+		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
 		
 		return config;
 	}
@@ -130,6 +133,20 @@ public static GunConfiguration getCalamityConfig() {
 		bullet.dmgMax = 35;
 		bullet.wear = 25;
 		bullet.leadChance = 50;
+		
+		return bullet;
+	}
+
+	public static BulletConfiguration get50BMGStarConfig() {
+		
+		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
+		
+		bullet.ammo = ModItems.ammo_50bmg_star;
+		bullet.spread *= inaccuracy;
+		bullet.dmgMin = 50;
+		bullet.dmgMax = 70;
+		bullet.wear = 25;
+		bullet.leadChance = 100;
 		
 		return bullet;
 	}

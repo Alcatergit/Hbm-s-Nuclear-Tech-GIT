@@ -289,7 +289,8 @@ public class GUIScreenBobmazon extends GuiScreen {
 		ASSEMBLY(AdvancementManager.bobAssembly),
 		CHEMICS(AdvancementManager.bobChemistry),
 		OIL(AdvancementManager.bobOil),
-		NUCLEAR(AdvancementManager.bobNuclear);
+		NUCLEAR(AdvancementManager.bobNuclear),
+		HIDDEN(AdvancementManager.bobHidden);
 		
 		private Requirement(Advancement achievement) {
 			this.achievement = achievement;

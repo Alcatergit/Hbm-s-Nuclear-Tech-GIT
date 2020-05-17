@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
@@ -122,6 +123,18 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			System.out.println(portal);
 			test = false;
 		}*/
+		if(world.isRemote){
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "exhaust");
+			data.setString("mode", "soyuz");
+			data.setInteger("count", 1);
+			data.setDouble("width", world.rand.nextDouble() * 0.25 - 0.5);
+			data.setDouble("posX", pos.getX());
+			data.setDouble("posY", pos.getY() + 10);
+			data.setDouble("posZ", pos.getZ());
+			
+			MainRegistry.proxy.effectNT(data);
+		}
 		if (!world.isRemote) {
 			if (burnTime > 0) {
 				this.burnTime--;

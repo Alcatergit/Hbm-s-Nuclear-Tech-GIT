@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:sat_gerald"
+		},
+		"title": {
+			"translate": "hbm.achievement.horizonsStart"
+		},
+		"description": {
+			"translate": "hbm.achievement.horizonsStart.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

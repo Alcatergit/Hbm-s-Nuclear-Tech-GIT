@@ -121,7 +121,6 @@ public class EntityNukeExplosionMK4 extends Entity {
 	}
 
 	public static EntityNukeExplosionMK4 statFac(World world, int r, double x, double y, double z) {
-
 		if(MainRegistry.enableExtendedLogging && !world.isRemote)
 			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized explosion at " + x + " / " + y + " / " + z + " with strength " + r + "!");
 
@@ -136,6 +135,8 @@ public class EntityNukeExplosionMK4 extends Entity {
 		mk4.speed = (int) Math.ceil(100000 / mk4.strength);
 		mk4.setPosition(x, y, z);
 		mk4.length = mk4.strength / 2;
+		if(MainRegistry.disableNuclear)
+			mk4.fallout = false;
 		return mk4;
 	}
 
@@ -152,6 +153,8 @@ public class EntityNukeExplosionMK4 extends Entity {
 		mk4.speed = (int) Math.ceil(100000 / mk4.strength);
 		mk4.setPosition(x, y, z);
 		mk4.length = mk4.strength / 2;
+		if(MainRegistry.disableNuclear)
+			mk4.fallout = false;
 		return mk4;
 	}
 

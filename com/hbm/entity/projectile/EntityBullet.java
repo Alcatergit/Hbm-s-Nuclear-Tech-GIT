@@ -123,8 +123,9 @@ public class EntityBullet extends Entity implements IProjectile {
 			double d5 = d2 / d3;
 			this.setLocationAndAngles(shooter.posX + d4, this.posY, shooter.posZ + d5, f2, f3);
 			this.setRenderYawOffset(0.0F);
-			float f4 = (float) d3 * 0.2F;
-			this.setThrowableHeading(d0, d1 + f4, d2, velocity, innacuracy);
+			//Adding f4 just makes cyber crabs miss
+			//float f4 = (float) d3 * 0.2F;
+			this.setThrowableHeading(d0, d1 /*+ f4*/, d2, velocity, innacuracy);
 		}
 	}
 

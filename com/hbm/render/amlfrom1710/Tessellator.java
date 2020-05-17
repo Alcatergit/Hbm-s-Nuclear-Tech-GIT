@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
@@ -95,6 +96,8 @@ public class Tessellator
      */
     public int draw()
     {
+    	hasColor = false;
+    	hasNormals = false;
     	net.minecraft.client.renderer.Tessellator.getInstance().draw();
     	return 1;
        /* if (!this.isDrawing)
@@ -313,6 +316,8 @@ public class Tessellator
         this.setColorRGBA(p_78376_1_, p_78376_2_, p_78376_3_, 255);
     }
 
+    private int r, g, b, a;
+    
     /**
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
@@ -361,6 +366,11 @@ public class Tessellator
             }
 
             this.hasColor = true;
+            
+            r = p_78370_1_;
+            g = p_78370_2_;
+            b = p_78370_3_;
+            a = p_78370_4_;
 
             if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN)
             {
@@ -383,10 +393,13 @@ public class Tessellator
      */
     public void addVertexWithUV(double x, double y, double z, double u, double v)
     {
-    	if(this.hasNormals)
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).tex(u, v).normal(normalTestX, normalTestY, normalTestZ).endVertex();
-    	else
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).tex(u, v).endVertex();
+    	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+    	buf.pos(x, y, z).tex(u, v);
+    	if(hasColor)
+    		buf.color(r, g, b, a);
+    	if(hasNormals)
+    		buf.normal(normalTestX, normalTestY, normalTestZ);
+    	buf.endVertex();
         /*this.setTextureUV(p_78374_7_, p_78374_9_);
         this.addVertex(p_78374_1_, p_78374_3_, p_78374_5_);*/
     }
@@ -397,10 +410,15 @@ public class Tessellator
      */
     public void addVertex(double x, double y, double z)
     {
-    	if(this.hasNormals)
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).normal(normalTestX, normalTestY, normalTestZ).endVertex();
-    	else
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x, y, z).endVertex();
+    	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+    	buf.pos(x, y, z);
+    	if(hasColor){
+    		buf.color(r, g, b, a);
+    		//System.out.println(r + " " + g + " " + b + " " + a);
+    	}
+    	if(hasNormals)
+    		buf.normal(normalTestX, normalTestY, normalTestZ);
+    	buf.endVertex();
        /* if (rawBufferIndex >= rawBufferSize - 32) 
         {
             if (rawBufferSize == 0)

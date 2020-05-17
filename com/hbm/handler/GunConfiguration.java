@@ -1,5 +1,6 @@
 package com.hbm.handler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.lib.HBMSoundHandler;
@@ -49,6 +50,8 @@ public class GunConfiguration {
 	//sound path to the shooting sound
 	public SoundEvent firingSound = null;
 	public float firingPitch = 1.0F;
+	//whether the reload sound should be played at the beginning or at the end of the reload
+	public boolean reloadSoundEnd = true;
 	
 	//how much ammo the clip can hold, 0 if drawn from inventory
 	public int ammoCap;
@@ -59,6 +62,7 @@ public class GunConfiguration {
 	
 	public String name = "";
 	public String manufacturer = "";
+	public List<String> comment = new ArrayList<String>();
 
 	//bullet configs for main and alt fire
 	public List<Integer> config;
@@ -83,6 +87,7 @@ public class GunConfiguration {
 	public static SoundEvent RSOUND_SHOTGUN;
 	public static SoundEvent RSOUND_LAUNCHER;
 	public static SoundEvent RSOUND_GRENADE;
+	public static SoundEvent RSOUND_FATMAN;
 	
 	public GunConfiguration silenced() {
 		this.firingSound = HBMSoundHandler.silencerShoot;

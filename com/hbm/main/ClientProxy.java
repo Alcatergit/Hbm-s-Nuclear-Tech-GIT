@@ -1,6 +1,7 @@
 package com.hbm.main;
 
 import java.io.File;
+import java.util.Random;
 import java.util.function.Function;
 
 import org.lwjgl.opengl.GL11;
@@ -67,6 +68,7 @@ import com.hbm.entity.logic.EntityEMP;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.logic.EntityNukeExplosionPlus;
+import com.hbm.entity.logic.EntityTomBlast;
 import com.hbm.entity.missile.EntityBobmazon;
 import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.missile.EntityBombletTheta;
@@ -99,10 +101,14 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.missile.EntitySoyuz;
+import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityNuclearCreeper;
+import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
+import com.hbm.entity.mob.EntityTeslaCrab;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
@@ -121,6 +127,7 @@ import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
 import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.entity.projectile.EntityBoxcar;
+import com.hbm.entity.projectile.EntityBuilding;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
@@ -148,10 +155,13 @@ import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntitySchrab;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
+import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.particle.ParticleExSmoke;
+import com.hbm.particle.ParticleRocketFlame;
 import com.hbm.particle.ParticleSmokePlume;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
@@ -176,6 +186,7 @@ import com.hbm.render.entity.RenderBombletSelena;
 import com.hbm.render.entity.RenderBombletTheta;
 import com.hbm.render.entity.RenderBombletZeta;
 import com.hbm.render.entity.RenderBoxcar;
+import com.hbm.render.entity.RenderBuilding;
 import com.hbm.render.entity.RenderBullet;
 import com.hbm.render.entity.RenderBulletMk2;
 import com.hbm.render.entity.RenderChopperMine;
@@ -233,6 +244,10 @@ import com.hbm.render.entity.missile.RenderMissileRain;
 import com.hbm.render.entity.missile.RenderMissileSchrabidium;
 import com.hbm.render.entity.missile.RenderMissileStrong;
 import com.hbm.render.entity.missile.RenderMissileTaint;
+import com.hbm.render.entity.missile.RenderSoyuz;
+import com.hbm.render.entity.missile.RenderSoyuzCapsule;
+import com.hbm.render.entity.mob.RenderTaintCrab;
+import com.hbm.render.entity.mob.RenderTeslaCrab;
 import com.hbm.render.factories.MultiCloudRendererFactory;
 import com.hbm.render.factories.RenderBurningFOEQFactory;
 import com.hbm.render.factories.RenderFalloutRainFactory;
@@ -308,11 +323,14 @@ import com.hbm.render.tileentity.RenderBombMulti;
 import com.hbm.render.tileentity.RenderBroadcaster;
 import com.hbm.render.tileentity.RenderCIWSTurret;
 import com.hbm.render.tileentity.RenderCable;
+import com.hbm.render.tileentity.RenderCapsule;
 import com.hbm.render.tileentity.RenderCentrifuge;
 import com.hbm.render.tileentity.RenderCheapoTurret;
 import com.hbm.render.tileentity.RenderChemplant;
 import com.hbm.render.tileentity.RenderCloudResidue;
 import com.hbm.render.tileentity.RenderCompactLauncher;
+import com.hbm.render.tileentity.RenderCore;
+import com.hbm.render.tileentity.RenderCoreComponent;
 import com.hbm.render.tileentity.RenderCrashedBomb;
 import com.hbm.render.tileentity.RenderCyclotron;
 import com.hbm.render.tileentity.RenderDecoBlock;
@@ -320,6 +338,7 @@ import com.hbm.render.tileentity.RenderDecoBlockAlt;
 import com.hbm.render.tileentity.RenderDerrick;
 import com.hbm.render.tileentity.RenderEPress;
 import com.hbm.render.tileentity.RenderFlamerTurret;
+import com.hbm.render.tileentity.RenderFluidBarrel;
 import com.hbm.render.tileentity.RenderFluidDuct;
 import com.hbm.render.tileentity.RenderFluidDuctMk2;
 import com.hbm.render.tileentity.RenderFluidTank;
@@ -369,11 +388,14 @@ import com.hbm.render.tileentity.RenderSpitfireTurret;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.tileentity.RenderTaint;
 import com.hbm.render.tileentity.RenderTauTurret;
+import com.hbm.render.tileentity.RenderTesla;
 import com.hbm.render.tileentity.RenderTestRender;
 import com.hbm.render.tileentity.RenderTurbofan;
 import com.hbm.render.tileentity.RenderUF6Tank;
 import com.hbm.render.tileentity.RenderVaultDoor;
 import com.hbm.render.util.HmfModelLoader;
+import com.hbm.sound.AudioWrapper;
+import com.hbm.sound.AudioWrapperClient;
 import com.hbm.tileentity.bomb.RenderNukeMike;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
@@ -417,8 +439,14 @@ import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
+import com.hbm.tileentity.machine.TileEntityBarrel;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
+import com.hbm.tileentity.machine.TileEntityCore;
+import com.hbm.tileentity.machine.TileEntityCoreEmitter;
+import com.hbm.tileentity.machine.TileEntityCoreInjector;
+import com.hbm.tileentity.machine.TileEntityCoreReceiver;
+import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityGeiger;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -447,8 +475,10 @@ import com.hbm.tileentity.machine.TileEntityMultiblock;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
+import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
+import com.hbm.tileentity.machine.TileEntityTesla;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
 import net.minecraft.block.BlockDirt;
@@ -466,9 +496,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
@@ -579,6 +613,14 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityObjTester.class, new RenderObjTester());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoBlockAlt.class, new RenderDecoBlockAlt());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuctMk2.class, new RenderFluidDuctMk2());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderFluidBarrel());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTesla.class, new RenderTesla());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoreEmitter.class, new RenderCoreComponent());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoreReceiver.class, new RenderCoreComponent());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoreInjector.class, new RenderCoreComponent());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoreStabilizer.class, new RenderCoreComponent());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCore.class, new RenderCore());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySoyuzCapsule.class, new RenderCapsule());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -728,6 +770,13 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMinerBeam.class, RenderBeam3.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityLaserBeam.class, RenderBeam2.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMIRV.class, RenderMirv.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBuilding.class, RenderBuilding.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTaintCrab.class, RenderTaintCrab.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTeslaCrab.class, RenderTeslaCrab.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTom.class, RenderTom.TOM_FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTomBlast.class, RenderEmpty.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySoyuzCapsule.class, RenderSoyuzCapsule.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySoyuz.class, RenderSoyuz.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
@@ -818,6 +867,125 @@ public class ClientProxy extends ServerProxy {
 		}
 	}
 	
+	//Drillgon200: Sending whole tag compounds to spawn particles can't be efficient...
+	//mk3, only use this one
+	@Override
+	public void effectNT(NBTTagCompound data) {
+		World world = Minecraft.getMinecraft().world;
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		Random rand = world.rand;
+		String type = data.getString("type");
+		double x = data.getDouble("posX");
+		double y = data.getDouble("posY");
+		double z = data.getDouble("posZ");
+		
+		if("smoke".equals(type)) {
+			
+			String mode = data.getString("mode");
+			int count = Math.max(1, data.getInteger("count"));
+			
+			if("cloud".equals(mode)) {
+				
+				for(int i = 0; i < count; i++) {
+					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+					double motionY = rand.nextGaussian() * (1 + (count / 100));
+					double motionX = rand.nextGaussian() * (1 + (count / 150));
+					double motionZ = rand.nextGaussian() * (1 + (count / 150));
+					if(rand.nextBoolean()) motionY = Math.abs(motionY);
+					fx.setMotion(motionX, motionY, motionZ);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				}
+			}
+
+			if("radial".equals(mode)) {
+
+				for(int i = 0; i < count; i++) {
+					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+					fx.setMotion(rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)));
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				}
+			}
+			
+			if("shock".equals(mode)) {
+				
+				double strength = data.getDouble("strength");
+
+				Vec3 vec = Vec3.createVectorHelper(strength, 0, 0);
+				vec.rotateAroundY(rand.nextInt(360));
+				
+				for(int i = 0; i < count; i++) {
+					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+					fx.setMotion(vec.xCoord, 0, vec.zCoord);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					
+					vec.rotateAroundY(360 / count);
+				}
+			}
+			
+			if("shockRand".equals(mode)) {
+				
+				double strength = data.getDouble("strength");
+
+				Vec3 vec = Vec3.createVectorHelper(strength, 0, 0);
+				vec.rotateAroundY(rand.nextInt(360));
+				double r;
+				
+				for(int i = 0; i < count; i++) {
+					r = rand.nextDouble();
+					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+					fx.setMotion(vec.xCoord * r, 0, vec.zCoord * r);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					
+					vec.rotateAroundY(360 / count);
+				}
+			}
+		}
+		
+		if("exhaust".equals(type)) {
+
+			String mode = data.getString("mode");
+			
+			if("soyuz".equals(mode)) {
+				
+				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350)
+					return;
+	
+				int count = Math.max(1, data.getInteger("count"));
+				double width = data.getDouble("width");
+				
+				for(int i = 0; i < count; i++) {
+					
+					ParticleRocketFlame fx = new ParticleRocketFlame(world, x + rand.nextGaussian() * width, y, z + rand.nextGaussian() * width);
+					fx.setMotionY(-0.75 + rand.nextDouble() * 0.5);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				}
+			}
+			
+			if("meteor".equals(mode)) {
+				
+				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350)
+					return;
+	
+				int count = Math.max(1, data.getInteger("count"));
+				double width = data.getDouble("width");
+				
+				for(int i = 0; i < count; i++) {
+					
+					ParticleRocketFlame fx = new ParticleRocketFlame(world, x + rand.nextGaussian() * width, y + rand.nextGaussian() * width, z + rand.nextGaussian() * width);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				}
+			}
+		}
+		
+		if("vanilla".equals(type)) {
+
+			double mX = data.getDouble("mX");
+			double mY = data.getDouble("mY");
+			double mZ = data.getDouble("mZ");
+			world.spawnParticle(EnumParticleTypes.getByName(data.getString("mode")), x, y, z, mX, mY, mZ);
+		}
+	}
+	
 	@Override
 	public void spawnSFX(World world, double posX, double posY, double posZ, int type, Vec3 payload) {
 		int pow = 250;
@@ -865,6 +1033,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_revolver_nopip.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 		ModItems.gun_revolver_blackjack.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 		ModItems.gun_revolver_red.setTileEntityItemStackRenderer(new ItemRenderOverkill());
+		ModItems.gun_revolver_silver.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 		ModItems.gun_lever_action.setTileEntityItemStackRenderer(new ItemRenderGunAnim2());
 		ModItems.gun_spark.setTileEntityItemStackRenderer(new ItemRenderOverkill());
 		ModItems.gun_b93.setTileEntityItemStackRenderer(new RenderGunB93());
@@ -872,6 +1041,8 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_karl.setTileEntityItemStackRenderer(new ItemRenderRpg());
 		ModItems.gun_panzerschreck.setTileEntityItemStackRenderer(new ItemRenderRpg());
 		ModItems.gun_hk69.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
+		ModItems.gun_deagle.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
+		ModItems.gun_supershotgun.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 		ModItems.gun_fatman.setTileEntityItemStackRenderer(new ItemRenderFatMan());
 		ModItems.gun_proto.setTileEntityItemStackRenderer(new ItemRenderFatMan());
 		ModItems.gun_mirv.setTileEntityItemStackRenderer(new ItemRenderMIRVLauncher());
@@ -926,6 +1097,13 @@ public class ClientProxy extends ServerProxy {
 		ModItems.shimmer_axe.setTileEntityItemStackRenderer(new ItemRenderShim());
 		ModItems.ff_fluid_duct.setTileEntityItemStackRenderer(new ItemRenderFFFluidDuct());
 		ModItems.fluid_icon.setTileEntityItemStackRenderer(new ItemRenderFluidIcon());
+	}
+	
+	@Override
+	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float pitch) {
+		AudioWrapperClient audio = new AudioWrapperClient(sound, cat);
+		audio.updatePosition(x, y, z);
+		return audio;
 	}
 	
 	public static IBakedModel boxcar;

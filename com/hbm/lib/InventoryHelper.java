@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -18,9 +17,9 @@ public class InventoryHelper {
 	public static void dropInventoryItems(World world, BlockPos pos, ICapabilityProvider t) {
 		if(t == null)
 			return;
-		if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN))
+		if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
 			return;
-		IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
+		IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		for (int i = 0; i < inventory.getSlots(); ++i)
         {
             ItemStack itemstack = inventory.getStackInSlot(i);

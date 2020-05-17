@@ -261,7 +261,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);
 					sta2.setCount(1);
 				
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(isItemAcceptable(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
 						inventory.getStackInSlot(slot).shrink(1);
 						
 						if(inventory.getStackInSlot(slot).isEmpty())
@@ -314,7 +314,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);
 					sta2.setCount(1);
 				
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
+					if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
 						inventory.getStackInSlot(slot).shrink(1);
 						
 						if(inventory.getStackInSlot(slot).isEmpty())
@@ -372,7 +372,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			boolean flag = false;
 			
 			for(int i = 0; i < list.size(); i++)
-				if(ItemStack.areItemStacksEqual(stack, list.get(i)) && ItemStack.areItemStackTagsEqual(stack, list.get(i)))
+				if(isItemAcceptable(stack, list.get(i)))
 					flag = true;
 			
 			if(!flag)
@@ -390,7 +390,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);;
 					sta2.setCount(1);;
 			
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(isItemAcceptable(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
 						ItemStack sta3 = inv.getStackInSlot(slot).copy();
 						sta3.shrink(1);;
 						if(sta3.getCount() <= 0)
@@ -444,7 +444,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			boolean flag = false;
 			
 			for(int i = 0; i < list.size(); i++)
-				if(ItemStack.areItemStacksEqual(stack, list.get(i)) && ItemStack.areItemStackTagsEqual(stack, list.get(i)))
+				if(isItemAcceptable(stack, list.get(i)))
 					flag = true;
 			
 			if(!flag)
@@ -462,7 +462,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					sta1.setCount(1);;
 					sta2.setCount(1);;
 			
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(isItemAcceptable(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
 						ItemStack sta3 = inv.getStackInSlot(slot).copy();
 						sta3.shrink(1);
 						if(sta3.getCount() <= 0)
@@ -527,7 +527,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 				ItemStack sta = array.getStackInSlot(i).copy();
 				sta.setCount(1);
 			
-				if(sta != null && isItemAcceptible(sta, st) && array.getStackInSlot(i).getCount() > 0) {
+				if(sta != null && isItemAcceptable(sta, st) && array.getStackInSlot(i).getCount() > 0) {
 					array.getStackInSlot(i).shrink(1);;
 					
 					if(array.getStackInSlot(i).isEmpty())
@@ -541,10 +541,10 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		return false;
 	}
 	
-	public boolean isItemAcceptible(ItemStack stack1, ItemStack stack2) {
+	public boolean isItemAcceptable(ItemStack stack1, ItemStack stack2) {
 		
-		if(stack1 != null && stack2 != null) {
-			if(areStacksEqual(stack1, stack2))
+		if(stack1 != null && stack2 != null && !stack1.isEmpty() && !stack2.isEmpty()) {
+			if(Library.areItemStacksCompatible(stack1, stack2))
 				return true;
 		
 			int[] ids1 = OreDictionary.getOreIDs(stack1);
@@ -563,10 +563,10 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	
 	//Drillgon200: Method so I can check stuff like containing a fluid without checking if the compound tags are exactly equal, that way
 	//it's more compatible with capabilities.
-	private boolean areStacksEqual(ItemStack sta1, ItemStack sta2){
-		return Library.areItemStacksCompatible(sta2, sta1);
+	//private boolean areStacksEqual(ItemStack sta1, ItemStack sta2){
+	//	return Library.areItemStacksCompatible(sta2, sta1);
 		//return ItemStack.areItemStacksEqual(sta1, sta2);
-	}
+//	}
 
 	@Override
 	public void setPower(long i) {

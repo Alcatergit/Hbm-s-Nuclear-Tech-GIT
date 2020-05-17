@@ -2,16 +2,11 @@ package com.hbm.particle;
 
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ModEventHandlerClient;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -19,13 +14,11 @@ import net.minecraft.world.World;
 
 public class ParticleSmokePlume extends Particle {
 
-	private TextureManager theRenderEngine;
 	private int age;
 	private int maxAge;
 
 	public ParticleSmokePlume(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
-		theRenderEngine = p_i1213_1_;
 		maxAge = 100 + rand.nextInt(40);
 		
 		int r = rand.nextInt(4);
@@ -120,14 +113,7 @@ public class ParticleSmokePlume extends Particle {
 	
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.depthMask(false);
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		
-		this.theRenderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		this.particleTexture = ModEventHandlerClient.contrail;
 		float f = (float) this.particleTextureIndexX / 16.0F;
 		float f1 = f + 0.0624375F;
@@ -175,10 +161,6 @@ public class ParticleSmokePlume extends Particle {
 			buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 		
 		}
-		GL11.glPolygonOffset(0.0F, 0.0F);
-		GlStateManager.enableLighting();
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
 	}
 	
 	@Override

@@ -527,10 +527,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(sta7 != null)
 			sta0.setCount(1);
 		
-		if((inventory.getStackInSlot(5) == ItemStack.EMPTY || stacks[0] == null || (stacks[0] != null && ItemStack.areItemStacksEqual(sta0, sta1) && ItemStack.areItemStackTagsEqual(sta0, sta1) && inventory.getStackInSlot(5).getCount() + stacks[0].getCount() <= inventory.getStackInSlot(5).getMaxStackSize())) && 
-				(inventory.getStackInSlot(6) == ItemStack.EMPTY || stacks[1] == null || (stacks[1] != null && ItemStack.areItemStacksEqual(sta2, sta3) && ItemStack.areItemStackTagsEqual(sta2, sta3) && inventory.getStackInSlot(6).getCount() + stacks[1].getCount() <= inventory.getStackInSlot(6).getMaxStackSize())) && 
-				(inventory.getStackInSlot(7) == ItemStack.EMPTY || stacks[2] == null || (stacks[2] != null && ItemStack.areItemStacksEqual(sta4, sta5) && ItemStack.areItemStackTagsEqual(sta4, sta5) && inventory.getStackInSlot(7).getCount() + stacks[2].getCount() <= inventory.getStackInSlot(7).getMaxStackSize())) && 
-				(inventory.getStackInSlot(8) == ItemStack.EMPTY || stacks[3] == null || (stacks[3] != null && ItemStack.areItemStacksEqual(sta6, sta7) && ItemStack.areItemStackTagsEqual(sta6, sta7) && inventory.getStackInSlot(8).getCount() + stacks[3].getCount() <= inventory.getStackInSlot(8).getMaxStackSize())))
+		if((inventory.getStackInSlot(5) == ItemStack.EMPTY || stacks[0] == null || (stacks[0] != null && isItemAcceptable(sta0, sta1) && inventory.getStackInSlot(5).getCount() + stacks[0].getCount() <= inventory.getStackInSlot(5).getMaxStackSize())) && 
+				(inventory.getStackInSlot(6) == ItemStack.EMPTY || stacks[1] == null || (stacks[1] != null && isItemAcceptable(sta2, sta3) && inventory.getStackInSlot(6).getCount() + stacks[1].getCount() <= inventory.getStackInSlot(6).getMaxStackSize())) && 
+				(inventory.getStackInSlot(7) == ItemStack.EMPTY || stacks[2] == null || (stacks[2] != null && isItemAcceptable(sta4, sta5) && inventory.getStackInSlot(7).getCount() + stacks[2].getCount() <= inventory.getStackInSlot(7).getMaxStackSize())) && 
+				(inventory.getStackInSlot(8) == ItemStack.EMPTY || stacks[3] == null || (stacks[3] != null && isItemAcceptable(sta6, sta7) && inventory.getStackInSlot(8).getCount() + stacks[3].getCount() <= inventory.getStackInSlot(8).getMaxStackSize())))
 			return true;
 			
 		return false;
@@ -652,7 +652,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 						sta1.setCount(1);
 						sta2.setCount(1);
 					
-						if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
+						if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
 							inventory.getStackInSlot(slot).shrink(1);
 							
 							if(inventory.getStackInSlot(slot).isEmpty())
@@ -793,7 +793,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			boolean flag = false;
 			
 			for(int i = 0; i < list.size(); i++)
-				if(ItemStack.areItemStacksEqual(stack, list.get(i)) && ItemStack.areItemStackTagsEqual(stack, list.get(i)))
+				if(isItemAcceptable(stack, list.get(i)))
 					flag = true;
 			
 			if(!flag)
@@ -811,7 +811,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 					sta1.setCount(1);;
 					sta2.setCount(1);;
 			
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
+					if(isItemAcceptable(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
 						ItemStack sta3 = inv.getStackInSlot(slot).copy();
 						sta3.shrink(1);
 						if(sta3.getCount() <= 0)
@@ -875,7 +875,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 					ItemStack sta = array.getStackInSlot(i).copy();
 					sta.setCount(1);
 				
-					if(sta != null && isItemAcceptible(sta, st) && array.getStackInSlot(i).getCount() > 0) {
+					if(sta != null && isItemAcceptable(sta, st) && array.getStackInSlot(i).getCount() > 0) {
 						array.getStackInSlot(i).shrink(1);;
 						
 						if(array.getStackInSlot(i).isEmpty())
@@ -889,10 +889,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			return false;
 		}
 	
-	public boolean isItemAcceptible(ItemStack stack1, ItemStack stack2) {
+	public boolean isItemAcceptable(ItemStack stack1, ItemStack stack2) {
 		
 		if(stack1 != null && stack2 != null && stack1.getItem() != Items.AIR && stack1.getItem() != Items.AIR) {
-			if(ItemStack.areItemStacksEqual(stack1, stack2))
+			if(Library.areItemStacksCompatible(stack1, stack2))
 				return true;
 		
 			int[] ids1 = OreDictionary.getOreIDs(stack1);

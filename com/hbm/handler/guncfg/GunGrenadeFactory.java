@@ -32,6 +32,7 @@ public static GunConfiguration getHK69Config() {
 		config.crosshair = Crosshair.L_CIRCUMFLEX;
 		config.firingSound = HBMSoundHandler.hkShoot;
 		config.reloadSound = GunConfiguration.RSOUND_GRENADE;
+		config.reloadSoundEnd = false;
 		
 		config.name = "Granatpistole HK69";
 		config.manufacturer = "Heckler & Koch";

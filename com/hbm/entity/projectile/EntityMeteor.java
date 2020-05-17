@@ -1,7 +1,5 @@
 package com.hbm.entity.projectile;
 
-import com.hbm.entity.particle.EntityGasFlameFX;
-import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -9,6 +7,7 @@ import com.hbm.world.Meteorite;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -48,18 +47,31 @@ public class EntityMeteor extends EntityThrowable {
             if(!this.world.isRemote)
     		{
     			world.createExplosion(this, this.posX, this.posY, this.posZ, 5 + rand.nextFloat(), true);
-    			if(MainRegistry.enableMeteorTails)
-    				ExplosionLarge.spawnParticles(world, posX, posY, posZ, ExplosionLarge.cloudFunction(20));
+    			if(MainRegistry.enableMeteorTails) {
+    				ExplosionLarge.spawnParticles(world, posX, posY + 5, posZ, 75);
+    				ExplosionLarge.spawnParticles(world, posX + 5, posY, posZ, 75);
+    				ExplosionLarge.spawnParticles(world, posX - 5, posY, posZ, 75);
+    				ExplosionLarge.spawnParticles(world, posX, posY, posZ + 5, 75);
+    				ExplosionLarge.spawnParticles(world, posX, posY, posZ - 5, 75);
+    			}
     			(new Meteorite()).generate(world, rand, (int)Math.round(this.posX - 0.5D), (int)Math.round(this.posY - 0.5D), (int)Math.round(this.posZ - 0.5D));
     		}
             this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.oldExplosion, SoundCategory.HOSTILE, 10000.0F, 0.5F + this.rand.nextFloat() * 0.1F);
     		this.setDead();
         }
         
-        if(MainRegistry.enableMeteorTails) {
-        	this.world.spawnEntity(new EntitySmokeFX(this.world, this.posX, this.posY + 1.5D, this.posZ, 0.0, 0.0, 0.0));
-        	for(int i = 0; i < 10; i++)
-        		this.world.spawnEntity(new EntityGasFlameFX(this.world, this.posX + rand.nextDouble() * 3 - 1.5, this.posY + 1.5D + rand.nextDouble() * 3 - 1.5, this.posZ + rand.nextDouble() * 3 - 1.5, 0.0, 0.1, 0.0));
+        if(MainRegistry.enableMeteorTails && world.isRemote) {
+
+    		NBTTagCompound data = new NBTTagCompound();
+    		data.setString("type", "exhaust");
+    		data.setString("mode", "meteor");
+    		data.setInteger("count", 10);
+    		data.setDouble("width", 1);
+    		data.setDouble("posX", posX - motionX);
+    		data.setDouble("posY", posY - motionY);
+    		data.setDouble("posZ", posZ - motionZ);
+    		
+    		MainRegistry.proxy.effectNT(data);
         }
 	}
 

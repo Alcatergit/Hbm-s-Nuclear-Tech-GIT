@@ -10,16 +10,18 @@ import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.explosion.ExplosionParticle;
+import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
@@ -45,11 +47,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("deprecation")
 public class EntityBulletBase extends Entity implements IProjectile {
 
 	public static final DataParameter<Integer> STYLE = EntityDataManager.createKey(EntityBulletBase.class, DataSerializers.VARINT);
@@ -60,6 +62,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	private BulletConfiguration config;
 	private EntityLivingBase shooter;
+	public float overrideDamage;
 
 	public EntityBulletBase(World world) {
 		super(world);
@@ -103,6 +106,31 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		this.getDataManager().set(TRAIL, this.config.trail);
 	}
 
+	public EntityBulletBase(World world, int config, EntityLivingBase entity) {
+		super(world);
+		this.config = BulletConfigSyncingUtil.pullConfig(config);
+		this.getDataManager().set(BULLETCONFIG, config);
+		shooter = entity;
+
+		this.setLocationAndAngles(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ, entity.rotationYaw, entity.rotationPitch);
+		
+		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		this.posY -= 0.10000000149011612D;
+		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
+		this.setPosition(this.posX, this.posY, this.posZ);
+		
+		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
+		this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
+		this.motionY = (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
+
+		this.setSize(0.5F, 0.5F);
+
+		this.shoot(this.motionX, this.motionY, this.motionZ, 1.0F, this.config.spread);
+		
+		this.getDataManager().set(STYLE, this.config.style);
+		this.getDataManager().set(TRAIL, this.config.trail);
+	}
+	
 	@Override
 	public void shoot(double moX, double moY, double moZ, float mult1, float mult2) {
 
@@ -156,7 +184,6 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		this.getDataManager().register(BULLETCONFIG, 0);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onUpdate() {
 
@@ -237,6 +264,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				}
 
 				float damage = rand.nextFloat() * (config.dmgMax - config.dmgMin) + config.dmgMin;
+				
+				if(overrideDamage != 0)
+					damage = overrideDamage;
 				
 				if (!victim.attackEntityFrom(damagesource, damage)) {
 
@@ -377,6 +407,8 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	// for when a bullet dies by hitting a block
 	private void onBlockImpact(BlockPos pos) {
+		if(config.bImpact != null)
+			config.bImpact.behaveBlockHit(this, pos.getX(), pos.getY(), pos.getZ());
 		if (!world.isRemote)
 			this.setDead();
 		
@@ -454,7 +486,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		if (config.nuke > 0 && !world.isRemote) {
 			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, config.nuke, posX, posY, posZ));
 
-			/*if (MainRegistry.polaroidID == 11) {
+			if (MainRegistry.polaroidID == 11) {
 				if (rand.nextInt(100) >= 0) {
 					ExplosionParticleB.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
 				} else {
@@ -466,7 +498,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				} else {
 					ExplosionParticle.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
 				}
-			}*/
+			}
 		}
 
 		if (config.destroysBlocks && !world.isRemote) {
@@ -482,51 +514,26 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	// for when a bullet dies by hitting a block
 	private void onRicochet(BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		Material m = state.getMaterial();
-		if (!world.isRemote && config.destroysWood && (m == Material.WOOD || m == Material.PLANTS || m == Material.GLASS || m == Material.LEAVES))
-			world.destroyBlock(pos, false);
+		if(config.bRicochet != null)
+			config.bRicochet.behaveBlockRicochet(this, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	// for when a bullet dies by hitting an entity
 	private void onEntityImpact(Entity e) {
+		
 		onEntityHurt(e);
 		onBlockImpact(new BlockPos(e));
 
-		if (config.boxcar && !world.isRemote) {
-			EntityBoxcar pippo = new EntityBoxcar(world);
-			pippo.posX = e.posX;
-			pippo.posY = e.posY + 50;
-			pippo.posZ = e.posZ;
-
-			for (int j = 0; j < 50; j++) {
-				EntityBSmokeFX fx = new EntityBSmokeFX(world, pippo.posX + (rand.nextDouble() - 0.5) * 4, pippo.posY + (rand.nextDouble() - 0.5) * 12, pippo.posZ + (rand.nextDouble() - 0.5) * 4, 0, 0, 0);
-				world.spawnEntity(fx);
-			}
-			world.spawnEntity(pippo);
-
-			world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 100F, 1F);
-		}
-
-		if (config.boat && !world.isRemote) {
-			EntityDuchessGambit pippo = new EntityDuchessGambit(world);
-			pippo.posX = e.posX;
-			pippo.posY = e.posY + 50;
-			pippo.posZ = e.posZ;
-
-			for (int j = 0; j < 150; j++) {
-				EntityBSmokeFX fx = new EntityBSmokeFX(world, pippo.posX + (rand.nextDouble() - 0.5) * 7, pippo.posY + (rand.nextDouble() - 0.5) * 8, pippo.posZ + (rand.nextDouble() - 0.5) * 18, 0, 0, 0);
-				world.spawnEntity(fx);
-			}
-			world.spawnEntity(pippo);
-
-			world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.boatWeapon, SoundCategory.HOSTILE, 100F, 1F);
-		}
+		if(config.bHit != null)
+			config.bHit.behaveEntityHit(this, e);
 	}
 
 	// for when a bullet hurts an entity, not necessarily dying
 	private void onEntityHurt(Entity e) {
 
+		if(config.bHurt != null)
+			config.bHurt.behaveEntityHurt(this, e);
+		
 		if (config.incendiary > 0 && !world.isRemote) {
 			e.setFire(config.incendiary);
 		}
@@ -559,15 +566,24 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 		int cfg = nbt.getInteger("config");
 		this.config = BulletConfigSyncingUtil.pullConfig(cfg);
+		
+		if(this.config == null) {
+			this.setDead();
+			return;
+		}
+		
 		this.getDataManager().set(BULLETCONFIG, cfg);
 
 		this.getDataManager().set(STYLE, this.config.style);
 		this.getDataManager().set(TRAIL, this.config.trail);
+		
+		this.overrideDamage = nbt.getFloat("damage");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
-
 		nbt.setInteger("config", this.getDataManager().get(BULLETCONFIG));
+		
+		nbt.setFloat("damage", this.overrideDamage);
 	}
 }

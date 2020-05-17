@@ -31,16 +31,17 @@ public class WasteEarth extends Block {
 	private float radIn = 0.0F;
 	private float radMax = 0.0F;
 	
-	public WasteEarth(Material materialIn, String s) {
+	public WasteEarth(Material materialIn, boolean tick, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
+		this.setTickRandomly(tick);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
-	public WasteEarth(Material mat, float rad, float max, String s){
-		this(mat, s);
+	public WasteEarth(Material mat, boolean tick, float rad, float max, String s){
+		this(mat, tick, s);
 		this.radIn = rad;
 		this.radMax = max;
 	}

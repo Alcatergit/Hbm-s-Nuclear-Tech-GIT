@@ -30,6 +30,10 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.missile_soyuz_lander)
+		{
+			list.add("Doubles as a crappy lander!");
+		}
 		if(this == ModItems.book_of_)
 		{
 			list.add("Denn wer den Walzer richtig tritt,");
@@ -580,6 +584,14 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
+		if(this == ModItems.rune_isa ||
+    			this == ModItems.rune_dagaz ||
+    			this == ModItems.rune_hagalaz ||
+    			this == ModItems.rune_jera ||
+    			this == ModItems.rune_thurisaz)
+    	{
+    		return true;
+    	}
 		return super.hasEffect(stack);
 	}
 

@@ -92,9 +92,9 @@ public class GUIAMSBase extends GuiInfoContainer {
 		if(!base.hasResonators())
 			this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 6);
 
-		FFUtils.drawLiquid(base.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 26, 70);
-		FFUtils.drawLiquid(base.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 70);
-		FFUtils.drawLiquid(base.tanks[2], guiLeft, guiTop, zLevel, 16, 52, 26, 124);
-		FFUtils.drawLiquid(base.tanks[3], guiLeft, guiTop, zLevel, 16, 52, 134, 124);
+		FFUtils.drawLiquid(base.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 26, 98);
+		FFUtils.drawLiquid(base.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 98);
+		FFUtils.drawLiquid(base.tanks[2], guiLeft, guiTop, zLevel, 16, 52, 26, 152);
+		FFUtils.drawLiquid(base.tanks[3], guiLeft, guiTop, zLevel, 16, 52, 134, 152);
 	}
 }

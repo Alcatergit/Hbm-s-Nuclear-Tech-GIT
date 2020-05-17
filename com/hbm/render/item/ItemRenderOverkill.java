@@ -27,6 +27,7 @@ public class ItemRenderOverkill extends TEISRBase {
 	protected ResourceLocation noPipLoc = new ResourceLocation(RefStrings.MODID + ":textures/models/ModelPipNoScope.png");
 	protected ResourceLocation blackjackLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipGrey.png");
 	protected ResourceLocation redLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipRed.png");
+	protected ResourceLocation silverLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipSilver.png");
 	/*protected ModelLacunae lacunae;
 	protected ModelFolly folly;
 	
@@ -61,6 +62,8 @@ public class ItemRenderOverkill extends TEISRBase {
 			Minecraft.getMinecraft().renderEngine.bindTexture(blackjackLoc);
 		if(stack.getItem() == ModItems.gun_revolver_red)
 			Minecraft.getMinecraft().renderEngine.bindTexture(redLoc);
+		if(stack.getItem() == ModItems.gun_revolver_silver)
+			Minecraft.getMinecraft().renderEngine.bindTexture(silverLoc);
 		if(stack.getItem() == ModItems.gun_spark)
 			Minecraft.getMinecraft().renderEngine.bindTexture(sparkLoc);
 		switch (type) {
@@ -68,7 +71,8 @@ public class ItemRenderOverkill extends TEISRBase {
 		case FIRST_PERSON_RIGHT_HAND:
 
 			if (type == TransformType.FIRST_PERSON_RIGHT_HAND) {
-				if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red) {
+				if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || 
+					stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red || stack.getItem() == ModItems.gun_revolver_silver) {
 					GL11.glScalef(0.70F, 0.70F, 0.70F);
 					GL11.glTranslatef(-0.5F, 0.4F, 0.0F);
 				}
@@ -83,9 +87,10 @@ public class ItemRenderOverkill extends TEISRBase {
 				GL11.glRotated(-20, 0, 0, 1);
 				GL11.glRotated(180, 1, 0, 0);
 			} else {
-				if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red) {
+				if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || 
+						stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red || stack.getItem() == ModItems.gun_revolver_silver) {
+					GL11.glTranslatef(1.5F, 0.5F, 0.2F);
 					GL11.glScalef(0.70F, 0.70F, 0.70F);
-					GL11.glTranslatef(1.0F, 0.4F, 0.0F);
 				}
 				
 				if(stack.getItem() == ModItems.gun_spark){
@@ -94,11 +99,12 @@ public class ItemRenderOverkill extends TEISRBase {
 					GL11.glRotated(20, 0, 0, 1);
 				}
 				GL11.glRotated(180, 1, 0, 0);
-				GL11.glRotated(180, 0, 1, 0);
+				GL11.glRotated(175, 0, 1, 0);
 				GL11.glRotated(23, 0, 0, 1);
 			}
 
-			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red)
+			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || 
+					stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red || stack.getItem() == ModItems.gun_revolver_silver)
 				pip.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			if(stack.getItem() == ModItems.gun_spark){
 				sparkPlug.renderingInFirstPerson = true;
@@ -113,10 +119,10 @@ public class ItemRenderOverkill extends TEISRBase {
 			GL11.glTranslated(0.45, 0.25, 0.5);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(180, 1, 0, 0);
-			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red) {
+			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red || stack.getItem() == ModItems.gun_revolver_silver) {
 				GL11.glScalef(0.60F, 0.60F, 0.60F);
 			}
-			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red)
+			if (stack.getItem() == ModItems.gun_revolver_pip || stack.getItem() == ModItems.gun_revolver_nopip || stack.getItem() == ModItems.gun_revolver_blackjack || stack.getItem() == ModItems.gun_revolver_red || stack.getItem() == ModItems.gun_revolver_silver)
 				pip.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			if(stack.getItem() == ModItems.gun_spark)
 				sparkPlug.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);

@@ -57,6 +57,9 @@ public class AdvancementManager {
 	public static Advancement achRadiation;
 	public static Advancement achSchrabidium;
 	public static Advancement achEuphemium;
+	public static Advancement horizonsStart;
+	public static Advancement horizonsEnd;
+	public static Advancement horizonsBonus;
 	
 	public static Advancement achSacrifice;
 	public static Advancement achImpossible;
@@ -75,6 +78,7 @@ public class AdvancementManager {
 	public static Advancement bobChemistry;
 	public static Advancement bobOil;
 	public static Advancement bobNuclear;
+	public static Advancement bobHidden;
 
 	public static void init(MinecraftServer serv){
 		net.minecraft.advancements.AdvancementManager adv = serv.getAdvancementManager();
@@ -86,10 +90,14 @@ public class AdvancementManager {
 		bobChemistry = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobchemistry"));
 		bobOil = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "boboil"));
 		bobNuclear = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobnuclear"));
+		bobHidden = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bobhidden"));
 		achSacrifice = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsacrifice"));
 		achFOEQ = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfoeq"));
 		achFiend = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfiend"));
 		achFiend2 = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achfiend2"));
+		horizonsStart = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsstart"));
+		horizonsEnd = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsend"));
+		horizonsBonus = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsbonus"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

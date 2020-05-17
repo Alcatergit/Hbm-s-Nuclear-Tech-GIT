@@ -6,9 +6,9 @@ import java.util.Random;
 import com.hbm.entity.missile.EntityMinerRocket;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemSatChip;
-import com.hbm.saveddata.SatelliteSaveData;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteSaveStructure;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteType;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteMiner;
+import com.hbm.saveddata.satellites.SatelliteSavedData;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,28 +80,40 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 		return super.writeToNBT(compound);
 	}
 	
+	SatelliteSavedData data = null;
+	
 	@Override
 	public void update() {
 		if(!world.isRemote) {
 			
-			SatelliteSaveData data = SatelliteSaveData.getData(world);
+			if(data == null)
+				data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
+			
+		    if(data == null) {
+		        world.getPerWorldStorage().setData("satellites", new SatelliteSavedData(world));
+		        data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
+		    }
+		    data.markDirty();
 
 		    if(data != null && !inventory.getStackInSlot(15).isEmpty()) {
 			    int freq = ItemSatChip.getFreq(inventory.getStackInSlot(15));
 			    
-			    SatelliteSaveStructure sat = data.getSatFromFreq(freq);
+			    Satellite sat = data.getSatFromFreq(freq);
 			    
 			    int delay = 10 * 60 * 1000;
 			    
-			    if(sat != null && sat.satelliteID == freq && sat.type.name().equals(SatelliteType.MINER.name())) {
-			    	if(sat.lastOp + delay < System.currentTimeMillis()) {
+			    if(sat != null && sat instanceof SatelliteMiner) {
+			    	
+			    	SatelliteMiner miner = (SatelliteMiner)sat;
+			    	
+			    	if(miner.lastOp + delay < System.currentTimeMillis()) {
 			    		
 			        	EntityMinerRocket rocket = new EntityMinerRocket(world);
 			        	rocket.posX = pos.getX() + 0.5;
 			        	rocket.posY = 300;
 			        	rocket.posZ = pos.getZ() + 0.5;
 			        	world.spawnEntity(rocket);
-			        	sat.lastOp = System.currentTimeMillis();
+			        	miner.lastOp = System.currentTimeMillis();
 			        	data.markDirty();
 			    	}
 			    }

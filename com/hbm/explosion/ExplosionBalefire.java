@@ -96,8 +96,11 @@ public class ExplosionBalefire {
 			while(y > 0) {
 				
 				if(strength <= 10) {
-					if(worldObj.rand.nextInt(10) == 0)
+					if(worldObj.rand.nextInt(10) == 0){
 						worldObj.setBlockState(pos.setPos(pX, y + 1, pZ), ModBlocks.balefire.getDefaultState());
+						if(worldObj.getBlockState(pos.setPos(pX, y, pZ)).getBlock() == ModBlocks.block_schrabidium_cluster)
+							worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getDefaultState(), 3);
+					}
 
 					if(worldObj.getBlockState(pos.setPos(pX, y, pZ)) == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.sellafield_slaked.getDefaultState());

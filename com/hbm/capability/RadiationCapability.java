@@ -73,6 +73,21 @@ public class RadiationCapability {
 	
 	public static class EntityRadiationProvider implements ICapabilitySerializable<NBTBase> {
 
+		public static final IEntityRadioactive DUMMY = new IEntityRadioactive(){
+			@Override
+			public float getRads() {
+				return 0;
+			}
+			@Override
+			public void setRads(float rads) {
+			}
+			@Override
+			public void increaseRads(float rads) {
+			}
+			@Override
+			public void decreaseRads(float rads) {
+			}
+		};
 		
 		@CapabilityInject(IEntityRadioactive.class)
 		public static final Capability<IEntityRadioactive> ENT_RAD_CAP = null;

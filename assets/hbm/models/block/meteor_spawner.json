@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"side": "hbm:blocks/meteor_spawner_side",
+		"bottom": "hbm:blocks/meteor_polished",
+		"top": "hbm:blocks/meteor_spawner_top"
+	}
+}

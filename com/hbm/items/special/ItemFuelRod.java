@@ -6,6 +6,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class ItemFuelRod extends ItemRadioactive {
 	
@@ -26,6 +27,11 @@ public class ItemFuelRod extends ItemRadioactive {
 		
 		tooltip.add("Generates " + heat + " heat per tick");
 		tooltip.add("Lasts " + lifeTime + " ticks");
+	}
+	
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return super.initCapabilities(stack, nbt);
 	}
 	
 	public static void setLifetime(ItemStack stack, int time){

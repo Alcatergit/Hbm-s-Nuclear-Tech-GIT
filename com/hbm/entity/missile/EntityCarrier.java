@@ -5,11 +5,9 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemSatChip;
 import com.hbm.main.AdvancementManager;
-import com.hbm.saveddata.SatelliteSaveData;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteType;
+import com.hbm.saveddata.satellites.Satellite;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -114,16 +112,12 @@ public class EntityCarrier extends EntityThrowable {
 	}
 	
 	private void deployPayload() {
-
 		if(payload != null) {
 			
 			if(payload.getItem() == ModItems.flame_pony) {
 				ExplosionLarge.spawnTracers(world, posX, posY, posZ, 25);
-				for(EntityPlayer p : world.playerEntities){
-					if(p instanceof EntityPlayerMP){
-						AdvancementManager.grantAchievement((EntityPlayerMP) p, AdvancementManager.achSpace);
-					}
-				}
+				for(EntityPlayer p : world.playerEntities)
+					AdvancementManager.grantAchievement(p, AdvancementManager.achSpace);
 			}
 			
 			if(payload.getItem() == ModItems.sat_foeq) {
@@ -132,27 +126,10 @@ public class EntityCarrier extends EntityThrowable {
 			}
 			
 			if(payload.getItem() instanceof ItemSatChip) {
-			    SatelliteSaveData data = SatelliteSaveData.getData(world);
-
+				
 			    int freq = ItemSatChip.getFreq(payload);
-			    
-			    if(!data.isFreqTaken(freq)) {
-				    if(payload.getItem() == ModItems.sat_mapper)
-				    	data.addSatellite(freq, SatelliteType.MAPPER);
-				    if(payload.getItem() == ModItems.sat_scanner)
-				    	data.addSatellite(freq, SatelliteType.SCANNER);
-				    if(payload.getItem() == ModItems.sat_radar)
-				    	data.addSatellite(freq, SatelliteType.RADAR);
-				    if(payload.getItem() == ModItems.sat_laser)
-				    	data.addSatellite(freq, SatelliteType.LASER);
-				    if(payload.getItem() == ModItems.sat_foeq)
-				    	data.addSatellite(freq, SatelliteType.RELAY);
-				    if(payload.getItem() == ModItems.sat_resonator)
-				    	data.addSatellite(freq, SatelliteType.RESONATOR);
-				    if(payload.getItem() == ModItems.sat_miner)
-				    	data.addSatellite(freq, SatelliteType.MINER);
-
-			    }
+		    	
+		    	Satellite.orbit(world, Satellite.getIDFromItem(payload.getItem()), freq, posX, posY, posZ);
 			}
 		}
 		

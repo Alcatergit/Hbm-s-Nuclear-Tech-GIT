@@ -3,6 +3,8 @@ package com.hbm.render.tileentity;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
 
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
@@ -10,6 +12,7 @@ import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -27,8 +30,8 @@ public class RenderAMSEmitter extends TileEntitySpecialRenderer<TileEntityAMSEmi
 		
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.enableLighting();
+        GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
 
@@ -44,6 +47,7 @@ public class RenderAMSEmitter extends TileEntitySpecialRenderer<TileEntityAMSEmi
 
         GL11.glPopMatrix();
         renderTileEntityAt2(te, x, y, z, partialTicks);
+        GlStateManager.enableCull();
 	}
 	
 	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f)
@@ -56,6 +60,7 @@ public class RenderAMSEmitter extends TileEntitySpecialRenderer<TileEntityAMSEmi
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableCull();
 		GlStateManager.enableBlend();
+		GlStateManager.enableLighting();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glTranslatef((float) x + 0.5F, (float) y - 7, (float) z + 0.5F);
 

@@ -84,11 +84,6 @@ public class PacketDispatcher {
 		wrapper.registerMessage(LargeReactorPacket.Handler.class, LargeReactorPacket.class, i++, Side.CLIENT);
 		//Packet to send missile multipart information to TEs
 		wrapper.registerMessage(TEMissileMultipartPacket.Handler.class, TEMissileMultipartPacket.class, i++, Side.CLIENT);
-		//Packets for syncing satellite data with the client only satellite gui
-		wrapper.registerMessage(SatelliteRequestPacket.Handler.class, SatelliteRequestPacket.class, i++, Side.SERVER);
-		wrapper.registerMessage(SatelliteResponsePacket.Handler.class, SatelliteResponsePacket.class, i++, Side.CLIENT);
-		//Signals server to perform orbital strike
-		wrapper.registerMessage(SatLaserPacket.Handler.class, SatLaserPacket.class, i++, Side.SERVER);
 		//Signals server to consume items and create template
 		wrapper.registerMessage(ItemFolderPacket.Handler.class, ItemFolderPacket.class, i++, Side.SERVER);
 		//Signals server to buy offer from bobmazon
@@ -101,6 +96,18 @@ public class PacketDispatcher {
 		//wrapper.registerMessage(TERadarDestructorPacket.Handler.class, TERadarDestructorPacket.class, i++, Side.CLIENT);
 		//Packet for causing pipes to rebuild their connections
 		wrapper.registerMessage(PipeUpdatePacket.Handler.class, PipeUpdatePacket.class, i++, Side.CLIENT);
+		//Packet for updating entities being zapped
+		wrapper.registerMessage(TETeslaPacket.Handler.class, TETeslaPacket.class, i++, Side.CLIENT);
+		//Aux Particle Packet, New Technology: like the APP but with NBT
+		wrapper.registerMessage(AuxParticlePacketNT.Handler.class, AuxParticlePacketNT.class, i++, Side.CLIENT);
+		//Packet to send NBT data to tile entities
+		wrapper.registerMessage(NBTPacket.Handler.class, NBTPacket.class, i++, Side.CLIENT);
+		//Packet to send sat info to players
+		wrapper.registerMessage(SatPanelPacket.Handler.class, SatPanelPacket.class, i++, Side.CLIENT);
+		//Signals server to do coord based satellite stuff
+		wrapper.registerMessage(SatCoordPacket.Handler.class, SatCoordPacket.class, i++, Side.SERVER);
+		//Signals server to perform orbital strike, among other things
+		wrapper.registerMessage(SatLaserPacket.Handler.class, SatLaserPacket.class, i++, Side.SERVER);
 	}
 
 }

@@ -57,6 +57,7 @@ public class FFUtils {
 	 *            - where the starting y of the rectangle should be on screen
 	 */
 	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY) {
+		//This is retarded, but it would be too much of a pain to fix it
 		offsetY -= 44;
 		RenderHelper.bindBlockTexture();
 
@@ -150,6 +151,10 @@ public class FFUtils {
 	}
 
 	public static void renderTankInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, FluidTank fluidTank, Fluid fluid) {
+		if(fluidTank.getFluid() != null){
+			renderTankInfo(gui, mouseX, mouseY, x, y, width, height, fluidTank);
+			return;
+		}
 		if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
 			if(fluid != null) {
 				gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
@@ -227,7 +232,7 @@ public class FFUtils {
 			return true;
 
 		if(slots.getStackInSlot(slot1).getItem() == ModItems.fluid_barrel_infinite && tank.getFluid() != null){
-			return tank.fill(new FluidStack(tank.getFluid(), 10), true) > 0 ? true : false;
+			return tank.fill(new FluidStack(tank.getFluid(), Integer.MAX_VALUE), true) > 0 ? true : false;
 		}
 		if(FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
 

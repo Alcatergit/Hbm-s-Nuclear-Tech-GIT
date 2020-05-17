@@ -61,7 +61,7 @@ public class ItemFFFluidDuct extends Item {
 	
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(world.getBlockState(pos).getBlock() != Blocks.SNOW_LAYER){
+		if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos)){
 			pos = pos.offset(facing);
 			if (!world.isAirBlock(pos))
             {

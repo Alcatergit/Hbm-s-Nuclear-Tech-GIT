@@ -1,0 +1,284 @@
+package com.hbm.tileentity.machine;
+
+import java.util.List;
+
+import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.IConsumer;
+import com.hbm.interfaces.ILaserable;
+import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.lib.ModDamageSource;
+import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.FluidTankPacket;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ILaserable, ITankPacketAcceptor {
+
+	public long power;
+	public static final long maxPower = 1000000000L;
+	public int watts;
+	public int beam;
+	public long joules;
+	public boolean isOn;
+	public FluidTank tank;
+	public long prev;
+	
+	public static final int range = 50;
+	
+	public TileEntityCoreEmitter() {
+		super(0);
+		tank = new FluidTank(64000);
+	}
+
+	@Override
+	public void update() {
+		if (!world.isRemote) {
+			
+			watts = MathHelper.clamp(watts, 1, 100);
+			long demand = maxPower * watts / 2000;
+
+			beam = 0;
+			
+			if(joules > 0 || prev > 0) {
+
+				if(tank.getFluidAmount() >= 20) {
+					tank.drain(20, true);
+				} else {
+					world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
+					return;
+				}
+			}
+			
+			if(isOn) {
+				
+				//i.e. 50,000,000 HE = 10,000 SPK
+				//1 SPK = 5,000HE
+				
+				if(power >= demand) {
+					power -= demand;
+					long add = watts * 100;
+					joules += add;
+				}
+				prev = joules;
+				
+				if(joules > 0) {
+					
+					long out = joules * 98 / 100;
+					
+					EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
+					for(int i = 1; i <= range; i++) {
+						
+						beam = i;
+		
+						int x = pos.getX() + dir.getFrontOffsetX() * i;
+						int y = pos.getY() + dir.getFrontOffsetY() * i;
+						int z = pos.getZ() + dir.getFrontOffsetZ() * i;
+						
+						BlockPos pos1 = new BlockPos(x, y, z);
+						
+						TileEntity te = world.getTileEntity(pos1);
+						
+						if(te instanceof ILaserable) {
+							
+							((ILaserable)te).addEnergy(out * 98 / 100, dir);
+							break;
+						}
+						
+						if(te instanceof TileEntityCore) {
+							out = ((TileEntityCore)te).burn(out);
+							continue;
+						}
+						
+						IBlockState b = world.getBlockState(pos1);
+						
+						if(b.getBlock() != Blocks.AIR) {
+							
+							if(b.getMaterial().isLiquid()) {
+								world.playSound(null, x + 0.5, y + 0.5, z + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								world.setBlockToAir(pos1);
+								break;
+							}
+							
+							float hardness = b.getBlock().getExplosionResistance(world, pos1, null, null);
+							if(hardness < 6000 && world.rand.nextInt(20) == 0) {
+								world.destroyBlock(pos1, false);
+							}
+							
+							break;
+						}
+					}
+					
+					
+					joules = 0;
+		
+					double blx = Math.min(pos.getX(), pos.getX() + dir.getFrontOffsetX() * beam) + 0.2;
+					double bux = Math.max(pos.getX(), pos.getX() + dir.getFrontOffsetX() * beam) + 0.8;
+					double bly = Math.min(pos.getY(), pos.getY() + dir.getFrontOffsetY() * beam) + 0.2;
+					double buy = Math.max(pos.getY(), pos.getY() + dir.getFrontOffsetY() * beam) + 0.8;
+					double blz = Math.min(pos.getZ(), pos.getZ() + dir.getFrontOffsetZ() * beam) + 0.2;
+					double buz = Math.max(pos.getZ(), pos.getZ() + dir.getFrontOffsetZ() * beam) + 0.8;
+					
+					List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(blx, bly, blz, bux, buy, buz));
+					
+					for(Entity e : list) {
+						e.attackEntityFrom(ModDamageSource.amsCore, 50);
+						e.setFire(10);
+					}
+				}
+			} else {
+				joules = 0;
+				prev = 0;
+			}
+			
+			this.markDirty();
+
+			//PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+			//Drillgon200: I'm handling this in the container because efficiency.
+			/*NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			data.setInteger("watts", watts);
+			data.setLong("prev", prev);
+			data.setInteger("beam", beam);
+			data.setBoolean("isOn", isOn);*/
+			
+			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, beam, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
+			
+			//this.networkPack(data, 250);
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "container.dfcEmitter";
+	}
+	
+	public long getPowerScaled(long i) {
+		return (power * i) / maxPower;
+	}
+	
+	public int getWattsScaled(int i) {
+		return (watts * i) / 100;
+	}
+
+	@Override
+	public void setPower(long i) {
+		this.power = i;
+	}
+
+	@Override
+	public long getPower() {
+		return this.power;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
+
+	@Override
+	public void addEnergy(long energy, EnumFacing dir) {
+		//do not accept lasers from the front
+		if(dir.getOpposite().ordinal() != this.getBlockMetadata()){
+			joules += energy;
+		}
+	}
+
+	@Override
+	public IFluidTankProperties[] getTankProperties() {
+		return tank.getTankProperties();
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		if(resource != null && resource.getFluid() == ModForgeFluids.cryogel)
+			return tank.fill(resource, doFill);
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		return null;
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return TileEntity.INFINITE_EXTENT_AABB;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared()
+	{
+		return 65536.0D;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		power = compound.getLong("power");
+		watts = compound.getInteger("watts");
+		joules = compound.getLong("joules");
+		prev = compound.getLong("prev");
+		isOn = compound.getBoolean("isOn");
+		tank.readFromNBT(compound.getCompoundTag("tank"));
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setLong("power", power);
+		compound.setInteger("watts", watts);
+		compound.setLong("joules", joules);
+		compound.setLong("prev", prev);
+		compound.setBoolean("isOn", isOn);
+		compound.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
+		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public void recievePacket(NBTTagCompound[] tags) {
+		if(tags.length == 1)
+			tank.readFromNBT(tags[0]);
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		}
+		return super.getCapability(capability, facing);
+	}
+
+}

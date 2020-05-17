@@ -3,6 +3,8 @@ package com.hbm.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.projectile.EntityRailgunBlast;
+import com.hbm.entity.projectile.EntityTom;
+import com.hbm.render.misc.TomPronter2;
 import com.hbm.render.util.TomPronter;
 
 import net.minecraft.client.renderer.entity.Render;
@@ -16,6 +18,9 @@ public class RenderTom<T extends Entity> extends Render<T> {
 	public static final IRenderFactory<EntityRailgunBlast> RAIL_FACTORY = (RenderManager man) -> {
 		return new RenderTom<EntityRailgunBlast>(man);
 	};
+	public static final IRenderFactory<EntityTom> TOM_FACTORY = (RenderManager man) -> {
+		return new RenderTom<EntityTom>(man);
+	};
 
 	protected RenderTom(RenderManager renderManager) {
 		super(renderManager);
@@ -23,18 +28,27 @@ public class RenderTom<T extends Entity> extends Render<T> {
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(x, y, z);
-		GL11.glRotatef(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
+		if(entity instanceof EntityRailgunBlast) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y, z);
+			GL11.glRotatef(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
 
-		int i = 0;
+			int i = 0;
 
-		//if(entity instanceof EntityShell || entity instanceof EntityMissileShell)
-		//	i = 1;
+			// if(entity instanceof EntityShell || entity instanceof
+			// EntityMissileShell)
+			// i = 1;
 
-		TomPronter.prontTom(i);
-		GL11.glPopMatrix();
+			TomPronter.prontTom(i);
+			GL11.glPopMatrix();
+		} else if(entity instanceof EntityTom){
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y - 50, z);
+			
+			TomPronter2.prontTom();
+			GL11.glPopMatrix();
+		}
 	}
 
 	@Override

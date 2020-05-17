@@ -83,6 +83,7 @@ import com.hbm.entity.logic.EntityEMP;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.logic.EntityNukeExplosionPlus;
+import com.hbm.entity.logic.EntityTomBlast;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.missile.EntityBobmazon;
 import com.hbm.entity.missile.EntityBombletSelena;
@@ -116,10 +117,14 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.missile.EntitySoyuz;
+import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityNuclearCreeper;
+import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
+import com.hbm.entity.mob.EntityTeslaCrab;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
@@ -137,6 +142,7 @@ import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
 import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.entity.projectile.EntityBoxcar;
+import com.hbm.entity.projectile.EntityBuilding;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
@@ -164,8 +170,10 @@ import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntitySchrab;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
+import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.forgefluid.FFPipeNetwork;
+import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -181,6 +189,7 @@ import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityCrashedBomb;
@@ -228,15 +237,22 @@ import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
+import com.hbm.tileentity.machine.TileEntityBarrel;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityChlorineSeal;
 import com.hbm.tileentity.machine.TileEntityConverterHeRf;
 import com.hbm.tileentity.machine.TileEntityConverterRfHe;
+import com.hbm.tileentity.machine.TileEntityCore;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
+import com.hbm.tileentity.machine.TileEntityCoreEmitter;
+import com.hbm.tileentity.machine.TileEntityCoreInjector;
+import com.hbm.tileentity.machine.TileEntityCoreReceiver;
+import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
+import com.hbm.tileentity.machine.TileEntityCyberCrab;
 import com.hbm.tileentity.machine.TileEntityDecon;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityDummy;
@@ -280,6 +296,7 @@ import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge.ReactorFuelType;
+import com.hbm.world.generator.CellularDungeonFactory;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineRefinery;
 import com.hbm.tileentity.machine.TileEntityMachineSPP;
@@ -304,7 +321,10 @@ import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntityReactorHatch;
 import com.hbm.tileentity.machine.TileEntityRtgFurnace;
 import com.hbm.tileentity.machine.TileEntitySafe;
+import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
+import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
+import com.hbm.tileentity.machine.TileEntityTesla;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 import com.hbm.tileentity.machine.TileEntityWasteDrum;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
@@ -316,9 +336,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -436,6 +456,7 @@ public class MainRegistry {
 	public static int blastSpeed = 1024;
 	public static int falloutRange = 100;
 	public static int fSpeed = 256;
+	public static boolean disableNuclear;
 	// public static int falloutDura = 100;
 
 	public static int radioStructure = 500;
@@ -454,6 +475,7 @@ public class MainRegistry {
 	public static int geyserWater = 3000;
 	public static int geyserChlorine = 3000;
 	public static int geyserVapor = 500;
+	public static int meteorStructure = 15000;
 
 	public static int broadcaster = 5000;
 	public static int minefreq = 64;
@@ -569,6 +591,8 @@ public class MainRegistry {
 		ModBlocks.preInit();
 		HbmPotion.init();
 		BulletConfigSyncingUtil.loadConfigsForSync();
+		CellularDungeonFactory.init();
+		Satellite.register();
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
@@ -726,6 +750,16 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityObjTester.class, new ResourceLocation(RefStrings.MODID, "tileentity_obj_tester"));
 		GameRegistry.registerTileEntity(TileEntityDecoBlockAlt.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_block_alt"));
 		GameRegistry.registerTileEntity(TileEntityFFFluidDuctMk2.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_fludi_duct_mk2"));
+		GameRegistry.registerTileEntity(TileEntityBarrel.class, new ResourceLocation(RefStrings.MODID, "tileentity_barrel"));
+		GameRegistry.registerTileEntity(TileEntityTesla.class, new ResourceLocation(RefStrings.MODID, "tileentity_tesla"));
+		GameRegistry.registerTileEntity(TileEntityCyberCrab.class, new ResourceLocation(RefStrings.MODID, "tileentity_cybercrab"));
+		GameRegistry.registerTileEntity(TileEntityCoreEmitter.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_emitter"));
+		GameRegistry.registerTileEntity(TileEntityCoreReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_receiver"));
+		GameRegistry.registerTileEntity(TileEntityCoreInjector.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_injector"));
+		GameRegistry.registerTileEntity(TileEntityCoreStabilizer.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_stabilizer"));
+		GameRegistry.registerTileEntity(TileEntityCore.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_core"));
+		GameRegistry.registerTileEntity(TileEntitySoyuzCapsule.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_capsule"));
+		GameRegistry.registerTileEntity(TileEntitySoyuzLauncher.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_launcher"));
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -864,7 +898,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_miner_rocket"), EntityMinerRocket.class, "entity_miner_rocket", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_meteor"), EntityMeteor.class, "entity_meteor", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bobmazon"), EntityBobmazon.class, "entity_bobmazon", i++, MainRegistry.instance, 1000, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cybercrab"), EntityCyberCrab.class, "entity_cybercrab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0x444444);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cyber_crab"), EntityCyberCrab.class, "entity_cyber_crab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0x444444);
 		//Drillgon200: The hunter chopper is messed up and janky and I don't know what to about it. I'd probably have to recode the whole thing, and I don't have time for that.
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_hunter_chopper"), EntityHunterChopper.class, "entity_hunter_chopper", i++, MainRegistry.instance, 1000, 1, true, 0x000020, 0x2D2D72);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_chopper_mine"), EntityChopperMine.class, "entity_chopper_mine", i++, MainRegistry.instance, 1000, 1, true);
@@ -872,6 +906,13 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_miner_beam"), EntityMinerBeam.class, "entity_miner_beam", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser_beam"), EntityLaserBeam.class, "entity_laser_beam", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mirvlet"), EntityMIRV.class, "entity_mirvlet", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_building"), EntityBuilding.class, "entity_building", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_taint_crab"), EntityTaintCrab.class, "entity_taint_crab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0xFF00FF);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tesla_crab"), EntityTeslaCrab.class, "entity_tesla_crab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0x440000);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tom_the_moonstone"), EntityTom.class, "entity_tom_the_moonstone", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tom_bust"), EntityTomBlast.class, "entity_tom_bust", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz_capsule"), EntitySoyuzCapsule.class, "entity_soyuz_capsule", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz"), EntitySoyuz.class, "entity_soyuz", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -1071,6 +1112,7 @@ public class MainRegistry {
 		Property pGV = config.get(CATEGORY_DUNGEON, "4.19_geyserVaporSpawn", 500);
 		pGV.setComment("Spawn vapor geyser on every nTH chunk");
 		geyserVapor = pGV.getInt();
+		meteorStructure = createConfigInt(config, CATEGORY_DUNGEON, "meteorStructure", "Spawn meteor dungeon on every nTH chunk", 15000);
 
 		final String CATEGORY_METEOR = "05_meteors";
 		Property propMeteorStrikeChance = config.get(CATEGORY_METEOR, "5.00_meteorStrikeChance", 20 * 60 * 60 * 5);
@@ -1103,34 +1145,38 @@ public class MainRegistry {
 		Property falloutSpeed = config.get(CATEGORY_NUKE, "6.04_falloutSpeed", 256);
 		falloutSpeed.setComment("Blocks processed per tick by the fallout rain");
 		fSpeed = falloutSpeed.getInt();
+		//Whether fallout and nuclear radiation is enabled at all
+		Property disableNuclear = config.get(CATEGORY_NUKE, "6.05_disableNuclear", false);
+		disableNuclear.setComment("Disable the nuclear part of nukes");
+		MainRegistry.disableNuclear = disableNuclear.getBoolean();
 		// afterrain duration
-		Property radRain = config.get(CATEGORY_NUKE, "6.05_falloutRainDuration", 0);
+		Property radRain = config.get(CATEGORY_NUKE, "6.06_falloutRainDuration", 0);
 		radRain.setComment("Duration of the thunderstorm after fallout in ticks (only large explosions)");
 		rain = radRain.getInt();
 		// afterrain radiation
-		Property rainCont = config.get(CATEGORY_NUKE, "6.06_falloutRainRadiation", 0);
+		Property rainCont = config.get(CATEGORY_NUKE, "6.07_falloutRainRadiation", 0);
 		rainCont.setComment("Radiation in 100th RADs created by fallout rain");
 		cont = rainCont.getInt();
 		// fog threshold
-		Property fogThresh = config.get(CATEGORY_NUKE, "6.07_fogThreshold", 100);
+		Property fogThresh = config.get(CATEGORY_NUKE, "6.08_fogThreshold", 100);
 		fogThresh.setComment("Radiation in RADs required for fog to spawn");
 		fogRad = fogThresh.getInt();
 		// fog chance
-		Property fogChance = config.get(CATEGORY_NUKE, "6.08_fogChance", 10);
+		Property fogChance = config.get(CATEGORY_NUKE, "6.09_fogChance", 10);
 		fogChance.setComment("1:n chance of fog spawning every second");
 		fogCh = fogChance.getInt();
 		// nether radiation
-		Property netherRad = config.get(CATEGORY_NUKE, "6.09_netherRad", 10);
+		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 10);
 		netherRad.setComment("RAD/s in the nether in hundredths");
 		hellRad = netherRad.getInt() * 0.01F;
 		// railgun
-		Property railDamage = config.get(CATEGORY_NUKE, "6.10_railgunDamage", 1000);
+		Property railDamage = config.get(CATEGORY_NUKE, "6.11_railgunDamage", 1000);
 		railDamage.setComment("How much damage a railgun death blast does per tick");
 		railgunDamage = railDamage.getInt();
-		Property railBuffer = config.get(CATEGORY_NUKE, "6.10_railgunBuffer", 500000000);
+		Property railBuffer = config.get(CATEGORY_NUKE, "6.12_railgunBuffer", 500000000);
 		railBuffer.setComment("How much RF the railgun can store");
 		railgunDamage = railBuffer.getInt();
-		Property railUse = config.get(CATEGORY_NUKE, "6.10_railgunConsumption", 250000000);
+		Property railUse = config.get(CATEGORY_NUKE, "6.13_railgunConsumption", 250000000);
 		railUse.setComment("How much RF the railgun requires per shot");
 		railgunDamage = railUse.getInt();
 
@@ -1209,6 +1255,13 @@ public class MainRegistry {
 
 		return value;
 	}
+	
+	private static int createConfigInt(Configuration config, String category, String name, String comment, int def) {
+
+        Property prop = config.get(category, name, def);
+        prop.setComment(comment);
+        return prop.getInt();
+	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -1225,6 +1278,7 @@ public class MainRegistry {
 		ModBlocks.postInit();
 		ItemAssemblyTemplate.loadRecipesFromConfig();
 		CraftingManager.init();
+		FluidTypeHandler.registerFluidProperties();
 		loadShredderRecipes();
 		BlockCrate.setDrops();
 		//Drillgon200: expand the max entity radius for the hunter chopper

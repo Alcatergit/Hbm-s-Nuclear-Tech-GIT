@@ -8,7 +8,10 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
 import com.hbm.capability.RadiationCapability;
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
+import com.hbm.capability.RadiationCapability.IEntityRadioactive;
 import com.hbm.entity.mob.EntityHunterChopper;
+import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.interfaces.IConductor;
@@ -33,7 +36,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,6 +43,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -125,6 +128,55 @@ public class Library {
 		return false;
 	}
 	
+public static boolean checkForFaraday(EntityPlayer player) {
+		
+		NonNullList<ItemStack> armor = player.inventory.armorInventory;
+		
+		if(armor.get(0).isEmpty() || armor.get(1).isEmpty() || armor.get(2).isEmpty() || armor.get(3).isEmpty()) return false;
+		
+		if(isFaradayArmor(armor.get(0).getItem()) &&
+				isFaradayArmor(armor.get(1).getItem()) &&
+				isFaradayArmor(armor.get(2).getItem()) &&
+				isFaradayArmor(armor.get(3).getItem()))
+			return true;
+		
+		return false;
+	}
+	
+	public static final String[] metals = new String[] {
+			"chainmail",
+			"iron",
+			"silver",
+			"gold",
+			"platinum",
+			"tin",
+			"lead",
+			"schrabidium",
+			"euphemium",
+			"steel",
+			"titanium",
+			"alloy",
+			"copper",
+			"bronze",
+			"electrum",
+			"t45",
+			"hazmat", //also count because rubber is insulating
+			"rubber"
+	};
+	
+	public static boolean isFaradayArmor(Item item) {
+		
+		String name = item.getUnlocalizedName();
+		
+		for(String metal : metals) {
+			
+			if(name.toLowerCase().contains(metal))
+				return true;
+		}
+		
+		return false;
+	}
+	
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
 		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
 	}
@@ -189,17 +241,8 @@ public class Library {
 	}
 
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
-
-		Vec3 vector = Vec3.createVectorHelper(a - x, b - y, c - z);
-		double length = vector.lengthVector();
-		Vec3 nVec = vector.normalize();
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(float i = 0; i < length; i += 0.25F) {
-			pos.setPos((int) Math.round(x + (nVec.xCoord * i)), (int) Math.round(y + (nVec.yCoord * i)), (int) Math.round(z + (nVec.zCoord * i)));
-			if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).isNormalCube())
-				return true;
-		}
-		return false;
+		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c));
+		return pos != null;
 	}
 
 	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
@@ -460,6 +503,69 @@ public class Library {
 			return null;
 		else
 			return stack.copy();
+	}
+	
+	public static EntityPlayer getClosestPlayerForSound(World world, double x, double y, double z, double radius) {
+		double d4 = -1.0D;
+		EntityPlayer entity = null;
+
+		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
+
+				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityPlayer) {
+					double d5 = entityplayer1.getDistanceSq(x, y, z);
+					double d6 = radius;
+
+					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+						d4 = d5;
+						entity = (EntityPlayer)entityplayer1;
+					}
+			}
+		}
+
+		return entity;
+	}
+
+	public static EntityHunterChopper getClosestChopperForSound(World world, double x, double y, double z, double radius) {
+		double d4 = -1.0D;
+		EntityHunterChopper entity = null;
+
+		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
+
+				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityHunterChopper) {
+					double d5 = entityplayer1.getDistanceSq(x, y, z);
+					double d6 = radius;
+
+					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+						d4 = d5;
+						entity = (EntityHunterChopper)entityplayer1;
+					}
+			}
+		}
+
+		return entity;
+	}
+
+	public static EntityChopperMine getClosestMineForSound(World world, double x, double y, double z, double radius) {
+		double d4 = -1.0D;
+		EntityChopperMine entity = null;
+
+		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
+
+				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityChopperMine) {
+					double d5 = entityplayer1.getDistanceSq(x, y, z);
+					double d6 = radius;
+
+					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+						d4 = d5;
+						entity = (EntityChopperMine)entityplayer1;
+					}
+			}
+		}
+
+		return entity;
 	}
 
 	public static RayTraceResult rayTrace(EntityPlayer player, double d, float f) {
@@ -963,6 +1069,12 @@ public class Library {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		inputs.forEach(stack -> {list.add(stack.copy());});
 		return list;
+	}
+	
+	public static IEntityRadioactive getEntRadCap(Entity e){
+		if(e.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+			return e.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null);
+		return EntityRadiationProvider.DUMMY;
 	}
 	
 }

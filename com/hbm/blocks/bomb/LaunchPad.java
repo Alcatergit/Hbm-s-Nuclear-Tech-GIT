@@ -69,12 +69,7 @@ public class LaunchPad extends BlockContainer implements IBomb {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-
-		if (tileentity instanceof TileEntityMachineCoal) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineCoal) tileentity);
-			worldIn.updateComparatorOutputLevel(pos, this);
-		}
+		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
 		super.breakBlock(worldIn, pos, state);
 	}
 

@@ -147,6 +147,8 @@ public class ItemCell extends ItemRadioactive {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if(stack.getTagCompound() == null)
+			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerCell(stack, 1000);
 	}
 

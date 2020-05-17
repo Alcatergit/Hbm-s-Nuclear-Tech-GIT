@@ -8,9 +8,12 @@ import com.hbm.lib.RefStrings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -32,12 +35,12 @@ public class RenderScreenOverlay {
 	public static void renderRadCounter(ScaledResolution resolution, float in, Gui gui) {
 		GL11.glPushMatrix();
 
-		GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableAlpha();
         
         float radiation = 0;
         
@@ -83,8 +86,8 @@ public class RenderScreenOverlay {
 			Minecraft.getMinecraft().fontRenderer.drawString("<1 RAD/s", posX, posY - 8, 0xFF0000);
 		}
 
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
         GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(hud);
 	}
@@ -96,7 +99,9 @@ public class RenderScreenOverlay {
 
 	
 	public static void renderCustomCrosshairs(ScaledResolution resolution, Gui gui, Crosshair cross) {
-
+		if(cross == Crosshair.NONE)
+			return;
+		
 		int size = cross.size;
 
 		GL11.glPushMatrix();
@@ -128,20 +133,20 @@ public class RenderScreenOverlay {
 		
 		Minecraft.getMinecraft().fontRenderer.drawString(count + " / " + cap, pX + 16, pZ + 6, 0xFFFFFF);
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GlStateManager.disableBlend();
+        GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
         itemRenderer.renderItemAndEffectIntoGUI(null, new ItemStack(ammo), pX, pZ);
         RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glEnable(GL11.GL_BLEND);
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.enableBlend();
         
         GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(hud);
 	}
 	
 	public enum Crosshair {
-		
+		NONE(0, 0, 0),
 		CROSS(1, 55, 16),
 		CIRCLE(19, 55, 16),
 		SEMI(37, 55, 16),

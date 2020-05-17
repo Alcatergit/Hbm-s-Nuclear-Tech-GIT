@@ -27,11 +27,17 @@ import com.hbm.world.Sellafield;
 import com.hbm.world.Silo;
 import com.hbm.world.Spaceship;
 import com.hbm.world.Vertibird;
+import com.hbm.world.generator.CellularDungeonFactory;
 
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockSkull;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -419,6 +425,16 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.STONE)
 					world.setBlockState(new BlockPos(x, y - 1, z), ModBlocks.geysir_vapor.getDefaultState());
 			}
+			if (rand.nextInt(1000) == 0) {
+				int x = i + rand.nextInt(16);
+				int z = j + rand.nextInt(16);
+				
+				for(int k = 0; k < 256; k++) {
+					IBlockState state = world.getBlockState(new BlockPos(x, k, z));
+					if(state.getBlock() == Blocks.LOG && state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.OAK)
+						world.setBlockState(new BlockPos(x, k, z), ModBlocks.pink_log.getDefaultState());
+				}
+			}
 			if (MainRegistry.enableVaults && rand.nextInt(MainRegistry.vaultfreq) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
@@ -467,6 +483,37 @@ public class HbmWorldGen implements IWorldGenerator {
 					if (MainRegistry.enableDebugMode)
 						MainRegistry.logger.info("[Debug] Successfully spawned safe at " + x + " " + (y + 1) + " " + z);
 				}
+				
+				if (rand.nextInt(MainRegistry.meteorStructure) == 0) {
+					int x1 = i + rand.nextInt(16);
+					int z1 = j + rand.nextInt(16);
+					
+					CellularDungeonFactory.test.generate(world, x, 10, z, rand);
+					
+					if(MainRegistry.enableDebugMode)
+						MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at " + x + " 10 " + z);
+					
+					int y1 = world.getHeight(x, z);
+					
+					for(int f = 1; f < 4; f++)
+						world.setBlockState(new BlockPos(x1, y1 + f, z1), ModBlocks.meteor_pillar.getDefaultState());
+					world.setBlockState(new BlockPos(x1, y1 + 4, z1), ModBlocks.meteor_brick_chiseled.getDefaultState());
+					
+					for(int f = 0; f < 10; f++) {
+
+						x1 = i + rand.nextInt(65) - 32;
+						z1 = j + rand.nextInt(65) - 32;
+						y1 = world.getHeight(x1, z1);
+						
+						if(world.getBlockState(new BlockPos(x1, y1, z1)).isSideSolid(world, new BlockPos(x1, y1, z1), EnumFacing.UP)) {
+							world.setBlockState(new BlockPos(x1, y1 + 1, z1), Blocks.SKULL.getDefaultState().withProperty(BlockSkull.FACING, EnumFacing.UP), 2);
+							TileEntitySkull skull = (TileEntitySkull)world.getTileEntity(new BlockPos(x1, y1 + 1, z1));
+							
+							if(skull != null)
+								skull.setType(rand.nextInt(16));
+						}
+					}
+				}
 
 			}
 			
@@ -482,6 +529,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 		}
+		
 		if(rand.nextInt(25) == 0) {
 			int randPosX = i + rand.nextInt(16);
 			int randPosY = rand.nextInt(25);

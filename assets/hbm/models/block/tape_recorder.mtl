@@ -2,4 +2,4 @@ newmtl TapeRecorderMTL
 d 1.0
 Ka 0.0 0.0 0.0
 Kd 1.0 1.0 1.0
-map_Kd hbm:blocks/deco_tape_recorder
+map_Kd hbm:blocks/deco_tape_recorder_flipped

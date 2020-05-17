@@ -32,9 +32,11 @@ public class Gun22LRFactory {
 		config.durability = 3000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
 		config.firingSound = HBMSoundHandler.uziShoot;
+		config.reloadSoundEnd = false;
 		
 		config.name = "IMI Uzi";
 		config.manufacturer = "Israel Military Industries";
+		config.comment.add("Mom, where are my mittens?");
 		
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.LR22_NORMAL);

@@ -1,9 +1,7 @@
 package com.hbm.core;
 
-import java.io.File;
 import java.util.Map;
 
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
@@ -12,7 +10,7 @@ public class HbmCorePlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		File file = new File("./config/hbm/hbm.cfg");
+		/*File file = new File("./config/hbm/hbm.cfg");
 		if(file.exists()){
 			Configuration config = new Configuration(file);
 			if(config.get("01_general", "1.21_enableShaders", false).getBoolean()){
@@ -24,8 +22,8 @@ public class HbmCorePlugin implements IFMLLoadingPlugin {
 						"com.hbm.core.GlStateManagerClassTransformer"};
 			}
 		}
-		System.out.println("Shaders are disabled! Not applying transformers!");
-		return new String[]{/*"com.hbm.core.FramebufferClassTransformer"*/};
+		System.out.println("Shaders are disabled! Not applying transformers!");*/
+		return new String[]{/*"com.hbm.core.EntityRendererTransformer"*/};
 	}
 
 	@Override

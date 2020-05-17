@@ -4,11 +4,15 @@ import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.machine.TileEntityBarrel;
+import com.hbm.tileentity.machine.TileEntityCoreEmitter;
+import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
+import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -160,6 +164,45 @@ public class AuxButtonPacket implements IMessage {
 								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 							}
 						}
+					}
+					if (te instanceof TileEntityBarrel) {
+						TileEntityBarrel barrel = (TileEntityBarrel)te;
+
+						barrel.mode = (short) ((barrel.mode + 1) % TileEntityBarrel.modes);
+						barrel.markDirty();
+					}
+					if (te instanceof TileEntityCoreEmitter) {
+						TileEntityCoreEmitter core = (TileEntityCoreEmitter)te;
+
+						if(m.id == 0) {
+							core.watts = m.value;
+						}
+						if(m.id == 1) {
+							core.isOn = !core.isOn;
+						}
+					}
+					
+					if (te instanceof TileEntityCoreStabilizer) {
+						TileEntityCoreStabilizer core = (TileEntityCoreStabilizer)te;
+
+						if(m.id == 0) {
+							core.watts = m.value;
+						}
+					}
+					if (te instanceof TileEntityCoreStabilizer) {
+						TileEntityCoreStabilizer core = (TileEntityCoreStabilizer)te;
+
+						if(m.id == 0) {
+							core.watts = m.value;
+						}
+					}
+					if (te instanceof TileEntitySoyuzLauncher) {
+						TileEntitySoyuzLauncher launcher = (TileEntitySoyuzLauncher)te;
+
+						if(m.id == 0)
+							launcher.mode = (byte) m.value;
+						if(m.id == 1)
+							launcher.startCountdown();
 					}
 					
 				//} catch (Exception x) { }

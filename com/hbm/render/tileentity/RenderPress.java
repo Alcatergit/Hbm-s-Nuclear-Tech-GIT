@@ -1,6 +1,9 @@
 package com.hbm.render.tileentity;
 
+import java.util.Arrays;
+
 import org.lwjgl.opengl.GL11;
+import org.objectweb.asm.Type;
 
 import com.hbm.flashlight.Flashlight;
 import com.hbm.handler.HbmShaderManager;
@@ -23,7 +26,10 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePress> {
 

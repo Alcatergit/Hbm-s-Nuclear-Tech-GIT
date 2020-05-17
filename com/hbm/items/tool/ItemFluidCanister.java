@@ -87,6 +87,8 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if(stack.getTagCompound() == null)
+			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerCanister(stack, cap);
 	}
 

@@ -30,7 +30,8 @@ public static GunConfiguration getBaseConfig() {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CLASSIC;
 		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
-		config.firingSound = HBMSoundHandler.revolverShootAlt;
+		config.firingSound = HBMSoundHandler.deagleShoot;
+		config.reloadSoundEnd = false;
 		
 		return config;
 	}
@@ -42,12 +43,14 @@ public static GunConfiguration getBaseConfig() {
 		config.durability = 2500;
 		
 		config.name = "IMI Desert Eagle";
-		config.manufacturer = "	Magnum Research / Israel Military Industries";
+		config.manufacturer = "Magnum Research / Israel Military Industries";
 		
+		config.hasSights = true;
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.AE50_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.AE50_AP);
 		config.config.add(BulletConfigSyncingUtil.AE50_DU);
+		config.config.add(BulletConfigSyncingUtil.AE50_STAR);
 		
 		return config;
 	}
@@ -88,6 +91,20 @@ public static GunConfiguration getBaseConfig() {
 		bullet.dmgMin = 24;
 		bullet.dmgMax = 28;
 		bullet.leadChance = 50;
+		bullet.wear = 25;
+		
+		return bullet;
+	}
+
+	public static BulletConfiguration get50StarConfig() {
+		
+		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
+		
+		bullet.ammo = ModItems.ammo_50ae_star;
+		bullet.spread *= inaccuracy;
+		bullet.dmgMin = 48;
+		bullet.dmgMax = 56;
+		bullet.leadChance = 100;
 		bullet.wear = 25;
 		
 		return bullet;

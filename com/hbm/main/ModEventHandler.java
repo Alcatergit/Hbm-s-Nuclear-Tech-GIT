@@ -1,5 +1,7 @@
 package com.hbm.main;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +31,9 @@ import com.hbm.saveddata.RadiationSavedData;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityCow;
@@ -37,13 +41,17 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -52,13 +60,16 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.registries.DataSerializerEntry;
 
@@ -173,10 +184,84 @@ public class ModEventHandler {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bobNuclear);
 		}
 	}
-
+	
+	private static final String hash = "a4e6e2d37cc6bae3b19a925569c008d8f98b867e62ecb72398ee6fd5d7ee535a";
+	
 	@SubscribeEvent
-	public void worldSave(WorldEvent.Save e) {
-		// TODO save pipe networks?
+	public void onClickSign(PlayerInteractEvent event) {
+
+		BlockPos pos = event.getPos();
+		World world = event.getWorld();
+		
+		if(!world.isRemote && world.getBlockState(pos).getBlock() == Blocks.STANDING_SIGN) {
+			
+			TileEntitySign sign = (TileEntitySign)world.getTileEntity(pos);
+			
+			String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
+			//System.out.println(result);
+			
+			if(result.equals(hash)) {
+				world.destroyBlock(pos, false);
+	            EntityItem entityitem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.bobmazon_hidden));
+	            entityitem.setPickupDelay(10);
+	            world.spawnEntity(entityitem);
+			}
+		}
+		
+	}
+	
+	private String smoosh(String s1, String s2, String s3, String s4) {
+		
+		Random rand = new Random();
+		String s = "";
+
+		byte[] b1 = s1.getBytes();
+		byte[] b2 = s2.getBytes();
+		byte[] b3 = s3.getBytes();
+		byte[] b4 = s4.getBytes();
+		
+		if(b1.length == 0 || b2.length == 0 || b3.length == 0 || b4.length == 0)
+			return "";
+		
+		s += s1;
+		rand.setSeed(b1[0]);
+		s += rand.nextInt(0xffffff);
+		
+		s += s2;
+		rand.setSeed(rand.nextInt(0xffffff) + b2[0]);
+		rand.setSeed(b2[0]);
+		s += rand.nextInt(0xffffff);
+		
+		s += s3;
+		rand.setSeed(rand.nextInt(0xffffff) + b3[0]);
+		rand.setSeed(b3[0]);
+		s += rand.nextInt(0xffffff);
+		
+		s += s4;
+		rand.setSeed(rand.nextInt(0xffffff) + b4[0]);
+		rand.setSeed(b4[0]);
+		s += rand.nextInt(0xffffff);
+		
+		//System.out.println(s);
+		
+		return getHash(s);
+	}
+	
+	private String getHash(String inp) {
+		
+		try {
+			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+			byte[] bytes = sha256.digest(inp.getBytes());
+			String str = "";
+			
+		    for(int b : bytes)
+		      str = str + Integer.toString((b & 0xFF) + 256, 16).substring(1);
+	    
+		    return str;
+		    
+		} catch (NoSuchAlgorithmException e) { }
+		
+		return "";
 	}
 
 	@SubscribeEvent
@@ -385,11 +470,28 @@ public class ModEventHandler {
 	// unblockable, huh?
 	@SubscribeEvent
 	public void onEntityHurt(LivingHurtEvent e) {
-		if(e.getEntityLiving() instanceof EntityPlayer && e.getSource().isUnblockable()) {
+		if(e.getEntityLiving() instanceof EntityPlayer) {
 			if(Library.checkArmor((EntityPlayer) e.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 				e.setCanceled(true);
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void onEntityHurt(LivingAttackEvent event) {
+		EntityLivingBase e = event.getEntityLiving();
+
+		if(e instanceof EntityPlayer && Library.checkArmor((EntityPlayer)e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+			e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
+			event.setCanceled(true);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+		if(!event.player.world.isRemote && event.player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
+			if(event.player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+				event.player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
 	}
 
 	@SubscribeEvent
@@ -406,6 +508,18 @@ public class ModEventHandler {
 			if(Library.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 				event.setCanceled(true);
 				event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
+			}
+		}
+		if(event.getEntity().getUniqueID().toString().equals(Library.HbMinecraft)) {
+			event.getEntity().dropItem(ModItems.book_of_, 1);
+		}
+		
+		if(event.getEntity() instanceof EntityEnderman && event.getSource() == ModDamageSource.boxcar) {
+			
+			for(EntityPlayer player : event.getEntity().getEntityWorld().playerEntities) {
+				if(Library.getEntRadCap(player).getRads() > 250 && player.isBurning()) {
+					AdvancementManager.grantAchievement(player, AdvancementManager.bobHidden);
+				}
 			}
 		}
 	}

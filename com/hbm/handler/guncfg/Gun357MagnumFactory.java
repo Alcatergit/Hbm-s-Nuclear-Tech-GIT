@@ -34,6 +34,7 @@ public static GunConfiguration getBaseConfig() {
 		config.crosshair = Crosshair.L_CLASSIC;
 		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
 		config.firingSound = HBMSoundHandler.revolverShoot;
+		config.reloadSoundEnd = false;
 		
 		return config;
 	}
@@ -177,6 +178,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		config.durability = 4000;
 		config.firingSound = HBMSoundHandler.schrabidiumShoot;
+		config.crosshair = Crosshair.NONE;
 		
 		config.name = "FFI Viper N2";
 		config.manufacturer = "FlimFlam Industries";

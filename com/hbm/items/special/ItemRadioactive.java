@@ -1,16 +1,20 @@
 package com.hbm.items.special;
 
+import java.util.List;
+
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -270,6 +274,12 @@ public class ItemRadioactive extends ItemCustomLore {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		super.addInformation(stack, world, list, flagIn);
+		list.add(TextFormatting.GREEN + "[Radioactive]");
 	}
 
 }

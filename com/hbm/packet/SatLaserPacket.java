@@ -1,13 +1,12 @@
 package com.hbm.packet;
 
-import com.hbm.entity.logic.EntityDeathBlast;
-import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemSatChip;
-import com.hbm.saveddata.SatelliteSaveData;
-import com.hbm.saveddata.SatelliteSaveData.SatelliteSaveStructure;
+import com.hbm.items.tool.ItemSatInterface;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteSavedData;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -51,33 +50,21 @@ public class SatLaserPacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(SatLaserPacket m, MessageContext ctx) {
-			
-			
-			EntityPlayer p = ctx.getServerHandler().player;
-
-			p.getServer().addScheduledTask(() -> {
-				if(p.getHeldItemMainhand().getItem() != ModItems.sat_interface || ItemSatChip.getFreq(p.getHeldItemMainhand()) != m.freq){
+			ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
+				EntityPlayer p = ctx.getServerHandler().player;
+				if(!ctx.getServerHandler().player.world.isBlockLoaded(new BlockPos(m.x, 0, m.z)))
 					return;
+				if(p.getHeldItemMainhand().getItem() instanceof ItemSatInterface) {
+					
+					int freq = ItemSatInterface.getFreq(p.getHeldItemMainhand());
+					
+					if(freq == m.freq) {
+					    Satellite sat = SatelliteSavedData.getData(p.world).getSatFromFreq(m.freq);
+					    
+					    if(sat != null)
+					    	sat.onClick(p.world, m.x, m.z);
+					}
 				}
-			    SatelliteSaveData data = SatelliteSaveData.getData(p.world);
-			    
-			    SatelliteSaveStructure sat = data.getSatFromFreq(m.freq);
-			    
-			    if(sat != null) {
-			    	if(sat.lastOp + 10000 < System.currentTimeMillis()) {
-			    		sat.lastOp = System.currentTimeMillis();
-			    		
-			    		int y = p.world.getHeight(m.x, m.z);
-			    		
-			    		//ExplosionLarge.explodeFire(p.worldObj, m.x, y, m.z, 50, true, true, true);
-			    		EntityDeathBlast blast = new EntityDeathBlast(p.world);
-			    		blast.posX = m.x;
-			    		blast.posY = y;
-			    		blast.posZ = m.z;
-			    		
-			    		p.world.spawnEntity(blast);
-			    	}
-			    }
 			});
 			
 			return null;

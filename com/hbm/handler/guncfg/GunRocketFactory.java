@@ -2,12 +2,18 @@ package com.hbm.handler.guncfg;
 
 import java.util.ArrayList;
 
+import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.interfaces.IBulletRicochetBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class GunRocketFactory {
 
@@ -31,9 +37,12 @@ public static GunConfiguration getGustavConfig() {
 		config.crosshair = Crosshair.L_CIRCUMFLEX;
 		config.firingSound = HBMSoundHandler.rpgShoot;
 		config.reloadSound = GunConfiguration.RSOUND_LAUNCHER;
+		config.reloadSoundEnd = false;
 		
 		config.name = "Carl Gustav Recoilless Rifle M1";
 		config.manufacturer = "Saab Bofors Dynamics";
+		config.comment.add("Fun fact of the day: Recoilless");
+		config.comment.add("rifles don't actually fire rockets.");
 		
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.ROCKET_NORMAL);
@@ -59,6 +68,7 @@ public static GunConfiguration getGustavConfig() {
 		
 		config.name = "M1 Karl-Gerät";
 		config.manufacturer = "???";
+		config.comment.clear();
 		
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.ROCKET_HE);
@@ -81,6 +91,8 @@ public static GunConfiguration getGustavConfig() {
 		
 		config.name = "Raketenpanzerbüchse 54";
 		config.manufacturer = "Enzinger Union";
+		config.comment.clear();
+		config.comment.add("Panzer-Shrek");
 		
 		config.durability = 260;
 		
@@ -236,8 +248,21 @@ public static GunConfiguration getGustavConfig() {
 		bullet.gravity = 0.000D;
 		bullet.ricochetAngle = 90;
 		bullet.LBRC = 100;
-		bullet.destroysWood = true;
 		bullet.doesPenetrate = true;
+		
+		bullet.bRicochet = new IBulletRicochetBehavior() {
+			
+			public void behaveBlockRicochet(EntityBulletBase bullet, int bX, int bY, int bZ) {
+				BlockPos pos = new BlockPos(bX, bY, bZ);
+				World worldObj = bullet.world;
+				if(!worldObj.isRemote && 
+						(worldObj.getBlockState(pos).getMaterial() == Material.WOOD ||
+						worldObj.getBlockState(pos).getMaterial() == Material.PLANTS ||
+						worldObj.getBlockState(pos).getMaterial() == Material.GLASS ||
+						worldObj.getBlockState(pos).getMaterial() == Material.LEAVES))
+					worldObj.destroyBlock(pos, false);}
+			
+		};
 		
 		return bullet;
 	}
