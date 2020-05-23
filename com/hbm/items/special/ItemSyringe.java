@@ -212,8 +212,7 @@ public class ItemSyringe extends Item {
 		{
             if (!world.isRemote)
             {
-				if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
-					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(140F);
+            	player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 14, 9));
             
 				player.getHeldItem(hand).shrink(1);
 				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -225,8 +224,16 @@ public class ItemSyringe extends Item {
 		{
             if (!world.isRemote)
             {
-            	if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
-					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(350F);
+            	int duration = 35;
+            	int level = 9;
+            	
+            	if(!player.isPotionActive(HbmPotion.radaway)) {
+            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
+            	} else {
+            		
+            		int d = player.getActivePotionEffect(HbmPotion.radaway).getDuration() + duration;
+            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, d, level));
+            	}
             
 				player.getHeldItem(hand).shrink(1);
 				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -238,8 +245,7 @@ public class ItemSyringe extends Item {
 		{
             if (!world.isRemote)
             {
-            	if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
-					player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(1000F);
+            	player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 50, 19));
             
 				player.getHeldItem(hand).shrink(1);
 				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);

@@ -1680,7 +1680,7 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 8, y + 11, z + 29), Block15.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 9, y + 11, z + 29), Block15.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 10, y + 11, z + 29), Block15.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 8, y + 12, z + 12), Block8.getDefaultState().withProperty(DecoPoleTop.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 8, y + 12, z + 12), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 23, y + 12, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 28, y + 12, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 12, z + 20), Block15.getDefaultState(), 3);
@@ -1742,7 +1742,7 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 23, y + 16, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 23, y + 17, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 23, y + 18, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 23, y + 19, z + 15), Block8.getDefaultState().withProperty(DecoPoleTop.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 23, y + 19, z + 15), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 
 		generate_r02_last(world, rand, x, y, z, pos);
 		return true;
@@ -1764,7 +1764,7 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 8, y + 8, z + 21), Blocks.WALL_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, EnumFacing.NORTH), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 9, z + 21), Blocks.WALL_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, EnumFacing.NORTH), 3);
 		if(MainRegistry.enableDebugMode)
-			System.out.print("[Debug] Successfully spawned abandoned Power Plant at " + x + " " + y +" " + z + "\n");
+			System.out.print("[Debug] Successfully spawned Abandoned Power Plant at " + x + " " + y +" " + z + "\n");
 		return true;
 
 	}

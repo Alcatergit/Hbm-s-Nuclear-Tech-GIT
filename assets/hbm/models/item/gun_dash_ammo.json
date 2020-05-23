@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "hbm:blocks/deco_pole_top"
+		"layer0": "hbm:items/gun_dash_ammo"
 	}
 }

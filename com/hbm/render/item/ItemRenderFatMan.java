@@ -21,7 +21,7 @@ public class ItemRenderFatMan extends TEISRBase {
 	}
 	
 	@Override
-	public void renderByItem(ItemStack itemStackIn) {
+	public void renderByItem(ItemStack item) {
 		GL11.glPopMatrix();
 		GlStateManager.enableCull();
 		Minecraft.getMinecraft().renderEngine.bindTexture(man_rl);
@@ -36,7 +36,7 @@ public class ItemRenderFatMan extends TEISRBase {
 				GL11.glRotated(100, 0, 0, 1);
 				GL11.glRotated(180, 1, 0, 0);
 			}
-			swordModel.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			swordModel.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, item);
 			break;
 		case THIRD_PERSON_RIGHT_HAND:
 		case THIRD_PERSON_LEFT_HAND:
@@ -47,7 +47,7 @@ public class ItemRenderFatMan extends TEISRBase {
 			GL11.glRotated(90, 0, 1, 0);
 			GL11.glRotated(180, 0, 0, 1);
 			GL11.glScaled(1.5, 1.5, 1.5);
-			swordModel.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			swordModel.render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, item);
 			break;
 		default:
 			break;

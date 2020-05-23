@@ -139,6 +139,10 @@ public class ModEventHandler {
 				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.geiger_counter, 1));
 			if(rand.nextInt(128) == 0)
 				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.steel_pickaxe, 1, world.rand.nextInt(300)));
+			if(rand.nextInt(512) == 0)
+				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.stopsign));
+			if(rand.nextInt(512) == 0)
+				entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.sopsign));
 		}
 		if(entity instanceof EntitySkeleton) {
 			if(rand.nextInt(16) == 0) {
@@ -284,7 +288,6 @@ public class ModEventHandler {
 			if(event.world.rand.nextInt(meteorShower > 0 ? MainRegistry.meteorShowerChance : MainRegistry.meteorStrikeChance) == 0) {
 				if(!event.world.playerEntities.isEmpty()) {
 					EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
-
 					if(p != null && p.dimension == 0) {
 						EntityMeteor meteor = new EntityMeteor(event.world);
 						meteor.posX = p.posX + event.world.rand.nextInt(201) - 100;
@@ -358,6 +361,9 @@ public class ModEventHandler {
 							Chunk chunk = entity.world.getChunkFromBlockCoords(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float rad = data.getRadNumFromCoord(chunk.x, chunk.z);
 
+							if(event.world.provider.isNether() && MainRegistry.hellRad > 0 && rad < MainRegistry.hellRad)
+								rad = MainRegistry.hellRad;
+							
 							if(rad > 0) {
 								if(!entity.isPotionActive(HbmPotion.mutation))
 									Library.applyRadData(entity, rad / 2);

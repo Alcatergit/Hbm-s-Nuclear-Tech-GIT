@@ -16,7 +16,10 @@ import com.hbm.handler.guncfg.Gun50AEFactory;
 import com.hbm.handler.guncfg.Gun50BMGFactory;
 import com.hbm.handler.guncfg.Gun5mmFactory;
 import com.hbm.handler.guncfg.Gun9mmFactory;
+import com.hbm.handler.guncfg.GunFatmanFactory;
+import com.hbm.handler.guncfg.GunGaussFactory;
 import com.hbm.handler.guncfg.GunGrenadeFactory;
+import com.hbm.handler.guncfg.GunOSIPRFactory;
 import com.hbm.handler.guncfg.GunRocketFactory;
 import com.hbm.items.bomb.ItemBoy;
 import com.hbm.items.bomb.ItemFleija;
@@ -67,6 +70,7 @@ import com.hbm.items.gear.WeaponSpecial;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.items.special.ItemBattery;
 import com.hbm.items.special.ItemBlades;
+import com.hbm.items.special.ItemBook;
 import com.hbm.items.special.ItemCapacitor;
 import com.hbm.items.special.ItemCatalyst;
 import com.hbm.items.special.ItemCell;
@@ -138,6 +142,7 @@ import com.hbm.items.weapon.GunB92Cell;
 import com.hbm.items.weapon.GunB93;
 import com.hbm.items.weapon.GunBaleFlare;
 import com.hbm.items.weapon.GunBoltAction;
+import com.hbm.items.weapon.GunBrimstone;
 import com.hbm.items.weapon.GunCryolator;
 import com.hbm.items.weapon.GunDampfmaschine;
 import com.hbm.items.weapon.GunDefabricator;
@@ -163,6 +168,9 @@ import com.hbm.items.weapon.ItemClip;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemGrenade;
 import com.hbm.items.weapon.ItemGunBase;
+import com.hbm.items.weapon.ItemGunGauss;
+import com.hbm.items.weapon.ItemGunLacunae;
+import com.hbm.items.weapon.ItemGunOSIPR;
 import com.hbm.items.weapon.ItemGunShotty;
 import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemTurretAmmo;
@@ -436,6 +444,10 @@ public class ModItems {
 	public static final Item jetpack_fly = new JetpackRegular(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jetpack_fly").setMaxStackSize(1);
 	public static final Item jetpack_vector = new JetpackVectorized(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jetpack_vector").setMaxStackSize(1);
 	
+	public static final Item cape_radiation = new ArmorModel(ArmorMaterial.CHAIN, -1, EntityEquipmentSlot.CHEST, "cape_radiation").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
+	public static final Item cape_gasmask = new ArmorModel(ArmorMaterial.CHAIN, -1, EntityEquipmentSlot.CHEST, "cape_gasmask").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
+	public static final Item cape_schrabidium = new ArmorModel(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, "cape_schrabidium").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
+	
 	public static final Item schrabidium_hammer = new WeaponSpecial(MainRegistry.enumToolMaterialHammer, "schrabidium_hammer").setMaxStackSize(1);
 	public static final Item shimmer_sledge = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_sledge").setMaxStackSize(1);
 	public static final Item shimmer_axe = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_axe").setMaxStackSize(1);
@@ -480,9 +492,9 @@ public class ModItems {
 	public static final Item gun_supershotgun = new ItemGunShotty(Gun12GaugeFactory.getShottyConfig(), "gun_supershotgun").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_calamity = new ItemGunBase(Gun50BMGFactory.getCalamityConfig(), "gun_calamity").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_calamity_dual = new ItemGunBase(Gun50BMGFactory.getSaddleConfig(), "gun_calamity_dual").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_minigun = new ItemGunBase(Gun5mmFactory.get53Config(), "gun_minigun").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_avenger = new ItemGunBase(Gun5mmFactory.get57Config(), "gun_avenger").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_lacunae = new ItemGunBase(Gun5mmFactory.getLacunaeConfig(), "gun_lacunae").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_minigun = new ItemGunLacunae(Gun5mmFactory.get53Config(), "gun_minigun").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_avenger = new ItemGunLacunae(Gun5mmFactory.get57Config(), "gun_avenger").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_lacunae = new ItemGunLacunae(Gun5mmFactory.getLacunaeConfig(), "gun_lacunae").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_bolt_action = new ItemGunBase(Gun20GaugeFactory.getBoltConfig(), "gun_bolt_action").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_bolt_action_green = new ItemGunBase(Gun20GaugeFactory.getBoltGreenConfig(), "gun_bolt_action_green").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_uzi = new ItemGunBase(Gun22LRFactory.getUziConfig(), "gun_uzi").setCreativeTab(MainRegistry.weaponTab);
@@ -501,13 +513,13 @@ public class ModItems {
 	public static final Item gun_hk69 = new ItemGunBase(GunGrenadeFactory.getHK69Config(), "gun_hk69").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item gun_spark = new GunSpark("gun_spark").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_fatman = new GunFatman("gun_fatman").setMaxDamage(2500).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_proto = new GunProtoMirv("gun_proto").setMaxDamage(2500).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_mirv = new GunMIRV("gun_mirv").setMaxDamage(2500).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_bf = new GunBaleFlare("gun_bf").setMaxDamage(2500).setCreativeTab(null);
+	public static final Item gun_fatman = new ItemGunBase(GunFatmanFactory.getFatmanConfig(), "gun_fatman").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_proto = new ItemGunBase(GunFatmanFactory.getProtoConfig(), "gun_proto").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_mirv = new ItemGunBase(GunFatmanFactory.getFatmanConfig(), "gun_mirv").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_bf = new ItemGunBase(GunFatmanFactory.getBELConfig(), "gun_bf").setCreativeTab(null);
 	
 	public static final Item gun_zomg = new GunZOMG("gun_zomg").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_xvl1456 = new GunXVL1456("gun_xvl1456").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_xvl1456 = new ItemGunGauss(GunGaussFactory.getXVLConfig(), GunGaussFactory.getChargedConfig(), "gun_xvl1456").setCreativeTab(MainRegistry.weaponTab);
 	//Drillgon200: The SQUID!
 	public static final Item gun_hp = new GunHP("gun_hp").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_defabricator = new GunDefabricator("gun_defabricator").setCreativeTab(MainRegistry.weaponTab);
@@ -515,10 +527,11 @@ public class ModItems {
 	public static final Item gun_stinger = new GunStinger("gun_stinger").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_skystinger = new GunStinger("gun_skystinger").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_mp = new GunMP("gun_mp").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_brimstone = new GunBrimstone("gun_brimstone").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_cryolator = new GunCryolator("gun_cryolator").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_jack = new GunJack("gun_jack").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_immolator = new GunImmolator("gun_immolator").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_osipr = new GunOSIPR("gun_osipr").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_osipr = new ItemGunOSIPR(GunOSIPRFactory.getOSIPRConfig(), GunOSIPRFactory.getAltConfig(), "gun_osipr").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_emp = new GunEMPRay("gun_emp").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_moist_nugget = new ItemNugget(3, false, "gun_moist_nugget").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_super_shotgun = new ItemCustomLore("gun_super_shotgun").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.weaponTab);
@@ -541,6 +554,7 @@ public class ModItems {
 	public static final Item ingot_beryllium = new ItemBase("ingot_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_lead = new ItemBase("ingot_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_asbestos = new ItemCustomLore("ingot_asbestos").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_electronium = new ItemCustomLore("ingot_electronium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_magnetized_tungsten = new ItemBase("ingot_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_combine_steel = new ItemCustomLore("ingot_combine_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_dura_steel = new ItemCustomLore("ingot_dura_steel").setCreativeTab(MainRegistry.partsTab);
@@ -1043,6 +1057,8 @@ public class ModItems {
 	public static final Item pipe_rusty = new ModSword(MainRegistry.enumToolMaterialPipeRusty, "weapon_pipe_rusty").setFull3D();
 	public static final Item pipe_lead = new ModSword(MainRegistry.enumToolMaterialPipeLead, "weapon_pipe_lead").setFull3D();
 	public static final Item reer_graar = new ModSword(MainRegistry.enumToolMaterialTitanium, "reer_graar").setFull3D();
+	public static final Item stopsign = new WeaponSpecial(MainRegistry.enumToolMaterialAlloy, "stopsign").setUnlocalizedName("stopsign");
+	public static final Item sopsign = new WeaponSpecial(MainRegistry.enumToolMaterialAlloy, "sopsign").setUnlocalizedName("sopsign");
 	
 	public static final Item mask_of_infamy = new MaskOfInfamy(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "mask_of_infamy").setMaxStackSize(1);
 	
@@ -1279,6 +1295,7 @@ public class ModItems {
 	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_xvl1456_ammo = new ItemBase("gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_hp_ammo = new ItemBase("gun_hp_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_dash_ammo = new ItemBase("gun_dash_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_defabricator_ammo = new ItemBase("gun_defabricator_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_cryolator_ammo = new ItemBase("gun_cryolator_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_jack_ammo = new ItemBase("gun_jack_ammo").setCreativeTab(MainRegistry.weaponTab);
@@ -1368,19 +1385,19 @@ public class ModItems {
 	public static final Item grenade_zomg = new ItemGrenade(7, "grenade_zomg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_black_hole = new ItemGrenade(7, "grenade_black_hole").setCreativeTab(MainRegistry.weaponTab);
 	
-	public static final Item grenade_if_generic = new ItemGrenade(4, "grenade_if_generic").setCreativeTab(null);
-	public static final Item grenade_if_he = new ItemGrenade(5, "grenade_if_he").setCreativeTab(null);
-	public static final Item grenade_if_bouncy = new ItemGrenade(4, "grenade_if_bouncy").setCreativeTab(null);
-	public static final Item grenade_if_sticky = new ItemGrenade(4, "grenade_if_sticky").setCreativeTab(null);
-	public static final Item grenade_if_impact = new ItemGrenade(-1, "grenade_if_impact").setCreativeTab(null);
-	public static final Item grenade_if_incendiary = new ItemGrenade(4, "grenade_if_incendiary").setCreativeTab(null);
-	public static final Item grenade_if_toxic = new ItemGrenade(4, "grenade_if_toxic").setCreativeTab(null);
-	public static final Item grenade_if_concussion = new ItemGrenade(4, "grenade_if_concussion").setCreativeTab(null);
-	public static final Item grenade_if_brimstone = new ItemGrenade(5, "grenade_if_brimstone").setCreativeTab(null);
-	public static final Item grenade_if_mystery = new ItemGrenade(5, "grenade_if_mystery").setCreativeTab(null);
-	public static final Item grenade_if_spark = new ItemGrenade(7, "grenade_if_spark").setCreativeTab(null);
-	public static final Item grenade_if_hopwire = new ItemGrenade(7, "grenade_if_hopwire").setCreativeTab(null);
-	public static final Item grenade_if_null = new ItemGrenade(7, "grenade_if_null").setCreativeTab(null);
+	public static final Item grenade_if_generic = new ItemGrenade(4, "grenade_if_generic");
+	public static final Item grenade_if_he = new ItemGrenade(5, "grenade_if_he");
+	public static final Item grenade_if_bouncy = new ItemGrenade(4, "grenade_if_bouncy");
+	public static final Item grenade_if_sticky = new ItemGrenade(4, "grenade_if_sticky");
+	public static final Item grenade_if_impact = new ItemGrenade(-1, "grenade_if_impact");
+	public static final Item grenade_if_incendiary = new ItemGrenade(4, "grenade_if_incendiary");
+	public static final Item grenade_if_toxic = new ItemGrenade(4, "grenade_if_toxic");
+	public static final Item grenade_if_concussion = new ItemGrenade(4, "grenade_if_concussion");
+	public static final Item grenade_if_brimstone = new ItemGrenade(5, "grenade_if_brimstone");
+	public static final Item grenade_if_mystery = new ItemGrenade(5, "grenade_if_mystery");
+	public static final Item grenade_if_spark = new ItemGrenade(7, "grenade_if_spark");
+	public static final Item grenade_if_hopwire = new ItemGrenade(7, "grenade_if_hopwire");
+	public static final Item grenade_if_null = new ItemGrenade(7, "grenade_if_null");
 	
 	public static final Item weaponized_starblaster_cell = new WeaponizedCell("weaponized_starblaster_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	
@@ -1786,7 +1803,7 @@ public class ModItems {
 	public static final Item burnt_bark = new ItemCustomLore("burnt_bark").setCreativeTab(null);
 	public static final Item letter = new ItemStarterKit("letter").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item book_secret = new ItemCustomLore("book_secret").setCreativeTab(MainRegistry.polaroidID == 11 ? MainRegistry.consumableTab : null);
-	public static final Item book_of_ = new ItemCustomLore("book_of_").setCreativeTab(null);
+	public static final Item book_of_ = new ItemBook("book_of_").setCreativeTab(null);
 	public static final Item crystal_horn = new ItemCustomLore("crystal_horn").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_charred = new ItemCustomLore("crystal_charred").setCreativeTab(MainRegistry.partsTab);
 	public static final Item watch = new ItemCustomLore("watch").setCreativeTab(null).setMaxStackSize(1);

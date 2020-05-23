@@ -2,6 +2,7 @@ package com.hbm.main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -154,6 +155,7 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFallingNuke;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityLaser;
 import com.hbm.entity.projectile.EntityLaserBeam;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.entity.projectile.EntityMinerBeam;
@@ -424,6 +426,8 @@ public class MainRegistry {
 	public static boolean enableExtendedLogging = false;
 	public static boolean enableHardcoreTaint = false;
 	public static boolean enableGuns = true;
+	public static boolean enableVirus = true;
+	public static boolean enableCrosshairs = true;
 
 	public static int uraniumSpawn = 6;
 	public static int thoriumSpawn = 7;
@@ -506,6 +510,14 @@ public class MainRegistry {
 
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
+	
+	public static List<String> templateBlacklist = new ArrayList<String>();
+	
+	public static boolean dropCell = true;
+	public static boolean dropSing = true;
+	public static boolean dropStar = true;
+	public static boolean dropCrys = true;
+	public static boolean dropDead = true;
 
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = true;
@@ -744,7 +756,6 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineDiesel.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_diesel"));
 		GameRegistry.registerTileEntity(TileEntityForceField.class, new ResourceLocation(RefStrings.MODID, "tileentity_force_field"));
 		GameRegistry.registerTileEntity(TileEntityMachineRadar.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
-		GameRegistry.registerTileEntity(TileEntityDecoPoleTop.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_poletop"));
 		GameRegistry.registerTileEntity(TileEntityDecoPoleSatelliteReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_pole_satellite_receiver"));
 		GameRegistry.registerTileEntity(TileEntityGeysir.class, new ResourceLocation(RefStrings.MODID, "tileentity_geyser"));
 		GameRegistry.registerTileEntity(TileEntityObjTester.class, new ResourceLocation(RefStrings.MODID, "tileentity_obj_tester"));
@@ -913,6 +924,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tom_bust"), EntityTomBlast.class, "entity_tom_bust", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz_capsule"), EntitySoyuzCapsule.class, "entity_soyuz_capsule", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz"), EntitySoyuz.class, "entity_soyuz", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser"), EntityLaser.class, "entity_laser", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -956,6 +968,8 @@ public class MainRegistry {
 		enableExtendedLogging = config.get(CATEGORY_GENERAL, "1.18_enableExtendedLogging", false).getBoolean(false);
 		enableHardcoreTaint = config.get(CATEGORY_GENERAL, "1.19_enableHardcoreTaint", false).getBoolean(false);
 		enableGuns = config.get(CATEGORY_GENERAL, "1.20_enableGuns", true).getBoolean(true);
+		enableVirus = config.get(CATEGORY_GENERAL, "1.21_enableVirus", false).getBoolean(false);
+        enableCrosshairs = config.get(CATEGORY_GENERAL, "1.22_enableCrosshairs", true).getBoolean(true);
 		Property shaders = config.get(CATEGORY_GENERAL, "1.21_enableShaders", false);
 		shaders.setComment("Experimental, don't use");
 		useShaders = shaders.getBoolean(false);
@@ -1166,7 +1180,7 @@ public class MainRegistry {
 		fogChance.setComment("1:n chance of fog spawning every second");
 		fogCh = fogChance.getInt();
 		// nether radiation
-		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 10);
+		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 0);
 		netherRad.setComment("RAD/s in the nether in hundredths");
 		hellRad = netherRad.getInt() * 0.01F;
 		// railgun
@@ -1218,6 +1232,16 @@ public class MainRegistry {
 		propLeadID.setComment("What potion ID the lead poisoning effect will have");
 		leadID = propLeadID.getInt();
 
+		final String CATEGORY_MACHINE = "09_machines";
+        templateBlacklist = Arrays.asList(createConfigStringList(config, CATEGORY_MACHINE, "9.00_templateBlacklist", "Which machine templates should be prohibited from being created (args: enum names)"));
+
+        final String CATEGORY_DROPS = "10_dangerous_drops";
+        dropCell = createConfigBool(config, CATEGORY_DROPS, "10.00_dropCell", "Whether antimatter cells should explode when dropped", true);
+        dropSing = createConfigBool(config, CATEGORY_DROPS, "10.01_dropBHole", "Whether singularities and blaack holes should spawn when dropped", true);
+        dropStar = createConfigBool(config, CATEGORY_DROPS, "10.02_dropStar", "Whether rigged star blaster cells should explode when dropped", true);
+        dropCrys = createConfigBool(config, CATEGORY_DROPS, "10.04_dropCrys", "Whether xen crystals should move blocks when dropped", true);
+        dropDead = createConfigBool(config, CATEGORY_DROPS, "10.05_dropDead", "Whether dead man's explosives should explode when dropped", true);
+		
 		config.save();
 
 		radioStructure = setDef(radioStructure, 1000);
@@ -1261,6 +1285,20 @@ public class MainRegistry {
         Property prop = config.get(category, name, def);
         prop.setComment(comment);
         return prop.getInt();
+	}
+	
+	private static boolean createConfigBool(Configuration config, String category, String name, String comment, boolean def) {
+
+        Property prop = config.get(category, name, def);
+        prop.setComment(comment);
+        return prop.getBoolean();
+	}
+	
+	private static String[] createConfigStringList(Configuration config, String category, String name, String comment) {
+
+        Property prop = config.get(category, name, new String[] { "PLACEHOLDER" } );
+        prop.setComment(comment);
+        return prop.getStringList();
 	}
 
 	@EventHandler

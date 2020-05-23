@@ -46,7 +46,7 @@ public class ItemCell extends ItemRadioactive {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		if(entityItem.onGround) {
-			if(hasFluid(entityItem.getItem(), ModForgeFluids.aschrab)) {
+			if(hasFluid(entityItem.getItem(), ModForgeFluids.aschrab) && MainRegistry.dropCell) {
 				if(!entityItem.world.isRemote) {
 					entityItem.setDead();
 					entityItem.world.playSound(null, entityItem.posX, entityItem.posY, entityItem.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0f, entityItem.world.rand.nextFloat() * 0.1F + 0.9F);
@@ -70,7 +70,7 @@ public class ItemCell extends ItemRadioactive {
 				}
 				return true;
 			}
-			if(hasFluid(entityItem.getItem(), ModForgeFluids.amat)) {
+			if(hasFluid(entityItem.getItem(), ModForgeFluids.amat) && MainRegistry.dropCell) {
 				if(!entityItem.world.isRemote) {
 					entityItem.setDead();
 					entityItem.world.createExplosion(entityItem, entityItem.posX, entityItem.posY, entityItem.posZ, 10.0F * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F), true);

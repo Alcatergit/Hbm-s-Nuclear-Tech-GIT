@@ -7,7 +7,9 @@ import com.hbm.items.tool.ItemAssemblyTemplate;
 import com.hbm.items.tool.ItemCassette;
 import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemForgeFluidIdentifier;
+import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,6 +18,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -77,6 +81,11 @@ public class ItemFolderPacket implements IMessage {
 				}
 
 				if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
+					Fluid f = ItemForgeFluidIdentifier.getType(m.stack);
+					if(f != null && MainRegistry.templateBlacklist.contains(f.getName())) {
+						p.sendMessage(new TextComponentTranslation("This item appears to be blacklisted."));
+						return;
+					}
 					if(Library.hasInventoryItem(p.inventory, ModItems.plate_iron) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_iron);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
@@ -93,6 +102,11 @@ public class ItemFolderPacket implements IMessage {
 					}
 				}
 				if(stack.getItem() instanceof ItemChemistryTemplate) {
+					EnumChemistryTemplate enumeration = EnumChemistryTemplate.getEnum(m.stack.getMetadata());
+					if(MainRegistry.templateBlacklist.contains(enumeration.getName())) {
+						p.sendMessage(new TextComponentTranslation("This item appears to be blacklisted."));
+						return;
+					}
 					if(Library.hasInventoryItem(p.inventory, Items.PAPER) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, Items.PAPER);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);

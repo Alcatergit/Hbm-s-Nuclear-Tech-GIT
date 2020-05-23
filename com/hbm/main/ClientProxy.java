@@ -139,6 +139,7 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityFallingNuke;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;
+import com.hbm.entity.projectile.EntityLaser;
 import com.hbm.entity.projectile.EntityLaserBeam;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.entity.projectile.EntityMinerBeam;
@@ -161,6 +162,7 @@ import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.particle.ParticleExSmoke;
+import com.hbm.particle.ParticleRadiationFog;
 import com.hbm.particle.ParticleRocketFlame;
 import com.hbm.particle.ParticleSmokePlume;
 import com.hbm.render.RenderHelper;
@@ -202,6 +204,7 @@ import com.hbm.render.entity.RenderFireProjectile;
 import com.hbm.render.entity.RenderFlare;
 import com.hbm.render.entity.RenderHunterChopper;
 import com.hbm.render.entity.RenderLN2;
+import com.hbm.render.entity.RenderLaser;
 import com.hbm.render.entity.RenderMeteor;
 import com.hbm.render.entity.RenderMinerRocket;
 import com.hbm.render.entity.RenderMiniMIRV;
@@ -295,6 +298,7 @@ import com.hbm.render.item.ItemRenderMissile;
 import com.hbm.render.item.ItemRenderMissilePart;
 import com.hbm.render.item.ItemRenderMultitool;
 import com.hbm.render.item.ItemRenderOSIPR;
+import com.hbm.render.item.ItemRenderObj;
 import com.hbm.render.item.ItemRenderOverkill;
 import com.hbm.render.item.ItemRenderRevolverCursed;
 import com.hbm.render.item.ItemRenderRevolverGold;
@@ -777,6 +781,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTomBlast.class, RenderEmpty.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySoyuzCapsule.class, RenderSoyuzCapsule.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySoyuz.class, RenderSoyuz.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLaser.class, RenderLaser.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
@@ -836,6 +841,11 @@ public class ClientProxy extends ServerProxy {
 			
 			ParticleContrail contrail = new ParticleContrail(Minecraft.getMinecraft().renderEngine, world, x, y, z);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			break;
+		case 3:
+
+			ParticleRadiationFog fog = new ParticleRadiationFog(world, x, y, z);
+			Minecraft.getMinecraft().effectRenderer.addEffect(fog);
 			break;
 		}
 	}
@@ -1097,6 +1107,9 @@ public class ClientProxy extends ServerProxy {
 		ModItems.shimmer_axe.setTileEntityItemStackRenderer(new ItemRenderShim());
 		ModItems.ff_fluid_duct.setTileEntityItemStackRenderer(new ItemRenderFFFluidDuct());
 		ModItems.fluid_icon.setTileEntityItemStackRenderer(new ItemRenderFluidIcon());
+		ModItems.gun_brimstone.setTileEntityItemStackRenderer(new ItemRenderObj());
+		ModItems.stopsign.setTileEntityItemStackRenderer(new ItemRenderShim());
+		ModItems.sopsign.setTileEntityItemStackRenderer(new ItemRenderShim());
 	}
 	
 	@Override

@@ -350,6 +350,9 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.shimmer_axe, reg);
 		swapModels(ModItems.ff_fluid_duct, reg);
 		swapModels(ModItems.fluid_icon, reg);
+		swapModelsNoGui(ModItems.gun_brimstone, reg);
+		swapModelsNoGui(ModItems.stopsign, reg);
+		swapModelsNoGui(ModItems.sopsign, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -496,6 +499,7 @@ public class ModEventHandlerClient {
 
 		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		particle_base = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/particle_base"));
+		fog = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/fog"));
 
 		// evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID,
 		// "blocks/forgefluid/toxic_still"));
@@ -579,6 +583,7 @@ public class ModEventHandlerClient {
 
 	public static TextureAtlasSprite contrail;
 	public static TextureAtlasSprite particle_base;
+	public static TextureAtlasSprite fog;
 	int renderCount = 0;
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -837,9 +842,8 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon)) {
+		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) && MainRegistry.enableCrosshairs) {
 			event.setCanceled(true);
-
 			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
 				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
 			if(!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {

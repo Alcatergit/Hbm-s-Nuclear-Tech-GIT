@@ -2,11 +2,10 @@ package com.hbm.items.gear;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
+import com.hbm.render.model.ModelCloak;
 import com.hbm.render.model.ModelGasMask;
 import com.hbm.render.model.ModelGoggles;
 import com.hbm.render.model.ModelM65;
@@ -15,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -35,9 +33,9 @@ public class ArmorModel extends ItemArmor {
 	private ModelGoggles modelGoggles;
 	@SideOnly(Side.CLIENT)
 	private ModelGasMask modelGas;
-	/*@SideOnly(Side.CLIENT)
-	private ModelCloak modelCloak;
 	@SideOnly(Side.CLIENT)
+	private ModelCloak modelCloak;
+	/*@SideOnly(Side.CLIENT)
 	private ModelOxygenMask modelOxy;*/
 	@SideOnly(Side.CLIENT)
 	private ModelM65 modelM65;
@@ -86,16 +84,16 @@ public class ArmorModel extends ItemArmor {
 		}
 		if (this == ModItems.cape_test) {
 			return armorType == 1;
-		}
+		}*/
 		if (this == ModItems.cape_radiation) {
-			return armorType == 1;
+			return armorType == EntityEquipmentSlot.CHEST;
 		}
 		if (this == ModItems.cape_gasmask) {
-			return armorType == 1;
+			return armorType == EntityEquipmentSlot.CHEST;
 		}
 		if (this == ModItems.cape_schrabidium) {
-			return armorType == 1;
-		}*/
+			return armorType == EntityEquipmentSlot.CHEST;
+		}
 		/*if (this == ModItems.cape_hbm) {
 			return armorType == 1;
 		}
@@ -155,14 +153,14 @@ public class ArmorModel extends ItemArmor {
 				return this.modelOxy;
 			}
 		}
-		if (this == ModItems.cape_test || this == ModItems.cape_radiation || this == ModItems.cape_gasmask || this == ModItems.cape_schrabidium) {
-			if (armorSlot == 1) {
+		*/if (/*this == ModItems.cape_test ||*/ this == ModItems.cape_radiation || this == ModItems.cape_gasmask || this == ModItems.cape_schrabidium) {
+			if (armorSlot == EntityEquipmentSlot.CHEST) {
 				if (this.modelCloak == null) {
 					this.modelCloak = new ModelCloak();
 				}
 				return this.modelCloak;
 			}
-		}*/
+		}
 		/*if (this == ModItems.cape_hbm || this == ModItems.cape_dafnik || this == ModItems.cape_lpkukin || this == ModItems.cape_vertice || this == ModItems.cape_codered_ || this == ModItems.cape_ayy || this == ModItems.cape_nostalgia) {
 			if (armorSlot == 1) {
 				if (this.modelCloak == null) {
@@ -197,7 +195,7 @@ public class ArmorModel extends ItemArmor {
 		if (stack.getItem() == ModItems.cape_test) {
 			return "hbm:textures/models/TestCape.png";
 		}
-		if (stack.getItem() == ModItems.cape_radiation) {
+		*/if (stack.getItem() == ModItems.cape_radiation) {
 			return "hbm:textures/models/CapeRadiation.png";
 		}
 		if (stack.getItem() == ModItems.cape_gasmask) {
@@ -205,7 +203,7 @@ public class ArmorModel extends ItemArmor {
 		}
 		if (stack.getItem() == ModItems.cape_schrabidium) {
 			return "hbm:textures/models/CapeSchrabidium.png";
-		}*/
+		}
 		/*if (stack.getItem() == ModItems.cape_hbm && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.HbMinecraft)) {
 			if(MainRegistry.polaroidID == 11)
 				return "hbm:textures/models/CapeHbm.png";
@@ -241,9 +239,9 @@ public class ArmorModel extends ItemArmor {
     	
 
         GlStateManager.disableDepth();
-        GL11.glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.depthMask(false);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableAlpha();
         
         if(this == ModItems.goggles || this == ModItems.gas_mask_m65 || this == ModItems.hazmat_helmet_red || this == ModItems.hazmat_helmet_grey) {
@@ -289,15 +287,15 @@ public class ArmorModel extends ItemArmor {
         RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
         RenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
         RenderHelper.draw();
-        GL11.glDepthMask(true);
+        GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
         GlStateManager.enableAlpha();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		/*if (stack.getItem() == ModItems.cape_radiation) {
+		if (stack.getItem() == ModItems.cape_radiation) {
 			list.add("Avalible for everyone");
 		}
 		if (stack.getItem() == ModItems.cape_gasmask) {
@@ -305,7 +303,7 @@ public class ArmorModel extends ItemArmor {
 		}
 		if (stack.getItem() == ModItems.cape_schrabidium) {
 			list.add("Avalible for everyone");
-		}*/
+		}
 	}
 	
 }

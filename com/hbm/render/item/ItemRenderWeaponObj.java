@@ -56,12 +56,22 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(-5, 0, 1, 0);
 				} else if(item.getItem() == ModItems.gun_supershotgun) {
 					GL11.glTranslated(0.8, -0.7, 0.6);
+					if(this.entity != null && this.entity.isSneaking()){
+						GL11.glTranslated(0, 0.20, 0.43);
+						GL11.glRotated(-4, 1, 0, 0);
+						GL11.glRotated(5, 0, 1, 0);
+						GL11.glRotated(-4, 0, 0, 1);
+					}
 					GL11.glRotated(4, 1, 0, 0);
 					GL11.glRotatef(-23F, 0.0F, 0.0F, 1.0F);
 					GL11.glRotatef(175F, 0.0F, 1.0F, 0.0F);
 					GL11.glScaled(1, 1.5, 1.5);
 				} else if(item.getItem() == ModItems.gun_deagle){
 					GL11.glTranslated(0, 0, 0.2);
+					if(this.entity != null && this.entity.isSneaking()){
+						GL11.glTranslated(0, 0.20, 0.72);
+						GL11.glRotated(10, 0, 1, 0);
+					}
 					GL11.glRotated(260, 0, 1, 0);
 					GL11.glRotated(-20, 1, 0, 0);
 					GL11.glScaled(0.2, 0.2, 0.2);

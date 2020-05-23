@@ -33,6 +33,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	
 	public TileEntityBarrel() {
 		super(4);
+		tank = new FluidTank(-1);
 	}
 	
 	public TileEntityBarrel(int cap) {
@@ -148,7 +149,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		mode = compound.getShort("mode");
-		if(tank == null)
+		if(tank == null || tank.getCapacity() <= 0)
 			tank = new FluidTank(compound.getInteger("cap"));
 		tank.readFromNBT(compound);
 		super.readFromNBT(compound);
@@ -157,7 +158,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		}
 		return super.getCapability(capability, facing);
 	}

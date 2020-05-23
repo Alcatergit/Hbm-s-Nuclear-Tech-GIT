@@ -6,6 +6,10 @@ import com.hbm.items.weapon.ItemGunBase;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
@@ -189,7 +193,7 @@ public class ModelNightmare2 extends ModelBase {
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack item) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		Shape1.render(f5);
 		Shape2.render(f5);
 		Shape3.render(f5);
@@ -201,7 +205,7 @@ public class ModelNightmare2 extends ModelBase {
 		Shape10.render(f5);
 		Shape11.render(f5);
 		Shape12.render(f5);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 		
 		Shape13.render(f5);
 		Shape14.render(f5);
@@ -225,6 +229,21 @@ public class ModelNightmare2 extends ModelBase {
 			Bullet5.render(f5);
 		if(ammo > 5)
 			Bullet6.render(f5);
+		GL11.glPushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buf = tessellator.getBuffer();
+
+        buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        buf.pos(-19F / 16F, -3F / 16F, -1F / 16F).color(1.0F, 0.0F, 0.0F, 1.0F).endVertex();
+        buf.pos(-150, 0, 0).color(1.0F, 0.0F, 0.0F, 1.0F).endVertex();
+        tessellator.draw();
+        
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
+		GL11.glPopMatrix();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

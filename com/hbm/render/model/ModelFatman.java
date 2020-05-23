@@ -2,9 +2,13 @@ package com.hbm.render.model;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.items.weapon.ItemGunBase;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 
 public class ModelFatman extends ModelBase {
 
@@ -246,25 +250,24 @@ public class ModelFatman extends ModelBase {
 		setRotation(Shape33, 0F, 0F, 0F);
 	}
 
-	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5, ItemStack item) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		Shape1.render(f5);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		Shape2.render(f5);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 		Shape3.render(f5);
 		Shape4.render(f5);
 		Shape5.render(f5);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		Shape6.render(f5);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 		Shape7.render(f5);
 		Shape8.render(f5);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		Shape9.render(f5);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 		Shape10.render(f5);
 		Shape11.render(f5);
 		Shape12.render(f5);
@@ -274,14 +277,19 @@ public class ModelFatman extends ModelBase {
 		Shape16.render(f5);
 		Shape17.render(f5);
 		Shape18.render(f5);
-		Shape19.render(f5);
-		Shape20.render(f5);
-		Shape21.render(f5);
-		Shape22.render(f5);
-		Shape23.render(f5);
-		Shape24.render(f5);
-		Shape25.render(f5);
-		Shape26.render(f5);
+		
+		int ammo = ItemGunBase.getMag(item);
+		if(ammo > 0) {
+			Shape19.render(f5);
+			Shape20.render(f5);
+			Shape21.render(f5);
+			Shape22.render(f5);
+			Shape23.render(f5);
+			Shape24.render(f5);
+			Shape25.render(f5);
+			Shape26.render(f5);
+		}
+		
 		Shape27.render(f5);
 		Shape28.render(f5);
 		Shape29.render(f5);

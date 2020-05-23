@@ -97,7 +97,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void updateClient(ItemStack stack, World world, EntityPlayer entity, int slot, EnumHand hand) {
+	protected void updateClient(ItemStack stack, World world, EntityPlayer entity, int slot, EnumHand hand) {
 
 		boolean clickLeft = Mouse.isButtonDown(0);
 		boolean clickRight = Mouse.isButtonDown(1);
@@ -211,7 +211,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	// tries to shoot, bullet checks are done here
-	private boolean tryShoot(ItemStack stack, World world, EntityPlayer player, boolean main) {
+	protected boolean tryShoot(ItemStack stack, World world, EntityPlayer player, boolean main) {
 
 		if(getDelay(stack) == 0 && !getIsReloading(stack) && getItemWear(stack) < mainConfig.durability) {
 
@@ -268,7 +268,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			world.playSound(null, player.posX, player.posY, player.posZ, altConfig.firingSound, SoundCategory.PLAYERS, 1.0F, altConfig.firingPitch);
 	}
 
-	private void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand) {
+	protected void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand) {
 
 		EntityBulletBase bullet = new EntityBulletBase(world, config, player, hand);
 		world.spawnEntity(bullet);
@@ -605,7 +605,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	/// NBT utility ///
-	private static void writeNBT(ItemStack stack, String key, int value) {
+	protected static void writeNBT(ItemStack stack, String key, int value) {
 
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
@@ -613,7 +613,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 		stack.getTagCompound().setInteger(key, value);
 	}
 
-	private static int readNBT(ItemStack stack, String key) {
+	public static int readNBT(ItemStack stack, String key) {
 
 		if(!stack.hasTagCompound())
 			return 0;

@@ -128,7 +128,7 @@ public class Library {
 		return false;
 	}
 	
-public static boolean checkForFaraday(EntityPlayer player) {
+	public static boolean checkForFaraday(EntityPlayer player) {
 		
 		NonNullList<ItemStack> armor = player.inventory.armorInventory;
 		
@@ -200,6 +200,7 @@ public static boolean checkForFaraday(EntityPlayer player) {
 		player.inventory.armorInventory.get(slot).setItemDamage(j += amount);
 
 		if(player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage()) {
+			System.out.println(player.inventory.armorInventory.get(slot).getMaxDamage());
 			player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
 		}
 	}
@@ -209,7 +210,10 @@ public static boolean checkForFaraday(EntityPlayer player) {
 			return;
 
 		EntityLivingBase entity = (EntityLivingBase) e;
-
+		
+		if(e instanceof EntityPlayer && ((EntityPlayer) e).isSpectator())
+			return;
+		
 		if(entity.isPotionActive(HbmPotion.mutation))
 			return;
 

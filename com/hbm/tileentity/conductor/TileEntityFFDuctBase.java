@@ -111,7 +111,6 @@ public class TileEntityFFDuctBase extends TileEntity implements IFluidPipe, IFlu
 	}
 	
 	public void checkOtherNetworks() {
-		//TODO debug this later
 		List<FFPipeNetwork> list = new ArrayList<FFPipeNetwork>();
 		list.add(this.getNetworkTrue());
 		TileEntity te;

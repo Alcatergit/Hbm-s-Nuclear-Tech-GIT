@@ -48,6 +48,8 @@ public class ItemRenderFolly extends TEISRBase {
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
 		case GROUND:
+		case FIXED:
+		case HEAD:
 			GL11.glTranslated(0.5, 0.5, 0.3);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(180, 1, 0, 0);

@@ -124,7 +124,7 @@ public class ItemGeigerCounter extends Item {
 
 			RadiationSavedData data = RadiationSavedData.getData(player.world);
 			Chunk chunk = world.getChunkFromBlockCoords(player.getPosition());
-			int rads = (int)Math.ceil(data.getRadNumFromCoord(chunk.x, chunk.z));
+			double rads = ((int)(data.getRadNumFromCoord(chunk.x, chunk.z) * 10)) / 10D;
 
 			player.sendMessage(new TextComponentTranslation("Current chunk radiation: " + rads + " RAD/s"));
 			player.sendMessage(new TextComponentTranslation("Player contamination: " + eRad + " RAD"));

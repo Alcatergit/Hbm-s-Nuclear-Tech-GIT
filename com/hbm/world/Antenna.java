@@ -275,7 +275,7 @@ public class Antenna extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 1, y + 20, z + 0), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 2, y + 20, z + 0), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 20, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 20, z + 1), ModBlocks.pole_top.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[4]), 3);
+		world.setBlockState(pos.setPos(x + 1, y + 20, z + 1), ModBlocks.pole_top.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 2, y + 20, z + 1), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 20, z + 2), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 1, y + 20, z + 2), Blocks.AIR.getDefaultState(), 3);

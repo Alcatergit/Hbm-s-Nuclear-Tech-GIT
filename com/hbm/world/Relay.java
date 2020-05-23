@@ -1659,7 +1659,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 6, y + 59, z + 4), ModBlocks.red_wire_coated.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 60, z + 4), ModBlocks.red_wire_coated.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 61, z + 4), ModBlocks.red_wire_coated.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 62, z + 4), Block9.getDefaultState().withProperty(DecoPoleTop.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(pos.setPos(x + 6, y + 62, z + 4), Block9.getDefaultState(), 3);
 
 		generate_r03_last(world, rand, x, y, z, pos);
 		return true;

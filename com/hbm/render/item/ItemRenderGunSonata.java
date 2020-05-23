@@ -53,6 +53,8 @@ public class ItemRenderGunSonata extends TEISRBase {
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
 		case GROUND:
+		case FIXED:
+		case HEAD:
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
 			GL11.glTranslated(1.0, 0.5, 0.5);
 			GL11.glRotated(-90, 0, 1, 0);

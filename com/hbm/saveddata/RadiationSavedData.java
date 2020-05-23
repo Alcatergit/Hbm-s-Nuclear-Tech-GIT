@@ -4,16 +4,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.hbm.entity.particle.EntityFogFX;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.AuxParticlePacket;
+import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class RadiationSavedData extends WorldSavedData {
 	public Map<ChunkPos, RadiationSaveStructure> contamination = new HashMap<ChunkPos, RadiationSaveStructure>();
@@ -81,10 +82,6 @@ public class RadiationSavedData extends WorldSavedData {
     	RadiationSaveStructure rad = contamination.get(pos);
     	if(rad != null)
     		return rad.radiation;
-    	
-    	if(worldObj != null && worldObj.provider instanceof WorldProviderHell)
-    		return MainRegistry.hellRad;
-    	
     	return 0F;
     }
     
@@ -112,10 +109,11 @@ public class RadiationSavedData extends WorldSavedData {
 					int z = struct.chunkY * 16 + worldObj.rand.nextInt(16);
 					int y = worldObj.getHeight(x, z) + worldObj.rand.nextInt(5);
 					
-					EntityFogFX fog = new EntityFogFX(worldObj);
-					fog.setPosition(x, y, z);
+					//EntityFogFX fog = new EntityFogFX(worldObj);
+					//fog.setPosition(x, y, z);
 					//System.out.println(x + " " + y + " " + z);
-					worldObj.spawnEntity(fog);
+					//worldObj.spawnEntity(fog);
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(x, y, z, 3), new TargetPoint(worldObj.provider.getDimension(), x, y, z, 100));
 				}
     			
     			if(struct.radiation > 1) {

@@ -1,8 +1,11 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {},
+		"model": "hbm:antenna_top.obj"
+	},
 	"variants": {
-		"facing=north": { "model": "hbm:pole_top" },
-     	   	"facing=south": { "model": "hbm:pole_top", "y": 180 },
-      	  	"facing=west":  { "model": "hbm:pole_top", "y": 270 },
-      		"facing=east":  { "model": "hbm:pole_top", "y": 90 }
+		"normal": [{}],
+		"inventory": [{ "transform": "forge:default-block" }]
 	}
 }

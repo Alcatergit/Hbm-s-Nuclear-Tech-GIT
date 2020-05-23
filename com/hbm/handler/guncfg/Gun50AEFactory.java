@@ -11,7 +11,7 @@ import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 public class Gun50AEFactory {
 
-public static GunConfiguration getBaseConfig() {
+	public static GunConfiguration getBaseConfig() {
 		
 		GunConfiguration config = new GunConfiguration();
 		

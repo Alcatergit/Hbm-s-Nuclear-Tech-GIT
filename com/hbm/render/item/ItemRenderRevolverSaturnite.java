@@ -42,6 +42,8 @@ public class ItemRenderRevolverSaturnite extends TEISRBase {
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
 		case GROUND:
+		case FIXED:
+		case HEAD:
 			GL11.glTranslated(0.45, 0.25, 0.5);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(180, 1, 0, 0);

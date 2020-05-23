@@ -624,7 +624,8 @@ public class ExplosionChaos {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
-						pDestruction(world, X, Y, Z);
+						if(world.getBlockState(new BlockPos(X, Y, Z)).getBlock().getExplosionResistance(world, new BlockPos(X, Y, Z), null, null) <= 70)
+							pDestruction(world, X, Y, Z);
 					}
 				}
 			}
@@ -907,8 +908,7 @@ public class ExplosionChaos {
 
 					IBlockState b = world.getBlockState(pos.setPos(i, y, j));
 					float k = b.getBlockHardness(world, pos.setPos(i, y, j));
-
-					if(k < 60 && b.getBlock() != Blocks.AIR) {
+					if(k < 6000 && k > 0 && b.getBlock() != Blocks.AIR) {
 
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = i + 0.5F;

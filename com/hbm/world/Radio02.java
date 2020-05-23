@@ -2006,7 +2006,7 @@ public class Radio02
 		world.setBlockState(pos.setPos(x + 2, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 23, z + 10), ModBlocks.pole_top.getDefaultState().withProperty(DecoPoleTop.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 5, y + 23, z + 10), ModBlocks.pole_top.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 23, z + 10), Blocks.AIR.getDefaultState(), 3);

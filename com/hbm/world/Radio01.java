@@ -656,8 +656,8 @@ public class Radio01 extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 0, y + 0, z + 24), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 1, y + 0, z + 24), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 2, y + 0, z + 24), Library.getRandomConcrete().getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 24), ModBlocks.pole_top.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 24), ModBlocks.pole_top.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(pos.setPos(x + 3, y + 0, z + 24), ModBlocks.pole_top.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 4, y + 0, z + 24), ModBlocks.pole_top.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 0, z + 24), ModBlocks.deco_steel.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 0, z + 24), ModBlocks.deco_steel.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 0, z + 24), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.EAST), 3);
@@ -4000,7 +4000,7 @@ public class Radio01 extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 2, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 13), ModBlocks.pole_top.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 5, y + 12, z + 13), ModBlocks.pole_top.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 12, z + 13), Blocks.AIR.getDefaultState(), 3);

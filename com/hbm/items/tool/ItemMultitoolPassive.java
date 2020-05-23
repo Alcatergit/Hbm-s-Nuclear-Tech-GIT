@@ -137,7 +137,7 @@ public class ItemMultitoolPassive extends Item {
 		if(this == ModItems.multitool_ext) {
 			IBlockState b = world.getBlockState(pos);
 			ItemStack s = FurnaceRecipes.instance().getSmeltingResult(new ItemStack(Item.getItemFromBlock(b.getBlock()), 1, b.getBlock().getMetaFromState(b)));
-			if(s != null) {
+			if(!s.isEmpty()) {
 				ItemStack t = s.copy();
 				if(!world.isRemote)
 					world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -194,7 +194,7 @@ public class ItemMultitoolPassive extends Item {
 					IBlockState b = world.getBlockState(pos2);
 					float k = b.getBlockHardness(world, pos2);
 
-					if(k < 60 && b.getBlock() != Blocks.AIR) {
+					if(k < 6000 && k > 0 && b.getBlock() != Blocks.AIR) {
 
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x1 + 0.5F;

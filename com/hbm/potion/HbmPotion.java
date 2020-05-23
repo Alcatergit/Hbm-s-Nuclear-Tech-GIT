@@ -2,6 +2,7 @@ package com.hbm.potion;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
@@ -29,6 +30,8 @@ public class HbmPotion extends Potion {
 	public static HbmPotion mutation;
 	public static HbmPotion radx;
 	public static HbmPotion lead;
+	public static HbmPotion radaway;
+	public static HbmPotion telekinesis;
 	
 	public HbmPotion(boolean isBad, int color, String name, int x, int y){
 		super(isBad, color);
@@ -44,6 +47,8 @@ public class HbmPotion extends Potion {
 		mutation = registerPotion(false, 8388736, "potion.hbm_mutation", 2, 0);
 		radx = registerPotion(false, 0xBB4B00, "potion.hbm_radx", 5, 0);
 		lead = registerPotion(false, 0x767682, "potion.hbm_lead", 6, 0);
+		radaway = registerPotion(false, 0xBB4B00, "potion.hbm_radaway", 7, 0);
+		telekinesis = registerPotion(true, 0x00F3FF, "potion.hbm_telekinesis", 0, 1);
 	}
 
 	public static HbmPotion registerPotion(boolean isBad, int color, String name, int x, int y) {
@@ -114,6 +119,10 @@ public class HbmPotion extends Potion {
 			
 			Library.applyRadData(entity, (float)(level + 1F) * 0.05F);
 		}
+		if(this == radaway) {
+			if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+				entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(level+1);
+		}
 		if(this == bang) {
 			
 			entity.attackEntityFrom(ModDamageSource.bang, 1000);
@@ -129,6 +138,17 @@ public class HbmPotion extends Potion {
 			
 			entity.attackEntityFrom(ModDamageSource.lead, (level + 1));
 		}
+		if(this == telekinesis) {
+			
+			int remaining = entity.getActivePotionEffect(this).getDuration();
+			
+			if(remaining > 1) {
+				entity.motionY = 0.5;
+			} else {
+				entity.motionY = -2;
+				entity.fallDistance = 50;
+			}
+		}
 	}
 
 	public boolean isReady(int par1, int par2) {
@@ -137,7 +157,7 @@ public class HbmPotion extends Potion {
 
 	        return par1 % 2 == 0;
 		}
-		if(this == radiation) {
+		if(this == radiation || this == radaway || this == telekinesis) {
 			
 			return true;
 		}

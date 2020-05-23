@@ -38,14 +38,13 @@ public class ItemRenderRevolverNightmare extends TEISRBase {
 			
 			if (type == TransformType.FIRST_PERSON_RIGHT_HAND) {
 				GL11.glTranslated(-0.2, 0.2, 0.2);
-				GL11.glRotated(-10, 0, 1, 0);
-				GL11.glRotated(-20, 0, 0, 1);
+				GL11.glRotated(-25, 0, 0, 1);
 				GL11.glRotated(180, 1, 0, 0);
 			} else {
 				GL11.glTranslated(1.2, 0.2, 0.0);
 				GL11.glRotated(180, 1, 0, 0);
 				GL11.glRotated(180, 0, 1, 0);
-				GL11.glRotated(23, 0, 0, 1);
+				GL11.glRotated(25, 0, 0, 1);
 			}
 			if(stack.getItem() == ModItems.gun_revolver_nightmare)
 				n1.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, stack);

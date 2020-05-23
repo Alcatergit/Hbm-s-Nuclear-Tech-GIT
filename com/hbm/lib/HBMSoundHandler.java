@@ -144,6 +144,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent chopperFlyingLoop;
 	public static SoundEvent chopperCrashingLoop;
 	public static SoundEvent chopperMineLoop;
+	public static SoundEvent lacunaeSpinup;
+	public static SoundEvent lacunaeSpindown;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -172,6 +174,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent vortalCombat = registerBypass("music.recordvortalcombat");
 
 	public static SoundEvent[] geigerSounds;
+
+	
 	
 	public static void init() {
 		
@@ -307,6 +311,8 @@ public final class HBMSoundHandler {
 		chopperFlyingLoop = register("entity.chopperFlyingLoop");
 		chopperCrashingLoop = register("entity.chopperCrashingLoop");
 		chopperMineLoop = register("entity.chopperMineLoop");
+		lacunaeSpinup = register("weapon.lacunaeSpinup");
+		lacunaeSpindown = register("weapon.lacunaeSpindown");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

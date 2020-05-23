@@ -67,7 +67,7 @@ public class ItemDrop extends Item {
 				}
 			}
 			if(stack.getItem() != null && stack.getItem() == ModItems.detonator_de) {
-				if(!entityItem.world.isRemote) {
+				if(!entityItem.world.isRemote && MainRegistry.dropDead) {
 					entityItem.world.createExplosion(entityItem, entityItem.posX, entityItem.posY, entityItem.posZ, 15.0F, true);
 
 					if(MainRegistry.enableExtendedLogging)
@@ -79,7 +79,7 @@ public class ItemDrop extends Item {
 
 			if(entityItem.onGround) {
 
-				if(stack.getItem() != null && stack.getItem() == ModItems.pellet_antimatter) {
+				if(stack.getItem() != null && stack.getItem() == ModItems.pellet_antimatter && MainRegistry.dropCell) {
 					if(!entityItem.world.isRemote) {
 						ExplosionLarge.explodeFire(entityItem.world, entityItem.posX, entityItem.posY, entityItem.posZ, 100, true, true, true);
 					}
@@ -94,7 +94,7 @@ public class ItemDrop extends Item {
 						entityItem.world.spawnEntity(bl);
 					}
 				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_counter_resonant) {
+				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_counter_resonant && MainRegistry.dropSing) {
 					if(!entityItem.world.isRemote) {
 
 						EntityVortex bl = new EntityVortex(entityItem.world, 2.5F);
@@ -104,7 +104,7 @@ public class ItemDrop extends Item {
 						entityItem.world.spawnEntity(bl);
 					}
 				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_super_heated) {
+				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_super_heated && MainRegistry.dropSing) {
 					if(!entityItem.world.isRemote) {
 
 						EntityVortex bl = new EntityVortex(entityItem.world, 2.5F);
@@ -114,7 +114,7 @@ public class ItemDrop extends Item {
 						entityItem.world.spawnEntity(bl);
 					}
 				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.black_hole) {
+				if(stack.getItem() != null && stack.getItem() == ModItems.black_hole && MainRegistry.dropSing) {
 					if(!entityItem.world.isRemote) {
 						/*entityItem.world.playSoundEffect(entityItem.posX, entityItem.posY, entityItem.posZ,
 								"random.explode", 100.0f, entityItem.world.rand.nextFloat() * 0.1F + 0.9F);
@@ -138,7 +138,7 @@ public class ItemDrop extends Item {
 						entityItem.world.spawnEntity(bl);
 					}
 				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.singularity_spark) {
+				if (stack.getItem() != null && stack.getItem() == ModItems.singularity_spark && MainRegistry.dropSing) {
 					if (!entityItem.world.isRemote) {
 					EntityRagingVortex bl = new EntityRagingVortex(entityItem.world, 3.5F);
 					bl.posX = entityItem.posX ;
@@ -147,7 +147,7 @@ public class ItemDrop extends Item {
 					entityItem.world.spawnEntity(bl);
 					}
 				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.crystal_xen) {
+				if (stack.getItem() != null && stack.getItem() == ModItems.crystal_xen && MainRegistry.dropCrys) {
 					if (!entityItem.world.isRemote) {
 						ExplosionChaos.floater(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 25, 75);
 						ExplosionChaos.move(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 25, 0, 75, 0);

@@ -19,7 +19,7 @@ public class RenderNukeBoy extends TileEntitySpecialRenderer<TileEntityNukeBoy> 
 	
 	public RenderNukeBoy() {
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/LilBoy2.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/lilboy.png");
 	}
 	
 	@Override

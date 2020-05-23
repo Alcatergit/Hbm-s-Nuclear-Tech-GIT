@@ -481,15 +481,15 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 	public int getPower(ItemStack stack) {
 		if(stack != null) {
 			if(stack.getItem() == ModItems.part_lithium)
-				return 25000;
+				return 250;
 			if(stack.getItem() == ModItems.part_beryllium)
-				return 35000;
+				return 350;
 			if(stack.getItem() == ModItems.part_carbon)
-				return 60000;
+				return 600;
 			if(stack.getItem() == ModItems.part_copper)
-				return 75000;
+				return 750;
 			if(stack.getItem() == ModItems.part_plutonium)
-				return 100000;
+				return 1000;
 		}
 		return 0;
 	}

@@ -170,7 +170,7 @@ public class TileEntityLaunchTable extends TileEntity implements ITickable, ICon
 				if(e instanceof EntityMissileCustom) {
 					
 					for(int i = 0; i < 15; i++)
-						MainRegistry.proxy.spawnParticle(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5, "largelaunchsmoke", null);
+						MainRegistry.proxy.spawnParticle(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5, "launchsmoke", null);
 					
 					break;
 				}

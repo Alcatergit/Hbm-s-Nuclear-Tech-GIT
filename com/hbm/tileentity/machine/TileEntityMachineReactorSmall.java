@@ -99,7 +99,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				if(isItemValid(slot, stack))
 					return super.insertItem(slot, stack, simulate);
-				return ItemStack.EMPTY;
+				return stack;
 			}
 		};
 		

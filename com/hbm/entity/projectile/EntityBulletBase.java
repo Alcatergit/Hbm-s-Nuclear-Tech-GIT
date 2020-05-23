@@ -40,6 +40,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -399,6 +400,11 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		if (this.ticksExisted > config.maxAge)
 			this.setDead();
 
+		if(world.isRemote && !config.vPFX.isEmpty()) {
+			for (i = 0; i < 8; ++i) {
+				this.world.spawnParticle(EnumParticleTypes.getByName(config.vPFX), this.posX - this.motionX * i / 1.0D, this.posY - this.motionY * i / 1.0D, this.posZ - this.motionZ * i / 1.0D, 0, 0, 0);
+			}
+		}
 		// this.rotationPitch = this.prevRotationPitch + (this.rotationPitch -
 		// this.prevRotationPitch) * 0.2F;
 		// this.rotationYaw = this.prevRotationYaw + (this.rotationYaw -

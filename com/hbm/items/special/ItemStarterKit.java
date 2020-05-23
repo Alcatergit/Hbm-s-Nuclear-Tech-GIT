@@ -431,6 +431,17 @@ public class ItemStarterKit extends Item {
 			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30 * 20, 0, false, false));
 		}
 		
+		if(this == ModItems.euphemium_kit)
+		{
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.euphemium_helmet, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.euphemium_plate, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.euphemium_legs, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.euphemium_boots, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(ModBlocks.statue_elb), 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_revolver_cursed, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.watch, 1));
+		}
+		
 		if(this == ModItems.letter && world.isRemote)
 		{
 			if(player.getUniqueID().toString().equals(Library.a20)) {

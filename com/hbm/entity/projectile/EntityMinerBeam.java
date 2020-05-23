@@ -375,7 +375,7 @@ public class EntityMinerBeam extends Entity implements IProjectile {
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState b = world.getBlockState(pos);
 		ItemStack s = FurnaceRecipes.instance().getSmeltingResult(new ItemStack(Item.getItemFromBlock(b.getBlock()), 1, b.getBlock().getMetaFromState(b)));
-		if(s != null) {
+		if(!s.isEmpty()) {
 			ItemStack t = s.copy();
 			if(!world.isRemote)
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());

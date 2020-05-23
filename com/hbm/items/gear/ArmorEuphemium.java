@@ -97,5 +97,18 @@ public class ArmorEuphemium extends ItemArmor implements ISpecialArmor {
 			
 		}
 	}
-
+	
+	@Override
+	public void setDamage(ItemStack stack, int damage) {}
+	
+	@Override
+	public int getDamage(ItemStack stack) {
+		return 0;
+	}
+	
+	@Override
+	public int getMaxDamage() {
+		return Integer.MAX_VALUE;
+	}
+	
 }
