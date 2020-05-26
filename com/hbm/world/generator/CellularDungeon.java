@@ -113,7 +113,6 @@ public class CellularDungeon {
 			return false;
 		}
 
-		// CellularDungeonRoom next = DungeonToolbox.getRandom(rooms, rand);
 
 		if(room.daisyChain == null || addRoom(x + room.daisyDirection.getFrontOffsetX(), z + room.daisyDirection.getFrontOffsetZ(), rand, null, room.daisyChain)) {
 			cells[x][z] = room;
@@ -121,7 +120,6 @@ public class CellularDungeon {
 			order.add(new int[] { x, z });
 		}
 
-		// if(room.daisyChain == null)
 		for(int i = 0; i < 3; i++) {
 			EnumFacing dir = getRandomDir(rand);
 			addRoom(x + dir.getFrontOffsetX(), z + dir.getFrontOffsetZ(), rand, dir.getOpposite(), DungeonToolbox.getRandom(rooms, rand));
@@ -129,15 +127,6 @@ public class CellularDungeon {
 
 		return true;
 	}
-
-	/*public boolean addDaisychain(int x, int z, Random rand, ForgeDirection door, CellularDungeonRoom room) {
-	
-		if(x < 0 || z < 0 || x >= dimX || z >= dimZ)
-			return false;
-		
-		if(cells[x][z] != null)
-			return false;
-	}*/
 
 	public static EnumFacing getRandomDir(Random rand) {
 

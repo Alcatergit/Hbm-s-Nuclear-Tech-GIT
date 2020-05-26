@@ -22,7 +22,10 @@ public class RenderCapsule extends TileEntitySpecialRenderer<TileEntitySoyuzCaps
         
         GlStateManager.enableCull();
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        bindTexture(ResourceManager.soyuz_lander_tex);
+        if(te.getBlockMetadata() > 0)
+        	bindTexture(ResourceManager.soyuz_lander_rust_tex);
+        else
+        	bindTexture(ResourceManager.soyuz_lander_tex);
         ResourceManager.soyuz_lander.renderPart("Capsule");
         GlStateManager.shadeModel(GL11.GL_FLAT);
         

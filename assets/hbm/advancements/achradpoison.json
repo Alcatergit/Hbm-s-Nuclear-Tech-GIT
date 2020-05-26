@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:geiger_counter"
+		},
+		"title": {
+			"translate": "hbm.achievement.radPoison"
+		},
+		"description": {
+			"translate": "hbm.achievement.radPoison.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

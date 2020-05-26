@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemMike extends ItemRadioactive {
 
-	public ItemMike(String s) {
-		super(s);
+	public ItemMike(float radiation, String s) {
+		super(radiation, s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 
@@ -20,5 +20,6 @@ public class ItemMike extends ItemRadioactive {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
 		list.add("Ivy Mike");
+		super.addInformation(stack, world, list, flagIn);
 	}
 }

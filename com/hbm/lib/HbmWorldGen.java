@@ -5,9 +5,12 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockStorageCrate;
 import com.hbm.blocks.machine.PinkCloudBroadcaster;
+import com.hbm.blocks.machine.SoyuzCapsule;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
+import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntitySafe;
+import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 import com.hbm.world.Antenna;
 import com.hbm.world.Barrel;
 import com.hbm.world.Bunker;
@@ -36,6 +39,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
@@ -388,11 +392,12 @@ public class HbmWorldGen implements IWorldGenerator {
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
-				if (world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP))
+				if (world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP)){
 					world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.broadcaster_pc.getDefaultState().withProperty(PinkCloudBroadcaster.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
 
-				if (MainRegistry.enableDebugMode)
-					MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at " + x + " " + (y + 1) + " " + z);
+					if (MainRegistry.enableDebugMode)
+						MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at " + x + " " + (y + 1) + " " + z);
+				}
 			}
 			if (rand.nextInt(MainRegistry.dungeonStructure) == 0) {
 				int x = i + rand.nextInt(16);
@@ -425,15 +430,39 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.STONE)
 					world.setBlockState(new BlockPos(x, y - 1, z), ModBlocks.geysir_vapor.getDefaultState());
 			}
+			if (biome == Biomes.BEACH && rand.nextInt(MainRegistry.capsuleStructure) == 0) {
+				int x = i + rand.nextInt(16);
+				int z = j + rand.nextInt(16);
+				int y = world.getHeight(x, z) - 4;
+				
+				if(world.getBlockState(new BlockPos(x, y + 1, z)).isSideSolid(world, new BlockPos(x, y + 1, z), EnumFacing.UP)) {
+					
+					world.setBlockState(new BlockPos(x, y, z), ModBlocks.soyuz_capsule.getDefaultState().withProperty(SoyuzCapsule.RUSTY, true), 2);
+					
+					TileEntitySoyuzCapsule cap = (TileEntitySoyuzCapsule)world.getTileEntity(new BlockPos(x, y, z));
+					
+					if(cap != null) {
+						cap.inventory.setStackInSlot(rand.nextInt(cap.inventory.getSlots()), new ItemStack(ModItems.record_glass));
+					}
+	
+					if(MainRegistry.enableDebugMode)
+						MainRegistry.logger.info("[Debug] Successfully spawned capsule at " + x + " " + z);
+				}
+			}
 			if (rand.nextInt(1000) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				
+				boolean done = false;
 				for(int k = 0; k < 256; k++) {
 					IBlockState state = world.getBlockState(new BlockPos(x, k, z));
-					if(state.getBlock() == Blocks.LOG && state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.OAK)
+					if(state.getBlock() == Blocks.LOG && state.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.OAK){
 						world.setBlockState(new BlockPos(x, k, z), ModBlocks.pink_log.getDefaultState());
+						done = true;
+					}
 				}
+				if(MainRegistry.enableDebugMode && done)
+					MainRegistry.logger.info("[Debug] Successfully spawned pink tree at " + x + " " + z);
 			}
 			if (MainRegistry.enableVaults && rand.nextInt(MainRegistry.vaultfreq) == 0) {
 				int x = i + rand.nextInt(16);
@@ -495,9 +524,9 @@ public class HbmWorldGen implements IWorldGenerator {
 					
 					int y1 = world.getHeight(x, z);
 					
-					for(int f = 1; f < 4; f++)
+					for(int f = 0; f < 3; f++)
 						world.setBlockState(new BlockPos(x1, y1 + f, z1), ModBlocks.meteor_pillar.getDefaultState());
-					world.setBlockState(new BlockPos(x1, y1 + 4, z1), ModBlocks.meteor_brick_chiseled.getDefaultState());
+					world.setBlockState(new BlockPos(x1, y1 + 3, z1), ModBlocks.meteor_brick_chiseled.getDefaultState());
 					
 					for(int f = 0; f < 10; f++) {
 

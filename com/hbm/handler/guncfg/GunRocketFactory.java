@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class GunRocketFactory {
 
-public static GunConfiguration getGustavConfig() {
+	public static GunConfiguration getGustavConfig() {
 		
 		GunConfiguration config = new GunConfiguration();
 		
@@ -48,6 +48,7 @@ public static GunConfiguration getGustavConfig() {
 		config.config.add(BulletConfigSyncingUtil.ROCKET_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.ROCKET_HE);
 		config.config.add(BulletConfigSyncingUtil.ROCKET_INCENDIARY);
+		config.config.add(BulletConfigSyncingUtil.ROCKET_PHOSPHORUS);
 		config.config.add(BulletConfigSyncingUtil.ROCKET_SHRAPNEL);
 		config.config.add(BulletConfigSyncingUtil.ROCKET_EMP);
 		config.config.add(BulletConfigSyncingUtil.ROCKET_GLARE);
@@ -263,6 +264,23 @@ public static GunConfiguration getGustavConfig() {
 					worldObj.destroyBlock(pos, false);}
 			
 		};
+		
+		return bullet;
+	}
+	
+	public static BulletConfiguration getRocketPhosphorusConfig() {
+		
+		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
+		
+		bullet.ammo = ModItems.ammo_rocket_phosphorus;
+		bullet.dmgMin = 10;
+		bullet.dmgMax = 15;
+		bullet.wear = 15;
+		bullet.explosive = 4F;
+		bullet.incendiary = 5;
+		bullet.trail = 9;
+		
+		bullet.bImpact = BulletConfigFactory.getPhosphorousEffect(10, 60 * 20, 100, 0.5D);
 		
 		return bullet;
 	}

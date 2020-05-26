@@ -18,12 +18,15 @@ public class ItemRenderWeaponObj extends TEISRBase {
 		GlStateManager.disableCull();
 		if(item.getItem() == ModItems.gun_hk69)
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.hk69_tex);
-
 		if(item.getItem() == ModItems.gun_deagle)
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.turbofan_blades_tex);
-
 		if(item.getItem() == ModItems.gun_supershotgun)
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.turbofan_blades_tex);
+		if(item.getItem() == ModItems.gun_ks23)
+			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ks23_tex);
+		if(item.getItem() == ModItems.gun_flamer)
+			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.flamer_tex);
+		
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
@@ -47,6 +50,15 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(20, 0, 0, 1);
 					GL11.glRotated(95, 0, 1, 0);
 					GL11.glScaled(0.2, 0.2, 0.2);
+				} else if(item.getItem() == ModItems.gun_ks23){
+					GL11.glTranslated(-0.1, 0.25, 0.5);
+					GL11.glRotated(30, 0, 0, 1);
+					GL11.glRotated(95, 0, 1, 0);
+				} else if(item.getItem() == ModItems.gun_flamer){
+					GL11.glTranslated(0.3, -0.6, 0);
+					GL11.glRotated(26, 0, 0, 1);
+					GL11.glRotated(95, 0, 1, 0);
+					GL11.glScaled(0.5, 0.5, 0.5);
 				}
 			} else {
 				if(item.getItem() == ModItems.gun_hk69) {
@@ -75,6 +87,19 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(260, 0, 1, 0);
 					GL11.glRotated(-20, 1, 0, 0);
 					GL11.glScaled(0.2, 0.2, 0.2);
+				} else if(item.getItem() == ModItems.gun_ks23){
+					GL11.glTranslated(-0.1, 0.3, 0.4);
+					if(this.entity != null && this.entity.isSneaking()){
+						GL11.glTranslated(-0.2, 0.25, 0.53);
+						GL11.glRotated(10, 0, 1, 0);
+					}
+					GL11.glRotated(260, 0, 1, 0);
+					GL11.glRotated(-25, 1, 0, 0);
+				} else if(item.getItem() == ModItems.gun_flamer){
+					GL11.glTranslated(-0.5, -0.5, 0);
+					GL11.glRotated(265, 0, 1, 0);
+					GL11.glRotated(-25, 1, 0, 0);
+					GL11.glScaled(0.5, 0.5, 0.5);
 				}
 			}
 			break;
@@ -83,9 +108,13 @@ public class ItemRenderWeaponObj extends TEISRBase {
 		case GROUND:
 			if(item.getItem() == ModItems.gun_hk69){
 				GL11.glTranslated(0.0, -0.2, 0.5);
-			} if(item.getItem() == ModItems.gun_supershotgun){
+			} else if(item.getItem() == ModItems.gun_supershotgun){
 				GL11.glTranslated(0.0, -0.2, 0.5);
-			} if(item.getItem() == ModItems.gun_deagle){
+			} else if(item.getItem() == ModItems.gun_deagle){
+				
+			} else if(item.getItem() == ModItems.gun_ks23){
+				
+			} else if(item.getItem() == ModItems.gun_flamer){
 				
 			}
 		case THIRD_PERSON_LEFT_HAND:
@@ -101,6 +130,32 @@ public class ItemRenderWeaponObj extends TEISRBase {
 				GL11.glTranslated(0, -0.3, 0);
 				GL11.glRotated(180, 0, 1, 0);
 				GL11.glScaled(0.2, 0.2, 0.2);
+			} else if(item.getItem() == ModItems.gun_ks23){
+				GL11.glTranslated(0, -0.15, -1.3);
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(1.25, 1.25, 1.25);
+			} else if(item.getItem() == ModItems.gun_flamer){
+				GL11.glTranslated(0, -0.62, 0);
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(0.35, 0.35, 0.35);
+			}
+			break;
+		case GUI:
+			if(item.getItem() == ModItems.gun_hk69){
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslatef(-0.2F, -0.1F, 0.0F);
+				GL11.glRotatef(-90F, 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef(-40F, 1.0F, 0.0F, 0.0F);
+			} else if(item.getItem() == ModItems.gun_ks23){
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslatef(-0.5F, 0.6F, 0.0F);
+				GL11.glRotatef(-90F, 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef(-40F, 1.0F, 0.0F, 0.0F);
+			} else if(item.getItem() == ModItems.gun_flamer){
+				GL11.glScaled(0.12, 0.12, 0.12);
+				GL11.glTranslatef(-0.2F, -1.2F, 0.0F);
+				GL11.glRotatef(-90F, 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef(-40F, 1.0F, 0.0F, 0.0F);
 			}
 			break;
 		default:
@@ -123,6 +178,19 @@ public class ItemRenderWeaponObj extends TEISRBase {
 			ResourceManager.shotty.renderAll();
 			GlStateManager.shadeModel(GL11.GL_FLAT);
 		}
+		
+		if(item.getItem() == ModItems.gun_ks23) {
+			GlStateManager.shadeModel(GL11.GL_SMOOTH);
+			ResourceManager.ks23.renderAll();
+			GlStateManager.shadeModel(GL11.GL_FLAT);
+		} 
+		
+		if(item.getItem() == ModItems.gun_flamer){
+			GlStateManager.shadeModel(GL11.GL_SMOOTH);
+			ResourceManager.flamer.renderAll();
+			GlStateManager.shadeModel(GL11.GL_FLAT);
+		}
+		
 		GlStateManager.enableCull();
 		GL11.glPushMatrix();
 	}

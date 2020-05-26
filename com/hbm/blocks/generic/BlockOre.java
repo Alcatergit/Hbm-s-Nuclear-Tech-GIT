@@ -1,5 +1,6 @@
 package com.hbm.blocks.generic;
 
+import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -12,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -19,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -146,7 +149,7 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.ore_nether_fire)
 		{
-			return rand.nextInt(2) == 0 ? ModItems.powder_fire : Items.BLAZE_POWDER;
+			return rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
 		}
 		if(this == ModBlocks.deco_aluminium)
 		{
@@ -196,10 +199,6 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.ore_rare){
 			return 4 + rand.nextInt(8);
-		}
-		if(this == ModBlocks.ore_nether_fire)
-		{
-			return 2 + rand.nextInt(3);
 		}
 		if(this == ModBlocks.block_meteor_broken)
 		{
@@ -302,6 +301,14 @@ public class BlockOre extends Block {
         	if(!world.isRemote)
         		world.setBlockState(pos, Blocks.LAVA.getDefaultState());
         }
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.ore_oil)){
+			tooltip.add("You weren't supposed to mine that.");
+			tooltip.add("Come on, get a derrick you doofus.");
+		}
 	}
 
 	@Override

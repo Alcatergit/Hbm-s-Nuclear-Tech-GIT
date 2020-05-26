@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemSatChip;
+import com.hbm.items.machine.ItemSatChip;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
@@ -62,9 +62,13 @@ public class EntitySoyuz extends Entity {
 				e.setFire(15);
 				e.attackEntityFrom(ModDamageSource.exhaust, 100.0F);
 				
-				if(!memed && e instanceof EntityPlayer) {
-					memed = true;
-					world.playSound(null, posX, posY, posZ, HBMSoundHandler.soyuzed, SoundCategory.NEUTRAL, 100, 1.0F);
+				if(e instanceof EntityPlayer) {
+					if(!memed) {
+						memed = true;
+						world.playSound(null, posX, posY, posZ, HBMSoundHandler.soyuzed, SoundCategory.NEUTRAL, 100, 1.0F);
+					}
+					
+					AdvancementManager.grantAchievement(((EntityPlayer)e), AdvancementManager.soyuz);
 				}
 			}
 		}
@@ -126,15 +130,11 @@ public class EntitySoyuz extends Entity {
 			capsule.payload = this.payload;
 			capsule.soyuz = this.getSkin();
 			capsule.setPosition(targetX + 0.5, 600, targetZ + 0.5);
-			System.out.println(capsule.posX + " " + capsule.posZ);
 			
 			IChunkProvider provider = world.getChunkProvider();
 			provider.provideChunk(targetX >> 4, targetZ >> 4);
 			
-			if(world.spawnEntity(capsule))
-				System.out.println("Success!");
-			else
-				System.out.println("Crap.");
+			world.spawnEntity(capsule);
 		}
 		
 		this.setDead();

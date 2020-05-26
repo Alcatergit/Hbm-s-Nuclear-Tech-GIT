@@ -8,6 +8,7 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.RenderSparks;
 import com.hbm.render.model.ModelBaleflare;
 import com.hbm.render.model.ModelBuckshot;
 import com.hbm.render.model.ModelBullet;
@@ -51,11 +52,13 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ResourceLocation rocket_gl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketGlare.png");
 	private ResourceLocation rocket_sl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketSleek.png");
 	private ResourceLocation rocket_nu = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketNuclear.png");
+	private ResourceLocation rocket_phos = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketPhosphorus.png");
 	private ResourceLocation grenade_rl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenade.png");
 	private ResourceLocation grenade_he = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeHE.png");
 	private ResourceLocation grenade_in = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeIncendiary.png");
 	private ResourceLocation grenade_to = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeToxic.png");
 	private ResourceLocation grenade_sl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeSleek.png");
+	
 
 	protected RenderBulletMk2(RenderManager renderManager) {
 		super(renderManager);
@@ -83,6 +86,8 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		int trail = bullet.getDataManager().get(EntityBulletBase.TRAIL);
 
 		switch (style) {
+		case BulletConfiguration.STYLE_NONE:
+			break;
 		case BulletConfiguration.STYLE_NORMAL:
 			renderBullet(trail);
 			break;
@@ -112,6 +117,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			break;
 		case BulletConfiguration.STYLE_BF: 
 			renderNuke(2); 
+			break;
+		case BulletConfiguration.STYLE_ORB:
+			renderOrb(trail);
 			break;
 		default:
 			renderBullet(trail);
@@ -167,6 +175,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			break;
 		case 7:
 			bindTexture(rocket_nu);
+			break;
+		case 9:
+			bindTexture(rocket_phos);
 			break;
 		}
 
@@ -226,8 +237,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	
 	private void renderFlechette() {
 		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 		
         GL11.glScalef(1F/16F, 1F/16F, 1F/16F);
@@ -290,9 +300,8 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		tess.draw();
 		
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.enableTexture2D();
 		
-        GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 	
@@ -309,14 +318,13 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		}
 		
 		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableCull();
         GlStateManager.disableLighting();
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glDepthMask(false);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GlStateManager.depthMask(false);
 
         GL11.glScalef(1F/4F, 1F/8F, 1F/8F);
         GL11.glScalef(-1, 1, 1);
@@ -389,14 +397,40 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		
 		tess.draw();
 		
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
         GlStateManager.enableLighting();
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(true);
+        GlStateManager.enableCull();
+        GlStateManager.depthMask(true);
 		
-        GL11.glPopAttrib();
 		GL11.glPopMatrix();
+	}
+	
+	private void renderOrb(int type) {
+
+        GlStateManager.enableCull();
+        GlStateManager.disableLighting();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GlStateManager.depthMask(false);
+		
+		switch(type) {
+		case 0:
+			bindTexture(ResourceManager.tom_flame_tex);
+			ResourceManager.sphere_uv_anim.renderAll();
+			GL11.glScalef(0.3F, 0.3F, 0.3F);
+			ResourceManager.sphere_uv_anim.renderAll();
+			GL11.glScalef(1F/0.3F, 1F/0.3F, 1F/0.3F);
+			for(int i = 0; i < 5; i++)
+				RenderSparks.renderSpark((int) (System.currentTimeMillis() / 100 + 100 * i), 0, 0, 0, 0.5F, 2, 2, 0x8080FF, 0xFFFFFF);
+			break;
+		}
+		
+		GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
+        GlStateManager.depthMask(true);
+
 	}
 
 	@Override

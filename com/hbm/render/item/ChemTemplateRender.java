@@ -4,7 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemChemistryTemplate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;

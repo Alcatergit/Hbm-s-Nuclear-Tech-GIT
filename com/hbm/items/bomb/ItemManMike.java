@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemManMike extends ItemRadioactive {
 
-	public ItemManMike(String s) {
-		super(s);
+	public ItemManMike(float radiation, String s) {
+		super(radiation, s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 
@@ -22,5 +22,6 @@ public class ItemManMike extends ItemRadioactive {
 		list.add("Fat Man");
 		list.add("Ivy Mike");
 		list.add("Tsar Bomba");
+		super.addInformation(stack, world, list, flagIn);
 	}
 }

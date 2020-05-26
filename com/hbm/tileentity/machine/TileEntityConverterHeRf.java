@@ -25,42 +25,13 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 	public void update() {
 		if (!world.isRemote) {
 
-			for(int i = 0; i < 9; i++)
-			if(power >= 100000 && storage.getEnergyStored() + 400000 <= storage.getMaxEnergyStored())
-			{
-				power -= 100000;
-				storage.setEnergyStored(storage.getEnergyStored() + 400000);
-			}
-			for(int i = 0; i < 9; i++)
-			if(power >= 10000 && storage.getEnergyStored() + 40000 <= storage.getMaxEnergyStored())
-			{
-				power -= 10000;
-				storage.setEnergyStored(storage.getEnergyStored() + 40000);
-			}
-			for(int i = 0; i < 9; i++)
-			if(power >= 1000 && storage.getEnergyStored() + 4000 <= storage.getMaxEnergyStored())
-			{
-				power -= 1000;
-				storage.setEnergyStored(storage.getEnergyStored() + 4000);
-			}
-			for(int i = 0; i < 9; i++)
-			if(power >= 100 && storage.getEnergyStored() + 400 <= storage.getMaxEnergyStored())
-			{
-				power -= 100;
-				storage.setEnergyStored(storage.getEnergyStored() + 400);
-			}
-			for(int i = 0; i < 9; i++)
-			if(power >= 10 && storage.getEnergyStored() + 40 <= storage.getMaxEnergyStored())
-			{
-				power -= 10;
-				storage.setEnergyStored(storage.getEnergyStored() + 4);
-			}
-			for(int i = 0; i < 10; i++)
-			if(power >= 1 && storage.getEnergyStored() + 4 <= storage.getMaxEnergyStored())
-			{
-				power -= 1;
-				storage.setEnergyStored(storage.getEnergyStored() + 40);
-			}
+			long convert = Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), power * 4);
+
+			power -= convert / 4;
+			storage.setEnergyStored((int) (storage.getEnergyStored() + convert));
+			
+			if(convert > 0)
+				this.markDirty();
 			
 			for (EnumFacing dir : EnumFacing.VALUES) {
 				//Drillgon200: BlockPos is basically the location class, but without as much abstraction.
@@ -77,7 +48,6 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 					storage.extractEnergy(energyTransferred, false);
 				}
 			}
-			detectAndSendChanges();
 		}
 		
 	}
@@ -93,10 +63,8 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 	public void readFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("storage")){
 			storage.readFromNBT(compound.getCompoundTag("storage"));
-			detectRfPower = storage.getEnergyStored() + 1;
 		}
 		power = compound.getLong("power");
-		detectPower = power + 1;
 		super.readFromNBT(compound);
 	}
 
@@ -181,24 +149,6 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 	
 	public long getFluxScaled(long i) {
 		return (storage.getEnergyStored() * i) / storage.getMaxEnergyStored();
-	}
-	
-	long detectPower;
-	int detectRfPower;
-	
-	private void detectAndSendChanges() {
-		boolean mark = false;
-		if(detectPower != power){
-			mark = true;
-			detectPower = power;
-		}
-		if(detectRfPower != storage.getEnergyStored()){
-			mark = true;
-			detectRfPower = storage.getEnergyStored();
-		}
-		if(mark)
-			markDirty();
-		
 	}
 
 }

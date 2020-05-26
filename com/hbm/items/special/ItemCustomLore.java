@@ -3,8 +3,8 @@ package com.hbm.items.special;
 import java.util.List;
 
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.Minecraft;
@@ -30,6 +30,10 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.ingot_fiberglass)
+		{
+			list.add("High in fiber, high in glass. Everything the body needs.");
+		}
 		if(this == ModItems.missile_soyuz_lander)
 		{
 			list.add("Doubles as a crappy lander!");
@@ -130,7 +134,7 @@ public class ItemCustomLore extends Item {
 			list.add("Can be used with a screwdriver to pick locks.");
 			if(Minecraft.getMinecraft().player != null) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
-				if(Library.checkArmorPiece(player, ModItems.jackt, 2) || Library.checkArmorPiece(player, ModItems.jackt2, 2))
+				if(ArmorUtil.checkArmorPiece(player, ModItems.jackt, 2) || ArmorUtil.checkArmorPiece(player, ModItems.jackt2, 2))
 					list.add("Success rate of picking standard lock is 100%!");
 				else
 					list.add("Success rate of picking standard lock is ~10%");
@@ -158,9 +162,6 @@ public class ItemCustomLore extends Item {
 			list.add("use up it's fuel. Removing the fuse");
 			list.add("from a reactor will instantly shut");
 			list.add("it down.");
-		}
-		if(this == ModItems.screwdriver) {
-			list.add("Could be used instead of a fuse...");
 		}
 		if(this == ModItems.gun_super_shotgun) {
 			list.add("It's super broken!");

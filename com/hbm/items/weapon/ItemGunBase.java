@@ -309,47 +309,49 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			setIsReloading(stack, false);
 			return;
 		}
-
+			
 		if(getReloadCycle(stack) < 0) {
-
+			
 			if(getMag(stack) == 0)
 				resetAmmoType(stack, world, player);
 
+			
 			int count = 1;
-
+			
 			if(mainConfig.reloadType == GunConfiguration.RELOAD_FULL) {
-
+				
 				count = mainConfig.ammoCap - getMag(stack);
 			}
-
+			
 			boolean hasLoaded = false;
-			Item ammo = BulletConfigSyncingUtil.pullConfig(mainConfig.config.get(getMagType(stack))).ammo;
-
+			BulletConfiguration cfg = BulletConfigSyncingUtil.pullConfig(mainConfig.config.get(getMagType(stack)));
+			Item ammo = cfg.ammo;
+			
 			for(int i = 0; i < count; i++) {
 
-				if(Library.hasInventoryItem(player.inventory, ammo)) {
+				if(Library.hasInventoryItem(player.inventory, ammo) && getMag(stack) < mainConfig.ammoCap) {
 					Library.consumeInventoryItem(player.inventory, ammo);
-					setMag(stack, getMag(stack) + 1);
+					setMag(stack, Math.min(getMag(stack) + cfg.ammoCount, mainConfig.ammoCap));
 					hasLoaded = true;
 				} else {
 					setIsReloading(stack, false);
 					break;
 				}
 			}
-
+			
 			if(getMag(stack) >= mainConfig.ammoCap) {
 				setIsReloading(stack, false);
 			} else {
 				resetReloadCycle(stack);
 			}
-
+			
 			if(hasLoaded && mainConfig.reloadSoundEnd)
 				world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
+			
 		} else {
 			setReloadCycle(stack, getReloadCycle(stack) - 1);
 		}
-
+		
 		if(stack != player.getHeldItem(hand)) {
 			setReloadCycle(stack, 0);
 			setIsReloading(stack, false);

@@ -7,6 +7,9 @@ import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -19,10 +22,13 @@ import net.minecraft.world.World;
 
 public class SoyuzCapsule extends BlockContainer {
 
+	public static final PropertyBool RUSTY = PropertyBool.create("rusty");
+	
 	public SoyuzCapsule(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(RUSTY, false));
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -57,6 +63,21 @@ public class SoyuzCapsule extends BlockContainer {
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{RUSTY});
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return meta > 0 ? this.getDefaultState().withProperty(RUSTY, true) : this.getDefaultState().withProperty(RUSTY, false);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(RUSTY) ? 3 : 0;
 	}
 	
 	@Override

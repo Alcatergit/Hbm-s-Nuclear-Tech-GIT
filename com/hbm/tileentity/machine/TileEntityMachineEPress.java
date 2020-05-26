@@ -3,8 +3,8 @@ package com.hbm.tileentity.machine;
 import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
-import com.hbm.items.special.ItemBattery;
-import com.hbm.items.special.ItemBlades;
+import com.hbm.items.machine.ItemBattery;
+import com.hbm.items.machine.ItemBlades;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -126,7 +126,7 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 				age = 0;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
-			if(power >= 100) {
+			if(power >= 100 && !(world.isBlockIndirectlyGettingPowered(pos) > 0)) {
 
 				int speed = 25;
 				

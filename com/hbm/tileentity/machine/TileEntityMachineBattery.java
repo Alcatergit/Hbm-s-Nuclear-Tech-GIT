@@ -6,60 +6,43 @@ import java.util.List;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
-import com.hbm.items.special.ItemBattery;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineBattery extends TileEntity implements ITickable, IConsumer, ISource {
+public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IConsumer, ISource {
 
-	public ItemStackHandler inventory;
-	
 	public long power = 0;
 	public long maxPower = 1000000;
 	
+	//0: input only
+	//1: buffer
+	//2: output only
+	//3: nothing
+	public short redLow = 0;
+	public short redHigh = 2;
+	
 	public boolean conducts = false;
 	
-	//private static final int[] slots_top = new int[] {0};
-	//private static final int[] slots_bottom = new int[] {0, 1};
-	//private static final int[] slots_side = new int[] {1};
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {0, 1};
+	private static final int[] slots_side = new int[] {1};
 	public int age = 0;
 	public List<IConsumer> list = new ArrayList<IConsumer>();
 	
 	private String customName;
 	
 	public TileEntityMachineBattery() {
-		inventory = new ItemStackHandler(2){
-			@Override
-			protected void onContentsChanged(int slot) {
-				super.onContentsChanged(slot);
-				markDirty();
-			}
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				return stack.getItem() instanceof ItemBattery;
-			}
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(this.isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				else
-					return ItemStack.EMPTY;
-			}
-		};
-		
+		super(2);
 	}
 	
 	public TileEntityMachineBattery(long power) {
@@ -79,6 +62,11 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 		this.customName = name;
 	}
 	
+	@Override
+	public String getName() {
+		return "container.battery";
+	}
+	
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if(world.getTileEntity(pos) != this)
 		{
@@ -94,30 +82,76 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setBoolean("conducts", conducts);
-		detectConducts = !conducts;
 		compound.setLong("power", power);
+		compound.setShort("redLow", redLow);
+		compound.setShort("redHigh", redHigh);
 		detectPower = power + 1;
+		
 		return super.writeToNBT(compound);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("power");
-		conducts = compound.getBoolean("conducts");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		this.conducts = compound.getBoolean("conducts");
+		this.redLow = compound.getShort("redLow");
+		this.redHigh = compound.getShort("redHigh");
 		super.readFromNBT(compound);
 	}
 
 	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_)
+    {
+        return p_94128_1_ == EnumFacing.DOWN ? slots_bottom : (p_94128_1_ == EnumFacing.UP ? slots_top : slots_side);
+    }
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		switch(i)
+		{
+		case 0:
+			if(stack.getItem() instanceof ItemBattery)
+				return true;
+			break;
+		case 1:
+			if(stack.getItem() instanceof ItemBattery)
+				return true;
+			break;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemStack, int j) {
+		return this.isItemValidForSlot(i, itemStack);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+		
+		if(itemStack.getItem() instanceof ItemBattery) {
+			if(i == 0 && ItemBattery.getCharge(itemStack) == 0) {
+				return true;
+			}
+			if(i == 1 && ItemBattery.getCharge(itemStack) == ItemBattery.getMaxChargeStatic(itemStack)) {
+				return true;
+			}
+		}
+			
+		return false;
+	}
+	
+	@Override
 	public void update() {
 		if(world.getBlockState(pos).getBlock() instanceof MachineBattery && !world.isRemote) {
+			
 			this.maxPower = ((MachineBattery)world.getBlockState(pos).getBlock()).getMaxPower();
-			conducts = world.isBlockIndirectlyGettingPowered(pos) > 0;
 		
-			if(this.conducts)
+			short mode = (short) this.getRelevantMode();
+			
+			if(mode == 1 || mode == 2)
 			{
 				age++;
 				if(age >= 20)
@@ -132,10 +166,27 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			power = Library.chargeItemsFromTE(inventory, 1, power, maxPower);
 			
-			
 			detectAndSendChanges();
 		}
 		
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) { 
+
+		this.power = nbt.getLong("power");
+		this.maxPower = nbt.getLong("maxPower");
+		this.redLow = nbt.getShort("redLow");
+		this.redHigh = nbt.getShort("redHigh");
+	}
+	
+	public short getRelevantMode() {
+		
+		if(world.isBlockIndirectlyGettingPowered(pos) > 0) {
+			return this.redHigh;
+		} else {
+			return this.redLow;
+		}
 	}
 
 	@Override
@@ -152,6 +203,8 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 
 	@Override
 	public long getMaxPower() {
+		if(!world.isRemote && getRelevantMode() >= 2)
+			return 0;
 		return maxPower;
 	}
 
@@ -201,16 +254,6 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 		list.clear();
 	}
 	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing facing) {
-		return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(cap, facing);
-	}
-	
 	private boolean detectConducts;
 	private long detectPower;
 	
@@ -225,8 +268,6 @@ public class TileEntityMachineBattery extends TileEntity implements ITickable, I
 			mark = true;
 			detectPower = power;
 		}
-		//Drillgon200: This system is buggy, changes don't always get sent correctly when they should, or the wrong changes get sent
-		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		
 		if(mark)
 			markDirty();

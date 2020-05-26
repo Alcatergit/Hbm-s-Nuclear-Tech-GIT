@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemBoy extends ItemRadioactive {
 
-	public ItemBoy(String s) {
-		super(s);
+	public ItemBoy(float radiation, String s) {
+		super(radiation, s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 
@@ -20,6 +20,7 @@ public class ItemBoy extends ItemRadioactive {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
 		list.add("Little Boy");
+		super.addInformation(stack, world, list, flagIn);
 	}
 	
 }

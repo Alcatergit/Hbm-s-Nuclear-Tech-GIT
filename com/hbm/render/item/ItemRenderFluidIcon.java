@@ -2,7 +2,7 @@ package com.hbm.render.item;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.items.tool.ItemFluidIcon;
+import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;

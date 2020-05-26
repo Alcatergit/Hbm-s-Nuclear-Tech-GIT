@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemForgeFluidIdentifier;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;

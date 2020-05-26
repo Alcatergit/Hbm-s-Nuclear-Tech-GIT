@@ -7,6 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineBattery extends Container {
@@ -17,8 +18,8 @@ public class ContainerMachineBattery extends Container {
 		
 		diFurnace = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 134, 35));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 26, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -66,6 +67,17 @@ public class ContainerMachineBattery extends Container {
 		}
 		
 		return var3;
+	}
+	
+	@Override
+	public void detectAndSendChanges() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setLong("power", diFurnace.power);
+		nbt.setLong("maxPower", diFurnace.maxPower);
+		nbt.setShort("redLow", diFurnace.redLow);
+		nbt.setShort("redHigh", diFurnace.redHigh);
+		diFurnace.networkPack(nbt, 10);
+		super.detectAndSendChanges();
 	}
 	
 	@Override

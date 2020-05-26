@@ -18,7 +18,7 @@ public class TileEntityFusionHatch extends TileEntity implements IFluidHandler {
 		TileEntityFusionMultiblock fillable = this.getReactorTE(world, pos);
 		if(fillable != null)
 			return fillable.getTankProperties();
-		return null;
+		return new IFluidTankProperties[]{};
 	}
 
 	@Override

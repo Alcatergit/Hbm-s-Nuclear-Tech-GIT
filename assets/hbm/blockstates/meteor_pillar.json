@@ -1,5 +1,7 @@
 {
-	"variants": {
-		"normal": { "model": "hbm:meteor_pillar" }
-	}
+    "variants": {
+        "axis=y": { "model": "hbm:meteor_pillar" },
+        "axis=z": { "model": "hbm:meteor_pillar", "x": 90 },
+        "axis=x": { "model": "hbm:meteor_pillar", "x": 90, "y": 90 }
+    }
 }

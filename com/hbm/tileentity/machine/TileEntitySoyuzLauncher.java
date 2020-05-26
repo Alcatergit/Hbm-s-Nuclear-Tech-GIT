@@ -84,7 +84,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 				countdown = maxCount;
 				starting = false;
 			} else if(countdown > 0) {
-				countdown-=30; //TODO: remove speedy countdown
+				countdown--;
 				
 				if(countdown % 100 == 0 && countdown > 0)
 					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.alarmHatch, SoundCategory.BLOCKS, 100F, 1.1F);

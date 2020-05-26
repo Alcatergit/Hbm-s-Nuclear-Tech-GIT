@@ -3,7 +3,7 @@ package com.hbm.explosion;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.Library;
+import com.hbm.handler.ArmorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
@@ -300,7 +300,7 @@ public class ExplosionThermo {
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
 				if (d9 < wat && !(entity instanceof EntityOcelot) && entity instanceof EntityLivingBase) {
 
-					if (!(entity instanceof EntityPlayer && Library.checkForAsbestos((EntityPlayer) entity))) {
+					if (!(entity instanceof EntityPlayer && ArmorUtil.checkForAsbestos((EntityPlayer) entity))) {
 						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 15 * 20, 4));
 						entity.setFire(10);
 					}

@@ -3,7 +3,7 @@ package com.hbm.blocks.generic;
 import javax.annotation.Nullable;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.Library;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.potion.HbmPotion;
 
@@ -68,10 +68,10 @@ public class BarbedWire extends Block {
         	ent.attackEntityFrom(DamageSource.CACTUS, 2.0F);
 
         	if(ent instanceof EntityPlayer) {
-	    		Library.damageSuit((EntityPlayer)ent, 0, 1);
-	    		Library.damageSuit((EntityPlayer)ent, 1, 1);
-	    		Library.damageSuit((EntityPlayer)ent, 2, 1);
-	    		Library.damageSuit((EntityPlayer)ent, 3, 1);
+	    		ArmorUtil.damageSuit((EntityPlayer)ent, 0, 1);
+	    		ArmorUtil.damageSuit((EntityPlayer)ent, 1, 1);
+	    		ArmorUtil.damageSuit((EntityPlayer)ent, 2, 1);
+	    		ArmorUtil.damageSuit((EntityPlayer)ent, 3, 1);
         	}
         }
 

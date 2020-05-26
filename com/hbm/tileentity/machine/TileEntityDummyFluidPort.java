@@ -66,7 +66,7 @@ public class TileEntityDummyFluidPort extends TileEntityDummy implements IFluidH
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(target == null)
+		if(target == null && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		if(target != null && world.getTileEntity(target) != null){
 			return world.getTileEntity(target).getCapability(capability, facing);

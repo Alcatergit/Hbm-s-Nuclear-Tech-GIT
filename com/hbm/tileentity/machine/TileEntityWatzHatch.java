@@ -18,7 +18,7 @@ public class TileEntityWatzHatch extends TileEntity implements IFluidHandler {
 		TileEntityWatzCore fillable = this.getReactorTE(world, pos);
 		if(fillable != null)
 			return fillable.getTankProperties();
-		return null;
+		return new IFluidTankProperties[]{};
 	}
 
 	@Override

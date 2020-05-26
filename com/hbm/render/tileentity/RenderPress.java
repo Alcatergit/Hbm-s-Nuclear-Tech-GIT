@@ -1,22 +1,11 @@
 package com.hbm.render.tileentity;
 
-import java.util.Arrays;
-
 import org.lwjgl.opengl.GL11;
-import org.objectweb.asm.Type;
-
-import com.hbm.flashlight.Flashlight;
-import com.hbm.handler.HbmShaderManager;
-import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
-import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -25,11 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePress> {
 
@@ -48,10 +33,10 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 	@Override
 	public void render(TileEntityMachinePress te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if(MainRegistry.useShaders) {
+		/*if(MainRegistry.useShaders) {
 			if(!ModEventHandlerClient.tester.containsKey(te))
 				ModEventHandlerClient.tester.put(te, new Flashlight(new Vec3d(te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5), new Vec3d(1, 0, 0), 10));
-		}
+		}*/
 		/* GL11.glEnable(GL11.GL_STENCIL_TEST);
 		    
 		    
@@ -104,11 +89,11 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		    GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		}*/
 		
-		if(te.getPos().getX() % 2 == 0){
+		/*if(te.getPos().getX() % 2 == 0){
 			HbmShaderManager.useDissolveShader(Library.remap((float)Math.sin((te.getWorld().getTotalWorldTime() + partialTicks)/10), -1F, 1F, 0F, 1F));
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		}
+		}*/
 		
 		GL11.glPushMatrix();
 
@@ -120,10 +105,10 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 		GL11.glPopMatrix();
 		renderTileEntityAt2(te, x, y, z, partialTicks);
-		if(te.getPos().getX() % 2 == 0){
+		/*if(te.getPos().getX() % 2 == 0){
 			GlStateManager.disableBlend();
 			HbmShaderManager.releaseShader2();
-		}
+		}*/
 		
 		// GL11.glMatrixMode(GL11.GL_PROJECTION);
 		// GL11.glLoadIdentity();

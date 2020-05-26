@@ -3,11 +3,11 @@ package com.hbm.packet;
 import java.io.IOException;
 
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemCassette;
-import com.hbm.items.tool.ItemChemistryTemplate;
-import com.hbm.items.tool.ItemForgeFluidIdentifier;
-import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
+import com.hbm.items.machine.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemCassette;
+import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 

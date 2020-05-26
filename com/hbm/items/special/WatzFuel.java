@@ -25,8 +25,8 @@ public class WatzFuel extends ItemRadioactive {
 	 * @param heatMultiplier
 	 * @param decayMultiplier
 	 */
-	public WatzFuel(int lifeTime, int power, float powerMultiplier, int heat, float heatMultiplier, float decayMultiplier, String s) {
-		super(s);
+	public WatzFuel(float radiation, boolean blinding, int lifeTime, int power, float powerMultiplier, int heat, float heatMultiplier, float decayMultiplier, String s) {
+		super(radiation, false, blinding, s);
 		this.lifeTime = lifeTime * 100;
 		this.power = power/10;
 		this.powerMultiplier = powerMultiplier;

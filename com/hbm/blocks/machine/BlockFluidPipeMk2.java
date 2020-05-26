@@ -1,13 +1,21 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,21 +25,32 @@ import net.minecraft.world.World;
 
 public class BlockFluidPipeMk2 extends BlockContainer {
 
+	public static final PropertyBool EXTRACTS = PropertyBool.create("extracts");
+	
 	private static final float p = 1F / 16F;
 	private static final AxisAlignedBB DUCT_BB = new AxisAlignedBB(11 * p / 2, 11 * p / 2, 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2);
-	
 	
 	public BlockFluidPipeMk2(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(EXTRACTS, false));
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityFFFluidDuctMk2();
+		if(meta > 0){
+			return new TileEntityFFFluidSuccMk2();
+		} else {
+			return new TileEntityFFFluidDuctMk2();
+		}
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("Right click with screwdriver to toggle extraction");
 	}
 	
 	@Override
@@ -110,6 +129,21 @@ public class BlockFluidPipeMk2 extends BlockContainer {
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{ EXTRACTS });
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(EXTRACTS) ? 1 : 0;
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return meta > 0 ? this.getDefaultState().withProperty(EXTRACTS, true) : this.getDefaultState().withProperty(EXTRACTS, false);
 	}
 	
 }

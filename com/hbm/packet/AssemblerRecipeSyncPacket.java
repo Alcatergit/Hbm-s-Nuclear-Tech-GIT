@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
+import com.hbm.items.machine.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemAssemblyTemplate.AssemblerRecipe;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;

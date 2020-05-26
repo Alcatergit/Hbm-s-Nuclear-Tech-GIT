@@ -24,7 +24,6 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 	public int dualPower;
 	public static final int maxPower = 1000;
 	public static final int processingSpeed = 1000;
-	public boolean runsOnRtg = false;
 	
 	private static final int[] slots_top = new int[] {1};
 	private static final int[] slots_bottom = new int[] {2, 0};
@@ -74,6 +73,8 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 		}else{
 		Item item = itemStack.getItem();
 		
+		if(item == ModItems.pellet_rtg_weak) return 1;
+		if(item == ModItems.pellet_rtg) return 2;
 		if(item == ModItems.rod_u238) return 1;
 		if(item == ModItems.rod_dual_u238) return 2;
 		if(item == ModItems.rod_quad_u238) return 4;
@@ -109,7 +110,6 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 		
 		dualPower = nbt.getShort("powerTime");
 		dualCookTime = nbt.getShort("CookTime");
-		runsOnRtg = nbt.getBoolean("runsOnRtg");
 		if(nbt.hasKey("inventory"))
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 	}
@@ -119,7 +119,6 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 		
 		nbt.setShort("powerTime", (short) dualPower);
 		nbt.setShort("cookTime", (short) dualCookTime);
-		nbt.setBoolean("runsOnRtg", runsOnRtg);
 		nbt.setTag("inventory", inventory.serializeNBT());
 		
 		return super.writeToNBT(nbt);
@@ -184,11 +183,6 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 					inventory.setStackInSlot(i, ItemStack.EMPTY);
 				}
 			}
-			
-			if(!runsOnRtg)
-			{
-				dualPower--;
-			}
 		}
 	}
 	
@@ -219,20 +213,6 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 						inventory.setStackInSlot(0, container);
 					}
 				}
-			}
-			
-			if(!inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() == ModItems.pellet_rtg && this.dualPower == 0)
-			{
-				ItemStack container = inventory.getStackInSlot(0).getItem().getContainerItem(inventory.getStackInSlot(0));
-				inventory.getStackInSlot(0).shrink(1);
-				if(inventory.getStackInSlot(0).isEmpty())
-				{
-					inventory.setStackInSlot(0, container);
-				}
-				
-				this.runsOnRtg = true;
-				
-				this.dualPower = 1;
 			}
 			
 			if(hasPower() && canProcess())
@@ -272,7 +252,9 @@ public class TileEntityMachineReactor extends TileEntity implements ITickable {
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			if(facing.getHorizontalIndex() >= 0){
+			if(facing == null){
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			} else if(facing.getHorizontalIndex() >= 0){
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, slots_side));
 			} else if(facing == EnumFacing.DOWN){
 				

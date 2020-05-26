@@ -2,9 +2,9 @@ package com.hbm.items.gear;
 
 import java.util.List;
 
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemBattery;
-import com.hbm.lib.Library;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelT45Boots;
 import com.hbm.render.model.ModelT45Chest;
@@ -120,7 +120,7 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
 		// return null;
-				if (player instanceof EntityPlayer && Library.checkArmor((EntityPlayer) player, ModItems.t45_helmet,
+				if (player instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) player, ModItems.t45_helmet,
 						ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots)) {
 					if (source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE || source == DamageSource.FALL
 							|| source == DamageSource.DROWN || source == DamageSource.CACTUS || source == DamageSource.MAGIC
@@ -190,13 +190,13 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 				}
 			}
 
-			if (armor.getTagCompound().getInteger("charge") > 0 && Library.checkArmor(player, ModItems.t45_helmet,
+			if (armor.getTagCompound().getInteger("charge") > 0 && ArmorUtil.checkArmor(player, ModItems.t45_helmet,
 					ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots)) {
 				armor.getTagCompound().setInteger("charge", armor.getTagCompound().getInteger("charge") - 1);
 			}
 		}
 
-		if (Library.checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) && !world.isRemote) {
+		if (ArmorUtil.checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) && !world.isRemote) {
 			//Probably don't need the null check because it's a non null list, but whatever
 			if (player.inventory.armorInventory.get(2) != null
 					&& player.inventory.armorInventory.get(2).getItem() == ModItems.t45_plate

@@ -31,43 +31,14 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 	public void update() {
 		if (!world.isRemote) {
 
-			for(int i = 0; i < 9; i++)
-			if(storage.getEnergyStored() >= 400000 && power + 100000 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 400000);
-				power += 100000;
-			}
-			for(int i = 0; i < 9; i++)
-			if(storage.getEnergyStored() >= 40000 && power + 10000 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 40000);
-				power += 10000;
-			}
-			for(int i = 0; i < 9; i++)
-			if(storage.getEnergyStored() >= 4000 && power + 1000 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 4000);
-				power += 1000;
-			}
-			for(int i = 0; i < 9; i++)
-			if(storage.getEnergyStored() >= 400 && power + 100 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 400);
-				power += 100;
-			}
-			for(int i = 0; i < 9; i++)
-			if(storage.getEnergyStored() >= 40 && power + 10 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 40);
-				power += 10;
-			}
-			for(int i = 0; i < 10; i++)
-			if(storage.getEnergyStored() >= 4 && power + 1 <= maxPower)
-			{
-				storage.setEnergyStored(storage.getEnergyStored() - 4);
-				power += 1;
-			}
-			detectAndSendChanges();
+			long convert = Math.min(storage.getEnergyStored(), (maxPower - power) * 4);
+
+			storage.setEnergyStored((int) (storage.getEnergyStored() - convert));
+			power += convert / 4;
+			
+			if(convert > 0)
+				this.markDirty();
+			
 			age++;
 			if(age >= 20)
 			{
@@ -94,10 +65,8 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 	public void readFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("storage")){
 			storage.readFromNBT(compound.getCompoundTag("storage"));
-			detectRfPower = storage.getEnergyStored() + 1;
 		}
 		power = compound.getLong("power");
-		detectPower = power + 1;
 		super.readFromNBT(compound);
 	}
 	
@@ -215,24 +184,6 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 	@Override
 	public boolean canReceive() {
 		return true;
-	}
-	
-	long detectPower;
-	int detectRfPower;
-	
-	private void detectAndSendChanges() {
-		boolean mark = false;
-		if(detectPower != power){
-			mark = true;
-			detectPower = power;
-		}
-		if(detectRfPower != storage.getEnergyStored()){
-			mark = true;
-			detectRfPower = storage.getEnergyStored();
-		}
-		if(mark)
-			markDirty();
-		
 	}
 
 }

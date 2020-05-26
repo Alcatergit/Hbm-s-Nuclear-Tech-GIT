@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKey;
 import com.hbm.lib.HBMSoundHandler;
@@ -109,7 +110,7 @@ public class TileEntityLockableBase extends TileEntity {
 		
 		if(canPick) {
 			
-			if(Library.checkArmorPiece(player, ModItems.jackt, 2) || Library.checkArmorPiece(player, ModItems.jackt2, 2))
+			if(ArmorUtil.checkArmorPiece(player, ModItems.jackt, 2) || ArmorUtil.checkArmorPiece(player, ModItems.jackt2, 2))
 				chanceOfSuccess *= 100D;
 			
 			double rand = player.world.rand.nextDouble() * 100;

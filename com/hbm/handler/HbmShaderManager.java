@@ -153,8 +153,6 @@ public class HbmShaderManager {
 
 		fbo8.framebufferClear();
 		fbo8.bindFramebuffer(true);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		useShader(vGauss);
 		targetHeight = fbo8.framebufferHeight;
 		TARGET_HEIGHT.assign(vGauss);

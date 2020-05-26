@@ -17,8 +17,10 @@ import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.interfaces.IConductor;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemBattery;
+import com.hbm.items.machine.ItemBattery;
+import com.hbm.items.tool.ItemToolAbilityPower;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.conductor.TileEntityCable;
@@ -43,7 +45,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -56,6 +57,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
 
+@Spaghetti("this whole class")
 public class Library {
 
 	static Random rand = new Random();
@@ -96,115 +98,10 @@ public class Library {
 		superuser.add(Drillgon);
 	}
 
-	public static boolean checkForAsbestos(EntityPlayer player) {
-
-		if(checkArmor(player, ModItems.asbestos_helmet, ModItems.asbestos_plate, ModItems.asbestos_legs, ModItems.asbestos_boots)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean checkForHazmat(EntityPlayer player) {
-		if(checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey) || checkArmor(player, ModItems.t45_helmet, ModItems.t45_plate, ModItems.t45_legs, ModItems.t45_boots) || checkArmor(player, ModItems.schrabidium_helmet, ModItems.schrabidium_plate, ModItems.schrabidium_legs, ModItems.schrabidium_boots) || checkForHaz2(player)) {
-
-			return true;
-		}
-
-		if(player.isPotionActive(HbmPotion.mutation))
-			return true;
-
-		return false;
-	}
-
-	// Drillgon200: Is there a reason for this method? I don't know and I don't
-	// care to find out.
-	public static boolean checkForHaz2(EntityPlayer player) {
-
-		if(checkArmor(player, ModItems.hazmat_paa_helmet, ModItems.hazmat_paa_plate, ModItems.hazmat_paa_legs, ModItems.hazmat_paa_boots) || checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
-			return true;
-		}
-
-		return false;
-	}
-	
-	public static boolean checkForFaraday(EntityPlayer player) {
-		
-		NonNullList<ItemStack> armor = player.inventory.armorInventory;
-		
-		if(armor.get(0).isEmpty() || armor.get(1).isEmpty() || armor.get(2).isEmpty() || armor.get(3).isEmpty()) return false;
-		
-		if(isFaradayArmor(armor.get(0).getItem()) &&
-				isFaradayArmor(armor.get(1).getItem()) &&
-				isFaradayArmor(armor.get(2).getItem()) &&
-				isFaradayArmor(armor.get(3).getItem()))
-			return true;
-		
-		return false;
-	}
-	
-	public static final String[] metals = new String[] {
-			"chainmail",
-			"iron",
-			"silver",
-			"gold",
-			"platinum",
-			"tin",
-			"lead",
-			"schrabidium",
-			"euphemium",
-			"steel",
-			"titanium",
-			"alloy",
-			"copper",
-			"bronze",
-			"electrum",
-			"t45",
-			"hazmat", //also count because rubber is insulating
-			"rubber"
-	};
-	
-	public static boolean isFaradayArmor(Item item) {
-		
-		String name = item.getUnlocalizedName();
-		
-		for(String metal : metals) {
-			
-			if(name.toLowerCase().contains(metal))
-				return true;
-		}
-		
-		return false;
-	}
-	
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
 		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
 	}
 	
-	public static boolean checkForFiend(EntityPlayer player) {
-		
-		return checkArmorPiece(player, ModItems.jackt, 2) && checkForHeld(player, ModItems.shimmer_sledge);
-	}
-	
-	public static boolean checkForFiend2(EntityPlayer player) {
-		
-		return checkArmorPiece(player, ModItems.jackt2, 2) && checkForHeld(player, ModItems.shimmer_axe);
-	}
-
-	public static void damageSuit(EntityPlayer player, int slot, int amount) {
-
-		if(player.inventory.armorInventory.get(slot) == ItemStack.EMPTY)
-			return;
-
-		int j = player.inventory.armorInventory.get(slot).getItemDamage();
-		player.inventory.armorInventory.get(slot).setItemDamage(j += amount);
-
-		if(player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage()) {
-			System.out.println(player.inventory.armorInventory.get(slot).getMaxDamage());
-			player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
-		}
-	}
-
 	public static void applyRadData(Entity e, float f) {
 		if(!(e instanceof EntityLivingBase))
 			return;
@@ -249,58 +146,6 @@ public class Library {
 		return pos != null;
 	}
 
-	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
-		if(player.inventory.armorInventory.get(0).getItem() == shoe && player.inventory.armorInventory.get(1).getItem() == leg && player.inventory.armorInventory.get(2).getItem() == chest && player.inventory.armorInventory.get(3).getItem() == helm) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean checkArmorPiece(EntityPlayer player, Item armor, int slot) {
-		if(player.inventory.armorInventory.get(slot) != null && player.inventory.armorInventory.get(slot).getItem() == armor) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean checkForGasMask(EntityPlayer player) {
-
-		if(checkArmorPiece(player, ModItems.hazmat_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_red, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_grey, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_paa_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.gas_mask, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.gas_mask_m65, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.t45_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.schrabidium_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.euphemium_helmet, 3)) {
-			return true;
-		}
-
-		if(player.isPotionActive(HbmPotion.mutation))
-			return true;
-
-		return false;
-	}
-
 	public static String getShortNumber(long l) {
 		if(l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
@@ -339,106 +184,47 @@ public class Library {
 	// Drillgon200: Just realized I copied the wrong method. God dang it.
 	// It works though. Not sure why, but it works.
 	public static long chargeTEFromItems(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
-		if(inventory.getStackInSlot(index).getItem() == ModItems.fusion_core_infinite || inventory.getStackInSlot(index).getItem() == ModItems.battery_creative) {
+		if(inventory.getStackInSlot(index).getItem() == ModItems.battery_creative)
+		{
 			return maxPower;
 		}
-		if(!(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) || index > inventory.getSlots()) {
-			return power;
+		
+		if(inventory.getStackInSlot(index).getItem() == ModItems.fusion_core_infinite)
+		{
+			return maxPower;
 		}
-		long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getDischargeRate();
+		
+		if(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 
-		while(dR >= 1000000000000L) {
-			if(power + 100000000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
-				power += 100000000000000L;
-				dR -= 1000000000000L;
-				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000000000L);
-			} else
-				break;
-		}
-		while(dR >= 1000000000) {
-			if(power + 100000000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
-				power += 100000000000L;
-				dR -= 1000000000L;
-				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000000);
-			} else
-				break;
-		}
-		while(dR >= 1000000) {
-			if(power + 100000000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
-				power += 100000000L;
-				dR -= 1000000;
-				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000000);
-			} else
-				break;
-		}
-		while(dR >= 1000) {
-			if(power + 100000L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
-				power += 100000L;
-				dR -= 1000;
-				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1000);
-			} else
-				break;
-		}
-		while(dR >= 1) {
-			if(power + 100L <= maxPower && ItemBattery.getCharge(inventory.getStackInSlot(index)) > 0) {
-				power += 100L;
-				dR -= 1;
-				((ItemBattery) inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), 1);
-			} else
-				break;
-		}
-
-		if(inventory.getStackInSlot(index).getItem() != Items.AIR && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+			long batCharge = ItemBattery.getCharge(inventory.getStackInSlot(index));
+			long batRate = ((ItemBattery)inventory.getStackInSlot(index).getItem()).getDischargeRate();
+			
+			//in hHe
+			long toDischarge = Math.min(Math.min((maxPower - power) / 100, batRate), batCharge);
+			
+			((ItemBattery)inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), toDischarge);
+			power += toDischarge * 100;
+			
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
+		
 		return power;
 	}
 
+	//not great either but certainly better
 	public static long chargeItemsFromTE(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
-		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+		if(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 
-			long dR = ((ItemBattery) inventory.getStackInSlot(index).getItem()).getChargeRate();
-
-			while(dR >= 1000000000000L) {
-				if(power - 100000000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
-					power -= 100000000000000L;
-					dR -= 1000000000000L;
-					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000000L);
-				} else
-					break;
-			}
-			while(dR >= 1000000000) {
-				if(power - 100000000000L >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
-					power -= 100000000000L;
-					dR -= 1000000000;
-					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000000);
-				} else
-					break;
-			}
-			while(dR >= 1000000) {
-				if(power - 100000000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
-					power -= 100000000;
-					dR -= 1000000;
-					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000000);
-				} else
-					break;
-			}
-			while(dR >= 1000) {
-				if(power - 100000 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
-					power -= 100000;
-					dR -= 1000;
-					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1000);
-				} else
-					break;
-			}
-			while(dR >= 1) {
-				if(power - 100 >= 0 && ItemBattery.getCharge(inventory.getStackInSlot(index)) < ((ItemBattery) inventory.getStackInSlot(index).getItem()).getMaxCharge()) {
-					power -= 100;
-					dR -= 1;
-					((ItemBattery) inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), 1);
-				} else
-					break;
-			}
+			long batMax = ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index));
+			long batCharge = ItemBattery.getCharge(inventory.getStackInSlot(index));
+			long batRate = ((ItemBattery)inventory.getStackInSlot(index).getItem()).getChargeRate();
+			
+			//in hHE
+			long toCharge = Math.min(Math.min(power / 100, batRate), batMax - batCharge);
+			
+			power -= toCharge * 100;
+			
+			((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), toCharge);
 
 			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
@@ -449,39 +235,26 @@ public class Library {
 			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
-		
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_sword && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-		
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_pickaxe && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-		
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_axe && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
-		
-		for(int i = 0; i < 50; i++)
-			if(power - 10 >= 0 && inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.elec_shovel && inventory.getStackInSlot(index).getItemDamage() > 0)
-			{
-				power -= 10;
-				inventory.getStackInSlot(index).setItemDamage(inventory.getStackInSlot(index).getItemDamage() - 1);
-			} else break;
+
+		if(inventory.getStackInSlot(index).getItem() instanceof ItemToolAbilityPower) {
+
+			long batMax = ItemToolAbilityPower.getMaxChargeStatic(inventory.getStackInSlot(index));
+			long batCharge = ItemToolAbilityPower.getCharge(inventory.getStackInSlot(index));
+			long batRate = ((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).getChargeRate();
+			
+			//in hHE
+			long toCharge = Math.min(Math.min(power / 100, batRate), batMax - batCharge);
+			
+			power -= toCharge * 100;
+			
+			((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), toCharge);
+			
+		}
 		
 		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
 			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
-
+		
 		return power;
 	}
 
@@ -591,9 +364,9 @@ public class Library {
 		}
 	}
 
+	//TODO: jesus christ kill it
 	// Flut-Füll gesteuerter Energieübertragungsalgorithmus
 	// Flood fill controlled energy transmission algorithm
-
 	public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {
 		Block block = worldObj.getBlockState(pos).getBlock();
 		TileEntity tileentity = worldObj.getTileEntity(pos);

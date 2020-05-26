@@ -58,8 +58,11 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		int part = resource.amount/handlers.size();
 		int totalDrained = 0;
 		int remaining = resource.amount;
+		//Drillgon200: The whole "first" thing is messy, but I guess it accounts for the integer rounding errors.
+		boolean first = true;
 		for(IFluidHandler consumer : handlers){
-			int vol = consumer.fill(new FluidStack(resource.getFluid(), part), doFill);
+			int vol = consumer.fill(new FluidStack(resource.getFluid(), first ? part + resource.amount-part*handlers.size() : part), doFill);
+			first = false;
 			totalDrained += vol;
 			remaining -= vol;
 			if(remaining <= 0)

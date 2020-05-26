@@ -8,9 +8,9 @@ import com.google.common.collect.Multimap;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.projectile.EntityRubble;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 
@@ -71,7 +71,7 @@ public class WeaponSpecial extends ItemSword {
         	{
 				target.setHealth(0.0F);
         	}
-        	world.playSound(null, target.posX, target.posY, target.posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, 3.0F, 0.1F);
+        	world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.bonk, SoundCategory.PLAYERS, 3.0F, 0.1F);
 		}
 		if(this == ModItems.bottle_opener) {
 			if (!target.world.isRemote)
@@ -149,6 +149,8 @@ public class WeaponSpecial extends ItemSword {
 				}
 			}
 		}
+		if(this == ModItems.stopsign || this == ModItems.sopsign)
+        	world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.stop, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		return false;
 	}
 	
@@ -220,9 +222,9 @@ public class WeaponSpecial extends ItemSword {
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entity, int itemSlot, boolean isSelected) {
 		if(entity instanceof EntityPlayer) {
-    		if(Library.checkForFiend((EntityPlayer) entity)) {
+    		if(ArmorUtil.checkForFiend((EntityPlayer) entity)) {
     			AdvancementManager.grantAchievement(((EntityPlayer) entity), AdvancementManager.achFiend);
-    		} else if(Library.checkForFiend2((EntityPlayer) entity)) {
+    		} else if(ArmorUtil.checkForFiend2((EntityPlayer) entity)) {
         		AdvancementManager.grantAchievement(((EntityPlayer) entity), AdvancementManager.achFiend2);
         	}
     	}

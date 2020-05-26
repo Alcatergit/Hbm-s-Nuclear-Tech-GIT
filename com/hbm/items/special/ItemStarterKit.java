@@ -5,7 +5,8 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemFluidTank;
+import com.hbm.items.machine.ItemBattery;
+import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 

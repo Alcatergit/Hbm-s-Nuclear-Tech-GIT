@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemTsar extends ItemRadioactive {
 
-	public ItemTsar(String s) {
-		super(s);
+	public ItemTsar(float radiation, String s) {
+		super(radiation, s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 	
@@ -20,6 +20,7 @@ public class ItemTsar extends ItemRadioactive {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
 		list.add("Tsar Bomba");
+		super.addInformation(stack, world, list, flagIn);
 	}
 
 }

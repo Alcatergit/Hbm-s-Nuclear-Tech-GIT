@@ -11,16 +11,21 @@ import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -39,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCell extends ItemRadioactive {
 
 	public ItemCell(String s) {
-		super(s);
+		super(0.0F, s);
 		this.setMaxDamage(1000);
 	}
 
@@ -85,6 +90,19 @@ public class ItemCell extends ItemRadioactive {
 	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		return isFullOrEmpty(stack) ? 64 : 1;
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(!(entityIn instanceof EntityLivingBase))
+			return;
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		if(hasFluid(stack, ModForgeFluids.tritium)){
+			Library.applyRadData(entityIn, 0.5F / 20F);
+		} else if(hasFluid(stack, ModForgeFluids.sas3)){
+			Library.applyRadData(entityIn, 10F / 20F);
+			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
+		}
 	}
 	
 	@Override

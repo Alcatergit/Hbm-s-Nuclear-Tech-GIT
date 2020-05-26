@@ -8,7 +8,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.gui.GUIScreenBobmazon.Offer;
 import com.hbm.inventory.gui.GUIScreenBobmazon.Requirement;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemBattery;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemGasCanister;
 

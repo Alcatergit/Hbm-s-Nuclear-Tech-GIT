@@ -1,7 +1,7 @@
 package com.hbm.items.gear;
 
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 
 import net.minecraft.entity.Entity;
@@ -42,7 +42,7 @@ public class ArmorEuphemium extends ItemArmor implements ISpecialArmor {
 
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
-		if(player instanceof EntityPlayer && Library.checkArmor((EntityPlayer)player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
+		if(player instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer)player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
 		{
 			return new ArmorProperties(1, 1, MathHelper.floor(999999999));
 		}
@@ -82,7 +82,7 @@ public class ArmorEuphemium extends ItemArmor implements ISpecialArmor {
 	
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if(player instanceof EntityPlayer && Library.checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
+		if(player instanceof EntityPlayer && ArmorUtil.checkArmor(player, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
 		{
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 5, 127, true, false));
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 5, 127, true, false));

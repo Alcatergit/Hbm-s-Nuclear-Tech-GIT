@@ -50,20 +50,6 @@ public class ItemLemon extends ItemFood {
 			list.add("Ipecac in a different bottle!");
 		}
 		
-		if(this == ModItems.med_schizophrenia) {
-			list.add("Makes the voices go away. Just for a while.");
-			list.add("");
-			list.add("...");
-			list.add("Better not take it.");
-		}
-		
-		if(this == ModItems.med_schizophrenia) {
-			list.add("Makes the voices go away. Just for a while.");
-			list.add("");
-			list.add("...");
-			list.add("Better not take it.");
-		}
-		
 		if(this == ModItems.loops) {
 			list.add("Brøther, may I have some lööps?");
 		}
@@ -214,9 +200,6 @@ public class ItemLemon extends ItemFood {
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
 		if(this == ModItems.med_ipecac || this == ModItems.med_ptsd) {
 			player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 50, 49));
-		}
-		
-		if(this == ModItems.med_schizophrenia) {
 		}
 		
 		if(this == ModItems.loop_stew) {

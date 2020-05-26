@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
-import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.Library;
 
 import mezz.jei.api.recipe.IFocus;

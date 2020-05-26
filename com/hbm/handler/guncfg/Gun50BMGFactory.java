@@ -2,16 +2,25 @@ package com.hbm.handler.guncfg;
 
 import java.util.ArrayList;
 
+import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.potion.HbmPotion;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class Gun50BMGFactory {
 
-public static GunConfiguration getCalamityConfig() {
+	public static GunConfiguration getCalamityConfig() {
 		
 		GunConfiguration config = new GunConfiguration();
 		
@@ -40,6 +49,7 @@ public static GunConfiguration getCalamityConfig() {
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.BMG50_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.BMG50_INCENDIARY);
+		config.config.add(BulletConfigSyncingUtil.BMG50_PHOSPHORUS);
 		config.config.add(BulletConfigSyncingUtil.BMG50_EXPLOSIVE);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
 		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
@@ -75,6 +85,7 @@ public static GunConfiguration getCalamityConfig() {
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.BMG50_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.BMG50_INCENDIARY);
+		config.config.add(BulletConfigSyncingUtil.BMG50_PHOSPHORUS);
 		config.config.add(BulletConfigSyncingUtil.BMG50_EXPLOSIVE);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
 		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
@@ -147,6 +158,41 @@ public static GunConfiguration getCalamityConfig() {
 		bullet.dmgMax = 70;
 		bullet.wear = 25;
 		bullet.leadChance = 100;
+		
+		return bullet;
+	}
+	
+	public static BulletConfiguration get50BMGPhosphorusConfig() {
+		
+		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
+		
+		bullet.ammo = ModItems.ammo_50bmg_phosphorus;
+		bullet.spread *= inaccuracy;
+		bullet.dmgMin = 15;
+		bullet.dmgMax = 18;
+		bullet.wear = 15;
+		bullet.incendiary = 5;
+		bullet.doesPenetrate = false;
+		
+		PotionEffect eff = new PotionEffect(HbmPotion.phosphorus, 20 * 20, 0, true, false);
+		eff.getCurativeItems().clear();
+		bullet.effects = new ArrayList<PotionEffect>();
+		bullet.effects.add(new PotionEffect(eff));
+		
+		bullet.bImpact = new IBulletImpactBehavior() {
+
+			@Override
+			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
+				
+				NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "vanillaburst");
+				data.setString("mode", "flame");
+				data.setInteger("count", 15);
+				data.setDouble("motion", 0.05D);
+				
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, bullet.posX, bullet.posY, bullet.posZ), new TargetPoint(bullet.dimension, bullet.posX, bullet.posY, bullet.posZ, 50));
+			}
+		};
 		
 		return bullet;
 	}

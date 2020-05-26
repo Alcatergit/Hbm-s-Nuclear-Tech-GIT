@@ -3,7 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.Library;
+import com.hbm.handler.ArmorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -52,10 +52,10 @@ public class BlockClorine extends Block {
 	
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (entity instanceof EntityPlayer && Library.checkForGasMask((EntityPlayer) entity)) {
+		if (entity instanceof EntityPlayer && ArmorUtil.checkForGasMask((EntityPlayer) entity)) {
 			
 			if(world.rand.nextInt(25) == 0)
-				Library.damageSuit((EntityPlayer)entity, 3, world.rand.nextInt(2));
+				ArmorUtil.damageSuit((EntityPlayer)entity, 3, world.rand.nextInt(2));
 
 		} else if (entity instanceof EntityLivingBase) {
 			((EntityLivingBase) entity)

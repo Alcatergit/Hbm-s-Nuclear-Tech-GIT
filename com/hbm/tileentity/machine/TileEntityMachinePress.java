@@ -68,7 +68,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		return inventory.getStackInSlot(i);
 	}
 
-	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -83,9 +82,9 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		detectMaxBurn = maxBurn + 1;
 		isRetracting = nbt.getBoolean("ret");
 		detectIsRetracting = !isRetracting;
-		if (nbt.hasKey("inventory"))
+		if(nbt.hasKey("inventory"))
 			((ItemStackHandler) inventory).deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
-		if (nbt.hasKey("CustomName", 8)) {
+		if(nbt.hasKey("CustomName", 8)) {
 			this.customName = nbt.getString("CustomName");
 		}
 		detectCustomName = customName == null ? "" : null;
@@ -104,7 +103,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 		nbt.setTag("inventory", ((ItemStackHandler) inventory).serializeNBT());
 
-		if (this.hasCustomName()) {
+		if(this.hasCustomName()) {
 			nbt.setString("CustomName", this.customName);
 		}
 		return nbt;
@@ -117,119 +116,97 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 	@Override
 	public void update() {
-	/*	if(test){
-			Vec3d bottomLeft = new Vec3d(pos.getX(), pos.getY() + 5, pos.getZ());
-			Portal portal = new Mirror(world, bottomLeft, bottomLeft.addVector(1, 0, 0), bottomLeft.addVector(0, 1, 0), bottomLeft.addVector(1, 1, 0), null);
-			System.out.println(portal);
-			test = false;
-		}*/
-		if(world.isRemote){
-			NBTTagCompound data = new NBTTagCompound();
-			data.setString("type", "exhaust");
-			data.setString("mode", "soyuz");
-			data.setInteger("count", 1);
-			data.setDouble("width", world.rand.nextDouble() * 0.25 - 0.5);
-			data.setDouble("posX", pos.getX());
-			data.setDouble("posY", pos.getY() + 10);
-			data.setDouble("posZ", pos.getZ());
-			
-			MainRegistry.proxy.effectNT(data);
-		}
-		if (!world.isRemote) {
-			if (burnTime > 0) {
+		/*	if(test){
+				Vec3d bottomLeft = new Vec3d(pos.getX(), pos.getY() + 5, pos.getZ());
+				Portal portal = new Mirror(world, bottomLeft, bottomLeft.addVector(1, 0, 0), bottomLeft.addVector(0, 1, 0), bottomLeft.addVector(1, 1, 0), null);
+				System.out.println(portal);
+				test = false;
+			}*/
+		if(!world.isRemote) {
+			if(burnTime > 0) {
 				this.burnTime--;
 				this.power++;
-				if (power > maxPower)
+				if(power > maxPower)
 					power = maxPower;
 			} else {
-				if (power > 0)
+				if(power > 0)
 					power--;
 			}
+			if(!(world.isBlockIndirectlyGettingPowered(pos) > 0)) {
+				if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
+					this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
+					inventory.getStackInSlot(0).shrink(1);
 
-			if (inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0
-					&& TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
-				this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
-				inventory.getStackInSlot(0).shrink(1);
-				
-				if (inventory.getStackInSlot(0).getCount() <= 0) {
+					if(inventory.getStackInSlot(0).getCount() <= 0) {
 
-					if (inventory.getStackInSlot(0).getItem().getContainerItem() != null)
-						inventory.setStackInSlot(0,
-								new ItemStack(inventory.getStackInSlot(0).getItem().getContainerItem()));
-					else
-						inventory.setStackInSlot(0, ItemStack.EMPTY);
+						if(inventory.getStackInSlot(0).getItem().getContainerItem() != null)
+							inventory.setStackInSlot(0, new ItemStack(inventory.getStackInSlot(0).getItem().getContainerItem()));
+						else
+							inventory.setStackInSlot(0, ItemStack.EMPTY);
+					}
 				}
-			}
 
-			if (power >= maxPower / 3) {
+				if(power >= maxPower / 3) {
 
-				int speed = power * 25 / maxPower;
+					int speed = power * 25 / maxPower;
 
-				if (inventory.getStackInSlot(1) != ItemStack.EMPTY && inventory.getStackInSlot(2) != ItemStack.EMPTY) {
-					ItemStack stack = MachineRecipes.getPressResult(inventory.getStackInSlot(2).copy(),
-							inventory.getStackInSlot(1).copy());
-					if (stack != null && (inventory.getStackInSlot(3) == ItemStack.EMPTY
-							|| (inventory.getStackInSlot(3).getItem() == stack.getItem()
-									&& inventory.getStackInSlot(3).getCount() + stack.getCount() <= inventory
-											.getStackInSlot(3).getMaxStackSize()))) {
-						if (progress >= maxProgress) {
+					if(inventory.getStackInSlot(1) != ItemStack.EMPTY && inventory.getStackInSlot(2) != ItemStack.EMPTY) {
+						ItemStack stack = MachineRecipes.getPressResult(inventory.getStackInSlot(2).copy(), inventory.getStackInSlot(1).copy());
+						if(stack != null && (inventory.getStackInSlot(3) == ItemStack.EMPTY || (inventory.getStackInSlot(3).getItem() == stack.getItem() && inventory.getStackInSlot(3).getCount() + stack.getCount() <= inventory.getStackInSlot(3).getMaxStackSize()))) {
+							if(progress >= maxProgress) {
 
+								isRetracting = true;
+
+								if(inventory.getStackInSlot(3) == ItemStack.EMPTY)
+									inventory.setStackInSlot(3, stack.copy());
+								else
+									inventory.getStackInSlot(3).grow(stack.getCount());
+								;
+
+								inventory.getStackInSlot(2).shrink(1);
+								;
+								if(inventory.getStackInSlot(2).getCount() <= 0)
+									inventory.setStackInSlot(2, ItemStack.EMPTY);
+
+								inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
+								if(inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1).getMaxDamage())
+									inventory.setStackInSlot(1, ItemStack.EMPTY);
+								// this.world.playSound(pos.getX(), pos.getY(),
+								// pos.getZ(), HBMSoundHandler.pressOperate,
+								// SoundCategory.BLOCKS, 1.5F, 1.0F, false);
+								this.world.playSound(null, pos, HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
+							}
+
+							if(!isRetracting)
+								progress += speed;
+
+						} else {
 							isRetracting = true;
-
-							if (inventory.getStackInSlot(3) == ItemStack.EMPTY)
-								inventory.setStackInSlot(3, stack.copy());
-							else
-								inventory.getStackInSlot(3).grow(stack.getCount());
-							;
-
-							inventory.getStackInSlot(2).shrink(1);
-							;
-							if (inventory.getStackInSlot(2).getCount() <= 0)
-								inventory.setStackInSlot(2, ItemStack.EMPTY);
-
-							inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
-							if (inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1)
-									.getMaxDamage())
-								inventory.setStackInSlot(1, ItemStack.EMPTY);
-							// this.world.playSound(pos.getX(), pos.getY(),
-							// pos.getZ(), HBMSoundHandler.pressOperate,
-							// SoundCategory.BLOCKS, 1.5F, 1.0F, false);
-							this.world.playSound(null, pos, HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F,
-									1.0F);
 						}
-
-						if (!isRetracting)
-							progress += speed;
-
 					} else {
 						isRetracting = true;
+					}
+
+					if(isRetracting) {
+						progress -= speed;
 					}
 				} else {
 					isRetracting = true;
 				}
 
-				if (isRetracting){
-					progress -= speed;
+				if(progress <= 0) {
+					isRetracting = false;
+					progress = 0;
 				}
-			} else {
-				isRetracting = true;
 			}
-
-			if (progress <= 0) {
-				isRetracting = false;
-				progress = 0;
-			}
-
 			detectAndSendChanges();
 		}
 	}
 
-	
-
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
-		//return new AxisAlignedBB(pos, pos.add(1, 3, 1));
+		// return new AxisAlignedBB(pos, pos.add(1, 3, 1));
 	}
 
 	@Override
@@ -240,14 +217,14 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return true;
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 		}
 		return super.getCapability(capability, facing);
@@ -258,13 +235,13 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	}
 
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		if (player.world.getTileEntity(this.pos) != this) {
+		if(player.world.getTileEntity(this.pos) != this) {
 			return false;
 		} else {
 			return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64;
 		}
 	}
-	
+
 	private int detectProgress;
 	private int detectPower;
 	private int detectBurnTime;
@@ -272,37 +249,37 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	private boolean detectIsRetracting;
 	private String detectCustomName;
 	private ItemStack detectItem;
-	
+
 	private void detectAndSendChanges() {
-		
+
 		boolean mark = false;
 		boolean needsPressPacket = false;
-		if(detectProgress != progress){
+		if(detectProgress != progress) {
 			mark = true;
 			needsPressPacket = true;
 			detectProgress = progress;
 		}
-		if(detectPower != power){
+		if(detectPower != power) {
 			mark = true;
 			detectPower = power;
 		}
-		if(detectBurnTime != burnTime){
+		if(detectBurnTime != burnTime) {
 			mark = true;
 			detectBurnTime = burnTime;
 		}
-		if(detectMaxBurn != maxBurn){
+		if(detectMaxBurn != maxBurn) {
 			mark = true;
 			detectMaxBurn = maxBurn;
 		}
-		if(detectIsRetracting != isRetracting){
+		if(detectIsRetracting != isRetracting) {
 			mark = true;
 			detectIsRetracting = isRetracting;
 		}
-		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))){
+		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))) {
 			mark = true;
 			detectCustomName = customName;
 		}
-		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)){
+		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)) {
 			detectItem = inventory.getStackInSlot(2).copy();
 			needsPressPacket = true;
 		}

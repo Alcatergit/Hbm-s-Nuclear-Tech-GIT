@@ -1,5 +1,6 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:fluid_duct_mk2" }
+		"extracts=false": { "model": "hbm:fluid_duct_mk2" },
+		"extracts=true": { "model": "hbm:fluid_duct_mk2" }
 	}
 }

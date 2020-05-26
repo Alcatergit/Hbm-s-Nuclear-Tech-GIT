@@ -14,9 +14,11 @@ import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.MissileStruct;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.gear.ArmorFSB;
+import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -59,6 +61,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -186,6 +189,58 @@ public class ModEventHandler {
 		}
 		if (item == ModItems.ingot_uranium_fuel && AdvancementManager.hasAdvancement(player, AdvancementManager.bobOil)) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bobNuclear);
+		}
+	}
+	
+	@SubscribeEvent
+	public void chatEvent(ServerChatEvent event) {
+
+		EntityPlayerMP player = event.getPlayer();
+		String message = event.getMessage();
+
+		if(player.getUniqueID().toString().equals(Library.Dr_Nostalgia) && message.startsWith("!")) {
+
+			String m = message.substring(1, message.length()).toLowerCase();
+
+			if("pew".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_b92).setStackDisplayName("Meme Machine"));
+			}
+			
+			if("dagoth".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_kit));
+			}
+
+			if("pow".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.grenade_kit));
+			}
+
+			if("ascend".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.jetpack_vector));
+				for(int i = 0 ; i < 10; i++)
+					player.inventory.addItemStackToInventory(new ItemStack(ModItems.jetpack_tank));
+			}
+
+			//Drillgon200: Animal crossing has the gey.
+			if("animalcrossing".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_supershotgun));
+				for(int i = 0 ; i < 5; i++)
+					player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_12gauge_du, 64));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_kit_2, 16));
+			}
+
+			if("tom".equals(m)) {
+				player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.soyuz_launcher));
+				player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_satlinker));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_soyuz0, 1, 2));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.sat_gerald));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_soyuz_lander));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.sat_coord));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.fluid_barrel_infinite));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.battery_creative));
+			}
+
+			player.inventoryContainer.detectAndSendChanges();
+			event.setCanceled(true);
 		}
 	}
 	
@@ -329,9 +384,9 @@ public class ModEventHandler {
 					data.worldObj = event.world;
 				}
 
-				for(Object o : event.world.playerEntities) {
-
-					EntityPlayer player = (EntityPlayer) o;
+				for(EntityPlayer player : event.world.playerEntities) {
+					if(!(player instanceof EntityPlayerMP))
+						continue;
 					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
 						PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads()), (EntityPlayerMP) player);
 					else
@@ -365,15 +420,11 @@ public class ModEventHandler {
 								rad = MainRegistry.hellRad;
 							
 							if(rad > 0) {
-								if(!entity.isPotionActive(HbmPotion.mutation))
-									Library.applyRadData(entity, rad / 2);
+								Library.applyRadData(entity, rad / 2);
 							}
 
 							if(entity.world.isRaining() && MainRegistry.cont > 0 && AuxSavedData.getThunder(entity.world) > 0 && entity.world.canBlockSeeSky(new BlockPos(entity))) {
-
-								if(!entity.isPotionActive(HbmPotion.mutation)) {
-									Library.applyRadData(entity, MainRegistry.cont * 0.005F);
-								}
+								Library.applyRadData(entity, MainRegistry.cont * 0.005F);
 							}
 						}
 
@@ -419,8 +470,17 @@ public class ModEventHandler {
 							continue;
 
 						if(eRad >= 1000) {
-							if(entity.attackEntityFrom(ModDamageSource.radiation, 1000))
+							if(entity.attackEntityFrom(ModDamageSource.radiation, entity.getMaxHealth() * 100)){
 								entRad.setRads(0);
+								if(entity instanceof EntityPlayerMP)
+									AdvancementManager.grantAchievement((EntityPlayerMP)entity, AdvancementManager.achRadDeath);
+								
+							}
+							//.attackEntityFrom ensures the recentlyHit var is set to enable drops.
+							//if the attack is canceled, then nothing will drop.
+							//that's what you get for trying to cheat death
+							if(!(entity instanceof EntityPlayer && (((EntityPlayer)entity).isCreative() || ((EntityPlayer)entity).isSpectator())))
+								entity.setHealth(0);
 						} else if(eRad >= 800) {
 							if(event.world.rand.nextInt(300) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 30, 0));
@@ -464,6 +524,9 @@ public class ModEventHandler {
 								entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 5 * 20, 0));
 							if(event.world.rand.nextInt(700) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 3 * 20, 2));
+							
+							if(entity instanceof EntityPlayerMP)
+								AdvancementManager.grantAchievement((EntityPlayerMP)entity, AdvancementManager.achRadPoison);
 						}
 
 					}
@@ -477,27 +540,130 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void onEntityHurt(LivingHurtEvent e) {
 		if(e.getEntityLiving() instanceof EntityPlayer) {
-			if(Library.checkArmor((EntityPlayer) e.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+			if(ArmorUtil.checkArmor((EntityPlayer) e.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 				e.setCanceled(true);
+			}
+		}
+		
+		EntityLivingBase ent = e.getEntityLiving();
+
+		if(ent instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)ent;
+
+			ItemStack helmet = player.inventory.armorInventory.get(3);
+			ItemStack plate = player.inventory.armorInventory.get(2);
+			ItemStack legs = player.inventory.armorInventory.get(1);
+			ItemStack boots = player.inventory.armorInventory.get(0);
+
+			if(plate.getItem() instanceof ArmorFSB) {
+				
+				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+				
+				boolean noHelmet = chestplate.noHelmet;
+			
+				if((helmet.getItem() instanceof ArmorFSB || noHelmet) && plate.getItem() instanceof ArmorFSB && legs.getItem() instanceof ArmorFSB && boots.getItem() instanceof ArmorFSB) {
+					
+					if((noHelmet || chestplate.getArmorMaterial() == ((ArmorFSB)helmet.getItem()).getArmorMaterial()) &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)legs.getItem()).getArmorMaterial() &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)boots.getItem()).getArmorMaterial()) {
+						
+						if(chestplate.damageMod != -1) {
+							e.setAmount(e.getAmount() * chestplate.damageMod);
+						}
+						
+						if(chestplate.resistance.get(e.getSource().getDamageType()) != null) {
+							e.setAmount(e.getAmount() * chestplate.resistance.get(e.getSource()));
+						}
+						
+						if(chestplate.blastProtection != -1 && e.getSource().isExplosion()) {
+							e.setAmount(e.getAmount() * chestplate.blastProtection);
+						}
+						
+						if(chestplate.damageCap != -1) {
+							e.setAmount(Math.min(e.getAmount(), chestplate.damageCap));
+						}
+					}
+				}
 			}
 		}
 	}
 	
 	@SubscribeEvent
-	public void onEntityHurt(LivingAttackEvent event) {
+	public void onEntityAttacked(LivingAttackEvent event) {
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer && Library.checkArmor((EntityPlayer)e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+		if(e instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer)e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 			e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
 			event.setCanceled(true);
+		}
+		
+		if(e instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)e;
+
+			ItemStack helmet = player.inventory.armorInventory.get(3);
+			ItemStack plate = player.inventory.armorInventory.get(2);
+			ItemStack legs = player.inventory.armorInventory.get(1);
+			ItemStack boots = player.inventory.armorInventory.get(0);
+
+			if(plate.getItem() instanceof ArmorFSB) {
+				
+				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+				
+				boolean noHelmet = chestplate.noHelmet;
+			
+				if((helmet.getItem() instanceof ArmorFSB || noHelmet) && plate.getItem() instanceof ArmorFSB && legs.getItem() instanceof ArmorFSB && boots.getItem() instanceof ArmorFSB) {
+					
+					if((noHelmet || chestplate.getArmorMaterial() == ((ArmorFSB)helmet.getItem()).getArmorMaterial()) &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)legs.getItem()).getArmorMaterial() &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)boots.getItem()).getArmorMaterial()) {
+						
+						if(chestplate.fireproof && event.getSource().isFireDamage()) {
+							player.extinguish();
+							event.setCanceled(true);
+						}
+					}
+				}
+			}
 		}
 	}
 	
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if(!event.player.world.isRemote && event.player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
-			if(event.player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				event.player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
+		EntityPlayer player = event.player;
+
+		if(!player.world.isRemote && player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
+			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+				player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
+
+		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
+
+			ItemStack helmet = player.inventory.armorInventory.get(3);
+			ItemStack plate = player.inventory.armorInventory.get(2);
+			ItemStack legs = player.inventory.armorInventory.get(1);
+			ItemStack boots = player.inventory.armorInventory.get(0);
+
+			if(plate.getItem() instanceof ArmorFSB) {
+				
+				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+				
+				boolean noHelmet = chestplate.noHelmet;
+			
+				if((helmet.getItem() instanceof ArmorFSB || noHelmet) && plate.getItem() instanceof ArmorFSB && legs.getItem() instanceof ArmorFSB && boots.getItem() instanceof ArmorFSB) {
+					
+					if((noHelmet || chestplate.getArmorMaterial() == ((ArmorFSB)helmet.getItem()).getArmorMaterial()) &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)legs.getItem()).getArmorMaterial() &&
+						chestplate.getArmorMaterial() == ((ArmorFSB)boots.getItem()).getArmorMaterial()) {
+						
+						if(!chestplate.effects.isEmpty()) {
+							
+							for(PotionEffect i : chestplate.effects) {
+								player.addPotionEffect(new PotionEffect(i.getPotion(), i.getDuration(), i.getAmplifier(), i.getIsAmbient(), i.doesShowParticles()));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -511,7 +677,7 @@ public class ModEventHandler {
 			event.getEntity().world.spawnEntity(foeq);
 		}
 		if(event.getEntityLiving() instanceof EntityPlayer) {
-			if(Library.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+			if(ArmorUtil.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 				event.setCanceled(true);
 				event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
 			}
@@ -534,18 +700,15 @@ public class ModEventHandler {
 	public void clientJoinServer(PlayerLoggedInEvent e) {
 		if(e.player instanceof EntityPlayerMP)
 			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
-
-		if(showMessage) {
+		if(e.player.world.isRemote)
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
-		}
-		showMessage = false;
 	}
 
 	@SubscribeEvent
 	public void onDataSerializerRegister(RegistryEvent.Register<DataSerializerEntry> evt) {
 		evt.getRegistry().register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
 	}
-
+	
 	// TODO should probably use these.
 
 	@SubscribeEvent

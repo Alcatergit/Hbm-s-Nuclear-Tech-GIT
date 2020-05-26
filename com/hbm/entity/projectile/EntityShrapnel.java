@@ -8,6 +8,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -38,11 +39,8 @@ public class EntityShrapnel extends EntityThrowable {
     @Override
     public void onUpdate() {
     	super.onUpdate();
-    	if(!world.isRemote)
-    		if(this.dataManager.get(TRAIL) == (byte)1) {
-    			world.spawnEntity(new EntitySSmokeFX(world, this.posX, this.posY - 0.5, this.posZ, 0.0, 0.0, 0.0));
-    			world.spawnEntity(new EntitySSmokeFX(world, this.posX - this.motionX, this.posY - 0.5 - this.motionY, this.posZ - this.motionZ, 0.0, 0.0, 0.0));
-    		}
+    	if(world.isRemote)
+    		world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.0, 0.0, 0.0);
     }
 
     @Override

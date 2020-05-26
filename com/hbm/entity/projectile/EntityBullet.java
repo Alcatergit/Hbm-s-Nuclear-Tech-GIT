@@ -8,9 +8,9 @@ import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
@@ -447,7 +447,7 @@ public class EntityBullet extends Entity implements IProjectile {
 								EntityLivingBase entitylivingbase = (EntityLivingBase) movingobjectposition.entityHit;
 
 								if (rad) {
-									if (entitylivingbase instanceof EntityPlayer && Library.checkForHazmat((EntityPlayer) entitylivingbase)) {
+									if (entitylivingbase instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer) entitylivingbase)) {
 									} else if (entitylivingbase instanceof EntityCreeper) {
 										EntityNuclearCreeper creep = new EntityNuclearCreeper(this.world);
 										creep.setLocationAndAngles(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ, entitylivingbase.rotationYaw, entitylivingbase.rotationPitch);

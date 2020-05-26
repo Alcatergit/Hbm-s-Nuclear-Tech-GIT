@@ -24,5 +24,6 @@ public class ItemMan extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
 		list.add("Fat Man");
+		super.addInformation(stack, worldIn, list, flagIn);
 	}
 }

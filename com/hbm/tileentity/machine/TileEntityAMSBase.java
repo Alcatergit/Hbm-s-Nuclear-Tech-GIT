@@ -7,11 +7,12 @@ import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.items.machine.ItemCatalyst;
 import com.hbm.items.special.ItemAMSCore;
-import com.hbm.items.special.ItemCatalyst;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxElectricityPacket;
@@ -322,7 +323,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - 10 + 0.5, pos.getY() - 10 + 0.5 + 6, pos.getZ() - 10 + 0.5, pos.getX() + 10 + 0.5, pos.getY() + 10 + 0.5 + 6, pos.getZ() + 10 + 0.5));
 		
 		for(Entity e : list) {
-			if(!(e instanceof EntityPlayer && Library.checkForHazmat((EntityPlayer)e)))
+			if(!(e instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer)e)))
 				if(!Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ)) {
 					e.attackEntityFrom(ModDamageSource.ams, 1000);
 					e.setFire(3);
@@ -332,7 +333,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 		List<Entity> list2 = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - scale + 0.5, pos.getY() - scale + 0.5 + 6, pos.getZ() - scale + 0.5, pos.getX() + scale + 0.5, pos.getY() + scale + 0.5 + 6, pos.getZ() + scale + 0.5));
 		
 		for(Entity e : list2) {
-			if(!(e instanceof EntityPlayer && Library.checkForHaz2((EntityPlayer)e)))
+			if(!(e instanceof EntityPlayer && ArmorUtil.checkForHaz2((EntityPlayer)e)))
 					e.attackEntityFrom(ModDamageSource.amsCore, 10000);
 		}
 	}

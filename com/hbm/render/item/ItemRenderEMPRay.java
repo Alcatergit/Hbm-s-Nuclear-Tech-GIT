@@ -44,10 +44,11 @@ public class ItemRenderEMPRay extends TEISRBase {
 				GL11.glRotated(0, 0, 1, 0);
 				GL11.glRotated(-40, 0, 0, 1);
 				GL11.glRotated(180, 1, 0, 0);
+				GL11.glRotated(-10, 0, 0, 1);
 			} else {
 				GL11.glRotated(180, 0, 1, 0);
 				GL11.glRotated(180, 1, 0, 0);
-				GL11.glRotated(50, 0, 0, 1);
+				GL11.glRotated(35, 0, 0, 1);
 			}
 			
 			emp.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, f);

@@ -1,7 +1,7 @@
 package com.hbm.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.hbm.potion.HbmPotion;
 
@@ -11,33 +11,34 @@ import net.minecraft.item.ItemStack;
 
 public class HazmatRegistry {
 	public static final HazmatRegistry instance = new HazmatRegistry();
-	private static List<HazmatEntry> entries = new ArrayList<HazmatEntry>();
-	
-	private class HazmatEntry {
-		
-		private Item item;
-		private float resistance;
-		
-		private HazmatEntry(Item item, float resistance) {
-			this.item = item;
-			this.resistance = resistance;
-		}
-	}
+	private static Map<Item, Float> entries = new HashMap<Item, Float>();
 	
 	public void registerHazmat(Item item, float resistance) {
 		
-		entries.add(new HazmatEntry(item, resistance));
+		entries.put(item, resistance);
 	}
 	
-	public float getResistance(Item item) {
+	public float getResistance(ItemStack stack) {
 		
-		for(HazmatEntry entry : entries) {
-			
-			if(entry.item == item)
-				return entry.resistance;
-		}
+		if(stack == null)
+			return 0;
 		
-		return 0.0F;
+		float cladding = getCladding(stack);
+		
+		Float f = entries.get(stack.getItem());
+		
+		if(f != null)
+			return f + cladding;
+		
+		return cladding;
+	}
+	
+	public float getCladding(ItemStack stack) {
+
+		if(stack.hasTagCompound() && stack.getTagCompound().getFloat("hfr_cladding") > 0)
+			return stack.getTagCompound().getFloat("hfr_cladding");
+		
+		return 0;
 	}
 	
 	public float getResistance(EntityPlayer player) {
@@ -46,7 +47,7 @@ public class HazmatRegistry {
 		
 		for(int i = 0; i < 4; i++) {
 			if(player.inventory.armorInventory.get(i) != ItemStack.EMPTY) {
-				res += getResistance(player.inventory.armorInventory.get(i).getItem());
+				res += getResistance(player.inventory.armorInventory.get(i));
 			}
 		}
 		

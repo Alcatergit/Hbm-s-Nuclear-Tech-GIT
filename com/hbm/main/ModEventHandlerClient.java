@@ -21,6 +21,7 @@ import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
@@ -28,14 +29,14 @@ import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.RedstoneSword;
+import com.hbm.items.machine.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemFluidTank;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.items.machine.ItemCassette.TrackType;
+import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.special.weapon.GunB92;
-import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemCassette.TrackType;
-import com.hbm.items.tool.ItemChemistryTemplate;
-import com.hbm.items.tool.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.tool.ItemFluidCanister;
-import com.hbm.items.tool.ItemFluidTank;
-import com.hbm.items.tool.ItemForgeFluidIdentifier;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -104,6 +105,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.registry.IRegistry;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -117,6 +119,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -293,7 +296,7 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_rpg, reg);
 		swapModelsNoGui(ModItems.gun_karl, reg);
 		swapModelsNoGui(ModItems.gun_panzerschreck, reg);
-		swapModelsNoGui(ModItems.gun_hk69, reg);
+		swapModels(ModItems.gun_hk69, reg);
 		swapModelsNoGui(ModItems.gun_deagle, reg);
 		swapModelsNoGui(ModItems.gun_supershotgun, reg);
 		swapModelsNoGui(ModItems.gun_fatman, reg);
@@ -353,6 +356,8 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_brimstone, reg);
 		swapModelsNoGui(ModItems.stopsign, reg);
 		swapModelsNoGui(ModItems.sopsign, reg);
+		swapModels(ModItems.gun_ks23, reg);
+		swapModels(ModItems.gun_flamer, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -665,9 +670,10 @@ public class ModEventHandlerClient {
 	public static float getBLightmapColor(float current) {
 		return 0.0F;
 	}
-	
-	
-	//Drillgon200: All this random flashlight shader stuff was ultimately abandoned because it would have caused too many mod incompatibilities and isn't used anywhere.
+
+	// Drillgon200: All this random flashlight shader stuff was ultimately
+	// abandoned because it would have caused too many mod incompatibilities and
+	// isn't used anywhere.
 
 	private static boolean sentUniforms = false;
 	public static boolean renderingDepthOnly = false;
@@ -922,64 +928,60 @@ public class ModEventHandlerClient {
 			}
 		}
 	}
-	
+
 	@Spaghetti("please get this shit out of my face")
 	@SubscribeEvent
-	public void onPlaySound(PlaySoundEvent e){
+	public void onPlaySound(PlaySoundEvent e) {
 		ResourceLocation r = e.getSound().getSoundLocation();
 
 		WorldClient wc = Minecraft.getMinecraft().world;
-		
-		//Alright, alright, I give the fuck up, you've wasted my time enough with this bullshit. You win.
-		//A winner is you.
-		//Conglaturations.
-		//Fuck you.
 
-		if(r.toString().equals("hbm:misc.nullTau") && Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null)
-		{
+		// Alright, alright, I give the fuck up, you've wasted my time enough
+		// with this bullshit. You win.
+		// A winner is you.
+		// Conglaturations.
+		// Fuck you.
+
+		if(r.toString().equals("hbm:misc.nullTau") && Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null) {
 			EntityPlayer ent = Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
-			
+
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop) == null) {
 				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundXVL1456(HBMSoundHandler.tauChargeLoop2, SoundCategory.PLAYERS, ent, EnumHbmSound.soundTauLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).setPitch(0.5F);
 			} else {
 				if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).getPitch() < 1.5F)
-				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).setPitch(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).getPitch() + 0.01F);
+					MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).setPitch(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).getPitch() + 0.01F);
 			}
 		}
-		
-		if(r.toString().equals("hbm:misc.nullChopper") && Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null)
-		{
+
+		if(r.toString().equals("hbm:misc.nullChopper") && Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null) {
 			EntityHunterChopper ent = Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
-			
+
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundChopperLoop) == null) {
 				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopper(HBMSoundHandler.chopperFlyingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundChopperLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundChopperLoop).setVolume(10.0F);
 			}
 		}
-		
-		if(r.toString().equals("hbm:misc.nullCrashing") && Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null)
-		{
+
+		if(r.toString().equals("hbm:misc.nullCrashing") && Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null) {
 			EntityHunterChopper ent = Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
-			
+
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundCrashingLoop) == null) {
 				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundCrashing(HBMSoundHandler.chopperCrashingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundCrashingLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundCrashingLoop).setVolume(10.0F);
 			}
 		}
-		
-		if(r.toString().equals("hbm:misc.nullMine") && Library.getClosestMineForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null)
-		{
+
+		if(r.toString().equals("hbm:misc.nullMine") && Library.getClosestMineForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null) {
 			EntityChopperMine ent = Library.getClosestMineForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
-			
+
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundMineLoop) == null) {
 				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopperMine(HBMSoundHandler.chopperMineLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundMineLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundMineLoop).setVolume(10.0F);
 			}
 		}
 
-		for(MovingSoundPlayerLoop sounds : MovingSoundPlayerLoop.globalSoundList)
-		{
+		for(MovingSoundPlayerLoop sounds : MovingSoundPlayerLoop.globalSoundList) {
 			if(!sounds.init || sounds.isDonePlaying()) {
 				sounds.init = true;
 				sounds.setDone(false);
@@ -994,6 +996,20 @@ public class ModEventHandlerClient {
 			ItemAssemblyTemplate.recipes = ItemAssemblyTemplate.recipesBackup;
 			ItemAssemblyTemplate.recipesBackup = null;
 		}
+	}
+
+	@SubscribeEvent
+	public void drawTooltip(ItemTooltipEvent event) {
+
+		ItemStack stack = event.getItemStack();
+		List<String> list = event.getToolTip();
+
+		float rad = HazmatRegistry.instance.getResistance(stack);
+
+		rad = ((int) (rad * 100)) / 100F;
+
+		if(rad > 0)
+			list.add(TextFormatting.YELLOW + "Radiation resistance: " + rad);
 	}
 
 }

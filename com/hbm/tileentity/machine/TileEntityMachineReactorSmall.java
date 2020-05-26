@@ -7,7 +7,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemFuelRod;
+import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.ClientRequestUpdatePacket;

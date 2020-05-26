@@ -12,13 +12,13 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.machine.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.items.special.ItemCell;
-import com.hbm.items.tool.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.lib.Library;
-import com.hbm.items.tool.ItemAssemblyTemplate;
-import com.hbm.items.tool.ItemChemistryTemplate;
 import com.hbm.items.tool.ItemFluidCanister;
-import com.hbm.items.tool.ItemFluidIcon;
 import com.hbm.main.MainRegistry;
 
 import mezz.jei.api.ingredients.IIngredients;
@@ -831,12 +831,10 @@ public class JeiRecipes {
 					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.plate_mixed), new ItemStack(ModItems.plate_gold)).copy());
 			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.ingot_tungsten) },
 					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.ingot_tungsten)).copy());
-			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.powder_cobalt) },
-					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.powder_cobalt)).copy());
-			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_dura_steel), new ItemStack(ModItems.powder_meteorite) },
-					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_dura_steel), new ItemStack(ModItems.powder_meteorite)).copy());
-			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_starmetal), new ItemStack(ModItems.powder_cobalt) },
-					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_starmetal), new ItemStack(ModItems.powder_cobalt)).copy());
+			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.ingot_cobalt) },
+					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_steel), new ItemStack(ModItems.ingot_cobalt)).copy());
+			recipes.put(new ItemStack[] { new ItemStack(ModItems.ingot_saturnite), new ItemStack(ModItems.powder_meteorite) },
+					MachineRecipes.getFurnaceOutput(new ItemStack(ModItems.ingot_saturnite), new ItemStack(ModItems.powder_meteorite)).copy());
 		} catch (Exception x) {
 			MainRegistry.logger.error("Unable to register alloy recipes for NEI!");
 		}
@@ -860,6 +858,7 @@ public class JeiRecipes {
 		fuels.add(new ItemStack(ModItems.powder_lignite));
 		fuels.add(new ItemStack(ModItems.briquette_lignite));
 		fuels.add(new ItemStack(ModItems.coke));
+		fuels.add(new ItemStack(ModItems.solid_fuel));
 		fuels.add(new ItemStack(ModItems.powder_coal));
 		return fuels;
 	}
@@ -888,30 +887,6 @@ public class JeiRecipes {
 			recipes.put(new ItemStack(Item.getItemFromBlock(ModBlocks.test_render)),
 					MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.test_render)));
 		}
-		//recipes.put(new ItemStack(ModItems.rod_uranium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_uranium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_dual_uranium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_dual_uranium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_quad_uranium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_quad_uranium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_plutonium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_plutonium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_dual_plutonium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_dual_plutonium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_quad_plutonium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_quad_plutonium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_mox_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_mox_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_dual_mox_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_dual_mox_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_quad_mox_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_quad_mox_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_schrabidium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_schrabidium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_dual_schrabidium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_dual_schrabidium_fuel_depleted)));
-		//recipes.put(new ItemStack(ModItems.rod_quad_schrabidium_fuel_depleted),
-		//		MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.rod_quad_schrabidium_fuel_depleted)));
 		recipes.put(new ItemStack(ModItems.powder_cloud),
 				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.powder_cloud)));
 		recipes.put(new ItemStack(Blocks.COAL_ORE),
@@ -966,6 +941,12 @@ public class JeiRecipes {
 				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_lignite)));
 		recipes.put(new ItemStack(ModBlocks.ore_meteor_starmetal),
 				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_meteor_starmetal)));
+		recipes.put(new ItemStack(ModBlocks.block_euphemium_cluster),
+				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.block_euphemium_cluster)));
+		recipes.put(new ItemStack(ModBlocks.ore_nether_fire),
+				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_nether_fire)));
+		recipes.put(new ItemStack(Items.BLAZE_ROD),
+				MachineRecipes.getCentrifugeOutput(new ItemStack(Items.BLAZE_ROD)));
 		
 		for(Map.Entry<ItemStack, ItemStack[]> entry : recipes.entrySet()){
 			List<ItemStack> output = new ArrayList<ItemStack>(4);

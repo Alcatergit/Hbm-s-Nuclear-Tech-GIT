@@ -23,7 +23,55 @@ public class ItemAmmo extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		// FUEL
+		if(this == ModItems.ammo_fuel_napalm) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Increased range");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_fuel_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Phosphorus splash");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Increased range");
+			list.add(TextFormatting.BLUE + "+ Increased accuracy");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Single projectile");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_fuel_gas) {
+			list.add(TextFormatting.BLUE + "+ No gravity");
+			list.add(TextFormatting.BLUE + "+ Poison splash");
+			list.add(TextFormatting.RED + "- No damage");
+			list.add(TextFormatting.RED + "- Not incendiary");
+		}
 		// 12 GAUGE
+		if(this == ModItems.ammo_44_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_50bmg) {
+			list.add(TextFormatting.YELLOW + "12.7mm anti-materiel round");
+			list.add(TextFormatting.YELLOW + "You shoot down planes with these, using");
+			list.add(TextFormatting.YELLOW + "them against people would be nasty.");
+		}
+		if(this == ModItems.ammo_50bmg_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_rocket_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Phosphorus splash");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
+		if(this == ModItems.ammo_grenade_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Phosphorus splash");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
 		if(this == ModItems.ammo_12gauge_incendiary) {
 			list.add(TextFormatting.BLUE + "+ Incendiary");
 			list.add(TextFormatting.RED + "- Increased wear");
@@ -286,6 +334,20 @@ public class ItemAmmo extends Item {
 		}
 		if(this == ModItems.ammo_folly_du) {
 			list.add(TextFormatting.BLUE + "+ Howitzer 17kg U238 shell");
+		}
+		// 23mm
+		if(this == ModItems.ammo_4gauge_slug) {
+			list.add(TextFormatting.BLUE + "+ Near-perfect accuracy");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.RED + "- Single projectile");
+		}
+		if(this == ModItems.ammo_4gauge_explosive) {
+			list.add(TextFormatting.BLUE + "+ Explosive");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.YELLOW + "* It's a 40mm grenade that we squeezed to fit the barrel!");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+			list.add(TextFormatting.RED + "- Single projectile");
 		}
 	}
 }

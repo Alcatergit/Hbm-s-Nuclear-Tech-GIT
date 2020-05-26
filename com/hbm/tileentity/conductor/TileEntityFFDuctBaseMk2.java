@@ -36,7 +36,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 
 	public EnumFacing[] connections = new EnumFacing[6];
 	protected Fluid type;
-	public FFPipeNetworkMk2 network = null;
+	protected FFPipeNetworkMk2 network = null;
 	public TileEntity[] tileentityCache = new TileEntity[6];
 	public boolean isBeingDestroyed = false;
 

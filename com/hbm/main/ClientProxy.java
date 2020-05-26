@@ -430,6 +430,7 @@ import com.hbm.tileentity.bomb.TileEntityTurretTau;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
@@ -490,6 +491,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleCloud;
 import net.minecraft.client.particle.ParticleFirework;
+import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -616,7 +619,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoPoleSatelliteReceiver.class, new RenderPoleSatelliteReceiver());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityObjTester.class, new RenderObjTester());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecoBlockAlt.class, new RenderDecoBlockAlt());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuctMk2.class, new RenderFluidDuctMk2());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidDuctMk2.class, new RenderFluidDuctMk2<TileEntityFFFluidDuctMk2>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFFFluidSuccMk2.class, new RenderFluidDuctMk2<TileEntityFFFluidSuccMk2>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderFluidBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTesla.class, new RenderTesla());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCoreEmitter.class, new RenderCoreComponent());
@@ -987,6 +991,54 @@ public class ClientProxy extends ServerProxy {
 			}
 		}
 		
+		if("vanillaburst".equals(type)) {
+
+			double motion = data.getDouble("motion");
+
+			for(int i = 0; i < data.getInteger("count"); i++) {
+
+				double mX = rand.nextGaussian() * motion;
+				double mY = rand.nextGaussian() * motion;
+				double mZ = rand.nextGaussian() * motion;
+				
+				Particle fx = null;
+
+				if("flame".equals(data.getString("mode"))) {
+					fx = new ParticleFlame.Factory().createParticle(-1, world, x, y, z, mX, mY, mZ);
+				}
+				if("cloud".equals(data.getString("mode"))) {
+					fx = new ParticleCloud.Factory().createParticle(-1, world, x, y, z, mX, mY, mZ);
+				}
+
+				if(fx != null)
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
+		
+		if("vanillaExt".equals(type)) {
+
+			double mX = data.getDouble("mX");
+			double mY = data.getDouble("mY");
+			double mZ = data.getDouble("mZ");
+
+			Particle fx = null;
+
+			if("flame".equals(data.getString("mode"))) {
+				fx = new ParticleFlame.Factory().createParticle(-1, world, x, y, z, mX, mY, mZ);
+			}
+
+			if("smoke".equals(data.getString("mode"))) {
+				fx = new ParticleSmokeNormal.Factory().createParticle(-1, world, x, y, z, mX, mY, mZ);
+			}
+
+			if("cloud".equals(data.getString("mode"))) {
+				fx = new ParticleCloud.Factory().createParticle(-1, world, x, y, z, mX, mY, mZ);
+			}
+
+			if(fx != null)
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+		
 		if("vanilla".equals(type)) {
 
 			double mX = data.getDouble("mX");
@@ -1110,6 +1162,8 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_brimstone.setTileEntityItemStackRenderer(new ItemRenderObj());
 		ModItems.stopsign.setTileEntityItemStackRenderer(new ItemRenderShim());
 		ModItems.sopsign.setTileEntityItemStackRenderer(new ItemRenderShim());
+		ModItems.gun_ks23.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
+		ModItems.gun_flamer.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 	}
 	
 	@Override

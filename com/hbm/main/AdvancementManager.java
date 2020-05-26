@@ -60,6 +60,9 @@ public class AdvancementManager {
 	public static Advancement horizonsStart;
 	public static Advancement horizonsEnd;
 	public static Advancement horizonsBonus;
+	public static Advancement soyuz;
+	public static Advancement achRadPoison;
+	public static Advancement achRadDeath;
 	
 	public static Advancement achSacrifice;
 	public static Advancement achImpossible;
@@ -98,6 +101,9 @@ public class AdvancementManager {
 		horizonsStart = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsstart"));
 		horizonsEnd = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsend"));
 		horizonsBonus = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "horizonsbonus"));
+		soyuz = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "soyuz"));
+		achRadPoison = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achradpoison"));
+		achRadDeath = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achraddeath"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

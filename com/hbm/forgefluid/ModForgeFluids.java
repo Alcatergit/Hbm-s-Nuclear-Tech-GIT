@@ -69,6 +69,8 @@ public class ModForgeFluids {
 	public static final Fluid xenon = new Fluid("hbmxenon", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"), null, Color.WHITE);
 	public static final Fluid balefire = new Fluid("hbmbalefire", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"), null, Color.WHITE);
 	
+	public static final Fluid mercury = new Fluid("hbmmercury", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_flowing"), null, Color.WHITE);
+	
 	//Block fluids
 	public static final Fluid toxic_fluid = new ToxicFluid().setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773).setBlock(ModBlocks.toxic_block);
 	public static final Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773).setBlock(ModBlocks.mud_block);
@@ -124,6 +126,8 @@ public class ModForgeFluids {
 		FluidRegistry.registerFluid(oxygen);
 		FluidRegistry.registerFluid(xenon);
 		FluidRegistry.registerFluid(balefire);
+		
+		FluidRegistry.registerFluid(mercury);
 		
 		FluidRegistry.registerFluid(toxic_fluid);
 		FluidRegistry.registerFluid(mud_fluid);

@@ -13,6 +13,7 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
@@ -155,7 +156,7 @@ public class ExplosionNukeGeneric {
 						&& !(entity instanceof EntityGrenadeNuclear) 
 						&& !(entity instanceof EntityExplosiveBeam)
 						&& !(entity instanceof EntityBulletBase) 
-						&& !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
+						&& !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
 						{
 					d5 /= d9;
 					d6 /= d9;
@@ -217,7 +218,7 @@ public class ExplosionNukeGeneric {
 				d6 = entity.posY + entity.getEyeHeight() - y;
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if (d9 < wat && !(entity instanceof EntityPlayer && Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
+				if (d9 < wat && !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
@@ -261,7 +262,7 @@ public class ExplosionNukeGeneric {
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
 				if (d9 < wat && !(entity instanceof EntityPlayer
-								&& Library.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet,
+								&& ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet,
 										ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
 					d5 /= d9;
 					d6 /= d9;

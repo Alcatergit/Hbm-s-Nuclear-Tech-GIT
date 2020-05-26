@@ -1,5 +1,6 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:soyuz_capsule" }
+		"rusty=true": { "model": "hbm:soyuz_capsule" },
+		"rusty=false": { "model": "hbm:soyuz_capsule" }
 	}
 }

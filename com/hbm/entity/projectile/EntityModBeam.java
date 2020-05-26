@@ -318,7 +318,7 @@ public class EntityModBeam extends Entity implements IProjectile {
 
             if (movingobjectposition != null)
             {
-                if (movingobjectposition.entityHit != null)
+                if (movingobjectposition.entityHit != null && movingobjectposition.entityHit != this.shootingEntity)
                 {
                     f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
                     int k = MathHelper.ceil(f2 * this.damage);

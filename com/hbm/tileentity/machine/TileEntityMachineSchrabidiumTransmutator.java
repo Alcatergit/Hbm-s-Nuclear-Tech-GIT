@@ -4,8 +4,9 @@ import java.util.Random;
 
 import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
+import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemBattery;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.ClientRequestUpdatePacket;
@@ -55,7 +56,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 			public boolean isItemValid(int slot, ItemStack stack) {
 				switch (slot) {
 				case 0:
-					if (stack.getItem() == ModItems.ingot_uranium)
+					if (MachineRecipes.mODE(stack, "ingotUranium"))
 						return true;
 					break;
 				case 2:
@@ -166,7 +167,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	}
 
 	public boolean canProcess() {
-		if (power >= 4990000 && inventory.getStackInSlot(0).getItem() == ModItems.ingot_uranium
+		if (power >= 4990000 && MachineRecipes.mODE(inventory.getStackInSlot(0), "ingotUranium")
 				&& inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor
 				&& inventory.getStackInSlot(2).getItemDamage() < inventory.getStackInSlot(2).getMaxDamage()
 				&& (inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == ModItems.ingot_schrabidium

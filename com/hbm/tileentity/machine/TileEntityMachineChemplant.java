@@ -10,7 +10,7 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxParticlePacket;

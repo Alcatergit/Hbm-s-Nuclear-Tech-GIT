@@ -32,6 +32,7 @@ public class HbmPotion extends Potion {
 	public static HbmPotion lead;
 	public static HbmPotion radaway;
 	public static HbmPotion telekinesis;
+	public static HbmPotion phosphorus;
 	
 	public HbmPotion(boolean isBad, int color, String name, int x, int y){
 		super(isBad, color);
@@ -49,6 +50,7 @@ public class HbmPotion extends Potion {
 		lead = registerPotion(false, 0x767682, "potion.hbm_lead", 6, 0);
 		radaway = registerPotion(false, 0xBB4B00, "potion.hbm_radaway", 7, 0);
 		telekinesis = registerPotion(true, 0x00F3FF, "potion.hbm_telekinesis", 0, 1);
+		phosphorus = registerPotion(true, 0xFFFF00, "potion.hbm_phosphorus", 1, 1);
 	}
 
 	public static HbmPotion registerPotion(boolean isBad, int color, String name, int x, int y) {
@@ -149,6 +151,10 @@ public class HbmPotion extends Potion {
 				entity.fallDistance = 50;
 			}
 		}
+		if(this == phosphorus && !entity.world.isRemote) {
+			
+			entity.setFire(1);
+		}
 	}
 
 	public boolean isReady(int par1, int par2) {
@@ -157,7 +163,7 @@ public class HbmPotion extends Potion {
 
 	        return par1 % 2 == 0;
 		}
-		if(this == radiation || this == radaway || this == telekinesis) {
+		if(this == radiation || this == radaway || this == telekinesis || this == phosphorus) {
 			
 			return true;
 		}

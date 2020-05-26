@@ -184,7 +184,7 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.ShredderRecipe;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemAssemblyTemplate;
+import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.HbmWorld;
 import com.hbm.lib.Library;
@@ -222,6 +222,7 @@ import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityCableSwitch;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuct;
 import com.hbm.tileentity.conductor.TileEntityFFGasDuctSolid;
 import com.hbm.tileentity.conductor.TileEntityFFOilDuct;
@@ -480,6 +481,7 @@ public class MainRegistry {
 	public static int geyserChlorine = 3000;
 	public static int geyserVapor = 500;
 	public static int meteorStructure = 15000;
+	public static int capsuleStructure = 100;
 
 	public static int broadcaster = 5000;
 	public static int minefreq = 64;
@@ -543,36 +545,40 @@ public class MainRegistry {
 	public static ArmorMaterial enumArmorMaterialHazmat3 = EnumHelper.addArmorMaterial(RefStrings.MODID + ":HAZMAT3", RefStrings.MODID + ":HAZMAT3", 60, new int[] { 1, 4, 5, 2 }, 5, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	public static ArmorMaterial enumArmorMaterialPaa = EnumHelper.addArmorMaterial(RefStrings.MODID + ":PAA", RefStrings.MODID + ":PAA", 75, new int[] { 3, 6, 8, 3 }, 25, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial enumArmorMaterialSchrabidium = EnumHelper.addArmorMaterial(RefStrings.MODID + ":SCHRABIDIUM", RefStrings.MODID + ":SCHRABIDIUM", 100, new int[] { 3, 6, 8, 3 }, 50, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
-	public static ArmorMaterial enumArmorMaterialEuphemium = EnumHelper.addArmorMaterial(RefStrings.MODID + ":EUPHEMIUM", RefStrings.MODID + ":EUPHEMIUM", 150000000, new int[] { 3, 6, 8, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial enumArmorMaterialEuphemium = EnumHelper.addArmorMaterial(RefStrings.MODID + ":EUPHEMIUM", RefStrings.MODID + ":EUPHEMIUM", 15000000, new int[] { 3, 6, 8, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial enumArmorMaterialSteel = EnumHelper.addArmorMaterial(RefStrings.MODID + ":STEEL", RefStrings.MODID + ":STEEL", 20, new int[] { 2, 5, 6, 2 }, 5, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	public static ArmorMaterial enumArmorMaterialAlloy = EnumHelper.addArmorMaterial(RefStrings.MODID + ":ALLOY", RefStrings.MODID + ":ALLOY", 40, new int[] { 3, 6, 8, 3 }, 12, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	public static ArmorMaterial enumArmorMaterialAusIII = EnumHelper.addArmorMaterial(RefStrings.MODID + ":AUSIII", RefStrings.MODID + ":AUSIII", 375, new int[] {2, 5, 6, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	public static ArmorMaterial enumArmorMaterialTitanium = EnumHelper.addArmorMaterial(RefStrings.MODID + ":TITANIUM", RefStrings.MODID + ":TITANIUM", 25, new int[] {3, 6, 8, 3}, 9, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial enumArmorMaterialCmb = EnumHelper.addArmorMaterial(RefStrings.MODID + ":CMB", RefStrings.MODID + ":CMB", 60, new int[] {3, 6, 8, 3}, 50, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial enumArmorMaterialSecurity = EnumHelper.addArmorMaterial(RefStrings.MODID + ":SECURITY", RefStrings.MODID + ":SECURITY", 100, new int[] {3, 6, 8, 3}, 15, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial enumArmorMaterialAsbestos = EnumHelper.addArmorMaterial(RefStrings.MODID + ":ASBESTOS", RefStrings.MODID + ":ASBESTOS", 20, new int[] {1, 3, 4, 1}, 5, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
+	public static ArmorMaterial aMatCobalt = EnumHelper.addArmorMaterial(RefStrings.MODID + ":COBALT", RefStrings.MODID + ":COBALT", 70, new int[] {3, 6, 8, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial aMatStarmetal = EnumHelper.addArmorMaterial(RefStrings.MODID + ":STARMETAL", RefStrings.MODID + ":STARMETAL", 150, new int[] {3, 6, 8, 3}, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	
 	// Tool Materials
-	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial("SCHRABIDIUM", 3, 10000, 50.0F, 100.0F, 200);
-	public static ToolMaterial enumToolMaterialHammer = EnumHelper.addToolMaterial("SCHRABIDIUMHAMMER", 3, 0, 50.0F, 999999996F, 200);
-	public static ToolMaterial enumToolMaterialChainsaw = EnumHelper.addToolMaterial("CHAINSAW", 3, 1500, 50.0F, 22.0F, 0);
-	public static ToolMaterial enumToolMaterialSteel = EnumHelper.addToolMaterial("STEEL", 2, 500, 7.5F, 2.0F, 10);
-	public static ToolMaterial enumToolMaterialTitanium = EnumHelper.addToolMaterial("TITANIUM", 3, 750, 9.0F, 2.5F, 15);
-	public static ToolMaterial enumToolMaterialAlloy = EnumHelper.addToolMaterial("ALLOY", 3, 2000, 15.0F, 5.0F, 5);
-	public static ToolMaterial enumToolMaterialCmb = EnumHelper.addToolMaterial("CMB", 3, 8500, 40.0F, 55F, 100);
-	public static ToolMaterial enumToolMaterialElec = EnumHelper.addToolMaterial("ELEC", 3, 4700, 30.0F, 12.0F, 2);
-	public static ToolMaterial enumToolMaterialDesh = EnumHelper.addToolMaterial("DESH", 2, 0, 7.5F, 2.0F, 10);
+	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUM", 3, 10000, 50.0F, 100.0F, 200);
+	public static ToolMaterial enumToolMaterialHammer = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUMHAMMER", 3, 0, 50.0F, 999999996F, 200);
+	public static ToolMaterial enumToolMaterialChainsaw = EnumHelper.addToolMaterial(RefStrings.MODID + ":CHAINSAW", 3, 1500, 50.0F, 22.0F, 0);
+	public static ToolMaterial enumToolMaterialSteel = EnumHelper.addToolMaterial(RefStrings.MODID + ":STEEL", 2, 500, 7.5F, 2.0F, 10);
+	public static ToolMaterial enumToolMaterialTitanium = EnumHelper.addToolMaterial(RefStrings.MODID + ":TITANIUM", 3, 750, 9.0F, 2.5F, 15);
+	public static ToolMaterial enumToolMaterialAlloy = EnumHelper.addToolMaterial(RefStrings.MODID + ":ALLOY", 3, 2000, 15.0F, 5.0F, 5);
+	public static ToolMaterial enumToolMaterialCmb = EnumHelper.addToolMaterial(RefStrings.MODID + ":CMB", 3, 8500, 40.0F, 55F, 100);
+	public static ToolMaterial enumToolMaterialElec = EnumHelper.addToolMaterial(RefStrings.MODID + ":ELEC", 3, 0, 30.0F, 12.0F, 2);
+	public static ToolMaterial enumToolMaterialDesh = EnumHelper.addToolMaterial(RefStrings.MODID + ":DESH", 2, 0, 7.5F, 2.0F, 10);
+	public static ToolMaterial enumToolMaterialCobalt = EnumHelper.addToolMaterial(RefStrings.MODID + ":COBALT", 3, 750, 9.0F, 2.5F, 15);
 
-	public static ToolMaterial enumToolMaterialSaw = EnumHelper.addToolMaterial("SAW", 2, 750, 2.0F, 3.5F, 25);
-	public static ToolMaterial enumToolMaterialBat = EnumHelper.addToolMaterial("BAT", 0, 500, 1.5F, 3F, 25);
-	public static ToolMaterial enumToolMaterialBatNail = EnumHelper.addToolMaterial("BATNAIL", 0, 450, 1.0F, 4F, 25);
-	public static ToolMaterial enumToolMaterialGolfClub = EnumHelper.addToolMaterial("GOLFCLUB", 1, 1000, 2.0F, 5F, 25);
-	public static ToolMaterial enumToolMaterialPipeRusty = EnumHelper.addToolMaterial("PIPERUSTY", 1, 350, 1.5F, 4.5F, 25);
-	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 5.5F, 25);
+	public static ToolMaterial enumToolMaterialSaw = EnumHelper.addToolMaterial(RefStrings.MODID + ":SAW", 2, 750, 2.0F, 3.5F, 25);
+	public static ToolMaterial enumToolMaterialBat = EnumHelper.addToolMaterial(RefStrings.MODID + ":BAT", 0, 500, 1.5F, 3F, 25);
+	public static ToolMaterial enumToolMaterialBatNail = EnumHelper.addToolMaterial(RefStrings.MODID + ":BATNAIL", 0, 450, 1.0F, 4F, 25);
+	public static ToolMaterial enumToolMaterialGolfClub = EnumHelper.addToolMaterial(RefStrings.MODID + ":GOLFCLUB", 1, 1000, 2.0F, 5F, 25);
+	public static ToolMaterial enumToolMaterialPipeRusty = EnumHelper.addToolMaterial(RefStrings.MODID + ":PIPERUSTY", 1, 350, 1.5F, 4.5F, 25);
+	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial(RefStrings.MODID + ":PIPELEAD", 1, 250, 1.5F, 5.5F, 25);
 
-	public static ToolMaterial enumToolMaterialBottleOpener = EnumHelper.addToolMaterial("OPENER", 1, 250, 1.5F, 0.5F, 200);
-	public static ToolMaterial enumToolMaterialSledge = EnumHelper.addToolMaterial("SHIMMERSLEDGE", 1, 0, 25.0F, 26F, 200);
+	public static ToolMaterial enumToolMaterialBottleOpener = EnumHelper.addToolMaterial(RefStrings.MODID + ":OPENER", 1, 250, 1.5F, 0.5F, 200);
+	public static ToolMaterial enumToolMaterialSledge = EnumHelper.addToolMaterial(RefStrings.MODID + ":SHIMMERSLEDGE", 1, 0, 25.0F, 26F, 200);
 
-	public static ToolMaterial enumToolMaterialMultitool = EnumHelper.addToolMaterial("MULTITOOL", 3, 5000, 25F, 5.5F, 25);
+	public static ToolMaterial enumToolMaterialMultitool = EnumHelper.addToolMaterial(RefStrings.MODID + ":MULTITOOL", 3, 5000, 25F, 5.5F, 25);
 
 	Random rand = new Random();
 
@@ -632,6 +638,7 @@ public class MainRegistry {
 		enumToolMaterialCmb.setRepairItem(new ItemStack(ModItems.ingot_combine_steel));
 		enumToolMaterialBottleOpener.setRepairItem(new ItemStack(ModItems.plate_steel));
 		enumToolMaterialDesh.setRepairItem(new ItemStack(ModItems.ingot_desh));
+		enumArmorMaterialAsbestos.setRepairItem(new ItemStack(ModItems.asbestos_cloth));
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityDummy.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy"));
@@ -771,6 +778,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCore.class, new ResourceLocation(RefStrings.MODID, "tileentity_core_core"));
 		GameRegistry.registerTileEntity(TileEntitySoyuzCapsule.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_capsule"));
 		GameRegistry.registerTileEntity(TileEntitySoyuzLauncher.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_launcher"));
+		GameRegistry.registerTileEntity(TileEntityFFFluidSuccMk2.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_succ_mk2"));
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -1127,7 +1135,8 @@ public class MainRegistry {
 		pGV.setComment("Spawn vapor geyser on every nTH chunk");
 		geyserVapor = pGV.getInt();
 		meteorStructure = createConfigInt(config, CATEGORY_DUNGEON, "meteorStructure", "Spawn meteor dungeon on every nTH chunk", 15000);
-
+		capsuleStructure = createConfigInt(config, CATEGORY_DUNGEON, "4.21_capsuleSpawn", "Spawn landing capsule on every nTH chunk", 100);
+		
 		final String CATEGORY_METEOR = "05_meteors";
 		Property propMeteorStrikeChance = config.get(CATEGORY_METEOR, "5.00_meteorStrikeChance", 20 * 60 * 60 * 5);
 		propMeteorStrikeChance.setComment("The probability of a meteor spawning (an average of once every nTH ticks)");
@@ -1267,6 +1276,8 @@ public class MainRegistry {
 		meteorStrikeChance = setDef(meteorStrikeChance, 1000);
 		meteorShowerChance = setDef(meteorShowerChance, 1000);
 		fogCh = setDef(fogCh, 20);
+		capsuleStructure = setDef(capsuleStructure, 100);
+		meteorStructure = setDef(meteorStructure, 15000);
 	}
 
 	private static int setDef(int value, int def) {
@@ -1369,6 +1380,7 @@ public class MainRegistry {
 		OreDictionary.registerOre("ingotTungsten", ModItems.ingot_tungsten);
 		OreDictionary.registerOre("ingotAluminum", ModItems.ingot_aluminium);
 		OreDictionary.registerOre("ingotBeryllium", ModItems.ingot_beryllium);
+		OreDictionary.registerOre("ingotCobalt", ModItems.ingot_cobalt);
 		OreDictionary.registerOre("ingotNeptunium", ModItems.ingot_neptunium);
 		OreDictionary.registerOre("ingotLead", ModItems.ingot_lead);
 		OreDictionary.registerOre("ingotLithium", ModItems.lithium);
@@ -1416,10 +1428,7 @@ public class MainRegistry {
 		OreDictionary.registerOre("plateAdvanced", ModItems.plate_advanced_alloy);
 		OreDictionary.registerOre("plateSchrabidium", ModItems.plate_schrabidium);
 		OreDictionary.registerOre("plateCMBSteel", ModItems.plate_combine_steel);
-		OreDictionary.registerOre("plateDesh", ModItems.plate_desh);
 		OreDictionary.registerOre("plateSaturnite", ModItems.plate_saturnite);
-		OreDictionary.registerOre("plateEuphemium", ModItems.plate_euphemium);
-		OreDictionary.registerOre("plateDineutronium", ModItems.plate_dineutronium);
 		OreDictionary.registerOre("dustIron", ModItems.powder_iron);
 		OreDictionary.registerOre("dustGold", ModItems.powder_gold);
 		OreDictionary.registerOre("dustUranium", ModItems.powder_uranium);
@@ -1550,11 +1559,25 @@ public class MainRegistry {
 		HazmatRegistry.instance.registerHazmat(ModItems.t45_plate, 0.8F);
 		HazmatRegistry.instance.registerHazmat(ModItems.t45_legs, 0.6F);
 		HazmatRegistry.instance.registerHazmat(ModItems.t45_boots, 0.2F);
+		
+		HazmatRegistry.instance.registerHazmat(ModItems.paa_plate, 0.8F);
+		HazmatRegistry.instance.registerHazmat(ModItems.paa_legs, 0.6F);
+		HazmatRegistry.instance.registerHazmat(ModItems.paa_boots, 0.2F);
 
 		HazmatRegistry.instance.registerHazmat(ModItems.hazmat_paa_helmet, 0.6F);
 		HazmatRegistry.instance.registerHazmat(ModItems.hazmat_paa_plate, 1.2F);
 		HazmatRegistry.instance.registerHazmat(ModItems.hazmat_paa_legs, 0.9F);
 		HazmatRegistry.instance.registerHazmat(ModItems.hazmat_paa_boots, 0.3F);
+		
+		HazmatRegistry.instance.registerHazmat(ModItems.security_helmet, 0.2F);
+		HazmatRegistry.instance.registerHazmat(ModItems.security_plate, 0.4F);
+		HazmatRegistry.instance.registerHazmat(ModItems.security_legs, 0.3F);
+		HazmatRegistry.instance.registerHazmat(ModItems.security_boots, 0.1F);
+		
+		HazmatRegistry.instance.registerHazmat(ModItems.starmetal_helmet, 0.6F);
+		HazmatRegistry.instance.registerHazmat(ModItems.starmetal_plate, 1.2F);
+		HazmatRegistry.instance.registerHazmat(ModItems.starmetal_legs, 0.9F);
+		HazmatRegistry.instance.registerHazmat(ModItems.starmetal_boots, 0.3F);
 
 		HazmatRegistry.instance.registerHazmat(ModItems.jackt, 0.3F);
 		HazmatRegistry.instance.registerHazmat(ModItems.jackt2, 0.3F);
@@ -1567,6 +1590,11 @@ public class MainRegistry {
 		HazmatRegistry.instance.registerHazmat(ModItems.steel_legs, 0.06F);
 		HazmatRegistry.instance.registerHazmat(ModItems.steel_boots, 0.02F);
 
+		HazmatRegistry.instance.registerHazmat(ModItems.cobalt_helmet, 0.1F);
+		HazmatRegistry.instance.registerHazmat(ModItems.cobalt_plate, 0.2F);
+		HazmatRegistry.instance.registerHazmat(ModItems.cobalt_legs, 0.15F);
+		HazmatRegistry.instance.registerHazmat(ModItems.cobalt_boots, 0.05F);
+		
 		HazmatRegistry.instance.registerHazmat(Items.IRON_HELMET, 0.04F);
 		HazmatRegistry.instance.registerHazmat(Items.IRON_CHESTPLATE, 0.08F);
 		HazmatRegistry.instance.registerHazmat(Items.IRON_LEGGINGS, 0.06F);
@@ -1663,7 +1691,12 @@ public class MainRegistry {
 		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.ore_nether_fire), new ItemStack(ModItems.powder_fire, 6));
 		recipes.overridePreSetRecipe(new ItemStack(Blocks.PACKED_ICE), new ItemStack(ModItems.powder_ice, 1));
 		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_light), new ItemStack(Items.CLAY_BALL, 4));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.concrete), new ItemStack(Blocks.GRAVEL, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.concrete_smooth), new ItemStack(Blocks.GRAVEL, 1));
 		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete), new ItemStack(Blocks.GRAVEL, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_mossy), new ItemStack(Blocks.GRAVEL, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_cracked), new ItemStack(Blocks.GRAVEL, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_broken), new ItemStack(Blocks.GRAVEL, 1));
 		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_obsidian), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		recipes.overridePreSetRecipe(new ItemStack(Blocks.OBSIDIAN), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		recipes.overridePreSetRecipe(new ItemStack(Blocks.STONE), new ItemStack(Blocks.GRAVEL, 1));
@@ -1693,6 +1726,12 @@ public class MainRegistry {
 		recipes.overridePreSetRecipe(new ItemStack(Items.ENCHANTED_BOOK), new ItemStack(ModItems.powder_magic, 1));
 		recipes.overridePreSetRecipe(new ItemStack(ModItems.arc_electrode_burnt), new ItemStack(ModItems.powder_coal, 1));
 		recipes.overridePreSetRecipe(new ItemStack(ModItems.arc_electrode_desh), new ItemStack(ModItems.powder_desh, 2));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_polished), new ItemStack(ModItems.powder_meteorite, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick), new ItemStack(ModItems.powder_meteorite, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_mossy), new ItemStack(ModItems.powder_meteorite, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_cracked), new ItemStack(ModItems.powder_meteorite, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_chiseled), new ItemStack(ModItems.powder_meteorite, 1));
+		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_pillar), new ItemStack(ModItems.powder_meteorite, 1));
 
 		for(int i = 0; i < 16; i++) {
 			recipes.overridePreSetRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i), new ItemStack(Items.CLAY_BALL, 4));
