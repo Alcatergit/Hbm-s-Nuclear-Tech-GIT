@@ -3,7 +3,7 @@ package com.hbm.items.tool;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.BlockFluidPipeMk2;
+import com.hbm.blocks.network.BlockFluidPipeMk2;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 

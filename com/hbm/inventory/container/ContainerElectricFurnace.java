@@ -20,7 +20,7 @@ public class ContainerElectricFurnace extends Container {
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 56, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 56, 17));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 2, 116, 35));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 116, 35));
 		
 		for(int i = 0; i < 3; i++)
 		{

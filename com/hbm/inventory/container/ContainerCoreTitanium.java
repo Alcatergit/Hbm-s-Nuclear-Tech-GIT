@@ -1,9 +1,12 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -16,9 +19,12 @@ public class ContainerCoreTitanium extends Container {
 	private TileEntityCoreTitanium diFurnace;
 	private int progress;
 	private int power;
+	EntityPlayerMP player;
 	
-	public ContainerCoreTitanium(InventoryPlayer invPlayer, TileEntityCoreTitanium tedf) {
-		
+	public ContainerCoreTitanium(EntityPlayer player, TileEntityCoreTitanium tedf) {
+		if(player instanceof EntityPlayerMP)
+			this.player = (EntityPlayerMP) player;
+		InventoryPlayer invPlayer = player.inventory;
 		diFurnace = tedf;
 		
 		//Input Storage
@@ -35,18 +41,18 @@ public class ContainerCoreTitanium extends Container {
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 8, 54));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 8, 72));
 		//Outputs
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 11, 152, 54));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 12, 152, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 152, 54));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 12, 152, 72));
 		//Output Storage
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 13, 8, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 14, 26, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 15, 44, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 16, 62, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 17, 80, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 18, 98, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 19, 116, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 20, 134, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 21, 152, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 8, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 14, 26, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 44, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 16, 62, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 17, 80, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 18, 98, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 19, 116, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 20, 134, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 21, 152, 108));
 		//Power Cell
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 22, 44, 72));
 		
@@ -68,7 +74,7 @@ public class ContainerCoreTitanium extends Container {
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		crafting.sendWindowProperty(this, 0, this.diFurnace.progress);
-		crafting.sendWindowProperty(this, 1, (int)this.diFurnace.power);
+		PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 	}
 	
 	@Override
@@ -126,10 +132,11 @@ public class ContainerCoreTitanium extends Container {
 				par1.sendWindowProperty(this, 0, this.diFurnace.progress);
 			}
 			
-			if(this.power != this.diFurnace.power)
-			{
-				par1.sendWindowProperty(this, 1, (int)this.diFurnace.power);
-			}
+		}
+		
+		if(this.power != this.diFurnace.power)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 		}
 		
 		this.progress = this.diFurnace.progress;
@@ -141,10 +148,6 @@ public class ContainerCoreTitanium extends Container {
 		if(i == 0)
 		{
 			diFurnace.progress = j;
-		}
-		if(i == 1)
-		{
-			diFurnace.power = j;
 		}
 	}
 

@@ -149,7 +149,6 @@ public class AuxButtonPacket implements IMessage {
 								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
 								PacketDispatcher.wrapper.sendToAll(new RailgunCallbackPacket(m.x, m.y, m.z, gun.pitch, gun.yaw));
 							} else {
-								System.out.println("re");
 								System.out.println(HBMSoundHandler.buttonNo);
 								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 							}

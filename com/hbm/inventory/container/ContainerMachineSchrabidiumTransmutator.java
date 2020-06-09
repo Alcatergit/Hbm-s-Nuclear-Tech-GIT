@@ -22,7 +22,7 @@ private TileEntityMachineSchrabidiumTransmutator nukeBoy;
 		nukeBoy = tedf;
 
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 44, 63));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 1, 134, 63));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 134, 63));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 26, 18));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 8, 108));
 		
@@ -107,9 +107,9 @@ private TileEntityMachineSchrabidiumTransmutator nukeBoy;
 	
 	@Override
 	public void updateProgressBar(int i, int j) {
-		if(i == 1)
+		if(i == 0)
 		{
-			nukeBoy.power = j;
+			nukeBoy.process = j;
 		}
 	}
 }

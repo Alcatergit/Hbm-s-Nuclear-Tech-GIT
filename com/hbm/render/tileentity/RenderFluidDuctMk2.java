@@ -157,6 +157,8 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 			float iconMaxV = icon.getInterpolatedV(13);
 			float iconMinV = icon.getInterpolatedV(12);
 			RenderHelper.bindBlockTexture();
+			
+			FFUtils.setColorFromFluid(type);
 
 			RenderHelper.startDrawingTexturedQuads();
 			
@@ -182,6 +184,8 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 				RenderHelper.addVertexWithUV(6*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+1*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMaxV);
 
 			RenderHelper.draw();
+			
+			RenderHelper.resetColor();
 
 			this.bindTexture(texture);
 

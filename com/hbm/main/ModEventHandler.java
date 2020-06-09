@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.RadiationCapability;
 import com.hbm.entity.logic.IChunkLoader;
@@ -16,6 +18,7 @@ import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.MissileStruct;
+import com.hbm.handler.VersionChecker;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.machine.ItemAssemblyTemplate;
@@ -26,7 +29,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.AssemblerRecipeSyncPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.RadSurveyPacket;
-import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -56,7 +58,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -192,58 +196,6 @@ public class ModEventHandler {
 		}
 	}
 	
-	@SubscribeEvent
-	public void chatEvent(ServerChatEvent event) {
-
-		EntityPlayerMP player = event.getPlayer();
-		String message = event.getMessage();
-
-		if(player.getUniqueID().toString().equals(Library.Dr_Nostalgia) && message.startsWith("!")) {
-
-			String m = message.substring(1, message.length()).toLowerCase();
-
-			if("pew".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_b92).setStackDisplayName("Meme Machine"));
-			}
-			
-			if("dagoth".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_kit));
-			}
-
-			if("pow".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.grenade_kit));
-			}
-
-			if("ascend".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.jetpack_vector));
-				for(int i = 0 ; i < 10; i++)
-					player.inventory.addItemStackToInventory(new ItemStack(ModItems.jetpack_tank));
-			}
-
-			//Drillgon200: Animal crossing has the gey.
-			if("animalcrossing".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_supershotgun));
-				for(int i = 0 ; i < 5; i++)
-					player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_12gauge_du, 64));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_kit_2, 16));
-			}
-
-			if("tom".equals(m)) {
-				player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.soyuz_launcher));
-				player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.machine_satlinker));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_soyuz0, 1, 2));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.sat_gerald));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.missile_soyuz_lander));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.sat_coord));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.fluid_barrel_infinite));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.battery_creative));
-			}
-
-			player.inventoryContainer.detectAndSendChanges();
-			event.setCanceled(true);
-		}
-	}
-	
 	private static final String hash = "a4e6e2d37cc6bae3b19a925569c008d8f98b867e62ecb72398ee6fd5d7ee535a";
 	
 	@SubscribeEvent
@@ -321,6 +273,80 @@ public class ModEventHandler {
 		} catch (NoSuchAlgorithmException e) { }
 		
 		return "";
+	}
+	
+	@SubscribeEvent
+	public void chatEvent(ServerChatEvent event) {
+
+		EntityPlayerMP player = event.getPlayer();
+		String message = event.getMessage();
+		//boolean conditions for the illiterate, edition 1
+		//bellow you can see the header of an if-block. inside the brackets, there is a boolean statement.
+		//that means nothing other than its value totaling either 'true' or 'false'
+		//examples: 'true' would just mean true
+		//'1 > 3' would equal false
+		//'i < 10' would equal true if 'i' is smaller than 10, if equal or greater, it will result in false
+
+		//let's start from the back:
+
+		//this part means that the message's first character has to equal a '!': -------------------------+
+		//                                                                                                |
+		//this is a logical AND operator: -------------------------------------------------------------+  |
+		//                                                                                             |  |
+		//this is a reference to a field in                                                            |  |
+		//Library.java containing a reference UUID: --------------------------------------+            |  |
+		//                                                                                |            |  |
+		//this will compare said UUID with                                                |            |  |
+		//the string representation of the                                                |            |  |
+		//current player's UUID: ----------+                                              |            |  |
+		//                                 |                                              |            |  |
+		//another AND operator: --------+  |                                              |            |  |
+		//                              |  |                                              |            |  |
+		//this is a reference to a      |  |                                              |            |  |
+		//boolean called                |  |                                              |            |  |
+		//'enableDebugMode' which is    |  |                                              |            |  |
+		//only set once by the mod's    |  |                                              |            |  |
+		//config and is disabled by     |  |                                              |            |  |
+		//default. "debug" is not a     |  |                                              |            |  |
+		//substring of the message, nor |  |                                              |            |  |
+		//something that can be toggled |  |                                              |            |  |
+		//in any other way except for   |  |                                              |            |  |
+		//the config file: |            |  |                                              |            |  |
+		//                 V            V  V                                              V            V  V
+		if(MainRegistry.enableDebugMode && player.getUniqueID().toString().equals(Library.HbMinecraft) && message.startsWith("!")) {
+
+			String[] msg = message.split(" ");
+
+			String m = msg[0].substring(1, msg[0].length()).toLowerCase();
+
+			if("gv".equals(m)) {
+
+				int id = 0;
+				int size = 1;
+				int meta = 0;
+
+				if(msg.length > 1 && NumberUtils.isCreatable(msg[1])) {
+					id = (int)(double)NumberUtils.createDouble(msg[1]);
+				}
+
+				if(msg.length > 2 && NumberUtils.isCreatable(msg[2])) {
+					size = (int)(double)NumberUtils.createDouble(msg[2]);
+				}
+
+				if(msg.length > 3 && NumberUtils.isCreatable(msg[3])) {
+					meta = (int)(double)NumberUtils.createDouble(msg[3]);
+				}
+
+				Item item = Item.getItemById(id);
+
+				if(item != null && size > 0 && meta >= 0) {
+					player.inventory.addItemStackToInventory(new ItemStack(item, size, meta));
+				}
+			}
+
+			player.inventoryContainer.detectAndSendChanges();
+			event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent
@@ -468,19 +494,20 @@ public class ModEventHandler {
 
 						if(eRad < 200 || entity instanceof EntityNuclearCreeper || entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
 							continue;
+						
+						if(entity instanceof EntityPlayer && (((EntityPlayer)entity).capabilities.isCreativeMode || ((EntityPlayer)entity).isSpectator()))
+							continue;
 
 						if(eRad >= 1000) {
 							if(entity.attackEntityFrom(ModDamageSource.radiation, entity.getMaxHealth() * 100)){
 								entRad.setRads(0);
-								if(entity instanceof EntityPlayerMP)
-									AdvancementManager.grantAchievement((EntityPlayerMP)entity, AdvancementManager.achRadDeath);
-								
 							}
+							if(entity instanceof EntityPlayerMP)
+								AdvancementManager.grantAchievement((EntityPlayerMP)entity, AdvancementManager.achRadDeath);
 							//.attackEntityFrom ensures the recentlyHit var is set to enable drops.
 							//if the attack is canceled, then nothing will drop.
 							//that's what you get for trying to cheat death
-							if(!(entity instanceof EntityPlayer && (((EntityPlayer)entity).isCreative() || ((EntityPlayer)entity).isSpectator())))
-								entity.setHealth(0);
+							entity.setHealth(0);
 						} else if(eRad >= 800) {
 							if(event.world.rand.nextInt(300) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 30, 0));
@@ -630,10 +657,14 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
-
-		if(!player.world.isRemote && player.getUniqueID().toString().equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
-			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
+		String st = player.getUniqueID().toString();
+		
+		if(!player.world.isRemote && (
+				st.equals("c874fd4e-5841-42e4-8f77-70efd5881bc1") ||
+				st.equals("6a058220-7d86-4f29-817b-418eb98bd842") ||
+				st.equals("dec34886-ef6b-409e-94ee-a99c5fbec9dd")))
+					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
+						player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
 
 		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
 
@@ -700,8 +731,13 @@ public class ModEventHandler {
 	public void clientJoinServer(PlayerLoggedInEvent e) {
 		if(e.player instanceof EntityPlayerMP)
 			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
-		if(e.player.world.isRemote)
+		if(!e.player.world.isRemote){
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
+			
+			if(VersionChecker.newVersion) {
+        		e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "New version " + VersionChecker.versionNumber + " is available!"));
+        	}
+		}
 	}
 
 	@SubscribeEvent

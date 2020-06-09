@@ -1,6 +1,5 @@
 package com.hbm.render.misc;
 
-import java.nio.FloatBuffer;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -8,12 +7,9 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;

@@ -9,7 +9,7 @@ import com.hbm.tileentity.machine.TileEntityWatzCore;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIWatzCore extends GuiInfoContainer {
@@ -17,7 +17,7 @@ public class GUIWatzCore extends GuiInfoContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_watz_multiblock.png");
 	private TileEntityWatzCore diFurnace;
 
-	public GUIWatzCore(InventoryPlayer invPlayer, TileEntityWatzCore tedf) {
+	public GUIWatzCore(EntityPlayer invPlayer, TileEntityWatzCore tedf) {
 		super(new ContainerWatzCore(invPlayer, tedf));
 		diFurnace = tedf;
 		

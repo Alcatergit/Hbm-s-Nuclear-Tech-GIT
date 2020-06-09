@@ -129,10 +129,10 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "smoke");
 				data.setString("mode", "shockRand");
-				data.setInteger("count", 35);
+				data.setInteger("count", 50);
 				data.setDouble("strength", world.rand.nextGaussian() * 3 + 6);
 				data.setDouble("posX", pos.getX() + 0.5);
-				data.setDouble("posY", pos.getY() + 1);
+				data.setDouble("posY", pos.getY() - 3);
 				data.setDouble("posZ", pos.getZ() + 0.5);
 				
 				MainRegistry.proxy.effectNT(data);
@@ -191,7 +191,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 		EntitySoyuz soyuz = new EntitySoyuz(world);
 		soyuz.setSkin(this.getType());
 		soyuz.mode = this.mode;
-		soyuz.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 0, 0);
+		soyuz.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0);
 		world.spawnEntity(soyuz);
 
 		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.soyuzTakeOff, SoundCategory.BLOCKS, 100F, 1.1F);

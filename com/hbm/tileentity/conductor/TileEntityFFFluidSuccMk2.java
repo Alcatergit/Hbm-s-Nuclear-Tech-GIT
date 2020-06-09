@@ -21,13 +21,7 @@ public class TileEntityFFFluidSuccMk2 extends TileEntityFFDuctBaseMk2 implements
 			if(te != null && !(te instanceof IFluidPipeMk2) && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, e.getOpposite())){
 				IFluidHandler toDrain = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, e.getOpposite());
 				int maxNetFill = network.fill(new FluidStack(network.getType(), Integer.MAX_VALUE), false);
-				if(toDrain.drain(new FluidStack(network.getType(), maxNetFill), false) != null)
-					System.out.println(toDrain.drain(new FluidStack(network.getType(), maxNetFill), false).amount);
-				int maxNetFill2 = network.fill(toDrain.drain(new FluidStack(network.getType(), maxNetFill), true), true);
-				if(maxNetFill2 > 0){
-					System.out.println(maxNetFill);
-					System.out.println(maxNetFill2);
-				}
+				network.fill(toDrain.drain(new FluidStack(network.getType(), maxNetFill), true), true);
 			}
 		}
 	}

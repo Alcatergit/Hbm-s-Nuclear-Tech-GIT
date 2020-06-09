@@ -23,6 +23,7 @@ public class ItemAmmo extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+
 		// FUEL
 		if(this == ModItems.ammo_fuel_napalm) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
@@ -62,6 +63,10 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.RED + "- Increased wear");
 			list.add(TextFormatting.RED + "- Not penetrating");
 		}
+		if(this == ModItems.ammo_50bmg_ap) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
 		if(this == ModItems.ammo_rocket_phosphorus) {
 			list.add(TextFormatting.BLUE + "+ Phosphorus splash");
 			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
@@ -70,6 +75,12 @@ public class ItemAmmo extends Item {
 		if(this == ModItems.ammo_grenade_phosphorus) {
 			list.add(TextFormatting.BLUE + "+ Phosphorus splash");
 			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
+		if(this == ModItems.ammo_grenade_kampf) {
+			list.add(TextFormatting.BLUE + "+ Rocket Propelled");
+			list.add(TextFormatting.BLUE + "+ Increased blast radius");
+			list.add(TextFormatting.BLUE + "+ Increased accuracy");
 			list.add(TextFormatting.RED + "- Increased wear");
 		}
 		if(this == ModItems.ammo_12gauge_incendiary) {
@@ -348,6 +359,61 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.YELLOW + "* It's a 40mm grenade that we squeezed to fit the barrel!");
 			list.add(TextFormatting.RED + "- Highly increased wear");
 			list.add(TextFormatting.RED + "- Single projectile");
+		}
+		// 5.56mm
+		if(this == ModItems.ammo_556_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.YELLOW + "* Technically a warcrime");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_ap) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
+		if(this == ModItems.ammo_556_du) {
+			list.add(TextFormatting.BLUE + "+ Highly increased damage");
+			list.add(TextFormatting.YELLOW + "* Heavy metal");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_556_star) {
+			list.add(TextFormatting.BLUE + "+ Highly increased damage");
+			list.add(TextFormatting.YELLOW + "* Starmetal");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_556_flechette) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_flechette_incendiary) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Incendiary");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_flechette_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.YELLOW + "* Twice the warcrime in a single round!");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_flechette_du) {
+			list.add(TextFormatting.BLUE + "+ Highly increased damage");
+			list.add(TextFormatting.BLUE + "+ Penetrating");
+			list.add(TextFormatting.YELLOW + "* Heavy metal");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_556_tracer) {
+			list.add(TextFormatting.YELLOW + "* Tracer");
+		}
+		if(this == ModItems.ammo_556_k) {
+			list.add(TextFormatting.YELLOW + "* It's a blank");
 		}
 	}
 }

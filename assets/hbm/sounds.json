@@ -48,6 +48,7 @@
     "item.radaway": {"category": "player", "sounds": [{"name": "hbm:tool/radaway", "stream": false}]},
     "item.spray": {"category": "player", "sounds": [{"name": "hbm:tool/spray", "stream": false}]},
     "item.repair": {"category": "player", "sounds": ["hbm:tool/repair1", "hbm:tool/repair2", "hbm:tool/repair3", "hbm:tool/repair4", "hbm:tool/repair5", "hbm:tool/repair6", "hbm:tool/repair7"]},
+	"item.vice": {"category": "player", "sounds": [{"name": "hbm:tool/vice", "stream": false}]},
 
 	"music.recordlambdacore": {"category": "record", "sounds": [{"name": "hbm:music/recordlambdacore", "stream": true}]},
 	"music.recordsectorsweep": {"category": "record", "sounds": [{"name": "hbm:music/recordsectorsweep", "stream": true}]},
@@ -121,6 +122,8 @@
 	"weapon.flamerReload": {"category": "player", "sounds": [{"name": "hbm:weapon/flamerReload", "stream": false}]},
 	"weapon.stop": {"category": "player", "sounds": ["hbm:weapon/stop1", "hbm:weapon/stop2"]},
 	"weapon.bonk": {"category": "player", "sounds": [{"name": "hbm:weapon/bonk", "stream": false}]},
+	"weapon.glauncher": {"category": "player", "sounds": ["hbm:weapon/glauncher1", "hbm:weapon/glauncher2"]},
+	"weapon.hksShoot": {"category": "player", "sounds": ["hbm:weapon/hksShoot1", "hbm:weapon/hksShoot2", "hbm:weapon/hksShoot3"]},
 
     "weapon.reloadTurret": {"category": "player", "sounds": [{"name": "hbm:weapon/reloadTurret", "stream": false}]},
     "weapon.switchmode1": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode1", "stream": false}]},

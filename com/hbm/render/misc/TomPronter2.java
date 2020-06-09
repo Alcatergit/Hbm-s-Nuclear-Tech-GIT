@@ -52,7 +52,7 @@ public class TomPronter2 {
 			
 			GL11.glScalef(-1.015F, 0.9F, 1.015F);
         }
-		
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
 

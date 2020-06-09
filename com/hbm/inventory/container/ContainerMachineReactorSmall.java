@@ -36,9 +36,9 @@ public class ContainerMachineReactorSmall extends Container {
 		
 		//Fluid IO
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 8, 90));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 13, 8, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 8, 108));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 26, 90));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 15, 26, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 26, 108));
 		
 		for(int i = 0; i < 3; i++)
 		{

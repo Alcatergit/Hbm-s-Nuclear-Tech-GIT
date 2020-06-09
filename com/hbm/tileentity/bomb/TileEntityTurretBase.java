@@ -7,9 +7,7 @@ import com.hbm.blocks.bomb.TurretBase;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.missile.EntityMissileCustom;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.lib.Library;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETurretCIWSPacket;
 import com.hbm.packet.TETurretPacket;
@@ -26,7 +24,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityTurretBase extends TileEntity implements ITickable, IClientRequestUpdator {
+public class TileEntityTurretBase extends TileEntity implements ITickable {
 
 	public double rotationYaw;
 	public double rotationPitch;
@@ -37,16 +35,9 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 	public List<String> players = new ArrayList<String>();
 	public int use;
 	public int ammo = 0;
-	private boolean firstUpdate = true;
 
 	@Override
 	public void update() {
-		if (firstUpdate) {
-			if (world.isRemote) {
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 		if (isAI) {
 
 			Object[] iter = world.loadedEntityList.toArray();
@@ -157,9 +148,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		rotationYaw = nbt.getDouble("yaw");
-		detectYaw = rotationYaw + 1;
 		rotationPitch = nbt.getDouble("pitch");
-		detectPit = rotationPitch + 1;
 		isAI = nbt.getBoolean("AI");
 		detectIsAI = !isAI;
 		ammo = nbt.getInteger("ammo");
@@ -191,13 +180,10 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 	private int detectAmmo;
 	private boolean detectIsAI;
 	public boolean playerListChanged = true;
-	private double detectPit;
-	private double detectYaw;
 
 	private void detectAndSendChanges() {
 		boolean mark = false;
 		if (isAI != detectIsAI) {
-			PacketDispatcher.wrapper.sendToAll(new TETurretPacket(pos.getX(), pos.getY(), pos.getZ(), isAI));
 			detectIsAI = isAI;
 			mark = true;
 		}
@@ -213,11 +199,10 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 			playerListChanged = false;
 			mark = true;
 		}
-		if (isAI && this instanceof TileEntityTurretCIWS && (detectPit != rotationPitch || detectYaw != rotationYaw)) {
-			detectYaw = rotationYaw;
-			detectPit = rotationPitch;
+		if (isAI && this instanceof TileEntityTurretCIWS) {
 			PacketDispatcher.wrapper.sendToAllTracking(new TETurretCIWSPacket(pos.getX(), pos.getY(), pos.getZ(), rotationYaw, rotationPitch), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
 		}
+		PacketDispatcher.wrapper.sendToAllTracking(new TETurretPacket(pos.getX(), pos.getY(), pos.getZ(), isAI), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if (mark)
 			this.markDirty();
 	}
@@ -237,14 +222,5 @@ public class TileEntityTurretBase extends TileEntity implements ITickable, IClie
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		// for(EntityPlayer player : this.world.playerEntities){
-		// if(player instanceof EntityPlayerMP)
-		// ((EntityPlayerMP)player).connection.sendPacket(new
-		// SPacketUpdateTileEntity(pos, 0, writeToNBT(new NBTTagCompound())));
-		// }
 	}
 }

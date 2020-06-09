@@ -1,7 +1,5 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.weapon.ItemGunBase;
 
 import net.minecraft.client.model.ModelBase;

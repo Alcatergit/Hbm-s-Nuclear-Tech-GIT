@@ -1,12 +1,7 @@
 package com.hbm.items.weapon;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.logging.log4j.Level;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemLootCrate;

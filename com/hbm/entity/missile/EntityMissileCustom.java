@@ -222,7 +222,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 		fuel = nbt.getFloat("fuel");
 		consumption = nbt.getFloat("consumption");
 		int i = nbt.getInteger("fins");
-		template = new MissileStruct(Item.getItemById(nbt.getInteger("warhead")), Item.getItemById(nbt.getInteger("fuselage")), i < 0 ? null : Item.getItemById(i), Item.getItemById(nbt.getInteger("thruster")));
+		if(nbt.hasKey("noTemplate")){
+			template = null;
+			this.setDead();
+		} else {
+			template = new MissileStruct(Item.getItemById(nbt.getInteger("warhead")), Item.getItemById(nbt.getInteger("fuselage")), i < 0 ? null : Item.getItemById(i), Item.getItemById(nbt.getInteger("thruster")));
+		}
 		this.getDataManager().set(TEMPLATE, template);
 	}
 
@@ -244,10 +249,15 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 		nbt.setFloat("fuel", fuel);
 		nbt.setFloat("consumption", consumption);
 		template = this.getDataManager().get(TEMPLATE);
-		nbt.setInteger("warhead", Item.getIdFromItem(template.warhead));
-		nbt.setInteger("fuselage", Item.getIdFromItem(template.fuselage));
-		nbt.setInteger("fins", template.fins == null ? -1 : Item.getIdFromItem(template.fins));
-		nbt.setInteger("thruster", Item.getIdFromItem(template.thruster));
+		if(template == null){
+			//Drillgon200: Should never happen but apparently mo creatures likes spawning other people's mobs
+			nbt.setBoolean("noTemplate", true);	
+		} else {
+			nbt.setInteger("warhead", Item.getIdFromItem(template.warhead));
+			nbt.setInteger("fuselage", Item.getIdFromItem(template.fuselage));
+			nbt.setInteger("fins", template.fins == null ? -1 : Item.getIdFromItem(template.fins));
+			nbt.setInteger("thruster", Item.getIdFromItem(template.thruster));
+		}
 	}
 	
 	protected void rotation() {

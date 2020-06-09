@@ -67,7 +67,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		this.checkAndDropBlock(worldIn, pos, state);
-		if(worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.waste_earth && rand.nextInt(5) == 0){
+		if(MainRegistry.enableMycelium && worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.waste_earth && rand.nextInt(5) == 0){
 			worldIn.setBlockState(pos.down(), ModBlocks.waste_mycelium.getDefaultState());
 		}
 		

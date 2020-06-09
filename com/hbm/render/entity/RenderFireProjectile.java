@@ -1,8 +1,6 @@
 package com.hbm.render.entity;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.items.ModItems;
 import com.hbm.render.RenderHelper;

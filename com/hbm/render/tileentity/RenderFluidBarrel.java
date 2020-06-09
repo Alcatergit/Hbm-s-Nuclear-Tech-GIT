@@ -2,15 +2,11 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.render.misc.DiamondPronter;
-import com.hbm.render.misc.EnumSymbol;
 import com.hbm.tileentity.machine.TileEntityBarrel;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.fluids.FluidStack;
 

@@ -220,9 +220,9 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 		}
 		if(detectPower != power){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			detectPower = power;
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
 			markDirty();
 	}

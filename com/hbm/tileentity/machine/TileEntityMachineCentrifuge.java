@@ -1,13 +1,11 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -25,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCentrifuge extends TileEntity implements ITickable, IConsumer, IClientRequestUpdator {
+public class TileEntityMachineCentrifuge extends TileEntity implements ITickable, IConsumer {
 
 	public ItemStackHandler inventory;
 	
@@ -34,8 +32,6 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	public boolean isProgressing;
 	public static final int maxPower = 100000;
 	public static final int processingSpeed = 200;
-	private boolean requestUpdate = true;
-	private boolean firstUpdate = true;
 	
 	//private static final int[] slots_top = new int[] {0};
 	//private static final int[] slots_bottom = new int[] {2, 3, 4, 5};
@@ -118,7 +114,7 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 		{
 			return false;
 		}
-		ItemStack[] itemStack = MachineRecipes.getCentrifugeProcessingResult(inventory.getStackInSlot(0));
+		ItemStack[] itemStack = CentrifugeRecipes.getOutput(inventory.getStackInSlot(0));
 		if(itemStack == null)
 		{
 			return false;
@@ -142,7 +138,7 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	
 	private void processItem() {
 		if(canProcess()) {
-			ItemStack[] itemStack = MachineRecipes.getCentrifugeProcessingResult(inventory.getStackInSlot(0));
+			ItemStack[] itemStack = CentrifugeRecipes.getOutput(inventory.getStackInSlot(0));
 			
 			if(inventory.getStackInSlot(2).isEmpty() && itemStack[0] != null)
 			{
@@ -201,13 +197,6 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	@Override
 	public void update() {
 		
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
-		
 		if(!world.isRemote) {
 			
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
@@ -255,23 +244,21 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	
 	private void detectAndSendChanges(){
 		boolean mark = false;
-		if(detectPower != power || requestUpdate){
+		if(detectPower != power){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			detectPower = power;
 		}
-		if(detectCookTime != dualCookTime || requestUpdate){
+		if(detectCookTime != dualCookTime){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), dualCookTime, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			detectCookTime = dualCookTime;
 		}
-		if(detectIsProgressing != isProgressing || requestUpdate){
+		if(detectIsProgressing != isProgressing){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			detectIsProgressing = isProgressing;
 		}
-		
-		requestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), dualCookTime, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 		if(mark)
 			markDirty();
 	}
@@ -301,11 +288,6 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		this.requestUpdate = true;
 	}
 	
 	@Override

@@ -1,8 +1,11 @@
 package com.hbm.inventory.container;
 
+import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -20,9 +23,12 @@ public class ContainerWatzCore extends Container {
 	private int powerMultiplier;
 	private int heatMultiplier;
 	private int heat;
+	EntityPlayerMP player;
 	
-	public ContainerWatzCore(InventoryPlayer invPlayer, TileEntityWatzCore tedf) {
-
+	public ContainerWatzCore(EntityPlayer player, TileEntityWatzCore tedf) {
+		if(player instanceof EntityPlayerMP)
+			this.player = (EntityPlayerMP) player;
+		InventoryPlayer invPlayer = player.inventory;
 		powerList = 0;
 		heatList = 0;
 		decayMultiplier = 0;
@@ -94,12 +100,12 @@ public class ContainerWatzCore extends Container {
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
-		crafting.sendWindowProperty(this, 0, this.diFurnace.powerList);
-		crafting.sendWindowProperty(this, 1, this.diFurnace.heatList);
-		crafting.sendWindowProperty(this, 2, this.diFurnace.decayMultiplier);
-		crafting.sendWindowProperty(this, 3, this.diFurnace.powerMultiplier);
-		crafting.sendWindowProperty(this, 4, this.diFurnace.heatMultiplier);
-		crafting.sendWindowProperty(this, 5, this.diFurnace.heat);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
 	}
 	
 	@Override
@@ -144,39 +150,34 @@ public class ContainerWatzCore extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		for(int i = 0; i < this.listeners.size(); i++)
+		if(this.powerList != this.diFurnace.powerList)
 		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			
-			if(this.powerList != this.diFurnace.powerList)
-			{
-				par1.sendWindowProperty(this, 0, this.diFurnace.powerList);
-			}
-			
-			if(this.heatList != this.diFurnace.heatList)
-			{
-				par1.sendWindowProperty(this, 1, this.diFurnace.heatList);
-			}
-			
-			if(this.decayMultiplier != this.diFurnace.decayMultiplier)
-			{
-				par1.sendWindowProperty(this, 2, this.diFurnace.decayMultiplier);
-			}
-			
-			if(this.powerMultiplier != this.diFurnace.powerMultiplier)
-			{
-				par1.sendWindowProperty(this, 3, this.diFurnace.powerMultiplier);
-			}
-			
-			if(this.heatMultiplier != this.diFurnace.heatMultiplier)
-			{
-				par1.sendWindowProperty(this, 4, this.diFurnace.heatMultiplier);
-			}
-			
-			if(this.heat != this.diFurnace.heat)
-			{
-				par1.sendWindowProperty(this, 5, this.diFurnace.heat);
-			}
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
+		}
+		
+		if(this.heatList != this.diFurnace.heatList)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
+		}
+		
+		if(this.decayMultiplier != this.diFurnace.decayMultiplier)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
+		}
+		
+		if(this.powerMultiplier != this.diFurnace.powerMultiplier)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
+		}
+		
+		if(this.heatMultiplier != this.diFurnace.heatMultiplier)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
+		}
+		
+		if(this.heat != this.diFurnace.heat)
+		{
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
 		}
 
 		this.powerList = this.diFurnace.powerList;
@@ -187,31 +188,4 @@ public class ContainerWatzCore extends Container {
 		this.heat = this.diFurnace.heat;
 	}
 	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 0)
-		{
-			diFurnace.powerList = j;
-		}
-		if(i == 1)
-		{
-			diFurnace.heatList = j;
-		}
-		if(i == 2)
-		{
-			diFurnace.decayMultiplier = j;
-		}
-		if(i == 3)
-		{
-			diFurnace.powerMultiplier = j;
-		}
-		if(i == 4)
-		{
-			diFurnace.heatMultiplier = j;
-		}
-		if(i == 5)
-		{
-			diFurnace.heat = j;
-		}
-	}
 }

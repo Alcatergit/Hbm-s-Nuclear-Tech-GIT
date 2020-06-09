@@ -34,8 +34,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
-import com.hbm.tileentity.machine.TileEntityMachineCoal;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

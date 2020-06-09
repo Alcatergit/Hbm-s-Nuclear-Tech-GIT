@@ -3,7 +3,6 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.JetpackBooster;
 import com.hbm.items.gear.JetpackBreak;
@@ -357,6 +356,16 @@ public class ItemSyringe extends Item {
             	}
             
             	player.getHeldItem(hand).shrink(1);
+            }
+		}
+		if(this == ModItems.cbt_device)
+		{
+            if (!world.isRemote)
+            {
+                player.addPotionEffect(new PotionEffect(HbmPotion.bang, 30, 0));
+
+            	player.getHeldItem(hand).shrink(1);
+            	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.vice, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }
 		}
 		

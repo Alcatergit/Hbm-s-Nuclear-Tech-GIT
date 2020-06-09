@@ -58,6 +58,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ResourceLocation grenade_in = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeIncendiary.png");
 	private ResourceLocation grenade_to = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeToxic.png");
 	private ResourceLocation grenade_sl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeSleek.png");
+	private ResourceLocation grenade_tr = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeTraining.png");
 	
 
 	protected RenderBulletMk2(RenderManager renderManager) {
@@ -212,6 +213,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		case 4:
 			bindTexture(grenade_sl);
 			break;
+		case 5:
+			bindTexture(grenade_tr);
+			break;
 		}
 
 		grenade.renderAll(0.0625F);
@@ -301,6 +305,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		
 
         GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
 		
 		GL11.glPopMatrix();
 	}
@@ -427,6 +432,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			break;
 		}
 		
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.depthMask(true);

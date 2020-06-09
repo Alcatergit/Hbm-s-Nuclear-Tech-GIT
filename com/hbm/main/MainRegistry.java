@@ -76,6 +76,7 @@ import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
+import com.hbm.entity.item.EntityMovingItem;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityBlast;
 import com.hbm.entity.logic.EntityBomber;
@@ -181,8 +182,10 @@ import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
-import com.hbm.inventory.MachineRecipes;
-import com.hbm.inventory.MachineRecipes.ShredderRecipe;
+import com.hbm.handler.VersionChecker;
+import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.inventory.CrystallizerRecipes;
+import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
@@ -230,7 +233,6 @@ import com.hbm.tileentity.conductor.TileEntityFFOilDuctSolid;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
 import com.hbm.tileentity.deco.TileEntityDecoBlockAlt;
 import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
-import com.hbm.tileentity.deco.TileEntityDecoPoleTop;
 import com.hbm.tileentity.deco.TileEntityGeysir;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 import com.hbm.tileentity.deco.TileEntityTestRender;
@@ -278,6 +280,7 @@ import com.hbm.tileentity.machine.TileEntityMachineCMBFactory;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
+import com.hbm.tileentity.machine.TileEntityMachineCrystallizer;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
@@ -336,7 +339,6 @@ import com.hbm.tileentity.machine.TileEntityWireCoated;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -521,6 +523,10 @@ public class MainRegistry {
 	public static boolean dropCrys = true;
 	public static boolean dropDead = true;
 
+	public static int recursionDepth = 500;
+	public static boolean recursiveStone = true;
+	public static boolean recursiveNetherrack = true;
+
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = true;
 
@@ -601,7 +607,7 @@ public class MainRegistry {
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
 		PacketDispatcher.registerPackets();
 
-		loadConfig(event);
+		reloadConfig();
 
 		CapabilityManager.INSTANCE.register(RadiationCapability.IEntityRadioactive.class, new RadiationCapability.EntityRadioactiveStorage(), RadiationCapability.EntityRadioactive.FACTORY);
 		ModForgeFluids.init();
@@ -611,6 +617,7 @@ public class MainRegistry {
 		BulletConfigSyncingUtil.loadConfigsForSync();
 		CellularDungeonFactory.init();
 		Satellite.register();
+		VersionChecker.checkVersion();
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
@@ -779,6 +786,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntitySoyuzCapsule.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_capsule"));
 		GameRegistry.registerTileEntity(TileEntitySoyuzLauncher.class, new ResourceLocation(RefStrings.MODID, "tileentity_soyuz_launcher"));
 		GameRegistry.registerTileEntity(TileEntityFFFluidSuccMk2.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_succ_mk2"));
+		GameRegistry.registerTileEntity(TileEntityMachineCrystallizer.class, new ResourceLocation(RefStrings.MODID, "tileentity_acidomatic"));
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_fog"), EntityFogFX.class, "entity_nuclear_fog", i++, MainRegistry.instance, 1000, 1, true);
@@ -933,6 +941,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz_capsule"), EntitySoyuzCapsule.class, "entity_soyuz_capsule", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz"), EntitySoyuz.class, "entity_soyuz", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser"), EntityLaser.class, "entity_laser", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_c_item"), EntityMovingItem.class, "entity_c_item", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -950,7 +959,7 @@ public class MainRegistry {
 		//ForgeRegistries.DATA_SERIALIZERS.register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
 	}
 
-	public static void loadConfig(FMLPreInitializationEvent event) {
+	public static void reloadConfig() {
 		Configuration config = new Configuration(new File(proxy.getDataDir().getPath() + "/config/hbm/hbm.cfg"));
 		config.load();
 
@@ -978,7 +987,7 @@ public class MainRegistry {
 		enableGuns = config.get(CATEGORY_GENERAL, "1.20_enableGuns", true).getBoolean(true);
 		enableVirus = config.get(CATEGORY_GENERAL, "1.21_enableVirus", false).getBoolean(false);
         enableCrosshairs = config.get(CATEGORY_GENERAL, "1.22_enableCrosshairs", true).getBoolean(true);
-		Property shaders = config.get(CATEGORY_GENERAL, "1.21_enableShaders", false);
+		Property shaders = config.get(CATEGORY_GENERAL, "1.23_enableShaders", false);
 		shaders.setComment("Experimental, don't use");
 		useShaders = shaders.getBoolean(false);
 
@@ -990,6 +999,7 @@ public class MainRegistry {
 				logger.log(Level.WARN, "OpenGL 3.0 is not supported; not using shaders");
 				useShaders = false;
 			}
+		useShaders = false;
 
 		final String CATEGORY_OREGEN = "02_ores";
 		Property PuraniumSpawn = config.get(CATEGORY_OREGEN, "2.00_uraniumSpawnrate", 6);
@@ -1251,6 +1261,11 @@ public class MainRegistry {
         dropCrys = createConfigBool(config, CATEGORY_DROPS, "10.04_dropCrys", "Whether xen crystals should move blocks when dropped", true);
         dropDead = createConfigBool(config, CATEGORY_DROPS, "10.05_dropDead", "Whether dead man's explosives should explode when dropped", true);
 		
+        final String CATEGORY_TOOLS = "11_tools";
+        recursionDepth = createConfigInt(config, CATEGORY_TOOLS, "11.00_recursionDepth", "Limits veinminer's recursive function. Usually not an issue, unless you're using bukkit which is especially sensitive for some reason.", 1000);
+        recursiveStone = createConfigBool(config, CATEGORY_TOOLS, "11.01_recursionDepth", "Determines whether veinminer can break stone", false);
+        recursiveNetherrack = createConfigBool(config, CATEGORY_TOOLS, "11.02_recursionDepth", "Determines whether veinminer can break netherrack", false);
+        
 		config.save();
 
 		radioStructure = setDef(radioStructure, 1000);
@@ -1328,7 +1343,10 @@ public class MainRegistry {
 		ItemAssemblyTemplate.loadRecipesFromConfig();
 		CraftingManager.init();
 		FluidTypeHandler.registerFluidProperties();
-		loadShredderRecipes();
+		ShredderRecipes.registerShredder();
+		ShredderRecipes.registerOverrides();
+		CrystallizerRecipes.register();
+		CentrifugeRecipes.register();
 		BlockCrate.setDrops();
 		//Drillgon200: expand the max entity radius for the hunter chopper
 		if(World.MAX_ENTITY_RADIUS < 5)
@@ -1490,7 +1508,7 @@ public class MainRegistry {
 		OreDictionary.registerOre("oreSchrabidium", ModBlocks.ore_schrabidium);
 		OreDictionary.registerOre("oreSulfur", ModBlocks.ore_sulfur);
 		OreDictionary.registerOre("oreNiter", ModBlocks.ore_niter);
-		OreDictionary.registerOre("oreSapeter", ModBlocks.ore_niter);
+		OreDictionary.registerOre("oreSalpeter", ModBlocks.ore_niter);
 		OreDictionary.registerOre("oreCopper", ModBlocks.ore_copper);
 		OreDictionary.registerOre("oreTungsten", ModBlocks.ore_tungsten);
 		OreDictionary.registerOre("oreAluminum", ModBlocks.ore_aluminium);
@@ -1667,78 +1685,6 @@ public class MainRegistry {
 		TileEntityMachineReactorLarge.registerWasteEntry(6, ReactorFuelType.THORIUM, ModItems.rod_empty, ModItems.rod_thorium_fuel_depleted);
 		TileEntityMachineReactorLarge.registerWasteEntry(12, ReactorFuelType.THORIUM, ModItems.rod_dual_empty, ModItems.rod_dual_thorium_fuel_depleted);
 		TileEntityMachineReactorLarge.registerWasteEntry(24, ReactorFuelType.THORIUM, ModItems.rod_quad_empty, ModItems.rod_quad_thorium_fuel_depleted);
-	}
-
-	private void loadShredderRecipes() {
-		ShredderRecipe recipes = new MachineRecipes().new ShredderRecipe();
-
-		recipes.registerEverythingImSrs();
-
-		recipes.addRecipes();
-
-		recipes.removeDuplicates();
-
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.scrap), new ItemStack(ModItems.dust));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.dust), new ItemStack(ModItems.dust));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 0), new ItemStack(ModItems.powder_quartz, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new ItemStack(ModItems.powder_quartz, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2), new ItemStack(ModItems.powder_quartz, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.QUARTZ_STAIRS), new ItemStack(ModItems.powder_quartz, 3));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.STONE_SLAB, 1, 7), new ItemStack(ModItems.powder_quartz, 2));
-		recipes.overridePreSetRecipe(new ItemStack(Items.QUARTZ), new ItemStack(ModItems.powder_quartz));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.QUARTZ_ORE), new ItemStack(ModItems.powder_quartz, 2));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.ore_nether_fire), new ItemStack(ModItems.powder_fire, 6));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.PACKED_ICE), new ItemStack(ModItems.powder_ice, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_light), new ItemStack(Items.CLAY_BALL, 4));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.concrete), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.concrete_smooth), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_mossy), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_cracked), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_concrete_broken), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.brick_obsidian), new ItemStack(ModBlocks.gravel_obsidian, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.OBSIDIAN), new ItemStack(ModBlocks.gravel_obsidian, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.STONE), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.STONEBRICK), new ItemStack(Blocks.GRAVEL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.SAND), new ItemStack(ModItems.dust, 2));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.BRICK_BLOCK), new ItemStack(Items.CLAY_BALL, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.BRICK_STAIRS), new ItemStack(Items.CLAY_BALL, 3));
-		recipes.overridePreSetRecipe(new ItemStack(Items.FLOWER_POT), new ItemStack(Items.CLAY_BALL, 3));
-		recipes.overridePreSetRecipe(new ItemStack(Items.BRICK), new ItemStack(Items.CLAY_BALL, 1));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.SANDSTONE), new ItemStack(Blocks.SAND, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.SANDSTONE_STAIRS), new ItemStack(Blocks.SAND, 6));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.CLAY), new ItemStack(Items.CLAY_BALL, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.HARDENED_CLAY), new ItemStack(Items.CLAY_BALL, 4));
-		recipes.overridePreSetRecipe(new ItemStack(Blocks.TNT), new ItemStack(Items.GUNPOWDER, 5));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.powder_quartz), new ItemStack(ModItems.powder_lithium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.powder_lapis), new ItemStack(ModItems.powder_cobalt_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_neodymium), new ItemStack(ModItems.powder_neodymium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_cobalt), new ItemStack(ModItems.powder_cobalt_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_niobium), new ItemStack(ModItems.powder_niobium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_cerium), new ItemStack(ModItems.powder_cerium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_lanthanium), new ItemStack(ModItems.powder_lanthanium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_actinium), new ItemStack(ModItems.powder_actinium_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.fragment_meteorite), new ItemStack(ModItems.powder_meteorite_tiny, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.block_meteor), new ItemStack(ModItems.powder_meteorite, 10));
-		recipes.overridePreSetRecipe(new ItemStack(Items.ENCHANTED_BOOK), new ItemStack(ModItems.powder_magic, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.arc_electrode_burnt), new ItemStack(ModItems.powder_coal, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModItems.arc_electrode_desh), new ItemStack(ModItems.powder_desh, 2));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_polished), new ItemStack(ModItems.powder_meteorite, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick), new ItemStack(ModItems.powder_meteorite, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_mossy), new ItemStack(ModItems.powder_meteorite, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_cracked), new ItemStack(ModItems.powder_meteorite, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_brick_chiseled), new ItemStack(ModItems.powder_meteorite, 1));
-		recipes.overridePreSetRecipe(new ItemStack(ModBlocks.meteor_pillar), new ItemStack(ModItems.powder_meteorite, 1));
-
-		for(int i = 0; i < 16; i++) {
-			recipes.overridePreSetRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i), new ItemStack(Items.CLAY_BALL, 4));
-			recipes.overridePreSetRecipe(new ItemStack(Blocks.WOOL, 1, i), new ItemStack(Items.STRING, 4));
-		}
-
-		recipes.PrintRecipes();
 	}
 
 }

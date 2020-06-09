@@ -6,11 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemToolAbility;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.item.EntityItem;
@@ -44,6 +47,13 @@ public abstract class ToolAbility {
 		@Override
 		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
 			
+			Block b = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+
+			if(b == Blocks.STONE && !MainRegistry.recursiveStone)
+				return;
+			if(b == Blocks.NETHERRACK && !MainRegistry.recursiveNetherrack)
+				return;
+			
 			List<Integer> indices = Arrays.asList(new Integer[] {0, 1, 2, 3, 4, 5});
 			Collections.shuffle(indices);
 			
@@ -51,19 +61,24 @@ public abstract class ToolAbility {
 			
 			for(Integer i : indices) {
 				switch(i) {
-				case 0: breakExtra(world, x + 1, y, z, x, y, z, player, tool, hand); break;
-				case 1: breakExtra(world, x - 1, y, z, x, y, z, player, tool, hand); break;
-				case 2: breakExtra(world, x, y + 1, z, x, y, z, player, tool, hand); break;
-				case 3: breakExtra(world, x, y - 1, z, x, y, z, player, tool, hand); break;
-				case 4: breakExtra(world, x, y, z + 1, x, y, z, player, tool, hand); break;
-				case 5: breakExtra(world, x, y, z - 1, x, y, z, player, tool, hand); break;
+				case 0: breakExtra(world, x + 1, y, z, x, y, z, player, tool, hand, 0); break;
+				case 1: breakExtra(world, x - 1, y, z, x, y, z, player, tool, hand, 0); break;
+				case 2: breakExtra(world, x, y + 1, z, x, y, z, player, tool, hand, 0); break;
+				case 3: breakExtra(world, x, y - 1, z, x, y, z, player, tool, hand, 0); break;
+				case 4: breakExtra(world, x, y, z + 1, x, y, z, player, tool, hand, 0); break;
+				case 5: breakExtra(world, x, y, z - 1, x, y, z, player, tool, hand, 0); break;
 				}
 			}
 		}
 		
-		private void breakExtra(World world, int x, int y, int z, int refX, int refY, int refZ, EntityPlayer player, ItemToolAbility tool, EnumHand hand) {
+		private void breakExtra(World world, int x, int y, int z, int refX, int refY, int refZ, EntityPlayer player, ItemToolAbility tool, EnumHand hand, int depth) {
 			
 			if(pos.contains(new BlockPos(x, y, z)))
+				return;
+			
+			depth += 1;
+
+			if(depth > MainRegistry.recursionDepth)
 				return;
 			
 			pos.add(new BlockPos(x, y, z));
@@ -91,12 +106,12 @@ public abstract class ToolAbility {
 			
 			for(Integer i : indices) {
 				switch(i) {
-				case 0: breakExtra(world, x + 1, y, z, refX, refY, refZ, player, tool, hand); break;
-				case 1: breakExtra(world, x - 1, y, z, refX, refY, refZ, player, tool, hand); break;
-				case 2: breakExtra(world, x, y + 1, z, refX, refY, refZ, player, tool, hand); break;
-				case 3: breakExtra(world, x, y - 1, z, refX, refY, refZ, player, tool, hand); break;
-				case 4: breakExtra(world, x, y, z + 1, refX, refY, refZ, player, tool, hand); break;
-				case 5: breakExtra(world, x, y, z - 1, refX, refY, refZ, player, tool, hand); break;
+				case 0: breakExtra(world, x + 1, y, z, refX, refY, refZ, player, tool, hand, depth); break;
+				case 1: breakExtra(world, x - 1, y, z, refX, refY, refZ, player, tool, hand, depth); break;
+				case 2: breakExtra(world, x, y + 1, z, refX, refY, refZ, player, tool, hand, depth); break;
+				case 3: breakExtra(world, x, y - 1, z, refX, refY, refZ, player, tool, hand, depth); break;
+				case 4: breakExtra(world, x, y, z + 1, refX, refY, refZ, player, tool, hand, depth); break;
+				case 5: breakExtra(world, x, y, z - 1, refX, refY, refZ, player, tool, hand, depth); break;
 				}
 			}
 		}
@@ -190,7 +205,7 @@ public abstract class ToolAbility {
 				block = Blocks.REDSTONE_ORE.getDefaultState();
 			
 			ItemStack stack = new ItemStack(block.getBlock(), 1, block.getBlock().getMetaFromState(block));
-			ItemStack result = MachineRecipes.getShredderResult(stack);
+			ItemStack result = ShredderRecipes.getShredderResult(stack);
 			
 			if(result != null && result.getItem() != ModItems.scrap) {
 				world.setBlockToAir(new BlockPos(x, y, z));
@@ -220,7 +235,7 @@ public abstract class ToolAbility {
 				block = Blocks.REDSTONE_ORE.getDefaultState();
 			
 			ItemStack stack = new ItemStack(block.getBlock(), 1, block.getBlock().getMetaFromState(block));
-			ItemStack[] result = MachineRecipes.getCentrifugeProcessingResult(stack);
+			ItemStack[] result = CentrifugeRecipes.getOutput(stack);
 			
 			if(result != null) {
 				world.setBlockToAir(new BlockPos(x, y, z));

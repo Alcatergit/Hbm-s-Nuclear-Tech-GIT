@@ -18,9 +18,9 @@ public class ContainerUF6Tank extends Container {
 		testNuke = tedf;
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 44, 17));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 1, 44, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 44, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 116, 17));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 116, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 116, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

@@ -23,25 +23,25 @@ private TileEntityMachineRefinery testNuke;
 		//Canister Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 35, 90));
 		//Canister Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 2, 35, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 35, 108));
 		//Heavy Oil Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80, 90));
 		//Heavy Oil Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 4, 80, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 80, 108));
 		//Nahptha Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 98, 90));
 		//Nahptha Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 6, 98, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 98, 108));
 		//Light Oil Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 116, 90));
 		//Light Oil Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 8, 116, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 8, 116, 108));
 		//Petroleum Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 134, 90));
 		//Petroleum Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 10, 134, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 10, 134, 108));
 		//Sulfur Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 11, 152, 36));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 152, 36));
 		
 		for(int i = 0; i < 3; i++)
 		{

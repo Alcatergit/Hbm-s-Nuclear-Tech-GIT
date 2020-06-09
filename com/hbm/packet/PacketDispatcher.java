@@ -34,14 +34,14 @@ public class PacketDispatcher {
 		wrapper.registerMessage(AssemblerRecipeSyncPacket.Handler.class, AssemblerRecipeSyncPacket.class, i++, Side.CLIENT);
 		//Universal package for machine gauges and states
 		wrapper.registerMessage(AuxGaugePacket.Handler.class, AuxGaugePacket.class, i++, Side.CLIENT);
+		//Universal package for machine gauges and states but for longs
+		wrapper.registerMessage(AuxLongPacket.Handler.class, AuxLongPacket.class, i++, Side.CLIENT);
 		//Universal button packet
 		wrapper.registerMessage(AuxButtonPacket.Handler.class, AuxButtonPacket.class, i++, Side.SERVER);
 		//For handling fluid tank type updates
 		wrapper.registerMessage(FluidTypePacketTest.Handler.class, FluidTypePacketTest.class, i++, Side.CLIENT);
 		//Fluid pipe type update for rendering
 		wrapper.registerMessage(TEFluidTypePacketTest.Handler.class, TEFluidTypePacketTest.class, i++, Side.CLIENT);
-		//Client request update packet in case they load the new tile entity and the server doesn't know it needs an update and doesn't send any packets
-		wrapper.registerMessage(ClientRequestUpdatePacket.Handler.class, ClientRequestUpdatePacket.class, i++, Side.SERVER);
 		//Turret basic packet for making the client has the right ammo amounts
 		wrapper.registerMessage(TETurretPacket.Handler.class, TETurretPacket.class, i++, Side.CLIENT);
 		//CIWS has a really long range, so stuff might not even exist on client, so rotation needs to be sent
@@ -108,6 +108,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(SatCoordPacket.Handler.class, SatCoordPacket.class, i++, Side.SERVER);
 		//Signals server to perform orbital strike, among other things
 		wrapper.registerMessage(SatLaserPacket.Handler.class, SatLaserPacket.class, i++, Side.SERVER);
+		//Sets the gun animation on server because there is no client side nbt tag
+		wrapper.registerMessage(SetGunAnimPacket.Handler.class, SetGunAnimPacket.class, i++, Side.SERVER);
 	}
 
 }

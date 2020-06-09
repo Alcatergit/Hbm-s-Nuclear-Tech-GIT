@@ -9,8 +9,6 @@ import com.hbm.interfaces.ILaserable;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.Library;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.init.Blocks;
@@ -26,7 +24,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

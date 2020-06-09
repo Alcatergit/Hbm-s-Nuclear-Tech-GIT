@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.hbm.interfaces.IFluidPipeMk2;
 
@@ -19,6 +20,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class FFPipeNetworkMk2 implements IFluidHandler {
 
+	protected static Random rand = new Random();
+	
 	protected Fluid type;
 	protected Map<BlockPos, TileEntity> fillables = new HashMap<BlockPos, TileEntity>();
 	protected Map<BlockPos, IFluidPipeMk2> pipes = new HashMap<BlockPos, IFluidPipeMk2>();
@@ -47,7 +50,7 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 			if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
 				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-				if(h.fill(new FluidStack(resource.getFluid(), 1), false) > 0)
+				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0)
 					handlers.add(h);
 			}
 		}
@@ -55,14 +58,16 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		if(handlers.isEmpty())
 			return 0;
 		
+		
 		int part = resource.amount/handlers.size();
 		int totalDrained = 0;
 		int remaining = resource.amount;
-		//Drillgon200: The whole "first" thing is messy, but I guess it accounts for the integer rounding errors.
-		boolean first = true;
-		for(IFluidHandler consumer : handlers){
-			int vol = consumer.fill(new FluidStack(resource.getFluid(), first ? part + resource.amount-part*handlers.size() : part), doFill);
-			first = false;
+		//Drillgon200: Extra hacky compensation
+		int intRoundingCompensation = resource.amount-part*handlers.size();
+		int randomFillIndex = rand.nextInt(handlers.size());
+		for(int i = 0; i < handlers.size(); i++){
+			IFluidHandler consumer = handlers.get(i);
+			int vol = consumer.fill(new FluidStack(resource.getFluid(), randomFillIndex == i ? part + intRoundingCompensation : part), doFill);
 			totalDrained += vol;
 			remaining -= vol;
 			if(remaining <= 0)
@@ -123,7 +128,7 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		}
 		return false;
 	}
-
+	
 	public static FFPipeNetworkMk2 mergeNetworks(FFPipeNetworkMk2 net1, FFPipeNetworkMk2 net2) {
 		if((net1 == null || net2 == null) || net1 == net2)
 			return net1;

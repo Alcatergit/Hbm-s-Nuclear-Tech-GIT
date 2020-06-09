@@ -175,6 +175,19 @@ public class ItemCustomLore extends Item {
 			// list.add("Blue horse beats yellow horse, look it up!");
 			list.add("Yellow horse beats blue horse, that's a proven fact!");
 		}
+		
+		if(this == ModItems.flame_conspiracy)
+		{
+			list.add("Steel beams can't melt jet fuel!");
+		}
+		if(this == ModItems.flame_politics)
+		{
+			list.add("Donald Duck will build the wall!");
+		}
+		if(this == ModItems.flame_opinion)
+		{
+			list.add("Well, I like it...");
+		}
 
 		if(this == ModItems.ingot_neptunium) {
 			if(MainRegistry.polaroidID == 11) {
@@ -567,7 +580,7 @@ public class ItemCustomLore extends Item {
 			return EnumRarity.RARE;
 		}
 
-		if(this == ModItems.plate_paa || this == ModItems.gun_mp_ammo || this == ModItems.gun_revolver_cursed_ammo || this == ModItems.powder_power || this == ModItems.ingot_australium || this == ModItems.ingot_weidanium || 
+		if(this == ModItems.plate_paa || this == ModItems.ammo_566_gold || this == ModItems.gun_revolver_cursed_ammo || this == ModItems.powder_power || this == ModItems.ingot_australium || this == ModItems.ingot_weidanium || 
     			this == ModItems.ingot_reiium || this == ModItems.ingot_unobtainium || 
     			this == ModItems.ingot_daffergon || this == ModItems.ingot_verticium || 
     			this == ModItems.nugget_australium || this == ModItems.nugget_weidanium || 

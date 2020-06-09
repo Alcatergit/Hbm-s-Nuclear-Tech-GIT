@@ -20,7 +20,7 @@ public class ContainerMachineGasFlare extends Container {
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 44, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 134, 17));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 2, 134, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 134, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

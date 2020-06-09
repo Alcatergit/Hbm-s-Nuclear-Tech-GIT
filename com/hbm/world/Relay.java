@@ -3,7 +3,6 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.DecoPoleTop;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;

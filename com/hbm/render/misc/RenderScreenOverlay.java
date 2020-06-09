@@ -1,15 +1,12 @@
 package com.hbm.render.misc;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.lib.RefStrings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -141,6 +138,31 @@ public class RenderScreenOverlay {
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableBlend();
         
+        GL11.glPopMatrix();
+		Minecraft.getMinecraft().renderEngine.bindTexture(hud);
+	}
+	
+	public static void renderAmmoAlt(ScaledResolution resolution, Gui gui, Item ammo, int count, EnumHand hand) {
+
+		GL11.glPushMatrix();
+
+		int pX = resolution.getScaledWidth() / 2 + 62 + 36 + 18;
+		int pZ = resolution.getScaledHeight() - 21 - 16;
+		if(hand == EnumHand.OFF_HAND){
+			pX -= 296;
+		}
+		
+		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
+
+		Minecraft.getMinecraft().fontRenderer.drawString(count + "x", pX + 16, pZ + 6, 0xFFFFFF);
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableRescaleNormal();
+        RenderHelper.enableGUIStandardItemLighting();
+        	itemRenderer.renderItemAndEffectIntoGUI(null, new ItemStack(ammo), pX, pZ);
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableRescaleNormal();
+
         GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(hud);
 	}

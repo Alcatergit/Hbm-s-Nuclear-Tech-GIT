@@ -79,6 +79,11 @@ import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.generic.YellowBarrel;
 import com.hbm.blocks.machine.*;
+import com.hbm.blocks.network.BlockCable;
+import com.hbm.blocks.network.BlockConveyor;
+import com.hbm.blocks.network.BlockFluidDuct;
+import com.hbm.blocks.network.BlockFluidPipeMk2;
+import com.hbm.blocks.network.CableSwitch;
 import com.hbm.blocks.test.TestObjTester;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.main.MainRegistry;
@@ -214,6 +219,7 @@ public class ModBlocks {
 	public static final Block block_magnetized_tungsten = new BlockBase(Material.IRON, "block_magnetized_tungsten").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(35.0F);
 	public static final Block block_desh = new BlockBase(Material.IRON, "block_desh").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
 	public static final Block gravel_obsidian = new BlockFallingBase(Material.IRON, "gravel_obsidian", SoundType.GROUND).setHardness(5.0F).setResistance(600F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block gravel_diamond = new BlockFallingBase(Material.GROUND, "gravel_diamond", SoundType.GROUND).setCreativeTab(MainRegistry.blockTab).setHardness(2.5F).setResistance(60.0F);
 	
 	public static final Block brick_concrete = new BlockBase(Material.ROCK, "brick_concrete").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(6000.0F);
 	public static final Block brick_concrete_mossy = new BlockBase(Material.ROCK, "brick_concrete_mossy").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(6000.0F);
@@ -523,6 +529,9 @@ public class ModBlocks {
 	public static final Block machine_gascent = new MachineGasCent(Material.IRON, "machine_gascent").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_gascent = 71;
 	
+	public static final Block machine_crystallizer = new MachineCrystallizer(Material.IRON, "machine_crystallizer").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_crystallizer = 95;
+	
 	public static final Block machine_shredder = new MachineShredder(Material.IRON, "machine_shredder").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_shredder = 34;
 	
@@ -712,6 +721,7 @@ public class ModBlocks {
 	//public static final Block gas_duct = new BlockGasDuct(Material.IRON, "gas_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block fluid_duct_mk2 = new BlockFluidPipeMk2(Material.IRON, "fluid_duct_mk2").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(0.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//Fluids
 	public static final Material fluidtoxic = new MaterialLiquid(MapColor.GREEN).setReplaceable();

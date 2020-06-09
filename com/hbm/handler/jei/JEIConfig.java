@@ -1,6 +1,10 @@
 package com.hbm.handler.jei;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.inventory.CrystallizerRecipes;
+import com.hbm.inventory.ShredderRecipes;
+import com.hbm.inventory.gui.GUICrystallizer;
 import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachineBoiler;
 import com.hbm.inventory.gui.GUIMachineBoilerElectric;
@@ -47,6 +51,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String REFINERY = "hbm.refinery";
 	public static final String SHREDDER = "hbm.shredder";
 	public static final String FLUIDS = "hbm.fluids";
+	public static final String CRYSTALLIZER = "hbm.crystallizer";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -65,6 +70,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_refinery), REFINERY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_shredder), SHREDDER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fluidtank), FLUIDS);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crystallizer), CRYSTALLIZER);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -72,13 +78,14 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getPressRecipes(), PRESS);
 		registry.addRecipes(JeiRecipes.getAlloyRecipes(), ALLOY);
 		registry.addRecipes(JeiRecipes.getBoilerRecipes(), BOILER);
-		registry.addRecipes(JeiRecipes.getCentrifugeRecipes(), CENTRIFUGE);
+		registry.addRecipes(CentrifugeRecipes.getCentrifugeRecipes(), CENTRIFUGE);
 		registry.addRecipes(JeiRecipes.getCMBRecipes(), CMB);
 		registry.addRecipes(JeiRecipes.getGasCentrifugeRecipes(), GAS_CENT);
 		registry.addRecipes(JeiRecipes.getReactorRecipes(), REACTOR);
 		registry.addRecipes(JeiRecipes.getRefineryRecipe(), REFINERY);
-		registry.addRecipes(JeiRecipes.getShredderRecipes(), SHREDDER);
+		registry.addRecipes(ShredderRecipes.getShredderRecipes(), SHREDDER);
 		registry.addRecipes(JeiRecipes.getFluidEquivalences(), FLUIDS);
+		registry.addRecipes(CrystallizerRecipes.getRecipes(), CRYSTALLIZER);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -94,6 +101,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineReactor.class, 80, 35, 21, 14, REACTOR);
 		registry.addRecipeClickArea(GUIMachineRefinery.class, 79, 71, 71, 17, REFINERY);
 		registry.addRecipeClickArea(GUIMachineShredder.class, 43, 89, 53, 17, SHREDDER);
+		registry.addRecipeClickArea(GUICrystallizer.class, 103, 34, 23, 16, CRYSTALLIZER);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
@@ -177,7 +185,8 @@ public class JEIConfig implements IModPlugin {
 				new ReactorRecipeHandler(help),
 				new RefineryRecipeHandler(help),
 				new ShredderRecipeHandler(help),
-				new FluidRecipeHandler(help));
+				new FluidRecipeHandler(help),
+				new CrystallizerRecipeHandler(help));
 	}
 
 	@Override
@@ -199,7 +208,7 @@ public class JEIConfig implements IModPlugin {
 			return ModItems.canister_generic.getUnlocalizedName() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);
 		});
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.missile_custom, (ItemStack stack) -> {
-			return "w" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "warhead")) + "f" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "fuselage")) + "s" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "stability")) + "t" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "thruster"));
+			return ModItems.missile_custom.getUnlocalizedName() + "w" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "warhead")) + "f" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "fuselage")) + "s" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "stability")) + "t" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "thruster"));
 		});
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.fluid_icon, (ItemStack stack) -> {
 			if(stack.hasTagCompound()) {

@@ -2,10 +2,7 @@ package com.hbm.items.weapon;
 
 import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -19,19 +16,17 @@ public class ItemGunOSIPR extends ItemGunBase {
 	}
 	
 	@Override
-	protected void altFire(ItemStack stack, World world, EntityPlayer player) {
+	protected void altFire(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		
-		if(Library.hasInventoryItem(player.inventory, ModItems.gun_osipr_ammo2)) {
-			setCharge(stack, 1);
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.osiprCharging, SoundCategory.PLAYERS, 1.0F, 1F);
-		}
+		setCharge(stack, 1);
+		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.osiprCharging, SoundCategory.PLAYERS, 1.0F, 1F);
 	}
 	
 	@Override
 	protected void updateServer(ItemStack stack, World world, EntityPlayer player, int slot, EnumHand hand) {
 		super.updateServer(stack, world, player, slot, hand);
 		
-		if(hand == null || !Library.hasInventoryItem(player.inventory, ModItems.gun_osipr_ammo2)) {
+		if(hand == null) {
 			setCharge(stack, 0);
 			return;
 		}
@@ -45,7 +40,6 @@ public class ItemGunOSIPR extends ItemGunBase {
 			world.playSound(null, player.posX, player.posY, player.posZ, altConfig.firingSound, SoundCategory.PLAYERS, 1.0F, 1F);
 			setCharge(stack, 0);
 			setDelay(stack, altConfig.rateOfFire);
-			Library.consumeInventoryItem(player.inventory, ModItems.gun_osipr_ammo2);
 			
 		} else if(i > 0)
 			setCharge(stack, i + 1);

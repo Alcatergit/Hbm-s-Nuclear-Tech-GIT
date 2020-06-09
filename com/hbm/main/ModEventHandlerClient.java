@@ -358,6 +358,7 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.sopsign, reg);
 		swapModels(ModItems.gun_ks23, reg);
 		swapModels(ModItems.gun_flamer, reg);
+		swapModels(ModItems.gun_flechette, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -499,6 +500,10 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"));
+		
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_flowing"));
+		
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcar"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcarflipv"));
 
@@ -801,7 +806,7 @@ public class ModEventHandlerClient {
 			int max = gcfg.ammoCap;
 
 			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
-				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.MAIN_HAND));
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.MAIN_HAND), true);
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
 			}
@@ -809,8 +814,16 @@ public class ModEventHandlerClient {
 			int dura = ItemGunBase.getItemWear(player.getHeldItem(EnumHand.MAIN_HAND)) * 50 / gcfg.durability;
 
 			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, EnumHand.MAIN_HAND);
-			// RenderScreenOverlay.renderRadCounter(event.resolution, 0,
-			// Minecraft.getMinecraft().ingameGUI);
+
+			if(gun.altConfig != null && gun.altConfig.reloadType == GunConfiguration.RELOAD_NONE) {
+				Item oldAmmo = ammo;
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItemMainhand(), false);
+
+				if(ammo != oldAmmo) {
+					count = ItemGunBase.getBeltSize(player, ammo);
+					RenderScreenOverlay.renderAmmoAlt(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, EnumHand.MAIN_HAND);
+				}
+			}
 		}
 
 		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
@@ -824,7 +837,7 @@ public class ModEventHandlerClient {
 			int max = gcfg.ammoCap;
 
 			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
-				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.OFF_HAND));
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(EnumHand.OFF_HAND), true);
 				count = ItemGunBase.getBeltSize(player, ammo);
 				max = -1;
 			}
@@ -832,8 +845,16 @@ public class ModEventHandlerClient {
 			int dura = ItemGunBase.getItemWear(player.getHeldItem(EnumHand.OFF_HAND)) * 50 / gcfg.durability;
 
 			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, EnumHand.OFF_HAND);
-			// RenderScreenOverlay.renderRadCounter(event.resolution, 0,
-			// Minecraft.getMinecraft().ingameGUI);
+
+			if(gun.altConfig != null && gun.altConfig.reloadType == GunConfiguration.RELOAD_NONE) {
+				Item oldAmmo = ammo;
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItemOffhand(), false);
+
+				if(ammo != oldAmmo) {
+					count = ItemGunBase.getBeltSize(player, ammo);
+					RenderScreenOverlay.renderAmmoAlt(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, EnumHand.OFF_HAND);
+				}
+			}
 		}
 
 		if(event.getType() == ElementType.HOTBAR) {
@@ -901,7 +922,6 @@ public class ModEventHandlerClient {
 				item.m1r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.MAIN_HAND));
 				item.startActionClient(player.getHeldItemMainhand(), player.world, player, true, EnumHand.MAIN_HAND);
-				// System.out.println("M1");
 			} else if(event.getButton() == 1 && !item.m2r && !item.m1r) {
 				item.m2r = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.MAIN_HAND));
@@ -918,12 +938,12 @@ public class ModEventHandlerClient {
 			if(event.getButton() == 0 && !item.m1l && !item.m2l) {
 				item.m1l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.OFF_HAND));
-				item.startActionClient(player.getHeldItemMainhand(), player.world, player, true, EnumHand.OFF_HAND);
+				item.startActionClient(player.getHeldItemOffhand(), player.world, player, true, EnumHand.OFF_HAND);
 				// System.out.println("M1");
 			} else if(event.getButton() == 1 && !item.m2l && !item.m1l) {
 				item.m2l = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.OFF_HAND));
-				item.startActionClient(player.getHeldItemMainhand(), player.world, player, false, EnumHand.OFF_HAND);
+				item.startActionClient(player.getHeldItemOffhand(), player.world, player, false, EnumHand.OFF_HAND);
 				// System.out.println("M2");
 			}
 		}

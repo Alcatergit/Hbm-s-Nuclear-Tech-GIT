@@ -12,6 +12,7 @@ import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -459,6 +460,19 @@ public class FFUtils {
 			return null;
 		}
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
+	}
+	
+	public static void setColorFromFluid(Fluid f){
+		if(f == null)
+			return;
+		
+		int color = f.getColor();
+		float r = (color >> 16 & 0xFF)/255F;
+		float g = (color >> 8 & 0xFF)/255F;
+		float b = (color & 0xFF)/255F;
+		float a = (color >> 24 & 0xFF)/255F;
+		
+		GlStateManager.color(r, g, b, a);
 	}
 
 	public static boolean containsFluid(ItemStack stack, Fluid fluid) {

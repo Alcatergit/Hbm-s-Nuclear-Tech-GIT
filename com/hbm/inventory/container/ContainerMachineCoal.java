@@ -21,7 +21,7 @@ private TileEntityMachineCoal diFurnace;
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 44, 53 - 36));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 116, 53));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 44, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 44, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

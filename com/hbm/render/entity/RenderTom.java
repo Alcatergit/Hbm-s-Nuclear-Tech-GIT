@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.projectile.EntityRailgunBlast;
 import com.hbm.entity.projectile.EntityTom;
+import com.hbm.main.ClientProxy;
 import com.hbm.render.misc.TomPronter2;
 import com.hbm.render.util.TomPronter;
 
@@ -42,12 +43,14 @@ public class RenderTom<T extends Entity> extends Render<T> {
 
 			TomPronter.prontTom(i);
 			GL11.glPopMatrix();
-		} else if(entity instanceof EntityTom){
-			GL11.glPushMatrix();
-			GL11.glTranslated(x, y - 50, z);
-			
-			TomPronter2.prontTom();
-			GL11.glPopMatrix();
+		} else if(entity instanceof EntityTom) {
+			if(ClientProxy.renderingConstant) {
+				GL11.glPushMatrix();
+				GL11.glTranslated(x, y - 50, z);
+
+				TomPronter2.prontTom();
+				GL11.glPopMatrix();
+			}
 		}
 	}
 

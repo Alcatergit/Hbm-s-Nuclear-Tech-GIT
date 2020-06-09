@@ -99,8 +99,12 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	}
 	
 	public void fillFluidInit(FluidTank tank) {
+		fillFluid(pos.east(), tank);
+		fillFluid(pos.west(), tank);
 		fillFluid(pos.up(), tank);
 		fillFluid(pos.down(), tank);
+		fillFluid(pos.south(), tank);
+		fillFluid(pos.north(), tank);
 	}
 
 	public void fillFluid(BlockPos pos1, FluidTank tank) {

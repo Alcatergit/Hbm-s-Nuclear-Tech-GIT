@@ -22,7 +22,7 @@ public class ContainerMachineTurbofan extends Container {
 		diFurnace = tedf;
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 17, 17));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 1, 17, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 17, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 107, 17));
 		
 		for(int i = 0; i < 3; i++)

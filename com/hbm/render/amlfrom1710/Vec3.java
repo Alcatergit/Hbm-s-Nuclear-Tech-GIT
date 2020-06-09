@@ -252,4 +252,8 @@ public class Vec3
         double d2 = this.zCoord;
         this.setComponents(d0, d1, d2);
     }
+    
+    public Vec3 interpolate(Vec3 other, double inter){
+    	return Vec3.createVectorHelper(this.xCoord + (other.xCoord - this.xCoord)*inter, this.yCoord + (other.yCoord - this.yCoord)*inter, this.zCoord + (other.zCoord - this.zCoord)*inter);
+    }
 }

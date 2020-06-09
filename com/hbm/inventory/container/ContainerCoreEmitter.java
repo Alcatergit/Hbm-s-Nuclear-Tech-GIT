@@ -1,12 +1,13 @@
 package com.hbm.inventory.container;
 
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.inventory.gui.GUICoreEmitter;
+import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.AuxLongPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -46,10 +47,11 @@ public class ContainerCoreEmitter extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		listener.sendWindowProperty(this, 0, (int) nukeBoy.power);
-		listener.sendWindowProperty(this, 1, nukeBoy.watts);
-		listener.sendWindowProperty(this, 2, (int) nukeBoy.prev);
+		PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+		PacketDispatcher.wrapper.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
 		listener.sendWindowProperty(this, 3, nukeBoy.isOn ? 1 : 0);
+		PacketDispatcher.wrapper.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
 	}
 	
 	int power;
@@ -61,26 +63,26 @@ public class ContainerCoreEmitter extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		for(IContainerListener l : listeners){
-			if(nukeBoy.power != power){
-				l.sendWindowProperty(this, 0, (int) nukeBoy.power);
-				power = (int) nukeBoy.power;
-			}
-			if(nukeBoy.watts != watts){
-				l.sendWindowProperty(this, 1, nukeBoy.watts);
-				watts = nukeBoy.watts;
-			}
-			if(nukeBoy.prev != prev){
-				l.sendWindowProperty(this, 2, (int) nukeBoy.prev);
-				prev = (int) nukeBoy.prev;
-			}
 			if(nukeBoy.isOn != isOn){
 				l.sendWindowProperty(this, 3, nukeBoy.isOn ? 1 : 0);
 				isOn = nukeBoy.isOn;
 			}
-			if(!FFUtils.areTanksEqual(tank, nukeBoy.tank)){
-				tank = FFUtils.copyTank(nukeBoy.tank);
-				PacketDispatcher.wrapper.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
-			}
+		}
+		if(nukeBoy.power != power){
+			PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
+			power = (int) nukeBoy.power;
+		}
+		if(nukeBoy.watts != watts){
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+			watts = nukeBoy.watts;
+		}
+		if(nukeBoy.prev != prev){
+			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
+			prev = (int) nukeBoy.prev;
+		}
+		if(!FFUtils.areTanksEqual(tank, nukeBoy.tank)){
+			tank = FFUtils.copyTank(nukeBoy.tank);
+			PacketDispatcher.wrapper.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
 	}
@@ -88,23 +90,8 @@ public class ContainerCoreEmitter extends Container {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
-		switch(id){
-		case 0:
-			nukeBoy.power = data;
-			break;
-		case 1:
-			nukeBoy.watts = data;
-			if(Minecraft.getMinecraft().currentScreen instanceof GUICoreEmitter){
-				((GUICoreEmitter)Minecraft.getMinecraft().currentScreen).syncTextField(data);
-			}
-			break;
-		case 2:
-			nukeBoy.prev = data;
-			break;
-		case 3:
+		if(id == 3)
 			nukeBoy.isOn = data > 0 ? true : false;
-			break;
-		}
 		super.updateProgressBar(id, data);
 	}
 

@@ -9,7 +9,6 @@ import com.hbm.render.model.ModelLacunae;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -28,7 +27,6 @@ public class ItemRenderMinigun extends TEISRBase {
 	@Override
 	public void renderByItem(ItemStack item) {
 		float f = ItemGunBase.readNBT(item, "rot");
-		System.out.println(f);
 		if(item.getItem() == ModItems.gun_minigun)
 			Minecraft.getMinecraft().renderEngine.bindTexture(minigun_rl);
 		if(item.getItem() == ModItems.gun_avenger)

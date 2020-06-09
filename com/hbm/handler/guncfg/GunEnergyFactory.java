@@ -99,7 +99,7 @@ public class GunEnergyFactory {
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCLE;
-		config.firingSound = HBMSoundHandler.immolatorShoot;
+		config.firingSound = HBMSoundHandler.flamethrowerShoot;
 		config.reloadSound = HBMSoundHandler.flamerReload;
 
 		config.name = "Heavy Duty Flamer";

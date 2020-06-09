@@ -2,13 +2,11 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -33,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRefinery extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor, IClientRequestUpdator {
+public class TileEntityMachineRefinery extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -45,9 +43,6 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	public boolean needsUpdate = false;
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
-	
-	private boolean firstUpdate = true;
-	private boolean clientRequestUpdate = true;
 
 	//private static final int[] slots_top = new int[] { 1 };
 	//private static final int[] slots_bottom = new int[] { 0, 2, 4, 6, 8, 10, 11};
@@ -121,17 +116,11 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	
 	@Override
 	public void update() {
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos));
-			}
-			firstUpdate = false;
-		}
 		if (!world.isRemote) {
 			if(needsUpdate){
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3], tanks[4]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;
 			}
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3], tanks[4]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
 			age++;
@@ -202,38 +191,36 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	
 	private void detectAndSendChanges() {
 		boolean mark = false;
-		if(detectPower != power || clientRequestUpdate){
+		if(detectPower != power){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			detectPower = power;
 		}
-		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0])){
 			mark = true;
 			needsUpdate = true;
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1])){
 			mark = true;
 			needsUpdate = true;
 			detectTanks[1] = FFUtils.copyTank(tanks[1]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[2], detectTanks[2]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[2], detectTanks[2])){
 			mark = true;
 			needsUpdate = true;
 			detectTanks[2] = FFUtils.copyTank(tanks[2]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[3], detectTanks[3]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[3], detectTanks[3])){
 			mark = true;
 			needsUpdate = true;
 			detectTanks[3] = FFUtils.copyTank(tanks[3]);
 		}
-		if(!FFUtils.areTanksEqual(tanks[4], detectTanks[4]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[4], detectTanks[4])){
 			mark = true;
 			needsUpdate = true;
 			detectTanks[4] = FFUtils.copyTank(tanks[4]);
 		}
-		
-		clientRequestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 		if(mark)
 			markDirty();
 	}
@@ -352,11 +339,6 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 			tanks[3].readFromNBT(tags[3]);
 			tanks[4].readFromNBT(tags[4]);
 		}
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		clientRequestUpdate = true;
 	}
 	
 	@Override

@@ -1,10 +1,8 @@
 package com.hbm.tileentity.bomb;
 
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
 
@@ -22,13 +20,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsumer, IClientRequestUpdator {
+public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsumer {
 
 	public ItemStackHandler inventory;
 
 	public long power;
 	public final long maxPower = 100000;
-	private boolean firstUpdate = true;
 
 	// private static final int[] slots_top = new int[] {0};
 	// private static final int[] slots_bottom = new int[] { 0, 1, 2};
@@ -86,38 +83,28 @@ public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsu
 
 	@Override
 	public void update() {
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 		if (!world.isRemote) {
 			power = Library.chargeTEFromItems(inventory, 2, power, maxPower);
-			
-			
 			detectAndSendChanges();
 		}
 
 	}
 
-	private boolean requestUpdate = true;
 	private ItemStack detectStack = ItemStack.EMPTY;
 	private long detectPower;
 	
 	private void detectAndSendChanges() {
 		boolean mark = false;
-		if((!(detectStack.isEmpty() && inventory.getStackInSlot(0).isEmpty()) && !detectStack.isItemEqualIgnoreDurability(inventory.getStackInSlot(0))) || requestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new TEMissilePacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
+		if(!(detectStack.isEmpty() && inventory.getStackInSlot(0).isEmpty()) && !detectStack.isItemEqualIgnoreDurability(inventory.getStackInSlot(0))){
 			mark = true;
 			detectStack = inventory.getStackInSlot(0).copy();
 		}
-		if(detectPower != power || requestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+		if(detectPower != power){
 			mark = true;
 			detectPower = power;
 		}
-		requestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllTracking(new TEMissilePacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
 			markDirty();
 	}
@@ -148,11 +135,6 @@ public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsu
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		requestUpdate = true;
 	}
 	
 	@Override

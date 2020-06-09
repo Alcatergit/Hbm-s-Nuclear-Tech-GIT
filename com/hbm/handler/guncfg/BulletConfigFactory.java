@@ -17,7 +17,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -182,6 +181,7 @@ public class BulletConfigFactory {
 		bullet.explosive = 2.5F;
 		bullet.style = BulletConfiguration.STYLE_GRENADE;
 		bullet.plink = BulletConfiguration.PLINK_GRENADE;
+		bullet.vPFX = "smoke";
 
 		return bullet;
 	}

@@ -41,7 +41,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -103,7 +102,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		this.setSize(0.5F, 0.5F);
 
 		this.shoot(this.motionX, this.motionY, this.motionZ, 1.0F, this.config.spread);
-
+		
 		this.getDataManager().set(STYLE, this.config.style);
 		this.getDataManager().set(TRAIL, this.config.trail);
 	}
@@ -140,9 +139,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		moX /= f2;
 		moY /= f2;
 		moZ /= f2;
-		moX += this.rand.nextGaussian() * /*(this.rand.nextBoolean() ? -1 : 1) **/ mult2;
-		moY += this.rand.nextGaussian() * /*(this.rand.nextBoolean() ? -1 : 1) **/ mult2;
-		moZ += this.rand.nextGaussian() * /*(this.rand.nextBoolean() ? -1 : 1) **/ mult2;
+		moX += this.rand.nextGaussian() * mult2;
+		moY += this.rand.nextGaussian() * mult2;
+		moZ += this.rand.nextGaussian() * mult2;
 		moX *= mult1;
 		moY *= mult1;
 		moZ *= mult1;
@@ -193,6 +192,11 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 		if (config == null)
 			config = BulletConfigSyncingUtil.pullConfig(this.getDataManager().get(BULLETCONFIG));
+		
+		if(config.maxAge == 0) {
+			this.setDead();
+			return;
+		}
 
 		if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
 			float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -404,7 +408,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		if(world.isRemote && !config.vPFX.isEmpty()) {
 			double motion = Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector();
 
-			for (i = 0; i < motion * 2; ++i) {
+			for (i = 0; i < motion * 3; ++i) {
 
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setString("type", "vanillaExt");

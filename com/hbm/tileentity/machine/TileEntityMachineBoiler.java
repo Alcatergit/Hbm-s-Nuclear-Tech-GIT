@@ -4,11 +4,9 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -29,10 +27,11 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineBoiler extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IClientRequestUpdator {
+public class TileEntityMachineBoiler extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -49,8 +48,6 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	private String customName;
 
 	private boolean needsUpdate = false;
-	private boolean clientRequestUpdate = true;
-	private boolean firstUpdate = true;
 
 	public TileEntityMachineBoiler() {
 		inventory = new ItemStackHandler(7){
@@ -111,22 +108,15 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 
 	@Override
 	public void update() {
-
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 		if (!world.isRemote) {
 			age++;
 			if (age >= 20) {
 				age = 0;
 			}
 			if (needsUpdate) {
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }));
 				needsUpdate = false;
 			}
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			if (age == 9 || age == 19)
 				fillFluidInit(tanks[1]);
 
@@ -234,11 +224,6 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	}
 
 	@Override
-	public void requestClientUpdate() {
-		clientRequestUpdate = true;
-	}
-
-	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
 		if(tags.length != 2) {
 			return;
@@ -296,28 +281,26 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	
 	private void detectAndSendChanges() {
 		boolean mark = false;
-		if(detectHeat != heat || clientRequestUpdate){
-			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), heat, 0));
+		if(detectHeat != heat){
 			detectHeat = heat;
 			mark = true;
 		}
-		if(detectBurnTime != burnTime || clientRequestUpdate){
-			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), burnTime, 1));
+		if(detectBurnTime != burnTime){
 			detectBurnTime = burnTime;
 			mark = true;
 		}
-		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0])){
 			needsUpdate = true;
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 			mark = true;
 		}
-		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1]) || clientRequestUpdate){
+		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1])){
 			needsUpdate = true;
 			detectTanks[1] = FFUtils.copyTank(tanks[1]);
 			mark = true;
 		}
-		
-		clientRequestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), heat, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), burnTime, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
 			markDirty();
 	}

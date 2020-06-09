@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -13,6 +14,8 @@ import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
+import com.hbm.tileentity.machine.TileEntityConverterHeRf;
+import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreInjector;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
@@ -24,9 +27,11 @@ import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
+import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
+import com.hbm.tileentity.machine.TileEntityWatzCore;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -38,6 +43,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@Spaghetti("Changing all machiines to use TileEntityMachineBase will reduce the total chaos in this class")
 public class AuxGaugePacket implements IMessage {
 
 	int x;
@@ -252,6 +258,32 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityCoreStabilizer) {
 						if(m.id == 0)
 							((TileEntityCoreStabilizer) te).beam = m.value;
+					} else if(te instanceof TileEntityConverterRfHe){
+						if(m.id == 0)
+							((TileEntityConverterRfHe) te).storage.setEnergyStored(m.value);
+					} else if(te instanceof TileEntityConverterHeRf){
+						if(m.id == 0)
+							((TileEntityConverterHeRf) te).storage.setEnergyStored(m.value);
+					} else if(te instanceof TileEntityCoreEmitter){
+						if(m.id == 0)
+							((TileEntityCoreEmitter) te).watts = m.value;
+					} else if(te instanceof TileEntityMachineGenerator){
+						if(m.id == 0)
+							((TileEntityMachineGenerator) te).heat = m.value;
+					} else if(te instanceof TileEntityWatzCore){
+						TileEntityWatzCore core = (TileEntityWatzCore) te;
+						if(m.id == 0)
+							core.powerList = m.value;
+						else if(m.id == 1)
+							core.heatList = m.value;
+						else if(m.id == 2)
+							core.decayMultiplier = m.value;
+						else if(m.id == 3)
+							core.powerMultiplier = m.value;
+						else if(m.id == 4)
+							core.heatMultiplier = m.value;
+						else if(m.id == 5)
+							core.heat = m.value;
 					}
 				} catch(Exception x) {
 				}

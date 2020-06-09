@@ -37,7 +37,7 @@ private TileEntityMachineAssembler nukeBoy;
 			};
 		});
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 5, 134, 90));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 134, 90));
 		//Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 8, 18));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 26, 18));

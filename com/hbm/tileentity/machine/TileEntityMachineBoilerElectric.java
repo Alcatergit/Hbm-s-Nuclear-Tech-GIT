@@ -4,14 +4,12 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -33,7 +31,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineBoilerElectric extends TileEntity implements ITickable, IFluidHandler, IConsumer, ITankPacketAcceptor, IClientRequestUpdator {
+public class TileEntityMachineBoilerElectric extends TileEntity implements ITickable, IFluidHandler, IConsumer, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -50,9 +48,6 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	/// private static final int[] slots_side = new int[] {4};
 
 	private String customName;
-
-	private boolean clientRequestUpdate = true;
-	private boolean firstUpdate = true;
 
 	public TileEntityMachineBoilerElectric() {
 		inventory = new ItemStackHandler(7);
@@ -111,13 +106,6 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public void update() {
-
-		if (firstUpdate) {
-			if (world.isRemote) {
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 
 		if (!world.isRemote) {
 			if (needsUpdate) {
@@ -271,39 +259,32 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 		return tanks[1].drain(maxDrain, doDrain);
 	}
 
-	@Override
-	public void requestClientUpdate() {
-		clientRequestUpdate = true;
-	}
-
 	private long detectPower;
 	private int detectHeat;
 	private FluidTank[] detectTanks = new FluidTank[] { null, null };
 
 	private void detectAndSendChanges() {
 		boolean mark = false;
-
-		if (detectPower != power || clientRequestUpdate) {
-			PacketDispatcher.wrapper.sendToAll(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power));
+		if (detectPower != power) {
 			detectPower = power;
 			mark = true;
 		}
-		if (detectHeat != heat || clientRequestUpdate) {
-			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), heat, 0));
+		if (detectHeat != heat) {
 			detectHeat = heat;
 			mark = true;
 		}
-		if (!FFUtils.areTanksEqual(tanks[0], detectTanks[0]) || clientRequestUpdate) {
+		if (!FFUtils.areTanksEqual(tanks[0], detectTanks[0])) {
 			needsUpdate = true;
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 			mark = true;
 		}
-		if (!FFUtils.areTanksEqual(tanks[1], detectTanks[1]) || clientRequestUpdate) {
+		if (!FFUtils.areTanksEqual(tanks[1], detectTanks[1])) {
 			needsUpdate = true;
 			detectTanks[1] = FFUtils.copyTank(tanks[1]);
 			mark = true;
 		}
-		clientRequestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), heat, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if (mark)
 			markDirty();
 	}

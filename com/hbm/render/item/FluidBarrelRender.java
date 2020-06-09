@@ -49,8 +49,7 @@ public class FluidBarrelRender extends TileEntityItemStackRenderer {
 		FluidStack f = FluidUtil.getFluidContained(stack);
 		TextureAtlasSprite lava = null;
 		if (f != null)
-			lava = Minecraft.getMinecraft().getTextureMapBlocks()
-					.getAtlasSprite(f.getFluid().getStill().toString());
+			lava = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getFluid().getStill().toString());
 
 		
 		if (lava != null) {

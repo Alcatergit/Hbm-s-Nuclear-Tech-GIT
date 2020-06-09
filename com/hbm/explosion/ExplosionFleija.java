@@ -81,6 +81,9 @@ public class ExplosionFleija
 	{
 		breakColumn(this.lastposX, this.lastposZ);
 		this.shell = (int) Math.floor((Math.sqrt(n) + 1) / 2);
+		//Should never happen, but someone got a / by 0 exception here so who knows.
+		if(shell == 0)
+			shell = 1;
 		int shell2 = this.shell * 2;
 		this.leg = (int) Math.floor((this.n - (shell2 - 1) * (shell2 - 1)) / shell2);
 		this.element = (this.n - (shell2 - 1) * (shell2 - 1)) - shell2 * this.leg - this.shell + 1;

@@ -1,9 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-
 import com.hbm.interfaces.IMultiBlock;
 
 import net.minecraft.nbt.NBTTagCompound;

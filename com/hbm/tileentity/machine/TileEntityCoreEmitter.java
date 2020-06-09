@@ -8,11 +8,9 @@ import com.hbm.interfaces.ILaserable;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;

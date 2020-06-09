@@ -51,7 +51,7 @@ public class ItemGunGauss extends ItemGunBase {
 	}
 	
 	@Override
-	protected void altFire(ItemStack stack, World world, EntityPlayer player) {
+	protected void altFire(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		setCharge(stack, 1);
 	}
 	
@@ -88,7 +88,7 @@ public class ItemGunGauss extends ItemGunBase {
 			if(c > 0) {
 				setCharge(stack, c + 1);
 				
-				if(c % 10 == 1 && c < 140) {
+				if(c % 10 == 1 && c < 140 && c > 2) {
 					
 					if(Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) {
 						Library.consumeInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo);

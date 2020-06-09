@@ -1,7 +1,5 @@
 package com.hbm.blocks.generic;
 
-import javax.annotation.Nullable;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ModDamageSource;
@@ -19,7 +17,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;

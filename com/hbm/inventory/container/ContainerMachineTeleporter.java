@@ -1,9 +1,11 @@
 package com.hbm.inventory.container;
 
+import com.hbm.packet.AuxLongPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
@@ -14,11 +16,11 @@ public class ContainerMachineTeleporter extends Container {
 	private TileEntityMachineTeleporter diFurnace;
 	
 	BlockPos detectTarget = null;
+	EntityPlayerMP player;
 	
-	private int[] buffer = {0, 0, 0};
-	
-	public ContainerMachineTeleporter(InventoryPlayer invPlayer, TileEntityMachineTeleporter tedf) {
-		
+	public ContainerMachineTeleporter(EntityPlayer player, TileEntityMachineTeleporter tedf) {
+		if(player instanceof EntityPlayerMP)
+			this.player = (EntityPlayerMP) player;
 		diFurnace = tedf;
 	}
 	
@@ -26,21 +28,16 @@ public class ContainerMachineTeleporter extends Container {
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		if(diFurnace.target != null){
-			crafting.sendWindowProperty(this, 1, this.diFurnace.target.getX());
-			crafting.sendWindowProperty(this, 2, this.diFurnace.target.getY());
-			crafting.sendWindowProperty(this, 3, this.diFurnace.target.getZ());
+			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
 		} else {
-			crafting.sendWindowProperty(this, 1, 0);
-			crafting.sendWindowProperty(this, 2, 0);
-			crafting.sendWindowProperty(this, 3, 0);
+			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
 		}
-		crafting.sendWindowProperty(this, 4, 0);
 	}
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_)
     {
-		return null;
+		return ItemStack.EMPTY;
     }
 
 	@Override
@@ -51,47 +48,14 @@ public class ContainerMachineTeleporter extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
+		if(this.detectTarget != this.diFurnace.target)
 		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			if(this.detectTarget != this.diFurnace.target)
-			{
-				if(diFurnace.target != null){
-					par1.sendWindowProperty(this, 1, this.diFurnace.target.getX());
-					par1.sendWindowProperty(this, 2, this.diFurnace.target.getY());
-					par1.sendWindowProperty(this, 3, this.diFurnace.target.getZ());
-				} else {
-					par1.sendWindowProperty(this, 1, 0);
-					par1.sendWindowProperty(this, 2, 0);
-					par1.sendWindowProperty(this, 3, 0);
-				}
-				par1.sendWindowProperty(this, 4, 0);
+			if(diFurnace.target != null){
+				PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
+			} else {
+				PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
 			}
 		}
 		this.detectTarget = this.diFurnace.target;
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 1)
-		{
-			buffer[0] = j;
-		}
-		if(i == 2)
-		{
-			buffer[1] = j;
-		}
-		if(i == 3)
-		{
-			buffer[2] = j;
-		}
-		if(i == 4){
-			if(buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0){
-				diFurnace.target = null;
-			} else {
-				diFurnace.target = new BlockPos(buffer[0], buffer[1], buffer[2]);
-			}
-		}
 	}
 }

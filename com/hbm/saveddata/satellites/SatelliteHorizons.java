@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class SatelliteHorizons extends Satellite {
@@ -39,6 +40,10 @@ public class SatelliteHorizons extends Satellite {
 		
 		EntityTom tom = new EntityTom(world);
 		tom.setPosition(x + 0.5, 600, z + 0.5);
+		
+		IChunkProvider provider = world.getChunkProvider();
+		provider.provideChunk(x >> 4, z >> 4);
+		
 		world.spawnEntity(tom);
 
 		for(EntityPlayer p : world.playerEntities)

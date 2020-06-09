@@ -23,7 +23,7 @@ public class ContainerDiFurnace extends Container {
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 18));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 54));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 8, 36));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 134, 36));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 134, 36));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -52,7 +52,7 @@ public class ContainerDiFurnace extends Container {
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
-		ItemStack var3 = null;
+		ItemStack var3 = ItemStack.EMPTY;
 		Slot var4 = (Slot) this.inventorySlots.get(par2);
 		
 		if (var4 != null && var4.getHasStack())
@@ -63,12 +63,12 @@ public class ContainerDiFurnace extends Container {
             if (par2 <= 3) {
 				if (!this.mergeItemStack(var5, 4, this.inventorySlots.size(), true))
 				{
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!this.mergeItemStack(var5, 0, 3, false))
 			{
-				return null;
+				return ItemStack.EMPTY;
 			}
 			
 			if (var5.getCount() == 0)

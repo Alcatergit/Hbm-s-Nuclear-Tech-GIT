@@ -138,7 +138,6 @@ public class ExplosionNukeGeneric {
 		int l = MathHelper.floor(z - wat - 1.0D);
 		int j2 = MathHelper.floor(z + wat + 1.0D);
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-
 		for (int i1 = 0; i1 < list.size(); ++i1) {
 			Entity entity = (Entity) list.get(i1);
 			double d4 = entity.getDistance(x, y, z) / bombStartStrength;
@@ -148,7 +147,7 @@ public class ExplosionNukeGeneric {
 				d6 = entity.posY + entity.getEyeHeight() - y;
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if(!Library.isObstructed(world, x, y, z, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ))
+				if(!Library.isObstructed(world, x+0.5, y+0.5, z+0.5, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ))
 				if (d9 < wat && !(entity instanceof EntityOcelot) &&
 						!(entity instanceof EntityNukeCloudSmall)
 						&& !(entity instanceof EntityMIRV) && !(entity instanceof EntityMiniNuke)

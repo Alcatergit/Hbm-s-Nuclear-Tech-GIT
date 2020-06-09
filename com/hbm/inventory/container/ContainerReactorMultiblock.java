@@ -22,20 +22,20 @@ public class ContainerReactorMultiblock extends Container {
 		//Water in
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 90));
 		//Water out
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 1, 8, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 8, 108));
 		//Coolant in
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 26, 90));
 		//Coolant out
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 26, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 26, 108));
 		
 		//Fuel in
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 80, 36));
 		//Fuel out
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 5, 80, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 80, 72));
 		//Waste in
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 36));
 		//Waste out
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 7, 152, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 7, 152, 72));
 		
 		for(int i = 0; i < 3; i++)
 		{

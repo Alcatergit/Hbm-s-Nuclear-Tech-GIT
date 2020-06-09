@@ -1,6 +1,6 @@
 package com.hbm.handler.jei;
 
-import com.hbm.handler.jei.JeiRecipes.ShredderRecipe;
+import com.hbm.inventory.ShredderRecipes.ShredderRecipe;
 import com.hbm.lib.RefStrings;
 
 import mezz.jei.api.IGuiHelper;

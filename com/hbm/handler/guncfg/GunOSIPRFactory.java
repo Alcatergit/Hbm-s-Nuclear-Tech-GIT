@@ -57,10 +57,12 @@ public class GunOSIPRFactory {
 		config.hasSpindown = false;
 		config.reloadDuration = 20;
 		config.firingDuration = 0;
-		config.ammoCap = 1;
+		config.ammoCap = 0;
 		config.reloadType = GunConfiguration.RELOAD_NONE;
 		config.allowsInfinity = true;
 		config.firingSound = HBMSoundHandler.singFlyby;
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.SPECIAL_OSIPR_CHARGED);
 		
 		return config;
 	}
@@ -76,6 +78,15 @@ public class GunOSIPRFactory {
 		bullet.dmgMax = 5;
 		bullet.trail = 2;
 		
+		return bullet;
+	}
+	
+	public static BulletConfiguration getPulseChargedConfig() {
+
+		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
+
+		bullet.ammo = ModItems.gun_osipr_ammo2;
+
 		return bullet;
 	}
 }

@@ -1,7 +1,8 @@
 package com.hbm.handler;
 
+import com.hbm.lib.ForgeDirection;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -12,6 +13,10 @@ public class MultiblockHandlerXR {
 	//when looking north
 	//											U  D  N  S  W  E
 	public static int[] uni = 		new int[] { 3, 0, 4, 4, 4, 4 };
+	
+	public static boolean checkSpace(World world, int x, int y, int z, int[] dim, int ox, int oy, int oz, ForgeDirection dir) {
+		return checkSpace(world, x, y, z, dim, ox, oy, oz, dir.toEnumFacing());
+	}
 	
 	public static boolean checkSpace(World world, int x, int y, int z, int[] dim, int ox, int oy, int oz, EnumFacing dir) {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -47,6 +52,11 @@ public class MultiblockHandlerXR {
 		return true;
 	}
 	
+	public static void fillSpace(World world, int x, int y, int z, int[] dim, Block block, ForgeDirection dir) {
+		fillSpace(world, x, y, z, dim, block, dir.toEnumFacing());
+	}
+	
+	@SuppressWarnings("deprecation")
 	public static void fillSpace(World world, int x, int y, int z, int[] dim, Block block, EnumFacing dir) {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		if(dim == null || dim.length != 6)
@@ -60,25 +70,25 @@ public class MultiblockHandlerXR {
 			for(int b = y - rot[1]; b <= y + rot[0]; b++) {
 				for(int c = z - rot[2]; c <= z + rot[3]; c++) {
 					
-					EnumFacing meta = EnumFacing.NORTH;
+					int meta = 0;
 					
 					if(b < y) {
-						meta = EnumFacing.DOWN;
+						meta = ForgeDirection.DOWN.ordinal();
 					} else if(b > y) {
-						meta = EnumFacing.UP;
+						meta = ForgeDirection.UP.ordinal();
 					} else if(a < x) {
-						meta = EnumFacing.WEST;
+						meta = ForgeDirection.WEST.ordinal();
 					} else if(a > x) {
-						meta = EnumFacing.EAST;
+						meta = ForgeDirection.EAST.ordinal();
 					} else if(c < z) {
-						meta = EnumFacing.NORTH;
+						meta = ForgeDirection.NORTH.ordinal();
 					} else if(c > z) {
-						meta = EnumFacing.SOUTH;
+						meta = ForgeDirection.SOUTH.ordinal();
 					} else {
 						continue;
 					}
 					
-					world.setBlockState(pos.setPos(a, b, c), block.getDefaultState().withProperty(BlockHorizontal.FACING, meta), 3);
+					world.setBlockState(pos.setPos(a, b, c), block.getStateFromMeta(meta), 3);
 					
 					count++;
 					

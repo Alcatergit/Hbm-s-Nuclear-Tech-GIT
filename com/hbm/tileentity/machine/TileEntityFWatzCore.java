@@ -292,7 +292,7 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(tanks[tank] != null) {
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+			if(inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
 				return true;
 			}
 		}

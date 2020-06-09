@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -13,7 +12,6 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;

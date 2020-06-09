@@ -9,7 +9,7 @@ import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIMachineTeleporter extends GuiContainer {
@@ -17,7 +17,7 @@ public class GUIMachineTeleporter extends GuiContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_teleporter.png");
 	private TileEntityMachineTeleporter diFurnace;
 
-	public GUIMachineTeleporter(InventoryPlayer invPlayer, TileEntityMachineTeleporter tedf) {
+	public GUIMachineTeleporter(EntityPlayer invPlayer, TileEntityMachineTeleporter tedf) {
 		super(new ContainerMachineTeleporter(invPlayer, tedf));
 		diFurnace = tedf;
 

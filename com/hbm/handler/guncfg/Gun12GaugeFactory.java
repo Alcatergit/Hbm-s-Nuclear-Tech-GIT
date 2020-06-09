@@ -57,7 +57,7 @@ public static GunConfiguration getUboinikConfig() {
 		
 		GunConfiguration config = new GunConfiguration();
 		
-		config.rateOfFire = 20;
+		config.rateOfFire = 26;
 		config.roundsPerCycle = 2;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;

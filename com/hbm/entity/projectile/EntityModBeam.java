@@ -233,6 +233,8 @@ public class EntityModBeam extends Entity implements IProjectile {
 	public void onUpdate()
     {
         super.onUpdate();
+        if(world.isRemote)
+        	return;
         
         if(this.ticksExisted > 100)
         	this.setDead();

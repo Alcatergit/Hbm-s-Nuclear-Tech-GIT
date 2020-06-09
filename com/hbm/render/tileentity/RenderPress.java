@@ -1,6 +1,7 @@
 package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
+
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
@@ -26,7 +27,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 				0.0f, 0.0f, 0.0f, 1.0f };
 	
 	private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);*/
-
+	
 	public RenderPress() {
 		super();
 	}
@@ -100,11 +101,30 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 		GlStateManager.enableLighting();
 		GL11.glRotatef(180, 0F, 1F, 0F);
+		
+		
+		
+		//ColladaLoader.test.apply(2000);
+		//test.applyAll();
 		this.bindTexture(ResourceManager.press_body_tex);
 		ResourceManager.press_body.renderAll();
 
-		GL11.glPopMatrix();
+		
 		renderTileEntityAt2(te, x, y, z, partialTicks);
+		GL11.glPopMatrix();
+		//if(model.controller.getAnim() == AnimationWrapper.EMPTY)
+		//	model.controller.setAnim(new AnimationWrapper(anim_test).onEnd(new EndResult(EndType.REPEAT_REVERSE, null)));
+		/*GL11.glPushMatrix();
+		if(ResourceManager.model.controller.getAnim() == AnimationWrapper.EMPTY)
+			ResourceManager.model.controller.setAnim(new AnimationWrapper(ResourceManager.anim_test).onEnd(new EndResult(EndType.REPEAT, null)));
+		GL11.glTranslated(x+0.5, y+4, z+0.5);
+		this.bindTexture(ResourceManager.turbofan_blades_tex);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.disableCull();
+		ResourceManager.model.renderAnimated(System.currentTimeMillis());
+		GlStateManager.enableCull();
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GL11.glPopMatrix();*/
 		/*if(te.getPos().getX() % 2 == 0){
 			GlStateManager.disableBlend();
 			HbmShaderManager.releaseShader2();
@@ -121,31 +141,26 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 1 - 0.125D, z + 0.5D);
-		GlStateManager.enableLighting();
-		GL11.glRotatef(180, 0F, 1F, 0F);
+		GL11.glTranslated(0, 1 - 0.125D, 0);
 		GL11.glScalef(0.95F, 1, 0.95F);
 
 		TileEntityMachinePress press = (TileEntityMachinePress) tileEntity;
 		float f1 = press.progress * (1 - 0.125F) / TileEntityMachinePress.maxProgress;
 		GL11.glTranslated(0, -f1, 0);
-
 		this.bindTexture(ResourceManager.press_head_tex);
 
 		ResourceManager.press_head.renderAll();
 
 		GL11.glPopMatrix();
-
 		renderTileEntityAt3(tileEntity, x, y, z, f);
 	}
 
 	public void renderTileEntityAt3(TileEntity tileEntity, double x, double y, double z, float f) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 1, z - 0.5);
+		GL11.glTranslated(0, 1, -1);
 		GlStateManager.enableLighting();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		GL11.glRotatef(-90, 1F, 0F, 0F);
-
+		
 		TileEntityMachinePress press = (TileEntityMachinePress) tileEntity;
 		ItemStack stack = new ItemStack(Item.getItemById(press.item), 1, press.meta);
 
@@ -156,10 +171,11 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(180, 0F, 1F, 0F);
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
+			
+			
 			Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
 		}
 
-		GL11.glPopMatrix();
 	}
 
 	/**

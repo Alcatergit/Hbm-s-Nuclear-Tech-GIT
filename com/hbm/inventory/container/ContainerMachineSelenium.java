@@ -31,7 +31,7 @@ public class ContainerMachineSelenium extends Container {
 		
 		//Fluid IO
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 80, 18));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 10, 80, 54));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 10, 80, 54));
 		
 		//Fluid IDs
 		//Drillgon200 don't need this.

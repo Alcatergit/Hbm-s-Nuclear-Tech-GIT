@@ -24,8 +24,8 @@ public class ContainerMachineCMBFactory extends Container {
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80 + 9, 17));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 62 + 9, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80 + 9, 53));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 4, 134 + 9, 35));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 5, 62 - 9, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 134 + 9, 35));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 62 - 9, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

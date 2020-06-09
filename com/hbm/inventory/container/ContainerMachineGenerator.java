@@ -1,9 +1,12 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -13,13 +16,16 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineGenerator extends Container {
 
-private TileEntityMachineGenerator diFurnace;
+	private TileEntityMachineGenerator diFurnace;
 	
 	private int heat;
+	EntityPlayerMP player;
 	
-	public ContainerMachineGenerator(InventoryPlayer invPlayer, TileEntityMachineGenerator tedf) {
-		
+	public ContainerMachineGenerator(EntityPlayer player, TileEntityMachineGenerator tedf) {
+		if(player instanceof EntityPlayerMP)
+			this.player = (EntityPlayerMP) player;
 		diFurnace = tedf;
+		InventoryPlayer invPlayer = player.inventory;
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 116, 36));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 134, 36));
@@ -33,8 +39,8 @@ private TileEntityMachineGenerator diFurnace;
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 8, 90));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 26, 90));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 62, 90));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 12, 8, 90 + 18));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 13, 26, 90 + 18));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 12, 8, 90 + 18));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 26, 90 + 18));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -53,7 +59,7 @@ private TileEntityMachineGenerator diFurnace;
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
-		crafting.sendWindowProperty(this, 1, this.diFurnace.heat);
+		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
 	}
 	
 
@@ -102,14 +108,9 @@ private TileEntityMachineGenerator diFurnace;
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		for(int i = 0; i < this.listeners.size(); i++)
+		if(this.heat != this.diFurnace.heat)
 		{
-			IContainerListener par1 = this.listeners.get(i);
-			
-			if(this.heat != this.diFurnace.heat)
-			{
-				par1.sendWindowProperty(this, 1, this.diFurnace.heat);
-			}
+			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
 		}
 		
 		this.heat = this.diFurnace.heat;

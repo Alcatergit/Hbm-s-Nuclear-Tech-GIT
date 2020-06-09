@@ -72,6 +72,8 @@ public class ExplosionBalefire {
 	{
 		breakColumn(this.lastposX, this.lastposZ);
 		this.shell = (int) Math.floor((Math.sqrt(n) + 1) / 2);
+		if(shell == 0)
+			shell = 1;
 		int shell2 = this.shell * 2;
 		this.leg = (int) Math.floor((this.n - (shell2 - 1) * (shell2 - 1)) / shell2);
 		this.element = (this.n - (shell2 - 1) * (shell2 - 1)) - shell2 * this.leg - this.shell + 1;
@@ -92,7 +94,6 @@ public class ExplosionBalefire {
 			
 			int y = worldObj.getHeight(pX, pZ);
 			float strength = (float)dist / (float) this.radius;
-			
 			while(y > 0) {
 				
 				if(strength <= 10) {
@@ -102,15 +103,15 @@ public class ExplosionBalefire {
 							worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getDefaultState(), 3);
 					}
 
-					if(worldObj.getBlockState(pos.setPos(pX, y, pZ)) == Blocks.STONE)
+					if(worldObj.getBlockState(pos.setPos(pX, y, pZ)).getBlock() == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 1, pZ)) == Blocks.STONE)
+					if(worldObj.getBlockState(pos.setPos(pX, y - 1, pZ)).getBlock() == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y - 1, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 2, pZ)) == Blocks.STONE)
+					if(worldObj.getBlockState(pos.setPos(pX, y - 2, pZ)).getBlock() == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y - 2, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 3, pZ)) == Blocks.STONE)
+					if(worldObj.getBlockState(pos.setPos(pX, y - 3, pZ)).getBlock() == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y - 3, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 4, pZ)) == Blocks.STONE)
+					if(worldObj.getBlockState(pos.setPos(pX, y - 4, pZ)).getBlock() == Blocks.STONE)
 						worldObj.setBlockState(pos.setPos(pX, y - 4, pZ), ModBlocks.sellafield_slaked.getDefaultState());
 						
 					return;

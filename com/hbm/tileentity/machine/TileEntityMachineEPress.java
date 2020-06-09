@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.machine.ItemBattery;
@@ -8,7 +7,6 @@ import com.hbm.items.machine.ItemBlades;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
@@ -27,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineEPress extends TileEntity implements ITickable, IConsumer, IClientRequestUpdator {
+public class TileEntityMachineEPress extends TileEntity implements ITickable, IConsumer {
 
 	public ItemStackHandler inventory;
 
@@ -38,13 +36,8 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	public int item;
 	public int meta;
 	boolean isRetracting = false;
-	boolean requestUpdate = true;
-	boolean firstUpdate = true;
 
 	private String customName;
-
-	//Fail-safe
-	int age;
 	
 	public TileEntityMachineEPress() {
 		inventory = new ItemStackHandler(4) {
@@ -111,19 +104,8 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	
 	@Override
 	public void update() {
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 		if(!world.isRemote)
 		{
-			age ++;
-			if(age % 300 == 0)
-				requestUpdate = true;
-			if(age > 10000)
-				age = 0;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
 			if(power >= 100 && !(world.isBlockIndirectlyGettingPowered(pos) > 0)) {
@@ -192,33 +174,29 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	
 	protected void detectAndSendChanges(){
 		boolean mark = false;
-		boolean needsPressPacket = false;
-		if(detectProgress != progress || requestUpdate){
+		if(detectProgress != progress){
 			mark = true;
-			needsPressPacket = true;
 			detectProgress = progress;
 		}
-		if(detectPower != power || requestUpdate){
+		if(detectPower != power){
 			mark = true;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			detectPower = power;
 		}
-		if(detectIsRetracting != isRetracting || requestUpdate){
+		if(detectIsRetracting != isRetracting){
 			mark = true;
 			detectIsRetracting = isRetracting;
 		}
-		if(((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))) || requestUpdate){
+		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))){
 			mark = true;
 			detectCustomName = customName;
 		}
-		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem) || requestUpdate){
+		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)){
 			detectItem = inventory.getStackInSlot(2).copy();
-			needsPressPacket = true;
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(mark)
 			markDirty();
-		if(needsPressPacket)
-			PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 		
 	}
 	
@@ -256,11 +234,6 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		this.requestUpdate = true;
 	}
 	
 	@Override

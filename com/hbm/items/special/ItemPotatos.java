@@ -37,6 +37,12 @@ public class ItemPotatos extends ItemBattery {
     		}
     	}
 	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return oldStack.getItem() != newStack.getItem() || oldStack.getMetadata() != newStack.getMetadata();
+	}
+	
 	private static int getTimer(ItemStack stack) {
 		if(stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());

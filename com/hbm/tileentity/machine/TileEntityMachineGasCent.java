@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
@@ -14,7 +13,6 @@ import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -40,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineGasCent extends TileEntity implements ITickable, IClientRequestUpdator, IConsumer, ITankPacketAcceptor, IFluidHandler {
+public class TileEntityMachineGasCent extends TileEntity implements ITickable, IConsumer, ITankPacketAcceptor, IFluidHandler {
 
 	public ItemStackHandler inventory;
 	
@@ -50,8 +48,6 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	public static final int maxPower = 100000;
 	public static final int processingSpeed = 200;
 	public boolean needsUpdate = false;
-	private boolean firstUpdate = true;
-	private boolean requestUpdate = true;
 	
 	public FluidTank tank;
 	
@@ -60,9 +56,6 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	//private static final int[] slots_side = new int[] {0, 3};
 	
 	private String customName;
-	
-	//Fail-safe
-	int age;
 	
 	public TileEntityMachineGasCent() {
 		inventory = new ItemStackHandler(9){
@@ -191,25 +184,13 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	
 	@Override
 	public void update() {
-		if(firstUpdate){
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos.getX(), pos.getY(), pos.getZ()));
-			}
-			firstUpdate = false;
-		}
 		
 		if(!world.isRemote) {
 			
 			if (needsUpdate) {
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 				needsUpdate = false;
 			}
-
-			age ++;
-			if(age % 300 == 0)
-				requestUpdate = true;
-			if(age > 10000)
-				age = 0;
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
@@ -253,29 +234,26 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	
 	private void detectAndSendChanges(){
 		boolean mark = false;
-		if(detectPower != power || requestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+		if(detectPower != power){
 			detectPower = power;
 			mark = true;
 		}
-		if(detectProgress != progress || requestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), progress, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+		if(detectProgress != progress){
 			detectProgress = progress;
 			mark = true;
 		}
-		if(detectIsProgressing != isProgressing || requestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+		if(detectIsProgressing != isProgressing){
 			detectIsProgressing = isProgressing;
 			mark = true;
 		}
-		if(!FFUtils.areTanksEqual(tank, detectTank) || requestUpdate){
+		if(!FFUtils.areTanksEqual(tank, detectTank)){
 			detectTank = FFUtils.copyTank(tank);
 			needsUpdate = true;
 			mark = true;
 		}
-		
-		requestUpdate = false;
-		
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), progress, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(mark)
 			markDirty();
 	}
@@ -306,11 +284,6 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	public double getMaxRenderDistanceSquared()
 	{
 		return 65536.0D;
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		requestUpdate = true;
 	}
 
 	@Override

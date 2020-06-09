@@ -28,7 +28,7 @@ private TileEntityMachineEPress nukeBoy;
 		//Input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 53));
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 3, 140, 35));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 140, 35));
 		
 		for(int i = 0; i < 3; i++)
 		{

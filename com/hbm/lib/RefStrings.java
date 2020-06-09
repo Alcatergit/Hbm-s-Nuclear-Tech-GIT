@@ -3,7 +3,7 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech Mod";
-	public static final String VERSION = "ALPHA-1.3.1-1.12.2";
+	public static final String VERSION = "hbm-1.3.3A-1.12.2";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version

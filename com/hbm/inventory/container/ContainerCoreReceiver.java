@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.packet.AuxLongPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreReceiver;
@@ -39,7 +40,8 @@ public class ContainerCoreReceiver extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		listener.sendWindowProperty(this, 0, (int) te.syncJoules);
+		PacketDispatcher.wrapper.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
+		PacketDispatcher.wrapper.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
 	}
 
 	int joules;
@@ -47,24 +49,15 @@ public class ContainerCoreReceiver extends Container {
 
 	@Override
 	public void detectAndSendChanges() {
-		for(IContainerListener listener : listeners) {
-			if(joules != te.syncJoules) {
-				joules = (int) te.syncJoules;
-				listener.sendWindowProperty(this, 0, (int) te.syncJoules);
-			}
+		if(joules != te.syncJoules) {
+			joules = (int) te.syncJoules;
+			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
 		}
 		if(!FFUtils.areTanksEqual(tank, te.tank)){
 			tank = FFUtils.copyTank(te.tank);
 			PacketDispatcher.wrapper.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
-	}
-
-	@Override
-	public void updateProgressBar(int id, int data) {
-		if(id == 0)
-			te.joules = data;
-		super.updateProgressBar(id, data);
 	}
 
 	@Override

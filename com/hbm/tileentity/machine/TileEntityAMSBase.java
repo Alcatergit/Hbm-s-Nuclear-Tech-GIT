@@ -264,7 +264,6 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 							tanks[2].getFluidAmount() > 0 && tanks[3].getFluidAmount() > 0) {
 
 						power += (powerBase * powerMod * gauss(1, (heat - (maxHeat / 2)) / maxHeat)) / 1000 * getFuelPower(tanks[2].getFluid()) * getFuelPower(tanks[3].getFluid());
-						System.out.println((powerBase * powerMod * gauss(1, (heat - (maxHeat / 2)) / maxHeat)) / 1000 * getFuelPower(tanks[2].getFluid()) * getFuelPower(tanks[3].getFluid()));
 						heat += (heatBase * heatMod) / (float)(this.field / 100F);
 						tanks[2].drain((int)(fuelBase * fuelMod), true);
 						tanks[3].drain((int)(fuelBase * fuelMod), true);

@@ -8,7 +8,7 @@ import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUICoreAdvanced extends GuiInfoContainer {
@@ -16,7 +16,7 @@ public class GUICoreAdvanced extends GuiInfoContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/factory_advanced.png");
 	private TileEntityCoreAdvanced diFurnace;
 
-	public GUICoreAdvanced(InventoryPlayer invPlayer, TileEntityCoreAdvanced tedf) {
+	public GUICoreAdvanced(EntityPlayer invPlayer, TileEntityCoreAdvanced tedf) {
 		super(new ContainerCoreAdvanced(invPlayer, tedf));
 		diFurnace = tedf;
 		

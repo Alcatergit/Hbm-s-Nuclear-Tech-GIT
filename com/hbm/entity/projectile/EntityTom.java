@@ -1,6 +1,7 @@
 package com.hbm.entity.projectile;
 
 import com.hbm.entity.logic.EntityTomBlast;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
 
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityTom extends EntityThrowable {
+public class EntityTom extends EntityThrowable implements IConstantRenderer {
 
 	public EntityTom(World p_i1582_1_) {
 		super(p_i1582_1_);

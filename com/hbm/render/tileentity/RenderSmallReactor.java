@@ -20,7 +20,7 @@ public class RenderSmallReactor extends TileEntitySpecialRenderer<TileEntityMach
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		
 

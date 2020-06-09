@@ -27,7 +27,6 @@ public class RenderBroadcaster extends TileEntitySpecialRenderer<TileEntityBroad
 		GL11.glRotated(180, 0, 1, 0);
 		
 		GlStateManager.enableLighting();
-		GL11.glEnable(GL11.GL_LIGHTING);
 		this.bindTexture(texture6);
 		switch(te.getBlockMetadata())
 		{

@@ -92,8 +92,8 @@ public class GUIMachineCompactLauncher extends GuiInfoContainer {
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 11);
 		
-		FFUtils.drawLiquid(launcher.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 116, 88);
-		FFUtils.drawLiquid(launcher.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 88);
+		FFUtils.drawLiquid(launcher.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 116, 116);
+		FFUtils.drawLiquid(launcher.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 116);
 		
 		/// DRAW MISSILE START
 		GL11.glPushMatrix();

@@ -26,7 +26,6 @@ public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
 		super(worldIn);
 		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
-		new Exception().printStackTrace();
 	}
 
 	@Override

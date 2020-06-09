@@ -39,12 +39,10 @@ public class JeiRecipes {
 	private static List<PressRecipe> pressRecipes = null;
 	private static List<AlloyFurnaceRecipe> alloyFurnaceRecipes = null;
 	private static List<BoilerRecipe> boilerRecipes = null;
-	private static List<CentrifugeRecipe> centrifugeRecipes = null;
 	private static List<CMBFurnaceRecipe> cmbRecipes = null;
 	private static List<GasCentRecipe> gasCentRecipes = null;
 	private static List<ReactorRecipe> reactorRecipes = null;
 	private static List<RefineryRecipe> refineryRecipes = null;
-	private static List<ShredderRecipe> shredderRecipes = null;
 	private static List<FluidRecipe> fluidEquivalences = null;
 	
 	private static List<ItemStack> batteries = null;
@@ -144,24 +142,6 @@ public class JeiRecipes {
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
-		}
-		
-	}
-	
-	public static class CentrifugeRecipe implements IRecipeWrapper {
-		
-		private final ItemStack input;
-		private final List<ItemStack> outputs;
-		
-		public CentrifugeRecipe(ItemStack input, List<ItemStack> outputs) {
-			this.input = input;
-			this.outputs = outputs; 
-		}
-		
-		@Override
-		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.ITEM, input);
-			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
 		
 	}
@@ -266,24 +246,6 @@ public class JeiRecipes {
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInput(VanillaTypes.ITEM, output);
 			ingredients.setOutput(VanillaTypes.FLUID, input);
-		}
-		
-	}
-	
-	public static class ShredderRecipe implements IRecipeWrapper {
-		
-		private final ItemStack input;
-		private final ItemStack output;
-		
-		public ShredderRecipe(ItemStack input, ItemStack output) {
-			this.input = input;
-			this.output = output; 
-		}
-		
-		@Override
-		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.ITEM, input);
-			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		
 	}
@@ -781,6 +743,7 @@ public class JeiRecipes {
 		recipes.put(new Object[] { i_stamps_9, new ItemStack(ModItems.assembly_uzi) }, getPressResultNN(i_stamps_9.get(0).getItem(), ModItems.assembly_uzi));
 		recipes.put(new Object[] { i_stamps_9, new ItemStack(ModItems.assembly_lacunae) }, getPressResultNN(i_stamps_9.get(0).getItem(), ModItems.assembly_lacunae));
 		recipes.put(new Object[] { i_stamps_9, new ItemStack(Items.GOLD_INGOT) }, getPressResultNN(i_stamps_9.get(0).getItem(), Items.GOLD_INGOT));
+		recipes.put(new Object[] { i_stamps_9, new ItemStack(ModItems.assembly_556) }, getPressResultNN(i_stamps_9.get(0).getItem(), ModItems.assembly_556));
 		
 		recipes.put(new Object[] { i_stamps_50, new ItemStack(ModItems.assembly_actionexpress) }, getPressResultNN(i_stamps_50.get(0).getItem(), ModItems.assembly_actionexpress));
 		recipes.put(new Object[] { i_stamps_50, new ItemStack(ModItems.assembly_calamity) }, getPressResultNN(i_stamps_50.get(0).getItem(), ModItems.assembly_calamity));
@@ -876,86 +839,6 @@ public class JeiRecipes {
 		}
 		
 		return boilerRecipes;
-	}
-	
-	public static List<CentrifugeRecipe> getCentrifugeRecipes() {
-		if(centrifugeRecipes != null)
-			return centrifugeRecipes;
-		centrifugeRecipes = new ArrayList<CentrifugeRecipe>();
-		Map<ItemStack, ItemStack[]> recipes = new HashMap<ItemStack, ItemStack[]>();
-		if (MainRegistry.enableDebugMode) {
-			recipes.put(new ItemStack(Item.getItemFromBlock(ModBlocks.test_render)),
-					MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.test_render)));
-		}
-		recipes.put(new ItemStack(ModItems.powder_cloud),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.powder_cloud)));
-		recipes.put(new ItemStack(Blocks.COAL_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.COAL_ORE)));
-		recipes.put(new ItemStack(Blocks.IRON_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.IRON_ORE)));
-		recipes.put(new ItemStack(Blocks.GOLD_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.GOLD_ORE)));
-		recipes.put(new ItemStack(Blocks.DIAMOND_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.DIAMOND_ORE)));
-		recipes.put(new ItemStack(Blocks.EMERALD_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.EMERALD_ORE)));
-		recipes.put(new ItemStack(ModBlocks.ore_uranium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_uranium)));
-		recipes.put(new ItemStack(ModBlocks.ore_thorium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_thorium)));
-		recipes.put(new ItemStack(ModBlocks.ore_titanium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_titanium)));
-		recipes.put(new ItemStack(ModBlocks.ore_tungsten),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_tungsten)));
-		recipes.put(new ItemStack(ModBlocks.ore_aluminium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_aluminium)));
-		recipes.put(new ItemStack(ModBlocks.ore_beryllium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_beryllium)));
-		recipes.put(new ItemStack(ModBlocks.ore_copper),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_copper)));
-		recipes.put(new ItemStack(ModBlocks.ore_lead),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_lead)));
-		recipes.put(new ItemStack(ModBlocks.ore_rare),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_rare)));
-		recipes.put(new ItemStack(ModBlocks.ore_schrabidium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_schrabidium)));
-		recipes.put(new ItemStack(ModBlocks.ore_tikite),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_tikite)));
-		recipes.put(new ItemStack(Blocks.REDSTONE_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.REDSTONE_ORE)));
-		recipes.put(new ItemStack(Blocks.LAPIS_ORE),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Blocks.LAPIS_ORE)));
-		recipes.put(new ItemStack(ModBlocks.ore_nether_plutonium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_nether_plutonium)));
-		recipes.put(new ItemStack(ModItems.waste_uranium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.waste_uranium)));
-		recipes.put(new ItemStack(ModItems.waste_thorium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.waste_thorium)));
-		recipes.put(new ItemStack(ModItems.waste_plutonium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.waste_plutonium)));
-		recipes.put(new ItemStack(ModItems.waste_mox),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.waste_mox)));
-		recipes.put(new ItemStack(ModItems.waste_schrabidium),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModItems.waste_schrabidium)));
-		recipes.put(new ItemStack(ModBlocks.ore_lignite),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_lignite)));
-		recipes.put(new ItemStack(ModBlocks.ore_meteor_starmetal),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_meteor_starmetal)));
-		recipes.put(new ItemStack(ModBlocks.block_euphemium_cluster),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.block_euphemium_cluster)));
-		recipes.put(new ItemStack(ModBlocks.ore_nether_fire),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(ModBlocks.ore_nether_fire)));
-		recipes.put(new ItemStack(Items.BLAZE_ROD),
-				MachineRecipes.getCentrifugeOutput(new ItemStack(Items.BLAZE_ROD)));
-		
-		for(Map.Entry<ItemStack, ItemStack[]> entry : recipes.entrySet()){
-			List<ItemStack> output = new ArrayList<ItemStack>(4);
-			for(ItemStack stack : entry.getValue())
-				output.add(stack);
-			centrifugeRecipes.add(new CentrifugeRecipe(entry.getKey(), output));
-		}
-		
-		return centrifugeRecipes;
 	}
 	
 	public static List<ItemStack> getBatteries() {
@@ -1142,19 +1025,6 @@ public class JeiRecipes {
         				)));
 		
 		return refineryRecipes;
-	}
-	
-	public static List<ShredderRecipe> getShredderRecipes() {
-		if(shredderRecipes != null)
-			return shredderRecipes;
-		shredderRecipes = new ArrayList<ShredderRecipe>();
-		
-		for(int i = 0; i < MachineRecipes.recipesShredder.size(); i++) {
-			if(MachineRecipes.recipesShredder.get(i) != null && MachineRecipes.recipesShredder.get(i).output.getItem() != ModItems.scrap)
-				shredderRecipes.add(new ShredderRecipe(MachineRecipes.recipesShredder.get(i).input, MachineRecipes.getShredderResult(MachineRecipes.recipesShredder.get(i).input)));
-		}
-		
-		return shredderRecipes;
 	}
 	
 	public static List<ItemStack> getBlades() {

@@ -21,6 +21,6 @@ public class TileEntitySoyuzCapsule extends TileEntityInventoryBase {
 
 	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return SOYUZ_CAPSULE_BOX;
+        return SOYUZ_CAPSULE_BOX.offset(pos);
     }
 }

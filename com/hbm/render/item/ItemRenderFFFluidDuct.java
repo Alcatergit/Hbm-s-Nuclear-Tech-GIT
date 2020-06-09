@@ -35,8 +35,7 @@ public class ItemRenderFFFluidDuct extends TEISRBase {
 		Fluid f = ItemFFFluidDuct.getFluidFromStack(stack);
 		TextureAtlasSprite lava = null;
 		if (f != null)
-			lava = Minecraft.getMinecraft().getTextureMapBlocks()
-					.getAtlasSprite(f.getStill().toString());
+			lava = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
 
 		if (lava != null) {
 			RenderHelper.setColor(f.getColor(new FluidStack(f, 1000)));

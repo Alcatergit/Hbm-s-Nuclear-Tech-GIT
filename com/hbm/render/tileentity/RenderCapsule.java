@@ -11,6 +11,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class RenderCapsule extends TileEntitySpecialRenderer<TileEntitySoyuzCapsule> {
 
 	@Override
+	public boolean isGlobalRenderer(TileEntitySoyuzCapsule te) {
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntitySoyuzCapsule te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);

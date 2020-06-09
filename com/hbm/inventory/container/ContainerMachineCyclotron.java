@@ -38,11 +38,11 @@ public class ContainerMachineCyclotron extends Container {
 		//Cell
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 8, 108));
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 11, 44, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 12, 62, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 13, 80, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 14, 98, 108));
-		this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf.inventory, 15, 116, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 44, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 12, 62, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 80, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 14, 98, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 116, 108));
 		
 		for(int i = 0; i < 3; i++)
 		{

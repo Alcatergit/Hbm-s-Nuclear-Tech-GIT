@@ -150,6 +150,9 @@ public final class HBMSoundHandler {
 	public static SoundEvent flamerReload;
 	public static SoundEvent stop;
 	public static SoundEvent bonk;
+	public static SoundEvent glauncher;
+	public static SoundEvent hksShoot;
+	public static SoundEvent vice;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -322,6 +325,9 @@ public final class HBMSoundHandler {
 		flamerReload = register("weapon.flamerReload");
 		stop = register("weapon.stop");
 		bonk = register("weapon.bonk");
+		glauncher = register("weapon.glauncher");
+		hksShoot = register("weapon.hksShoot");
+		vice = register("item.vice");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

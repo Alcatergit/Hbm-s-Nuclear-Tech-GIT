@@ -9,7 +9,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIMachineGenerator extends GuiInfoContainer {
@@ -17,7 +17,7 @@ public class GUIMachineGenerator extends GuiInfoContainer {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_generator.png");
 	private TileEntityMachineGenerator diFurnace;
 	
-	public GUIMachineGenerator(InventoryPlayer invPlayer, TileEntityMachineGenerator tedf) {
+	public GUIMachineGenerator(EntityPlayer invPlayer, TileEntityMachineGenerator tedf) {
 		super(new ContainerMachineGenerator(invPlayer, tedf));
 		diFurnace = tedf;
 		

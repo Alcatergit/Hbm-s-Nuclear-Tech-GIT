@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiver;
-import com.hbm.blocks.generic.DecoPoleTop;
 import com.hbm.blocks.generic.DecoSteelPoles;
 import com.hbm.main.MainRegistry;
 

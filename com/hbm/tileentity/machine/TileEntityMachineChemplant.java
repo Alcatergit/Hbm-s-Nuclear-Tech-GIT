@@ -234,7 +234,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(!world.isRemote)
 		{
 			if(needsUpdate){
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;
 			}
 			int meta = world.getBlockState(pos).getValue(MachineChemplant.FACING);
@@ -268,7 +267,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 					(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
 				this.maxProgress = (ItemChemistryTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
 				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory)) && hasFluidsStored(inputs)) {
-					
 					if(hasSpaceForItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4))) && hasSpaceForFluids(outputs)) {
 						progress++;
 						isProgressing = true;
@@ -507,25 +505,25 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			sta0.setCount(1);
 		ItemStack sta1 = Library.carefulCopy(stacks[0]);
 		if(sta1 != null)
-			sta0.setCount(1);
+			sta1.setCount(1);
 		ItemStack sta2 = Library.carefulCopy(inventory.getStackInSlot(6));
 		if(sta2 != null)
-			sta0.setCount(1);
+			sta2.setCount(1);
 		ItemStack sta3 = Library.carefulCopy(stacks[1]);
 		if(sta3 != null)
-			sta0.setCount(1);
+			sta3.setCount(1);
 		ItemStack sta4 = Library.carefulCopy(inventory.getStackInSlot(7));
 		if(sta4 != null)
-			sta0.setCount(1);
+			sta4.setCount(1);
 		ItemStack sta5 = Library.carefulCopy(stacks[2]);
 		if(sta5 != null)
-			sta0.setCount(1);
+			sta5.setCount(1);
 		ItemStack sta6 = Library.carefulCopy(inventory.getStackInSlot(8));
 		if(sta6 != null)
-			sta0.setCount(1);
+			sta6.setCount(1);
 		ItemStack sta7 = Library.carefulCopy(stacks[3]);
 		if(sta7 != null)
-			sta0.setCount(1);
+			sta7.setCount(1);
 		
 		if((inventory.getStackInSlot(5) == ItemStack.EMPTY || stacks[0] == null || (stacks[0] != null && isItemAcceptable(sta0, sta1) && inventory.getStackInSlot(5).getCount() + stacks[0].getCount() <= inventory.getStackInSlot(5).getMaxStackSize())) && 
 				(inventory.getStackInSlot(6) == ItemStack.EMPTY || stacks[1] == null || (stacks[1] != null && isItemAcceptable(sta2, sta3) && inventory.getStackInSlot(6).getCount() + stacks[1].getCount() <= inventory.getStackInSlot(6).getMaxStackSize())) && 
@@ -1089,13 +1087,13 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		if(detectIsProgressing != isProgressing){
 			mark = true;
 			detectIsProgressing = isProgressing;
-			PacketDispatcher.wrapper.sendToAllAround(new TEChemplantPacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new TEChemplantPacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(detectPower != power){
 			mark = true;
 			detectPower = power;
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(!FFUtils.areTanksEqual(detectTanks[0], tanks[0])){
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 			mark = true;
@@ -1116,7 +1114,7 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			mark = true;
 			needsUpdate = true;
 		}
-		
+		PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		
 		if(mark)
 			markDirty();

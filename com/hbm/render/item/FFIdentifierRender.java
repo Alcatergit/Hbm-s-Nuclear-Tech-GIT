@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 public class FFIdentifierRender extends TileEntityItemStackRenderer {
 
@@ -26,10 +27,10 @@ public class FFIdentifierRender extends TileEntityItemStackRenderer {
 	public void renderByItem(ItemStack itemStackIn) {
 		if(itemStackIn.getItem() != ModItems.forge_fluid_identifier)
 			return;
-		
 		final double HALF_A_PIXEL = 0.03125;
 		final double PIX = 0.0625;
-		TextureAtlasSprite fluidIcon = FFUtils.getTextureFromFluid(ItemForgeFluidIdentifier.getType(itemStackIn));
+		Fluid fluid = ItemForgeFluidIdentifier.getType(itemStackIn);
+		TextureAtlasSprite fluidIcon = FFUtils.getTextureFromFluid(fluid);
 		RenderHelper.bindBlockTexture();
 		if(fluidIcon != null){
 			GL11.glPushMatrix();
@@ -37,7 +38,8 @@ public class FFIdentifierRender extends TileEntityItemStackRenderer {
 			GlStateManager.disableLighting();
 			GL11.glTranslated(0, 0, 0.5+HALF_A_PIXEL);
 			
-
+			FFUtils.setColorFromFluid(fluid);
+			
 			RenderHelper.startDrawingTexturedQuads();
 			
 			float maxU = fluidIcon.getInterpolatedU(9);
@@ -115,6 +117,7 @@ public class FFIdentifierRender extends TileEntityItemStackRenderer {
 			
 			
 			RenderHelper.draw();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableLighting();
 			GL11.glPopAttrib();
 			GL11.glPopMatrix();

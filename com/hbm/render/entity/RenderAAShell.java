@@ -32,7 +32,6 @@ public class RenderAAShell extends Render<EntityAAShell> {
         GL11.glTranslatef((float)x, (float)y, (float)z);
         GL11.glRotatef(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
-        System.out.println(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks);
         bindTexture(boyTexture);
         boyModel.renderAll();
 		GL11.glPopMatrix();

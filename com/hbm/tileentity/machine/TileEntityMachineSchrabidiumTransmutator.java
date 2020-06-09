@@ -2,14 +2,12 @@ package com.hbm.tileentity.machine;
 
 import java.util.Random;
 
-import com.hbm.interfaces.IClientRequestUpdator;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.ClientRequestUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +23,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineSchrabidiumTransmutator extends TileEntity implements ITickable, IConsumer, IClientRequestUpdator {
+public class TileEntityMachineSchrabidiumTransmutator extends TileEntity implements ITickable, IConsumer {
 
 	public ItemStackHandler inventory;
 
@@ -36,9 +34,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	public static final int processSpeed = 60;
 	Random rand = new Random();
 	
-	private boolean firstUpdate = true;
-	private boolean clientRequestUpdate = true;
-
 	//private static final int[] slots_top = new int[] { 0 };
 	//private static final int[] slots_bottom = new int[] { 1, 2 };
 	//private static final int[] slots_side = new int[] { 3, 2 };
@@ -119,21 +114,12 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	
 	@Override
 	public void update() {
-		if(firstUpdate){
-			firstUpdate = false;
-			if(world.isRemote){
-				PacketDispatcher.wrapper.sendToServer(new ClientRequestUpdatePacket(pos));
-			}
-		}
 		if (!world.isRemote) {
 			
 			power = Library.chargeTEFromItems(inventory, 3, power, maxPower);
 
 			if (canProcess()) {
-
-				//if (!worldObj.isRemote) {
 				process();
-				//}
 			} else {
 				process = 0;
 			}
@@ -147,13 +133,10 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	private void detectAndSendChanges(){
 		boolean mark = false;
 		if(detectPower != power){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			mark = true;
 			detectPower = power;
-		} else if(clientRequestUpdate){
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 		}
-		clientRequestUpdate = false;
+		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
 			markDirty();
 	}
@@ -231,11 +214,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-
-	@Override
-	public void requestClientUpdate() {
-		clientRequestUpdate = true;
 	}
 
 	@Override

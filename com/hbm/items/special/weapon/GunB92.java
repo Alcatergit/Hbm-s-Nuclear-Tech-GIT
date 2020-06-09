@@ -114,7 +114,6 @@ public class GunB92 extends Item implements IHasCustomModel {
 		int j = getAnim(stack);
 		if (j > 0) {
 			{
-
 				if (j < 30) {
 					setAnim(stack, j + 1);
 

@@ -1,6 +1,6 @@
 package com.hbm.handler.jei;
 
-import com.hbm.handler.jei.JeiRecipes.CentrifugeRecipe;
+import com.hbm.inventory.CentrifugeRecipes.CentrifugeRecipe;
 import com.hbm.lib.RefStrings;
 
 import mezz.jei.api.IGuiHelper;
@@ -81,6 +81,8 @@ public class CentrifugeRecipeHandler implements IRecipeCategory<CentrifugeRecipe
 		guiItemStacks.init(5, true, 19, 37);
 		
 		guiItemStacks.set(ingredients);
+		if(recipeWrapper.inputs != null)
+			guiItemStacks.set(0, recipeWrapper.inputs);
 		guiItemStacks.set(5, JeiRecipes.getBatteries());
 	}
 

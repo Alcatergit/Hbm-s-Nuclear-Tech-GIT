@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -43,7 +45,7 @@ public class RenderVortex extends Render<EntityVortex> {
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef((entity.ticksExisted % 360) * 10, 1, 1, 1);
     	GlStateManager.disableLighting();
-    	GL11.glDisable(GL11.GL_CULL_FACE);
+    	GlStateManager.disableCull();
     	
     	float size = entity.getDataManager().get(EntityBlackHole.SIZE);
     	
@@ -77,13 +79,13 @@ public class RenderVortex extends Render<EntityVortex> {
         }
 
         Random random = new Random(432L);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(false);
+        GlStateManager.disableTexture2D();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+        GlStateManager.disableAlpha();
+        GlStateManager.enableCull();
+        GlStateManager.depthMask(false);
         GL11.glPushMatrix();
         
         //for (int i = 0; (float)i < (f1 + f1 * f1) / 2.0F * 60.0F; ++i)
@@ -109,13 +111,14 @@ public class RenderVortex extends Render<EntityVortex> {
 
         GL11.glPopMatrix();
     	GL11.glPopMatrix();
-        GL11.glDepthMask(true);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+    	GlStateManager.depthMask(true);
+        GlStateManager.disableCull();
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableAlpha();
         RenderHelper.enableStandardItemLighting();
 	}
 

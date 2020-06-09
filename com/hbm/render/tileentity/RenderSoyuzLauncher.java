@@ -18,7 +18,7 @@ public class RenderSoyuzLauncher extends TileEntitySpecialRenderer<TileEntitySoy
 	@Override
 	public void render(TileEntitySoyuzLauncher te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float) x + 0.5F, (float) y-4, (float) z + 0.5F);
 		
 		TileEntitySoyuzLauncher launcher = (TileEntitySoyuzLauncher)te;
 		

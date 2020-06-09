@@ -17,6 +17,7 @@ import com.hbm.handler.guncfg.Gun44MagnumFactory;
 import com.hbm.handler.guncfg.Gun4GaugeFactory;
 import com.hbm.handler.guncfg.Gun50AEFactory;
 import com.hbm.handler.guncfg.Gun50BMGFactory;
+import com.hbm.handler.guncfg.Gun556mmFactory;
 import com.hbm.handler.guncfg.Gun5mmFactory;
 import com.hbm.handler.guncfg.Gun9mmFactory;
 import com.hbm.handler.guncfg.GunEnergyFactory;
@@ -51,7 +52,6 @@ import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.gear.ArmorHazmat;
 import com.hbm.items.gear.ArmorModel;
 import com.hbm.items.gear.ArmorT45;
-import com.hbm.items.gear.AxeSchrabidium;
 import com.hbm.items.gear.BigSword;
 import com.hbm.items.gear.HoeSchrabidium;
 import com.hbm.items.gear.JetpackBooster;
@@ -60,10 +60,7 @@ import com.hbm.items.gear.JetpackRegular;
 import com.hbm.items.gear.JetpackVectorized;
 import com.hbm.items.gear.MaskOfInfamy;
 import com.hbm.items.gear.ModArmor;
-import com.hbm.items.gear.ModAxe;
 import com.hbm.items.gear.ModHoe;
-import com.hbm.items.gear.ModPickaxe;
-import com.hbm.items.gear.ModSpade;
 import com.hbm.items.gear.ModSword;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.gear.WeaponSpecial;
@@ -155,7 +152,6 @@ import com.hbm.items.weapon.GunHP;
 import com.hbm.items.weapon.GunImmolator;
 import com.hbm.items.weapon.GunJack;
 import com.hbm.items.weapon.GunLeverActionS;
-import com.hbm.items.weapon.GunMP;
 import com.hbm.items.weapon.GunSpark;
 import com.hbm.items.weapon.GunStinger;
 import com.hbm.items.weapon.GunSuicide;
@@ -185,6 +181,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -234,6 +231,7 @@ public class ModItems {
 	public static final Item cladding_lead = new ItemCladding(0.2F, "cladding_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item cladding_desh = new ItemCladding(0.4F, "cladding_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item euphemium_kit = new ItemStarterKit("euphemium_kit").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(null);
 	
 	//Energy items
 	public static final Item factory_core_titanium = new ItemBattery(70400, 10, 0, "factory_core_titanium").setMaxStackSize(1);
@@ -483,6 +481,8 @@ public class ModItems {
 	public static final Item wrench = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "wrench").setMaxStackSize(1);
 	public static final Item wrench_flipped = new WeaponSpecial(MainRegistry.enumToolMaterialElec, "wrench_flipped").setMaxStackSize(1);
 	public static final Item memespoon = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "memespoon").setMaxStackSize(1);
+	//Drillgon200: This is too much for me...
+	//public static final Item pch = new WeaponSpecial(MainRegistry.tMatHammmer, "pch").setMaxStackSize(1);
 	
 	public static final Item multitool_hit = new ItemMultitoolPassive("multitool_hit").setCreativeTab(null);
 	public static final Item multitool_dig = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, Collections.emptySet(), "multitool_dig").setFull3D().setCreativeTab(MainRegistry.consumableTab);
@@ -514,6 +514,7 @@ public class ModItems {
 	public static final Item gun_revolver_silver = new ItemGunBase(Gun44MagnumFactory.getSilverConfig(), "gun_revolver_silver").setMaxDamage(1000).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_red = new ItemGunBase(Gun44MagnumFactory.getRedConfig(), "gun_revolver_red").setMaxDamage(1000).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_deagle = new ItemGunBase(Gun50AEFactory.getDeagleConfig(), "gun_deagle").setFull3D().setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_flechette = new ItemGunBase(Gun556mmFactory.getSPIWConfig(), Gun556mmFactory.getGLauncherConfig(), "gun_flechette").setFull3D().setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_uboinik = new ItemGunBase(Gun12GaugeFactory.getUboinikConfig(), "gun_uboinik").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_supershotgun = new ItemGunShotty(Gun12GaugeFactory.getShottyConfig(), "gun_supershotgun").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_ks23 = new ItemGunBase(Gun4GaugeFactory.getKS23Config(), "gun_ks23").setCreativeTab(MainRegistry.weaponTab);
@@ -553,7 +554,7 @@ public class ModItems {
 	public static final Item gun_euthanasia = new GunEuthanasia("gun_euthanasia").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger = new GunStinger("gun_stinger").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_skystinger = new GunStinger("gun_skystinger").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_mp = new GunMP("gun_mp").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_mp = new ItemGunBase(Gun556mmFactory.getEuphieConfig(), "gun_mp").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_brimstone = new GunBrimstone("gun_brimstone").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_cryolator = new GunCryolator("gun_cryolator").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_jack = new GunJack("gun_jack").setCreativeTab(MainRegistry.weaponTab);
@@ -714,9 +715,9 @@ public class ModItems {
 	public static final Item rod_schrabidium_fuel_depleted = new ItemRadioactive(40F, true, "rod_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_dual_schrabidium_fuel_depleted = new ItemRadioactive(80F, true, "rod_dual_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_quad_schrabidium_fuel_depleted = new ItemRadioactive(160F, true, "rod_quad_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
-	public static final Item rod_waste = new ItemRadioactive(15F, "rod_waste").setCreativeTab(null).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_waste = new ItemRadioactive(30F, "rod_dual_waste").setCreativeTab(null).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_waste = new ItemRadioactive(60F, "rod_quad_waste").setCreativeTab(null).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_waste = new ItemRadioactive(15F, "rod_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_waste = new ItemRadioactive(30F, "rod_dual_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_waste = new ItemRadioactive(60F, "rod_quad_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	public static final Item rod_dual_th232 = new ItemCustomLore("rod_dual_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_dual_uranium = new ItemRadioactive(1F, "rod_dual_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_dual_u233 = new ItemRadioactive(10F, "rod_dual_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
@@ -1056,15 +1057,15 @@ public class ModItems {
 			.addHitAbility(new WeaponAbility.StunAbility(2))
 			.addHitAbility(new WeaponAbility.VampireAbility(2F));
 
-	public static final Item cmb_pickaxe = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.PICKAXE, "cmb_pickaxe")
+	public static final Item cmb_pickaxe = new ItemToolAbility(10, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.PICKAXE, "cmb_pickaxe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility());
 
-	public static final Item cmb_axe = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.AXE, "cmb_axe")
+	public static final Item cmb_axe = new ItemToolAbility(12.5F, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.AXE, "cmb_axe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility());
 
-	public static final Item cmb_shovel = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.SHOVEL, "cmb_shovel")
+	public static final Item cmb_shovel = new ItemToolAbility(8, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.SHOVEL, "cmb_shovel")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility());
 	
@@ -1117,24 +1118,28 @@ public class ModItems {
 			.addBreakAbility(new ToolAbility.CentrifugeAbility()).setMaxDamage(50);
 	
 	public static final Item schrabidium_hoe = new HoeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_hoe").setCreativeTab(CreativeTabs.TOOLS);
-	public static final Item schrabidium_sword = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SWORD, "schrabidium_sword")
+	public static final Item schrabidium_sword = new ItemToolAbility(150, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SWORD, "schrabidium_sword")
 			.addHitAbility(new WeaponAbility.RadiationAbility(50F))
-			.addHitAbility(new WeaponAbility.VampireAbility(2F));
-	public static final Item schrabidium_pickaxe = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.PICKAXE, "schrabidium_pickaxe")
+			.addHitAbility(new WeaponAbility.VampireAbility(2F))
+			.setRarity(EnumRarity.RARE);
+	public static final Item schrabidium_pickaxe = new ItemToolAbility(20, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.PICKAXE, "schrabidium_pickaxe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
-			.addBreakAbility(new ToolAbility.ShredderAbility());
-	public static final Item schrabidium_axe = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.AXE, "schrabidium_axe")
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.setRarity(EnumRarity.RARE);
+	public static final Item schrabidium_axe = new ItemToolAbility(25, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.AXE, "schrabidium_axe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
-			.addBreakAbility(new ToolAbility.ShredderAbility());
-	public static final Item schrabidium_shovel = new ItemToolAbility(5, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SHOVEL, "schrabidium_shovel")
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.setRarity(EnumRarity.RARE);
+	public static final Item schrabidium_shovel = new ItemToolAbility(15, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SHOVEL, "schrabidium_shovel")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
-			.addBreakAbility(new ToolAbility.ShredderAbility());
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.setRarity(EnumRarity.RARE);
 	
 	public static final Item titanium_hoe = new ModHoe(MainRegistry.enumToolMaterialTitanium, "titanium_hoe").setMaxStackSize(1);
 	public static final Item titanium_sword = new ItemToolAbility(6.5F, -2.8F, 0, MainRegistry.enumToolMaterialTitanium, EnumToolType.SWORD, "titanium_sword").setMaxStackSize(1);
@@ -1195,6 +1200,29 @@ public class ModItems {
 	public static final Item plate_titanium = new ItemBase("plate_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_aluminium = new ItemBase("plate_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_schrabidium = new ItemRadioactive(7.5F, false, true, "plate_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	
+	//Crystals
+	public static final Item crystal_iron = new ItemBase("crystal_iron").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_gold = new ItemBase("crystal_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_redstone = new ItemBase("crystal_redstone").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_uranium = new ItemRadioactive(0.75F, "crystal_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_thorium = new ItemBase("crystal_thorium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_plutonium = new ItemRadioactive(3.0F, "crystal_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_titanium = new ItemBase("crystal_titanium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_sulfur = new ItemBase("crystal_sulfur").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_niter = new ItemBase("crystal_niter").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_copper = new ItemBase("crystal_copper").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_tungsten = new ItemBase("crystal_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_aluminium = new ItemBase("crystal_aluminium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_fluorite = new ItemBase("crystal_fluorite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_beryllium = new ItemBase("crystal_beryllium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_lead = new ItemBase("crystal_lead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_schrabidium = new ItemRadioactive(10F, false, true, "crystal_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_rare = new ItemBase("crystal_rare").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_phosphorus = new ItemRadioactive(0.0F, true, "crystal_phosphorus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_lithium = new ItemBase("crystal_lithium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_starmetal = new ItemBase("crystal_starmetal").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_trixite = new ItemRadioactive(10.0F, "crystal_trixite").setCreativeTab(MainRegistry.partsTab);
 	
 	//Circuits
 	public static final Item circuit_raw = new ItemBase("circuit_raw").setCreativeTab(MainRegistry.partsTab);
@@ -1300,6 +1328,7 @@ public class ModItems {
 	public static final Item assembly_desh = new ItemBase("assembly_desh").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_nopip = new ItemBase("assembly_nopip").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_smg = new ItemBase("assembly_smg").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_556 = new ItemBase("assembly_556").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_uzi = new ItemBase("assembly_uzi").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_actionexpress = new ItemBase("assembly_actionexpress").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_calamity = new ItemBase("assembly_calamity").setCreativeTab(MainRegistry.partsTab);
@@ -1315,7 +1344,7 @@ public class ModItems {
 	public static final Item gun_revolver_cursed_ammo = new ItemCustomLore("gun_revolver_cursed_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_pip_ammo = new ItemCustomLore("gun_revolver_pip_ammo").setCreativeTab(null);
 	public static final Item gun_revolver_nopip_ammo = new ItemBase("gun_revolver_nopip_ammo").setCreativeTab(null);
-	public static final Item gun_mp_ammo = new ItemCustomLore("gun_mp_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_566_gold = new ItemCustomLore("gun_mp_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_rpg_ammo = new ItemBase("gun_rpg_ammo").setCreativeTab(null);
 	public static final Item gun_spark_ammo = new ItemBase("gun_spark_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_euthanasia_ammo = new ItemBase("gun_euthanasia_ammo").setCreativeTab(MainRegistry.weaponTab);
@@ -1355,6 +1384,8 @@ public class ModItems {
 	public static final Item ammo_grenade_finned = new ItemAmmo("ammo_grenade_finned").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_grenade_sleek = new ItemAmmo("ammo_grenade_sleek").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_grenade_nuclear = new ItemAmmo("ammo_grenade_nuclear").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_grenade_tracer = new ItemAmmo("ammo_grenade_tracer").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_grenade_kampf = new ItemAmmo("ammo_grenade_kampf").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item ammo_fuel = new ItemAmmo("ammo_fuel").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_napalm = new ItemAmmo("ammo_fuel_napalm").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
@@ -1385,12 +1416,25 @@ public class ModItems {
 	public static final Item ammo_9mm_du = new ItemAmmo("ammo_9mm_du").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_9mm_rocket = new ItemAmmo("ammo_9mm_rocket").setCreativeTab(MainRegistry.weaponTab);
 	
+	public static final Item ammo_556 = new ItemAmmo("ammo_556").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_phosphorus = new ItemAmmo("ammo_556_phosphorus").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_ap = new ItemAmmo("ammo_556_ap").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_du = new ItemAmmo("ammo_556_du").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_star = new ItemAmmo("ammo_556_star").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_tracer = new ItemAmmo("ammo_556_tracer").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_flechette = new ItemAmmo("ammo_556_flechette").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_flechette_incendiary = new ItemAmmo("ammo_556_flechette_incendiary").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_flechette_phosphorus = new ItemAmmo("ammo_556_flechette_phosphorus").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_flechette_du = new ItemAmmo("ammo_556_flechette_du").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_556_k = new ItemAmmo("ammo_556_k").setCreativeTab(MainRegistry.weaponTab);
+	
 	public static final Item ammo_50bmg = new ItemAmmo("ammo_50bmg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg_incendiary = new ItemAmmo("ammo_50bmg_incendiary").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg_phosphorus = new ItemAmmo("ammo_50bmg_phosphorus").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg_explosive = new ItemAmmo("ammo_50bmg_explosive").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg_du = new ItemAmmo("ammo_50bmg_du").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_50bmg_star = new ItemAmmo("ammo_50bmg_star").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_50bmg_ap = new ItemAmmo("ammo_50bmg_ap").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item ammo_5mm = new ItemAmmo("ammo_5mm").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_5mm_explosive = new ItemAmmo("ammo_5mm_explosive").setCreativeTab(MainRegistry.weaponTab);

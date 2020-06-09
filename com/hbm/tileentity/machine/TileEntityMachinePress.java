@@ -2,8 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
@@ -88,7 +86,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			this.customName = nbt.getString("CustomName");
 		}
 		detectCustomName = customName == null ? "" : null;
-		detectItem = null;
 	}
 
 	@Override
@@ -248,15 +245,12 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	private int detectMaxBurn;
 	private boolean detectIsRetracting;
 	private String detectCustomName;
-	private ItemStack detectItem;
 
 	private void detectAndSendChanges() {
 
 		boolean mark = false;
-		boolean needsPressPacket = false;
 		if(detectProgress != progress) {
 			mark = true;
-			needsPressPacket = true;
 			detectProgress = progress;
 		}
 		if(detectPower != power) {
@@ -279,14 +273,9 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			mark = true;
 			detectCustomName = customName;
 		}
-		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)) {
-			detectItem = inventory.getStackInSlot(2).copy();
-			needsPressPacket = true;
-		}
 		if(mark)
 			markDirty();
-		if(needsPressPacket)
-			PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 	}
 
 }

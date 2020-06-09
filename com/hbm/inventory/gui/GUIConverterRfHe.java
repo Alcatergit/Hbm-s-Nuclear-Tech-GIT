@@ -8,7 +8,7 @@ import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIConverterRfHe extends GuiContainer {
@@ -17,7 +17,7 @@ public class GUIConverterRfHe extends GuiContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_rf_he_converter.png");
 	private TileEntityConverterRfHe diFurnace;
 
-	public GUIConverterRfHe(InventoryPlayer invPlayer, TileEntityConverterRfHe tedf) {
+	public GUIConverterRfHe(EntityPlayer invPlayer, TileEntityConverterRfHe tedf) {
 		super(new ContainerConverterRfHe(invPlayer, tedf));
 		diFurnace = tedf;
 		

@@ -6,12 +6,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.inventory.gui.GUIScreenBobmazon.FolderButton;
-import com.hbm.inventory.gui.GUIScreenBobmazon.Offer;
-import com.hbm.inventory.gui.GUIScreenBobmazon.Requirement;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.ItemBobmazonPacket;
 import com.hbm.packet.PacketDispatcher;
 

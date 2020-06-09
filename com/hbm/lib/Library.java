@@ -38,7 +38,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -62,6 +61,8 @@ public class Library {
 
 	static Random rand = new Random();
 	
+	//this is a list of UUIDs used for various things, primarily for accessories.
+	//for a comprehensive list, check RenderAccessoryUtility.java
 	public static String HbMinecraft = "192af5d7-ed0f-48d8-bd89-9d41af8524f8";
 	public static String TacoRedneck = "5aee1e3d-3767-4987-a222-e7ce1fbdf88e";
 	// Earl0fPudding
@@ -82,6 +83,8 @@ public class Library {
 	public static String Ducxkskiziko = "122fe98f-be19-49ca-a96b-d4dee4f0b22e";
 	public static String Drillgon = "41ebd03f-7a12-42f3-b037-0caa4d6f235b";
 
+	//the old list that allowed superuser mode for the ZOMG
+	//currently unused
 	public static List<String> superuser = new ArrayList<String>();
 
 	// Drillgon200: Not like super users are used for anything, but they could

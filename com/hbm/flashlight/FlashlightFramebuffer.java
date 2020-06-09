@@ -5,11 +5,8 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-
 import com.hbm.handler.HbmShaderManager;
 
 import net.minecraft.client.renderer.GlStateManager;
