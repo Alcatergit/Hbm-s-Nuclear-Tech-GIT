@@ -29,14 +29,13 @@ public class RenderAccessoryUtility {
 	private static ResourceLocation test = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeTest.png");
 	private static ResourceLocation swiggs = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeSweatySwiggs.png");
 	private static ResourceLocation wiki = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeWiki.png");
-	
-	
+
 	public static ResourceLocation getCloakFromPlayer(EntityPlayer player) {
-		
+
 		String uuid = player.getUniqueID().toString();
 		String name = player.getDisplayName().getUnformattedText();
 		if(uuid.equals(Library.HbMinecraft)) {
-			
+
 			if(MainRegistry.polaroidID == 11)
 				return hbm;
 			else
@@ -84,15 +83,20 @@ public class RenderAccessoryUtility {
 		if(name.startsWith("Player")) {
 			return test;
 		}
-		
+
 		return null;
 	}
-	
-	public static void loadCape(NetworkPlayerInfo info, ResourceLocation rl){
-		//Map<Type, ResourceLocation> playerTextures = ObfuscationReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures");
-		@SuppressWarnings("deprecation")
-		Map<Type, ResourceLocation> playerTextures = ReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures", "field_187107_a");
-		
-		playerTextures.put(Type.CAPE, rl);
+
+	public static void loadCape(NetworkPlayerInfo info, ResourceLocation rl) {
+		try {
+			// Map<Type, ResourceLocation> playerTextures =
+			// ObfuscationReflectionHelper.getPrivateValue(NetworkPlayerInfo.class,
+			// info, "playerTextures");
+			@SuppressWarnings("deprecation")
+			Map<Type, ResourceLocation> playerTextures = ReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, info, "playerTextures", "field_187107_a");
+
+			playerTextures.put(Type.CAPE, rl);
+		} catch(Exception x) {
+		}
 	}
 }

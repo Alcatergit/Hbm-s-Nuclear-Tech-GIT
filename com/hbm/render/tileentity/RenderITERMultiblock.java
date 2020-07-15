@@ -3,6 +3,7 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.render.RenderHelper;
 import com.hbm.render.util.IconUtil;
 import com.hbm.render.util.SmallBlockPronter;
 import com.hbm.tileentity.machine.TileEntityITERStruct;
@@ -24,13 +25,15 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
 	public void render(TileEntityITERStruct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef((float)x, (float)y, (float)z);
+		GL11.glTranslatef((float)x-1, (float)y, (float)z);
 
 		GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
 		GlStateManager.enableCull();
 		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
         GlStateManager.disableAlpha();
+        GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
 
 		/*GlStateManager.shadeModel(GL11.GL_SMOOTH);
@@ -61,10 +64,13 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
         
         TextureAtlasSprite magnet = RenderStructureMarker.fusion[0][1];
         TextureAtlasSprite solenoid = RenderStructureMarker.fusion[4][1];
-        TextureAtlasSprite motor = IconUtil.getTextureFromBlock(ModBlocks.fusion_motor);
+        TextureAtlasSprite motor = RenderStructureMarker.fusion[3][0];
         TextureAtlasSprite glass = IconUtil.getTextureFromBlock(ModBlocks.reinforced_glass);
         
         TextureAtlasSprite active = magnet;
+        
+        RenderHelper.bindBlockTexture();
+        RenderHelper.startDrawingTexturedQuads();
 
         int[][][] layout = TileEntityITERStruct.layout;
 
@@ -91,6 +97,8 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
 	        }
         }
 
+        RenderHelper.draw();
+        
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);

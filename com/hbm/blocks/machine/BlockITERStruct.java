@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
 
 public class BlockITERStruct extends BlockContainer {
@@ -23,9 +24,10 @@ public class BlockITERStruct extends BlockContainer {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityITERStruct();
 	}
-
+	
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
 	}
+
 }

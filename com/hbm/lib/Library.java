@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
@@ -37,6 +38,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -45,8 +47,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -363,6 +367,29 @@ public class Library {
 		Vec3d vec31 = player.getLook(f);
 		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
 		return player.world.rayTraceBlocks(vec3, vec32, false, false, true);
+	}
+	
+	public static RayTraceResult rayTraceIncludeEntities(EntityPlayer player, double d, float f) {
+		Vec3d vec3 = getPosition(f, player);
+		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
+		Vec3d vec31 = player.getLook(f);
+		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
+		
+		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, false, true);
+		
+		AxisAlignedBB box = new AxisAlignedBB(vec3, vec32).grow(1D);
+		List<Entity> ents = player.world.getEntitiesInAABBexcluding(player, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLiving));
+		for(Entity ent : ents){
+			RayTraceResult test = ent.getEntityBoundingBox().grow(0.3D).calculateIntercept(vec3, vec32);
+			if(test != null){
+				test.hitVec = new Vec3d(ent.posX, ent.posY + ent.getEyeHeight()/2, ent.posZ);
+				if(result == null || vec3.squareDistanceTo(result.hitVec) > vec3.squareDistanceTo(test.hitVec)){
+					result = test;
+				}
+			}
+		}
+		
+		return result;
 	}
 
 	public static Vec3d getPosition(float par1, EntityPlayer player) {

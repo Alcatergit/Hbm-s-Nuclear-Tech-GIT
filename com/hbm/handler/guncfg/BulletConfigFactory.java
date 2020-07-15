@@ -282,14 +282,14 @@ public class BulletConfigFactory {
 				if(Vec3.createVectorHelper(bullet.posX - bullet.shooter.posX, bullet.posY - bullet.shooter.posY, bullet.posZ - bullet.shooter.posZ).lengthVector() > 100)
 					return;
 
-				RayTraceResult mop = Library.rayTrace((EntityPlayer)bullet.shooter, 200, 1);
-
+				RayTraceResult mop = Library.rayTraceIncludeEntities((EntityPlayer)bullet.shooter, 200, 1);
+				
 				if(mop == null || mop.hitVec == null)
 					return;
 
 				Vec3 vec = Vec3.createVectorHelper(mop.hitVec.x - bullet.posX, mop.hitVec.y - bullet.posY, mop.hitVec.z - bullet.posZ);
 
-				if(vec.lengthVector() < 3)
+				if(vec.lengthVector() < 1)
 					return;
 
 				vec = vec.normalize();
