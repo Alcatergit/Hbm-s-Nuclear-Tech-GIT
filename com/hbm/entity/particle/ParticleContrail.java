@@ -66,12 +66,6 @@ public class ParticleContrail extends Particle {
 
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.depthMask(false);
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		
 		this.theRenderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		this.particleTexture = ModEventHandlerClient.contrail;
@@ -124,43 +118,6 @@ public class ParticleContrail extends Particle {
 			buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k).endVertex();
 		
 		}
-		GL11.glPolygonOffset(0.0F, 0.0F);
-		GlStateManager.enableLighting();
-		GL11.glPopAttrib();
-		GL11.glPopMatrix();
-		/*GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableLighting();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDepthMask(false);
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-		//Drillgon200: Not sure what this is in 1.12.2
-		//RenderHelper.disableStandardItemLighting();
-		
-		//Drillgon200: Entity id? Not sure what to put here, so I chose hash code
-		Random urandom = new Random(this.hashCode());
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		for(int i = 0; i < 6; i++) {
-			
-			
-			float mod = urandom.nextFloat() * 0.2F + 0.2F;
-			
-			int brightness = this.getBrightnessForRender(partialTicks);
-		    int j = brightness >> 16 & 65535;
-		    int k = brightness & 65535;
-			
-			float scale = particleAlpha + 0.5F * this.particleScale;
-		    float pX = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX) + urandom.nextGaussian() * 0.5);
-		    float pY = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY) + urandom.nextGaussian() * 0.5);
-		    float pZ = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ) + urandom.nextGaussian() * 0.5);
-		    
-			buffer.pos((float)(pX - rotationX * scale - rotationXY * scale), (float)(pY - rotationZ * scale), (float)(pZ - rotationYZ * scale - rotationXZ * scale)).tex(1, 1).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k);
-			buffer.pos((float)(pX - rotationX * scale + rotationXY * scale), (float)(pY + rotationZ * scale), (float)(pZ - rotationYZ * scale + rotationXZ * scale)).tex(1, 0).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k);
-			buffer.pos((float)(pX + rotationX * scale + rotationXY * scale), (float)(pY + rotationZ * scale), (float)(pZ + rotationYZ * scale + rotationXZ * scale)).tex(0, 0).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k);
-			buffer.pos((float)(pX + rotationX * scale - rotationXY * scale), (float)(pY - rotationZ * scale), (float)(pZ + rotationYZ * scale - rotationXZ * scale)).tex(0, 1).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k);
-		}
-		Tessellator.getInstance().draw();
-		GL11.glPolygonOffset(0.0F, 0.0F);
-		GlStateManager.enableLighting();*/
 	}
 
 	@Override

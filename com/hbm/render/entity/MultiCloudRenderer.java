@@ -11,6 +11,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -43,12 +45,11 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 		if (tex != null) {
 			GL11.glPushMatrix();
 			//GlStateManager.enableBlend();
-			GL11.glPushAttrib(GL11.GL_ALPHA_BITS | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_LIGHTING_BIT);
 			GlStateManager.disableLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+			GlStateManager.disableLighting();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GlStateManager.enableRescaleNormal();
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
 			GL11.glScalef(7.5F, 7.5F, 7.5F);
 			
@@ -80,8 +81,7 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 				GL11.glTranslatef((float) -dX, (float) -dY, (float) -dZ);
 			}
 			
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-			GL11.glPopAttrib();
+			GlStateManager.disableRescaleNormal();
 			GL11.glPopMatrix();
 		}
 	}

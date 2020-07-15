@@ -56,7 +56,8 @@
 	"music.transmission": {"category": "record", "sounds": [{"name": "hbm:music/recordglass", "stream": true}]},
 
 	"weapon.tauShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/tauShoot", "stream": false}]},
-	"weapon.tauChargeLoop2": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop2", "stream": true}]},
+	"weapon.tauChargeLoop": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop", "stream": true}]},
+    "weapon.tauChargeLoop2": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop2", "stream": true}]},
     "weapon.revolverShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/revolverShoot", "stream": false}]},
     "weapon.revolverShootAlt": {"category": "player", "sounds": [{"name": "hbm:weapon/revolverShootAlt", "stream": false}]},
 	"weapon.heavyShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/heavyShoot", "stream": false}]},
@@ -124,6 +125,9 @@
 	"weapon.bonk": {"category": "player", "sounds": [{"name": "hbm:weapon/bonk", "stream": false}]},
 	"weapon.glauncher": {"category": "player", "sounds": ["hbm:weapon/glauncher1", "hbm:weapon/glauncher2"]},
 	"weapon.hksShoot": {"category": "player", "sounds": ["hbm:weapon/hksShoot1", "hbm:weapon/hksShoot2", "hbm:weapon/hksShoot3"]},
+	"weapon.quadroReload": {"category": "player", "sounds": [{"name": "hbm:weapon/quadroReload", "stream": false}]},
+	"weapon.fstbmbStart": {"category": "player", "sounds": [{"name": "hbm:weapon/fstbmbStart", "stream": false}]},
+    "weapon.fstbmbPing": {"category": "player", "sounds": [{"name": "hbm:weapon/fstbmbPing", "stream": false}]},
 
     "weapon.reloadTurret": {"category": "player", "sounds": [{"name": "hbm:weapon/reloadTurret", "stream": false}]},
     "weapon.switchmode1": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode1", "stream": false}]},
@@ -183,5 +187,7 @@
     "block.buttonNo": {"category": "block", "sounds": [{"name": "hbm:block/buttonNo", "stream": false}]},
     "block.openDoor": {"category": "block", "sounds": ["hbm:block/door_open_1", "hbm:block/door_open_2"]},
 	"block.closeDoor": {"category": "block", "sounds": ["hbm:block/door_close_1", "hbm:block/door_close_2"]},
-	"block.soyuzReady": {"category": "block", "sounds": [{"name": "hbm:block/soyuzReady", "stream": false}]}
+	"block.soyuzReady": {"category": "block", "sounds": [{"name": "hbm:block/soyuzReady", "stream": false}]},
+	"block.screm": {"category": "block", "sounds": ["hbm:screm/scream1", "hbm:screm/scream01", "hbm:screm/scream2", "hbm:screm/scream02", "hbm:screm/scream3", "hbm:screm/scream03", "hbm:screm/scream4", "hbm:screm/scream04", "hbm:screm/scream5", "hbm:screm/scream05", "hbm:screm/scream6", "hbm:screm/scream06", "hbm:screm/scream7", "hbm:screm/scream07", "hbm:screm/scream08", "hbm:screm/scream09", "hbm:screm/scream10", "hbm:screm/scream11", "hbm:screm/scream12", "hbm:screm/scream13", "hbm:screm/scream14", "hbm:screm/scream15", "hbm:screm/scream16", "hbm:screm/scream17", "hbm:screm/scream18", "hbm:screm/scream19", "hbm:screm/scream20", "hbm:screm/scream21", "hbm:screm/scream22", "hbm:screm/scream23", "hbm:screm/scream24", "hbm:screm/scream25"]},
+	"item.upgradePlug": {"category": "player", "sounds": [{"name": "hbm:tool/upgradePlug", "stream": false}]}
 }

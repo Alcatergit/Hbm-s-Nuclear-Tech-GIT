@@ -17,9 +17,11 @@ import com.hbm.blocks.bomb.CompactLauncher;
 import com.hbm.blocks.bomb.CrystalPulsar;
 import com.hbm.blocks.bomb.CrystalVirus;
 import com.hbm.blocks.bomb.DetCord;
+import com.hbm.blocks.bomb.DetMiner;
 import com.hbm.blocks.bomb.Landmine;
 import com.hbm.blocks.bomb.LaunchPad;
 import com.hbm.blocks.bomb.LaunchTable;
+import com.hbm.blocks.bomb.NukeBalefire;
 import com.hbm.blocks.bomb.NukeBoy;
 import com.hbm.blocks.bomb.NukeCustom;
 import com.hbm.blocks.bomb.NukeFleija;
@@ -334,6 +336,9 @@ public class ModBlocks {
 	public static final Block nuke_n45 = new NukeN45(Material.IRON, "nuke_n45").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_n45 = 77;
 	
+	public static final int guiID_nuke_fstbmb = 97;
+	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, guiID_nuke_fstbmb, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
+	
 	public static final Block nuke_custom = new NukeCustom(Material.IRON, "nuke_custom").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_custom = 37;
 	
@@ -356,6 +361,7 @@ public class ModBlocks {
 	public static final Block det_cord = new DetCord(Material.IRON, "det_cord").setCreativeTab(MainRegistry.nukeTab).setHardness(0.1F).setResistance(0.0F);
 	public static final Block det_charge = new DetCord(Material.IRON, "det_charge").setCreativeTab(MainRegistry.nukeTab).setHardness(0.1F).setResistance(0.0F);
 	public static final Block det_nuke = new DetCord(Material.IRON, "det_nuke").setCreativeTab(MainRegistry.nukeTab).setHardness(0.1F).setResistance(0.0F);
+	public static final Block det_miner = new DetMiner(Material.IRON, "det_miner").setCreativeTab(MainRegistry.nukeTab).setHardness(0.1F).setResistance(0.0F);
 	public static final Block red_barrel = new RedBarrel(Material.IRON, "red_barrel").setCreativeTab(MainRegistry.nukeTab).setHardness(0.5F).setResistance(2.5F);
 	public static final Block pink_barrel = new RedBarrel(Material.IRON, "pink_barrel").setCreativeTab(MainRegistry.nukeTab).setHardness(0.5F).setResistance(2.5F);
 	public static final Block yellow_barrel = new YellowBarrel(Material.IRON, "yellow_barrel").setCreativeTab(MainRegistry.nukeTab).setHardness(0.5F).setResistance(2.5F);
@@ -551,6 +557,10 @@ public class ModBlocks {
 	public static final Block drill_pipe = new BlockNoDrop(Material.IRON, "drill_pipe").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final int guiID_machine_drill = 45;
 	
+	public static final Block machine_mining_laser = new MachineMiningLaser(Material.IRON, "machine_mining_laser").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block barricade = new BlockNoDrop(Material.SAND, "barricade").setHardness(1.0F).setResistance(2.5F).setCreativeTab(null);
+	public static final int guiID_mining_laser = 96;
+	
 	public static final Block machine_turbofan = new MachineTurbofan(Material.IRON, "machine_turbofan").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_turbofan = 52;
 	
@@ -592,6 +602,9 @@ public class ModBlocks {
 	public static final int guiID_electric_furnace = 16;
 	public static final int guiID_machine_arc = 82;
 	
+	public static final int guiID_microwave = 98;
+	public static final Block machine_microwave = new MachineMicrowave(Material.IRON, "machine_microwave").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	
 	public static final Block machine_cyclotron = new MachineCyclotron(Material.IRON, "machine_cyclotron").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_cyclotron = 41;
 	
@@ -611,6 +624,8 @@ public class ModBlocks {
 	public static final Block struct_scaffold = new BlockBase(Material.IRON, "struct_scaffold").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final Block struct_launcher_core = new BlockStruct(Material.IRON, "struct_launcher_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final Block struct_launcher_core_large = new BlockStruct(Material.IRON, "struct_launcher_core_large").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_soyuz_core = new BlockSoyuzStruct(Material.IRON, "struct_soyuz_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_iter_core = new BlockITERStruct(Material.IRON, "struct_iter_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	
 	public static final int guiID_factory_titanium = 24;
 	public static final Block factory_titanium_hull = new BlockBase(Material.IRON, "factory_titanium_hull").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -708,7 +723,7 @@ public class ModBlocks {
 	public static final Block chlorine_gas = new BlockClorine(Material.CLOTH, "chlorine_gas").setHardness(0.0F).setResistance(0.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	public static final Block railgun_plasma = new RailgunPlasma(Material.IRON, "railgun_plasma").setSoundType(SoundType.METAL).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.weaponTab);
-	public static final int guiID_railgun = 94;
+	public static final int guiID_railgun = 99;
 	
 	//Cables
 	public static final Block red_cable = new BlockCable(Material.IRON, "red_cable").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

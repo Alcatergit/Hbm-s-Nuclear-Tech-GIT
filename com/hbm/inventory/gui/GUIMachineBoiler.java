@@ -90,9 +90,10 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 		// System.out.println(diFurnace.tanks[0].getFluid());
 
 		// sizeX and sizeY doesn't do anything, no need for it.
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 96);
+		// ^ Out dated comment
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
 
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 96);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
 		// Minecraft.getMinecraft().getTextureManager().bindTexture(diFurnace.tanks[1].getSheet());
 		// diFurnace.tanks[1].renderTank(this, guiLeft + 134, guiTop + 69,
 		// diFurnace.tanks[1].getTankType().textureX() * FluidTank.x,

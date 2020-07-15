@@ -32,107 +32,109 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 		this.setSize(4, 20);
 		this.ignoreFrustumCheck = false;
 		this.isImmuneToFire = true;
-		
+
 	}
-@Override
-public AxisAlignedBB getRenderBoundingBox() {
-	return new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
-}
-@Override
-public boolean isInRangeToRender3d(double x, double y, double z) {
-	return true;
-}
-@Override
-public boolean isInRangeToRenderDist(double distance) {
-	return true;
-}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
+	}
+
+	@Override
+	public boolean isInRangeToRender3d(double x, double y, double z) {
+		return true;
+	}
+
+	@Override
+	public boolean isInRangeToRenderDist(double distance) {
+		return true;
+	}
+
 	public EntityFalloutRain(World p_i1582_1_, int maxAge) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.isImmuneToFire = true;
 	}
-	
-	
 
-    @Override
+	@Override
 	public void onUpdate() {
 
-        if(!world.isRemote) {
-        	MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        	for(int i = 0; i < MainRegistry.fSpeed; i++) {
-        		
-	        	Vec3 vec = Vec3.createVectorHelper(radProgress * 0.5, 0, 0);
-	        	double circum = radProgress * 2 * Math.PI * 2;
-	        	
-	        	///
-	        	if(circum == 0)
-	        		circum = 1;
-	        	///
-	        	
-	        	double part = 360D / circum;
-	        	
-	        	vec.rotateAroundY((float) (part * revProgress));
-	        	
-	        	int x = (int) (posX + vec.xCoord);
-	        	int z = (int) (posZ + vec.zCoord);
-	        	
-	        	//int y = world.getHeightValue(x, z) - 1;
-	        	
-	        	//if(world.getBlock(x, y, z) == Blocks.grass)
-	        	//	world.setBlock(x, y, z, ModBlocks.waste_earth);
-	        	
-	        	double dist = radProgress * 100 / getScale() * 0.5;
-	        	pos.setPos(x, 0, z);
-	        	stomp(pos, dist);
-	        	
-	        	revProgress++;
-	        	
-	        	if(revProgress > circum) {
-	        		revProgress = 0;
-	        		radProgress++;
-	        	}
-	        	
-	        	if(radProgress > getScale() * 2D) {
-	        		
-	        		this.setDead();
-	        	}
-        	}
-        	
-        	if(this.isDead) {
-        		if(MainRegistry.rain > 0 && getScale() > 150) {
-        			world.getWorldInfo().setRaining(true);
-    				world.getWorldInfo().setThundering(true);
-    				world.getWorldInfo().setRainTime(MainRegistry.rain);
-    				world.getWorldInfo().setThunderTime(MainRegistry.rain);
-    				AuxSavedData.setThunder(world, MainRegistry.rain);
-        		}
-        	}
-        }
-    }
-    
-    private void stomp(MutableBlockPos pos, double dist) {
-    	
-    	int depth = 0;
-    	
-    	for(int y = 255; y >= 0; y--) {
-    		pos.setY(y);
-    		IBlockState b =  world.getBlockState(pos);
-    		//int meta = world.getBlockMetadata(x, y, z);
-    		
-    		if(b.getMaterial() == Material.AIR)
-    			continue;
-    		
-    		if(b.getBlock().isFlammable(world, pos, EnumFacing.UP)) {
-    			if(rand.nextInt(5) == 0)
-    				world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
-    		}
-    		
-			if (b.getBlock() == Blocks.LEAVES || b.getBlock() == Blocks.LEAVES2) {
+		if(!world.isRemote) {
+			MutableBlockPos pos = new BlockPos.MutableBlockPos();
+			for(int i = 0; i < MainRegistry.fSpeed; i++) {
+
+				Vec3 vec = Vec3.createVectorHelper(radProgress * 0.5, 0, 0);
+				double circum = radProgress * 2 * Math.PI * 2;
+
+				///
+				if(circum == 0)
+					circum = 1;
+				///
+
+				double part = 360D / circum;
+
+				vec.rotateAroundY((float) (part * revProgress));
+
+				int x = (int) (posX + vec.xCoord);
+				int z = (int) (posZ + vec.zCoord);
+
+				// int y = world.getHeightValue(x, z) - 1;
+
+				// if(world.getBlock(x, y, z) == Blocks.grass)
+				// world.setBlock(x, y, z, ModBlocks.waste_earth);
+
+				double dist = radProgress * 100 / getScale() * 0.5;
+				pos.setPos(x, 0, z);
+				stomp(pos, dist);
+
+				revProgress++;
+
+				if(revProgress > circum) {
+					revProgress = 0;
+					radProgress++;
+				}
+
+				if(radProgress > getScale() * 2D) {
+
+					this.setDead();
+				}
+			}
+
+			if(this.isDead) {
+				if(MainRegistry.rain > 0 && getScale() > 150) {
+					world.getWorldInfo().setRaining(true);
+					world.getWorldInfo().setThundering(true);
+					world.getWorldInfo().setRainTime(MainRegistry.rain);
+					world.getWorldInfo().setThunderTime(MainRegistry.rain);
+					AuxSavedData.setThunder(world, MainRegistry.rain);
+				}
+			}
+		}
+	}
+
+	private void stomp(MutableBlockPos pos, double dist) {
+
+		int depth = 0;
+
+		for(int y = 255; y >= 0; y--) {
+			pos.setY(y);
+			IBlockState b = world.getBlockState(pos);
+			// int meta = world.getBlockMetadata(x, y, z);
+
+			if(b.getMaterial() == Material.AIR)
+				continue;
+
+			if(b.getBlock().isFlammable(world, pos, EnumFacing.UP)) {
+				if(rand.nextInt(5) == 0)
+					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
+			}
+
+			if(b.getBlock() == Blocks.LEAVES || b.getBlock() == Blocks.LEAVES2) {
 				world.setBlockToAir(pos);
 			}
-    		
+
 			else if(b.getBlock() == Blocks.STONE) {
-				
+
 				depth++;
 				if(dist < 5)
 					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
@@ -142,81 +144,81 @@ public boolean isInRangeToRenderDist(double distance) {
 					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
 				else
 					return;
-				
-    			if(depth > 2)
-    				return;
-			
-			}else if(b.getBlock() == Blocks.GRASS) {
-    			world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-    			return;
-    			
-    		} else if(b.getBlock() == Blocks.MYCELIUM) {
-    			world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
-    			return;
-    		} else if(b.getBlock() == Blocks.SAND) {
-    			
-    			if(rand.nextInt(60) == 0){
-    				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-    				world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
-    			}
-    			return;
-    		}
 
-			else if (b.getBlock() == Blocks.CLAY) {
+				if(depth > 2)
+					return;
+
+			} else if(b.getBlock() == Blocks.GRASS) {
+				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+				return;
+
+			} else if(b.getBlock() == Blocks.MYCELIUM) {
+				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+				return;
+			} else if(b.getBlock() == Blocks.SAND) {
+
+				if(rand.nextInt(60) == 0) {
+					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
+					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+				}
+				return;
+			}
+
+			else if(b.getBlock() == Blocks.CLAY) {
 				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
-    			return;
+				return;
 			}
 
-			else if (b.getBlock() == Blocks.MOSSY_COBBLESTONE) {
+			else if(b.getBlock() == Blocks.MOSSY_COBBLESTONE) {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
-    			return;
+				return;
 			}
 
-			else if (b.getBlock() == Blocks.COAL_ORE) {
+			else if(b.getBlock() == Blocks.COAL_ORE) {
 				int ra = rand.nextInt(150);
-				if (ra < 7) {
+				if(ra < 7) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
-				} else if (ra < 10) {
+				} else if(ra < 10) {
 					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 				}
-    			return;
+				return;
 			}
 
-			else if (b.getBlock() == Blocks.LOG || b.getBlock() == Blocks.LOG2) {
+			else if(b.getBlock() == Blocks.LOG || b.getBlock() == Blocks.LOG2) {
 				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 			}
 
-			else if (b.getBlock() == Blocks.BROWN_MUSHROOM_BLOCK || b.getBlock() == Blocks.RED_MUSHROOM_BLOCK) {
+			else if(b.getBlock() == Blocks.BROWN_MUSHROOM_BLOCK || b.getBlock() == Blocks.RED_MUSHROOM_BLOCK) {
 				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
-				if (meta == BlockHugeMushroom.EnumType.STEM) {
+				if(meta == BlockHugeMushroom.EnumType.STEM) {
 					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
 					world.setBlockToAir(pos);
 				}
 			}
-			
-			else if (b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
+
+			else if(b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (b.getBlock() == ModBlocks.ore_uranium) {
-				if (rand.nextInt(90) == 0)
+			else if(b.getBlock() == ModBlocks.ore_uranium) {
+				if(rand.nextInt(90) == 0)
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-    			return;
+				return;
 			}
 
-			else if (b.getBlock() == ModBlocks.ore_nether_uranium) {
-				if (rand.nextInt(90) == 0)
+			else if(b.getBlock() == ModBlocks.ore_nether_uranium) {
+				if(rand.nextInt(90) == 0)
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-    			return;
-    			
-    		//this piece stops the "stomp" from reaching below ground
+				return;
+
+				// this piece stops the "stomp" from reaching below ground
 			} else if(b.isNormalCube()) {
 
 				return;
 			}
-    	}
-    }
+		}
+	}
 
 	@Override
 	protected void entityInit() {
@@ -235,7 +237,7 @@ public boolean isInRangeToRenderDist(double distance) {
 		p_70014_1_.setInteger("scale", getScale());
 		p_70014_1_.setInteger("revProgress", revProgress);
 		p_70014_1_.setInteger("radProgress", radProgress);
-		
+
 	}
 
 	public void setScale(int i) {
@@ -245,7 +247,7 @@ public boolean isInRangeToRenderDist(double distance) {
 	public int getScale() {
 
 		int scale = this.dataManager.get(SCALE);
-		
+
 		return scale == 0 ? 1 : scale;
 	}
 }

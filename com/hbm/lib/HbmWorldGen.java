@@ -242,7 +242,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
 			
 			if (biome == Biomes.PLAINS || biome == Biomes.DESERT) {
-				if (rand.nextInt(MainRegistry.radioStructure) == 0) {
+				if (MainRegistry.radioStructure > 0 && rand.nextInt(MainRegistry.radioStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -254,7 +254,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			}
 			if (biome == Biomes.PLAINS || biome == Biomes.FOREST || biome == Biomes.DESERT
 					|| biome == Biomes.SWAMPLAND || biome == Biomes.EXTREME_HILLS) {
-				if (rand.nextInt(MainRegistry.antennaStructure) == 0) {
+				if (MainRegistry.antennaStructure > 0 && rand.nextInt(MainRegistry.antennaStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -266,7 +266,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			}
 			if (biome == Biomes.DESERT || biome == Biomes.BEACH || biome == Biomes.MESA
 					|| biome == Biomes.MESA_CLEAR_ROCK || biome == Biomes.MESA_ROCK) {
-				if (rand.nextInt(MainRegistry.atomStructure) == 0) {
+				if (MainRegistry.atomStructure > 0 && rand.nextInt(MainRegistry.atomStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -276,7 +276,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (rand.nextInt(MainRegistry.bunkerStructure) == 0) {
+			if (MainRegistry.bunkerStructure > 0 && rand.nextInt(MainRegistry.bunkerStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -284,7 +284,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new Bunker().generate(world, rand, new BlockPos(x, y, z));
 			}
 			if (biome == Biomes.PLAINS || biome == Biomes.DESERT) {
-				if (rand.nextInt(MainRegistry.relayStructure) == 0) {
+				if (MainRegistry.relayStructure > 0 && rand.nextInt(MainRegistry.relayStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -294,28 +294,28 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (rand.nextInt(MainRegistry.siloStructure) == 0) {
+			if (MainRegistry.siloStructure > 0 && rand.nextInt(MainRegistry.siloStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
 				new Silo().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (rand.nextInt(MainRegistry.factoryStructure) == 0) {
+			if (MainRegistry.factoryStructure > 0 && rand.nextInt(MainRegistry.factoryStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
 				new Factory().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (rand.nextInt(MainRegistry.dudStructure) == 0) {
+			if (MainRegistry.dudStructure > 0 && rand.nextInt(MainRegistry.dudStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
 				new Dud().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (biome == Biomes.DESERT && rand.nextInt(MainRegistry.barrelStructure) == 0) {
+			if (MainRegistry.barrelStructure > 0 &&  biome == Biomes.DESERT && rand.nextInt(MainRegistry.barrelStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -323,7 +323,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new Barrel().generate(world, rand, new BlockPos(x, y, z));
 			}
 			if (biome == Biomes.DESERT) {
-				if (rand.nextInt(MainRegistry.vertibirdStructure) == 0) {
+				if (MainRegistry.vertibirdStructure > 0 && rand.nextInt(MainRegistry.vertibirdStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -339,7 +339,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			if (biome == Biomes.PLAINS || biome == Biomes.DESERT) {
-				if (rand.nextInt(MainRegistry.satelliteStructure) == 0) {
+				if (MainRegistry.satelliteStructure > 0 && rand.nextInt(MainRegistry.satelliteStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
@@ -349,7 +349,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (rand.nextInt(MainRegistry.spaceshipStructure) == 0) {
+			if (MainRegistry.spaceshipStructure > 0 && rand.nextInt(MainRegistry.spaceshipStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -357,7 +357,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new Spaceship().generate(world, rand, new BlockPos(x, y, z));
 			}
 			
-			if (MainRegistry.enableRad && rand.nextInt(MainRegistry.radfreq) == 0 && biome == Biomes.DESERT) {
+			if (MainRegistry.radfreq > 0 && MainRegistry.enableRad && rand.nextInt(MainRegistry.radfreq) == 0 && biome == Biomes.DESERT) {
 
 				for (int a = 0; a < 1; a++) {
 					int x = i + rand.nextInt(16);
@@ -375,38 +375,38 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			
-			if (MainRegistry.enableMines && rand.nextInt(MainRegistry.minefreq) == 0) {
+			if (MainRegistry.minefreq > 0 && MainRegistry.enableMines && rand.nextInt(MainRegistry.minefreq) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
-				if (world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP)) {
-					world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.mine_ap.getDefaultState());
+				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)) {
+					world.setBlockState(new BlockPos(x, y, z), ModBlocks.mine_ap.getDefaultState());
 
 					if (MainRegistry.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned landmine at " + x + " " + (y + 1) + " " + z);
+						MainRegistry.logger.info("[Debug] Successfully spawned landmine at " + x + " " + y + " " + z);
 				}
 			}
-			if (rand.nextInt(MainRegistry.broadcaster) == 0) {
+			if (MainRegistry.broadcaster > 0 && rand.nextInt(MainRegistry.broadcaster) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
-				if (world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP)){
-					world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.broadcaster_pc.getDefaultState().withProperty(PinkCloudBroadcaster.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
+				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)){
+					world.setBlockState(new BlockPos(x, y, z), ModBlocks.broadcaster_pc.getDefaultState().withProperty(PinkCloudBroadcaster.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
 
 					if (MainRegistry.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at " + x + " " + (y + 1) + " " + z);
+						MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at " + x + " " + (y) + " " + z);
 				}
 			}
-			if (rand.nextInt(MainRegistry.dungeonStructure) == 0) {
+			if (MainRegistry.dungeonStructure > 0 && rand.nextInt(MainRegistry.dungeonStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int y = rand.nextInt(256);
 				int z = j + rand.nextInt(16);
 				new LibraryDungeon().generate(world, rand, new BlockPos(x, y, z));
 			}
 			
-			if (biome == Biomes.PLAINS && rand.nextInt(MainRegistry.geyserWater) == 0) {
+			if (MainRegistry.geyserWater > 0 && biome == Biomes.PLAINS && rand.nextInt(MainRegistry.geyserWater) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -414,7 +414,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.GRASS)
 					new Geyser().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (biome == Biomes.DESERT && rand.nextInt(MainRegistry.geyserChlorine) == 0) {
+			if (MainRegistry.geyserChlorine > 0 && biome == Biomes.DESERT && rand.nextInt(MainRegistry.geyserChlorine) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -422,7 +422,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.SAND)
 					new GeyserLarge().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (rand.nextInt(MainRegistry.geyserVapor) == 0) {
+			if (MainRegistry.geyserVapor > 0 && rand.nextInt(MainRegistry.geyserVapor) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -430,7 +430,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.STONE)
 					world.setBlockState(new BlockPos(x, y - 1, z), ModBlocks.geysir_vapor.getDefaultState());
 			}
-			if (biome == Biomes.BEACH && rand.nextInt(MainRegistry.capsuleStructure) == 0) {
+			if (MainRegistry.capsuleStructure > 0 && biome == Biomes.BEACH && rand.nextInt(MainRegistry.capsuleStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z) - 4;
@@ -464,48 +464,48 @@ public class HbmWorldGen implements IWorldGenerator {
 				if(MainRegistry.enableDebugMode && done)
 					MainRegistry.logger.info("[Debug] Successfully spawned pink tree at " + x + " " + z);
 			}
-			if (MainRegistry.enableVaults && rand.nextInt(MainRegistry.vaultfreq) == 0) {
+			if (MainRegistry.vaultfreq > 0 && MainRegistry.enableVaults && rand.nextInt(MainRegistry.vaultfreq) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
 
-				if (world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP)) {
-					world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
+				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)) {
+					world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
 
 					switch (rand.nextInt(10)) {
 					case 0:
 					case 1:
 					case 2:
 					case 3:
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setMod(1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).lock();
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
 						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(10),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z)), rand.nextInt(4) + 3);
+								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(4) + 3);
 						break;
 					case 4:
 					case 5:
 					case 6:
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setMod(0.1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).lock();
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
 						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(11),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z)), rand.nextInt(3) + 2);
+								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 2);
 						break;
 					case 7:
 					case 8:
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setMod(0.02);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).lock();
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.02);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
 						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(12),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z)), rand.nextInt(3) + 1);
+								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 1);
 						break;
 					case 9:
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).setMod(0.0);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z))).lock();
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.0);
+						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
 						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(13),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y + 1, z)), rand.nextInt(2) + 1);
+								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(2) + 1);
 						break;
 					}
 
@@ -513,7 +513,7 @@ public class HbmWorldGen implements IWorldGenerator {
 						MainRegistry.logger.info("[Debug] Successfully spawned safe at " + x + " " + (y + 1) + " " + z);
 				}
 				
-				if (rand.nextInt(MainRegistry.meteorStructure) == 0) {
+				if (MainRegistry.meteorStructure > 0 && rand.nextInt(MainRegistry.meteorStructure) == 0) {
 					int x1 = i + rand.nextInt(16);
 					int z1 = j + rand.nextInt(16);
 					

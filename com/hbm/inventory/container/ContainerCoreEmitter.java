@@ -47,11 +47,11 @@ public class ContainerCoreEmitter extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
-		PacketDispatcher.wrapper.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
+		PacketDispatcher.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+		PacketDispatcher.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
 		listener.sendWindowProperty(this, 3, nukeBoy.isOn ? 1 : 0);
-		PacketDispatcher.wrapper.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
+		PacketDispatcher.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
 	}
 	
 	int power;
@@ -69,20 +69,20 @@ public class ContainerCoreEmitter extends Container {
 			}
 		}
 		if(nukeBoy.power != power){
-			PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
+			PacketDispatcher.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
 			power = (int) nukeBoy.power;
 		}
 		if(nukeBoy.watts != watts){
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
 			watts = nukeBoy.watts;
 		}
 		if(nukeBoy.prev != prev){
-			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
+			PacketDispatcher.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
 			prev = (int) nukeBoy.prev;
 		}
 		if(!FFUtils.areTanksEqual(tank, nukeBoy.tank)){
 			tank = FFUtils.copyTank(nukeBoy.tank);
-			PacketDispatcher.wrapper.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
+			PacketDispatcher.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
 	}

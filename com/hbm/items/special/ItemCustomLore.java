@@ -30,6 +30,14 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.egg_balefire)
+		{
+			list.add("What kind of bird lays a radioactive egg?");
+		}
+		if(this == ModItems.ingot_schraranium)
+		{
+			list.add("Made from uranium in a schrabidium transmutator");
+		}
 		if(this == ModItems.ingot_fiberglass)
 		{
 			list.add("High in fiber, high in glass. Everything the body needs.");
@@ -398,144 +406,6 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.rod_quad_lithium) {
 			list.add("Turns into Quad Tritium Rod");
 		}
-		if(this == ModItems.upgrade_speed_1) {
-			list.add("Speed Upgrade");
-			list.add("Mining Drill:");
-			list.add("Delay -15 / Consumption +300");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Delay -25 / Consumption +300");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Delay -25 / Consumption +300");
-		}
-
-		if(this == ModItems.upgrade_speed_2) {
-			list.add("Speed Upgrade");
-			list.add("Mining Drill:");
-			list.add("Delay -30 / Consumption +600");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Delay -50 / Consumption +600");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Delay -50 / Consumption +600");
-		}
-
-		if(this == ModItems.upgrade_speed_3) {
-			list.add("Speed Upgrade");
-			list.add("Mining Drill:");
-			list.add("Delay -45 / Consumption +900");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Delay -75 / Consumption +900");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Delay -75 / Consumption +900");
-		}
-
-		if(this == ModItems.upgrade_effect_1) {
-			list.add("Effectiveness Upgrade");
-			list.add("Mining Drill:");
-			list.add("Radius +1 / Consumption +80");
-		}
-
-		if(this == ModItems.upgrade_effect_2) {
-			list.add("Effectiveness Upgrade");
-			list.add("Mining Drill:");
-			list.add("Radius +2 / Consumption +160");
-		}
-
-		if(this == ModItems.upgrade_effect_3) {
-			list.add("Effectiveness Upgrade");
-			list.add("Mining Drill:");
-			list.add("Radius +3 / Consumption +240");
-		}
-
-		if(this == ModItems.upgrade_power_1) {
-			list.add("Power Saving Upgrade");
-			list.add("Mining Drill:");
-			list.add("Consumption -30 / Delay +5");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Consumption -30 / Delay +5");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Consumption -30 / Delay +5");
-		}
-
-		if(this == ModItems.upgrade_power_2) {
-			list.add("Power Saving Upgrade");
-			list.add("Mining Drill:");
-			list.add("Consumption -60 / Delay +10");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Consumption -60 / Delay +10");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Consumption -60 / Delay +10");
-		}
-
-		if(this == ModItems.upgrade_power_3) {
-			list.add("Power Saving Upgrade");
-			list.add("Mining Drill:");
-			list.add("Consumption -90 / Delay +15");
-			list.add("");
-			list.add("Assembly Machine:");
-			list.add("Consumption -90 / Delay +15");
-			list.add("");
-			list.add("Chemical Plant:");
-			list.add("Consumption -90 / Delay +15");
-		}
-
-		if(this == ModItems.upgrade_fortune_1) {
-			list.add("Fortune Upgrade");
-			list.add("Mining Drill:");
-			list.add("Fortune +1 / Delay +15");
-		}
-
-		if(this == ModItems.upgrade_fortune_2) {
-			list.add("Fortune Upgrade");
-			list.add("Mining Drill:");
-			list.add("Fortune +2 / Delay +30");
-		}
-
-		if(this == ModItems.upgrade_fortune_3) {
-			list.add("Fortune Upgrade");
-			list.add("Mining Drill:");
-			list.add("Fortune +3 / Delay +45");
-		}
-
-		if(this == ModItems.upgrade_afterburn_1) {
-			list.add("Afterburner Upgrade");
-			list.add("Turbofan:");
-			list.add("Production x2 / Consumption x2.5");
-		}
-
-		if(this == ModItems.upgrade_afterburn_2) {
-			list.add("Afterburner Upgrade");
-			list.add("Turbofan:");
-			list.add("Production x3 / Consumption x5");
-		}
-
-		if(this == ModItems.upgrade_afterburn_3) {
-			list.add("Afterburner Upgrade");
-			list.add("Turbofan:");
-			list.add("Production x4 / Consumption x7.5");
-		}
-		if(this == ModItems.upgrade_radius) {
-			list.add("Forcefield Range Upgrade");
-			list.add("Radius +16 / Consumption +500");
-			list.add("");
-			list.add("Stacks to 16");
-		}
-
-		if(this == ModItems.upgrade_health) {
-			list.add("Forcefield Health Upgrade");
-			list.add("Max. Health +50 / Consumption +250");
-			list.add("");
-			list.add("Stacks to 16");
-		}
 		if(this == ModItems.ingot_combine_steel) {
 			/*list.add("\"I mean, it's a verb for crying out loud.");
 			list.add("The aliens aren't verbs. They're nouns!\"");
@@ -602,8 +472,10 @@ public class ItemCustomLore extends Item {
     			this == ModItems.rune_dagaz ||
     			this == ModItems.rune_hagalaz ||
     			this == ModItems.rune_jera ||
-    			this == ModItems.rune_thurisaz)
-    	{
+    			this == ModItems.rune_thurisaz ||
+    			this == ModItems.egg_balefire_shard ||
+    			this == ModItems.egg_balefire) 
+		{
     		return true;
     	}
 		return super.hasEffect(stack);

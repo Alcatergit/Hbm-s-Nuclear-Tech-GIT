@@ -140,6 +140,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent soyuzTakeOff;
 	public static SoundEvent chime;
 	public static SoundEvent deagleShoot;
+	public static SoundEvent tauChargeLoop;
 	public static SoundEvent tauChargeLoop2;
 	public static SoundEvent chopperFlyingLoop;
 	public static SoundEvent chopperCrashingLoop;
@@ -153,6 +154,11 @@ public final class HBMSoundHandler {
 	public static SoundEvent glauncher;
 	public static SoundEvent hksShoot;
 	public static SoundEvent vice;
+	public static SoundEvent screm;
+	public static SoundEvent upgradePlug;
+	public static SoundEvent quadroReload;
+	public static SoundEvent fstbmbStart;
+	public static SoundEvent fstbmbPing;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -328,6 +334,12 @@ public final class HBMSoundHandler {
 		glauncher = register("weapon.glauncher");
 		hksShoot = register("weapon.hksShoot");
 		vice = register("item.vice");
+		screm = register("block.screm");
+		upgradePlug = register("item.upgradePlug");
+		tauChargeLoop = register("weapon.tauChargeLoop");
+		quadroReload = register("weapon.quadroReload");
+		fstbmbStart = register("weapon.fstbmbStart");
+		fstbmbPing = register("weapon.fstbmbPing");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

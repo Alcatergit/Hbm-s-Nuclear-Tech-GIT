@@ -62,7 +62,7 @@ public class ItemSatInterface extends ItemSatChip {
     	Satellite sat = SatelliteSavedData.getData(world).getSatFromFreq(getFreq(stack));
     	
     	if(sat != null && entity.ticksExisted % 2 == 0) {
-    		PacketDispatcher.wrapper.sendTo(new SatPanelPacket(sat), (EntityPlayerMP) entity);
+    		PacketDispatcher.sendTo(new SatPanelPacket(sat), (EntityPlayerMP) entity);
     	}
 	}
 }

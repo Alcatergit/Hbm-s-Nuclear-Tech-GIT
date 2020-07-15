@@ -13,7 +13,7 @@ public class Face
     @SideOnly(Side.CLIENT)
     public void addFaceForRender(Tessellator tessellator)
     {
-        addFaceForRender(tessellator, 0.0005F);
+        addFaceForRender(tessellator, 0.0000F);
     }
 
     @SideOnly(Side.CLIENT)

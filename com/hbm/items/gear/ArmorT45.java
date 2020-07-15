@@ -11,6 +11,7 @@ import com.hbm.render.model.ModelT45Chest;
 import com.hbm.render.model.ModelT45Helmet;
 import com.hbm.render.model.ModelT45Legs;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -170,7 +171,7 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 			boolean b = true;
 			
 			if(player.inventory.hasItemStack(new ItemStack(ModItems.fusion_core_infinite))) {
-				armor.getTagCompound().setInteger("charge", (int)ItemBattery.getCharge(ItemBattery.getFullBattery(ModItems.fusion_core)));
+				armor.getTagCompound().setInteger("charge", (int)((IBatteryItem)ModItems.fusion_core).getMaxCharge());
 			}
 			
 			if(b)
@@ -178,9 +179,9 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 				for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if (stack != null && stack.getItem() == ModItems.fusion_core
-							&& ItemBattery.getCharge(stack) != 0) {
+							&& ((IBatteryItem)stack.getItem()).getCharge(stack) != 0) {
 						if (armor.getTagCompound().getInteger("charge") == 0) {
-							int j = (int) ItemBattery.getCharge(stack);
+							int j = (int) ((IBatteryItem)stack.getItem()).getCharge(stack);
 							armor.getTagCompound().setInteger("charge", j);
 							player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 							player.sendMessage(new TextComponentTranslation("[Power Armor recharged]"));

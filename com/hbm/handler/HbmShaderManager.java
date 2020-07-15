@@ -14,13 +14,16 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
+@Spaghetti("Oh god, 85% of this class is useless unused trash")
 public class HbmShaderManager {
 
 	private static float targetWidth;
@@ -50,6 +54,9 @@ public class HbmShaderManager {
 
 	public static final Uniform WORLD_TIME = Uniform.createUniform("worldTime", () -> {
 		return Minecraft.getMinecraft().world.getWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks();
+	});
+	public static final Uniform TIME = Uniform.createUniform("time", () -> {
+		return System.currentTimeMillis()/1000F;
 	});
 	public static final Uniform TARGET_WIDTH = Uniform.createUniform("targetWidth", () -> {
 		return targetWidth;
@@ -82,8 +89,11 @@ public class HbmShaderManager {
 	public static int deferredFlashlight;
 	
 	public static int dissolve;
+	public static int bfg_worm;
+	public static int bfg_beam;
 	
 	public static int noise1;
+	public static int noise2;
 
 	// public static FloatBuffer testBuf1;
 	// public static FloatBuffer testBuf2;
@@ -93,10 +103,10 @@ public class HbmShaderManager {
 	}
 
 	public static void renderGauss() {
-		// Drillgon200: I don't know why I have to do this but shaders only work
-		// if I do.
 		if(!MainRegistry.useShaders)
 			return;
+		// Drillgon200: I don't know why I have to do this but shaders only work
+		// if I do.
 		GlStateManager.disableBlend();
 
 		if(firstRun || Minecraft.getMinecraft().displayWidth != displayWidth || Minecraft.getMinecraft().displayHeight != displayHeight) {
@@ -252,6 +262,8 @@ public class HbmShaderManager {
 		}
 		if(MainRegistry.useShaders2){
 			dissolve = createShader("dissolve.frag", "dissolve.vert");
+			bfg_worm = createShader("bfg_worm.frag", "bfg_worm.vert");
+			bfg_beam = createShader("bfg_beam.frag", "bfg_worm.vert");
 			SimpleTexture tex = new SimpleTexture(new ResourceLocation(RefStrings.MODID, "textures/misc/perlin1.png"));
 			try {
 				tex.loadTexture(Minecraft.getMinecraft().getResourceManager());
@@ -259,6 +271,19 @@ public class HbmShaderManager {
 				e.printStackTrace();
 			}
 			noise1 = tex.getGlTextureId();
+			GlStateManager.bindTexture(noise1);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL14.GL_MIRRORED_REPEAT);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL14.GL_MIRRORED_REPEAT);
+			tex = new SimpleTexture(new ResourceLocation(RefStrings.MODID, "textures/misc/perlin2.png"));
+			try {
+				tex.loadTexture(Minecraft.getMinecraft().getResourceManager());
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			noise2 = tex.getGlTextureId();
+			GlStateManager.bindTexture(noise2);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL14.GL_MIRRORED_REPEAT);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL14.GL_MIRRORED_REPEAT);
 		}
 	}
 
@@ -382,6 +407,19 @@ public class HbmShaderManager {
 		GL20.glUniform1i(GL20.glGetUniformLocation(dissolve, "noise"), 2);
 		WORLD_TIME.assign(dissolve);
 		GL20.glUniform2f(GL20.glGetUniformLocation(dissolve, "noiseScroll"), 0.01F, 0.01F);
+	}
+	
+	public static void useWormShader(float offset){
+		useShader2(bfg_worm);
+		GL13.glActiveTexture(GL13.GL_TEXTURE2);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, noise1);
+		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, noise2);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL20.glUniform1i(GL20.glGetUniformLocation(bfg_worm, "noise"), 2);
+		GL20.glUniform1i(GL20.glGetUniformLocation(bfg_worm, "bigNoise"), 3);
+		float worldTime = Minecraft.getMinecraft().world.getWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks() + offset;
+		GL20.glUniform1f(GL20.glGetUniformLocation(bfg_worm, "worldTime"), worldTime/4);
 	}
 
 	public static void releaseShader() {

@@ -4,6 +4,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations;
+import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.model.ModelB92;
 import com.hbm.render.model.ModelB93;
 import com.hbm.render.model.ModelBoltAction;
@@ -12,6 +16,7 @@ import com.hbm.render.model.ModelLeverAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemRenderGunAnim2 extends TEISRBase {
@@ -34,6 +39,9 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 	
 	@Override
 	public void renderByItem(ItemStack item) {
+		
+		float lever = 0;
+		
 		if(item.getItem() == ModItems.gun_lever_action/* || item.getItem() == ModItems.gun_lever_action_sonata*/)
 			Minecraft.getMinecraft().renderEngine.bindTexture(leverActionLoc);
 		if(item.getItem() == ModItems.gun_lever_action_dark)
@@ -60,10 +68,20 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 				GL11.glRotated(25, 0, 0, 1);
 			}
 			
-			if(item.getItem() == ModItems.gun_lever_action)
-				leveraction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_lever_action_dark)
-				leveraction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			if(item.getItem() == ModItems.gun_lever_action || item.getItem() == ModItems.gun_lever_action_dark) {
+
+				double[] recoil = HbmAnimations.getRelevantTransformation("LEVER_RECOIL", type == TransformType.FIRST_PERSON_LEFT_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+				GL11.glTranslated(recoil[0], recoil[1] * 4, recoil[2]);
+				
+				GL11.glTranslatef(-1.5F, 0, 0);
+				double[] rotation = HbmAnimations.getRelevantTransformation("LEVER_ROTATE", type == TransformType.FIRST_PERSON_LEFT_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+				GL11.glRotated(rotation[2], 0.0, 0.0, 1.0);
+				lever = (float) Math.toRadians(rotation[2] * 2);
+				GL11.glTranslatef(1.5F, 0, 0);
+			}
+			
+			if(item.getItem() == ModItems.gun_lever_action || item.getItem() == ModItems.gun_lever_action_dark)
+				leveraction.renderAnim(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, lever);
 			if(item.getItem() == ModItems.gun_bolt_action)
 				boltaction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			if(item.getItem() == ModItems.gun_bolt_action_green)

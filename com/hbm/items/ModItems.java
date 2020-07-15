@@ -8,6 +8,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.items.ItemBlockScrap;
 import com.hbm.handler.ToolAbility;
+import com.hbm.handler.ToolAbility.LuckAbility;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.handler.guncfg.Gun12GaugeFactory;
 import com.hbm.handler.guncfg.Gun20GaugeFactory;
@@ -78,6 +79,7 @@ import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.items.machine.ItemLens;
+import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemReactorSensor;
 import com.hbm.items.machine.ItemSatChip;
 import com.hbm.items.machine.ItemTemplateFolder;
@@ -131,6 +133,8 @@ import com.hbm.items.tool.ItemOilDetector;
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.items.tool.ItemScrewdriver;
 import com.hbm.items.tool.ItemSurveyScanner;
+import com.hbm.items.tool.ItemSwordAbility;
+import com.hbm.items.tool.ItemSwordAbilityPower;
 import com.hbm.items.tool.ItemToolAbility;
 import com.hbm.items.tool.ItemToolAbility.EnumToolType;
 import com.hbm.items.tool.ItemToolAbilityPower;
@@ -248,32 +252,32 @@ public class ModItems {
 	public static final Item fusion_core = new ItemBattery(200000, 0, 25, "fusion_core").setMaxStackSize(1);
 	public static final Item energy_core = new ItemBattery(100000, 0, 10, "energy_core").setMaxStackSize(1);
 	public static final Item fusion_core_infinite = new ItemBase("fusion_core_infinite").setMaxStackSize(1);
-	public static final Item battery_generic = new ItemBattery(50, 1, 1, "battery_generic").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_advanced = new ItemBattery(200, 5, 5, "battery_advanced").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_lithium = new ItemBattery(2500, 10, 10, "battery_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_schrabidium = new ItemBattery(10000, 50, 50, "battery_schrabidium").setMaxStackSize(1);
-	public static final Item battery_spark = new ItemBattery(1000000, 20000, 20000, "battery_spark").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_generic = new ItemBattery(5000, 100, 100, "battery_generic").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced = new ItemBattery(20000, 500, 500, "battery_advanced").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium = new ItemBattery(250000, 1000, 1000, "battery_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium = new ItemBattery(1000000, 5000, 5000, "battery_schrabidium").setMaxStackSize(1);
+	public static final Item battery_spark = new ItemBattery(100000000, 2000000, 2000000, "battery_spark").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_creative = new ItemBattery(0, 0, 0, "battery_creative").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
-	public static final Item battery_red_cell = new ItemBattery(150, 1, 1, "battery_red_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_red_cell_6 = new ItemBattery(150 * 6, 1, 1, "battery_red_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_red_cell_24 = new ItemBattery(150 * 24, 1, 1, "battery_red_cell_24").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_advanced_cell = new ItemBattery(600, 5, 5, "battery_advanced_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_advanced_cell_4 = new ItemBattery(600 * 4, 5, 5, "battery_advanced_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_advanced_cell_12 = new ItemBattery(600 * 12, 5, 5, "battery_advanced_cell_12").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_lithium_cell = new ItemBattery(7500, 10, 10, "battery_lithium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_lithium_cell_3 = new ItemBattery(7500 * 3, 10, 10, "battery_lithium_cell_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_lithium_cell_6 = new ItemBattery(7500 * 6, 10, 10, "battery_lithium_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_schrabidium_cell = new ItemBattery(30000, 50, 50, "battery_schrabidium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_schrabidium_cell_2 = new ItemBattery(30000 * 2, 50, 50, "battery_schrabidium_cell_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_schrabidium_cell_4 = new ItemBattery(30000 * 4, 50, 50, "battery_schrabidium_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_6 = new ItemBattery(1000000 * 6, 20000, 20000, "battery_spark_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_25 = new ItemBattery(1000000 * 25, 20000, 20000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_100 = new ItemBattery(1000000L * 100L, 20000, 20000, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_1000 = new ItemBattery(1000000L * 1000L, 200000, 200000, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_2500 = new ItemBattery(1000000L * 2500L, 200000, 200000, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_10000 = new ItemBattery(1000000L * 10000L, 2000000, 2000000, "battery_spark_cell_10000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_power = new ItemBattery(1000000L * 1000000L, 2000000, 2000000, "battery_spark_cell_power").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_red_cell = new ItemBattery(15000, 100, 100, "battery_red_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_red_cell_6 = new ItemBattery(15000 * 6, 100, 100, "battery_red_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_red_cell_24 = new ItemBattery(15000 * 24, 100, 100, "battery_red_cell_24").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell = new ItemBattery(60000, 500, 500, "battery_advanced_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell_4 = new ItemBattery(60000 * 4, 500, 500, "battery_advanced_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_advanced_cell_12 = new ItemBattery(60000 * 12, 500, 500, "battery_advanced_cell_12").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell = new ItemBattery(750000, 1000, 1000, "battery_lithium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell_3 = new ItemBattery(750000 * 3, 1000, 1000, "battery_lithium_cell_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_lithium_cell_6 = new ItemBattery(750000 * 6, 1000, 1000, "battery_lithium_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell = new ItemBattery(3000000, 5000, 5000, "battery_schrabidium_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell_2 = new ItemBattery(3000000 * 2, 5000, 5000, "battery_schrabidium_cell_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_schrabidium_cell_4 = new ItemBattery(300000 * 4, 5000, 5000, "battery_schrabidium_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_6 = new ItemBattery(100000000 * 6, 2000000, 2000000, "battery_spark_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_25 = new ItemBattery(100000000 * 25, 2000000, 2000000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_100 = new ItemBattery(100000000L * 100L, 2000000, 2000000, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_1000 = new ItemBattery(100000000L * 1000L, 20000000, 20000000, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_2500 = new ItemBattery(100000000L * 2500L, 20000000, 20000000, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_10000 = new ItemBattery(100000000L * 10000L, 200000000, 200000000, "battery_spark_cell_10000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_power = new ItemBattery(100000000L * 1000000L, 200000000, 200000000, "battery_spark_cell_power").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
 	public static final Item battery_potato = new ItemBattery(1, 0, 1, "battery_potato").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_potatos = new ItemPotatos(50, 0, 1, "battery_potatos").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -408,6 +412,7 @@ public class ModItems {
 	public static final Item jackt2 = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt2").setMaxStackSize(1);
 	
 	public static final Item chainsaw = new ItemToolAbility(25, -2.8F, -0.05, MainRegistry.enumToolMaterialChainsaw, EnumToolType.AXE, "chainsaw")
+			.addBreakAbility(new ToolAbility.SilkAbility())
 			.addBreakAbility(new ToolAbility.RecursionAbility(5));
 	
 	public static final Item alloy_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_helmet").setMod(0.75F).setMaxStackSize(1);
@@ -534,6 +539,7 @@ public class ModItems {
 	public static final Item gun_rpg = new ItemGunBase(GunRocketFactory.getGustavConfig(), "gun_rpg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_karl = new ItemGunBase(GunRocketFactory.getKarlConfig(), "gun_karl").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_panzerschreck = new ItemGunBase(GunRocketFactory.getPanzConfig(), "gun_panzerschreck").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_quadro = new ItemGunBase(GunRocketFactory.getQuadroConfig(), "gun_quadro").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item gun_lever_action = new ItemGunBase(Gun20GaugeFactory.getMareConfig(), "gun_lever_action").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_lever_action_dark = new ItemGunBase(Gun20GaugeFactory.getMareDarkConfig(), "gun_lever_action_dark").setCreativeTab(MainRegistry.weaponTab);
@@ -572,6 +578,7 @@ public class ModItems {
 	
 	//Materials
 	public static final Item ingot_schrabidium = new ItemRadioactive(7.5F, false, true, "ingot_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_schraranium = new ItemRadioactive(2.5F, false, true, "ingot_schraranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_advanced_alloy = new ItemBase("ingot_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_steel = new ItemBase("ingot_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_titanium = new ItemBase("ingot_titanium").setCreativeTab(MainRegistry.partsTab);
@@ -636,7 +643,7 @@ public class ModItems {
 	public static final Item nugget_uranium_fuel = new ItemRadioactive(1F, "nugget_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_plutonium_fuel = new ItemRadioactive(1F, "nugget_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_mox_fuel = new ItemRadioactive(1F, "nugget_mox_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_schrabidium_fuel = new ItemRadioactive(7.5F, "nugget_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_schrabidium_fuel = new ItemRadioactive(1.5F, "nugget_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_thorium_fuel = new ItemRadioactive(0.025F, "nugget_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_hes = new ItemRadioactive(2.5F, false, true, "nugget_hes").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_les = new ItemRadioactive(0.5F, false, true, "nugget_les").setCreativeTab(MainRegistry.partsTab);
@@ -985,6 +992,8 @@ public class ModItems {
 	public static final Item tem_flakes1 = new ItemTemFlakes(0, 0, false, "tem_flakes1").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item tem_flakes2 = new ItemTemFlakes(0, 0, false, "tem_flakes2").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item glowing_stew = new ItemSoupBase(6, "glowing_stew").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item balefire_scrambled = new ItemSoupBase(6, "balefire_scrambled").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item balefire_and_ham = new ItemSoupBase(6, "balefire_and_ham").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item lemon = new ItemLemon(3, 5, false, "lemon").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item definitelyfood = new ItemLemon(2, 5, false, "definitelyfood").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item med_ipecac = new ItemLemon(0, 0, false, "med_ipecac").setCreativeTab(MainRegistry.consumableTab);
@@ -1040,7 +1049,7 @@ public class ModItems {
 	
 	//Tools
 	public static final Item alloy_hoe = new ModHoe(MainRegistry.enumToolMaterialAlloy, "alloy_hoe").setCreativeTab(CreativeTabs.TOOLS);
-	public static final Item alloy_sword = new ItemToolAbility(9F, -2.8F, 0, MainRegistry.enumToolMaterialAlloy, EnumToolType.SWORD, "alloy_sword")
+	public static final Item alloy_sword = new ItemSwordAbility(9F, 0, MainRegistry.enumToolMaterialAlloy, "alloy_sword")
 			.addHitAbility(new WeaponAbility.StunAbility(2));
 
 	public static final Item alloy_pickaxe = new ItemToolAbility(6F, -2.8F, 0, MainRegistry.enumToolMaterialAlloy, EnumToolType.PICKAXE, "alloy_pickaxe")
@@ -1053,102 +1062,134 @@ public class ModItems {
 			.addBreakAbility(new ToolAbility.RecursionAbility(3));
 	
 	public static final Item cmb_hoe = new ModHoe(MainRegistry.enumToolMaterialCmb, "cmb_hoe").setMaxStackSize(1);
-	public static final Item cmb_sword = new ItemToolAbility(50F, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.SWORD, "cmb_sword")
+	public static final Item cmb_sword = new ItemSwordAbility(50F, 0, MainRegistry.enumToolMaterialCmb, "cmb_sword")
 			.addHitAbility(new WeaponAbility.StunAbility(2))
 			.addHitAbility(new WeaponAbility.VampireAbility(2F));
 
 	public static final Item cmb_pickaxe = new ItemToolAbility(10, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.PICKAXE, "cmb_pickaxe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
-			.addBreakAbility(new ToolAbility.SmelterAbility());
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(3));
 
 	public static final Item cmb_axe = new ItemToolAbility(12.5F, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.AXE, "cmb_axe")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
-			.addBreakAbility(new ToolAbility.SmelterAbility());
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(3));
 
 	public static final Item cmb_shovel = new ItemToolAbility(8, -2.8F, 0, MainRegistry.enumToolMaterialCmb, EnumToolType.SHOVEL, "cmb_shovel")
 			.addBreakAbility(new ToolAbility.RecursionAbility(5))
-			.addBreakAbility(new ToolAbility.SmelterAbility());
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(3));
 	
 	public static final Item desh_hoe = new ModHoe(MainRegistry.enumToolMaterialDesh, "desh_hoe");
 	
-	public static final Item elec_sword = new ItemToolAbilityPower(15F, -2.8F, 0, MainRegistry.enumToolMaterialElec, EnumToolType.SWORD, 500000, 1000, 100, "elec_sword")
+	public static final Item elec_sword = new ItemSwordAbilityPower(15F, 0, MainRegistry.enumToolMaterialElec, 500000, 1000, 100, "elec_sword")
 			.addHitAbility(new WeaponAbility.StunAbility(5));
 
 	public static final Item elec_pickaxe = new ItemToolAbilityPower(10F, -2.8F, 0, MainRegistry.enumToolMaterialElec, EnumToolType.PICKAXE, 500000, 1000, 100, "elec_pickaxe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
-			.addBreakAbility(new ToolAbility.RecursionAbility(5));
+			.addBreakAbility(new ToolAbility.RecursionAbility(5))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 
 	public static final Item elec_axe = new ItemToolAbilityPower(12.5F, -2.8F, 0, MainRegistry.enumToolMaterialElec, EnumToolType.AXE, 500000, 1000, 100, "elec_axe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
-			.addBreakAbility(new ToolAbility.RecursionAbility(5));
+			.addBreakAbility(new ToolAbility.RecursionAbility(5))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 
 	public static final Item elec_shovel = new ItemToolAbilityPower(7.5F, -2.8F, 0, MainRegistry.enumToolMaterialElec, EnumToolType.SHOVEL, 500000, 1000, 100, "elec_shovel")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
-			.addBreakAbility(new ToolAbility.RecursionAbility(5));
+			.addBreakAbility(new ToolAbility.RecursionAbility(5))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 
-	public static final Item desh_sword = new ItemToolAbility(15F, -2.8F, 0, MainRegistry.enumToolMaterialDesh, EnumToolType.SWORD, "desh_sword")
+	public static final Item desh_sword = new ItemSwordAbility(15F, 0, MainRegistry.enumToolMaterialDesh, "desh_sword")
 			.addHitAbility(new WeaponAbility.StunAbility(2));
 
-	public static final Item desh_pickaxe = new ItemToolAbility(5F, -2.8F, 0, MainRegistry.enumToolMaterialDesh, EnumToolType.PICKAXE, "desh_pickaxe")
+	public static final Item desh_pickaxe = new ItemToolAbility(5F, -2.8F, -0.05, MainRegistry.enumToolMaterialDesh, EnumToolType.PICKAXE, "desh_pickaxe")
 			.addBreakAbility(new ToolAbility.HammerAbility(1))
-			.addBreakAbility(new ToolAbility.RecursionAbility(3));
+			.addBreakAbility(new ToolAbility.RecursionAbility(3))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 
-	public static final Item desh_axe = new ItemToolAbility(6.5F, -2.8F, 0, MainRegistry.enumToolMaterialDesh, EnumToolType.AXE, "desh_axe")
+	public static final Item desh_axe = new ItemToolAbility(6.5F, -2.8F, -0.05, MainRegistry.enumToolMaterialDesh, EnumToolType.AXE, "desh_axe")
 			.addBreakAbility(new ToolAbility.HammerAbility(1))
-			.addBreakAbility(new ToolAbility.RecursionAbility(3));
+			.addBreakAbility(new ToolAbility.RecursionAbility(3))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 
-	public static final Item desh_shovel = new ItemToolAbility(4F, -2.8F, 0, MainRegistry.enumToolMaterialDesh, EnumToolType.SHOVEL, "desh_shovel")
+	public static final Item desh_shovel = new ItemToolAbility(4F, -2.8F, -0.05, MainRegistry.enumToolMaterialDesh, EnumToolType.SHOVEL, "desh_shovel")
 			.addBreakAbility(new ToolAbility.HammerAbility(1))
-			.addBreakAbility(new ToolAbility.RecursionAbility(3));
+			.addBreakAbility(new ToolAbility.RecursionAbility(3))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(2));
 	
-	public static final Item cobalt_sword = new ItemToolAbility(12F, -2.8F, 0, MainRegistry.enumToolMaterialCobalt, EnumToolType.SWORD, "cobalt_sword");
+	public static final Item cobalt_sword = new ItemSwordAbility(12F, 0, MainRegistry.enumToolMaterialCobalt, "cobalt_sword");
 
 	public static final Item cobalt_pickaxe = new ItemToolAbility(4F, -2.8F, 0, MainRegistry.enumToolMaterialCobalt, EnumToolType.PICKAXE, "cobalt_pickaxe")
-			.addBreakAbility(new ToolAbility.RecursionAbility(4));
+			.addBreakAbility(new ToolAbility.RecursionAbility(4))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(1));
 
 	public static final Item cobalt_axe = new ItemToolAbility(6F, -2.8F, 0, MainRegistry.enumToolMaterialCobalt, EnumToolType.AXE, "cobalt_axe")
-			.addBreakAbility(new ToolAbility.RecursionAbility(4));
+			.addBreakAbility(new ToolAbility.RecursionAbility(4))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(1));
 
 	public static final Item cobalt_shovel = new ItemToolAbility(3.5F, -2.8F, 0, MainRegistry.enumToolMaterialCobalt, EnumToolType.SHOVEL, "cobalt_shovel")
-			.addBreakAbility(new ToolAbility.RecursionAbility(4));
+			.addBreakAbility(new ToolAbility.RecursionAbility(4))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(1));
 	
 	public static final Item cobalt_hoe = new ModHoe(MainRegistry.enumToolMaterialCobalt, "cobalt_hoe");
 	
 	public static final Item centri_stick = new ItemToolAbility(3F, -2.8F, 0, MainRegistry.enumToolMaterialElec, EnumToolType.MINER, "centri_stick")
 			.addBreakAbility(new ToolAbility.CentrifugeAbility()).setMaxDamage(50);
+	public static final Item smashing_hammer = new ItemToolAbility(12F, -2.8F, -0.1, MainRegistry.enumToolMaterialSteel, EnumToolType.MINER, "smashing_hammer")
+			.addBreakAbility(new ToolAbility.ShredderAbility()).setMaxDamage(2500);
 	
 	public static final Item schrabidium_hoe = new HoeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_hoe").setCreativeTab(CreativeTabs.TOOLS);
-	public static final Item schrabidium_sword = new ItemToolAbility(150, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SWORD, "schrabidium_sword")
+	public static final Item schrabidium_sword = new ItemSwordAbility(150, 0, MainRegistry.enumToolMaterialSchrabidium, "schrabidium_sword")
 			.addHitAbility(new WeaponAbility.RadiationAbility(50F))
 			.addHitAbility(new WeaponAbility.VampireAbility(2F))
 			.setRarity(EnumRarity.RARE);
 	public static final Item schrabidium_pickaxe = new ItemToolAbility(20, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.PICKAXE, "schrabidium_pickaxe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
 			.addBreakAbility(new ToolAbility.ShredderAbility())
 			.setRarity(EnumRarity.RARE);
 	public static final Item schrabidium_axe = new ItemToolAbility(25, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.AXE, "schrabidium_axe")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
 			.addBreakAbility(new ToolAbility.ShredderAbility())
 			.setRarity(EnumRarity.RARE);
 	public static final Item schrabidium_shovel = new ItemToolAbility(15, -2.8F, 0, MainRegistry.enumToolMaterialSchrabidium, EnumToolType.SHOVEL, "schrabidium_shovel")
 			.addBreakAbility(new ToolAbility.HammerAbility(2))
 			.addBreakAbility(new ToolAbility.RecursionAbility(10))
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new LuckAbility(5))
 			.addBreakAbility(new ToolAbility.SmelterAbility())
 			.addBreakAbility(new ToolAbility.ShredderAbility())
 			.setRarity(EnumRarity.RARE);
 	
 	public static final Item titanium_hoe = new ModHoe(MainRegistry.enumToolMaterialTitanium, "titanium_hoe").setMaxStackSize(1);
-	public static final Item titanium_sword = new ItemToolAbility(6.5F, -2.8F, 0, MainRegistry.enumToolMaterialTitanium, EnumToolType.SWORD, "titanium_sword").setMaxStackSize(1);
+	public static final Item titanium_sword = new ItemSwordAbility(6.5F, 0, MainRegistry.enumToolMaterialTitanium, "titanium_sword").setMaxStackSize(1);
 	public static final Item titanium_pickaxe = new ItemToolAbility(4.5F, -2.8F, 0, MainRegistry.enumToolMaterialTitanium, EnumToolType.PICKAXE, "titanium_pickaxe").setMaxStackSize(1);
 	public static final Item titanium_axe = new ItemToolAbility(5.5F, -2.8F, 0, MainRegistry.enumToolMaterialTitanium, EnumToolType.AXE, "titanium_axe").setMaxStackSize(1);
 	public static final Item titanium_shovel = new ItemToolAbility(3.5F, -2.8F, 0, MainRegistry.enumToolMaterialTitanium, EnumToolType.SHOVEL, "titanium_shovel").setMaxStackSize(1);
 	
 	public static final Item steel_hoe = new ModHoe(MainRegistry.enumToolMaterialSteel, "steel_hoe").setMaxStackSize(1);
-	public static final Item steel_sword = new ItemToolAbility(6F, -2.8F, 0, MainRegistry.enumToolMaterialSteel, EnumToolType.SWORD, "steel_sword").setMaxStackSize(1);
+	public static final Item steel_sword = new ItemSwordAbility(6F, 0, MainRegistry.enumToolMaterialSteel, "steel_sword").setMaxStackSize(1);
 	public static final Item steel_pickaxe = new ItemToolAbility(4F, -2.8F, 0, MainRegistry.enumToolMaterialSteel, EnumToolType.PICKAXE, "steel_pickaxe").setMaxStackSize(1);
 	public static final Item steel_axe = new ItemToolAbility(5F, -2.8F, 0, MainRegistry.enumToolMaterialSteel, EnumToolType.AXE, "steel_axe").setMaxStackSize(1);
 	public static final Item steel_shovel = new ItemToolAbility(3F, -2.8F, 0, MainRegistry.enumToolMaterialSteel, EnumToolType.SHOVEL, "steel_shovel").setMaxStackSize(1);
@@ -1205,6 +1246,7 @@ public class ModItems {
 	public static final Item crystal_iron = new ItemBase("crystal_iron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_gold = new ItemBase("crystal_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_redstone = new ItemBase("crystal_redstone").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_diamond = new ItemBase("crystal_diamond").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_uranium = new ItemRadioactive(0.75F, "crystal_uranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_thorium = new ItemBase("crystal_thorium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_plutonium = new ItemRadioactive(3.0F, "crystal_plutonium").setCreativeTab(MainRegistry.partsTab);
@@ -1216,6 +1258,7 @@ public class ModItems {
 	public static final Item crystal_aluminium = new ItemBase("crystal_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_fluorite = new ItemBase("crystal_fluorite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_beryllium = new ItemBase("crystal_beryllium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_schraranium = new ItemRadioactive(5F, false, true, "crystal_schraranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_lead = new ItemBase("crystal_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_schrabidium = new ItemRadioactive(10F, false, true, "crystal_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_rare = new ItemBase("crystal_rare").setCreativeTab(MainRegistry.partsTab);
@@ -1390,6 +1433,7 @@ public class ModItems {
 	public static final Item ammo_fuel = new ItemAmmo("ammo_fuel").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_napalm = new ItemAmmo("ammo_fuel_napalm").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_phosphorus = new ItemAmmo("ammo_fuel_phosphorus").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
+	public static final Item ammo_fuel_vaporizer = new ItemAmmo("ammo_fuel_vaporizer").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_gas = new ItemAmmo("ammo_fuel_gas").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	
 	public static final Item ammo_12gauge = new ItemAmmo("ammo_12gauge").setCreativeTab(MainRegistry.weaponTab);
@@ -1588,23 +1632,32 @@ public class ModItems {
 	
 	//Upgrade
 	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
-	public static final Item upgrade_speed_1 = new ItemCustomLore("upgrade_speed_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_speed_2 = new ItemCustomLore("upgrade_speed_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_speed_3 = new ItemCustomLore("upgrade_speed_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_effect_1 = new ItemCustomLore("upgrade_effect_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_effect_2 = new ItemCustomLore("upgrade_effect_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_effect_3 = new ItemCustomLore("upgrade_effect_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_power_1 = new ItemCustomLore("upgrade_power_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_power_2 = new ItemCustomLore("upgrade_power_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_power_3 = new ItemCustomLore("upgrade_power_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_fortune_1 = new ItemCustomLore("upgrade_fortune_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_fortune_2 = new ItemCustomLore("upgrade_fortune_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_fortune_3 = new ItemCustomLore("upgrade_fortune_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_afterburn_1 = new ItemCustomLore("upgrade_afterburn_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_afterburn_2 = new ItemCustomLore("upgrade_afterburn_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_afterburn_3 = new ItemCustomLore("upgrade_afterburn_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_radius = new ItemCustomLore("upgrade_radius").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_health = new ItemCustomLore("upgrade_health").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_speed_1 = new ItemMachineUpgrade("upgrade_speed_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_speed_2 = new ItemMachineUpgrade("upgrade_speed_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_speed_3 = new ItemMachineUpgrade("upgrade_speed_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_1 = new ItemMachineUpgrade("upgrade_effect_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_2 = new ItemMachineUpgrade("upgrade_effect_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_effect_3 = new ItemMachineUpgrade("upgrade_effect_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_1 = new ItemMachineUpgrade("upgrade_power_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_2 = new ItemMachineUpgrade("upgrade_power_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_power_3 = new ItemMachineUpgrade("upgrade_power_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_1 = new ItemMachineUpgrade("upgrade_fortune_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_2 = new ItemMachineUpgrade("upgrade_fortune_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_fortune_3 = new ItemMachineUpgrade("upgrade_fortune_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_1 = new ItemMachineUpgrade("upgrade_afterburn_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_2 = new ItemMachineUpgrade("upgrade_afterburn_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_afterburn_3 = new ItemMachineUpgrade("upgrade_afterburn_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_radius = new ItemMachineUpgrade("upgrade_radius").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_health = new ItemMachineUpgrade("upgrade_health").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_overdrive_1 = new ItemMachineUpgrade("upgrade_overdrive_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_overdrive_2 = new ItemMachineUpgrade("upgrade_overdrive_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_overdrive_3 = new ItemMachineUpgrade("upgrade_overdrive_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_smelter = new ItemMachineUpgrade("upgrade_smelter").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_shredder = new ItemMachineUpgrade("upgrade_shredder").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_centrifuge = new ItemMachineUpgrade("upgrade_centrifuge").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_crystallizer = new ItemMachineUpgrade("upgrade_crystallizer").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_nullifier = new ItemMachineUpgrade("upgrade_nullifier").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_screm = new ItemMachineUpgrade("upgrade_screm").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	//AMS
 	public static final Item ams_focus_blank = new ItemBase("ams_focus_blank").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -1653,6 +1706,9 @@ public class ModItems {
 	public static final Item solinium_propellant = new ItemSolinium(0F, false, "solinium_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item n2_charge = new ItemN2("n2_charge").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	
+	public static final Item egg_balefire_shard = new ItemRadioactive(1500F, true, "egg_balefire_shard").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item egg_balefire = new ItemRadioactive(10000F, true, "egg_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item custom_tnt = new ItemCustomLore("custom_tnt").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item custom_nuke = new ItemCustomLore("custom_nuke").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);

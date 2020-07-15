@@ -15,8 +15,6 @@ public class ContainerMachineSchrabidiumTransmutator extends Container {
 
 private TileEntityMachineSchrabidiumTransmutator nukeBoy;
 
-	private int progress;
-	
 	public ContainerMachineSchrabidiumTransmutator(InventoryPlayer invPlayer, TileEntityMachineSchrabidiumTransmutator tedf) {
 		
 		nukeBoy = tedf;
@@ -86,23 +84,6 @@ private TileEntityMachineSchrabidiumTransmutator nukeBoy;
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return nukeBoy.isUseableByPlayer(player);
-	}
-	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			
-			if(this.progress != this.nukeBoy.process)
-			{
-				par1.sendWindowProperty(this, 0, this.nukeBoy.process);
-			}
-		}
-		
-		this.progress = this.nukeBoy.process;
 	}
 	
 	@Override

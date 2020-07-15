@@ -46,6 +46,7 @@ public class ItemCell extends ItemRadioactive {
 	public ItemCell(String s) {
 		super(0.0F, s);
 		this.setMaxDamage(1000);
+		this.setContainerItem(this);
 	}
 
 	@Override
@@ -122,6 +123,7 @@ public class ItemCell extends ItemRadioactive {
 				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
 					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.aschrab, 1000), true);
 			}
+			Library.applyRadDirect(player, 50F);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;

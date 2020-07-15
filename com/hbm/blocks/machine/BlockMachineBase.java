@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 public class BlockMachineBase extends BlockContainer {
 
 	int guiID = -1;
-	boolean rotatable = false;
 	
 	public BlockMachineBase(Material materialIn, int guiID, String s) {
 		super(materialIn);
@@ -64,7 +63,7 @@ public class BlockMachineBase extends BlockContainer {
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(!rotatable)
+		if(!rotatable())
 			return;
 		worldIn.setBlockState(pos, state.withProperty(BlockHorizontal.FACING, placer.getHorizontalFacing().getOpposite()));
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
@@ -72,7 +71,7 @@ public class BlockMachineBase extends BlockContainer {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		if(rotatable){
+		if(rotatable()){
 			return new BlockStateContainer(this, new IProperty[]{BlockHorizontal.FACING});
 		}
 		return super.createBlockState();
@@ -80,14 +79,14 @@ public class BlockMachineBase extends BlockContainer {
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		if(!rotatable)
+		if(!rotatable())
 			return 0;
 		return ((EnumFacing)state.getValue(BlockHorizontal.FACING)).getIndex();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		if(!rotatable)
+		if(!rotatable())
 			return this.getDefaultState();
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
 
@@ -97,6 +96,10 @@ public class BlockMachineBase extends BlockContainer {
         }
 
         return this.getDefaultState().withProperty(BlockHorizontal.FACING, enumfacing);
+	}
+	
+	protected boolean rotatable(){
+		return false;
 	}
 	
 }

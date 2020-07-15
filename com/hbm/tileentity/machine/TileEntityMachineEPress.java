@@ -10,6 +10,7 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,7 +53,7 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 			public boolean isItemValid(int slot, ItemStack stack) {
 				if(stack.getItem() instanceof ItemBlades && slot == 1)
 					return true;
-				if(stack.getItem() instanceof ItemBattery && slot == 0)
+				if(stack.getItem() instanceof IBatteryItem && slot == 0)
 					return true;
 				return slot == 2;
 			}

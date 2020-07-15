@@ -28,9 +28,9 @@ public class ContainerMachineTeleporter extends Container {
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		if(diFurnace.target != null){
-			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
+			PacketDispatcher.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
 		} else {
-			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
+			PacketDispatcher.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
 		}
 	}
 	
@@ -51,9 +51,9 @@ public class ContainerMachineTeleporter extends Container {
 		if(this.detectTarget != this.diFurnace.target)
 		{
 			if(diFurnace.target != null){
-				PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
+				PacketDispatcher.sendTo(new AuxLongPacket(diFurnace.getPos(), diFurnace.target.toLong(), 0), player);
 			} else {
-				PacketDispatcher.wrapper.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
+				PacketDispatcher.sendTo(new AuxLongPacket(diFurnace.getPos(), 0, 0), player);
 			}
 		}
 		this.detectTarget = this.diFurnace.target;

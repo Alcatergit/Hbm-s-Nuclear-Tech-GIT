@@ -2,10 +2,10 @@ package com.hbm.explosion;
 
 import com.hbm.blocks.ModBlocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public class ExplosionBalefire {
@@ -83,7 +83,56 @@ public class ExplosionBalefire {
 		return this.n > this.nlimit;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void breakColumn(int x, int z)
+	{
+		int dist = (int) (radius - Math.sqrt(x * x + z * z));
+		
+		if (dist > 0) {
+			int pX = posX + x;
+			int pZ = posZ + z;
+			
+			int y  = worldObj.getHeight(pX, pZ);
+			int maxdepth = (int) (10 + radius * 0.25);
+			int depth = (int) ((maxdepth * dist / radius) + (Math.sin(dist * 0.15 + 2) * 2));//
+			
+			depth = Math.max(y - depth, 0);
+			
+			while(y > depth) {
+
+				Block b = worldObj.getBlockState(new BlockPos(pX, y, pZ)).getBlock();
+				
+				if(b == ModBlocks.block_schrabidium_cluster) {
+					
+					if(worldObj.rand.nextInt(10) == 0) {
+						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.balefire.getDefaultState());
+						worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
+					}
+					return;
+				}
+				
+				worldObj.setBlockToAir(new BlockPos(pX, y, pZ));
+				
+				y--;
+			}
+			
+			if(worldObj.rand.nextInt(10) == 0) {
+				worldObj.setBlockState(new BlockPos(pX, depth + 1, pZ), ModBlocks.balefire.getDefaultState());
+				
+				Block b = worldObj.getBlockState(new BlockPos(pX, y, pZ)).getBlock();
+				
+				if(b == ModBlocks.block_schrabidium_cluster)
+					worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
+			}
+
+			for(int i = depth; i > depth - 5; i--) {
+				if(worldObj.getBlockState(new BlockPos(pX, i, pZ)).getBlock() == Blocks.STONE)
+					worldObj.setBlockState(new BlockPos(pX, i, pZ), ModBlocks.sellafield_slaked.getDefaultState());
+			}
+		}
+	}
+	
+	/*private void breakColumn(int x, int z)
 	{
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int dist = this.radius2 - (x * x + z * z);
@@ -129,5 +178,5 @@ public class ExplosionBalefire {
 				y--;
 			}
 		}
-	}
+	}*/
 }

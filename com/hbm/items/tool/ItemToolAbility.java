@@ -10,6 +10,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.hbm.handler.ToolAbility;
+import com.hbm.handler.ToolAbility.SilkAbility;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
 
@@ -46,7 +47,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolAbility extends ItemTool {
+public class ItemToolAbility extends ItemTool implements IItemAbility {
 
 	private EnumToolType toolType;
 	private EnumRarity rarity = EnumRarity.COMMON;
@@ -60,9 +61,6 @@ public class ItemToolAbility extends ItemTool {
 	
 	public static enum EnumToolType {
 		
-		SWORD(
-				Sets.newHashSet(new Material[] { Material.PLANTS, Material.VINE, Material.CORAL, Material.LEAVES, Material.GOURD, Material.WEB })
-		),
 		PICKAXE(
 				Sets.newHashSet(new Material[] { Material.IRON, Material.ANVIL, Material.ROCK }),
 				Sets.newHashSet(Blocks.ACTIVATOR_RAIL, Blocks.COAL_ORE, Blocks.COBBLESTONE, Blocks.DETECTOR_RAIL, Blocks.DIAMOND_BLOCK, Blocks.DIAMOND_ORE, Blocks.DOUBLE_STONE_SLAB, Blocks.GOLDEN_RAIL, Blocks.GOLD_BLOCK, Blocks.GOLD_ORE, Blocks.ICE, Blocks.IRON_BLOCK, Blocks.IRON_ORE, Blocks.LAPIS_BLOCK, Blocks.LAPIS_ORE, Blocks.LIT_REDSTONE_ORE, Blocks.MOSSY_COBBLESTONE, Blocks.NETHERRACK, Blocks.PACKED_ICE, Blocks.RAIL, Blocks.REDSTONE_ORE, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_BUTTON, Blocks.STONE_PRESSURE_PLATE)
@@ -136,11 +134,6 @@ public class ItemToolAbility extends ItemTool {
 				ability.onHit(attacker.world, (EntityPlayer) attacker, target, this);
     		}
     	}
-    	
-    	if(this.toolType == EnumToolType.SWORD)
-    		stack.damageItem(1, attacker);
-    	else
-    		stack.damageItem(2, attacker);
         
         return true;
 	}
@@ -174,6 +167,9 @@ public class ItemToolAbility extends ItemTool {
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 		if(!canOperate(stack)) return false;
     	
+		if(this.getCurrentAbility(stack) instanceof SilkAbility)
+    		return true;
+		
     	return getDestroySpeed(stack, state) > 1;
 	}
 	
@@ -189,6 +185,7 @@ public class ItemToolAbility extends ItemTool {
 	
 	//that's slimelad's code
     //creative commons 3 and all that jazz
+	@Override
     public void breakExtraBlock(World world, int x, int y, int z, EntityPlayer playerEntity, int refX, int refY, int refZ, EnumHand hand) {
     	BlockPos pos = new BlockPos(x, y, z);
         if (world.isAirBlock(pos))
@@ -303,8 +300,6 @@ public class ItemToolAbility extends ItemTool {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
     	ItemStack stack = player.getHeldItem(hand);
-    	if(this.toolType == EnumToolType.SWORD)
-    		player.setActiveHand(hand);
     	
     	if(world.isRemote || this.breakAbility.size() < 2 || !canOperate(stack))
     		return super.onItemRightClick(world, player, hand);
@@ -330,22 +325,6 @@ public class ItemToolAbility extends ItemTool {
         world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.25F, getCurrentAbility(stack) == null ? 0.75F : 1.25F);
     	
     	return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-    }
-    
-    @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-    	if(this.toolType == EnumToolType.SWORD)
-    		return 72000;
-    	else
-    		return super.getMaxItemUseDuration(stack);
-    }
-    
-    @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-    	if(this.toolType == EnumToolType.SWORD)
-    		return EnumAction.BLOCK;
-    	else
-    		return super.getItemUseAction(stack);
     }
     
     private ToolAbility getCurrentAbility(ItemStack stack) {

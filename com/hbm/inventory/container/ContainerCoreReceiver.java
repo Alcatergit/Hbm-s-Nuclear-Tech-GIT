@@ -40,8 +40,8 @@ public class ContainerCoreReceiver extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		PacketDispatcher.wrapper.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
-		PacketDispatcher.wrapper.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
+		PacketDispatcher.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
+		PacketDispatcher.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
 	}
 
 	int joules;
@@ -51,11 +51,11 @@ public class ContainerCoreReceiver extends Container {
 	public void detectAndSendChanges() {
 		if(joules != te.syncJoules) {
 			joules = (int) te.syncJoules;
-			PacketDispatcher.wrapper.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
+			PacketDispatcher.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
 		}
 		if(!FFUtils.areTanksEqual(tank, te.tank)){
 			tank = FFUtils.copyTank(te.tank);
-			PacketDispatcher.wrapper.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
+			PacketDispatcher.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
 	}

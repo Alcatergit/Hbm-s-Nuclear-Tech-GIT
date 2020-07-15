@@ -85,6 +85,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 				starting = false;
 			} else if(countdown > 0) {
 				countdown--;
+				countdown = 0;
 				
 				if(countdown % 100 == 0 && countdown > 0)
 					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.alarmHatch, SoundCategory.BLOCKS, 100F, 1.1F);

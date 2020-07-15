@@ -5,12 +5,14 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.anim.HbmAnimations;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 
 public class ItemRenderWeaponObj extends TEISRBase {
 
@@ -66,15 +68,21 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(25, 0, 0, 1);
 					GL11.glRotated(185, 0, 1, 0);
 					GL11.glScaled(0.25, 0.25, 0.25);
+					double[] recoil = HbmAnimations.getRelevantTransformation("RECOIL", type == TransformType.FIRST_PERSON_LEFT_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+					GL11.glTranslated(recoil[0], recoil[1], recoil[2]);
 				}
 			} else {
 				if(item.getItem() == ModItems.gun_hk69) {
 					GL11.glTranslated(-1.0, 0.0, -0.2);
+					if(this.entity != null && entity.isSneaking()){
+						GL11.glTranslated(0.5, 0.2, 1.14);
+						GL11.glRotated(5, 0, 1, 0);
+					}
 					GL11.glRotated(-90, 0, 1, 0);
 					GL11.glRotated(-25, 1, 0, 0);
 					GL11.glRotated(-5, 0, 1, 0);
 				} else if(item.getItem() == ModItems.gun_supershotgun) {
-					/*GL11.glTranslated(0.8, -0.7, 0.6);
+					GL11.glTranslated(0, -7, -0.6);
 					if(this.entity != null && this.entity.isSneaking()){
 						GL11.glTranslated(0, 0.20, 0.43);
 						GL11.glRotated(-4, 1, 0, 0);
@@ -84,8 +92,9 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(4, 1, 0, 0);
 					GL11.glRotatef(-23F, 0.0F, 0.0F, 1.0F);
 					GL11.glRotatef(175F, 0.0F, 1.0F, 0.0F);
-					GL11.glScaled(1, 1.5, 1.5);*/
-					GL11.glTranslated(1.2, -0.75, 0.75);
+					GL11.glScaled(10, 10, 10);
+					GL11.glScaled(1, 1.5, 1.5);
+					/*GL11.glTranslated(1.5, -0.75, 0.75);
 					if(this.entity != null && this.entity.isSneaking()) {
 						GL11.glTranslated(0, 0.09, 0.28);
 						GL11.glRotated(-4, 1, 0, 0);
@@ -95,7 +104,7 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glRotated(4, 1, 0, 0);
 					GL11.glRotatef(-20F, 0.0F, 0.0F, 1.0F);
 					GL11.glRotatef(175F, 0.0F, 1.0F, 0.0F);
-					GL11.glScaled(1.5, 1.5, 1.5);
+					GL11.glScaled(1, 1.5, 1.5);*/
 				} else if(item.getItem() == ModItems.gun_deagle) {
 					GL11.glTranslated(0, 0, 0.2);
 					if(this.entity != null && this.entity.isSneaking()) {
@@ -123,9 +132,15 @@ public class ItemRenderWeaponObj extends TEISRBase {
 					GL11.glScaled(0.5, 0.5, 0.5);
 				} else if(item.getItem() == ModItems.gun_flechette) {
 					GL11.glTranslated(-0.5, -1, 0.3);
+					if(this.entity != null && entity.isSneaking()){
+						GL11.glTranslated(-0.8, 0.55, 0.7);
+						GL11.glRotated(6, 0, 1, 0);
+					}
 					GL11.glRotated(-25, 0, 0, 1);
 					GL11.glRotated(-5, 0, 1, 0);
 					GL11.glScaled(0.25, 0.25, 0.25);
+					double[] recoil = HbmAnimations.getRelevantTransformation("RECOIL", type == TransformType.FIRST_PERSON_LEFT_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
+					GL11.glTranslated(recoil[0], recoil[1], recoil[2]);
 				}
 			}
 			if(item.getItem() == ModItems.gun_supershotgun) {

@@ -1,6 +1,8 @@
 package com.hbm.blocks.test;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.entity.effect.EntityCloudTom;
+import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.block.BlockContainer;
@@ -10,16 +12,19 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TestObjTester extends BlockContainer {
+public class TestObjTester extends BlockContainer implements IBomb {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -39,6 +44,26 @@ public class TestObjTester extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
+		if(!worldIn.isRemote) {
+	    	EntityCloudTom tom = new EntityCloudTom(worldIn, 100);
+	    	tom.setPosition(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5);
+	    	worldIn.spawnEntity(tom);
+    	}
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(!world.isRemote) {
+
+    		/*world.setBlockToAir(pos);
+    		ExplosionNT ex = new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 5);
+    		ex.addAttrib(ExAttrib.ALLDROP);
+    		ex.doExplosionA();
+    		ex.doExplosionB(false);*/
+    	} else {
+    		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5));
+    	}
+		return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}
 	
 	@Override
@@ -79,6 +104,24 @@ public class TestObjTester extends BlockContainer {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	public void explode(World world, BlockPos pos) {
+		if(!world.isRemote) {
+    		/*world.setBlockToAir(pos);
+    		ExplosionNT ex = new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 5);
+    		ex.addAttrib(ExAttrib.ALLDROP);
+    		ex.doExplosionA();
+    		ex.doExplosionB(false);*/
+    	} else {
+    		TileEntity te = world.getTileEntity(pos);
+    		if(te instanceof TileEntityObjTester){
+    			((TileEntityObjTester)te).fireAge = 0;
+    		}
+    		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleLightning(world, pos.getX(), pos.getY()+40, pos.getZ()));
+    		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5 - 55));
+    	}
 	}
 	
 

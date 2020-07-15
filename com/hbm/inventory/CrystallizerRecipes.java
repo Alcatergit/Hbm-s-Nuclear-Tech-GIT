@@ -13,6 +13,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -28,6 +29,7 @@ public class CrystallizerRecipes {
 		recipes.put("oreIron", new ItemStack(ModItems.crystal_iron));
 		recipes.put("oreGold", new ItemStack(ModItems.crystal_gold));
 		recipes.put("oreRedstone", new ItemStack(ModItems.crystal_redstone));
+		recipes.put("oreDiamond", new ItemStack(ModItems.crystal_diamond));
 		recipes.put("oreUranium", new ItemStack(ModItems.crystal_uranium));
 		recipes.put("oreThorium", new ItemStack(ModItems.crystal_thorium));
 		recipes.put("orePlutonium", new ItemStack(ModItems.crystal_plutonium));
@@ -51,6 +53,11 @@ public class CrystallizerRecipes {
 		recipes.put(new ComparableStack(Blocks.COBBLESTONE), new ItemStack(ModBlocks.reinforced_stone));
 		recipes.put(new ComparableStack(ModBlocks.gravel_obsidian), new ItemStack(ModBlocks.brick_obsidian));
 		recipes.put("blockRedstone", new ItemStack(ModItems.nugget_mercury));
+		recipes.put(new ComparableStack(ModBlocks.gravel_diamond), new ItemStack(ModItems.crystal_diamond));
+		recipes.put(new ComparableStack(ModItems.powder_diamond), new ItemStack(Items.DIAMOND));
+		recipes.put(new ComparableStack(ModItems.powder_emerald), new ItemStack(Items.EMERALD));
+		recipes.put(new ComparableStack(ModItems.powder_lapis), new ItemStack(Items.DYE, 1, 4));
+		recipes.put(new ComparableStack(ModItems.ingot_schraranium), new ItemStack(ModItems.crystal_schraranium));
 	}
 
 	public static ItemStack getOutput(ItemStack stack) {

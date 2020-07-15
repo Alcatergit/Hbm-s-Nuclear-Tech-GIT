@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -33,26 +34,17 @@ public class RadiationCapability {
 
 		@Override
 		public void setRads(float rads) {
-			this.rads = rads;
-			if(this.rads < 0){
-				this.rads = 0;
-			}
+			this.rads = MathHelper.clamp(rads, 0, 2500);
 		}
 		
 		@Override
 		public void increaseRads(float rads){
-			this.rads = this.rads + rads;
-			if(this.rads < 0){
-				this.rads = 0;
-			}
+			this.rads = MathHelper.clamp(this.rads + rads, 0, 2500);
 		}
 		
 		@Override
 		public void decreaseRads(float rads){
-			this.rads = this.rads - rads;
-			if(this.rads < 0){
-				this.rads = 0;
-			}
+			this.rads = MathHelper.clamp(this.rads - rads, 0, 2500);
 		}
 		
 	}

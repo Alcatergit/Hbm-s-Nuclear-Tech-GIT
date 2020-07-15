@@ -28,8 +28,8 @@ public class ContainerConverterRfHe extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.storage.getEnergyStored(), 0), player);
-		PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.storage.getEnergyStored(), 0), player);
+		PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 	}
 
 	@Override
@@ -47,10 +47,10 @@ public class ContainerConverterRfHe extends Container {
 		super.detectAndSendChanges();
 
 		if(this.flux != this.diFurnace.storage.getEnergyStored()) {
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.storage.getEnergyStored(), 0), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.storage.getEnergyStored(), 0), player);
 		}
 		if(this.power != this.diFurnace.power) {
-			PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
+			PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 		}
 
 		this.flux = this.diFurnace.storage.getEnergyStored();

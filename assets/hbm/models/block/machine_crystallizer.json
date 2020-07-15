@@ -1,7 +1,6 @@
 {
-	"parent": "block/cube_column",
+	"parent": "block/cube_all",
 	"textures": {
-		"end": "hbm:blocks/machine_crystallizer_top",
-		"side": "hbm:blocks/machine_crystallizer_side"
+		"all": "hbm:blocks/machine_crystallizer"
 	}
 }

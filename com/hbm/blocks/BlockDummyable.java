@@ -55,7 +55,7 @@ public abstract class BlockDummyable extends BlockContainer {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if(world.isRemote)
+		if(world.isRemote || safeRem)
     		return;
     	
     	int metadata = state.getValue(META);
@@ -131,11 +131,14 @@ public abstract class BlockDummyable extends BlockContainer {
     	if(!(player instanceof EntityPlayer))
 			return;
 		
+    	world.setBlockToAir(pos);
+    	
 		EntityPlayer pl = (EntityPlayer) player;
 		EnumHand hand = pl.getHeldItemMainhand() == itemStack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 		
 		int i = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		int o = -getOffset();
+		pos = new BlockPos(pos.getX(), pos.getY() + getHeightOffset(), pos.getZ());
 		
 		ForgeDirection dir = ForgeDirection.NORTH;
 		
@@ -161,8 +164,6 @@ public abstract class BlockDummyable extends BlockContainer {
 		int z = pos.getZ();
 		
 		if(!checkRequirement(world, x, y, z, dir, o)) {
-			world.setBlockToAir(pos);
-			
 			if(!pl.capabilities.isCreativeMode) {
 				ItemStack stack = pl.inventory.mainInventory.get(pl.inventory.currentItem);
 				Item item = Item.getItemFromBlock(this);
@@ -181,8 +182,11 @@ public abstract class BlockDummyable extends BlockContainer {
 			return;
 		}
 		
-		world.setBlockState(new BlockPos(x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o), this.getDefaultState().withProperty(META, dir.ordinal() + offset), 3);
-		fillSpace(world, x, y, z, dir, o);
+		if(!world.isRemote){
+			world.setBlockState(new BlockPos(x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o), this.getDefaultState().withProperty(META, dir.ordinal() + offset), 3);
+			fillSpace(world, x, y, z, dir, o);
+		}
+		pos = new BlockPos(pos.getX(), pos.getY() - getHeightOffset(), pos.getZ());
 		world.scheduleUpdate(pos, this, 1);
 		world.scheduleUpdate(pos, this, 2);
 
@@ -290,5 +294,9 @@ public abstract class BlockDummyable extends BlockContainer {
 	
 	public abstract int[] getDimensions();
 	public abstract int getOffset();
+	
+	public int getHeightOffset() {
+		return 0;
+	}
 
 }

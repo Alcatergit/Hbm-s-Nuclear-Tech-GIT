@@ -256,4 +256,8 @@ public class Vec3
     public Vec3 interpolate(Vec3 other, double inter){
     	return Vec3.createVectorHelper(this.xCoord + (other.xCoord - this.xCoord)*inter, this.yCoord + (other.yCoord - this.yCoord)*inter, this.zCoord + (other.zCoord - this.zCoord)*inter);
     }
+    
+    public Vec3 mult(float mult){
+    	return Vec3.createVectorHelper(this.xCoord*mult, this.yCoord*mult, this.zCoord*mult);
+    }
 }

@@ -19,10 +19,12 @@ public class ContainerCompactLauncher extends Container {
 
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 36));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 26, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 116, 90));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 134, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 116, 90-18));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 134, 90-18));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 152, 90));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 116, 108));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 116, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 134, 90));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -49,13 +51,13 @@ public class ContainerCompactLauncher extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 			
-            if (par2 <= 1) {
-				if (!this.mergeItemStack(var5, 2, this.inventorySlots.size(), true))
+            if (par2 <= 7) {
+				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 1, false))
+			else if (!this.mergeItemStack(var5, 0, 8, false))
 				return ItemStack.EMPTY;
 			
 			if (var5.isEmpty())

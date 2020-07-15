@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hbm.potion.HbmPotion;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,13 +42,12 @@ public class HazmatRegistry {
 		return 0;
 	}
 	
-	public float getResistance(EntityPlayer player) {
-		
+	public float getResistance(EntityLivingBase player) {
 		float res = 0.0F;
 		
-		for(int i = 0; i < 4; i++) {
-			if(player.inventory.armorInventory.get(i) != ItemStack.EMPTY) {
-				res += getResistance(player.inventory.armorInventory.get(i));
+		for(ItemStack stack : player.getArmorInventoryList()) {
+			if(!stack.isEmpty()) {
+				res += getResistance(stack);
 			}
 		}
 		

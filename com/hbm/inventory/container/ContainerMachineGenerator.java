@@ -59,7 +59,7 @@ public class ContainerMachineGenerator extends Container {
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
 	}
 	
 
@@ -110,7 +110,7 @@ public class ContainerMachineGenerator extends Container {
 		
 		if(this.heat != this.diFurnace.heat)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 0), player);
 		}
 		
 		this.heat = this.diFurnace.heat;

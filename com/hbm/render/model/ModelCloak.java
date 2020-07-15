@@ -61,6 +61,8 @@ public class ModelCloak extends ModelBiped {
             f1 = f1 + MathHelper.sin((player.prevDistanceWalkedModified + (player.distanceWalkedModified - player.prevDistanceWalkedModified) * partialTicks) * 6.0F) * 32.0F * f4;
 
             if (player.isSneaking())
+            	
+            	
             {
                 f1 += 25.0F;
             }

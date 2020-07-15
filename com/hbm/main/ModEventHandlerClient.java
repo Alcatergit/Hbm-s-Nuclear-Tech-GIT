@@ -45,6 +45,9 @@ import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.particle.ParticleDSmokeFX;
 import com.hbm.render.FakeWorldRenderer;
+import com.hbm.render.RenderHelper;
+import com.hbm.render.anim.HbmAnimations;
+import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
@@ -70,6 +73,7 @@ import com.hbm.render.item.TEISRBase;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.tileentity.RenderMultiblock;
+import com.hbm.render.tileentity.RenderSoyuzMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.sound.MovingSoundChopper;
 import com.hbm.sound.MovingSoundChopperMine;
@@ -84,6 +88,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -91,6 +96,7 @@ import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -359,6 +365,7 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.gun_ks23, reg);
 		swapModels(ModItems.gun_flamer, reg);
 		swapModels(ModItems.gun_flechette, reg);
+		swapModels(ModItems.gun_quadro, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -500,10 +507,10 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"));
-		
+
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mercury_flowing"));
-		
+
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcar"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcarflipv"));
 
@@ -589,6 +596,9 @@ public class ModEventHandlerClient {
 		RenderMultiblock.structLauncher = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
 		RenderMultiblock.structScaffold = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
+		RenderSoyuzMultiblock.blockIcons[0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
+		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete_smooth");
+		RenderSoyuzMultiblock.blockIcons[2] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 	}
 
 	public static TextureAtlasSprite contrail;
@@ -638,7 +648,7 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void renderLast(TickEvent.RenderTickEvent evt) {
 		if(evt.phase == Phase.END) {
-
+			
 		}
 		if(evt.phase == Phase.START) {
 			if(MainRegistry.useShaders) {
@@ -795,6 +805,7 @@ public class ModEventHandlerClient {
 
 		EntityPlayer player = Minecraft.getMinecraft().player;
 
+		/// HANDLE GUN AND AMMO OVERLAYS ///
 		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
 			ItemGunBase gun = ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem());
@@ -857,6 +868,7 @@ public class ModEventHandlerClient {
 			}
 		}
 
+		/// HANDLE GEIGER COUNTER HUD ///
 		if(event.getType() == ElementType.HOTBAR) {
 			if(Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
 
@@ -869,6 +881,7 @@ public class ModEventHandlerClient {
 			}
 		}
 
+		/// HANDLE CUSTOM CROSSHAIRS ///
 		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) && MainRegistry.enableCrosshairs) {
 			event.setCanceled(true);
 			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
@@ -876,6 +889,21 @@ public class ModEventHandlerClient {
 			if(!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
 			}
+		}
+
+		/// HANLDE ANIMATION BUSES ///
+
+		for(int i = 0; i < HbmAnimations.hotbar.length; i++) {
+
+			Animation animation = HbmAnimations.hotbar[i];
+
+			if(animation == null)
+				continue;
+
+			long time = System.currentTimeMillis() - animation.startMillis;
+
+			if(time > animation.animation.getDuration())
+				HbmAnimations.hotbar[i] = null;
 		}
 	}
 

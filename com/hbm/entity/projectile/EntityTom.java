@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.entity.logic.EntityTomBlast;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
@@ -44,6 +45,10 @@ public class EntityTom extends EntityThrowable implements IConstantRenderer {
     			tom.posZ = posZ;
     			tom.destructionRange = 500;
     			world.spawnEntity(tom);
+    			
+    			EntityCloudTom cloud = new EntityCloudTom(world, 500);
+    			cloud.setLocationAndAngles(posX, posY, posZ, 0, 0);
+    			world.spawnEntity(cloud);
     		}
     		this.setDead();
         }

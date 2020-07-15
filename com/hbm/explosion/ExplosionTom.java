@@ -3,7 +3,6 @@ package com.hbm.explosion;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public class ExplosionTom
@@ -81,7 +80,6 @@ public class ExplosionTom
 
 	private void breakColumn(int x, int z)
 	{
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int dist = this.radius2 - (x * x + z * z);
 		
 		if (dist > 0)
@@ -92,7 +90,7 @@ public class ExplosionTom
 			int y = 256;
 			
 			for(int i = 256; i > 0; i--) {
-				if(worldObj.getBlockState(pos.setPos(pX, i, pZ)).getBlock() != Blocks.AIR) {
+				if(worldObj.getBlockState(new BlockPos(pX, i, pZ)).getBlock() != Blocks.AIR) {
 					y = i;
 					break;
 				}

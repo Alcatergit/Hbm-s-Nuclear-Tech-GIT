@@ -45,6 +45,7 @@ public class BeamPronter {
 		if(beam == EnumBeamType.SOLID) {
 			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
+			GlStateManager.depthMask(false);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		}
         
@@ -137,6 +138,7 @@ public class BeamPronter {
 		
 		if(beam == EnumBeamType.SOLID) {
 			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
 		}
 		

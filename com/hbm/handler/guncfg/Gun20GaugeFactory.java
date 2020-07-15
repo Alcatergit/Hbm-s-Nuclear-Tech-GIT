@@ -7,6 +7,10 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.init.MobEffects;
@@ -14,18 +18,14 @@ import net.minecraft.potion.PotionEffect;
 
 public class Gun20GaugeFactory {
 
-public static GunConfiguration getShotgunConfig() {
+	public static GunConfiguration getShotgunConfig() {
 		
 		GunConfiguration config = new GunConfiguration();
 		
-		config.rateOfFire = 10;
+		config.rateOfFire = 25;
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.reloadDuration = 10;
 		config.firingDuration = 0;
 		config.ammoCap = 6;
@@ -33,6 +33,21 @@ public static GunConfiguration getShotgunConfig() {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCLE;
 		config.reloadSound = GunConfiguration.RSOUND_SHOTGUN;
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("LEVER_ROTATE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 45, 500))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500))
+						)
+				.addBus("LEVER_RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0.5, 0, 0, 50))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 50))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 150))
+						.addKeyframe(new BusAnimationKeyframe(0, -0.5, 0, 500))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500))
+						)
+				);
 		
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.G20_NORMAL);

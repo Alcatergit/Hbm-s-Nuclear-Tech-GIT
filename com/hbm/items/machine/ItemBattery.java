@@ -6,6 +6,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -13,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class ItemBattery extends Item {
+public class ItemBattery extends Item implements IBatteryItem {
 
 	private long maxCharge;
 	private long chargeRate;
@@ -26,7 +27,6 @@ public class ItemBattery extends Item {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
-		this.setMaxDamage(100);
 		ModItems.ALL_ITEMS.add(this);
 	}
 	
@@ -37,7 +37,7 @@ public class ItemBattery extends Item {
 			return;
 		long charge = maxCharge;
 		if(stack.hasTagCompound())
-			charge = ItemBattery.getCharge(stack);
+			charge = getCharge(stack);
 		
 		
 		if(stack.getItem() != ModItems.fusion_core && 
@@ -50,14 +50,14 @@ public class ItemBattery extends Item {
 				stack.getItem() != ModItems.dynosphere_dineutronium)
 				
 		{
-			list.add("Energy stored: " + Library.getShortNumber(charge * 100) + "/" + Library.getShortNumber(maxCharge * 100) + "HE");
+			list.add("Energy stored: " + Library.getShortNumber(charge) + "/" + Library.getShortNumber(maxCharge) + "HE");
 		} else {
-			String charge1 = Library.getShortNumber((charge  * 100) / this.maxCharge);
+			String charge1 = Library.getShortNumber((charge * 100) / this.maxCharge);
 			list.add("Charge: " + charge1 + "%");
-			list.add("(" + Library.getShortNumber(charge * 100) + "/" + Library.getShortNumber(maxCharge * 100) + "HE)");
+			list.add("(" + Library.getShortNumber(charge) + "/" + Library.getShortNumber(maxCharge) + "HE)");
 		}
-		list.add("Charge rate: " + Library.getShortNumber(chargeRate * 100) + "HE/t");
-		list.add("Discharge rate: " + Library.getShortNumber(dischargeRate * 100) + "HE/t");
+		list.add("Charge rate: " + Library.getShortNumber(chargeRate) + "HE/t");
+		list.add("Discharge rate: " + Library.getShortNumber(dischargeRate) + "HE/t");
 	}
 	
 	@Override
@@ -123,7 +123,7 @@ public class ItemBattery extends Item {
     	}
     }
     
-    public static long getCharge(ItemStack stack) {
+    public long getCharge(ItemStack stack) {
     	if(stack.getItem() == ModItems.battery_creative)
 			return Long.MAX_VALUE;
     	if(stack.getItem() instanceof ItemBattery) {
@@ -151,10 +151,6 @@ public class ItemBattery extends Item {
     	return dischargeRate;
     }
     
-    public static long getMaxChargeStatic(ItemStack stack) {
-    	return ((ItemBattery)stack.getItem()).maxCharge;
-    }
-    
     public static ItemStack getEmptyBattery(Item item) {
     	
     	if(item instanceof ItemBattery) {
@@ -173,21 +169,23 @@ public class ItemBattery extends Item {
     	if(item instanceof ItemBattery) {
     		ItemStack stack = new ItemStack(item);
     		stack.setTagCompound(new NBTTagCompound());;
-    		stack.getTagCompound().setLong("charge", getMaxChargeStatic(stack));
+    		stack.getTagCompound().setLong("charge", ((ItemBattery)item).getMaxCharge());
     		return stack.copy();
     	}
     	
     	return null;
     }
 	
-	public static void updateDamage(ItemStack stack) {
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
 		if(stack.getItem() == ModItems.battery_creative)
-			return;
-		if(!stack.hasTagCompound()) {
-			stack = getFullBattery(stack.getItem()).copy();
-		}
-
-		stack.setItemDamage(100 - (int)((double)getCharge(stack) / (double)getMaxChargeStatic(stack) * 100D));
+			return false;
+		return true;
+	}
+	
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack) {
+		return 1D - (double)getCharge(stack) / (double)getMaxCharge();
 	}
 	
 }

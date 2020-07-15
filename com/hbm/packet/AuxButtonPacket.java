@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.machine.TileEntityBarrel;
@@ -9,6 +10,7 @@ import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
+import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -216,6 +218,16 @@ public class AuxButtonPacket implements IMessage {
 							bat.redHigh = (short) ((bat.redHigh + 1) % 4);
 							bat.markDirty();
 						}
+					}
+					if (te instanceof TileEntityMachineMiningLaser) {
+						TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser)te;
+
+						laser.isOn = !laser.isOn;
+					}
+					/// yes ///
+					if(te instanceof TileEntityMachineBase) {
+						TileEntityMachineBase base = (TileEntityMachineBase)te;
+						base.handleButtonPacket(m.value, m.id);
 					}
 					
 				//} catch (Exception x) { }

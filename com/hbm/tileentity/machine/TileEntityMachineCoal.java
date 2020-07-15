@@ -15,6 +15,7 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -66,7 +67,7 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 				if(slot == 0)
 					return isValidFluid(FluidUtil.getFluidContained(stack));
 				if(slot == 2)
-					if(stack.getItem() instanceof ItemBattery)
+					if(stack.getItem() instanceof IBatteryItem)
 						return true;
 				if(slot == 1)
 					if(TileEntityFurnace.getItemBurnTime(stack) > 0)

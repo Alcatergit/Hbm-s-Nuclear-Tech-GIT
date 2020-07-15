@@ -19,6 +19,7 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -89,7 +90,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 					if(FFUtils.containsFluid(itemStack, ModForgeFluids.coolant))
 						return true;
 				if(i == 11)
-					if(itemStack.getItem() instanceof ItemBattery)
+					if(itemStack.getItem() instanceof IBatteryItem)
 						return true;
 				return false;
 			}

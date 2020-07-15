@@ -6,11 +6,13 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
+import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +21,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class BulletConfigFactory {
@@ -46,7 +49,7 @@ public class BulletConfigFactory {
 		bullet.HBRC = 2;
 		bullet.LBRC = 90;
 		bullet.bounceMod = 0.8;
-		bullet.doesPenetrate = true;
+		bullet.doesPenetrate = false;
 		bullet.doesBreakGlass = true;
 		bullet.style = 0;
 		bullet.plink = 1;
@@ -264,5 +267,42 @@ public class BulletConfigFactory {
 		};
 		
 		return impact;
+	}
+	
+	public static IBulletUpdateBehavior getLaserSteering() {
+
+		IBulletUpdateBehavior onUpdate = new IBulletUpdateBehavior() {
+
+			@Override
+			public void behaveUpdate(EntityBulletBase bullet) {
+
+				if(bullet.shooter == null || !(bullet.shooter instanceof EntityPlayer))
+					return;
+				
+				if(Vec3.createVectorHelper(bullet.posX - bullet.shooter.posX, bullet.posY - bullet.shooter.posY, bullet.posZ - bullet.shooter.posZ).lengthVector() > 100)
+					return;
+
+				RayTraceResult mop = Library.rayTrace((EntityPlayer)bullet.shooter, 200, 1);
+
+				if(mop == null || mop.hitVec == null)
+					return;
+
+				Vec3 vec = Vec3.createVectorHelper(mop.hitVec.x - bullet.posX, mop.hitVec.y - bullet.posY, mop.hitVec.z - bullet.posZ);
+
+				if(vec.lengthVector() < 3)
+					return;
+
+				vec = vec.normalize();
+
+				double speed = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).lengthVector();
+
+				bullet.motionX = vec.xCoord * speed;
+				bullet.motionY = vec.yCoord * speed;
+				bullet.motionZ = vec.zCoord * speed;
+			}
+
+		};
+
+		return onUpdate;
 	}
 }

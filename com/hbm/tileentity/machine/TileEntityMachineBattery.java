@@ -10,6 +10,7 @@ import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -109,11 +110,11 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		switch(i)
 		{
 		case 0:
-			if(stack.getItem() instanceof ItemBattery)
+			if(stack.getItem() instanceof IBatteryItem)
 				return true;
 			break;
 		case 1:
-			if(stack.getItem() instanceof ItemBattery)
+			if(stack.getItem() instanceof IBatteryItem)
 				return true;
 			break;
 		}
@@ -129,11 +130,12 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
 		
-		if(itemStack.getItem() instanceof ItemBattery) {
-			if(i == 0 && ItemBattery.getCharge(itemStack) == 0) {
+		if(itemStack.getItem() instanceof IBatteryItem) {
+			IBatteryItem item = ((IBatteryItem)itemStack.getItem());
+			if(i == 0 && item.getCharge(itemStack) == 0) {
 				return true;
 			}
-			if(i == 1 && ItemBattery.getCharge(itemStack) == ItemBattery.getMaxChargeStatic(itemStack)) {
+			if(i == 1 && item.getCharge(itemStack) == item.getMaxCharge()) {
 				return true;
 			}
 		}

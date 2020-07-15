@@ -12,6 +12,10 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,10 +32,6 @@ public class Gun556mmFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.hasSights = false;
 		config.reloadDuration = 20;
 		config.firingDuration = 0;
@@ -70,10 +70,6 @@ public class Gun556mmFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.hasSights = true;
 		config.reloadDuration = 25;
 		config.firingDuration = 0;
@@ -85,6 +81,13 @@ public class Gun556mmFactory {
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
 		config.firingSound = HBMSoundHandler.hksShoot;
 		config.reloadSoundEnd = false;
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0.5, 0, 0, 25))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 75))
+						)
+				);
 
 		config.name = "H&R SPIW";
 		config.manufacturer = "Harrington & Richardson";
@@ -111,10 +114,6 @@ public class Gun556mmFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.hasSights = true;
 		config.reloadDuration = 40;
 		config.firingDuration = 0;

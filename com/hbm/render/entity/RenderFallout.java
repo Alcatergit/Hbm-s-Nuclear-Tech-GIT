@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.lib.RefStrings;
+import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,8 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -61,10 +64,10 @@ public class RenderFallout extends Render<EntityFalloutRain> {
     @Override
     public void doRender(EntityFalloutRain entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_CURRENT_BIT | GL11.GL_LIGHTING_BIT);
         GlStateManager.disableCull();
         //Drillgon200: It doesn't work when I use GLStateManager...
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.resetColor();
         
         GlStateManager.disableLighting();
         Entity ent = this.mc.getRenderViewEntity();
@@ -85,7 +88,6 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             lastTime = time;
         }
         GlStateManager.enableCull();
-        GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
    
@@ -125,11 +127,11 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             int l2 = MathHelper.floor(entitylivingbase.posY);
             int i3 = MathHelper.floor(entitylivingbase.posZ);
             Tessellator tessellator = Tessellator.getInstance();
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-            GL11.glEnable(GL11.GL_BLEND);
-            OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+            GlStateManager.disableCull();
+            GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
             double d0 = entitylivingbase.lastTickPosX
                     + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * p_78474_1_;
             double d1 = entitylivingbase.lastTickPosY
@@ -151,6 +153,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             }
  
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderHelper.resetColor();
             for (int l = i3 - b0; l <= i3 + b0; ++l) {
                 for (int i1 = k2 - b0; i1 <= k2 + b0; ++i1) {
                     int j1 = (l - i3 + 16) * 32 + i1 - k2 + 16;
@@ -267,9 +270,9 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                 // System.out.println("Fired!");
             }
  
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glDisable(GL11.GL_BLEND);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+            GlStateManager.enableCull();
+            GlStateManager.disableBlend();
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
             // this.disableLightmap((double)p_78474_1_);
         }
     }

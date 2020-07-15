@@ -9,7 +9,7 @@ Tired of waiting until the next version comes out? Here is a tutorial on how to 
 1. Download the forge 1.12.2 latest mdk and put it in a new folder
 2. Extract the mdk
 3. Go into the extracted folder (you should see some gradle files) and open the terminal of your choice (terminal, cmd, powershell). On windows you can do this by shift right clicking in the folder and clicking either 'Open powershell window here' or a similar option for cmd
-4. Download the zip file of this reop and extract it somewhere
+4. Download the zip file of this repo and extract it somewhere
 5. Copy the com, cofh, and glmath folders to src/main/java (delete the example mod first). Copy assets, META_INF, hbm_at.cfg, mcmod.info, and pack.mcmeta to src/main/resources
 6. Edit build.gradle, change `modid` to `hbm` and `com.yourname.modid` to `com.hbm`.
 7. Scroll down in the build.gradle until you see the dependencies section, then paste this at the bottom of it
@@ -50,7 +50,7 @@ If you want to do some changes in the code yourself, start here after 6. and con
 3) Save changes, close the IDE and continue with 7. of the previous list
 
 
-This software is licensed under the GNU Public Livense version 3. In short: This software is free, you may run the software freely, create modified versions, distribute this software and distribute modified versions, as long as the modified software too has a free software license. You win this round, Stallman.
+This software is licensed under the GNU Public License version 3. In short: This software is free, you may run the software freely, create modified versions, distribute this software and distribute modified versions, as long as the modified software too has a free software license. You win this round, Stallman.
 
 TERMS AND CONDITIONS
 0. Definitions.

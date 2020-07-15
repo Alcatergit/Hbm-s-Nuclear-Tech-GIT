@@ -38,7 +38,7 @@ public class ItemCladding extends Item {
 
 			for(ItemStack armor : player.inventory.armorInventory) {
 
-				if(armor != null && HazmatRegistry.instance.getCladding(armor) == 0) {
+				if(armor != null && HazmatRegistry.instance.getCladding(armor) < rad) {
 
 					if(!armor.hasTagCompound())
 						armor.setTagCompound(new NBTTagCompound());

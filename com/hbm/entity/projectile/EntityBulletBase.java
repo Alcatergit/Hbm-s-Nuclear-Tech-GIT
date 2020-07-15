@@ -62,7 +62,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	Field lastDamage = null;
 
 	private BulletConfiguration config;
-	private EntityLivingBase shooter;
+	public EntityLivingBase shooter;
 	public float overrideDamage;
 
 	public EntityBulletBase(World world) {
@@ -379,6 +379,10 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			this.posZ += this.motionZ * this.config.velocity;
 			this.setPosition(this.posX, this.posY, this.posZ);
 		}
+		
+		/// SPECIAL UPDATE BEHAVIOR ///
+        if(this.config.bUpdate != null)
+        	this.config.bUpdate.behaveUpdate(this);
 
 		if (this.config.style == BulletConfiguration.STYLE_ROCKET && !world.isRemote)
 			this.world.spawnEntity(new EntityTSmokeFX(world, this.posX, this.posY, this.posZ, 0, 0, 0));
@@ -406,16 +410,16 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			this.setDead();
 
 		if(world.isRemote && !config.vPFX.isEmpty()) {
-			double motion = Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector();
+			double motion = Math.min(Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector(), 0.1);
 
-			for (i = 0; i < motion * 3; ++i) {
+			for (double d = 0; d < 1; d += 1 / motion) {
 
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setString("type", "vanillaExt");
 				nbt.setString("mode", config.vPFX);
-				nbt.setDouble("posX", this.posX - this.motionX * i / 1.0D);
-				nbt.setDouble("posY", this.posY - this.motionY * i / 1.0D);
-				nbt.setDouble("posZ", this.posZ - this.motionZ * i / 1.0D);
+				nbt.setDouble("posX", (this.lastTickPosX - this.posX) * d + this.posX);
+				nbt.setDouble("posY", (this.lastTickPosY - this.posY) * d + this.posY);
+				nbt.setDouble("posZ", (this.lastTickPosZ - this.posZ) * d + this.posZ);
 				MainRegistry.proxy.effectNT(nbt);
 			}
 		}

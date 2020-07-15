@@ -244,8 +244,10 @@ public class TileEntityMachineOilWell extends TileEntity implements ITickable, I
 	}
 
 	public boolean isOre(IBlockState b) {
-
-		int[] ids = OreDictionary.getOreIDs(new ItemStack(b.getBlock(), 1, b.getBlock().getMetaFromState(b)));
+		ItemStack stack = new ItemStack(b.getBlock(), 1, b.getBlock().getMetaFromState(b));
+		if(stack.isEmpty())
+			return false;
+		int[] ids = OreDictionary.getOreIDs(stack);
 
 		for(int i = 0; i < ids.length; i++) {
 

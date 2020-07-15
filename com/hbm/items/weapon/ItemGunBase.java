@@ -14,8 +14,10 @@ import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -24,6 +26,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,6 +44,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	public GunConfiguration mainConfig;
 	public GunConfiguration altConfig;
 
+	// Drillgon200: Wait this doesn't make any sense, there's only one mouse 1 and 2. What was I thinking???
 	// Drillgon200: true if mouse 1 has been pressed for the right hand
 	@SideOnly(Side.CLIENT)
 	public boolean m1r;// = false;
@@ -64,13 +68,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	public ItemGunBase(GunConfiguration config, GunConfiguration alt, String s) {
-		mainConfig = config;
+		this(config, s);
 		altConfig = alt;
-		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-
-		ModItems.ALL_ITEMS.add(this);
 	}
 
 	@Override
@@ -280,6 +279,9 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 		EntityBulletBase bullet = new EntityBulletBase(world, config, player, hand);
 		world.spawnEntity(bullet);
+		
+		if(this.mainConfig.animations.containsKey(AnimType.CYCLE) && player instanceof EntityPlayerMP)
+			PacketDispatcher.wrapper.sendTo(new GunAnimationPacket(AnimType.CYCLE.ordinal(), hand), (EntityPlayerMP) player);
 	}
 
 	// called on click (server side, called by mouse packet)
@@ -368,13 +370,15 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	// initiates a reload
-	public void startReloadAction(ItemStack stack, World world, EntityPlayer player) {
+	public void startReloadAction(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 
 		if(getIsReloading(stack))
 			return;
 
 		if(!mainConfig.reloadSoundEnd)
 			world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.reloadSound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		
+		PacketDispatcher.wrapper.sendTo(new GunAnimationPacket(AnimType.RELOAD.ordinal(), hand), (EntityPlayerMP) player);
 
 		setIsReloading(stack, true);
 		resetReloadCycle(stack);

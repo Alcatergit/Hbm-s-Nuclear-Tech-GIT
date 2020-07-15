@@ -9,16 +9,19 @@ import java.util.Set;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemToolAbility;
+import com.hbm.items.tool.IItemAbility;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.EnchantmentUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumHand;
@@ -29,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ToolAbility {
 	
-	public abstract void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand);
+	public abstract void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand);
 	public abstract String getName();
 	@SideOnly(Side.CLIENT)
 	public abstract String getFullName();
@@ -45,7 +48,7 @@ public abstract class ToolAbility {
 		private Set<BlockPos> pos = new HashSet<BlockPos>();
 
 		@Override
-		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
 			Block b = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 
@@ -71,7 +74,7 @@ public abstract class ToolAbility {
 			}
 		}
 		
-		private void breakExtra(World world, int x, int y, int z, int refX, int refY, int refZ, EntityPlayer player, ItemToolAbility tool, EnumHand hand, int depth) {
+		private void breakExtra(World world, int x, int y, int z, int refX, int refY, int refZ, EntityPlayer player, IItemAbility tool, EnumHand hand, int depth) {
 			
 			if(pos.contains(new BlockPos(x, y, z)))
 				return;
@@ -138,7 +141,7 @@ public abstract class ToolAbility {
 		}
 		
 		@Override
-		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
 			for(int a = x - range; a <= x + range; a++) {
 				for(int b = y - range; b <= y + range; b++) {
@@ -168,7 +171,7 @@ public abstract class ToolAbility {
 	public static class SmelterAbility extends ToolAbility {
 
 		@Override
-		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
 			//a band-aid on a gaping wound
 			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
@@ -198,7 +201,7 @@ public abstract class ToolAbility {
 	public static class ShredderAbility extends ToolAbility {
 
 		@Override
-		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
 			//a band-aid on a gaping wound
 			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
@@ -228,7 +231,7 @@ public abstract class ToolAbility {
 	public static class CentrifugeAbility extends ToolAbility {
 
 		@Override
-		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, ItemToolAbility tool, EnumHand hand) {
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
 			//a band-aid on a gaping wound
 			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
@@ -256,6 +259,74 @@ public abstract class ToolAbility {
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
 			return I18n.format(getName());
+		}
+	}
+	
+	public static class SilkAbility extends ToolAbility {
+
+		@Override
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
+
+			//if the tool is already enchanted, do nothing
+			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItem(hand)) <= 0 || player.getHeldItem(hand).isEmpty())
+				return;
+
+			//add enchantment
+			ItemStack stack = player.getHeldItem(hand);
+
+			EnchantmentUtil.addEnchantment(stack, Enchantments.SILK_TOUCH, 1);
+			BlockPos pos = new BlockPos(x, y, z);
+			block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
+			EnchantmentUtil.removeEnchantment(stack, Enchantments.SILK_TOUCH);
+
+			world.setBlockToAir(pos);
+		}
+
+		@Override
+		public String getName() {
+			return "tool.ability.silktouch";
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName());
+		}
+	}
+	
+	public static class LuckAbility extends ToolAbility {
+
+		int luck;
+
+		public LuckAbility(int luck) {
+			this.luck = luck;
+		}
+
+		@Override
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
+
+			//if the tool is already enchanted, do nothing
+			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItem(hand)) <= 0 || player.getHeldItem(hand) == null)
+				return;
+
+			//add enchantment
+			ItemStack stack = player.getHeldItem(hand);
+
+			EnchantmentUtil.addEnchantment(stack, Enchantments.FORTUNE, luck);
+			BlockPos pos = new BlockPos(x, y, z);
+			block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
+			EnchantmentUtil.removeEnchantment(stack, Enchantments.FORTUNE);
+
+			world.setBlockToAir(pos);
+		}
+
+		@Override
+		public String getName() {
+			return "tool.ability.luck";
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName()) + " (" + luck + ")";
 		}
 	}
 }

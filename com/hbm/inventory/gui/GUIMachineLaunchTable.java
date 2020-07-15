@@ -40,8 +40,8 @@ public class GUIMachineLaunchTable extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 88 - 52, 16, 52, launcher.tanks[0], launcher.tankTypes[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 88 - 52, 16, 52, launcher.tanks[1], launcher.tankTypes[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 36, 16, 34, launcher.tanks[0], launcher.tankTypes[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 36, 16, 34, launcher.tanks[1], launcher.tankTypes[1]);
 		
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 52, 16, 52, new String[] { "Solid Fuel: " + launcher.solid + "l" });
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 113, 34, 6, launcher.power, TileEntityLaunchTable.maxPower);
@@ -140,8 +140,8 @@ public class GUIMachineLaunchTable extends GuiInfoContainer {
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 11);
 		
-		FFUtils.drawLiquid(launcher.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 116, 116);
-		FFUtils.drawLiquid(launcher.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 116);
+		FFUtils.drawLiquid(launcher.tanks[0], guiLeft, guiTop, zLevel, 16, 34, 116, 98);
+		FFUtils.drawLiquid(launcher.tanks[1], guiLeft, guiTop, zLevel, 16, 34, 134, 98);
 		
 		/// DRAW MISSILE START
 		GL11.glPushMatrix();

@@ -11,9 +11,12 @@ import net.minecraft.block.BlockRedstoneComparator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityReactorControl extends TileEntity implements ITickable {
@@ -96,7 +99,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
 		compound.setInteger("lastRods", lastRods);
 		if(link != null)
 			compound.setLong("link", link.toLong());
-		compound.setTag("inventroy", inventory.serializeNBT());
+		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
 
@@ -239,5 +242,17 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         	
         	PacketDispatcher.wrapper.sendToAllAround(new TEControlPacket(pos.getX(), pos.getY(), pos.getZ(), hullHeat, coreHeat, fuel, water, cool, steam, maxWater, maxCool, maxSteam, compression, rods, maxRods, isOn, auto, isLinked), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
 		}
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		return super.getCapability(capability, facing);
 	}
 }

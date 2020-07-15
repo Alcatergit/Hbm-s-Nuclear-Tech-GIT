@@ -150,7 +150,6 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 		rotationYaw = nbt.getDouble("yaw");
 		rotationPitch = nbt.getDouble("pitch");
 		isAI = nbt.getBoolean("AI");
-		detectIsAI = !isAI;
 		ammo = nbt.getInteger("ammo");
 
 		int playercount = nbt.getInteger("playercount");

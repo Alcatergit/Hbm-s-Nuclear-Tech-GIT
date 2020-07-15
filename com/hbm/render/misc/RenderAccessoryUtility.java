@@ -27,6 +27,8 @@ public class RenderAccessoryUtility {
 	private static ResourceLocation master = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeMaster.png");
 	private static ResourceLocation mek = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeMek.png");
 	private static ResourceLocation test = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeTest.png");
+	private static ResourceLocation swiggs = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeSweatySwiggs.png");
+	private static ResourceLocation wiki = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeWiki.png");
 	
 	
 	public static ResourceLocation getCloakFromPlayer(EntityPlayer player) {
@@ -39,6 +41,9 @@ public class RenderAccessoryUtility {
 				return hbm;
 			else
 				return hbm2;
+		}
+		if(uuid.equals(Library.Drillgon)) {
+			return hbm;
 		}
 		if(uuid.equals(Library.Dafnik)) {
 			return dafnik;
@@ -69,6 +74,12 @@ public class RenderAccessoryUtility {
 		}
 		if(uuid.equals(Library.SteelCourage)) {
 			return mek;
+		}
+		if(uuid.equals(Library.SweatySwiggs)) {
+			return swiggs;
+		}
+		if(Library.contributors.contains(uuid)) {
+			return wiki;
 		}
 		if(name.startsWith("Player")) {
 			return test;

@@ -20,8 +20,9 @@ private TileEntityMachineTurbine diFurnace;
 
 		//Fluid ID
 		//Drillgon200: don't need these
-		//this.addSlotToContainer(new Slot(tedf, 0, 8, 17));
-		//this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf, 1, 8, 53));
+		//Drillgon200: Actually we do need these, at least until I stop being lazy and make directional fluid pipes.
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 17));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 8, 53));
 		//Input IO
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 44, 17));
 		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 44, 53));

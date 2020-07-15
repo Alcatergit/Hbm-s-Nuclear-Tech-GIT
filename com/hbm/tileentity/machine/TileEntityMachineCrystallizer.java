@@ -12,8 +12,10 @@ import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -21,6 +23,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineCrystallizer extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
@@ -30,6 +34,9 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	public static final int acidRequired = 500;
 	public short progress;
 	public static final short duration = 600;
+	
+	public float angle;
+	public float prevAngle;
 
 	public FluidTank tank;
 	
@@ -72,6 +79,18 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			data.setShort("progress", progress);
 			data.setLong("power", power);
 			this.networkPack(data, 25);
+		} else {
+
+			prevAngle = angle;
+
+			if(progress > 0) {
+				angle += 5F;
+
+				if(angle >= 360) {
+					angle -= 360;
+					prevAngle -= 360;
+				}
+			}
 		}
 	}
 	
@@ -134,7 +153,19 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	public int[] getAccessibleSlotsFromSide(EnumFacing face) {
 		int side = face.getIndex();
 
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0 } : new int[] { 1 });
+		return side == 0 ? new int[] { 2 } : new int[] { 0, 2 };
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return TileEntity.INFINITE_EXTENT_AABB;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared()
+	{
+		return 65536.0D;
 	}
 	
 	@Override

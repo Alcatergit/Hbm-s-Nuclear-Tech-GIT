@@ -50,6 +50,18 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int G20_CAUSTIC = i++;
 	public static int G20_SHOCK = i++;
 	public static int G20_WITHER = i++;
+	
+	public static int ROCKET_NORMAL_LASER = i++;
+	public static int ROCKET_HE_LASER = i++;
+	public static int ROCKET_INCENDIARY_LASER = i++;
+	public static int ROCKET_SHRAPNEL_LASER = i++;
+	public static int ROCKET_EMP_LASER = i++;
+	public static int ROCKET_GLARE_LASER = i++;
+	public static int ROCKET_SLEEK_LASER = i++;
+	public static int ROCKET_NUKE_LASER = i++;
+	public static int ROCKET_CHAINSAW_LASER = i++;
+	public static int ROCKET_TOXIC_LASER = i++;
+	public static int ROCKET_PHOSPHORUS_LASER = i++;
 
 	public static int ROCKET_NORMAL = i++;
 	public static int ROCKET_HE = i++;
@@ -136,6 +148,7 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int FLAMER_NORMAL = i++;
 	public static int FLAMER_NAPALM = i++;
 	public static int FLAMER_WP = i++;
+	public static int FLAMER_VAPORIZER = i++;
 	public static int FLAMER_GAS = i++;
 	
 	public static int R556_NORMAL = i++;
@@ -189,6 +202,18 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(G20_CAUSTIC, Gun20GaugeFactory.get20GaugeCausticConfig());
 		configSet.put(G20_SHOCK, Gun20GaugeFactory.get20GaugeShockConfig());
 		configSet.put(G20_WITHER, Gun20GaugeFactory.get20GaugeWitherConfig());
+		
+		configSet.put(ROCKET_NORMAL_LASER, GunRocketFactory.getRocketConfig().setToGuided());
+		configSet.put(ROCKET_HE_LASER, GunRocketFactory.getRocketHEConfig().setToGuided());
+		configSet.put(ROCKET_INCENDIARY_LASER, GunRocketFactory.getRocketIncendiaryConfig().setToGuided());
+		configSet.put(ROCKET_PHOSPHORUS_LASER, GunRocketFactory.getRocketPhosphorusConfig().setToGuided());
+		configSet.put(ROCKET_SHRAPNEL_LASER, GunRocketFactory.getRocketShrapnelConfig().setToGuided());
+		configSet.put(ROCKET_EMP_LASER, GunRocketFactory.getRocketEMPConfig().setToGuided());
+		configSet.put(ROCKET_GLARE_LASER, GunRocketFactory.getRocketGlareConfig().setToGuided());
+		configSet.put(ROCKET_SLEEK_LASER, GunRocketFactory.getRocketSleekConfig().setToGuided());
+		configSet.put(ROCKET_NUKE_LASER, GunRocketFactory.getRocketNukeConfig().setToGuided());
+		configSet.put(ROCKET_CHAINSAW_LASER, GunRocketFactory.getRocketRPCConfig().setToGuided());
+		configSet.put(ROCKET_TOXIC_LASER, GunRocketFactory.getRocketChlorineConfig().setToGuided());
         
 		configSet.put(ROCKET_NORMAL, GunRocketFactory.getRocketConfig());
 		configSet.put(ROCKET_HE, GunRocketFactory.getRocketHEConfig());
@@ -275,6 +300,7 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(FLAMER_NORMAL, GunEnergyFactory.getFlameConfig());
 		configSet.put(FLAMER_NAPALM, GunEnergyFactory.getNapalmConfig());
 		configSet.put(FLAMER_WP, GunEnergyFactory.getPhosphorusConfig());
+		configSet.put(FLAMER_VAPORIZER, GunEnergyFactory.getVaporizerConfig());
 		configSet.put(FLAMER_GAS, GunEnergyFactory.getGasConfig());
 		
 		configSet.put(R556_NORMAL, Gun556mmFactory.get556Config());

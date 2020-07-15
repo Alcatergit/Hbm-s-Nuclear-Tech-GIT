@@ -9,13 +9,16 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
+import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +49,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 	public List<IConsumer> list1 = new ArrayList<IConsumer>();
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
+	//Drillgon200: Not even used but I'm too lazy to remove them
 	public boolean needsUpdate;
 	public boolean needsTankTypeUpdate;
 
@@ -65,8 +69,10 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
+				if(slot == 0)
+					return stack != null && stack.getItem() == ModItems.forge_fluid_identifier;
 				if(slot == 4)
-					if(stack != null && stack.getItem() instanceof ItemBattery)
+					if(stack != null && stack.getItem() instanceof IBatteryItem)
 						return true;
 
 				return slot != 4 && stack != null && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -95,6 +101,15 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 			age++;
 			if(age >= 2) {
 				age = 0;
+			}
+			
+			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
+				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
+				if(isValidFluidForTank(0, new FluidStack(f, 1000))){
+					tankTypes[0] = f;
+					inventory.setStackInSlot(1, inventory.getStackInSlot(0));
+					inventory.setStackInSlot(0, ItemStack.EMPTY);
+				}
 			}
 
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
@@ -181,9 +196,9 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null) {
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+			FluidStack f = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
+			if(f != null && f.getFluid() == tankTypes[tank])
 				return true;
-			}
 		}
 		return false;
 	}
@@ -291,10 +306,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(isValidFluidForTank(0, resource) && resource.amount > 0) {
-			if(tanks[0].getFluid() != null) {
-				tankTypes[0] = tanks[0].getFluid().getFluid();
-			}
+		if(resource != null && resource.getFluid() == tankTypes[0] && resource.amount > 0) {
 			return tanks[0].fill(resource, doFill);
 		} else {
 			return 0;

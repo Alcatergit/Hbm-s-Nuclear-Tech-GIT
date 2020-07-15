@@ -72,6 +72,8 @@ public abstract class TileEntityMachineBase extends TileEntity {
 	
 	public void networkUnpack(NBTTagCompound nbt) { }
 	
+	public void handleButtonPacket(int value, int meta) { }
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
@@ -90,7 +92,7 @@ public abstract class TileEntityMachineBase extends TileEntity {
 	}
 	
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
-		return true;
+		return this.isItemValidForSlot(slot, itemStack);
 	}
 
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {

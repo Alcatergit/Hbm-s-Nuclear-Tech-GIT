@@ -153,9 +153,9 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.wire_copper, 8);
 			if (mODE(input, "ingotTungsten"))
 				return new ItemStack(ModItems.wire_tungsten, 8);
-			if (mODE(input, "ingotRedAlloy"))
+			if (mODE(input, "ingotRedCopperAlloy"))
 				return new ItemStack(ModItems.wire_red_copper, 8);
-			if (mODE(input, "ingotRedstoneAlloy"))
+			if (mODE(input, "ingotRedCopperAlloy"))
 				return new ItemStack(ModItems.wire_red_copper, 8);
 			if (mODE(input, "ingotGold"))
 				return new ItemStack(ModItems.wire_gold, 8);
@@ -273,8 +273,8 @@ public class MachineRecipes {
 			return new ItemStack(ModItems.canister_napalm, 1);
 		}
 
-		if (mODE(item, new String[] {"ingotRedstoneAlloy", "dustRedstoneAlloy"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})
-				|| mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"ingotRedstoneAlloy", "dustRedstoneAlloy"})) {
+		if (mODE(item, new String[] {"ingotRedCopperAlloy", "dustRedCopperAlloy"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})
+				|| mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"ingotRedCopperAlloy", "dustRedCopperAlloy"})) {
 			return new ItemStack(ModItems.ingot_advanced_alloy, 2);
 		}
 
@@ -1016,10 +1016,10 @@ public class MachineRecipes {
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.fluorite), 4));
 			return list;
 		} else if(fluid == ModForgeFluids.watz){
-			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_schrabidium), 1));
-			list.add(new GasCentOutput(3, new ItemStack(ModItems.nugget_uranium), 2));
-			list.add(new GasCentOutput(3, new ItemStack(ModItems.powder_iron), 3));
-			list.add(new GasCentOutput(3, new ItemStack(ModItems.powder_copper), 4));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_solinium), 1));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_uranium), 1));
+			list.add(new GasCentOutput(5, new ItemStack(ModItems.powder_lead), 1));
+			list.add(new GasCentOutput(10, new ItemStack(ModItems.dust), 1));
 			return list;
 		} else if(fluid == ModForgeFluids.sas3){
 			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_schrabidium), 1));
@@ -1073,7 +1073,7 @@ public class MachineRecipes {
 		else if(fluid == ModForgeFluids.puf6)
 			return 100;
 		else if(fluid == ModForgeFluids.watz)
-			return 100;
+			return 1000;
 		else if(fluid == ModForgeFluids.sas3)
 			return 100;
 		else if(fluid == ModForgeFluids.coolant)

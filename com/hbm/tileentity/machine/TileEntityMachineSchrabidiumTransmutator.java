@@ -1,38 +1,32 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
-
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemBattery;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
+import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.entity.player.EntityPlayer;
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineSchrabidiumTransmutator extends TileEntity implements ITickable, IConsumer {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power = 0;
 	public int process = 0;
-	public int soundCycle = 0;
 	public static final long maxPower = 5000000;
-	public static final int processSpeed = 60;
-	Random rand = new Random();
+	public static final int processSpeed = 600;
+
+	private AudioWrapper audio;
 	
 	//private static final int[] slots_top = new int[] { 0 };
 	//private static final int[] slots_bottom = new int[] { 1, 2 };
@@ -41,41 +35,11 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	private String customName;
 	
 	public TileEntityMachineSchrabidiumTransmutator() {
-		inventory = new ItemStackHandler(4){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				switch (slot) {
-				case 0:
-					if (MachineRecipes.mODE(stack, "ingotUranium"))
-						return true;
-					break;
-				case 2:
-					if (stack.getItem() == ModItems.redcoil_capacitor)
-						return true;
-					break;
-				case 3:
-					if (stack.getItem() instanceof ItemBattery || stack.getItem() == ModItems.battery_creative)
-						return true;
-					break;
-				}
-				return false;
-			}
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				else
-					return ItemStack.EMPTY;
-			}
-		};
+		super(4);
 	}
 	
-	public String getInventoryName() {
+	@Override
+	public String getName() {
 		return this.hasCustomInventoryName() ? this.customName : "container.machine_schrabidium_transmutator";
 	}
 
@@ -87,28 +51,54 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 		this.customName = name;
 	}
 	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		switch (i) {
+		case 0:
+			if (MachineRecipes.mODE(stack, "ingotUranium"))
+				return true;
+			break;
+		case 2:
+			if (stack.getItem() == ModItems.redcoil_capacitor)
+				return true;
+			break;
+		case 3:
+			if (stack.getItem() instanceof IBatteryItem)
+				return true;
+			break;
 		}
+		return false;
+	}
+	
+	@Override
+	public boolean canExtractItem(int i, ItemStack stack, int amount) {
+		if (i == 2 && stack.getItem() != null && stack.getItem() == ModItems.redcoil_capacitor
+				&& stack.getItemDamage() == stack.getMaxDamage()) {
+			return true;
+		}
+		if (i == 1) {
+			return true;
+		}
+
+		if (i == 3) {
+			if (stack.getItem() instanceof IBatteryItem && ((IBatteryItem)stack.getItem()).getCharge(stack) == 0)
+				return true;
+		}
+
+		return false;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		power = compound.getLong("power");
-		process = compound.getShort("process");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
+		power = compound.getLong("power");
+		process = compound.getInteger("process");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", power);
-		compound.setShort("process", (short) process);
-		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setInteger("process", process);
 		return super.writeToNBT(compound);
 	}
 	
@@ -124,8 +114,50 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 				process = 0;
 			}
 
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			data.setInteger("progress", process);
+			this.networkPack(data, 50);
+			
 			detectAndSendChanges();
+		} else {
+			if(process > 0) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.tauChargeLoop, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
+					audio.startSound();
+				}
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
+	}
+	
+	@Override
+	public void onChunkUnload() {
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+    	}
+	}
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+    	}
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		this.power = data.getLong("power");
+		this.process = data.getInteger("progress");
 	}
 	
 	private long detectPower;
@@ -136,7 +168,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 			mark = true;
 			detectPower = power;
 		}
-		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
 			markDirty();
 	}
@@ -153,7 +184,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 		if (power >= 4990000 && MachineRecipes.mODE(inventory.getStackInSlot(0), "ingotUranium")
 				&& inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor
 				&& inventory.getStackInSlot(2).getItemDamage() < inventory.getStackInSlot(2).getMaxDamage()
-				&& (inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == ModItems.ingot_schrabidium
+				&& (inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == ModItems.ingot_schraranium
 						&& inventory.getStackInSlot(1).getCount() < inventory.getStackInSlot(1).getMaxStackSize()))) {
 			return true;
 		}
@@ -167,15 +198,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 	public void process() {
 		process++;
 
-		if (isProcessing()) {
-			if (soundCycle == 0)
-				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			soundCycle++;
-
-			if (soundCycle >= 38)
-				soundCycle = 0;
-		}
-
 		if (process >= processSpeed) {
 
 			power = 0;
@@ -187,7 +209,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 			}
 
 			if (inventory.getStackInSlot(1).isEmpty()) {
-				inventory.setStackInSlot(1, new ItemStack(ModItems.ingot_schrabidium));
+				inventory.setStackInSlot(1, new ItemStack(ModItems.ingot_schraranium));
 			} else {
 				inventory.getStackInSlot(1).grow(1);
 			}
@@ -195,7 +217,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntity impleme
 				inventory.getStackInSlot(2).setItemDamage(inventory.getStackInSlot(2).getItemDamage() + 1);
 			}
 
-			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.BLOCKS, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.BLOCKS, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 		}
 	}
 	

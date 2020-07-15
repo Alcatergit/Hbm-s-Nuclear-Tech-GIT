@@ -11,7 +11,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Quaternion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -120,17 +119,6 @@ public class ColladaLoader {
 			}
 		}
 		return elements;
-	}
-	
-	private static boolean containsElementTag(Element e, String name){
-		NodeList n = e.getChildNodes();
-		for(int i = 0; i < n.getLength(); i ++){
-			Node node = n.item(i);
-			if(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equals(name)){
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	private static List<Element> getChildElements(Element e){
@@ -398,10 +386,5 @@ public class ColladaLoader {
 			f[3], f[7], f[11], f[15]
 		};
 	}
-	
-	private static Quaternion invertQuat(Quaternion q){
-		return new Quaternion(-q.x, -q.y, -q.z, -q.w);
-	}
-	
 	
 }

@@ -80,7 +80,8 @@ public class ContainerCoreAdvanced extends Container {
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		crafting.sendWindowProperty(this, 0, this.diFurnace.progress);
-		PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
+		if(player != null)
+			PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 	}
 	
 	@Override
@@ -142,7 +143,7 @@ public class ContainerCoreAdvanced extends Container {
 		}
 		if(this.power != this.diFurnace.power)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
+			PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
 		}
 		
 		this.progress = this.diFurnace.progress;

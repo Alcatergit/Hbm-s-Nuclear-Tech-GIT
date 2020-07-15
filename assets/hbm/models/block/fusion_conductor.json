@@ -1,7 +1,7 @@
 {
 	"parent": "block/cube_column",
 	"textures": {
-		"end": "hbm:blocks/block_steel",
+		"end": "hbm:blocks/deco_steel",
 		"side": "hbm:blocks/fusion_conductor_side_alt3"
 	}
 }

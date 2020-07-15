@@ -63,9 +63,12 @@ import com.hbm.inventory.container.ContainerMachineTeleLinker;
 import com.hbm.inventory.container.ContainerMachineTeleporter;
 import com.hbm.inventory.container.ContainerMachineTurbine;
 import com.hbm.inventory.container.ContainerMachineTurbofan;
+import com.hbm.inventory.container.ContainerMicrowave;
+import com.hbm.inventory.container.ContainerMiningLaser;
 import com.hbm.inventory.container.ContainerNukeBoy;
 import com.hbm.inventory.container.ContainerNukeCustom;
 import com.hbm.inventory.container.ContainerNukeFleija;
+import com.hbm.inventory.container.ContainerNukeFstbmb;
 import com.hbm.inventory.container.ContainerNukeFurnace;
 import com.hbm.inventory.container.ContainerNukeGadget;
 import com.hbm.inventory.container.ContainerNukeMan;
@@ -151,9 +154,12 @@ import com.hbm.inventory.gui.GUIMachineTeleporter;
 import com.hbm.inventory.gui.GUIMachineTurbine;
 import com.hbm.inventory.gui.GUIMachineTurbofan;
 import com.hbm.inventory.gui.GUIMachineUF6Tank;
+import com.hbm.inventory.gui.GUIMicrowave;
+import com.hbm.inventory.gui.GUIMiningLaser;
 import com.hbm.inventory.gui.GUINukeBoy;
 import com.hbm.inventory.gui.GUINukeCustom;
 import com.hbm.inventory.gui.GUINukeFleija;
+import com.hbm.inventory.gui.GUINukeFstbmb;
 import com.hbm.inventory.gui.GUINukeFurnace;
 import com.hbm.inventory.gui.GUINukeGadget;
 import com.hbm.inventory.gui.GUINukeMan;
@@ -184,6 +190,7 @@ import com.hbm.tileentity.bomb.TileEntityBombMulti;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
+import com.hbm.tileentity.bomb.TileEntityNukeBalefire;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
@@ -235,6 +242,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineKeyForge;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
+import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
@@ -258,6 +266,7 @@ import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
+import com.hbm.tileentity.machine.TileEntityMicrowave;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntityRtgFurnace;
@@ -645,6 +654,18 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineCrystallizer){
 					return new ContainerCrystallizer(player.inventory, (TileEntityMachineCrystallizer) entity);
 				}
+			case ModBlocks.guiID_mining_laser:
+				if(entity instanceof TileEntityMachineMiningLaser){
+					return new ContainerMiningLaser(player.inventory, (TileEntityMachineMiningLaser) entity);
+				}
+			case ModBlocks.guiID_nuke_fstbmb:
+				if(entity instanceof TileEntityNukeBalefire){
+					return new ContainerNukeFstbmb(player.inventory, (TileEntityNukeBalefire) entity);
+				}
+			case ModBlocks.guiID_microwave:
+				if(entity instanceof TileEntityMicrowave){
+					return new ContainerMicrowave(player.inventory, (TileEntityMicrowave) entity);
+				}
 			}
 
 		}
@@ -1019,7 +1040,18 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMachineCrystallizer){
 					return new GUICrystallizer(player.inventory, (TileEntityMachineCrystallizer) entity);
 				}
-				return null;
+			case ModBlocks.guiID_mining_laser:
+				if(entity instanceof TileEntityMachineMiningLaser){
+					return new GUIMiningLaser(player.inventory, (TileEntityMachineMiningLaser) entity);
+				}
+			case ModBlocks.guiID_nuke_fstbmb:
+				if(entity instanceof TileEntityNukeBalefire){
+					return new GUINukeFstbmb(player.inventory, (TileEntityNukeBalefire) entity);
+				}
+			case ModBlocks.guiID_microwave:
+				if(entity instanceof TileEntityMicrowave){
+					return new GUIMicrowave(player.inventory, (TileEntityMicrowave) entity);
+				}
 			}
 
 		} else {

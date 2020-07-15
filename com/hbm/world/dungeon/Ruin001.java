@@ -1,0 +1,506 @@
+package com.hbm.world.dungeon;
+
+import java.util.Random;
+
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.bomb.BlockCrashedBomb;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockEnderChest;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+
+public class Ruin001 extends WorldGenerator {
+
+	Block Block1 = ModBlocks.brick_concrete;
+	Block Block2 = ModBlocks.brick_concrete_cracked;
+	Block Block3 = ModBlocks.brick_concrete_broken;
+
+	protected Block[] GetValidSpawnBlocks() {
+		return new Block[] {Blocks.GRASS};
+	}
+
+	public boolean LocationIsValidSpawn(World world, int x, int y, int z) {
+
+		IBlockState checkBlockState = world.getBlockState(new BlockPos(x, y - 1, z));
+		Block checkBlock = checkBlockState.getBlock();
+		Block blockAbove = world.getBlockState(new BlockPos(x, y , z)).getBlock();
+		Block blockBelow = world.getBlockState(new BlockPos(x, y - 2, z)).getBlock();
+
+		for (Block i : GetValidSpawnBlocks())
+		{
+			if (blockAbove != Blocks.AIR)
+			{
+				return false;
+			}
+			if (checkBlock == i)
+			{
+				return true;
+			}
+			else if (checkBlock == Blocks.SNOW_LAYER && blockBelow == i)
+			{
+				return true;
+			}
+			else if (checkBlockState.getMaterial() == Material.PLANTS && blockBelow == i)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
+
+		int i = rand.nextInt(1);
+
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ());
+		}
+
+       return true;
+	}
+
+	public boolean generate_r0(World world, Random rand, int x, int y, int z) {
+
+		if(!LocationIsValidSpawn(world, x, y, z) || !LocationIsValidSpawn(world, x + 12, y, z) || !LocationIsValidSpawn(world, x + 12, y, z + 14) || !LocationIsValidSpawn(world, x, y, z + 14)) {
+		//	return false;
+		}
+
+		world.setBlockState(new BlockPos(x + 1, y + 0, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 0, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 0, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 0, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 0, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 0, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 0, z + 9), Blocks.LIT_FURNACE.getDefaultState().withProperty(BlockFurnace.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 0, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 0, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 5), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 1, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 1, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 1, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 1, z + 7), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 1, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 1, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 8), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 8), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 1, z + 8), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 1, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 1, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 9), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 9), Blocks.WATER.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 1, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 1, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 10), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 1, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 1, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 5), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 6), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 7), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 7), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 7), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 7), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 8), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 8), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 8), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 8), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 8), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 8), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 8), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 8), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 9), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 9), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 9), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 9), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 9), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 9), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 9), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 10), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 10), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 10), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 10), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 10), Block2.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 10), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 10), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 10), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 11), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 11), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 11), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 11), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 11), Block3.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 11), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 11), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 12), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 12), Blocks.NETHERRACK.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 2, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 5), Blocks.REEDS.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 5), Blocks.WATERLILY.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 5), Blocks.WATERLILY.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 5), Blocks.WATERLILY.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 5), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 5), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 6), ModBlocks.red_cable.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 6), Blocks.VINE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 6), Blocks.STONE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 6), Blocks.STONE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 7), Blocks.NETHER_WART.getDefaultState().withProperty(BlockNetherWart.AGE, 5), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 7), Blocks.ENDER_CHEST.getDefaultState().withProperty(BlockEnderChest.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 8), Blocks.STONE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 8), Blocks.STONE.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 10), ModBlocks.machine_shredder.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 10), ModBlocks.crashed_balefire.getDefaultState().withProperty(BlockCrashedBomb.FACING, EnumFacing.EAST), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 12), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 3, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 3, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 3, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 4), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 5), Blocks.WATERLILY.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 5), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 5), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 5), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 6), ModBlocks.red_cable.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 6), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 7), Blocks.NETHER_WART.getDefaultState().withProperty(BlockNetherWart.AGE, 5), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 7), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 7), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 8), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 8), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 9), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 9), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 10), ModBlocks.red_cable.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 10), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 10), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 11), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 11), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 12), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 12), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 0, y + 4, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 13), Blocks.AIR.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 13), Blocks.WEB.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 4, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 12, y + 4, z + 13), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 1, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 2, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 3, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 4, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 5, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 6, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 7, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 9, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 10, y + 4, z + 14), Block1.getDefaultState(), 3);
+		world.setBlockState(new BlockPos(x + 11, y + 4, z + 14), Block1.getDefaultState(), 3);
+
+		new Ruin002().generate_r00(world, rand, x, y, z);
+		return true;
+
+	}
+} 

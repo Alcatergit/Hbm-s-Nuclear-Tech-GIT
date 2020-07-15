@@ -69,7 +69,7 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 	private String customName;
 
 	public TileEntityCompactLauncher() {
-		inventory = new ItemStackHandler(6) {
+		inventory = new ItemStackHandler(8) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				markDirty();
@@ -119,10 +119,10 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 		if(!world.isRemote) {
 
 			if(this.inputValidForTank(0, 2))
-				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3))
+				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 6))
 					needsUpdate = true;
-			if(this.inputValidForTank(1, 2))
-				if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 2, 3))
+			if(this.inputValidForTank(1, 3))
+				if(FFUtils.fillFromFluidContainer(inventory, tanks[1], 3, 7))
 					needsUpdate = true;
 
 			power = Library.chargeTEFromItems(inventory, 5, power, maxPower);

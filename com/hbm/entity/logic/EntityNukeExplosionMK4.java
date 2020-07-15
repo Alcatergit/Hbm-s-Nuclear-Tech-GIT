@@ -88,7 +88,6 @@ public class EntityNukeExplosionMK4 extends Entity {
 			// / length);
 			explosion.processTip(MainRegistry.mk4);
 		} else if(fallout) {
-
 			// MainRegistry.logger.info("STOP: " + System.currentTimeMillis());
 
 			EntityFalloutRain fallout = new EntityFalloutRain(this.world);

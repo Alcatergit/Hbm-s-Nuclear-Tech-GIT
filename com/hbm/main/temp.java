@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemFluidTank;
@@ -20,8 +21,11 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+@Spaghetti("death")
 public class temp {
 
+	//TODO: replace this steaming shit with JSON
+	//Drillgon200: Or in my case, with my own custom format because I couldn't be bothered to figure out how json worked. Sigh.
 	public enum EnumAssemblyTemplate {
 
 		IRON_PLATE,
@@ -135,6 +139,34 @@ public class temp {
 		UPGRADE_PINK_III,
 		UPGRADE_RANGE,
 		UPGRADE_HEALTH,
+		UPGRADE_OVERDRIVE_I(200, Arrays.asList(
+				new ItemStack(ModItems.upgrade_speed_3, 4),
+				new ItemStack(ModItems.upgrade_effect_3, 2),
+				new ItemStack(ModItems.ingot_desh, 8),
+				new ItemStack(ModItems.powder_power, 16),
+				new ItemStack(ModItems.crystal_lithium, 4),
+				new ItemStack(ModItems.circuit_schrabidium, 4)),
+				new ItemStack(ModItems.upgrade_overdrive_1)),
+		UPGRADE_OVERDRIVE_II(400, Arrays.asList(
+				new ItemStack(ModItems.upgrade_overdrive_1, 1),
+				new ItemStack(ModItems.upgrade_afterburn_1, 1),
+				new ItemStack(ModItems.upgrade_speed_3, 2),
+				new ItemStack(ModItems.upgrade_effect_3, 2),
+				new ItemStack(ModItems.ingot_saturnite, 12),
+				new ItemStack(ModItems.powder_nitan_mix, 16),
+				new ItemStack(ModItems.crystal_starmetal, 6),
+				new ItemStack(ModItems.circuit_schrabidium, 6)),
+				new ItemStack(ModItems.upgrade_overdrive_2)),
+		UPGRADE_OVERDRIVE_III(800, Arrays.asList(
+				new ItemStack(ModItems.upgrade_overdrive_2, 1),
+				new ItemStack(ModItems.upgrade_afterburn_1, 1),
+				new ItemStack(ModItems.upgrade_speed_3, 2),
+				new ItemStack(ModItems.upgrade_effect_3, 2),
+				new ItemStack(ModItems.ingot_desh, 8),
+				new ItemStack(ModItems.powder_power, 16),
+				new ItemStack(ModItems.crystal_lithium, 4),
+				new ItemStack(ModItems.circuit_schrabidium, 4)),
+				new ItemStack(ModItems.upgrade_overdrive_3)),
 		FUSE,
 		REDCOIL_CAPACITOR,
 		TITANIUM_FILTER,
@@ -175,8 +207,20 @@ public class temp {
 		REFINERY,
 		EPRESS,
 		CHEMPLANT,
+		CRYSTALLIZER(400, Arrays.asList(
+				new ItemStack(ModItems.hull_big_steel, 4),
+				new ItemStack(ModItems.pipes_steel, 4),
+				new ItemStack(ModItems.ingot_desh, 4),
+				new ItemStack(ModItems.motor, 2),
+				new ItemStack(ModItems.blades_advanced_alloy, 2),
+				new ItemStack(ModItems.ingot_steel, 16),
+				new ItemStack(ModItems.plate_titanium, 16),
+				new ItemStack(Blocks.GLASS, 4),
+				new ItemStack(ModItems.circuit_gold, 1)),
+				new ItemStack(ModBlocks.machine_crystallizer)),
 		TANK,
 		MINER,
+		MININGLASER,
 		TURBOFAN,
 		TELEPORTER,
 		SCHRABTRANS,
@@ -216,6 +260,15 @@ public class temp {
 		FLEIJA,
 		SOLINIUM,
 		N2,
+		FSTBMB(600, Arrays.asList(
+				new ItemStack(ModItems.sphere_steel, 1),
+				new ItemStack(ModItems.hull_big_titanium, 6),
+				new ItemStack(ModItems.fins_big_steel, 1),
+				new ItemStack(ModItems.powder_magic, 8),
+				new ItemStack(ModItems.wire_gold, 12),
+				new ItemStack(ModItems.circuit_targeting_tier4, 4),
+				new ItemStack(Items.DYE, 6, 8)),
+				new ItemStack(ModBlocks.nuke_fstbmb)),
 		CUSTOM_NUKE,
 		BOMB_LEV,
 		BOMB_ENDO,
@@ -1600,6 +1653,18 @@ public class temp {
 			list.add(new ItemStack(ModItems.bolt_dura_steel, 2));
 			list.add(new ItemStack(ModItems.drill_titanium, 1));
 			break;
+		case MININGLASER:
+			list.add(new ItemStack(ModItems.tank_steel, 3));
+			list.add(new ItemStack(ModItems.ingot_steel, 8));
+			list.add(new ItemStack(ModItems.plate_steel, 12));
+			list.add(new ItemStack(ModItems.crystal_redstone, 3));
+			list.add(new ItemStack(Items.DIAMOND, 5));
+			list.add(new ItemStack(ModItems.ingot_polymer, 8));
+			list.add(new ItemStack(ModItems.motor, 3));
+			list.add(new ItemStack(ModItems.ingot_dura_steel, 4));
+			list.add(new ItemStack(ModItems.bolt_dura_steel, 6));
+			list.add(new ItemStack(ModBlocks.machine_lithium_battery, 3));
+			break;
 		case TURBOFAN:
 			list.add(new ItemStack(ModItems.hull_big_steel, 1));
 			list.add(new ItemStack(ModItems.hull_big_titanium, 3));
@@ -1721,28 +1786,27 @@ public class temp {
 			break;
 		case LW_ELEMENT:
 			list.add(new ItemStack(ModItems.ingot_tungsten, 4));
-			list.add(new ItemStack(ModItems.plate_advanced_alloy, 6));
-			list.add(new ItemStack(ModItems.rod_empty, 4));
+			list.add(new ItemStack(ModItems.plate_advanced_alloy, 4));
+			list.add(new ItemStack(ModItems.rod_empty, 2));
 			list.add(new ItemStack(ModItems.wire_magnetized_tungsten, 2));
-			list.add(new ItemStack(ModItems.circuit_red_copper, 1));
+			list.add(new ItemStack(ModItems.wire_advanced_alloy, 4));
 			break;
 		case LW_CONTROL:
 			list.add(new ItemStack(ModItems.ingot_tungsten, 4));
 			list.add(new ItemStack(ModItems.ingot_advanced_alloy, 4));
 			list.add(new ItemStack(ModItems.ingot_lead, 2));
 			list.add(new ItemStack(ModItems.wire_magnetized_tungsten, 4));
-			list.add(new ItemStack(ModItems.circuit_copper, 2));
+			list.add(new ItemStack(ModItems.wire_advanced_alloy, 2));
 			break;
 		case LW_COOLER:
 			list.add(new ItemStack(ModItems.ingot_tungsten, 2));
 			list.add(new ItemStack(ModItems.ingot_steel, 2));
-			list.add(new ItemStack(ModItems.niter, 6));
-			list.add(new ItemStack(ModItems.powder_quartz, 4));
+			list.add(new ItemStack(ModItems.niter, 4));
 			break;
 		case LW_STRUTURE:
 			list.add(new ItemStack(ModItems.ingot_tungsten, 2));
 			list.add(new ItemStack(ModItems.ingot_lead, 2));
-			list.add(new ItemStack(ModItems.ingot_steel, 5));
+			list.add(new ItemStack(ModItems.ingot_steel, 3));
 			break;
 		case LW_HATCH:
 			list.add(new ItemStack(ModBlocks.reinforced_brick, 1));
@@ -1758,7 +1822,7 @@ public class temp {
 			break;
 		case LW_CORE:
 			list.add(new ItemStack(ModBlocks.block_meteor, 1));
-			list.add(new ItemStack(ModItems.circuit_gold, 8));
+			list.add(new ItemStack(ModItems.circuit_gold, 5));
 			list.add(new ItemStack(ModItems.circuit_schrabidium, 2));
 			list.add(new ItemStack(ModItems.wire_magnetized_tungsten, 12));
 			break;
@@ -2860,6 +2924,9 @@ public class temp {
 		case MINER:
 			output = new ItemStack(ModBlocks.machine_drill, 1);
 			break;
+		case MININGLASER:
+			output = new ItemStack(ModBlocks.machine_mining_laser, 1);
+			break;
 		case TURBOFAN:
 			output = new ItemStack(ModBlocks.machine_turbofan, 1);
 			break;
@@ -3525,6 +3592,8 @@ public class temp {
 			return 150;
 		case MINER:
 			return 200;
+		case MININGLASER:
+			return 400;
 		case TURBOFAN:
 			return 500;
 		case TELEPORTER:

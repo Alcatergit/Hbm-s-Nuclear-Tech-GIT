@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
 import com.hbm.capability.RadiationCapability;
@@ -19,7 +21,6 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.tool.ItemToolAbilityPower;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -31,6 +32,7 @@ import com.hbm.tileentity.machine.TileEntityMachineTransformer;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityWireCoated;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -81,7 +83,14 @@ public class Library {
 	public static String Dragon59MC = "dc23a304-0f84-4e2d-b47d-84c8d3bfbcdb";
 	public static String SteelCourage = "ac49720b-4a9a-4459-a26f-bee92160287a";
 	public static String Ducxkskiziko = "122fe98f-be19-49ca-a96b-d4dee4f0b22e";
+	
+	public static String SweatySwiggs = "5544aa30-b305-4362-b2c1-67349bb499d5";
 	public static String Drillgon = "41ebd03f-7a12-42f3-b037-0caa4d6f235b";
+	
+	public static Set<String> contributors = Sets.newHashSet(new String[] {
+			"06ab7c03-55ce-43f8-9d3c-2850e3c652de", //mustang_rudolf
+			"5bf069bc-5b46-4179-aafe-35c0a07dee8b", //JMF781
+			});
 
 	//the old list that allowed superuser mode for the ZOMG
 	//currently unused
@@ -108,6 +117,9 @@ public class Library {
 	public static void applyRadData(Entity e, float f) {
 		if(!(e instanceof EntityLivingBase))
 			return;
+		
+		if(e.getEntityData().hasKey("hbmradmultiplier", 99))
+			f *= e.getEntityData().getFloat("hbmradmultiplier");
 
 		EntityLivingBase entity = (EntityLivingBase) e;
 		
@@ -117,12 +129,8 @@ public class Library {
 		if(entity.isPotionActive(HbmPotion.mutation))
 			return;
 
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-
-			float koeff = 5.0F;
-			f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player));
-		}
+		float koeff = 5.0F;
+		f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(entity));
 
 		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
 			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
@@ -131,7 +139,10 @@ public class Library {
 	}
 
 	public static void applyRadDirect(Entity entity, float f) {
-
+		
+		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
+			f *= entity.getEntityData().getFloat("hbmradmultiplier");
+		
 		if(!(entity instanceof EntityLivingBase))
 			return;
 
@@ -197,18 +208,18 @@ public class Library {
 			return maxPower;
 		}
 		
-		if(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
+		if(inventory.getStackInSlot(index).getItem() instanceof IBatteryItem) {
+			
+			IBatteryItem battery = (IBatteryItem) inventory.getStackInSlot(index).getItem();
 
-			long batCharge = ItemBattery.getCharge(inventory.getStackInSlot(index));
-			long batRate = ((ItemBattery)inventory.getStackInSlot(index).getItem()).getDischargeRate();
+			long batCharge = battery.getCharge(inventory.getStackInSlot(index));
+			long batRate = battery.getDischargeRate();
 			
 			//in hHe
 			long toDischarge = Math.min(Math.min((maxPower - power) / 100, batRate), batCharge);
 			
-			((ItemBattery)inventory.getStackInSlot(index).getItem()).dischargeBattery(inventory.getStackInSlot(index), toDischarge);
+			battery.dischargeBattery(inventory.getStackInSlot(index), toDischarge);
 			power += toDischarge * 100;
-			
-			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
 		
 		return power;
@@ -216,26 +227,28 @@ public class Library {
 
 	//not great either but certainly better
 	public static long chargeItemsFromTE(IItemHandlerModifiable inventory, int index, long power, long maxPower) {
-		if(inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
-
-			long batMax = ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index));
-			long batCharge = ItemBattery.getCharge(inventory.getStackInSlot(index));
-			long batRate = ((ItemBattery)inventory.getStackInSlot(index).getItem()).getChargeRate();
+		if(inventory.getStackInSlot(index).getItem() instanceof IBatteryItem) {
+			IBatteryItem battery = (IBatteryItem) inventory.getStackInSlot(index).getItem();
+			ItemStack stack = inventory.getStackInSlot(index);
+			
+			long batMax = battery.getMaxCharge();
+			long batCharge = battery.getCharge(stack);
+			long batRate = battery.getChargeRate();
 			
 			//in hHE
-			long toCharge = Math.min(Math.min(power / 100, batRate), batMax - batCharge);
+			long toCharge = Math.min(Math.min(power, batRate), batMax - batCharge);
 			
-			power -= toCharge * 100;
+			power -= toCharge;
 			
-			((ItemBattery)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), toCharge);
+			battery.chargeBattery(stack, toCharge);
 
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && battery.getCharge(stack) >= battery.getMaxCharge())
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && battery.getCharge(stack) >= battery.getMaxCharge())
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_schrabidium_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && battery.getCharge(stack) >= battery.getMaxCharge())
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_euphemium_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && ItemBattery.getCharge(inventory.getStackInSlot(index)) >= ItemBattery.getMaxChargeStatic(inventory.getStackInSlot(index)))
+			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && battery.getCharge(stack) >= battery.getMaxCharge())
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
 
@@ -246,16 +259,12 @@ public class Library {
 			long batRate = ((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).getChargeRate();
 			
 			//in hHE
-			long toCharge = Math.min(Math.min(power / 100, batRate), batMax - batCharge);
+			long toCharge = Math.min(Math.min(power, batRate), batMax - batCharge);
 			
-			power -= toCharge * 100;
+			power -= toCharge;
 			
 			((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), toCharge);
 			
-		}
-		
-		if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() instanceof ItemBattery) {
-			ItemBattery.updateDamage(inventory.getStackInSlot(index));
 		}
 		
 		return power;
@@ -367,7 +376,7 @@ public class Library {
 		}
 	}
 
-	//TODO: jesus christ kill it
+	//TODO: jesus christ
 	// Flut-Füll gesteuerter Energieübertragungsalgorithmus
 	// Flood fill controlled energy transmission algorithm
 	public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {

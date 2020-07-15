@@ -11,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.potion.HbmPotion;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.init.MobEffects;
@@ -28,10 +29,6 @@ public class GunEnergyFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.reloadDuration = 10;
 		config.firingDuration = 0;
 		config.ammoCap = 0;
@@ -87,10 +84,6 @@ public class GunEnergyFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.reloadDuration = 20;
 		config.reloadSoundEnd = false;
 		config.firingDuration = 0;
@@ -114,6 +107,7 @@ public class GunEnergyFactory {
 		config.config.add(BulletConfigSyncingUtil.FLAMER_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.FLAMER_NAPALM);
 		config.config.add(BulletConfigSyncingUtil.FLAMER_WP);
+		config.config.add(BulletConfigSyncingUtil.FLAMER_VAPORIZER);
 		config.config.add(BulletConfigSyncingUtil.FLAMER_GAS);
 
 		return config;
@@ -189,6 +183,29 @@ public class GunEnergyFactory {
 		bullet.vPFX = "smoke";
 
 		bullet.bImpact = BulletConfigFactory.getPhosphorousEffect(5, 60 * 20, 25, 0.25);
+
+		return bullet;
+	}
+	
+	public static BulletConfiguration getVaporizerConfig() {
+
+		BulletConfiguration bullet = getFlameConfig();
+
+		bullet.ammo = ModItems.ammo_fuel_vaporizer;
+		bullet.wear = 4;
+		bullet.spread = 0.25F;
+		bullet.bulletsMin = 8;
+		bullet.bulletsMax = 10;
+		bullet.dmgMin = 6;
+		bullet.dmgMax = 10;
+		bullet.maxAge = 15;
+		bullet.vPFX = "flame";
+		bullet.incendiary = 0;
+
+		PotionEffect eff = new PotionEffect(HbmPotion.phosphorus, 20 * 20, 0, true, false);
+		eff.getCurativeItems().clear();
+		bullet.effects = new ArrayList<>();
+		bullet.effects.add(new PotionEffect(eff));
 
 		return bullet;
 	}

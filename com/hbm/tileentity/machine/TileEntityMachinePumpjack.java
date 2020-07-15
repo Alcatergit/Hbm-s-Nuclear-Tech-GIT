@@ -136,7 +136,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 	
 	@Override
 	public void update() {
-int timer = 20;
+		int timer = 20;
 		
 		age++;
 		age2++;
@@ -186,7 +186,6 @@ int timer = 20;
 						Block b = world.getBlockState(checkPos).getBlock();
 						if(b == ModBlocks.oil_pipe)
 							continue;
-						
 						if(b == Blocks.AIR || b == Blocks.GRASS || b == Blocks.DIRT || 
 								b == Blocks.STONE || b == Blocks.SAND || b == Blocks.SANDSTONE || 
 								b == Blocks.CLAY || b == Blocks.HARDENED_CLAY || b == Blocks.STAINED_HARDENED_CLAY || 
@@ -256,7 +255,10 @@ int timer = 20;
 	public boolean isOre(IBlockState b) {
 		int meta = b.getBlock().getMetaFromState(b);
 		
-		int[] ids = OreDictionary.getOreIDs(new ItemStack(b.getBlock(), 1, meta));
+		ItemStack stack = new ItemStack(b.getBlock(), 1, meta);
+		if(stack.isEmpty())
+			return false;
+		int[] ids = OreDictionary.getOreIDs(stack);
 		
 		for(int i = 0; i < ids.length; i++) {
 			
@@ -366,6 +368,7 @@ int timer = 20;
 	public void fillFluidInit(FluidTank tank) {
 		
 		EnumFacing e = world.getBlockState(pos).getValue(MachinePumpjack.FACING);
+		e = e.rotateY();
 
 		if(e == EnumFacing.EAST) {
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 2), 2000) || needsUpdate;

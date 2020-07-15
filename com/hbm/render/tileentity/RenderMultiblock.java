@@ -29,11 +29,12 @@ public class RenderMultiblock extends TileEntitySpecialRenderer<TileEntityMultib
 		
 		GL11.glTranslated(x, y, z);
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.75F);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
+		GlStateManager.enableCull();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
+        GlStateManager.disableAlpha();
 		
         Block b = te.getBlockType();
         RenderHelper.bindBlockTexture();
@@ -48,7 +49,9 @@ public class RenderMultiblock extends TileEntitySpecialRenderer<TileEntityMultib
         
         RenderHelper.draw();
         
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableBlend();
+		GlStateManager.enableLighting();
 		GlStateManager.enableAlpha();
 		
 		GL11.glPopMatrix();

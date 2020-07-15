@@ -45,6 +45,16 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.RED + "- No damage");
 			list.add(TextFormatting.RED + "- Not incendiary");
 		}
+		if(this == ModItems.ammo_fuel_vaporizer) {
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.BLUE + "+ Increased flame count");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.YELLOW + "* For removing big mistakes");
+			list.add(TextFormatting.RED + "- Highly decreased accuracy");
+			list.add(TextFormatting.RED + "- Highly decreased range");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+			list.add(TextFormatting.RED + "- No lingering fire");
+		}
 		// 12 GAUGE
 		if(this == ModItems.ammo_44_phosphorus) {
 			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");

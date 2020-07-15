@@ -28,10 +28,6 @@ public class Gun50BMGFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.reloadDuration = 20;
 		config.firingDuration = 0;
 		config.ammoCap = 50;
@@ -66,10 +62,6 @@ public class Gun50BMGFactory {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
-		config.hasReloadAnim = false;
-		config.hasFiringAnim = false;
-		config.hasSpinup = false;
-		config.hasSpindown = false;
 		config.reloadDuration = 30;
 		config.firingDuration = 0;
 		config.ammoCap = 100;

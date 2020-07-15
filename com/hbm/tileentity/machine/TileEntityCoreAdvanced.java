@@ -6,6 +6,7 @@ import com.hbm.interfaces.IFactory;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -98,7 +99,7 @@ public class TileEntityCoreAdvanced extends TileEntity implements ITickable, IFa
 	public void update() {
 		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_advanced)
 		{
-			this.power = (int) ItemBattery.getCharge(inventory.getStackInSlot(22));
+			this.power = (int) ((IBatteryItem)inventory.getStackInSlot(22).getItem()).getCharge(inventory.getStackInSlot(22));
 		} else {
 			this.power = 0;
 		}

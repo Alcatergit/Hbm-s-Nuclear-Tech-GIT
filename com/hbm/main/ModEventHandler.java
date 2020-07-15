@@ -414,9 +414,9 @@ public class ModEventHandler {
 					if(!(player instanceof EntityPlayerMP))
 						continue;
 					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-						PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads()), (EntityPlayerMP) player);
+						PacketDispatcher.sendTo(new RadSurveyPacket(player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads()), (EntityPlayerMP) player);
 					else
-						PacketDispatcher.wrapper.sendTo(new RadSurveyPacket(0.0F), (EntityPlayerMP) player);
+						PacketDispatcher.sendTo(new RadSurveyPacket(0.0F), (EntityPlayerMP) player);
 				}
 
 				if(event.world.getTotalWorldTime() % 20 == 0) {
@@ -494,6 +494,9 @@ public class ModEventHandler {
 
 						if(eRad < 200 || entity instanceof EntityNuclearCreeper || entity instanceof EntityMooshroom || entity instanceof EntityZombie || entity instanceof EntitySkeleton)
 							continue;
+						
+						if(eRad > 2500)
+							entRad.setRads(2500);
 						
 						if(entity instanceof EntityPlayer && (((EntityPlayer)entity).capabilities.isCreativeMode || ((EntityPlayer)entity).isSpectator()))
 							continue;
@@ -658,11 +661,7 @@ public class ModEventHandler {
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
 		String st = player.getUniqueID().toString();
-		
-		if(!player.world.isRemote && (
-				st.equals("c874fd4e-5841-42e4-8f77-70efd5881bc1") ||
-				st.equals("6a058220-7d86-4f29-817b-418eb98bd842") ||
-				st.equals("dec34886-ef6b-409e-94ee-a99c5fbec9dd")))
+		if(!player.world.isRemote && st.equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
 					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
 						player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
 
@@ -730,7 +729,7 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void clientJoinServer(PlayerLoggedInEvent e) {
 		if(e.player instanceof EntityPlayerMP)
-			PacketDispatcher.wrapper.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
+			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
 		if(!e.player.world.isRemote){
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
 			

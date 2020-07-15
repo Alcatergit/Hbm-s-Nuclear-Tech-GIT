@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class ToxicFluid extends Fluid {
 
 	public ToxicFluid(){
-		super("hbmtoxic_fluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_flowing"), Color.white);
+		super("toxic_fluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/toxic_flowing"), Color.white);
 		FluidRegistry.addBucketForFluid(this);
 	}
 	

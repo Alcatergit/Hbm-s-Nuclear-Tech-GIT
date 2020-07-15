@@ -30,6 +30,9 @@ public class ItemRenderGunAnim extends TileEntityItemStackRenderer {
 	
 	@Override
 	public void renderByItem(ItemStack item) {
+		
+		float lever = 0;
+		
 		GL11.glPopMatrix();
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
@@ -60,7 +63,6 @@ public class ItemRenderGunAnim extends TileEntityItemStackRenderer {
 				GL11.glRotated(20, 0, 0, 1);
 				GL11.glTranslated(0, -1, -0.5);
 				
-				//TODO one day make a real animation system
 				if(item.getItem() == ModItems.gun_b92 && GunB92.getRotationFromAnim(item, Minecraft.getMinecraft().getRenderPartialTicks()) > 0) {
 					float off = GunB92.getRotationFromAnim(item, Minecraft.getMinecraft().getRenderPartialTicks()) * 2;
 					GL11.glRotatef(GunB92.getRotationFromAnim(item, Minecraft.getMinecraft().getRenderPartialTicks()) * -90, 0.0F, 0.0F, 1.0F);

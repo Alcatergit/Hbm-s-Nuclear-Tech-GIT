@@ -27,6 +27,11 @@ public class BlockFallingBase extends BlockFalling {
 		if(this == ModBlocks.gravel_diamond){
 			tooltip.add("There is some kind of joke here,");
 			tooltip.add("but I can't quite tell what it is.");
+			tooltip.add("");
+			tooltip.add("Update, 2020-07-04:");
+			tooltip.add("We deny any implications of a joke on");
+			tooltip.add("the basis that it was so severly unfunny");
+			tooltip.add("that people started stabbing their eyes out.");
 		}
 	}
 	

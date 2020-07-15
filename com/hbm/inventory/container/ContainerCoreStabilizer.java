@@ -54,7 +54,7 @@ public class ContainerCoreStabilizer extends Container {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setLong("power", nukeBoy.power);
 		data.setInteger("watts", nukeBoy.watts);
-		PacketDispatcher.wrapper.sendTo(new NBTPacket(data, nukeBoy.getPos()), player);
+		PacketDispatcher.sendTo(new NBTPacket(data, nukeBoy.getPos()), player);
 		super.detectAndSendChanges();
 	}
 	

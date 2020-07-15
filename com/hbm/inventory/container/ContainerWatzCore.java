@@ -100,12 +100,12 @@ public class ContainerWatzCore extends Container {
 	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
-		PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
 	}
 	
 	@Override
@@ -152,32 +152,32 @@ public class ContainerWatzCore extends Container {
 		
 		if(this.powerList != this.diFurnace.powerList)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerList, 0), player);
 		}
 		
 		if(this.heatList != this.diFurnace.heatList)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatList, 1), player);
 		}
 		
 		if(this.decayMultiplier != this.diFurnace.decayMultiplier)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.decayMultiplier, 2), player);
 		}
 		
 		if(this.powerMultiplier != this.diFurnace.powerMultiplier)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.powerMultiplier, 3), player);
 		}
 		
 		if(this.heatMultiplier != this.diFurnace.heatMultiplier)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heatMultiplier, 4), player);
 		}
 		
 		if(this.heat != this.diFurnace.heat)
 		{
-			PacketDispatcher.wrapper.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(diFurnace.getPos(), diFurnace.heat, 5), player);
 		}
 
 		this.powerList = this.diFurnace.powerList;

@@ -9,6 +9,7 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,10 +50,10 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 				}
 				
 				if(slot == 1) {
-					return stack.getItem() instanceof ItemBattery;
+					return stack.getItem() instanceof IBatteryItem;
 				}
 				
-				return !(stack.getItem() instanceof ItemBattery);
+				return !(stack.getItem() instanceof IBatteryItem);
 			}
 			@Override
 			protected void onContentsChanged(int slot) {
