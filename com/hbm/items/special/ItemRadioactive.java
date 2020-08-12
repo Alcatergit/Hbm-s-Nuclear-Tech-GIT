@@ -2,7 +2,9 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.inventory.BreederRecipes;
 import com.hbm.lib.Library;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -47,7 +49,7 @@ public class ItemRadioactive extends ItemCustomLore {
 		if (entity instanceof EntityLivingBase) {
 			
 			if(this.radiation > 0)
-				Library.applyRadData(entity, this.radiation * mod / 20F);
+				ContaminationUtil.applyRadData(entity, this.radiation * mod / 20F);
 			
 			if(this.fire)
 				entity.setFire(5);
@@ -69,6 +71,14 @@ public class ItemRadioactive extends ItemCustomLore {
 
 		if(blinding)
 			list.add(TextFormatting.DARK_AQUA + "[Blinding]");
+		
+		int[] breeder = BreederRecipes.getFuelValue(stack);
+
+		if(breeder != null) {
+			list.add(BreederRecipes.getHEATString("[Provides " + breeder[0] + " HEAT]", breeder[0]));
+			list.add(TextFormatting.YELLOW + "Worth " + breeder[1] + " operations in breeding reactor");
+			list.add(TextFormatting.YELLOW + "Worth " + (breeder[0] * breeder[1] * 5) + " operations in nuclear furnace");
+		}
 	}
 
 }

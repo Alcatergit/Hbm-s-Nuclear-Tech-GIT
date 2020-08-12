@@ -3,6 +3,7 @@ package com.hbm.render.item;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 
@@ -29,9 +30,10 @@ public class AssemblyTemplateRender extends TileEntityItemStackRenderer {
 				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 				GL11.glTranslated(0.5, 0.5, 0);
 				GlStateManager.enableLighting();
-				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(MachineRecipes.getOutputFromTempate(stack), Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
+				ItemStack item = AssemblerRecipes.recipeList.get(ItemAssemblyTemplate.getRecipeIndex(stack)).toStack();
+				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
 				model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
-				Minecraft.getMinecraft().getRenderItem().renderItem(MachineRecipes.getOutputFromTempate(stack), model);
+				Minecraft.getMinecraft().getRenderItem().renderItem(item, model);
 				GL11.glPopAttrib();
 				GL11.glPopMatrix();
 			} else {

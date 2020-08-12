@@ -1,11 +1,14 @@
 package com.hbm.items.special;
 
+import java.util.List;
+
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -76,6 +79,13 @@ public class ItemUnstable extends Item {
 		default:
 			return ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 		}
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(stack.getItemDamage() != 0)
+    		return;
+		tooltip.add("Decay: " + (getTimer(stack) * 100 / timer) + "%");
 	}
 
 }

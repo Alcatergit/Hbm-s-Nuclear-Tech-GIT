@@ -122,6 +122,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		case BulletConfiguration.STYLE_ORB:
 			renderOrb(trail);
 			break;
+		case BulletConfiguration.STYLE_METEOR: 
+			renderMeteor(trail); 
+			break;
 		default:
 			renderBullet(trail);
 			break;
@@ -430,6 +433,18 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			for(int i = 0; i < 5; i++)
 				RenderSparks.renderSpark((int) (System.currentTimeMillis() / 100 + 100 * i), 0, 0, 0, 0.5F, 2, 2, 0x8080FF, 0xFFFFFF);
 			break;
+		case 1:
+			GL11.glScalef(0.5F, 0.5F, 0.5F);
+			GlStateManager.disableTexture2D();
+			GlStateManager.color(0.5F, 0.0F, 0.0F, 0.5F);
+			ResourceManager.sphere_uv.renderAll();
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+			ResourceManager.sphere_uv.renderAll();
+			GL11.glScalef(1F/0.75F, 1F/0.75F, 1F/0.75F);
+			GlStateManager.enableTexture2D();
+			for(int i = 0; i < 3; i++)
+				RenderSparks.renderSpark((int) (System.currentTimeMillis() / 100 + 100 * i), 0, 0, 0, 1F, 2, 3, 0xFF0000, 0xFF8080);
+			break;
 		}
 		
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -437,6 +452,23 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
         GlStateManager.enableLighting();
         GlStateManager.depthMask(true);
 
+	}
+	
+	private void renderMeteor(int type) {
+
+        GlStateManager.enableCull();
+        GlStateManager.disableLighting();
+
+		switch(type) {
+		case 0:
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/blocks/block_meteor_molten.png")); break;
+		case 1:
+			bindTexture(new ResourceLocation("textures/blocks/obsidian.png")); break;
+		}
+
+		ResourceManager.meteor.renderAll();
+
+        GlStateManager.enableLighting();
 	}
 
 	@Override

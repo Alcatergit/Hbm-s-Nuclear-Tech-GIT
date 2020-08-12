@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 
+import api.hbm.energy.IRadarDetectable;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMissileAntiBallistic extends Entity {
+public class EntityMissileAntiBallistic extends Entity implements IRadarDetectable {
 
 	int activationTimer;
 	public double prevPosX2;
@@ -164,4 +165,9 @@ public class EntityMissileAntiBallistic extends Entity {
     {
         return distance < 500000;
     }
+
+	@Override
+	public RadarTargetType getTargetType() {
+		return RadarTargetType.MISSILE_AB;
+	}
 }

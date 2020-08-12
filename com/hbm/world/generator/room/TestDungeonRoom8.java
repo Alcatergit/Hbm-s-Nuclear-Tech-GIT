@@ -7,6 +7,7 @@ import com.hbm.world.generator.CellularDungeon;
 import com.hbm.world.generator.CellularDungeonRoom;
 import com.hbm.world.generator.DungeonToolbox;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,8 +44,13 @@ public class TestDungeonRoom8 extends CellularDungeonRoom {
 		case 6: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_meteor.getDefaultState(), 3); break;
 		case 7:
 			world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.safe.getDefaultState(), 3);
-			if(world.getTileEntity(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2)) instanceof TileEntitySafe)
-				((TileEntitySafe)world.getTileEntity(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2))).inventory.setStackInSlot(7, new ItemStack(ModItems.book_of_));
+			if(world.getTileEntity(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2)) instanceof TileEntitySafe) {
+
+				if(world.rand.nextInt(10) == 0)
+					((TileEntitySafe)world.getTileEntity(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2))).inventory.setStackInSlot(7, new ItemStack(ModItems.book_of_));
+				else
+					((TileEntitySafe)world.getTileEntity(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2))).inventory.setStackInSlot(7, new ItemStack(Items.BOOK));
+			}
 			break;
 		}
 		

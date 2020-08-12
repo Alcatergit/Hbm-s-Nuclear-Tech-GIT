@@ -1,8 +1,6 @@
 {
-	"parent": "block/cube_bottom_top",
+	"parent": "block/cube_all",
 	"textures": {
-		"top": "hbm:blocks/machine_minirtg_top",
-		"bottom": "hbm:blocks/machine_minirtg_top",
-		"side": "hbm:blocks/machine_minirtg_side"
+		"all": "hbm:blocks/machine_minirtg"
 	}
 }

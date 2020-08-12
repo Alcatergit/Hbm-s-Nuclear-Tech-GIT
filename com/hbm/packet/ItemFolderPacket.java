@@ -81,11 +81,6 @@ public class ItemFolderPacket implements IMessage {
 				}
 
 				if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
-					Fluid f = ItemForgeFluidIdentifier.getType(m.stack);
-					if(f != null && MainRegistry.templateBlacklist.contains(f.getName())) {
-						p.sendMessage(new TextComponentTranslation("This item appears to be blacklisted."));
-						return;
-					}
 					if(Library.hasInventoryItem(p.inventory, ModItems.plate_iron) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_iron);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
@@ -102,11 +97,6 @@ public class ItemFolderPacket implements IMessage {
 					}
 				}
 				if(stack.getItem() instanceof ItemChemistryTemplate) {
-					EnumChemistryTemplate enumeration = EnumChemistryTemplate.getEnum(m.stack.getMetadata());
-					if(MainRegistry.templateBlacklist.contains(enumeration.getName())) {
-						p.sendMessage(new TextComponentTranslation("This item appears to be blacklisted."));
-						return;
-					}
 					if(Library.hasInventoryItem(p.inventory, Items.PAPER) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, Items.PAPER);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);

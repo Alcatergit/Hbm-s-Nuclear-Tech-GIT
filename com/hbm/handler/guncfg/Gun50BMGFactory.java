@@ -6,6 +6,7 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.interfaces.IBulletHitBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -14,6 +15,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -50,6 +52,7 @@ public class Gun50BMGFactory {
 		config.config.add(BulletConfigSyncingUtil.BMG50_AP);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
 		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
+		config.config.add(BulletConfigSyncingUtil.BMG50_SLEEK);
 		
 		return config;
 	}
@@ -83,6 +86,7 @@ public class Gun50BMGFactory {
 		config.config.add(BulletConfigSyncingUtil.BMG50_AP);
 		config.config.add(BulletConfigSyncingUtil.BMG50_DU);
 		config.config.add(BulletConfigSyncingUtil.BMG50_STAR);
+		config.config.add(BulletConfigSyncingUtil.BMG50_SLEEK);
 		
 		return config;
 	}
@@ -201,6 +205,56 @@ public class Gun50BMGFactory {
 		bullet.dmgMax = 25;
 		bullet.wear = 15;
 		bullet.leadChance = 10;
+
+		return bullet;
+	}
+	
+	public static BulletConfiguration get50BMGSleekConfig() {
+
+		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
+
+		bullet.ammo = ModItems.ammo_50bmg_sleek;
+		bullet.spread *= inaccuracy;
+		bullet.dmgMin = 50;
+		bullet.dmgMax = 70;
+		bullet.wear = 10;
+		bullet.leadChance = 100;
+		bullet.doesPenetrate = false;
+
+		bullet.bHit = new IBulletHitBehavior() {
+
+			@Override
+			public void behaveEntityHit(EntityBulletBase bullet, Entity hit) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				EntityBulletBase meteor = new EntityBulletBase(bullet.world, BulletConfigSyncingUtil.MASKMAN_METEOR);
+				meteor.setPosition(hit.posX, hit.posY + 30 + meteor.world.rand.nextInt(10), hit.posZ);
+				meteor.motionY = -1D;
+				meteor.shooter = bullet.shooter;
+				bullet.world.spawnEntity(meteor);
+			}
+		};
+
+		bullet.bImpact = new IBulletImpactBehavior() {
+
+			@Override
+			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				if(y == -1)
+					return;
+
+				EntityBulletBase meteor = new EntityBulletBase(bullet.world, BulletConfigSyncingUtil.MASKMAN_METEOR);
+				meteor.setPosition(bullet.posX, bullet.posY + 30 + meteor.world.rand.nextInt(10), bullet.posZ);
+				meteor.motionY = -1D;
+				meteor.shooter = bullet.shooter;
+				bullet.world.spawnEntity(meteor);
+			}
+		};
 
 		return bullet;
 	}

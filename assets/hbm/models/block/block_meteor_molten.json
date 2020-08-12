@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "hbm:blocks/block_meteor_molten"
+		"all": "hbm:blocks/meteor_cobble_molten"
 	}
 }

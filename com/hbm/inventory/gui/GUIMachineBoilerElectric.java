@@ -76,23 +76,26 @@ public class GUIMachineBoilerElectric extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		if(diFurnace.power > 0)
+		//<insert witty line here>
+		TileEntityMachineBoilerElectric dud = diFurnace;
+
+		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoilerElectric)
+			dud = (TileEntityMachineBoilerElectric) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
+		
+		if(dud.power > 0)
 			drawTexturedModalRect(guiLeft + 97, guiTop + 34, 176, 0, 18, 18);
 
-		int j = (int)diFurnace.getHeatScaled(17);
+		int j = (int)dud.getHeatScaled(17);
 		drawTexturedModalRect(guiLeft + 103, guiTop + 33 - j, 194, 16 - j, 6, j);
 
-		int i = (int)diFurnace.getPowerScaled(34);
+		int i = (int)dud.getPowerScaled(34);
 		drawTexturedModalRect(guiLeft + 123, guiTop + 69 - i, 200, 34 - i, 7, i);
-		
-		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoilerElectric)
-			diFurnace = (TileEntityMachineBoilerElectric) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
+		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
+		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
 	}
 }

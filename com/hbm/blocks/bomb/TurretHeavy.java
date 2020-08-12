@@ -25,7 +25,7 @@ public class TurretHeavy extends TurretBase {
 
 	@Override
 	public boolean executeHoldAction(World world, int i, double yaw, double pitch, BlockPos pos) {
-boolean flag = false;
+		boolean flag = false;
 		
 		if(pitch < -60)
 			pitch = -60;

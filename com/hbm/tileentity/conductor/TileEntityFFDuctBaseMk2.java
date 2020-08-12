@@ -43,8 +43,8 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	public void setType(Fluid f) {
 		if(f != type) {
 			type = f;
-			world.notifyNeighborsOfStateChange(pos, blockType, true);
-			world.neighborChanged(pos, blockType, pos);
+			world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+			world.neighborChanged(pos, getBlockType(), pos);
 			IBlockState state = world.getBlockState(pos);
 			world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
 			rebuildNetworks(world, pos);

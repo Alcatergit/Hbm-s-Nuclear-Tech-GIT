@@ -66,15 +66,18 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		
+		//"It just works" -Todd Howard
+		TileEntityMachineBoiler dud = diFurnace;
 
-		if (diFurnace.burnTime > 0)
+		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoiler)
+			dud = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
+
+		if (dud.burnTime > 0)
 			drawTexturedModalRect(guiLeft + 97, guiTop + 34, 176, 0, 18, 18);
 
-		int j = (int) diFurnace.getHeatScaled(17);
+		int j = (int) dud.getHeatScaled(17);
 		drawTexturedModalRect(guiLeft + 103, guiTop + 33 - j, 194, 16 - j, 6, j);
-
-		if (diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoiler)
-			diFurnace = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
@@ -91,9 +94,9 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 
 		// sizeX and sizeY doesn't do anything, no need for it.
 		// ^ Out dated comment
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
+		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
 
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
+		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
 		// Minecraft.getMinecraft().getTextureManager().bindTexture(diFurnace.tanks[1].getSheet());
 		// diFurnace.tanks[1].renderTank(this, guiLeft + 134, guiTop + 69,
 		// diFurnace.tanks[1].getTankType().textureX() * FluidTank.x,

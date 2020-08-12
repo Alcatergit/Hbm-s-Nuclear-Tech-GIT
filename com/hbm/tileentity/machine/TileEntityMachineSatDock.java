@@ -94,7 +94,7 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 				data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 			
 		    if(data == null) {
-		        world.getPerWorldStorage().setData("satellites", new SatelliteSavedData(world));
+		        world.getPerWorldStorage().setData("satellites", new SatelliteSavedData());
 		        data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 		    }
 		    data.markDirty();
@@ -225,8 +225,7 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 							ItemStack sta = inventory.getStackInSlot(i).copy();
 							sta.setCount(1);
 							
-							if(chest.getStackInSlot(j) != null && chest.getStackInSlot(j).getItem() == inventory.getStackInSlot(i).getItem() && 
-									chest.getStackInSlot(j).getItemDamage() == inventory.getStackInSlot(i).getItemDamage() && 
+							if(chest.getStackInSlot(j) != null && chest.getStackInSlot(j).isItemEqual(inventory.getStackInSlot(i)) && ItemStack.areItemStackTagsEqual(chest.getStackInSlot(j), inventory.getStackInSlot(i)) &&
 									chest.getStackInSlot(j).getCount() < chest.getStackInSlot(j).getMaxStackSize()) {
 								
 								inventory.getStackInSlot(i).shrink(1);
@@ -234,7 +233,7 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 								if(inventory.getStackInSlot(i).isEmpty())
 									inventory.setStackInSlot(i, ItemStack.EMPTY);
 								
-								chest.setStackInSlot(j, new ItemStack(chest.getStackInSlot(j).getItem(), chest.getStackInSlot(j).getCount() + 1, chest.getStackInSlot(j).getItemDamage()));
+								chest.setStackInSlot(j, chest.getStackInSlot(j).copy());
 								return;
 							}
 						}

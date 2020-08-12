@@ -44,8 +44,7 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 		this.bindEntityTexture(fx);
 		if (tex != null) {
 			GL11.glPushMatrix();
-			//GlStateManager.enableBlend();
-			GlStateManager.disableLighting();
+			GlStateManager.enableBlend();
 			GlStateManager.disableLighting();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
@@ -61,8 +60,8 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 			
 			for(int i = 0; i < 5; i++) {
 				
-				double d = randy.nextInt(10) * 0.05;
-				GL11.glColor3d(1 - d, 1 - d, 1 - d);
+				float d = randy.nextInt(10) * 0.05F;
+				GlStateManager.color(1 - d, 1 - d, 1 - d);
 
 				double dX = (rand.nextGaussian() - 1D) * 0.15D;
 				double dY = (rand.nextGaussian() - 1D) * 0.15D;
@@ -81,7 +80,9 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 				GL11.glTranslatef((float) -dX, (float) -dY, (float) -dZ);
 			}
 			
-			GlStateManager.disableRescaleNormal();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
 			GL11.glPopMatrix();
 		}
 	}

@@ -344,6 +344,19 @@ public class temp {
 		AMS_EMITTER,
 		RADAR,
 		FORCEFIELD,
+		RAILGUN(500, Arrays.asList(
+				new ItemStack(ModItems.plate_steel, 24),
+				new ItemStack(ModItems.hull_big_steel, 2),
+				new ItemStack(ModItems.hull_small_steel, 6),
+				new ItemStack(ModItems.pipes_steel, 2),
+				new ItemStack(ModBlocks.machine_lithium_battery, 4),
+				new ItemStack(ModItems.coil_copper, 16),
+				new ItemStack(ModItems.coil_copper_torus, 8),
+				new ItemStack(ModItems.plate_desh, 4),
+				new ItemStack(ModItems.circuit_targeting_tier4, 4),
+				new ItemStack(ModItems.circuit_targeting_tier3, 2),
+				new ItemStack(ModItems.ingot_polymer, 4)),
+				new ItemStack(ModBlocks.railgun_plasma)),
 		
 		MP_T_10_KEROSENE(100, Arrays.asList(
 				new ItemStack(ModItems.seg_10, 1),
@@ -672,7 +685,35 @@ public class temp {
 				new ItemStack(ModBlocks.det_nuke, 16),
 				new ItemStack(ModItems.ingot_starmetal, 32)),
 				
-				new ItemStack(ModItems.sat_gerald));
+				new ItemStack(ModItems.sat_gerald)),
+		SOYUZ(2000, Arrays.asList(
+				new ItemStack(ModItems.rocket_fuel, 40),
+				new ItemStack(ModBlocks.det_cord, 20),
+				new ItemStack(ModItems.thruster_medium, 12),
+				new ItemStack(ModItems.thruster_small, 12),
+				new ItemStack(ModItems.tank_steel, 10),
+				new ItemStack(ModItems.circuit_targeting_tier4, 4),
+				new ItemStack(ModItems.circuit_targeting_tier3, 8),
+				new ItemStack(ModItems.plate_polymer, 64),
+				new ItemStack(ModItems.fins_small_steel, 4),
+				new ItemStack(ModItems.hull_big_titanium, 40),
+				new ItemStack(ModItems.hull_big_steel, 24),
+				new ItemStack(ModItems.ingot_fiberglass, 64)),
+
+				new ItemStack(ModItems.missile_soyuz0)),
+
+		LANDER(1000, Arrays.asList(
+				new ItemStack(ModItems.rocket_fuel, 10),
+				new ItemStack(ModItems.thruster_small, 3),
+				new ItemStack(ModItems.tank_steel, 2),
+				new ItemStack(ModItems.circuit_targeting_tier3, 4),
+				new ItemStack(ModItems.plate_polymer, 32),
+				new ItemStack(ModItems.hull_big_aluminium, 2),
+				new ItemStack(ModItems.sphere_steel, 1),
+				new ItemStack(ModItems.ingot_fiberglass, 12)),
+
+				new ItemStack(ModItems.missile_soyuz_lander)),
+;
 
 		private EnumAssemblyTemplate() { }
 		
@@ -780,7 +821,7 @@ public class temp {
 			list.add(new ItemStack(Items.STRING, 8));
 			break;
 		case ASBESTOS_CLOTH:
-			list.add(new ItemStack(ModItems.powder_quartz, 4));
+			list.add(new ItemStack(ModItems.ingot_asbestos, 2));
 			list.add(new ItemStack(Items.STRING, 6));
 			list.add(new ItemStack(Blocks.WOOL, 1));
 			break;

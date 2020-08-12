@@ -77,9 +77,10 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 				&& this.dualPower <= (TileEntityDiFurnace.maxPower - TileEntityDiFurnace.getItemPower(inventory.getStackInSlot(2)))) {
 			this.dualPower += getItemPower(inventory.getStackInSlot(2));
 			if (!inventory.getStackInSlot(2).isEmpty()) {
+				ItemStack copy = inventory.getStackInSlot(2).copy();
 				inventory.getStackInSlot(2).shrink(1);
 				if (inventory.getStackInSlot(2).isEmpty()) {
-					inventory.setStackInSlot(2, inventory.getStackInSlot(2).getItem().getContainerItem(inventory.getStackInSlot(2)));
+					inventory.setStackInSlot(2, copy.getItem().getContainerItem(copy));
 				}
 			}
 		}

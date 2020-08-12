@@ -7,6 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.items.ModItems;
 
+import api.hbm.energy.IRadarDetectable.RadarTargetType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -55,7 +56,7 @@ public class EntityMissileTaint extends EntityMissileBaseAdvanced {
 	}
 
 	@Override
-	public EnumMissileType getMissileType() {
-		return EnumMissileType.TIER1;
+	public RadarTargetType getTargetType() {
+		return RadarTargetType.MISSILE_TIER0;
 	}
 }

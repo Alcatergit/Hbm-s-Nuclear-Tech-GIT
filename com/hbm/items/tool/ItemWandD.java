@@ -88,6 +88,7 @@ public class ItemWandD extends Item {
 			if(world.isRemote)
 				player.sendMessage(new TextComponentTranslation(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
 		}
+		System.out.println(world.isRemote);
 		
 		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	}

@@ -142,7 +142,7 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 				heat += 50;
 			}
 
-			if (burnTime > 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_on)
+			if (burnTime <= 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_on)
 				MachineBoiler.updateBlockState(false, world, pos);
 
 			if (heat > maxHeat)

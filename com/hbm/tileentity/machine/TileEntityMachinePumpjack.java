@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.lwjgl.opengl.GL33;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachinePumpjack;
 import com.hbm.entity.particle.EntityGasFX;
@@ -183,14 +185,11 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 							break;
 						}
 						BlockPos checkPos = new BlockPos(pos.getX(), i, pos.getZ());
-						Block b = world.getBlockState(checkPos).getBlock();
+						IBlockState state = world.getBlockState(checkPos);
+						Block b = state.getBlock();
 						if(b == ModBlocks.oil_pipe)
 							continue;
-						if(b == Blocks.AIR || b == Blocks.GRASS || b == Blocks.DIRT || 
-								b == Blocks.STONE || b == Blocks.SAND || b == Blocks.SANDSTONE || 
-								b == Blocks.CLAY || b == Blocks.HARDENED_CLAY || b == Blocks.STAINED_HARDENED_CLAY || 
-								b == Blocks.GRAVEL || isOre(world.getBlockState(checkPos)) ||
-								b.isReplaceable(world, checkPos)) {
+						if(b.isReplaceable(world, checkPos) || b.getExplosionResistance(world, checkPos, null, null) < 100) {
 							world.setBlockState(checkPos, ModBlocks.oil_pipe.getDefaultState());
 							
 							//Code 2: The drilling ended
@@ -250,25 +249,6 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 				markDirty();
 			}
 		}
-	}
-	
-	public boolean isOre(IBlockState b) {
-		int meta = b.getBlock().getMetaFromState(b);
-		
-		ItemStack stack = new ItemStack(b.getBlock(), 1, meta);
-		if(stack.isEmpty())
-			return false;
-		int[] ids = OreDictionary.getOreIDs(stack);
-		
-		for(int i = 0; i < ids.length; i++) {
-			
-			String s = OreDictionary.getOreName(ids[i]);
-			
-			if(s.length() > 3 && s.substring(0, 3).equals("ore"))
-				return true;
-		}
-		
-		return false;
 	}
 	
 	public boolean succ(int x, int y, int z) {

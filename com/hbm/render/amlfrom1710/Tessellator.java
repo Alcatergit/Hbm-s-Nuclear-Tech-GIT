@@ -96,6 +96,9 @@ public class Tessellator
     {
     	hasColor = false;
     	hasNormals = false;
+    	this.xOffset = 0;
+    	this.yOffset = 0;
+    	this.zOffset = 0;
     	net.minecraft.client.renderer.Tessellator.getInstance().draw();
     	return 1;
        /* if (!this.isDrawing)
@@ -392,7 +395,7 @@ public class Tessellator
     public void addVertexWithUV(double x, double y, double z, double u, double v)
     {
     	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
-    	buf.pos(x, y, z).tex(u, v);
+    	buf.pos(x+xOffset, y+yOffset, z+zOffset).tex(u, v);
     	if(hasColor)
     		buf.color(r, g, b, a);
     	if(hasNormals)
@@ -409,7 +412,7 @@ public class Tessellator
     public void addVertex(double x, double y, double z)
     {
     	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
-    	buf.pos(x, y, z);
+    	buf.pos(x+xOffset, y+yOffset, z+zOffset);
     	if(hasColor){
     		buf.color(r, g, b, a);
     		//System.out.println(r + " " + g + " " + b + " " + a);

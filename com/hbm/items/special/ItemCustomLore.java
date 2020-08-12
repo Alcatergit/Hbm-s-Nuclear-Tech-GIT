@@ -30,6 +30,10 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this == ModItems.powder_asbestos)
+		{
+			list.add(TextFormatting.ITALIC + "\"Sniffffffff- MHHHHHHMHHHHHHHHH\"");
+		}
 		if(this == ModItems.egg_balefire)
 		{
 			list.add("What kind of bird lays a radioactive egg?");
@@ -218,183 +222,6 @@ public class ItemCustomLore extends Item {
 				list.add("Cheaper and weaker pellet, now with more U238!");
 		}
 
-		if(this == ModItems.rod_uranium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Plutonium Rod");
-		}
-
-		if(this == ModItems.rod_u235) {
-			list.add("Worth 3 operations in breeding reactor");
-			list.add("Worth 15 operations in nuclear powered furnace");
-			list.add("Turns into Neptunium Rod");
-		}
-
-		if(this == ModItems.rod_u238) {
-			list.add("Worth 1 operation in breeding reactor");
-			list.add("Worth 5 operations in nuclear powered furnace");
-			list.add("Turns into Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_neptunium) {
-			list.add("Worth 3 operations in breeding reactor");
-			list.add("Worth 15 operations in nuclear powered furnace");
-			list.add("Turns into Plutonium 238 Rod");
-		}
-
-		if(this == ModItems.rod_plutonium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Lead Rod");
-		}
-
-		if(this == ModItems.rod_pu238) {
-			list.add("Worth 5 operations in breeding reactor");
-			list.add("Worth 25 operations in nuclear powered furnace");
-			list.add("Turns into Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_pu239) {
-			list.add("Worth 3 operations in breeding reactor");
-			list.add("Worth 15 operations in nuclear powered furnace");
-			list.add("Turns into Plutonium 240 Rod");
-		}
-
-		if(this == ModItems.rod_pu240) {
-			list.add("Worth 1 operation in breeding reactor");
-			list.add("Worth 5 operations in nuclear powered furnace");
-			list.add("Turns into Lead Rod");
-		}
-
-		if(this == ModItems.rod_schrabidium) {
-			list.add("Worth 15 operations in breeding reactor");
-			list.add("Worth 75 operations in nuclear powered furnace");
-			list.add("Turns into Solinium Rod");
-		}
-
-		if(this == ModItems.rod_solinium) {
-			list.add("Worth 20 operations in breeding reactor");
-			list.add("Worth 100 operations in nuclear powered furnace");
-		}
-
-		if(this == ModItems.rod_dual_uranium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Dual Plutonium Rod");
-		}
-
-		if(this == ModItems.rod_dual_u235) {
-			list.add("Worth 6 operations in breeding reactor");
-			list.add("Worth 30 operations in nuclear powered furnace");
-			list.add("Turns into Dual Neptunium Rod");
-		}
-
-		if(this == ModItems.rod_dual_u238) {
-			list.add("Worth 2 operations in breeding reactor");
-			list.add("Worth 10 operations in nuclear powered furnace");
-			list.add("Turns into Dual Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_dual_neptunium) {
-			list.add("Worth 6 operations in breeding reactor");
-			list.add("Worth 30 operations in nuclear powered furnace");
-			list.add("Turns into Dual Plutonium 238 Rod");
-		}
-
-		if(this == ModItems.rod_dual_plutonium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Dual Lead Rod");
-		}
-
-		if(this == ModItems.rod_dual_pu238) {
-			list.add("Worth 10 operations in breeding reactor");
-			list.add("Worth 50 operations in nuclear powered furnace");
-			list.add("Turns into Dual Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_dual_pu239) {
-			list.add("Worth 6 operations in breeding reactor");
-			list.add("Worth 30 operations in nuclear powered furnace");
-			list.add("Turns into Dual Plutonium 240 Rod");
-		}
-
-		if(this == ModItems.rod_dual_pu240) {
-			list.add("Worth 2 operations in breeding reactor");
-			list.add("Worth 10 operations in nuclear powered furnace");
-			list.add("Turns into Dual Lead Rod");
-		}
-
-		if(this == ModItems.rod_dual_schrabidium) {
-			list.add("Worth 30 operations in breeding reactor");
-			list.add("Worth 150 operations in nuclear powered furnace");
-			list.add("Turns into Dual Solinium Rod");
-		}
-
-		if(this == ModItems.rod_dual_solinium) {
-			list.add("Worth 40 operations in breeding reactor");
-			list.add("Worth 200 operations in nuclear powered furnace");
-		}
-
-		if(this == ModItems.rod_quad_uranium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Quad Plutonium Rod");
-		}
-
-		if(this == ModItems.rod_quad_u235) {
-			list.add("Worth 12 operations in breeding reactor");
-			list.add("Worth 60 operations in nuclear powered furnace");
-			list.add("Turns into Quad Neptunium Rod");
-		}
-
-		if(this == ModItems.rod_quad_u238) {
-			list.add("Worth 4 operations in breeding reactor");
-			list.add("Worth 20 operations in nuclear powered furnace");
-			list.add("Turns into Quad Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_quad_neptunium) {
-			list.add("Worth 12 operations in breeding reactor");
-			list.add("Worth 60 operations in nuclear powered furnace");
-			list.add("Turns into Quad Plutonium 238 Rod");
-		}
-
-		if(this == ModItems.rod_quad_plutonium) {
-			list.add("Worth 0 operations in breeding reactor");
-			list.add("Worth 0 operations in nuclear powered furnace");
-			list.add("Turns into Quad Lead Rod");
-		}
-
-		if(this == ModItems.rod_quad_pu238) {
-			list.add("Worth 20 operations in breeding reactor");
-			list.add("Worth 100 operations in nuclear powered furnace");
-			list.add("Turns into Quad Plutonium 239 Rod");
-		}
-
-		if(this == ModItems.rod_quad_pu239) {
-			list.add("Worth 12 operations in breeding reactor");
-			list.add("Worth 60 operations in nuclear powered furnace");
-			list.add("Turns into Quad Plutonium 240 Rod");
-		}
-
-		if(this == ModItems.rod_quad_pu240) {
-			list.add("Worth 4 operations in breeding reactor");
-			list.add("Worth 20 operations in nuclear powered furnace");
-			list.add("Turns into Quad Lead Rod");
-		}
-
-		if(this == ModItems.rod_quad_schrabidium) {
-			list.add("Worth 60 operations in breeding reactor");
-			list.add("Worth 300 operations in nuclear powered furnace");
-			list.add("Turns into Quad Solinium Rod");
-		}
-
-		if(this == ModItems.rod_quad_solinium) {
-			list.add("Worth 80 operations in breeding reactor");
-			list.add("Worth 400 operations in nuclear powered furnace");
-		}
-
 		if(this == ModItems.rod_lithium) {
 			list.add("Turns into Tritium Rod");
 		}
@@ -474,7 +301,8 @@ public class ItemCustomLore extends Item {
     			this == ModItems.rune_jera ||
     			this == ModItems.rune_thurisaz ||
     			this == ModItems.egg_balefire_shard ||
-    			this == ModItems.egg_balefire) 
+    			this == ModItems.egg_balefire ||
+    			this == ModItems.coin_maskman) 
 		{
     		return true;
     	}

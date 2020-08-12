@@ -1,5 +1,6 @@
 package com.hbm.tileentity;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.lib.ItemStackHandlerWrapper;
 import com.hbm.packet.NBTPacket;
@@ -97,6 +98,24 @@ public abstract class TileEntityMachineBase extends TileEntity {
 
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		return true;
+	}
+	
+	public int countMufflers() {
+
+		int count = 0;
+
+		for(EnumFacing dir : EnumFacing.VALUES)
+			if(world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler)
+				count++;
+
+		return count;
+	}
+
+	public float getVolume(int toSilence) {
+
+		float volume = 1 - (countMufflers() / (float)toSilence);
+
+		return Math.max(volume, 0);
 	}
 	
 	@Override

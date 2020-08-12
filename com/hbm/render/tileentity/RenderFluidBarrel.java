@@ -18,17 +18,19 @@ public class RenderFluidBarrel extends TileEntitySpecialRenderer<TileEntityBarre
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 		GlStateManager.disableLighting();
 
-		FluidStack type = barrel.tank.getFluid();
-		FluidTypeHandler.FluidProperties p = FluidTypeHandler.getProperties(type);
+		if(barrel.tank.getFluid() != null) {
+			FluidStack type = barrel.tank.getFluid();
+			FluidTypeHandler.FluidProperties p = FluidTypeHandler.getProperties(type);
 
-		for(int j = 0; j < 4; j++) {
+			for(int j = 0; j < 4; j++) {
 
-			GL11.glPushMatrix();
-			GL11.glTranslated(0.4, 0.25, -0.15);
-			GL11.glScalef(1.0F, 0.35F, 0.35F);
-			DiamondPronter.pront(p.poison, p.flammability, p.reactivity, p.symbol);
-			GL11.glPopMatrix();
-			GL11.glRotatef(90, 0, 1, 0);
+				GL11.glPushMatrix();
+				GL11.glTranslated(0.4, 0.25, -0.15);
+				GL11.glScalef(1.0F, 0.35F, 0.35F);
+				DiamondPronter.pront(p.poison, p.flammability, p.reactivity, p.symbol);
+				GL11.glPopMatrix();
+				GL11.glRotatef(90, 0, 1, 0);
+			}
 		}
 
 		GL11.glPopMatrix();

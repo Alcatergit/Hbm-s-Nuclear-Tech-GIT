@@ -13,6 +13,7 @@ import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -99,9 +100,9 @@ public class ItemCell extends ItemRadioactive {
 			return;
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if(hasFluid(stack, ModForgeFluids.tritium)){
-			Library.applyRadData(entityIn, 0.5F / 20F);
+			ContaminationUtil.applyRadData(entityIn, 0.5F / 20F);
 		} else if(hasFluid(stack, ModForgeFluids.sas3)){
-			Library.applyRadData(entityIn, 10F / 20F);
+			ContaminationUtil.applyRadData(entityIn, 10F / 20F);
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
 		}
 	}
@@ -123,7 +124,7 @@ public class ItemCell extends ItemRadioactive {
 				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
 					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.aschrab, 1000), true);
 			}
-			Library.applyRadDirect(player, 50F);
+			ContaminationUtil.applyRadDirect(player, 50F);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;

@@ -128,7 +128,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 	private void killMissile() {
         ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
         ExplosionLarge.spawnShrapnelShower(world, posX, posY, posZ, motionX, motionY, motionZ, 15, 0.075);
-        TileEntityMachineRadar.allMissiles.remove(this);
     }
 	
 	@Override
@@ -287,11 +286,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader {
 	
 	@Override
 	public void onUpdate() {
-		
-		if(!world.isRemote) {
-			 TileEntityMachineRadar.allMissiles.remove(this);
-			 TileEntityMachineRadar.allMissiles.add(this);
-		 }
 		
 		this.getDataManager().set(HEALTH, this.health);
 		if(world.isRemote)

@@ -76,7 +76,8 @@ public class ContainerNukeCustom extends Container {
 					return ItemStack.EMPTY;
 				}
 			} else {
-				return ItemStack.EMPTY;
+				if (!this.mergeItemStack(var5, 0, 27, true))
+					return ItemStack.EMPTY;
 			}
             
 			if (var5.isEmpty())

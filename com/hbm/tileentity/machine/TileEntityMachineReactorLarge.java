@@ -10,8 +10,10 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
+import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.LargeReactorPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.RadiationSavedData;
@@ -37,6 +39,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -137,7 +140,8 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		rods = compound.getInteger("rods");
 		fuel = compound.getInteger("fuel");
 		waste = compound.getInteger("waste");
-		compression = compound.getInteger("compression");
+		if(compound.hasKey("compression"))
+			compression = compound.getInteger("compression");
 		tankTypes[0] = FluidRegistry.WATER;
 		tankTypes[1] = ModForgeFluids.coolant;
 		if(compression == 0){
@@ -406,6 +410,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			caluclateSize();
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, size, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tanks[0], tanks[1], tanks[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{tankTypes[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 		}
 		
 		//tanks[0] = FFUtils.changeTankSize(tanks[0], waterBase * getSize());
@@ -441,9 +446,9 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			}
 			
 			//Load fuel
-			if(getFuelContent(inventory.getStackInSlot(4).getItem(), type) > 0) {
+			if(getFuelContent(inventory.getStackInSlot(4), type) > 0) {
 				
-				int cont = getFuelContent(inventory.getStackInSlot(4).getItem(), type) * fuelMult;
+				int cont = getFuelContent(inventory.getStackInSlot(4), type) * fuelMult;
 				
 				if(fuel + cont <= maxFuel) {
 					
@@ -558,7 +563,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(!inventory.getStackInSlot(slot).isEmpty() && tanks[tank] != null){
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
+			if(inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
 				return true;
 			}
 		}
@@ -606,6 +611,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			for(int i = 0; i < chest.getSlots(); i ++){
 				if(chest.insertItem(i, new ItemStack(waste), false).isEmpty()){
 					this.waste -= wSize;
+					return;
 				}
 			}
 		}
@@ -665,7 +671,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 				if(fuel > 0){
 					for(int i = 0; i < chest.getSlots(); i ++){
 						if(!chest.getStackInSlot(i).isEmpty()){
-							int cont = getFuelContent(chest.getStackInSlot(i).getItem(), type) * fuelMult;
+							int cont = getFuelContent(chest.getStackInSlot(i), type) * fuelMult;
 							
 							if(cont > 0 && fuel + cont <= maxFuel){
 								Item container =  chest.getStackInSlot(i).getItem().getContainerItem();
@@ -683,7 +689,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 					for(int i = 0; i < chest.getSlots(); i++) {
 						
 						if(!chest.getStackInSlot(i).isEmpty()) {
-							int cont = getFuelContent(chest.getStackInSlot(i).getItem(), getFuelType(chest.getStackInSlot(i).getItem())) * fuelMult;
+							int cont = getFuelContent(chest.getStackInSlot(i), getFuelType(chest.getStackInSlot(i).getItem())) * fuelMult;
 							if(cont > 0 && fuel + cont <= maxFuel) {
 								
 								Item container =  chest.getStackInSlot(i).getItem().getContainerItem();
@@ -960,7 +966,8 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			this.out = out;
 		}
 	}
-
+	
+	//TODO: turn this steaming hot garbage into hashmaps
 	static List<ReactorFuelEntry> fuels = new ArrayList<ReactorFuelEntry>();
 	static List<ReactorWasteEntry> wastes = new ArrayList<ReactorWasteEntry>();
 	
@@ -974,11 +981,25 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		wastes.add(new ReactorWasteEntry(nuggets, type, in, out));
 	}
 	
-	public static int getFuelContent(Item item, ReactorFuelType type) {
+	public static int getFuelContent(ItemStack item, ReactorFuelType type) {
+		
+		if(item == null || item.isEmpty())
+			return 0;
 		
 		for(ReactorFuelEntry ent : fuels) {
-			if(ent.item == item && type.toString().equals(ent.type.toString()))
-				return ent.value;
+			if(ent.item == item.getItem() && type.toString().equals(ent.type.toString())) {
+
+				int value = ent.value;
+
+				//if it's a fuel rod that has been used up, multiply by damage and floor it
+				if(item.getItem() instanceof ItemFuelRod) {
+
+					double mult = 1D - ((double)ItemFuelRod.getLifeTime(item) / (double)((ItemFuelRod)item.getItem()).getMaxLifeTime());
+					return (int)Math.floor(mult * value);
+				}
+
+				return value;
+			}
 		}
 			
 		return 0;

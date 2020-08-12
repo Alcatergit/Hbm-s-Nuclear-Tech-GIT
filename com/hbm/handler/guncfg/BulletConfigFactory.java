@@ -1,9 +1,12 @@
 package com.hbm.handler.guncfg;
 
 import java.util.List;
+import java.util.Random;
 
+import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
@@ -27,8 +30,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public class BulletConfigFactory {
 
 	/// configs should never be loaded manually due to syncing issues: use the
-	/// syncing util and pass the UID in the DW of the bullet to make the client
-	/// load the config correctly ////
+		/// syncing util and pass the UID in the DW of the bullet to make the client
+		/// load the config correctly ////
 
 	public static BulletConfiguration getTestConfig() {
 
@@ -185,6 +188,61 @@ public class BulletConfigFactory {
 		bullet.style = BulletConfiguration.STYLE_GRENADE;
 		bullet.plink = BulletConfiguration.PLINK_GRENADE;
 		bullet.vPFX = "smoke";
+
+		return bullet;
+	}
+	
+	public static BulletConfiguration standardAirstrikeConfig() {
+
+		BulletConfiguration bullet = new BulletConfiguration();
+
+		bullet.velocity = 5.0F;
+		bullet.spread = 0.0F;
+		bullet.wear = 50;
+		bullet.bulletsMin = 1;
+		bullet.bulletsMax = 1;
+		bullet.gravity = 0D;
+		bullet.maxAge = 100;
+		bullet.doesRicochet = false;
+		bullet.doesPenetrate = false;
+		bullet.doesBreakGlass = false;
+		bullet.style = BulletConfiguration.STYLE_BOLT;
+		bullet.leadChance = 0;
+		bullet.vPFX = "reddust";
+
+		bullet.bImpact = new IBulletImpactBehavior() {
+
+			@Override
+			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				Random rand = bullet.world.rand;
+				int count = rand.nextInt(11) + 95;
+
+				for(int i = 0; i < count; i++) {
+
+					double dx = bullet.posX + rand.nextGaussian() * 4;
+					double dy = bullet.posY + 25 + rand.nextGaussian() * 5;
+					double dz = bullet.posZ + rand.nextGaussian() * 4;
+
+					Vec3 motion = Vec3.createVectorHelper(bullet.posX - dx, bullet.posY - dy, bullet.posZ - dz);
+					motion = motion.normalize();
+
+					EntityBulletBase bolt = new EntityBulletBase(bullet.world, BulletConfigSyncingUtil.R556_FLECHETTE_DU);
+					bolt.setPosition(dx, dy, dz);
+					bolt.shoot(motion.xCoord, motion.yCoord, motion.zCoord, 0.5F, 0.1F);
+					bullet.world.spawnEntity(bolt);
+
+					if(i < 30) {
+						EntityBSmokeFX bsmoke = new EntityBSmokeFX(bullet.world);
+						bsmoke.setPosition(dx, dy, dz);
+						bullet.world.spawnEntity(bsmoke);
+					}
+				}
+			}
+		};
 
 		return bullet;
 	}

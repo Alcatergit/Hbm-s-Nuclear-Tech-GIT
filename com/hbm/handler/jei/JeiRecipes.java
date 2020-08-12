@@ -9,21 +9,28 @@ import java.util.Map.Entry;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.BreederRecipes;
+import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
+import com.hbm.inventory.MagicRecipes;
+import com.hbm.inventory.MagicRecipes.MagicRecipe;
+import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.machine.ItemAssemblyTemplate.AssemblerRecipe;
 import com.hbm.items.special.ItemCell;
 import com.hbm.lib.Library;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.main.MainRegistry;
 
+import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -44,9 +51,10 @@ public class JeiRecipes {
 	private static List<ReactorRecipe> reactorRecipes = null;
 	private static List<RefineryRecipe> refineryRecipes = null;
 	private static List<FluidRecipe> fluidEquivalences = null;
+	private static List<BookRecipe> bookRecipes = null;
 	
 	private static List<ItemStack> batteries = null;
-	private static List<ItemStack> reactorFuels = null;
+	private static Map<Integer, List<ItemStack>> reactorFuelMap = new HashMap<Integer, List<ItemStack>>();
 	private static List<ItemStack> blades = null;
 	
 	
@@ -184,18 +192,27 @@ public class JeiRecipes {
 	
 	public static class ReactorRecipe implements IRecipeWrapper {
 		
+		public static IDrawableStatic heatTex;
+		
 		private final ItemStack input;
 		private final ItemStack output;
+		public final int heat;
 		
-		public ReactorRecipe(ItemStack input, ItemStack output) {
+		public ReactorRecipe(ItemStack input, ItemStack output, int heat) {
 			this.input = input;
 			this.output = output; 
+			this.heat = heat;
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+		
+		@Override
+		public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+			heatTex.draw(minecraft, 1, 20, 16-heat*4, 0, 0, 0);
 		}
 		
 	}
@@ -252,20 +269,33 @@ public class JeiRecipes {
 	
 	public static class AssemblerRecipeWrapper implements IRecipeWrapper {
 
-		AssemblerRecipe recipe;
+		ItemStack output;
+		List<ItemStack> inputs;
+		int time;
 		
-		public AssemblerRecipeWrapper(AssemblerRecipe recipe) {
-			this.recipe = recipe;
+		public AssemblerRecipeWrapper(ItemStack output, List<ItemStack> inputs, int time) {
+			this.output = output;
+			this.inputs = inputs;
+			this.time = time;
+		}
+		
+		public AssemblerRecipeWrapper(ItemStack output, AStack[] inputs, int time) {
+			this.output = output;
+			List<ItemStack> list = new ArrayList<>(inputs.length);
+			for(AStack s : inputs)
+				list.add(s.getStack());
+			this.inputs = list;
+			this.time = time;
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			List<ItemStack> in = Library.copyItemStackList(recipe.getInputs());
+			List<ItemStack> in = Library.copyItemStackList(inputs);
 			while(in.size() < 12)
 				in.add(new ItemStack(ModItems.nothing));
 			int index = -1;
-			for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++){
-				if(ItemAssemblyTemplate.recipes.get(i) == recipe){
+			for(int i = 0; i < AssemblerRecipes.recipeList.size(); i++){
+				if(AssemblerRecipes.recipeList.get(i).isApplicable(output)){
 					index = i;
 					break;
 				}
@@ -276,11 +306,32 @@ public class JeiRecipes {
 				in.add(new ItemStack(ModItems.nothing));
 			}
 			ingredients.setInputs(VanillaTypes.ITEM, in);
-			ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput().copy());
+			ingredients.setOutput(VanillaTypes.ITEM, output.copy());
 		}
 		
 	}
 	
+	public static class BookRecipe implements IRecipeWrapper {
+
+		List<ItemStack> inputs;
+		ItemStack output;
+		
+		public BookRecipe(MagicRecipe recipe) {
+			inputs = new ArrayList<>(4);
+			for(int i = 0; i < recipe.in.size(); i ++)
+				inputs.add(recipe.in.get(i).getStack());
+			while(inputs.size() < 4)
+				inputs.add(new ItemStack(ModItems.nothing));
+			output = recipe.getResult();
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+		
+	}
 	
 	
 	
@@ -920,94 +971,33 @@ public class JeiRecipes {
 		return gasCentRecipes;
 	}
 	
-	public static List<ReactorRecipe> getReactorRecipes() {
+	public static List<BookRecipe> getBookRecipes(){
+		if(bookRecipes != null)
+			return bookRecipes;
+		bookRecipes = new ArrayList<>();
+		for(MagicRecipe m : MagicRecipes.getRecipes()){
+			bookRecipes.add(new BookRecipe(m));
+		}
+		return bookRecipes;
+	}
+	
+	public static List<ReactorRecipe> getReactorRecipes(){
 		if(reactorRecipes != null)
 			return reactorRecipes;
 		reactorRecipes = new ArrayList<ReactorRecipe>();
 		
-		Map<ItemStack, ItemStack> recipes = new HashMap<ItemStack, ItemStack>();
-		recipes.put(new ItemStack(ModItems.rod_uranium), MachineRecipes.getReactorOutput(ModItems.rod_uranium));
-		recipes.put(new ItemStack(ModItems.rod_dual_uranium), MachineRecipes.getReactorOutput(ModItems.rod_dual_uranium));
-		recipes.put(new ItemStack(ModItems.rod_quad_uranium), MachineRecipes.getReactorOutput(ModItems.rod_quad_uranium));
-		recipes.put(new ItemStack(ModItems.rod_u235), MachineRecipes.getReactorOutput(ModItems.rod_u235));
-		recipes.put(new ItemStack(ModItems.rod_dual_u235), MachineRecipes.getReactorOutput(ModItems.rod_dual_u235));
-		recipes.put(new ItemStack(ModItems.rod_quad_u235), MachineRecipes.getReactorOutput(ModItems.rod_quad_u235));
-		recipes.put(new ItemStack(ModItems.rod_u238), MachineRecipes.getReactorOutput(ModItems.rod_u238));
-		recipes.put(new ItemStack(ModItems.rod_dual_u238), MachineRecipes.getReactorOutput(ModItems.rod_dual_u238));
-		recipes.put(new ItemStack(ModItems.rod_quad_u238), MachineRecipes.getReactorOutput(ModItems.rod_quad_u238));
-		recipes.put(new ItemStack(ModItems.rod_plutonium), MachineRecipes.getReactorOutput(ModItems.rod_plutonium));
-		recipes.put(new ItemStack(ModItems.rod_dual_plutonium), MachineRecipes.getReactorOutput(ModItems.rod_dual_plutonium));
-		recipes.put(new ItemStack(ModItems.rod_quad_plutonium), MachineRecipes.getReactorOutput(ModItems.rod_quad_plutonium));
-		recipes.put(new ItemStack(ModItems.rod_pu238), MachineRecipes.getReactorOutput(ModItems.rod_pu238));
-		recipes.put(new ItemStack(ModItems.rod_dual_pu238), MachineRecipes.getReactorOutput(ModItems.rod_dual_pu238));
-		recipes.put(new ItemStack(ModItems.rod_quad_pu238), MachineRecipes.getReactorOutput(ModItems.rod_quad_pu238));
-		recipes.put(new ItemStack(ModItems.rod_pu239), MachineRecipes.getReactorOutput(ModItems.rod_pu239));
-		recipes.put(new ItemStack(ModItems.rod_dual_pu239), MachineRecipes.getReactorOutput(ModItems.rod_dual_pu239));
-		recipes.put(new ItemStack(ModItems.rod_quad_pu239), MachineRecipes.getReactorOutput(ModItems.rod_quad_pu239));
-		recipes.put(new ItemStack(ModItems.rod_pu240), MachineRecipes.getReactorOutput(ModItems.rod_pu240));
-		recipes.put(new ItemStack(ModItems.rod_dual_pu240), MachineRecipes.getReactorOutput(ModItems.rod_dual_pu240));
-		recipes.put(new ItemStack(ModItems.rod_quad_pu240), MachineRecipes.getReactorOutput(ModItems.rod_quad_pu240));
-		recipes.put(new ItemStack(ModItems.rod_neptunium), MachineRecipes.getReactorOutput(ModItems.rod_neptunium));
-		recipes.put(new ItemStack(ModItems.rod_dual_neptunium), MachineRecipes.getReactorOutput(ModItems.rod_dual_neptunium));
-		recipes.put(new ItemStack(ModItems.rod_quad_neptunium), MachineRecipes.getReactorOutput(ModItems.rod_quad_neptunium));
-		recipes.put(new ItemStack(ModItems.rod_schrabidium), MachineRecipes.getReactorOutput(ModItems.rod_schrabidium));
-		recipes.put(new ItemStack(ModItems.rod_dual_schrabidium), MachineRecipes.getReactorOutput(ModItems.rod_dual_schrabidium));
-		recipes.put(new ItemStack(ModItems.rod_quad_schrabidium), MachineRecipes.getReactorOutput(ModItems.rod_quad_schrabidium));
-		recipes.put(new ItemStack(ModItems.rod_quad_solinium), MachineRecipes.getReactorOutput(ModItems.rod_quad_solinium));
-		recipes.put(new ItemStack(ModItems.rod_lithium), MachineRecipes.getReactorOutput(ModItems.rod_lithium));
-		recipes.put(new ItemStack(ModItems.rod_dual_lithium), MachineRecipes.getReactorOutput(ModItems.rod_dual_lithium));
-		recipes.put(new ItemStack(ModItems.rod_quad_lithium), MachineRecipes.getReactorOutput(ModItems.rod_quad_lithium));
-		recipes.put(new ItemStack(Blocks.STONE), MachineRecipes.getReactorOutput(Item.getItemFromBlock(Blocks.STONE)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_slaked), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_slaked)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_0), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_0)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_1), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_1)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_2), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_2)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_3), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_3)));
-		recipes.put(new ItemStack(ModBlocks.sellafield_4), MachineRecipes.getReactorOutput(Item.getItemFromBlock(ModBlocks.sellafield_4)));
-		recipes.put(new ItemStack(ModItems.rod_th232), MachineRecipes.getReactorOutput(ModItems.rod_th232));
-		recipes.put(new ItemStack(ModItems.rod_dual_th232), MachineRecipes.getReactorOutput(ModItems.rod_dual_th232));
-		recipes.put(new ItemStack(ModItems.rod_quad_th232), MachineRecipes.getReactorOutput(ModItems.rod_quad_th232));
-		recipes.put(new ItemStack(ModItems.rod_u233), MachineRecipes.getReactorOutput(ModItems.rod_u233));
-		recipes.put(new ItemStack(ModItems.rod_dual_u233), MachineRecipes.getReactorOutput(ModItems.rod_dual_u233));
-		recipes.put(new ItemStack(ModItems.rod_quad_u233), MachineRecipes.getReactorOutput(ModItems.rod_quad_u233));
-		
-		for(Map.Entry<ItemStack, ItemStack> entry : recipes.entrySet()){
-			reactorRecipes.add(new ReactorRecipe(entry.getKey(), entry.getValue()));
+		for(Map.Entry<ItemStack, BreederRecipe> entry : BreederRecipes.getAllRecipes().entrySet()){
+			reactorRecipes.add(new ReactorRecipe(entry.getKey(), entry.getValue().output, entry.getValue().heat));
 		}
 		
 		return reactorRecipes;
 	}
 	
-	public static List<ItemStack> getReactorFuels() {
-		if(reactorFuels != null)
-			return reactorFuels;
-		reactorFuels = new ArrayList<ItemStack>();
-		reactorFuels.add(new ItemStack(ModItems.rod_u238));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_u238));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_u238));
-		reactorFuels.add(new ItemStack(ModItems.rod_u235));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_u235));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_u235));
-		reactorFuels.add(new ItemStack(ModItems.rod_pu238));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_pu238));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_pu238));
-		reactorFuels.add(new ItemStack(ModItems.rod_pu239));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_pu239));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_pu239));
-		reactorFuels.add(new ItemStack(ModItems.rod_pu240));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_pu240));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_pu240));
-		reactorFuels.add(new ItemStack(ModItems.rod_neptunium));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_neptunium));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_neptunium));
-		reactorFuels.add(new ItemStack(ModItems.rod_schrabidium));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_schrabidium));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_schrabidium));
-		reactorFuels.add(new ItemStack(ModItems.rod_solinium));
-		reactorFuels.add(new ItemStack(ModItems.rod_dual_solinium));
-		reactorFuels.add(new ItemStack(ModItems.rod_quad_solinium));
-		reactorFuels.add(new ItemStack(ModItems.pellet_rtg));
-		return reactorFuels;
+	public static List<ItemStack> getReactorFuels(int heat){
+		if(reactorFuelMap.containsKey(heat))
+			return reactorFuelMap.get(heat);
+		reactorFuelMap.put(heat, BreederRecipes.getAllFuelsFromHEAT(heat));
+		return reactorFuelMap.get(heat);
 	}
 	
 	public static List<RefineryRecipe> getRefineryRecipe() {

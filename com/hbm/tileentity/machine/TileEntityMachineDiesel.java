@@ -9,15 +9,12 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -32,11 +29,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineDiesel extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineDiesel extends TileEntityMachineBase implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public int soundCycle = 0;
@@ -48,41 +42,18 @@ public class TileEntityMachineDiesel extends TileEntity implements ITickable, IS
 	public Fluid tankType = ModForgeFluids.diesel;
 	public boolean needsUpdate;
 
-	//private static final int[] slots_top = new int[] { 0 };
-	//private static final int[] slots_bottom = new int[] { 1, 2 };
-	//private static final int[] slots_side = new int[] { 2 };
+	private static final int[] slots_top = new int[] { 0 };
+	private static final int[] slots_bottom = new int[] { 1, 2 };
+	private static final int[] slots_side = new int[] { 2 };
 
-	private String customName;
-	
 	public TileEntityMachineDiesel() {
-		inventory = new ItemStackHandler(3){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(3);
 		tank = new FluidTank(16000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineDiesel";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
-		}
+	@Override
+	public String getName() {
+		return "container.machineDiesel";
 	}
 	
 	@Override
@@ -90,7 +61,6 @@ public class TileEntityMachineDiesel extends TileEntity implements ITickable, IS
 		compound.setLong("powerTime", power);
 		compound.setLong("powerCap", powerCap);
 		tank.writeToNBT(compound);
-		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
 	
@@ -99,9 +69,13 @@ public class TileEntityMachineDiesel extends TileEntity implements ITickable, IS
 		this.power = compound.getLong("powerTime");
 		this.powerCap = compound.getLong("powerCap");
 		tank.readFromNBT(compound);
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int p_94128_1_ = e.ordinal();
+		return p_94128_1_ == 0 ? slots_bottom : (p_94128_1_ == 1 ? slots_top : slots_side);
 	}
 	
 	public long getPowerScaled(long i) {
@@ -141,10 +115,19 @@ public class TileEntityMachineDiesel extends TileEntity implements ITickable, IS
 
 			generate();
 
+			NBTTagCompound data = new NBTTagCompound();
+			data.setInteger("power", (int) power);
+			data.setInteger("powerCap", (int) powerCap);
+			this.networkPack(data, 50);
+			
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, (int)powerCap, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		}
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		power = data.getInteger("power");
+		powerCap = data.getInteger("powerCap");
 	}
 	
 	public boolean hasAcceptableFuel() {
@@ -170,17 +153,12 @@ public class TileEntityMachineDiesel extends TileEntity implements ITickable, IS
 		if (hasAcceptableFuel()) {
 			if (tank.getFluidAmount() > 0) {
 				if (soundCycle == 0) {
-					//if (tank.getTankType().name().equals(FluidType.) > 0)
-					//	this.worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "fireworks.blast", 1.0F, 1.0F);
-					//else
-						this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.BLOCKS, 1.0F, 0.5F);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.BLOCKS, 1.0F, 0.5F);
 				}
 				soundCycle++;
 
 				if (soundCycle >= 3)
 					soundCycle = 0;
-				//if (this.superTimer > 0)
-				//	soundCycle = 0;
 
 				tank.drain(10, true);
 				needsUpdate = true;

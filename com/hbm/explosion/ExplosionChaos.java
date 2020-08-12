@@ -224,7 +224,6 @@ public class ExplosionChaos {
 
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos(pos);
 		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos(pos.up());
-		MutableBlockPos mPosFlameCheck = new BlockPos.MutableBlockPos(mPosUp);
 
 		int r = bound;
 		int r2 = r * r;
@@ -241,8 +240,7 @@ public class ExplosionChaos {
 					if(ZZ < r22) {
 						mPos.setPos(X, Y, Z);
 						mPosUp.setPos(X, Y + 1, Z);
-						mPosFlameCheck.setPos(XX, YY, ZZ);
-						if(world.getBlockState(mPos).getBlock().isFlammable(world, mPosFlameCheck, EnumFacing.UP) && world.getBlockState(mPosUp).getBlock() == Blocks.AIR) {
+						if(world.getBlockState(mPos).getBlock().isFlammable(world, mPos, EnumFacing.UP) && world.getBlockState(mPosUp).getBlock() == Blocks.AIR) {
 							world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
 						}
 					}

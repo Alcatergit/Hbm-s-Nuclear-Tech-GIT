@@ -2,6 +2,7 @@ package com.hbm.blocks.fluid;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.Library;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -47,7 +48,7 @@ public class ToxicBlock extends BlockFluidClassic {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.setInWeb();
-		Library.applyRadData(entityIn, 1.0F);
+		ContaminationUtil.applyRadData(entityIn, 1.0F);
 	}
 	
 	@Override

@@ -19,8 +19,8 @@ public class ControlTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		if(ModItems.rod_uranium_fuel != null){
-			return new ItemStack(ModItems.rod_uranium_fuel);
+		if(ModItems.rod_balefire_blazing != null){
+			return new ItemStack(ModItems.rod_balefire_blazing);
 		}
 		return new ItemStack(Items.IRON_PICKAXE, 1);
 	}
@@ -59,7 +59,9 @@ public class ControlTab extends CreativeTabs {
 
 			list.remove(index);
 			list.add(index, full);
-			list.add(index, empty);
+			//do not list empty versions of SU batteries
+			if(battery.getChargeRate() > 0)
+				list.add(index, empty);
 		}
 	}
 }

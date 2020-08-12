@@ -34,13 +34,15 @@ public class RenderMeteor extends Render<EntityMeteor> {
 		GlStateManager.disableCull();
 		GL11.glScalef(5.0F, 5.0F, 5.0F);
 		bindTexture(this.getEntityTexture(rocket));
-		renderBlock(getEntityTexture(rocket), 0, 0, 0);
+		GlStateManager.disableLighting();
+		renderBlock(0, 0, 0);
+		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
 		
 		GL11.glPopMatrix();
 	}
 	
-	public void renderBlock(ResourceLocation loc1, double x, double y, double z) {
+	public void renderBlock(double x, double y, double z) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef(180, 0F, 0F, 1F);

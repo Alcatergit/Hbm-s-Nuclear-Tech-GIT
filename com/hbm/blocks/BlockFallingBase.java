@@ -30,9 +30,19 @@ public class BlockFallingBase extends BlockFalling {
 			tooltip.add("");
 			tooltip.add("Update, 2020-07-04:");
 			tooltip.add("We deny any implications of a joke on");
-			tooltip.add("the basis that it was so severly unfunny");
+			tooltip.add("the basis that it was so severely unfunny");
 			tooltip.add("that people started stabbing their eyes out.");
+			tooltip.add("");
+			tooltip.add("Update, 2020-17-04:");
+			tooltip.add("As it turns out, \"Diamond Gravel\" was");
+			tooltip.add("never really a thing, rendering what might");
+			tooltip.add("have been a joke as totally nonsensical.");
+			tooltip.add("We apologize for getting your hopes up with");
+			tooltip.add("this non-joke that hasn't been made.");
+			tooltip.add("");
+			tooltip.add("i added an item for a joke that isn't even here, what am i, stupid? can't even tell the difference between gravel and a gavel, how did i not forget how to breathe yet?");
 		}
+
 	}
 	
 }

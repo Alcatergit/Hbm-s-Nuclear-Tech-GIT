@@ -15,7 +15,7 @@ public class SatelliteSavedData extends WorldSavedData {
 		super(p_i2141_1_);
 	}
 
-    public SatelliteSavedData(World p_i1678_1_)
+    public SatelliteSavedData()
     {
         super("satellites");
         this.markDirty();
@@ -69,7 +69,7 @@ public class SatelliteSavedData extends WorldSavedData {
 
 		SatelliteSavedData data = (SatelliteSavedData)worldObj.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 	    if(data == null) {
-	        worldObj.getPerWorldStorage().setData("satellites", new SatelliteSavedData(worldObj));
+	        worldObj.getPerWorldStorage().setData("satellites", new SatelliteSavedData());
 	        
 	        data = (SatelliteSavedData)worldObj.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 	    }

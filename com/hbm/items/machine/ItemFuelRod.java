@@ -3,10 +3,12 @@ package com.hbm.items.machine;
 import java.util.List;
 
 import com.hbm.items.special.ItemRadioactive;
+import com.hbm.lib.Library;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -25,10 +27,10 @@ public class ItemFuelRod extends ItemRadioactive {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Used in nuclear reactor");
+		tooltip.add(TextFormatting.YELLOW + "[Reactor Fuel Rod]");
 		
-		tooltip.add("Generates " + heat + " heat per tick");
-		tooltip.add("Lasts " + lifeTime + " ticks");
+		tooltip.add(TextFormatting.DARK_AQUA + "  Generates " + heat + " heat per tick");
+		tooltip.add(TextFormatting.DARK_AQUA + "  Lasts " + Library.getShortNumber(lifeTime) + " ticks");
 	}
 	
 	@Override
@@ -58,10 +60,12 @@ public class ItemFuelRod extends ItemRadioactive {
 		return heat;
 	}
 	
-	public static void updateDamage(ItemStack stack){
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.setItemDamage((int)((double)getLifeTime(stack) / (double)((ItemFuelRod)stack.getItem()).lifeTime * 100D));
-	}
+	public boolean showDurabilityBar(ItemStack stack) {
+        return true;
+    }
 
+    public double getDurabilityForDisplay(ItemStack stack)
+    {
+        return (double)getLifeTime(stack) / (double)((ItemFuelRod)stack.getItem()).lifeTime;
+    }
 }

@@ -52,7 +52,7 @@ public class EntityMissileBHole extends EntityMissileBaseAdvanced {
 	}
 
 	@Override
-	public EnumMissileType getMissileType() {
-		return EnumMissileType.TIER1;
+	public RadarTargetType getTargetType() {
+		return RadarTargetType.MISSILE_TIER0;
 	}
 }

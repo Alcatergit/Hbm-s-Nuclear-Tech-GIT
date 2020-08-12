@@ -8,6 +8,7 @@ import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
+import api.hbm.energy.IRadarDetectable.RadarTargetType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -59,7 +60,7 @@ public class EntityMissileNuclear extends EntityMissileBaseAdvanced {
 	}
 
 	@Override
-	public EnumMissileType getMissileType() {
-		return EnumMissileType.TIER4;
+	public RadarTargetType getTargetType() {
+		return RadarTargetType.MISSILE_TIER4;
 	}
 }

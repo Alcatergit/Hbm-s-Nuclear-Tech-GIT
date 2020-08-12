@@ -103,6 +103,7 @@ public class BulletConfiguration {
 	public static final int STYLE_GRENADE = 9;
 	public static final int STYLE_BF = 10;
 	public static final int STYLE_ORB = 11;
+	public static final int STYLE_METEOR = 12;
 
 	public static final int PLINK_NONE = 0;
 	public static final int PLINK_BULLET = 1;
@@ -122,14 +123,13 @@ public class BulletConfiguration {
 	}
 
 	public BulletConfiguration setToFire(int duration) {
-
 		this.incendiary = duration;
 		return this;
 	}
 	
 	public BulletConfiguration setToGuided() {
-
 		this.bUpdate = BulletConfigFactory.getLaserSteering();
+		this.doesRicochet = false;
 		return this;
 	}
 }

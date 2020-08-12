@@ -29,6 +29,7 @@ public class GUIMachineSchrabidiumTransmutator extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, f);
 
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 106 - 88, 16, 88, diFurnace.power, TileEntityMachineSchrabidiumTransmutator.maxPower);
+		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override
@@ -42,6 +43,7 @@ public class GUIMachineSchrabidiumTransmutator extends GuiInfoContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		super.drawDefaultBackground();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);

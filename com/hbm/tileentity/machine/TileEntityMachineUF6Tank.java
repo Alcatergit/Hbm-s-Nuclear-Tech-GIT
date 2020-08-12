@@ -29,7 +29,6 @@ public class TileEntityMachineUF6Tank extends TileEntity implements ITickable, I
 	//public static final int maxFill = 64 * 3;
 	public FluidTank tank;
 	public Fluid tankType;
-	public boolean needsUpdate;
 
 	//private static final int[] slots_top = new int[] {0};
 	//private static final int[] slots_bottom = new int[] {1, 3};
@@ -47,7 +46,6 @@ public class TileEntityMachineUF6Tank extends TileEntity implements ITickable, I
 		};
 		tank = new FluidTank(64000);
 		tankType = ModForgeFluids.uf6;
-		needsUpdate = false;
 	}
 	
 	public String getInventoryName() {
@@ -92,14 +90,10 @@ public class TileEntityMachineUF6Tank extends TileEntity implements ITickable, I
 		if(!world.isRemote)
 		{
 			if(inputValidForTank(-1, 0))
-				if(FFUtils.fillFromFluidContainer(inventory, tank, 0, 1))
-					needsUpdate = true;
-			if(FFUtils.fillFluidContainer(inventory, tank, 2, 3))
-				needsUpdate = true;
-			if(needsUpdate){
-				PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[]{tank}));
-				needsUpdate = false;
-			}
+				FFUtils.fillFromFluidContainer(inventory, tank, 0, 1);
+			FFUtils.fillFluidContainer(inventory, tank, 2, 3);
+			
+			PacketDispatcher.wrapper.sendToAll(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[]{tank}));
 		}
 	}
 	

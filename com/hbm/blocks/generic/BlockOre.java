@@ -57,6 +57,10 @@ public class BlockOre extends Block {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		if(this == ModBlocks.ore_asbestos)
+		{
+			return ModItems.ingot_asbestos;
+		}
 		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
 			return ModItems.trinitite;
 		}

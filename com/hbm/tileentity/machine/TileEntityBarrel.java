@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.BlockFluidBarrel;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -60,28 +61,26 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 				
 				Block b = this.getBlockType();
 				
+				//for when you fill antimatter into a matter tank
 				if(b != ModBlocks.barrel_antimatter && FluidTypeHandler.isAntimatter(tank.getFluid().getFluid())) {
 					world.destroyBlock(pos, false);
 					world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
 				}
 				
+				//for when you fill hot or corrosive liquids into a plastic tank
 				if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosive(tank.getFluid().getFluid()) || FluidTypeHandler.isHot(tank.getFluid().getFluid()))) {
 					world.destroyBlock(pos, false);
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				}
 				
-				//TODO: rip off furnace code and make transition more seamless
+				//for when you fill corrosive liquid into an iron tank
 				if(b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosive(tank.getFluid().getFluid())) {
+					BlockFluidBarrel.keepInventory = true;
 					world.setBlockState(pos, ModBlocks.barrel_corroded.getDefaultState());
-					world.setTileEntity(pos, this);
 					this.validate();
-					/*TileEntityBarrel barrel = (TileEntityBarrel)world.getTileEntity(pos);
+					world.setTileEntity(pos, this);
 					
-					if(barrel != null) {
-						barrel.tank.setTankType(tank.getTankType());
-						barrel.tank.setFill(Math.min(barrel.tank.getMaxFill(), tank.getFill()));
-						barrel.slots = copy;
-					}*/
+					BlockFluidBarrel.keepInventory = false;
 					
 					//Drillgon200: Heck if I know what random.fizz is.
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);

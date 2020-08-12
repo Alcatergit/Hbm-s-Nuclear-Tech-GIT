@@ -24,6 +24,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 	public int length;
 
 	public boolean fallout = true;
+	private int falloutAdd = 0;
 
 	ExplosionNukeRay explosion;
 
@@ -94,7 +95,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 			fallout.posX = this.posX;
 			fallout.posY = this.posY;
 			fallout.posZ = this.posZ;
-			fallout.setScale((int) (this.length * 1.8) * MainRegistry.falloutRange / 100);
+			fallout.setScale((int) (this.length * 1.8 + falloutAdd) * MainRegistry.falloutRange / 100);
 
 			this.world.spawnEntity(fallout);
 
@@ -172,5 +173,10 @@ public class EntityNukeExplosionMK4 extends Entity {
 		mk4.length = mk4.strength / 2;
 		mk4.fallout = false;
 		return mk4;
+	}
+	
+	public EntityNukeExplosionMK4 moreFallout(int fallout) {
+		falloutAdd = fallout;
+		return this;
 	}
 }

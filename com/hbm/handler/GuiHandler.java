@@ -7,6 +7,7 @@ import com.hbm.inventory.container.ContainerAMSEmitter;
 import com.hbm.inventory.container.ContainerAMSLimiter;
 import com.hbm.inventory.container.ContainerBarrel;
 import com.hbm.inventory.container.ContainerBombMulti;
+import com.hbm.inventory.container.ContainerBook;
 import com.hbm.inventory.container.ContainerCentrifuge;
 import com.hbm.inventory.container.ContainerCompactLauncher;
 import com.hbm.inventory.container.ContainerConverterHeRf;
@@ -96,6 +97,7 @@ import com.hbm.inventory.gui.GUIAMSEmitter;
 import com.hbm.inventory.gui.GUIAMSLimiter;
 import com.hbm.inventory.gui.GUIBarrel;
 import com.hbm.inventory.gui.GUIBombMulti;
+import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUIConverterHeRf;
 import com.hbm.inventory.gui.GUIConverterRfHe;
 import com.hbm.inventory.gui.GUICore;
@@ -288,6 +290,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity entity = world.getTileEntity(new BlockPos(x, y, z));
+		
 		if(entity != null) {
 			switch(ID) {
 			case ModBlocks.guiID_machine_press: {
@@ -666,8 +669,14 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMicrowave){
 					return new ContainerMicrowave(player.inventory, (TileEntityMicrowave) entity);
 				}
+			
 			}
 
+		} else {
+			switch(ID){
+			case ModItems.guiID_item_book:
+				return new ContainerBook(player.inventory);
+			}
 		}
 		return null;
 	}
@@ -1055,8 +1064,7 @@ public class GuiHandler implements IGuiHandler {
 			}
 
 		} else {
-			// CLIENTONLY GUIS
-
+			// ITEM GUIS
 			switch(ID) {
 			case ModItems.guiID_item_folder:
 				return new GUIScreenTemplateFolder(player);
@@ -1069,6 +1077,9 @@ public class GuiHandler implements IGuiHandler {
 			case ModItems.guiID_item_bobmazon:
 				if(BobmazonOfferFactory.getOffers(player.getHeldItemMainhand()) != null)
 					return new GUIScreenBobmazon(player, BobmazonOfferFactory.getOffers(player.getHeldItemMainhand()));
+				break;
+			case ModItems.guiID_item_book:
+				return new GUIBook(player.inventory);
 			}
 		}
 		return null;

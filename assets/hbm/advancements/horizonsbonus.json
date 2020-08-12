@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:horizonsend",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

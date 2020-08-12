@@ -266,9 +266,8 @@ public abstract class ToolAbility {
 
 		@Override
 		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
-
 			//if the tool is already enchanted, do nothing
-			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItem(hand)) <= 0 || player.getHeldItem(hand).isEmpty())
+			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItem(hand)) > 0 || player.getHeldItem(hand).isEmpty())
 				return;
 
 			//add enchantment
@@ -277,6 +276,7 @@ public abstract class ToolAbility {
 			EnchantmentUtil.addEnchantment(stack, Enchantments.SILK_TOUCH, 1);
 			BlockPos pos = new BlockPos(x, y, z);
 			block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
+			
 			EnchantmentUtil.removeEnchantment(stack, Enchantments.SILK_TOUCH);
 
 			world.setBlockToAir(pos);
@@ -303,14 +303,13 @@ public abstract class ToolAbility {
 
 		@Override
 		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
-
 			//if the tool is already enchanted, do nothing
-			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItem(hand)) <= 0 || player.getHeldItem(hand) == null)
+			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItem(hand)) > 0 || player.getHeldItem(hand) == null)
 				return;
 
 			//add enchantment
 			ItemStack stack = player.getHeldItem(hand);
-
+			
 			EnchantmentUtil.addEnchantment(stack, Enchantments.FORTUNE, luck);
 			BlockPos pos = new BlockPos(x, y, z);
 			block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);

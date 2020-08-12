@@ -10,6 +10,7 @@ import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -119,7 +120,7 @@ public class HbmPotion extends Potion {
 			//RadEntitySavedData data = RadEntitySavedData.getData(entity.worldObj);
 			//data.increaseRad(entity, (float)(level + 1F) * 0.05F);
 			
-			Library.applyRadData(entity, (float)(level + 1F) * 0.05F);
+			ContaminationUtil.applyRadData(entity, (float)(level + 1F) * 0.05F);
 		}
 		if(this == radaway) {
 			if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))

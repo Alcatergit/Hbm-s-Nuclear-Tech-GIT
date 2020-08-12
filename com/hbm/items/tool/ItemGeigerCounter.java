@@ -10,6 +10,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -118,16 +119,7 @@ public class ItemGeigerCounter extends Item {
 		if(!world.isRemote) {
 	    	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-			float eRad = 0.0F;
-			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				eRad = player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads();
-
-			RadiationSavedData data = RadiationSavedData.getData(player.world);
-			Chunk chunk = world.getChunkFromBlockCoords(player.getPosition());
-			double rads = ((int)(data.getRadNumFromCoord(chunk.x, chunk.z) * 10)) / 10D;
-
-			player.sendMessage(new TextComponentTranslation("Current chunk radiation: " + rads + " RAD/s"));
-			player.sendMessage(new TextComponentTranslation("Player contamination: " + eRad + " RAD"));
+	    	ContaminationUtil.printGeigerData(player);
 		}
 		
 		return super.onItemRightClick(world, player, handIn);

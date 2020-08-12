@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.inventory.SlotUpgrade;
 import com.hbm.tileentity.machine.TileEntityMachineCrystallizer;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,9 @@ public class ContainerCrystallizer extends Container {
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 8, 53));
 		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 140, 35));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 26, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 25, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 26, 53));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 5, 98, 17));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 6, 116, 17));
 
 		for(int i = 0; i < 3; i++)
 		{
@@ -58,7 +61,8 @@ public class ContainerCrystallizer extends Container {
 				
 				if (!this.mergeItemStack(var5, 0, 2, false))
 					if (!this.mergeItemStack(var5, 3, 4, false))
-						return ItemStack.EMPTY;
+						if (!this.mergeItemStack(var5, 5, 7, false))
+							return null;
 			}
 			
 			if (var5.isEmpty())

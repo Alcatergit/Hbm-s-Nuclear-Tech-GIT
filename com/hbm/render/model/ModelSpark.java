@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.main.MainRegistry;
-import com.hbm.render.item.ItemRenderOverkill;
+import com.hbm.render.item.weapon.ItemRenderOverkill;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;

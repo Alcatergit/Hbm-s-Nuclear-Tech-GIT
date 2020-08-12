@@ -5,6 +5,7 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
+import com.hbm.interfaces.Untested;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -12,6 +13,7 @@ import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDrillPacket;
 import com.hbm.sound.SoundLoopMachine;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -34,9 +36,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineMiningDrill extends TileEntity implements ITickable, IConsumer {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineMiningDrill extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
 	public int warning;
@@ -50,34 +50,20 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 	public float torque;
 	public float rotation;
 	SoundLoopMachine sound;
+	//TODO: clientside-only animations and sound
 
-	// private static final int[] slots_top = new int[] {1};
-	// private static final int[] slots_bottom = new int[] {2, 0};
-	// private static final int[] slots_side = new int[] {0};
+	private static final int[] slots_top = new int[] {1};
+	private static final int[] slots_bottom = new int[] {2, 0};
+	private static final int[] slots_side = new int[] {0};
 	Random rand = new Random();
 
-	private String customName;
-
 	public TileEntityMachineMiningDrill() {
-		inventory = new ItemStackHandler(13) {
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(13);
 	}
 
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.miningDrill";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public String getName() {
+		return "container.miningDrill";
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -91,22 +77,26 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		this.power = compound.getLong("powerTime");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
-		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int p_94128_1_ = e.ordinal();
+		return p_94128_1_ == 0 ? slots_bottom : (p_94128_1_ == 1 ? slots_top : slots_side);
 	}
 
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
 	}
 
+	@Untested
 	@Override
 	public void update() {
 		this.consumption = 100;
@@ -231,50 +221,15 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 
 							flag = i != pos.getY() - 1;
 
-							if(this.radius == 1)
-								if(!this.drill1(pos.getX(), i, pos.getZ())) {
-									if(this.isOreo(new BlockPos(pos.getX(), i - 1, pos.getZ())) && this.hasSpace(stack1)) {
-										// if(stack1 != null)
-										// this.addItemToInventory(stack1);
+							if(!this.drill(pos.getX(), i, pos.getZ(), radius)) {
+								if(this.isOreo(new BlockPos(pos.getX(), i - 1, pos.getZ())) && this.hasSpace(stack1)) {
 										world.setBlockState(new BlockPos(pos.getX(), i - 1, pos.getZ()), ModBlocks.drill_pipe.getDefaultState());
-									} else {
-										// Code 2: Drill jammed
-										warning = 1;
-									}
+								} else {
+									//Code 2: Drill jammed
+									warning = 1;
 								}
-							if(this.radius == 2)
-								if(!this.drill2(pos.getX(), i, pos.getZ())) {
-									if(this.isOreo(new BlockPos(pos.getX(), i - 1, pos.getZ())) && this.hasSpace(stack1)) {
-										// if(stack1 != null)
-										// this.addItemToInventory(stack1);
-										world.setBlockState(new BlockPos(pos.getX(), i - 1, pos.getZ()), ModBlocks.drill_pipe.getDefaultState());
-									} else {
-										// Code 2: Drill jammed
-										warning = 1;
-									}
-								}
-							if(this.radius == 3)
-								if(!this.drill3(pos.getX(), i, pos.getZ())) {
-									if(this.isOreo(new BlockPos(pos.getX(), i - 1, pos.getZ())) && this.hasSpace(stack1)) {
-										// if(stack1 != null)
-										// this.addItemToInventory(stack1);
-										world.setBlockState(new BlockPos(pos.getX(), i - 1, pos.getZ()), ModBlocks.drill_pipe.getDefaultState());
-									} else {
-										// Code 2: Drill jammed
-										warning = 1;
-									}
-								}
-							if(this.radius == 4)
-								if(!this.drill4(pos.getX(), i, pos.getZ())) {
-									if(this.isOreo(new BlockPos(pos.getX(), i - 1, pos.getZ())) && this.hasSpace(stack1)) {
-										// if(stack1 != null)
-										// this.addItemToInventory(stack1);
-										world.setBlockState(new BlockPos(pos.getX(), i - 1, pos.getZ()), ModBlocks.drill_pipe.getDefaultState());
-									} else {
-										// Code 2: Drill jammed
-										warning = 1;
-									}
-								}
+
+							}
 							break;
 						}
 					}
@@ -483,25 +438,6 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 	// "ok"
 	public boolean isOreo(BlockPos pos) {
 
-		/*Block b = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		
-		if(b == Blocks.air || b == Blocks.grass || b == Blocks.dirt || 
-				b == Blocks.stone || b == Blocks.sand || b == Blocks.sandstone || 
-				b == Blocks.clay || b == Blocks.hardened_clay || b == Blocks.stained_hardened_clay || 
-				b == Blocks.gravel || b.isReplaceable(world, x, y, z))
-			return true;
-		
-		int[] ids = OreDictionary.getOreIDs(new ItemStack(b, 1, meta));
-		
-		for(int i = 0; i < ids.length; i++) {
-			
-			String s = OreDictionary.getOreName(ids[i]);
-			
-			if(s.length() > 3 && s.substring(0, 3).equals("ore"))
-				return true;
-		}*/
-
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
 
@@ -509,27 +445,6 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 	}
 
 	public boolean isMinableOreo(BlockPos pos) {
-
-		/*Block b = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		
-		if(b == Blocks.grass || b == Blocks.dirt || 
-				b == Blocks.stone || b == Blocks.sand || b == Blocks.sandstone || 
-				b == Blocks.clay || b == Blocks.hardened_clay || b == Blocks.stained_hardened_clay || 
-				b == Blocks.gravel || b.isReplaceable(world, x, y, z))
-			return true;
-		
-		int[] ids = OreDictionary.getOreIDs(new ItemStack(b, 1, meta));
-		
-		for(int i = 0; i < ids.length; i++) {
-			
-			String s = OreDictionary.getOreName(ids[i]);
-			
-			if(s.length() > 3 && s.substring(0, 3).equals("ore"))
-				return true;
-		}
-		
-		return false;*/
 
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
@@ -542,24 +457,20 @@ public class TileEntityMachineMiningDrill extends TileEntity implements ITickabl
 	 * returns true if there has been a successful mining operation returns
 	 * false if no block could be mined and the drill is ready to extend
 	 */
-	public boolean drill1(int x, int y, int z) {
+	public boolean drill(int x, int y, int z, int rad) {
 
 		if(!flag)
 			return false;
 
-		if(!tryDrill(x + 1, y, z))
-			if(!tryDrill(x + 1, y, z + 1))
-				if(!tryDrill(x, y, z + 1))
-					if(!tryDrill(x - 1, y, z + 1))
-						if(!tryDrill(x - 1, y, z))
-							if(!tryDrill(x - 1, y, z - 1))
-								if(!tryDrill(x, y, z - 1))
-									if(!tryDrill(x + 1, y, z - 1))
+		for(int ix = x - rad; ix <= x + rad; ix++) {
+			for(int iz = z - rad; iz <= z + rad; iz++) {
 
-										if(!tryDrill(x, y - 1, z))
-											return false;
+				if(tryDrill(ix, y, iz))
+					return true;
+			}
+		}
 
-		return true;
+		return false;
 	}
 
 	public boolean drill2(int x, int y, int z) {

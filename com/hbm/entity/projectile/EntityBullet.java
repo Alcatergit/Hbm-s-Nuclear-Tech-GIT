@@ -337,7 +337,8 @@ public class EntityBullet extends Entity implements IProjectile {
 			Vec3d vec31 = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d vec3 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			//Drillgon200: Yeah I don't know if this is the best way, but at least bullets can hit entities that are closer than three blocks now.
-			vec31 = new Vec3d(this.posX - this.motionX, this.posY - this.motionY, this.posZ - this.motionZ);
+			//vec31 = new Vec3d(this.posX - this.motionX, this.posY - this.motionY, this.posZ - this.motionZ);
+			//Drillgon200: Ok that was retarded and completely breaks turrets.
 			
 			RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec31, vec3, false, true, false);
 			vec31 = new Vec3d(this.posX, this.posY, this.posZ);

@@ -61,12 +61,6 @@ public class CommandRadiation extends CommandBase {
 	public int getRequiredPermissionLevel() {
 		return 3;
 	}
-	
-	@Override
-	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		//TODO UUID testing, remove later
-		return super.checkPermission(server, sender) || Library.superuser.contains(sender.getCommandSenderEntity().getUniqueID().toString());
-	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {

@@ -2,6 +2,7 @@ package com.hbm.tileentity;
 
 import com.hbm.interfaces.IConsumer;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,7 +16,10 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 	boolean inventory;
 	boolean power;
 	boolean fluid;
-
+	
+	public TileEntityProxyCombo() {
+	}
+	
 	public TileEntityProxyCombo(boolean inventory, boolean power, boolean fluid) {
 		this.inventory = inventory;
 		this.power = power;
@@ -101,5 +105,21 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 		}
 
 		return 0;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		inventory = compound.getBoolean("inv");
+		fluid = compound.getBoolean("flu");
+		power = compound.getBoolean("pow");
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setBoolean("inv", inventory);
+		compound.setBoolean("flu", fluid);
+		compound.setBoolean("pow", power);
+		return super.writeToNBT(compound);
 	}
 }

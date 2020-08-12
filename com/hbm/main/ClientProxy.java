@@ -111,6 +111,7 @@ import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityHunterChopper;
+import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
@@ -258,6 +259,7 @@ import com.hbm.render.entity.missile.RenderMissileStrong;
 import com.hbm.render.entity.missile.RenderMissileTaint;
 import com.hbm.render.entity.missile.RenderSoyuz;
 import com.hbm.render.entity.missile.RenderSoyuzCapsule;
+import com.hbm.render.entity.mob.RenderMaskMan;
 import com.hbm.render.entity.mob.RenderTaintCrab;
 import com.hbm.render.entity.mob.RenderTeslaCrab;
 import com.hbm.render.factories.MultiCloudRendererFactory;
@@ -276,57 +278,59 @@ import com.hbm.render.item.FFIdentifierRender;
 import com.hbm.render.item.FluidBarrelRender;
 import com.hbm.render.item.FluidCanisterRender;
 import com.hbm.render.item.FluidTankRender;
-import com.hbm.render.item.GunRevolverRender;
-import com.hbm.render.item.ItemRedstoneSwordRender;
-import com.hbm.render.item.ItemRenderBFLauncher;
-import com.hbm.render.item.ItemRenderBigSword;
-import com.hbm.render.item.ItemRenderBullshit;
-import com.hbm.render.item.ItemRenderCalamity;
 import com.hbm.render.item.ItemRenderCell;
-import com.hbm.render.item.ItemRenderCryolator;
-import com.hbm.render.item.ItemRenderEMPRay;
-import com.hbm.render.item.ItemRenderEuthanasia;
 import com.hbm.render.item.ItemRenderFFFluidDuct;
-import com.hbm.render.item.ItemRenderFatMan;
 import com.hbm.render.item.ItemRenderFluidIcon;
-import com.hbm.render.item.ItemRenderFolly;
 import com.hbm.render.item.ItemRenderGasCanister;
-import com.hbm.render.item.ItemRenderGunAnim;
-import com.hbm.render.item.ItemRenderGunAnim2;
-import com.hbm.render.item.ItemRenderGunDefab;
-import com.hbm.render.item.ItemRenderGunHP;
-import com.hbm.render.item.ItemRenderGunJack;
-import com.hbm.render.item.ItemRenderGunSaturnite;
-import com.hbm.render.item.ItemRenderGunSonata;
-import com.hbm.render.item.ItemRenderImmolator;
-import com.hbm.render.item.ItemRenderMIRVLauncher;
-import com.hbm.render.item.ItemRenderMP;
-import com.hbm.render.item.ItemRenderMP40;
-import com.hbm.render.item.ItemRenderMinigun;
 import com.hbm.render.item.ItemRenderMissile;
 import com.hbm.render.item.ItemRenderMissilePart;
 import com.hbm.render.item.ItemRenderMultitool;
-import com.hbm.render.item.ItemRenderOSIPR;
 import com.hbm.render.item.ItemRenderObj;
-import com.hbm.render.item.ItemRenderOverkill;
-import com.hbm.render.item.ItemRenderRevolverCursed;
-import com.hbm.render.item.ItemRenderRevolverGold;
-import com.hbm.render.item.ItemRenderRevolverInverted;
-import com.hbm.render.item.ItemRenderRevolverIron;
-import com.hbm.render.item.ItemRenderRevolverLead;
-import com.hbm.render.item.ItemRenderRevolverNightmare;
-import com.hbm.render.item.ItemRenderRevolverSaturnite;
-import com.hbm.render.item.ItemRenderRevolverSchrabidium;
-import com.hbm.render.item.ItemRenderRpg;
 import com.hbm.render.item.ItemRenderShim;
-import com.hbm.render.item.ItemRenderStinger;
-import com.hbm.render.item.ItemRenderUboinik;
-import com.hbm.render.item.ItemRenderUzi;
-import com.hbm.render.item.ItemRenderWeaponObj;
-import com.hbm.render.item.ItemRenderWeaponQuadro;
-import com.hbm.render.item.ItemRenderXVL1456;
-import com.hbm.render.item.ItemRenderZOMG;
-import com.hbm.render.item.RenderGunB93;
+import com.hbm.render.item.weapon.GunRevolverRender;
+import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
+import com.hbm.render.item.weapon.ItemRenderBFLauncher;
+import com.hbm.render.item.weapon.ItemRenderBigSword;
+import com.hbm.render.item.weapon.ItemRenderBullshit;
+import com.hbm.render.item.weapon.ItemRenderCalamity;
+import com.hbm.render.item.weapon.ItemRenderCryolator;
+import com.hbm.render.item.weapon.ItemRenderEMPRay;
+import com.hbm.render.item.weapon.ItemRenderEuthanasia;
+import com.hbm.render.item.weapon.ItemRenderFatMan;
+import com.hbm.render.item.weapon.ItemRenderFolly;
+import com.hbm.render.item.weapon.ItemRenderGunAnim;
+import com.hbm.render.item.weapon.ItemRenderGunAnim2;
+import com.hbm.render.item.weapon.ItemRenderGunDefab;
+import com.hbm.render.item.weapon.ItemRenderGunHP;
+import com.hbm.render.item.weapon.ItemRenderGunJack;
+import com.hbm.render.item.weapon.ItemRenderGunSaturnite;
+import com.hbm.render.item.weapon.ItemRenderGunSonata;
+import com.hbm.render.item.weapon.ItemRenderImmolator;
+import com.hbm.render.item.weapon.ItemRenderMIRVLauncher;
+import com.hbm.render.item.weapon.ItemRenderMP;
+import com.hbm.render.item.weapon.ItemRenderMP40;
+import com.hbm.render.item.weapon.ItemRenderMinigun;
+import com.hbm.render.item.weapon.ItemRenderOSIPR;
+import com.hbm.render.item.weapon.ItemRenderOverkill;
+import com.hbm.render.item.weapon.ItemRenderRevolverCursed;
+import com.hbm.render.item.weapon.ItemRenderRevolverGold;
+import com.hbm.render.item.weapon.ItemRenderRevolverInverted;
+import com.hbm.render.item.weapon.ItemRenderRevolverIron;
+import com.hbm.render.item.weapon.ItemRenderRevolverLead;
+import com.hbm.render.item.weapon.ItemRenderRevolverNightmare;
+import com.hbm.render.item.weapon.ItemRenderRevolverSaturnite;
+import com.hbm.render.item.weapon.ItemRenderRevolverSchrabidium;
+import com.hbm.render.item.weapon.ItemRenderRpg;
+import com.hbm.render.item.weapon.ItemRenderStinger;
+import com.hbm.render.item.weapon.ItemRenderUboinik;
+import com.hbm.render.item.weapon.ItemRenderUzi;
+import com.hbm.render.item.weapon.ItemRenderWeaponObj;
+import com.hbm.render.item.weapon.ItemRenderWeaponQuadro;
+import com.hbm.render.item.weapon.ItemRenderWeaponSauer;
+import com.hbm.render.item.weapon.ItemRenderWeaponShotty;
+import com.hbm.render.item.weapon.ItemRenderXVL1456;
+import com.hbm.render.item.weapon.ItemRenderZOMG;
+import com.hbm.render.item.weapon.RenderGunB93;
 import com.hbm.render.misc.MissilePart;
 import com.hbm.render.tileentity.RenderAMSBase;
 import com.hbm.render.tileentity.RenderAMSEmitter;
@@ -392,6 +396,7 @@ import com.hbm.render.tileentity.RenderPress;
 import com.hbm.render.tileentity.RenderPuF6Tank;
 import com.hbm.render.tileentity.RenderPumpjack;
 import com.hbm.render.tileentity.RenderPylon;
+import com.hbm.render.tileentity.RenderRTG;
 import com.hbm.render.tileentity.RenderRadGen;
 import com.hbm.render.tileentity.RenderRadar;
 import com.hbm.render.tileentity.RenderRadioRec;
@@ -481,6 +486,7 @@ import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
+import com.hbm.tileentity.machine.TileEntityMachineMiniRTG;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
@@ -488,6 +494,7 @@ import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
+import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -508,6 +515,7 @@ import com.hbm.tileentity.machine.TileEntityStructureMarker;
 import com.hbm.tileentity.machine.TileEntityTesla;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -658,6 +666,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeBalefire.class, new RenderNukeFstbmb());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCrystallizer.class, new RenderCrystallizer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicrowave.class, new RenderMicrowave());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRTG.class, new RenderRTG());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineMiniRTG.class, new RenderRTG());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -817,6 +827,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityLaser.class, RenderLaser.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingItem.class, RenderMovingItem.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCloudTom.class, RenderCloudTom.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMaskMan.class, RenderMaskMan.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
@@ -825,9 +836,11 @@ public class ClientProxy extends ServerProxy {
 		ModelLoader.setCustomStateMapper(ModBlocks.mud_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.seal_controller, new StateMap.Builder().ignore(BlockSeal.ACTIVATED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.ntm_dirt, new StateMap.Builder().ignore(BlockDirt.SNOWY).ignore(BlockDirt.VARIANT).build());
-		ModelLoader.setCustomStateMapper(ModBlocks.soyuz_launcher, new StateMap.Builder().ignore(BlockDummyable.META).build());
-		ModelLoader.setCustomStateMapper(ModBlocks.machine_mining_laser, new StateMap.Builder().ignore(BlockDummyable.META).build());
-		ModelLoader.setCustomStateMapper(ModBlocks.machine_crystallizer, new StateMap.Builder().ignore(BlockDummyable.META).build());
+		//Drillgon200: This can't be efficient, but eh.
+		for(Block b : ModBlocks.ALL_BLOCKS){
+			if(b instanceof BlockDummyable)
+				ModelLoader.setCustomStateMapper(b, new StateMap.Builder().ignore(BlockDummyable.META).build());
+		}
 	}
 	
 	private <E extends Entity> void registerGrenadeRenderer(Class<E> clazz, Item grenade) {
@@ -1146,7 +1159,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_panzerschreck.setTileEntityItemStackRenderer(new ItemRenderRpg());
 		ModItems.gun_hk69.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 		ModItems.gun_deagle.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
-		ModItems.gun_supershotgun.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
+		ModItems.gun_supershotgun.setTileEntityItemStackRenderer(new ItemRenderWeaponShotty());
 		ModItems.gun_fatman.setTileEntityItemStackRenderer(new ItemRenderFatMan());
 		ModItems.gun_proto.setTileEntityItemStackRenderer(new ItemRenderFatMan());
 		ModItems.gun_mirv.setTileEntityItemStackRenderer(new ItemRenderMIRVLauncher());
@@ -1208,6 +1221,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_flamer.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 		ModItems.gun_flechette.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 		ModItems.gun_quadro.setTileEntityItemStackRenderer(new ItemRenderWeaponQuadro());
+		ModItems.gun_sauer.setTileEntityItemStackRenderer(new ItemRenderWeaponSauer());
 	}
 	
 	@Override
@@ -1233,7 +1247,7 @@ public class ClientProxy extends ServerProxy {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		AnimatedModel m = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
+		AnimatedModel m = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2_newmodel.dae"));
 		Animation s = ColladaLoader.loadAnim(1300, new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
 		ResourceManager.supershotgun = m;
 		ResourceManager.ssg_reload = s;

@@ -23,12 +23,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockFluidBarrel extends BlockContainer {
 
 	private int capacity;
+	public static boolean keepInventory;
 	
 	public BlockFluidBarrel(Material materialIn, int cap, String s) {
 		super(materialIn);
@@ -45,29 +47,41 @@ public class BlockFluidBarrel extends BlockContainer {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag advanced) {
 		if(this == ModBlocks.barrel_plastic) {
-			tooltip.add("Cannot store hot fluids");
-			tooltip.add("Cannot store corrosive fluids");
-			tooltip.add("Cannot store antimatter");
+			list.add(TextFormatting.AQUA + "Capacity: 12,000mB");
+			list.add(TextFormatting.YELLOW + "Cannot store hot fluids");
+			list.add(TextFormatting.YELLOW + "Cannot store corrosive fluids");
+			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+		}
+
+		if(this == ModBlocks.barrel_corroded) {
+			list.add(TextFormatting.AQUA + "Capacity: 6,000mB");
+			list.add(TextFormatting.GREEN + "Can store hot fluids");
+			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
+			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+			list.add(TextFormatting.RED + "Leaky");
 		}
 		
 		if(this == ModBlocks.barrel_iron) {
-			tooltip.add("Can store hot fluids");
-			tooltip.add("Cannot store corrosive fluids properly");
-			tooltip.add("Cannot store antimatter");
+			list.add(TextFormatting.AQUA + "Capacity: 8,000mB");
+			list.add(TextFormatting.GREEN + "Can store hot fluids");
+			list.add(TextFormatting.YELLOW + "Cannot store corrosive fluids properly");
+			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 		}
 		
 		if(this == ModBlocks.barrel_steel) {
-			tooltip.add("Can store hot fluids");
-			tooltip.add("Can store corrosive fluids");
-			tooltip.add("Cannot store antimatter");
+			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
+			list.add(TextFormatting.GREEN + "Can store hot fluids");
+			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
+			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 		}
 		
 		if(this == ModBlocks.barrel_antimatter) {
-			tooltip.add("Can store hot fluids");
-			tooltip.add("Can store corrosive fluids");
-			tooltip.add("Can store antimatter");
+			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
+			list.add(TextFormatting.GREEN + "Can store hot fluids");
+			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
+			list.add(TextFormatting.GREEN + "Can store antimatter");
 		}
 	}
 	
@@ -94,7 +108,8 @@ public class BlockFluidBarrel extends BlockContainer {
 	@Spaghetti("stop doing that and make a base class for fuck's sake")
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
+		if(!keepInventory)
+			InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
 		super.breakBlock(worldIn, pos, state);
 	}
 	

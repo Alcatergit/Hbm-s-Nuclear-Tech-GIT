@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
@@ -15,6 +18,7 @@ import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.capability.RadiationCapability.IEntityRadioactive;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
+import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.interfaces.IConductor;
@@ -40,6 +44,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -52,6 +58,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -117,50 +124,9 @@ public class Library {
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
 		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
 	}
-	
-	public static void applyRadData(Entity e, float f) {
-		if(!(e instanceof EntityLivingBase))
-			return;
-		
-		if(e.getEntityData().hasKey("hbmradmultiplier", 99))
-			f *= e.getEntityData().getFloat("hbmradmultiplier");
-
-		EntityLivingBase entity = (EntityLivingBase) e;
-		
-		if(e instanceof EntityPlayer && ((EntityPlayer) e).isSpectator())
-			return;
-		
-		if(entity.isPotionActive(HbmPotion.mutation))
-			return;
-
-		float koeff = 5.0F;
-		f *= (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(entity));
-
-		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
-			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
-			ent.increaseRads(f);
-		}
-	}
-
-	public static void applyRadDirect(Entity entity, float f) {
-		
-		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
-			f *= entity.getEntityData().getFloat("hbmradmultiplier");
-		
-		if(!(entity instanceof EntityLivingBase))
-			return;
-
-		if(((EntityLivingBase) entity).isPotionActive(HbmPotion.mutation))
-			return;
-
-		if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null)) {
-			RadiationCapability.IEntityRadioactive ent = entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null);
-			ent.increaseRads(f);
-		}
-	}
 
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
-		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c));
+		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c), false, true, true);
 		return pos != null;
 	}
 
@@ -220,10 +186,10 @@ public class Library {
 			long batRate = battery.getDischargeRate();
 			
 			//in hHe
-			long toDischarge = Math.min(Math.min((maxPower - power) / 100, batRate), batCharge);
+			long toDischarge = Math.min(Math.min((maxPower - power), batRate), batCharge);
 			
 			battery.dischargeBattery(inventory.getStackInSlot(index), toDischarge);
-			power += toDischarge * 100;
+			power += toDischarge;
 		}
 		
 		return power;
@@ -375,15 +341,19 @@ public class Library {
 		Vec3d vec31 = player.getLook(f);
 		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
 		
-		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, false, true);
+		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, true, true);
+		if(result != null)
+			vec32 = result.hitVec;
 		
-		AxisAlignedBB box = new AxisAlignedBB(vec3, vec32).grow(1D);
+		AxisAlignedBB box = new AxisAlignedBB(vec3.x, vec3.y, vec3.z, vec32.x, vec32.y, vec32.z).grow(1D);
 		List<Entity> ents = player.world.getEntitiesInAABBexcluding(player, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLiving));
 		for(Entity ent : ents){
 			RayTraceResult test = ent.getEntityBoundingBox().grow(0.3D).calculateIntercept(vec3, vec32);
 			if(test != null){
 				test.hitVec = new Vec3d(ent.posX, ent.posY + ent.getEyeHeight()/2, ent.posZ);
 				if(result == null || vec3.squareDistanceTo(result.hitVec) > vec3.squareDistanceTo(test.hitVec)){
+					test.typeOfHit = RayTraceResult.Type.ENTITY;
+					test.entityHit = ent;
 					result = test;
 				}
 			}
@@ -391,6 +361,220 @@ public class Library {
 		
 		return result;
 	}
+	
+	public static RayTraceResult rayTraceEntitiesInCone(EntityPlayer player, double d, float f, float degrees) {
+		double cosDegrees = Math.cos(Math.toRadians(degrees));
+		Vec3d vec3 = getPosition(f, player);
+		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
+		Vec3d vec31 = player.getLook(f);
+		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
+		
+		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, true, true);
+		double runningDot = Double.MIN_VALUE;
+		
+		AxisAlignedBB box = new AxisAlignedBB(vec3.x, vec3.y, vec3.z, vec3.x, vec3.y, vec3.z).grow(1D+d);
+		List<Entity> ents = player.world.getEntitiesInAABBexcluding(player, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLiving));
+		for(Entity ent : ents){
+			Vec3d entPos = closestPointOnBB(ent.getEntityBoundingBox(), vec3, vec32);
+			Vec3d relativeEntPos = entPos.subtract(vec3).normalize();
+			double dot = relativeEntPos.dotProduct(vec31);
+			
+			if(dot > cosDegrees && dot > runningDot && !isObstructed(player.world, vec3.x, vec3.y, vec3.z, ent.posX, ent.posY + ent.getEyeHeight()*0.75, ent.posZ)){
+				runningDot = dot;
+				result = new RayTraceResult(ent);
+				result.hitVec = new Vec3d(ent.posX, ent.posY + ent.getEyeHeight()/2, ent.posZ);
+			}
+			
+		}
+		
+		return result;
+	}
+	
+	//Drillgon200: Basically the AxisAlignedBB calculateIntercept method except it clamps to edge instead of returning null
+	public static Vec3d closestPointOnBB(AxisAlignedBB box, Vec3d vecA, Vec3d vecB){
+		
+		Vec3d vec3d = collideWithXPlane(box, box.minX, vecA, vecB);
+        Vec3d vec3d1 = collideWithXPlane(box, box.maxX, vecA, vecB);
+
+        if (vec3d1 != null && isClosest(vecA, vecB, vec3d, vec3d1))
+        {
+            vec3d = vec3d1;
+        }
+
+        vec3d1 = collideWithYPlane(box, box.minY, vecA, vecB);
+
+        if (vec3d1 != null && isClosest(vecA, vecB, vec3d, vec3d1))
+        {
+            vec3d = vec3d1;
+        }
+
+        vec3d1 = collideWithYPlane(box, box.maxY, vecA, vecB);
+
+        if (vec3d1 != null && isClosest(vecA, vecB, vec3d, vec3d1))
+        {
+            vec3d = vec3d1;
+        }
+
+        vec3d1 = collideWithZPlane(box, box.minZ, vecA, vecB);
+
+        if (vec3d1 != null && isClosest(vecA, vecB, vec3d, vec3d1))
+        {
+            vec3d = vec3d1;
+        }
+
+        vec3d1 = collideWithZPlane(box, box.maxZ, vecA, vecB);
+
+        if (vec3d1 != null && isClosest(vecA, vecB, vec3d, vec3d1))
+        {
+            vec3d = vec3d1;
+        }
+		
+		return vec3d;
+	}
+	
+	protected static Vec3d collideWithXPlane(AxisAlignedBB box, double p_186671_1_, Vec3d p_186671_3_, Vec3d p_186671_4_)
+    {
+        Vec3d vec3d = getIntermediateWithXValue(p_186671_3_, p_186671_4_, p_186671_1_);
+        return clampToBox(box, vec3d);
+        //return vec3d != null && box.intersectsWithYZ(vec3d) ? vec3d : null;
+    }
+
+	protected static Vec3d collideWithYPlane(AxisAlignedBB box, double p_186663_1_, Vec3d p_186663_3_, Vec3d p_186663_4_)
+    {
+        Vec3d vec3d = getIntermediateWithYValue(p_186663_3_, p_186663_4_, p_186663_1_);
+        return clampToBox(box, vec3d);
+        //return vec3d != null && box.intersectsWithXZ(vec3d) ? vec3d : null;
+    }
+
+	protected static Vec3d collideWithZPlane(AxisAlignedBB box, double p_186665_1_, Vec3d p_186665_3_, Vec3d p_186665_4_)
+    {
+        Vec3d vec3d = getIntermediateWithZValue(p_186665_3_, p_186665_4_, p_186665_1_);
+        return clampToBox(box, vec3d);
+        //return vec3d != null && box.intersectsWithXY(vec3d) ? vec3d : null;
+    }
+	
+	protected static Vec3d clampToBox(AxisAlignedBB box, Vec3d vec)
+    {
+		return new Vec3d(MathHelper.clamp(vec.x, box.minX, box.maxX), MathHelper.clamp(vec.y, box.minY, box.maxY), MathHelper.clamp(vec.z, box.minZ, box.maxZ));
+    }
+	
+	protected static boolean isClosest(Vec3d line1, Vec3d line2, @Nullable Vec3d p_186661_2_, Vec3d p_186661_3_)
+    {
+        return p_186661_2_ == null || dist_to_segment_squared(p_186661_3_, line1, line2) < dist_to_segment_squared(p_186661_2_, line1, line2);
+    }
+	
+	//Drillgon200: https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
+	//Drillgon200: I'm not figuring this out myself.
+	protected static double dist_to_segment_squared(Vec3d point, Vec3d linePoint1, Vec3d linePoint2) {
+		  double line_dist = linePoint1.squareDistanceTo(linePoint2);
+		  if (line_dist == 0) return point.squareDistanceTo(linePoint1);
+		  double t = ((point.x - linePoint1.x) * (linePoint2.x - linePoint1.x) + (point.y - linePoint1.y) * (linePoint2.y - linePoint1.y) + (point.z - linePoint1.z) * (linePoint2.z - linePoint1.z)) / line_dist;
+		  t = MathHelper.clamp(t, 0, 1);
+		  Vec3d pointOnLine = new Vec3d(linePoint1.x + t * (linePoint2.x - linePoint1.x), linePoint1.y + t * (linePoint2.y - linePoint1.y), linePoint1.z + t * (linePoint2.z - linePoint1.z));
+		  return point.squareDistanceTo(pointOnLine);
+	}
+	
+	/**
+     * Returns a new vector with x value equal to the second parameter, along the line between this vector and the
+     * passed in vector, or null if not possible.
+     */
+    @Nullable
+    public static Vec3d getIntermediateWithXValue(Vec3d vec1, Vec3d vec, double x)
+    {
+        double d0 = vec.x - vec1.x;
+        double d1 = vec.y - vec1.y;
+        double d2 = vec.z - vec1.z;
+
+        if (d0 * d0 < 1.0000000116860974E-7D)
+        {
+            return vec;
+        }
+        else
+        {
+            double d3 = (x - vec1.x) / d0;
+            if(d3 < 0){
+            	return new Vec3d(x, vec.y, vec.z);
+            } else if(d3 > 1){
+            	return new Vec3d(x, vec1.y, vec1.z);
+            } else {
+            	return new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3);
+            }
+            //return d3 >= 0.0D && d3 <= 1.0D ? new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3) : null;
+        }
+    }
+
+    /**
+     * Returns a new vector with y value equal to the second parameter, along the line between this vector and the
+     * passed in vector, or null if not possible.
+     */
+    @Nullable
+    public static Vec3d getIntermediateWithYValue(Vec3d vec1, Vec3d vec, double y)
+    {
+        double d0 = vec.x - vec1.x;
+        double d1 = vec.y - vec1.y;
+        double d2 = vec.z - vec1.z;
+
+        if (d1 * d1 < 1.0000000116860974E-7D)
+        {
+            return vec;
+        }
+        else
+        {
+            double d3 = (y - vec1.y) / d1;
+            if(d3 < 0){
+            	return new Vec3d(vec.x, y, vec.z);
+            } else if(d3 > 1){
+            	return new Vec3d(vec1.x, y, vec1.z);
+            } else {
+            	return new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3);
+            }
+            //return d3 >= 0.0D && d3 <= 1.0D ? new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3) : null;
+        }
+    }
+
+    /**
+     * Returns a new vector with z value equal to the second parameter, along the line between this vector and the
+     * passed in vector, or null if not possible.
+     */
+    @Nullable
+    public static Vec3d getIntermediateWithZValue(Vec3d vec1, Vec3d vec, double z)
+    {
+        double d0 = vec.x - vec1.x;
+        double d1 = vec.y - vec1.y;
+        double d2 = vec.z - vec1.z;
+
+        if (d2 * d2 < 1.0000000116860974E-7D)
+        {
+            return vec;
+        }
+        else
+        {
+            double d3 = (z - vec1.z) / d2;
+            if(d3 < 0){
+            	return new Vec3d(vec.x, vec.y, z);
+            } else if(d3 > 1){
+            	return new Vec3d(vec1.x, vec1.y, z);
+            } else {
+            	return new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3);
+            }
+            //return d3 >= 0.0D && d3 <= 1.0D ? new Vec3d(vec1.x + d0 * d3, vec1.y + d1 * d3, vec1.z + d2 * d3) : null;
+        }
+    }
+    
+    public static Vec3d getEuler(Vec3d vec){
+    	double yaw = Math.toDegrees(Math.atan2(vec.x, vec.z));
+		double sqrt = MathHelper.sqrt(vec.x * vec.x + vec.z * vec.z);
+		double pitch = Math.toDegrees(Math.atan2(vec.y, sqrt));
+		return new Vec3d(yaw, pitch, 0);
+    }
+    
+    //Drillgon200: https://thebookofshaders.com/glossary/?search=smoothstep
+    public static double smoothstep(double t, double edge0, double edge1){
+    	t = MathHelper.clamp((t - edge0) / (edge1 - edge0), 0.0, 1.0);
+        return t * t * (3.0 - 2.0 * t);
+    }
+	
+	
 
 	public static Vec3d getPosition(float par1, EntityPlayer player) {
 		if(par1 == 1.0F) {
@@ -626,6 +810,10 @@ public class Library {
 			return false;
 		else
 			return stackA.getMetadata() == stackB.getMetadata() && stackA.getItem() == stackB.getItem();
+	}
+	
+	public static boolean checkCableConnectables(World world, int x, int y, int z) {
+		return checkCableConnectables(world, new BlockPos(x, y, z));
 	}
 
 	public static boolean checkCableConnectables(World world, BlockPos pos) {

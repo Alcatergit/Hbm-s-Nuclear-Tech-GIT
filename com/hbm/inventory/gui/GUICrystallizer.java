@@ -39,6 +39,11 @@ public class GUICrystallizer extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 51 - 34, 16, 34, acidomatic.power, TileEntityMachineCrystallizer.maxPower);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 17, 16, 52, acidomatic.tank, ModForgeFluids.acid);
+		String[] text = new String[] { "Acceptable upgrades:",
+				" -Speed (stacks to level 3)",
+				" -Effectiveness (stacks to level 3)",
+				" -Overdrive (stacks to level 3)"};
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 87, guiTop + 21, 8, 8, guiLeft + 200, guiTop + 45, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -54,6 +59,7 @@ public class GUICrystallizer extends GuiInfoContainer {
 
 		int j = acidomatic.getProgressScaled(23);
 		drawTexturedModalRect(guiLeft + 104, guiTop + 34, 192, 0, j, 16);
+		this.drawInfoPanel(guiLeft + 87, guiTop + 21, 8, 8, 8);
 
 		FFUtils.drawLiquid(acidomatic.tank, guiLeft, guiTop, zLevel, 16, 52, 44, 97);
 	}

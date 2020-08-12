@@ -114,6 +114,10 @@ public class PacketDispatcher {
 		wrapper.registerMessage(SetGunAnimPacket.Handler.class, SetGunAnimPacket.class, i++, Side.SERVER);
 		//Triggers gun animations of the client
 		wrapper.registerMessage(GunAnimationPacket.Handler.class, GunAnimationPacket.class, i++, Side.CLIENT);
+		//Unhooks the entity when the player jumps
+		wrapper.registerMessage(MeathookJumpPacket.Handler.class, MeathookJumpPacket.class, i++, Side.SERVER);
+		//Resets any sideways acceleration when the meathook unhooks
+		wrapper.registerMessage(MeathookResetStrafePacket.Handler.class, MeathookResetStrafePacket.class, i++, Side.CLIENT);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

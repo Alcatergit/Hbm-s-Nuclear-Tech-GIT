@@ -17,22 +17,28 @@ import net.minecraft.util.ResourceLocation;
 
 public class ReactorRecipeHandler implements IRecipeCategory<ReactorRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/guireactor.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/processing/gui_breeder.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic progressStatic;
 	protected final IDrawableAnimated progressAnimated;
 	protected final IDrawableStatic fuelStatic;
 	protected final IDrawableAnimated fuelAnimated;
+	public final IDrawableStatic heat;
+	
+	protected ReactorRecipe currentRecipe;
 	
 	public ReactorRecipeHandler(IGuiHelper help) {
-		background = help.createDrawable(gui_rl, 54, 15, 83, 55);
+		background = help.createDrawable(gui_rl, 47, 15, 90, 55);
 		
 		progressStatic = help.createDrawable(gui_rl, 176, 16, 24, 17);
 		progressAnimated = help.createAnimatedDrawable(progressStatic, 48, StartDirection.LEFT, false);
 		
 		fuelStatic = help.createDrawable(gui_rl, 176, 0, 18, 16);
 		fuelAnimated = help.createAnimatedDrawable(fuelStatic, 48*3, StartDirection.TOP, true);
+		
+		heat = help.createDrawable(gui_rl, 194, 0, 4, 16);
+		ReactorRecipe.heatTex = heat;
 	}
 	
 	@Override
@@ -57,20 +63,21 @@ public class ReactorRecipeHandler implements IRecipeCategory<ReactorRecipe> {
 
 	@Override
 	public void drawExtras(Minecraft minecraft) {
-		progressAnimated.draw(minecraft, 25, 19);
-		fuelAnimated.draw(minecraft, 1, 20);
+		progressAnimated.draw(minecraft, 33, 19);
+		fuelAnimated.draw(minecraft, 8, 20);
 	}
 	
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, ReactorRecipe recipeWrapper, IIngredients ingredients) {
+		currentRecipe = recipeWrapper;
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(0, true, 1, 1);
-		guiItemStacks.init(1, false, 61, 19);
-		guiItemStacks.init(2, true, 1, 37);
+		guiItemStacks.init(0, true, 8, 1);
+		guiItemStacks.init(1, false, 68, 19);
+		guiItemStacks.init(2, true, 8, 37);
 		
 		guiItemStacks.set(ingredients);
-		guiItemStacks.set(2, JeiRecipes.getReactorFuels());
+		guiItemStacks.set(2, JeiRecipes.getReactorFuels(recipeWrapper.heat));
 	}
 
 }

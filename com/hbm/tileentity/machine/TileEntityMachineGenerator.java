@@ -145,7 +145,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(100);
 				
@@ -158,7 +157,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(100);
 
@@ -171,7 +169,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(100);
 
@@ -184,7 +181,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(2);
 					attemptPower(150);
 
@@ -197,7 +193,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(2);
 					attemptPower(150);
 
@@ -210,7 +205,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(2);
 					attemptPower(150);
 
@@ -223,7 +217,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(50);
 
@@ -236,7 +229,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(50);
 
@@ -249,7 +241,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(1);
 					attemptPower(50);
 
@@ -262,7 +253,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(10);
 					attemptPower(25000);
 
@@ -275,7 +265,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(10);
 					attemptPower(25000);
 
@@ -288,7 +277,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
-					ItemFuelRod.updateDamage(inventory.getStackInSlot(i));
 					attemptHeat(10);
 					attemptPower(25000);
 

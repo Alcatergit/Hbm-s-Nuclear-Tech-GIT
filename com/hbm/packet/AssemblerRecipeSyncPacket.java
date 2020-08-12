@@ -1,20 +1,6 @@
 package com.hbm.packet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.items.machine.ItemAssemblyTemplate;
-import com.hbm.items.machine.ItemAssemblyTemplate.AssemblerRecipe;
-
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -23,18 +9,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AssemblerRecipeSyncPacket implements IMessage {
 
-	public List<AssemblerRecipe> recipes;
+	//public List<AssemblerRecipe> recipes;
 	
 	public AssemblerRecipeSyncPacket() {
 	}
 	
-	public AssemblerRecipeSyncPacket(List<AssemblerRecipe> recipes){
+	/*public AssemblerRecipeSyncPacket(List<AssemblerRecipe> recipes){
 		this.recipes = recipes;
-	}
+	}*/
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		recipes = new ArrayList<AssemblerRecipe>();
+		/*recipes = new ArrayList<AssemblerRecipe>();
 		int size = buf.readInt();
 		for(int i = 0; i < size; i ++){
 			int inputSize = buf.readInt();
@@ -59,12 +45,12 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 			ItemStack output = new ItemStack(Item.getItemById(id), amount, meta);
 			int time = buf.readInt();
 			recipes.add(new AssemblerRecipe(time, inputs, output));
-		}
+		}*/
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(recipes.size());
+		/*buf.writeInt(recipes.size());
 		for(int i = 0; i < recipes.size(); i ++){
 			AssemblerRecipe recipe = recipes.get(i);
 			List<ItemStack> inputs = recipe.getInputs();
@@ -89,7 +75,7 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 			buf.writeInt(recipes.get(i).getOutput().getMetadata());
 			buf.writeInt(recipes.get(i).getOutput().getCount());
 			buf.writeInt(recipes.get(i).getTime());
-		}
+		}*/
 	}
 	
 	public static class Handler implements IMessageHandler<AssemblerRecipeSyncPacket, IMessage> {
@@ -98,10 +84,10 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(AssemblerRecipeSyncPacket message, MessageContext ctx) {
 			
-			Minecraft.getMinecraft().addScheduledTask(() -> {
+			/*Minecraft.getMinecraft().addScheduledTask(() -> {
 				ItemAssemblyTemplate.recipesBackup = ItemAssemblyTemplate.recipes;
 				ItemAssemblyTemplate.recipes = message.recipes;
-			});
+			});*/
 			return null;
 		}
 		

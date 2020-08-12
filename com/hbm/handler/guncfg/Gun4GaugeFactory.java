@@ -7,6 +7,10 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 public class Gun4GaugeFactory {
@@ -47,6 +51,7 @@ public class Gun4GaugeFactory {
 		config.config.add(BulletConfigSyncingUtil.G4_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.G4_SLUG);
 		config.config.add(BulletConfigSyncingUtil.G4_EXPLOSIVE);
+		config.config.add(BulletConfigSyncingUtil.G4_SLEEK);
 		
 		return config;
 	}
@@ -89,6 +94,64 @@ public class Gun4GaugeFactory {
 		bullet.wear = 25;
 		bullet.trail = 1;
 		
+		return bullet;
+	}
+	
+	public static GunConfiguration getSauerConfig() {
+
+		GunConfiguration config = getShotgunConfig();
+
+		config.rateOfFire = 20;
+		config.ammoCap = 0;
+		config.reloadType = GunConfiguration.RELOAD_NONE;
+		config.firingMode = GunConfiguration.FIRE_AUTO;
+		config.durability = 3000;
+		config.reloadSound = GunConfiguration.RSOUND_SHOTGUN;
+		config.firingSound = HBMSoundHandler.sauerGun;
+		config.firingPitch = 1.0F;
+
+		config.name = "Sauer Shotgun";
+		config.manufacturer = "Cube 2: Sauerbraten";
+
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("SAUER_RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0.5, 0, 0, 50))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 50))
+						)
+				.addBus("SAUER_TILT", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0.0, 0, 0, 200))	// do nothing for 200ms
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 30, 150))	//tilt forward
+						.addKeyframe(new BusAnimationKeyframe(45, 0, 30, 150))	//tilt sideways
+						.addKeyframe(new BusAnimationKeyframe(45, 0, 30, 200))	//do nothing for 200ms (eject)
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 30, 150))	//restore sideways
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 150))	//restore forward
+						)
+				.addBus("SAUER_COCK", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500))	//do nothing for 500ms
+						.addKeyframe(new BusAnimationKeyframe(1, 0, 0, 100))	//pull back lever for 100ms
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 100))	//release lever for 100ms
+						)
+				.addBus("SAUER_SHELL_EJECT", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500))	//do nothing for 500ms
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 1, 500))	//FLING!
+						)
+				);
+
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.G4_NORMAL);
+		config.config.add(BulletConfigSyncingUtil.G4_SLUG);
+		config.config.add(BulletConfigSyncingUtil.G4_EXPLOSIVE);
+		config.config.add(BulletConfigSyncingUtil.G4_SLEEK);
+
+		return config;
+	}
+	
+	public static BulletConfiguration get4GaugeSleekConfig() {
+
+		BulletConfiguration bullet = BulletConfigFactory.standardAirstrikeConfig();
+
+		bullet.ammo = ModItems.ammo_4gauge_sleek;
+
 		return bullet;
 	}
 }

@@ -5,6 +5,7 @@ import com.hbm.capability.RadiationCapability;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.machine.TileEntityGeiger;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -59,16 +60,7 @@ public class GeigerCounter extends BlockContainer {
 		{
 	    	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-			float eRad = 0.0F;
-			if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				eRad = player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).getRads();
-
-			RadiationSavedData data = RadiationSavedData.getData(player.world);
-			Chunk chunk = world.getChunkFromBlockCoords(new BlockPos((int)player.posX, (int)player.posZ, (int)player.posZ));
-			int rads = (int)Math.ceil(data.getRadNumFromCoord(chunk.x, chunk.z));
-
-			player.sendMessage(new TextComponentTranslation("Current chunk radiation: " + rads + " RAD/s"));
-			player.sendMessage(new TextComponentTranslation("Player contamination: " + eRad + " RAD"));
+	    	ContaminationUtil.printGeigerData(player);
 			return true;
 		} else {
 			return false;

@@ -112,7 +112,10 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.BLUE + "+ Instantly removes annoying and unbalanced enemies");
 			list.add(TextFormatting.YELLOW + "* No drawbacks lole");
 		}
-
+		if(this == ModItems.ammo_12gauge_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
+		}
+		
 		// 20 GAUGE
 		if(this == ModItems.ammo_20gauge_flechette) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
@@ -156,7 +159,10 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
 			list.add(TextFormatting.BLUE + "+ Withering");
 		}
-
+		if(this == ModItems.ammo_20gauge_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
+		}
+		
 		// .357 MAGNUM
 		if(this == ModItems.ammo_357_desh) {
 			list.add(TextFormatting.BLUE + "+ Fits every .357 model");
@@ -252,6 +258,9 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.BLUE + "+ Highly increased damage");
 			list.add(TextFormatting.YELLOW + "* Starmetal");
 			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_50bmg_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a high-damage round that summons a small meteorite");
 		}
 
 		// .50 AE
@@ -370,6 +379,9 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.RED + "- Highly increased wear");
 			list.add(TextFormatting.RED + "- Single projectile");
 		}
+		if(this == ModItems.ammo_4gauge_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
+		}
 		// 5.56mm
 		if(this == ModItems.ammo_556_phosphorus) {
 			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
@@ -390,6 +402,9 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.BLUE + "+ Highly increased damage");
 			list.add(TextFormatting.YELLOW + "* Starmetal");
 			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_556_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a high-damage round that summons a small meteorite");
 		}
 		if(this == ModItems.ammo_556_flechette) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
@@ -418,6 +433,9 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.YELLOW + "* Heavy metal");
 			list.add(TextFormatting.YELLOW + "* Less bouncy");
 			list.add(TextFormatting.RED + "- Highly increased wear");
+		}
+		if(this == ModItems.ammo_556_flechette_sleek) {
+			list.add(TextFormatting.YELLOW + "* Fires a high-damage round that summons a small meteorite");
 		}
 		if(this == ModItems.ammo_556_tracer) {
 			list.add(TextFormatting.YELLOW + "* Tracer");

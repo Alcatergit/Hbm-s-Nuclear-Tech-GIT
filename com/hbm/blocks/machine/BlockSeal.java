@@ -72,7 +72,6 @@ public class BlockSeal extends Block implements IBomb {
 		for(int size = 1; size < max; size ++) {
 			
 			boolean valid = true;
-			
 			int xOff = 0;
 			int zOff = 0;
 			if(world.getBlockState(pos).getValue(FACING) == EnumFacing.SOUTH)
@@ -86,7 +85,7 @@ public class BlockSeal extends Block implements IBomb {
 
 			for(int X = pos.getX() - size; X <= pos.getX() + size; X ++) {
 				if(world.getBlockState(new BlockPos(X + xOff, pos.getY(), pos.getZ()+ size + zOff)).getBlock() != ModBlocks.seal_frame && 
-						world.getBlockState(new BlockPos(X + xOff, pos.getX(), pos.getZ() + size + zOff)).getBlock() != ModBlocks.seal_controller)
+						world.getBlockState(new BlockPos(X + xOff, pos.getY(), pos.getZ() + size + zOff)).getBlock() != ModBlocks.seal_controller)
 					valid = false;
 			}
 			for(int X = pos.getX() - size; X <= pos.getX() + size; X ++) {

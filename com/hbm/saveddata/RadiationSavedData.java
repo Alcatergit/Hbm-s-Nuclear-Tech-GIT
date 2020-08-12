@@ -19,6 +19,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public class RadiationSavedData extends WorldSavedData {
 	public Map<ChunkPos, RadiationSaveStructure> contamination = new HashMap<ChunkPos, RadiationSaveStructure>();
 	
+	//in order to reduce read operations
+	//Drillgon200: I'm pretty sure this doesn't actually help since all the world saved datas are cached in a map anyway...
 	private static RadiationSavedData openInstance;
 	
     public World worldObj;
@@ -96,8 +98,8 @@ public class RadiationSavedData extends WorldSavedData {
     		if(struct.radiation != 0) {
 
 				//struct.radiation *= 0.999F;
-				struct.radiation *= 0.99F;
-				struct.radiation -= 0.5F;
+				struct.radiation *= 0.999F;
+				struct.radiation -= 0.05F;
 				
 				if(struct.radiation <= 0) {
 					struct.radiation = 0;
@@ -156,6 +158,9 @@ public class RadiationSavedData extends WorldSavedData {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		if(!MainRegistry.enableRads) {
+			return;
+		}
 		int count = nbt.getInteger("radCount");
 		
 		for(int i = 0; i < count; i++) {

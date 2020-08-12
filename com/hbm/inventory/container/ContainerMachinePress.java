@@ -22,6 +22,11 @@ public class ContainerMachinePress extends Container {
 	
 	public ContainerMachinePress(InventoryPlayer invPlayer, TileEntityMachinePress tedf) {
 		
+		power = 0;
+		progress = 0;
+		burnTime = 0;
+		maxBurn = 0;
+		
 		nukeBoy = tedf;
 
 		//Coal

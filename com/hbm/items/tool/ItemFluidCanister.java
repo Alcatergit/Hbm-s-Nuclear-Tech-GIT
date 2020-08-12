@@ -56,7 +56,12 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		if(f == null) {
 			return I18n.format("item.canister_empty.name");
 		} else {
-			return I18n.format(EnumCanister.getEnumFromFluid(f.getFluid()).getTranslateKey());
+			//Drillgon200: I don't feel like figuring out this crash so time to slap on a try/catch and call it good enough I guess.
+			try {
+				return I18n.format(EnumCanister.getEnumFromFluid(f.getFluid()).getTranslateKey());
+			} catch (Exception x){
+				return I18n.format("item.canister_empty.name");
+			}
 		}
 	}
 	

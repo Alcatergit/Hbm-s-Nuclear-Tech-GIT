@@ -1,4 +1,4 @@
-package com.hbm.saveddata;
+	package com.hbm.saveddata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ public List<DataPair> data = new ArrayList<DataPair>();
 		super(p_i2141_1_);
 	}
 
-    public AuxSavedData(World p_i1678_1_)
+    public AuxSavedData()
     {
         super("hbmauxdata");
         this.markDirty();
@@ -72,7 +72,7 @@ public List<DataPair> data = new ArrayList<DataPair>();
 
 		AuxSavedData data = (AuxSavedData)worldObj.getPerWorldStorage().getOrLoadData(AuxSavedData.class, "hbmauxdata");
 	    if(data == null) {
-	        worldObj.getPerWorldStorage().setData("hbmauxdata", new AuxSavedData(worldObj));
+	        worldObj.getPerWorldStorage().setData("hbmauxdata", new AuxSavedData());
 	        
 	        data = (AuxSavedData)worldObj.getPerWorldStorage().getOrLoadData(AuxSavedData.class, "hbmauxdata");
 	    }

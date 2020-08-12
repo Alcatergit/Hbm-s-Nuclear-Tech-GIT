@@ -157,7 +157,7 @@ public class ItemBattery extends Item implements IBatteryItem {
     		ItemStack stack = new ItemStack(item);
     		stack.setTagCompound(new NBTTagCompound());;
     		stack.getTagCompound().setLong("charge", 0);
-    		stack.setItemDamage(100);
+    		//stack.setItemDamage(100);
     		return stack.copy();
     	}
     	

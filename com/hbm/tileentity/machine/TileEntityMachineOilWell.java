@@ -184,7 +184,7 @@ public class TileEntityMachineOilWell extends TileEntity implements ITickable, I
 						if(b == ModBlocks.oil_pipe)
 							continue;
 
-						if(b == Blocks.AIR || b == Blocks.GRASS || b == Blocks.DIRT || b == Blocks.STONE || b == Blocks.SAND || b == Blocks.SANDSTONE || b == Blocks.CLAY || b == Blocks.HARDENED_CLAY || b == Blocks.STAINED_HARDENED_CLAY || b == Blocks.GRAVEL || isOre(world.getBlockState(new BlockPos(pos.getX(), i, pos.getZ()))) || b.isReplaceable(world, new BlockPos(pos.getX(), i, pos.getZ()))) {
+						if(b.isReplaceable(world, new BlockPos(pos.getX(), i, pos.getZ())) || b.getExplosionResistance(world, new BlockPos(pos.getX(), i, pos.getZ()), null, null) < 100) {
 							world.setBlockState(new BlockPos(pos.getX(), i, pos.getZ()), ModBlocks.oil_pipe.getDefaultState());
 
 							// Code 2: The drilling ended
@@ -241,23 +241,6 @@ public class TileEntityMachineOilWell extends TileEntity implements ITickable, I
 				markDirty();
 			}
 		}
-	}
-
-	public boolean isOre(IBlockState b) {
-		ItemStack stack = new ItemStack(b.getBlock(), 1, b.getBlock().getMetaFromState(b));
-		if(stack.isEmpty())
-			return false;
-		int[] ids = OreDictionary.getOreIDs(stack);
-
-		for(int i = 0; i < ids.length; i++) {
-
-			String s = OreDictionary.getOreName(ids[i]);
-
-			if(s.length() > 3 && s.substring(0, 3).equals("ore"))
-				return true;
-		}
-
-		return false;
 	}
 
 	public boolean succ(int x, int y, int z) {

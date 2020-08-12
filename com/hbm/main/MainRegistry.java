@@ -124,6 +124,7 @@ import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityHunterChopper;
+import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
@@ -177,6 +178,7 @@ import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.forgefluid.FFPipeNetwork;
+import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BobmazonOfferFactory;
@@ -184,8 +186,12 @@ import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.VersionChecker;
+import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
+import com.hbm.inventory.MagicRecipes;
+import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
@@ -271,6 +277,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -283,7 +290,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -344,6 +350,7 @@ public class MainRegistry {
 	public static boolean enableExtendedLogging = false;
 	public static boolean enableHardcoreTaint = false;
 	public static boolean enableGuns = true;
+	public static boolean ssgAnim = true;
 	public static boolean enableVirus = true;
 	public static boolean enableCrosshairs = true;
 
@@ -359,6 +366,7 @@ public class MainRegistry {
 	public static int leadSpawn = 6;
 	public static int berylliumSpawn = 6;
 	public static int ligniteSpawn = 2;
+	public static int asbestosSpawn = 2;
 
 	public static int gadgetRadius = 150;
 	public static int boyRadius = 120;
@@ -420,6 +428,8 @@ public class MainRegistry {
 	public static int fogRad = 100;
 	public static int fogCh = 20;
 	public static float hellRad = 0.1F;
+	public static int worldRad = 10;
+	public static int worldRadThreshold = 20;
 
 	public static int railgunDamage = 100;
 	public static int railgunBuffer = 500000000;
@@ -429,8 +439,6 @@ public class MainRegistry {
 
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
-	
-	public static List<String> templateBlacklist = new ArrayList<String>();
 	
 	public static boolean dropCell = true;
 	public static boolean dropSing = true;
@@ -533,6 +541,7 @@ public class MainRegistry {
 		CellularDungeonFactory.init();
 		Satellite.register();
 		VersionChecker.checkVersion();
+		AssemblerRecipes.preInit(event.getModConfigurationDirectory());
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
@@ -710,6 +719,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityNukeBalefire.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_fstbmb"));
 		GameRegistry.registerTileEntity(TileEntityProxyCombo.class, new ResourceLocation(RefStrings.MODID, "tileentity_proxy_combo"));
 		GameRegistry.registerTileEntity(TileEntityMicrowave.class, new ResourceLocation(RefStrings.MODID, "tileentity_microwave"));
+		GameRegistry.registerTileEntity(TileEntityMachineMiniRTG.class, new ResourceLocation(RefStrings.MODID, "tileentity_mini_rtg"));
+		GameRegistry.registerTileEntity(TileEntityITER.class, new ResourceLocation(RefStrings.MODID, "tileentity_iter"));
 
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -867,6 +878,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser"), EntityLaser.class, "entity_laser", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_c_item"), EntityMovingItem.class, "entity_c_item", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_moonstone_blast"), EntityCloudTom.class, "entity_moonstone_blast", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mask_man"), EntityMaskMan.class, "entity_mask_man", i++, MainRegistry.instance, 1000, 1, true, 0xAAAAAA, 0xAAAAAA);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -915,6 +927,9 @@ public class MainRegistry {
 		Property shaders = config.get(CATEGORY_GENERAL, "1.23_enableShaders", false);
 		shaders.setComment("Experimental, don't use");
 		useShaders = shaders.getBoolean(false);
+		Property ssg_anim = config.get(CATEGORY_GENERAL, "1.23_ssgAnimType", true);
+		ssg_anim.setComment("Which supershotgun reload animation to use. True is Drillgon's animation, false is Bob's animation");
+		ssgAnim = ssg_anim.getBoolean();
 
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
 			if(!OpenGlHelper.shadersSupported) {
@@ -927,42 +942,19 @@ public class MainRegistry {
 		useShaders = false;
 
 		final String CATEGORY_OREGEN = "02_ores";
-		Property PuraniumSpawn = config.get(CATEGORY_OREGEN, "2.00_uraniumSpawnrate", 6);
-		PuraniumSpawn.setComment("Ammount of uranium ore veins per chunk");
-		uraniumSpawn = PuraniumSpawn.getInt();
-		Property PtitaniumSpawn = config.get(CATEGORY_OREGEN, "2.01_titaniumSpawnrate", 8);
-		PtitaniumSpawn.setComment("Ammount of titanium ore veins per chunk");
-		titaniumSpawn = PtitaniumSpawn.getInt();
-		Property PsulfurSpawn = config.get(CATEGORY_OREGEN, "2.02_sulfurSpawnrate", 5);
-		PsulfurSpawn.setComment("Ammount of sulfur ore veins per chunk");
-		sulfurSpawn = PsulfurSpawn.getInt();
-		Property PaluminiumSpawn = config.get(CATEGORY_OREGEN, "2.03_aluminiumSpawnrate", 7);
-		PaluminiumSpawn.setComment("Ammount of aluminium ore veins per chunk");
-		aluminiumSpawn = PaluminiumSpawn.getInt();
-		Property PcopperSpawn = config.get(CATEGORY_OREGEN, "2.04_copperSpawnrate", 12);
-		PcopperSpawn.setComment("Ammount of copper ore veins per chunk");
-		copperSpawn = PcopperSpawn.getInt();
-		Property PFluoriteSpawn = config.get(CATEGORY_OREGEN, "2.05_fluoriteSpawnrate", 6);
-		PFluoriteSpawn.setComment("Ammount of fluorite ore veins per chunk");
-		fluoriteSpawn = PFluoriteSpawn.getInt();
-		Property PNiterSpawn = config.get(CATEGORY_OREGEN, "2.06_niterSpawnrate", 6);
-		PNiterSpawn.setComment("Ammount of niter ore veins per chunk");
-		niterSpawn = PNiterSpawn.getInt();
-		Property PtungstenSpawn = config.get(CATEGORY_OREGEN, "2.07_tungstenSpawnrate", 10);
-		PtungstenSpawn.setComment("Ammount of tungsten ore veins per chunk");
-		tungstenSpawn = PtungstenSpawn.getInt();
-		Property PleadSpawn = config.get(CATEGORY_OREGEN, "2.08_leadSpawnrate", 6);
-		PleadSpawn.setComment("Ammount of lead ore veins per chunk");
-		leadSpawn = PleadSpawn.getInt();
-		Property PberylliumSpawn = config.get(CATEGORY_OREGEN, "2.09_berylliumSpawnrate", 6);
-		PberylliumSpawn.setComment("Ammount of beryllium ore veins per chunk");
-		berylliumSpawn = PberylliumSpawn.getInt();
-		Property PthoriumSpawn = config.get(CATEGORY_OREGEN, "2.10_thoriumSpawnrate", 7);
-		PthoriumSpawn.setComment("Ammount of thorium ore veins per chunk");
-		thoriumSpawn = PthoriumSpawn.getInt();
-		Property ligniteSpawnP = config.get(CATEGORY_OREGEN, "2.11_ligniteSpawnrate", 2);
-		ligniteSpawnP.setComment("Ammount of lignite ore veins per chunk");
-		ligniteSpawn = ligniteSpawnP.getInt();
+		uraniumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.00_uraniumSpawnrate", "Ammount of uranium ore veins per chunk", 7);
+        titaniumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.01_titaniumSpawnrate", "Ammount of titanium ore veins per chunk", 8);
+        sulfurSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.02_sulfurSpawnrate", "Ammount of sulfur ore veins per chunk", 5);
+        aluminiumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.03_aluminiumSpawnrate", "Ammount of aluminium ore veins per chunk", 7);
+        copperSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.04_copperSpawnrate", "Ammount of copper ore veins per chunk", 12);
+        fluoriteSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.05_fluoriteSpawnrate", "Ammount of fluorite ore veins per chunk", 6);
+        niterSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.06_niterSpawnrate", "Ammount of niter ore veins per chunk", 6);
+        tungstenSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.07_tungstenSpawnrate", "Ammount of tungsten ore veins per chunk", 10);
+        leadSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.08_leadSpawnrate", "Ammount of lead ore veins per chunk", 6);
+        berylliumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.09_berylliumSpawnrate", "Ammount of beryllium ore veins per chunk", 6);
+        thoriumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.10_thoriumSpawnrate", "Ammount of thorium ore veins per chunk", 7);
+        ligniteSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.11_ligniteSpawnrate", "Ammount of lignite ore veins per chunk", 2);
+        asbestosSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.12_asbestosSpawnRate", "Ammount of asbestos ore veins per chunk", 2);
 
 		final String CATEGORY_NUKES = "03_nukes";
 		Property propGadget = config.get(CATEGORY_NUKES, "3.00_gadgetRadius", 150);
@@ -1127,6 +1119,8 @@ public class MainRegistry {
 		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 0);
 		netherRad.setComment("RAD/s in the nether in hundredths");
 		hellRad = netherRad.getInt() * 0.01F;
+		worldRad = createConfigInt(config, CATEGORY_NUKE, "6.10_worldRadCount", "How many block operations radiation can perform per tick", 10);
+        worldRadThreshold = createConfigInt(config, CATEGORY_NUKE, "6.11_worldRadThreshold", "The least amount of RADs required for block modification to happen", 20);
 		// railgun
 		Property railDamage = config.get(CATEGORY_NUKE, "6.11_railgunDamage", 1000);
 		railDamage.setComment("How much damage a railgun death blast does per tick");
@@ -1177,7 +1171,6 @@ public class MainRegistry {
 		leadID = propLeadID.getInt();
 
 		final String CATEGORY_MACHINE = "09_machines";
-        templateBlacklist = Arrays.asList(createConfigStringList(config, CATEGORY_MACHINE, "9.00_templateBlacklist", "Which machine templates should be prohibited from being created (args: enum names)"));
 
         final String CATEGORY_DROPS = "10_dangerous_drops";
         dropCell = createConfigBool(config, CATEGORY_DROPS, "10.00_dropCell", "Whether antimatter cells should explode when dropped", true);
@@ -1256,7 +1249,7 @@ public class MainRegistry {
 	public void init(FMLInitializationEvent event) {
 		ModItems.init();
 		ModBlocks.init();
-		registerOreDict();
+		OreDictManager.registerOres();
 		registerHazmatArmors();
 		registerReactorFuels();
 	}
@@ -1265,14 +1258,25 @@ public class MainRegistry {
 	public void postInit(FMLPostInitializationEvent event) {
 		ModItems.postInit();
 		ModBlocks.postInit();
-		ItemAssemblyTemplate.loadRecipesFromConfig();
+		//ItemAssemblyTemplate.loadRecipesFromConfig();
 		CraftingManager.init();
 		FluidTypeHandler.registerFluidProperties();
 		ShredderRecipes.registerShredder();
 		ShredderRecipes.registerOverrides();
 		CrystallizerRecipes.register();
 		CentrifugeRecipes.register();
+		BreederRecipes.registerFuels();
+		BreederRecipes.registerRecipes();
+		AssemblerRecipes.loadRecipes();
+		MagicRecipes.register();
 		BlockCrate.setDrops();
+		
+		TileEntityNukeCustom.registerBombItems();
+		
+		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
+		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));
+		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.red_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.diesel, 10000));
+		
 		//Drillgon200: expand the max entity radius for the hunter chopper
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
@@ -1287,196 +1291,6 @@ public class MainRegistry {
 		//MUST be initialized AFTER achievements!!
 		BobmazonOfferFactory.reset();
 		BobmazonOfferFactory.init();
-	}
-
-	public void registerOreDict() {
-		OreDictionary.registerOre("ingotUranium", ModItems.ingot_uranium);
-		OreDictionary.registerOre("ingotUranium233", ModItems.ingot_u233);
-		OreDictionary.registerOre("ingotUranium235", ModItems.ingot_u235);
-		OreDictionary.registerOre("ingotUranium238", ModItems.ingot_u238);
-		OreDictionary.registerOre("ingotThorium", ModItems.ingot_th232);
-		OreDictionary.registerOre("ingotThorium232", ModItems.ingot_th232);
-		OreDictionary.registerOre("ingotPlutonium", ModItems.ingot_plutonium);
-		OreDictionary.registerOre("ingotPlutonium238", ModItems.ingot_pu238);
-		OreDictionary.registerOre("ingotPlutonium239", ModItems.ingot_pu239);
-		OreDictionary.registerOre("ingotPlutonium240", ModItems.ingot_pu240);
-		OreDictionary.registerOre("U233", ModItems.ingot_u233);
-		OreDictionary.registerOre("U235", ModItems.ingot_u235);
-		OreDictionary.registerOre("U238", ModItems.ingot_u238);
-		OreDictionary.registerOre("Th232", ModItems.ingot_th232);
-		OreDictionary.registerOre("Pu238", ModItems.ingot_pu238);
-		OreDictionary.registerOre("Pu239", ModItems.ingot_pu239);
-		OreDictionary.registerOre("Pu240", ModItems.ingot_pu240);
-		OreDictionary.registerOre("ingotTitanium", ModItems.ingot_titanium);
-		OreDictionary.registerOre("ingotSchrabidium", ModItems.ingot_schrabidium);
-		OreDictionary.registerOre("dustSchrabidium", ModItems.powder_schrabidium);
-		OreDictionary.registerOre("dustSulfur", ModItems.sulfur);
-		OreDictionary.registerOre("dustNiter", ModItems.niter);
-		OreDictionary.registerOre("dustSalpeter", ModItems.niter);
-		OreDictionary.registerOre("dustLead", ModItems.powder_lead);
-		OreDictionary.registerOre("dustNeptunium", ModItems.powder_neptunium);
-		OreDictionary.registerOre("ingotCopper", ModItems.ingot_copper);
-		OreDictionary.registerOre("ingotRedCopperAlloy", ModItems.ingot_red_copper);
-		OreDictionary.registerOre("ingotAdvanced", ModItems.ingot_advanced_alloy);
-		OreDictionary.registerOre("ingotAdvancedAlloy", ModItems.ingot_advanced_alloy);
-		OreDictionary.registerOre("ingotTungsten", ModItems.ingot_tungsten);
-		OreDictionary.registerOre("ingotAluminum", ModItems.ingot_aluminium);
-		OreDictionary.registerOre("ingotBeryllium", ModItems.ingot_beryllium);
-		OreDictionary.registerOre("ingotCobalt", ModItems.ingot_cobalt);
-		OreDictionary.registerOre("ingotNeptunium", ModItems.ingot_neptunium);
-		OreDictionary.registerOre("ingotLead", ModItems.ingot_lead);
-		OreDictionary.registerOre("ingotLithium", ModItems.lithium);
-		OreDictionary.registerOre("ingotMagnetizedTungsten", ModItems.ingot_magnetized_tungsten);
-		OreDictionary.registerOre("ingotCMBSteel", ModItems.ingot_combine_steel);
-		OreDictionary.registerOre("ingotDuraSteel", ModItems.ingot_dura_steel);
-		OreDictionary.registerOre("ingotPolymer", ModItems.ingot_polymer);
-		OreDictionary.registerOre("ingotLanthanium", ModItems.ingot_lanthanium);
-		OreDictionary.registerOre("ingotActinium", ModItems.ingot_actinium);
-		OreDictionary.registerOre("ingotDesh", ModItems.ingot_desh);
-		OreDictionary.registerOre("ingotSaturnite", ModItems.ingot_saturnite);
-		OreDictionary.registerOre("ingotEuphemium", ModItems.ingot_euphemium);
-		OreDictionary.registerOre("ingotDineutronium", ModItems.ingot_dineutronium);
-		OreDictionary.registerOre("ingotStarmetal", ModItems.ingot_starmetal);
-		OreDictionary.registerOre("dustFluorite", ModItems.fluorite);
-		OreDictionary.registerOre("nuggetLead", ModItems.nugget_lead);
-		OreDictionary.registerOre("nuggetUranium", ModItems.nugget_uranium);
-		OreDictionary.registerOre("nuggetUranium233", ModItems.nugget_u233);
-		OreDictionary.registerOre("nuggetUranium235", ModItems.nugget_u235);
-		OreDictionary.registerOre("nuggetUranium238", ModItems.nugget_u238);
-		OreDictionary.registerOre("nuggetThorium", ModItems.nugget_th232);
-		OreDictionary.registerOre("nuggetThorium232", ModItems.nugget_th232);
-		OreDictionary.registerOre("nuggetPlutonium", ModItems.nugget_plutonium);
-		OreDictionary.registerOre("nuggetPlutonium238", ModItems.nugget_pu238);
-		OreDictionary.registerOre("nuggetPlutonium239", ModItems.nugget_pu239);
-		OreDictionary.registerOre("nuggetPlutonium240", ModItems.nugget_pu240);
-		OreDictionary.registerOre("tinyU233", ModItems.nugget_u233);
-		OreDictionary.registerOre("tinyU235", ModItems.nugget_u235);
-		OreDictionary.registerOre("tinyU238", ModItems.nugget_u238);
-		OreDictionary.registerOre("tinyTh232", ModItems.nugget_th232);
-		OreDictionary.registerOre("tinyPu238", ModItems.nugget_pu238);
-		OreDictionary.registerOre("tinyPu239", ModItems.nugget_pu239);
-		OreDictionary.registerOre("tinyPu240", ModItems.nugget_pu240);
-		OreDictionary.registerOre("nuggetNeptunium", ModItems.nugget_neptunium);
-		OreDictionary.registerOre("nuggetSchrabidium", ModItems.nugget_schrabidium);
-		OreDictionary.registerOre("plateTitanium", ModItems.plate_titanium);
-		OreDictionary.registerOre("plateAluminum", ModItems.plate_aluminium);
-		OreDictionary.registerOre("plateDenseLead", ModItems.neutron_reflector);
-		OreDictionary.registerOre("ingotSteel", ModItems.ingot_steel);
-		OreDictionary.registerOre("plateSteel", ModItems.plate_steel);
-		OreDictionary.registerOre("plateLead", ModItems.plate_lead);
-		OreDictionary.registerOre("plateCopper", ModItems.plate_copper);
-		OreDictionary.registerOre("plateIron", ModItems.plate_iron);
-		OreDictionary.registerOre("plateGold", ModItems.plate_gold);
-		OreDictionary.registerOre("plateAdvanced", ModItems.plate_advanced_alloy);
-		OreDictionary.registerOre("plateSchrabidium", ModItems.plate_schrabidium);
-		OreDictionary.registerOre("plateCMBSteel", ModItems.plate_combine_steel);
-		OreDictionary.registerOre("plateSaturnite", ModItems.plate_saturnite);
-		OreDictionary.registerOre("dustIron", ModItems.powder_iron);
-		OreDictionary.registerOre("dustGold", ModItems.powder_gold);
-		OreDictionary.registerOre("dustUranium", ModItems.powder_uranium);
-		OreDictionary.registerOre("dustThorium", ModItems.powder_thorium);
-		OreDictionary.registerOre("dustPlutonium", ModItems.powder_plutonium);
-		OreDictionary.registerOre("dustTitanium", ModItems.powder_titanium);
-		OreDictionary.registerOre("dustTungsten", ModItems.powder_tungsten);
-		OreDictionary.registerOre("dustCopper", ModItems.powder_copper);
-		OreDictionary.registerOre("dustBeryllium", ModItems.powder_beryllium);
-		OreDictionary.registerOre("dustAluminum", ModItems.powder_aluminium);
-		OreDictionary.registerOre("dustDiamond", ModItems.powder_diamond);
-		OreDictionary.registerOre("dustEmerald", ModItems.powder_emerald);
-		OreDictionary.registerOre("dustLapis", ModItems.powder_lapis);
-		OreDictionary.registerOre("dustCoal", ModItems.powder_coal);
-		OreDictionary.registerOre("dustLignite", ModItems.powder_lignite);
-		OreDictionary.registerOre("dustAdvanced", ModItems.powder_advanced_alloy);
-		OreDictionary.registerOre("dustAdvancedAlloy", ModItems.powder_advanced_alloy);
-		OreDictionary.registerOre("dustCMBSteel", ModItems.powder_combine_steel);
-		OreDictionary.registerOre("dustMagnetizedTungsten", ModItems.powder_magnetized_tungsten);
-		OreDictionary.registerOre("dustRedCopperAlloy", ModItems.powder_red_copper);
-		OreDictionary.registerOre("dustSteel", ModItems.powder_steel);
-		OreDictionary.registerOre("dustLithium", ModItems.powder_lithium);
-		OreDictionary.registerOre("dustNetherQuartz", ModItems.powder_quartz);
-		OreDictionary.registerOre("dustDuraSteel", ModItems.powder_dura_steel);
-		OreDictionary.registerOre("dustPolymer", ModItems.powder_polymer);
-		OreDictionary.registerOre("dustLanthanium", ModItems.powder_lanthanium);
-		OreDictionary.registerOre("dustActinium", ModItems.powder_actinium);
-		OreDictionary.registerOre("dustDesh", ModItems.powder_desh);
-		OreDictionary.registerOre("dustEuphemium", ModItems.powder_euphemium);
-		OreDictionary.registerOre("dustDineutronium", ModItems.powder_dineutronium);
-
-		OreDictionary.registerOre("dustNeptunium", ModItems.powder_neptunium);
-		OreDictionary.registerOre("dustIodine", ModItems.powder_iodine);
-		OreDictionary.registerOre("dustThorium", ModItems.powder_thorium);
-		OreDictionary.registerOre("dustAstatine", ModItems.powder_astatine);
-		OreDictionary.registerOre("dustNeodymium", ModItems.powder_neodymium);
-		OreDictionary.registerOre("dustCaesium", ModItems.powder_caesium);
-		OreDictionary.registerOre("dustStrontium", ModItems.powder_strontium);
-		OreDictionary.registerOre("dustCobalt", ModItems.powder_cobalt);
-		OreDictionary.registerOre("dustBromine", ModItems.powder_bromine);
-		OreDictionary.registerOre("dustNiobium", ModItems.powder_niobium);
-		OreDictionary.registerOre("dustTennessine", ModItems.powder_tennessine);
-		OreDictionary.registerOre("dustCerium", ModItems.powder_cerium);
-
-		OreDictionary.registerOre("nuggetNeodymium", ModItems.fragment_neodymium);
-		OreDictionary.registerOre("nuggetCobalt", ModItems.fragment_cobalt);
-		OreDictionary.registerOre("nuggetNiobium", ModItems.fragment_niobium);
-		OreDictionary.registerOre("nuggetCerium", ModItems.fragment_cerium);
-		OreDictionary.registerOre("nuggetLanthanium", ModItems.fragment_lanthanium);
-		OreDictionary.registerOre("nuggetActinium", ModItems.fragment_actinium);
-
-		OreDictionary.registerOre("gemCoal", Items.COAL);
-		OreDictionary.registerOre("gemLignite", ModItems.lignite);
-
-		OreDictionary.registerOre("oreUranium", ModBlocks.ore_uranium);
-		OreDictionary.registerOre("oreThorium", ModBlocks.ore_thorium);
-		OreDictionary.registerOre("oreTitanium", ModBlocks.ore_titanium);
-		OreDictionary.registerOre("oreSchrabidium", ModBlocks.ore_schrabidium);
-		OreDictionary.registerOre("oreSulfur", ModBlocks.ore_sulfur);
-		OreDictionary.registerOre("oreNiter", ModBlocks.ore_niter);
-		OreDictionary.registerOre("oreSalpeter", ModBlocks.ore_niter);
-		OreDictionary.registerOre("oreCopper", ModBlocks.ore_copper);
-		OreDictionary.registerOre("oreTungsten", ModBlocks.ore_tungsten);
-		OreDictionary.registerOre("oreAluminum", ModBlocks.ore_aluminium);
-		OreDictionary.registerOre("oreFluorite", ModBlocks.ore_fluorite);
-		OreDictionary.registerOre("oreLead", ModBlocks.ore_lead);
-		OreDictionary.registerOre("oreBeryllium", ModBlocks.ore_beryllium);
-		OreDictionary.registerOre("oreLignite", ModBlocks.ore_lignite);
-		OreDictionary.registerOre("oreRareEarth", ModBlocks.ore_rare);
-
-		OreDictionary.registerOre("oreUranium", ModBlocks.ore_nether_uranium);
-		OreDictionary.registerOre("orePlutonium", ModBlocks.ore_nether_plutonium);
-		OreDictionary.registerOre("oreTungsten", ModBlocks.ore_nether_tungsten);
-		OreDictionary.registerOre("oreSulfur", ModBlocks.ore_nether_sulfur);
-		OreDictionary.registerOre("oreSchrabidium", ModBlocks.ore_nether_schrabidium);
-
-		OreDictionary.registerOre("oreUranium", ModBlocks.ore_meteor_uranium);
-		OreDictionary.registerOre("oreThorium", ModBlocks.ore_meteor_thorium);
-		OreDictionary.registerOre("oreTitanium", ModBlocks.ore_meteor_titanium);
-		OreDictionary.registerOre("oreSulfur", ModBlocks.ore_meteor_sulfur);
-		OreDictionary.registerOre("oreCopper", ModBlocks.ore_meteor_copper);
-		OreDictionary.registerOre("oreTungsten", ModBlocks.ore_meteor_tungsten);
-		OreDictionary.registerOre("oreAluminum", ModBlocks.ore_meteor_aluminium);
-		OreDictionary.registerOre("oreLead", ModBlocks.ore_meteor_lead);
-		OreDictionary.registerOre("oreLithium", ModBlocks.ore_meteor_lithium);
-		OreDictionary.registerOre("oreStarmetal", ModBlocks.ore_meteor_starmetal);
-
-		OreDictionary.registerOre("blockThorium", ModBlocks.block_thorium);
-		OreDictionary.registerOre("blockUranium", ModBlocks.block_uranium);
-		OreDictionary.registerOre("blockTitanium", ModBlocks.block_titanium);
-		OreDictionary.registerOre("blockSulfur", ModBlocks.block_sulfur);
-		OreDictionary.registerOre("blockNiter", ModBlocks.block_niter);
-		OreDictionary.registerOre("blockSalpeter", ModBlocks.block_niter);
-		OreDictionary.registerOre("blockCopper", ModBlocks.block_copper);
-		OreDictionary.registerOre("blockRedCopperAlloy", ModBlocks.block_red_copper);
-		OreDictionary.registerOre("blockAdvanced", ModBlocks.block_advanced_alloy);
-		OreDictionary.registerOre("blockTungsten", ModBlocks.block_tungsten);
-		OreDictionary.registerOre("blockAluminum", ModBlocks.block_aluminium);
-		OreDictionary.registerOre("blockFluorite", ModBlocks.block_fluorite);
-		OreDictionary.registerOre("blockSteel", ModBlocks.block_steel);
-		OreDictionary.registerOre("blockLead", ModBlocks.block_lead);
-		OreDictionary.registerOre("blockBeryllium", ModBlocks.block_beryllium);
-		OreDictionary.registerOre("blockSchrabidium", ModBlocks.block_schrabidium);
-		OreDictionary.registerOre("blockCMBSteel", ModBlocks.block_combine_steel);
-		OreDictionary.registerOre("blockMagnetizedTungsten", ModBlocks.block_magnetized_tungsten);
-		OreDictionary.registerOre("blockDesh", ModBlocks.block_desh);
 	}
 
 	private void registerHazmatArmors() {

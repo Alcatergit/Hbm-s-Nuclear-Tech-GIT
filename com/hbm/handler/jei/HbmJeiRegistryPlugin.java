@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
+import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.Library;
 
@@ -19,7 +21,7 @@ import net.minecraft.item.ItemStack;
 public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 
 	// Drillgon200: This is needed because assembler recipes can change during
-	// run time.
+		// run time.
 	@Override
 	public <V> List<String> getRecipeCategoryUids(IFocus<V> focus) {
 		return Lists.newArrayList(JEIConfig.ASSEMBLY);
@@ -32,16 +34,16 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 			ItemStack stack = (ItemStack) focus.getValue();
 			if(JEIConfig.ASSEMBLY.equals(recipeCategory.getUid())) {
 				if(focus.getMode() == Mode.INPUT) {
-					List<T> list = (List<T>) ItemAssemblyTemplate.recipes.stream().filter(recipe -> {
-						for(ItemStack input : recipe.getInputs()) {
-							if(Library.areItemStacksEqualIgnoreCount(input, stack))
+					List<T> list = (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> {
+						for(AStack input : recipe.getValue()) {
+							if(input.isApplicable(stack))
 								return true;
 						}
 						return false;
-					}).map(recipe -> new AssemblerRecipeWrapper(recipe)).collect(Collectors.toList());
+					}).map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 					return list;
 				} else if(focus.getMode() == Mode.OUTPUT) {
-					return (List<T>) ItemAssemblyTemplate.recipes.stream().filter(recipe -> Library.areItemStacksEqualIgnoreCount(recipe.getOutput(), stack)).map(recipe -> new AssemblerRecipeWrapper(recipe)).collect(Collectors.toList());
+					return (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> Library.areItemStacksEqualIgnoreCount(recipe.getKey().toStack(), stack)).map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 				}
 			}
 		}
@@ -52,7 +54,7 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 	@Override
 	public <T extends IRecipeWrapper> List<T> getRecipeWrappers(IRecipeCategory<T> recipeCategory) {
 		if(recipeCategory.getUid().equals(JEIConfig.ASSEMBLY)) {
-			return (List<T>) ItemAssemblyTemplate.recipes.stream().map(recipe -> new AssemblerRecipeWrapper(recipe)).collect(Collectors.toList());
+			return (List<T>) AssemblerRecipes.recipes.entrySet().stream().map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

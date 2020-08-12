@@ -36,8 +36,10 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 			for (EnumFacing dir : EnumFacing.VALUES) {
 				//Drillgon200: BlockPos is basically the location class, but without as much abstraction.
 				TileEntity entity = world.getTileEntity(pos.offset(dir));
+				if(entity == null)
+					continue;
 			
-				if (entity != null && entity instanceof IEnergyReceiver) {
+				if (entity instanceof IEnergyReceiver) {
 				
 					IEnergyReceiver receiver = (IEnergyReceiver) entity;
 					
@@ -45,6 +47,14 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 					int maxAvailable = storage.extractEnergy(maxExtract, true);
 					int energyTransferred = receiver.receiveEnergy(dir.getOpposite(), maxAvailable, false);
 
+					storage.extractEnergy(energyTransferred, false);
+				} else if(entity.hasCapability(CapabilityEnergy.ENERGY, dir.getOpposite())){
+					IEnergyStorage receiver = entity.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite());
+					
+					int maxExtract = storage.getMaxExtract();
+					int maxAvailable = storage.extractEnergy(maxExtract, true);
+					int energyTransferred = receiver.receiveEnergy(maxAvailable, false);
+					
 					storage.extractEnergy(energyTransferred, false);
 				}
 			}

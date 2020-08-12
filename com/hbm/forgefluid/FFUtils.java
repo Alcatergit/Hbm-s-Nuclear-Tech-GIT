@@ -18,6 +18,8 @@ import com.hbm.tileentity.machine.TileEntityDummy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -229,15 +231,15 @@ public class FFUtils {
 	 * @return true if something was actually filled
 	 */
 	public static boolean fillFromFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2) {
-
 		if(slots == null || tank == null || slots.getSlots() < slot1 || slots.getSlots() < slot2 || slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
 
 		if(trySpecialFillFromFluidContainer(slots, tank, slot1, slot2))
 			return true;
-
+		
 		if(slots.getStackInSlot(slot1).getItem() == ModItems.fluid_barrel_infinite && tank.getFluid() != null) {
+			
 			return tank.fill(new FluidStack(tank.getFluid(), Integer.MAX_VALUE), true) > 0 ? true : false;
 		}
 		if(FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
@@ -313,6 +315,33 @@ public class FFUtils {
 				out.grow(1);
 			}
 			return true;
+		}
+		
+		//Mercury override
+		//Oh god, these overrides are getting worse and worse, but it would take a large amount of effort to make the code good
+		if(in.getItem() == ModItems.bottle_mercury && tank.fill(new FluidStack(ModForgeFluids.mercury, 1000), false) == 1000 && (out.isEmpty() || (out.getItem() == Items.GLASS_BOTTLE && out.getCount() < 64))){
+			tank.fill(new FluidStack(ModForgeFluids.mercury, 1000), true);
+			in.shrink(1);
+			if(out.isEmpty()){
+				slots.setStackInSlot(slot2, new ItemStack(Items.GLASS_BOTTLE));
+			} else {
+				out.grow(1);
+			}
+		}
+		
+		//That's it. I'm making a fluid container registry just so I don't have to make this method any worse.
+		if(FluidContainerRegistry.hasFluid(in.getItem())){
+			FluidStack fluid = FluidContainerRegistry.getFluidFromItem(in.getItem());
+			Item container = FluidContainerRegistry.getContainerItem(in.getItem());
+			if(tank.fill(fluid, false) == fluid.amount && (out.isEmpty() || (out.getItem() == container && out.getCount() < out.getMaxStackSize()))){
+				tank.fill(fluid, true);
+				in.shrink(1);
+				if(out.isEmpty()){
+					slots.setStackInSlot(slot2, new ItemStack(container));
+				} else {
+					out.grow(1);
+				}
+			}
 		}
 
 		return false;
@@ -559,6 +588,20 @@ public class FFUtils {
 				if(out.isEmpty() && JetpackBooster.getFuel(in) == JetpackBooster.maxFuel) {
 					slots.setStackInSlot(slot2, in);
 					slots.setStackInSlot(slot1, ItemStack.EMPTY);
+				}
+			}
+		}
+		
+		Item container = FluidContainerRegistry.getFullContainer(in.getItem(), tank.getFluid().getFluid());
+		if(container != null){
+			FluidStack stack = FluidContainerRegistry.getFluidFromItem(container);
+			if(tank.drain(stack, false).amount == stack.amount && (out.isEmpty() || (out.getItem() == container && out.getCount() < out.getMaxStackSize()))){
+				tank.drain(stack, true);
+				in.shrink(1);
+				if(out.isEmpty()){
+					slots.setStackInSlot(slot2, new ItemStack(container));
+				} else {
+					out.grow(1);
 				}
 			}
 		}

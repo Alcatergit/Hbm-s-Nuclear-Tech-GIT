@@ -80,7 +80,6 @@ public class HbmAnimations {
 					return trans;
 			}
 		}
-
 		return new double[] {0, 0, 0};
 	}
 

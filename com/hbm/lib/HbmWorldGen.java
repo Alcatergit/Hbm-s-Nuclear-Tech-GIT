@@ -235,6 +235,14 @@ public class HbmWorldGen implements IWorldGenerator {
 			(new WorldGenMinable(ModBlocks.ore_lignite.getDefaultState(), 24)).generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
 		}
 
+		for (int k = 0; k < MainRegistry.asbestosSpawn; k++) {
+			int randPosX = i + rand.nextInt(16);
+			int randPosY = rand.nextInt(16) + 16;
+			int randPosZ = j + rand.nextInt(16);
+
+			(new WorldGenMinable(ModBlocks.ore_asbestos.getDefaultState(), 3)).generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
+		}
+		
 		if(MainRegistry.enableDungeons) {
 			//Drillgon200: Helps with cascading world gen.
 			i += 8;

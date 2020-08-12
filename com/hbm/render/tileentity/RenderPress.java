@@ -1,11 +1,14 @@
 package com.hbm.render.tileentity;
 
+import java.nio.DoubleBuffer;
+
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -15,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePress> {
@@ -27,6 +31,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 				0.0f, 0.0f, 0.0f, 1.0f };
 	
 	private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);*/
+	public static Vec3d pos = new Vec3d(0, 0, 0);
 	
 	public RenderPress() {
 		super();
@@ -34,6 +39,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 	@Override
 	public void render(TileEntityMachinePress te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		pos = new Vec3d(x, y, z);
 		/*if(MainRegistry.useShaders) {
 			if(!ModEventHandlerClient.tester.containsKey(te))
 				ModEventHandlerClient.tester.put(te, new Flashlight(new Vec3d(te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5), new Vec3d(1, 0, 0), 10));
@@ -96,6 +102,15 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		}*/
 		
+		GL11.glEnable(GL11.GL_CLIP_PLANE0);
+		DoubleBuffer buf = GLAllocation.createDirectByteBuffer(8*4).asDoubleBuffer();
+		buf.put(new double[]{1, 0, 1, 0});
+		buf.rewind();
+		GL11.glPushMatrix();
+		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
+		GL11.glClipPlane(GL11.GL_CLIP_PLANE0, buf);
+		GL11.glPopMatrix();
+		
 		GL11.glPushMatrix();
 
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
@@ -112,6 +127,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		
 		renderTileEntityAt2(te, x, y, z, partialTicks);
 		GL11.glPopMatrix();
+		GL11.glDisable(GL11.GL_CLIP_PLANE0);
 		//if(model.controller.getAnim() == AnimationWrapper.EMPTY)
 		//	model.controller.setAnim(new AnimationWrapper(anim_test).onEnd(new EndResult(EndType.REPEAT_REVERSE, null)));
 		/*GL11.glPushMatrix();

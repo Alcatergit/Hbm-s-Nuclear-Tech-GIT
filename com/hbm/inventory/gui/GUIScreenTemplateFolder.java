@@ -3,6 +3,8 @@ package com.hbm.inventory.gui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
@@ -61,7 +63,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     	//Assembly Templates
     	//for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++)
     	//	stacks.add(new ItemStack(ModItems.assembly_template, 1, i));
-    	for (int i = 0; i < ItemAssemblyTemplate.recipes.size(); ++i) {
+    	for (int i = 0; i < AssemblerRecipes.recipeList.size(); ++i) {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("type", i);
 			ItemStack stack = new ItemStack(ModItems.assembly_template, 1, 0);
@@ -203,7 +205,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		        RenderHelper.enableGUIStandardItemLighting();
 				if(stack != null) {
 					if(stack.getItem() == ModItems.assembly_template)
-						itemRender.renderItemAndEffectIntoGUI(player, MachineRecipes.getOutputFromTempate(stack), xPos + 1, yPos + 1);
+						itemRender.renderItemAndEffectIntoGUI(player, AssemblerRecipes.getOutputFromTempate(stack), xPos + 1, yPos + 1);
 					else if(stack.getItem() == ModItems.chemistry_template)
 						itemRender.renderItemAndEffectIntoGUI(player, new ItemStack(ModItems.chemistry_icon, 1, stack.getItemDamage()), xPos + 1, yPos + 1);
 					else

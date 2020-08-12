@@ -2,6 +2,7 @@ package com.hbm.entity.mob;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.entity.mob.ai.EntityAITaintedCreeperSwell;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.Entity;

@@ -128,6 +128,7 @@
 	"weapon.quadroReload": {"category": "player", "sounds": [{"name": "hbm:weapon/quadroReload", "stream": false}]},
 	"weapon.fstbmbStart": {"category": "player", "sounds": [{"name": "hbm:weapon/fstbmbStart", "stream": false}]},
     "weapon.fstbmbPing": {"category": "player", "sounds": [{"name": "hbm:weapon/fstbmbPing", "stream": false}]},
+    "weapon.sauergun": {"category": "player", "sounds": ["hbm:weapon/sauergun1", "hbm:weapon/sauergun2", "hbm:weapon/sauergun3"]},
 
     "weapon.reloadTurret": {"category": "player", "sounds": [{"name": "hbm:weapon/reloadTurret", "stream": false}]},
     "weapon.switchmode1": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode1", "stream": false}]},

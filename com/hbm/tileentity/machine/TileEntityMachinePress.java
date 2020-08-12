@@ -132,12 +132,13 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			if(!(world.isBlockIndirectlyGettingPowered(pos) > 0)) {
 				if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
 					this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
+					ItemStack copy = inventory.getStackInSlot(0).copy();
 					inventory.getStackInSlot(0).shrink(1);
 
 					if(inventory.getStackInSlot(0).getCount() <= 0) {
 
-						if(inventory.getStackInSlot(0).getItem().getContainerItem() != null)
-							inventory.setStackInSlot(0, new ItemStack(inventory.getStackInSlot(0).getItem().getContainerItem()));
+						if(copy.getItem().getContainerItem() != null)
+							inventory.setStackInSlot(0, new ItemStack(copy.getItem().getContainerItem()));
 						else
 							inventory.setStackInSlot(0, ItemStack.EMPTY);
 					}

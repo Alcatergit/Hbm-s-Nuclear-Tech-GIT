@@ -18,6 +18,7 @@ import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.MissileStruct;
+import com.hbm.handler.RadiationWorldHandler;
 import com.hbm.handler.VersionChecker;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
@@ -31,6 +32,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.RadSurveyPacket;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -77,6 +79,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.registries.DataSerializerEntry;
 
@@ -419,7 +422,7 @@ public class ModEventHandler {
 						PacketDispatcher.sendTo(new RadSurveyPacket(0.0F), (EntityPlayerMP) player);
 				}
 
-				if(event.world.getTotalWorldTime() % 20 == 0) {
+				if(event.world.getTotalWorldTime() % 20 == 0 && event.phase == Phase.START) {
 					data.updateSystem();
 				}
 
@@ -446,11 +449,11 @@ public class ModEventHandler {
 								rad = MainRegistry.hellRad;
 							
 							if(rad > 0) {
-								Library.applyRadData(entity, rad / 2);
+								ContaminationUtil.applyRadData(entity, rad / 2);
 							}
 
 							if(entity.world.isRaining() && MainRegistry.cont > 0 && AuxSavedData.getThunder(entity.world) > 0 && entity.world.canBlockSeeSky(new BlockPos(entity))) {
-								Library.applyRadData(entity, MainRegistry.cont * 0.005F);
+								ContaminationUtil.applyRadData(entity, MainRegistry.cont * 0.005F);
 							}
 						}
 
@@ -563,6 +566,9 @@ public class ModEventHandler {
 				}
 			}
 		}
+		
+		if(event.phase == Phase.START)
+			RadiationWorldHandler.handleWorldDestruction(event.world);
 	}
 
 	// Drillgon200: So 1.12.2's going to ignore ISpecialArmor if the damage is
@@ -660,10 +666,6 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
-		String st = player.getUniqueID().toString();
-		if(!player.world.isRemote && st.equals("c874fd4e-5841-42e4-8f77-70efd5881bc1"))
-					if(player.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-						player.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).increaseRads(0.05F);
 
 		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
 
@@ -729,7 +731,7 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void clientJoinServer(PlayerLoggedInEvent e) {
 		if(e.player instanceof EntityPlayerMP)
-			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(ItemAssemblyTemplate.recipes), (EntityPlayerMP) e.player);
+			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(/*ItemAssemblyTemplate.recipes*/), (EntityPlayerMP) e.player);
 		if(!e.player.world.isRemote){
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
 			

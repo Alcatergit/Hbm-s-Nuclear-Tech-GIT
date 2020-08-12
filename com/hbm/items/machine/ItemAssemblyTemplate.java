@@ -1,28 +1,17 @@
 package com.hbm.items.machine;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import org.apache.logging.log4j.Level;
-
 import com.hbm.interfaces.IHasCustomModel;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
-import com.hbm.main.temp;
-import com.hbm.main.temp.EnumAssemblyTemplate;
-
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,24 +20,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 
 	public static final ModelResourceLocation location = new ModelResourceLocation(
 			RefStrings.MODID + ":assembly_template", "inventory");
 	
-	private static IForgeRegistry<Item> itemRegistry;
-	private static IForgeRegistry<Block> blockRegistry;
+	//private static IForgeRegistry<Item> itemRegistry;
+	//private static IForgeRegistry<Block> blockRegistry;
 
 
-	public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
-	public static List<AssemblerRecipe> recipesBackup = null;
+	//public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
+	//public static List<AssemblerRecipe> recipesBackup = null;
 	
 
 	public ItemAssemblyTemplate(String s) {
@@ -65,7 +52,8 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
-		ItemStack out = MachineRecipes.getOutputFromTempate(stack);
+		int damage = getTagWithRecipeNumber(stack).getInteger("type");
+		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : null;
 		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getUnlocalizedName() : "") + ".name")).trim();
 
 		if (s1 != null) {
@@ -78,7 +66,9 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
-			for (int i = 0; i < ItemAssemblyTemplate.recipes.size(); ++i) {
+			int count = AssemblerRecipes.recipeList.size();
+
+	    	for(int i = 0; i < count; i++) {
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setInteger("type", i);
 				ItemStack stack = new ItemStack(this, 1, 0);
@@ -101,27 +91,56 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 		if (!(stack.getItem() instanceof ItemAssemblyTemplate))
 			return;
 
-		List<ItemStack> stacks = MachineRecipes.getRecipeFromTempate(stack);
-		ItemStack out = MachineRecipes.getOutputFromTempate(stack);
+		int i = getTagWithRecipeNumber(stack).getInteger("type");
+		
+		if(i < 0 || i >= AssemblerRecipes.recipeList.size()) {
+    		list.add("I AM ERROR");
+    		return;
+    	}
 
-		list.add("[CREATED USING TEMPLATE FOLDER]");
-		list.add("");
+    	ComparableStack out = AssemblerRecipes.recipeList.get(i);
 
-		try {
-			list.add("Output:");
-			list.add(out.getCount() + "x " + out.getDisplayName());
-			list.add("Inputs:");
+    	if(out == null) {
+    		list.add("I AM ERROR");
+    		return;
+    	}
 
-			for (int i = 0; i < stacks.size(); i++) {
-				if (stacks.get(i) != null)
-					list.add(stacks.get(i).getCount() + "x " + stacks.get(i).getDisplayName());
+    	Object[] in = AssemblerRecipes.recipes.get(out);
+
+    	if(in == null) {
+    		list.add("I AM ERROR");
+    		return;
+    	}
+
+    	ItemStack output = out.toStack();
+
+		list.add("Output:");
+		list.add(output.getCount() + "x " + output.getDisplayName());
+		list.add("Inputs:");
+
+		Random rand = new Random(System.currentTimeMillis() / 1000);
+
+		for(Object o : in) {
+
+			if(o instanceof ComparableStack)  {
+				ItemStack input = ((ComparableStack)o).toStack();
+	    		list.add(input.getCount() + "x " + input.getDisplayName());
+
+			} else if(o instanceof OreDictStack)  {
+				OreDictStack input = (OreDictStack) o;
+				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
+
+				if(ores.size() > 0) {
+					ItemStack inStack = ores.get(rand.nextInt(ores.size()));
+		    		list.add(input.count() + "x " + inStack.getDisplayName());
+				} else {
+		    		list.add("I AM ERROR");
+				}
 			}
-			list.add("Production time:");
-			list.add(Math.floor((float) (getProcessTime(stack)) / 20 * 100) / 100 + " seconds");
-		} catch (Exception e) {
-			list.add("###INVALID###");
-			list.add("0x334077-0x6A298F-0xDF3795-0x334077");
 		}
+
+		list.add("Production time:");
+    	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " seconds");
 	}
 
 	public static int getProcessTime(ItemStack stack) {
@@ -129,16 +148,27 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 			return 100;
 		
 		int i = getTagWithRecipeNumber(stack).getInteger("type");
-		AssemblerRecipe recipe = recipes.get(i);
-		if(recipe != null)
-			if (recipe.getTime() != 0)
-				return recipe.getTime();
-		return 0;
+
+    	if(i < 0 || i >= AssemblerRecipes.recipeList.size())
+    		return 100;
+
+    	ComparableStack out = AssemblerRecipes.recipeList.get(i);
+    	Integer time = AssemblerRecipes.time.get(out);
+
+    	if(time != null)
+    		return time;
+    	else
+    		return 100;
+
 	}
 
 	@Override
 	public ModelResourceLocation getResourceLocation() {
 		return location;
+	}
+	
+	public static int getRecipeIndex(ItemStack stack){
+		return getTagWithRecipeNumber(stack).getInteger("type");
 	}
 
 	public static NBTTagCompound getTagWithRecipeNumber(@Nonnull ItemStack stack){
@@ -149,7 +179,7 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 		return stack.getTagCompound();
 	}
 	
-	public static class AssemblerRecipe {
+	/*public static class AssemblerRecipe {
 		private int time;
 		private List<ItemStack> inputs;
 		private ItemStack output;
@@ -320,5 +350,5 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	}
 	private static void addConfigRecipes(FileWriter write) throws IOException {
 			write.write("\n");
-	}
+	}*/
 }

@@ -1,19 +1,17 @@
 package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.hbm.entity.missile.EntityMissileAntiBallistic;
-import com.hbm.entity.missile.EntityMissileBaseAdvanced;
-import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TERadarPacket;
+import com.hbm.tileentity.TileEntityTickingBase;
 
+import api.hbm.energy.IRadarDetectable;
+import api.hbm.energy.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,11 +23,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineRadar extends TileEntity implements ITickable, IConsumer {
+public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IConsumer {
 
-	public static List<Entity> allMissiles = new ArrayList<Entity>();
 	public List<int[]> nearbyMissiles = new ArrayList<int[]>();
 	int pingTimer = 0;
+	int lastPower;
 	final static int maxTimer = 40;
 
 	public long power = 0;
@@ -48,35 +46,42 @@ public class TileEntityMachineRadar extends TileEntity implements ITickable, ICo
 	}
 	
 	@Override
+	public String getInventoryName() {
+		return "";
+	}
+	
+	@Override
 	public void update() {
 		if(pos.getY() < MainRegistry.radarAltitude)
 			return;
 		
-		if(!world.isRemote)
-			nearbyMissiles.clear();
+		int lastPower = getRedPower();
 		
-		if(power > 0) {
+		if(!world.isRemote) {
+			nearbyMissiles.clear();
 
-			if(!world.isRemote) {
+			if(power > 0) {
 				allocateMissiles();
-				sendMissileData();
+
+				power -= 500;
+
+				if(power < 0)
+					power = 0;
 			}
 			
-			power -= 500;
-			if(power < 0)
-				power = 0;
-		}
-		
-		world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
-		
-		if(!world.isRemote)
-			PacketDispatcher.wrapper.sendToAllTracking(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		
-		pingTimer++;
-		
-		if(power > 0 && pingTimer >= maxTimer) {
-			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
-			pingTimer = 0;
+			if(lastPower != getRedPower())
+				world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+
+			sendMissileData();
+
+			pingTimer++;
+
+			if(power > 0 && pingTimer >= maxTimer) {
+				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
+				pingTimer = 0;
+			}
+			
+			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		}
 	}
 	
@@ -87,61 +92,14 @@ public class TileEntityMachineRadar extends TileEntity implements ITickable, ICo
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - MainRegistry.radarRange, 0, pos.getZ() + 0.5 - MainRegistry.radarRange, pos.getX() + 0.5 + MainRegistry.radarRange, 5000, pos.getZ() + 0.5 + MainRegistry.radarRange));
 
 		for(Entity e : list) {
-			/*if(e instanceof EntityMissileBaseAdvanced) {
-				EntityMissileBaseAdvanced mis = (EntityMissileBaseAdvanced)e;
-				nearbyMissiles.add(new int[] { (int)mis.posX, (int)mis.posZ, mis.getMissileType() });
-			}*/
-			
-			/*if(e instanceof EntityRocketHoming && e.posY >= yCoord + MainRegistry.radarBuffer) {
-				EntityRocketHoming rocket = (EntityRocketHoming)e;
-				
-				if(rocket.getIsCritical())
-					nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, 7, (int)e.posY });
-				else
-					nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, 6, (int)e.posY });
-				
-				continue;
-			}*/
 
 			if(e instanceof EntityPlayer && e.posY >= pos.getY() + MainRegistry.radarBuffer) {
-				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, 5, (int)e.posY });
+				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY });
 			}
 			
-			if(e instanceof EntityMissileAntiBallistic && e.posY >= pos.getY() + MainRegistry.radarBuffer) {
-				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, 4, (int)e.posY });
+			if(e instanceof IRadarDetectable && e.posY >= pos.getY() + MainRegistry.radarBuffer) {
+				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY });
 			}
-		}
-		
-		for(Iterator<Entity> itr = allMissiles.iterator(); itr.hasNext();){
-			Entity e = itr.next();
-			if(e.isDead){
-				itr.remove();
-				continue;
-			}
-			if(e != null && e.posY >= pos.getY() + MainRegistry.radarBuffer){
-				if(e instanceof EntityMissileBaseAdvanced) {
-					if(e.posX < pos.getX() + MainRegistry.radarRange && e.posX > pos.getX() - MainRegistry.radarRange &&
-							e.posZ < pos.getZ() + MainRegistry.radarRange && e.posZ > pos.getZ() - MainRegistry.radarRange) {
-						EntityMissileBaseAdvanced mis = (EntityMissileBaseAdvanced)e;
-						nearbyMissiles.add(new int[] { (int)mis.posX, (int)mis.posZ, mis.getMissileType().ordinal(), (int)mis.posY });
-					}
-				} else if(e instanceof EntityMissileCustom){
-					if(e.posX < pos.getX() + MainRegistry.radarRange && e.posX > pos.getX() - MainRegistry.radarRange &&
-							e.posZ < pos.getZ() + MainRegistry.radarRange && e.posZ > pos.getZ() - MainRegistry.radarRange)
-						nearbyMissiles.add(new int[] {(int)e.posX, (int)e.posZ, 6, (int)e.posY});
-				}
-			}
-		}
-		
-		for(Entity e : allMissiles) {
-			if(e != null && !e.isDead && e.posY >= pos.getY() + MainRegistry.radarBuffer)
-				if(e instanceof EntityMissileBaseAdvanced) {
-					if(e.posX < pos.getX() + MainRegistry.radarRange && e.posX > pos.getX() - MainRegistry.radarRange &&
-							e.posZ < pos.getZ() + MainRegistry.radarRange && e.posZ > pos.getZ() - MainRegistry.radarRange) {
-						EntityMissileBaseAdvanced mis = (EntityMissileBaseAdvanced)e;
-						nearbyMissiles.add(new int[] { (int)mis.posX, (int)mis.posZ, mis.getMissileType().ordinal(), (int)mis.posY });
-					}
-				}
 		}
 	}
 	
@@ -171,9 +129,36 @@ public class TileEntityMachineRadar extends TileEntity implements ITickable, ICo
 	
 	private void sendMissileData() {
 		
-		//PacketDispatcher.wrapper.sendToAllAround(new TERadarDestructorPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		
-		PacketDispatcher.wrapper.sendToAllAround(new TERadarPacket(pos, nearbyMissiles), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		NBTTagCompound data = new NBTTagCompound();
+		data.setLong("power", power);
+		data.setInteger("count", this.nearbyMissiles.size());
+
+		for(int i = 0; i < this.nearbyMissiles.size(); i++) {
+			data.setInteger("x" + i, this.nearbyMissiles.get(i)[0]);
+			data.setInteger("z" + i, this.nearbyMissiles.get(i)[1]);
+			data.setInteger("type" + i, this.nearbyMissiles.get(i)[2]);
+			data.setInteger("y" + i, this.nearbyMissiles.get(i)[3]);
+		}
+
+		this.networkPack(data, 15);
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		this.nearbyMissiles.clear();
+		this.power = data.getLong("power");
+
+		int count = data.getInteger("count");
+
+		for(int i = 0; i < count; i++) {
+
+			int x = data.getInteger("x" + i);
+			int z = data.getInteger("z" + i);
+			int type = data.getInteger("type" + i);
+			int y = data.getInteger("y" + i);
+
+			this.nearbyMissiles.add(new int[] {x, z, type, y});
+		}
 	}
 	
 	public long getPowerScaled(long i) {

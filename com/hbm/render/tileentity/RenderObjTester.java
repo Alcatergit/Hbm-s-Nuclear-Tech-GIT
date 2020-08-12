@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
 import com.hbm.handler.HbmShaderManager;
+import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
@@ -125,6 +126,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
         GlStateManager.color(0.5F, 1F, 0.5F, 0.6F);
+        
         
         /*bindTexture(ResourceManager.bfg_beam2);
         GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL14.GL_MIRRORED_REPEAT);

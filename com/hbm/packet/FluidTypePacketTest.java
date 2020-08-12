@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 
 import io.netty.buffer.ByteBuf;
@@ -73,9 +74,11 @@ public class FluidTypePacketTest implements IMessage {
 		public IMessage onMessage(FluidTypePacketTest m, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
-				if (te != null && te instanceof TileEntityMachineTurbine) {
+				if (te instanceof TileEntityMachineTurbine) {
 					((TileEntityMachineTurbine)te).tankTypes[0] = m.fluids[0];
 					((TileEntityMachineTurbine)te).tankTypes[1] = m.fluids[1];
+				} else if(te instanceof TileEntityMachineReactorLarge){
+					((TileEntityMachineReactorLarge) te).tankTypes[2] = m.fluids[0];
 				}
 			});
 			return null;

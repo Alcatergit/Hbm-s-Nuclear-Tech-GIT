@@ -11,6 +11,8 @@ import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
 
+import api.hbm.energy.IRadarDetectable;
+import api.hbm.energy.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -31,7 +33,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMissileBaseAdvanced extends Entity implements IChunkLoader, IConstantRenderer {
+public abstract class EntityMissileBaseAdvanced extends Entity implements IChunkLoader, IConstantRenderer, IRadarDetectable {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileBaseAdvanced.class, DataSerializers.VARINT);
 
@@ -108,7 +110,6 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 		ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
 		ExplosionLarge.spawnShrapnelShower(world, posX, posY, posZ, motionX, motionY, motionZ, 15, 0.075);
 		ExplosionLarge.spawnMissileDebris(world, posX, posY, posZ, motionX, motionY, motionZ, 0.25, getDebris(), getDebrisRareDrop());
-		TileEntityMachineRadar.allMissiles.remove(this);
 	}
 
 	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
@@ -198,16 +199,6 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 
 	@Override
 	public void onUpdate() {
-		// super.onUpdate();
-		 if(!world.isRemote) {
-			 TileEntityMachineRadar.allMissiles.remove(this);
-			 TileEntityMachineRadar.allMissiles.add(this);
-		 }
-
-		// if(!worldObj.loadedEntityList.contains(this))
-		// worldObj.loadedEntityList.add(this);
-
-		// System.out.println(this.posX + " " + this.posY + " " + this.posZ);
 
 		if (velocity < 1)
 			velocity = 1;
@@ -225,6 +216,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 		this.prevPosY2 = this.posY;
 		this.prevPosZ2 = this.posZ;
 
+		 //TODO: instead of crappy skipping, implement a hitscan
 		for (int i = 0; i < velocity; i++) {
 			// this.posX += this.motionX;
 			// this.posY += this.motionY;
@@ -303,17 +295,11 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 
 	public abstract void onImpact();
 
-	public abstract EnumMissileType getMissileType();
-
 	public abstract List<ItemStack> getDebris();
 
 	public abstract ItemStack getDebrisRareDrop();
 
 	public void cluster() {
-	}
-
-	public static enum EnumMissileType {
-		TIER1, TIER2, TIER3, TIER4, ANTIBALLISTIC;
 	}
 
 }

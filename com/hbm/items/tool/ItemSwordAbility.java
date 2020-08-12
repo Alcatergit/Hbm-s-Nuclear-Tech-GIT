@@ -77,7 +77,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility{
     		}
     	}
 
-        return true;
+        return super.hitEntity(stack, target, attacker);
 	}
 	
 	@Override
