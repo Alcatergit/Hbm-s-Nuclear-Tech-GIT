@@ -3,6 +3,7 @@ package com.hbm.blocks.bomb;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.missile.EntityCarrier;
 import com.hbm.entity.missile.EntityMissileAntiBallistic;
 import com.hbm.entity.missile.EntityMissileBHole;
@@ -40,6 +41,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -125,6 +127,24 @@ public class LaunchPad extends BlockContainer implements IBomb {
 
 	@Override
 	public void explode(World world, BlockPos pos) {
+		if(world.isRemote){
+			for(int i = 0; i < 16000; i ++){
+				int x = world.rand.nextInt(10)-5;
+				int y = world.rand.nextInt(10)-5;
+				int z = world.rand.nextInt(10)-5;
+				MainRegistry.proxy.particleControl(pos.getX()+x, pos.getY()+18+y, pos.getZ()+z, 2);
+				/*NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "exhaust");
+				data.setString("mode", "soyuz");
+				data.setInteger("count", 1);
+				data.setDouble("width", world.rand.nextDouble() * 0.25 - 0.5);
+				data.setDouble("posX", pos.getX()+x);
+				data.setDouble("posY", pos.getY()+18+y);
+				data.setDouble("posZ", pos.getZ()+z);
+				
+				MainRegistry.proxy.effectNT(data);*/
+			}
+		}
 		TileEntityLaunchPad entity = (TileEntityLaunchPad) world.getTileEntity(pos);
 
 		int x = pos.getX();
@@ -140,7 +160,7 @@ public class LaunchPad extends BlockContainer implements IBomb {
 					xCoord += 1;
 				}
 
-				if (MainRegistry.enableExtendedLogging)
+				if (GeneralConfig.enableExtendedLogging)
 					MainRegistry.logger.log(Level.INFO, "[MISSILE] Tried to launch missile at " + x + " / " + y + " / " + z + " to " + xCoord + " / " + zCoord + "!");
 
 				if (entity.inventory.getStackInSlot(0).getItem() == ModItems.missile_generic && entity.power >= 75000) {

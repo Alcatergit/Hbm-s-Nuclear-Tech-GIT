@@ -558,10 +558,9 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			for(int j = 0; j < stack.get(i).count(); j++) {
 				AStack sta = stack.get(i).copy();
 				sta.singulize();
-				//if(!canRemoveItemFromArray(sta, array))
-					//System.out.println(sta);
-				if(!canRemoveItemFromArray(sta, array))
+				if(!canRemoveItemFromArray(sta, array)){
 					return false;
+				}
 			}
 		}
 

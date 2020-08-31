@@ -3,10 +3,10 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -2598,7 +2598,7 @@ public class Satellite extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 16, y + 19, z + 12), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.WEST), 3);
 		world.setBlockState(pos.setPos(x + 22, y + 19, z + 12), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 19, y + 19, z + 15), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.SOUTH), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned satellite dish at " + x + " " + y +" " + z + "\n");
 		return true;
 

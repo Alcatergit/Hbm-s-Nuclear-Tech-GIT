@@ -15,6 +15,8 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -22,6 +24,8 @@ import net.minecraft.world.World;
 public class EntityMaskMan extends EntityMob {
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS));
+	
+	public float prevHealth;
 	
 	public EntityMaskMan(World worldIn) {
 		super(worldIn);
@@ -49,6 +53,36 @@ public class EntityMaskMan extends EntityMob {
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(15.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1000.0D);
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage())
+    		amount = 0;
+    	if(source.isMagicDamage())
+    		amount = 0;
+    	if(source.isProjectile())
+    		amount *= 0.25F;
+    	if(source.isExplosion())
+    		amount *= 0.5F;
+    	if(amount > 50)
+    		amount = 50;
+
+    	return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+        if(this.prevHealth >= this.getMaxHealth() / 2 && this.getHealth() < this.getMaxHealth() / 2) {
+        	prevHealth = this.getHealth();
+
+        	if(!world.isRemote)
+        		world.createExplosion(this, posX, posY + 4, posZ, 2.5F, true);
+        }
+
+        getEntityData().setFloat("hfr_radiation", 0);
 	}
 	
 	//ool in the shed
@@ -82,8 +116,11 @@ public class EntityMaskMan extends EntityMob {
 
 	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
-		if(!world.isRemote)
+		if(!world.isRemote){
 			this.dropItem(ModItems.coin_maskman, 1);
+			this.dropItem(ModItems.gas_mask_m65, 1);
+			this.dropItem(Items.SKULL, 1);
+		}
 	}
 	
 }

@@ -327,7 +327,8 @@ public class RecipesCommon {
 		
 		@Override
 		public ItemStack getStack() {
-			return toStacks().get(0);
+			ItemStack stack = toStacks().get(0);
+			return new ItemStack(stack.getItem(), stacksize, stack.getMetadata());
 		}
 		
 		@Override

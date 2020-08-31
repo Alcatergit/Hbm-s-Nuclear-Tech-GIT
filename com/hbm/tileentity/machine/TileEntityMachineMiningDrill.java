@@ -465,8 +465,9 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		for(int ix = x - rad; ix <= x + rad; ix++) {
 			for(int iz = z - rad; iz <= z + rad; iz++) {
 
-				if(tryDrill(ix, y, iz))
-					return true;
+				if(ix != x || iz != z)
+					if(tryDrill(ix, y, iz))
+						return true;
 			}
 		}
 

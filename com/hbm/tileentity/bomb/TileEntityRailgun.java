@@ -1,11 +1,11 @@
 package com.hbm.tileentity.bomb;
 
+import com.hbm.config.RadiationConfig;
 import com.hbm.entity.projectile.EntityRailgunBlast;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
@@ -142,7 +142,7 @@ public class TileEntityRailgun extends TileEntity implements ITickable, IConsume
 				if(fireDelay == 0)
 					tryFire();
 			}
-			power = Library.chargeTEFromItems(inventory, 0, power, MainRegistry.railgunBuffer);
+			power = Library.chargeTEFromItems(inventory, 0, power, RadiationConfig.railgunBuffer);
 			
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			PacketDispatcher.wrapper.sendToAllAround(new RailgunRotationPacket(pos.getX(), pos.getY(), pos.getZ(), pitch, yaw), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
@@ -192,7 +192,7 @@ public class TileEntityRailgun extends TileEntity implements ITickable, IConsume
 	
 	public boolean canFire() {
 		
-		int required = MainRegistry.railgunUse;
+		int required = RadiationConfig.railgunUse;
 		
 		if(inventory.getStackInSlot(2).getItem() == ModItems.charge_railgun && power >= required) {
 			return true;
@@ -206,7 +206,7 @@ public class TileEntityRailgun extends TileEntity implements ITickable, IConsume
 		if(canFire()) {
 			fire();
 			inventory.setStackInSlot(2, ItemStack.EMPTY);
-			power -= MainRegistry.railgunUse;
+			power -= RadiationConfig.railgunUse;
 			if(power < 0)
 				power = 0;
 			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), 0, 0));
@@ -276,12 +276,12 @@ public class TileEntityRailgun extends TileEntity implements ITickable, IConsume
 
 	@Override
 	public long getMaxPower() {
-		return MainRegistry.railgunBuffer;
+		return RadiationConfig.railgunBuffer;
 	}
 	
 	public long getPowerScaled(long i) {
 		//System.out.println(power * i);
 		//System.out.println(MainRegistry.railgunBuffer);
-		return (power * i) / MainRegistry.railgunBuffer;
+		return (power * i) / RadiationConfig.railgunBuffer;
 	}
 }

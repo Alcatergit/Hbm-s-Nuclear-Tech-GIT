@@ -184,7 +184,7 @@ public class TileEntityMachineOilWell extends TileEntity implements ITickable, I
 						if(b == ModBlocks.oil_pipe)
 							continue;
 
-						if(b.isReplaceable(world, new BlockPos(pos.getX(), i, pos.getZ())) || b.getExplosionResistance(world, new BlockPos(pos.getX(), i, pos.getZ()), null, null) < 100) {
+						if((b.isReplaceable(world, new BlockPos(pos.getX(), i, pos.getZ())) || b.getExplosionResistance(world, new BlockPos(pos.getX(), i, pos.getZ()), null, null) < 100) && !(b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty)) {
 							world.setBlockState(new BlockPos(pos.getX(), i, pos.getZ()), ModBlocks.oil_pipe.getDefaultState());
 
 							// Code 2: The drilling ended
@@ -192,7 +192,7 @@ public class TileEntityMachineOilWell extends TileEntity implements ITickable, I
 								warning = 2;
 							break;
 
-						} else if((b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty) && this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
+						} else if(this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
 							if(succ(pos.getX(), i, pos.getZ())) {
 
 								this.tanks[0].fill(new FluidStack(tankTypes[0], 500), true);

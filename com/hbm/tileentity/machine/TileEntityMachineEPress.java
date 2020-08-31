@@ -3,7 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.machine.ItemBattery;
-import com.hbm.items.machine.ItemBlades;
+import com.hbm.items.machine.ItemStamp;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -51,7 +51,7 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 			
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
-				if(stack.getItem() instanceof ItemBlades && slot == 1)
+				if(stack.getItem() instanceof ItemStamp && slot == 1)
 					return true;
 				if(stack.getItem() instanceof IBatteryItem && slot == 0)
 					return true;

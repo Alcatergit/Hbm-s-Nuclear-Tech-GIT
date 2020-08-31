@@ -26,15 +26,18 @@ public class ContaminationUtil {
 
 		if(entity.isPotionActive(HbmPotion.mutation))
 			return 0;
+		float mult = 1;
+		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
+			mult = entity.getEntityData().getFloat("hbmradmultiplier");
 
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 
 			float koeff = 5.0F;
-			return (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player)) * entity.getEntityData().getFloat("hbmradmultiplier");
+			return (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player)) * mult;
 		}
 
-		return entity.getEntityData().getFloat("hbmradmultiplier");
+		return mult;
 	}
 
 	public static void applyRadData(Entity e, float f) {
@@ -119,5 +122,9 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Current chunk radiation: " + chunkPrefix + rads + " RAD/s"));
 		player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Player contamination: " + radPrefix + eRad + " RAD"));
 		player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Player resistance: " + resPrefix + res + "% (" + resKoeff + ")"));
+	}
+	
+	public static float getRads(Entity e) {
+		return Library.getEntRadCap(e).getRads();
 	}
 }

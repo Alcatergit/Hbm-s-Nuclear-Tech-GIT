@@ -2,13 +2,10 @@ package com.hbm.main;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.opengl.GLContext;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockCrate;
@@ -16,6 +13,14 @@ import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.capability.RadiationCapability;
 import com.hbm.command.CommandHbm;
 import com.hbm.command.CommandRadiation;
+import com.hbm.config.BombConfig;
+import com.hbm.config.GeneralConfig;
+import com.hbm.config.MachineConfig;
+import com.hbm.config.PotionConfig;
+import com.hbm.config.RadiationConfig;
+import com.hbm.config.ToolConfig;
+import com.hbm.config.WeaponConfig;
+import com.hbm.config.WorldConfig;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
 import com.hbm.creativetabs.ControlTab;
@@ -129,6 +134,8 @@ import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.mob.EntityTeslaCrab;
+import com.hbm.entity.mob.botprime.EntityBOTPrimeBody;
+import com.hbm.entity.mob.botprime.EntityBOTPrimeHead;
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
@@ -194,7 +201,6 @@ import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.HbmWorld;
 import com.hbm.lib.Library;
@@ -247,6 +253,7 @@ import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
 import com.hbm.tileentity.deco.TileEntityGeysir;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 import com.hbm.tileentity.deco.TileEntityTestRender;
+import com.hbm.tileentity.deco.TileEntityTrappedBrick;
 import com.hbm.tileentity.deco.TileEntityVent;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
@@ -255,7 +262,6 @@ import com.hbm.tileentity.machine.TileEntityMachineReactorLarge.ReactorFuelType;
 import com.hbm.world.generator.CellularDungeonFactory;
 
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
@@ -274,11 +280,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -289,7 +293,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -329,137 +332,11 @@ public class MainRegistry {
 	// drinks, kits, tools
 	public static CreativeTabs consumableTab = new ConsumableTab(CreativeTabs.getNextID(), "tabConsumable");
 
-	public static boolean enableDebugMode = true;
-	public static boolean enableMycelium = false;
-	public static boolean enablePlutoniumOre = false;
-	public static boolean enableDungeons = true;
-	public static boolean enableMDOres = true;
-	public static boolean enableMines = true;
-	public static boolean enableRad = true;
-	public static boolean enableNITAN = true;
-	public static boolean enableNukeClouds = true;
-	public static boolean enableAutoCleanup = false;
-	public static boolean enableMeteorStrikes = true;
-	public static boolean enableMeteorShowers = true;
-	public static boolean enableMeteorTails = true;
-	public static boolean enableSpecialMeteors = true;
-	public static boolean enableBomberShortMode = false;
-	public static boolean enableVaults = true;
-	public static boolean enableRads = true;
-	public static boolean enableCataclysm = false;
-	public static boolean enableExtendedLogging = false;
-	public static boolean enableHardcoreTaint = false;
-	public static boolean enableGuns = true;
-	public static boolean ssgAnim = true;
-	public static boolean enableVirus = true;
-	public static boolean enableCrosshairs = true;
-
-	public static int uraniumSpawn = 6;
-	public static int thoriumSpawn = 7;
-	public static int titaniumSpawn = 8;
-	public static int sulfurSpawn = 5;
-	public static int aluminiumSpawn = 7;
-	public static int copperSpawn = 12;
-	public static int fluoriteSpawn = 6;
-	public static int niterSpawn = 6;
-	public static int tungstenSpawn = 10;
-	public static int leadSpawn = 6;
-	public static int berylliumSpawn = 6;
-	public static int ligniteSpawn = 2;
-	public static int asbestosSpawn = 2;
-
-	public static int gadgetRadius = 150;
-	public static int boyRadius = 120;
-	public static int manRadius = 175;
-	public static int mikeRadius = 250;
-	public static int tsarRadius = 500;
-	public static int prototypeRadius = 150;
-	public static int fleijaRadius = 50;
-	public static int soliniumRadius = 75;
-	public static int n2Radius = 100;
-	public static int missileRadius = 100;
-	public static int mirvRadius = 100;
-	public static int fatmanRadius = 35;
-	public static int nukaRadius = 25;
-	public static int aSchrabRadius = 20;
-
-	public static int blastSpeed = 1024;
-	public static int falloutRange = 100;
-	public static int fSpeed = 256;
-	public static boolean disableNuclear;
-	// public static int falloutDura = 100;
-
-	public static int radioStructure = 500;
-	public static int antennaStructure = 250;
-	public static int atomStructure = 500;
-	public static int vertibirdStructure = 500;
-	public static int dungeonStructure = 64;
-	public static int relayStructure = 500;
-	public static int satelliteStructure = 500;
-	public static int bunkerStructure = 1000;
-	public static int siloStructure = 1000;
-	public static int factoryStructure = 1000;
-	public static int dudStructure = 500;
-	public static int spaceshipStructure = 1000;
-	public static int barrelStructure = 5000;
-	public static int geyserWater = 3000;
-	public static int geyserChlorine = 3000;
-	public static int geyserVapor = 500;
-	public static int meteorStructure = 15000;
-	public static int capsuleStructure = 100;
-
-	public static int broadcaster = 5000;
-	public static int minefreq = 64;
-	public static int radfreq = 5000;
-	public static int vaultfreq = 2500;
-
-	public static int meteorStrikeChance = 20 * 60 * 180;
-	public static int meteorShowerChance = 20 * 60 * 5;
-	public static int meteorShowerDuration = 6000;
-	public static int limitExplosionLifespan = 0;
-	public static int radarRange = 1000;
-	public static int radarBuffer = 30;
-	public static int radarAltitude = 55;
-	public static int ciwsHitrate = 50;
-
-	public static int mk4 = 1024;
-	public static int rain = 0;
-	public static int cont = 0;
-	public static int fogRad = 100;
-	public static int fogCh = 20;
-	public static float hellRad = 0.1F;
-	public static int worldRad = 10;
-	public static int worldRadThreshold = 20;
-
-	public static int railgunDamage = 100;
-	public static int railgunBuffer = 500000000;
-	public static int railgunUse = 250000000;
-
-	public static int fireDuration = 4 * 20;
-
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
 	
-	public static boolean dropCell = true;
-	public static boolean dropSing = true;
-	public static boolean dropStar = true;
-	public static boolean dropCrys = true;
-	public static boolean dropDead = true;
-
-	public static int recursionDepth = 500;
-	public static boolean recursiveStone = true;
-	public static boolean recursiveNetherrack = true;
-
-	public static boolean useShaders = false;
-	public static boolean useShaders2 = true;
-
-	public static int taintID = 62;
-	public static int radiationID = 63;
-	public static int bangID = 64;
-	public static int mutationID = 65;
-	public static int radxID = 66;
-	public static int leadID = 67;
-
+	public static final int schrabFromUraniumChance = 100;
+	
 	public static int x;
 	public static int y;
 	public static int z;
@@ -721,6 +598,11 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMicrowave.class, new ResourceLocation(RefStrings.MODID, "tileentity_microwave"));
 		GameRegistry.registerTileEntity(TileEntityMachineMiniRTG.class, new ResourceLocation(RefStrings.MODID, "tileentity_mini_rtg"));
 		GameRegistry.registerTileEntity(TileEntityITER.class, new ResourceLocation(RefStrings.MODID, "tileentity_iter"));
+		GameRegistry.registerTileEntity(TileEntityMachinePlasmaHeater.class, new ResourceLocation(RefStrings.MODID, "tileentity_plasma_heater"));
+		GameRegistry.registerTileEntity(TileEntityMachineFENSU.class, new ResourceLocation(RefStrings.MODID, "tileentity_fensu"));
+		GameRegistry.registerTileEntity(TileEntityTrappedBrick.class, new ResourceLocation(RefStrings.MODID, "tileentity_trapped_brick"));
+		GameRegistry.registerTileEntity(TileEntityPlasmaStruct.class, new ResourceLocation(RefStrings.MODID, "tileentity_plasma_struct"));
+		GameRegistry.registerTileEntity(TileEntityMachineLargeTurbine.class, new ResourceLocation(RefStrings.MODID, "tileentity_industrial_turbine"));
 
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -879,6 +761,8 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_c_item"), EntityMovingItem.class, "entity_c_item", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_moonstone_blast"), EntityCloudTom.class, "entity_moonstone_blast", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mask_man"), EntityMaskMan.class, "entity_mask_man", i++, MainRegistry.instance, 1000, 1, true, 0xAAAAAA, 0xAAAAAA);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_balls_o_tron_mk0"), EntityBOTPrimeHead.class, "entity_balls_o_tron_mk0", i++, MainRegistry.instance, 1000, 1, true, 0xAAAAAA, 0xAAAAAA);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_balls_o_tron_mk0_segfault"), EntityBOTPrimeBody.class, "entity_balls_o_tron_mk0_segfault", i++, MainRegistry.instance, 1000, 1, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
@@ -899,350 +783,15 @@ public class MainRegistry {
 	public static void reloadConfig() {
 		Configuration config = new Configuration(new File(proxy.getDataDir().getPath() + "/config/hbm/hbm.cfg"));
 		config.load();
-
-		final String CATEGORY_GENERAL = "01_general";
-		enableDebugMode = config.get(CATEGORY_GENERAL, "1.00_enableDebugMode", false).getBoolean(false);
-		enableMycelium = config.get(CATEGORY_GENERAL, "1.01_enableMyceliumSpread", false).getBoolean(false);
-		enablePlutoniumOre = config.get(CATEGORY_GENERAL, "1.02_enablePlutoniumNetherOre", false).getBoolean(false);
-		enableDungeons = config.get(CATEGORY_GENERAL, "1.03_enableDungeonSpawn", true).getBoolean(true);
-		enableMDOres = config.get(CATEGORY_GENERAL, "1.04_enableOresInModdedDimensions", true).getBoolean(true);
-		enableMines = config.get(CATEGORY_GENERAL, "1.05_enableLandmineSpawn", true).getBoolean(true);
-		enableRad = config.get(CATEGORY_GENERAL, "1.06_enableRadHotspotSpawn", true).getBoolean(true);
-		enableNITAN = config.get(CATEGORY_GENERAL, "1.07_enableNITANChestSpawn", true).getBoolean(true);
-		enableNukeClouds = config.get(CATEGORY_GENERAL, "1.08_enableMushroomClouds", true).getBoolean(true);
-		enableAutoCleanup = config.get(CATEGORY_GENERAL, "1.09_enableAutomaticRadCleanup", false).getBoolean(false);
-		enableMeteorStrikes = config.get(CATEGORY_GENERAL, "1.10_enableMeteorStrikes", true).getBoolean(true);
-		enableMeteorShowers = config.get(CATEGORY_GENERAL, "1.11_enableMeteorShowers", true).getBoolean(true);
-		enableMeteorTails = config.get(CATEGORY_GENERAL, "1.12_enableMeteorTails", true).getBoolean(true);
-		enableSpecialMeteors = config.get(CATEGORY_GENERAL, "1.13_enableSpecialMeteors", false).getBoolean(false);
-		enableBomberShortMode = config.get(CATEGORY_GENERAL, "1.14_enableBomberShortMode", false).getBoolean(false);
-		enableVaults = config.get(CATEGORY_GENERAL, "1.15_enableVaultSpawn", true).getBoolean(true);
-		enableRads = config.get(CATEGORY_GENERAL, "1.16_enableNewRadiation", true).getBoolean(true);
-		enableCataclysm = config.get(CATEGORY_GENERAL, "1.17_enableCataclysm", false).getBoolean(false);
-		enableExtendedLogging = config.get(CATEGORY_GENERAL, "1.18_enableExtendedLogging", false).getBoolean(false);
-		enableHardcoreTaint = config.get(CATEGORY_GENERAL, "1.19_enableHardcoreTaint", false).getBoolean(false);
-		enableGuns = config.get(CATEGORY_GENERAL, "1.20_enableGuns", true).getBoolean(true);
-		enableVirus = config.get(CATEGORY_GENERAL, "1.21_enableVirus", false).getBoolean(false);
-        enableCrosshairs = config.get(CATEGORY_GENERAL, "1.22_enableCrosshairs", true).getBoolean(true);
-		Property shaders = config.get(CATEGORY_GENERAL, "1.23_enableShaders", false);
-		shaders.setComment("Experimental, don't use");
-		useShaders = shaders.getBoolean(false);
-		Property ssg_anim = config.get(CATEGORY_GENERAL, "1.23_ssgAnimType", true);
-		ssg_anim.setComment("Which supershotgun reload animation to use. True is Drillgon's animation, false is Bob's animation");
-		ssgAnim = ssg_anim.getBoolean();
-
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
-			if(!OpenGlHelper.shadersSupported) {
-				logger.log(Level.WARN, "GLSL shaders are not supported; not using shaders");
-				useShaders = false;
-			} else if(!GLContext.getCapabilities().OpenGL30) {
-				logger.log(Level.WARN, "OpenGL 3.0 is not supported; not using shaders");
-				useShaders = false;
-			}
-		useShaders = false;
-
-		final String CATEGORY_OREGEN = "02_ores";
-		uraniumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.00_uraniumSpawnrate", "Ammount of uranium ore veins per chunk", 7);
-        titaniumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.01_titaniumSpawnrate", "Ammount of titanium ore veins per chunk", 8);
-        sulfurSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.02_sulfurSpawnrate", "Ammount of sulfur ore veins per chunk", 5);
-        aluminiumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.03_aluminiumSpawnrate", "Ammount of aluminium ore veins per chunk", 7);
-        copperSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.04_copperSpawnrate", "Ammount of copper ore veins per chunk", 12);
-        fluoriteSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.05_fluoriteSpawnrate", "Ammount of fluorite ore veins per chunk", 6);
-        niterSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.06_niterSpawnrate", "Ammount of niter ore veins per chunk", 6);
-        tungstenSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.07_tungstenSpawnrate", "Ammount of tungsten ore veins per chunk", 10);
-        leadSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.08_leadSpawnrate", "Ammount of lead ore veins per chunk", 6);
-        berylliumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.09_berylliumSpawnrate", "Ammount of beryllium ore veins per chunk", 6);
-        thoriumSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.10_thoriumSpawnrate", "Ammount of thorium ore veins per chunk", 7);
-        ligniteSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.11_ligniteSpawnrate", "Ammount of lignite ore veins per chunk", 2);
-        asbestosSpawn = createConfigInt(config, CATEGORY_OREGEN, "2.12_asbestosSpawnRate", "Ammount of asbestos ore veins per chunk", 2);
-
-		final String CATEGORY_NUKES = "03_nukes";
-		Property propGadget = config.get(CATEGORY_NUKES, "3.00_gadgetRadius", 150);
-		propGadget.setComment("Radius of the Gadget");
-		gadgetRadius = propGadget.getInt();
-		Property propBoy = config.get(CATEGORY_NUKES, "3.01_boyRadius", 120);
-		propBoy.setComment("Radius of Little Boy");
-		boyRadius = propBoy.getInt();
-		Property propMan = config.get(CATEGORY_NUKES, "3.02_manRadius", 175);
-		propMan.setComment("Radius of Fat Man");
-		manRadius = propMan.getInt();
-		Property propMike = config.get(CATEGORY_NUKES, "3.03_mikeRadius", 250);
-		propMike.setComment("Radius of Ivy Mike");
-		mikeRadius = propMike.getInt();
-		Property propTsar = config.get(CATEGORY_NUKES, "3.04_tsarRadius", 500);
-		propTsar.setComment("Radius of the Tsar Bomba");
-		tsarRadius = propTsar.getInt();
-		Property propPrototype = config.get(CATEGORY_NUKES, "3.05_prototypeRadius", 150);
-		propPrototype.setComment("Radius of the Prototype");
-		prototypeRadius = propPrototype.getInt();
-		Property propFleija = config.get(CATEGORY_NUKES, "3.06_fleijaRadius", 50);
-		propFleija.setComment("Radius of F.L.E.I.J.A.");
-		fleijaRadius = propFleija.getInt();
-		Property propMissile = config.get(CATEGORY_NUKES, "3.07_missileRadius", 100);
-		propMissile.setComment("Radius of the nuclear missile");
-		missileRadius = propMissile.getInt();
-		Property propMirv = config.get(CATEGORY_NUKES, "3.08_mirvRadius", 100);
-		propMirv.setComment("Radius of a MIRV");
-		mirvRadius = propMirv.getInt();
-		Property propFatman = config.get(CATEGORY_NUKES, "3.09_fatmanRadius", 35);
-		propFatman.setComment("Radius of the Fatman Launcher");
-		fatmanRadius = propFatman.getInt();
-		Property propNuka = config.get(CATEGORY_NUKES, "3.10_nukaRadius", 25);
-		propNuka.setComment("Radius of the nuka grenade");
-		nukaRadius = propNuka.getInt();
-		Property propASchrab = config.get(CATEGORY_NUKES, "3.11_aSchrabRadius", 20);
-		propASchrab.setComment("Radius of dropped anti schrabidium");
-		aSchrabRadius = propASchrab.getInt();
-		Property propSolinium = config.get(CATEGORY_NUKES, "3.12_soliniumRadius", 75);
-		propSolinium.setComment("Radius of the blue rinse");
-		soliniumRadius = propSolinium.getInt();
-		Property propN2 = config.get(CATEGORY_NUKES, "3.13_n2Radius", 130);
-		propN2.setComment("Radius of the N2 mine");
-		n2Radius = propN2.getInt();
-
-		final String CATEGORY_DUNGEON = "04_dungeons";
-		Property propRadio = config.get(CATEGORY_DUNGEON, "4.00_radioSpawn", 500);
-		propRadio.setComment("Spawn radio station on every nTH chunk");
-		radioStructure = propRadio.getInt();
-		Property propAntenna = config.get(CATEGORY_DUNGEON, "4.01_antennaSpawn", 250);
-		propAntenna.setComment("Spawn antenna on every nTH chunk");
-		antennaStructure = propAntenna.getInt();
-		Property propAtom = config.get(CATEGORY_DUNGEON, "4.02_atomSpawn", 500);
-		propAtom.setComment("Spawn power plant on every nTH chunk");
-		atomStructure = propAtom.getInt();
-		Property propVertibird = config.get(CATEGORY_DUNGEON, "4.03_vertibirdSpawn", 500);
-		propVertibird.setComment("Spawn vertibird on every nTH chunk");
-		vertibirdStructure = propVertibird.getInt();
-		Property propDungeon = config.get(CATEGORY_DUNGEON, "4.04_dungeonSpawn", 64);
-		propDungeon.setComment("Spawn library dungeon on every nTH chunk");
-		dungeonStructure = propDungeon.getInt();
-		Property propRelay = config.get(CATEGORY_DUNGEON, "4.05_relaySpawn", 500);
-		propRelay.setComment("Spawn relay on every nTH chunk");
-		relayStructure = propRelay.getInt();
-		Property propSatellite = config.get(CATEGORY_DUNGEON, "4.06_satelliteSpawn", 500);
-		propSatellite.setComment("Spawn satellite dish on every nTH chunk");
-		satelliteStructure = propSatellite.getInt();
-		Property propBunker = config.get(CATEGORY_DUNGEON, "4.07_bunkerSpawn", 1000);
-		propBunker.setComment("Spawn bunker on every nTH chunk");
-		bunkerStructure = propBunker.getInt();
-		Property propSilo = config.get(CATEGORY_DUNGEON, "4.08_siloSpawn", 1000);
-		propSilo.setComment("Spawn missile silo on every nTH chunk");
-		siloStructure = propSilo.getInt();
-		Property propFactory = config.get(CATEGORY_DUNGEON, "4.09_factorySpawn", 1000);
-		propFactory.setComment("Spawn factory on every nTH chunk");
-		factoryStructure = propFactory.getInt();
-		Property propDud = config.get(CATEGORY_DUNGEON, "4.10_dudSpawn", 500);
-		propDud.setComment("Spawn dud on every nTH chunk");
-		dudStructure = propDud.getInt();
-		Property propSpaceship = config.get(CATEGORY_DUNGEON, "4.11_spaceshipSpawn", 1000);
-		propSpaceship.setComment("Spawn spaceship on every nTH chunk");
-		spaceshipStructure = propSpaceship.getInt();
-		Property propBarrel = config.get(CATEGORY_DUNGEON, "4.12_barrelSpawn", 5000);
-		propBarrel.setComment("Spawn waste tank on every nTH chunk");
-		barrelStructure = propBarrel.getInt();
-		Property propBroadcaster = config.get(CATEGORY_DUNGEON, "4.13_broadcasterSpawn", 5000);
-		propBroadcaster.setComment("Spawn corrupt broadcaster on every nTH chunk");
-		broadcaster = propBroadcaster.getInt();
-		Property propMines = config.get(CATEGORY_DUNGEON, "4.14_landmineSpawn", 64);
-		propMines.setComment("Spawn AP landmine on every nTH chunk");
-		minefreq = propMines.getInt();
-		Property propRad = config.get(CATEGORY_DUNGEON, "4.15_radHotsoptSpawn", 5000);
-		propRad.setComment("Spawn radiation hotspot on every nTH chunk");
-		radfreq = propRad.getInt();
-		Property propVault = config.get(CATEGORY_DUNGEON, "4.16_vaultSpawn", 2500);
-		propVault.setComment("Spawn locked safe on every nTH chunk");
-		vaultfreq = propVault.getInt();
-		Property pGW = config.get(CATEGORY_DUNGEON, "4.17_geyserWaterSpawn", 3000);
-		pGW.setComment("Spawn water geyser on every nTH chunk");
-		geyserWater = pGW.getInt();
-		Property pGC = config.get(CATEGORY_DUNGEON, "4.18_geyserChlorineSpawn", 3000);
-		pGC.setComment("Spawn poison geyser on every nTH chunk");
-		geyserChlorine = pGC.getInt();
-		Property pGV = config.get(CATEGORY_DUNGEON, "4.19_geyserVaporSpawn", 500);
-		pGV.setComment("Spawn vapor geyser on every nTH chunk");
-		geyserVapor = pGV.getInt();
-		meteorStructure = createConfigInt(config, CATEGORY_DUNGEON, "meteorStructure", "Spawn meteor dungeon on every nTH chunk", 15000);
-		capsuleStructure = createConfigInt(config, CATEGORY_DUNGEON, "4.21_capsuleSpawn", "Spawn landing capsule on every nTH chunk", 100);
-		
-		final String CATEGORY_METEOR = "05_meteors";
-		Property propMeteorStrikeChance = config.get(CATEGORY_METEOR, "5.00_meteorStrikeChance", 20 * 60 * 60 * 5);
-		propMeteorStrikeChance.setComment("The probability of a meteor spawning (an average of once every nTH ticks)");
-		meteorStrikeChance = propMeteorStrikeChance.getInt();
-		Property propMeteorShowerChance = config.get(CATEGORY_METEOR, "5.01_meteorShowerChance", 20 * 60 * 15);
-		propMeteorShowerChance.setComment("The probability of a meteor spawning during meteor shower (an average of once every nTH ticks)");
-		meteorShowerChance = propMeteorShowerChance.getInt();
-		Property propMeteorShowerDuration = config.get(CATEGORY_METEOR, "5.02_meteorShowerDuration", 20 * 60 * 30);
-		propMeteorShowerDuration.setComment("Max duration of meteor shower in ticks");
-		meteorShowerDuration = propMeteorShowerDuration.getInt();
-
-		final String CATEGORY_NUKE = "06_explosions";
-		Property propLimitExplosionLifespan = config.get(CATEGORY_NUKE, "6.00_limitExplosionLifespan", 0);
-		propLimitExplosionLifespan.setComment("How long an explosion can be unloaded until it dies in seconds. Based of system time. 0 disables the effect");
-		limitExplosionLifespan = propLimitExplosionLifespan.getInt();
-		// explosion speed
-		Property propBlastSpeed = config.get(CATEGORY_NUKE, "6.01_blastSpeed", 1024);
-		propBlastSpeed.setComment("Base speed of MK3 system (old and schrabidium) detonations (Blocks / tick)");
-		blastSpeed = propBlastSpeed.getInt();
-		// fallout range
-		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_blastSpeedNew", 1024);
-		propFalloutRange.setComment("Base speed of MK4 system (new) detonations (Blocks / tick)");
-		mk4 = propFalloutRange.getInt();
-		// fallout speed
-		Property falloutRangeProp = config.get(CATEGORY_NUKE, "6.03_falloutRange", 100);
-		falloutRangeProp.setComment("Radius of fallout area (base radius * value in percent)");
-		falloutRange = falloutRangeProp.getInt();
-		// new explosion speed
-		Property falloutSpeed = config.get(CATEGORY_NUKE, "6.04_falloutSpeed", 256);
-		falloutSpeed.setComment("Blocks processed per tick by the fallout rain");
-		fSpeed = falloutSpeed.getInt();
-		//Whether fallout and nuclear radiation is enabled at all
-		Property disableNuclear = config.get(CATEGORY_NUKE, "6.05_disableNuclear", false);
-		disableNuclear.setComment("Disable the nuclear part of nukes");
-		MainRegistry.disableNuclear = disableNuclear.getBoolean();
-		// afterrain duration
-		Property radRain = config.get(CATEGORY_NUKE, "6.06_falloutRainDuration", 0);
-		radRain.setComment("Duration of the thunderstorm after fallout in ticks (only large explosions)");
-		rain = radRain.getInt();
-		// afterrain radiation
-		Property rainCont = config.get(CATEGORY_NUKE, "6.07_falloutRainRadiation", 0);
-		rainCont.setComment("Radiation in 100th RADs created by fallout rain");
-		cont = rainCont.getInt();
-		// fog threshold
-		Property fogThresh = config.get(CATEGORY_NUKE, "6.08_fogThreshold", 100);
-		fogThresh.setComment("Radiation in RADs required for fog to spawn");
-		fogRad = fogThresh.getInt();
-		// fog chance
-		Property fogChance = config.get(CATEGORY_NUKE, "6.09_fogChance", 10);
-		fogChance.setComment("1:n chance of fog spawning every second");
-		fogCh = fogChance.getInt();
-		// nether radiation
-		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 0);
-		netherRad.setComment("RAD/s in the nether in hundredths");
-		hellRad = netherRad.getInt() * 0.01F;
-		worldRad = createConfigInt(config, CATEGORY_NUKE, "6.10_worldRadCount", "How many block operations radiation can perform per tick", 10);
-        worldRadThreshold = createConfigInt(config, CATEGORY_NUKE, "6.11_worldRadThreshold", "The least amount of RADs required for block modification to happen", 20);
-		// railgun
-		Property railDamage = config.get(CATEGORY_NUKE, "6.11_railgunDamage", 1000);
-		railDamage.setComment("How much damage a railgun death blast does per tick");
-		railgunDamage = railDamage.getInt();
-		Property railBuffer = config.get(CATEGORY_NUKE, "6.12_railgunBuffer", 500000000);
-		railBuffer.setComment("How much RF the railgun can store");
-		railgunDamage = railBuffer.getInt();
-		Property railUse = config.get(CATEGORY_NUKE, "6.13_railgunConsumption", 250000000);
-		railUse.setComment("How much RF the railgun requires per shot");
-		railgunDamage = railUse.getInt();
-
-		final String CATEGORY_MISSILE = "07_missile_machines";
-		Property propRadarRange = config.get(CATEGORY_MISSILE, "7.00_radarRange", 1000);
-		propRadarRange.setComment("Range of the radar, 50 will result in 100x100 block area covered");
-		radarRange = propRadarRange.getInt();
-		Property propRadarBuffer = config.get(CATEGORY_MISSILE, "7.01_radarBuffer", 30);
-		propRadarBuffer.setComment("How high entities have to be above the radar to be detected");
-		radarBuffer = propRadarBuffer.getInt();
-		Property propRadarAltitude = config.get(CATEGORY_MISSILE, "7.02_radarAltitude", 55);
-		propRadarAltitude.setComment("Y height required for the radar to work");
-		radarAltitude = propRadarAltitude.getInt();
-		Property propCiwsHitrate = config.get(CATEGORY_MISSILE, "7.03_ciwsAccuracy", 50);
-		propCiwsHitrate.setComment("Additional modifier for CIWS accuracy");
-		ciwsHitrate = propRadarAltitude.getInt();
-
-		Property fireDurationP = config.get(CATEGORY_MISSILE, "fireDuration", 4 * 20);
-		fireDurationP.setComment("How long the fire blast will last");
-		fireDuration = fireDurationP.getInt();
-
-		final String CATEGORY_POTION = "08_potion_effects";
-		Property propTaintID = config.get(CATEGORY_POTION, "8.00_taintPotionID", 62);
-		propTaintID.setComment("What potion ID the taint effect will have");
-		taintID = propTaintID.getInt();
-		Property propRadiationID = config.get(CATEGORY_POTION, "8.01_radiationPotionID", 63);
-		propRadiationID.setComment("What potion ID the radiation effect will have");
-		radiationID = propRadiationID.getInt();
-		Property propBangID = config.get(CATEGORY_POTION, "8.02_bangPotionID", 64);
-		propBangID.setComment("What potion ID the B93 timebomb effect will have");
-		bangID = propBangID.getInt();
-		Property propMutationID = config.get(CATEGORY_POTION, "8.03_mutationPotionID", 65);
-		propMutationID.setComment("What potion ID the taint mutation effect will have");
-		mutationID = propMutationID.getInt();
-		Property propRadxID = config.get(CATEGORY_POTION, "8.04_radxPotionID", 66);
-		propRadxID.setComment("What potion ID the Rad-X effect will have");
-		radxID = propRadxID.getInt();
-		Property propLeadID = config.get(CATEGORY_POTION, "8.05_leadPotionID", 67);
-		propLeadID.setComment("What potion ID the lead poisoning effect will have");
-		leadID = propLeadID.getInt();
-
-		final String CATEGORY_MACHINE = "09_machines";
-
-        final String CATEGORY_DROPS = "10_dangerous_drops";
-        dropCell = createConfigBool(config, CATEGORY_DROPS, "10.00_dropCell", "Whether antimatter cells should explode when dropped", true);
-        dropSing = createConfigBool(config, CATEGORY_DROPS, "10.01_dropBHole", "Whether singularities and blaack holes should spawn when dropped", true);
-        dropStar = createConfigBool(config, CATEGORY_DROPS, "10.02_dropStar", "Whether rigged star blaster cells should explode when dropped", true);
-        dropCrys = createConfigBool(config, CATEGORY_DROPS, "10.04_dropCrys", "Whether xen crystals should move blocks when dropped", true);
-        dropDead = createConfigBool(config, CATEGORY_DROPS, "10.05_dropDead", "Whether dead man's explosives should explode when dropped", true);
-		
-        final String CATEGORY_TOOLS = "11_tools";
-        recursionDepth = createConfigInt(config, CATEGORY_TOOLS, "11.00_recursionDepth", "Limits veinminer's recursive function. Usually not an issue, unless you're using bukkit which is especially sensitive for some reason.", 1000);
-        recursiveStone = createConfigBool(config, CATEGORY_TOOLS, "11.01_recursionDepth", "Determines whether veinminer can break stone", false);
-        recursiveNetherrack = createConfigBool(config, CATEGORY_TOOLS, "11.02_recursionDepth", "Determines whether veinminer can break netherrack", false);
-        
+		GeneralConfig.loadFromConfig(config);
+		WorldConfig.loadFromConfig(config);
+		MachineConfig.loadFromConfig(config);
+		BombConfig.loadFromConfig(config);
+		RadiationConfig.loadFromConfig(config);
+		PotionConfig.loadFromConfig(config);
+		ToolConfig.loadFromConfig(config);
+		WeaponConfig.loadFromConfig(config);
 		config.save();
-
-		radioStructure = setDef(radioStructure, 1000);
-		antennaStructure = setDef(antennaStructure, 1000);
-		atomStructure = setDef(atomStructure, 1000);
-		vertibirdStructure = setDef(vertibirdStructure, 1000);
-		dungeonStructure = setDef(dungeonStructure, 1000);
-		relayStructure = setDef(relayStructure, 1000);
-		satelliteStructure = setDef(satelliteStructure, 1000);
-		bunkerStructure = setDef(bunkerStructure, 1000);
-		siloStructure = setDef(siloStructure, 1000);
-		factoryStructure = setDef(factoryStructure, 1000);
-		dudStructure = setDef(dudStructure, 1000);
-		spaceshipStructure = setDef(spaceshipStructure, 1000);
-		barrelStructure = setDef(barrelStructure, 1000);
-		geyserWater = setDef(geyserWater, 1000);
-		geyserChlorine = setDef(geyserChlorine, 1000);
-		geyserVapor = setDef(geyserVapor, 1000);
-		broadcaster = setDef(broadcaster, 1000);
-		minefreq = setDef(minefreq, 1000);
-		radfreq = setDef(radfreq, 1000);
-		vaultfreq = setDef(vaultfreq, 1000);
-		meteorStrikeChance = setDef(meteorStrikeChance, 1000);
-		meteorShowerChance = setDef(meteorShowerChance, 1000);
-		fogCh = setDef(fogCh, 20);
-		capsuleStructure = setDef(capsuleStructure, 100);
-		meteorStructure = setDef(meteorStructure, 15000);
-	}
-
-	private static int setDef(int value, int def) {
-
-		if(value <= 0) {
-			logger.error("Fatal error config: Randomizer value has been set to zero, despite bound having to be positive integer!");
-			logger.error(String.format("Errored value will default back to %d, PLEASE REVIEW CONFIGURATION DESCRIPTION BEFORE MEDDLING WITH VALUES!", def));
-			return def;
-		}
-
-		return value;
-	}
-	
-	private static int createConfigInt(Configuration config, String category, String name, String comment, int def) {
-
-        Property prop = config.get(category, name, def);
-        prop.setComment(comment);
-        return prop.getInt();
-	}
-	
-	private static boolean createConfigBool(Configuration config, String category, String name, String comment, boolean def) {
-
-        Property prop = config.get(category, name, def);
-        prop.setComment(comment);
-        return prop.getBoolean();
-	}
-	
-	private static String[] createConfigStringList(Configuration config, String category, String name, String comment) {
-
-        Property prop = config.get(category, name, new String[] { "PLACEHOLDER" } );
-        prop.setComment(comment);
-        return prop.getStringList();
 	}
 
 	@EventHandler
@@ -1276,6 +825,7 @@ public class MainRegistry {
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.red_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.diesel, 10000));
+		FluidContainerRegistry.registerContainer(ModItems.bottle_mercury, Items.GLASS_BOTTLE, new FluidStack(ModForgeFluids.mercury, 1000));
 		
 		//Drillgon200: expand the max entity radius for the hunter chopper
 		if(World.MAX_ENTITY_RADIUS < 5)

@@ -3,7 +3,7 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -93,7 +93,7 @@ public class Dud extends WorldGenerator
 		}
 		
 		world.setBlockState(pos, ModBlocks.crashed_balefire.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[rand.nextInt(4) + 2]), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned dud at " + pos.getX() + " " + pos.getY() +" " + pos.getZ() + "\n");
 		return true;
 

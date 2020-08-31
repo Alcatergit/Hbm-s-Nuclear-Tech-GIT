@@ -2,10 +2,10 @@ package com.hbm.items.weapon;
 
 import java.util.List;
 
+import com.hbm.config.WeaponConfig;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
@@ -31,7 +31,7 @@ public class WeaponizedCell extends Item {
     	
     	if(item.ticksExisted > 50 * 20 || item.isBurning()) {
 			
-	    	if(!world.isRemote && MainRegistry.dropStar) {
+	    	if(!world.isRemote && WeaponConfig.dropStar) {
 	    		
 	    		
 	    		world.playSound(null, item.posX, item.posY, item.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0f, world.rand.nextFloat() * 0.1F + 0.9F);

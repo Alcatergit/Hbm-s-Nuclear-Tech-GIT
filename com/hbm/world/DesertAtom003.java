@@ -8,10 +8,11 @@ import com.hbm.blocks.generic.DecoSteelPoles;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.blocks.machine.MachineElectricFurnace;
 import com.hbm.blocks.machine.MachineReactor;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockHorizontal;
@@ -45,7 +46,7 @@ public class DesertAtom003
 	Block Block13 = ModBlocks.pole_satellite_receiver;
 	Block Block14 = ModBlocks.machine_generator;
 	Block Block15 = ModBlocks.deco_titanium;
-	Block Block16 = ModBlocks.machine_reactor;
+	Block Block16 = ModBlocks.block_lead;
 	Block Block17 = ModBlocks.ore_schrabidium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
@@ -85,9 +86,9 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 4, y + 3, z + 13), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 3, z + 13), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 3, z + 13), Blocks.WATER.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 7, y + 3, z + 13), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 7, y + 3, z + 13), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 3, z + 13), Block14.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 9, y + 3, z + 13), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(pos.setPos(x + 9, y + 3, z + 13), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 10, y + 3, z + 13), Blocks.WATER.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 11, y + 3, z + 13), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 12, y + 3, z + 13), Block5.getDefaultState(), 3);
@@ -699,9 +700,9 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 20, y + 5, z + 11), Blocks.WEB.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 23, y + 5, z + 11), Block11.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 27, y + 5, z + 11), Blocks.VINE.getDefaultState().withProperty(BlockVine.EAST, true), 3);
-		world.setBlockState(pos.setPos(x + 28, y + 5, z + 11), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.WEST), 3);
-		world.setBlockState(pos.setPos(x + 29, y + 5, z + 11), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.NORTH), 3);
-		world.setBlockState(pos.setPos(x + 30, y + 5, z + 11), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 28, y + 5, z + 11), Block16.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 29, y + 5, z + 11), Block16.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 30, y + 5, z + 11), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 37, y + 5, z + 11), Library.getRandomConcrete().getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 5, z + 12), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 5, z + 12), Block25.getDefaultState(), 3);
@@ -712,9 +713,9 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 22, y + 5, z + 12), Blocks.VINE.getDefaultState().withProperty(BlockVine.EAST, true), 3);
 		world.setBlockState(pos.setPos(x + 24, y + 5, z + 12), Blocks.VINE.getDefaultState().withProperty(BlockVine.WEST, true), 3);
 		world.setBlockState(pos.setPos(x + 27, y + 5, z + 12), Blocks.VINE.getDefaultState().withProperty(BlockVine.EAST, true), 3);
-		world.setBlockState(pos.setPos(x + 28, y + 5, z + 12), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 28, y + 5, z + 12), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 29, y + 5, z + 12), Block26.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 30, y + 5, z + 12), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 30, y + 5, z + 12), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 31, y + 5, z + 12), Blocks.VINE.getDefaultState().withProperty(BlockVine.WEST, true), 3);
 		world.setBlockState(pos.setPos(x + 36, y + 5, z + 12), Blocks.VINE.getDefaultState().withProperty(BlockVine.EAST, true), 3);
 		world.setBlockState(pos.setPos(x + 37, y + 5, z + 12), Library.getRandomConcrete().getDefaultState(), 3);
@@ -724,9 +725,9 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 17, y + 5, z + 13), Blocks.VINE.getDefaultState().withProperty(BlockVine.WEST, true), 3);
 		world.setBlockState(pos.setPos(x + 19, y + 5, z + 13), ModBlocks.fence_metal.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 23, y + 5, z + 13), Block11.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 28, y + 5, z + 13), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 29, y + 5, z + 13), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 30, y + 5, z + 13), Block16.getDefaultState().withProperty(MachineReactor.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 28, y + 5, z + 13), Block16.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 29, y + 5, z + 13), Block16.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 30, y + 5, z + 13), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 31, y + 5, z + 13), Blocks.WEB.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 35, y + 5, z + 13), Blocks.VINE.getDefaultState().withProperty(BlockVine.NORTH, true), 3);
 		world.setBlockState(pos.setPos(x + 36, y + 5, z + 13), Blocks.VINE.getDefaultState().withProperty(BlockVine.EAST, true), 3);
@@ -1762,7 +1763,7 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 22, y + 5, z + 14), Blocks.LEVER.getDefaultState().withProperty(BlockLever.FACING, BlockLever.EnumOrientation.WEST), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 8, z + 21), Blocks.WALL_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, EnumFacing.NORTH), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 9, z + 21), Blocks.WALL_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, EnumFacing.NORTH), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned Abandoned Power Plant at " + x + " " + y +" " + z + "\n");
 		return true;
 

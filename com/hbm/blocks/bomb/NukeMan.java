@@ -3,6 +3,8 @@ package com.hbm.blocks.bomb;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.BombConfig;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
@@ -176,12 +178,12 @@ public class NukeMan extends BlockContainer implements IBomb {
     	
     	world.spawnEntityInWorld(entity);*/
 		
-    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.manRadius, x + 0.5, y + 0.5, z + 0.5));
+    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.manRadius, x + 0.5, y + 0.5, z + 0.5));
     	
     	//ExplosionNukeAdvanced.mush(world, x, y, z);
 
-    	if (MainRegistry.enableNukeClouds) {
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, MainRegistry.manRadius * 0.005F);
+    	if (GeneralConfig.enableNukeClouds) {
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.manRadius * 0.005F);
 			entity2.posX = x;
 			entity2.posY = y;
 			entity2.posZ = z;

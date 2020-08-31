@@ -104,8 +104,6 @@ public class BlockFluidBarrel extends BlockContainer {
 		}
 	}
 	
-	//Drillgon200: No need for a base class, a helper method works just fine
-	@Spaghetti("stop doing that and make a base class for fuck's sake")
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if(!keepInventory)

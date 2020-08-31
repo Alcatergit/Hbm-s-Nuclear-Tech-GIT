@@ -116,6 +116,33 @@ public class AuxButtonPacket implements IMessage {
 						if(m.id == 1)
 							control.auto = m.value == 1;
 						
+						if(control.link != null) {
+							TileEntity reac = p.world.getTileEntity(control.link);
+							
+							if (reac instanceof TileEntityMachineReactorSmall) {
+								TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall)reac;
+								
+								if(m.id == 0)
+									reactor.retracting = m.value == 0;
+								
+								if(m.id == 2) {
+									reactor.compress(m.value);
+								}
+							}
+							
+							if (reac instanceof TileEntityMachineReactorLarge) {
+								TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)reac;
+								
+								if(m.id == 0) {
+									reactor.rods = m.value;
+								}
+								
+								if(m.id == 2) {
+									reactor.compress(m.value);
+								}
+							}
+						}
+						
 					}
 					TileEntity reac = p.world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 					if (reac instanceof TileEntityMachineReactorLarge) {

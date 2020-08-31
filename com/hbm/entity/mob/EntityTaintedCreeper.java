@@ -2,8 +2,8 @@ package com.hbm.entity.mob;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.ai.EntityAITaintedCreeperSwell;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -315,7 +315,7 @@ public class EntityTaintedCreeper extends EntityMob {
 			    	pos.setPos(a, b, c);
 			           if(world.getBlockState(pos).getBlock().isReplaceable(world, pos) && BlockTaint.hasPosNeightbour(world, pos)) {
 			        	   
-			        	   if(MainRegistry.enableHardcoreTaint)
+			        	   if(GeneralConfig.enableHardcoreTaint)
 			        		   world.setBlockState(pos, ModBlocks.taint.getBlockState().getBaseState().withProperty(BlockTaint.TEXTURE, rand.nextInt(3) + 5), 2);
 			        	   else
 			        		   world.setBlockState(pos, ModBlocks.taint.getBlockState().getBaseState().withProperty(BlockTaint.TEXTURE, rand.nextInt(3)), 2);
@@ -331,7 +331,7 @@ public class EntityTaintedCreeper extends EntityMob {
 			    	pos.setPos(a, b, c);
 			           if(world.getBlockState(pos).getBlock().isReplaceable(world, pos) && BlockTaint.hasPosNeightbour(world, pos)) {
 			        	   
-			        	   if(MainRegistry.enableHardcoreTaint)
+			        	   if(GeneralConfig.enableHardcoreTaint)
 			        		   world.setBlockState(pos, ModBlocks.taint.getBlockState().getBaseState().withProperty(BlockTaint.TEXTURE, rand.nextInt(6) + 10), 2);
 			        	   else
 			        		   world.setBlockState(pos, ModBlocks.taint.getBlockState().getBaseState().withProperty(BlockTaint.TEXTURE, rand.nextInt(3) + 4), 2);

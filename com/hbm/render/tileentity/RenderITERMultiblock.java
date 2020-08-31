@@ -36,32 +36,6 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
 
-		/*GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		bindTexture(ResourceManager.iter_glass);
-		ResourceManager.iter.renderPart("Windows");
-		bindTexture(ResourceManager.iter_motor);
-		ResourceManager.iter.renderPart("Motors");
-		bindTexture(ResourceManager.iter_rails);
-		ResourceManager.iter.renderPart("Rails");
-		bindTexture(ResourceManager.iter_toroidal);
-		ResourceManager.iter.renderPart("Toroidal");
-		bindTexture(ResourceManager.iter_torus);
-		ResourceManager.iter.renderPart("Torus");
-
-		GL11.glPushMatrix();
-		GL11.glRotated(System.currentTimeMillis() / 5D % 360, 0, 1, 0);
-		bindTexture(ResourceManager.iter_solenoid);
-		ResourceManager.iter.renderPart("Solenoid");
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		GL11.glRotated(System.currentTimeMillis() / 50D % 360, 0, 1, 0);
-		GlStateManager.disableLighting();
-		bindTexture(ResourceManager.iter_plasma);
-		ResourceManager.iter.renderPart("Plasma");
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GL11.glPopMatrix();*/
-        
         TextureAtlasSprite magnet = RenderStructureMarker.fusion[0][1];
         TextureAtlasSprite solenoid = RenderStructureMarker.fusion[4][1];
         TextureAtlasSprite motor = RenderStructureMarker.fusion[3][0];

@@ -82,6 +82,7 @@ import com.hbm.items.machine.ItemLens;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemReactorSensor;
 import com.hbm.items.machine.ItemSatChip;
+import com.hbm.items.machine.ItemStamp;
 import com.hbm.items.machine.ItemTemplateFolder;
 import com.hbm.items.machine.ItemTurretBiometry;
 import com.hbm.items.machine.ItemTurretChip;
@@ -93,6 +94,7 @@ import com.hbm.items.special.ItemCladding;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.items.special.ItemDrop;
 import com.hbm.items.special.ItemFuel;
+import com.hbm.items.special.ItemFusionShield;
 import com.hbm.items.special.ItemGlitch;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.items.special.ItemModRecord;
@@ -867,6 +869,7 @@ public class ModItems {
 	public static final Item powder_advanced_alloy = new ItemBase("powder_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_combine_steel = new ItemBase("powder_combine_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_magnetized_tungsten = new ItemBase("powder_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_chlorophyte = new ItemBase("powder_chlorophyte").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_red_copper = new ItemBase("powder_red_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_steel = new ItemBase("powder_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_lithium = new ItemBase("powder_lithium").setCreativeTab(MainRegistry.partsTab);
@@ -905,6 +908,7 @@ public class ModItems {
 	public static final Item powder_meteorite = new ItemBase("powder_meteorite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_magic = new ItemBase("powder_magic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cloud = new ItemBase("powder_cloud").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_balefire = new ItemRadioactive(500F, true, "powder_balefire").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_poison = new ItemCustomLore("powder_poison").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_thermite = new ItemCustomLore("powder_thermite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_power = new ItemCustomLore("powder_power").setCreativeTab(MainRegistry.partsTab);
@@ -1174,6 +1178,34 @@ public class ModItems {
 			.addBreakAbility(new ToolAbility.CentrifugeAbility()).setMaxDamage(50);
 	public static final Item smashing_hammer = new ItemToolAbility(12F, -2.8F, -0.1, MainRegistry.enumToolMaterialSteel, EnumToolType.MINER, "smashing_hammer")
 			.addBreakAbility(new ToolAbility.ShredderAbility()).setMaxDamage(2500);
+	public static final Item drax = new ItemToolAbilityPower(15F, -2.8F, -0.05, MainRegistry.enumToolMaterialElec, EnumToolType.MINER, 500000000, 100000, 5000, "drax")
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.addBreakAbility(new ToolAbility.LuckAbility(2))
+			.addBreakAbility(new ToolAbility.HammerAbility(1))
+			.addBreakAbility(new ToolAbility.HammerAbility(2))
+			.addBreakAbility(new ToolAbility.RecursionAbility(5));
+	public static final Item drax_mk2 = new ItemToolAbilityPower(20F, -2.8F, -0.05, MainRegistry.enumToolMaterialElec, EnumToolType.MINER, 1000000000, 250000, 7500, "drax_mk2")
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.addBreakAbility(new ToolAbility.CentrifugeAbility())
+			.addBreakAbility(new ToolAbility.LuckAbility(3))
+			.addBreakAbility(new ToolAbility.HammerAbility(1))
+			.addBreakAbility(new ToolAbility.HammerAbility(2))
+			.addBreakAbility(new ToolAbility.HammerAbility(3))
+			.addBreakAbility(new ToolAbility.RecursionAbility(7));
+	public static final Item drax_mk3 = new ItemToolAbilityPower(20F, -2.8F, -0.05, MainRegistry.enumToolMaterialElec, EnumToolType.MINER, 2500000000L, 500000, 10000, "drax_mk3")
+			.addBreakAbility(new ToolAbility.SmelterAbility())
+			.addBreakAbility(new ToolAbility.ShredderAbility())
+			.addBreakAbility(new ToolAbility.CentrifugeAbility())
+			.addBreakAbility(new ToolAbility.CrystallizerAbility())
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new ToolAbility.LuckAbility(4))
+			.addBreakAbility(new ToolAbility.HammerAbility(1))
+			.addBreakAbility(new ToolAbility.HammerAbility(2))
+			.addBreakAbility(new ToolAbility.HammerAbility(3))
+			.addBreakAbility(new ToolAbility.HammerAbility(4))
+			.addBreakAbility(new ToolAbility.RecursionAbility(9));
 	
 	public static final Item schrabidium_hoe = new HoeSchrabidium(MainRegistry.enumToolMaterialSchrabidium, "schrabidium_hoe").setCreativeTab(CreativeTabs.TOOLS);
 	public static final Item schrabidium_sword = new ItemSwordAbility(150, 0, MainRegistry.enumToolMaterialSchrabidium, "schrabidium_sword")
@@ -1228,6 +1260,7 @@ public class ModItems {
 	public static final Item reer_graar = new ModSword(MainRegistry.enumToolMaterialTitanium, "reer_graar").setFull3D();
 	public static final Item stopsign = new WeaponSpecial(MainRegistry.enumToolMaterialAlloy, "stopsign");
 	public static final Item sopsign = new WeaponSpecial(MainRegistry.enumToolMaterialAlloy, "sopsign");
+	public static final Item chernobylsign = new WeaponSpecial(MainRegistry.enumToolMaterialAlloy, "chernobylsign");
 	
 	public static final Item mask_of_infamy = new MaskOfInfamy(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "mask_of_infamy").setMaxStackSize(1);
 	
@@ -1340,34 +1373,34 @@ public class ModItems {
 	public static final Item coil_magnetized_tungsten = new ItemBase("coil_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	
 	//Stamps
-	public static final Item stamp_stone_flat = new ItemBlades("stamp_stone_flat", 5);
-	public static final Item stamp_stone_plate = new ItemBlades("stamp_stone_plate", 5);
-	public static final Item stamp_stone_wire = new ItemBlades("stamp_stone_wire", 5);
-	public static final Item stamp_stone_circuit = new ItemBlades("stamp_stone_circuit", 5);
-	public static final Item stamp_iron_flat = new ItemBlades("stamp_iron_flat", 25);
-	public static final Item stamp_iron_plate = new ItemBlades("stamp_iron_plate", 25);
-	public static final Item stamp_iron_wire = new ItemBlades("stamp_iron_wire", 25);
-	public static final Item stamp_iron_circuit = new ItemBlades("stamp_iron_circuit", 25);
-	public static final Item stamp_steel_flat = new ItemBlades("stamp_steel_flat", 50);
-	public static final Item stamp_steel_plate = new ItemBlades("stamp_steel_plate", 50);
-	public static final Item stamp_steel_wire = new ItemBlades("stamp_steel_wire", 50);
-	public static final Item stamp_steel_circuit = new ItemBlades("stamp_steel_circuit", 50);
-	public static final Item stamp_titanium_flat = new ItemBlades("stamp_titanium_flat", 65);
-	public static final Item stamp_titanium_plate = new ItemBlades("stamp_titanium_plate", 65);
-	public static final Item stamp_titanium_wire = new ItemBlades("stamp_titanium_wire", 65);
-	public static final Item stamp_titanium_circuit = new ItemBlades("stamp_titanium_circuit", 65);
-	public static final Item stamp_obsidian_flat = new ItemBlades("stamp_obsidian_flat", 100);
-	public static final Item stamp_obsidian_plate = new ItemBlades("stamp_obsidian_plate", 100);
-	public static final Item stamp_obsidian_wire = new ItemBlades("stamp_obsidian_wire", 100);
-	public static final Item stamp_obsidian_circuit = new ItemBlades("stamp_obsidian_circuit", 100);
-	public static final Item stamp_schrabidium_flat = new ItemBlades("stamp_schrabidium_flat", 1024);
-	public static final Item stamp_schrabidium_plate = new ItemBlades("stamp_schrabidium_plate", 1024);
-	public static final Item stamp_schrabidium_wire = new ItemBlades("stamp_schrabidium_wire", 1024);
-	public static final Item stamp_schrabidium_circuit = new ItemBlades("stamp_schrabidium_circuit", 1024);
-	public static final Item stamp_357 = new ItemBlades("stamp_357", 512);
-	public static final Item stamp_44 = new ItemBlades("stamp_44", 512);
-	public static final Item stamp_9 = new ItemBlades("stamp_9", 512);
-	public static final Item stamp_50 = new ItemBlades("stamp_50", 512);
+	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 5);
+	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 5);
+	public static final Item stamp_stone_wire = new ItemStamp("stamp_stone_wire", 5);
+	public static final Item stamp_stone_circuit = new ItemStamp("stamp_stone_circuit", 5);
+	public static final Item stamp_iron_flat = new ItemStamp("stamp_iron_flat", 25);
+	public static final Item stamp_iron_plate = new ItemStamp("stamp_iron_plate", 25);
+	public static final Item stamp_iron_wire = new ItemStamp("stamp_iron_wire", 25);
+	public static final Item stamp_iron_circuit = new ItemStamp("stamp_iron_circuit", 25);
+	public static final Item stamp_steel_flat = new ItemStamp("stamp_steel_flat", 50);
+	public static final Item stamp_steel_plate = new ItemStamp("stamp_steel_plate", 50);
+	public static final Item stamp_steel_wire = new ItemStamp("stamp_steel_wire", 50);
+	public static final Item stamp_steel_circuit = new ItemStamp("stamp_steel_circuit", 50);
+	public static final Item stamp_titanium_flat = new ItemStamp("stamp_titanium_flat", 65);
+	public static final Item stamp_titanium_plate = new ItemStamp("stamp_titanium_plate", 65);
+	public static final Item stamp_titanium_wire = new ItemStamp("stamp_titanium_wire", 65);
+	public static final Item stamp_titanium_circuit = new ItemStamp("stamp_titanium_circuit", 65);
+	public static final Item stamp_obsidian_flat = new ItemStamp("stamp_obsidian_flat", 100);
+	public static final Item stamp_obsidian_plate = new ItemStamp("stamp_obsidian_plate", 100);
+	public static final Item stamp_obsidian_wire = new ItemStamp("stamp_obsidian_wire", 100);
+	public static final Item stamp_obsidian_circuit = new ItemStamp("stamp_obsidian_circuit", 100);
+	public static final Item stamp_schrabidium_flat = new ItemStamp("stamp_schrabidium_flat", 1024);
+	public static final Item stamp_schrabidium_plate = new ItemStamp("stamp_schrabidium_plate", 1024);
+	public static final Item stamp_schrabidium_wire = new ItemStamp("stamp_schrabidium_wire", 1024);
+	public static final Item stamp_schrabidium_circuit = new ItemStamp("stamp_schrabidium_circuit", 1024);
+	public static final Item stamp_357 = new ItemStamp("stamp_357", 512);
+	public static final Item stamp_44 = new ItemStamp("stamp_44", 512);
+	public static final Item stamp_9 = new ItemStamp("stamp_9", 512);
+	public static final Item stamp_50 = new ItemStamp("stamp_50", 512);
 	
 	public static final Item blades_aluminum = new ItemBlades("blades_aluminum", 10);
 	public static final Item blades_gold = new ItemBlades("blades_gold", 25);
@@ -1377,6 +1410,7 @@ public class ModItems {
 	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 85);
 	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 150);
 	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
+	public static final Item blades_desh = new ItemBlades("blades_desh", 0).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	public static final Item part_lithium = new ItemBase("part_lithium").setCreativeTab(MainRegistry.controlTab);
 	public static final Item part_beryllium = new ItemBase("part_beryllium").setCreativeTab(MainRegistry.controlTab);
@@ -1693,11 +1727,16 @@ public class ModItems {
 	public static final Item ams_focus_limiter = new ItemCustomLore("ams_focus_limiter").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_focus_booster = new ItemCustomLore("ams_focus_booster").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_muzzle = new ItemCustomLore("ams_muzzle").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item ams_lens = new ItemLens("ams_lens").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item ams_lens = new ItemLens(60 * 60 * 60 * 20 * 100, "ams_lens").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_sing = new ItemAMSCore(1000000000L, 200, 10, "ams_core_sing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_wormhole = new ItemAMSCore(1500000000L, 200, 15, "ams_core_wormhole").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_eyeofharmony = new ItemAMSCore(2500000000L, 300, 10, "ams_core_eyeofharmony").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_thingy = new ItemAMSCore(5000000000L, 250, 5, "ams_core_thingy").setMaxStackSize(1).setCreativeTab(null);
+	
+	public static final Item fusion_shield_tungsten = new ItemFusionShield(60 * 60 * 60 * 5, 3500, "fusion_shield_tungsten").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 4500, "fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_chlorophyte = new ItemFusionShield(60 * 60 * 60 * 15, 9000, "fusion_shield_chlorophyte").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 10, 1916169, "fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	//Special tools
 	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);

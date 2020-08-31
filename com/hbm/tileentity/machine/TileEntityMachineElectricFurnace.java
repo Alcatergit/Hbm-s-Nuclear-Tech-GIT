@@ -105,7 +105,7 @@ public class TileEntityMachineElectricFurnace extends TileEntity implements ITic
 		}
         ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(1));
         
-		if(itemStack == null)
+		if(itemStack == null || itemStack.isEmpty())
 		{
 			return false;
 		}

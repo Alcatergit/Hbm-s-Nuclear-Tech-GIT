@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.machine.MachineReactor;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -9,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineReactor extends TileEntityMachineBase implements ITickable {
 
@@ -71,6 +73,31 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		nbt.setShort("cookTime", (short) progress);
 
 		return super.writeToNBT(nbt);
+	}
+	
+	AxisAlignedBB bb = null;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+
+		if(bb == null) {
+			bb = new AxisAlignedBB(
+					pos.getX(),
+					pos.getY(),
+					pos.getZ(),
+					pos.getX() + 1,
+					pos.getY() + 3,
+					pos.getZ() + 1
+					);
+		}
+
+		return bb;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
 	}
 
 	@Override
@@ -215,7 +242,6 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 
 			if(trigger) {
 				markDirty = true;
-				MachineReactor.updateBlockState(this.progress > 0, this.world, pos);
 			}
 
 			if(markDirty)

@@ -46,7 +46,7 @@ public class MultiCloudRenderer extends Render<EntityModFX> {
 			GL11.glPushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.disableLighting();
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GL11.glTranslatef((float) x, (float) y, (float) z);
 			GlStateManager.enableRescaleNormal();
 			GL11.glScalef(0.5F, 0.5F, 0.5F);

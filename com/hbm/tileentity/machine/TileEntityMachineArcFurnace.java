@@ -135,7 +135,7 @@ public class TileEntityMachineArcFurnace extends TileEntity implements ITickable
 		}
         ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
         
-		if(itemStack == null)
+		if(itemStack == null || itemStack.isEmpty())
 		{
 			return false;
 		}

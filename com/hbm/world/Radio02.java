@@ -5,7 +5,7 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiver;
 import com.hbm.blocks.generic.DecoSteelPoles;
-import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -2176,7 +2176,7 @@ public class Radio02
 		world.setBlockState(pos.setPos(x + 8, y + 23, z + 25), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 9, y + 23, z + 25), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 10, y + 23, z + 25), Blocks.AIR.getDefaultState(), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned abandoned Radio station at " + x + " " + y +" " + z + "\n");
 		return true;
 

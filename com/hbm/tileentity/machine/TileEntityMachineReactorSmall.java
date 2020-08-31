@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.MachineReactor;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -375,11 +376,23 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 				tanks[0].drain(50, true);
 				tanks[1].fill(new FluidStack(tankTypes[1], 5), true);
 			}
-		} else if(te instanceof TileEntityMachineReactor) {
-			TileEntityMachineReactor reactor = (TileEntityMachineReactor) te;
-			if(reactor.charge <= 1 && this.hullHeat > 0) {
-				reactor.charge = 1;
-				reactor.heat = (int) Math.floor(hullHeat * 4 / maxHullHeat) + 1;
+		} else if(b == ModBlocks.machine_reactor) {
+
+			int[] pos1 = ((MachineReactor)ModBlocks.machine_reactor).findCore(world, pos.getX(), pos.getY(), pos.getZ());
+
+			if(pos1 != null) {
+
+				TileEntity tile = world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
+
+				if(tile instanceof TileEntityMachineReactor) {
+
+					TileEntityMachineReactor reactor = (TileEntityMachineReactor)tile;
+
+					if(reactor.charge <= 1 && this.hullHeat > 0) {
+						reactor.charge = 1;
+						reactor.heat = (int)Math.floor(hullHeat * 4 / maxHullHeat) + 1;
+					}
+				}
 			}
 
 		} else if(te instanceof TileEntityNukeFurnace) {

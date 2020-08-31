@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GLContext;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
@@ -103,7 +104,7 @@ public class HbmShaderManager {
 	}
 
 	public static void renderGauss() {
-		if(!MainRegistry.useShaders)
+		if(!GeneralConfig.useShaders)
 			return;
 		// Drillgon200: I don't know why I have to do this but shaders only work
 		// if I do.
@@ -247,7 +248,7 @@ public class HbmShaderManager {
 	}
 
 	public static void loadShaders() {
-		if(MainRegistry.useShaders) {
+		if(GeneralConfig.useShaders) {
 			gaussFbo = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
 			fbo6 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2, true);
 			fbo7 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2, true);
@@ -260,7 +261,7 @@ public class HbmShaderManager {
 			flashlightWorld = createShader("flashlightworld.frag", "flashlightworld.vert");
 			deferredFlashlight = createShader("deferredflashlight.frag", "deferredflashlight.vert");
 		}
-		if(MainRegistry.useShaders2){
+		if(GeneralConfig.useShaders2){
 			dissolve = createShader("dissolve.frag", "dissolve.vert");
 			bfg_worm = createShader("bfg_worm.frag", "bfg_worm.vert");
 			bfg_beam = createShader("bfg_beam.frag", "bfg_worm.vert");
@@ -376,11 +377,11 @@ public class HbmShaderManager {
 	}
 
 	public static boolean shouldUseShader(int shader) {
-		return OpenGlHelper.shadersSupported && MainRegistry.useShaders;
+		return OpenGlHelper.shadersSupported && GeneralConfig.useShaders;
 	}
 	
 	public static boolean shouldUseShader2(int shader) {
-		return OpenGlHelper.shadersSupported && MainRegistry.useShaders2;
+		return OpenGlHelper.shadersSupported && GeneralConfig.useShaders2;
 	}
 
 	public static void useShader(int shader) {

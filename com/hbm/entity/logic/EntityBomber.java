@@ -3,6 +3,7 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.entity.projectile.EntityBoxcar;
@@ -219,7 +220,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
     	
     	Vec3d vector = new Vec3d(world.rand.nextDouble() - 0.5, 0, world.rand.nextDouble() - 0.5);
     	vector = vector.normalize();
-    	vector = new Vec3d(vector.x * (MainRegistry.enableBomberShortMode ? 1 : 2), vector.y, vector.z * (MainRegistry.enableBomberShortMode ? 1 : 2));
+    	vector = new Vec3d(vector.x * (GeneralConfig.enableBomberShortMode ? 1 : 2), vector.y, vector.z * (GeneralConfig.enableBomberShortMode ? 1 : 2));
     	
     	this.setLocationAndAngles(x - vector.x * 100, y + 50, z - vector.z * 100, 0.0F, 0.0F);
     	

@@ -43,7 +43,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 
 			beam = 0;
 			
-			if(power >= demand && inventory.getStackInSlot(0).getItem() == ModItems.ams_lens && ItemLens.getLensDamage(inventory.getStackInSlot(0)) < ItemLens.maxDamage) {
+			if(power >= demand && inventory.getStackInSlot(0).getItem() == ModItems.ams_lens && ItemLens.getLensDamage(inventory.getStackInSlot(0)) < ((ItemLens)ModItems.ams_lens).maxDamage) {
 				
 				EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
 				for(int i = 1; i <= range; i++) {
@@ -65,7 +65,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 						long dmg = ItemLens.getLensDamage(inventory.getStackInSlot(0));
 						dmg += watts;
 						
-						if(dmg >= ItemLens.maxDamage)
+						if(dmg >= ((ItemLens)ModItems.ams_lens).maxDamage)
 							inventory.setStackInSlot(0, ItemStack.EMPTY);
 						else
 							ItemLens.setLensDamage(inventory.getStackInSlot(0), dmg);

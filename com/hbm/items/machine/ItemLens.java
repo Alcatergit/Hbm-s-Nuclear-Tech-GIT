@@ -12,11 +12,12 @@ import net.minecraft.world.World;
 
 public class ItemLens extends Item {
 
-	public static final long maxDamage = 60 * 60 * 60 * 20 * 100; //1 hour at 100%, 100 hours at 1%
+	public long maxDamage;
 	
-	public ItemLens(String s) {
+	public ItemLens(long maxDamage, String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.maxDamage = maxDamage;
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
@@ -30,15 +31,13 @@ public class ItemLens extends Item {
 	}
 	
 	@Override
-    public double getDurabilityForDisplay(ItemStack stack)
-    {
+    public double getDurabilityForDisplay(ItemStack stack){
         return (double)getLensDamage(stack) / (double)maxDamage;
     }
     
     @Override
-    public boolean showDurabilityBar(ItemStack stack)
-    {
-        return true;
+    public boolean showDurabilityBar(ItemStack stack){
+        return getDurabilityForDisplay(stack) != 0;
     }
 	
 	public static long getLensDamage(ItemStack stack) {

@@ -1,5 +1,7 @@
 package com.hbm.packet;
 
+import com.hbm.tileentity.machine.TileEntityITER;
+import com.hbm.tileentity.machine.TileEntityMachineLargeTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 
@@ -79,6 +81,11 @@ public class FluidTypePacketTest implements IMessage {
 					((TileEntityMachineTurbine)te).tankTypes[1] = m.fluids[1];
 				} else if(te instanceof TileEntityMachineReactorLarge){
 					((TileEntityMachineReactorLarge) te).tankTypes[2] = m.fluids[0];
+				} else if(te instanceof TileEntityITER){
+					((TileEntityITER) te).plasmaType = m.fluids[0];
+				} else if(te instanceof TileEntityMachineLargeTurbine){
+					((TileEntityMachineLargeTurbine) te).types[0] = m.fluids[0];
+					((TileEntityMachineLargeTurbine) te).types[1] = m.fluids[1];
 				}
 			});
 			return null;

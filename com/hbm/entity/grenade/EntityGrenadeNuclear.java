@@ -1,11 +1,11 @@
 package com.hbm.entity.grenade;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
@@ -43,7 +43,7 @@ public class EntityGrenadeNuclear extends EntityGrenadeBouncyBase
     	    entity0.speed = 25;
     	    entity0.coefficient = 10.0F;*/
     	    	
-    	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.nukaRadius, posX, posY, posZ));
+    	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.nukaRadius, posX, posY, posZ));
         	if(rand.nextInt(100) == 0)
         	{
         		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY, (int)this.posZ);

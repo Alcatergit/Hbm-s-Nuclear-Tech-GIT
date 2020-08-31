@@ -2,6 +2,7 @@ package com.hbm.handler.guncfg;
 
 import java.util.ArrayList;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.explosion.ExplosionParticleB;
@@ -12,7 +13,6 @@ import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 public class GunFatmanFactory {
@@ -172,7 +172,7 @@ public class GunFatmanFactory {
 					bf.posX = x;
 					bf.posY = y;
 					bf.posZ = z;
-					bf.destructionRange = (int) (MainRegistry.fatmanRadius * 1.25);
+					bf.destructionRange = (int) (BombConfig.fatmanRadius * 1.25);
 					bullet.world.spawnEntity(bf);
 		    		ExplosionParticleB.spawnMush(bullet.world, x, y, z);
 				}

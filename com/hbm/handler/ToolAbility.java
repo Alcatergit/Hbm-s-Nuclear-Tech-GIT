@@ -6,11 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.hbm.config.ToolConfig;
 import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.IItemAbility;
-import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.EnchantmentUtil;
 
@@ -36,6 +37,7 @@ public abstract class ToolAbility {
 	public abstract String getName();
 	@SideOnly(Side.CLIENT)
 	public abstract String getFullName();
+	public abstract String getExtension();
 	
 	public static class RecursionAbility extends ToolAbility {
 		
@@ -52,9 +54,9 @@ public abstract class ToolAbility {
 			
 			Block b = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 
-			if(b == Blocks.STONE && !MainRegistry.recursiveStone)
+			if(b == Blocks.STONE && !ToolConfig.recursiveStone)
 				return;
-			if(b == Blocks.NETHERRACK && !MainRegistry.recursiveNetherrack)
+			if(b == Blocks.NETHERRACK && !ToolConfig.recursiveNetherrack)
 				return;
 			
 			List<Integer> indices = Arrays.asList(new Integer[] {0, 1, 2, 3, 4, 5});
@@ -81,7 +83,7 @@ public abstract class ToolAbility {
 			
 			depth += 1;
 
-			if(depth > MainRegistry.recursionDepth)
+			if(depth > ToolConfig.recursionDepth)
 				return;
 			
 			pos.add(new BlockPos(x, y, z));
@@ -127,7 +129,12 @@ public abstract class ToolAbility {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
-			return I18n.format(getName()) + " (" + radius + ")";
+			return I18n.format(getName()) + getExtension();
+		}
+
+		@Override
+		public String getExtension() {
+			return " (" + radius + ")";
 		}
 		
 	}
@@ -164,7 +171,12 @@ public abstract class ToolAbility {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
-			return I18n.format(getName()) + " (" + range + ")";
+			return I18n.format(getName()) + getExtension();
+		}
+
+		@Override
+		public String getExtension() {
+			return " (" + range + ")";
 		}
 	}
 
@@ -196,6 +208,11 @@ public abstract class ToolAbility {
 		public String getFullName() {
 			return I18n.format(getName());
 		}
+		
+		@Override
+		public String getExtension() {
+			return "";
+		}
 	}
 	
 	public static class ShredderAbility extends ToolAbility {
@@ -225,6 +242,11 @@ public abstract class ToolAbility {
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
 			return I18n.format(getName());
+		}
+		
+		@Override
+		public String getExtension() {
+			return "";
 		}
 	}
 	
@@ -260,6 +282,11 @@ public abstract class ToolAbility {
 		public String getFullName() {
 			return I18n.format(getName());
 		}
+		
+		@Override
+		public String getExtension() {
+			return "";
+		}
 	}
 	
 	public static class SilkAbility extends ToolAbility {
@@ -290,6 +317,11 @@ public abstract class ToolAbility {
 		@Override
 		public String getFullName() {
 			return I18n.format(getName());
+		}
+		
+		@Override
+		public String getExtension() {
+			return "";
 		}
 	}
 	
@@ -325,7 +357,46 @@ public abstract class ToolAbility {
 
 		@Override
 		public String getFullName() {
-			return I18n.format(getName()) + " (" + luck + ")";
+			return I18n.format(getName()) + getExtension();
+		}
+
+		@Override
+		public String getExtension() {
+			return " (" + luck + ")";
+		}
+	}
+	
+	public static class CrystallizerAbility extends ToolAbility {
+
+		@Override
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
+
+			//a band-aid on a gaping wound
+			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
+				block = Blocks.REDSTONE_ORE.getDefaultState();
+
+			ItemStack stack = new ItemStack(block.getBlock(), 1, block.getBlock().getMetaFromState(block));
+			ItemStack result = CrystallizerRecipes.getOutput(stack);
+
+			if(result != null) {
+				world.setBlockToAir(new BlockPos(x, y, z));
+				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, result.copy()));
+			}
+		}
+
+		@Override
+		public String getExtension() {
+			return "";
+		}
+
+		@Override
+		public String getName() {
+			return "tool.ability.crystallizer";
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName());
 		}
 	}
 }

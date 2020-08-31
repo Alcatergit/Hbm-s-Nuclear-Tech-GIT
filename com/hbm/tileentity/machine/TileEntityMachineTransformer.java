@@ -21,6 +21,9 @@ public class TileEntityMachineTransformer extends TileEntity implements ITickabl
 	boolean tact;
 	int age;
 	
+	public TileEntityMachineTransformer() {
+	}
+	
 	public TileEntityMachineTransformer(long b, int d){
 		maxPower = b;
 		delay = d;

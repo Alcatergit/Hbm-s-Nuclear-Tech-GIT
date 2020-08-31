@@ -2,8 +2,8 @@ package com.hbm.entity.logic;
 
 import java.util.List;
 
+import com.hbm.config.RadiationConfig;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class EntityBlast extends Entity {
 	
-	int life = MainRegistry.fireDuration;
+	int life = RadiationConfig.fireDuration;
 	int size;
 	int damage = 100;
 	int exCount;

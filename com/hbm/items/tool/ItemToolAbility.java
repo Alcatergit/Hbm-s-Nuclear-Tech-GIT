@@ -9,8 +9,16 @@ import java.util.UUID;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.hbm.config.ToolConfig;
 import com.hbm.handler.ToolAbility;
+import com.hbm.handler.ToolAbility.CentrifugeAbility;
+import com.hbm.handler.ToolAbility.CrystallizerAbility;
+import com.hbm.handler.ToolAbility.HammerAbility;
+import com.hbm.handler.ToolAbility.LuckAbility;
+import com.hbm.handler.ToolAbility.RecursionAbility;
+import com.hbm.handler.ToolAbility.ShredderAbility;
 import com.hbm.handler.ToolAbility.SilkAbility;
+import com.hbm.handler.ToolAbility.SmelterAbility;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
 
@@ -27,7 +35,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -39,6 +46,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -74,7 +82,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
 				Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.CONCRETE_POWDER)
 		),
 		MINER(
-				Sets.newHashSet(new Material[] { Material.IRON, Material.ANVIL, Material.ROCK, Material.CLAY, Material.SAND, Material.GROUND, Material.SNOW, Material.CRAFTED_SNOW })
+				Sets.newHashSet(new Material[] { Material.GRASS, Material.IRON, Material.ANVIL, Material.ROCK, Material.CLAY, Material.SAND, Material.GROUND, Material.SNOW, Material.CRAFTED_SNOW })
 		);
 		
 		private EnumToolType(Set<Material> materials) {
@@ -312,13 +320,26 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     	
     	setAbility(stack, i % this.breakAbility.size());
     	
+    	while(!isAbilityAllowed(getCurrentAbility(stack))) {
+
+    		player.sendMessage(
+    				new TextComponentString("[Ability ")
+    				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName(), new Object[0]))
+    				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + " is blacklisted!]"))
+    				.setStyle(new Style().setColor(TextFormatting.RED)));
+
+        	i++;
+        	setAbility(stack, i % this.breakAbility.size());
+    	}
+    	
     	if(getCurrentAbility(stack) != null) {
     		player.sendMessage(
     				new TextComponentString("[Enabled ")
     				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName()))
-    				.appendSibling(new TextComponentString("]")));
+    				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + "]"))
+    				.setStyle(new Style().setColor(TextFormatting.YELLOW)));
     	} else {
-    		player.sendMessage(new TextComponentString("[Tool ability deactivated]"));
+    		player.sendMessage(new TextComponentString(TextFormatting.GOLD + "[Tool ability deactivated]"));
     	}
 
     	//Drillgon200: I hope "random.orb" referred to the experience orb sound
@@ -352,6 +373,30 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     
     protected boolean canOperate(ItemStack stack) {
     	return true;
+    }
+    
+  //TODO: integrate "isAllowed" into the ability class
+    private boolean isAbilityAllowed(ToolAbility ability) {
+
+    	if(ability instanceof HammerAbility)
+    		return ToolConfig.abilityHammer;
+    	if(ability instanceof RecursionAbility)
+    		return ToolConfig.abilityVein;
+    	if(ability instanceof LuckAbility)
+    		return ToolConfig.abilityLuck;
+    	if(ability instanceof SilkAbility)
+    		return ToolConfig.abilitySilk;
+    	if(ability instanceof SmelterAbility)
+    		return ToolConfig.abilityFurnace;
+    	if(ability instanceof ShredderAbility)
+    		return ToolConfig.abilityShredder;
+    	if(ability instanceof CentrifugeAbility)
+    		return ToolConfig.abilityCentrifuge;
+    	if(ability instanceof CrystallizerAbility)
+    		return ToolConfig.abilityCrystallizer;
+
+    	return true;
+
     }
 
 }

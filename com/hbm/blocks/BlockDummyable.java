@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.InventoryHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -245,6 +246,7 @@ public abstract class BlockDummyable extends BlockContainer {
 				world.setBlockToAir(new BlockPos(pos1[0], pos1[1], pos1[2]));
 			}
 		}
+		InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
 		super.breakBlock(world, pos, state);
 	}
 	

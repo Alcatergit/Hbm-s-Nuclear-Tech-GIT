@@ -5,7 +5,7 @@ import java.util.List;
 import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 
-import api.hbm.energy.IRadarDetectable;
+import api.hbm.entity.IRadarDetectable;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;

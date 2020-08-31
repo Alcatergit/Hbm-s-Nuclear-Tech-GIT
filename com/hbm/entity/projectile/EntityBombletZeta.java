@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
@@ -7,7 +8,6 @@ import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -74,7 +74,7 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
     				ExplosionChaos.spawnChlorine(world, this.posX + 0.5F - motionX, this.posY + 0.5F - motionY, this.posZ + 0.5F - motionZ, 75, 2, 0);
     			}
     			if(type == 4) {
-    				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) (MainRegistry.fatmanRadius * 1.5), posX, posY, posZ));
+    				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ));
     				
     	        	if(rand.nextInt(100) == 0)
     	        	{

@@ -91,7 +91,8 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		SOLID_FUEL,
 		ELECTROLYSIS,
 		XENON,
-		SATURN;
+		SATURN,
+		BALEFIRE;
 		
 		public static EnumChemistryTemplate getEnum(int i) {
 			if(i < EnumChemistryTemplate.values().length)
@@ -266,6 +267,8 @@ public static int getProcessTime(ItemStack stack) {
         	return 600;
         case SATURN:
         	return 600;
+        case BALEFIRE:
+        	return 100;
         default:
         	return 100;
         }

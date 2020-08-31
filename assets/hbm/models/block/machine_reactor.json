@@ -1,8 +1,6 @@
 {
-	"parent": "block/orientable",
+	"parent": "block/cube_all",
 	"textures": {
-		"top": "hbm:blocks/machine_reactor_decal",
-		"front": "hbm:blocks/machine_reactor_front_off",
-		"side": "hbm:blocks/machine_reactor_top"
+		"all": "hbm:blocks/machine_reactor"
 	}
 }

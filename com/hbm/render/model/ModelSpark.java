@@ -5,8 +5,8 @@ import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager;
-import com.hbm.main.MainRegistry;
 import com.hbm.render.item.weapon.ItemRenderOverkill;
 
 import net.minecraft.client.Minecraft;
@@ -162,7 +162,7 @@ public class ModelSpark extends ModelBase {
 		Handle1.render(f5);
 		Handle2.render(f5);
 
-		if (MainRegistry.useShaders) {
+		if (GeneralConfig.useShaders) {
 			FloatBuffer buf1 = BufferUtils.createFloatBuffer(16);
 			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buf1);
 			// HbmShaderManager.testBuf1 = buf1;

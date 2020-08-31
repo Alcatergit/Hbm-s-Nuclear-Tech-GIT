@@ -2,6 +2,8 @@ package com.hbm.entity.logic;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.BombConfig;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.explosion.ExplosionFleija;
 import com.hbm.explosion.ExplosionHurtUtil;
@@ -50,7 +52,7 @@ public class EntityNukeExplosionMK3 extends Entity {
 		
 		long time = nbt.getLong("milliTime");
 		
-		if(MainRegistry.limitExplosionLifespan > 0 && System.currentTimeMillis() - time > MainRegistry.limitExplosionLifespan * 1000)
+		if(BombConfig.limitExplosionLifespan > 0 && System.currentTimeMillis() - time > BombConfig.limitExplosionLifespan * 1000)
 			this.setDead();
 		
     	if(this.waste)
@@ -116,7 +118,7 @@ public class EntityNukeExplosionMK3 extends Entity {
         	return;
         if(!this.did)
         {
-    		if(MainRegistry.enableExtendedLogging && !world.isRemote)
+    		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
     			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized mk3 explosion at " + posX + " / " + posY + " / " + posZ + " with strength " + destructionRange + "!");
     		
         	if(this.waste)

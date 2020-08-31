@@ -189,7 +189,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 						Block b = state.getBlock();
 						if(b == ModBlocks.oil_pipe)
 							continue;
-						if(b.isReplaceable(world, checkPos) || b.getExplosionResistance(world, checkPos, null, null) < 100) {
+						if((b.isReplaceable(world, checkPos) || b.getExplosionResistance(world, checkPos, null, null) < 100) && !(b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty)) {
 							world.setBlockState(checkPos, ModBlocks.oil_pipe.getDefaultState());
 							
 							//Code 2: The drilling ended
@@ -197,7 +197,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 								warning = 2;
 							break;
 							
-						} else if((b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty) && this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
+						} else if(this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
 							if(succ(pos.getX(), i, pos.getZ())) {
 								
 								this.tanks[0].fill(new FluidStack(tankTypes[0], 650), true);

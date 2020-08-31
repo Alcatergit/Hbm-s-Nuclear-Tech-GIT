@@ -19,6 +19,7 @@ import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
 import cofh.redstoneflux.api.IEnergyProvider;
@@ -474,16 +475,20 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if (b == ModBlocks.ore_uranium) {
-				rand = random.nextInt(30);
+				rand = random.nextInt(MainRegistry.schrabFromUraniumChance);
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+				} else {
+					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
 				}
 			}
 
 			else if (b == ModBlocks.ore_nether_uranium) {
-				rand = random.nextInt(30);
+				rand = random.nextInt(MainRegistry.schrabFromUraniumChance);
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+				} else {
+					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				}
 			}
 

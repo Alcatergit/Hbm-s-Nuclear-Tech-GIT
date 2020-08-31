@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL12;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.main.ResourceManager;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -40,13 +41,6 @@ public class ModelMaskMan extends ModelBase {
 		ResourceManager.maskman.renderPart("Torso");
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0.5F, 4F, 0);
-		//if(!target)
-		GL11.glRotated(-f3, 0, 1, 0);
-		ResourceManager.maskman.renderPart("Head");
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
 		GL11.glTranslatef(-0.5F, 1.75F, -0.5F);
 		GL11.glRotated(swing, 0, 0, 1);
 		ResourceManager.maskman.renderPart("LLeg");
@@ -68,6 +62,19 @@ public class ModelMaskMan extends ModelBase {
 		GL11.glTranslatef(-0.5F, 3.75F, 1.5F);
 		GL11.glRotated(swing * -0.25, 0, 0, 1);
 		ResourceManager.maskman.renderPart("RArm");
+		GL11.glPopMatrix();
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0.5F, 4F, 0);
+		GL11.glRotated(-f3, 0, 1, 0);
+
+		if(man.getHealth() >= man.getMaxHealth() / 2) {
+			ResourceManager.maskman.renderPart("Head");
+		} else {
+			ResourceManager.maskman.renderPart("Skull");
+			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.iou);
+			ResourceManager.maskman.renderPart("IOU");
+		}
 		GL11.glPopMatrix();
 
 		GL11.glPopMatrix();

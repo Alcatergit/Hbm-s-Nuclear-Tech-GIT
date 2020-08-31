@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -86,12 +87,13 @@ public class ItemDetonator extends Item {
 			 if(world.isBlockLoaded(pos) && world.getBlockState(pos).getBlock() instanceof IBomb)
 			 {
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
+				//TODO put this back in world.isremote
 				((IBomb)world.getBlockState(pos).getBlock()).explode(world, pos);
 				if(!world.isRemote)
 				{
 					
 
-		    		if(MainRegistry.enableExtendedLogging)
+		    		if(GeneralConfig.enableExtendedLogging)
 		    			MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + x + " / " + y + " / " + z + " by " + player.getDisplayName() + "!");
 				}
 				if(world.isRemote)

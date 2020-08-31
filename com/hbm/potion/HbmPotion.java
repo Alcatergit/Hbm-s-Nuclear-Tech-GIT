@@ -3,13 +3,13 @@ package com.hbm.potion;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.capability.RadiationCapability;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.Minecraft;
@@ -96,7 +96,7 @@ public class HbmPotion extends Potion {
 			if(!(entity instanceof EntityTaintedCreeper) && entity.world.rand.nextInt(80) == 0)
 				entity.attackEntityFrom(ModDamageSource.taint, (level + 1));
 			
-			if(MainRegistry.enableHardcoreTaint && !entity.world.isRemote) {
+			if(GeneralConfig.enableHardcoreTaint && !entity.world.isRemote) {
 				
 				int x = (int)(entity.posX - 1);
 				int y = (int)entity.posY;

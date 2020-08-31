@@ -91,7 +91,7 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 			return false;
 		}
         ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
-		if(itemStack == null)
+		if(itemStack == null || itemStack.isEmpty())
 		{
 			return false;
 		}

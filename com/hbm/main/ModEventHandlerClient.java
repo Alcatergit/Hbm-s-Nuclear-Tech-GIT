@@ -9,7 +9,10 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.Project;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.TrappedBrick.Trap;
+import com.hbm.blocks.generic.TrappedBrick.TrapType;
 import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.flashlight.Flashlight;
@@ -75,6 +78,7 @@ import com.hbm.render.item.weapon.ItemRenderRedstoneSword;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.tileentity.RenderMultiblock;
+import com.hbm.render.tileentity.RenderPlasmaMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.sound.MovingSoundChopper;
@@ -200,7 +204,7 @@ public class ModEventHandlerClient {
 			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
-		} else if(item == ModItems.siren_track) {
+		} else 	if(item == ModItems.siren_track) {
 			for(int i = 0; i < TrackType.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
@@ -211,6 +215,12 @@ public class ModEventHandlerClient {
 			ModelLoader.setCustomModelResourceLocation(item, 3, new ModelResourceLocation(RefStrings.MODID + ":hs-vault", "inventory"));
 		} else if(item == ModItems.polaroid || item == ModItems.glitch) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName() + "_" + MainRegistry.polaroidID, "inventory"));
+		} else if(item == Item.getItemFromBlock(ModBlocks.brick_jungle_glyph)){
+			for(int i = 0; i < 16; i ++)
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName().toString() + i, "inventory"));
+		} else if(item == Item.getItemFromBlock(ModBlocks.brick_jungle_trap)){
+			for(int i = 0; i < Trap.values().length; i ++)
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
 		} else {
@@ -380,6 +390,7 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.gun_flechette, reg);
 		swapModels(ModItems.gun_quadro, reg);
 		swapModels(ModItems.gun_sauer, reg);
+		swapModelsNoGui(ModItems.chernobylsign, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -440,6 +451,8 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ultrahotsteam_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ultrahotsteam_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_flowing"));
 
@@ -542,6 +555,7 @@ public class ModEventHandlerClient {
 		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		particle_base = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/particle_base"));
 		fog = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/fog"));
+		uv_debug = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "misc/uv_debug"));
 
 		// evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID,
 		// "blocks/forgefluid/toxic_still"));
@@ -585,7 +599,7 @@ public class ModEventHandlerClient {
 		RenderStructureMarker.fusion[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fusion_core_side_alt");
 		RenderStructureMarker.fusion[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
 		RenderStructureMarker.fusion[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
-
+		
 		RenderStructureMarker.watz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
 		RenderStructureMarker.watz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
 		RenderStructureMarker.watz[1][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
@@ -629,6 +643,7 @@ public class ModEventHandlerClient {
 	public static TextureAtlasSprite contrail;
 	public static TextureAtlasSprite particle_base;
 	public static TextureAtlasSprite fog;
+	public static TextureAtlasSprite uv_debug;
 
 	// All of these are called via coremod, EntityRenderer on line 1018. current
 	// is the current value for each, and the returned value is added to the
@@ -654,14 +669,14 @@ public class ModEventHandlerClient {
 
 	// Called from asm via coremod, in ChunkRenderContainer#preRenderChunk
 	public static void preRenderChunk(RenderChunk chunk) {
-		if(!MainRegistry.useShaders || renderingDepthOnly)
+		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
 		GL20.glUniform3i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "chunkPos"), chunk.getPosition().getX(), chunk.getPosition().getY(), chunk.getPosition().getZ());
 	}
 
 	// Called from asm via coremod, in Profiler#endStartSection
 	public static void profilerStart(String name) {
-		if(!MainRegistry.useShaders || renderingDepthOnly)
+		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
 		if(name.equals("terrain")) {
 			HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
@@ -707,7 +722,7 @@ public class ModEventHandlerClient {
 
 	// Called from asm via coremod, in RenderManager#renderEntity
 	public static void onEntityRender(Entity e) {
-		if(!MainRegistry.useShaders || renderingDepthOnly)
+		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
 		if(!HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
 			HbmShaderManager.useShader(HbmShaderManager.flashlightWorld);
@@ -729,7 +744,7 @@ public class ModEventHandlerClient {
 
 	// Called from asm via coremod, in TileEntityRendererDispatcher#render
 	public static void onTileEntityRender(TileEntity t) {
-		if(!MainRegistry.useShaders || renderingDepthOnly)
+		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
 		if(t instanceof TileEntityEndPortal || t instanceof TileEntityEndGateway) {
 			HbmShaderManager.releaseShader();
@@ -1004,7 +1019,7 @@ public class ModEventHandlerClient {
 		}
 
 		/// HANDLE CUSTOM CROSSHAIRS ///
-		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) && MainRegistry.enableCrosshairs) {
+		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) && GeneralConfig.enableCrosshairs) {
 			event.setCanceled(true);
 			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
 				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
@@ -1028,7 +1043,7 @@ public class ModEventHandlerClient {
 				HbmAnimations.hotbar[i] = null;
 		}
 		
-		if(event.getType() == ElementType.CROSSHAIRS) {
+		/*if(event.getType() == ElementType.CROSSHAIRS) {
 
 			if(player.ticksExisted < 200) {
 
@@ -1056,7 +1071,7 @@ public class ModEventHandlerClient {
 				if(annoyanceToken)
 					annoyanceToken = false;
 			}
-		}
+		}*/
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	

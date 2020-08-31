@@ -2,7 +2,7 @@ package com.hbm.world;
 
 import java.util.Random;
 
-import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -1074,7 +1074,7 @@ public class LibraryDungeon extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 3, y + 5, z + 3), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 5, z + 6), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 5, z + 7), Blocks.AIR.getDefaultState(), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned library at " + x + " " + y +" " + z + "\n");
 		return true;
 

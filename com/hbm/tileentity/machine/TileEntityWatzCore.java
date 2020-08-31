@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -15,7 +16,6 @@ import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.WatzFuel;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -594,7 +594,7 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 					entity.posX = x;
 					entity.posY = y;
 					entity.posZ = z;
-					entity.destructionRange = MainRegistry.fleijaRadius;
+					entity.destructionRange = BombConfig.fleijaRadius;
 					entity.speed = 25;
 					entity.coefficient = 1.0F;
 					entity.waste = false;

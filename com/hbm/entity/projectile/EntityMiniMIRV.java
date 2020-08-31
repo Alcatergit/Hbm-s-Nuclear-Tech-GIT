@@ -2,11 +2,11 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -265,7 +265,7 @@ public class EntityMiniMIRV extends Entity implements IProjectile {
         {
             if (!this.world.isRemote)
             {
-    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.fatmanRadius, posX, posY, posZ));
+    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
         	    
             	if(rand.nextInt(100) == 0)
             	{
@@ -397,7 +397,7 @@ public class EntityMiniMIRV extends Entity implements IProjectile {
                         {
                             if (!this.world.isRemote)
                             {
-                    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.fatmanRadius, posX, posY, posZ));
+                    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
                     	    	
                             	if(rand.nextInt(100) == 0)
                             	{

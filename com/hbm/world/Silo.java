@@ -3,10 +3,10 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -2543,7 +2543,7 @@ public class Silo extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 9, y + -1, z + 2), Blocks.LADDER.getDefaultState().withProperty(BlockLadder.FACING, EnumFacing.values()[3]), 3);
 		world.setBlockState(pos.setPos(x + 9, y + 0, z + 2), Blocks.LADDER.getDefaultState().withProperty(BlockLadder.FACING, EnumFacing.values()[3]), 3);
 		world.setBlockState(pos.setPos(x + 9, y + 1, z + 2), Blocks.LADDER.getDefaultState().withProperty(BlockLadder.FACING, EnumFacing.values()[3]), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned missile silo at " + x + " " + y +" " + z + "\n");
 		return true;
 

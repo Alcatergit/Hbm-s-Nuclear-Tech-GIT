@@ -24,6 +24,8 @@ public class ItemRenderShim extends TEISRBase {
 				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.stopsign_tex);
 			if(stack.getItem() == ModItems.sopsign)
 				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.sopsign_tex);
+			if(stack.getItem() == ModItems.chernobylsign)
+				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.chernobylsign_tex);
 			if(stack.getItem() == ModItems.shimmer_sledge || stack.getItem() == ModItems.shimmer_axe) {
 				GL11.glScalef(1.5F, 1.5F, 1.5F);
 				if(type == TransformType.FIRST_PERSON_RIGHT_HAND) {
@@ -51,7 +53,7 @@ public class ItemRenderShim extends TEISRBase {
 				ResourceManager.shimmer_sledge.renderAll();
 			if(stack.getItem() == ModItems.shimmer_axe)
 				ResourceManager.shimmer_axe.renderAll();
-			if(stack.getItem() == ModItems.stopsign || stack.getItem() == ModItems.sopsign)
+			if(stack.getItem() == ModItems.stopsign || stack.getItem() == ModItems.sopsign || stack.getItem() == ModItems.chernobylsign)
 				ResourceManager.stopsign.renderAll();
 			break;
 		case THIRD_PERSON_LEFT_HAND:
@@ -68,6 +70,8 @@ public class ItemRenderShim extends TEISRBase {
 				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.stopsign_tex);
 			if(stack.getItem() == ModItems.sopsign)
 				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.sopsign_tex);
+			if(stack.getItem() == ModItems.chernobylsign)
+				Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.chernobylsign_tex);
 			if(stack.getItem() == ModItems.shimmer_sledge || stack.getItem() == ModItems.shimmer_axe) {
 				GL11.glScaled(2.5, 2.5, 2.5);
 				GL11.glTranslated(0.1, -0.1, 0.15);
@@ -80,7 +84,7 @@ public class ItemRenderShim extends TEISRBase {
 				ResourceManager.shimmer_sledge.renderAll();
 			if(stack.getItem() == ModItems.shimmer_axe)
 				ResourceManager.shimmer_axe.renderAll();
-			if(stack.getItem() == ModItems.stopsign || stack.getItem() == ModItems.sopsign)
+			if(stack.getItem() == ModItems.stopsign || stack.getItem() == ModItems.sopsign || stack.getItem() == ModItems.chernobylsign)
 				ResourceManager.stopsign.renderAll();
 			break;
 		default:

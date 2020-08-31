@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IConsumer;
+import com.hbm.interfaces.Untested;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.machine.ItemBlades;
 import com.hbm.lib.Library;
@@ -109,8 +110,9 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 				
 				if(this.progress == TileEntityMachineShredder.processingSpeed)
 				{
-					inventory.getStackInSlot(27).setItemDamage(inventory.getStackInSlot(27).getItemDamage() + 1);
-					inventory.getStackInSlot(28).setItemDamage(inventory.getStackInSlot(28).getItemDamage() + 1);
+					for(int i = 27; i <= 28; i++)
+						if(inventory.getStackInSlot(i).getMaxDamage() > 0)
+							inventory.getStackInSlot(i).setItemDamage(inventory.getStackInSlot(i).getItemDamage()+1);
 					
 					this.progress = 0;
 					this.processItem();
@@ -150,44 +152,47 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 	}
 	
 	public void processItem() {
-		for(int i = 0; i < 9; i++)
+		for(int inpSlot = 0; inpSlot < 9; inpSlot++)
 		{
-			if(!inventory.getStackInSlot(i).isEmpty() && hasSpace(inventory.getStackInSlot(i)))
+			if(!inventory.getStackInSlot(inpSlot).isEmpty() && hasSpace(inventory.getStackInSlot(inpSlot)))
 			{
-				ItemStack inp = inventory.getStackInSlot(i).copy();
+				ItemStack inp = inventory.getStackInSlot(inpSlot);
 				ItemStack outp = ShredderRecipes.getShredderResult(inp);
 				boolean flag = false;
 				
-				for (int j = 9; j < 27; j++)
+				for (int outSlot = 9; outSlot < 27; outSlot++)
 				{
-					if (!inventory.getStackInSlot(j).isEmpty() && inventory.getStackInSlot(j).getItem().equals(outp.getItem()) && inventory.getStackInSlot(j).getCount() + outp.getCount() <= outp.getMaxStackSize()) {
-						inventory.getStackInSlot(j).grow(outp.getCount());
-						inventory.getStackInSlot(i).shrink(1);
+					if (!inventory.getStackInSlot(outSlot).isEmpty() && inventory.getStackInSlot(outSlot).getItem() == outp.getItem() && inventory.getStackInSlot(outSlot).getCount() + outp.getCount() <= outp.getMaxStackSize()) {
+
+						System.out.println(outp.getUnlocalizedName() + " is equal to " + inventory.getStackInSlot(outSlot).getUnlocalizedName());
+
+						inventory.getStackInSlot(outSlot).grow(outp.getCount());
+						inventory.getStackInSlot(inpSlot).shrink(1);
 						flag = true;
 						break;
 					}
 				}
 				
 				if(!flag)
-					for (int j = 9; j < 27; j++)
+					for (int outSlot = 9; outSlot < 27; outSlot++)
 					{
-						if (inventory.getStackInSlot(j).isEmpty()) {
-							inventory.setStackInSlot(j, outp.copy());
-							inventory.getStackInSlot(i).shrink(1);
+						if (inventory.getStackInSlot(outSlot).isEmpty()) {
+							inventory.setStackInSlot(outSlot, outp.copy());
+							inventory.getStackInSlot(inpSlot).shrink(1);
 							break;
 						}
 					}
 				
-				if(inventory.getStackInSlot(i).isEmpty())
-					inventory.setStackInSlot(i, ItemStack.EMPTY);
+				if(inventory.getStackInSlot(inpSlot).isEmpty())
+					inventory.setStackInSlot(inpSlot, ItemStack.EMPTY);
 			}
 		}
 	}
 	
+	@Untested
 	public boolean canProcess() {
-		if(
-				inventory.getStackInSlot(27).getItem() instanceof ItemBlades && inventory.getStackInSlot(28).getItem() instanceof ItemBlades && 
-				inventory.getStackInSlot(27).getItemDamage() < inventory.getStackInSlot(27).getMaxDamage() && inventory.getStackInSlot(28).getItemDamage() < inventory.getStackInSlot(28).getMaxDamage())
+		if(this.getGearLeft() > 0 && this.getGearLeft() < 3 && 
+				this.getGearRight() > 0 && this.getGearRight() < 3)
 		for(int i = 0; i < 9; i++)
 		{
 			if(!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).getCount() > 0 && hasSpace(inventory.getStackInSlot(i)))
@@ -242,6 +247,8 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 		
 		if(!inventory.getStackInSlot(27).isEmpty() && inventory.getStackInSlot(27).getItem() instanceof ItemBlades)
 		{
+			if(inventory.getStackInSlot(27).getMaxDamage() == 0)
+				return 1;
 			if(inventory.getStackInSlot(27).getItemDamage() < inventory.getStackInSlot(27).getMaxDamage()/2)
 			{
 				return 1;
@@ -259,6 +266,8 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 		
 		if(!inventory.getStackInSlot(28).isEmpty() && inventory.getStackInSlot(28).getItem() instanceof ItemBlades)
 		{
+			if(inventory.getStackInSlot(28).getMaxDamage() == 0)
+				return 1;
 			if(inventory.getStackInSlot(28).getItemDamage() < inventory.getStackInSlot(28).getMaxDamage()/2)
 			{
 				return 1;

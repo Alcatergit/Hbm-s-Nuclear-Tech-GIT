@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.bomb.BlockCrashedBomb;
+import com.hbm.config.BombConfig;
+import com.hbm.config.WeaponConfig;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.HbmFluidHandlerCell;
@@ -12,7 +14,6 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.resources.I18n;
@@ -53,7 +54,7 @@ public class ItemCell extends ItemRadioactive {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		if(entityItem.onGround) {
-			if(hasFluid(entityItem.getItem(), ModForgeFluids.aschrab) && MainRegistry.dropCell) {
+			if(hasFluid(entityItem.getItem(), ModForgeFluids.aschrab) && WeaponConfig.dropCell) {
 				if(!entityItem.world.isRemote) {
 					entityItem.setDead();
 					entityItem.world.playSound(null, entityItem.posX, entityItem.posY, entityItem.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 100.0f, entityItem.world.rand.nextFloat() * 0.1F + 0.9F);
@@ -61,7 +62,7 @@ public class ItemCell extends ItemRadioactive {
 					entity.posX = entityItem.posX;
 					entity.posY = entityItem.posY;
 					entity.posZ = entityItem.posZ;
-					entity.destructionRange = (int) (MainRegistry.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F));
+					entity.destructionRange = (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F));
 
 					entity.speed = 25;
 					entity.coefficient = 1.0F;
@@ -69,7 +70,7 @@ public class ItemCell extends ItemRadioactive {
 
 					entityItem.world.spawnEntity(entity);
 
-					EntityCloudFleija cloud = new EntityCloudFleija(entityItem.world, (int) (MainRegistry.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F)));
+					EntityCloudFleija cloud = new EntityCloudFleija(entityItem.world, (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F)));
 					cloud.posX = entityItem.posX;
 					cloud.posY = entityItem.posY;
 					cloud.posZ = entityItem.posZ;
@@ -77,7 +78,7 @@ public class ItemCell extends ItemRadioactive {
 				}
 				return true;
 			}
-			if(hasFluid(entityItem.getItem(), ModForgeFluids.amat) && MainRegistry.dropCell) {
+			if(hasFluid(entityItem.getItem(), ModForgeFluids.amat) && WeaponConfig.dropCell) {
 				if(!entityItem.world.isRemote) {
 					entityItem.setDead();
 					entityItem.world.createExplosion(entityItem, entityItem.posX, entityItem.posY, entityItem.posZ, 10.0F * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F), true);

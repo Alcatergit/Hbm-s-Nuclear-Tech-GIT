@@ -3,6 +3,8 @@ package com.hbm.tileentity;
 import com.hbm.interfaces.IConsumer;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,6 +42,9 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(tile == null) {
 			tile = this.getTE();
+			if(tile == null){
+				return super.getCapability(capability, facing);
+			}
 		}
 		if(inventory && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return tile.getCapability(capability, facing);
@@ -57,6 +62,9 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if(tile == null) {
 			tile = this.getTE();
+			if(tile == null){
+				return super.hasCapability(capability, facing);
+			}
 		}
 		if(inventory && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return tile.hasCapability(capability, facing);
@@ -121,5 +129,20 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 		compound.setBoolean("flu", fluid);
 		compound.setBoolean("pow", power);
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+	}
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		this.readFromNBT(tag);
 	}
 }

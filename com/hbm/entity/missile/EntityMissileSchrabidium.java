@@ -3,12 +3,12 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
 
-import api.hbm.energy.IRadarDetectable.RadarTargetType;
+import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -30,14 +30,14 @@ public class EntityMissileSchrabidium extends EntityMissileBaseAdvanced {
 			entity.posX = this.posX;
 			entity.posY = this.posY;
 			entity.posZ = this.posZ;
-			entity.destructionRange = MainRegistry.aSchrabRadius;
+			entity.destructionRange = BombConfig.aSchrabRadius;
 			entity.speed = 25;
 			entity.coefficient = 1.0F;
 			entity.waste = false;
 
 			this.world.spawnEntity(entity);
 
-			EntityCloudFleija cloud = new EntityCloudFleija(this.world, MainRegistry.aSchrabRadius);
+			EntityCloudFleija cloud = new EntityCloudFleija(this.world, BombConfig.aSchrabRadius);
 			cloud.posX = this.posX;
 			cloud.posY = this.posY;
 			cloud.posZ = this.posZ;

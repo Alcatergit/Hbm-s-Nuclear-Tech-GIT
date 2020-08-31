@@ -3,6 +3,8 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL13;
+
 import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -20,6 +22,8 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,6 +74,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+			Tessellator.getInstance().draw();
 
 			if(isValidFluidForTank(4, 0))
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 4, 5);
@@ -85,7 +90,6 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 				starting = false;
 			} else if(countdown > 0) {
 				countdown--;
-				countdown = 0;
 				
 				if(countdown % 100 == 0 && countdown > 0)
 					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.alarmHatch, SoundCategory.BLOCKS, 100F, 1.1F);

@@ -3,11 +3,16 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.handler.HbmShaderManager;
+import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.particle_instanced.InstancedParticleRenderer;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.deco.TileEntityObjTester;
@@ -124,8 +129,9 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.disableAlpha();
         GlStateManager.disableFog();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(0.5F, 1F, 0.5F, 0.6F);
+        GlStateManager.color(1, 1, 1);
         
         
         /*bindTexture(ResourceManager.bfg_beam2);
@@ -161,7 +167,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         buf.pos(15, 4, 0).tex(1+time, 0).endVertex();
         tes.draw();
         
-        HbmShaderManager.releaseShader2();
+        HbmShaderManager.releaseShader2();*/
         
         int index = (int) ((System.currentTimeMillis()%1000000)/10F%64);
         float size = 1/8F;
@@ -169,17 +175,45 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         float v = (index/8)*size;
         
         bindTexture(ResourceManager.bfg_smoke);
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        int bruh = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GlStateManager.bindTexture(bruh);
         
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();
+       // buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+       /* buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();
         buf.pos(-1, 1, 0).tex(u+size, v).endVertex();
         buf.pos(1, 1, 0).tex(u, v).endVertex();
         buf.pos(1, -1, 0).tex(u, v+size).endVertex();
         buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();
         buf.pos(-1, 1, 0).tex(u+size, v).endVertex();
         buf.pos(1, 1, 0).tex(u, v).endVertex();
-        buf.pos(1, -1, 0).tex(u, v+size).endVertex();
+        buf.pos(1, -1, 0).tex(u, v+size).endVertex();*/
+        /*buf.pos(-1, -1, 0).tex(0, 0).endVertex();
+        buf.pos(-1, 1, 0).tex(0, 1).endVertex();
+        buf.pos(1, 1, 0).tex(1, 1).endVertex();
+        buf.pos(1, -1, 0).tex(1, 0).endVertex();
         tes.draw();*/
+        ResourceManager.test.draw();
+        
+        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		Matrix4f mvMatrix = new Matrix4f();
+		mvMatrix.load(HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		Matrix4f pMatrix = new Matrix4f();
+		pMatrix.load(HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		
+		Matrix4f.mul(pMatrix, mvMatrix, mvMatrix);
+		
+		Vector4f bruh1 = new Vector4f(0, 0, 0, 1);
+		Matrix4f.transform(mvMatrix, bruh1, bruh1);
+		Vector3f bruh2 = new Vector3f(bruh1.x/bruh1.w, bruh1.y/bruh1.w, bruh1.z/bruh1.w);
+		//System.out.println(bruh2);
         
         GlStateManager.enableCull();
         GlStateManager.enableLighting();

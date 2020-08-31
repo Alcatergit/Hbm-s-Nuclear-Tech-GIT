@@ -11,7 +11,8 @@ public class TileEntityProxyInventory extends TileEntityProxyBase {
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			ICapabilityProvider te = this.getTE();
-			return te.getCapability(capability, facing);
+			if(te != null)
+				return te.getCapability(capability, facing);
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -20,7 +21,8 @@ public class TileEntityProxyInventory extends TileEntityProxyBase {
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			ICapabilityProvider te = this.getTE();
-			return te.hasCapability(capability, facing);
+			if(te != null)
+				return te.hasCapability(capability, facing);
 		}
 		return super.hasCapability(capability, facing);
 	}

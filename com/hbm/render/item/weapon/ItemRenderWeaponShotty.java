@@ -3,7 +3,7 @@ package com.hbm.render.item.weapon;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.animloader.AnimationWrapper;
-import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
@@ -26,7 +26,7 @@ public class ItemRenderWeaponShotty extends TEISRBase {
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
-			if(MainRegistry.ssgAnim) {
+			if(GeneralConfig.ssgAnim) {
 				if(type == TransformType.FIRST_PERSON_LEFT_HAND) {
 					GL11.glTranslated(-0.81, -0.7, 0.4);
 					GL11.glRotated(4, 1, 0, 0);
@@ -79,13 +79,15 @@ public class ItemRenderWeaponShotty extends TEISRBase {
 				if(entity.isSneaking()) {
 					GL11.glTranslatef(0F, 1.0F, -1.8F);
 					GL11.glRotatef(3.5F, 0.0F, 1.0F, 0.0F);
+				} else {
+					GL11.glRotated(-eject[2] * 0.25, 0, 0, 1);
 				}
 
 				GL11.glTranslated(-recoil[0] * 2, 0, 0);
 				GL11.glRotated(recoil[0] * 5, 0, 0, 1);
 				
 				GL11.glPushMatrix();
-				GL11.glRotated(-eject[2], 0, 0, 1);
+				GL11.glRotated(-eject[2] * 0.8, 0, 0, 1);
 				ResourceManager.shotty.renderPart("Barrel");
 				
 				GL11.glPushMatrix();

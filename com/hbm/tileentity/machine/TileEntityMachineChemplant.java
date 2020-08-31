@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -455,7 +456,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
 				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];
 			}
-			
+			FluidStack test = FluidContainerRegistry.getFluidFromItem(inventory.getStackInSlot(slot).getItem());
+			if(test != null && test.getFluid() == tankTypes[tank]){
+				return true;
+			}
 			//Drillgon200: I really hope fluid container registry comes back.
 		}
 		

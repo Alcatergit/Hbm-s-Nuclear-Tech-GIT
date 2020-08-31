@@ -3,7 +3,7 @@ package com.hbm.blocks.bomb;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -27,7 +27,7 @@ public class CheaterVirusSeed extends Block {
 	@Override
 	public void breakBlock(World world, BlockPos pos1, IBlockState state) {
 		super.breakBlock(world, pos1, state);
-		if(!MainRegistry.enableVirus)
+		if(!GeneralConfig.enableVirus)
 			return;
 		int x = pos1.getX();
 		int y = pos1.getY();
@@ -49,7 +49,7 @@ public class CheaterVirusSeed extends Block {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos1, IBlockState state, Random rand) {
-		if(!MainRegistry.enableVirus)
+		if(!GeneralConfig.enableVirus)
 			return;
 		int x = pos1.getX();
 		int y = pos1.getY();

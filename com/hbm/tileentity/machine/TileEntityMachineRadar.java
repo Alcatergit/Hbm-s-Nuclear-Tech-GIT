@@ -3,15 +3,15 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.WeaponConfig;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityTickingBase;
 
-import api.hbm.energy.IRadarDetectable;
-import api.hbm.energy.IRadarDetectable.RadarTargetType;
+import api.hbm.entity.IRadarDetectable;
+import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,7 +52,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 	
 	@Override
 	public void update() {
-		if(pos.getY() < MainRegistry.radarAltitude)
+		if(pos.getY() < WeaponConfig.radarAltitude)
 			return;
 		
 		int lastPower = getRedPower();
@@ -89,15 +89,15 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		
 		nearbyMissiles.clear();
 		
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - MainRegistry.radarRange, 0, pos.getZ() + 0.5 - MainRegistry.radarRange, pos.getX() + 0.5 + MainRegistry.radarRange, 5000, pos.getZ() + 0.5 + MainRegistry.radarRange));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000, pos.getZ() + 0.5 + WeaponConfig.radarRange));
 
 		for(Entity e : list) {
 
-			if(e instanceof EntityPlayer && e.posY >= pos.getY() + MainRegistry.radarBuffer) {
+			if(e instanceof EntityPlayer && e.posY >= pos.getY() + WeaponConfig.radarBuffer) {
 				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY });
 			}
 			
-			if(e instanceof IRadarDetectable && e.posY >= pos.getY() + MainRegistry.radarBuffer) {
+			if(e instanceof IRadarDetectable && e.posY >= pos.getY() + WeaponConfig.radarBuffer) {
 				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY });
 			}
 		}
@@ -107,7 +107,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		
 		if(!nearbyMissiles.isEmpty()) {
 			
-			double maxRange = MainRegistry.radarRange * Math.sqrt(2D);
+			double maxRange = WeaponConfig.radarRange * Math.sqrt(2D);
 			
 			int power = 0;
 			

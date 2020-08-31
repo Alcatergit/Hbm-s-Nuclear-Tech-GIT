@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -186,7 +187,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 			if (thrower != null && thrower instanceof EntityPlayer)
 				s = ((EntityPlayer) thrower).getDisplayName().getUnformattedText();
 
-			if (MainRegistry.enableExtendedLogging)
+			if (GeneralConfig.enableExtendedLogging)
 				MainRegistry.logger.log(Level.INFO, "[GREN] Set off grenade at " + ((int) posX) + " / " + ((int) posY) + " / " + ((int) posZ) + " by " + s + "!");
 		}
 	}

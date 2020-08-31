@@ -27,6 +27,7 @@ import com.hbm.inventory.container.ContainerElectricFurnace;
 import com.hbm.inventory.container.ContainerFWatzCore;
 import com.hbm.inventory.container.ContainerForceField;
 import com.hbm.inventory.container.ContainerFusionMultiblock;
+import com.hbm.inventory.container.ContainerITER;
 import com.hbm.inventory.container.ContainerLaunchPadTier1;
 import com.hbm.inventory.container.ContainerLaunchTable;
 import com.hbm.inventory.container.ContainerMachineArcFurnace;
@@ -45,6 +46,7 @@ import com.hbm.inventory.container.ContainerMachineGasCent;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.inventory.container.ContainerMachineGenerator;
 import com.hbm.inventory.container.ContainerMachineKeyForge;
+import com.hbm.inventory.container.ContainerMachineLargeTurbine;
 import com.hbm.inventory.container.ContainerMachineMiningDrill;
 import com.hbm.inventory.container.ContainerMachineMissileAssembly;
 import com.hbm.inventory.container.ContainerMachineOilWell;
@@ -79,6 +81,7 @@ import com.hbm.inventory.container.ContainerNukeN45;
 import com.hbm.inventory.container.ContainerNukePrototype;
 import com.hbm.inventory.container.ContainerNukeSolinium;
 import com.hbm.inventory.container.ContainerNukeTsar;
+import com.hbm.inventory.container.ContainerPlasmaHeater;
 import com.hbm.inventory.container.ContainerPuF6Tank;
 import com.hbm.inventory.container.ContainerRailgun;
 import com.hbm.inventory.container.ContainerReactor;
@@ -113,6 +116,7 @@ import com.hbm.inventory.gui.GUICrystallizer;
 import com.hbm.inventory.gui.GUIFWatzCore;
 import com.hbm.inventory.gui.GUIForceField;
 import com.hbm.inventory.gui.GUIFusionMultiblock;
+import com.hbm.inventory.gui.GUIITER;
 import com.hbm.inventory.gui.GUILaunchPadTier1;
 import com.hbm.inventory.gui.GUIMachineArcFurnace;
 import com.hbm.inventory.gui.GUIMachineAssembler;
@@ -133,6 +137,7 @@ import com.hbm.inventory.gui.GUIMachineGasCent;
 import com.hbm.inventory.gui.GUIMachineGasFlare;
 import com.hbm.inventory.gui.GUIMachineGenerator;
 import com.hbm.inventory.gui.GUIMachineKeyForge;
+import com.hbm.inventory.gui.GUIMachineLargeTurbine;
 import com.hbm.inventory.gui.GUIMachineLaunchTable;
 import com.hbm.inventory.gui.GUIMachineMiningDrill;
 import com.hbm.inventory.gui.GUIMachineMissileAssembly;
@@ -171,6 +176,7 @@ import com.hbm.inventory.gui.GUINukeN45;
 import com.hbm.inventory.gui.GUINukePrototype;
 import com.hbm.inventory.gui.GUINukeSolinium;
 import com.hbm.inventory.gui.GUINukeTsar;
+import com.hbm.inventory.gui.GUIPlasmaHeater;
 import com.hbm.inventory.gui.GUIRailgun;
 import com.hbm.inventory.gui.GUIReactorControl;
 import com.hbm.inventory.gui.GUIReactorMultiblock;
@@ -224,6 +230,7 @@ import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityFusionMultiblock;
+import com.hbm.tileentity.machine.TileEntityITER;
 import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
@@ -243,10 +250,12 @@ import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineKeyForge;
+import com.hbm.tileentity.machine.TileEntityMachineLargeTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineOilWell;
+import com.hbm.tileentity.machine.TileEntityMachinePlasmaHeater;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
@@ -669,7 +678,18 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMicrowave){
 					return new ContainerMicrowave(player.inventory, (TileEntityMicrowave) entity);
 				}
-			
+			case ModBlocks.guiID_iter:
+				if(entity instanceof TileEntityITER){
+					return new ContainerITER(player.inventory, (TileEntityITER) entity);
+				}
+			case ModBlocks.guiID_plasma_heater:
+				if(entity instanceof TileEntityMachinePlasmaHeater){
+					return new ContainerPlasmaHeater(player.inventory, (TileEntityMachinePlasmaHeater) entity);
+				}
+			case ModBlocks.guiID_machine_large_turbine:
+				if(entity instanceof TileEntityMachineLargeTurbine){
+					return new ContainerMachineLargeTurbine(player.inventory, (TileEntityMachineLargeTurbine) entity);
+				}
 			}
 
 		} else {
@@ -1061,6 +1081,19 @@ public class GuiHandler implements IGuiHandler {
 				if(entity instanceof TileEntityMicrowave){
 					return new GUIMicrowave(player.inventory, (TileEntityMicrowave) entity);
 				}
+			case ModBlocks.guiID_iter:
+				if(entity instanceof TileEntityITER){
+					return new GUIITER(player.inventory, (TileEntityITER) entity);
+				}
+			case ModBlocks.guiID_plasma_heater:
+				if(entity instanceof TileEntityMachinePlasmaHeater){
+					return new GUIPlasmaHeater(player.inventory, (TileEntityMachinePlasmaHeater) entity);
+				}
+			case ModBlocks.guiID_machine_large_turbine:
+				if(entity instanceof TileEntityMachineLargeTurbine){
+					return new GUIMachineLargeTurbine(player.inventory, (TileEntityMachineLargeTurbine) entity);
+				}
+				return null;
 			}
 
 		} else {

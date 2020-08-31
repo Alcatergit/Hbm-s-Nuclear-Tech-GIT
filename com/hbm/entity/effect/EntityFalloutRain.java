@@ -1,6 +1,8 @@
 package com.hbm.entity.effect;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.BombConfig;
+import com.hbm.config.RadiationConfig;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -61,7 +63,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 
 		if(!world.isRemote) {
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
-			for(int i = 0; i < MainRegistry.fSpeed; i++) {
+			for(int i = 0; i < BombConfig.fSpeed; i++) {
 
 				Vec3 vec = Vec3.createVectorHelper(radProgress * 0.5, 0, 0);
 				double circum = radProgress * 2 * Math.PI * 2;
@@ -101,12 +103,12 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 			}
 
 			if(this.isDead) {
-				if(MainRegistry.rain > 0 && getScale() > 150) {
+				if(RadiationConfig.rain > 0 && getScale() > 150) {
 					world.getWorldInfo().setRaining(true);
 					world.getWorldInfo().setThundering(true);
-					world.getWorldInfo().setRainTime(MainRegistry.rain);
-					world.getWorldInfo().setThunderTime(MainRegistry.rain);
-					AuxSavedData.setThunder(world, MainRegistry.rain);
+					world.getWorldInfo().setRainTime(RadiationConfig.rain);
+					world.getWorldInfo().setThunderTime(RadiationConfig.rain);
+					AuxSavedData.setThunder(world, RadiationConfig.rain);
 				}
 			}
 		}
@@ -202,14 +204,18 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 			}
 
 			else if(b.getBlock() == ModBlocks.ore_uranium) {
-				if(rand.nextInt(90) == 0)
+				if (rand.nextInt(MainRegistry.schrabFromUraniumChance) == 0)
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+				else
+					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
 				return;
 			}
 
 			else if(b.getBlock() == ModBlocks.ore_nether_uranium) {
-				if(rand.nextInt(90) == 0)
+				if(rand.nextInt(MainRegistry.schrabFromUraniumChance) == 0)
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+				else
+					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				return;
 
 				// this piece stops the "stomp" from reaching below ground

@@ -43,6 +43,11 @@ public class ServerProxy
 	}
 	
 	public void postInit(FMLPostInitializationEvent e){
-		
 	}
+	
+	public boolean opengl33(){
+		return true;//Doesn't matter for servers, and this won't print an error message.
+	}
+	
+	public void playSound(String sound, Object data) { }
 }

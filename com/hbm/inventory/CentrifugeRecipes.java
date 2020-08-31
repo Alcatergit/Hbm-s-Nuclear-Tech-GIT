@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.b3d.B3DModel.Bone;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class CentrifugeRecipes {
@@ -280,6 +281,7 @@ public class CentrifugeRecipes {
 		public final List<ItemStack> inputs;
 		
 		public CentrifugeRecipe(ItemStack input, List<ItemStack> outputs) {
+			Bone b;
 			this.input = input;
 			this.inputs = null;
 			this.outputs = outputs; 

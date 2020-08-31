@@ -221,21 +221,6 @@ public class Library {
 			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && battery.getCharge(stack) >= battery.getMaxCharge())
 				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
-
-		if(inventory.getStackInSlot(index).getItem() instanceof ItemToolAbilityPower) {
-
-			long batMax = ItemToolAbilityPower.getMaxChargeStatic(inventory.getStackInSlot(index));
-			long batCharge = ItemToolAbilityPower.getCharge(inventory.getStackInSlot(index));
-			long batRate = ((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).getChargeRate();
-			
-			//in hHE
-			long toCharge = Math.min(Math.min(power, batRate), batMax - batCharge);
-			
-			power -= toCharge;
-			
-			((ItemToolAbilityPower)inventory.getStackInSlot(index).getItem()).chargeBattery(inventory.getStackInSlot(index), toCharge);
-			
-		}
 		
 		return power;
 	}

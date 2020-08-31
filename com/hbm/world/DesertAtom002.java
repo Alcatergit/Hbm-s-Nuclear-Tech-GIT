@@ -42,7 +42,7 @@ public class DesertAtom002
 	Block Block13 = ModBlocks.pole_satellite_receiver;
 	Block Block14 = ModBlocks.machine_generator;
 	Block Block15 = ModBlocks.deco_titanium;
-	Block Block16 = ModBlocks.machine_reactor;
+	Block Block16 = ModBlocks.block_lead;
 	Block Block17 = ModBlocks.ore_nether_plutonium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
@@ -2560,9 +2560,9 @@ public class DesertAtom002
 		world.setBlockState(pos.setPos(x + 4, y + 3, z + 11), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 3, z + 11), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 3, z + 11), Blocks.WATER.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 7, y + 3, z + 11), Block16.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 7, y + 3, z + 11), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 3, z + 11), Block14.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 9, y + 3, z + 11), Block16.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(pos.setPos(x + 9, y + 3, z + 11), Block16.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 10, y + 3, z + 11), Blocks.WATER.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 11, y + 3, z + 11), Block5.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 12, y + 3, z + 11), Block5.getDefaultState(), 3);

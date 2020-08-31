@@ -112,14 +112,14 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 
 	private void fillFluidInit() {
 		if (tank.getFluid() != null) {
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 6000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 6000);
+			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 18000);
 		}
 	}
 

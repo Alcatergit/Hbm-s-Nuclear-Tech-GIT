@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
@@ -251,7 +252,7 @@ public class EntityMiniNuke extends Entity implements IProjectile {
         {
             if (!this.world.isRemote)
             {
-    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.fatmanRadius, posX, posY, posZ));
+    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
     	    	
         	    //Perma-baleflare mode if the polaroid's glitched
         	    if(MainRegistry.polaroidID == 11)
@@ -392,7 +393,7 @@ public class EntityMiniNuke extends Entity implements IProjectile {
                         {
                             if (!this.world.isRemote)
                             {
-                    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.fatmanRadius, posX, posY, posZ));
+                    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
                     	    	
                             	if(rand.nextInt(100) == 0)
                             	{

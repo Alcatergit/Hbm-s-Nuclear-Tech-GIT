@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.BreederRecipes;
@@ -22,8 +23,8 @@ import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.special.ItemCell;
-import com.hbm.lib.Library;
 import com.hbm.items.tool.ItemFluidCanister;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import mezz.jei.api.gui.IDrawableStatic;
@@ -52,6 +53,7 @@ public class JeiRecipes {
 	private static List<RefineryRecipe> refineryRecipes = null;
 	private static List<FluidRecipe> fluidEquivalences = null;
 	private static List<BookRecipe> bookRecipes = null;
+	private static List<FusionRecipe> fusionByproducts = null;
 	
 	private static List<ItemStack> batteries = null;
 	private static Map<Integer, List<ItemStack>> reactorFuelMap = new HashMap<Integer, List<ItemStack>>();
@@ -333,6 +335,22 @@ public class JeiRecipes {
 		
 	}
 	
+	public static class FusionRecipe implements IRecipeWrapper {
+		ItemStack input;
+		ItemStack output;
+		
+		public FusionRecipe(Fluid input, ItemStack output) {
+			this.input = ItemFluidIcon.getStack(input);
+			this.output = output;
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+		
+	}
 	
 	
 	
@@ -820,7 +838,7 @@ public class JeiRecipes {
 		alloyFurnaceRecipes = new ArrayList<AlloyFurnaceRecipe>();
 		Map<ItemStack[], ItemStack> recipes = new HashMap<ItemStack[], ItemStack>();
 		
-		if (MainRegistry.enableDebugMode) {
+		if (GeneralConfig.enableDebugMode) {
 			recipes.put(new ItemStack[] { new ItemStack(Items.IRON_INGOT), new ItemStack(Items.QUARTZ) },
 					new ItemStack(Item.getItemFromBlock(ModBlocks.test_render)));
 		}
@@ -1044,6 +1062,15 @@ public class JeiRecipes {
 		}
 		
 		return fluidEquivalences;
+	}
+	
+	public static List<FusionRecipe> getFusionByproducts(){
+		if(fusionByproducts != null)
+			return fusionByproducts;
+		fusionByproducts = new ArrayList<>();
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_xm, new ItemStack(ModItems.powder_chlorophyte)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_bf, new ItemStack(ModItems.powder_balefire)));
+		return fusionByproducts;
 	}
 	
 }

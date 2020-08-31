@@ -62,6 +62,7 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.steam.getName(), new FluidProperties(3, 0 ,0, EnumSymbol.NONE, true, false, false));
 		fluidProperties.put(ModForgeFluids.hotsteam.getName(), new FluidProperties(4, 0 ,0, EnumSymbol.NONE, true, false, false));
 		fluidProperties.put(ModForgeFluids.superhotsteam.getName(), new FluidProperties(4, 0 ,0, EnumSymbol.NONE, true, false, false));
+		fluidProperties.put(ModForgeFluids.ultrahotsteam.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NONE, true, false, false));
 		fluidProperties.put(ModForgeFluids.coolant.getName(), new FluidProperties(1, 0, 0, EnumSymbol.NONE));
 		
 		fluidProperties.put(FluidRegistry.LAVA.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NOWATER, true, false, false));
@@ -113,6 +114,12 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.balefire.getName(), new FluidProperties(4, 4, 3, EnumSymbol.RADIATION, true, true, false));
 		
 		fluidProperties.put(ModForgeFluids.mercury.getName(), new FluidProperties(2, 0, 0, EnumSymbol.NONE));
+		
+		fluidProperties.put(ModForgeFluids.plasma_dt.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, true, false, true));
+		fluidProperties.put(ModForgeFluids.plasma_hd.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, true, false, true));
+		fluidProperties.put(ModForgeFluids.plasma_ht.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, true, false, true));
+		fluidProperties.put(ModForgeFluids.plasma_xm.getName(), new FluidProperties(0, 4, 1, EnumSymbol.RADIATION, true, false, true));
+		fluidProperties.put(ModForgeFluids.plasma_bf.getName(), new FluidProperties(4, 5, 4, EnumSymbol.ANTIMATTER, true, false, true));
 	}
 	
 	public static class FluidProperties {

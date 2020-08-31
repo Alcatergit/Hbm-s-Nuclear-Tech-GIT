@@ -177,22 +177,6 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility{
     		}
     	}
 	}
-	
-	private int getAbility(ItemStack stack) {
-
-    	if(stack.hasTagCompound())
-    		return stack.getTagCompound().getInteger("ability");
-
-    	return 0;
-    }
-
-    private void setAbility(ItemStack stack, int ability) {
-
-    	if(!stack.hasTagCompound())
-    		stack.setTagCompound(new NBTTagCompound());
-
-    	stack.getTagCompound().setInteger("ability", ability);
-    }
 
     protected boolean canOperate(ItemStack stack) {
     	return true;

@@ -3,10 +3,10 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 
 import net.minecraft.block.Block;
@@ -1669,7 +1669,7 @@ public class Relay extends WorldGenerator
 
 		world.setBlockState(pos.setPos(x + 5, y + 1, z + 11), Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, EnumFacing.UP), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 1, z + 12), Blocks.WALL_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, EnumFacing.WEST), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned relay tower at " + x + " " + y +" " + z + "\n");
 		return true;
 

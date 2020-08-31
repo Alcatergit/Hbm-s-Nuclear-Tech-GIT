@@ -54,6 +54,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String FLUIDS = "hbm.fluids";
 	public static final String CRYSTALLIZER = "hbm.crystallizer";
 	public static final String BOOK = "hbm.book_of";
+	public static final String FUSION_BYPRODUCT = "hbm.fusionbyproduct";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -75,6 +76,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crystallizer), CRYSTALLIZER);
 		//This recipe catalyst doesn't work, since the book of is blacklisted.
 		//registry.addRecipeCatalyst(new ItemStack(ModItems.book_of_), BOOK);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.iter), FUSION_BYPRODUCT);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -91,6 +93,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getFluidEquivalences(), FLUIDS);
 		registry.addRecipes(CrystallizerRecipes.getRecipes(), CRYSTALLIZER);
 		registry.addRecipes(JeiRecipes.getBookRecipes(), BOOK);
+		registry.addRecipes(JeiRecipes.getFusionByproducts(), FUSION_BYPRODUCT);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -193,7 +196,8 @@ public class JEIConfig implements IModPlugin {
 				new ShredderRecipeHandler(help),
 				new FluidRecipeHandler(help),
 				new CrystallizerRecipeHandler(help),
-				new BookRecipeHandler(help));
+				new BookRecipeHandler(help),
+				new FusionRecipeHandler(help));
 	}
 
 	@Override

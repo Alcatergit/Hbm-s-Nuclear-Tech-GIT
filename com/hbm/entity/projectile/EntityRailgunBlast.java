@@ -3,6 +3,7 @@ package com.hbm.entity.projectile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.RadiationConfig;
 import com.hbm.entity.logic.EntityBlast;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
@@ -98,7 +99,7 @@ public class EntityRailgunBlast extends Entity implements IChunkLoader {
 
 				EntityTNTPrimed scapegoat = new EntityTNTPrimed(world);
 				world.newExplosion(scapegoat, posX, posY, posZ, 12F, false, true);
-				world.spawnEntity(EntityBlast.statFac(world, posX, posY, posZ, 45, MainRegistry.railgunDamage, 12, 5, false));
+				world.spawnEntity(EntityBlast.statFac(world, posX, posY, posZ, 45, RadiationConfig.railgunDamage, 12, 5, false));
 			}
 			this.setDead();
 			return;

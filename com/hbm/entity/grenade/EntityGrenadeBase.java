@@ -2,6 +2,7 @@ package com.hbm.entity.grenade;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -61,7 +62,7 @@ public abstract class EntityGrenadeBase extends EntityThrowable {
         }
         
         if(!world.isRemote) {
-    		if(MainRegistry.enableExtendedLogging) {
+    		if(GeneralConfig.enableExtendedLogging) {
     			
     			String s = "null";
     			

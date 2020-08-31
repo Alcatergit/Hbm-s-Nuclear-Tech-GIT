@@ -58,7 +58,6 @@ public class MachineCrystallizer extends BlockDummyable {
 			}
 			return true;
 		} else {
-			player.sendMessage(new TextComponentString("" + state.getBlock().getMetaFromState(state)));
 			return false;
 		}
 	}

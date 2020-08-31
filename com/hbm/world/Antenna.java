@@ -3,9 +3,9 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -280,7 +280,7 @@ public class Antenna extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 0, y + 20, z + 2), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 1, y + 20, z + 2), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 2, y + 20, z + 2), Blocks.AIR.getDefaultState(), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned antenna at " + x + " " + y +" " + z + "\n");
 		return true;
 

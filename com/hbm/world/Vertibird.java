@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBattery;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -519,7 +519,7 @@ public class Vertibird extends WorldGenerator
 
 		world.setBlockState(pos.setPos(x + 12, y + 2 - yOffset, z + 1), Blocks.LEVER.getDefaultState().withProperty(BlockLever.POWERED, false).withProperty(BlockLever.FACING, BlockLever.EnumOrientation.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 14, y + 2 - yOffset, z + 1), Blocks.LEVER.getDefaultState().withProperty(BlockLever.POWERED, false).withProperty(BlockLever.FACING, BlockLever.EnumOrientation.SOUTH), 3);
-		if(MainRegistry.enableDebugMode)
+		if(GeneralConfig.enableDebugMode)
 			System.out.print("[Debug] Successfully spawned Vertibird at " + x + " " + y +" " + z + "\n");
 		return true;
 

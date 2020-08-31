@@ -1,6 +1,8 @@
 package com.hbm.blocks.bomb;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.BombConfig;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
@@ -88,10 +90,10 @@ public class NukeGadget extends BlockContainer implements IBomb {
 			
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F); // x,y,z,sound,volume,pitch
 			
-	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.gadgetRadius, x + 0.5, y + 0.5, z + 0.5));
+	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.gadgetRadius, x + 0.5, y + 0.5, z + 0.5));
 
-			if (MainRegistry.enableNukeClouds) {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, MainRegistry.gadgetRadius * 0.005F);
+			if (GeneralConfig.enableNukeClouds) {
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.gadgetRadius * 0.005F);
 				entity2.posX = x;
 				entity2.posY = y;
 				entity2.posZ = z;

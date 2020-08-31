@@ -31,12 +31,13 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 	@Override
 	public <T extends IRecipeWrapper, V> List<T> getRecipeWrappers(IRecipeCategory<T> recipeCategory, IFocus<V> focus) {
 		if(focus.getValue() instanceof ItemStack) {
-			ItemStack stack = (ItemStack) focus.getValue();
+			ItemStack stack = ((ItemStack) focus.getValue()).copy();
+			stack.setCount(1);
 			if(JEIConfig.ASSEMBLY.equals(recipeCategory.getUid())) {
 				if(focus.getMode() == Mode.INPUT) {
 					List<T> list = (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> {
 						for(AStack input : recipe.getValue()) {
-							if(input.isApplicable(stack))
+							if(input.copy().singulize().isApplicable(stack))
 								return true;
 						}
 						return false;

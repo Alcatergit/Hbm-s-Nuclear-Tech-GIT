@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -234,7 +234,7 @@ public class MachineRecipes {
 		if (item == null || item2 == null)
 			return null;
 
-		if (MainRegistry.enableDebugMode) {
+		if (GeneralConfig.enableDebugMode) {
 			if (item.getItem() == Items.IRON_INGOT && item2.getItem() == Items.QUARTZ
 					|| item.getItem() == Items.QUARTZ && item2.getItem() == Items.IRON_INGOT) {
 				return new ItemStack(ModBlocks.test_render, 1);
@@ -467,6 +467,9 @@ public class MachineRecipes {
 			list.add(new ItemStack(ModItems.powder_dura_steel, 1));
 			list.add(new ItemStack(ModItems.powder_fire, 1));
 			break;
+		case BALEFIRE:
+			list.add(new ItemStack(ModItems.egg_balefire_shard, 1));
+			break;
 		default:
 			break;
 		}
@@ -664,6 +667,9 @@ public class MachineRecipes {
 			input[0] = new FluidStack(ModForgeFluids.acid, 100);
 			input[1] = new FluidStack(ModForgeFluids.mercury, 200);
         	break;
+		case BALEFIRE:
+			input[0] = new FluidStack(ModForgeFluids.kerosene, 6000);
+        	break;
 		default:
 			break;
 		}
@@ -793,6 +799,9 @@ public class MachineRecipes {
 		case SATURN:
 			output[0] = new ItemStack(ModItems.ingot_saturnite, 1);
         	break;
+		case BALEFIRE:
+			output[0] = new ItemStack(ModItems.powder_balefire, 1);
+        	break;
 		default:
 			break;
 		}
@@ -913,6 +922,9 @@ public class MachineRecipes {
 		case XENON:
 			output[0] = new FluidStack(ModForgeFluids.xenon, 50);
 			break;
+		case BALEFIRE:
+			output[0] = new FluidStack(ModForgeFluids.balefire, 8000);
+        	break;
 		default:
 			break;
 		}
@@ -929,6 +941,8 @@ public class MachineRecipes {
 			return new Object[] { ModForgeFluids.steam, 50, 5, 100 };
 		} else if (type == ModForgeFluids.superhotsteam) {
 			return new Object[] { ModForgeFluids.hotsteam, 50, 5, 150 };
+		} else if(type == ModForgeFluids.ultrahotsteam){
+			return new Object[] { ModForgeFluids.superhotsteam, 50, 5, 250 };
 		}
 
 		return null;

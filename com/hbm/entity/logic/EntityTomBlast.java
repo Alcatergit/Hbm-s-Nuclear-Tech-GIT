@@ -2,6 +2,7 @@ package com.hbm.entity.logic;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionTom;
 import com.hbm.main.MainRegistry;
@@ -30,7 +31,7 @@ public class EntityTomBlast extends Entity {
     	
         if(!this.did)
         {
-    		if(MainRegistry.enableExtendedLogging && !world.isRemote)
+    		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
     			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized TOM explosion at " + posX + " / " + posY + " / " + posZ + " with strength " + destructionRange + "!");
     		
         	exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);

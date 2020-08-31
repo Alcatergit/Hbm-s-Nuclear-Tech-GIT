@@ -3,13 +3,14 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
-import api.hbm.energy.IRadarDetectable.RadarTargetType;
+import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -35,7 +36,7 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
     	    entity0.speed = MainRegistry.blastSpeed;
     	    entity0.coefficient = 10.0F;*/
     	    	
-    	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.fatmanRadius, posX, posY, posZ));
+    	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
     	    
     	    if(MainRegistry.polaroidID == 11)
     	    	if(rand.nextInt(100) >= 0)

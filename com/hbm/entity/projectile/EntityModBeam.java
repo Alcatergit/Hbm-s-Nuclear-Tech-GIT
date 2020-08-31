@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -10,7 +11,6 @@ import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
@@ -556,8 +556,8 @@ public class EntityModBeam extends Entity implements IProjectile {
     		} else {
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	    		
-	    		this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, MainRegistry.gadgetRadius, posX, posY, posZ));
-	    		this.world.spawnEntity(EntityNukeCloudSmall.statFac(world, posX, posY, posZ, MainRegistry.gadgetRadius));
+	    		this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.gadgetRadius, posX, posY, posZ));
+	    		this.world.spawnEntity(EntityNukeCloudSmall.statFac(world, posX, posY, posZ, BombConfig.gadgetRadius));
     		}
     	}
     }

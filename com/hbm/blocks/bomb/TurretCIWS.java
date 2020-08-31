@@ -2,10 +2,10 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.config.WeaponConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
 
 import net.minecraft.block.material.Material;
@@ -60,7 +60,7 @@ public class TurretCIWS extends TurretBase {
 			
 			if(!world.isRemote) {
 				
-				rayShot(world, vector, x + vector.x * 2.5 + 0.5, y + vector.y * 2.5 + 0.5, z + vector.z * 2.5 + 0.5, 100, 10.0F, MainRegistry.ciwsHitrate);
+				rayShot(world, vector, x + vector.x * 2.5 + 0.5, y + vector.y * 2.5 + 0.5, z + vector.z * 2.5 + 0.5, 100, 10.0F, WeaponConfig.ciwsHitrate);
 				
 				EntityGasFlameFX smoke = new EntityGasFlameFX(world);
 				smoke.posX = x + vector.x * 2.5 + 0.5;

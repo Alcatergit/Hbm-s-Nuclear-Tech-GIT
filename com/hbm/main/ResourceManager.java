@@ -1,9 +1,16 @@
 package com.hbm.main;
 
+import org.lwjgl.opengl.GL20;
+
 import com.hbm.animloader.AnimatedModel;
 import com.hbm.animloader.Animation;
+import com.hbm.config.GeneralConfig;
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
+import com.hbm.render.Vbo;
+import com.hbm.render.WavefrontObjCalllist;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.WavefrontObject;
@@ -27,8 +34,14 @@ public class ResourceManager {
 	public static final IModelCustom reactor_small_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/reactors/reactor_small_base.obj"));
 	public static final IModelCustom reactor_small_rods = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/reactors/reactor_small_rods.obj"));
 
+	//Breeder
+	public static final IModelCustom breeder = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/reactors/breeder.obj"));
+	
 	//ITER
 	public static final IModelCustom iter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/reactors/iter.obj"));
+	
+	//FENSU
+	public static final IModelCustom fensu = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu.obj"));
 	
 	//Turrets
 	public static final IModelCustom turret_heavy_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_heavy_base.obj"));
@@ -81,14 +94,14 @@ public class ResourceManager {
 	public static final IModelCustom missileCarrier = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/missileCarrier.obj"));
 	public static final IModelCustom missileBooster = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/missileBooster.obj"));
 	public static final IModelCustom minerRocket = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/minerRocket.obj"));
-	public static final IModelCustom soyuz = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/soyuz.obj"));
+	public static IModelCustom soyuz = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/soyuz.obj"));
 	public static final IModelCustom soyuz_lander = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/soyuz_lander.obj"));
-	public static final IModelCustom soyuz_launcher_legs = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_legs.obj"));
-	public static final IModelCustom soyuz_launcher_table = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_table.obj"));
-	public static final IModelCustom soyuz_launcher_tower_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_tower_base.obj"));
-	public static final IModelCustom soyuz_launcher_tower = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_tower.obj"));
-	public static final IModelCustom soyuz_launcher_support_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support_base.obj"));
-	public static final IModelCustom soyuz_launcher_support = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support.obj"));
+	public static IModelCustom soyuz_launcher_legs = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_legs.obj"));
+	public static IModelCustom soyuz_launcher_table = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_table.obj"));
+	public static IModelCustom soyuz_launcher_tower_base = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_tower_base.obj"));
+	public static IModelCustom soyuz_launcher_tower = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_tower.obj"));
+	public static IModelCustom soyuz_launcher_support_base = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support_base.obj"));
+	public static IModelCustom soyuz_launcher_support = new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support.obj"));
 	
 	//Boxcar
 	public static final IModelCustom boxcar = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/boxcar.obj"));
@@ -184,6 +197,9 @@ public class ResourceManager {
 	//Turbofan
 	public static final IModelCustom turbofan_body = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turbofan_body.obj"));
 	public static final IModelCustom turbofan_blades = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turbofan_blades.obj"));
+	
+	//Large Turbine
+	public static final IModelCustom turbine = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/turbine.obj"));
 	
 	//Bombs
 	public static final IModelCustom bomb_solinium = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/ufp.obj"));
@@ -286,6 +302,13 @@ public class ResourceManager {
 		public static final ResourceLocation iter_solenoid = new ResourceLocation(RefStrings.MODID, "textures/models/iter/solenoid.png");
 		public static final ResourceLocation iter_toroidal = new ResourceLocation(RefStrings.MODID, "textures/models/iter/toroidal.png");
 		public static final ResourceLocation iter_torus = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus.png");
+		public static final ResourceLocation iter_torus_tungsten = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus_tungsten.png");
+		public static final ResourceLocation iter_torus_desh = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus_desh.png");
+		public static final ResourceLocation iter_torus_chlorophyte = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus_chlorophyte.png");
+		public static final ResourceLocation iter_torus_vaporwave = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus_vaporwave.png");
+		
+		//FENSU
+		public static final ResourceLocation fensu_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu.png");
 		
 		//Forcefield
 		public static final IModelCustom forcefield_top = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/forcefield_top.obj"));
@@ -334,9 +357,12 @@ public class ResourceManager {
 	public static final ResourceLocation pumpjack_head_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack_head.png");
 	public static final ResourceLocation pumpjack_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack_rotor.png");
 	
-	//Pumpjack
+	//Turbofan
 	public static final ResourceLocation turbofan_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turbofan_body.png");
 	public static final ResourceLocation turbofan_blades_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turbofan_blades.png");
+	
+	//Large Turbine
+	public static final ResourceLocation turbine_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/turbine.png");
 	
 	//Selenium Engine
 	public static final ResourceLocation selenium_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/selenium_engine_body.png");
@@ -391,6 +417,9 @@ public class ResourceManager {
 	//Small Reactor
 	public static final ResourceLocation reactor_small_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/reactor_small_base.png");
 	public static final ResourceLocation reactor_small_rods_tex = new ResourceLocation(RefStrings.MODID, "textures/models/reactor_small_rods.png");
+	
+	//Breeder
+	public static final ResourceLocation breeder_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/breeder.png");
 	
 	//Radar
 	public static final ResourceLocation radar_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/radar_base.png");
@@ -448,6 +477,8 @@ public class ResourceManager {
 	public static final ResourceLocation taintcrab_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/taintcrab.png");
 	public static final ResourceLocation maskman_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/maskman.png");
 	
+	public static final ResourceLocation iou = new ResourceLocation(RefStrings.MODID, "textures/entity/iou.png");
+	
 	////Obj Items
 	
 	//Shimmer Sledge
@@ -459,6 +490,7 @@ public class ResourceManager {
 	public static final ResourceLocation shimmer_axe_tex = new ResourceLocation(RefStrings.MODID, "textures/models/shimmer_axe.png");
 	public static final ResourceLocation stopsign_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/stopsign.png");
 	public static final ResourceLocation sopsign_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/sopsign.png");
+	public static final ResourceLocation chernobylsign_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/chernobylsign.png");
 	
 	public static final ResourceLocation brimstone_tex = new ResourceLocation(RefStrings.MODID, "textures/models/brimstone.png");
 	public static final ResourceLocation hk69_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/hk69.png");
@@ -756,11 +788,45 @@ public class ResourceManager {
 	public static final IModelCustom railgun_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/railgun_rotor.obj"));
 	public static final IModelCustom railgun_main = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/railgun_main.obj"));	
 	
+	//Debug
+	public static final ResourceLocation uv_debug = new ResourceLocation(RefStrings.MODID, "textures/misc/uv_debug.png");
+	
 	//ANIMATIONS
 	public static AnimatedModel supershotgun;
 	public static Animation ssg_reload;
 	
+	//SHADERS
+	public static Shader lit_particles = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lit_particles"))
+			.withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, HbmShaderManager2.LIGHTMAP);
+	
+	public static Shader gpu_particle_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_render"))
+			.withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, shader -> {
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData0"), 2);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData1"), 3);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData2"), 4);
+				GL20.glUniform4f(GL20.glGetUniformLocation(shader, "particleTypeTexCoords[0]"), ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMinV(), ModEventHandlerClient.contrail.getMaxU()-ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMaxV()-ModEventHandlerClient.contrail.getMinV());
+			});
+	
+	public static Shader gpu_particle_udpate = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_update"))
+			.withUniforms(shader -> {
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData0"), 2);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData1"), 3);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData2"), 4);
+			});
+	
+	public static final Vbo test = Vbo.setupTestVbo();
+	
 	public static void init(){
+		if(GeneralConfig.callListModels){
+			soyuz = new WavefrontObjCalllist((WavefrontObject)soyuz);
+			soyuz_launcher_legs = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_legs);
+			soyuz_launcher_table = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_table);
+			soyuz_launcher_tower_base = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_tower_base);
+			soyuz_launcher_tower = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_tower);
+			soyuz_launcher_support_base = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_support_base);
+			soyuz_launcher_support = new WavefrontObjCalllist((WavefrontObject)soyuz_launcher_support);
+		}
 	}
 
 	

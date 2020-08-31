@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.lib.Library;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSwordAbilityPower extends ItemSwordAbility {
+public class ItemSwordAbilityPower extends ItemSwordAbility implements IBatteryItem {
 
 	public long maxPower = 1;
 	public long chargeRate;
@@ -25,6 +26,7 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
 		this.setMaxDamage(1);
 	}
 	
+	@Override
 	public void chargeBattery(ItemStack stack, long i) {
     	if(stack.getItem() instanceof ItemSwordAbilityPower) {
     		if(stack.hasTagCompound()) {
@@ -36,6 +38,7 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
     	}
     }
 
+	@Override
     public void setCharge(ItemStack stack, long i) {
     	if(stack.getItem() instanceof ItemSwordAbilityPower) {
     		if(stack.hasTagCompound()) {
@@ -47,6 +50,7 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
     	}
     }
 
+	@Override
     public void dischargeBattery(ItemStack stack, long i) {
     	if(stack.getItem() instanceof ItemSwordAbilityPower) {
     		if(stack.hasTagCompound()) {
@@ -61,7 +65,8 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
     	}
     }
 
-    public static long getCharge(ItemStack stack) {
+	@Override
+    public long getCharge(ItemStack stack) {
     	if(stack.getItem() instanceof ItemSwordAbilityPower) {
     		if(stack.hasTagCompound()) {
     			return stack.getTagCompound().getLong("charge");
@@ -74,6 +79,11 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
 
     	return 0;
     }
+    
+    @Override
+	public long getDischargeRate() {
+		return 0;
+	}
     
     @Override
     @SideOnly(Side.CLIENT)
@@ -97,18 +107,16 @@ public class ItemSwordAbilityPower extends ItemSwordAbility {
     	return getCharge(stack) >= this.consumption;
     }
     
+    @Override
     public long getMaxCharge() {
     	return maxPower;
     }
 
+    @Override
     public long getChargeRate() {
     	return chargeRate;
     }
 
-    public static long getMaxChargeStatic(ItemStack stack) {
-    	return ((ItemSwordAbilityPower)stack.getItem()).maxPower;
-    }
-    
     @Override
     public void setDamage(ItemStack stack, int damage) {
     	this.dischargeBattery(stack, damage * consumption);
