@@ -37,7 +37,7 @@ public class FluidTankPacket implements IMessage {
 		this.length = tanks.length;
 	}
 	
-	public FluidTankPacket(BlockPos pos, FluidTank[] tanks){
+	public FluidTankPacket(BlockPos pos, FluidTank... tanks){
 		this(pos.getX(), pos.getY(), pos.getZ(), tanks);
 	}
 

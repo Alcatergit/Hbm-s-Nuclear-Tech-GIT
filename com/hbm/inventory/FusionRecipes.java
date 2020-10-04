@@ -9,17 +9,29 @@ import net.minecraftforge.fluids.Fluid;
 public class FusionRecipes {
 
 	public static int getByproductChance(Fluid plasma) {
-		if(plasma == ModForgeFluids.plasma_xm){
-			return 3 * 60 * 20; 
+		if(plasma == ModForgeFluids.plasma_dt){
+			return 1200; 
+		} else if(plasma == ModForgeFluids.plasma_hd){
+			return 1200;
+		} else if(plasma == ModForgeFluids.plasma_ht){
+			return 1200;
+		} else if(plasma == ModForgeFluids.plasma_xm){
+			return 3600;
 		} else if(plasma == ModForgeFluids.plasma_bf){
-			return 10 * 60 * 20;
+			return 1200;
 		}
 		return 0;
 	}
 
 	public static ItemStack getByproduct(Fluid plasma) {
-		if(plasma == ModForgeFluids.plasma_xm){
-			return new ItemStack(ModItems.powder_chlorophyte); 
+		if(plasma == ModForgeFluids.plasma_dt){
+			return new ItemStack(ModItems.pellet_charged); 
+		} else if(plasma == ModForgeFluids.plasma_hd){
+			return new ItemStack(ModItems.pellet_charged);
+		} else if(plasma == ModForgeFluids.plasma_ht){
+			return new ItemStack(ModItems.pellet_charged);
+		} else if(plasma == ModForgeFluids.plasma_xm){
+			return new ItemStack(ModItems.powder_chlorophyte);
 		} else if(plasma == ModForgeFluids.plasma_bf){
 			return new ItemStack(ModItems.powder_balefire);
 		}

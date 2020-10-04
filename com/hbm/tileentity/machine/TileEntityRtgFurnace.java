@@ -59,11 +59,12 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 
 	public boolean isLoaded() {
 
-		if(inventory.getStackInSlot(1).getItem() == ModItems.pellet_rtg && inventory.getStackInSlot(2).getItem() == ModItems.pellet_rtg && inventory.getStackInSlot(3).getItem() == ModItems.pellet_rtg) {
-			return true;
+		for(int i = 1; i <= 3; i++) {
+			if(!(!inventory.getStackInSlot(i).isEmpty() && (inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg || inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_polonium)))
+				return false;
 		}
 
-		return false;
+		return true;
 	}
 	
 	@Override

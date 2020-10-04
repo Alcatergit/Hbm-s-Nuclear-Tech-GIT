@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class CyclotronRecipeHandler implements IRecipeCategory<CyclotronRecipe> {
 
+	//TODO remake this to fit new cyclotron.
 	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_cyclotron.png");
 	
 	protected final IDrawable background;

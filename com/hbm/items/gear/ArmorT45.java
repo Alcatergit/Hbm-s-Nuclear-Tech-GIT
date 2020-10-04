@@ -3,8 +3,8 @@ package com.hbm.items.gear;
 import java.util.List;
 
 import com.hbm.handler.ArmorUtil;
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelT45Boots;
 import com.hbm.render.model.ModelT45Chest;
@@ -31,6 +31,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@Spaghetti("kill it")
 public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 
 	@SideOnly(Side.CLIENT)
@@ -160,6 +161,7 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 			stack.damageItem(damage * 1, entity);
 	}
 	
+	//TODO: cleanse this filth with holy fire once it's time to overhaul armors
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack armor) {
 		if (armor.getItem() == ModItems.t45_plate) {
@@ -219,9 +221,9 @@ public class ArmorT45 extends ItemArmor implements ISpecialArmor {
 		if (stack.getItem() == ModItems.t45_plate) {
 			if (stack.getTagCompound() != null) {
 				if (stack.getTagCompound().getInteger("charge") != 0)
-					list.add("Charge: " + (stack.getTagCompound().getInteger("charge") / 2000 + 1) + "%");
+					list.add("Charge: " + (stack.getTagCompound().getInteger("charge") / 200000 + 1) + "%");
 				else
-					list.add("Charge: " + (stack.getTagCompound().getInteger("charge") / 2000) + "%");
+					list.add("Charge: " + (stack.getTagCompound().getInteger("charge") / 200000) + "%");
 			}
 		}
 	}

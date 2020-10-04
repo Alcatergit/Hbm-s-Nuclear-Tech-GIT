@@ -2,10 +2,10 @@ package com.hbm.particle.bfg;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -45,8 +45,8 @@ public class ParticleBFGPrefire extends Particle {
 		float timeScale = this.particleAge/(float)this.particleMaxAge;
 		
 		this.prevAlpha = particleAlpha;
-		this.particleAlpha = MathHelper.clamp(1-Library.remap((float)MathHelper.clamp(timeScale, 0.4, 1), 0.4F, 1F, 0F, 1F), 0, 1);
-		this.particleAlpha *= MathHelper.clamp(Library.remap((float)MathHelper.clamp(timeScale, 0, 0.4), 0F, 0.4F, 0F, 1.1F), 0, 1);
+		this.particleAlpha = MathHelper.clamp(1-BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0.4, 1), 0.4F, 1F, 0F, 1F), 0, 1);
+		this.particleAlpha *= MathHelper.clamp(BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0, 0.4), 0F, 0.4F, 0F, 1.1F), 0, 1);
 		this.particleAlpha *= 0.5;
 	}
 	

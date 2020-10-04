@@ -32,8 +32,8 @@ public class GunB92Cell extends Item {
 					if(p > 1) {
 						setPower(player.inventory.mainInventory.get(j), p - 1);
 						setPower(stack, getPower(stack) + 1);
-						if(getPower(stack) == 25)
-							stack.setItemDamage(1);
+						//if(getPower(stack) == 25)
+							//stack.setItemDamage(1);
 						return;
 					}
 				}
@@ -72,7 +72,7 @@ public class GunB92Cell extends Item {
 	}
 	
 	public static ItemStack getFullCell() {
-		ItemStack stack = new ItemStack(ModItems.gun_b92_ammo, 1, 1);
+		ItemStack stack = new ItemStack(ModItems.gun_b92_ammo, 1, 0);
 		setPower(stack, 25);
 		return stack.copy();
 	}

@@ -74,7 +74,6 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			Tessellator.getInstance().draw();
 
 			if(isValidFluidForTank(4, 0))
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 4, 5);

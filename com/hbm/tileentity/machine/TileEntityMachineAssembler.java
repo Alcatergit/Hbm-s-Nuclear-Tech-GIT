@@ -178,7 +178,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 			} else
 				progress = 0;
 
-			int meta = world.getBlockState(pos).getValue(MachineAssembler.FACING);
+			int meta = this.getBlockMetadata();
 			TileEntity te = null;
 			TileEntity te2 = null;
 			if(meta == 2) {

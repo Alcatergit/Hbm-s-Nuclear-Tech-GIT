@@ -71,7 +71,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob {
 		
 		if(rand.nextInt(15) == 0)
 		{
-			if(!world.isRemote)
+			if(!world.isRemote && !this.isDying)
 			{
 				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 5F, true);
 				this.dropDamageItem();

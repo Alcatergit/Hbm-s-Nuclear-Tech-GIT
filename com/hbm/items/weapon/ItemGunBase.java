@@ -16,6 +16,8 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunButtonPacket;
+import com.hbm.packet.GunFXPacket;
+import com.hbm.packet.GunFXPacket.FXType;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
@@ -36,6 +38,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -282,6 +285,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 		
 		if(this.mainConfig.animations.containsKey(AnimType.CYCLE) && player instanceof EntityPlayerMP)
 			PacketDispatcher.wrapper.sendTo(new GunAnimationPacket(AnimType.CYCLE.ordinal(), hand), (EntityPlayerMP) player);
+		PacketDispatcher.wrapper.sendToAllTracking(new GunFXPacket(player, hand, FXType.FIRE), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 1));
 	}
 
 	// called on click (server side, called by mouse packet)
@@ -534,6 +538,10 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 				player.inventoryContainer.detectAndSendChanges();
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void onFireClient(ItemStack stack, EntityPlayer player, boolean shouldDoThirdPerson){
 	}
 
 	/// sets reload cycle to config defult ///

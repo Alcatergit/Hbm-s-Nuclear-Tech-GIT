@@ -49,7 +49,7 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			
 			@Override
 			public boolean isItemValid(int slot, ItemStack itemStack) {
-				if(itemStack != null && (itemStack.getItem() == ModItems.pellet_rtg || itemStack.getItem() == ModItems.pellet_rtg_weak))
+				if(itemStack != null && (itemStack.getItem() == ModItems.pellet_rtg || itemStack.getItem() == ModItems.pellet_rtg_weak || itemStack.getItem() == ModItems.pellet_rtg_polonium))
 					return true;
 				return false;
 			}
@@ -83,8 +83,13 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 						heat += 5;
 					if(inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_weak)
 						heat += 3;
+					if(inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_polonium)
+						heat += 25;
 				}
 			}
+			
+			if(heat > heatMax)
+				heat = heatMax;
 			
 			power += heat;
 			if(power > powerMax)

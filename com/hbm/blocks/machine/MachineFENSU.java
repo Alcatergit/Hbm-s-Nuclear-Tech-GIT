@@ -1,6 +1,6 @@
 package com.hbm.blocks.machine;
 
-import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.BlockDummyableMBB;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineFENSU;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class MachineFENSU extends BlockDummyable {
+public class MachineFENSU extends BlockDummyableMBB {
 
 	public MachineFENSU(Material materialIn, String s) {
 		super(materialIn, s);

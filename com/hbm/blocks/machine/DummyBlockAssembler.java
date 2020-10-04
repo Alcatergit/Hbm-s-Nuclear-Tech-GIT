@@ -96,10 +96,9 @@ public class DummyBlockAssembler extends BlockContainer implements IDummy {
 		if(world.isRemote)
 		{
 			return true;
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te != null && te instanceof TileEntityDummy) {
+    		if(te instanceof TileEntityDummy) {
     			
     			TileEntityMachineAssembler entity = (TileEntityMachineAssembler) world.getTileEntity(((TileEntityDummy)te).target);
     			if(entity != null)

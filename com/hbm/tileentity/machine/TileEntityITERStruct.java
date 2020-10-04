@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -153,7 +154,6 @@ public class TileEntityITERStruct extends TileEntity implements ITickable {
 
 					int b = layout[ly][x][z];
 					Block block = world.getBlockState(new BlockPos(pos.getX() + x - width, pos.getY() + y, pos.getZ() + z - width)).getBlock();
-
 					switch(b) {
 					case 1: if(block != ModBlocks.fusion_conductor) { return; } break;
 					case 2: if(block != ModBlocks.fusion_center) { return; } break;

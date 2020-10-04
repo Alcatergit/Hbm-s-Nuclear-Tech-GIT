@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.hbm.interfaces.IFluidPipeMk2;
+import com.hbm.tileentity.TileEntityProxyCombo;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -50,8 +51,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 			if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
 				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0)
+				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0){
 					handlers.add(h);
+				}
 			}
 		}
 		

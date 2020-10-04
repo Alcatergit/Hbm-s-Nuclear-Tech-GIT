@@ -15,6 +15,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -378,7 +379,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			}
 		} else if(b == ModBlocks.machine_reactor) {
 
-			int[] pos1 = ((MachineReactor)ModBlocks.machine_reactor).findCore(world, pos.getX(), pos.getY(), pos.getZ());
+			int[] pos1 = ((MachineReactor) ModBlocks.machine_reactor).findCore(world, pos.getX(), pos.getY(), pos.getZ());
 
 			if(pos1 != null) {
 
@@ -386,11 +387,11 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 				if(tile instanceof TileEntityMachineReactor) {
 
-					TileEntityMachineReactor reactor = (TileEntityMachineReactor)tile;
+					TileEntityMachineReactor reactor = (TileEntityMachineReactor) tile;
 
 					if(reactor.charge <= 1 && this.hullHeat > 0) {
 						reactor.charge = 1;
-						reactor.heat = (int)Math.floor(hullHeat * 4 / maxHullHeat) + 1;
+						reactor.heat = (int) Math.floor(hullHeat * 4 / maxHullHeat) + 1;
 					}
 				}
 			}
@@ -794,4 +795,13 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		if(mark)
 			markDirty();
 	}
+
+	public boolean isSubmerged() {
+
+		return world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER &&
+				world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER &&
+				world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER &&
+				world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;
+	}
+
 }

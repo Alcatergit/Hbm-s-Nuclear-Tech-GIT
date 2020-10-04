@@ -1,5 +1,9 @@
 package com.hbm.lib;
 
+import org.lwjgl.opengl.GL11;
+
+import com.hbm.blocks.BlockDummyable;
+
 import net.minecraft.util.EnumFacing;
 
 public enum ForgeDirection {
@@ -75,5 +79,19 @@ public enum ForgeDirection {
     
     public EnumFacing toEnumFacing(){
     	return EnumFacing.values()[ordinal()];
+    }
+    
+    public float getRotationDegrees(){
+    	switch(this.ordinal()) {
+		case 2: return 0;
+		case 4: return 90;
+		case 3: return 180;
+		case 5: return 270;
+		default: return 0;
+		}
+    }
+    
+    public float getRotationRadians(){
+    	return (float) Math.toRadians(getRotationDegrees());
     }
 }

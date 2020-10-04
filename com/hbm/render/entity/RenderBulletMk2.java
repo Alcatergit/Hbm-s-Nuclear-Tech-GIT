@@ -53,6 +53,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ResourceLocation rocket_sl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketSleek.png");
 	private ResourceLocation rocket_nu = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketNuclear.png");
 	private ResourceLocation rocket_phos = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketPhosphorus.png");
+	private ResourceLocation rocket_can = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketCanister.png");
 	private ResourceLocation grenade_rl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenade.png");
 	private ResourceLocation grenade_he = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeHE.png");
 	private ResourceLocation grenade_in = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeIncendiary.png");
@@ -93,7 +94,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			renderBullet(trail);
 			break;
 		case BulletConfiguration.STYLE_BOLT:
-			renderDart(trail);
+			renderDart(trail, bullet.getEntityId());
 			break;
 		case BulletConfiguration.STYLE_FLECHETTE:
 			renderFlechette();
@@ -182,6 +183,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			break;
 		case 9:
 			bindTexture(rocket_phos);
+			break;
+		case 10:
+			bindTexture(rocket_can);
 			break;
 		}
 
@@ -313,7 +317,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		GL11.glPopMatrix();
 	}
 	
-	private void renderDart(int style) {
+	private void renderDart(int style, int eID) {
 		
 		
 		float red = 1F;
@@ -323,6 +327,12 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		case BulletConfiguration.BOLT_LASER: red = 1F; green = 0F; blue = 0F; break;
 		case BulletConfiguration.BOLT_NIGHTMARE: red = 1F; green = 1F; blue = 0F; break;
 		case BulletConfiguration.BOLT_LACUNAE: red = 0.25F; green = 0F; blue = 0.75F; break;
+		case BulletConfiguration.BOLT_ZOMG:
+			Random rand = new Random(eID * eID);
+			red = rand.nextInt(2) * 0.8F;
+			green = rand.nextInt(2) * 0.8F;
+			blue = rand.nextInt(2) * 0.8F;
+			break;
 		}
 		
 		GL11.glPushMatrix();

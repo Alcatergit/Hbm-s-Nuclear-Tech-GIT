@@ -21,9 +21,9 @@ import org.lwjgl.opengl.GLContext;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.Spaghetti;
-import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -399,7 +399,7 @@ public class HbmShaderManager {
 	public static void useDissolveShader(float amount){
 		useShader2(dissolve);
 		amount = MathHelper.clamp(amount, 0.0F, 1.0F);
-		amount = Library.remap(amount, 0.0F, 1.0F, 0.34F, 0.7F);
+		amount = BobMathUtil.remap(amount, 0.0F, 1.0F, 0.34F, 0.7F);
 		GL20.glUniform1f(GL20.glGetUniformLocation(dissolve, "amount"), amount);
 		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, noise1);

@@ -22,7 +22,7 @@ public class RenderPlasmaMultiblock extends TileEntitySpecialRenderer<TileEntity
 	public void render(TileEntityPlasmaStruct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F+1, (float)y-1, (float)z + 0.5F);
 
 		switch(te.getBlockMetadata()) {
 		case 2: GL11.glRotatef(270, 0F, 1F, 0F); break;

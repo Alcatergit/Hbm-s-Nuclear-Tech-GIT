@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.MachineITER;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IConsumer;
@@ -108,7 +109,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
 					int chance = FusionRecipes.getByproductChance(plasmaType);
 
-					if(chance > 0 && world.rand.nextInt() == 0)
+					if(chance > 0 && world.rand.nextInt(chance) == 0)
 						produceByproduct();
 				}
 
@@ -242,7 +243,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	public int getShield() {
 
 		if(inventory.getStackInSlot(3).isEmpty() || !(inventory.getStackInSlot(3).getItem() instanceof ItemFusionShield))
-			return 273;
+			return 0;
 
 		return ((ItemFusionShield) inventory.getStackInSlot(3).getItem()).maxTemp;
 	}
@@ -304,6 +305,8 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	}
 
 	public void disassemble() {
+		
+		MachineITER.drop = false;
 
 		int[][][] layout = TileEntityITERStruct.layout;
 
@@ -339,6 +342,8 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		}
 
 		world.setBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ()), ModBlocks.struct_iter_core.getDefaultState());
+		
+		MachineITER.drop = true;
 	}
 
 	@Override

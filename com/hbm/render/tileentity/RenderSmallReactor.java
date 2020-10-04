@@ -5,8 +5,13 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class RenderSmallReactor extends TileEntitySpecialRenderer<TileEntityMachineReactorSmall>{
 	
@@ -27,9 +32,70 @@ public class RenderSmallReactor extends TileEntitySpecialRenderer<TileEntityMach
         bindTexture(ResourceManager.reactor_small_base_tex);
         ResourceManager.reactor_small_base.renderAll();
         
+        
+        GL11.glPushMatrix();
         GL11.glTranslated(0.0D, reactor.rods / 100D, 0.0D);
         bindTexture(ResourceManager.reactor_small_rods_tex);
         ResourceManager.reactor_small_rods.renderAll();
+
+        GL11.glPopMatrix();
+        if(reactor.coreHeat > 0 && reactor.isSubmerged()) {
+
+	        GlStateManager.disableTexture2D();
+	        GlStateManager.enableBlend();
+	        GlStateManager.disableLighting();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+	        GlStateManager.disableAlpha();
+
+	        Tessellator tess = Tessellator.getInstance();
+	        BufferBuilder buf = tess.getBuffer();
+
+	        for(double d = 0.285; d < 0.7; d += 0.025) {
+
+		        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+		        double top = 1.375;
+		        double bottom = 1.375;
+
+		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+
+		        tess.draw();
+	        }
+
+	        GlStateManager.enableLighting();
+	        GlStateManager.disableBlend();
+	        GlStateManager.enableTexture2D();
+        }
+
+        GlStateManager.enableCull();
 
         GL11.glPopMatrix();
 	}

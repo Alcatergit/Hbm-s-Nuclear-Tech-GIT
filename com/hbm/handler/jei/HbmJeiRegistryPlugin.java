@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -16,6 +17,7 @@ import mezz.jei.api.recipe.IFocus.Mode;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeRegistryPlugin;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
@@ -35,6 +37,9 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 			stack.setCount(1);
 			if(JEIConfig.ASSEMBLY.equals(recipeCategory.getUid())) {
 				if(focus.getMode() == Mode.INPUT) {
+					if(stack.getItem() == Item.getItemFromBlock(ModBlocks.machine_assembler)){
+						return getRecipeWrappers(recipeCategory);
+					}
 					List<T> list = (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> {
 						for(AStack input : recipe.getValue()) {
 							if(input.copy().singulize().isApplicable(stack))
@@ -55,6 +60,7 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 	@Override
 	public <T extends IRecipeWrapper> List<T> getRecipeWrappers(IRecipeCategory<T> recipeCategory) {
 		if(recipeCategory.getUid().equals(JEIConfig.ASSEMBLY)) {
+			
 			return (List<T>) AssemblerRecipes.recipes.entrySet().stream().map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.Library;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.math.MathHelper;
@@ -69,7 +69,7 @@ public class AnimatedModel {
 		if(activeAnim.reverse)
 			diff = activeAnim.anim.length - diff;
 		diff *= activeAnim.speedScale;
-		float remappedTime = MathHelper.clamp(Library.remap(diff, 0, activeAnim.anim.length, 0, numKeyFrames - 1), 0, numKeyFrames - 1);
+		float remappedTime = MathHelper.clamp(BobMathUtil.remap(diff, 0, activeAnim.anim.length, 0, numKeyFrames - 1), 0, numKeyFrames - 1);
 		int index = (int) remappedTime;
 		int first = index;
 		int next;

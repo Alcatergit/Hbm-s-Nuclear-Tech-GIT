@@ -33,6 +33,7 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AssemblerRecipeSyncPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.PlayerInformPacket;
 import com.hbm.packet.RadSurveyPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
@@ -62,6 +63,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -679,6 +681,7 @@ public class ModEventHandler {
 
 		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
 
+			/// FSB ARMOR START ///
 			ItemStack helmet = player.inventory.armorInventory.get(3);
 			ItemStack plate = player.inventory.armorInventory.get(2);
 			ItemStack legs = player.inventory.armorInventory.get(1);
@@ -703,9 +706,23 @@ public class ModEventHandler {
 					}
 				}
 			}
-		}
+			/// FSB ARMOR END ///
+			
+			/// BETA HEALTH START ///
+			if(player.getUniqueID().toString().equals(Library.Dr_Nostalgia)) {
+				if(player.getFoodStats().getFoodLevel() < 10) {
+					player.getFoodStats().setFoodLevel(10);
+				}
 
-		//TODO: rewrite this so it doesn't look like shit
+				if(player.getFoodStats().getFoodLevel() > 10) {
+					player.heal(player.getFoodStats().getFoodLevel() - 10);
+					player.getFoodStats().setFoodLevel(10);
+				}
+			}
+			/// BETA HEALTH END ///
+		}
+		
+
 		if(player.world.isRemote && event.phase == Phase.START && !player.isInvisible() && !player.isSneaking()) {
 
 			if(player.getUniqueID().toString().equals(Library.HbMinecraft)) {
@@ -713,44 +730,13 @@ public class ModEventHandler {
 				int i = player.ticksExisted * 3;
 
 				Vec3 vec = Vec3.createVectorHelper(3, 0, 0);
+				
 				vec.rotateAroundY((float) (i * Math.PI / 180D));
+				for(int k = 0; k < 5; k++) {
 
-				NBTTagCompound p1 = new NBTTagCompound();
-				p1.setString("type", "vanillaExt");
-				p1.setString("mode", "reddust");
-				p1.setDouble("posX", player.posX + vec.xCoord);
-				p1.setDouble("posY", player.posY + 1.5);
-				p1.setDouble("posZ", player.posZ + vec.zCoord);
-				p1.setDouble("mX", 51F / 256F);
-				p1.setDouble("mY", 64F / 256F);
-				p1.setDouble("mZ", 119F / 256F);
-				MainRegistry.proxy.effectNT(p1);
-
-				vec.rotateAroundY((float) (Math.PI * 2D / 3D));
-
-				NBTTagCompound p2 = new NBTTagCompound();
-				p2.setString("type", "vanillaExt");
-				p2.setString("mode", "reddust");
-				p2.setDouble("posX", player.posX + vec.xCoord);
-				p2.setDouble("posY", player.posY + 1.5);
-				p2.setDouble("posZ", player.posZ + vec.zCoord);
-				p2.setDouble("mX", 106F / 256F);
-				p2.setDouble("mY", 41F / 256F);
-				p2.setDouble("mZ", 143F / 256F);
-				MainRegistry.proxy.effectNT(p2);
-
-				vec.rotateAroundY((float) (Math.PI * 2D / 3D));
-
-				NBTTagCompound p3 = new NBTTagCompound();
-				p3.setString("type", "vanillaExt");
-				p3.setString("mode", "reddust");
-				p3.setDouble("posX", player.posX + vec.xCoord);
-				p3.setDouble("posY", player.posY + 1.5);
-				p3.setDouble("posZ", player.posZ + vec.zCoord);
-				p3.setDouble("mX", 223F / 256F);
-				p3.setDouble("mY", 55F / 256F);
-				p3.setDouble("mZ", 149F / 256F);
-				MainRegistry.proxy.effectNT(p3);
+					vec.rotateAroundY((float) (1F * Math.PI / 180D));
+					player.world.spawnParticle(EnumParticleTypes.TOWN_AURA, player.posX + vec.xCoord, player.posY + 1 + player.world.rand.nextDouble() * 0.05, player.posZ + vec.zCoord, 0.0, 0.0, 0.0);
+				}
 			}
 		}
 	}
@@ -793,6 +779,9 @@ public class ModEventHandler {
 			if(VersionChecker.newVersion) {
 				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "New version " + VersionChecker.versionNumber + " is available!"));
 			}
+			
+			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))
+        		PacketDispatcher.wrapper.sendTo(new PlayerInformPacket("Press O to Duck!"), (EntityPlayerMP)e.player);
 		}
 	}
 

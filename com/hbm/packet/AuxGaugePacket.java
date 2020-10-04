@@ -6,7 +6,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
-import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeN45;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
@@ -31,6 +30,7 @@ import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
+import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
 
 import io.netty.buffer.ByteBuf;
@@ -280,6 +280,8 @@ public class AuxGaugePacket implements IMessage {
 							core.heatMultiplier = m.value;
 						else if(m.id == 5)
 							core.heat = m.value;
+					} else if(te instanceof TileEntitySlidingBlastDoor){
+						((TileEntitySlidingBlastDoor) te).shouldUseBB = m.value == 1 ? true : false;
 					}
 				} catch(Exception x) {
 				}

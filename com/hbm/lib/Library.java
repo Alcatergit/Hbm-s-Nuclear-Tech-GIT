@@ -2,32 +2,29 @@ package com.hbm.lib;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
-import com.hbm.capability.RadiationCapability;
 import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.capability.RadiationCapability.IEntityRadioactive;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
-import com.hbm.explosion.ExplosionNukeGeneric;
-import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.interfaces.IConductor;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemToolAbilityPower;
-import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityCableSwitch;
@@ -44,8 +41,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -58,9 +53,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -127,7 +123,7 @@ public class Library {
 
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
 		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c), false, true, true);
-		return pos != null;
+		return pos != null && pos.typeOfHit != Type.MISS;
 	}
 
 	public static String getShortNumber(long l) {
@@ -312,13 +308,22 @@ public class Library {
 		return entity;
 	}
 
-	public static RayTraceResult rayTrace(EntityPlayer player, double d, float f) {
-		Vec3d vec3 = getPosition(f, player);
+	public static RayTraceResult rayTrace(EntityPlayer player, double length, float interpolation) {
+		Vec3d vec3 = getPosition(interpolation, player);
 		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
-		Vec3d vec31 = player.getLook(f);
-		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
+		Vec3d vec31 = player.getLook(interpolation);
+		Vec3d vec32 = vec3.addVector(vec31.x * length, vec31.y * length, vec31.z * length);
 		return player.world.rayTraceBlocks(vec3, vec32, false, false, true);
 	}
+	
+	public static RayTraceResult rayTrace(EntityPlayer player, double length, float interpolation, boolean b1, boolean b2, boolean b3) {
+		Vec3d vec3 = getPosition(interpolation, player);
+		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
+		Vec3d vec31 = player.getLook(interpolation);
+		Vec3d vec32 = vec3.addVector(vec31.x * length, vec31.y * length, vec31.z * length);
+		return player.world.rayTraceBlocks(vec3, vec32, b1, b2, b3);
+	}
+	
 	
 	public static RayTraceResult rayTraceIncludeEntities(EntityPlayer player, double d, float f) {
 		Vec3d vec3 = getPosition(f, player);
@@ -335,7 +340,6 @@ public class Library {
 		for(Entity ent : ents){
 			RayTraceResult test = ent.getEntityBoundingBox().grow(0.3D).calculateIntercept(vec3, vec32);
 			if(test != null){
-				test.hitVec = new Vec3d(ent.posX, ent.posY + ent.getEyeHeight()/2, ent.posZ);
 				if(result == null || vec3.squareDistanceTo(result.hitVec) > vec3.squareDistanceTo(test.hitVec)){
 					test.typeOfHit = RayTraceResult.Type.ENTITY;
 					test.entityHit = ent;
@@ -345,6 +349,28 @@ public class Library {
 		}
 		
 		return result;
+	}
+	
+	public static Pair<RayTraceResult, List<Entity>> rayTraceEntitiesOnLine(EntityPlayer player, double d, float f){
+		Vec3d vec3 = getPosition(f, player);
+		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
+		Vec3d vec31 = player.getLook(f);
+		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
+		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, true, true);
+		if(result != null)
+			vec32 = result.hitVec;
+		AxisAlignedBB box = new AxisAlignedBB(vec3.x, vec3.y, vec3.z, vec32.x, vec32.y, vec32.z).grow(1D);
+		List<Entity> ents = player.world.getEntitiesInAABBexcluding(player, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLiving));
+		Iterator<Entity> itr = ents.iterator();
+		while(itr.hasNext()){
+			Entity ent = itr.next();
+			AxisAlignedBB entityBox = ent.getEntityBoundingBox().grow(0.1);
+			RayTraceResult entTrace = entityBox.calculateIntercept(vec3, vec32);
+			if(entTrace == null || entTrace.typeOfHit == Type.MISS){
+				itr.remove();
+			}
+		}
+		return Pair.of(rayTraceIncludeEntities(player, d, f), ents);
 	}
 	
 	public static RayTraceResult rayTraceEntitiesInCone(EntityPlayer player, double d, float f, float degrees) {
@@ -559,15 +585,13 @@ public class Library {
         return t * t * (3.0 - 2.0 * t);
     }
 	
-	
-
-	public static Vec3d getPosition(float par1, EntityPlayer player) {
-		if(par1 == 1.0F) {
+	public static Vec3d getPosition(float interpolation, EntityPlayer player) {
+		if(interpolation == 1.0F) {
 			return new Vec3d(player.posX, player.posY + (player.getEyeHeight() - player.getDefaultEyeHeight()), player.posZ);
 		} else {
-			double d0 = player.prevPosX + (player.posX - player.prevPosX) * par1;
-			double d1 = player.prevPosY + (player.posY - player.prevPosY) * par1 + (player.getEyeHeight() - player.getDefaultEyeHeight());
-			double d2 = player.prevPosZ + (player.posZ - player.prevPosZ) * par1;
+			double d0 = player.prevPosX + (player.posX - player.prevPosX) * interpolation;
+			double d1 = player.prevPosY + (player.posY - player.prevPosY) * interpolation + (player.getEyeHeight() - player.getDefaultEyeHeight());
+			double d2 = player.prevPosZ + (player.posZ - player.prevPosZ) * interpolation;
 			return new Vec3d(d0, d1, d2);
 		}
 	}
@@ -941,10 +965,6 @@ public class Library {
         worldIn.notifyNeighborsOfStateChange(pos, door, false);
         worldIn.notifyNeighborsOfStateChange(blockpos2, door, false);
     }
-	
-	public static float remap(float num, float min1, float max1, float min2, float max2){
-		return ((num - min1) / (max1 - min1)) * (max2 - min2) + min2;
-	}
 	
 	public static boolean areItemStacksEqualIgnoreCount(ItemStack a, ItemStack b){
 		if (a.isEmpty() && b.isEmpty())

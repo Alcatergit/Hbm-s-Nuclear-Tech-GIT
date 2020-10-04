@@ -85,7 +85,8 @@ public class ShredderRecipes {
 			} else if(name.length() > 3 && name.substring(0, 4).equals("dust")) {
 
 				for(ItemStack stack : matches) {
-					shredderRecipes.put(new ComparableStack(stack), new ItemStack(ModItems.dust));
+					if(stack != null && !stack.isEmpty() && Item.REGISTRY.getNameForObject(stack.getItem()) != null)
+						shredderRecipes.put(new ComparableStack(stack), new ItemStack(ModItems.dust));
 				}
 			}
 		}

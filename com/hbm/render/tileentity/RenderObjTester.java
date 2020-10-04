@@ -2,17 +2,16 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import com.hbm.handler.HbmShaderManager;
+import com.hbm.animloader.AnimationWrapper;
+import com.hbm.animloader.AnimationWrapper.EndResult;
+import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.handler.HbmShaderManager2;
-import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.particle_instanced.InstancedParticleRenderer;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.deco.TileEntityObjTester;
@@ -21,13 +20,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTester> {
@@ -78,7 +75,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GL11.glTranslated(0, 3, 0);
         //Drillgon200: Reeee
         //Drillgon200: I hate niko
-        bindTexture(ResourceManager.nikonium_tex);
+        bindTexture(ResourceManager.bobkotium_tex);
         ResourceManager.nikonium.renderAll();
         GL11.glTranslated(0, -3, 0);
         GL11.glRotatef(90, 0, 1, 0);
@@ -223,5 +220,6 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.depthMask(true);
         
         GL11.glPopMatrix();
+        
 	}
 }

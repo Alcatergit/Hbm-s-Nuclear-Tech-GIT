@@ -300,6 +300,13 @@ public class MachineRecipes {
 				|| item.getItem() == ModItems.powder_meteorite && mODE(item2, new String[] {"ingotSaturnite", "dustSaturnite"})) {
 			return new ItemStack(ModItems.ingot_starmetal, 2);
 		}
+		
+		if(GeneralConfig.enableBabyMode) {
+			if(mODE(item, new String[] { "gemCoal", "dustCoal" }) && ItemFluidCanister.isEmptyCanister(item2)
+					|| ItemFluidCanister.isEmptyCanister(item) && mODE(item2, new String[] { "gemCoal", "dustCoal" })) {
+				return ItemFluidCanister.getFullCanister(ModForgeFluids.oil);
+			}
+		}
 
 		return null;
 	}
@@ -560,8 +567,12 @@ public class MachineRecipes {
 			input[0] = new FluidStack(ModForgeFluids.coolant, 1800);
 			break;
 		case DESH:
-			input[0] = new FluidStack(ModForgeFluids.acid, 800);
-			input[1] = new FluidStack(ModForgeFluids.lightoil, 200);
+			if(GeneralConfig.enableBabyMode) {
+				input[0] = new FluidStack(ModForgeFluids.lightoil, 200);
+        	} else {
+				input[0] = new FluidStack(ModForgeFluids.mercury, 200);
+				input[1] = new FluidStack(ModForgeFluids.lightoil, 200);
+        	}
 			break;
 		case PEROXIDE:
 			input[0] = new FluidStack(FluidRegistry.WATER, 1000);
@@ -661,7 +672,7 @@ public class MachineRecipes {
 			input[0] = new FluidStack(FluidRegistry.WATER, 8000);
 			break;
 		case XENON:
-			// input[0] = null;
+			//input[0] = null;
 			break;
 		case SATURN:
 			input[0] = new FluidStack(ModForgeFluids.acid, 100);

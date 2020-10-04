@@ -134,25 +134,19 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 			} else {
 				tankTypes[1] = ((Fluid) outs[0]);
 
-				for(int i = 0; i < 1200; i++) {
-					if(tanks[0].getFluidAmount() >= (Integer) outs[2] && tanks[1].getFluidAmount() + (Integer) outs[1] <= tanks[1].getCapacity()) {
-						tanks[0].drain((Integer) outs[2], true);
+				int processMax = 1200;																//the maximum amount of cycles based on the 1.2k cycle cap (subject to change)
+				int processSteam = tanks[0].getFluidAmount() / (Integer)outs[2];							//the maximum amount of cycles depending on steam
+				int processWater = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / (Integer)outs[1];	//the maximum amount of cycles depending on water
 
-						// Empty tank if it doesn't match the machine recipe
-						if(tanks[1].getFluid() != null && tanks[1].getFluid().getFluid() != tankTypes[1]) {
-							tanks[1].drain(tanks[1].getCapacity(), true);
-						}
+				int cycles = Math.min(processMax, Math.min(processSteam, processWater));
 
-						tanks[1].fill(new FluidStack(tankTypes[1], (Integer) outs[1]), true);
+				tanks[0].drain((Integer)outs[2] * cycles, true);
+				tanks[1].fill(new FluidStack(tankTypes[1], (Integer)outs[1] * cycles), true);
 
-						power += (Integer) outs[3];
+				power += (Integer)outs[3] * cycles;
 
-						if(power > maxPower)
-							power = maxPower;
-					} else {
-						break;
-					}
-				}
+				if(power > maxPower)
+					power = maxPower;
 			}
 
 			FFUtils.fillFluidContainer(inventory, tanks[1], 5, 6);

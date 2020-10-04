@@ -177,5 +177,30 @@ public class SoyuzPronter {
 		
 		GL11.glPopMatrix();
 	}
+	
+	public static void prontCapsule() {
+
+		GL11.glPushMatrix();
+
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
+		TextureManager tex = Minecraft.getMinecraft().getTextureManager();
+
+		tex.bindTexture(ResourceManager.soyuz_module_dome_tex);
+		ResourceManager.soyuz_module.renderPart("Dome");
+		tex.bindTexture(ResourceManager.soyuz_module_lander_tex);
+		ResourceManager.soyuz_module.renderPart("Capsule");
+		tex.bindTexture(ResourceManager.soyuz_module_propulsion_tex);
+		ResourceManager.soyuz_module.renderPart("Propulsion");
+		tex.bindTexture(ResourceManager.soyuz_module_solar_tex);
+		ResourceManager.soyuz_module.renderPart("Solar");
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+
+		GL11.glPopMatrix();
+
+	}
+
 
 }

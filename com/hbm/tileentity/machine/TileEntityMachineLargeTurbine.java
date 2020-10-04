@@ -9,6 +9,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.interfaces.Untested;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
@@ -61,6 +62,7 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		types[1] = FluidRegistry.WATER;
 	}
 
+	@Untested
 	@Override
 	public void update() {
 		if(!world.isRemote) {
@@ -101,25 +103,19 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 				if(tanks[1].getFluid() != null && tanks[1].getFluid().getFluid() != types[1])
 					tanks[1].setFluid(null);
 
-				int processMax = (int) Math.ceil(tanks[0].getFluidAmount() / 10F);
+				int processMax = (int) Math.ceil(tanks[0].getFluidAmount() / 10F) / (Integer)outs[2];		//the maximum amount of cycles based on the 10% cap
+				int processSteam = tanks[0].getFluidAmount() / (Integer)outs[2];							//the maximum amount of cycles depending on steam
+				int processWater = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / (Integer)outs[1];	//the maximum amount of cycles depending on water
 
-				//TODO: handle this dynamically instead of a 16k iteration for loop
-				for(int i = 0; i < processMax; i++) {
-					if(tanks[0].getFluidAmount() >= (Integer)outs[2] && tanks[1].getFluidAmount() + (Integer)outs[1] <= tanks[1].getCapacity()) {
-						
-						operational = true;
-						
-						tanks[0].drain((Integer)outs[2], true);
-						tanks[1].fill(new FluidStack(types[1], (Integer)outs[1]), true);
+				int cycles = Math.min(processMax, Math.min(processSteam, processWater));
 
-						power += (Integer)outs[3];
+				tanks[0].drain((Integer)outs[2] * cycles, true);
+				tanks[1].fill(new FluidStack(types[1], (Integer)outs[1] * cycles), true);
 
-						if(power > maxPower)
-							power = maxPower;
-					} else {
-						break;
-					}
-				}
+				power += (Integer)outs[3] * cycles;
+
+				if(power > maxPower)
+					power = maxPower;
 			}
 
 			FFUtils.fillFluidContainer(inventory, tanks[1], 5, 6);

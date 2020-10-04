@@ -26,13 +26,17 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(ModItems.ingot_steel, 0, 2, 5, 7),
 			new WeightedRandomChestContentFrom1710(ModItems.ingot_beryllium, 0, 1, 2, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.ingot_titanium, 0, 1, 1, 3),
-			new WeightedRandomChestContentFrom1710(ModItems.circuit_aluminium, 0, 1, 2, 7),
 			new WeightedRandomChestContentFrom1710(ModItems.circuit_targeting_tier1, 0, 1, 1, 5),
 			new WeightedRandomChestContentFrom1710(ModItems.gun_revolver, 0, 1, 1, 3),
 			new WeightedRandomChestContentFrom1710(ModItems.gun_revolver_ammo, 0, 2, 6, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.gun_kit_1, 0, 1, 3, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.gun_lever_action, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.ammo_20gauge, 0, 2, 6, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.casing_9, 0, 4, 10, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.casing_50, 0, 4, 10, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.primer_9, 0, 4, 10, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.primer_50, 0, 4, 10, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.cordite, 0, 4, 6, 5),
 			new WeightedRandomChestContentFrom1710(ModItems.battery_generic, 0, 1, 1, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.battery_advanced, 0, 1, 1, 2),
 			new WeightedRandomChestContentFrom1710(ModItems.scrap, 0, 1, 3, 10),
@@ -53,7 +57,6 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(ModItems.ingot_red_copper, 0, 1, 1, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.ingot_titanium, 0, 1, 3, 5),
 			new WeightedRandomChestContentFrom1710(ModItems.wire_red_copper, 0, 2, 3, 7),
-			new WeightedRandomChestContentFrom1710(ModItems.circuit_aluminium, 0, 1, 3, 6),
 			new WeightedRandomChestContentFrom1710(ModItems.circuit_targeting_tier1, 0, 1, 1, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.circuit_copper, 0, 1, 1, 4),
 			new WeightedRandomChestContentFrom1710(ModItems.battery_generic, 0, 1, 1, 4),
@@ -224,7 +227,9 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(Item.getItemFromBlock(ModBlocks.reactor_element), 0, 1, 2, 5),
 			new WeightedRandomChestContentFrom1710(Item.getItemFromBlock(ModBlocks.block_tungsten), 0, 3, 8, 5),
 			new WeightedRandomChestContentFrom1710(Item.getItemFromBlock(ModBlocks.red_wire_coated), 0, 4, 8, 5),
-			new WeightedRandomChestContentFrom1710(Item.getItemFromBlock(ModBlocks.red_cable), 0, 8, 16, 5) };
+			new WeightedRandomChestContentFrom1710(Item.getItemFromBlock(ModBlocks.red_cable), 0, 8, 16, 5),
+			new WeightedRandomChestContentFrom1710(ModItems.gun_vortex, 0, 1, 1, 1)};
+			//I couldn't think of a better way to get it, so the vortex gets to be in the space ship loot.
 
 	private static WeightedRandomChestContentFrom1710[] powder = new WeightedRandomChestContentFrom1710[] {
 			new WeightedRandomChestContentFrom1710(ModItems.powder_neptunium, 0, 1, 32, 1),

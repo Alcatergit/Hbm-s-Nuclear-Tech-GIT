@@ -118,6 +118,15 @@ public class PacketDispatcher {
 		wrapper.registerMessage(MeathookJumpPacket.Handler.class, MeathookJumpPacket.class, i++, Side.SERVER);
 		//Resets any sideways acceleration when the meathook unhooks
 		wrapper.registerMessage(MeathookResetStrafePacket.Handler.class, MeathookResetStrafePacket.class, i++, Side.CLIENT);
+		//Gernal packet for sending door states
+		wrapper.registerMessage(TEDoorAnimationPacket.Handler.class, TEDoorAnimationPacket.class, i++, Side.CLIENT);
+		//Packets for syncing the keypad
+		wrapper.registerMessage(KeypadServerPacket.Handler.class, KeypadServerPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(KeypadClientPacket.Handler.class, KeypadClientPacket.class, i++, Side.CLIENT);
+		//Sends a funi text to display like a music disc announcement
+		wrapper.registerMessage(PlayerInformPacket.Handler.class, PlayerInformPacket.class, i++, Side.CLIENT);
+		//Activates particle effects or animations without the need for an entity
+		wrapper.registerMessage(GunFXPacket.Handler.class, GunFXPacket.class, i++, Side.CLIENT);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

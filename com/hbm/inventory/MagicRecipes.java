@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -67,6 +68,11 @@ public class MagicRecipes {
 				new ComparableStack(ModItems.egg_balefire_shard),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_magic)));
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.diamond_gavel),
+				new ComparableStack(ModBlocks.gravel_diamond),
+				new ComparableStack(ModBlocks.gravel_diamond),
+				new ComparableStack(ModBlocks.gravel_diamond),
+				new ComparableStack(ModItems.lead_gavel)));
 	}
 
 	public static List<MagicRecipe> getRecipes() {

@@ -7,8 +7,6 @@ import java.util.function.Function;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-import com.hbm.animloader.AnimatedModel;
-import com.hbm.animloader.Animation;
 import com.hbm.animloader.ColladaLoader;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
@@ -113,6 +111,7 @@ import com.hbm.entity.missile.EntityMissileTaint;
 import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
+import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.entity.mob.EntityNuclearCreeper;
@@ -138,6 +137,7 @@ import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.entity.particle.ParticleContrail;
 import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
+import com.hbm.entity.projectile.EntityBeamVortex;
 import com.hbm.entity.projectile.EntityBombletZeta;
 import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.entity.projectile.EntityBuilding;
@@ -173,12 +173,13 @@ import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
+import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.particle.ParticleExSmoke;
 import com.hbm.particle.ParticleRadiationFog;
 import com.hbm.particle.ParticleRocketFlame;
 import com.hbm.particle.ParticleSmokePlume;
+import com.hbm.particle.ParticleSpark;
 import com.hbm.particle.bfg.ParticleBFGBeam;
 import com.hbm.particle.bfg.ParticleBFGCoreLightning;
 import com.hbm.particle.bfg.ParticleBFGParticle;
@@ -280,9 +281,11 @@ import com.hbm.render.entity.missile.RenderMissileTaint;
 import com.hbm.render.entity.missile.RenderSoyuz;
 import com.hbm.render.entity.missile.RenderSoyuzCapsule;
 import com.hbm.render.entity.mob.RenderBalls;
+import com.hbm.render.entity.mob.RenderDuck;
 import com.hbm.render.entity.mob.RenderMaskMan;
 import com.hbm.render.entity.mob.RenderTaintCrab;
 import com.hbm.render.entity.mob.RenderTeslaCrab;
+import com.hbm.render.entity.projectile.RenderVortexBeam;
 import com.hbm.render.factories.MultiCloudRendererFactory;
 import com.hbm.render.factories.RenderBurningFOEQFactory;
 import com.hbm.render.factories.RenderFalloutRainFactory;
@@ -308,6 +311,7 @@ import com.hbm.render.item.ItemRenderMissilePart;
 import com.hbm.render.item.ItemRenderMultitool;
 import com.hbm.render.item.ItemRenderObj;
 import com.hbm.render.item.ItemRenderShim;
+import com.hbm.render.item.ItemRendererMachine;
 import com.hbm.render.item.weapon.GunRevolverRender;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderBFLauncher;
@@ -319,6 +323,7 @@ import com.hbm.render.item.weapon.ItemRenderEMPRay;
 import com.hbm.render.item.weapon.ItemRenderEuthanasia;
 import com.hbm.render.item.weapon.ItemRenderFatMan;
 import com.hbm.render.item.weapon.ItemRenderFolly;
+import com.hbm.render.item.weapon.ItemRenderGavel;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
 import com.hbm.render.item.weapon.ItemRenderGunAnim2;
 import com.hbm.render.item.weapon.ItemRenderGunDefab;
@@ -349,6 +354,8 @@ import com.hbm.render.item.weapon.ItemRenderWeaponObj;
 import com.hbm.render.item.weapon.ItemRenderWeaponQuadro;
 import com.hbm.render.item.weapon.ItemRenderWeaponSauer;
 import com.hbm.render.item.weapon.ItemRenderWeaponShotty;
+import com.hbm.render.item.weapon.ItemRenderWeaponThompson;
+import com.hbm.render.item.weapon.ItemRenderWeaponVortex;
 import com.hbm.render.item.weapon.ItemRenderXVL1456;
 import com.hbm.render.item.weapon.ItemRenderZOMG;
 import com.hbm.render.item.weapon.RenderGunB93;
@@ -392,6 +399,7 @@ import com.hbm.render.tileentity.RenderGeiger;
 import com.hbm.render.tileentity.RenderHeavyTurret;
 import com.hbm.render.tileentity.RenderITER;
 import com.hbm.render.tileentity.RenderITERMultiblock;
+import com.hbm.render.tileentity.RenderKeypadBase;
 import com.hbm.render.tileentity.RenderLandmine;
 import com.hbm.render.tileentity.RenderLaserMiner;
 import com.hbm.render.tileentity.RenderLaunchPadTier1;
@@ -433,6 +441,7 @@ import com.hbm.render.tileentity.RenderRefinery;
 import com.hbm.render.tileentity.RenderRocketTurret;
 import com.hbm.render.tileentity.RenderSatDock;
 import com.hbm.render.tileentity.RenderSelenium;
+import com.hbm.render.tileentity.RenderSlidingBlastDoor;
 import com.hbm.render.tileentity.RenderSmallReactor;
 import com.hbm.render.tileentity.RenderSoyuzLauncher;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
@@ -448,6 +457,8 @@ import com.hbm.render.tileentity.RenderVaultDoor;
 import com.hbm.render.util.HmfModelLoader;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.AudioWrapperClient;
+import com.hbm.tileentity.TileEntityKeypadBase;
+import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.bomb.RenderNukeMike;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
@@ -541,12 +552,14 @@ import com.hbm.tileentity.machine.TileEntityPlasmaStruct;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
+import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 import com.hbm.tileentity.machine.TileEntitySoyuzStruct;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
 import com.hbm.tileentity.machine.TileEntityTesla;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -708,6 +721,9 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlasmaStruct.class, new RenderPlasmaMultiblock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineLargeTurbine.class, new RenderBigTurbine());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineReactor.class, new RenderBreeder());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlidingBlastDoor.class, new RenderSlidingBlastDoor());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityKeypadBase.class, new RenderKeypadBase());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlidingBlastDoorKeypad.class, new RenderKeypadBase());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -871,12 +887,15 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBallsOTronSegment.class, RenderBalls.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBOTPrimeHead.class, RenderWormHead.FACTORY);
 	    RenderingRegistry.registerEntityRenderingHandler(EntityBOTPrimeBody.class, RenderWormBody.FACTORY);
+	    RenderingRegistry.registerEntityRenderingHandler(EntityDuck.class, RenderDuck.FACTORY);
+	    RenderingRegistry.registerEntityRenderingHandler(EntityBeamVortex.class, RenderVortexBeam.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_metal, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_office, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.mud_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.schrabidic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.seal_controller, new StateMap.Builder().ignore(BlockSeal.ACTIVATED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.ntm_dirt, new StateMap.Builder().ignore(BlockDirt.SNOWY).ignore(BlockDirt.VARIANT).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.brick_jungle_trap, new StateMap.Builder().ignore(TrappedBrick.TYPE).build());
@@ -978,13 +997,12 @@ public class ClientProxy extends ServerProxy {
 			BlockPos pos = new BlockPos(x, y, z);
 			int fireAge = (int)args[0];
 			if(fireAge >= 0) {
-				fireAge++;
 				if(fireAge >= 1 && fireAge <= 40){
 					Vec3 attractionPoint = Vec3.createVectorHelper(pos.getX() + 0.5, pos.getY() + 24, pos.getZ() + 0.5 - 60);
 					for(int i = 0; i < world.rand.nextInt(6); i ++){
-						float randPosX = Library.remap(world.rand.nextFloat(), 0, 1, -10, 10);
-						float randPosY = Library.remap(world.rand.nextFloat(), 0, 1, -10, 10);
-						float randPosZ = Library.remap(world.rand.nextFloat(), 0, 1, 0, 10);
+						float randPosX = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, -10, 10);
+						float randPosY = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, -10, 10);
+						float randPosZ = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, 0, 10);
 						float randMotionX = world.rand.nextFloat()*0.4F-0.2F;
 						float randMotionY = world.rand.nextFloat()*0.4F-0.2F;
 						float randMotionZ = world.rand.nextFloat()*0.4F-0.2F;
@@ -1011,9 +1029,9 @@ public class ClientProxy extends ServerProxy {
 				}
 				if(fireAge >= 58 && fireAge <= 70){
 					for(int i = 0; i < 20; i ++){
-						float randPosX = Library.remap(world.rand.nextFloat(), 0, 1, -5, 5);
-						float randPosY = Library.remap(world.rand.nextFloat(), 0, 1, -5, 5);
-						float randPosZ = Library.remap(world.rand.nextFloat(), 0, 1, 0, -200);
+						float randPosX = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, -5, 5);
+						float randPosY = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, -5, 5);
+						float randPosZ = BobMathUtil.remap(world.rand.nextFloat(), 0, 1, 0, -200);
 						float randMotionX = world.rand.nextFloat()*0.4F-0.2F;
 						float randMotionY = world.rand.nextFloat()*0.4F-0.2F;
 						float randMotionZ = world.rand.nextFloat()-5.4F-4F;
@@ -1058,22 +1076,38 @@ public class ClientProxy extends ServerProxy {
 			if("cloud".equals(mode)) {
 				
 				for(int i = 0; i < count; i++) {
-					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
-					double motionY = rand.nextGaussian() * (1 + (count / 100));
-					double motionX = rand.nextGaussian() * (1 + (count / 150));
-					double motionZ = rand.nextGaussian() * (1 + (count / 150));
-					if(rand.nextBoolean()) motionY = Math.abs(motionY);
-					fx.setMotion(motionX, motionY, motionZ);
-					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					if(GeneralConfig.instancedParticles){
+						ParticleExSmokeInstanced fx = new ParticleExSmokeInstanced(world, x, y, z);
+						double motionY = rand.nextGaussian() * (1 + (count / 100));
+						double motionX = rand.nextGaussian() * (1 + (count / 150));
+						double motionZ = rand.nextGaussian() * (1 + (count / 150));
+						if(rand.nextBoolean()) motionY = Math.abs(motionY);
+						fx.setMotion(motionX, motionY, motionZ);
+						InstancedParticleRenderer.addParticle(fx);
+					} else {
+						ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+						double motionY = rand.nextGaussian() * (1 + (count / 100));
+						double motionX = rand.nextGaussian() * (1 + (count / 150));
+						double motionZ = rand.nextGaussian() * (1 + (count / 150));
+						if(rand.nextBoolean()) motionY = Math.abs(motionY);
+						fx.setMotion(motionX, motionY, motionZ);
+						Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					}
 				}
 			}
 
 			if("radial".equals(mode)) {
 
 				for(int i = 0; i < count; i++) {
-					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
-					fx.setMotion(rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)));
-					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					if(GeneralConfig.instancedParticles){
+						ParticleExSmokeInstanced fx = new ParticleExSmokeInstanced(world, x, y, z);
+						fx.setMotion(rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)));
+						InstancedParticleRenderer.addParticle(fx);
+					} else {
+						ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+						fx.setMotion(rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)), rand.nextGaussian() * (1 + (count / 50)));
+						Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					}
 				}
 			}
 			
@@ -1085,9 +1119,15 @@ public class ClientProxy extends ServerProxy {
 				vec.rotateAroundY(rand.nextInt(360));
 				
 				for(int i = 0; i < count; i++) {
-					ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
-					fx.setMotion(vec.xCoord, 0, vec.zCoord);
-					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					if(GeneralConfig.instancedParticles){
+						ParticleExSmokeInstanced fx = new ParticleExSmokeInstanced(world, x, y, z);
+						fx.setMotion(vec.xCoord, 0, vec.zCoord);
+						InstancedParticleRenderer.addParticle(fx);
+					} else {
+						ParticleExSmoke fx = new ParticleExSmoke(world, x, y, z);
+						fx.setMotion(vec.xCoord, 0, vec.zCoord);
+						Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					}
 					
 					vec.rotateAroundY(360 / count);
 				}
@@ -1152,9 +1192,13 @@ public class ClientProxy extends ServerProxy {
 				double width = data.getDouble("width");
 				
 				for(int i = 0; i < count; i++) {
-					
-					ParticleRocketFlame fx = new ParticleRocketFlame(world, x + rand.nextGaussian() * width, y + rand.nextGaussian() * width, z + rand.nextGaussian() * width);
-					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					if(GeneralConfig.instancedParticles){
+						ParticleRocketFlameInstanced fx = new ParticleRocketFlameInstanced(world, x + rand.nextGaussian() * width, y + rand.nextGaussian() * width, z + rand.nextGaussian() * width);
+						InstancedParticleRenderer.addParticle(fx);
+					} else {
+						ParticleRocketFlame fx = new ParticleRocketFlame(world, x + rand.nextGaussian() * width, y + rand.nextGaussian() * width, z + rand.nextGaussian() * width);
+						Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+					}
 				}
 			}
 		}
@@ -1210,9 +1254,54 @@ public class ClientProxy extends ServerProxy {
 			if("bluedust".equals(data.getString("mode"))) {
 				fx = new ParticleRedstone.Factory().createParticle(-1, world, x, y, z, 0.01F, 0.01F, 1F);
 			}
+			
+			if("greendust".equals(data.getString("mode"))) {
+				fx = new ParticleRedstone.Factory().createParticle(-1, world, x, y, z, 0.01F, 0.5F, 0.1F);
+			}
 
 			if(fx != null)
 				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+		
+		if("spark".equals(type)){
+			String mode = data.getString("mode");
+			double dirX = data.getDouble("dirX");
+			double dirY = data.getDouble("dirY");
+			double dirZ = data.getDouble("dirZ");
+			float width = data.hasKey("width") ? data.getFloat("width") : 0.025F;
+			float length = data.hasKey("length") ? data.getFloat("length") : 1.0F;
+			float randLength = data.hasKey("randLength") ? data.getFloat("randLength")-length : 0;
+			float gravity = data.hasKey("gravity") ? data.getFloat("gravity") : 9.81F*0.01F;
+			int lifetime = data.hasKey("lifetime") ? data.getInteger("lifetime") : 100;
+			int randLifeTime = data.hasKey("randLifetime") ? data.getInteger("randLifetime")-lifetime : lifetime;
+			float velocityRand = data.hasKey("randomVelocity") ? data.getFloat("randomVelocity") : 1.0F;
+			float r = data.hasKey("r") ? data.getFloat("r") : 1.0F;
+			float g = data.hasKey("g") ? data.getFloat("g") : 1.0F;
+			float b = data.hasKey("b") ? data.getFloat("b") : 1.0F;
+			float a = data.hasKey("a") ? data.getFloat("a") : 1.0F;
+			
+			if("coneBurst".equals(mode)){
+				float angle = data.hasKey("angle") ? data.getFloat("angle") : 10;
+				float randAngle = data.hasKey("randAngle") ? data.getFloat("randAngle") - angle : 0;
+				int count = data.hasKey("count") ? data.getInteger("count") : 1;
+				for(int i = 0; i < count; i ++){
+					//Gets a random vector rotated within a cone and then rotates it to the particle data's direction
+					//Create a new vector and rotate it randomly about the x axis within the angle specified, then rotate that by random degrees to get the random cone vector
+					Vec3 up = Vec3.createVectorHelper(0, 1, 0);
+					up.rotateAroundX((float) Math.toRadians(rand.nextFloat()*(angle+rand.nextFloat()*randAngle)));
+					up.rotateAroundY((float) Math.toRadians(rand.nextFloat()*360));
+					//Finds the angles for the particle direction and rotate our random cone vector to it.
+					Vec3 direction = Vec3.createVectorHelper(dirX, dirY, dirZ);
+					Vec3 angles = BobMathUtil.getEulerAngles(direction);
+					Vec3 newDirection = Vec3.createVectorHelper(up.xCoord, up.yCoord, up.zCoord);
+					newDirection.rotateAroundX((float) Math.toRadians(angles.yCoord-90));
+					newDirection.rotateAroundY((float) Math.toRadians(angles.xCoord));
+					//Multiply it by the original vector's length to ensure it has the right magnitude
+					newDirection = newDirection.mult((float) direction.lengthVector()+rand.nextFloat()*velocityRand);
+					Particle fx = new ParticleSpark(world, x, y, z, length+rand.nextFloat()*randLength, width, lifetime + rand.nextInt(randLifeTime), gravity).color(r, g, b, a).motion((float)newDirection.xCoord, (float)newDirection.yCoord, (float)newDirection.zCoord);
+					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				}
+			}
 		}
 		
 		if("vanilla".equals(type)) {
@@ -1222,6 +1311,11 @@ public class ClientProxy extends ServerProxy {
 			double mZ = data.getDouble("mZ");
 			world.spawnParticle(EnumParticleTypes.getByName(data.getString("mode")), x, y, z, mX, mY, mZ);
 		}
+	}
+	
+	@Override
+	public void setRecoil(float rec) {
+		RecoilHandler.verticalVelocity = rec;
 	}
 	
 	@Override
@@ -1255,7 +1349,7 @@ public class ClientProxy extends ServerProxy {
 	
 	@Override
 	public void preInit(FMLPreInitializationEvent evt){
-		OBJLoader.INSTANCE.addDomain("hbm");
+		OBJLoader.INSTANCE.addDomain(RefStrings.MODID);
 		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.INSTANCE);
 		ModItems.assembly_template.setTileEntityItemStackRenderer(AssemblyTemplateRender.INSTANCE);
 		ModItems.gun_b92.setTileEntityItemStackRenderer(ItemRenderGunAnim.INSTANCE);
@@ -1349,6 +1443,13 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_quadro.setTileEntityItemStackRenderer(new ItemRenderWeaponQuadro());
 		ModItems.gun_sauer.setTileEntityItemStackRenderer(new ItemRenderWeaponSauer());
 		ModItems.chernobylsign.setTileEntityItemStackRenderer(new ItemRenderShim());
+		Item.getItemFromBlock(ModBlocks.machine_selenium).setTileEntityItemStackRenderer(new ItemRendererMachine(2D));
+		Item.getItemFromBlock(ModBlocks.radiorec).setTileEntityItemStackRenderer(new ItemRendererMachine(1D));
+		ModItems.gun_vortex.setTileEntityItemStackRenderer(new ItemRenderWeaponVortex());
+		ModItems.gun_thompson.setTileEntityItemStackRenderer(new ItemRenderWeaponThompson());
+		ModItems.wood_gavel.setTileEntityItemStackRenderer(new ItemRenderGavel());
+		ModItems.lead_gavel.setTileEntityItemStackRenderer(new ItemRenderGavel());
+		ModItems.diamond_gavel.setTileEntityItemStackRenderer(new ItemRenderGavel());
 	}
 	
 	@Override
@@ -1374,15 +1475,27 @@ public class ClientProxy extends ServerProxy {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		AnimatedModel m = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2_newmodel.dae"));
-		Animation s = ColladaLoader.loadAnim(1300, new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
-		ResourceManager.supershotgun = m;
-		ResourceManager.ssg_reload = s;
+		ResourceManager.supershotgun = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2_newmodel.dae"));
+		ResourceManager.ssg_reload = ColladaLoader.loadAnim(1300, new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
+		ResourceManager.door0 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
+		ResourceManager.door0_1 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0_1.dae"));
+		ResourceManager.door0_open = ColladaLoader.loadAnim(1200, new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
 	}
 	
 	@Override
 	public void playSound(String sound, Object data) {
 
+	}
+	
+	@Override
+	public void displayTooltip(String msg) {
+		Minecraft.getMinecraft().ingameGUI.setOverlayMessage(msg, false);
+	}
+	
+	@Override
+	public float partialTicks() {
+		boolean paused = Minecraft.getMinecraft().isGamePaused();
+		return paused ? Minecraft.getMinecraft().renderPartialTicksPaused : Minecraft.getMinecraft().getRenderPartialTicks();
 	}
 	
 	private static enum BoxcarTextureGetter implements Function<ResourceLocation, TextureAtlasSprite>

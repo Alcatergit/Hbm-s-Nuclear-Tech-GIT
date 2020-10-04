@@ -13,6 +13,7 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
+import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
 import net.minecraft.client.Minecraft;
@@ -605,7 +606,7 @@ public class FFUtils {
 		}
 		
 		Item container = FluidContainerRegistry.getFullContainer(in.getItem(), tank.getFluid().getFluid());
-		if(container != null){
+		if(container != null && container != Items.AIR){
 			FluidStack stack = FluidContainerRegistry.getFluidFromItem(container);
 			if(tank.drain(stack, false).amount == stack.amount && (out.isEmpty() || (out.getItem() == container && out.getCount() < out.getMaxStackSize()))){
 				tank.drain(stack, true);

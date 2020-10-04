@@ -89,6 +89,7 @@ import com.hbm.blocks.network.BlockConveyor;
 import com.hbm.blocks.network.BlockFluidDuct;
 import com.hbm.blocks.network.BlockFluidPipeMk2;
 import com.hbm.blocks.network.CableSwitch;
+import com.hbm.blocks.test.KeypadTest;
 import com.hbm.blocks.test.TestObjTester;
 import com.hbm.blocks.test.TestRender;
 import com.hbm.main.MainRegistry;
@@ -197,6 +198,7 @@ public class ModBlocks {
 	public static final Block brick_jungle_mystic = new BlockOre(Material.ROCK, "brick_jungle_mystic").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F).setLightLevel(5F/15F);
 	public static final Block brick_jungle_trap = new TrappedBrick(Material.ROCK, "brick_jungle_trap").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block brick_jungle_glyph = new BlockGlyph(Material.ROCK, "brick_jungle_glyph").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F);
+	public static final Block brick_jungle_circle = new BlockBase(Material.ROCK, "brick_jungle_circle").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F);
 	
 	//Material Blocks
 	public static final Block block_niter = new BlockBase(Material.IRON, "block_niter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
@@ -434,6 +436,11 @@ public class ModBlocks {
 	
 	public static final Block vault_door = new VaultDoor(Material.IRON, "vault_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block blast_door = new BlastDoor(Material.IRON, "blast_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door_2 = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_2").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door_keypad = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_keypad").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(null);
+	
+	public static final Block keypad_test = new KeypadTest(Material.IRON, "keypad_test").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(null);
 	
 	public static final Block door_metal = new BlockModDoor(Material.IRON, "door_metal").setHardness(5.0F).setResistance(5.0F);
 	public static final Block door_office = new BlockModDoor(Material.IRON, "door_office").setHardness(10.0F).setResistance(10.0F);
@@ -783,6 +790,9 @@ public class ModBlocks {
 	
 	public static final Material fluidmud = (new MaterialLiquid(MapColor.ADOBE).setReplaceable());
 	public static Block mud_block;
+	
+	public static final Material fluidschrabidic = (new MaterialLiquid(MapColor.CYAN));
+	public static Block schrabidic_block;
 	
 	//Weird stuff
 	public static final Block boxcar = new DecoBlock(Material.IRON, "boxcar").setSoundType(SoundType.METAL).setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);

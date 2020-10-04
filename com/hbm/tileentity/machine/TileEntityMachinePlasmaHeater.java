@@ -104,7 +104,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 
 						if(iter.isOn) {
 
-							if(iter.plasmaType == this.plasmaType) {
+							if(this.plasmaType != null && iter.plasmaType == this.plasmaType) {
 
 								int toLoad = Math.min(iter.plasma.getCapacity() - iter.plasma.getFluidAmount(), this.plasma.getFluidAmount());
 								toLoad = Math.min(toLoad, 40);

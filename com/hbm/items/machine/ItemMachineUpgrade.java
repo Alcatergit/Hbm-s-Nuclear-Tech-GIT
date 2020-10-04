@@ -33,6 +33,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("Delay -10% / Consumption +1000");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Speed x2");
 		}
 
 		if(this == ModItems.upgrade_speed_2)
@@ -48,6 +51,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("Delay -20% / Consumption +2000");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Speed x3");
 		}
 
 		if(this == ModItems.upgrade_speed_3)
@@ -63,6 +69,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("Speed Delay -30% / Consumption +3000");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Speed x4");
 		}
 
 		if(this == ModItems.upgrade_effect_1)
@@ -72,6 +81,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("+5% chance of not consuming an item / Acid consumption +1000mB");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("-50% chance of incrementing overheat counter");
 		}
 
 		if(this == ModItems.upgrade_effect_2)
@@ -81,6 +93,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("+10% chance of not consuming an item / Acid consumption +2000mB");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("-66% chance of incrementing overheat counter");
 		}
 
 		if(this == ModItems.upgrade_effect_3)
@@ -90,6 +105,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Crystallizer");
 			list.add("+15% chance of not consuming an item / Acid consumption +3000mB");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("-75% chance of incrementing overheat counter");
 		}
 
 		if(this == ModItems.upgrade_power_1)
@@ -102,6 +120,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Chemical Plant:");
 			list.add("Consumption -30 / Delay +5");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Consumption -100k");
 		}
 
 		if(this == ModItems.upgrade_power_2)
@@ -114,6 +135,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Chemical Plant:");
 			list.add("Consumption -60 / Delay +10");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Consumption -200k");
 		}
 
 		if(this == ModItems.upgrade_power_3)
@@ -126,6 +150,9 @@ public class ItemMachineUpgrade extends Item {
 			list.add("");
 			list.add("Chemical Plant:");
 			list.add("Consumption -90 / Delay +15");
+			list.add("");
+			list.add("Cyclotron");
+			list.add("Consumption -300k");
 		}
 
 		if(this == ModItems.upgrade_fortune_1)

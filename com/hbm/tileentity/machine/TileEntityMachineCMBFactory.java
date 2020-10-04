@@ -136,11 +136,11 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 		return (process * i) / processSpeed;
 	}
 	
-public boolean canProcess() {
+	public boolean canProcess() {
 		
 		boolean b = false;
 		
-		if(tank.getFluidAmount() >= 10 && power >= 100000 && !inventory.getStackInSlot(1).isEmpty() && !inventory.getStackInSlot(3).isEmpty() && (inventory.getStackInSlot(4).isEmpty() || inventory.getStackInSlot(4).getCount() <= 60))
+		if(tank.getFluidAmount() >= 1 && power >= 100000 && !inventory.getStackInSlot(1).isEmpty() && !inventory.getStackInSlot(3).isEmpty() && (inventory.getStackInSlot(4).isEmpty() || inventory.getStackInSlot(4).getCount() <= 60))
 		{
 			boolean flag0 = inventory.getStackInSlot(1).getItem() == ModItems.ingot_magnetized_tungsten || inventory.getStackInSlot(1).getItem() == ModItems.powder_magnetized_tungsten;
 			boolean flag1 = inventory.getStackInSlot(3).getItem() == ModItems.ingot_advanced_alloy || inventory.getStackInSlot(3).getItem() == ModItems.powder_advanced_alloy;
@@ -156,7 +156,7 @@ public boolean canProcess() {
 	}
 	
 	public void process() {
-		tank.drain(10, true);
+		tank.drain(1, true);
 		needsUpdate = true;
 		power -= 100000;
 		

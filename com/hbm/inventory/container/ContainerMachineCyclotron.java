@@ -1,48 +1,52 @@
 package com.hbm.inventory.container;
 
+import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.inventory.SlotUpgrade;
+import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineCyclotron extends Container {
 
-	private TileEntityMachineCyclotron testNuke;
-	private int progress;
+	private TileEntityMachineCyclotron cyclotron;
 	
-	public ContainerMachineCyclotron(InventoryPlayer invPlayer, TileEntityMachineCyclotron tedf) {
-		progress = 0;
-		
-		testNuke = tedf;
+	public ContainerMachineCyclotron(InventoryPlayer invPlayer, TileEntityMachineCyclotron tile) {
+		cyclotron = tile;
 		
 		//Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 8, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 8, 54));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 0, 17, 18));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 1, 17, 36));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 2, 17, 54));
 		//Targets
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 98, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 116, 72));
-		//Tech
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 8, 81));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 26, 81));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 44, 81));
-		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 152, 108));
-		//Cell
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 8, 108));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 3, 107, 18));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 4, 107, 36));
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 5, 107, 54));
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 44, 108));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 12, 62, 108));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 80, 108));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 14, 98, 108));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 116, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tile.inventory, 6, 143, 18));
+		this.addSlotToContainer(new SlotMachineOutput(tile.inventory, 7, 143, 36));
+		this.addSlotToContainer(new SlotMachineOutput(tile.inventory, 8, 143, 54));
+		//AMAT In
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 9, 143, 90));
+		//AMAT Out
+		this.addSlotToContainer(new SlotMachineOutput(tile.inventory, 10, 143, 108));
+		//Coolant In
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 11, 62, 72));
+		//Coolant Out
+		this.addSlotToContainer(new SlotMachineOutput(tile.inventory, 12, 62, 90));
+		//Battery
+		this.addSlotToContainer(new SlotItemHandler(tile.inventory, 13, 62, 108));
+		//Upgrades
+		this.addSlotToContainer(new SlotUpgrade(tile.inventory, 14, 17, 90));
+		this.addSlotToContainer(new SlotUpgrade(tile.inventory, 15, 17, 108));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -59,73 +63,62 @@ public class ContainerMachineCyclotron extends Container {
 	}
 	
 	@Override
-	public void addListener(IContainerListener listener) {
-		super.addListener(listener);
-		listener.sendWindowProperty(this, 0, this.testNuke.progress);
-	}
-	
-	@Override
-    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
+    public ItemStack transferStackInSlot(EntityPlayer player, int index)
     {
 		ItemStack var3 = ItemStack.EMPTY;
-		Slot var4 = (Slot) this.inventorySlots.get(par2);
-		
-		if (var4 != null && var4.getHasStack())
-		{
-			ItemStack var5 = var4.getStack();
-			var3 = var5.copy();
-			
-            if (par2 <= 15) {
-				if (!this.mergeItemStack(var5, 16, this.inventorySlots.size(), true))
-				{
+		Slot slot = (Slot) this.inventorySlots.get(index);
+
+		if(slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			var3 = stack.copy();
+
+			if(index <= 15) {
+				if(!this.mergeItemStack(stack, 16, this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
+				
+			} else {
+				
+				if(stack.getItem() instanceof IBatteryItem || stack.getItem() == ModItems.battery_creative) {
+					if(!this.mergeItemStack(stack, 13, 14, true))
+						return ItemStack.EMPTY;
+					
+				} else if(stack.getItem() instanceof ItemMachineUpgrade) {
+					if(!this.mergeItemStack(stack, 14, 15, true))
+						if(!this.mergeItemStack(stack, 15, 16, true))
+							return ItemStack.EMPTY;
+					
+				} else {
+					
+					if(stack.getItem() == ModItems.part_lithium ||
+							stack.getItem() == ModItems.part_beryllium ||
+							stack.getItem() == ModItems.part_carbon ||
+							stack.getItem() == ModItems.part_copper ||
+							stack.getItem() == ModItems.part_plutonium) {
+						
+						if(!this.mergeItemStack(stack, 0, 3, true))
+							return ItemStack.EMPTY;
+					} else {
+						
+						if(!this.mergeItemStack(stack, 3, 6, true))
+							return ItemStack.EMPTY;
+					}
+				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 16, false))
-			{
-					return ItemStack.EMPTY;
-			}
-			
-			if (var5.isEmpty())
-			{
-				var4.putStack(ItemStack.EMPTY);
-			}
-			else
-			{
-				var4.onSlotChanged();
+
+			if(stack.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			} else {
+				slot.onSlotChanged();
 			}
 		}
-		
+
 		return var3;
     }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return testNuke.isUseableByPlayer(player);
+		return cyclotron.isUseableByPlayer(player);
 	}
 	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener listener = (IContainerListener)this.listeners.get(i);
-
-			if(this.progress != this.testNuke.progress)
-			{
-				listener.sendWindowProperty(this, 0, this.testNuke.progress);
-			}
-		}
-
-		this.progress = this.testNuke.progress;
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 0)
-		{
-			testNuke.progress = j;
-		}
-	}
 }

@@ -20,6 +20,7 @@ public class RenderFENSU extends TileEntitySpecialRenderer<TileEntityMachineFENS
 
 		GlStateManager.enableCull();
 		GlStateManager.enableLighting();
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		switch(te.getBlockMetadata() - BlockDummyable.offset) {
 		case 2: GL11.glRotatef(90, 0F, 1F, 0F); break;

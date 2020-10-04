@@ -22,7 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderScreenOverlay {
 
 	private static final ResourceLocation misc = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_misc.png");
-	private static final ResourceLocation hud = new ResourceLocation("textures/gui/widgets.png");
 	private static final RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	
 	private static long lastSurvey;

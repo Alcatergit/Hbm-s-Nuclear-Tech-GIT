@@ -32,6 +32,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 
 	public EntityNukeExplosionMK4(World p_i1582_1_) {
 		super(p_i1582_1_);
+		new Exception().printStackTrace();
 	}
 
 	public EntityNukeExplosionMK4(World world, int strength, int count, int speed, int length) {

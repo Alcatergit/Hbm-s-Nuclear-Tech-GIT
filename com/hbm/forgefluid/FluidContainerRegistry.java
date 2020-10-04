@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -26,15 +27,24 @@ public class FluidContainerRegistry {
 	}
 	
 	public static FluidStack getFluidFromItem(Item item){
-		return containers.get(item).containedFluid.copy();
+		FluidContainerData data = containers.get(item);
+		if(data == null)
+			return null;
+		return data.containedFluid.copy();
 	}
 	
 	public static Item getContainerItem(Item item){
-		return containers.get(item).container;
+		FluidContainerData data = containers.get(item);
+		if(data == null)
+			return Items.AIR;
+		return data.container;
 	}
 	
 	public static Item getFullContainer(Item item, Fluid f){
-		return containerToItem.get(Pair.of(item, f));
+		Item i = containerToItem.get(Pair.of(item, f));
+		if(i == null)
+			return Items.AIR;
+		return i;
 	}
 	
 	private static class FluidContainerData {

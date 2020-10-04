@@ -33,6 +33,7 @@ public static GunConfiguration getMinigunConfig() {
 		config.config.add(BulletConfigSyncingUtil.R5_EXPLOSIVE);
 		config.config.add(BulletConfigSyncingUtil.R5_DU);
 		config.config.add(BulletConfigSyncingUtil.R5_STAR);
+		config.config.add(BulletConfigSyncingUtil.CHL_R5);
 		
 		return config;
 	}
@@ -71,6 +72,7 @@ public static GunConfiguration getMinigunConfig() {
 		config.config.add(BulletConfigSyncingUtil.R5_EXPLOSIVE_BOLT);
 		config.config.add(BulletConfigSyncingUtil.R5_DU_BOLT);
 		config.config.add(BulletConfigSyncingUtil.R5_STAR_BOLT);
+		config.config.add(BulletConfigSyncingUtil.CHL_R5_BOLT);
 		
 		return config;
 	}

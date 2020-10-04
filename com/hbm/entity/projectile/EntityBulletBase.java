@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.RedBarrel;
-import com.hbm.calc.VectorUtil;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
@@ -24,6 +23,7 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -59,7 +59,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	public static final DataParameter<Integer> TRAIL = EntityDataManager.createKey(EntityBulletBase.class, DataSerializers.VARINT);
 	public static final DataParameter<Integer> BULLETCONFIG = EntityDataManager.createKey(EntityBulletBase.class, DataSerializers.VARINT);
 
-	Field lastDamage = null;
+	public static Field lastDamage = null;
 
 	private BulletConfiguration config;
 	public EntityLivingBase shooter;
@@ -367,7 +367,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 						vel.normalize();
 
 						boolean lRic = rand.nextInt(100) < config.LBRC;
-						double angle = Math.abs(VectorUtil.getCrossAngle(vel, face) - 90);
+						double angle = Math.abs(BobMathUtil.getCrossAngle(vel, face) - 90);
 
 						if (hRic || (angle <= config.ricochetAngle && lRic)) {
 							switch (movement.sideHit.getAxis()) {

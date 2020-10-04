@@ -22,6 +22,7 @@ import com.hbm.handler.guncfg.GunGrenadeFactory;
 import com.hbm.handler.guncfg.GunNPCFactory;
 import com.hbm.handler.guncfg.GunOSIPRFactory;
 import com.hbm.handler.guncfg.GunRocketFactory;
+import com.hbm.items.ModItems;
 
 public class BulletConfigSyncingUtil {
 
@@ -76,6 +77,7 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int ROCKET_CHAINSAW = i++;
 	public static int ROCKET_TOXIC = i++;
 	public static int ROCKET_PHOSPHORUS = i++;
+	public static int ROCKET_CANISTER = i++;
 
 	public static int GRENADE_NORMAL = i++;
 	public static int GRENADE_HE = i++;
@@ -141,7 +143,13 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 
 	public static int G4_NORMAL = i++;
 	public static int G4_SLUG = i++;
+	public static int G4_FLECHETTE = i++;
+	public static int G4_FLECHETTE_PHOSPHORUS = i++;
 	public static int G4_EXPLOSIVE = i++;
+	public static int G4_SEMTEX = i++;
+	public static int G4_BALEFIRE = i++;
+	public static int G4_KAMPF = i++;
+	public static int G4_CANISTER = i++;
 	public static int G4_SLEEK = i++;
 
 	public static int SPECIAL_OSIPR = i++;
@@ -184,6 +192,19 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int NUKE_MIRV = i++;
 	public static int NUKE_AMAT = i++;
 	public static int NUKE_PROTO = i++;
+	
+	public static int ZOMG_BOLT = i++;
+
+	public static int CHL_LR22 = i++;
+	public static int CHL_LR22_FIRE = i++;
+	public static int CHL_M44 = i++;
+	public static int CHL_P9 = i++;
+	public static int CHL_BMG50 = i++;
+	public static int CHL_R5 = i++;
+	public static int CHL_R5_BOLT = i++;
+	public static int CHL_AE50 = i++;
+	public static int CHL_R556 = i++;
+	public static int CHL_R556_FLECHETTE = i++;
 	
 	public static int MASKMAN_BULLET = i++;
 	public static int MASKMAN_ORB = i++;
@@ -241,6 +262,7 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(ROCKET_NUKE, GunRocketFactory.getRocketNukeConfig());
 		configSet.put(ROCKET_CHAINSAW, GunRocketFactory.getRocketRPCConfig());
 		configSet.put(ROCKET_TOXIC, GunRocketFactory.getRocketChlorineConfig());
+		configSet.put(ROCKET_CANISTER, GunRocketFactory.getRocketCanisterConfig());
         
 		configSet.put(GRENADE_NORMAL, GunGrenadeFactory.getGrenadeConfig());
 		configSet.put(GRENADE_HE, GunGrenadeFactory.getGrenadeHEConfig());
@@ -306,7 +328,13 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
         
 		configSet.put(G4_NORMAL, Gun4GaugeFactory.get4GaugeConfig());
 		configSet.put(G4_SLUG, Gun4GaugeFactory.get4GaugeSlugConfig());
+		configSet.put(G4_FLECHETTE, Gun4GaugeFactory.get4GaugeFlechetteConfig());
+		configSet.put(G4_FLECHETTE_PHOSPHORUS, Gun4GaugeFactory.get4GaugeFlechettePhosphorusConfig());
 		configSet.put(G4_EXPLOSIVE, Gun4GaugeFactory.get4GaugeExplosiveConfig());
+		configSet.put(G4_SEMTEX, Gun4GaugeFactory.get4GaugeMiningConfig());
+		configSet.put(G4_BALEFIRE, Gun4GaugeFactory.get4GaugeBalefireConfig());
+		configSet.put(G4_KAMPF, Gun4GaugeFactory.getGrenadeKampfConfig());
+		configSet.put(G4_CANISTER, Gun4GaugeFactory.getGrenadeCanisterConfig());
 		configSet.put(G4_SLEEK, Gun4GaugeFactory.get4GaugeSleekConfig());
         
 		configSet.put(SPECIAL_OSIPR, GunOSIPRFactory.getPulseConfig());
@@ -349,6 +377,19 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(NUKE_MIRV, GunFatmanFactory.getMirvConfig());
 		configSet.put(NUKE_PROTO, GunFatmanFactory.getNukeProtoConfig());
 		configSet.put(NUKE_AMAT, GunFatmanFactory.getBalefireConfig());
+		
+		configSet.put(ZOMG_BOLT, GunEnergyFactory.getZOMGBoltConfig());
+
+		configSet.put(CHL_LR22, Gun22LRFactory.get22LRConfig().setToHoming(ModItems.ammo_22lr_chlorophyte));
+		configSet.put(CHL_LR22_FIRE, Gun22LRFactory.get22LRConfig().setToFire(3).setToHoming(ModItems.ammo_22lr_chlorophyte));
+		configSet.put(CHL_M44, Gun44MagnumFactory.getNoPipConfig().setToHoming(ModItems.ammo_44_chlorophyte));
+		configSet.put(CHL_P9, Gun9mmFactory.get9mmConfig().setToHoming(ModItems.ammo_9mm_chlorophyte));
+		configSet.put(CHL_BMG50, Gun50BMGFactory.get50BMGConfig().setToHoming(ModItems.ammo_50bmg_chlorophyte));
+		configSet.put(CHL_R5, Gun5mmFactory.get5mmConfig().setToHoming(ModItems.ammo_5mm_chlorophyte));
+		configSet.put(CHL_R5_BOLT, Gun5mmFactory.get5mmConfig().setToBolt(BulletConfiguration.BOLT_LACUNAE).setToHoming(ModItems.ammo_5mm_chlorophyte));
+		configSet.put(CHL_AE50, Gun50AEFactory.get50AEConfig().setToHoming(ModItems.ammo_50ae_chlorophyte));
+		configSet.put(CHL_R556, Gun556mmFactory.get556Config().setToHoming(ModItems.ammo_556_chlorophyte));
+		configSet.put(CHL_R556_FLECHETTE, Gun556mmFactory.get556FlechetteConfig().setToHoming(ModItems.ammo_556_flechette_chlorophyte));
 		
 		configSet.put(MASKMAN_BULLET, GunNPCFactory.getMaskmanBullet());
 		configSet.put(MASKMAN_ORB, GunNPCFactory.getMaskmanOrb());

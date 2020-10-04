@@ -379,8 +379,42 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.RED + "- Highly increased wear");
 			list.add(TextFormatting.RED + "- Single projectile");
 		}
+		if(this == ModItems.ammo_4gauge_semtex) {
+			list.add(TextFormatting.BLUE + "+ Explosive");
+			list.add(TextFormatting.BLUE + "+ Explosion drops all blocks");
+			list.add(TextFormatting.RED + "- No splash damage");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+			list.add(TextFormatting.RED + "- Single projectile");
+		}
+		if(this == ModItems.ammo_4gauge_balefire) {
+			list.add(TextFormatting.BLUE + "+ Explosive");
+			list.add(TextFormatting.BLUE + "+ Balefire");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.RED + "- Highly increased wear");
+			list.add(TextFormatting.RED + "- Single projectile");
+		}
+		if(this == ModItems.ammo_4gauge_kampf) {
+			list.add(TextFormatting.BLUE + "+ Explosive");
+			list.add(TextFormatting.BLUE + "+ Rocket Propelled");
+			list.add(TextFormatting.BLUE + "+ Increased accuracy");
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.RED + "- Increased wear");
+			list.add(TextFormatting.RED + "- Single projectile");
+		}
 		if(this == ModItems.ammo_4gauge_sleek) {
 			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
+		}
+		if(this == ModItems.ammo_4gauge_flechette) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Increased wear");
+		}
+		if(this == ModItems.ammo_4gauge_flechette_phosphorus) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Induces phosphorus burns");
+			list.add(TextFormatting.YELLOW + "* Twice the warcrime in a single round!");
+			list.add(TextFormatting.YELLOW + "* Less bouncy");
+			list.add(TextFormatting.RED + "- Increased wear");
 		}
 		// 5.56mm
 		if(this == ModItems.ammo_556_phosphorus) {
@@ -442,6 +476,64 @@ public class ItemAmmo extends Item {
 		}
 		if(this == ModItems.ammo_556_k) {
 			list.add(TextFormatting.YELLOW + "* It's a blank");
+		}
+		
+		//Drillgon200: New stuff (organization? Whatever)
+		if(this == ModItems.ammo_44_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_5mm_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_9mm_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_22lr_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_50bmg_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_50ae_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
+		}
+		if(this == ModItems.ammo_556_flechette_chlorophyte) {
+			list.add(TextFormatting.BLUE + "+ Increased damage");
+			list.add(TextFormatting.BLUE + "+ Decreased wear");
+			list.add(TextFormatting.DARK_GREEN + "* Chlorophyte");
+			list.add(TextFormatting.YELLOW + "* Homing");
+			list.add(TextFormatting.RED + "- Not penetrating");
 		}
 	}
 }

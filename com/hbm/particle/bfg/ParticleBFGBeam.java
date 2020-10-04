@@ -4,9 +4,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 import com.hbm.handler.HbmShaderManager;
-import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -45,7 +45,7 @@ public class ParticleBFGBeam extends Particle {
 		float timeScale = this.particleAge/(float)this.particleMaxAge;
 		
 		this.prevAlpha = particleAlpha;
-		this.particleAlpha = MathHelper.clamp(1-Library.remap((float)MathHelper.clamp(timeScale, 0.6, 1), 0.6F, 1F, 0F, 1.1F), 0, 1);
+		this.particleAlpha = MathHelper.clamp(1-BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0.6, 1), 0.6F, 1F, 0F, 1.1F), 0, 1);
 	}
 	
 	@Override

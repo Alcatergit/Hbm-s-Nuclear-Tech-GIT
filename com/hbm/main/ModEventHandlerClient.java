@@ -4,13 +4,13 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.Project;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
-import com.hbm.blocks.generic.TrappedBrick.TrapType;
 import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
@@ -44,7 +44,9 @@ import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunShotty;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.MeathookJumpPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -78,7 +80,6 @@ import com.hbm.render.item.weapon.ItemRenderRedstoneSword;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.tileentity.RenderMultiblock;
-import com.hbm.render.tileentity.RenderPlasmaMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.sound.MovingSoundChopper;
@@ -90,13 +91,12 @@ import com.hbm.sound.MovingSoundXVL1456;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
+import com.hbm.util.BobMathUtil;
 
 import glmath.glm.vec._2.Vec2;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -117,6 +117,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEndGateway;
 import net.minecraft.tileentity.TileEntityEndPortal;
@@ -129,6 +130,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -143,13 +145,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ModEventHandlerClient {
 
@@ -391,6 +391,13 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.gun_quadro, reg);
 		swapModels(ModItems.gun_sauer, reg);
 		swapModelsNoGui(ModItems.chernobylsign, reg);
+		swapModels(Item.getItemFromBlock(ModBlocks.machine_selenium), reg);
+		swapModels(Item.getItemFromBlock(ModBlocks.radiorec), reg);
+		swapModels(ModItems.gun_vortex, reg);
+		swapModels(ModItems.gun_thompson, reg);
+		swapModelsNoGui(ModItems.wood_gavel, reg);
+		swapModelsNoGui(ModItems.lead_gavel, reg);
+		swapModelsNoGui(ModItems.diamond_gavel, reg);
 
 		MainRegistry.proxy.registerMissileItems(reg);
 	}
@@ -662,7 +669,7 @@ public class ModEventHandlerClient {
 
 	// Drillgon200: All this random flashlight shader stuff was ultimately
 	// abandoned because it would have caused too many mod incompatibilities and
-	// isn't used anywhere.
+	// isn't used anywhere. The coremod still exists, but has no transformers so it doesn't do anything.
 
 	private static boolean sentUniforms = false;
 	public static boolean renderingDepthOnly = false;
@@ -820,6 +827,11 @@ public class ModEventHandlerClient {
 		}
 	}
 	
+	@SubscribeEvent
+	public void cameraSetup(EntityViewRenderEvent.CameraSetup e){
+		RecoilHandler.modifiyCamera(e);
+	}
+	
 	FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
 	FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
 	IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
@@ -827,6 +839,9 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
+		/*
+		* my ass is heavy
+		*/
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
 		ClientProxy.renderingConstant = true;
 
@@ -931,8 +946,8 @@ public class ModEventHandlerClient {
 		if(event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			float x1 = ItemGunShotty.prevScreenPos.x + (ItemGunShotty.screenPos.x - ItemGunShotty.prevScreenPos.x) * event.getPartialTicks();
 			float y1 = ItemGunShotty.prevScreenPos.y + (ItemGunShotty.screenPos.y - ItemGunShotty.prevScreenPos.y) * event.getPartialTicks();
-			float x = Library.remap(x1, 0, Minecraft.getMinecraft().displayWidth, 0, event.getResolution().getScaledWidth());
-			float y = event.getResolution().getScaledHeight() - Library.remap(y1, 0, Minecraft.getMinecraft().displayHeight, 0, event.getResolution().getScaledHeight());
+			float x = BobMathUtil.remap(x1, 0, Minecraft.getMinecraft().displayWidth, 0, event.getResolution().getScaledWidth());
+			float y = event.getResolution().getScaledHeight() - BobMathUtil.remap(y1, 0, Minecraft.getMinecraft().displayHeight, 0, event.getResolution().getScaledHeight());
 			RenderHelper.bindTexture(ResourceManager.meathook_marker);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableBlend();
@@ -941,7 +956,6 @@ public class ModEventHandlerClient {
 			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 			GlStateManager.disableBlend();
 		}
-		// Screw that I'm not attempting art
 		/// HANDLE GUN AND AMMO OVERLAYS ///
 		if(event.getType() == ElementType.HOTBAR && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
@@ -1021,10 +1035,21 @@ public class ModEventHandlerClient {
 		/// HANDLE CUSTOM CROSSHAIRS ///
 		if(event.getType() == ElementType.CROSSHAIRS && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon || player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) && GeneralConfig.enableCrosshairs) {
 			event.setCanceled(true);
-			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking()))
-				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
+			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon && !(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase && ((ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).mainConfig.hasSights && player.isSneaking())){
+				if(((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).hasCustomHudElement()){
+					((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).renderHud(event.getResolution(), Minecraft.getMinecraft().ingameGUI, player.getHeldItemMainhand(), event.getPartialTicks());
+				} else {
+					RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.MAIN_HAND).getItem()).getCrosshair());
+				}
+			}
+				
 			if(!(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
-				RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
+				if(((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).hasCustomHudElement()){
+					((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).renderHud(event.getResolution(), Minecraft.getMinecraft().ingameGUI, player.getHeldItemOffhand(), event.getPartialTicks());
+				} else {
+					RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(EnumHand.OFF_HAND).getItem()).getCrosshair());
+				}
+				
 			}
 		}
 
@@ -1042,41 +1067,12 @@ public class ModEventHandlerClient {
 			if(time > animation.animation.getDuration())
 				HbmAnimations.hotbar[i] = null;
 		}
-		
-		/*if(event.getType() == ElementType.CROSSHAIRS) {
-
-			if(player.ticksExisted < 200) {
-
-				if(annoyanceToken) {
-					FontRenderer font = Minecraft.getMinecraft().fontRenderer;
-
-					ScaledResolution resolution = event.getResolution();
-					int pX = resolution.getScaledWidth() / 2;
-					int pZ = resolution.getScaledHeight() / 2;
-
-					String msg = "PLEASE";
-					font.drawStringWithShadow(msg, pX - font.getStringWidth(msg) / 2, pZ - 40, 0xffffff);
-					msg = "THIS IS A DEVELOPMENT VERSION";
-					if(player.ticksExisted > 30) font.drawStringWithShadow(msg, pX - font.getStringWidth(msg) / 2, pZ - 20, 0xffffff);
-					msg = "OBVIOUSLY SOME THINGS AREN'T GOING TO WORK";
-					if(player.ticksExisted > 60) font.drawStringWithShadow(msg, pX - font.getStringWidth(msg) / 2, pZ, 0xffffff);
-					msg = "PLEASE AT LEAST TRY TO REMEMBER THAT";
-					if(player.ticksExisted > 90) font.drawStringWithShadow(msg, pX - font.getStringWidth(msg) / 2, pZ + 20, 0xffffff);
-					msg = "FOR THE LOVE OF GOD";
-					if(player.ticksExisted > 120) font.drawStringWithShadow(msg, pX - font.getStringWidth(msg) / 2, pZ + 40, 0xb00000);
-				}
-
-			} else {
-
-				if(annoyanceToken)
-					annoyanceToken = false;
-			}
-		}*/
+		if(Keyboard.isKeyDown(Keyboard.KEY_O)) {
+			PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(0, 0, 0, 999, 0));
+		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	
-	public static boolean annoyanceToken = true;
-
 	@SubscribeEvent
 	public void preRenderPlayer(RenderPlayerEvent.Pre evt) {
 		// event.setCanceled(true);

@@ -25,9 +25,8 @@ public class RenderAMSBase extends TileEntitySpecialRenderer<TileEntityAMSBase> 
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
         bindTexture(ResourceManager.ams_base_tex);
-        
         ResourceManager.ams_base.renderAll();
-
+        
         GL11.glPopMatrix();
 
 		if(base.color > -1)

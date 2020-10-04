@@ -84,8 +84,7 @@ public class MachinePress extends BlockContainer {
 		if(world.isRemote)
 		{
 			return true;
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
 			TileEntityMachinePress entity = (TileEntityMachinePress) world.getTileEntity(pos);
 			if(entity != null)
 			{

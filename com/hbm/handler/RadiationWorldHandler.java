@@ -1,8 +1,8 @@
 package com.hbm.handler;
 
-import java.util.Collection;
 import java.util.Map.Entry;
 
+import com.hbm.config.RadiationConfig;
 import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 
 public class RadiationWorldHandler {
@@ -20,7 +19,9 @@ public class RadiationWorldHandler {
 
 		if(!(world instanceof WorldServer))
 			return;
-
+		if(!RadiationConfig.worldRadEffects)
+			return;
+		
 		WorldServer serv = (WorldServer)world;
 
 		RadiationSavedData data = RadiationSavedData.getData(serv);

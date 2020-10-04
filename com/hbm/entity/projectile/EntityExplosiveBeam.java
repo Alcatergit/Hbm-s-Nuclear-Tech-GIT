@@ -426,7 +426,6 @@ public class EntityExplosiveBeam extends Entity implements IProjectile
     public void setIsCritical(boolean p_70243_1_)
     {
         byte b0 = this.dataManager.get(CRITICAL);
-        Tessellator.getInstance();
         if (p_70243_1_)
         {
             this.dataManager.set(CRITICAL, Byte.valueOf((byte)(b0 | 1)));

@@ -102,14 +102,14 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		}*/
 		
-		GL11.glEnable(GL11.GL_CLIP_PLANE0);
+		/*GL11.glEnable(GL11.GL_CLIP_PLANE0);
 		DoubleBuffer buf = GLAllocation.createDirectByteBuffer(8*4).asDoubleBuffer();
 		buf.put(new double[]{1, 0, 1, 0});
 		buf.rewind();
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 		GL11.glClipPlane(GL11.GL_CLIP_PLANE0, buf);
-		GL11.glPopMatrix();
+		GL11.glPopMatrix();*/
 		
 		GL11.glPushMatrix();
 
@@ -127,7 +127,7 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		
 		renderTileEntityAt2(te, x, y, z, partialTicks);
 		GL11.glPopMatrix();
-		GL11.glDisable(GL11.GL_CLIP_PLANE0);
+		//GL11.glDisable(GL11.GL_CLIP_PLANE0);
 		//if(model.controller.getAnim() == AnimationWrapper.EMPTY)
 		//	model.controller.setAnim(new AnimationWrapper(anim_test).onEnd(new EndResult(EndType.REPEAT_REVERSE, null)));
 		/*GL11.glPushMatrix();

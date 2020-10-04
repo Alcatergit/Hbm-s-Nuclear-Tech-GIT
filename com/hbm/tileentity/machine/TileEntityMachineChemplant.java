@@ -263,9 +263,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 
 			FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(inventory.getStackInSlot(4));
 			FluidStack[] outputs = MachineRecipes.getFluidOutputFromTempate(inventory.getStackInSlot(4));
-			
-			if((MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(inputs)) && 
-					(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
+			if((MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))) {
+				
 				this.maxProgress = (ItemChemistryTemplate.getProcessTime(inventory.getStackInSlot(4)) * speed) / 100;
 				if(power >= consumption && removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), cloneItemStackProper(inventory)) && hasFluidsStored(inputs)) {
 					if(hasSpaceForItems(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4))) && hasSpaceForFluids(outputs)) {

@@ -28,15 +28,15 @@ public class ItemRenderZOMG extends TEISRBase {
 		Minecraft.getMinecraft().renderEngine.bindTexture(zomg_rl);
 		switch(type){
 		case FIRST_PERSON_LEFT_HAND:
-			GL11.glTranslated(0.0, 0, -0.2);
-			GL11.glScaled(1.2, 1.2, 1.2);
+			GL11.glTranslated(-0.5, 0, -0.5);
+			GL11.glScaled(1.4, 1.4, 1.4);
 		case FIRST_PERSON_RIGHT_HAND:
-			GL11.glScaled(0.5, 0.5, 0.5);
-			GL11.glTranslated(0.2, 0, 0.4);
+			GL11.glScaled(0.75, 0.75, 0.75);
+			GL11.glTranslated(0.4, 0.3, 0.6);
 			GL11.glRotated(180, 1, 0, 0);
-			GL11.glRotated(40, 0, 0, 1);
+			GL11.glRotated(30, 0, 0, 1);
 			if(type == TransformType.FIRST_PERSON_LEFT_HAND){
-				GL11.glRotated(100, 0, 0, 1);
+				GL11.glRotated(120, 0, 0, 1);
 				GL11.glRotated(180, 1, 0, 0);
 			}
 			swordModel.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);

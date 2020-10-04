@@ -28,6 +28,15 @@ public class WavefrontObjCalllist implements IModelCustom {
 		}
 		
 	}
+	
+	public int getListForName(String name){
+		for(Pair<String, Integer> p : nameToCallList){
+			if(p.getLeft().equalsIgnoreCase(name)){
+				return p.getRight();
+			}
+		}
+		return 0;
+	}
 
 	@Override
 	public String getType() {

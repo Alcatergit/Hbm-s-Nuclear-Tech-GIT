@@ -26,6 +26,8 @@ import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 public class MachineITER extends BlockDummyable {
 
+	public static boolean drop = true;
+	
 	public MachineITER(String s) {
 		super(Material.IRON, s);
 	}
@@ -142,7 +144,7 @@ public class MachineITER extends BlockDummyable {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		int i = state.getValue(META);
-		if(i >= 12) {
+		if(i >= 12 && drop) {
 
             for(int l = 0; l < 4; l++)
             	world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.fusion_conductor, 64)));

@@ -76,9 +76,6 @@ public class BeamPronter {
 				spinner.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
 			}
 			
-			//spinner.rotateAroundX(sPitch + (float)Math.PI * 0.5F);
-			//spinner.rotateAroundY(sYaw);
-
 			double pX = unit.xCoord * segLength * i + spinner.xCoord;
 			double pY = unit.yCoord * segLength * i + spinner.yCoord;
 			double pZ = unit.zCoord * segLength * i + spinner.zCoord;

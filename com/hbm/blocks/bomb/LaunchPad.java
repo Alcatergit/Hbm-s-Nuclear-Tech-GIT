@@ -35,6 +35,7 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -127,24 +128,6 @@ public class LaunchPad extends BlockContainer implements IBomb {
 
 	@Override
 	public void explode(World world, BlockPos pos) {
-		if(world.isRemote){
-			for(int i = 0; i < 16000; i ++){
-				int x = world.rand.nextInt(10)-5;
-				int y = world.rand.nextInt(10)-5;
-				int z = world.rand.nextInt(10)-5;
-				MainRegistry.proxy.particleControl(pos.getX()+x, pos.getY()+18+y, pos.getZ()+z, 2);
-				/*NBTTagCompound data = new NBTTagCompound();
-				data.setString("type", "exhaust");
-				data.setString("mode", "soyuz");
-				data.setInteger("count", 1);
-				data.setDouble("width", world.rand.nextDouble() * 0.25 - 0.5);
-				data.setDouble("posX", pos.getX()+x);
-				data.setDouble("posY", pos.getY()+18+y);
-				data.setDouble("posZ", pos.getZ()+z);
-				
-				MainRegistry.proxy.effectNT(data);*/
-			}
-		}
 		TileEntityLaunchPad entity = (TileEntityLaunchPad) world.getTileEntity(pos);
 
 		int x = pos.getX();

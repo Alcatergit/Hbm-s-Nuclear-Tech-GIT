@@ -67,8 +67,7 @@ public abstract class BlockDummyable extends BlockContainer {
     	
     	ForgeDirection dir = ForgeDirection.getOrientation(metadata).getOpposite();
     	Block b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock();
-    	
-    	if(b != this) {
+    	if(b.getClass() != this.getClass()) {
     		world.setBlockToAir(pos);
     	}
 	}
@@ -88,7 +87,7 @@ public abstract class BlockDummyable extends BlockContainer {
     	ForgeDirection dir = ForgeDirection.getOrientation(metadata).getOpposite();
     	Block b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock();
     	
-    	if(b != this) {
+    	if(b.getClass() != this.getClass()) {
     		world.setBlockToAir(pos);
     	}
 	}
@@ -104,7 +103,7 @@ public abstract class BlockDummyable extends BlockContainer {
     	BlockPos pos = new BlockPos(x, y, z);
     	IBlockState state = world.getBlockState(pos);
     	
-    	if(state.getBlock() != this)
+    	if(state.getBlock().getClass() != this.getClass())
     		return null;
     	
     	int metadata = state.getValue(META);
@@ -218,7 +217,23 @@ public abstract class BlockDummyable extends BlockContainer {
 		safeRem = true;
 		world.setBlockState(pos, this.getDefaultState().withProperty(META, meta + extra), 3);
 		safeRem = false;
+	}
+	
+	//Drillgon200: Removes the extra. I could have sworn there was already a method for this, but I can't find it.
+	public void removeExtra(World world, int x, int y, int z) {
+		BlockPos pos = new BlockPos(x, y, z);
+		if(world.getBlockState(pos).getBlock() != this)
+			return;
+		
+		int meta = world.getBlockState(pos).getValue(META);
+		
+		if(meta <= 5 || meta >= 12)
+			return;
 			
+		//world.setBlockMetadataWithNotify(x, y, z, meta + extra, 3);
+		safeRem = true;
+		world.setBlockState(pos, this.getDefaultState().withProperty(META, meta - extra), 3);
+		safeRem = false;
 	}
 		
 	//checks if the dummy metadata is within the extra range

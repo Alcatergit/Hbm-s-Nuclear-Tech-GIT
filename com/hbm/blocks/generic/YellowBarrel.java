@@ -81,7 +81,10 @@ public class YellowBarrel extends Block {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
         
-        RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 5, 75);
+		if(this == ModBlocks.yellow_barrel)
+    		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 5, 75);
+    	else
+    		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 0.5F, 5);
 
         world.scheduleUpdate(pos, this, this.tickRate(world));
 	}

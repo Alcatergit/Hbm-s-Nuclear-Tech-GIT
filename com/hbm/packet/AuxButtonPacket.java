@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import com.hbm.entity.mob.EntityDuck;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -19,9 +20,11 @@ import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -257,6 +260,29 @@ public class AuxButtonPacket implements IMessage {
 						base.handleButtonPacket(m.value, m.id);
 					}
 					
+					
+					//why make new packets when you can just abuse and uglify the existing ones?
+					if(te == null && m.value == 999) {
+
+						NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+
+						if(!perDat.getBoolean("hasDucked")) {
+							EntityDuck ducc = new EntityDuck(p.world);
+							ducc.setPosition(p.posX, p.posY + p.eyeHeight, p.posZ);
+
+							Vec3d vec = p.getLookVec();
+							ducc.motionX = vec.x;
+							ducc.motionY = vec.y;
+							ducc.motionZ = vec.z;
+
+							p.world.spawnEntity(ducc);
+							p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+							perDat.setBoolean("hasDucked", true);
+
+							p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
+						}
+					}
 				//} catch (Exception x) { }
 			});
 			

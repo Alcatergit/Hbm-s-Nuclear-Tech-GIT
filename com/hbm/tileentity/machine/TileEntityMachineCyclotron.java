@@ -1,134 +1,89 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityBlackHole;
-import com.hbm.entity.effect.EntityCloudFleija;
-import com.hbm.entity.logic.EntityNukeExplosionMK3;
+import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
+import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.explosion.ExplosionThermo;
+import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemCell;
+import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCyclotron extends TileEntity implements ITickable, ISource {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
+	public static final long maxPower = 100000000;
+	public int consumption = 1000000;
+
+	public boolean isOn;
+
+	private int age;
+	private int countdown;
+	private byte plugs; 
 	public int progress;
-	public int soundCycle = 0;
-	public static final long maxPower = 1000000000;
-	public static final int processTime = 690;
-	public boolean isOn = false;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
-	Random rand = new Random();
-	public ICapabilityProvider dropProvider;
+	public static final int duration = 690;
 
-	//private static final int[] slots_top = new int[] { 0 };
-	//private static final int[] slots_bottom = new int[] { 0, 0 };
-	//private static final int[] slots_side = new int[] { 0 };
+	public FluidTank coolant;
+	public FluidTank amat;
 
-	private String customName;
-	
 	public TileEntityMachineCyclotron() {
+		super(0);
 		inventory = new ItemStackHandler(16){
 			@Override
 			protected void onContentsChanged(int slot) {
-				markDirty();
 				super.onContentsChanged(slot);
+				markDirty();
+			}
+			@Override
+			public void setStackInSlot(int slot, ItemStack stack) {
+				if(stack != null && slot >= 14 && slot <= 15 && stack.getItem() instanceof ItemMachineUpgrade)
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
+				super.setStackInSlot(slot, stack);
 			}
 		};
-		dropProvider = new ICapabilityProvider(){
-
-			@Override
-			public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-			}
-
-			@Override
-			public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : null;
-			}
-			
-		};
-	}
-	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.cyclotron";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
-		}
+		coolant = new FluidTank(32000);
+		amat = new FluidTank(8000);
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		this.power = compound.getLong("power");
-		this.progress = compound.getInteger("progress");
-		this.isOn = compound.getBoolean("isOn");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		super.readFromNBT(compound);
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setLong("power", power);
-		compound.setInteger("progress", progress);
-		compound.setBoolean("isOn", isOn);
-		compound.setTag("inventory", inventory.serializeNBT());
-		return super.writeToNBT(compound);
+	public String getName() {
+		return "container.cyclotron";
 	}
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			
 			age++;
 			if(age >= 20)
 			{
@@ -136,378 +91,229 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 			}
 			
 			if(age == 9 || age == 19)
-				ffgeuaInit();
+				fillFluidInit(amat);
 
-			if(!isOn && hasFuse() && getHeatLevel() != 4 && hasEnergy() && (isPart(inventory.getStackInSlot(0)) || isPart(inventory.getStackInSlot(1)) || isPart(inventory.getStackInSlot(2)))) {
-				isOn = true;
-				inventory.setStackInSlot(6, ItemStack.EMPTY);
+			this.power = Library.chargeTEFromItems(inventory, 13, power, maxPower);
+			FFUtils.fillFromFluidContainer(inventory, coolant, 11, 12);
+			if(coolant.getFluid() != null && coolant.getFluid().getFluid() != ModForgeFluids.coolant){
+				coolant.setFluid(null);
 			}
-			
-			if(isOn && (!hasFuse() || (!isPart(inventory.getStackInSlot(0)) && !isPart(inventory.getStackInSlot(1)) && !isPart(inventory.getStackInSlot(2))))) {
-				isOn = false;
-			}
+			FFUtils.fillFluidContainer(inventory, amat, 9, 10);
 			
 			if(isOn) {
 
-				this.power += getPower(inventory.getStackInSlot(0));
-				this.power += getPower(inventory.getStackInSlot(1));
-				this.power += getPower(inventory.getStackInSlot(2));
-				if(this.power > maxPower)
-					power = maxPower;
-				
-				if(progress < processTime) {
-					progress++;
+				int defConsumption = consumption - 100000 * getConsumption();
+
+				if(canProcess() && power >= defConsumption) {
+					progress += this.getSpeed();
+					power -= defConsumption;
+					
+					if(progress >= duration) {
+						process();
+						progress = 0;
+						this.markDirty();
+					}
+					if(coolant.getFluidAmount() > 0) {
+						countdown = 0;
+
+						if(world.rand.nextInt(3) == 0)
+							coolant.drain(1, true);
+
+					} else if(world.rand.nextInt(this.getSafety()) == 0) {
+
+						countdown++;
+
+						int chance = 7 - Math.min((int) Math.ceil(countdown / 200D), 6);
+
+						if(world.rand.nextInt(chance) == 0)
+							ExplosionLarge.spawnTracers(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 1);
+
+						if(countdown > 1000) {
+							ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 25);
+							ExplosionThermo.scorchLight(world, pos.getX(), pos.getY(), pos.getZ(), 7);
+
+							if(countdown % 4 == 0)
+								ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 18, 1);
+
+						} else if(countdown > 600) {
+							ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 10);
+						}
+
+						if(countdown == 1140)
+							world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
+
+						if(countdown > 1200)
+							explode();
+					}
 				} else {
 					progress = 0;
-					process();
-				}
-				
-				if(!inventory.getStackInSlot(7).isEmpty()) {
-					inventory.getStackInSlot(7).setItemDamage(inventory.getStackInSlot(7).getItemDamage() + 1);
-					if(inventory.getStackInSlot(7).getItemDamage() >= inventory.getStackInSlot(7).getMaxDamage())
-						inventory.setStackInSlot(7, ItemStack.EMPTY);
-				}
-				
-				if(getCoolantTicksLeft() == 100) {
-			        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
-				}
-				
-				if(getHeatLevel() == 1) {
-					ExplosionChaos.flameDeath(world, pos, 15);
-				}
-				
-				if(getHeatLevel() == 2) {
-					ExplosionChaos.flameDeath(world, pos, 25);
-					ExplosionChaos.burn(world, pos, 7);
-					ExplosionThermo.setEntitiesOnFire(world, pos.getX(), pos.getY(), pos.getZ(), 7);
-				}
-				
-				if(getHeatLevel() == 3) {
-					ExplosionChaos.flameDeath(world, pos, 35);
-					ExplosionChaos.burn(world, pos, 15);
-					ExplosionThermo.setEntitiesOnFire(world, pos.getX(), pos.getY(), pos.getZ(), 25);
-					ExplosionThermo.scorchLight(world, pos.getX(), pos.getY(), pos.getZ(), 5);
-					if(rand.nextInt(50) == 0)
-						ExplosionLarge.spawnTracers(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 3);
-				}
-				
-				if(getHeatLevel() == 4) {
-					int i = rand.nextInt(4);
-
-					world.setBlockToAir(pos);
-					
-					if(i == 0) {
-						ExplosionLarge.explodeFire(world, pos.getX(), pos.getY(), pos.getZ(), 35 + rand.nextInt(21), true, true, true);
-					}
-					if(i == 1) {
-						world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX(), pos.getY(), pos.getZ()));
-						ExplosionParticleB.spawnMush(world, pos.getX(), pos.getY() - 3, pos.getZ());
-					}
-					if(i == 2) {
-					
-						EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(world);
-						entity.posX = pos.getX();
-						entity.posY = pos.getY();
-						entity.posZ = pos.getZ();
-						int j = 15 + rand.nextInt(21);
-						entity.destructionRange = j;
-						entity.speed = 25;
-						entity.coefficient = 1.0F;
-						entity.waste = false;
-		    	
-						world.spawnEntity(entity);
-		    		
-						EntityCloudFleija cloud = new EntityCloudFleija(world, j);
-						cloud.posX = pos.getX();
-						cloud.posY = pos.getY();
-						cloud.posZ = pos.getZ();
-						world.spawnEntity(cloud);
-					}
-					if(i == 3) {
-						EntityBlackHole bl = new EntityBlackHole(world, 1.5F + rand.nextFloat());
-						bl.posX = pos.getX() + 0.5F;
-						bl.posY = pos.getY() + 3.5F;
-						bl.posZ = pos.getZ() + 0.5F;
-						world.spawnEntity(bl);
-					}
 				}
 				
 			} else {
 				progress = 0;
 			}
 			
-			power = Library.chargeItemsFromTE(inventory, 9, power, maxPower);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			data.setInteger("progress", progress);
+			data.setBoolean("isOn", isOn);
+			data.setByte("plugs", plugs);
+			this.networkPack(data, 25);
+
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, coolant, amat), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 		}
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		this.isOn = data.getBoolean("isOn");
+		this.power = data.getLong("power");
+		this.plugs = data.getByte("plugs");
+		this.progress = data.getInteger("progress");
+	}
+	
+	@Override
+	public void handleButtonPacket(int value, int meta) {
+		isOn = !isOn;
+	}
+	
+	private void explode() {
+
+		ExplosionLarge.explodeFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 25, true, false, true);
+		int rand = world.rand.nextInt(10);
+
+		if(rand < 2) {
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5));
+			ExplosionParticle.spawnMush(world, pos.getX() + 0.5, pos.getY() - 3,  pos.getZ() + 0.5);
+		} else if(rand < 4) {
+			EntityBalefire bf = new EntityBalefire(world);
+			bf.posX = pos.getX() + 0.5;
+			bf.posY = pos.getY() + 1.5;
+			bf.posZ =  pos.getZ() + 0.5;
+			bf.destructionRange = (int)(BombConfig.fatmanRadius * 1.5);
+			world.spawnEntity(bf);
+			ExplosionParticleB.spawnMush(world, pos.getX() + 0.5, pos.getY() - 3,  pos.getZ() + 0.5);
+		} else if(rand < 5) {
+			EntityBlackHole bl = new EntityBlackHole(world, 1.5F + world.rand.nextFloat());
+			bl.posX = pos.getX() + 0.5F;
+			bl.posY = pos.getY() + 1.5F;
+			bl.posZ = pos.getZ() + 0.5F;
+			world.spawnEntity(bl);
+		}
+	}
+	
+	public boolean canProcess(){
+
+		for(int i = 0; i < 3; i++) {
+			Object[] res = CyclotronRecipes.getOutput(inventory.getStackInSlot(i+3), inventory.getStackInSlot(i));
+
+			if(res == null)
+				continue;
+
+			ItemStack out = (ItemStack)res[0];
+
+			if(out == null)
+				continue;
+
+			if(inventory.getStackInSlot(i+6).isEmpty())
+				return true;
+			if(Library.areItemStacksCompatible(out, inventory.getStackInSlot(i+6), false) && inventory.getStackInSlot(i+6).getCount() < out.getMaxStackSize())
+				return true;
+		}
+
+		return false;
 	}
 	
 	public void process() {
-		ItemStack stack1 = MachineRecipes.getCyclotronOutput(inventory.getStackInSlot(0), inventory.getStackInSlot(3));
-		ItemStack stack2 = MachineRecipes.getCyclotronOutput(inventory.getStackInSlot(1), inventory.getStackInSlot(4));
-		ItemStack stack3 = MachineRecipes.getCyclotronOutput(inventory.getStackInSlot(2), inventory.getStackInSlot(5));
-		
-		if(stack1 != null && hasSpaceForItem(stack1)) {
-			addItemPlox(stack1);
-			inventory.getStackInSlot(0).shrink(1);
-			inventory.getStackInSlot(3).shrink(1);
-			if(inventory.getStackInSlot(0).isEmpty())
-				inventory.setStackInSlot(0, ItemStack.EMPTY);
-			if(inventory.getStackInSlot(3).isEmpty())
-				inventory.setStackInSlot(3, ItemStack.EMPTY);
-		}
-		if(stack2 != null && hasSpaceForItem(stack2)) {
-			addItemPlox(stack2);
-			inventory.getStackInSlot(1).shrink(1);
-			inventory.getStackInSlot(4).shrink(1);
-			if(inventory.getStackInSlot(1).isEmpty())
-				inventory.setStackInSlot(1, ItemStack.EMPTY);
-			if(inventory.getStackInSlot(4).isEmpty())
-				inventory.setStackInSlot(4, ItemStack.EMPTY);
-		}
-		if(stack3 != null && hasSpaceForItem(stack3)) {
-			addItemPlox(stack3);
-			inventory.getStackInSlot(2).shrink(1);
-			inventory.getStackInSlot(5).shrink(1);
-			if(inventory.getStackInSlot(2).isEmpty())
-				inventory.setStackInSlot(2, ItemStack.EMPTY);
-			if(inventory.getStackInSlot(5).isEmpty())
-				inventory.setStackInSlot(5, ItemStack.EMPTY);
-		}
-		
-		if(!inventory.getStackInSlot(0).isEmpty() && stack1 == null) {
-			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(0)))
-				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
-					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
 
-			inventory.getStackInSlot(0).shrink(1);
-			if(inventory.getStackInSlot(0).isEmpty())
-				inventory.setStackInSlot(0, ItemStack.EMPTY);
-					
-		}
-		
-		if(!inventory.getStackInSlot(1).isEmpty() && stack1 == null) {
-			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(1)))
-				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
-					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
-			
-			inventory.getStackInSlot(1).shrink(1);
-			if(inventory.getStackInSlot(1).isEmpty())
-				inventory.setStackInSlot(1, ItemStack.EMPTY);
-					
-		}
-		
-		if(!inventory.getStackInSlot(2).isEmpty() && stack1 == null) {
-			if(rand.nextInt(100) < getAmatChance(inventory.getStackInSlot(2)))
-				if(hasSpaceForItem(ItemCell.getFullCell(ModForgeFluids.amat)) && useCell())
-					addItemPlox(ItemCell.getFullCell(ModForgeFluids.amat));
+		for(int i = 0; i < 3; i++) {
 
-			inventory.getStackInSlot(2).shrink(1);
-			if(inventory.getStackInSlot(2).isEmpty())
-				inventory.setStackInSlot(2, ItemStack.EMPTY);
-					
-		}
-	}
-	
-	public boolean hasSpaceForItem(Item item) {
-		
-		if(inventory.getStackInSlot(11).isEmpty() || inventory.getStackInSlot(12).isEmpty() || inventory.getStackInSlot(13).isEmpty() || inventory.getStackInSlot(14).isEmpty() || inventory.getStackInSlot(15).isEmpty())
-			return true;
+			Object[] res = CyclotronRecipes.getOutput(inventory.getStackInSlot(i+3), inventory.getStackInSlot(i));
 
-		if(inventory.getStackInSlot(11).getItem() == item && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize())
-			return true;
-		if(inventory.getStackInSlot(12).getItem() == item && inventory.getStackInSlot(12).getCount() < inventory.getStackInSlot(12).getMaxStackSize())
-			return true;
-		if(inventory.getStackInSlot(13).getItem() == item && inventory.getStackInSlot(13).getCount() < inventory.getStackInSlot(13).getMaxStackSize())
-			return true;
-		if(inventory.getStackInSlot(14).getItem() == item && inventory.getStackInSlot(14).getCount() < inventory.getStackInSlot(14).getMaxStackSize())
-			return true;
-		if(inventory.getStackInSlot(15).getItem() == item && inventory.getStackInSlot(15).getCount() < inventory.getStackInSlot(15).getMaxStackSize())
-			return true;
-		
-		return false;
-	}
-	
-	public boolean hasSpaceForItem(ItemStack item){
-		if(inventory.getStackInSlot(11).isEmpty() || inventory.getStackInSlot(12).isEmpty() || inventory.getStackInSlot(13).isEmpty() || inventory.getStackInSlot(14).isEmpty() || inventory.getStackInSlot(15).isEmpty())
-			return true;
+			if(res == null)
+				continue;
 
-		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(11)) && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize())
-			return true;
-		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(12)) && inventory.getStackInSlot(12).getCount() < inventory.getStackInSlot(12).getMaxStackSize())
-			return true;
-		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(13)) && inventory.getStackInSlot(13).getCount() < inventory.getStackInSlot(13).getMaxStackSize())
-			return true;
-		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(14)) && inventory.getStackInSlot(14).getCount() < inventory.getStackInSlot(14).getMaxStackSize())
-			return true;
-		if(Library.areItemStacksCompatible(item, inventory.getStackInSlot(15)) && inventory.getStackInSlot(15).getCount() < inventory.getStackInSlot(15).getMaxStackSize())
-			return true;
-		
-		return false;
-	}
-	
-	public boolean useCell() {
-		if(ItemCell.isEmptyCell(inventory.getStackInSlot(10))) {
-			inventory.getStackInSlot(10).shrink(1);
-			if(inventory.getStackInSlot(10).isEmpty())
-				inventory.setStackInSlot(10, ItemStack.EMPTY);
-			return true;
-		}
-		return false;
-	}
-	
-	public void addItemPlox(Item item) {
-		if(inventory.getStackInSlot(11).getItem() == item && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize()) {
-			inventory.getStackInSlot(11).grow(1);
-			return;
-		}
-		if(inventory.getStackInSlot(12).getItem() == item && inventory.getStackInSlot(12).getCount() < inventory.getStackInSlot(12).getMaxStackSize()) {
-			inventory.getStackInSlot(12).grow(1);
-			return;
-		}
-		if(inventory.getStackInSlot(13).getItem() == item && inventory.getStackInSlot(13).getCount() < inventory.getStackInSlot(13).getMaxStackSize()) {
-			inventory.getStackInSlot(13).grow(1);
-			return;
-		}
-		if(inventory.getStackInSlot(14).getItem() == item && inventory.getStackInSlot(14).getCount() < inventory.getStackInSlot(14).getMaxStackSize()) {
-			inventory.getStackInSlot(14).grow(1);
-			return;
-		}
-		if(inventory.getStackInSlot(15).getItem() == item && inventory.getStackInSlot(15).getCount() < inventory.getStackInSlot(15).getMaxStackSize()) {
-			inventory.getStackInSlot(15).grow(1);
-			return;
-		}
-		if(inventory.getStackInSlot(11).isEmpty()) {
-			inventory.setStackInSlot(11, new ItemStack(item, 1));
-			return;
-		}
-		if(inventory.getStackInSlot(12).isEmpty()) {
-			inventory.setStackInSlot(12, new ItemStack(item, 1));
-			return;
-		}
-		if(inventory.getStackInSlot(13).isEmpty()) {
-			inventory.setStackInSlot(13, new ItemStack(item, 1));
-			return;
-		}
-		if(inventory.getStackInSlot(14).isEmpty()) {
-			inventory.setStackInSlot(14, new ItemStack(item, 1));
-			return;
-		}
-		if(inventory.getStackInSlot(15).isEmpty()) {
-			inventory.setStackInSlot(15, new ItemStack(item, 1));
-			return;
-		}
-	}
-	
-	public void addItemPlox(ItemStack stack) {
-		for(int i = 11; i < 16; i ++){
-			if(inventory.getStackInSlot(i).isEmpty()) {
-				inventory.setStackInSlot(i, stack);
-				return;
-			} else if(Library.areItemStacksEqualIgnoreCount(stack, inventory.getStackInSlot(i)) && stack.getCount() + inventory.getStackInSlot(i).getCount() <= inventory.getStackInSlot(i).getMaxStackSize()){
-				inventory.getStackInSlot(i).grow(stack.getCount());
-				return;
+			ItemStack out = (ItemStack)res[0];
+
+			if(out == null)
+				continue;
+
+			if(inventory.getStackInSlot(i+6).isEmpty()) {
+				amat.fill(new FluidStack(ModForgeFluids.amat, (Integer)res[1]), true);
+				inventory.getStackInSlot(i).shrink(1);
+				inventory.getStackInSlot(i+3).shrink(1);
+				inventory.setStackInSlot(i+6, out);
+				continue;
+			}
+
+			if(inventory.getStackInSlot(i+6).getItem() == out.getItem() && inventory.getStackInSlot(i+6).getItemDamage() == out.getItemDamage() && inventory.getStackInSlot(i+6).getCount() < out.getMaxStackSize()) {
+
+				amat.fill(new FluidStack(ModForgeFluids.amat, (Integer)res[1]), true);
+				inventory.getStackInSlot(i).shrink(1);
+				inventory.getStackInSlot(i+3).shrink(1);
+				inventory.getStackInSlot(i+6).grow(1);
 			}
 		}
-		/*if(inventory.getStackInSlot(11).isEmpty()) {
-			inventory.setStackInSlot(11, stack);
-			return;
-		}
-		if(inventory.getStackInSlot(12).isEmpty()) {
-			inventory.setStackInSlot(12, stack);
-			return;
-		}
-		if(inventory.getStackInSlot(13).isEmpty()) {
-			inventory.setStackInSlot(13, stack);
-			return;
-		}
-		if(inventory.getStackInSlot(14).isEmpty()) {
-			inventory.setStackInSlot(14, stack);
-			return;
-		}
-		if(inventory.getStackInSlot(15).isEmpty()) {
-			inventory.setStackInSlot(15, stack);
-			return;
-		}*/
 	}
 	
-	public boolean hasFuse() {
-		return inventory.getStackInSlot(8).getItem() == ModItems.fuse || inventory.getStackInSlot(8).getItem() == ModItems.screwdriver;
-	}
-	
-	public boolean hasEnergy() {
-		return inventory.getStackInSlot(6).getItem() == ModItems.crystal_energy;
-	}
-	
-	public int getHeatLevel() {
-		if(inventory.getStackInSlot(7).getItem() == ModItems.pellet_coolant) {
-			int i = (inventory.getStackInSlot(7).getItemDamage() * 100) / inventory.getStackInSlot(7).getMaxDamage();
-			if(i < 75)
-				return 0;
-			if(i < 85)
-				return 1;
-			if(i < 95)
-				return 2;
-			return 3;
-		}
+	public int getSpeed() {
 		
-		return 4;
-	}
-	
-	public int getCoolantTicksLeft() {
-		if(inventory.getStackInSlot(7).getItem() == ModItems.pellet_coolant) {
-			int i = inventory.getStackInSlot(7).getMaxDamage() - inventory.getStackInSlot(7).getItemDamage();
-			return i;
-		}
+		int speed = 1;
 		
-		return 0;
-	}
-	
-	public boolean isPart(ItemStack stack) {
-		if(stack != null) {
-			if(stack.getItem() == ModItems.part_lithium)
-				return true;
-			if(stack.getItem() == ModItems.part_beryllium)
-				return true;
-			if(stack.getItem() == ModItems.part_carbon)
-				return true;
-			if(stack.getItem() == ModItems.part_copper)
-				return true;
-			if(stack.getItem() == ModItems.part_plutonium)
-				return true;
+		for(int i = 14; i < 16; i++) {
+
+			if(!inventory.getStackInSlot(i).isEmpty()) {
+
+				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
+					speed += 1;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
+					speed += 2;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
+					speed += 3;
+			}
 		}
-		return false;
+
+		return Math.min(speed, 4);
 	}
-	
-	public int getPower(ItemStack stack) {
-		if(stack != null) {
-			if(stack.getItem() == ModItems.part_lithium)
-				return 250;
-			if(stack.getItem() == ModItems.part_beryllium)
-				return 350;
-			if(stack.getItem() == ModItems.part_carbon)
-				return 600;
-			if(stack.getItem() == ModItems.part_copper)
-				return 750;
-			if(stack.getItem() == ModItems.part_plutonium)
-				return 1000;
+
+	public int getConsumption() {
+
+		int speed = 0;
+
+		for(int i = 14; i < 16; i++) {
+
+			if(!inventory.getStackInSlot(i).isEmpty()) {
+
+				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_1)
+					speed += 1;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_2)
+					speed += 2;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_3)
+					speed += 3;
+			}
 		}
-		return 0;
+
+		return Math.min(speed, 3);
 	}
-	
-	public int getAmatChance(ItemStack stack) {
-		if(stack != null) {
-			if(stack.getItem() == ModItems.part_lithium)
-				return 2;
-			if(stack.getItem() == ModItems.part_beryllium)
-				return 3;
-			if(stack.getItem() == ModItems.part_carbon)
-				return 6;
-			if(stack.getItem() == ModItems.part_copper)
-				return 29;
-			if(stack.getItem() == ModItems.part_plutonium)
-				return 94;
+
+	public int getSafety() {
+
+		int speed = 1;
+
+		for(int i = 14; i < 16; i++) {
+
+			if(!inventory.getStackInSlot(i).isEmpty()) {
+
+				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_1)
+					speed += 1;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_2)
+					speed += 2;
+				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_3)
+					speed += 3;
+			}
 		}
-		return 0;
+
+		return Math.min(speed, 4);
 	}
 	
 	public long getPowerScaled(long i) {
@@ -515,61 +321,145 @@ public class TileEntityMachineCyclotron extends TileEntity implements ITickable,
 	}
 	
 	public int getProgressScaled(int i) {
-		return (progress * i) / processTime;
+		return (progress * i) / duration;
 	}
 	
 	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.add(2, 0, 0), getTact());
-		ffgeua(pos.add(-2, 0, 0), getTact());
-		ffgeua(pos.add(0, 0, 2), getTact());
-		ffgeua(pos.add(0, 0, -2), getTact());
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+
+		coolant.readFromNBT(compound.getCompoundTag("coolant"));
+		amat.readFromNBT(compound.getCompoundTag("amat"));
+
+		this.isOn = compound.getBoolean("isOn");
+		this.countdown = compound.getInteger("countdown");
+		this.progress = compound.getInteger("progress");
+		this.plugs = compound.getByte("plugs");
+		this.power = compound.getLong("power");
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setTag("coolant", coolant.writeToNBT(new NBTTagCompound()));
+		compound.setTag("amat", amat.writeToNBT(new NBTTagCompound()));
+
+		compound.setBoolean("isOn", isOn);
+		compound.setInteger("countdown", countdown);
+		compound.setByte("plugs", plugs);
+		compound.setInteger("progress", progress);
+		compound.setLong("power", power);
+		return super.writeToNBT(compound);
+	}
+	
+	public void setPlug(int index) {
+		this.plugs |= (1 << index);
+		this.markDirty();
 	}
 
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
+	public boolean getPlug(int index) {
+		return (this.plugs & (1 << index)) > 0;
 	}
 
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
+	public static Item getItemForPlug(int i) {
+
+		switch(i) {
+		case 0: return ModItems.powder_balefire;
+		case 1: return ModItems.book_of_;
+		case 2: return ModItems.diamond_gavel;
+		case 3: return ModItems.coin_maskman;
 		}
 
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		list.clear();
-	}
-
-	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return TileEntity.INFINITE_EXTENT_AABB;
+		return null;
 	}
 	
 	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(pos.getX() - 2, pos.getY(), pos.getZ() - 2, pos.getX() + 3, pos.getY() + 4, pos.getZ() + 3);
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-	public double getMaxRenderDistanceSquared()
-	{
+	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	public void fillFluidInit(FluidTank tank) {
+
+		fillFluid(pos.getX() + 3, pos.getY(), pos.getZ() + 1, tank);
+		fillFluid(pos.getX() + 3, pos.getY(), pos.getZ() - 1, tank);
+		fillFluid(pos.getX() - 3, pos.getY(), pos.getZ() + 1, tank);
+		fillFluid(pos.getX() - 3, pos.getY(), pos.getZ() - 1, tank);
+
+		fillFluid(pos.getX() + 1, pos.getY(), pos.getZ() + 3, tank);
+		fillFluid(pos.getX() - 1, pos.getY(), pos.getZ() + 3, tank);
+		fillFluid(pos.getX() + 1, pos.getY(), pos.getZ() - 3, tank);
+		fillFluid(pos.getX() - 1, pos.getY(), pos.getZ() - 3, tank);
+	}
+
+	public void fillFluid(int x, int y, int z, FluidTank tank) {
+		FFUtils.fillFluid(this, tank, world, new BlockPos(x, y, z), 2000);
+	}
+	
+	@Override
+	public IFluidTankProperties[] getTankProperties() {
+		return new IFluidTankProperties[]{coolant.getTankProperties()[0], amat.getTankProperties()[0]};
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		if(resource != null && resource.getFluid() == ModForgeFluids.coolant){
+			return coolant.fill(resource, doFill);
+		}
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		return amat.drain(resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		return amat.drain(maxDrain, doDrain);
+	}
+	
+	@Override
+	public void recievePacket(NBTTagCompound[] tags) {
+		if(tags.length == 2){
+			coolant.readFromNBT(tags[0]);
+			amat.readFromNBT(tags[1]);
+		}
+	}
+
+	@Override
+	public void setPower(long i) {
+		this.power = i;
+	}
+
+	@Override
+	public long getPower() {
+		return this.power;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
 	}
 	
 

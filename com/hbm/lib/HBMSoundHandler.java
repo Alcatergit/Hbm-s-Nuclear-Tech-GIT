@@ -160,6 +160,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent fstbmbStart;
 	public static SoundEvent fstbmbPing;
 	public static SoundEvent sauerGun;
+	public static SoundEvent ducc;
+	public static SoundEvent whack;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -342,6 +344,8 @@ public final class HBMSoundHandler {
 		fstbmbStart = register("weapon.fstbmbStart");
 		fstbmbPing = register("weapon.fstbmbPing");
 		sauerGun = register("weapon.sauergun");
+		ducc = register("entity.ducc");
+		whack = register("weapon.whack");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

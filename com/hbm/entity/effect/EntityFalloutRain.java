@@ -3,8 +3,8 @@ package com.hbm.entity.effect;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.VersatileConfig;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
@@ -204,7 +204,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 			}
 
 			else if(b.getBlock() == ModBlocks.ore_uranium) {
-				if (rand.nextInt(MainRegistry.schrabFromUraniumChance) == 0)
+				if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
 				else
 					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
@@ -212,7 +212,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 			}
 
 			else if(b.getBlock() == ModBlocks.ore_nether_uranium) {
-				if(rand.nextInt(MainRegistry.schrabFromUraniumChance) == 0)
+				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
 				else
 					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());

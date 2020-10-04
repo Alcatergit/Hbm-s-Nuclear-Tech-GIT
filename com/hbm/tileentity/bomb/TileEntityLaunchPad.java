@@ -2,6 +2,7 @@ package com.hbm.tileentity.bomb;
 
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
@@ -83,6 +84,7 @@ public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsu
 
 	@Override
 	public void update() {
+		
 		if (!world.isRemote) {
 			power = Library.chargeTEFromItems(inventory, 2, power, maxPower);
 			detectAndSendChanges();

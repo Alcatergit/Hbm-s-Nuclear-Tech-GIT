@@ -5,6 +5,8 @@ import java.awt.Color;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.fluid.MudBlock;
 import com.hbm.blocks.fluid.MudFluid;
+import com.hbm.blocks.fluid.SchrabidicBlock;
+import com.hbm.blocks.fluid.SchrabidicFluid;
 import com.hbm.blocks.fluid.ToxicBlock;
 import com.hbm.blocks.fluid.ToxicFluid;
 import com.hbm.lib.ModDamageSource;
@@ -79,8 +81,9 @@ public class ModForgeFluids {
 	public static Fluid plasma_bf = new Fluid("plasma_bf", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"), null, Color.WHITE).setTemperature(8500 + 273);
 	
 	//Block fluids
-	public static Fluid toxic_fluid = new ToxicFluid().setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773).setBlock(ModBlocks.toxic_block);
-	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773).setBlock(ModBlocks.mud_block);
+	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773);
+	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
+	public static Fluid schrabidic_fluid = new SchrabidicFluid("schrabidic_fluid").setDensity(31200).setViscosity(500).setTemperature(273);
 	
 	public static void init(){
 		if(!FluidRegistry.registerFluid(steam))
@@ -190,10 +193,16 @@ public class ModForgeFluids {
 			toxic_fluid = FluidRegistry.getFluid("toxic_fluid");
 		if(!FluidRegistry.registerFluid(mud_fluid))
 			mud_fluid = FluidRegistry.getFluid("mud_fluid");
+		if(!FluidRegistry.registerFluid(schrabidic_fluid))
+			schrabidic_fluid = FluidRegistry.getFluid("schrabidic_fluid");
 		
 		
 		ModBlocks.toxic_block = new ToxicBlock(ModForgeFluids.toxic_fluid, ModBlocks.fluidtoxic, ModDamageSource.radiation, "toxic_block").setResistance(500F);
 		ModBlocks.mud_block = new MudBlock(ModForgeFluids.mud_fluid, ModBlocks.fluidmud, ModDamageSource.mudPoisoning, "mud_block").setResistance(500F);
+		ModBlocks.schrabidic_block = new SchrabidicBlock(schrabidic_fluid, ModBlocks.fluidschrabidic.setReplaceable(), ModDamageSource.radiation, "schrabidic_block").setResistance(500F);
+		toxic_fluid.setBlock(ModBlocks.toxic_block);
+		mud_fluid.setBlock(ModBlocks.mud_block);
+		schrabidic_fluid.setBlock(ModBlocks.schrabidic_block);
 	}
 	
 }

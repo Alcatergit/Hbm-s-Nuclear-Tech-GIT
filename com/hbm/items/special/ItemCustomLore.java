@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
@@ -40,7 +41,10 @@ public class ItemCustomLore extends Item {
 		}
 		if(this == ModItems.ingot_schraranium)
 		{
-			list.add("Made from uranium in a schrabidium transmutator");
+			if(GeneralConfig.enableBabyMode)
+				list.add("Peer can go die, I'm not putting any retarded niko stuff in the mod.");
+			else
+				list.add("Made from uranium in a schrabidium transmutator");
 		}
 		if(this == ModItems.ingot_fiberglass)
 		{
@@ -263,6 +267,17 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.rod_quad_euphemium) {
 			list.add("A quad fuel rod which contains a");
 			list.add("very small ammount of a strange new element.");
+		}
+		if(this == ModItems.pellet_rtg_polonium)
+		{
+			if(MainRegistry.polaroidID == 11)
+				list.add("Polonium 4 U and me.");
+			else
+				list.add("More powderful RTG pellet, made from finest polonium!");
+		}
+		if(this == ModItems.mech_key)
+		{
+			list.add("It pulses with power.");
 		}
 	}
 

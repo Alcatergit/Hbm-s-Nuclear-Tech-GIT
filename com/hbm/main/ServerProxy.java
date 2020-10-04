@@ -49,5 +49,13 @@ public class ServerProxy
 		return true;//Doesn't matter for servers, and this won't print an error message.
 	}
 	
+	public float partialTicks(){
+		return 1;
+	};
+	
 	public void playSound(String sound, Object data) { }
+	
+	public void displayTooltip(String msg) { }
+	
+	public void setRecoil(float rec){};
 }

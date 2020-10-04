@@ -13,6 +13,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
+import com.hbm.potion.HbmPotion;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -151,6 +152,24 @@ public class WeaponSpecial extends ItemSword {
 		}
 		if(this == ModItems.stopsign || this == ModItems.sopsign)
         	world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.stop, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		if(this == ModItems.wood_gavel) {
+        	world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.whack, SoundCategory.PLAYERS, 3.0F, 1.F);
+		}
+
+		if(this == ModItems.lead_gavel) {
+			world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.whack, SoundCategory.PLAYERS, 3.0F, 1.F);
+
+			target.addPotionEffect(new PotionEffect(HbmPotion.lead, 15 * 20, 4));
+		}
+
+		if(this == ModItems.diamond_gavel) {
+
+			float ded = target.getMaxHealth() / 3;
+			target.setHealth(target.getHealth() - ded);
+
+			world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.whack, SoundCategory.PLAYERS, 3.0F, 1.F);
+		}
+
 		return false;
 	}
 	
@@ -273,6 +292,17 @@ public class WeaponSpecial extends ItemSword {
 			} else {
 				list.add("Timber!");
 			}
+		}
+		if(this == ModItems.wood_gavel) {
+			list.add("Thunk!");
+		}
+		if(this == ModItems.lead_gavel) {
+			list.add("You are hereby sentenced to lead poisoning.");
+		}
+		if(this == ModItems.diamond_gavel) {
+			list.add("The joke! It makes sense now!!");
+			list.add("");
+			list.add(TextFormatting.BLUE + "Deals as much damage as it needs to.");
 		}
 	}
 

@@ -2,9 +2,9 @@ package com.hbm.particle.bfg;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -48,8 +48,8 @@ public class ParticleBFGRing extends Particle {
 		this.posZ += 1.5;
 		
 		this.prevAlpha = particleAlpha;
-		this.particleAlpha = MathHelper.clamp(1-Library.remap((float)MathHelper.clamp(timeScale, 0.6, 1), 0.6F, 1F, 0F, 1.1F), 0, 1);
-		this.particleAlpha *= MathHelper.clamp(Library.remap((float)MathHelper.clamp(timeScale, 0, 0.4), 0F, 0.4F, 0F, 1.1F), 0, 1);
+		this.particleAlpha = MathHelper.clamp(1-BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0.6, 1), 0.6F, 1F, 0F, 1.1F), 0, 1);
+		this.particleAlpha *= MathHelper.clamp(BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0, 0.4), 0F, 0.4F, 0F, 1.1F), 0, 1);
 		
 		this.prevScale = this.particleScale;
 		this.particleScale = 0.6F + 1.2F*timeScale;

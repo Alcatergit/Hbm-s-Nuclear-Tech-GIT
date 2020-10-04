@@ -41,6 +41,7 @@ public class GeneralConfig {
 	public static boolean callListModels = true;
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = true;
+	public static boolean enableBabyMode = false;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
@@ -88,6 +89,7 @@ public class GeneralConfig {
 			instancedParticles = false;
 		}
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
+		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
 	}
 
 }

@@ -131,7 +131,6 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 		side = side.normalize();
 
 		Vec3d check = new Vec3d(turret.x + side.x, turret.y + side.y, turret.z + side.z);
-
 		return !Library.isObstructed(world, check.x, check.y, check.z, entity.x, entity.y, entity.z);
 	}
 

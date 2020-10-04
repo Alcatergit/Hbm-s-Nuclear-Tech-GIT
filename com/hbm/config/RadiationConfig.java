@@ -12,6 +12,7 @@ public class RadiationConfig {
 	public static float hellRad = 0.1F;
 	public static int worldRad = 10;
 	public static int worldRadThreshold = 20;
+	public static boolean worldRadEffects = true;
 	
 	//Drillgon200: Not sure why I put these here, but oh well.
 	public static int railgunDamage = 100;
@@ -43,6 +44,7 @@ public class RadiationConfig {
 		hellRad = netherRad.getInt() * 0.01F;
 		worldRad = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.10_worldRadCount", "How many block operations radiation can perform per tick", 10);
 		worldRadThreshold = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.11_worldRadThreshold", "The least amount of RADs required for block modification to happen", 20);
+		worldRadEffects = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "6.12_worldRadEffects", "Whether high radiation levels should perform changes in the world", true);
 		// railgun
 		Property railDamage = config.get(CATEGORY_NUKE, "6.11_railgunDamage", 1000);
 		railDamage.setComment("How much damage a railgun death blast does per tick");

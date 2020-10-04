@@ -25,7 +25,7 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
 	public void render(TileEntityITERStruct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 
-		GL11.glTranslatef((float)x-1, (float)y, (float)z);
+		GL11.glTranslatef((float)x-1, (float)y-1, (float)z);
 
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();

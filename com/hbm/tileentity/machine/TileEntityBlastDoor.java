@@ -40,7 +40,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 
 	@Override
 	public void update() {
-if(!world.isRemote) {
+		if(!world.isRemote) {
 			
 			if(!isLocked() && world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
 				
@@ -101,13 +101,13 @@ if(!world.isRemote) {
 	    		}
 	    	}
 	    	
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
+	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 		}
 	}
 	
 	public void open() {
 		if(state == 0) {
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
+	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			isOpening = true;
 			state = 1;
 
@@ -124,7 +124,7 @@ if(!world.isRemote) {
 	
 	public void close() {
 		if(state == 2) {
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
+	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			isOpening = false;
 			state = 1;
 

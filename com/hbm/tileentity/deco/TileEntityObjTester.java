@@ -14,6 +14,9 @@ public class TileEntityObjTester extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		if(world.isRemote) {
+			if(fireAge >= 0) {
+				fireAge++;
+			}
 			MainRegistry.proxy.spawnParticle(pos.getX(), pos.getY(), pos.getZ(), "bfg_fire", new float[]{fireAge});
 		}
 	}

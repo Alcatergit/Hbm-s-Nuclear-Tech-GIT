@@ -1,6 +1,7 @@
 package com.hbm.render.amlfrom1710;
 
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class Vec3
 {
@@ -20,6 +21,12 @@ public class Vec3
     {
         return new Vec3(p_72443_0_, p_72443_2_, p_72443_4_);
     }
+    
+    public Vec3(Vec3d vec) {
+    	this.xCoord = vec.x;
+    	this.yCoord = vec.y;
+    	this.zCoord = vec.z;
+	}
 
     protected Vec3(double p_i1108_1_, double p_i1108_3_, double p_i1108_5_)
     {

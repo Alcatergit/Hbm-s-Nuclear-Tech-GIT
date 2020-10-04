@@ -3,6 +3,8 @@ package com.hbm.handler.guncfg;
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.explosion.ExplosionChaos;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
@@ -12,14 +14,49 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class GunEnergyFactory {
+
+	public static GunConfiguration getZOMGConfig() {
+
+		GunConfiguration config = new GunConfiguration();
+
+		config.rateOfFire = 1;
+		config.roundsPerCycle = 1;
+		config.gunMode = GunConfiguration.MODE_NORMAL;
+		config.firingMode = GunConfiguration.FIRE_AUTO;
+		config.reloadDuration = 10;
+		config.reloadSoundEnd = false;
+		config.firingDuration = 0;
+		config.durability = 100000;
+		config.reloadType = GunConfiguration.RELOAD_FULL;
+		config.ammoCap = 1000;
+		config.allowsInfinity = true;
+		config.crosshair = Crosshair.L_ARROWS;
+		config.firingSound = HBMSoundHandler.zomgShoot;
+		config.reloadSound = HBMSoundHandler.b92Reload;
+
+		config.name = "EMC101 Prismatic Negative Energy Cannon";
+		config.manufacturer = "MWT Prototype Labs";
+
+		config.comment.add("Taste the rainbow!");
+
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.ZOMG_BOLT);
+
+		return config;
+	}
 
 	public static GunConfiguration getEMPConfig() {
 
@@ -113,6 +150,53 @@ public class GunEnergyFactory {
 		return config;
 	}
 
+	public static GunConfiguration getVortexConfig() {
+
+		GunConfiguration config = new GunConfiguration();
+
+		config.rateOfFire = 30;
+		config.roundsPerCycle = 1;
+		config.gunMode = GunConfiguration.MODE_NORMAL;
+		config.firingMode = GunConfiguration.FIRE_AUTO;
+		config.hasSights = false;
+		config.reloadDuration = 20;
+		config.firingDuration = 0;
+		config.ammoCap = 40;
+		config.reloadType = GunConfiguration.RELOAD_FULL;
+		config.allowsInfinity = true;
+		config.crosshair = Crosshair.L_BOX;
+		config.durability = 10000;
+		config.reloadSound = GunConfiguration.RSOUND_MAG;
+		config.firingSound = HBMSoundHandler.hksShoot;
+		config.reloadSoundEnd = false;
+
+		config.name = "Bob plz do name.";
+		config.manufacturer = "AAAAAAAAAAA";
+
+		config.comment.add("Bruh.");
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("VORTEX_RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 1, -5, 25))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 400))
+						));
+
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.R556_NORMAL);
+		config.config.add(BulletConfigSyncingUtil.R556_GOLD);
+		config.config.add(BulletConfigSyncingUtil.R556_TRACER);
+		config.config.add(BulletConfigSyncingUtil.R556_PHOSPHORUS);
+		config.config.add(BulletConfigSyncingUtil.R556_AP);
+		config.config.add(BulletConfigSyncingUtil.R556_DU);
+		config.config.add(BulletConfigSyncingUtil.R556_STAR);
+		config.config.add(BulletConfigSyncingUtil.CHL_R556);
+		config.config.add(BulletConfigSyncingUtil.R556_SLEEK);
+		config.config.add(BulletConfigSyncingUtil.R556_K);
+
+		return config;
+
+	}
+
 	public static BulletConfiguration getFlameConfig() {
 
 		BulletConfiguration bullet = new BulletConfiguration();
@@ -147,7 +231,7 @@ public class GunEnergyFactory {
 				data.setString("mode", "flame");
 				data.setInteger("count", 15);
 				data.setDouble("motion", 0.1D);
-				
+
 				/*
 				 * java.lang.NullPointerException
 				 *	at cpw.mods.fml.common.network.FMLOutboundHandler$OutboundTarget$7.selectNetworks(FMLOutboundHandler.java:193)
@@ -204,7 +288,7 @@ public class GunEnergyFactory {
 
 		return bullet;
 	}
-	
+
 	public static BulletConfiguration getVaporizerConfig() {
 
 		BulletConfiguration bullet = getFlameConfig();
@@ -247,4 +331,43 @@ public class GunEnergyFactory {
 
 		return bullet;
 	}
+
+	public static BulletConfiguration getZOMGBoltConfig() {
+
+		BulletConfiguration bullet = new BulletConfiguration();
+
+		bullet.ammo = ModItems.nugget_euphemium;
+		bullet.ammoCount = 1000;
+		bullet.wear = 1;
+		bullet.velocity = 1F;
+		bullet.spread = 0.125F;
+		bullet.maxAge = 100;
+		bullet.gravity = 0D;
+		bullet.bulletsMin = 5;
+		bullet.bulletsMax = 5;
+		bullet.dmgMin = 10000;
+		bullet.dmgMax = 25000;
+
+		bullet.style = BulletConfiguration.STYLE_BOLT;
+		bullet.trail = bullet.BOLT_ZOMG;
+
+		bullet.effects = new ArrayList<>();
+		bullet.effects.add(new PotionEffect(HbmPotion.bang, 10 * 20, 0));
+
+		bullet.bImpact = new IBulletImpactBehavior() {
+
+			@Override
+			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
+
+				if(!bullet.world.isRemote) {
+					ExplosionChaos.explodeZOMG(bullet.world, (int) bullet.posX, (int) bullet.posY, (int) bullet.posZ, 5);
+					bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, HBMSoundHandler.bombDet, SoundCategory.HOSTILE, 5.0F, 1.0F);
+					ExplosionLarge.spawnParticles(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 5);
+				}
+			}
+		};
+
+		return bullet;
+	}
+
 }
