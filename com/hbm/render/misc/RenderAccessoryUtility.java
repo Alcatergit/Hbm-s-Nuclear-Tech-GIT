@@ -8,6 +8,7 @@ import com.hbm.main.MainRegistry;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -31,7 +32,6 @@ public class RenderAccessoryUtility {
 	private static ResourceLocation wiki = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeWiki.png");
 
 	public static ResourceLocation getCloakFromPlayer(EntityPlayer player) {
-
 		String uuid = player.getUniqueID().toString();
 		String name = player.getDisplayName().getUnformattedText();
 		if(uuid.equals(Library.HbMinecraft)) {

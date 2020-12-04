@@ -83,7 +83,7 @@ public class ParticleBFGParticle extends Particle {
 		
 		Vec3 attraction = null;
 		if(targetPoint != null){
-			attraction = Vec3.createVectorHelper(this.posX, this.posY, this.posZ).subtract(targetPoint).normalize().mult(0.5F*timeScale);
+			attraction = targetPoint.subtract(Vec3.createVectorHelper(this.posX, this.posY, this.posZ)).normalize().mult(0.5F*timeScale);
 		} else {
 			attraction = Vec3.createVectorHelper(0, 0, 0);
 		}

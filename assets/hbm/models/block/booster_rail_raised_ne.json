@@ -1,6 +1,6 @@
 {
     "parent": "block/rail_raised_ne",
     "textures": {
-        "rail": "blocks/rail_booster"
+        "rail": "hbm:blocks/rail_booster"
     }
 }

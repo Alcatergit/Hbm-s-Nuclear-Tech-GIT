@@ -1,6 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -56,8 +55,6 @@ public class ItemGunVortex extends ItemGunBase {
 	@SideOnly(Side.CLIENT)
 	private long lastFireTime;
 	
-	public static Field hurtResistantTime;
-	
 	public ItemGunVortex(GunConfiguration config, String s) {
 		super(config, s);
 	}
@@ -75,10 +72,11 @@ public class ItemGunVortex extends ItemGunBase {
 				continue;
 			float dmg = 30;
 			try {
-				if (hurtResistantTime == null)
-					hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
-				hurtResistantTime.setInt(e, 0);
+				if (ItemGunBase.hurtResistantTime == null)
+					ItemGunBase.hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
+				ItemGunBase.hurtResistantTime.setInt(e, 0);
 			} catch (Exception x){
+				x.printStackTrace();
 			}
 
 			e.attackEntityFrom(ModDamageSource.radiation, dmg);

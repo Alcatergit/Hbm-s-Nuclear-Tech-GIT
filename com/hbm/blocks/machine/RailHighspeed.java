@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
+import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
@@ -24,7 +25,11 @@ public class RailHighspeed extends BlockRailBase {
     });
 	public RailHighspeed(String s) {
 		super(true);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
+		
+		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override

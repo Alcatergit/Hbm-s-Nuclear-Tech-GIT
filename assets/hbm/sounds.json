@@ -57,7 +57,7 @@
 
 	"weapon.tauShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/tauShoot", "stream": false}]},
 	"weapon.tauChargeLoop": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop", "stream": true}]},
-    "weapon.tauChargeLoop2": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop2", "stream": true}]},
+    "weapon.tauChargeLoop2": {"category": "player", "sounds": [{"name": "hbm:weapon/tauChargeLoop2", "stream": false}]},
     "weapon.revolverShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/revolverShoot", "stream": false}]},
     "weapon.revolverShootAlt": {"category": "player", "sounds": [{"name": "hbm:weapon/revolverShootAlt", "stream": false}]},
 	"weapon.heavyShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/heavyShoot", "stream": false}]},

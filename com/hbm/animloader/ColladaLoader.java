@@ -2,6 +2,7 @@ package com.hbm.animloader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 import org.w3c.dom.Document;
@@ -208,9 +210,11 @@ public class ColladaLoader {
 				} else if(id.endsWith("mesh-map-0")){
 					texCoords = parseTexCoords(section);
 				} else if(section.getNodeName().equals("triangles")){
-					indices = parseIndices(section);
+					indices = ArrayUtils.addAll(indices, parseIndices(section));
 				}
 			}
+			if(positions.length == 0)
+				continue;
 			
 			int displayList = GL11.glGenLists(1);
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
@@ -252,6 +256,9 @@ public class ColladaLoader {
 	}
 	
 	private static float[] parseFloatArray(String s){
+		if(s.isEmpty()){
+			return new float[0];
+		}
 		String[] numbers = s.split(" ");
 		float[] arr = new float[numbers.length];
 		for(int i = 0; i < numbers.length; i ++){
@@ -269,7 +276,7 @@ public class ColladaLoader {
 	}
 	
 	private static void addGeometry(AnimatedModel m, Map<String, Integer> geometry){
-		if(!"".equals(m.geo_name))
+		if(!"".equals(m.geo_name) && geometry.containsKey(m.geo_name))
 			m.callList = geometry.get(m.geo_name);
 		else
 			m.hasGeometry = false;
@@ -305,7 +312,6 @@ public class ColladaLoader {
 	}
 	
 	private static Animation parseAnim(Element root, int length){
-		//Should get the first bone
 		Element anim_section = (Element)root.getElementsByTagName("library_animations").item(0);
 		Animation anim = new Animation();
 		anim.length = length;
@@ -313,7 +319,11 @@ public class ColladaLoader {
 			if("animation".equals(e.getNodeName())){
 				String name = e.getAttribute("name");
 				Transform[] t = null;
-				for(Element e2 : getChildElements(e)){
+				List<Element> elements2 = getChildElements(e);
+				if(elements2.isEmpty()){
+					continue;
+				}
+				for(Element e2 : elements2){
 					if(e2.getAttribute("id").endsWith("transform")){
 						t = parseTransforms(e2);
 					} else if(e2.getAttribute("id").endsWith("hide_viewport")){

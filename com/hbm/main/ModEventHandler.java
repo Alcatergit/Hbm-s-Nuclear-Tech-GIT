@@ -3,9 +3,11 @@ package com.hbm.main;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -20,11 +22,20 @@ import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
+import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BossSpawnHandler;
+import com.hbm.handler.JetpackHandler;
 import com.hbm.handler.MissileStruct;
 import com.hbm.handler.RadiationWorldHandler;
 import com.hbm.handler.VersionChecker;
+import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.BreederRecipes;
+import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.inventory.CrystallizerRecipes;
+import com.hbm.inventory.CyclotronRecipes;
+import com.hbm.inventory.MagicRecipes;
+import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
@@ -32,9 +43,11 @@ import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AssemblerRecipeSyncPacket;
+import com.hbm.packet.PacketCreatePhysTree;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PlayerInformPacket;
 import com.hbm.packet.RadSurveyPacket;
+import com.hbm.physics.ParticlePhysicsBlocks;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
@@ -42,6 +55,7 @@ import com.hbm.util.ContaminationUtil;
 import com.hbm.world.generator.TimedGenerator;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -60,7 +74,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.EnumParticleTypes;
@@ -82,6 +95,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
@@ -739,6 +753,9 @@ public class ModEventHandler {
 				}
 			}
 		}
+		if(event.phase == Phase.END){
+			JetpackHandler.postPlayerTick(event.player);
+		}
 	}
 
 	@SubscribeEvent
@@ -769,6 +786,19 @@ public class ModEventHandler {
 		}
 	}
 
+	/*@SubscribeEvent
+	public void blockBreak(BlockEvent.BreakEvent e){
+		PacketDispatcher.wrapper.sendToAll(new PacketCreatePhysTree(e.getPos().up()));
+		Set<BlockPos> blocks = new HashSet<>();
+		BlockPos pos = e.getPos().up();
+		int recurse = PacketCreatePhysTree.recurseFloodFill(pos, 0, blocks);
+		if(recurse > 0){
+			for(BlockPos b : blocks){
+				e.getWorld().setBlockToAir(b);
+			}
+		}
+	}*/
+	
 	@SubscribeEvent
 	public void clientJoinServer(PlayerLoggedInEvent e) {
 		if(e.player instanceof EntityPlayerMP)
@@ -788,6 +818,23 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public void onDataSerializerRegister(RegistryEvent.Register<DataSerializerEntry> evt) {
 		evt.getRegistry().register(new DataSerializerEntry(MissileStruct.SERIALIZER).setRegistryName(new ResourceLocation(RefStrings.MODID, "missile_struct")));
+	}
+	
+	@SubscribeEvent
+	public void craftingRegister(RegistryEvent.Register<IRecipe> e){
+		CraftingManager.hack = e;
+		CraftingManager.init();
+		FluidTypeHandler.registerFluidProperties();
+		ShredderRecipes.registerShredder();
+		ShredderRecipes.registerOverrides();
+		CrystallizerRecipes.register();
+		CentrifugeRecipes.register();
+		BreederRecipes.registerFuels();
+		BreederRecipes.registerRecipes();
+		AssemblerRecipes.loadRecipes();
+		CyclotronRecipes.register();
+		MagicRecipes.register();
+		CraftingManager.hack = null;
 	}
 
 	// TODO should probably use these.

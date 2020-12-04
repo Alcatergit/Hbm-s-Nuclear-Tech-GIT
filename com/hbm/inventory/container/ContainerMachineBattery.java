@@ -18,7 +18,7 @@ public class ContainerMachineBattery extends Container {
 		
 		diFurnace = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 0, 0));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 26, 53));
 		
 		for(int i = 0; i < 3; i++)

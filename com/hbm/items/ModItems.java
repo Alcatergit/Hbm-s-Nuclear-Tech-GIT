@@ -279,7 +279,7 @@ public class ModItems {
 	public static final Item battery_schrabidium_cell_2 = new ItemBattery(3000000 * 2, 5000, 5000, "battery_schrabidium_cell_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_schrabidium_cell_4 = new ItemBattery(3000000 * 4, 5000, 5000, "battery_schrabidium_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_6 = new ItemBattery(100000000 * 6, 2000000, 2000000, "battery_spark_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_25 = new ItemBattery(100000000 * 25, 2000000, 2000000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_25 = new ItemBattery(100000000L * 25L, 2000000, 2000000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_100 = new ItemBattery(100000000L * 100L, 2000000, 2000000, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_1000 = new ItemBattery(100000000L * 1000L, 20000000, 20000000, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_2500 = new ItemBattery(100000000L * 2500L, 20000000, 20000000, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);

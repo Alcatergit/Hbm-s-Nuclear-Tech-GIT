@@ -43,7 +43,7 @@ public class ItemGunShotty extends ItemGunBase {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void startActionClient(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
-		if(mainConfig.firingMode == GunConfiguration.FIRE_MANUAL && ((hand == EnumHand.MAIN_HAND && m1r) || (hand == EnumHand.OFF_HAND && m1l)) && tryShoot(stack, world, player, main)){
+		if(mainConfig.firingMode == GunConfiguration.FIRE_MANUAL && m1 && tryShoot(stack, world, player, main)){
 			long time = System.currentTimeMillis();
 			float mult = player.getUniqueID().toString().equals(Library.Dr_Nostalgia) ? 10 : 1;
 			NBTTagCompound anim = new NBTTagCompound();

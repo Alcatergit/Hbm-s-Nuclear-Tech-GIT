@@ -221,7 +221,7 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 	}
 
 	public void fillFluid(int x, int y, int z, FluidTank type) {
-		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 512000);
+		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 10239000);
 	}
 	
 	@Override

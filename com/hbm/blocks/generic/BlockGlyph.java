@@ -12,8 +12,13 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockGlyph extends Block {
@@ -57,6 +62,16 @@ public class BlockGlyph extends Block {
 		case 14: list.add("Digamma"); break;
 		case 15: list.add("Celestial Altar"); break;
 		}
+	}
+	
+	//Drillgon200: AAAAAAAAAAAAAAAAAAA 1.12.2 always places the block with metadata 0 by default!
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		ItemStack itemstack = placer.getHeldItem(hand);
+		if(itemstack.getItem() == Item.getItemFromBlock(this)){
+			return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, itemstack.getMetadata(), placer, hand);
+		}
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 	}
 	
 	@Override

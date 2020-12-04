@@ -2,13 +2,18 @@ package com.hbm.main;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.Project;
 
+import com.google.common.collect.Queues;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
 import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
@@ -24,6 +29,8 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.HbmShaderManager;
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.handler.JetpackHandler;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
@@ -51,6 +58,7 @@ import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.MeathookJumpPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.particle.ParticleDSmokeFX;
+import com.hbm.physics.ParticlePhysicsBlocks;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.anim.HbmAnimations;
@@ -100,6 +108,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -117,7 +126,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEndGateway;
 import net.minecraft.tileentity.TileEntityEndPortal;
@@ -149,10 +157,14 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 
 public class ModEventHandlerClient {
 
+	public static Set<EntityLivingBase> specialDeathEffectEntities = new HashSet<>();
+	public static ArrayDeque<Particle> firstPersonAuxParticles = Queues.newArrayDeque();
+	
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
 
@@ -423,7 +435,7 @@ public class ModEventHandlerClient {
 		}
 
 	}
-
+	
 	@SubscribeEvent
 	public void itemColorsEvent(ColorHandlerEvent.Item evt) {
 		evt.getItemColors().registerItemColorHandler((ItemStack stack, int tintIndex) -> {
@@ -812,24 +824,47 @@ public class ModEventHandlerClient {
 				m.jump = false;
 			}
 		}
+		JetpackHandler.inputUpdate(e);
 	}
 
 	@SubscribeEvent
 	public void clientTick(ClientTickEvent e) {
 		
 		if(e.phase == Phase.END) {
+			if(!firstPersonAuxParticles.isEmpty()){
+				Iterator<Particle> i = firstPersonAuxParticles.iterator();
+				while(i.hasNext()){
+					Particle p = i.next();
+					p.onUpdate();
+					if(!p.isAlive()){
+						i.remove();
+						continue;
+					}
+				}
+			}
+			Iterator<EntityLivingBase> itr = specialDeathEffectEntities.iterator();
+			while(itr.hasNext()){
+				Entity ent = itr.next();
+				if(ent.isDead)
+					itr.remove();
+			}
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			if(player != null) {
 				boolean isHooked = player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand());
 				if(isHooked)
 					player.distanceWalkedModified = player.prevDistanceWalkedModified; //Stops the held shotgun from bobbing when hooked
 			}
+			
+		}
+		if(Minecraft.getMinecraft().player != null){
+			JetpackHandler.clientTick(e);
 		}
 	}
 	
 	@SubscribeEvent
 	public void cameraSetup(EntityViewRenderEvent.CameraSetup e){
 		RecoilHandler.modifiyCamera(e);
+		JetpackHandler.handleCameraTransform(e);
 	}
 	
 	FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
@@ -838,7 +873,7 @@ public class ModEventHandlerClient {
 	FloatBuffer POSITION = GLAllocation.createDirectFloatBuffer(4);
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void renderWorld(RenderWorldLastEvent evt) {
+	public void renderWorld(RenderWorldLastEvent evt) {	
 		/*
 		* my ass is heavy
 		*/
@@ -938,6 +973,17 @@ public class ModEventHandlerClient {
 			Tessellator.instance.draw();
 			GL11.glPopMatrix();
 		}*/
+		for(Runnable r : ClientProxy.deferredRenderers){
+			r.run();
+		}
+		ClientProxy.deferredRenderers.clear();
+		
+		/*for(Particle p : firstPersonAuxParticles){
+			if(p instanceof ParticlePhysicsBlocks)
+				p.renderParticle(null, Minecraft.getMinecraft().getRenderViewEntity(), MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
+		}*/
+		//HbmShaderManager2.doPostProcess();
+		HbmShaderManager2.bloom();
 	}
 
 	@SubscribeEvent
@@ -1019,7 +1065,7 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		/// HANDLE GEIGER COUNTER HUD ///
+		/// HANDLE GEIGER COUNTER AND JETPACK HUD ///
 		if(event.getType() == ElementType.HOTBAR) {
 			if(Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
 
@@ -1029,6 +1075,14 @@ public class ModEventHandlerClient {
 					rads = player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).getRads();
 
 				RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
+			}
+			if(JetpackHandler.hasJetpack(player)){
+				boolean active = JetpackHandler.jetpackActive(player);
+				boolean hover = JetpackHandler.isHovering(player);
+				int posX = 12;
+				int posY = event.getResolution().getScaledHeight()/2 - 120;
+				Minecraft.getMinecraft().fontRenderer.drawString("Jetpack Active: " + active, posX, posY, 0xFFFFFFFF);
+				Minecraft.getMinecraft().fontRenderer.drawString("Jetpack Hover: " + hover, posX, posY+12, 0xFFFFFFFF);
 			}
 		}
 
@@ -1067,7 +1121,7 @@ public class ModEventHandlerClient {
 			if(time > animation.animation.getDuration())
 				HbmAnimations.hotbar[i] = null;
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_O)) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_O) && Minecraft.getMinecraft().currentScreen == null) {
 			PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(0, 0, 0, 999, 0));
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -1087,7 +1141,14 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void preRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event) {
-		if(event.getEntity() instanceof AbstractClientPlayer) {
+		//Mouse.isButtonDown(button)
+		//ForgeRegistries.ENTITIES.getKey(value);
+		//EntityMaskMan ent;
+		//EntityRegistry.getEntry(ent.getClass());
+		if(specialDeathEffectEntities.contains(event.getEntity())){
+			event.setCanceled(true);
+		}
+		if(event.getEntity() instanceof AbstractClientPlayer){
 			RenderPlayer renderer = (RenderPlayer) event.getRenderer();
 			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
 
@@ -1098,6 +1159,15 @@ public class ModEventHandlerClient {
 			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
+			JetpackHandler.preRenderPlayer(player);
+		}
+	}
+	
+	@SubscribeEvent
+	public void postRenderLiving(RenderLivingEvent.Post<AbstractClientPlayer> event) {
+		if(event.getEntity() instanceof AbstractClientPlayer){
+			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
+			JetpackHandler.postRenderPlayer(player);
 		}
 	}
 
@@ -1105,22 +1175,23 @@ public class ModEventHandlerClient {
 	public void clickHandler(MouseEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 
+		boolean m1 = ItemGunBase.m1;
+		boolean m2 = ItemGunBase.m2;
 		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
 			if(event.getButton() == 0)
 				event.setCanceled(true);
 
 			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
-
-			if(event.getButton() == 0 && !item.m1r && !item.m2r) {
-				item.m1r = true;
+			if(event.getButton() == 0 && !m1 && !m2) {
+				ItemGunBase.m1 = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.MAIN_HAND));
 				item.startActionClient(player.getHeldItemMainhand(), player.world, player, true, EnumHand.MAIN_HAND);
-			} else if(event.getButton() == 1 && !item.m2r && !item.m1r) {
-				item.m2r = true;
+			}
+			else if(event.getButton() == 1 && !m2 && !m1) {
+				ItemGunBase.m2 = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.MAIN_HAND));
 				item.startActionClient(player.getHeldItemMainhand(), player.world, player, false, EnumHand.MAIN_HAND);
-				// System.out.println("M2");
 			}
 		}
 		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
@@ -1129,16 +1200,15 @@ public class ModEventHandlerClient {
 				event.setCanceled(true);
 
 			ItemGunBase item = (ItemGunBase) player.getHeldItem(EnumHand.OFF_HAND).getItem();
-			if(event.getButton() == 0 && !item.m1l && !item.m2l) {
-				item.m1l = true;
+			if(event.getButton() == 0 && !m1 && !m2) {
+				ItemGunBase.m1 = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 0, EnumHand.OFF_HAND));
 				item.startActionClient(player.getHeldItemOffhand(), player.world, player, true, EnumHand.OFF_HAND);
-				// System.out.println("M1");
-			} else if(event.getButton() == 1 && !item.m2l && !item.m1l) {
-				item.m2l = true;
+			}
+			else if(event.getButton() == 1 && !m2 && !m1) {
+				ItemGunBase.m2 = true;
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 1, EnumHand.OFF_HAND));
 				item.startActionClient(player.getHeldItemOffhand(), player.world, player, false, EnumHand.OFF_HAND);
-				// System.out.println("M2");
 			}
 		}
 	}

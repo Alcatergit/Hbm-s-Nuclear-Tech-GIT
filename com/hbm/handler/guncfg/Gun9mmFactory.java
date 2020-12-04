@@ -7,6 +7,10 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 public class Gun9mmFactory {
@@ -61,6 +65,12 @@ public class Gun9mmFactory {
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
 		config.firingSound = HBMSoundHandler.rifleShoot;
 		config.reloadSoundEnd = false;
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 1, -5, 20))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 20))
+						));
 
 		config.name = "M1A1 Submachine Gun 9mm Mod";
 		config.manufacturer = "Auto-Ordnance Corporation";

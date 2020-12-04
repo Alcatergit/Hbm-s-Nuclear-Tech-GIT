@@ -312,7 +312,6 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				
 				if(overrideDamage != 0)
 					damage = overrideDamage;
-				
 				if (!victim.attackEntityFrom(damagesource, damage)) {
 
 					try {

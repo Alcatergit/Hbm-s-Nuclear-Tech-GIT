@@ -50,7 +50,6 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
 	//Drillgon200: Not even used but I'm too lazy to remove them
-	public boolean needsUpdate;
 	public boolean needsTankTypeUpdate;
 
 	// private static final int[] slots_top = new int[] {4};
@@ -91,7 +90,6 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 		tankTypes[0] = ModForgeFluids.steam;
 		tanks[1] = new FluidTank(128000);
 		tankTypes[1] = FluidRegistry.WATER;
-		needsUpdate = false;
 		needsTankTypeUpdate = false;
 	}
 
@@ -254,12 +252,12 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 
 	public void fillFluidInit(FluidTank tank) {
 
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.east(), 4000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.west(), 4000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.up(), 4000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.down(), 4000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.south(), 4000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.north(), 4000) || needsUpdate;
+		FFUtils.fillFluid(this, tank, world, pos.east(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.west(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.up(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.down(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.south(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.north(), 64000);
 	}
 
 	@Override

@@ -80,6 +80,29 @@ public class AuxButtonPacket implements IMessage {
 			ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
 				EntityPlayer p = ctx.getServerHandler().player;
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
+				
+				//why make new packets when you can just abuse and uglify the existing ones?
+				if(m.value == 999) {
+
+					NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+					if(!perDat.getBoolean("hasDucked")) {
+						EntityDuck ducc = new EntityDuck(p.world);
+						ducc.setPosition(p.posX, p.posY + p.eyeHeight, p.posZ);
+
+						Vec3d vec = p.getLookVec();
+						ducc.motionX = vec.x;
+						ducc.motionY = vec.y;
+						ducc.motionZ = vec.z;
+
+						p.world.spawnEntity(ducc);
+						p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+						perDat.setBoolean("hasDucked", true);
+
+						p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
+					}
+				}
+				
 				if(!p.world.isBlockLoaded(pos))
 					return;
 				//try {
@@ -181,7 +204,6 @@ public class AuxButtonPacket implements IMessage {
 								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
 								PacketDispatcher.wrapper.sendToAll(new RailgunCallbackPacket(m.x, m.y, m.z, gun.pitch, gun.yaw));
 							} else {
-								System.out.println(HBMSoundHandler.buttonNo);
 								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 							}
 						}
@@ -260,29 +282,6 @@ public class AuxButtonPacket implements IMessage {
 						base.handleButtonPacket(m.value, m.id);
 					}
 					
-					
-					//why make new packets when you can just abuse and uglify the existing ones?
-					if(te == null && m.value == 999) {
-
-						NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-
-						if(!perDat.getBoolean("hasDucked")) {
-							EntityDuck ducc = new EntityDuck(p.world);
-							ducc.setPosition(p.posX, p.posY + p.eyeHeight, p.posZ);
-
-							Vec3d vec = p.getLookVec();
-							ducc.motionX = vec.x;
-							ducc.motionY = vec.y;
-							ducc.motionZ = vec.z;
-
-							p.world.spawnEntity(ducc);
-							p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-							perDat.setBoolean("hasDucked", true);
-
-							p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
-						}
-					}
 				//} catch (Exception x) { }
 			});
 			

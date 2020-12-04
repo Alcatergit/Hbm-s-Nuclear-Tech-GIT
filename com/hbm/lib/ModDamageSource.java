@@ -21,7 +21,7 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource acid = (new DamageSource("acid")).setDamageBypassesArmor();
 	public static DamageSource euthanizedSelf = (new DamageSource("euthanizedSelf")).setDamageBypassesArmor();
 	public static DamageSource euthanizedSelf2 = (new DamageSource("euthanizedSelf2")).setDamageBypassesArmor();
-	public static DamageSource tauBlast = (new DamageSource("tauBlast")).setDamageBypassesArmor();
+	public static DamageSource tauBlast = (new DamageSource("tauBlast")).setDamageBypassesArmor().setDamageIsAbsolute();
 	public static DamageSource radiation = (new DamageSource("radiation")).setDamageBypassesArmor();
 	public static DamageSource suicide = (new DamageSource("suicide")).setProjectile();
 	public static DamageSource teleporter = (new DamageSource("teleporter")).setDamageIsAbsolute();
@@ -62,9 +62,9 @@ public class ModDamageSource extends DamageSource {
     {
         return (new EntityDamageSourceIndirect("chopperBullet", p_76353_0_, p_76353_1_)).setProjectile();
     }
-    public static DamageSource causeTauDamage(EntityBullet p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeTauDamage(Entity p_76353_0_, Entity p_76353_1_)
     {
-        return (new EntityDamageSourceIndirect("tau", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
+        return new EntityDamageSourceIndirect("tau", p_76353_0_, p_76353_1_).setProjectile().setDamageBypassesArmor().setDamageIsAbsolute();
     }
     public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
     {

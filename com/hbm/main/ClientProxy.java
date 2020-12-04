@@ -1,13 +1,17 @@
 package com.hbm.main;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
-import com.hbm.animloader.ColladaLoader;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockModDoor;
@@ -172,11 +176,13 @@ import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.handler.HbmShaderManager;
+import com.hbm.handler.JetpackHandler;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.particle.ParticleExSmoke;
 import com.hbm.particle.ParticleRadiationFog;
+import com.hbm.particle.ParticleRenderLayer;
 import com.hbm.particle.ParticleRocketFlame;
 import com.hbm.particle.ParticleSmokePlume;
 import com.hbm.particle.ParticleSpark;
@@ -501,10 +507,12 @@ import com.hbm.tileentity.deco.TileEntityObjTester;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
+import com.hbm.tileentity.machine.RenderBookCrafting;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityBarrel;
+import com.hbm.tileentity.machine.TileEntityBlackBook;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityCore;
@@ -570,6 +578,7 @@ import net.minecraft.client.particle.ParticleFirework;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -579,6 +588,7 @@ import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -593,19 +603,32 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class ClientProxy extends ServerProxy {
+	
+	public static KeyBinding jetpackActivate;
+	public static KeyBinding jetpackHover;
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
 	
 	//Drillgon200: This is stupid, but I'm lazy
 	public static boolean renderingConstant = false;
+	
+	public static Field partialTicksPaused;
+
+	public static final FloatBuffer AUX_GL_BUFFER = GLAllocation.createDirectFloatBuffer(16);
+	public static final FloatBuffer AUX_GL_BUFFER2 = GLAllocation.createDirectFloatBuffer(16);
+	
+	//Drillgon200: Will I ever figure out how to write better code than this?
+	public static final List<Runnable> deferredRenderers = new ArrayList<>();
 	
 	@Override
 	public File getDataDir() {
@@ -622,6 +645,11 @@ public class ClientProxy extends ServerProxy {
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
 		
 		HbmShaderManager.loadShaders();
+		
+		jetpackActivate = new KeyBinding("key.jetpack_activate", KeyConflictContext.IN_GAME, Keyboard.KEY_J, "key.categories.hbm");
+		ClientRegistry.registerKeyBinding(jetpackActivate);
+		jetpackHover = new KeyBinding("key.jetpack_hover", KeyConflictContext.IN_GAME, Keyboard.KEY_H, "key.categories.hbm");
+		ClientRegistry.registerKeyBinding(jetpackHover);
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
@@ -724,6 +752,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlidingBlastDoor.class, new RenderSlidingBlastDoor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityKeypadBase.class, new RenderKeypadBase());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySlidingBlastDoorKeypad.class, new RenderKeypadBase());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlackBook.class, new RenderBookCrafting());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -1475,11 +1504,11 @@ public class ClientProxy extends ServerProxy {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		ResourceManager.supershotgun = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2_newmodel.dae"));
-		ResourceManager.ssg_reload = ColladaLoader.loadAnim(1300, new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
-		ResourceManager.door0 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
-		ResourceManager.door0_1 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0_1.dae"));
-		ResourceManager.door0_open = ColladaLoader.loadAnim(1200, new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
+		ResourceManager.loadAnimatedModels();
+		Minecraft.getMinecraft().getRenderManager().getSkinMap().forEach((p, r) -> {
+			r.addLayer(new JetpackHandler.JetpackLayer());
+		});
+		ParticleRenderLayer.register();
 	}
 	
 	@Override
@@ -1492,10 +1521,19 @@ public class ClientProxy extends ServerProxy {
 		Minecraft.getMinecraft().ingameGUI.setOverlayMessage(msg, false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public float partialTicks() {
-		boolean paused = Minecraft.getMinecraft().isGamePaused();
-		return paused ? Minecraft.getMinecraft().renderPartialTicksPaused : Minecraft.getMinecraft().getRenderPartialTicks();
+		try {
+			if(partialTicksPaused == null){
+				partialTicksPaused = ReflectionHelper.findField(Minecraft.class, "renderPartialTicksPaused", "field_193996_ah");
+			}
+			boolean paused = Minecraft.getMinecraft().isGamePaused();
+			return paused ? partialTicksPaused.getFloat(Minecraft.getMinecraft()) : Minecraft.getMinecraft().getRenderPartialTicks();
+		} catch(Exception x){
+			x.printStackTrace();
+		}
+		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
 	
 	private static enum BoxcarTextureGetter implements Function<ResourceLocation, TextureAtlasSprite>

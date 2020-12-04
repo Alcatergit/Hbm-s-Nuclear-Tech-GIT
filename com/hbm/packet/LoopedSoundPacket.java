@@ -6,16 +6,19 @@ import com.hbm.sound.SoundLoopBroadcaster;
 import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
 import com.hbm.sound.SoundLoopMiner;
+import com.hbm.sound.SoundLoopTurbofan;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
+import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -121,7 +124,7 @@ public class LoopedSoundPacket implements IMessage {
 					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineIGenerator)te).torque > 0)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopIGen(new ResourceLocation("hbm:block.igeneratorOperate"), te));
 				}
-				
+				*/
 				if (te != null && te instanceof TileEntityMachineTurbofan) {
 					
 					boolean flag = true;
@@ -130,11 +133,11 @@ public class LoopedSoundPacket implements IMessage {
 							flag = false;
 					}
 					
-					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineTurbofan)te).isRunning)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(new ResourceLocation("hbm:block.turbofanOperate"), te));
+					if(flag && te.getWorld().isRemote && ((TileEntityMachineTurbofan)te).isRunning)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(HBMSoundHandler.turbofanOperate, te));
 				}
 				
-				*/if (te != null && te instanceof TileEntityBroadcaster) {
+				if (te != null && te instanceof TileEntityBroadcaster) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopBroadcaster.list.size(); i++)  {

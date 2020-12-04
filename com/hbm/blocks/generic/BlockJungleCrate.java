@@ -45,5 +45,6 @@ public class BlockJungleCrate extends Block {
 	public Block setSoundType(SoundType sound) {
 		return super.setSoundType(sound);
 	}
+	
 
 }

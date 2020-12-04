@@ -3,6 +3,7 @@ package com.hbm.blocks.test;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.interfaces.IBomb;
+import com.hbm.physics.PhysicsTestParticle;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.block.BlockContainer;
@@ -61,7 +62,39 @@ public class TestObjTester extends BlockContainer implements IBomb {
     		ex.doExplosionA();
     		ex.doExplosionB(false);*/
     	} else {
+    		/*Minecraft.getMinecraft().getTextureManager().deleteTexture(ResourceManager.gluon_beam_tex);
+    		ResourceManager.gluon_beam = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_beam"))
+    				.withUniforms(shader -> {
+    					GL13.glActiveTexture(GL13.GL_TEXTURE3);
+    					Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+    					GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+    					GL13.glActiveTexture(GL13.GL_TEXTURE4);
+    					Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+    					GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+    					GL13.glActiveTexture(GL13.GL_TEXTURE0);
+    					
+    					float time = (System.currentTimeMillis()%10000000)/1000F;
+    					GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+    				});
+    		ResourceManager.gluon_spiral = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_spiral"))
+    				.withUniforms(shader -> {
+    					GL13.glActiveTexture(GL13.GL_TEXTURE3);
+    					Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+    					GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+    					GL13.glActiveTexture(GL13.GL_TEXTURE4);
+    					Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+    					GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+    					GL13.glActiveTexture(GL13.GL_TEXTURE0);
+    					
+    					float time = (System.currentTimeMillis()%10000000)/1000F;
+    					GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+    				});*/
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5));
+    		try {
+    			Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 3));
+    		}catch (Exception x){
+    			x.printStackTrace();
+    		}
     	}
 		return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}
@@ -117,7 +150,12 @@ public class TestObjTester extends BlockContainer implements IBomb {
     	} else {
     		TileEntity te = world.getTileEntity(pos);
     		if(te instanceof TileEntityObjTester){
-    			((TileEntityObjTester)te).fireAge = 0;
+    			//((TileEntityObjTester)te).fireAge = 0;
+    		}
+    		try {
+    			Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 5.55));
+    		}catch (Exception x){
+    			x.printStackTrace();
     		}
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleLightning(world, pos.getX(), pos.getY()+40, pos.getZ()));
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5 - 55));

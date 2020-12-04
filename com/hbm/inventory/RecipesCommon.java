@@ -8,6 +8,7 @@ import com.hbm.lib.Library;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipesCommon {
@@ -179,7 +180,9 @@ public class RecipesCommon {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + Item.REGISTRY.getNameForObject(item).hashCode(); //using the int ID will cause fucky-wuckys if IDs are scrambled
+			ResourceLocation name = Item.REGISTRY.getNameForObject(item);
+			if(name != null)
+				result = prime * result + name.hashCode(); //using the int ID will cause fucky-wuckys if IDs are scrambled
 			result = prime * result + meta;
 			result = prime * result + stacksize;
 			return result;

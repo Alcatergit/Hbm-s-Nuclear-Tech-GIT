@@ -1,9 +1,13 @@
 package com.hbm.main;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
+import com.google.common.io.Resources;
 import com.hbm.animloader.AnimatedModel;
 import com.hbm.animloader.Animation;
+import com.hbm.animloader.ColladaLoader;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
@@ -14,14 +18,20 @@ import com.hbm.render.WavefrontObjCalllist;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.WavefrontObject;
+import com.hbm.render.misc.LensVisibilityHandler;
 import com.hbm.util.KeypadClient;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
 public class ResourceManager {
 
 	//God
 	public static final IModelCustom error = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/error.obj"));
+	
+	public static final IModelCustom cat = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/cat.obj"));
 
 	//Drillgon200 model loading test
 	//Hey it worked! I wonder if I can edit the tessellator to call 1.12.2 builder buffer commands, because that's a lot less laggy.
@@ -127,6 +137,7 @@ public class ResourceManager {
 	public static final IModelCustom sphere_iuv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_iuv.obj"));
 	public static final IModelCustom sphere_uv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.obj"));
 	public static final IModelCustom sphere_uv_anim = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.hmf"));
+	public static IModelCustom sphere_hq = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/sphere_hq.obj"));
 
 	//Meteor
 	public static final IModelCustom meteor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/weapons/meteor.obj"));
@@ -500,6 +511,9 @@ public class ResourceManager {
 	public static final ResourceLocation sliding_blast_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door.png");
 	public static final ResourceLocation sliding_blast_door_keypad_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door_keypad.png");
 
+	//Silo hatch
+	public static final ResourceLocation hatch_tex = new ResourceLocation(RefStrings.MODID, "textures/models/hatchtexture.png");
+	
 	//Tesla Coil
 	public static final ResourceLocation tesla_tex = new ResourceLocation(RefStrings.MODID, "textures/models/tesla.png");
 	public static final ResourceLocation teslacrab_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/teslacrab.png");
@@ -843,6 +857,25 @@ public class ResourceManager {
 
 	//Debug
 	public static final ResourceLocation uv_debug = new ResourceLocation(RefStrings.MODID, "textures/misc/uv_debug.png");
+	
+	public static final ResourceLocation noise_1 = new ResourceLocation(RefStrings.MODID, "textures/misc/noise_1.png");
+	public static final ResourceLocation noise_2 = new ResourceLocation(RefStrings.MODID, "textures/misc/noise_2.png");
+	
+	//Gluon gun and tau cannon
+	public static ResourceLocation flare = new ResourceLocation(RefStrings.MODID, "textures/misc/flare.png");
+	public static ResourceLocation flare2 = new ResourceLocation(RefStrings.MODID, "textures/misc/flare2.png");
+	public static ResourceLocation flare3 = new ResourceLocation(RefStrings.MODID, "textures/misc/flare3.png");
+	public static ResourceLocation flare3b = new ResourceLocation(RefStrings.MODID, "textures/misc/flare3b.png");
+	public static ResourceLocation gluon_beam_tex = new ResourceLocation(RefStrings.MODID, "textures/misc/gluonbeam.png");
+	
+	public static ResourceLocation tau_beam_tex = new ResourceLocation(RefStrings.MODID, "textures/misc/tau_beam.png");
+	public static ResourceLocation tau_lightning = new ResourceLocation(RefStrings.MODID, "textures/misc/tau_lightning.png");
+	public static ResourceLocation gluontau_hud = new ResourceLocation(RefStrings.MODID, "textures/misc/gluontau_hud.png");
+	
+	//Book
+	public static ResourceLocation circle_big = new ResourceLocation(RefStrings.MODID, "textures/misc/circle_big.png");
+	
+	public static ResourceLocation jetpack_tex = new ResourceLocation(RefStrings.MODID, "textures/models/jetpack_anim.png");
 
 	//ANIMATIONS
 	public static AnimatedModel supershotgun;
@@ -851,10 +884,76 @@ public class ResourceManager {
 	public static AnimatedModel door0;
 	public static AnimatedModel door0_1;
 	public static Animation door0_open;
+	
+	public static AnimatedModel silo_hatch;
+	public static Animation silo_hatch_open;
+	
+	public static AnimatedModel jetpack;
+	public static Animation jetpack_activate;
 
 	//SHADERS
-	public static Shader lit_particles = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lit_particles")).withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, HbmShaderManager2.LIGHTMAP);
-
+	public static Shader lit_particles = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lit_particles"))
+			.withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, HbmShaderManager2.LIGHTMAP);
+	public static Shader gluon_beam = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_beam"))
+			.withUniforms(shader -> {
+				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				
+				float time = (System.currentTimeMillis()%10000000)/1000F;
+				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+			});
+	
+	public static Shader gluon_spiral = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_spiral"))
+			.withUniforms(shader -> {
+				//Well, I accidentally uniformed the same noise sampler twice. That explains why the second noise didn't work.
+				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				
+				float time = (System.currentTimeMillis()%10000000)/1000F;
+				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+			});
+	
+	//Drillgon200: Did I need a shader for this? No, not really, but it's somewhat easier to create a sin wave pattern programmatically than to do it in paint.net.
+	public static Shader tau_ray = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/tau_ray"));
+	
+	public static Shader book_circle = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/book/circle"));
+	
+	public static Shader normal_fadeout = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/normal_fadeout"));
+	
+	public static Shader heat_distortion = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/heat_distortion"))
+			.withUniforms(shader -> {
+				Framebuffer buffer = Minecraft.getMinecraft().getFramebuffer();
+				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				GlStateManager.bindTexture(buffer.framebufferTexture);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "fbo_tex"), 3);
+				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				
+				float time = (System.currentTimeMillis()%10000000)/1000F;
+				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+				GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+			});
+	
+	public static Shader desaturate = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/desaturate"));
+	public static Shader test_trail = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/trail"));
+	public static Shader blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blit"));
+	public static Shader downsample = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/downsample"));
+	public static Shader bloom_h = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_h"));
+	public static Shader bloom_v = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_v"));
+	public static Shader bloom_test = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_test"));
+	
 	public static Shader gpu_particle_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_render")).withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, shader -> {
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData0"), 2);
@@ -871,6 +970,21 @@ public class ResourceManager {
 
 	public static final Vbo test = Vbo.setupTestVbo();
 
+	public static void loadAnimatedModels(){
+		supershotgun = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2_newmodel.dae"));
+		ssg_reload = ColladaLoader.loadAnim(1300, new ResourceLocation(RefStrings.MODID, "models/anim/ssg_reload_mk2_2.dae"));
+		
+		door0 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
+		door0_1 = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/door0_1.dae"));
+		door0_open = ColladaLoader.loadAnim(1200, new ResourceLocation(RefStrings.MODID, "models/anim/door0.dae"));
+		
+		silo_hatch = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/hatch.dae"));
+		silo_hatch_open = ColladaLoader.loadAnim(5000, new ResourceLocation(RefStrings.MODID, "models/anim/hatch.dae"));
+		
+		jetpack = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/jetpack.dae"));
+		jetpack_activate = ColladaLoader.loadAnim(1000, new ResourceLocation(RefStrings.MODID, "models/anim/jetpack.dae"));
+	}
+	
 	public static void init() {
 		if(GeneralConfig.callListModels && soyuz instanceof WavefrontObject) {
 			soyuz = new WavefrontObjCalllist((WavefrontObject) soyuz);
@@ -880,8 +994,17 @@ public class ResourceManager {
 			soyuz_launcher_tower = new WavefrontObjCalllist((WavefrontObject) soyuz_launcher_tower);
 			soyuz_launcher_support_base = new WavefrontObjCalllist((WavefrontObject) soyuz_launcher_support_base);
 			soyuz_launcher_support = new WavefrontObjCalllist((WavefrontObject) soyuz_launcher_support);
+			sphere_hq = new WavefrontObjCalllist((HFRWavefrontObject)sphere_hq);
 		}
 		KeypadClient.load();
+		
+		LensVisibilityHandler.checkSphere = new WavefrontObjCalllist(new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/diffractionspikechecker.obj"))).getListForName("sphere");
+		Minecraft.getMinecraft().getTextureManager().bindTexture(fresnel_ms);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(noise_1);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(noise_2);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 	}
 
 }

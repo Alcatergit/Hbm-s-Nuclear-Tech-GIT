@@ -34,4 +34,9 @@ public class EntityDuck extends EntityChicken {
 		return new EntityDuck(this.world);
 	}
 	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+	
 }

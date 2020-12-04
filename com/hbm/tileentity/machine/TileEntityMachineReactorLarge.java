@@ -838,20 +838,20 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		int y = pos.getY();
 		int z = pos.getZ();
 		if(world.getBlockState(mPos.setPos(x - 2, y, z)).getBlock() == ModBlocks.reactor_hatch)
-			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX() - 3, pos.getY(), pos.getZ()), 2000);
+			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX() - 3, pos.getY(), pos.getZ()), 20000);
 		
 		if(world.getBlockState(mPos.setPos(x + 2, y, z)).getBlock() == ModBlocks.reactor_hatch)
-			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX() + 3, pos.getY(), pos.getZ()), 2000);
+			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX() + 3, pos.getY(), pos.getZ()), 20000);
 		
 		if(world.getBlockState(mPos.setPos(x, y, z - 2)).getBlock() == ModBlocks.reactor_hatch)
-			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 3), 2000);
+			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 3), 20000);
 		
 		if(world.getBlockState(mPos.setPos(x, y, z + 2)).getBlock() == ModBlocks.reactor_hatch)
-			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 3), 2000);
+			FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 3), 20000);
 
-		FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY() + height + 1, pos.getZ()), 2000);
+		FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY() + height + 1, pos.getZ()), 20000);
 		
-		FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY() - depth - 1, pos.getZ() + 3), 2000);
+		FFUtils.fillFluid(this, tank, world, new BlockPos(pos.getX(), pos.getY() - depth - 1, pos.getZ() + 3), 20000);
 	}
 
 	@Override

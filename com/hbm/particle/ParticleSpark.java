@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -44,10 +45,10 @@ public class ParticleSpark extends Particle {
 	
 	public ParticleSpark motion(float mX, float mY, float mZ){
 		this.motionX = mX;
-		this.motionY = mY;
+		this.motionY = mY-gravity;
 		this.motionZ = mZ;
 		this.posX += mX;
-		this.posY += mY;
+		this.posY += mY-gravity;
 		this.posZ += mZ;
 		return this;
 	}
@@ -146,6 +147,7 @@ public class ParticleSpark extends Particle {
 		GlStateManager.enableBlend();
 		GlStateManager.disableCull();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		RenderHelper.enableStandardItemLighting();
 		
         float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
         float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);

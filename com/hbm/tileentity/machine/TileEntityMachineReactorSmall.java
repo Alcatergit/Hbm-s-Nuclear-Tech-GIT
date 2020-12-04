@@ -666,15 +666,15 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	}
 
 	public void fillFluidInit(FluidTank tank) {
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.west(), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.east(), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.north(), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.south(), 1000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.west(), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.east(), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.north(), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.south(), 4000) || needsUpdate;
 
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-1, 2, 0), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(1, 2, 0), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 2, -1), 1000) || needsUpdate;
-		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 2, 1), 1000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-1, 2, 0), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(1, 2, 0), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 2, -1), 4000) || needsUpdate;
+		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 2, 1), 4000) || needsUpdate;
 	}
 
 	@Override

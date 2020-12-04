@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
+import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

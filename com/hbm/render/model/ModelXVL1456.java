@@ -266,6 +266,13 @@ public class ModelXVL1456 extends ModelBase {
 		SpinP1.render(f5);
 		SpinP2.render(f5);
 		SpinP3.render(f5);
+		//Drillgon200: It's stupid to store rotation in the render class. Maybe if I'm not lazy I'll move it to one of the animations classes or something.
+		SpinC1.rotateAngleX -= rot;
+		SpinC2.rotateAngleX -= rot;
+		SpinC3.rotateAngleX -= rot;
+		SpinP1.rotateAngleX -= rot;
+		SpinP2.rotateAngleX -= rot;
+		SpinP3.rotateAngleX -= rot;
 		Battery1.render(f5);
 		Battery2.render(f5);
 		StockBase.render(f5);

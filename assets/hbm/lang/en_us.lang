@@ -1,4 +1,8 @@
-\itemGroup.tabTest=Nuclear Tech Mod Test Tab
+key.jetpack_activate=Activate Jetpack
+key.jetpack_hover=Activate Jetpack Hover Mode
+key.categories.hbm=Hbm's Nuclear Tech Mod
+
+itemGroup.tabTest=Nuclear Tech Mod Test Tab
 itemGroup.tabParts=NTM Resources and Parts
 itemGroup.tabControl=NTM Machine Items and Fuel
 itemGroup.tabTemplate=NTM Templates
@@ -249,7 +253,7 @@ death.attack.mudPoisoning=%1$s died in poisonous mud.
 death.attack.euthanized=%1$s was euthanized by %2$s.
 death.attack.euthanizedSelf=%1$s euthanized himself, what a dork.
 death.attack.euthanizedSelf2=%1$s wins the Darwin Award.
-death.attack.tau=%1$s was riddeled by %2$s using negatively charged tauons.
+death.attack.tau=%1$s was riddled by %2$s using negatively charged tauons.
 death.attack.tauBlast=%1$s charged the XVL1456 for too long and was blown into pieces.
 death.attack.chopperBullet=%1$s was rekt by %2$s.
 death.attack.cmb=%1$s was fizzeled by %2$s.
@@ -724,6 +728,7 @@ item.ingot_plutonium.name=Plutonium Ingot
 item.ingot_pu238.name=Pu238 Ingot
 item.ingot_pu239.name=Pu239 Ingot
 item.ingot_pu240.name=Pu240 Ingot
+item.ingot_polonium.name=Polonium Ingot
 item.ingot_titanium.name=Titanium Ingot
 item.ingot_cobalt.name=Cobalt Ingot
 item.sulfur.name=Sulfur

@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -122,7 +123,12 @@ public class BlockSlidingBlastDoor extends BlockDummyable {
 		}
 		return FULL_BLOCK_AABB;
 	}
-
+	
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+	
 	@Override
 	public int[] getDimensions() {
 		return new int[] { 3, 0, 0, 0, 3, 3 };

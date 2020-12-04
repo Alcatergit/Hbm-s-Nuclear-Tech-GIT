@@ -3,16 +3,25 @@ package com.hbm.render.misc;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.BobMathUtil;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class BeamPronter {
 	
@@ -271,6 +280,90 @@ public class BeamPronter {
         GlStateManager.enableTexture2D();
 		GL11.glPopMatrix();
 
+		GL11.glPopMatrix();
+	}
+	
+	public static void gluonBeam(Vec3 pos1, Vec3 pos2, float size){
+		//long l = System.nanoTime();
+		GL11.glPushMatrix();
+		GlStateManager.depthMask(false);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		
+		Vec3 diff = pos1.subtract(pos2);
+		float len = (float) diff.lengthVector();
+		Vec3 angles = BobMathUtil.getEulerAngles(diff);
+		GL11.glRotated(angles.xCoord+90, 0, 1, 0);
+		GL11.glRotated(angles.yCoord, 0, 0, -1);
+		GL11.glTranslated(pos1.xCoord, pos1.yCoord, pos1.zCoord);
+		
+		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.bfg_core_lightning);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		
+		net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
+		BufferBuilder buf = tes.getBuffer();
+		
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		Matrix4f mvMatrix = new Matrix4f();
+		mvMatrix.load(HbmShaderManager2.AUX_GL_BUFFER);
+		HbmShaderManager2.AUX_GL_BUFFER.rewind();
+		Matrix4f.invert(mvMatrix, mvMatrix);
+		Vector4f billboardPos = Matrix4f.transform(mvMatrix, new Vector4f(0, 0, 0, 1), null);
+		//GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "playerPos"), billboardPos.x, billboardPos.y, billboardPos.z);
+		
+		//GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "playerPos"), 0.0F, 0.1F, 0F);
+		int SUBDIVISIONS_PER_BLOCK = 16;
+		int subdivisions = (int)Math.ceil(len*SUBDIVISIONS_PER_BLOCK);
+		
+		ResourceManager.gluon_spiral.use();
+		GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "playerPos"), billboardPos.x, billboardPos.y, billboardPos.z);
+		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "subdivXAmount"), 1/(float)SUBDIVISIONS_PER_BLOCK);
+		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "subdivUAmount"), 1/(float)(subdivisions+1));
+		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "len"), len);
+		
+		buf.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+		for(int i = 0; i <= subdivisions; i ++){
+			float iN = ((float)i/(float)subdivisions);
+			float pos = iN*len;
+			buf.pos(pos, 0, -size*0.025).tex(iN, 0.45).endVertex();
+			buf.pos(pos, 0, size*0.025).tex(iN, 0.55).endVertex();
+		}
+		tes.draw();
+		
+		SUBDIVISIONS_PER_BLOCK *= 0.5;
+		subdivisions = (int)Math.ceil(len*SUBDIVISIONS_PER_BLOCK);
+		
+		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.gluon_beam_tex);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		//GlStateManager.depthMask(true);
+		ResourceManager.gluon_beam.use();
+		buf.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+		//GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "subdivXAmount"), 1/(float)SUBDIVISIONS_PER_BLOCK);
+		//GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "subdivUAmount"), 1/(float)(subdivisions+1));
+		
+		
+		Vec3d vec = new Vec3d(billboardPos.x, billboardPos.y, billboardPos.z).crossProduct(new Vec3d(1, 0, 0)).normalize().scale(size*2);
+		for(int i = 0; i <= subdivisions; i ++){
+			float iN = ((float)i/(float)subdivisions);
+			float pos = iN*len;
+			buf.pos(pos, -vec.y, -vec.z).tex(iN, 0).endVertex();
+			buf.pos(pos, vec.y, vec.z).tex(iN, 1).endVertex();
+		}
+		tes.draw();
+		
+		
+		
+		
+		HbmShaderManager2.releaseShader();
+		
+		//System.out.println(System.nanoTime() - l);
+		GlStateManager.disableBlend();
 		GL11.glPopMatrix();
 	}
 

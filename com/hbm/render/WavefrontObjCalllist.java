@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
+import com.hbm.hfr.render.loader.S_GroupObject;
 import com.hbm.render.amlfrom1710.GroupObject;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
@@ -29,6 +31,16 @@ public class WavefrontObjCalllist implements IModelCustom {
 		
 	}
 	
+	public WavefrontObjCalllist(HFRWavefrontObject obj) {
+		for(S_GroupObject g : obj.groupObjects){
+			int list = GL11.glGenLists(1);
+			GL11.glNewList(list, GL11.GL_COMPILE);
+			g.render();
+			GL11.glEndList();
+			nameToCallList.add(Pair.of(g.name, list));
+		}
+	}
+
 	public int getListForName(String name){
 		for(Pair<String, Integer> p : nameToCallList){
 			if(p.getLeft().equalsIgnoreCase(name)){

@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -46,20 +47,14 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 	public GunConfiguration mainConfig;
 	public GunConfiguration altConfig;
+	public static Field hurtResistantTime;
 
-	// Drillgon200: Wait this doesn't make any sense, there's only one mouse 1 and 2. What was I thinking???
-	// Drillgon200: true if mouse 1 has been pressed for the right hand
 	@SideOnly(Side.CLIENT)
-	public boolean m1r;// = false;
-	// Drillgon200: true if mouse 2 has been pressed for the right hand
+	public static boolean m1;// = false;
 	@SideOnly(Side.CLIENT)
-	public boolean m2r;// = false;
-	// Drillgon200: true if mouse 1 has been pressed for the left hand
-	@SideOnly(Side.CLIENT)
-	public boolean m1l;// = false;
-	// Drillgon200: true if mouse 2 has been pressed for the left hand
-	@SideOnly(Side.CLIENT)
-	public boolean m2l;// = false;
+	public static boolean m2;// = false;
+	public static boolean oldClickRight;
+	public static boolean oldClickLeft;
 
 	public ItemGunBase(GunConfiguration config, String s) {
 		mainConfig = config;
@@ -104,77 +99,40 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 
 		boolean clickLeft = Mouse.isButtonDown(0);
 		boolean clickRight = Mouse.isButtonDown(1);
-		boolean left = m1r;
-		boolean right = m2r;
-		boolean leftleft = m1l;
-		boolean leftright = m2l;
-
+		boolean left = m1;
+		boolean right = m2;
+		
 		if(hand != null) {
-			if(left && right && hand == EnumHand.MAIN_HAND) {
+			if(left && right) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
-				m1r = false;
-				m2r = false;
+				m1 = false;
+				m2 = false;
 			}
-			if(leftleft && leftright && hand == EnumHand.OFF_HAND) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
-				m1l = false;
-				m2l = false;
-			}
-
+			
 			if(left && !clickLeft) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, EnumHand.MAIN_HAND));
-				// setIsMouseDown(stack, false);
-				m1r = false;
-				endActionClient(stack, world, entity, true, EnumHand.MAIN_HAND);
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
+				m1 = false;
+				endActionClient(stack, world, entity, true, hand);
 			}
-
-			if(leftleft && !clickLeft) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, EnumHand.OFF_HAND));
-				m1l = false;
-				endActionClient(stack, world, entity, true, EnumHand.OFF_HAND);
-			}
-
+			
 			if(right && !clickRight) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, EnumHand.MAIN_HAND));
-				m2r = false;
-				endActionClient(stack, world, entity, false, EnumHand.MAIN_HAND);
+				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
+				m2 = false;
+				endActionClient(stack, world, entity, false, hand);
 			}
-
-			if(leftright && !clickRight) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, EnumHand.OFF_HAND));
-				m2l = false;
-				endActionClient(stack, world, entity, false, EnumHand.OFF_HAND);
-			}
-
-			if(mainConfig.reloadType != GunConfiguration.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
-
+			
+			if(mainConfig.reloadType != mainConfig.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
+				
 				if(Keyboard.isKeyDown(Keyboard.KEY_R) && getMag(stack) < mainConfig.ammoCap) {
 					PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 2, hand));
 					setIsReloading(stack, true);
 					resetReloadCycle(stack);
 				}
 			}
-		} else {
-
-			if(left) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
-				m1r = false;
-			}
-			if(right) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
-				m2r = false;
-			}
-			if(leftleft) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
-				m1l = false;
-			}
-			if(leftright) {
-				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
-				m2l = false;
-			}
 		}
+		oldClickLeft = m1;
+		oldClickRight = m2;
 	}
 
 	protected void updateServer(ItemStack stack, World world, EntityPlayer player, int slot, EnumHand hand) {
@@ -186,7 +144,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			setIsMouseDown(stack, false);
 		}
 		
-		if(getIsAltDown(stack) && hand != null) {
+		if(getIsAltDown(stack) && hand == null) {
 			setIsAltDown(stack, false);
 		}
 		if(GeneralConfig.enableGuns && mainConfig.firingMode == GunConfiguration.FIRE_AUTO && getIsMouseDown(stack) && tryShoot(stack, world, player, hand != null)) {

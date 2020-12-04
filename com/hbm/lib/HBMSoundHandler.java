@@ -162,6 +162,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent sauerGun;
 	public static SoundEvent ducc;
 	public static SoundEvent whack;
+	public static SoundEvent turbofanOperate;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -346,6 +347,7 @@ public final class HBMSoundHandler {
 		sauerGun = register("weapon.sauergun");
 		ducc = register("entity.ducc");
 		whack = register("weapon.whack");
+		turbofanOperate = register("block.turbofanOperate");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

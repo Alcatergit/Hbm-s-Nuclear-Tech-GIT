@@ -5,11 +5,13 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.GeneralConfig;
+import com.hbm.handler.HbmShaderManager2;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.ResourceManager;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,10 +92,10 @@ public class ItemDetonator extends Item {
 			 {
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
 				
-				
+				((IBomb)world.getBlockState(pos).getBlock()).explode(world, pos);
 				if(!world.isRemote)
 				{
-					((IBomb)world.getBlockState(pos).getBlock()).explode(world, pos);
+					
 		    		if(GeneralConfig.enableExtendedLogging)
 		    			MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + x + " / " + y + " / " + z + " by " + player.getDisplayName() + "!");
 				}

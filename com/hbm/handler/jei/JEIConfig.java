@@ -1,6 +1,7 @@
 package com.hbm.handler.jei;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
@@ -58,6 +59,8 @@ public class JEIConfig implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
+		if(!GeneralConfig.jei)
+			return;
 		registry.addRecipeRegistryPlugin(new HbmJeiRegistryPlugin());
 
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_assembler), ASSEMBLY);
@@ -181,6 +184,8 @@ public class JEIConfig implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
+		if(!GeneralConfig.jei)
+			return;
 		IGuiHelper help = registry.getJeiHelpers().getGuiHelper();
 		registry.addRecipeCategories(new AssemblerRecipeHandler(help),
 				new ChemplantRecipeHandler(help),
@@ -202,6 +207,8 @@ public class JEIConfig implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+		if(!GeneralConfig.jei)
+			return;
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.cell, (ItemStack stack) -> {
 			FluidStack fluid = FluidUtil.getFluidContained(stack);
 			return ModItems.cell.getUnlocalizedName() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);

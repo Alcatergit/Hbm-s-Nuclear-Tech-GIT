@@ -396,7 +396,6 @@ public class MainRegistry {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-
 		if(logger == null)
 			logger = event.getModLog();
 
@@ -613,6 +612,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntitySlidingBlastDoor.class, new ResourceLocation(RefStrings.MODID, "tileentity_sliding_blast_door"));
 		GameRegistry.registerTileEntity(TileEntityKeypadBase.class, new ResourceLocation(RefStrings.MODID, "tileentity_keypad_base"));
 		GameRegistry.registerTileEntity(TileEntitySlidingBlastDoorKeypad.class, new ResourceLocation(RefStrings.MODID, "tileentity_keypad_door"));
+		GameRegistry.registerTileEntity(TileEntityBlackBook.class, new ResourceLocation(RefStrings.MODID, "tileentity_book_crafting"));
 		
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -819,18 +819,6 @@ public class MainRegistry {
 	public void postInit(FMLPostInitializationEvent event) {
 		ModItems.postInit();
 		ModBlocks.postInit();
-		//ItemAssemblyTemplate.loadRecipesFromConfig();
-		CraftingManager.init();
-		FluidTypeHandler.registerFluidProperties();
-		ShredderRecipes.registerShredder();
-		ShredderRecipes.registerOverrides();
-		CrystallizerRecipes.register();
-		CentrifugeRecipes.register();
-		BreederRecipes.registerFuels();
-		BreederRecipes.registerRecipes();
-		AssemblerRecipes.loadRecipes();
-		CyclotronRecipes.register();
-		MagicRecipes.register();
 		BlockCrate.setDrops();
 		
 		TileEntityNukeCustom.registerBombItems();

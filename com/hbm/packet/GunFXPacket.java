@@ -53,13 +53,15 @@ public class GunFXPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(GunFXPacket m, MessageContext ctx) {
-			EntityPlayer player = Minecraft.getMinecraft().world.getPlayerEntityByUUID(UUID.fromString(m.playerUUID));
-			ItemStack stack = player.getHeldItem(m.hand);
-			if(stack.getItem() instanceof ItemGunBase){
-				boolean isThirdPerson = Minecraft.getMinecraft().gameSettings.thirdPersonView > 0 || player != Minecraft.getMinecraft().player;
-				if(m.type == FXType.FIRE)
-					((ItemGunBase)stack.getItem()).onFireClient(stack, player, isThirdPerson);
-			}
+			Minecraft.getMinecraft().addScheduledTask(() -> {
+				EntityPlayer player = Minecraft.getMinecraft().world.getPlayerEntityByUUID(UUID.fromString(m.playerUUID));
+				ItemStack stack = player.getHeldItem(m.hand);
+				if(stack.getItem() instanceof ItemGunBase){
+					boolean isThirdPerson = Minecraft.getMinecraft().gameSettings.thirdPersonView > 0 || player != Minecraft.getMinecraft().player;
+					if(m.type == FXType.FIRE)
+						((ItemGunBase)stack.getItem()).onFireClient(stack, player, isThirdPerson);
+				}
+			});
 			return null;
 		}
 		

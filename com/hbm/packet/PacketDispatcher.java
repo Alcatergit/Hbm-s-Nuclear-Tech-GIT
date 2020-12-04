@@ -127,6 +127,10 @@ public class PacketDispatcher {
 		wrapper.registerMessage(PlayerInformPacket.Handler.class, PlayerInformPacket.class, i++, Side.CLIENT);
 		//Activates particle effects or animations without the need for an entity
 		wrapper.registerMessage(GunFXPacket.Handler.class, GunFXPacket.class, i++, Side.CLIENT);
+		//Handles custom death animations (like the gluon gun disintegration effect)
+		wrapper.registerMessage(PacketSpecialDeath.Handler.class, PacketSpecialDeath.class, i++, Side.CLIENT);
+		//DELETE LATER
+		//wrapper.registerMessage(PacketCreatePhysTree.Handler.class, PacketCreatePhysTree.class, i++, Side.CLIENT);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

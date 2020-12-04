@@ -261,7 +261,7 @@ public class RenderHelper {
 	public static void drawGuiRect(float x, float y, float u, float v, float width, float height, float uMax, float vMax){
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         bufferbuilder.pos((double)x, (double)(y + height), 0.0D).tex(u, vMax).endVertex();
         bufferbuilder.pos((double)(x + width), (double)(y + height), 0.0D).tex(uMax, vMax).endVertex();
         bufferbuilder.pos((double)(x + width), (double)y, 0.0D).tex(uMax, v).endVertex();

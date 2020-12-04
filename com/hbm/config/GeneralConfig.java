@@ -42,6 +42,8 @@ public class GeneralConfig {
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = true;
 	public static boolean enableBabyMode = false;
+	public static boolean recipes = true;
+	public static boolean jei = true;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
@@ -90,6 +92,8 @@ public class GeneralConfig {
 		}
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
+		recipes = config.get(CATEGORY_GENERAL, "1.28_enableRecipes", true).getBoolean(true);
+		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
 	}
 
 }

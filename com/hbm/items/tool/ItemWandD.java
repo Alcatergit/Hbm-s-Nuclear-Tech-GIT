@@ -6,13 +6,15 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.physics.ParticlePhysicsBlocks;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
-import com.hbm.world.dungeon.Ruin001;
 import com.hbm.world.generator.CellularDungeonFactory;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -73,15 +75,45 @@ public class ItemWandD extends Item {
 					CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
 				}
 			}
+		} else {
+			BlockPos[] blocks = new BlockPos[7];
+			blocks[0] = pos;
+			blocks[1] = pos.up();
+			blocks[2] = blocks[1].up();
+			blocks[3] = blocks[2].north();
+			blocks[4] = blocks[2].south();
+			blocks[5] = blocks[2].east();
+			blocks[6] = blocks[2].west();
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(world, pos.getX(), pos.getY(), pos.getZ(), blocks[0], blocks));
 		}
 		if(b == ModBlocks.fluid_duct_mk2){
 			System.out.println("client: " + world.isRemote + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork() + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork().size());
 			System.out.println(((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).connections);
 		}
 		
+		/*int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		Random rand = world.rand;
+		world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
+		WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(10),
+				(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(4) + 3);
+		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(1);
+		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();*/
+		
 		MainRegistry.time = System.currentTimeMillis();
 		
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+		if(target.world.isRemote){
+			//DisintegrationParticleHandler.spawnGluonDisintegrateParticles(target);
+		} else {
+		}
+		return super.itemInteractionForEntity(stack, playerIn, target, hand);
 	}
 	
 	@Override
@@ -90,8 +122,8 @@ public class ItemWandD extends Item {
 		{
 			if(world.isRemote)
 				player.sendMessage(new TextComponentTranslation(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
+		} else {
 		}
-		System.out.println(world.isRemote);
 		
 		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	}

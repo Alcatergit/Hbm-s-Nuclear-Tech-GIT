@@ -1,5 +1,9 @@
 package com.hbm.render.amlfrom1710;
 
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Tuple3f;
+import javax.vecmath.Vector3f;
+
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -11,7 +15,6 @@ public class Vec3
     public double yCoord;
     /** Z coordinate of Vec3D */
     public double zCoord;
-    private static final String __OBFID = "CL_00000612";
 
     /**
      * Static method for creating a new Vec3D given the three x,y,z values. This is only called from the other static
@@ -28,7 +31,7 @@ public class Vec3
     	this.zCoord = vec.z;
 	}
 
-    protected Vec3(double p_i1108_1_, double p_i1108_3_, double p_i1108_5_)
+    public Vec3(double p_i1108_1_, double p_i1108_3_, double p_i1108_5_)
     {
         if (p_i1108_1_ == -0.0D)
         {
@@ -53,24 +56,32 @@ public class Vec3
     /**
      * Sets the x,y,z components of the vector as specified.
      */
-    protected Vec3 setComponents(double p_72439_1_, double p_72439_3_, double p_72439_5_)
+    public Vec3 setComponents(double p_72439_1_, double p_72439_3_, double p_72439_5_)
     {
         this.xCoord = p_72439_1_;
         this.yCoord = p_72439_3_;
         this.zCoord = p_72439_5_;
         return this;
     }
+    
+    public Vec3 set(Vec3 other){
+    	return setComponents(other.xCoord, other.yCoord, other.zCoord);
+    }
 
     /**
      * Returns a new vector with the result of the specified vector minus this.
      */
-    public Vec3 subtract(Vec3 p_72444_1_)
+    public Vec3 subtract(Vec3 other)
     {
         /**
          * Static method for creating a new Vec3D given the three x,y,z values. This is only called from the other
          * static method which creates and places it in the list.
          */
-        return createVectorHelper(p_72444_1_.xCoord - this.xCoord, p_72444_1_.yCoord - this.yCoord, p_72444_1_.zCoord - this.zCoord);
+        return createVectorHelper(this.xCoord - other.xCoord, this.yCoord - other.yCoord, this.zCoord - other.zCoord);
+    }
+    
+    public Vec3 subtract(double x, double y, double z){
+    	return new Vec3(xCoord - x, yCoord - y, zCoord - z);
     }
 
     /**
@@ -110,6 +121,10 @@ public class Vec3
          * static method which creates and places it in the list.
          */
         return createVectorHelper(this.xCoord + p_72441_1_, this.yCoord + p_72441_3_, this.zCoord + p_72441_5_);
+    }
+    
+    public Vec3 add(Vec3 other){
+    	return new Vec3(xCoord + other.xCoord, yCoord + other.yCoord, zCoord + other.zCoord);
     }
 
     /**
@@ -151,6 +166,10 @@ public class Vec3
     public double lengthVector()
     {
         return (double)MathHelper.sqrt(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
+    }
+    
+    public double lengthSquared(){
+    	return this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord;
     }
 
     /**
@@ -267,4 +286,37 @@ public class Vec3
     public Vec3 mult(float mult){
     	return Vec3.createVectorHelper(this.xCoord*mult, this.yCoord*mult, this.zCoord*mult);
     }
+    
+    public Vec3 multd(double mult){
+    	return Vec3.createVectorHelper(this.xCoord*mult, this.yCoord*mult, this.zCoord*mult);
+    }
+    
+    public Vec3 negate(){
+    	return new Vec3(-xCoord, -yCoord, -zCoord);
+    }
+
+    //https://en.wikipedia.org/wiki/Outer_product
+	public Matrix3f outerProduct(Vec3 other) {
+		Matrix3f mat = new Matrix3f(
+				(float)(xCoord*other.xCoord), (float)(xCoord*other.yCoord), (float)(xCoord*other.zCoord),
+				(float)(yCoord*other.xCoord), (float)(yCoord*other.yCoord), (float)(yCoord*other.zCoord),
+				(float)(zCoord*other.xCoord), (float)(zCoord*other.yCoord), (float)(zCoord*other.zCoord));
+		return mat;
+	}
+	
+	 public Vec3 matTransform(Matrix3f mat) {
+	     double x,y,z;
+	     x = mat.m00* xCoord + mat.m01*yCoord + mat.m02*zCoord; 
+	     y = mat.m10* xCoord + mat.m11*yCoord + mat.m12*zCoord; 
+	     z = mat.m20* xCoord + mat.m21*yCoord + mat.m22*zCoord; 
+	     return new Vec3(x, y, z);
+	 }
+	 
+	 public Vec3 copy(){
+		 return new Vec3(xCoord, yCoord, zCoord);
+	 }
+	 
+	 public Vec3d toVec3d(){
+		 return new Vec3d(xCoord, yCoord, zCoord);
+	 }
 }

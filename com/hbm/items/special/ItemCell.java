@@ -135,11 +135,13 @@ public class ItemCell extends ItemRadioactive {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
-		if(f == null) {
-			return I18n.format("item.cell_empty.name");
-		} else {
-			return I18n.format(EnumCell.getEnumFromFluid(f.getFluid()).getTranslateKey());
+		if(f != null){
+			//Why is there a npe here? I have no idea, and I can't replicate it. Stupid try/catch it is.
+			try {
+				return I18n.format(EnumCell.getEnumFromFluid(f.getFluid()).getTranslateKey());
+			} catch(NullPointerException e){ }
 		}
+		return I18n.format("item.cell_empty.name");
 	}
 
 	@Override

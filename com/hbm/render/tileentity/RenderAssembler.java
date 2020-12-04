@@ -2,7 +2,9 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.animloader.AnimationWrapper;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -29,6 +31,11 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
     private static final ResourceLocation armTexture = new ResourceLocation(RefStrings.MODID, "textures/models/assembler_arm_new.png");
 	
 	public RenderAssembler() { }
+
+	@Override
+	public boolean isGlobalRenderer(TileEntityMachineAssembler te) {
+		return true;
+	}
 	
     @Override
 	public void render(TileEntityMachineAssembler tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
@@ -55,9 +62,15 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 		}
 
         bindTexture(bodyTexture);
-        
         bodyModel.renderAll();
-
+        GL11.glTranslated(-0.5, 3.6, -0.5);
+        bindTexture(ResourceManager.hatch_tex);
+        AnimationWrapper w = new AnimationWrapper(0, ResourceManager.silo_hatch_open);
+        ResourceManager.silo_hatch.controller.setAnim(w);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        ResourceManager.silo_hatch.renderAnimated(5000);
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        
         GL11.glPopMatrix();
         
         renderSlider(tileEntity, x, y, z, partialTicks);

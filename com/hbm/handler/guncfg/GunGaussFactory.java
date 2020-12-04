@@ -7,6 +7,10 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 public class GunGaussFactory {
@@ -15,7 +19,7 @@ public class GunGaussFactory {
 		
 		GunConfiguration config = new GunConfiguration();
 		
-		config.rateOfFire = 4;
+		config.rateOfFire = 6;
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_AUTO;
@@ -27,6 +31,18 @@ public class GunGaussFactory {
 		config.crosshair = Crosshair.L_RAD;
 		config.durability = 6000;
 		config.firingSound = HBMSoundHandler.tauShoot;
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation().addBus("RECOIL", new BusAnimationSequence()
+				.addKeyframe(new BusAnimationKeyframe(0, 90, -4, 50))
+				.addKeyframe(new BusAnimationKeyframe(0, -10, 1, 200))
+				.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 100))));
+		config.animations.put(AnimType.ALT_CYCLE, new BusAnimation().addBus("RECOIL", new BusAnimationSequence()
+				.addKeyframe(new BusAnimationKeyframe(0, 90, -4, 50))
+				.addKeyframe(new BusAnimationKeyframe(0, 45, -3, 275))
+				.addKeyframe(new BusAnimationKeyframe(0, 0, -0.25, 250))
+				.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 100))));
+		config.animations.put(AnimType.SPINUP, new BusAnimation().addBus("SPIN", new BusAnimationSequence()
+				.addKeyframe(new BusAnimationKeyframe(1000000, -1, 0, 20000))));
 		
 		config.name = "XVL1456 Tau Cannon";
 		config.manufacturer = "Black Mesa Research Facility";

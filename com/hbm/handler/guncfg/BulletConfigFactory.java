@@ -402,7 +402,7 @@ public class BulletConfigFactory {
 
 			private void chooseTarget(EntityBulletBase bullet) {
 
-				List<EntityLivingBase> entities = bullet.world.getEntitiesWithinAABB(EntityLivingBase.class, bullet.getEntityBoundingBox().expand(range, range, range));
+				List<EntityLivingBase> entities = bullet.world.getEntitiesWithinAABB(EntityLivingBase.class, bullet.getEntityBoundingBox().grow(range, range, range));
 
 				Vec3 mot = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ);
 
@@ -410,7 +410,6 @@ public class BulletConfigFactory {
 				double targetAngle = angle;
 
 				for(EntityLivingBase e : entities) {
-
 					if(!e.isEntityAlive() || e == bullet.shooter)
 						continue;
 
@@ -418,13 +417,11 @@ public class BulletConfigFactory {
 
 					if(bullet.world.rayTraceBlocks(new Vec3d(bullet.posX, bullet.posY, bullet.posZ), new Vec3d(e.posX, e.posY + e.height / 2, e.posZ)) != null)
 						continue;
-
+					
 					double dist = e.getDistanceSq(bullet);
 
 					if(dist < range * range) {
-
 						double deltaAngle = BobMathUtil.getCrossAngle(mot, delta);
-
 						if(deltaAngle < targetAngle) {
 							target = e;
 							targetAngle = deltaAngle;

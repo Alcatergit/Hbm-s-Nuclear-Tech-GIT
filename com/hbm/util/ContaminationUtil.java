@@ -30,14 +30,8 @@ public class ContaminationUtil {
 		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
 			mult = entity.getEntityData().getFloat("hbmradmultiplier");
 
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
-
-			float koeff = 5.0F;
-			return (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(player)) * mult;
-		}
-
-		return mult;
+		float koeff = 5.0F;
+		return (float) Math.pow(koeff, -HazmatRegistry.instance.getResistance(entity)) * mult;
 	}
 
 	public static void applyRadData(Entity e, float f) {

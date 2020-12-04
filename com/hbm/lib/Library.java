@@ -351,6 +351,27 @@ public class Library {
 		return result;
 	}
 	
+	public static RayTraceResult rayTraceIncludeEntities(World w, Vec3d vec3, Vec3d vec32, @Nullable Entity excluded) {
+		RayTraceResult result = w.rayTraceBlocks(vec3, vec32, false, true, true);
+		if(result != null)
+			vec32 = result.hitVec;
+		
+		AxisAlignedBB box = new AxisAlignedBB(vec3.x, vec3.y, vec3.z, vec32.x, vec32.y, vec32.z).grow(1D);
+		List<Entity> ents = w.getEntitiesInAABBexcluding(excluded, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLivingBase));
+		for(Entity ent : ents){
+			RayTraceResult test = ent.getEntityBoundingBox().grow(0.3D).calculateIntercept(vec3, vec32);
+			if(test != null){
+				if(result == null || vec3.squareDistanceTo(result.hitVec) > vec3.squareDistanceTo(test.hitVec)){
+					test.typeOfHit = RayTraceResult.Type.ENTITY;
+					test.entityHit = ent;
+					result = test;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	public static Pair<RayTraceResult, List<Entity>> rayTraceEntitiesOnLine(EntityPlayer player, double d, float f){
 		Vec3d vec3 = getPosition(f, player);
 		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
@@ -1084,6 +1105,12 @@ public class Library {
 		if(e.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
 			return e.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null);
 		return EntityRadiationProvider.DUMMY;
+	}
+
+	public static void addToInventoryOrDrop(EntityPlayer player, ItemStack stack) {
+		if(!player.inventory.addItemStackToInventory(stack)){
+			player.dropItem(stack, false, false);
+		}
 	}
 	
 }

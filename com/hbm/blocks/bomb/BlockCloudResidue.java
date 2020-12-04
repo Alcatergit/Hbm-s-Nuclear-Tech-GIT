@@ -1,5 +1,6 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -11,6 +12,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +32,7 @@ public class BlockCloudResidue extends BlockContainer {
 
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-
+	
 	public static boolean hasPosNeightbour(World world, BlockPos pos) {
 		Block b0 = world.getBlockState(pos.add(1, 0, 0)).getBlock();
 		Block b1 = world.getBlockState(pos.add(0, 1, 0)).getBlock();
