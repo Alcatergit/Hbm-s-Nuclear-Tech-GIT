@@ -14,9 +14,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.palantir.git-version'
 
-group = "com.hbm.nuclear-tech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Nuclear-Tech"
-version gitVersion().substring(1)
+group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "hbm"
+version gitVersion().substring(5) // Cut off the hbm- to make the version string clearer
 
 // Need this here so eclipse task generates correctly.
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'

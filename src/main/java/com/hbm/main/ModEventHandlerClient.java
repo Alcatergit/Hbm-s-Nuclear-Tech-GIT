@@ -106,6 +106,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped.ArmPose;
+import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.particle.Particle;
@@ -1131,27 +1132,29 @@ public class ModEventHandlerClient {
 	public void preRenderPlayer(RenderPlayerEvent.Pre event) {
 		// event.setCanceled(true);
 		AbstractClientPlayer player = (AbstractClientPlayer) event.getEntityPlayer();
-
+		
 		ResourceLocation cloak = RenderAccessoryUtility.getCloakFromPlayer(player);
 		// GL11.glRotated(180, 1, 0, 0);
 		NetworkPlayerInfo info = Minecraft.getMinecraft().getConnection().getPlayerInfo(player.getUniqueID());
 		if(cloak != null)
 			RenderAccessoryUtility.loadCape(info, cloak);
 		
+		ModelPlayer model = event.getRenderer().getMainModel();
+		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+			model.rightArmPose = ArmPose.BOW_AND_ARROW;
+			// model.bipedLeftArm.rotateAngleY = 90;
+		}
+		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+			model.leftArmPose = ArmPose.BOW_AND_ARROW;
+		}
+		JetpackHandler.preRenderPlayer(player);
+	}
+	
+	@SubscribeEvent
+	public void preRenderLiving(RenderLivingEvent.Pre<EntityLivingBase> event) {
 		if(specialDeathEffectEntities.contains(event.getEntity())) {
 			event.setCanceled(true);
 		}
-		
-		RenderPlayer renderer = (RenderPlayer) event.getRenderer();
-
-		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
-			renderer.getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
-			// renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
-		}
-		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
-			renderer.getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
-		}
-		JetpackHandler.preRenderPlayer(player);
 	}
 
 	@SubscribeEvent
