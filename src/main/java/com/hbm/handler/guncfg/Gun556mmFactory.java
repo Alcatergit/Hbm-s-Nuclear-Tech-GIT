@@ -40,7 +40,7 @@ public class Gun556mmFactory {
 		config.ammoCap = 40;
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
-		config.crosshair = Crosshair.L_BOX;
+		config.crosshair = Crosshair.L_CROSS;
 		config.durability = 10000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
 		config.firingSound = HBMSoundHandler.hksShoot;

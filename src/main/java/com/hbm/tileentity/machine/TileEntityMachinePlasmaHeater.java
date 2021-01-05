@@ -73,7 +73,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 			convert = (int) Math.min(convert, power / powerReq);
 			convert = Math.max(0, convert);
 
-			if(convert > 0) {
+			if(convert > 0 && plasmaType != null) {
 
 				tanks[0].drain(convert, true);
 				tanks[1].drain(convert, true);

@@ -17,6 +17,7 @@ public class RenderAccessoryUtility {
 
 	private static ResourceLocation hbm = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeHbm.png");
 	private static ResourceLocation hbm2 = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeHbm2.png");
+	private static ResourceLocation drillgon = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeDrillgon.png");
 	private static ResourceLocation dafnik = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeDafnik.png");
 	private static ResourceLocation lpkukin = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeShield.png");
 	private static ResourceLocation vertice = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeVertice_2.png");
@@ -29,8 +30,12 @@ public class RenderAccessoryUtility {
 	private static ResourceLocation mek = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeMek.png");
 	private static ResourceLocation test = new ResourceLocation(RefStrings.MODID + ":textures/models/CapeTest.png");
 	private static ResourceLocation swiggs = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeSweatySwiggs.png");
+	private static ResourceLocation doctor17 = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeDoctor17.png");
+	private static ResourceLocation shimmeringblaze = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeBlaze.png");
 	private static ResourceLocation wiki = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeWiki.png");
-
+	private static ResourceLocation leftnugget = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeLeftNugget.png");
+	private static ResourceLocation rightnugget = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeRightNugget.png");
+	
 	public static ResourceLocation getCloakFromPlayer(EntityPlayer player) {
 		String uuid = player.getUniqueID().toString();
 		String name = player.getDisplayName().getUnformattedText();
@@ -42,7 +47,7 @@ public class RenderAccessoryUtility {
 				return hbm2;
 		}
 		if(uuid.equals(Library.Drillgon)) {
-			return hbm;
+			return drillgon;
 		}
 		if(uuid.equals(Library.Dafnik)) {
 			return dafnik;
@@ -76,6 +81,18 @@ public class RenderAccessoryUtility {
 		}
 		if(uuid.equals(Library.SweatySwiggs)) {
 			return swiggs;
+		}
+		if(uuid.equals(Library.Doctor17) || uuid.equals(Library.Doctor17PH)) {
+			return doctor17;
+		}
+		if(uuid.equals(Library.ShimmeringBlaze)) {
+			return shimmeringblaze;
+		}
+		if(uuid.equals(Library.FifeMiner)) {
+			return leftnugget;
+		}
+		if(uuid.equals(Library.lag_add)) {
+			return rightnugget;
 		}
 		if(Library.contributors.contains(uuid)) {
 			return wiki;

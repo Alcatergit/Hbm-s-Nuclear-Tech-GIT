@@ -1,7 +1,6 @@
 package com.hbm.items.machine;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
@@ -12,6 +11,8 @@ import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.I18nUtil;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -20,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -90,6 +92,9 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if (!(stack.getItem() instanceof ItemAssemblyTemplate))
 			return;
+		
+		list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("info.templatefolder"));
+		list.add("");
 
 		int i = getTagWithRecipeNumber(stack).getInteger("type");
 		
@@ -114,11 +119,9 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 
     	ItemStack output = out.toStack();
 
-		list.add("Output:");
+    	list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_out"));
 		list.add(output.getCount() + "x " + output.getDisplayName());
-		list.add("Inputs:");
-
-		Random rand = new Random(System.currentTimeMillis() / 1000);
+		list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_in_p"));
 
 		for(Object o : in) {
 
@@ -131,7 +134,7 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 
 				if(ores.size() > 0) {
-					ItemStack inStack = ores.get(rand.nextInt(ores.size()));
+					ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 		    		list.add(input.count() + "x " + inStack.getDisplayName());
 				} else {
 		    		list.add("I AM ERROR");
@@ -139,8 +142,8 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 			}
 		}
 
-		list.add("Production time:");
-    	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " seconds");
+		list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_time"));
+    	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " " + I18nUtil.resolveKey("info.template_seconds"));
 	}
 
 	public static int getProcessTime(ItemStack stack) {

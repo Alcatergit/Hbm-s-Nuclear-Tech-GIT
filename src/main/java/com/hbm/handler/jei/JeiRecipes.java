@@ -12,9 +12,9 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.BreederRecipes;
+import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.inventory.FusionRecipes;
-import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.inventory.MagicRecipes;
@@ -24,7 +24,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
@@ -34,6 +33,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -56,6 +57,7 @@ public class JeiRecipes {
 	private static List<FluidRecipe> fluidEquivalences = null;
 	private static List<BookRecipe> bookRecipes = null;
 	private static List<FusionRecipe> fusionByproducts = null;
+	private static List<HadronRecipe> hadronRecipes = null;
 	
 	private static List<ItemStack> batteries = null;
 	private static Map<Integer, List<ItemStack>> reactorFuelMap = new HashMap<Integer, List<ItemStack>>();
@@ -350,6 +352,40 @@ public class JeiRecipes {
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+		
+	}
+	
+	public static class HadronRecipe implements IRecipeWrapper {
+
+		public ItemStack in1, in2, out1, out2;
+		public int momentum;
+		public boolean analysisOnly;
+		
+		public HadronRecipe(ItemStack in1, ItemStack in2, ItemStack out1, ItemStack out2, int momentum, boolean analysis) {
+			this.in1 = in1;
+			this.in2 = in2;
+			this.out1 = out1;
+			this.out2 = out2;
+			this.momentum = momentum;
+			this.analysisOnly = analysis;
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, Arrays.asList(in1, in2));
+			ingredients.setOutputs(VanillaTypes.ITEM, Arrays.asList(out1, out2));
+		}
+		
+		@Override
+		public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+			if(analysisOnly)
+				HadronRecipeHandler.analysis.draw(minecraft, 117, 17);
+			FontRenderer fontRenderer = minecraft.fontRenderer;
+	    	
+	    	String mom = "" + momentum;
+	    	fontRenderer.drawString(mom, -fontRenderer.getStringWidth(mom) / 2 + 19, 36, 0x404040);
+	    	GlStateManager.color(1, 1, 1, 1);
 		}
 		
 	}
@@ -763,6 +799,16 @@ public class JeiRecipes {
 		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_xm, FusionRecipes.getByproduct(ModForgeFluids.plasma_xm)));
 		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_bf, FusionRecipes.getByproduct(ModForgeFluids.plasma_bf)));
 		return fusionByproducts;
+	}
+	
+	public static List<HadronRecipe> getHadronRecipes(){
+		if(hadronRecipes != null)
+			return hadronRecipes;
+		hadronRecipes = new ArrayList<>();
+		for(com.hbm.inventory.HadronRecipes.HadronRecipe recipe : com.hbm.inventory.HadronRecipes.getRecipes()){
+			hadronRecipes.add(new HadronRecipe(recipe.in1.toStack(), recipe.in2.toStack(), recipe.out1, recipe.out2, recipe.momentum, recipe.analysisOnly));
+		}
+		return hadronRecipes;
 	}
 	
 }

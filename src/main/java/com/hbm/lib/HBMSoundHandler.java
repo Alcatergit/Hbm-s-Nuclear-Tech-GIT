@@ -163,6 +163,13 @@ public final class HBMSoundHandler {
 	public static SoundEvent ducc;
 	public static SoundEvent whack;
 	public static SoundEvent turbofanOperate;
+	public static SoundEvent slicer;
+	public static SoundEvent megaquacc;
+	public static SoundEvent chainsaw;
+	public static SoundEvent battery;
+	public static SoundEvent rocketFlame;
+	public static SoundEvent ballsLaser;
+	public static SoundEvent dartShoot;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -185,6 +192,10 @@ public final class HBMSoundHandler {
 	public static SoundEvent alarmAPCPass = registerBypass("alarm.apcPass");
 	public static SoundEvent alarmRazorTrain = registerBypass("alarm.razortrainHorn");
 	public static SoundEvent soyuzed = registerBypass("alarm.soyuzed");
+	public static SoundEvent metalStep = registerBypass("step.metal");
+	public static SoundEvent iron = registerBypass("step.iron");
+	public static SoundEvent ironLand = registerBypass("step.iron_land");
+	public static SoundEvent ironJump = registerBypass("step.iron_jump");
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
@@ -348,6 +359,13 @@ public final class HBMSoundHandler {
 		ducc = register("entity.ducc");
 		whack = register("weapon.whack");
 		turbofanOperate = register("block.turbofanOperate");
+		slicer = register("entity.slicer");
+		megaquacc = register("entity.megaquacc");
+		chainsaw = register("weapon.chainsaw");
+		battery = register("item.battery");
+		rocketFlame = register("weapon.rocketFlame");
+		ballsLaser = register("weapon.ballsLaser");
+		dartShoot = register("weapon.dartShoot");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

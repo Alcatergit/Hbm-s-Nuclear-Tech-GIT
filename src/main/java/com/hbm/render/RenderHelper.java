@@ -174,7 +174,6 @@ public class RenderHelper {
     		buf.addVertexData(quad.getVertexData());
     	}
     	tes.draw();
-		
 	}
 	
 	/**

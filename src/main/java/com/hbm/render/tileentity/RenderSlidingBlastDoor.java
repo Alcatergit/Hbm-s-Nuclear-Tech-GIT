@@ -21,6 +21,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class RenderSlidingBlastDoor extends TileEntitySpecialRenderer<TileEntitySlidingBlastDoor> {
 
+	private static DoubleBuffer buf = null;
+	
 	@Override
 	public boolean isGlobalRenderer(TileEntitySlidingBlastDoor te) {
 		return true;
@@ -47,7 +49,9 @@ public class RenderSlidingBlastDoor extends TileEntitySpecialRenderer<TileEntity
 		case 5: GL11.glRotatef(270, 0F, 1F, 0F); break;
 		}
 		
-		DoubleBuffer buf = GLAllocation.createDirectByteBuffer(8*4).asDoubleBuffer();
+		if(buf == null){
+			buf = GLAllocation.createDirectByteBuffer(8*4).asDoubleBuffer();
+		}
 		buf.put(new double[]{1, 0, 0, 0});
 		buf.rewind();
 		GL11.glPushMatrix();

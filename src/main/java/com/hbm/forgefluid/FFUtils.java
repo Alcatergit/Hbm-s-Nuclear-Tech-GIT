@@ -1,9 +1,11 @@
 package com.hbm.forgefluid;
 
+import com.google.common.base.Predicate;
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
+import com.hbm.items.armor.JetpackBase;
 import com.hbm.items.gear.JetpackBooster;
 import com.hbm.items.gear.JetpackBreak;
 import com.hbm.items.gear.JetpackRegular;
@@ -13,7 +15,6 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
-import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
 import net.minecraft.client.Minecraft;
@@ -37,6 +38,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 
 //Drillgon200: This is Library.java except for fluids
 //Drillgon200: Let's hope this works without bugs in 1.12.2...
@@ -77,10 +79,27 @@ public class FFUtils {
 			if(liquidIcon != null) {
 				int level = (int) (((double) tank.getFluidAmount() / (double) tank.getCapacity()) * sizeY);
 
-				drawFull(tank, guiLeft, guiTop, zLevel, liquidIcon, level, sizeX, offsetX, offsetY, sizeY);
+				drawFull(tank.getFluid().getFluid(), guiLeft, guiTop, zLevel, liquidIcon, level, sizeX, offsetX, offsetY, sizeY);
 			}
 		}
 	}
+	
+	public static void drawLiquid(FluidStack fluid, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY) {
+		if(fluid == null || fluid.getFluid() == null)
+			return;
+		drawLiquid(fluid.getFluid(), guiLeft, guiTop, zLevel, sizeX, sizeY, offsetX, offsetY);
+	}
+	
+	public static void drawLiquid(Fluid fluid, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY) {
+		RenderHelper.bindBlockTexture();
+		if(fluid != null) {
+			TextureAtlasSprite liquidIcon = getTextureFromFluid(fluid);
+			if(liquidIcon != null) {
+				drawFull(fluid, guiLeft, guiTop, zLevel, liquidIcon, sizeY, sizeX, offsetX, offsetY, sizeY);
+			}
+		}
+	}
+
 
 	/**
 	 * Internal method to actually render the fluid
@@ -95,8 +114,8 @@ public class FFUtils {
 	 * @param offsetX
 	 * @param offsetY
 	 */
-	private static void drawFull(FluidTank tank, int guiLeft, int guiTop, float zLevel, TextureAtlasSprite liquidIcon, int level, int sizeX, int offsetX, int offsetY, int sizeY) {
-		int color = tank.getFluid().getFluid().getColor();
+	private static void drawFull(Fluid f, int guiLeft, int guiTop, float zLevel, TextureAtlasSprite liquidIcon, int level, int sizeX, int offsetX, int offsetY, int sizeY) {
+		int color = f.getColor();
 		RenderHelper.setColor(color);
 		RenderHelper.startDrawingTexturedQuads();
 		for(int i = 0; i < level; i += 16) {
@@ -359,6 +378,22 @@ public class FFUtils {
 
 		return false;
 	}
+	
+	//Jesus H. Christ I hate this class
+	public static boolean checkRestrictions(ItemStack stack, Predicate<FluidStack> fluidRestrictor) {
+		FluidStack fluid = FluidUtil.getFluidContained(stack);
+		if(stack.getItem() == ModItems.fluid_barrel_infinite)
+			return true;
+		if(fluidRestrictor.apply(fluid))
+			return true;
+		
+		if(FluidContainerRegistry.hasFluid(stack.getItem())){
+			fluid = FluidContainerRegistry.getFluidFromItem(stack.getItem());
+			if(fluidRestrictor.apply(fluid))
+				return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Fills a tank from a fluid handler item.
@@ -478,6 +513,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_coolant));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 1000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(1000, true);
@@ -488,6 +524,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_tritium));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 1000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(1000, true);
@@ -498,6 +535,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_water));
 				}
+				return true;
 			}
 		}
 		if(in.getItem() == ModItems.rod_dual_empty) {
@@ -510,6 +548,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_dual_coolant));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 2000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(2000, true);
@@ -520,6 +559,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_dual_tritium));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 2000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(2000, true);
@@ -530,6 +570,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_dual_water));
 				}
+				return true;
 			}
 		}
 		if(in.getItem() == ModItems.rod_quad_empty) {
@@ -542,6 +583,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_quad_coolant));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 4000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(4000, true);
@@ -552,6 +594,7 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_quad_tritium));
 				}
+				return true;
 			}
 			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 4000 && (out.isEmpty() || in.getCount() == 1)) {
 				tank.drain(4000, true);
@@ -562,46 +605,21 @@ public class FFUtils {
 				} else {
 					slots.setStackInSlot(slot1, new ItemStack(ModItems.rod_quad_water));
 				}
+				return true;
 			}
 		}
 
-		// Jetpacks (this would be much easier if all jetpacks had the same base class)
-		if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.kerosene){
-			if(in.getItem() instanceof JetpackVectorized) {
-				int toDrain = Math.min(Math.min(tank.getFluidAmount(), 25), JetpackVectorized.maxFuel - JetpackVectorized.getFuel(in));
-				tank.drain(toDrain, true);
-				JetpackVectorized.setFuel(in, JetpackVectorized.getFuel(in) + toDrain);
-				if(out.isEmpty() && JetpackVectorized.getFuel(in) == JetpackVectorized.maxFuel) {
+		if(in.getItem() instanceof JetpackBase && ((JetpackBase)in.getItem()).fuel == tank.getFluid().getFluid()) {
+			if(tank.getFluidAmount() > 0 && JetpackBase.getFuel(in) < ((JetpackBase)in.getItem()).maxFuel) {
+				FluidStack st = tank.drain(25, false);
+				int fill = st == null ? 0 : st.amount;
+				JetpackBase.setFuel(in, Math.min(JetpackBase.getFuel(in) + fill, ((JetpackBase)in.getItem()).maxFuel));
+				tank.drain(25, true);
+				if(JetpackBase.getFuel(in) >= ((JetpackBase)in.getItem()).maxFuel && out.isEmpty()){
 					slots.setStackInSlot(slot2, in);
 					slots.setStackInSlot(slot1, ItemStack.EMPTY);
 				}
-			}
-			if(in.getItem() instanceof JetpackRegular) {
-				int toDrain = Math.min(Math.min(tank.getFluidAmount(), 25), JetpackRegular.maxFuel - JetpackRegular.getFuel(in));
-				tank.drain(toDrain, true);
-				JetpackRegular.setFuel(in, JetpackRegular.getFuel(in) + toDrain);
-				if(out.isEmpty() && JetpackRegular.getFuel(in) == JetpackRegular.maxFuel) {
-					slots.setStackInSlot(slot2, in);
-					slots.setStackInSlot(slot1, ItemStack.EMPTY);
-				}
-			}
-			if(in.getItem() instanceof JetpackBreak) {
-				int toDrain = Math.min(Math.min(tank.getFluidAmount(), 25), JetpackBreak.maxFuel - JetpackBreak.getFuel(in));
-				tank.drain(toDrain, true);
-				JetpackBreak.setFuel(in, JetpackBreak.getFuel(in) + toDrain);
-				if(out.isEmpty() && JetpackBreak.getFuel(in) == JetpackBreak.maxFuel) {
-					slots.setStackInSlot(slot2, in);
-					slots.setStackInSlot(slot1, ItemStack.EMPTY);
-				}
-			}
-			if(in.getItem() instanceof JetpackBooster) {
-				int toDrain = Math.min(Math.min(tank.getFluidAmount(), 25), JetpackBooster.maxFuel - JetpackBooster.getFuel(in));
-				tank.drain(toDrain, true);
-				JetpackBooster.setFuel(in, JetpackBooster.getFuel(in) + toDrain);
-				if(out.isEmpty() && JetpackBooster.getFuel(in) == JetpackBooster.maxFuel) {
-					slots.setStackInSlot(slot2, in);
-					slots.setStackInSlot(slot1, ItemStack.EMPTY);
-				}
+				return true;
 			}
 		}
 		
@@ -616,6 +634,7 @@ public class FFUtils {
 				} else {
 					out.grow(1);
 				}
+				return true;
 			}
 		}
 

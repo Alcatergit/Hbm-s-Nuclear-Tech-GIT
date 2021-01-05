@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
@@ -105,6 +106,8 @@ public class HbmShaderManager2 {
     public static Framebuffer bloomData;
     
 	public static void bloom(){
+		if(true)
+			return;
 		if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
 			height = Minecraft.getMinecraft().displayHeight;
             width = Minecraft.getMinecraft().displayWidth;
@@ -143,6 +146,8 @@ public class HbmShaderManager2 {
 		bloomData.framebufferClear();
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 		
+		GlStateManager.enableAlpha();
+		GlStateManager.enableLighting();
 		GlStateManager.enableDepth();
 	}
 	
@@ -229,10 +234,10 @@ public class HbmShaderManager2 {
         GlStateManager.colorMask(true, true, true, true);
 	}
 	
-	/*
+	
     public static Framebuffer buf;
     
-    public static void doPostProcess(){
+   /* public static void doPostProcess(){
         if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
             recreateFBOs();
             height = Minecraft.getMinecraft().displayHeight;
@@ -242,7 +247,13 @@ public class HbmShaderManager2 {
         
         buf.bindFramebuffer(false);
         
-        ResourceManager.desaturate.use();
+        ResourceManager.testlut.use();
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.lut);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+        GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.testlut.getShaderId(), "tempTest"), 3);
         
         Minecraft.getMinecraft().getFramebuffer().framebufferRender(buf.framebufferWidth, buf.framebufferHeight);
         

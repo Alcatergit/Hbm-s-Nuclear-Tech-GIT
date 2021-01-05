@@ -14,6 +14,7 @@ import com.hbm.interfaces.IReactor;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemCapacitor;
 import com.hbm.items.special.WatzFuel;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -158,7 +159,7 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 
 			//Only damages filter when heat is present (thus waste being created)
 			if (heatList > 0) {
-				inventory.getStackInSlot(38).setItemDamage(inventory.getStackInSlot(38).getItemDamage() + 1);
+				ItemCapacitor.setDura(inventory.getStackInSlot(38), ItemCapacitor.getDura(inventory.getStackInSlot(38)) - 1);
 				markDirty();
 			}
 
@@ -184,23 +185,6 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 			
 			if(FFUtils.fillFluidContainer(inventory, tank, 36, 39))
 				needsUpdate = true;
-			
-			if(inventory.getStackInSlot(36).getItem() == ModItems.titanium_filter && inventory.getStackInSlot(36).getItemDamage() + 100 <= inventory.getStackInSlot(36).getMaxDamage())
-			{
-				if(tank.getFluidAmount() - 10 >= 0)
-				{
-					tank.drain(10, true);
-					inventory.getStackInSlot(36).setItemDamage(inventory.getStackInSlot(36).getItemDamage() + 100);
-					needsUpdate = true;
-				} else {
-					if(tank.getFluidAmount() > 0)
-					{
-						tank.drain(tank.getCapacity(), true);
-						inventory.getStackInSlot(36).setItemDamage(inventory.getStackInSlot(36).getItemDamage() + 100);
-						needsUpdate = true;
-					}
-				}
-			}
 
 			if(needsUpdate){
 				//Removed you because selectively sending packets is buggy. Really this should only be sending packets when a gui is open, but whatever.
@@ -493,7 +477,7 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 
 	@Override
 	public boolean hasFuse() {
-		return inventory.getStackInSlot(38).getItem() == ModItems.titanium_filter && inventory.getStackInSlot(38).getItemDamage() < inventory.getStackInSlot(38).getMaxDamage();
+		return inventory.getStackInSlot(38).getItem() == ModItems.titanium_filter && ItemCapacitor.getDura(inventory.getStackInSlot(38)) > 0;
 	}
 
 	@Override

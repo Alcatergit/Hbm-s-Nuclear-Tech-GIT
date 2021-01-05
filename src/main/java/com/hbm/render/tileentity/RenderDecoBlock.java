@@ -82,10 +82,21 @@ public class RenderDecoBlock extends TileEntitySpecialRenderer<TileEntityDecoBlo
 			}
 			this.model2.renderModel(0.0625F);
 		} else if(block == ModBlocks.boxcar) {
-			GL11.glTranslatef(0, 0, -1.5F);
-			GL11.glRotated(90, 1, 0, 0);
+			GL11.glRotatef(180, 0F, 0F, 1F);
+			GL11.glTranslatef(0, -1.5F, 0);
 
-			GlStateManager.disableCull();
+			switch(te.getBlockMetadata()) {
+			case 4: GL11.glRotatef(0, 0F, 1F, 0F); break;
+			case 2: GL11.glRotatef(270, 0F, 1F, 0F); break;
+			case 5: GL11.glRotatef(180, 0F, 1F, 0F); break;
+			case 3: GL11.glRotatef(90, 0F, 1F, 0F); break;
+			default:
+				GL11.glRotatef(180, 0F, 0F, 1F);
+				GL11.glRotated(90, 1, 0, 0);
+				GL11.glTranslatef(0, -1.5F, 0);
+				break;
+			}
+			GlStateManager.enableCull();
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			// ResourceManager.boxcar.renderAll();
 			// RenderHelper.renderAll(ClientProxy.boxcar);

@@ -162,9 +162,9 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 				
 				for (int outSlot = 9; outSlot < 27; outSlot++)
 				{
-					if (!inventory.getStackInSlot(outSlot).isEmpty() && inventory.getStackInSlot(outSlot).getItem() == outp.getItem() && inventory.getStackInSlot(outSlot).getCount() + outp.getCount() <= outp.getMaxStackSize()) {
-
-						System.out.println(outp.getUnlocalizedName() + " is equal to " + inventory.getStackInSlot(outSlot).getUnlocalizedName());
+					if (inventory.getStackInSlot(outSlot).getItem() == outp.getItem() && 
+							inventory.getStackInSlot(outSlot).getItemDamage() == outp.getItemDamage() &&
+									inventory.getStackInSlot(outSlot).getCount() + outp.getCount() <= outp.getMaxStackSize()) {
 
 						inventory.getStackInSlot(outSlot).grow(outp.getCount());
 						inventory.getStackInSlot(inpSlot).shrink(1);

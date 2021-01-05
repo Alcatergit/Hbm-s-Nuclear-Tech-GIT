@@ -13,10 +13,13 @@ import net.minecraft.util.BlockRenderLayer;
 
 public class BlockNTMGlass extends BlockBreakable {
 
-	public BlockNTMGlass(Material materialIn, String s) {
+	BlockRenderLayer layer;
+	
+	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
 		super(materialIn, false);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.layer = layer;
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -33,7 +36,7 @@ public class BlockNTMGlass extends BlockBreakable {
 	
 	@Override
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
+		return layer;
 	}
 	
 	@Override

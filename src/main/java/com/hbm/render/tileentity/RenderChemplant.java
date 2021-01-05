@@ -3,8 +3,7 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.render.util.HmfController;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 
@@ -16,25 +15,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachineChemplant> {
 
-	private static final ResourceLocation body = new ResourceLocation(RefStrings.MODID, "models/chemplant_new_body.obj");
-	private static final ResourceLocation spinner = new ResourceLocation(RefStrings.MODID, "models/chemplant_new_spinner.obj");
-	private static final ResourceLocation piston = new ResourceLocation(RefStrings.MODID, "models/chemplant_new_piston.obj");
-	private static final ResourceLocation fluid = new ResourceLocation(RefStrings.MODID, "models/chemplant_new_fluid.hmf");
-	private static final ResourceLocation fluidcap = new ResourceLocation(RefStrings.MODID, "models/chemplant_new_fluidcap.hmf");
-
-	private static final IModelCustom bodyModel = AdvancedModelLoader.loadModel(body);
-	private static final IModelCustom spinnerModel = AdvancedModelLoader.loadModel(spinner);
-	private static final IModelCustom pistonModel = AdvancedModelLoader.loadModel(piston);
-	private static final IModelCustom fluidModel = AdvancedModelLoader.loadModel(fluid);
-	private static final IModelCustom fluidcapModel = AdvancedModelLoader.loadModel(fluidcap);
-	
-    private static final ResourceLocation bodyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/chemplant_base_new.png");
-    private static final ResourceLocation spinnerTexture = new ResourceLocation(RefStrings.MODID, "textures/models/chemplant_spinner_new.png");
-    private static final ResourceLocation pistonTexture = new ResourceLocation(RefStrings.MODID, "textures/models/chemplant_piston_new.png");
-    private static final ResourceLocation fluidTexture = new ResourceLocation(RefStrings.MODID, "textures/models/lavabase_small.png");
-	
-	public RenderChemplant(){};
-	
 	@Override
 	public void render(TileEntityMachineChemplant te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
@@ -58,9 +38,8 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
 		}
 
-        bindTexture(bodyTexture);
-        
-        bodyModel.renderAll();
+		bindTexture(ResourceManager.chemplant_body_tex);
+		ResourceManager.chemplant_body.renderAll();
 
         GL11.glPopMatrix();
         
@@ -89,8 +68,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 			GL11.glRotatef(90, 0F, 1F, 0F); break;
 		}
 		
-
-        bindTexture(spinnerTexture);
+		bindTexture(ResourceManager.chemplant_spinner_tex);
 
         int rotation = (int) (System.currentTimeMillis() % (360 * 5)) / 5;
 
@@ -102,7 +80,7 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 		else
 			GL11.glRotatef(-45, 0F, 1F, 0F);
 		
-		spinnerModel.renderAll();
+		ResourceManager.chemplant_spinner.renderAll();
         GL11.glPopMatrix();
         
         GL11.glPushMatrix();
@@ -113,12 +91,12 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 		else
 			GL11.glRotatef(45, 0F, 1F, 0F);
 		
-		spinnerModel.renderAll();
+		ResourceManager.chemplant_spinner.renderAll();
         GL11.glPopMatrix();
 
         double push = Math.sin((System.currentTimeMillis() % 2000) / 1000D * Math.PI) * 0.25 - 0.25;
 
-        bindTexture(pistonTexture);
+        bindTexture(ResourceManager.chemplant_piston_tex);
         
         GL11.glPushMatrix();
         
@@ -127,10 +105,10 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 		else
         	GL11.glTranslated(0, -0.25, 0);
         
-		pistonModel.renderAll();
+        ResourceManager.chemplant_piston.renderAll();
         GL11.glPopMatrix();
 
-        bindTexture(fluidTexture);
+        bindTexture(ResourceManager.chemplant_fluid_tex);
 
         GlStateManager.disableLighting();
         if(chem.tanks[0].getFluid() != null) {
@@ -156,13 +134,13 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 			//GL11.glColor3ub((byte)((color & 0xFF0000) >> 16), (byte)((color & 0x00FF00) >> 8), (byte)((color & 0x0000FF) >> 0));
 			GL11.glTranslated(-0.625, 0, 0.625);
 	        
-			int count = chem.tanks[0].getFluidAmount() / 1000;
+			int count = chem.tanks[0].getFluidAmount() * 16 / 24000;
 	        for(int i = 0; i < count; i++) {
 	        	
 	        	if(i < count - 1)
-	        		fluidModel.renderAll();
+	        		ResourceManager.chemplant_fluid.renderAll();
 	        	else
-	        		fluidcapModel.renderAll();
+	        		ResourceManager.chemplant_fluidcap.renderAll();
 				GL11.glTranslated(0, 0.125, 0);
 	        }
 	        GL11.glPopMatrix();
@@ -192,13 +170,13 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 			//GL11.glColor3ub((byte)((color & 0xFF0000) >> 16), (byte)((color & 0x00FF00) >> 8), (byte)((color & 0x0000FF) >> 0));
 			GL11.glTranslated(0.625, 0, 0.625);
 
-			int count = chem.tanks[1].getFluidAmount() / 1000;
+			int count = chem.tanks[1].getFluidAmount() * 16 / 24000;
 	        for(int i = 0; i < count; i++) {
 	        	
 	        	if(i < count - 1)
-	        		fluidModel.renderAll();
+	        		ResourceManager.chemplant_fluid.renderAll();
 	        	else
-	        		fluidcapModel.renderAll();
+	        		ResourceManager.chemplant_fluidcap.renderAll();
 				GL11.glTranslated(0, 0.125, 0);
 	        }
 	        GL11.glPopMatrix();

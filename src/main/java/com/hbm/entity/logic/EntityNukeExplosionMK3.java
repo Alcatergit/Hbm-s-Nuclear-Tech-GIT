@@ -164,7 +164,7 @@ public class EntityNukeExplosionMK3 extends Entity {
         {
         	this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, true);
         	if(waste || extType != 1) {
-        		ExplosionNukeGeneric.dealDamage(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, this.destructionRange * 2);
+        		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2);
         	} else {
         		ExplosionHurtUtil.doRadiation(world, posX, posY, posZ, 15000, 250000, this.destructionRange);
         	}

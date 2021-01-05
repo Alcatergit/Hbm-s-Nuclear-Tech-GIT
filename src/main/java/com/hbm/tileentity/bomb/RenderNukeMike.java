@@ -2,25 +2,13 @@ package com.hbm.tileentity.bomb;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderNukeMike extends TileEntitySpecialRenderer<TileEntityNukeMike> {
 
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/IvyMike.obj");
-	private IModelCustom mikeModel;
-    private ResourceLocation mikeTexture;
-	
-	public RenderNukeMike() {
-		mikeModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		mikeTexture = new ResourceLocation(RefStrings.MODID, "textures/models/IvyMike.png");
-	}
-	
 	@Override
 	public boolean isGlobalRenderer(TileEntityNukeMike te) {
 		return true;
@@ -45,8 +33,8 @@ public class RenderNukeMike extends TileEntitySpecialRenderer<TileEntityNukeMike
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(mikeTexture);
-        mikeModel.renderAll();
+		bindTexture(ResourceManager.bomb_mike_tex);
+        ResourceManager.bomb_mike.renderAll();
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();

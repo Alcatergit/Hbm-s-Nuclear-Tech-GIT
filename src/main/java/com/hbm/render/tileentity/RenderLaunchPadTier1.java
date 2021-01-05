@@ -2,26 +2,13 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLaunchPad> {
-
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/missilePad.obj");
-	private IModelCustom padModel;
-	private ResourceLocation padTexture;
-
-	public RenderLaunchPadTier1() {
-		padModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		padTexture = new ResourceLocation(RefStrings.MODID, "textures/models/missilePad.png");
-	}
 
 	@Override
 	public boolean isGlobalRenderer(TileEntityLaunchPad te) {
@@ -31,28 +18,13 @@ public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLa
 	@Override
 	public void render(TileEntityLaunchPad te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 		GlStateManager.enableLighting();
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		/*switch(tileEntity.getBlockMetadata())
-		{
-		case 5:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 2:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(270, 0F, 1F, 0F); break;
-		case 3:
-			GL11.glRotatef(0, 0F, 1F, 0F); break;
-		}*/
+		GlStateManager.disableCull();
+		bindTexture(ResourceManager.missile_pad_tex);
+	    ResourceManager.missile_pad.renderAll();
 
-		// GL11.glScalef(1.5F, 1.0F, 1.5F);
-		bindTexture(padTexture);
-		padModel.renderAll();
-		// GL11.glScalef(2/3F, 1.0F, 2/3F);
-
-		GL11.glDisable(GL11.GL_CULL_FACE);
+	    
 		int state = te.state;
 
 		GL11.glTranslated(0, 1, 0);
@@ -195,9 +167,8 @@ public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLa
 			ResourceManager.missileStrong.renderAll();
 		}
 
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableCull();
 
-		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 }

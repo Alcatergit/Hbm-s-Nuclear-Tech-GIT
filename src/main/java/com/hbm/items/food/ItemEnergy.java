@@ -20,6 +20,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class ItemEnergy extends Item {
 
@@ -34,6 +35,10 @@ public class ItemEnergy extends Item {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entity) {
 		if(!worldIn.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
+			if(player instanceof FakePlayer) {
+        		worldIn.newExplosion(player, player.posX, player.posY, player.posZ, 5F, true, true);
+        		return super.onItemUseFinish(stack, worldIn, entity);
+        	}
 			if(!player.capabilities.isCreativeMode) {
 				stack.shrink(1);
 			}

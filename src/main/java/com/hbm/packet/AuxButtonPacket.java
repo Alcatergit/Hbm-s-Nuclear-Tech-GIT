@@ -102,6 +102,13 @@ public class AuxButtonPacket implements IMessage {
 						p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
 					}
 				}
+				/*if(m.value == 1000){
+					NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+					int lightning = perDat.getInteger("lightningCharge");
+					if(lightning == 0){
+						perDat.setInteger("lightningCharge", 1);
+					}
+				}*/
 				
 				if(!p.world.isBlockLoaded(pos))
 					return;

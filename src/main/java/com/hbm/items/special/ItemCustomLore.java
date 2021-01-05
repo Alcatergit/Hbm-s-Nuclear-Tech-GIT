@@ -7,6 +7,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCustomLore extends Item {
 
+	EnumRarity rarity;
+	
 	public ItemCustomLore(String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
@@ -31,13 +34,20 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		String unloc = this.getUnlocalizedName() + ".desc";
+		String loc = I18nUtil.resolveKey(unloc);
+
+		if(!unloc.equals(loc)) {
+
+			String[] locs = loc.split("\\$");
+
+			for(String s : locs) {
+				list.add(s);
+			}
+		}
 		if(this == ModItems.powder_asbestos)
 		{
 			list.add(TextFormatting.ITALIC + "\"Sniffffffff- MHHHHHHMHHHHHHHHH\"");
-		}
-		if(this == ModItems.egg_balefire)
-		{
-			list.add("What kind of bird lays a radioactive egg?");
 		}
 		if(this == ModItems.ingot_schraranium)
 		{
@@ -279,6 +289,9 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("It pulses with power.");
 		}
+		if(this == ModItems.nugget_mox_fuel) {
+			list.add("Moxie says: " + TextFormatting.BOLD + "TAX EVASION.");
+		}
 	}
 
 	@Override
@@ -288,7 +301,9 @@ public class ItemCustomLore extends Item {
 			return EnumRarity.EPIC;
 		}
 
-		if(this == ModItems.rod_schrabidium || this == ModItems.rod_dual_schrabidium || this == ModItems.rod_quad_schrabidium || this == ModItems.ingot_schrabidium || this == ModItems.nugget_schrabidium || this == ModItems.plate_schrabidium || ItemCell.hasFluid(stack, ModForgeFluids.sas3) || this == ModItems.powder_schrabidium || this == ModItems.wire_schrabidium || this == ModItems.ingot_saturnite || this == ModItems.plate_saturnite || this == ModItems.powder_thorium || this == ModItems.circuit_schrabidium || this == ModItems.gun_revolver_schrabidium_ammo) {
+		if(this == ModItems.rod_schrabidium || this == ModItems.rod_dual_schrabidium || this == ModItems.rod_quad_schrabidium || this == ModItems.ingot_schrabidium || this == ModItems.nugget_schrabidium || this == ModItems.plate_schrabidium || ItemCell.hasFluid(stack, ModForgeFluids.sas3) || this == ModItems.powder_schrabidium || this == ModItems.wire_schrabidium || this == ModItems.ingot_saturnite || this == ModItems.plate_saturnite || this == ModItems.powder_thorium || this == ModItems.circuit_schrabidium || this == ModItems.gun_revolver_schrabidium_ammo || this == ModItems.plate_saturnite || this == ModItems.ingot_schrabidate || 
+    			this == ModItems.powder_schrabidate || this == ModItems.ingot_schraranium || 
+    			this == ModItems.crystal_schraranium) {
 			return EnumRarity.RARE;
 		}
 
@@ -304,7 +319,7 @@ public class ItemCustomLore extends Item {
 			return EnumRarity.UNCOMMON;
 		}
 
-		return EnumRarity.COMMON;
+		return this.rarity != null ? rarity : EnumRarity.COMMON;
 	}
 
 	@Override
@@ -323,5 +338,10 @@ public class ItemCustomLore extends Item {
     	}
 		return super.hasEffect(stack);
 	}
+	
+	public ItemCustomLore setRarity(EnumRarity rarity) {
+    	this.rarity = rarity;
+		return this;
+    }
 
 }

@@ -5,8 +5,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+
 import com.google.common.collect.Lists;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.handler.HbmShaderManager2.Shader;
+import com.hbm.lib.RefStrings;
+import com.hbm.main.ResourceManager;
 import com.hbm.world.Antenna;
 import com.hbm.world.Barrel;
 import com.hbm.world.Bunker;
@@ -25,15 +32,20 @@ import com.hbm.world.Silo;
 import com.hbm.world.Spaceship;
 import com.hbm.world.Vertibird;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class CommandHbm extends CommandBase {
 
@@ -78,12 +90,35 @@ public class CommandHbm extends CommandBase {
 			} else if("gen".equals(args[0])) {
 				doGenCommand(server, sender, args);
 				return;
+			} else if("reloadCollada".equals(args[0])){
+				if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+					Minecraft.getMinecraft().addScheduledTask(() -> {
+						ResourceManager.loadAnimatedModels();
+						ResourceManager.lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning")).withUniforms(shader -> {
+							GL13.glActiveTexture(GL13.GL_TEXTURE4);
+							Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+							GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
+							GL13.glActiveTexture(GL13.GL_TEXTURE0);
+						});
+						ResourceManager.maxdepth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/maxdepth"));
+						ResourceManager.lightning_gib = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning_gib")).withUniforms(HbmShaderManager2.LIGHTMAP, shader -> {
+							GL13.glActiveTexture(GL13.GL_TEXTURE4);
+							Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_3);
+							GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
+							GL13.glActiveTexture(GL13.GL_TEXTURE0);
+						});
+						ResourceManager.testlut = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/testlut"));
+						sender.sendMessage(new TextComponentString("Reloaded animated models!"));
+					});
+					
+				}
+				return;
 			}
 		}
 	}
 
 	protected List<String> getSubCommands() {
-		return Lists.newArrayList("subcommands", "gen");
+		return Lists.newArrayList("subcommands", "gen", "reloadCollada");
 	}
 
 	protected void doSubcommandCommand(MinecraftServer server, ICommandSender sender, String[] args) {

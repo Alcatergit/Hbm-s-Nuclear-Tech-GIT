@@ -29,8 +29,6 @@ import net.minecraft.world.World;
 
 public class ParticleGluonDisintegration extends Particle {
 
-	protected FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);
-	
 	ModelBox box;
 	int dl = -1;
 	float[] matrix;

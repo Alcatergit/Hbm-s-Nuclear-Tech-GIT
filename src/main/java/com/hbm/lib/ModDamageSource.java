@@ -46,6 +46,8 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource blast = (new DamageSource("blast")).setExplosion().setDamageBypassesArmor().setDamageIsAbsolute();
 	public static DamageSource electricity = (new DamageSource("electricity")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource exhaust = (new DamageSource("exhaust")).setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource spikes = (new DamageSource("spikes")).setDamageBypassesArmor();
+	public static DamageSource lunar = (new DamageSource("lunar")).setDamageIsAbsolute().setDamageBypassesArmor();
 	
 	public ModDamageSource(String p_i1566_1_) {
 		super(p_i1566_1_);

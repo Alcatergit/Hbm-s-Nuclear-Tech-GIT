@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"top": "hbm:blocks/fireworks_top",
+		"bottom": "hbm:blocks/fireworks_bottom",
+		"side": "hbm:blocks/fireworks_side"
+	}
+}

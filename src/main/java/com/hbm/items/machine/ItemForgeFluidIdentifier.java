@@ -9,6 +9,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -71,7 +73,7 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 		if (stack.hasTagCompound()) {
 			f = FluidRegistry.getFluid(stack.getTagCompound().getString("fluidtype"));
 		}
-		list.add("[CREATED USING TEMPLATE FOLDER]");
+		list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("info.templatefolder"));
 		list.add("");
 		list.add("Universal fluid identifier for:");
 		if (f != null)

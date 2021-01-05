@@ -33,6 +33,10 @@ public class AnimatedModel {
 	}
 
 	public void renderAnimated(long sysTime) {
+		renderAnimated(sysTime, null);
+	}
+	
+	public void renderAnimated(long sysTime, IAnimatedModelCallback c) {
 		if(controller.activeAnim == AnimationWrapper.EMPTY) {
 			render();
 			return;
@@ -78,12 +82,12 @@ public class AnimatedModel {
 		} else {
 			next = first;
 		}
-
-		renderWithIndex((float) fract(remappedTime), first, next);
-
+		
+		renderWithIndex((float) fract(remappedTime), first, next, c);
+		controller.activeAnim.prevFrame = first;
 	}
 
-	protected void renderWithIndex(float inter, int firstIndex, int nextIndex) {
+	protected void renderWithIndex(float inter, int firstIndex, int nextIndex, IAnimatedModelCallback c) {
 		GL11.glPushMatrix();
 		boolean hidden = false;
 		if(hasTransform) {
@@ -97,12 +101,13 @@ public class AnimatedModel {
 				GL11.glMultMatrix(auxGLMatrix);
 			}
 		}
+		if(c != null)
+			hidden |= c.onRender(controller.activeAnim.prevFrame, firstIndex, name);
 		if(hasGeometry && !hidden) {
 			GL11.glCallList(callList);
 		}
-
 		for(AnimatedModel m : children) {
-			m.renderWithIndex(inter, firstIndex, nextIndex);
+			m.renderWithIndex(inter, firstIndex, nextIndex, c);
 		}
 		GL11.glPopMatrix();
 	}
@@ -125,5 +130,9 @@ public class AnimatedModel {
 
 	private static float fract(float number) {
 		return (float) (number - Math.floor(number));
+	}
+	
+	public static interface IAnimatedModelCallback {
+		public boolean onRender(int prevFrame, int currentFrame, String modelName);
 	}
 }

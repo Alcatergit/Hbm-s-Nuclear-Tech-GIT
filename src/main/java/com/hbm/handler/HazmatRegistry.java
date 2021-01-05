@@ -11,15 +11,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class HazmatRegistry {
-	public static final HazmatRegistry instance = new HazmatRegistry();
 	private static Map<Item, Float> entries = new HashMap<Item, Float>();
 	
-	public void registerHazmat(Item item, float resistance) {
+	public static void registerHazmat(Item item, float resistance) {
 		
 		entries.put(item, resistance);
 	}
 	
-	public float getResistance(ItemStack stack) {
+	public static float getResistance(ItemStack stack) {
 		
 		if(stack == null)
 			return 0;
@@ -34,7 +33,7 @@ public class HazmatRegistry {
 		return cladding;
 	}
 	
-	public float getCladding(ItemStack stack) {
+	public static float getCladding(ItemStack stack) {
 
 		if(stack.hasTagCompound() && stack.getTagCompound().getFloat("hfr_cladding") > 0)
 			return stack.getTagCompound().getFloat("hfr_cladding");
@@ -42,7 +41,7 @@ public class HazmatRegistry {
 		return 0;
 	}
 	
-	public float getResistance(EntityLivingBase player) {
+	public static float getResistance(EntityLivingBase player) {
 		float res = 0.0F;
 		
 		for(ItemStack stack : player.getArmorInventoryList()) {

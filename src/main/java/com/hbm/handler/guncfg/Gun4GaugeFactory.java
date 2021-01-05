@@ -9,10 +9,12 @@ import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
+import com.hbm.interfaces.IBulletHurtBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -22,6 +24,9 @@ import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -71,6 +76,9 @@ public class Gun4GaugeFactory {
 		config.config.add(BulletConfigSyncingUtil.G4_KAMPF);
 		config.config.add(BulletConfigSyncingUtil.G4_CANISTER);
 		config.config.add(BulletConfigSyncingUtil.G4_SLEEK);
+		config.config.add(BulletConfigSyncingUtil.G4_CLAW);
+		config.config.add(BulletConfigSyncingUtil.G4_VAMPIRE);
+		config.config.add(BulletConfigSyncingUtil.G4_VOID);
 		
 		return config;
 	}
@@ -167,6 +175,9 @@ public class Gun4GaugeFactory {
 		config.config.add(BulletConfigSyncingUtil.G4_KAMPF);
 		config.config.add(BulletConfigSyncingUtil.G4_CANISTER);
 		config.config.add(BulletConfigSyncingUtil.G4_SLEEK);
+		config.config.add(BulletConfigSyncingUtil.G4_CLAW);
+		config.config.add(BulletConfigSyncingUtil.G4_VAMPIRE);
+		config.config.add(BulletConfigSyncingUtil.G4_VOID);
 
 		return config;
 	}
@@ -351,6 +362,107 @@ public class Gun4GaugeFactory {
 							bullet.world.spawnEntity(bolt);
 						}
 					}
+				}
+			}
+		};
+
+		return bullet;
+	}
+	
+	public static BulletConfiguration get4GaugeClawConfig() {
+
+		BulletConfiguration bullet = get4GaugeConfig();
+
+		bullet.ammo = ModItems.ammo_4gauge_claw;
+		bullet.dmgMin = 6;
+		bullet.dmgMax = 9;
+		bullet.bulletsMin *= 2;
+		bullet.bulletsMax *= 2;
+		bullet.leadChance = 100;
+
+		bullet.bHurt = new IBulletHurtBehavior() {
+
+			@Override
+			public void behaveEntityHurt(EntityBulletBase bullet, Entity hit) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				if(hit instanceof EntityLivingBase) {
+					EntityLivingBase living = (EntityLivingBase) hit;
+					float f = living.getHealth();
+					f = Math.max(0, f - 2);
+					living.setHealth(f);
+
+					if(f == 0)
+						living.onDeath(ModDamageSource.lead);
+				}
+			}
+		};
+
+		return bullet;
+	}
+
+	public static BulletConfiguration get4GaugeVampireConfig() {
+
+		BulletConfiguration bullet = get4GaugeConfig();
+
+		bullet.ammo = ModItems.ammo_4gauge_vampire;
+		bullet.dmgMin = 6;
+		bullet.dmgMax = 9;
+		bullet.bulletsMin *= 2;
+		bullet.bulletsMax *= 2;
+		bullet.leadChance = 100;
+		bullet.style = BulletConfiguration.STYLE_FLECHETTE;
+
+		bullet.bHurt = new IBulletHurtBehavior() {
+
+			@Override
+			public void behaveEntityHurt(EntityBulletBase bullet, Entity hit) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				if(hit instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) hit;
+
+					//TODO does bewitchment have something like this?
+					/*IExtendedEntityProperties prop = player.getExtendedProperties("WitcheryExtendedPlayer");
+
+					if(prop != null) {
+						prop.loadNBTData(new NBTTagCompound());
+					}*/
+				}
+			}
+		};
+
+		return bullet;
+	}
+
+	public static BulletConfiguration get4GaugeVoidConfig() {
+
+		BulletConfiguration bullet = get4GaugeConfig();
+
+		bullet.ammo = ModItems.ammo_4gauge_void;
+		bullet.dmgMin = 6;
+		bullet.dmgMax = 9;
+		bullet.bulletsMin *= 2;
+		bullet.bulletsMax *= 2;
+		bullet.leadChance = 0;
+
+		bullet.bHurt = new IBulletHurtBehavior() {
+
+			@Override
+			public void behaveEntityHurt(EntityBulletBase bullet, Entity hit) {
+
+				if(bullet.world.isRemote)
+					return;
+
+				if(hit instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) hit;
+
+					player.inventory.dropAllItems();
+					player.world.newExplosion(bullet.shooter, player.posX, player.posY, player.posZ, 5.0F, true, true);
 				}
 			}
 		};

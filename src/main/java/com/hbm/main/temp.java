@@ -23,9 +23,9 @@ import net.minecraftforge.fluids.FluidUtil;
 
 @Spaghetti("death")
 public class temp {
+	
+	//Drillgon200: Why do I even still have this class? I'm afraid to delete it in case it actually is used for something though.
 
-	//TODO: replace this steaming shit with JSON
-	//Drillgon200: Or in my case, with my own custom format because I couldn't be bothered to figure out how json worked. Sigh.
 	public enum EnumAssemblyTemplate {
 
 		IRON_PLATE,
@@ -3125,7 +3125,7 @@ public class temp {
 			output = new ItemStack(ModBlocks.turret_cheapo, 1);
 			break;
 		case HUNTER_CHOPPER:
-			output = new ItemStack(ModItems.chopper, 1);
+			output = new ItemStack(ModItems.spawn_chopper, 1);
 			break;
 		case MISSILE_HE_1:
 			output = new ItemStack(ModItems.missile_generic, 1);

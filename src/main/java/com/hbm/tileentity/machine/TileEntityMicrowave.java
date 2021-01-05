@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,18 +41,20 @@ public class TileEntityMicrowave extends TileEntityMachineBase implements ITicka
 
 			if(canProcess()) {
 
-				if(speed == maxSpeed) {
+				if(speed >= maxSpeed) {
 					world.destroyBlock(pos, false);
 					world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 7.5F, true, true);
 					return;
 				}
 
-				power -= consumption;
-				time += speed;
-
 				if(time >= maxTime) {
 					process();
 					time = 0;
+				}
+				
+				if(canProcess()) {
+					power -= consumption;
+					time += speed * 2;
 				}
 			}
 
@@ -71,6 +74,20 @@ public class TileEntityMicrowave extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		power = compound.getLong("power");
+		speed = compound.getInteger("speed");
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setLong("power", power);
+		compound.setInteger("speed", speed);
+		return super.writeToNBT(compound);
+	}
+	
+	@Override
 	public void handleButtonPacket(int value, int meta) {
 		if(value == 0)
 			speed++;
@@ -83,6 +100,21 @@ public class TileEntityMicrowave extends TileEntityMachineBase implements ITicka
 
 		if(speed > maxSpeed)
 			speed = maxSpeed;
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		return i == 0 && !FurnaceRecipes.instance().getSmeltingResult(stack).isEmpty();
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return slot == 1;
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return e.ordinal() == 0 ? new int[] { 1 } : new int[] { 0 };
 	}
 	
 	private void process() {

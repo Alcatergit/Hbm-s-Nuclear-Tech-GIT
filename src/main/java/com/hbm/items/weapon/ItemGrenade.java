@@ -296,6 +296,11 @@ public class ItemGrenade extends Item {
 			list.add("");
 			list.add(TextFormatting.ITALIC + "java.lang.NullPointerException");
 		}
+		if (this == ModItems.grenade_smart) {
+			list.add("");
+			list.add("\"Why did it not blow up????\"");
+			list.add(TextFormatting.ITALIC + "If it didn't blow up it means it worked.");
+		}
 	}
 	
 	public static int getFuseTicks(Item grenade) {

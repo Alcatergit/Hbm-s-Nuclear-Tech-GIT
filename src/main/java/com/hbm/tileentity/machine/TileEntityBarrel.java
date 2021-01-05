@@ -107,7 +107,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	}
 
 	public void fillFluid(BlockPos pos1, FluidTank tank) {
-		FFUtils.fillFluid(this, tank, world, pos1, 1000);
+		FFUtils.fillFluid(this, tank, world, pos1, 4000);
 	}
 	
 	@Override

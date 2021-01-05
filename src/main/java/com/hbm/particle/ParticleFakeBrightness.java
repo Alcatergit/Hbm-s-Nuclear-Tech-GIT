@@ -16,6 +16,8 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -27,6 +29,7 @@ public class ParticleFakeBrightness extends Particle {
 
 	int visibilityId = -1;
 	boolean local;
+	public float fadeInKoeff = 2;
 	
 	public ParticleFakeBrightness(World worldIn, double posXIn, double posYIn, double posZIn, float scale, int age) {
 		super(worldIn, posXIn, posYIn, posZIn);
@@ -117,11 +120,16 @@ public class ParticleFakeBrightness extends Particle {
 		visibility *= visibility;
 		
 		float ageN = (float)(this.particleAge+partialTicks)/(float)this.particleMaxAge;
-		float scale = MathHelper.clamp(ageN*2, 0, 1)* MathHelper.clamp(2-ageN*2+0.1F, 0, 1);
+		float scale = MathHelper.clamp(ageN*fadeInKoeff, 0, 1)* MathHelper.clamp(2-ageN*fadeInKoeff+0.1F, 0, 1);
 		float f4 = 0.1F * this.particleScale * visibility*scale;
         
         Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double)(-rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(rotationYZ * f4 - rotationXZ * f4))};
-
+        if(!local){
+        	GlStateManager.enableBlend();
+        	GlStateManager.disableAlpha();
+        	GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+        }
+        
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fresnel_ms);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		buffer.pos(avec3d[0].x, avec3d[0].y, avec3d[0].z).tex(1, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha*visibility).lightmap(240, 240).endVertex();
@@ -129,6 +137,11 @@ public class ParticleFakeBrightness extends Particle {
         buffer.pos(avec3d[2].x, avec3d[2].y, avec3d[2].z).tex(0, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha*visibility).lightmap(240, 240).endVertex();
         buffer.pos(avec3d[3].x, avec3d[3].y, avec3d[3].z).tex(0, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha*visibility).lightmap(240, 240).endVertex();
         Tessellator.getInstance().draw();
+        
+        if(!local){
+        	GlStateManager.disableBlend();
+        	GlStateManager.enableAlpha();
+        }
 		GlStateManager.enableDepth();
 		GL11.glPopMatrix();
 	}

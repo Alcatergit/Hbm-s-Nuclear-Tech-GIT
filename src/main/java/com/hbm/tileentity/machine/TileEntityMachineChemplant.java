@@ -82,10 +82,10 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	
 	public TileEntityMachineChemplant() {
 		tanks = new FluidTank[4];
-		tanks[0] = new FluidTank(16000);
-		tanks[1] = new FluidTank(16000);
-		tanks[2] = new FluidTank(16000);
-		tanks[3] = new FluidTank(16000);
+		tanks[0] = new FluidTank(24000);
+		tanks[1] = new FluidTank(24000);
+		tanks[2] = new FluidTank(24000);
+		tanks[3] = new FluidTank(24000);
 		tankTypes = new Fluid[]{null, null, null, null};
 	}
 	
@@ -257,6 +257,12 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
 			if(inputValidForTank(1, 18))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
+			
+			if(!inventory.getStackInSlot(17).isEmpty() && !(inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(17).getItem() == ModItems.inf_water))
+				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
+			if(!inventory.getStackInSlot(18).isEmpty() && !(inventory.getStackInSlot(18).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(18).getItem() == ModItems.inf_water))
+				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
+			
 			FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11);
 			FFUtils.fillFluidContainer(inventory, tanks[3], 10, 12);
 			
@@ -278,6 +284,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 
 							removeItems(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)), inventory);
 							removeFluids(inputs);
+							if(inventory.getStackInSlot(0).getItem() == ModItems.meteorite_sword_machined)
+								inventory.setStackInSlot(0, new ItemStack(ModItems.meteorite_sword_treated));
 						}
 						
 						power -= consumption;

@@ -2,25 +2,13 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.bomb.TileEntityNukePrototype;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderNukePrototype extends TileEntitySpecialRenderer<TileEntityNukePrototype> {
-
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/Prototype.obj");
-	private IModelCustom tsarModel;
-    private ResourceLocation tsarTexture;
-	
-	public RenderNukePrototype() {
-		tsarModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		tsarTexture = new ResourceLocation(RefStrings.MODID, "textures/models/Prototype.png");
-	}
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityNukePrototype te) {
@@ -46,8 +34,8 @@ public class RenderNukePrototype extends TileEntitySpecialRenderer<TileEntityNuk
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(tsarTexture);
-        tsarModel.renderAll();
+		bindTexture(ResourceManager.bomb_prototype_tex);
+        ResourceManager.bomb_prototype.renderAll();
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();

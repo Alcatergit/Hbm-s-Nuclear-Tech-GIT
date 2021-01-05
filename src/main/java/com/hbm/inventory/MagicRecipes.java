@@ -31,7 +31,7 @@ public class MagicRecipes {
 				comps.add(new ComparableStack(matrix.getStackInSlot(i)).makeSingular());
 		}
 
-		Collections.sort(comps);
+		//Collections.sort(comps);
 
 		for(MagicRecipe recipe : recipes) {
 			if(recipe.matches(comps))
@@ -73,6 +73,21 @@ public class MagicRecipes {
 				new ComparableStack(ModBlocks.gravel_diamond),
 				new ComparableStack(ModBlocks.gravel_diamond),
 				new ComparableStack(ModItems.lead_gavel)));
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.mese_gavel),
+				new ComparableStack(ModItems.shimmer_handle),
+				new ComparableStack(ModItems.powder_dineutronium),
+				new ComparableStack(ModItems.blades_desh),
+				new ComparableStack(ModItems.diamond_gavel)));
+		recipes.add(new MagicRecipe(new ItemStack(ModBlocks.hadron_coil_mese),
+				new ComparableStack(ModBlocks.hadron_coil_starmetal),
+				new ComparableStack(ModItems.powder_dineutronium),
+				new ComparableStack(ModItems.plate_desh),
+				new OreDictStack("dustGold")));
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.gun_darter),
+				new OreDictStack("plateSteel"),
+				new OreDictStack("plateSteel"),
+				new ComparableStack(ModItems.ingot_polymer),
+				new OreDictStack("plateGold")));
 	}
 
 	public static List<MagicRecipe> getRecipes() {
@@ -87,7 +102,7 @@ public class MagicRecipes {
 		public MagicRecipe(ItemStack out, AStack... in) {
 			this.out = out;
 			this.in = Arrays.asList(in);
-			Collections.sort(this.in);
+			//Collections.sort(this.in);
 		}
 
 		public boolean matches(List<ComparableStack> comps) {

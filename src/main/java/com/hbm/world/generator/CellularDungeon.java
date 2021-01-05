@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -25,11 +26,11 @@ public class CellularDungeon {
 	// the height of a room
 	public int height;
 	// list of random floor blocks with equal weight
-	public List<Block> floor = new ArrayList<Block>();
+	public List<IBlockState> floor = new ArrayList<>();
 	// list of random ceiling blocks with equal weight
-	public List<Block> ceiling = new ArrayList<Block>();
+	public List<IBlockState> ceiling = new ArrayList<>();
 	// list of random wall blocks with equal weight
-	public List<Block> wall = new ArrayList<Block>();
+	public List<IBlockState> wall = new ArrayList<>();
 	// the rooms that the dungeon can use
 	public List<CellularDungeonRoom> rooms = new ArrayList<CellularDungeonRoom>();
 	int tries;
@@ -53,9 +54,9 @@ public class CellularDungeon {
 		this.height = height;
 		this.tries = tries;
 		this.branches = branches;
-		this.floor.add(floor);
-		this.ceiling.add(ceiling);
-		this.wall.add(wall);
+		this.floor.add(floor.getDefaultState());
+		this.ceiling.add(ceiling.getDefaultState());
+		this.wall.add(wall.getDefaultState());
 	}
 
 	public void generate(World world, int x, int y, int z, Random rand) {

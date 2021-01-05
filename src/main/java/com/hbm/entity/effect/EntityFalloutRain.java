@@ -218,6 +218,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				return;
 
+			}
+
+			else if(b == ModBlocks.ore_gneiss_uranium) {
+				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+				else
+					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+				return;
 				// this piece stops the "stomp" from reaching below ground
 			} else if(b.isNormalCube()) {
 

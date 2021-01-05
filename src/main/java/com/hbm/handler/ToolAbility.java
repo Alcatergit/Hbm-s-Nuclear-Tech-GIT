@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.hbm.config.ToolConfig;
+import com.hbm.explosion.ExplosionNT;
+import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
@@ -38,6 +40,7 @@ public abstract class ToolAbility {
 	@SideOnly(Side.CLIENT)
 	public abstract String getFullName();
 	public abstract String getExtension();
+	public abstract boolean isAllowed();
 	
 	public static class RecursionAbility extends ToolAbility {
 		
@@ -74,6 +77,11 @@ public abstract class ToolAbility {
 				case 5: breakExtra(world, x, y, z - 1, x, y, z, player, tool, hand, 0); break;
 				}
 			}
+		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityVein;
 		}
 		
 		private void breakExtra(World world, int x, int y, int z, int refX, int refY, int refZ, EntityPlayer player, IItemAbility tool, EnumHand hand, int depth) {
@@ -169,6 +177,11 @@ public abstract class ToolAbility {
 		}
 
 		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityHammer;
+		}
+		
+		@Override
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
 			return I18n.format(getName()) + getExtension();
@@ -204,6 +217,11 @@ public abstract class ToolAbility {
 		}
 
 		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityFurnace;
+		}
+		
+		@Override
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
 			return I18n.format(getName());
@@ -238,6 +256,11 @@ public abstract class ToolAbility {
 			return "tool.ability.shredder";
 		}
 
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityShredder;
+		}
+		
 		@Override
 		@SideOnly(Side.CLIENT)
 		public String getFullName() {
@@ -276,6 +299,11 @@ public abstract class ToolAbility {
 		public String getName() {
 			return "tool.ability.centrifuge";
 		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityCentrifuge;
+		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
@@ -312,6 +340,11 @@ public abstract class ToolAbility {
 		@Override
 		public String getName() {
 			return "tool.ability.silktouch";
+		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilitySilk;
 		}
 
 		@Override
@@ -356,6 +389,11 @@ public abstract class ToolAbility {
 		}
 
 		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityLuck;
+		}
+		
+		@Override
 		public String getFullName() {
 			return I18n.format(getName()) + getExtension();
 		}
@@ -393,10 +431,100 @@ public abstract class ToolAbility {
 		public String getName() {
 			return "tool.ability.crystallizer";
 		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityCrystallizer;
+		}
 
 		@Override
 		public String getFullName() {
 			return I18n.format(getName());
+		}
+	}
+	
+	public static class MercuryAbility extends ToolAbility {
+
+		@Override
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
+
+			//a band-aid on a gaping wound
+			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
+				block = Blocks.REDSTONE_ORE.getDefaultState();
+
+			int mercury = 0;
+
+			if(block.getBlock() == Blocks.REDSTONE_ORE)
+				mercury = player.getRNG().nextInt(5) + 4;
+			if(block.getBlock() == Blocks.REDSTONE_BLOCK)
+				mercury = player.getRNG().nextInt(7) + 8;
+
+			if(mercury > 0) {
+				world.setBlockToAir(new BlockPos(x, y, z));
+				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.nugget_mercury, mercury)));
+			}
+		}
+
+		@Override
+		public String getExtension() {
+			return "";
+		}
+
+		@Override
+		public String getName() {
+			return "tool.ability.mercury";
+		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityMercury;
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName());
+		}
+	}
+
+	public static class ExplosionAbility extends ToolAbility {
+
+		float strength;
+
+		public ExplosionAbility(float strength) {
+			this.strength = strength;
+		}
+
+		@Override
+		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
+
+			ExplosionNT ex = new ExplosionNT(player.world, player, x + 0.5, y + 0.5, z + 0.5, strength);
+			ex.addAttrib(ExAttrib.ALLDROP);
+			ex.addAttrib(ExAttrib.NOHURT);
+			ex.addAttrib(ExAttrib.NOPARTICLE);
+			ex.doExplosionA();
+			ex.doExplosionB(false);
+
+			player.world.createExplosion(player, x + 0.5, y + 0.5, z + 0.5, 0.1F, false);
+		}
+
+		@Override
+		public String getExtension() {
+			return " (" + strength + ")";
+		}
+
+		@Override
+		public String getName() {
+			return "tool.ability.explosion";
+		}
+		
+		@Override
+		public boolean isAllowed() {
+			return ToolConfig.abilityExplosion;
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName()) + getExtension();
 		}
 	}
 }

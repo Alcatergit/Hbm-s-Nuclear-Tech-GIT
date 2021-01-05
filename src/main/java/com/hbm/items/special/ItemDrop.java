@@ -15,6 +15,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
@@ -28,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemDrop extends Item {
@@ -42,6 +44,10 @@ public class ItemDrop extends Item {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		if(entityItem != null) {
+			if(this == ModItems.beta) {
+				entityItem.setDead();
+				return true;
+			}
 
 			ItemStack stack = entityItem.getItem();
 
@@ -210,6 +216,7 @@ public class ItemDrop extends Item {
 		if(this == ModItems.detonator_de) {
 			tooltip.add("Explodes when dropped!");
 		}
+		tooltip.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.drop") + "]");
 	}
 
 	@Override

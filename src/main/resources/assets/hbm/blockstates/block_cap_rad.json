@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "hbm:block_cap_rad" },
+        "axis=z": { "model": "hbm:block_cap_rad", "x": 90 },
+        "axis=x": { "model": "hbm:block_cap_rad", "x": 90, "y": 90 }
+    }
+}

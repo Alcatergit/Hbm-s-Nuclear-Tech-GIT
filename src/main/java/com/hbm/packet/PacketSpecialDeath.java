@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.particle.DisintegrationParticleHandler;
+import com.hbm.render.amlfrom1710.Vec3;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -30,25 +31,36 @@ public class PacketSpecialDeath implements IMessage {
 	
 	int entId;
 	int effectId;
+	float[] auxData;
 	
 	public PacketSpecialDeath() {
 	}
 	
-	public PacketSpecialDeath(Entity ent, int effectId) {
+	public PacketSpecialDeath(Entity ent, int effectId, float... auxData) {
 		this.effectId = effectId;
 		this.entId = ent.getEntityId();
+		this.auxData = auxData;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		entId = buf.readInt();
 		effectId = buf.readInt();
+		int len = buf.readByte();
+		auxData = new float[len];
+		for(int i = 0; i < len; i++){
+			auxData[i] = buf.readFloat();
+		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(entId);
 		buf.writeInt(effectId);
+		buf.writeByte(auxData.length);
+		for(float f : auxData){
+			buf.writeFloat(f);
+		}
 	}
 	
 	public static class Handler implements IMessageHandler<PacketSpecialDeath, IMessage> {
@@ -75,6 +87,10 @@ public class PacketSpecialDeath implements IMessage {
 						} catch(Exception e) {
 							e.printStackTrace();
 						}
+						break;
+					case 2:
+						ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
+						DisintegrationParticleHandler.spawnLightningDisintegrateParticles(ent, new Vec3(m.auxData[0], m.auxData[1], m.auxData[2]));
 						break;
 					}
 				}

@@ -142,7 +142,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
 				ability.onHit(attacker.world, (EntityPlayer) attacker, target, this);
     		}
     	}
-        
+		stack.damageItem(2, attacker);
         return true;
 	}
 	
@@ -320,7 +320,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     	
     	setAbility(stack, i % this.breakAbility.size());
     	
-    	while(!isAbilityAllowed(getCurrentAbility(stack))) {
+    	while(getCurrentAbility(stack) != null && !getCurrentAbility(stack).isAllowed()) {
 
     		player.sendMessage(
     				new TextComponentString("[Ability ")
@@ -373,30 +373,6 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     
     protected boolean canOperate(ItemStack stack) {
     	return true;
-    }
-    
-  //TODO: integrate "isAllowed" into the ability class
-    private boolean isAbilityAllowed(ToolAbility ability) {
-
-    	if(ability instanceof HammerAbility)
-    		return ToolConfig.abilityHammer;
-    	if(ability instanceof RecursionAbility)
-    		return ToolConfig.abilityVein;
-    	if(ability instanceof LuckAbility)
-    		return ToolConfig.abilityLuck;
-    	if(ability instanceof SilkAbility)
-    		return ToolConfig.abilitySilk;
-    	if(ability instanceof SmelterAbility)
-    		return ToolConfig.abilityFurnace;
-    	if(ability instanceof ShredderAbility)
-    		return ToolConfig.abilityShredder;
-    	if(ability instanceof CentrifugeAbility)
-    		return ToolConfig.abilityCentrifuge;
-    	if(ability instanceof CrystallizerAbility)
-    		return ToolConfig.abilityCrystallizer;
-
-    	return true;
-
     }
 
 }

@@ -429,7 +429,7 @@ public class ItemStarterKit extends Item {
 		
 		if(this == ModItems.stealth_boy)
 		{
-			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30 * 20, 0, false, false));
+			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 30 * 20, 1, false, false));
 		}
 		
 		if(this == ModItems.euphemium_kit)

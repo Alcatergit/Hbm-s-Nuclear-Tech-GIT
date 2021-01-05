@@ -2,7 +2,7 @@ package com.hbm.animloader;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
@@ -70,9 +71,9 @@ public class ColladaLoader {
 		Element scene = getFirstElement((Element)root.getElementsByTagName("library_visual_scenes").item(0));
 		AnimatedModel structure = new AnimatedModel(){
 			@Override
-			protected void renderWithIndex(float inter, int firstIndex, int nextIndex) {
+			protected void renderWithIndex(float inter, int firstIndex, int nextIndex, IAnimatedModelCallback c) {
 				for(AnimatedModel m : children){
-					m.renderWithIndex(inter, firstIndex, nextIndex);
+					m.renderWithIndex(inter, firstIndex, nextIndex, c);
 				}
 			}
 			@Override

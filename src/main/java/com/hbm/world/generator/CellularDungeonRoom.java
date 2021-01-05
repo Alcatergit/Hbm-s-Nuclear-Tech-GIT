@@ -27,7 +27,7 @@ public class CellularDungeonRoom {
 	public void generateMain(World world, int x, int y, int z) {
 		
 		DungeonToolbox.generateBox(world, x, y, z, parent.width, 1, parent.width, parent.floor);
-		DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 1, parent.width, Blocks.AIR);
+		DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 1, parent.width, Blocks.AIR.getDefaultState());
 		DungeonToolbox.generateBox(world, x, y + parent.height - 1, z, parent.width, 1, parent.width, parent.ceiling);
 	}
 	
@@ -37,28 +37,28 @@ public class CellularDungeonRoom {
 			DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 2, 1, parent.wall);
 			
 			if(door)
-				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z, 1, 2, 1, Blocks.AIR);
+				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
 		
 		if(wall == EnumFacing.SOUTH) {
 			DungeonToolbox.generateBox(world, x, y + 1, z + parent.width - 1, parent.width, parent.height - 2, 1, parent.wall);
 			
 			if(door)
-				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z + parent.width - 1, 1, 2, 1, Blocks.AIR);
+				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z + parent.width - 1, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
 		
 		if(wall == EnumFacing.WEST) {
 			DungeonToolbox.generateBox(world, x, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 			
 			if(door)
-				DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR);
+				DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
 		
 		if(wall == EnumFacing.EAST) {
 			DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 			
 			if(door)
-				DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR);
+				DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
 	}
 

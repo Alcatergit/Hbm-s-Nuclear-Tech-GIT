@@ -24,12 +24,13 @@ public class PhysicsTestParticle extends Particle {
 	public PhysicsTestParticle(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		body = new RigidBody(worldIn, posXIn, posYIn, posZIn);
-		boxes = new AxisAlignedBB[2];
+		boxes = new AxisAlignedBB[1];
 		float size = 0.3F;
-		boxes[0] = new AxisAlignedBB(-size, -size*0.5, -size, size, size*0.5, size);
-		boxes[1] = new AxisAlignedBB(-size*0.5, -size*4-size, -size*0.5, size*0.5, size*0.5-size, size*0.5);
-		body.addColliders(new AABBCollider(boxes[0], 4), new AABBCollider(boxes[1], 4));
-		body.impulseVelocity(new Vec3(0, 0, 15), body.globalCentroid);
+		//boxes[0] = new AxisAlignedBB(-size, -size*0.5, -size, size, size*0.5, size);
+		//boxes[1] = new AxisAlignedBB(-size*0.5, -size*4-size, -size*0.5, size*0.5, size*0.5-size, size*0.5);
+		boxes[0] = new AxisAlignedBB(0, 0, 0, 0.0625F*2, 0.0625F*16, 0.0625F*2);
+		body.addColliders(new AABBCollider(boxes[0], 4));
+		body.impulseVelocity(new Vec3(0, 0, 0.01), body.globalCentroid);
 		body.friction = 0.3F;
 		particleMaxAge = 200;
 	}
@@ -79,14 +80,14 @@ public class PhysicsTestParticle extends Particle {
 				buf.pos(globalA.xCoord, globalA.yCoord, globalA.zCoord).color(0F, 0F, 1F, 1F).endVertex();
 				buf.pos(globalA.xCoord-normal.xCoord, globalA.yCoord-normal.yCoord, globalA.zCoord-normal.xCoord).color(0F, 0F, 1F, 1F).endVertex();
 				
-				//buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(0F, 0F, 1F, 1F).endVertex();
-				//buf.pos(globalB.xCoord+normal.xCoord, globalB.yCoord+normal.yCoord, globalB.zCoord+normal.xCoord).color(0F, 0F, 1F, 1F).endVertex();
+				buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(0F, 0F, 1F, 1F).endVertex();
+				buf.pos(globalB.xCoord+normal.xCoord, globalB.yCoord+normal.yCoord, globalB.zCoord+normal.xCoord).color(0F, 0F, 1F, 1F).endVertex();
 				tes.draw();
 				
 				GL11.glPointSize(16);
 				buf.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
 				buf.pos(globalA.xCoord, globalA.yCoord, globalA.zCoord).color(0F, 0F, 1F, 1F).endVertex();
-				//buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(0F, 0F, 1F, 1F).endVertex();
+				buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(0F, 0F, 1F, 1F).endVertex();
 				tes.draw();
 			}
 		}

@@ -45,25 +45,6 @@ public class ItemRendererMachine extends TEISRBase {
 			break;
 		}
 		
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.machine_selenium)) {
-
-            GlStateManager.disableCull();
-			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.selenium_body_tex);
-	        ResourceManager.selenium_body.renderAll();
-
-	        GL11.glTranslated(0.0D, 1.0D, 0.0D);
-
-	        Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.selenium_piston_tex);
-	        for(int i = 0; i < 7; i++) {
-	            ResourceManager.selenium_piston.renderAll();
-	    		GL11.glRotatef(360F/7F, 0, 0, 1);
-	        }
-
-            Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.selenium_rotor_tex);
-            ResourceManager.selenium_rotor.renderAll();
-            GlStateManager.enableCull();
-		}
-
 		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.radiorec)) {
 			GL11.glTranslated(0, 1.5, 0);
 			GL11.glRotated(180, 1, 0, 0);

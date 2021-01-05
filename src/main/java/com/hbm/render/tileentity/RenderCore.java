@@ -49,7 +49,7 @@ public class RenderCore extends TileEntitySpecialRenderer<TileEntityCore> {
 	    		GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX - 90, 1.0F, 0.0F, 0.0F);
 	    		GL11.glTranslated(-0.5, -0.5, -0.5);
 
-	        	renderVoid(core, 0, 0, 0);
+	    		renderOrb(core, 0, 0, 0);
 	        	GL11.glPopMatrix();
 	        }
 	}

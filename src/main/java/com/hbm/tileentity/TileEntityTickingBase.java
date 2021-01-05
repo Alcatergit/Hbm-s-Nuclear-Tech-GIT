@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public abstract class TileEntityTickingBase extends TileEntity implements ITickable {
 
 	public TileEntityTickingBase() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public abstract String getInventoryName();

@@ -3,6 +3,8 @@ package com.hbm.blocks.generic;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.deco.TileEntityTrappedBrick;
 
 import net.minecraft.block.Block;
@@ -24,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -78,7 +81,11 @@ public class TrappedBrick extends BlockContainer {
 			break;
 		case SPIKES:
 			if(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock().isReplaceable(world, new BlockPos(x, y + 1, z)))
-				world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.barbed_wire.getDefaultState());
+				world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.spikes.getDefaultState());
+			List<Entity> targets = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x, y + 1, z, x + 1, y + 2, z + 1));
+			for(Entity e : targets)
+				e.attackEntityFrom(ModDamageSource.spikes, 10);
+			world.playSound(null, x + 0.5, y + 1.5, z + 0.5, HBMSoundHandler.slicer, SoundCategory.HOSTILE, 1.0F, 1.0F);
 			break;
 		case MINE:
 			world.createExplosion(null, x + 0.5, y + 1.5, z + 0.5, 1F, false);

@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.config.WeaponConfig;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
@@ -74,11 +75,14 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 
 			sendMissileData();
 
-			pingTimer++;
+			if(world.getBlockState(pos.down()).getBlock() != ModBlocks.muffler) {
 
-			if(power > 0 && pingTimer >= maxTimer) {
-				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
-				pingTimer = 0;
+				pingTimer++;
+
+				if(power > 0 && pingTimer >= maxTimer) {
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
+					pingTimer = 0;
+				}
 			}
 			
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));

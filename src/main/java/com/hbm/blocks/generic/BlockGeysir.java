@@ -74,6 +74,9 @@ public class BlockGeysir extends BlockContainer {
 	
 			worldIn.spawnParticle(EnumParticleTypes.CLOUD, f, f1, f2, 0.0D, 0.1D, 0.0D);
 		}
+		if(this == ModBlocks.geysir_nether) {
+			worldIn.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5F, pos.getY() + 1.0625F, pos.getZ() + 0.5F, 0.0D, 0.0D, 0.0D);
+		}
 	}
 	
 	@Override

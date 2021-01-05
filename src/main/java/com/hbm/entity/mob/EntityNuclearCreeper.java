@@ -8,8 +8,9 @@ import com.hbm.entity.mob.ai.EntityAINuclearCreeperSwell;
 import com.hbm.explosion.ExplosionParticle;
 import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.AdvancementManager;
+import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
@@ -103,6 +104,14 @@ public class EntityNuclearCreeper extends EntityMob {
 		return false;
 	}
 
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+		super.dropFewItems(wasRecentlyHit, lootingModifier);
+
+        if(rand.nextInt(3) == 0)
+        	this.dropItem(ModItems.coin_creeper, 1);
+	}
+	
 	/**
 	 * Called when the mob is falling. Calculates and applies fall damage.
 	 */
@@ -265,6 +274,12 @@ public class EntityNuclearCreeper extends EntityMob {
 	public void onDeath(DamageSource p_70645_1_) {
 		super.onDeath(p_70645_1_);
 
+		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
+
+        for(EntityPlayer player : players) {
+        	AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
+        }
+		
 		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow) (p_70645_1_.getImmediateSource())).shootingEntity == null)) {
 			int i = rand.nextInt(11);
 			int j = rand.nextInt(3);

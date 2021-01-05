@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:coin_maskman"
+		},
+		"title": {
+			"translate": "hbm.achievement.bossMaskman"
+		},
+		"description": {
+			"translate": "hbm.achievement.bossMaskman.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:bosscreeper",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

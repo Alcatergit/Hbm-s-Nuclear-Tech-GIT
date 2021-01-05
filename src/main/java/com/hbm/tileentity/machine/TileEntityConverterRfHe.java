@@ -6,11 +6,11 @@ import java.util.List;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.lib.Library;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import cofh.redstoneflux.api.IEnergyReceiver;
 import cofh.redstoneflux.impl.EnergyStorage;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -18,40 +18,54 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityConverterRfHe extends TileEntity implements ITickable, ISource, IEnergyReceiver, IEnergyStorage {
+public class TileEntityConverterRfHe extends TileEntityMachineBase implements ITickable, ISource, IEnergyReceiver, IEnergyStorage {
 
 	//Also converts from forge energy
 	public long power;
-	public final long maxPower = 1000000;
+	public long maxPower = 500000000;
 	public List<IConsumer> list = new ArrayList<IConsumer>();
-	public int age = 0;
-	public EnergyStorage storage = new EnergyStorage(4000000, 2500000, 2500000);
+	public boolean tact;
+	public EnergyStorage storage = new EnergyStorage(2000000000, 2000000000, 2000000000);
+	public int buf;
+	
+	public TileEntityConverterRfHe() {
+		super(0);
+	}
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
 
-			long convert = Math.min(storage.getEnergyStored(), (maxPower - power) * 4);
+			power = storage.getEnergyStored() / 4;
+			maxPower = Math.max(1000000, power);
+			
+			buf = storage.getEnergyStored();
 
-			storage.setEnergyStored((int) (storage.getEnergyStored() - convert));
-			power += convert / 4;
-			
-			if(convert > 0)
-				this.markDirty();
-			
-			age++;
-			if(age >= 20)
-			{
-				age = 0;
-			}
-			
-			if(age == 9 || age == 19)
-				ffgeuaInit();
+			tact = false;
+			ffgeuaInit();
+			tact = true;
+			ffgeuaInit();
+			storage.setEnergyStored((int)power * 4);
+			NBTTagCompound data = new NBTTagCompound();
+			data.setInteger("rf", storage.getEnergyStored());
+			data.setInteger("maxrf", storage.getEnergyStored());
+			data.setLong("he", power);
+			data.setLong("maxhe", power);
+			this.networkPack(data, 25);
 		}
-			
-		
-		
-		
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		storage.setEnergyStored(nbt.getInteger("rf"));
+		storage.setCapacity(nbt.getInteger("maxrf"));
+		power = nbt.getLong("he");
+		maxPower = nbt.getLong("maxhe");
+	}
+	
+	@Override
+	public String getName() {
+		return "";
 	}
 
 	@Override
@@ -97,12 +111,7 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 
 	@Override
 	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
+		return tact;
 	}
 
 	@Override
@@ -132,6 +141,8 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 
 	@Override
 	public int getMaxEnergyStored(EnumFacing from) {
+		if(storage.getEnergyStored() < 4000000)
+			return 2000000000;
 		return storage.getMaxEnergyStored();
 	}
 
@@ -142,6 +153,7 @@ public class TileEntityConverterRfHe extends TileEntity implements ITickable, IS
 
 	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+		storage.setCapacity(2000000000);
 		return storage.receiveEnergy(maxReceive, simulate);
 	}
 	

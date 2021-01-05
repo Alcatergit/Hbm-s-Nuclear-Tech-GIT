@@ -1,6 +1,8 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
 
@@ -13,6 +15,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -58,6 +61,15 @@ public class Radiobox extends BlockContainer {
 			return true;
 		} else if(!player.isSneaking())
 		{
+			TileEntityRadiobox box = (TileEntityRadiobox)world.getTileEntity(pos);
+
+			if(player.getHeldItem(hand).getItem() == ModItems.battery_spark && !box.infinite) {
+				player.getHeldItem(hand).shrink(1);
+				world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
+				box.infinite = true;
+				box.markDirty();
+				return true;
+			}
 			boolean on = world.getBlockState(pos).getValue(STATE);
 			if(!on) {
 				world.setBlockState(pos, world.getBlockState(pos).withProperty(STATE, true));
@@ -73,6 +85,16 @@ public class Radiobox extends BlockContainer {
 			//return true;
 			return false;
 		}
+	}
+	
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		TileEntityRadiobox box = (TileEntityRadiobox)world.getTileEntity(pos);
+
+		if(box.infinite) {
+			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ItemBattery.getEmptyBattery(ModItems.battery_spark)));
+		}
+		super.breakBlock(world, pos, state);
 	}
 	
 	@Override

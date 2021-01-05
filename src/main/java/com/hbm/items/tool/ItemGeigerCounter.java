@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.capability.RadiationCapability;
 import com.hbm.items.ModItems;
+import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.saveddata.RadiationSavedData;
@@ -23,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -40,6 +39,11 @@ public class ItemGeigerCounter extends Item {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if(entity instanceof EntityPlayer) {
+
+			if(ArmorFSB.hasFSBArmor((EntityPlayer)entity) && ((ArmorFSB)((EntityPlayer)entity).inventory.armorInventory.get(2).getItem()).geigerSound)
+				return;
+		}
 		setInt(stack, getInt(stack, "timer") + 1, "timer");
 		if(getInt(stack, "timer") == 10) {
 			setInt(stack, 0, "timer");

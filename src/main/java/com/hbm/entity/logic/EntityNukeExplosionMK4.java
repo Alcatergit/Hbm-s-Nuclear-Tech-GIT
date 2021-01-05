@@ -32,7 +32,6 @@ public class EntityNukeExplosionMK4 extends Entity {
 
 	public EntityNukeExplosionMK4(World p_i1582_1_) {
 		super(p_i1582_1_);
-		new Exception().printStackTrace();
 	}
 
 	public EntityNukeExplosionMK4(World world, int strength, int count, int speed, int length) {
@@ -64,7 +63,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 		if(rand.nextInt(5) == 0)
 			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
 
-		ExplosionNukeGeneric.dealDamage(this.world, (int) this.posX, (int) this.posY, (int) this.posZ, this.length * 2);
+		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.length * 2);
 
 		if(explosion == null) {
 

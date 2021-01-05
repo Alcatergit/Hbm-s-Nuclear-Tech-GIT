@@ -327,6 +327,7 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		case BulletConfiguration.BOLT_LASER: red = 1F; green = 0F; blue = 0F; break;
 		case BulletConfiguration.BOLT_NIGHTMARE: red = 1F; green = 1F; blue = 0F; break;
 		case BulletConfiguration.BOLT_LACUNAE: red = 0.25F; green = 0F; blue = 0.75F; break;
+		case BulletConfiguration.BOLT_WORM: red = 0F; green = 1F; blue = 0F; break;
 		case BulletConfiguration.BOLT_ZOMG:
 			Random rand = new Random(eID * eID);
 			red = rand.nextInt(2) * 0.8F;

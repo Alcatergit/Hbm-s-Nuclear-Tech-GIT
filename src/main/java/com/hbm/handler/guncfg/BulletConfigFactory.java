@@ -307,12 +307,15 @@ public class BulletConfigFactory {
 							PotionEffect eff0 = new PotionEffect(MobEffects.POISON, duration, 2, true, false);
 							PotionEffect eff1 = new PotionEffect(MobEffects.MINING_FATIGUE, duration, 2, true, false);
 							PotionEffect eff2 = new PotionEffect(MobEffects.WEAKNESS, duration, 4, true, false);
+							PotionEffect eff3 = new PotionEffect(MobEffects.WITHER, (int)Math.ceil(duration * 0.1), 0, true, false);
 							eff0.getCurativeItems().clear();
 							eff1.getCurativeItems().clear();
 							eff2.getCurativeItems().clear();
+							eff3.getCurativeItems().clear();
 							((EntityLivingBase)e).addPotionEffect(eff0);
 							((EntityLivingBase)e).addPotionEffect(eff1);
 							((EntityLivingBase)e).addPotionEffect(eff2);
+							((EntityLivingBase)e).addPotionEffect(eff3);
 						}
 					}
 				}

@@ -24,6 +24,20 @@ public class ItemAmmo extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 
+		//BOLTS
+		if(this == ModItems.ammo_75bolt) {
+			list.add(TextFormatting.YELLOW + "Gyro-stabilized armor-piercing");
+			list.add(TextFormatting.YELLOW + "DU round with tandem charge");
+		}
+		if(this == ModItems.ammo_75bolt_incendiary) {
+			list.add(TextFormatting.YELLOW + "Armor-piercing explosive round");
+			list.add(TextFormatting.YELLOW + "filled with oxy-phosphorous gel");
+		}
+		if(this == ModItems.ammo_75bolt_he) {
+			list.add(TextFormatting.YELLOW + "Armor-piercing penetrator filled");
+			list.add(TextFormatting.YELLOW + "with a powerful explosive charge");
+		}
+		
 		// FUEL
 		if(this == ModItems.ammo_fuel_napalm) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");

@@ -2,36 +2,28 @@ package com.hbm.items.special;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.hbm.entity.mob.EntityHunterChopper;
+import com.hbm.entity.mob.botprime.EntityBOTPrimeHead;
 import com.hbm.items.ModItems;
-import com.hbm.lib.RefStrings;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
 public class ItemChopper extends Item {
@@ -43,48 +35,36 @@ public class ItemChopper extends Item {
 		ModItems.ALL_ITEMS.add(this);
 	}
 
-	//Drillgon200: Code from ItemMonsterPlacer, because that looks like what was done in the one from 1.7.10
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack itemstack = player.getHeldItem(hand);
-
-		if(worldIn.isRemote) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(world.isRemote) {
 			return EnumActionResult.SUCCESS;
-		} else if(!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) {
-			return EnumActionResult.FAIL;
 		} else {
-			IBlockState iblockstate = worldIn.getBlockState(pos);
-			Block block = iblockstate.getBlock();
+			ItemStack stack = player.getHeldItem(hand);
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			
+			//IBlockState blockState = world.getBlockState(pos);
 
-			if(block == Blocks.MOB_SPAWNER) {
-				TileEntity tileentity = worldIn.getTileEntity(pos);
+			x += facing.getFrontOffsetX();
+			y += facing.getFrontOffsetY();
+			z += facing.getFrontOffsetZ();
+			double offset = 0.0D;
 
-				if(tileentity instanceof TileEntityMobSpawner) {
-					MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner) tileentity).getSpawnerBaseLogic();
-					mobspawnerbaselogic.setEntityId(new ResourceLocation(RefStrings.MODID, "entity_hunter_chopper"));
-					tileentity.markDirty();
-					worldIn.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
+			//Drillgon200: No clue what 11 is supposed to mean. I'll just leave it and hope it doesn't break anything.
+			//if(facing.ordinal() == 1 && blockState.getRenderType() == 11)
+			//	offset = 0.5D;
 
-					if(!player.capabilities.isCreativeMode) {
-						itemstack.shrink(1);
-					}
-
-					return EnumActionResult.SUCCESS;
-				}
-			}
-
-			BlockPos blockpos = pos.offset(facing);
-			double d0 = this.getYOffset(worldIn, blockpos);
-			Entity entity = spawnCreature(worldIn, null, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + d0, (double) blockpos.getZ() + 0.5D);
+			Entity entity = spawnCreature(world, stack.getItemDamage(), x + 0.5D, y + offset, z + 0.5D);
 
 			if(entity != null) {
-				if(entity instanceof EntityLivingBase && itemstack.hasDisplayName()) {
-					entity.setCustomNameTag(itemstack.getDisplayName());
+				if(entity instanceof EntityLivingBase && stack.hasDisplayName()) {
+					((EntityLiving) entity).setCustomNameTag(stack.getDisplayName());
 				}
 
-
 				if(!player.capabilities.isCreativeMode) {
-					itemstack.shrink(1);
+					stack.shrink(1);
 				}
 			}
 
@@ -92,88 +72,81 @@ public class ItemChopper extends Item {
 		}
 	}
 	
-	protected double getYOffset(World p_190909_1_, BlockPos p_190909_2_)
-    {
-        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(p_190909_2_)).expand(0.0D, -1.0D, 0.0D);
-        List<AxisAlignedBB> list = p_190909_1_.getCollisionBoxes((Entity)null, axisalignedbb);
-
-        if (list.isEmpty())
-        {
-            return 0.0D;
-        }
-        else
-        {
-            double d0 = axisalignedbb.minY;
-
-            for (AxisAlignedBB axisalignedbb1 : list)
-            {
-                d0 = Math.max(axisalignedbb1.maxY, d0);
-            }
-
-            return d0 - (double)p_190909_2_.getY();
-        }
-    }
-
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		ItemStack itemstack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		if(world.isRemote) {
+			return ActionResult.newResult(EnumActionResult.PASS, stack);
 
-		if(worldIn.isRemote) {
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 		} else {
-			RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
+			RayTraceResult movingobjectposition = this.rayTrace(world, player, true);
 
-			if(raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
-				BlockPos blockpos = raytraceresult.getBlockPos();
-
-				if(!(worldIn.getBlockState(blockpos).getBlock() instanceof BlockLiquid)) {
-					return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-				} else if(worldIn.isBlockModifiable(playerIn, blockpos) && playerIn.canPlayerEdit(blockpos, raytraceresult.sideHit, itemstack)) {
-					Entity entity = spawnCreature(worldIn, null, (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 0.5D, (double) blockpos.getZ() + 0.5D);
-
-					if(entity == null) {
-						return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
-					} else {
-						if(entity instanceof EntityLivingBase && itemstack.hasDisplayName()) {
-							entity.setCustomNameTag(itemstack.getDisplayName());
-						}
-
-
-						if(!playerIn.capabilities.isCreativeMode) {
-							itemstack.shrink(1);
-						}
-
-						playerIn.addStat(StatList.getObjectUseStats(this));
-						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
-					}
-				} else {
-					return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
-				}
+			if(movingobjectposition == null || movingobjectposition.typeOfHit == Type.MISS) {
+				return ActionResult.newResult(EnumActionResult.PASS, stack);
 			} else {
-				return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
+				if(movingobjectposition.typeOfHit == Type.BLOCK) {
+					int i = movingobjectposition.getBlockPos().getX();
+					int j = movingobjectposition.getBlockPos().getY();
+					int k = movingobjectposition.getBlockPos().getZ();
+
+					if(!world.canMineBlockBody(player, movingobjectposition.getBlockPos())) {
+						return ActionResult.newResult(EnumActionResult.PASS, stack);
+					}
+
+					if(!player.canPlayerEdit(movingobjectposition.getBlockPos(), movingobjectposition.sideHit, stack)) {
+						return ActionResult.newResult(EnumActionResult.PASS, stack);
+					}
+
+					if(world.getBlockState(movingobjectposition.getBlockPos()).getBlock() instanceof BlockLiquid) {
+						Entity entity = spawnCreature(world, stack.getItemDamage(), i, j, k);
+
+						if(entity != null) {
+							if(entity instanceof EntityLivingBase && stack.hasDisplayName()) {
+								((EntityLiving) entity).setCustomNameTag(stack.getDisplayName());
+							}
+
+							if(!player.capabilities.isCreativeMode) {
+								stack.shrink(1);
+							}
+						}
+					}
+				}
+
+				return ActionResult.newResult(EnumActionResult.PASS, stack);
 			}
 		}
 	}
-
-	public static Entity spawnCreature(World worldIn, @Nullable ResourceLocation entityID, double x, double y, double z) {
-
+	
+	public Entity spawnCreature(World world, int dmg, double x, double y, double z) {
 		Entity entity = null;
 
-		for(int i = 0; i < 1; ++i) {
-			entity = new EntityHunterChopper(worldIn);
+		if(this == ModItems.spawn_chopper)
+			entity = new EntityHunterChopper(world);
 
-			if(entity instanceof EntityLiving) {
-				EntityLiving entityliving = (EntityLiving) entity;
-				entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-				entityliving.rotationYawHead = entityliving.rotationYaw;
-				entityliving.renderYawOffset = entityliving.rotationYaw;
-				entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData) null);
-				worldIn.spawnEntity(entity);
-				entityliving.playLivingSound();
-			}
+		if(this == ModItems.spawn_worm)
+			entity = new EntityBOTPrimeHead(world);
+
+		if(entity != null) {
+
+			EntityLiving entityliving = (EntityLiving) entity;
+			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
+			entityliving.rotationYawHead = entityliving.rotationYaw;
+			entityliving.renderYawOffset = entityliving.rotationYaw;
+			entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), (IEntityLivingData) null);
+			world.spawnEntity(entity);
 		}
 
 		return entity;
-
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(this == ModItems.spawn_worm) {
+			tooltip.add("Without a player in survival mode");
+			tooltip.add("to target, he struggles around a lot.");
+			tooltip.add("");
+			tooltip.add("He's doing his best so please show him");
+			tooltip.add("some consideration.");
+		}
 	}
 }

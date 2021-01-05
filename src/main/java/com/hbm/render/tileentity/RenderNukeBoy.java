@@ -2,26 +2,14 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderNukeBoy extends TileEntitySpecialRenderer<TileEntityNukeBoy> {
 
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/LilBoy1.obj");
-	private IModelCustom boyModel;
-    private ResourceLocation boyTexture;
-	
-	public RenderNukeBoy() {
-		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/lilboy.png");
-	}
-	
 	@Override
 	public boolean isGlobalRenderer(TileEntityNukeBoy te) {
 		return true;
@@ -50,8 +38,8 @@ public class RenderNukeBoy extends TileEntitySpecialRenderer<TileEntityNukeBoy> 
 	        GL11.glTranslated(-2.0D, 0.0D, 0.0D); break;
 		}
 
-        bindTexture(boyTexture);
-        boyModel.renderAll();
+		bindTexture(ResourceManager.bomb_boy_tex);
+        ResourceManager.bomb_boy.renderAll();
         
         GlStateManager.enableCull();
 

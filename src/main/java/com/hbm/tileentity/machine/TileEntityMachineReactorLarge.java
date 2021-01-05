@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.MobConfig;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -445,6 +447,10 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 				}
 			}
 			
+			//Meteorite sword
+			if(coreHeat > 0 && inventory.getStackInSlot(4).getItem() == ModItems.meteorite_sword_bred)
+				inventory.setStackInSlot(4, new ItemStack(ModItems.meteorite_sword_irradiated));
+			
 			//Load fuel
 			if(getFuelContent(inventory.getStackInSlot(4), type) > 0) {
 				
@@ -811,6 +817,13 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		}
 		
 		world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+		if(MobConfig.enableElementals) {
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(100, 100, 100));
+
+			for(EntityPlayer player : players) {
+				player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setBoolean("radMark", true);
+			}
+		}
 	}
 	
 	private void randomizeRadBlock(int x, int y, int z) {

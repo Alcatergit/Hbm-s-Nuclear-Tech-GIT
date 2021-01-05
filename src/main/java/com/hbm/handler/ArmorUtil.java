@@ -17,18 +17,21 @@ public class ArmorUtil {
 		
 		if(armor.get(0).isEmpty() || armor.get(1).isEmpty() || armor.get(2).isEmpty() || armor.get(3).isEmpty()) return false;
 		
-		if(ArmorUtil.isFaradayArmor(armor.get(0).getItem()) &&
-				ArmorUtil.isFaradayArmor(armor.get(1).getItem()) &&
-				ArmorUtil.isFaradayArmor(armor.get(2).getItem()) &&
-				ArmorUtil.isFaradayArmor(armor.get(3).getItem()))
+		if(ArmorUtil.isFaradayArmor(armor.get(0)) &&
+				ArmorUtil.isFaradayArmor(armor.get(1)) &&
+				ArmorUtil.isFaradayArmor(armor.get(2)) &&
+				ArmorUtil.isFaradayArmor(armor.get(3)))
 			return true;
 		
 		return false;
 	}
 
-	public static boolean isFaradayArmor(Item item) {
+	public static boolean isFaradayArmor(ItemStack item) {
 		
 		String name = item.getUnlocalizedName();
+		
+		if(HazmatRegistry.getCladding(item) > 0)
+			return true;
 		
 		for(String metal : metals) {
 			
@@ -57,8 +60,11 @@ public class ArmorUtil {
 			"bronze",
 			"electrum",
 			"t45",
+			"bj",
+			"starmetal",
 			"hazmat", //also count because rubber is insulating
-			"rubber"
+			"rubber",
+			"spacesuit"
 	};
 
 	public static void damageSuit(EntityPlayer player, int slot, int amount) {
@@ -166,6 +172,36 @@ public class ArmorUtil {
 		if(player.isPotionActive(HbmPotion.mutation))
 			return true;
 	
+		return false;
+	}
+	
+	public static boolean checkForGoggles(EntityPlayer player) {
+
+		if(checkArmorPiece(player, ModItems.goggles, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.gas_mask, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.t45_helmet, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.ajr_helmet, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.bj_helmet, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.hev_helmet, 3))
+		{
+			return true;
+		}
+		
 		return false;
 	}
 }

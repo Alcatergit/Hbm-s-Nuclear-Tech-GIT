@@ -9,8 +9,10 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -128,6 +130,14 @@ public class TurretCIWS extends TurretBase {
 		if(te.spin > 10)
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.ciwsSpindown, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("Hmmm today I will use an anti-missile turret agains mobs");
+		tooltip.add("");
+		tooltip.add("Why does it not work???");
+		tooltip.add("bob pls fix");
 	}
 
 }

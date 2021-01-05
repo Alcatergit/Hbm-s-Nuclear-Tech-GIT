@@ -4,6 +4,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.ai.EntityAITaintedCreeperSwell;
+import com.hbm.interfaces.IRadiationImmune;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityTaintedCreeper extends EntityMob {
+public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune {
 	
 	private static final DataParameter<Integer> STATE = EntityDataManager.<Integer>createKey(EntityTaintedCreeper.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> POWERED = EntityDataManager.<Boolean>createKey(EntityTaintedCreeper.class, DataSerializers.BOOLEAN);

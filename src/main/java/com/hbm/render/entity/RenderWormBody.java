@@ -3,11 +3,12 @@ package com.hbm.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.mob.botprime.EntityBOTPrimeBody;
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +18,8 @@ public class RenderWormBody extends Render<EntityBOTPrimeBody> {
 
 	public static final IRenderFactory<EntityBOTPrimeBody> FACTORY = man -> new RenderWormBody(man);
 	
-	public static final IModelCustom body = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/bot_prime_body.obj"));
+	public static final IModelCustom body = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/bot_prime_body.obj"));
+	public static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID, "textures/entity/mark_zero_body.png");
 
 	protected RenderWormBody(RenderManager renderManager) {
 		super(renderManager);
@@ -32,14 +34,18 @@ public class RenderWormBody extends Render<EntityBOTPrimeBody> {
 		GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks - 90, 0.0F, 0.0F, 1.0F);
 
 		this.bindEntityTexture(entity);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.disableCull();
 		body.renderAll();
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.enableCull();
 
 		GL11.glPopMatrix();
 	}
 	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBOTPrimeBody entity) {
-		return ResourceManager.universal;
+		return texture;
 	}
 	
 }

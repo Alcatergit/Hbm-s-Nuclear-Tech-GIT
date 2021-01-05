@@ -1,0 +1,15 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "#chain"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 15 ],
+            "to": [ 16, 16, 15 ],
+            "shade": false,
+            "faces": {
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#chain" }
+            }
+        }
+    ]
+}

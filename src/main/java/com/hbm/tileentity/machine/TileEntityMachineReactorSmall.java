@@ -1,13 +1,17 @@
 package com.hbm.tileentity.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineReactor;
+import com.hbm.config.MobConfig;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
+import com.hbm.items.tool.ItemSwordMeteorite;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
@@ -84,7 +88,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			@Override
 			public boolean isItemValid(int i, ItemStack itemStack) {
 				if(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11)
-					if(itemStack.getItem() instanceof ItemFuelRod)
+					if(itemStack.getItem() instanceof ItemFuelRod || itemStack.getItem() instanceof ItemSwordMeteorite)
 						return true;
 				if(i == 12)
 					if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
@@ -228,9 +232,12 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			}
 
 			if(rods >= rodsMax)
+				
 				for(int i = 0; i < 12; i++) {
-					if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() instanceof ItemFuelRod)
+					if(inventory.getStackInSlot(i).getItem() instanceof ItemFuelRod)
 						decay(i);
+					else if(inventory.getStackInSlot(i).getItem() == ModItems.meteorite_sword_bred)
+						inventory.setStackInSlot(i, new ItemStack(ModItems.meteorite_sword_irradiated));
 				}
 
 			coreHeatMod = 1.0;
@@ -284,11 +291,19 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			inventory.setStackInSlot(i, ItemStack.EMPTY);
 		}
 
+		world.setBlockToAir(pos);
 		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 18.0F, true);
 		ExplosionNukeGeneric.waste(world, pos.getX(), pos.getY(), pos.getZ(), 35);
 		world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
 
 		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 1000F, 2000F);
+		if(MobConfig.enableElementals) {
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(100, 100, 100));
+
+			for(EntityPlayer player : players) {
+				player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setBoolean("radMark", true);
+			}
+		}
 	}
 
 	private boolean blocksRad(BlockPos pos) {

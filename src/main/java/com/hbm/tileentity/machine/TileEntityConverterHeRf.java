@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IConsumer;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
@@ -13,25 +14,33 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityConverterHeRf extends TileEntity implements ITickable, IConsumer, IEnergyProvider, IEnergyStorage {
+public class TileEntityConverterHeRf extends TileEntityMachineBase implements ITickable, IConsumer, IEnergyProvider, IEnergyStorage {
 
 	public long power;
-	public final long maxPower = 1000000;
-	public EnergyStorage storage = new EnergyStorage(4000000, 2500000, 2500000);
+	public long maxPower = 500000000;
+	public EnergyStorage storage = new EnergyStorage(2000000000, 2000000000, 2000000000);
+	
+	public int buf;
 	
 	//Thanks to the great people of Fusion Warfare for helping me with this part.
+	
+	public TileEntityConverterHeRf() {
+		super(0);
+	}
+	
+	@Override
+	public String getName() {
+		return "";
+	}
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
 
-			long convert = Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), power * 4);
-
-			power -= convert / 4;
-			storage.setEnergyStored((int) (storage.getEnergyStored() + convert));
+			storage.setCapacity((int)power * 4);
+			storage.setEnergyStored((int)power * 4);
 			
-			if(convert > 0)
-				this.markDirty();
+			buf = storage.getEnergyStored();
 			
 			for (EnumFacing dir : EnumFacing.VALUES) {
 				//Drillgon200: BlockPos is basically the location class, but without as much abstraction.
@@ -58,8 +67,24 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 					storage.extractEnergy(energyTransferred, false);
 				}
 			}
+			
+			power = storage.getEnergyStored() / 4;
+			NBTTagCompound data = new NBTTagCompound();
+			data.setInteger("rf", storage.getEnergyStored());
+			data.setInteger("maxrf", storage.getEnergyStored());
+			data.setLong("he", power);
+			data.setLong("maxhe", power);
+			this.networkPack(data, 25);
 		}
 		
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		storage.setEnergyStored(nbt.getInteger("rf"));
+		storage.setCapacity(nbt.getInteger("maxrf"));
+		power = nbt.getLong("he");
+		maxPower = nbt.getLong("maxhe");
 	}
 	
 	@Override
@@ -110,6 +135,8 @@ public class TileEntityConverterHeRf extends TileEntity implements ITickable, IC
 
 	@Override
 	public long getMaxPower() {
+		if(power < 1000000)
+			return 500000000;//Long.MAX_VALUE / 100;
 		return maxPower;
 	}
 	

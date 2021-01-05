@@ -3,11 +3,10 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
-import com.hbm.items.gear.JetpackBooster;
-import com.hbm.items.gear.JetpackBreak;
+import com.hbm.items.armor.JetpackBase;
 import com.hbm.items.gear.JetpackRegular;
-import com.hbm.items.gear.JetpackVectorized;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
@@ -290,24 +289,23 @@ public class ItemSyringe extends Item {
             }
 		}
 		
-		if (this == ModItems.jetpack_tank && (player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_boost || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_break || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_fly || player.inventory.armorInventory.get(2).getItem() == ModItems.jetpack_vector)) {
+		if(this == ModItems.jetpack_tank && player.inventory.armorInventory.get(2) != null && player.inventory.armorInventory.get(2).getItem() instanceof JetpackBase) {
 			if (!world.isRemote) {
 				ItemStack jetpack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-				int fill = JetpackRegular.getFuel(jetpack) + 1000;
+				JetpackBase jetItem = (JetpackBase) jetpack.getItem();
 
-				if (jetpack.getItem() == ModItems.jetpack_boost && fill > JetpackBooster.maxFuel)
-					fill = JetpackBooster.maxFuel;
-				if (jetpack.getItem() == ModItems.jetpack_break && fill > JetpackBreak.maxFuel)
-					fill = JetpackBreak.maxFuel;
-				if (jetpack.getItem() == ModItems.jetpack_fly && fill > JetpackRegular.maxFuel)
-					fill = JetpackRegular.maxFuel;
-				if (jetpack.getItem() == ModItems.jetpack_vector && fill > JetpackVectorized.maxFuel)
-					fill = JetpackVectorized.maxFuel;
+            	if(jetItem.fuel != ModForgeFluids.kerosene)
+            		return super.onItemRightClick(world, player, hand);
 
-				if (JetpackRegular.getFuel(jetpack) == fill)
+            	int fill = JetpackBase.getFuel(jetpack) + 1000;
+
+            	if(fill > jetItem.maxFuel)
+            		fill = jetItem.maxFuel;
+
+				if (JetpackBase.getFuel(jetpack) == fill)
 					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 
-				JetpackRegular.setFuel(jetpack, fill);
+				JetpackBase.setFuel(jetpack, fill);
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.jetpackTank, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				ItemStack stack = player.getHeldItem(hand);
 				stack.shrink(1);

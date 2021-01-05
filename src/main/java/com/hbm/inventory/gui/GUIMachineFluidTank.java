@@ -1,20 +1,26 @@
 package com.hbm.inventory.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineFluidTank;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.AuxButtonPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIMachineFluidTank extends GuiInfoContainer {
 
-	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_tank.png");
+	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_tank.png");
 	private TileEntityMachineFluidTank tank;
 
 	public GUIMachineFluidTank(InventoryPlayer invPlayer, TileEntityMachineFluidTank tedf) {
@@ -39,6 +45,15 @@ public class GUIMachineFluidTank extends GuiInfoContainer {
 	}
 
 	@Override
+	protected void mouseClicked(int x, int y, int mouseButton) throws IOException {
+		super.mouseClicked(x, y, mouseButton);
+		if(guiLeft + 151 <= x && guiLeft + 151 + 18 > x && guiTop + 35 < y && guiTop + 35 + 18 >= y) {
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(tank.getPos(), 0, 0));
+    	}
+	}
+	
+	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.tank.hasCustomInventoryName() ? this.tank.getInventoryName() : I18n.format(this.tank.getInventoryName());
 
@@ -54,10 +69,9 @@ public class GUIMachineFluidTank extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		if(tank.dna())
-			drawTexturedModalRect(guiLeft + 152, guiTop + 53, 176, 0, 16, 16);
+		int i = tank.mode;
+		drawTexturedModalRect(guiLeft + 151, guiTop + 34, 176, i * 18, 18, 18);
 
-		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		FFUtils.drawLiquid(tank.tank, this.guiLeft, this.guiTop, this.zLevel, 34, 52, 71, 97);
 		this.mc.getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft + 71, guiTop + 17, 0, 204, 34, 52);

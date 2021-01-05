@@ -63,7 +63,6 @@ public class MachineLargeTurbine extends BlockDummyable {
 			FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_machine_large_turbine, world, pos[0], pos[1], pos[2]);
 			return true;
 		} else {
-			player.sendMessage(new TextComponentString("" + state.getValue(META)));
 			return true;
 		}
 	}

@@ -69,7 +69,7 @@ public abstract class EntityWormBase extends EntityBurrowing {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-
+		System.out.println(source);
 		if(this.isEntityInvulnerable(source) || source == DamageSource.DROWN || source == DamageSource.IN_WALL ||
 				((source.getImmediateSource() instanceof EntityWormBase) && ((EntityWormBase) source.getImmediateSource()).uniqueWormID == this.uniqueWormID)) {
 			return false;
@@ -100,7 +100,7 @@ public abstract class EntityWormBase extends EntityBurrowing {
 		if(this.attackTick == 0) {
 			this.attackTick = 10;
 
-			attackEntitiesInList(this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(0.5D, 0.5D, 0.5D), Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e instanceof EntityLivingBase)));
+			attackEntitiesInList(this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.5D, 0.5D, 0.5D), Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e instanceof EntityLivingBase)));
 		}
 	}
 	
@@ -139,18 +139,6 @@ public abstract class EntityWormBase extends EntityBurrowing {
 	}
 	
 	public abstract float getAttackStrength(Entity paramsa);
-	
-	@Override
-	public void addVelocity(double x, double y, double z) {
-		// TODO Auto-generated method stub
-		super.addVelocity(x, y, z);
-	}
-	
-	@Override
-	public void faceEntity(Entity entityIn, float maxYawIncrease, float maxPitchIncrease) {
-		// TODO Auto-generated method stub
-		super.faceEntity(entityIn, maxYawIncrease, maxPitchIncrease);
-	}
 	
 	protected boolean isCourseTraversable() {
 		return (this.canFly) || (isEntityInsideOpaqueBlock());

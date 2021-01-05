@@ -13,6 +13,7 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
+import com.hbm.interfaces.IItemHUD;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.GunAnimationPacket;
@@ -21,8 +22,11 @@ import com.hbm.packet.GunFXPacket;
 import com.hbm.packet.GunFXPacket.FXType;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.anim.HbmAnimations.AnimType;
+import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -37,13 +41,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomModel {
+public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomModel, IItemHUD {
 
 	public GunConfiguration mainConfig;
 	public GunConfiguration altConfig;
@@ -82,6 +89,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 			if(hand != null) {
 				if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && world.isRemote) {
 					updateClient(stack, world, (EntityPlayer) entity, itemSlot, hand);
+					
 				} else {
 					updateServer(stack, world, (EntityPlayer) entity, itemSlot, hand);
 				}
@@ -110,19 +118,19 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 				m2 = false;
 			}
 			
-			if(left && !clickLeft) {
+			if(getIsMouseDown(stack) && !clickLeft) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 0, hand));
 				m1 = false;
 				endActionClient(stack, world, entity, true, hand);
 			}
 			
-			if(right && !clickRight) {
+			if(getIsAltDown(stack) && !clickRight) {
 				PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(false, (byte) 1, hand));
 				m2 = false;
 				endActionClient(stack, world, entity, false, hand);
 			}
 			
-			if(mainConfig.reloadType != mainConfig.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
+			if(mainConfig.reloadType != GunConfiguration.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
 				
 				if(Keyboard.isKeyDown(Keyboard.KEY_R) && getMag(stack) < mainConfig.ammoCap) {
 					PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 2, hand));
@@ -136,7 +144,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	}
 
 	protected void updateServer(ItemStack stack, World world, EntityPlayer player, int slot, EnumHand hand) {
-
 		if(getDelay(stack) > 0 && hand != null)
 			setDelay(stack, getDelay(stack) - 1);
 		
@@ -207,9 +214,11 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 				spawnProjectile(world, player, stack, BulletConfigSyncingUtil.getKey(config), hand);
 			}
 
-			setItemWear(stack, getItemWear(stack) + config.wear);
+			int wear = (int) Math.ceil(config.wear / (1F + EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack)));
+			setItemWear(stack, getItemWear(stack) + wear);
 		}
 		world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.firingSound, SoundCategory.PLAYERS, 1.0F, mainConfig.firingPitch);
+		
 	}
 
 	// unlike fire(), being called does not automatically imply success, some
@@ -613,5 +622,53 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	@Override
 	public ModelResourceLocation getResourceLocation() {
 		return new ModelResourceLocation(this.getRegistryName(), "inventory");
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void renderHUD(Pre event, ElementType type, EntityPlayer player, ItemStack stack, EnumHand hand) {
+		ItemGunBase gun = ((ItemGunBase) player.getHeldItem(hand).getItem());
+		GunConfiguration gcfg = gun.mainConfig;
+		if(event.getType() == ElementType.HOTBAR){
+			BulletConfiguration bcfg = BulletConfigSyncingUtil.pullConfig(gun.mainConfig.config.get(ItemGunBase.getMagType(player.getHeldItem(hand))));
+	
+			Item ammo = bcfg.ammo;
+			int count = ItemGunBase.getMag(player.getHeldItem(hand));
+			int max = gcfg.ammoCap;
+			boolean showammo = gcfg.showAmmo;
+	
+			if(gcfg.reloadType == GunConfiguration.RELOAD_NONE) {
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(hand), true);
+				count = ItemGunBase.getBeltSize(player, ammo);
+				max = -1;
+			}
+	
+			int dura = ItemGunBase.getItemWear(player.getHeldItem(hand)) * 50 / gcfg.durability;
+	
+			RenderScreenOverlay.renderAmmo(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, max, dura, hand, showammo);
+	
+			if(gun.altConfig != null && gun.altConfig.reloadType == GunConfiguration.RELOAD_NONE) {
+				Item oldAmmo = ammo;
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItemMainhand(), false);
+	
+				if(ammo != oldAmmo) {
+					count = ItemGunBase.getBeltSize(player, ammo);
+					RenderScreenOverlay.renderAmmoAlt(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ammo, count, hand);
+				}
+			}
+		}
+		if(event.getType() == ElementType.CROSSHAIRS && GeneralConfig.enableCrosshairs && !(hand == EnumHand.OFF_HAND && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon)){
+		
+			event.setCanceled(true);
+			if(((IHoldableWeapon) player.getHeldItem(hand).getItem()).hasCustomHudElement()){
+				((IHoldableWeapon) player.getHeldItem(hand).getItem()).renderHud(event.getResolution(), Minecraft.getMinecraft().ingameGUI, player.getHeldItemMainhand(), event.getPartialTicks());
+			} else {
+				if(!(gcfg.hasSights && player.isSneaking()))
+					RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, ((IHoldableWeapon) player.getHeldItem(hand).getItem()).getCrosshair());
+				else
+					RenderScreenOverlay.renderCustomCrosshairs(event.getResolution(), Minecraft.getMinecraft().ingameGUI, Crosshair.NONE);
+			}
+		}
+		
 	}
 }

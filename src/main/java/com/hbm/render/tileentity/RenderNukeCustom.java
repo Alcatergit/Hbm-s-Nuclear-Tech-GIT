@@ -2,26 +2,14 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderNukeCustom extends TileEntitySpecialRenderer<TileEntityNukeCustom> {
 
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/LilBoy1.obj");
-	private IModelCustom boyModel;
-    private ResourceLocation boyTexture;
-	
-	public RenderNukeCustom() {
-		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/CustomNuke.png");
-	}
-	
 	@Override
 	public boolean isGlobalRenderer(TileEntityNukeCustom te) {
 		return true;
@@ -50,8 +38,8 @@ public class RenderNukeCustom extends TileEntitySpecialRenderer<TileEntityNukeCu
 	        GL11.glTranslated(-2.0D, 0.0D, 0.0D); break;
 		}
 
-        bindTexture(boyTexture);
-        boyModel.renderAll();
+		bindTexture(ResourceManager.bomb_custom_tex);
+        ResourceManager.bomb_boy.renderAll();
         
         GlStateManager.enableCull();
         GL11.glPopMatrix();

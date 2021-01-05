@@ -2,6 +2,7 @@ package com.hbm.util;
 
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
+import java.util.Random;
 
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BobMathUtil {
 
 	public static Field r_viewMat;
+	public static Random rand = new Random();
 	
 	public static double getAngleFrom2DVecs(double x1, double z1, double x2, double z2) {
 
@@ -55,8 +57,8 @@ public class BobMathUtil {
 	
 	public static double getCrossAngle(Vec3 vel, Vec3 rel) {
 
-		vel.normalize();
-		rel.normalize();
+		vel = vel.normalize();
+		rel = rel.normalize();
 
 		double angle = Math.toDegrees(Math.acos(vel.dotProduct(rel)));
 
@@ -155,6 +157,22 @@ public class BobMathUtil {
 		return retArr;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public static Vec3d[] glWorldFromLocalNoView(Vector4f... positions){
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
+		Matrix4f mv_mat = new Matrix4f();
+		mv_mat.load(ClientProxy.AUX_GL_BUFFER);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		Vec3d[] retArr = new Vec3d[positions.length];
+		for(int i = 0; i < positions.length; i ++){
+			Vector4f pos = new Vector4f(positions[i].x, positions[i].y, positions[i].z, positions[i].w);
+			Matrix4f.transform(mv_mat, pos, pos);
+			Vec3d pos2 = new Vec3d(pos.x, pos.y, pos.z);
+			retArr[i] = pos2;
+		}
+		return retArr;
+	}
+	
 	//https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
 	//TODO See if I can replace with the more optimized looking version from glm?
 	public static void matrixFromQuat(Matrix3f m, Quat4f q){
@@ -190,5 +208,36 @@ public class BobMathUtil {
 			}
 		}
 		return idx;
+	}
+	
+	public static Vec3 randVecInCone(Vec3 coneDirection, float angle){
+		return randVecInCone(coneDirection, angle, rand);
+	}
+	
+	public static Vec3 randVecInCone(Vec3 coneDirection, float angle, Random rand){
+		//Gets a random vector rotated within a cone and then rotates it to the particle data's direction
+		//Create a new vector and rotate it randomly about the x axis within the angle specified, then rotate that by random degrees to get the random cone vector
+		Vec3 up = Vec3.createVectorHelper(0, 1, 0);
+		up.rotateAroundX((float) Math.toRadians(rand.nextFloat()*(angle+rand.nextFloat()*angle)));
+		up.rotateAroundY((float) Math.toRadians(rand.nextFloat()*360));
+		//Finds the angles for the particle direction and rotate our random cone vector to it.
+		Vec3 direction = Vec3.createVectorHelper(coneDirection.xCoord, coneDirection.yCoord, coneDirection.zCoord);
+		Vec3 angles = BobMathUtil.getEulerAngles(direction);
+		Vec3 newDirection = Vec3.createVectorHelper(up.xCoord, up.yCoord, up.zCoord);
+		newDirection.rotateAroundX((float) Math.toRadians(angles.yCoord-90));
+		newDirection.rotateAroundY((float) Math.toRadians(angles.xCoord));
+		return newDirection;
+	}
+	
+	public static Vec3d randVecInCone(Vec3d coneDirection, float angle){
+		return randVecInCone(new Vec3(coneDirection), angle).toVec3d();
+	}
+	
+	public static Vec3d randVecInCone(Vec3d coneDirection, float angle, Random rand){
+		return randVecInCone(new Vec3(coneDirection), angle, rand).toVec3d();
+	}
+	
+	public static Vec3d mix(Vec3d a, Vec3d b, float amount){
+		return new Vec3d(a.x + (b.x - a.x)*amount, a.y + (b.y - a.y)*amount, a.z + (b.z - a.z)*amount);
 	}
 }

@@ -1,6 +1,6 @@
 package com.hbm.render.tileentity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -10,18 +10,13 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.handler.HbmShaderManager;
 import com.hbm.handler.HbmShaderManager2;
+import com.hbm.handler.LightningGenerator;
+import com.hbm.handler.LightningGenerator.LightningGenInfo;
+import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.particle.lightning_test.TrailRenderer2;
-import com.hbm.physics.AABBCollider;
-import com.hbm.physics.Collider;
-import com.hbm.physics.GJK;
-import com.hbm.physics.GJK.GJKInfo;
-import com.hbm.physics.GJK.Result;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.misc.BeamPronter;
@@ -30,24 +25,21 @@ import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTester> {
+	
+	
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityObjTester te) {
@@ -56,6 +48,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
 	
 	@Override
 	public void render(TileEntityObjTester te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         GlStateManager.disableLighting();
@@ -98,33 +91,55 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.disableCull();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        bindTexture(ResourceManager.bfg_core_lightning);
-        ResourceManager.test_trail.use();
-        TrailRenderer2.draw(player, Arrays.asList(new Vec3d(0, 0, 0), new Vec3d(0, 1, 0), new Vec3d(1, 2, 0)), 0.2F);
-        HbmShaderManager2.releaseShader();
+        bindTexture(ResourceManager.turbofan_blades_tex);
+        /* LightningGenInfo l = new LightningGenInfo();
+        l.randAmount = 0.7F;
+        l.subdivisions = 3;
+        l.forkChance = 0.6F;
+	    LightningNode n = LightningGenerator.generateLightning(new Vec3d(0, 10, 0), new Vec3d(0, 0, 0), l);
+	    ResourceManager.test_trail.use();
+	    GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 1F, 1F, 1F, 1F);
+	    //TrailRenderer2.draw(player, Arrays.asList(new Vec3d(0, 0, 0), new Vec3d(0, 1, 0), new Vec3d(1, 2, 0)), 0.2F);
+	    int bruh3 = GL11.glGenLists(1);
+	    
+	    GL11.glNewList(bruh3, GL11.GL_COMPILE);
+	    
+	    LightningGenerator.render(n, player, 0.05F);
+	    
+	    GL11.glEndList();
+	    
+	    GL11.glCallList(bruh3);
+	    
+	    HbmShaderManager2.bloomData.bindFramebuffer(false);
+	    float mult = 1F;
+	    GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 0.6F*mult, 0.8F*mult, 1F*mult, 1F);
+	    GL11.glCallList(bruh3);
+	    GL11.glCallList(bruh3);
+	    GL11.glCallList(bruh3);
+	    Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+	    HbmShaderManager2.releaseShader();
+	    GL11.glDeleteLists(bruh3, 1);*/
+	   
         GlStateManager.enableCull();
         GlStateManager.disableBlend();
         
         GL11.glPopMatrix();
         
-        
 		GL11.glRotatef(-90, 0, 1, 0);
         GL11.glTranslated(0, 3, 0);
-        GL11.glScaled(0.1, 0.1, 0.1);
         //Drillgon200: The thing is dead.
         bindTexture(ResourceManager.bobkotium_tex);
         ResourceManager.nikonium.renderAll();
-        HbmShaderManager2.bloomData.bindFramebuffer(false);
+        /*HbmShaderManager2.bloomData.bindFramebuffer(false);
         ResourceManager.bloom_test.use();
         ResourceManager.nikonium.renderAll();
         float aeug = (float) Math.sin((te.getWorld().getTotalWorldTime()+partialTicks)*0.15)*0.5F+0.65F;
         float aeug2 = (float) Math.sin((te.getWorld().getTotalWorldTime()+partialTicks)*0.15+0.2)*0.5F+0.65F;
         GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 1F*aeug, 0.2F*aeug2, 0, 1);
         GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 2F*aeug, 1.3F*aeug, 1*aeug, 1);
-        GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 0F, 1.2F, 0, 1);
+       // GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 0F, 1F, 0, 1);
         HbmShaderManager2.releaseShader();
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
-        GL11.glScaled(10, 10, 10);
+        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);*/
         GL11.glTranslated(0, -3, 0);
         GL11.glRotatef(90, 0, 1, 0);
 
@@ -149,6 +164,9 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.depthMask(true);
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
+        
+        GL11.glTranslated(0, 2, 0);
+        bindTexture(ResourceManager.turbofan_blades_tex);
 
         GL11.glPopMatrix();
         

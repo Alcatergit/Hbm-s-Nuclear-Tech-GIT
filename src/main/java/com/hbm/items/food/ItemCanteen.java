@@ -30,7 +30,7 @@ public class ItemCanteen extends Item {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (stack.getItemDamage() > 0)
+		if (stack.getItemDamage() > 0 && entityIn.ticksExisted % 20 == 0)
 			stack.setItemDamage(stack.getItemDamage() - 1);
 	}
 	
@@ -44,6 +44,13 @@ public class ItemCanteen extends Item {
 		if (this == ModItems.canteen_vodka) {
 			entityLiving.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10 * 20, 0));
 			entityLiving.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * 20, 2));
+		}
+		if (this == ModItems.canteen_fab) {
+			entityLiving.heal(10F);
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 15 * 20, 0));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 60 * 20, 2));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 60 * 20, 2));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60 * 20, 1));
 		}
 
 		return stack;
@@ -91,6 +98,11 @@ public class ItemCanteen extends Item {
     			tooltip.add("Time to get hammered & sickled!");
     		else
     			tooltip.add("Smells like disinfectant, tastes like disinfectant.");
+    	}
+    	if(this == ModItems.canteen_fab)
+    	{
+    		tooltip.add("Cooldown: 2 minutes");
+    		tooltip.add("Engages the fab drive");
     	}
 	}
 }

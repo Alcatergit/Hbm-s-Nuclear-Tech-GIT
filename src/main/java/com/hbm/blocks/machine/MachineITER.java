@@ -1,5 +1,7 @@
 package com.hbm.blocks.machine;
 
+import java.util.Random;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
@@ -14,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +40,7 @@ public class MachineITER extends BlockDummyable {
 		if(meta >= 12)
 			return new TileEntityITER();
 		if(meta >= 6)
-			return new TileEntityProxyCombo(false, true, true);
+			return new TileEntityProxyCombo(true, true, true);
 		return null;
 	}
 
@@ -248,6 +251,11 @@ public class MachineITER extends BlockDummyable {
 	@Override
 	public int getOffset() {
 		return 7;
+	}
+	
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return Items.AIR;
 	}
 
 }

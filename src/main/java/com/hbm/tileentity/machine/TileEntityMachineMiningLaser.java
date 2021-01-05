@@ -311,6 +311,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			Item.getItemFromBlock(Blocks.SAND),
 			Item.getItemFromBlock(Blocks.SANDSTONE),
 			Item.getItemFromBlock(Blocks.GRAVEL),
+			Item.getItemFromBlock(ModBlocks.stone_gneiss),
 			Items.FLINT,
 			Items.SNOWBALL,
 			Items.WHEAT_SEEDS

@@ -253,15 +253,8 @@ public class RigidBody {
 	}
 	
 	public void updateOrientation(){
-		//System.out.println("0");
-		//System.out.println(rotation);
 		Quat4f quat = new Quat4f();
 		float epsilon = 0.00001F;
-		float why = rotation.m00 + rotation.m11 + rotation.m22 + 1.0f;
-		//F-F-F-F-Floating point errors!
-		if(why < 0 && Math.abs(why) < epsilon){
-			//rotation.m11 -= why;
-		}
 		//quat.set(rotation);
 		setFromMat(quat, rotation);
 		quat.normalize();

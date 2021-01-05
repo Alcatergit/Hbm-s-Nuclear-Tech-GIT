@@ -1,10 +1,12 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,64 +27,34 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineFluidTank extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineFluidTank extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
-	public ItemStackHandler inventory;
-
-	// public static final int maxFill = 64 * 3;
 	public FluidTank tank;
 
-	//private static final int[] slots_top = new int[] { 0 };
-	//private static final int[] slots_bottom = new int[] { 0 };
-	//private static final int[] slots_side = new int[] { 0 };
+	public short mode = 0;
+	public static final short modes = 4;
 	public int age = 0;
-	public boolean needsUpdate = false;
-	
-	private String customName;
 	
 	public TileEntityMachineFluidTank() {
-		inventory = new ItemStackHandler(7){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(6);
 		tank = new FluidTank(256000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.fluidtank";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
-		}
+	public String getName() {
+		return "container.fluidtank";
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		tank.readFromNBT(compound);
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		mode = compound.getShort("mode");
 		super.readFromNBT(compound);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		tank.writeToNBT(compound);
-		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setShort("mode", mode);
 		return super.writeToNBT(compound);
 	}
 	
@@ -94,39 +66,48 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 				age = 0;
 			}
 
-			if ((age == 9 || age == 19))
-				if (dna()) {
-					fillFluidInit();
-				}
-			if (needsUpdate) {
-				needsUpdate = false;
-			}
-			PacketDispatcher.wrapper.sendToAllTracking(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-
+			if ((mode == 1 || mode == 2) && (age == 9 || age == 19))
+				fillFluidInit();
+			
 			FFUtils.fillFromFluidContainer(inventory, tank, 2, 3);
 			FFUtils.fillFluidContainer(inventory, tank, 4, 5);
-
+			
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.amat) {
+				world.destroyBlock(pos, false);
+				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
+			}
+			
+			PacketDispatcher.wrapper.sendToAllTracking(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+			NBTTagCompound data = new NBTTagCompound();
+			data.setShort("mode", mode);
+			this.networkPack(data, 50);
+			
 			detectAndSendChanges();
 		}
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		mode = nbt.getShort("mode");
+	}
+	
+	@Override
+	public void handleButtonPacket(int value, int meta) {
+		mode = (short) ((mode + 1) % modes);
+		markDirty();
 	}
 
 	private void fillFluidInit() {
 		if (tank.getFluid() != null) {
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 18000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 18000);
+			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 64000);
+			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 64000);
 		}
-	}
-
-	public boolean dna() {
-		if (inventory.getStackInSlot(6).getItem() == ModItems.fuse || inventory.getStackInSlot(6).getItem() == ModItems.screwdriver)
-			return true;
-		return false;
 	}
 
 	@Override
@@ -145,7 +126,6 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 	private void detectAndSendChanges() {
 		boolean mark = false;
 		if(!FFUtils.areTanksEqual(tank, detectTank)){
-			needsUpdate = true;
 			mark = true;
 			detectTank = FFUtils.copyTank(tank);
 		}
@@ -187,7 +167,10 @@ public class TileEntityMachineFluidTank extends TileEntity implements ITickable,
 	
 	public boolean canFill(Fluid fluid) {
 		if (!this.world.isRemote) {
-			return !this.dna();
+			if(mode == 2 || mode == 3 || (tank.getFluid() != null && tank.getFluid().getFluid() != fluid))
+				return false;
+			else
+				return true;
 		}
 		return false;
 	}

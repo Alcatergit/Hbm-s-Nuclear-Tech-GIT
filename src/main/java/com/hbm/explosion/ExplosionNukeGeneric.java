@@ -17,6 +17,7 @@ import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
+import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -29,7 +30,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -43,6 +43,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -122,72 +123,69 @@ public class ExplosionNukeGeneric {
 		}
 	}
 	
-	public static void dealDamage(World world, int x, int y, int z, int bombStartStrength) {
-		float f = bombStartStrength;
-		int i;
-		int j;
-		int k;
-		double d5;
-		double d6;
-		double d7;
-		double wat = bombStartStrength;
+	public static void dealDamage(World world, double x, double y, double z, double radius) {
+		dealDamage(world, x, y, z, radius, 250F);
+	}
 
-		// bombStartStrength *= 2.0F;
-		i = MathHelper.floor(x - wat - 1.0D);
-		j = MathHelper.floor(x + wat + 1.0D);
-		k = MathHelper.floor(y - wat - 1.0D);
-		int i2 = MathHelper.floor(y + wat + 1.0D);
-		int l = MathHelper.floor(z - wat - 1.0D);
-		int j2 = MathHelper.floor(z + wat + 1.0D);
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-		for (int i1 = 0; i1 < list.size(); ++i1) {
-			Entity entity = (Entity) list.get(i1);
-			double d4 = entity.getDistance(x, y, z) / bombStartStrength;
+	public static void dealDamage(World world, double x, double y, double z, double radius, float maxDamage) {
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(x, y, z, x, y, z).grow(radius, radius, radius));
 
-			if (d4 <= 1.0D) {
-				d5 = entity.posX - x;
-				d6 = entity.posY + entity.getEyeHeight() - y;
-				d7 = entity.posZ - z;
-				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if(!Library.isObstructed(world, x+0.5, y+0.5, z+0.5, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ))
-				if (d9 < wat && !(entity instanceof EntityOcelot) &&
-						!(entity instanceof EntityNukeCloudSmall)
-						&& !(entity instanceof EntityMIRV) && !(entity instanceof EntityMiniNuke)
-						&& !(entity instanceof EntityMiniMIRV) && !(entity instanceof EntityGrenadeASchrab)
-						&& !(entity instanceof EntityGrenadeNuclear) 
-						&& !(entity instanceof EntityExplosiveBeam)
-						&& !(entity instanceof EntityBulletBase) 
-						&& !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))
-						{
-					d5 /= d9;
-					d6 /= d9;
-					d7 /= d9;
-					// double d10 = (double)world.getBlockDensity(vec3,
-					// entity.boundingBox);
-					// if(d10 > 0) isOccupied = true;
-					double d11 = (1.0D - d4);// * d10;
-					if (!(entity instanceof EntityPlayerMP) || !(entity instanceof EntityPlayerMP
-							&& ((EntityPlayerMP) entity).capabilities.isCreativeMode)) {
-						// entity.attackEntityFrom(DamageSource.generic,
-						// ((int)((d11 * d11 + d11) / 2.0D * 8.0D *
-						// bombStartStrength + 1.0D)));
-						double damage = entity.getDistance(x, y, z) / bombStartStrength * 250;
-						entity.attackEntityFrom(ModDamageSource.nuclearBlast, (float)damage);
-						entity.setFire(5);
-						double d8 = 1.0;
-						if(entity instanceof EntityLivingBase)
-							d8 = EnchantmentProtection.getBlastDamageReduction((EntityLivingBase)entity, d11);
-						entity.motionX += d5 * d8 * 0.2D;
-						entity.motionY += d6 * d8 * 0.2D;
-						entity.motionZ += d7 * d8 * 0.2D;
-					}
+		for(Entity e : list) {
+
+			double dist = e.getDistance(x, y, z);
+
+			if(dist <= radius) {
+
+				double entX = e.posX;
+				double entY = e.posY + e.getEyeHeight();
+				double entZ = e.posZ;
+
+				if(!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
+
+					double damage = maxDamage * (radius - dist) / radius;
+					e.attackEntityFrom(ModDamageSource.nuclearBlast, (float)damage);
+					e.setFire(5);
+
+					double knockX = e.posX - x;
+					double knockY = e.posY + e.getEyeHeight() - y;
+					double knockZ = e.posZ - z;
+
+					Vec3d knock = new Vec3d(knockX, knockY, knockZ);
+					knock = knock.normalize();
+
+					e.motionX += knock.x * 0.2D;
+					e.motionY += knock.y * 0.2D;
+					e.motionZ += knock.z * 0.2D;
 				}
 			}
 		}
 
-		bombStartStrength = (int) f;
 	}
 
+	@Spaghetti("just look at it")
+	private static boolean isExplosionExempt(Entity e) {
+
+		if (e instanceof EntityOcelot ||
+				e instanceof EntityNukeCloudSmall ||
+				e instanceof EntityMIRV ||
+				e instanceof EntityMiniNuke ||
+				e instanceof EntityMiniMIRV ||
+				e instanceof EntityGrenadeASchrab ||
+				e instanceof EntityGrenadeNuclear ||
+				e instanceof EntityExplosiveBeam ||
+				e instanceof EntityBulletBase ||
+				e instanceof EntityPlayer &&
+				ArmorUtil.checkArmor((EntityPlayer) e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+			return true;
+		}
+
+		if (e instanceof EntityPlayerMP && (((EntityPlayerMP)e).isCreative() || ((EntityPlayerMP)e).isSpectator())) {
+			return true;
+		}
+
+		return false;
+	}
+	
 	public static void succ(World world, int x, int y, int z, int radius) {
 		int i;
 		int j;
@@ -489,6 +487,15 @@ public class ExplosionNukeGeneric {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
 				} else {
 					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+				}
+			}
+			
+			else if (b == ModBlocks.ore_gneiss_uranium) {
+				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
+				if (rand == 1) {
+					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+				} else {
+					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				}
 			}
 

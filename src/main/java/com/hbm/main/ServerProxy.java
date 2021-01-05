@@ -2,11 +2,13 @@ package com.hbm.main;
 
 import java.io.File;
 
+import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.sound.AudioWrapper;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -47,6 +49,13 @@ public class ServerProxy
 	
 	public boolean opengl33(){
 		return true;//Doesn't matter for servers, and this won't print an error message.
+	}
+	
+	public boolean getIsKeyPressed(EnumKeybind key) {
+		return false;
+	}
+	public EntityPlayer me() {
+		return null;
 	}
 	
 	public float partialTicks(){

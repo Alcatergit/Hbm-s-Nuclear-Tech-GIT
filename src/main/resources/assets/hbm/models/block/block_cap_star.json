@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/block_cap_star_top",
+		"side": "hbm:blocks/block_cap_star"
+	}
+}

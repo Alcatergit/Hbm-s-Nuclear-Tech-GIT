@@ -129,6 +129,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(GunFXPacket.Handler.class, GunFXPacket.class, i++, Side.CLIENT);
 		//Handles custom death animations (like the gluon gun disintegration effect)
 		wrapper.registerMessage(PacketSpecialDeath.Handler.class, PacketSpecialDeath.class, i++, Side.CLIENT);
+		//Universal keybind packet
+		wrapper.registerMessage(KeybindPacket.Handler.class, KeybindPacket.class, i++, Side.SERVER);
 		//DELETE LATER
 		//wrapper.registerMessage(PacketCreatePhysTree.Handler.class, PacketCreatePhysTree.class, i++, Side.CLIENT);
 	}

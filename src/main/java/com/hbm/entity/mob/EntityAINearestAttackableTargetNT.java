@@ -45,7 +45,7 @@ public class EntityAINearestAttackableTargetNT extends EntityAITarget {
 			return false;
 		}
 		double range = getTargetDistance();
-		List targets = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().expand(range, range, range), this.targetEntitySelector);
+		List targets = this.taskOwner.world.getEntitiesWithinAABB(this.targetClass, this.taskOwner.getEntityBoundingBox().grow(range, range, range), this.targetEntitySelector);
 		Collections.sort(targets, this.theNearestAttackableTargetSorter);
 
 		if(targets.isEmpty()) {

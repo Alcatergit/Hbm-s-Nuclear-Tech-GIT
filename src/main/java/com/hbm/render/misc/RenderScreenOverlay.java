@@ -95,8 +95,10 @@ public class RenderScreenOverlay {
 
 	
 	public static void renderCustomCrosshairs(ScaledResolution resolution, Gui gui, Crosshair cross) {
-		if(cross == Crosshair.NONE)
+		if(cross == Crosshair.NONE) {
+			Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 			return;
+		}
 		
 		int size = cross.size;
 
@@ -111,7 +113,7 @@ public class RenderScreenOverlay {
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 	}
 	
-	public static void renderAmmo(ScaledResolution resolution, Gui gui, Item ammo, int count, int max, int dura, EnumHand hand) {
+	public static void renderAmmo(ScaledResolution resolution, Gui gui, Item ammo, int count, int max, int dura, EnumHand hand, boolean renderCount) {
 		
 		GL11.glPushMatrix();
         
@@ -127,6 +129,7 @@ public class RenderScreenOverlay {
 		
 		String cap = max == -1 ? ("∞") : ("" + max);
 		
+		//if(renderCount)
 		Minecraft.getMinecraft().fontRenderer.drawString(count + " / " + cap, pX + 16, pZ + 6, 0xFFFFFF);
 
         GlStateManager.disableBlend();

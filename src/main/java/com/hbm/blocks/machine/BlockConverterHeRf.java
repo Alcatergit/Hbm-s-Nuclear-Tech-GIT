@@ -17,6 +17,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class BlockConverterHeRf extends BlockContainer {
@@ -45,7 +46,10 @@ public class BlockConverterHeRf extends BlockContainer {
 			TileEntityConverterHeRf entity = (TileEntityConverterHeRf) world.getTileEntity(pos);
 			if(entity != null)
 			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_converter_he_rf, world, pos.getX(), pos.getY(), pos.getZ());
+				player.sendMessage(new TextComponentString("Note: Buffer may not accuratly represent current conversion rate, keep tact rates in mind."));
+				player.sendMessage(new TextComponentString("HE: " + (entity.buf / 4)));
+				player.sendMessage(new TextComponentString("RF: " + entity.buf));
+				//FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_converter_he_rf, world, x, y, z);
 			}
 			return true;
 		} else {

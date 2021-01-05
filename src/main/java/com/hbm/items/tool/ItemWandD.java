@@ -6,13 +6,11 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-import com.hbm.physics.ParticlePhysicsBlocks;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.world.generator.CellularDungeonFactory;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -84,7 +82,7 @@ public class ItemWandD extends Item {
 			blocks[4] = blocks[2].south();
 			blocks[5] = blocks[2].east();
 			blocks[6] = blocks[2].west();
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(world, pos.getX(), pos.getY(), pos.getZ(), blocks[0], blocks));
+			//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(world, pos.getX(), pos.getY(), pos.getZ(), blocks[0], blocks));
 		}
 		if(b == ModBlocks.fluid_duct_mk2){
 			System.out.println("client: " + world.isRemote + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork() + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork().size());

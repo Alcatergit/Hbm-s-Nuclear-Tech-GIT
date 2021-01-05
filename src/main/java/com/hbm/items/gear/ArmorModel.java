@@ -8,6 +8,7 @@ import com.hbm.render.RenderHelper;
 import com.hbm.render.model.ModelCloak;
 import com.hbm.render.model.ModelGasMask;
 import com.hbm.render.model.ModelGoggles;
+import com.hbm.render.model.ModelHat;
 import com.hbm.render.model.ModelM65;
 
 import net.minecraft.client.Minecraft;
@@ -39,6 +40,8 @@ public class ArmorModel extends ItemArmor {
 	private ModelOxygenMask modelOxy;*/
 	@SideOnly(Side.CLIENT)
 	private ModelM65 modelM65;
+	@SideOnly(Side.CLIENT)
+	private ModelHat modelHat;
 	
 	private ResourceLocation goggleBlur0 = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_goggles_0.png");
 	private ResourceLocation goggleBlur1 = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_goggles_1.png");
@@ -115,6 +118,9 @@ public class ArmorModel extends ItemArmor {
 		if (this == ModItems.cape_nostalgia) {
 			return armorType == 1;
 		}*/
+		if (this == ModItems.hat) {
+			return armorType == EntityEquipmentSlot.HEAD;
+		}
 		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
@@ -169,6 +175,14 @@ public class ArmorModel extends ItemArmor {
 				return this.modelCloak;
 			}
 		}*/
+		if (this == ModItems.hat) {
+			if (armorSlot == EntityEquipmentSlot.HEAD) {
+				if (this.modelHat == null) {
+					this.modelHat = new ModelHat(0);
+				}
+				return this.modelHat;
+			}
+		}
 		return null;
 	}
 	

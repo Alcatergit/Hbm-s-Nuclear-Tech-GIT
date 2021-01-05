@@ -26,6 +26,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,7 +58,7 @@ public class BlockOre extends Block {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		if(this == ModBlocks.ore_asbestos)
+		if(this == ModBlocks.ore_asbestos || this == ModBlocks.ore_gneiss_asbestos)
 		{
 			return ModItems.ingot_asbestos;
 		}
@@ -79,7 +80,7 @@ public class BlockOre extends Block {
 		if(this == ModBlocks.ore_lignite){
 			return ModItems.lignite;
 		}
-		if(this == ModBlocks.ore_rare)
+		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare)
 		{
 			switch(rand.nextInt(6)) {
 			case 0: return ModItems.fragment_actinium;
@@ -201,7 +202,7 @@ public class BlockOre extends Block {
 		if(this == ModBlocks.ore_fluorite){
 			return 2 + rand.nextInt(3);
 		}
-		if(this == ModBlocks.ore_rare){
+		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare){
 			return 4 + rand.nextInt(8);
 		}
 		if(this == ModBlocks.block_meteor_broken)

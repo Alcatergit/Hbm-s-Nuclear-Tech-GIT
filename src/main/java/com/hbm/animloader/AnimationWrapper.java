@@ -16,6 +16,7 @@ public class AnimationWrapper {
 	float speedScale = 1;
 	boolean reverse;
 	EndResult endResult = EndResult.END;
+	int prevFrame = 0;
 	
 	public AnimationWrapper(Animation a){
 		this.anim = a;

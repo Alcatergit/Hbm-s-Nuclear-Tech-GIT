@@ -29,12 +29,16 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
+		TileEntityMachineBoiler dud = diFurnace;
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 16, 52, diFurnace.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, diFurnace.tanks[1]);
+		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoiler)
+			dud = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 102, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) diFurnace.heat / 100D)) + "°C" });
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 97, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) diFurnace.burnTime / 20D))) + "s" });
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 16, 52, dud.tanks[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, dud.tanks[1]);
+
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 102, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) dud.heat / 100D)) + "°C" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 97, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) dud.burnTime / 20D))) + "s" });
 
 		String[] text = new String[] { "Heat produced:", "  0.5°C/t", "  or 10°C/s", "Heat consumed:", "  0.15°C/t", "  or 3.0°C/s (base)", "  0.25°C/t", "  or 5.0°C/t (once boiling point is reached)", "  0.4°C/t", "  or 8.0°C/t (for every subsequent multiple of boiling point)" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);

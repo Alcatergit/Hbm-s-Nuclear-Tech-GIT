@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "hbm:block_cap_star" },
+        "axis=z": { "model": "hbm:block_cap_star", "x": 90 },
+        "axis=x": { "model": "hbm:block_cap_star", "x": 90, "y": 90 }
+    }
+}

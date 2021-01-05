@@ -1,0 +1,25 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "hbm:dungeon_chain",
+		"textures": {
+			"chain": "hbm:blocks/chain"
+		}
+	},
+	"variants": {
+		"wall": {
+			"true": { "model": "hbm:dungeon_chain_wall" },
+			"false": { "model": "hbm:dungeon_chain" }
+		},
+		"end": {
+			"true": { "textures": { "chain": "hbm:blocks/chain_end" } },
+			"false": { "textures": { "chain": "hbm:blocks/chain" } }
+		},
+		"facing": {
+			"north": { },
+     	   		"south": { "y": 180 },
+      	  		"west":  { "y": 270 },
+      			"east":  { "y": 90 }
+		}
+	}
+}

@@ -2,29 +2,17 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.bomb.TileEntityNukeGadget;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderNukeGadget extends TileEntitySpecialRenderer<TileEntityNukeGadget> {
-
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/TheGadget3.obj");
-	private IModelCustom gadgetModel;
-    private ResourceLocation gadgetTexture;
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityNukeGadget te) {
 		return true;
-	}
-	
-	public RenderNukeGadget() {
-		gadgetModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		gadgetTexture = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_tex.png");
 	}
 	
 	@Override
@@ -46,9 +34,9 @@ public class RenderNukeGadget extends TileEntitySpecialRenderer<TileEntityNukeGa
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(gadgetTexture);
-        gadgetModel.renderAll();
-
+		bindTexture(ResourceManager.bomb_gadget_tex);
+        ResourceManager.bomb_gadget.renderAll();
+        
         GlStateManager.enableCull();
         GL11.glPopMatrix();
 	}

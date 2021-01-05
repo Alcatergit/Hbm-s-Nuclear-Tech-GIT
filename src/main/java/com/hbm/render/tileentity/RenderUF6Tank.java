@@ -2,25 +2,13 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderUF6Tank extends TileEntitySpecialRenderer<TileEntityMachineUF6Tank> {
-
-	private static final ResourceLocation tankModel = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/tank.obj");
-	private IModelCustom tankModelC;
-    private ResourceLocation tankTexture;
-	
-	public RenderUF6Tank() {
-		tankModelC = AdvancedModelLoader.loadModel(tankModel);
-		tankTexture = new ResourceLocation(RefStrings.MODID, "textures/models/UF6Tank.png");
-	}
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityMachineUF6Tank te) {
@@ -44,8 +32,8 @@ public class RenderUF6Tank extends TileEntitySpecialRenderer<TileEntityMachineUF
 			GL11.glRotatef(0, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(tankTexture);
-        tankModelC.renderAll();
+		bindTexture(ResourceManager.uf6_tex);
+        ResourceManager.tank.renderAll();
 
         GL11.glPopMatrix();
 	}

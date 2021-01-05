@@ -3,7 +3,6 @@ package com.hbm.blocks.test;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.interfaces.IBomb;
-import com.hbm.physics.PhysicsTestParticle;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.block.BlockContainer;
@@ -13,7 +12,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -91,7 +89,7 @@ public class TestObjTester extends BlockContainer implements IBomb {
     				});*/
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5));
     		try {
-    			Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 3));
+    			//Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 3));
     		}catch (Exception x){
     			x.printStackTrace();
     		}
@@ -153,7 +151,7 @@ public class TestObjTester extends BlockContainer implements IBomb {
     			//((TileEntityObjTester)te).fireAge = 0;
     		}
     		try {
-    			Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 5.55));
+    			//Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 5.55));
     		}catch (Exception x){
     			x.printStackTrace();
     		}

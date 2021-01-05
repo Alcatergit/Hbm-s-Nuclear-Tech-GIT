@@ -110,7 +110,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
         if(age >= 50 && age < 150) {
     		GL11.glPushMatrix();
     		
-    		if(cloud.getDataManager().get(EntityNukeCloudSmall.SOMETHING) == 1)
+    		if(cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1)
     			GL11.glColor4f(0.2F, 0.7F, 0.0F, 0.9F);
     		else
     			GL11.glColor4f(0.4F, 0.15F, 0.0F, 0.9F);
@@ -205,7 +205,7 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
 	//Drillgon200: Who is the other guy??? There's a whole conversation in here
 	@Override
 	protected ResourceLocation getEntityTexture(EntityNukeCloudSmall entity) {
-		if(entity.getDataManager().get(EntityNukeCloudSmall.SOMETHING) == 1)
+		if(entity.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1)
 			return ResourceManager.balefire;
 		return ResourceManager.fireball;
 	}

@@ -1,5 +1,7 @@
 package com.hbm.main;
 
+import org.apache.logging.log4j.Level;
+
 import com.hbm.lib.RefStrings;
 
 import net.minecraft.advancements.Advancement;
@@ -82,6 +84,14 @@ public class AdvancementManager {
 	public static Advancement bobOil;
 	public static Advancement bobNuclear;
 	public static Advancement bobHidden;
+	public static Advancement achStratum;
+	public static Advancement achMeltdown;
+	public static Advancement achOmega12;
+	
+	public static Advancement bossCreeper;
+	public static Advancement bossMeltdown;
+	public static Advancement bossMaskman;
+	public static Advancement bossWorm;
 
 	public static void init(MinecraftServer serv){
 		net.minecraft.advancements.AdvancementManager adv = serv.getAdvancementManager();
@@ -104,9 +114,21 @@ public class AdvancementManager {
 		soyuz = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "soyuz"));
 		achRadPoison = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achradpoison"));
 		achRadDeath = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achraddeath"));
+		achStratum = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achstratum"));
+		achMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achmeltdown"));
+		achOmega12 = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achomega12"));
+		
+		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
+		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));
+		bossMaskman = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmaskman"));
+		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossworm"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){
+		if(a == null){
+			MainRegistry.logger.log(Level.ERROR, "Failed to grant null advancement! This should never happen.");
+			return;
+		}
 		for(String s : player.getAdvancements().getProgress(a).getRemaningCriteria()){
 			player.getAdvancements().grantCriterion(a, s);
 		}

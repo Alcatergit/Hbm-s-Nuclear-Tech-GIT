@@ -267,6 +267,16 @@ public class OreDictManager {
 		OreDictionary.registerOre("blockGlassYellow", ModBlocks.glass_uranium);
 		OreDictionary.registerOre("blockGlassLime", ModBlocks.glass_trinitite);
 		OreDictionary.registerOre("blockGlassRed", ModBlocks.glass_polonium);
+		
+		OreDictionary.registerOre("oreIron", ModBlocks.ore_gneiss_iron);
+		OreDictionary.registerOre("oreGold", ModBlocks.ore_gneiss_gold);
+		OreDictionary.registerOre("oreUranium", ModBlocks.ore_gneiss_uranium);
+		OreDictionary.registerOre("oreUranium", ModBlocks.ore_gneiss_uranium_scorched);
+		OreDictionary.registerOre("oreCopper", ModBlocks.ore_gneiss_copper);
+		OreDictionary.registerOre("oreAsbestos", ModBlocks.ore_gneiss_asbestos);
+		OreDictionary.registerOre("oreLithium", ModBlocks.ore_gneiss_lithium);
+		OreDictionary.registerOre("oreRareEarth", ModBlocks.ore_gneiss_rare);
+		OreDictionary.registerOre("oreSchrabidium", ModBlocks.ore_gneiss_schrabidium);
 	}
 
 }

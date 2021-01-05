@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -16,7 +17,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemOilDetector extends Item {
@@ -30,8 +33,8 @@ public class ItemOilDetector extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Right click to scan for oil.");
-		tooltip.add("Scanner can only detect larger deposits!");
+		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc1"));
+		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc2"));
 	}
 	
 	@Override
@@ -89,14 +92,14 @@ public class ItemOilDetector extends Item {
 		if(direct)
 			oil = true;
 		
-		if(world.isRemote)
-		{
-			if(oil) {
-				player.sendMessage(new TextComponentTranslation("Oil deposit detected!"));
-				if(direct)
-					player.sendMessage(new TextComponentTranslation("Oil deposit directly below!"));
+		if(!world.isRemote) {
+			
+			if(direct) {
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseye").setStyle(new Style().setColor(TextFormatting.DARK_GREEN)));
+			} else if(oil) {
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detected").setStyle(new Style().setColor(TextFormatting.GOLD)));
 			} else {
-				player.sendMessage(new TextComponentTranslation("No oil detected."));
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".noOil").setStyle(new Style().setColor(TextFormatting.RED)));
 			}
 		}
 

@@ -125,7 +125,7 @@ public class ModelT45Helmet extends ModelBiped {
 			this.helmet.render(par7);
 			GL11.glPopMatrix();
 		}
-
+		
 		protected void convertToChild(ModelRenderer parParent, ModelRenderer parChild) {
 			// move child rotation point to be relative to parent
 			parChild.rotationPointX -= parParent.rotationPointX;

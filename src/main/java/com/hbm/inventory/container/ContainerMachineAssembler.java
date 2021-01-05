@@ -14,43 +14,39 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineAssembler extends Container {
 
-private TileEntityMachineAssembler nukeBoy;
-
-	private int progress;
-	private int maxProgress;
+	private TileEntityMachineAssembler assembler;
 	
-	public ContainerMachineAssembler(InventoryPlayer invPlayer, TileEntityMachineAssembler tedf) {
-		progress = 0;
-		nukeBoy = tedf;
+	public ContainerMachineAssembler(InventoryPlayer invPlayer, TileEntityMachineAssembler te) {
+		assembler = te;
 
 		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 18));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 0, 80, 18));
 		//Upgrades
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 152, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 152, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 152, 54));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 1, 152, 18));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 2, 152, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 3, 152, 54));
 		//Schematic
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 80, 54){
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 4, 80, 54){
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack != null && stack.getItem() instanceof ItemAssemblyTemplate;
 			};
 		});
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 134, 90));
+		this.addSlotToContainer(new SlotMachineOutput(te.inventory, 5, 134, 90));
 		//Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 8, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 26, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 8, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 26, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 8, 54));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 26, 54));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 8, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 13, 26, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 8, 90));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 15, 26, 90));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 16, 8, 108));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 17, 26, 108));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 6, 8, 18));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 7, 26, 18));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 8, 8, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 9, 26, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 10, 8, 54));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 11, 26, 54));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 12, 8, 72));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 13, 26, 72));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 14, 8, 90));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 15, 26, 90));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 16, 8, 108));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 17, 26, 108));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -102,41 +98,7 @@ private TileEntityMachineAssembler nukeBoy;
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return nukeBoy.isUseableByPlayer(player);
+		return assembler.isUseableByPlayer(player);
 	}
 	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			
-			if(this.progress != this.nukeBoy.progress)
-			{
-				par1.sendWindowProperty(this, 1, this.nukeBoy.progress);
-			}
-			
-			if(this.maxProgress != this.nukeBoy.maxProgress)
-			{
-				par1.sendWindowProperty(this, 2, this.nukeBoy.maxProgress);
-			}
-		}
-
-		this.progress= this.nukeBoy.progress;
-		this.maxProgress= this.nukeBoy.maxProgress;
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 1)
-		{
-			nukeBoy.progress = j;
-		}
-		if(i == 2)
-		{
-			nukeBoy.maxProgress = j;
-		}
-	}
 }

@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.machine.TileEntityMachineRTG;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -23,17 +22,20 @@ public class RenderRTG extends TileEntitySpecialRenderer<TileEntity> {
 
         if(te.getBlockType() == ModBlocks.machine_rtg_grey){
             bindTexture(ResourceManager.rtg_tex);
-            ResourceManager.rtg.renderAll();
-        } else {
+        }  else if(te.getBlockType() == ModBlocks.machine_powerrtg){
+            bindTexture(ResourceManager.rtg_polonium_tex);
+		} else {
             bindTexture(ResourceManager.rtg_cell_tex);
         }
+        //Drillgon200: This is handled by the forge model
+        //ResourceManager.rtg.renderPart("Gen");
 
         int ix = te.getPos().getX();
         int iy = te.getPos().getY();
         int iz = te.getPos().getZ();
-
+        
         if(Library.checkCableConnectables(te.getWorld(), ix + 1, iy, iz))
-            ResourceManager.rtg_connector.renderAll();
+        	ResourceManager.rtg_connector.renderAll();
 
         if(Library.checkCableConnectables(te.getWorld(), ix - 1, iy, iz)) {
     		GL11.glRotatef(180, 0F, 1F, 0F);

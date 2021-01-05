@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:coin_worm"
+		},
+		"title": {
+			"translate": "hbm.achievement.bossWorm"
+		},
+		"description": {
+			"translate": "hbm.achievement.bossWorm.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:bossmaskman",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

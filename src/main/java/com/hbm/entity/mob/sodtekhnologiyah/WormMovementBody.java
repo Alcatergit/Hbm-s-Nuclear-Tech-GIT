@@ -27,7 +27,7 @@ public class WormMovementBody {
 			this.user.waypointZ = this.user.targetedEntity.posZ;
 		}
 		if(((this.user.ticksExisted % 60 == 0) || (this.user.ticksExisted == 1)) && ((this.user.targetedEntity == null) || (this.user.followed == null))) {
-			findEntityToFollow(this.user.world.getEntitiesWithinAABB(EntityWormBase.class, this.user.getEntityBoundingBox().expand(this.user.rangeForParts, this.user.rangeForParts, this.user.rangeForParts), Predicates.and(EntitySelectors.NOT_SPECTATING, EntityWormBase.wormSelector)));
+			findEntityToFollow(this.user.world.getEntitiesWithinAABB(EntityWormBase.class, this.user.getEntityBoundingBox().grow(this.user.rangeForParts, this.user.rangeForParts, this.user.rangeForParts), Predicates.and(EntitySelectors.NOT_SPECTATING, EntityWormBase.wormSelector)));
 		}
 		double deltaX = this.user.waypointX - this.user.posX;
 		double deltaY = this.user.waypointY - this.user.posY;

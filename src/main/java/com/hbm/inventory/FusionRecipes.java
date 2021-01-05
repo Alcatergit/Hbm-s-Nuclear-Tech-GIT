@@ -16,9 +16,9 @@ public class FusionRecipes {
 		} else if(plasma == ModForgeFluids.plasma_ht){
 			return 1200;
 		} else if(plasma == ModForgeFluids.plasma_xm){
-			return 3600;
+			return 2400;
 		} else if(plasma == ModForgeFluids.plasma_bf){
-			return 1200;
+			return 150;
 		}
 		return 0;
 	}

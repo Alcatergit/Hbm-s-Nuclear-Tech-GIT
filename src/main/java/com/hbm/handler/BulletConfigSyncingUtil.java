@@ -14,7 +14,9 @@ import com.hbm.handler.guncfg.Gun50AEFactory;
 import com.hbm.handler.guncfg.Gun50BMGFactory;
 import com.hbm.handler.guncfg.Gun556mmFactory;
 import com.hbm.handler.guncfg.Gun5mmFactory;
+import com.hbm.handler.guncfg.Gun75BoltFactory;
 import com.hbm.handler.guncfg.Gun9mmFactory;
+import com.hbm.handler.guncfg.GunDartFactory;
 import com.hbm.handler.guncfg.GunEnergyFactory;
 import com.hbm.handler.guncfg.GunFatmanFactory;
 import com.hbm.handler.guncfg.GunGaussFactory;
@@ -151,6 +153,9 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int G4_KAMPF = i++;
 	public static int G4_CANISTER = i++;
 	public static int G4_SLEEK = i++;
+	public static int G4_CLAW = i++;
+	public static int G4_VAMPIRE = i++;
+	public static int G4_VOID = i++;
 
 	public static int SPECIAL_OSIPR = i++;
 	public static int SPECIAL_OSIPR_CHARGED = i++;
@@ -178,6 +183,10 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int R556_FLECHETTE_DU = i++;
 	public static int R556_FLECHETTE_SLEEK = i++;
 	public static int R556_K = i++;
+	
+	public static int B75_NORMAL = i++;
+	public static int B75_INCENDIARY = i++;
+	public static int B75_HE = i++;
 
 	public static int G20_NORMAL_FIRE = i++;
 	public static int G20_SHRAPNEL_FIRE = i++;
@@ -212,6 +221,11 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int MASKMAN_ROCKET = i++;
 	public static int MASKMAN_TRACER = i++;
 	public static int MASKMAN_METEOR = i++;
+	
+	public static int WORM_BOLT = i++;
+	public static int WORM_LASER = i++;
+	
+	public static int NEEDLE_GPS = i++;
 	
 	public static void loadConfigsForSync() {
 		
@@ -336,6 +350,9 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(G4_KAMPF, Gun4GaugeFactory.getGrenadeKampfConfig());
 		configSet.put(G4_CANISTER, Gun4GaugeFactory.getGrenadeCanisterConfig());
 		configSet.put(G4_SLEEK, Gun4GaugeFactory.get4GaugeSleekConfig());
+		configSet.put(G4_CLAW, Gun4GaugeFactory.get4GaugeClawConfig());
+		configSet.put(G4_VAMPIRE, Gun4GaugeFactory.get4GaugeVampireConfig());
+		configSet.put(G4_VOID, Gun4GaugeFactory.get4GaugeVoidConfig());
         
 		configSet.put(SPECIAL_OSIPR, GunOSIPRFactory.getPulseConfig());
 		configSet.put(SPECIAL_OSIPR_CHARGED, GunOSIPRFactory.getPulseChargedConfig());
@@ -363,6 +380,10 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(R556_FLECHETTE_DU, Gun556mmFactory.get556FlechetteDUConfig());
 		configSet.put(R556_FLECHETTE_SLEEK, Gun556mmFactory.get556FlechetteSleekConfig());
 		configSet.put(R556_K, Gun556mmFactory.get556KConfig());
+		
+		configSet.put(B75_NORMAL, Gun75BoltFactory.get75BoltConfig());
+		configSet.put(B75_INCENDIARY, Gun75BoltFactory.get75BoltIncConfig());
+		configSet.put(B75_HE, Gun75BoltFactory.get75BoltHEConfig());
         
 		configSet.put(G20_NORMAL_FIRE, Gun20GaugeFactory.get20GaugeConfig().setToFire(3));
 		configSet.put(G20_SHRAPNEL_FIRE, Gun20GaugeFactory.get20GaugeShrapnelConfig().setToFire(3));
@@ -397,6 +418,11 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(MASKMAN_ROCKET, GunNPCFactory.getMaskmanRocket());
 		configSet.put(MASKMAN_TRACER, GunNPCFactory.getMaskmanTracer());
 		configSet.put(MASKMAN_METEOR, GunNPCFactory.getMaskmanMeteor());
+		
+		configSet.put(WORM_BOLT, GunNPCFactory.getWormBolt());
+		configSet.put(WORM_LASER, GunNPCFactory.getWormHeadBolt());
+		
+		configSet.put(NEEDLE_GPS, GunDartFactory.getGPSConfig());
 	}
 	
 	public static BulletConfiguration pullConfig(int key) {

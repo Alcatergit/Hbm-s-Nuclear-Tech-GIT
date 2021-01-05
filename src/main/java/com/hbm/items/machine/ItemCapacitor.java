@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -17,11 +18,12 @@ import net.minecraft.world.World;
 
 public class ItemCapacitor extends Item {
 
+	private int dura;
+	
 	public ItemCapacitor(int dura, String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setMaxDamage(dura);
-		this.setNoRepair();
+		this.dura = dura;
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
@@ -30,13 +32,12 @@ public class ItemCapacitor extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (this == ModItems.redcoil_capacitor) {
 			tooltip.add("Right-click a block to negate positive charge.");
-			tooltip.add("Does not work in creative mode!");
 			tooltip.add("[Needed for Schrabidium Synthesis]");
+			tooltip.add(getDura(stack) + "/" + dura);
 		}
 		if (this == ModItems.titanium_filter) {
-			tooltip.add("Can be used to remove waste");
-			tooltip.add("from a watz reactor!");
 			tooltip.add("[Needed for Watz Reaction]");
+			tooltip.add((getDura(stack) / 20) + "/" + (dura / 20));
 		}
 	}
 	
@@ -45,8 +46,9 @@ public class ItemCapacitor extends Item {
 		if (this == ModItems.redcoil_capacitor) {
 			ItemStack stack = player.getHeldItem(hand);
 			if (!player.isSneaking()) {
-				if (stack.getItemDamage() > 0) {
-					stack.setItemDamage(stack.getItemDamage() - 1);
+				if (getDura(stack) < dura) {
+
+					setDura(stack, getDura(stack) + 1);
 					if (!world.isRemote) {
 						world.createExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 2.5F, true);
 					}
@@ -59,5 +61,31 @@ public class ItemCapacitor extends Item {
 
 		return EnumActionResult.PASS;
 	}
+	
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return getDurabilityForDisplay(stack) > 0;
+	}
+	
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack) {
+		return 1D - (double)getDura(stack) / (double)dura;
+	}
+	
+	public static int getDura(ItemStack stack) {
+
+    	if(stack.getTagCompound() == null)
+    		return ((ItemCapacitor)stack.getItem()).dura;
+
+    	return stack.getTagCompound().getInteger("dura");
+    }
+
+    public static void setDura(ItemStack stack, int dura) {
+
+    	if(!stack.hasTagCompound())
+    		stack.setTagCompound(new NBTTagCompound());
+
+    	stack.getTagCompound().setInteger("dura", dura);
+    }
 	
 }

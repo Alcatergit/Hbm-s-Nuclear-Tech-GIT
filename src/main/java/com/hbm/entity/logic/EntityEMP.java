@@ -23,7 +23,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 public class EntityEMP extends Entity {
 
 	List<BlockPos> machines;
-	int life = 2 * 60 * 20;
+	int life = 10 * 60 * 20;
 
 	public EntityEMP(World p_i1582_1_) {
 		super(p_i1582_1_);

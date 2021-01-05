@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.block.Block;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -73,11 +75,15 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility{
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if(!attacker.world.isRemote && !this.hitAbility.isEmpty() && attacker instanceof EntityPlayer && canOperate(stack)) {
 
+			//hacky hacky hack
+    		if(this == ModItems.mese_gavel)
+    			attacker.world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.whack, SoundCategory.HOSTILE, 3.0F, 1.F);
+			
     		for(WeaponAbility ability : this.hitAbility) {
 				ability.onHit(attacker.world, (EntityPlayer) attacker, target, this);
     		}
     	}
-
+		stack.damageItem(1, attacker);
         return super.hitEntity(stack, target, attacker);
 	}
 	

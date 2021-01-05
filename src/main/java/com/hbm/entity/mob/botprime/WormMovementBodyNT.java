@@ -28,7 +28,7 @@ public class WormMovementBodyNT {
 		}
 
 		if(((this.user.ticksExisted % 60 == 0) || (this.user.ticksExisted == 1)) && ((this.user.targetedEntity == null) || (this.user.followed == null))) {
-			findEntityToFollow(this.user.world.getEntitiesWithinAABB(EntityWormBaseNT.class, this.user.getEntityBoundingBox().expand(this.user.rangeForParts, this.user.rangeForParts, this.user.rangeForParts), EntityWormBaseNT.wormSelector));
+			findEntityToFollow(this.user.world.getEntitiesWithinAABB(EntityWormBaseNT.class, this.user.getEntityBoundingBox().grow(this.user.rangeForParts, this.user.rangeForParts, this.user.rangeForParts), EntityWormBaseNT.wormSelector));
 		}
 
 		double deltaX = this.user.waypointX - this.user.posX;
@@ -54,11 +54,9 @@ public class WormMovementBodyNT {
 	}
 
 	protected void findEntityToFollow(List<EntityWormBaseNT> segments) {
-
 		for(EntityWormBaseNT segment : segments) {
 
 			if(segment.getHeadID() == this.user.getHeadID()) {
-
 				if(segment.getIsHead()) {
 					if(this.user.getPartNumber() == 0) {
 						this.user.targetedEntity = ((Entity) segment);

@@ -3,22 +3,19 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.blocks.machine.MachineAssembler;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.LoopedSoundPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TEAssemblerPacket;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
+import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -26,10 +23,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -38,14 +36,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityMachineAssembler extends TileEntity implements ITickable, IConsumer {
-
-	public ItemStackHandler inventory = new ItemStackHandler(18) {
-		protected void onContentsChanged(int slot) {
-			super.onContentsChanged(slot);
-			markDirty();
-		};
-	};
+public class TileEntityMachineAssembler extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
 	public static final long maxPower = 100000;
@@ -56,27 +47,20 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	int consumption = 100;
 	int speed = 100;
 
+	@SideOnly(Side.CLIENT)
+	public int recipe;
+
+	private AudioWrapper audio;
+
 	Random rand = new Random();
-
-	private String customName;
-
+	
 	public TileEntityMachineAssembler() {
+		super(18);
 	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 128;
-		}
+	
+	@Override
+	public String getName() {
+		return "container.assembler";
 	}
 
 	@Override
@@ -84,10 +68,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		super.readFromNBT(nbt);
 		this.power = nbt.getLong("powerTime");
 		this.isProgressing = nbt.getBoolean("progressing");
-		detectPower = power + 1;
-		detectIsProgressing = !isProgressing;
-		if(nbt.hasKey("inventory"))
-			inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
+		this.progress = nbt.getInteger("progress");
 	}
 
 	@Override
@@ -95,7 +76,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		super.writeToNBT(nbt);
 		nbt.setBoolean("progressing", this.isProgressing);
 		nbt.setLong("powerTime", power);
-		nbt.setTag("inventory", inventory.serializeNBT());
+		nbt.setInteger("progress", progress);
 		return nbt;
 	}
 
@@ -109,47 +90,46 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 
 	@Override
 	public void update() {
+		if(!world.isRemote) {
 
-		this.consumption = 100;
-		this.speed = 100;
+			this.consumption = 100;
+			this.speed = 100;
 
-		for(int i = 1; i < 4; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
+			for(int i = 1; i < 4; i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
 
-			if(stack != null) {
-				if(stack.getItem() == ModItems.upgrade_speed_1) {
-					this.speed -= 25;
-					this.consumption += 300;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_2) {
-					this.speed -= 50;
-					this.consumption += 600;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_3) {
-					this.speed -= 75;
-					this.consumption += 900;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_1) {
-					this.consumption -= 30;
-					this.speed += 5;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_2) {
-					this.consumption -= 60;
-					this.speed += 10;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_3) {
-					this.consumption -= 90;
-					this.speed += 15;
+				if(!stack.isEmpty()) {
+					if(stack.getItem() == ModItems.upgrade_speed_1) {
+						this.speed -= 25;
+						this.consumption += 300;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_2) {
+						this.speed -= 50;
+						this.consumption += 600;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_3) {
+						this.speed -= 75;
+						this.consumption += 900;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_1) {
+						this.consumption -= 30;
+						this.speed += 5;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_2) {
+						this.consumption -= 60;
+						this.speed += 10;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_3) {
+						this.consumption -= 90;
+						this.speed += 15;
+					}
 				}
 			}
-		}
 
 		if(speed < 25)
 			speed = 25;
 		if(consumption < 10)
 			consumption = 10;
-
-		if(!world.isRemote) {
 			isProgressing = false;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			if(AssemblerRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) != ItemStack.EMPTY && AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) != null) {
@@ -169,6 +149,8 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 							}
 
 							removeItems(AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)), inventory);
+							if(inventory.getStackInSlot(0).getItem() == ModItems.meteorite_sword_alloyed)
+								inventory.setStackInSlot(0, new ItemStack(ModItems.meteorite_sword_machined));
 						}
 
 						power -= consumption;
@@ -217,11 +199,59 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 					}
 				}
 			}
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			data.setInteger("progress", progress);
+			data.setInteger("maxProgress", maxProgress);
+			data.setBoolean("isProgressing", isProgressing);
+			data.setInteger("recipe", !inventory.getStackInSlot(4).isEmpty() ? inventory.getStackInSlot(4).getItemDamage() : -1);
+			this.networkPack(data, 150);
+		} else {
 
-			detectAndSendChanges();
+			float volume = this.getVolume(2);
+
+			if(isProgressing && volume > 0) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.assemblerOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), volume, 1.0F);
+					audio.startSound();
+				}
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 
 		}
+	}
 
+	@Override
+	public void onChunkUnload() {
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+    	}
+	}
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+    	if(audio != null) {
+			audio.stopSound();
+			audio = null;
+    	}
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		this.power = nbt.getLong("power");
+		this.progress = nbt.getInteger("progress");
+		this.maxProgress = nbt.getInteger("maxProgress");
+		this.isProgressing = nbt.getBoolean("isProgressing");
+		this.recipe = nbt.getInteger("recipe");
 	}
 
 	public boolean tryExchangeTemplates(TileEntity te1, TileEntity te2) {
@@ -480,8 +510,9 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		else {
 			List<AStack> list = AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
 
-			for(int i = 0; i < list.size(); i++)
-				list.get(i).singulize();
+			for(int i = 0; i < list.size(); i++){
+				list.set(i, list.get(i).copy().singulize());
+			}
 
 			if(inv.getStackInSlot(slot) == null)
 				return false;
@@ -641,7 +672,7 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return TileEntity.INFINITE_EXTENT_AABB;
+		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expand(2, 1, 2);
 	}
 
 	@Override
@@ -649,9 +680,18 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
 	}
+	
+	@Override
+	public int countMufflers() {
 
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.assembler";
+		int count = 0;
+
+		for(int x = pos.getX() - 1; x <= pos.getX() + 1; x++)
+			for(int z = pos.getZ() - 1; z <= pos.getZ() + 1; z++)
+				if(world.getBlockState(new BlockPos(x, pos.getY() - 1, z)).getBlock() == ModBlocks.muffler)
+					count++;
+
+		return count;
 	}
 
 	@Override
@@ -664,25 +704,4 @@ public class TileEntityMachineAssembler extends TileEntity implements ITickable,
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
 	}
 
-	private long detectPower;
-	private boolean detectIsProgressing;
-
-	private void detectAndSendChanges() {
-
-		PacketDispatcher.wrapper.sendToAllTracking(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 30));
-		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		PacketDispatcher.wrapper.sendToAllTracking(new TEAssemblerPacket(pos, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
-
-		boolean mark = false;
-		if(detectPower != power) {
-			mark = true;
-			detectPower = power;
-		}
-		if(detectIsProgressing != isProgressing) {
-			mark = true;
-			detectIsProgressing = isProgressing;
-		}
-		if(mark)
-			markDirty();
-	}
 }

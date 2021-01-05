@@ -7,6 +7,7 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -15,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -92,7 +94,9 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		ELECTROLYSIS,
 		XENON,
 		SATURN,
-		BALEFIRE;
+		BALEFIRE,
+		SCHRABIDIC,
+		SCHRABIDATE;
 		
 		public static EnumChemistryTemplate getEnum(int i) {
 			if(i < EnumChemistryTemplate.values().length)
@@ -266,9 +270,13 @@ public static int getProcessTime(ItemStack stack) {
         case XENON:
         	return 600;
         case SATURN:
-        	return 600;
+        	return 60;
         case BALEFIRE:
         	return 100;
+        case SCHRABIDIC:
+        	return 100;
+        case SCHRABIDATE:
+        	return 600;
         default:
         	return 100;
         }
@@ -284,11 +292,11 @@ public static int getProcessTime(ItemStack stack) {
     	ItemStack[] out = MachineRecipes.getChemOutputFromTempate(stack);
     	FluidStack[] outF = MachineRecipes.getFluidOutputFromTempate(stack);
 
-		list.add("[CREATED USING TEMPLATE FOLDER]");
+    	list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("info.templatefolder"));
 		list.add("");
 
     	try {
-    		list.add("Outputs:");
+    		list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_out_p"));
     		for(int i = 0; i < 4; i++)
     			if(out[i] != null)
     				list.add(out[i].getCount() + "x " + out[i].getDisplayName());
@@ -297,7 +305,7 @@ public static int getProcessTime(ItemStack stack) {
     			if(outF[i] != null)
     				list.add(outF[i].amount + "mB " + outF[i].getFluid().getLocalizedName(outF[i]));
     		
-    		list.add("Inputs:");
+    		list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_in_p"));
     		
     		if(stacks != null)
     			for(int i = 0; i < stacks.size(); i++)
@@ -307,8 +315,8 @@ public static int getProcessTime(ItemStack stack) {
     			if(inF[i] != null)
     				list.add(inF[i].amount + "mB " + inF[i].getFluid().getLocalizedName(inF[i]));
     		
-    		list.add("Production time:");
-        	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " seconds");
+    		list.add(TextFormatting.BOLD + I18nUtil.resolveKey("info.template_time"));
+        	list.add(Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " " + I18nUtil.resolveKey("info.template_seconds"));
     	} catch(Exception e) {
     		list.add("###INVALID###");
     		list.add("0x334077-0x6A298F-0xDF3795-0x334077");

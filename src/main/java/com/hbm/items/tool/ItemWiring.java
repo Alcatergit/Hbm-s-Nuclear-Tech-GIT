@@ -52,8 +52,13 @@ public class ItemWiring extends Item {
 					
 					if (world.getTileEntity(newPos) instanceof TileEntityPylonRedWire && this.isLengthValid(pos.getX(), pos.getY(), pos.getZ(), x1, y1, z1, 25)) {
 
-						((TileEntityPylonRedWire) te).connected.add((TileEntityPylonRedWire) world.getTileEntity(newPos));
-						((TileEntityPylonRedWire) world.getTileEntity(newPos)).connected.add(((TileEntityPylonRedWire) te));
+						TileEntityPylonRedWire first = (TileEntityPylonRedWire) world.getTileEntity(new BlockPos(x1, y1, z1));
+						TileEntityPylonRedWire second = ((TileEntityPylonRedWire) te);
+
+						first.connected.add(second);
+						second.connected.add(first);
+						first.markDirty();
+						second.markDirty();
 
 						if (world.isRemote)
 							player.sendMessage(new TextComponentTranslation("Wire end"));

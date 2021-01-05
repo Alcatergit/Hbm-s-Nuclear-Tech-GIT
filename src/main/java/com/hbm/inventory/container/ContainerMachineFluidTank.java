@@ -23,7 +23,6 @@ public class ContainerMachineFluidTank extends Container {
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 53 - 18, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 125, 17));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 125, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 17));
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -50,13 +49,13 @@ public class ContainerMachineFluidTank extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 			
-            if (par2 <= 6) {
-				if (!this.mergeItemStack(var5, 7, this.inventorySlots.size(), true))
+            if (par2 <= 5) {
+				if (!this.mergeItemStack(var5, 6, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 6, false))
+			else if (!this.mergeItemStack(var5, 0, 5, false))
 			{
 				return ItemStack.EMPTY;
 			}

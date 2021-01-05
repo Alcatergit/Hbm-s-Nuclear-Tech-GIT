@@ -58,14 +58,14 @@ public class GunLeverActionS extends Item {
 		EntityPlayer player = (EntityPlayer) entityLiving;
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
 
-		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, ModItems.ammo_12gauge));
+		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge));
 		MinecraftForge.EVENT_BUS.post(event);
 		j = event.getCharge();
 
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_12gauge)) {
+		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge)) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 

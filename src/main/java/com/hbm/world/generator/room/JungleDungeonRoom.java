@@ -12,6 +12,7 @@ import com.hbm.world.generator.TimedGenerator;
 import com.hbm.world.generator.TimedGenerator.ITimedJob;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -34,20 +35,20 @@ public class JungleDungeonRoom extends CellularDungeonRoom {
 			public void work() {
 
 				DungeonToolbox.generateBox(world, x, y, z, parent.width, 1, parent.width, parent.floor);
-				DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 1, parent.width, Blocks.AIR);
+				DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 1, parent.width, Blocks.AIR.getDefaultState());
 				DungeonToolbox.generateBox(world, x, y + parent.height - 1, z, parent.width, 1, parent.width, parent.ceiling);
 
 				int rtd = world.rand.nextInt(50);
 
 				// 1:10 chance to have a lava floor
 				if(rtd < 5) {
-					List<Block> metas = Arrays.asList(
-						ModBlocks.brick_jungle_cracked,
-						ModBlocks.brick_jungle_lava,
-						ModBlocks.brick_jungle_lava
+					List<IBlockState> metas = Arrays.asList(
+						ModBlocks.brick_jungle_cracked.getDefaultState(),
+						ModBlocks.brick_jungle_lava.getDefaultState(),
+						ModBlocks.brick_jungle_lava.getDefaultState()
 					);
 
-					DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y, z + parent.width / 2 - 1, 3, 1, 3, metas );
+					DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y, z + parent.width / 2 - 1, 3, 1, 3, metas);
 
 				// 1:5 chance to have a jungle crate
 				} else if(rtd < 10) {
@@ -95,28 +96,28 @@ public class JungleDungeonRoom extends CellularDungeonRoom {
 					DungeonToolbox.generateBox(world, x, y + 1, z, parent.width, parent.height - 2, 1, parent.wall);
 
 					if(door)
-						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z, 3, 3, 1, Blocks.AIR);
+						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z, 3, 3, 1, Blocks.AIR.getDefaultState());
 				}
 
 				if(wall == EnumFacing.SOUTH) {
 					DungeonToolbox.generateBox(world, x, y + 1, z + parent.width - 1, parent.width, parent.height - 2, 1, parent.wall);
 
 					if(door)
-						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z + parent.width - 1, 3, 3, 1, Blocks.AIR);
+						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z + parent.width - 1, 3, 3, 1, Blocks.AIR.getDefaultState());
 				}
 
 				if(wall == EnumFacing.WEST) {
 					DungeonToolbox.generateBox(world, x, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 
 					if(door)
-						DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2 - 1, 1, 3, 3, Blocks.AIR);
+						DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2 - 1, 1, 3, 3, Blocks.AIR.getDefaultState());
 				}
 
 				if(wall == EnumFacing.EAST) {
 					DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 
 					if(door)
-						DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z + parent.width / 2 - 1, 1, 3, 3, Blocks.AIR);
+						DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z + parent.width / 2 - 1, 1, 3, 3, Blocks.AIR.getDefaultState());
 				}
 			}
 		};

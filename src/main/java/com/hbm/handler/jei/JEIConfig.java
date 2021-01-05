@@ -7,6 +7,7 @@ import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
+import com.hbm.inventory.gui.GUIHadron;
 import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachineBoiler;
 import com.hbm.inventory.gui.GUIMachineBoilerElectric;
@@ -56,6 +57,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String CRYSTALLIZER = "hbm.crystallizer";
 	public static final String BOOK = "hbm.book_of";
 	public static final String FUSION_BYPRODUCT = "hbm.fusionbyproduct";
+	public static final String HADRON = "hbm.hadron";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -80,6 +82,7 @@ public class JEIConfig implements IModPlugin {
 		//This recipe catalyst doesn't work, since the book of is blacklisted.
 		//registry.addRecipeCatalyst(new ItemStack(ModItems.book_of_), BOOK);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.iter), FUSION_BYPRODUCT);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.hadron_core), HADRON);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -97,6 +100,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(CrystallizerRecipes.getRecipes(), CRYSTALLIZER);
 		registry.addRecipes(JeiRecipes.getBookRecipes(), BOOK);
 		registry.addRecipes(JeiRecipes.getFusionByproducts(), FUSION_BYPRODUCT);
+		registry.addRecipes(JeiRecipes.getHadronRecipes(), HADRON);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -114,6 +118,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineShredder.class, 43, 89, 53, 17, SHREDDER);
 		registry.addRecipeClickArea(GUICrystallizer.class, 103, 34, 23, 16, CRYSTALLIZER);
 		registry.addRecipeClickArea(GUIBook.class, 89, 34, 23, 16, BOOK);
+		registry.addRecipeClickArea(GUIHadron.class, 71, 28, 32, 32, HADRON);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
@@ -202,7 +207,8 @@ public class JEIConfig implements IModPlugin {
 				new FluidRecipeHandler(help),
 				new CrystallizerRecipeHandler(help),
 				new BookRecipeHandler(help),
-				new FusionRecipeHandler(help));
+				new FusionRecipeHandler(help),
+				new HadronRecipeHandler(help));
 	}
 
 	@Override

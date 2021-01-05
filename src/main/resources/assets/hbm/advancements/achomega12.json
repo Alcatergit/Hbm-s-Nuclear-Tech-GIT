@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:particle_digamma"
+		},
+		"title": {
+			"translate": "hbm.achievement.omega12"
+		},
+		"description": {
+			"translate": "hbm.achievement.omega12.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

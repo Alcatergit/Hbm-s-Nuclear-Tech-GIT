@@ -1,9 +1,14 @@
 package com.hbm.entity.mob;
 
+import java.util.List;
+
 import com.hbm.entity.mob.ai.EntityAIMaskmanCasualApproach;
 import com.hbm.entity.mob.ai.EntityAIMaskmanLasergun;
 import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
+import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
+import com.hbm.main.AdvancementManager;
+import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -21,7 +26,7 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 
-public class EntityMaskMan extends EntityMob {
+public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS));
 	
@@ -83,6 +88,16 @@ public class EntityMaskMan extends EntityMob {
         }
 
         getEntityData().setFloat("hfr_radiation", 0);
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause) {
+		super.onDeath(cause);
+		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
+
+		for(EntityPlayer player : players) {
+			AdvancementManager.grantAchievement(player, AdvancementManager.bossMaskman);
+		}
 	}
 	
 	//ool in the shed

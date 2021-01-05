@@ -12,6 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class EntityGrenadeBase extends EntityThrowable {
@@ -49,6 +50,29 @@ public abstract class EntityGrenadeBase extends EntityThrowable {
     public EntityGrenadeBase(World p_i1775_1_, double p_i1775_2_, double p_i1775_4_, double p_i1775_6_)
     {
         super(p_i1775_1_, p_i1775_2_, p_i1775_4_, p_i1775_6_);
+    }
+    
+    @Override
+    public void onUpdate() {
+    	super.onUpdate();
+    	
+    	this.prevRotationPitch = this.rotationPitch;
+        
+        this.rotationPitch -= new Vec3d(motionX, motionY, motionZ).lengthVector() * 25;
+        
+        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+
+        while (this.rotationYaw - this.prevRotationYaw < -180.0F)
+        {
+            this.prevRotationYaw -= 360.0F;
+        }
+
+        while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
+        {
+            this.prevRotationYaw += 360.0F;
+        }
+
+        this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
     }
 
     @Override

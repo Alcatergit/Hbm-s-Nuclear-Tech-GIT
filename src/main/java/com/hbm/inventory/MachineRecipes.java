@@ -112,6 +112,8 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.biomass_compressed);
 			if (input.getItem() == ModItems.powder_lignite)
 				return new ItemStack(ModItems.briquette_lignite);
+			if(input.getItem() == ModItems.meteorite_sword_reforged)
+				return new ItemStack(ModItems.meteorite_sword_hardened);
 		}
 
 		if (stamps_plate.contains(stamp.getItem())) {
@@ -307,7 +309,17 @@ public class MachineRecipes {
 				return ItemFluidCanister.getFullCanister(ModForgeFluids.oil);
 			}
 		}
-
+		
+		if (item.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor) && mODE(item2, new String[] {"ingotCobalt", "dustCobalt"})
+				|| mODE(item, new String[] {"ingotCobalt", "dustCobalt"}) && item2.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor)) {
+			return new ItemStack(ModItems.ingot_meteorite);
+		}
+		
+		if (item.getItem() == ModItems.meteorite_sword_hardened && mODE(item2, new String[] {"ingotCobalt", "dustCobalt"})
+				|| mODE(item, new String[] {"ingotCobalt", "dustCobalt"}) && item2.getItem() == ModItems.meteorite_sword_hardened) {
+			return new ItemStack(ModItems.meteorite_sword_alloyed, 1);
+		}
+		
 		return null;
 	}
 
@@ -396,14 +408,14 @@ public class MachineRecipes {
 			break;
 		case CIRCUIT_4:
 			list.add(new ItemStack(ModItems.circuit_red_copper, 1));
-			list.add(new ItemStack(ModItems.wire_gold, 6));
-			list.add(new ItemStack(ModItems.powder_lapis, 4));
+			list.add(new ItemStack(ModItems.wire_gold, 4));
+			list.add(new ItemStack(ModItems.powder_lapis, 1));
 			list.add(new ItemStack(ModItems.ingot_polymer, 1));
 			break;
 		case CIRCUIT_5:
 			list.add(new ItemStack(ModItems.circuit_gold, 1));
-			list.add(new ItemStack(ModItems.wire_schrabidium, 6));
-			list.add(new ItemStack(ModItems.powder_diamond, 4));
+			list.add(new ItemStack(ModItems.wire_schrabidium, 4));
+			list.add(new ItemStack(ModItems.powder_diamond, 1));
 			list.add(new ItemStack(ModItems.ingot_desh, 1));
 			break;
 		case POLYMER:
@@ -476,6 +488,12 @@ public class MachineRecipes {
 			break;
 		case BALEFIRE:
 			list.add(new ItemStack(ModItems.egg_balefire_shard, 1));
+			break;
+        case SCHRABIDIC:
+			list.add(new ItemStack(ModItems.pellet_charged, 1));
+			break;
+        case SCHRABIDATE:
+			list.add(new ItemStack(ModItems.powder_iron, 1));
 			break;
 		default:
 			break;
@@ -676,10 +694,17 @@ public class MachineRecipes {
 			break;
 		case SATURN:
 			input[0] = new FluidStack(ModForgeFluids.acid, 100);
-			input[1] = new FluidStack(ModForgeFluids.mercury, 200);
+			input[1] = new FluidStack(ModForgeFluids.mercury, 50);
         	break;
 		case BALEFIRE:
 			input[0] = new FluidStack(ModForgeFluids.kerosene, 6000);
+        	break;
+    	case SCHRABIDIC:
+			input[0] = new FluidStack(ModForgeFluids.sas3, 8000);
+			input[1] = new FluidStack(ModForgeFluids.acid, 6000);
+        	break;
+    	case SCHRABIDATE:
+			input[0] = new FluidStack(ModForgeFluids.schrabidic, 250);
         	break;
 		default:
 			break;
@@ -805,13 +830,16 @@ public class MachineRecipes {
 			output[0] = new ItemStack(ModItems.plate_kevlar, 4);
 			break;
 		case SOLID_FUEL:
-			output[0] = new ItemStack(ModItems.rocket_fuel, 1);
+			output[0] = new ItemStack(ModItems.rocket_fuel, 4);
 			break;
 		case SATURN:
-			output[0] = new ItemStack(ModItems.ingot_saturnite, 1);
+			output[0] = new ItemStack(ModItems.ingot_saturnite, 2);
         	break;
 		case BALEFIRE:
 			output[0] = new ItemStack(ModItems.powder_balefire, 1);
+        	break;
+        case SCHRABIDATE:
+			output[0] = new ItemStack(ModItems.powder_schrabidate, 1);
         	break;
 		default:
 			break;
@@ -936,6 +964,9 @@ public class MachineRecipes {
 		case BALEFIRE:
 			output[0] = new FluidStack(ModForgeFluids.balefire, 8000);
         	break;
+        case SCHRABIDIC:
+			output[0] = new FluidStack(ModForgeFluids.schrabidic, 16000);
+        	break;
 		default:
 			break;
 		}
@@ -981,12 +1012,6 @@ public class MachineRecipes {
 		List<GasCentOutput> list = new ArrayList<GasCentOutput>();
 		if(fluid == null){
 			return null;
-		} else if(fluid == FluidRegistry.LAVA){
-			list.add(new GasCentOutput(1, new ItemStack(ModBlocks.gravel_obsidian), 1));
-			list.add(new GasCentOutput(2, new ItemStack(Blocks.GRAVEL), 2));
-			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_lithium), 3));
-			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_iron, 2), 4));
-			return list;
 		} else if(fluid == ModForgeFluids.uf6){
 			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_u238), 1));
 			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_u238), 2));

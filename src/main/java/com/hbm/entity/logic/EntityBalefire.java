@@ -85,7 +85,7 @@ public class EntityBalefire extends Entity {
         if(!flag)
         {
         	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	ExplosionNukeGeneric.dealDamage(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, this.destructionRange * 2);
+        	ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2);
         }
         
         age++;
