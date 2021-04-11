@@ -37,7 +37,7 @@ public class BlockFallingRad extends BlockFalling {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		RadiationSavedData.incrementRad(worldIn, pos.getX(), pos.getZ(), rad, max);
+		RadiationSavedData.incrementRad(worldIn, pos, rad, max);
 
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 	}

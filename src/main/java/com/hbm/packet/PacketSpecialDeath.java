@@ -1,23 +1,25 @@
 package com.hbm.packet;
 
 import java.lang.reflect.Method;
-
-import org.lwjgl.opengl.GL11;
+import java.util.Random;
 
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.particle.DisintegrationParticleHandler;
+import com.hbm.particle.ParticleBlood;
+import com.hbm.particle.ParticleSlicedMob;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.render.util.ModelRendererUtil;
+import com.hbm.render.util.Triangle;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -92,6 +94,42 @@ public class PacketSpecialDeath implements IMessage {
 						ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
 						DisintegrationParticleHandler.spawnLightningDisintegrateParticles(ent, new Vec3(m.auxData[0], m.auxData[1], m.auxData[2]));
 						break;
+					case 3:
+						//ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
+						float[] plane = m.auxData;
+						ParticleSlicedMob[] particles = ModelRendererUtil.generateCutParticles(ent, plane, capTris -> {
+							int bloodCount = 5;
+							if(capTris.isEmpty()){
+								return;
+							}
+							for(int i = 0; i < bloodCount; i ++){
+								Triangle randTriangle = capTris.get(ent.world.rand.nextInt(capTris.size()));
+								//Hopefully this works for getting a random position in a triangle
+								float rand1 = ent.world.rand.nextFloat();
+								float rand2 = ent.world.rand.nextFloat();
+								if(rand2 < rand1){
+									float tmp = rand2;
+									rand2 = rand1;
+									rand1 = tmp;
+								}
+								Vec3d pos = randTriangle.p1.pos.scale(rand1);
+								pos = pos.add(randTriangle.p2.pos.scale(rand2-rand1));
+								pos = pos.add(randTriangle.p3.pos.scale(1-rand2));
+								pos = pos.addVector(ent.posX, ent.posY, ent.posZ);
+								
+								Random rand = ent.world.rand;
+								ParticleBlood blood = new ParticleBlood(ent.world, pos.x, pos.y, pos.z, 1, 0.4F+rand.nextFloat()*0.4F, 18+rand.nextInt(10), 0.05F);
+								Vec3d direction = Minecraft.getMinecraft().player.getLook(1).crossProduct(new Vec3d(plane[0], plane[1], plane[2])).normalize().scale(-0.6F);
+								Vec3d randMotion = new Vec3d(rand.nextDouble()*2-1, rand.nextDouble()*2-1, rand.nextDouble()*2-1).scale(0.2F);
+								direction = direction.add(randMotion);
+								blood.motion((float)direction.x, (float)direction.y, (float)direction.z);
+								blood.color(0.5F, 0.1F, 0.1F, 1F);
+								blood.onUpdate();
+								Minecraft.getMinecraft().effectRenderer.addEffect(blood);
+							}
+						});
+						for(ParticleSlicedMob p : particles)
+							Minecraft.getMinecraft().effectRenderer.addEffect(p);
 					}
 				}
 			});

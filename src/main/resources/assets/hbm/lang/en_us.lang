@@ -544,7 +544,7 @@ tile.machine_reactor_on.name=Breeding Reactor
 container.reactor=Breeding Reactor
 tile.machine_nuke_furnace_off.name=Nuclear Furnace
 tile.machine_nuke_furnace_on.name=Nuclear Furnace
-tile.machine_powerrtg.name=PT Isotope Cell
+tile.rtg_polonium.name=PT Isotope Cell
 container.nukeFurnace=Nuclear Powered Furnace
 tile.machine_rtg_furnace_off.name=RTG Furnace
 tile.machine_rtg_furnace_on.name=RTG Furnace
@@ -834,6 +834,11 @@ item.ingot_polonium.name=Polonium Ingot
 item.ingot_titanium.name=Titanium Ingot
 item.ingot_cobalt.name=Cobalt Ingot
 item.sulfur.name=Sulfur
+item.nugget_polonium.name=Polonium Nugget
+item.powder_polonium.name=Polonium Powder
+item.rod_polonium.name=Polonium Rod
+item.rod_dual_polonium.name=Polonium Dual Rod
+item.rod_quad_polonium.name=Polonium Quad Rod
 
 item.niter.name=Niter
 item.ingot_copper.name=Industrial Grade Copper
@@ -1843,6 +1848,8 @@ item.gun_euthanasia.name=Euthanasia
 item.gun_defabricator.name=Defabricator
 item.gun_dampfmaschine.name=Totally Not a Joke Weapon
 item.gun_folly.name=Prototype Digamma "Folly"
+item.gun_vortex.name=Vortex
+item.cc_plasma_gun.name=CC Plasma Gun
 
 item.nossy_hat.name=Fabulous Hat
 item.beta.name=Beta Features
@@ -2175,6 +2182,9 @@ item.gun_kit_2.name=Gun Repair Kit
 
 item.chainsaw.name=Chainsaw
 item.crowbar.name=Mk.V Crate Opening Device "Crowbar"
+item.crucible.name=Crucible
+item.hs_sword.name=Ultrahard Steel Sword
+item.hf_sword.name=High Frequency Sword
 
 item.wrench.name=Pipe Wrench
 item.wrench_flipped.name=Blade on a Wrench

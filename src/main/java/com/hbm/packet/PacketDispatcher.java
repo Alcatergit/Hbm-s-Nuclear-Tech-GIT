@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import com.hbm.lib.RefStrings;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -133,6 +134,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(KeybindPacket.Handler.class, KeybindPacket.class, i++, Side.SERVER);
 		//DELETE LATER
 		//wrapper.registerMessage(PacketCreatePhysTree.Handler.class, PacketCreatePhysTree.class, i++, Side.CLIENT);
+		//To tell the server to cut a mob for the cutting swords
+		wrapper.registerMessage(PacketMobSlicer.Handler.class, PacketMobSlicer.class, i++, Side.SERVER);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
 
@@ -17,6 +18,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -158,10 +160,27 @@ public class BobMathUtil {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static Vec3d[] glWorldFromLocalNoView(Vector4f... positions){
+	public static Vec3d[] viewFromLocal(Vector4f... positions){
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
 		Matrix4f mv_mat = new Matrix4f();
 		mv_mat.load(ClientProxy.AUX_GL_BUFFER);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		Vec3d[] retArr = new Vec3d[positions.length];
+		for(int i = 0; i < positions.length; i ++){
+			Vector4f pos = new Vector4f(positions[i].x, positions[i].y, positions[i].z, positions[i].w);
+			Matrix4f.transform(mv_mat, pos, pos);
+			Vec3d pos2 = new Vec3d(pos.x, pos.y, pos.z);
+			retArr[i] = pos2;
+		}
+		return retArr;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static Vec3d[] viewToLocal(Vector4f... positions){
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
+		Matrix4f mv_mat = new Matrix4f();
+		mv_mat.load(ClientProxy.AUX_GL_BUFFER);
+		mv_mat.invert();
 		ClientProxy.AUX_GL_BUFFER.rewind();
 		Vec3d[] retArr = new Vec3d[positions.length];
 		for(int i = 0; i < positions.length; i ++){
@@ -191,20 +210,30 @@ public class BobMathUtil {
 	
 	public static boolean epsilonEquals(float num1, float num2, float eps){
 		float diff = num1-num2;
-		return (diff < 0 ? -diff : diff) < eps;
+		return Math.abs(diff) < eps;
 	}
 	
 	public static boolean epsilonEquals(double num1, double num2, double eps){
 		double diff = num1-num2;
-		return (diff < 0 ? -diff : diff) < eps;
+		return Math.abs(diff) < eps;
+	}
+	
+	public static boolean epsilonEquals(Vec3d a, Vec3d b, double eps){
+		double dx = Math.abs(a.x-b.x);
+		double dy = Math.abs(a.y-b.y);
+		double dz = Math.abs(a.z-b.z);
+		
+		return dx < eps && dy < eps && dz < eps;
 	}
 	
 	public static int absMaxIdx(double... numbers){
 		int idx = 0;
 		double max = -Double.MAX_VALUE;
 		for(int i = 0; i < numbers.length; i ++){
-			if(Math.abs(numbers[i]) > max){
+			double num = Math.abs(numbers[i]);
+			if(num > max){
 				idx = i;
+				max = num;
 			}
 		}
 		return idx;
@@ -239,5 +268,15 @@ public class BobMathUtil {
 	
 	public static Vec3d mix(Vec3d a, Vec3d b, float amount){
 		return new Vec3d(a.x + (b.x - a.x)*amount, a.y + (b.y - a.y)*amount, a.z + (b.z - a.z)*amount);
+	}
+	
+	public static Vec3d mat4Transform(Vec3d vec, @Nullable Matrix4f mat){
+		if(mat != null){
+			double x = mat.m00 * vec.x + mat.m10 * vec.y + mat.m20 * vec.z + mat.m30;
+			double y = mat.m01 * vec.x + mat.m11 * vec.y + mat.m21 * vec.z + mat.m31;
+			double z = mat.m02 * vec.x + mat.m12 * vec.y + mat.m22 * vec.z + mat.m32;
+			return new Vec3d(x, y, z);
+		}
+		return vec;
 	}
 }

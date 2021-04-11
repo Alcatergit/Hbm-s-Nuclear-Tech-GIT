@@ -9,14 +9,19 @@ import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Quaternion;
 
+import com.hbm.flashlight.Vec3f;
 import com.hbm.main.ClientProxy;
 import com.hbm.physics.GJK.GJKInfo;
 import com.hbm.physics.GJK.Result;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
 
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -83,6 +88,7 @@ public class RigidBody {
 	public Matrix3f inv_localInertiaTensor;
 	public Matrix3f inv_globalInertiaTensor;
 	public float friction = 0.5F;
+	public float restitution = 0;
 	
 	public Vec3 localCentroid;
 	
@@ -121,16 +127,17 @@ public class RigidBody {
 					continue;
 				b = new AABBCollider(box);
 				GJKInfo info = GJK.colliding(this, null, c, b);
-				if(info.result == Result.COLLIDING && (bestInfo == null || bestInfo.depth < info.depth)){
-					a = c;
-					bestInfo = info;
+				if(info.result == Result.COLLIDING /*&& (bestInfo == null || bestInfo.depth < info.depth)*/){
+					//No need to find whatever is deepest. We can just add every contact and let the manifold sort itself out correctly.
+					//bestInfo = info;
+					contacts.addContact(new Contact(this, null, c, b, info));
 				}
 			}
 		}
 		
-		if(bestInfo != null){
-			contacts.addContact(new Contact(this, null, a, b, bestInfo));
-		}
+		//if(bestInfo != null){
+		//	contacts.addContact(new Contact(this, null, a, b, bestInfo));
+		//}
 		
 		solveContacts(dt);
 		integrateVelocityAndPosition(dt);
@@ -250,6 +257,11 @@ public class RigidBody {
 	public void impulseVelocity(Vec3 force, Vec3 position){
 		linearVelocity = linearVelocity.add(force.mult(inv_mass));
 		angularVelocity = angularVelocity.add(position.subtract(globalCentroid).crossProduct(force).matTransform(inv_globalInertiaTensor));
+	}
+	
+	public void impulseVelocityDirect(Vec3 force, Vec3 position){
+		linearVelocity = linearVelocity.add(force);
+		angularVelocity = angularVelocity.add(position.subtract(globalCentroid).crossProduct(force));
 	}
 	
 	public void updateOrientation(){
@@ -425,5 +437,37 @@ public class RigidBody {
 				q.w = (m10 - m01) * s;
 			}
 		}
+	}
+	
+	public void renderDebugInfo(Vec3 offset, float partialTicks){
+		GL11.glPushMatrix();
+		BufferBuilder buf = Tessellator.getInstance().getBuffer();
+		GlStateManager.disableDepth();
+		for(Contact c : contacts.contacts){
+			if(c != null){
+				buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+				Vec3 normal = c.normal.mult(0.5F);
+				Vec3 globalA = c.globalA.subtract(offset);
+				Vec3 globalB = c.globalB.subtract(offset);
+				buf.pos(globalA.xCoord, globalA.yCoord, globalA.zCoord).color(1, 0, 0, 1).endVertex();
+				buf.pos(globalA.xCoord-normal.xCoord, globalA.yCoord-normal.yCoord, globalA.zCoord-normal.zCoord).color(1, 0, 0, 1).endVertex();
+				
+				buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(1, 0, 0, 1).endVertex();
+				buf.pos(globalB.xCoord+normal.xCoord, globalB.yCoord+normal.yCoord, globalB.zCoord+normal.zCoord).color(1, 0, 0, 1).endVertex();
+				Tessellator.getInstance().draw();
+				
+				GL11.glPointSize(16);
+				buf.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
+				buf.pos(globalA.xCoord, globalA.yCoord, globalA.zCoord).color(1, 0, 0, 1).endVertex();
+				buf.pos(globalB.xCoord, globalB.yCoord, globalB.zCoord).color(1, 0, 0, 1).endVertex();
+				Tessellator.getInstance().draw();
+			}
+		}
+		GlStateManager.enableDepth();
+		doGlTransform(offset, partialTicks);
+		for(Collider c : colliders){
+			c.debugRender();
+		}
+		GL11.glPopMatrix();
 	}
 }

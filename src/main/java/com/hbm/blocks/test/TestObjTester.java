@@ -1,8 +1,22 @@
 package com.hbm.blocks.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.util.vector.Matrix4f;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.interfaces.IBomb;
+import com.hbm.physics.AABBCollider;
+import com.hbm.physics.Collider;
+import com.hbm.physics.ConvexMeshCollider;
+import com.hbm.physics.PhysicsTestParticle;
+import com.hbm.physics.RigidBody;
+import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.render.util.ModelRendererUtil;
+import com.hbm.render.util.ModelRendererUtil.VertexData;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.block.BlockContainer;
@@ -12,7 +26,11 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBox;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -20,7 +38,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class TestObjTester extends BlockContainer implements IBomb {
@@ -157,6 +177,35 @@ public class TestObjTester extends BlockContainer implements IBomb {
     		}
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleLightning(world, pos.getX(), pos.getY()+40, pos.getZ()));
     		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleBFGRing(world, pos.getX() + 0.5, pos.getY() + 25, pos.getZ() + 0.5 - 55));
+    		/*EntityCreeper creep = new EntityCreeper(Minecraft.getMinecraft().world);
+            creep.setPosition(te.getPos().getX()+0.5F, te.getPos().getY()+7, te.getPos().getZ()+6.5F);
+            List<Pair<Matrix4f, ModelRenderer>> boxes = ModelRendererUtil.getBoxesFromMob(creep);
+            Vec3d nor = new Vec3d(0, 1, 1).normalize();
+            float[] plane = new float[]{(float)nor.x, (float)nor.y, (float)nor.z, -0.5F};
+            List<Collider> colliders = new ArrayList<>();
+            List<Collider> colliders2 = new ArrayList<>();
+            for(Pair<Matrix4f, ModelRenderer> p : boxes){
+            	for(ModelBox b : p.getRight().cubeList){
+            		VertexData[] dat = ModelRendererUtil.cutAndCapModelBox(b, plane, p.getLeft());
+            		if(dat[0].positionIndices != null && dat[0].positionIndices.length > 0){
+            			Collider c = new ConvexMeshCollider(dat[0].positionIndices, dat[0].vertexArray(), 1);
+                		colliders.add(c);
+            		}
+            		if(dat[1].positionIndices != null && dat[1].positionIndices.length > 0){
+            			Collider c = new ConvexMeshCollider(dat[1].positionIndices, dat[1].vertexArray(), 1);
+                		colliders2.add(c);
+            		}
+            	}
+            }
+            RigidBody r = new RigidBody(te.getWorld(), creep.posX, creep.posY, creep.posZ);
+            r.addColliders(colliders.toArray(new Collider[colliders.size()]));
+            r.impulseVelocity(new Vec3(0, 1, 0.4), r.globalCentroid.addVector(0, -0.02, 0));
+            Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, r, creep.posX, creep.posY, creep.posZ));
+            r = new RigidBody(te.getWorld(), creep.posX, creep.posY, creep.posZ);
+            r.addColliders(colliders2.toArray(new Collider[colliders2.size()]));
+            r.impulseVelocity(new Vec3(0, 0, -0.1), r.globalCentroid.addVector(0, 0.02, 0));
+            Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, r, creep.posX, creep.posY, creep.posZ));*/
+            
     	}
 	}
 	

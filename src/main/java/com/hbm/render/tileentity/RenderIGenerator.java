@@ -117,7 +117,7 @@ public class RenderIGenerator extends TileEntitySpecialRenderer<TileEntityMachin
         if(igen.torque > 0) {
 	        for(int i = 0; i < 2; i++) {
 		        BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0x8080ff, 0x0000ff, (int)te.getWorld().getTotalWorldTime() % 1000 + i, 5, px * 4, 0, 0);
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0xffffff, 0x0000ff, (int)te.getWorld().getTotalWorldTime() % 1000 + 2 + i, 5, px * 4, 0, 0);
+		        //BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0xffffff, 0x0000ff, (int)te.getWorld().getTotalWorldTime() % 1000 + 2 + i, 5, px * 4, 0, 0);
 	        }
         }
         

@@ -23,6 +23,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GUIScreenBobmazon extends GuiScreen {
 	
@@ -270,7 +273,7 @@ public class GUIScreenBobmazon extends GuiScreen {
 				
 		        GlStateManager.disableLighting();
 				if(offer != null) {
-					gui.itemRender.renderItemAndEffectIntoGUI(null, requirement.achievement.getDisplay().getIcon(), x + 1, y + 1);
+					gui.itemRender.renderItemAndEffectIntoGUI(null, requirement.getAchievement().getDisplay().getIcon(), x + 1, y + 1);
 				}
 		        GlStateManager.enableLighting();
 		        
@@ -281,23 +284,41 @@ public class GUIScreenBobmazon extends GuiScreen {
 	
 	public enum Requirement {
 
-		STEEL(AdvancementManager.bobMetalworks),
-		ASSEMBLY(AdvancementManager.bobAssembly),
-		CHEMICS(AdvancementManager.bobChemistry),
-		OIL(AdvancementManager.bobOil),
-		NUCLEAR(AdvancementManager.bobNuclear),
-		HIDDEN(AdvancementManager.bobHidden);
+		STEEL(AdvancementManager.bobMetalworks, "bobmetalworks"),
+		ASSEMBLY(AdvancementManager.bobAssembly, "bobassembly"),
+		CHEMICS(AdvancementManager.bobChemistry, "bobchemistry"),
+		OIL(AdvancementManager.bobOil, "boboil"),
+		NUCLEAR(AdvancementManager.bobNuclear, "bobnuclear"),
+		HIDDEN(AdvancementManager.bobHidden, "bobhidden");
 		
-		private Requirement(Advancement achievement) {
-			this.achievement = achievement;
+		private Requirement(Advancement achievement, String advName) {
+			this.setAchievement(achievement);
+			this.advName = advName;
 		}
 		
 		public boolean fullfills(EntityPlayerMP player) {
 			
-			return player.getAdvancements().getProgress(achievement).isDone();
+			return player.getAdvancements().getProgress(getAchievement()).isDone();
 		}
 		
-		public Advancement achievement;
+		public Advancement getAchievement() {
+			if(FMLCommonHandler.instance().getSide().isServer()){
+				return achievement;
+			}
+			return getAchClient();
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private Advancement getAchClient(){
+			return Minecraft.getMinecraft().player.connection.getAdvancementManager().getAdvancementList().getAdvancement(new ResourceLocation(RefStrings.MODID, advName));
+		}
+
+		public void setAchievement(Advancement achievement) {
+			this.achievement = achievement;
+		}
+
+		private Advancement achievement;
+		private String advName;
 	}
 
 }

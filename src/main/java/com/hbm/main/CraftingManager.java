@@ -1976,32 +1976,31 @@ public class CraftingManager {
 		addShapelessRecipe(new ItemStack(out), new Object[] { ModItems.rod_quad_empty, ingot, ingot, nugget, nugget, nugget, nugget, nugget, nugget });
 	}
 
-	//Sword
 	public static void addSword(Item ingot, Item sword) {
 		addShapedRecipe(new ItemStack(sword), new Object[] { "I", "I", "S", 'I', ingot, 'S', Items.STICK });
 	}
 
-	//Pickaxe
 	public static void addPickaxe(Item ingot, Item pick) {
 		addShapedRecipe(new ItemStack(pick), new Object[] { "III", " S ", " S ", 'I', ingot, 'S', Items.STICK });
 	}
 
-	//Axe
 	public static void addAxe(Item ingot, Item axe) {
 		addShapedRecipe(new ItemStack(axe), new Object[] { "II", "IS", " S", 'I', ingot, 'S', Items.STICK });
 	}
 
-	//Shovel
 	public static void addShovel(Item ingot, Item shovel) {
 		addShapedRecipe(new ItemStack(shovel), new Object[] { "I", "S", "S", 'I', ingot, 'S', Items.STICK });
 	}
 
-	//Hoe
 	public static void addHoe(Item ingot, Item hoe) {
 		addShapedRecipe(new ItemStack(hoe), new Object[] { "II", " S", " S", 'I', ingot, 'S', Items.STICK });
 	}
 	
 	public static void addShapedRecipe(ItemStack output, Object... args){
+		if(!GeneralConfig.nonoredict)
+			return;
+		if(!GeneralConfig.shaped)
+			return;
 		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(args);
 		ResourceLocation loc = getRecipeName(output);
 		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
@@ -2010,6 +2009,10 @@ public class CraftingManager {
 	}
 	
 	public static void addShapelessRecipe(ItemStack output, Object... args){
+		if(!GeneralConfig.nonoredict)
+			return;
+		if(!GeneralConfig.shapeless)
+			return;
 		ResourceLocation loc = getRecipeName(output);
 		ShapelessRecipes recipe = new ShapelessRecipes(loc.getResourceDomain(), output, buildInput(args));
 		recipe.setRegistryName(loc);
@@ -2017,6 +2020,10 @@ public class CraftingManager {
 	}
 	
 	public static void addShapedOreRecipe(ItemStack output, Object... args){
+		if(!GeneralConfig.oredict)
+			return;
+		if(!GeneralConfig.shaped)
+			return;
 		ResourceLocation loc = getRecipeName(output);
 		ShapedOreRecipe recipe = new ShapedOreRecipe(loc, output, args);
 		recipe.setRegistryName(loc);
@@ -2024,6 +2031,10 @@ public class CraftingManager {
 	}
 	
 	public static void addShapelessOreRecipe(ItemStack output, Object... args){
+		if(!GeneralConfig.oredict)
+			return;
+		if(!GeneralConfig.shapeless)
+			return;
 		ResourceLocation loc = getRecipeName(output);
 		ShapelessOreRecipe recipe = new ShapelessOreRecipe(loc, output, args);
 		recipe.setRegistryName(loc);

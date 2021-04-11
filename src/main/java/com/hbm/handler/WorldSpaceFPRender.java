@@ -13,6 +13,7 @@ import org.lwjgl.util.vector.Vector4f;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
+import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.packet.AuxButtonPacket;
@@ -40,22 +41,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = RefStrings.MODID)
 public class WorldSpaceFPRender {
 
-	public static int ticksActive = -1;
-	private static long renderTime;
-	public static AnimationWrapper wrapper;
-	public static List<ParticleLightningStrip> lightning_strips = new ArrayList<>();
-	public static List<Particle> particles = new ArrayList<>(); 
+	public static boolean shouldCustomRender = false;
+	//public static int ticksActive = -1;
+	//private static long renderTime;
+	//public static AnimationWrapper wrapper;
+	//public static List<ParticleLightningStrip> lightning_strips = new ArrayList<>();
+	//public static List<Particle> particles = new ArrayList<>(); 
 	
 	@SubscribeEvent
 	public static void renderHand(RenderHandEvent e) {
-		if(true || ticksActive < 0)
+		if(true || !shouldCustomRender)
 			return;
 		e.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void doDepthRender(CameraSetup e){
-		if(true || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0 || ticksActive < 0)
+		if(true || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0 || !shouldCustomRender)
 			return;
 			
 		GlStateManager.matrixMode(GL11.GL_PROJECTION);
@@ -69,11 +71,12 @@ public class WorldSpaceFPRender {
 		GL11.glTranslated(-0.3, 0, -2.25);
 		GL11.glRotated(90, 0, 1, 0);
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.skin);
-		ResourceManager.lightning_fp.controller.setAnim(wrapper);
+		//Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.skin);
+		//ResourceManager.lightning_fp.controller.setAnim(wrapper);
 		GlStateManager.colorMask(false, false, false, false);
 		ResourceManager.maxdepth.use();
-		ResourceManager.lightning_fp.renderAnimated(renderTime = System.currentTimeMillis());
+		//ResourceManager.lightning_fp.renderAnimated(renderTime = System.currentTimeMillis());
+		Minecraft.getMinecraft().entityRenderer.itemRenderer.renderItemInFirstPerson((float) e.getRenderPartialTicks());
 		HbmShaderManager2.releaseShader();
 		GlStateManager.colorMask(true, true, true, true);
 		GL11.glPopMatrix();
@@ -83,7 +86,7 @@ public class WorldSpaceFPRender {
 	}
 
 	public static void doHandRendering(RenderWorldLastEvent e) {
-		if(true || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0)
+		if(true || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0 || !shouldCustomRender)
 			return;
 		
 		GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -95,7 +98,9 @@ public class WorldSpaceFPRender {
 		GL11.glLoadIdentity();
 		GL11.glPushMatrix();
 		
-		if(ticksActive >= 0){
+		Minecraft.getMinecraft().entityRenderer.itemRenderer.renderItemInFirstPerson(e.getPartialTicks());
+		
+		/*if(ticksActive >= 0){
 			GL11.glPushMatrix();
 			GL11.glTranslated(-0.3, 0, -2.25);
 			GL11.glRotated(90, 0, 1, 0);
@@ -103,11 +108,11 @@ public class WorldSpaceFPRender {
 			RenderHelper.enableStandardItemLighting();
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.skin);
 	        ResourceManager.lightning_fp.controller.setAnim(wrapper);
-	        ResourceManager.lightning_fp.renderAnimated(renderTime, (last, first, name) -> {
+	        ResourceManager.lightning_fp.renderAnimated(renderTime, (last, first, model, diffN, name) -> {
 	        	if(name.equals("lower")){
 	        		if(ticksActive < 55)
 	        		for(ParticleLightningStrip p : lightning_strips){
-	        			p.setNewPoint(BobMathUtil.glWorldFromLocalNoView(new Vector4f(0.156664F, -0.60966F, -0.252432F, 1))[0]);
+	        			p.setNewPoint(BobMathUtil.viewFromLocal(new Vector4f(0.156664F, -0.60966F, -0.252432F, 1))[0]);
 	        		}
 	        		for(Particle p : particles){
 	        			p.renderParticle(Tessellator.getInstance().getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), e.getPartialTicks(), 0, 0, 0, 0, 0);
@@ -123,7 +128,7 @@ public class WorldSpaceFPRender {
         for(ParticleLightningStrip p : lightning_strips){
         	if(p != null)
         		p.renderParticle(Tessellator.getInstance().getBuffer(), Minecraft.getMinecraft().getRenderViewEntity(), e.getPartialTicks(), 0, 0, 0, 0, 0);
-        }
+        }*/
         
 		GL11.glPopMatrix();
 		GlStateManager.matrixMode(GL11.GL_PROJECTION);
@@ -135,7 +140,7 @@ public class WorldSpaceFPRender {
 	public static void worldTick(TickEvent.ClientTickEvent e){
 		if(true || e.phase == Phase.END || Minecraft.getMinecraft().world == null)
 			return;
-		Random rand = Minecraft.getMinecraft().world.rand;
+		/*Random rand = Minecraft.getMinecraft().world.rand;
 		if(ticksActive >= 0){
 			ticksActive ++;
 			if(ticksActive >= 84){
@@ -163,7 +168,7 @@ public class WorldSpaceFPRender {
 			p.onUpdate();
 			if(!p.isAlive())
 				iter2.remove();
-		}
+		}*/
 	}
 
 }

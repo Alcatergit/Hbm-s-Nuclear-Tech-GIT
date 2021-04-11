@@ -95,7 +95,12 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 				ffgeuaInit();
 
 			FFUtils.fillFromFluidContainer(inventory, tanks[0], 7, 8);
-			if(FFUtils.checkRestrictions(inventory.getStackInSlot(9), stack -> stack != null && fluidHeat.get(stack.getFluid()) > 0))
+			if(FFUtils.checkRestrictions(inventory.getStackInSlot(9), stack -> {
+				if(stack != null && fluidHeat.containsKey(stack.getFluid())){
+					return fluidHeat.get(stack.getFluid()) > 0;
+				}
+				return false;
+			}))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 9, 10);
 			FFUtils.fillFromFluidContainer(inventory, tanks[2], 11, 12);
 			

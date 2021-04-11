@@ -24,6 +24,7 @@ public class RenderFluidDuct extends TileEntitySpecialRenderer<TileEntityFFFluid
 	@Override
 	public void render(TileEntityFFFluidDuct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glTranslated(x, y, z);
+		GlStateManager.enableAlpha();
 		GlStateManager.disableLighting();
 		this.bindTexture(texture);
 		drawCore(te);

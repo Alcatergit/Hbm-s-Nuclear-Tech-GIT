@@ -62,8 +62,7 @@ public class TileEntityGeiger extends TileEntity implements ITickable {
 		
 		RadiationSavedData data = RadiationSavedData.getData(world);
 		
-		Chunk chunk = world.getChunkFromBlockCoords(pos);
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(chunk.x, chunk.z));
+		int rads = (int)Math.ceil(data.getRadNumFromCoord(pos));
 		
 		return rads;
 	}

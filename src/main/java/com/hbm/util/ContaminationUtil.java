@@ -2,6 +2,7 @@ package com.hbm.util;
 
 import com.hbm.capability.RadiationCapability;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
@@ -86,13 +87,10 @@ public class ContaminationUtil {
 
 	public static void printGeigerData(EntityPlayer player) {
 
-		World world = player.world;
-
 		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 10)) / 10D;
 
 		RadiationSavedData data = RadiationSavedData.getData(player.world);
-		Chunk chunk = world.getChunkFromBlockCoords(new BlockPos((int)player.posX, 0, (int)player.posZ));
-		double rads = ((int)(data.getRadNumFromCoord(chunk.x, chunk.z) * 10)) / 10D;
+		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 10)) / 10D;
 
 		double res = 100.0D - ((int)(ContaminationUtil.calculateRadiationMod(player) * 10000)) / 100D;
 		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;

@@ -1,7 +1,6 @@
 package com.hbm.particle;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.lwjgl.opengl.GL11;
 
@@ -9,6 +8,7 @@ import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.render.util.ModelRendererUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -27,11 +27,6 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class DisintegrationParticleHandler {
 
-	public static Method rGetEntityTexture;
-	//Need to call this because things like bats do extra scaling
-	public static Method rPrepareScale;
-	//public static Method rPreRenderCallback;
-	
 	public static void spawnGluonDisintegrateParticles(Entity e) {
 		Render<Entity> eRenderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(e);
 		if(eRenderer instanceof RenderLivingBase && e instanceof EntityLivingBase) {
@@ -84,13 +79,13 @@ public class DisintegrationParticleHandler {
 		//if(rPreRenderCallback == null){
 		//	rPreRenderCallback = ReflectionHelper.findMethod(RenderLivingBase.class, "preRenderCallback", "func_77041_b", EntityLivingBase.class, float.class);
 		//}
-		if(rPrepareScale == null){
-			rPrepareScale = ReflectionHelper.findMethod(RenderLivingBase.class, "prepareScale", "func_188322_c", EntityLivingBase.class, float.class);
+		if(ModelRendererUtil.rPrepareScale == null){
+			ModelRendererUtil.rPrepareScale = ReflectionHelper.findMethod(RenderLivingBase.class, "prepareScale", "func_188322_c", EntityLivingBase.class, float.class);
 		}
 		//float f4 = prepareScale(e, partialTicks, render);
 		float f4 = 0.0625F;
 		try {
-			f4 = (float) rPrepareScale.invoke(render, e, partialTicks);
+			f4 = (float) ModelRendererUtil.rPrepareScale.invoke(render, e, partialTicks);
 		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e2) {
 			e2.printStackTrace();
 		}
@@ -112,12 +107,12 @@ public class DisintegrationParticleHandler {
 		model.setLivingAnimations(e, f6, f5, partialTicks);
 		model.setRotationAngles(f6, f5, f8, f2, f7, f4, e);
 
-		if(rGetEntityTexture == null){
-			rGetEntityTexture = ReflectionHelper.findMethod(Render.class, "getEntityTexture", "func_110775_a", Entity.class);
+		if(ModelRendererUtil.rGetEntityTexture == null){
+			ModelRendererUtil.rGetEntityTexture = ReflectionHelper.findMethod(Render.class, "getEntityTexture", "func_110775_a", Entity.class);
 		}
 		ResourceLocation r = ResourceManager.turbofan_blades_tex;
 		try {
-			r = (ResourceLocation) rGetEntityTexture.invoke(render, e);
+			r = (ResourceLocation) ModelRendererUtil.rGetEntityTexture.invoke(render, e);
 			if(r == null)
 				r = ResourceManager.turbofan_blades_tex;
 		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -184,13 +179,13 @@ public class DisintegrationParticleHandler {
 		//if(rPreRenderCallback == null){
 		//	rPreRenderCallback = ReflectionHelper.findMethod(RenderLivingBase.class, "preRenderCallback", "func_77041_b", EntityLivingBase.class, float.class);
 		//}
-		if(rPrepareScale == null){
-			rPrepareScale = ReflectionHelper.findMethod(RenderLivingBase.class, "prepareScale", "func_188322_c", EntityLivingBase.class, float.class);
+		if(ModelRendererUtil.rPrepareScale == null){
+			ModelRendererUtil.rPrepareScale = ReflectionHelper.findMethod(RenderLivingBase.class, "prepareScale", "func_188322_c", EntityLivingBase.class, float.class);
 		}
 		//float f4 = prepareScale(e, partialTicks, render);
 		float f4 = 0.0625F;
 		try {
-			f4 = (float) rPrepareScale.invoke(render, e, partialTicks);
+			f4 = (float) ModelRendererUtil.rPrepareScale.invoke(render, e, partialTicks);
 		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e2) {
 			e2.printStackTrace();
 		}
@@ -212,12 +207,12 @@ public class DisintegrationParticleHandler {
 		model.setLivingAnimations(e, f6, f5, partialTicks);
 		model.setRotationAngles(f6, f5, f8, f2, f7, f4, e);
 
-		if(rGetEntityTexture == null){
-			rGetEntityTexture = ReflectionHelper.findMethod(Render.class, "getEntityTexture", "func_110775_a", Entity.class);
+		if(ModelRendererUtil.rGetEntityTexture == null){
+			ModelRendererUtil.rGetEntityTexture = ReflectionHelper.findMethod(Render.class, "getEntityTexture", "func_110775_a", Entity.class);
 		}
 		ResourceLocation r = ResourceManager.turbofan_blades_tex;
 		try {
-			r = (ResourceLocation) rGetEntityTexture.invoke(render, e);
+			r = (ResourceLocation) ModelRendererUtil.rGetEntityTexture.invoke(render, e);
 			if(r == null)
 				r = ResourceManager.turbofan_blades_tex;
 		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
@@ -329,17 +324,6 @@ public class DisintegrationParticleHandler {
 				GlStateManager.rotate(m.rotateAngleX * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 			}
 		}
-	}
-
-	public static float prepareScale(EntityLivingBase entitylivingbaseIn, float partialTicks, RenderLivingBase r) {
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-		/*try {
-			rPreRenderCallback.invoke(r, entitylivingbaseIn, partialTicks);
-		} catch(IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}*/
-		GlStateManager.translate(0.0F, -1.501F, 0.0F);
-		return 0.0625F;
 	}
 
 	protected static float interpolateRotation(float prevYawOffset, float yawOffset, float partialTicks) {

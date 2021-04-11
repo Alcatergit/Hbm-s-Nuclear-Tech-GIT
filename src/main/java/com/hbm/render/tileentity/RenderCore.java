@@ -45,8 +45,8 @@ public class RenderCore extends TileEntitySpecialRenderer<TileEntityCore> {
 
 	        	GL11.glPushMatrix();
 	    		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-	    		GL11.glRotatef(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-	    		GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX - 90, 1.0F, 0.0F, 0.0F);
+	    		//GL11.glRotatef(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+	    		//GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX - 90, 1.0F, 0.0F, 0.0F);
 	    		GL11.glTranslated(-0.5, -0.5, -0.5);
 
 	    		renderOrb(core, 0, 0, 0);

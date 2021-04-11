@@ -6,14 +6,21 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.ResourceManager;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.PacketSpecialDeath;
+import com.hbm.particle.ParticleDecal;
+import com.hbm.render.util.BakedModelUtil;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
-import com.hbm.world.generator.CellularDungeonFactory;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -22,6 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
@@ -68,12 +76,17 @@ public class ItemWandD extends Item {
 					int y = world.getHeight(x, z);
 
 					//new Ruin001().generate_r0(world, world.rand, x, y - 8, z);
-					CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);
-					CellularDungeonFactory.jungle.generate(world, x, y + 4, z, world.rand);
-					CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
+					//CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);
+					//CellularDungeonFactory.jungle.generate(world, x, y + 4, z, world.rand);
+					//CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
 				}
 			}
 		} else {
+			Vec3d look = player.getLookVec();
+			int dl = BakedModelUtil.generateDecalMesh(world, look, 1, pos.getX()+hitX, pos.getY()+hitY, pos.getZ()+hitZ);
+			look = look.scale(0.001F);
+			//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecal(world, dl, ResourceManager.blood_dec1, 80, pos.getX()+hitX-look.x, pos.getY()+hitY-look.y, pos.getZ()+hitZ-look.z));
+			
 			BlockPos[] blocks = new BlockPos[7];
 			blocks[0] = pos;
 			blocks[1] = pos.up();
@@ -121,6 +134,23 @@ public class ItemWandD extends Item {
 			if(world.isRemote)
 				player.sendMessage(new TextComponentTranslation(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
 		} else {
+			if(!world.isRemote){
+				RayTraceResult r = Library.rayTraceIncludeEntities(player, 50, 1);
+				if(r.entityHit instanceof EntityLivingBase){
+					EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
+					ent.setHealth(0);
+					if(ent.getHealth() <= 0){
+						Vec3d norm = new Vec3d(world.rand.nextFloat()*2-1, world.rand.nextFloat()*2-1, world.rand.nextFloat()*2-1).normalize();
+						float[] planeEquation = new float[]{(float)norm.x, (float)norm.y, (float)norm.z, -ent.getEyeHeight()*0.5F*(float)norm.y};
+						//planeEquation = new float[]{0, 1, 0, -ent.getEyeHeight()*0.5F};
+						ent.setDead();
+						PacketDispatcher.wrapper.sendToAllTracking(new PacketSpecialDeath(ent, 3, planeEquation), ent);
+						if(ent instanceof EntityPlayerMP){
+							PacketDispatcher.wrapper.sendTo(new PacketSpecialDeath(ent, 3, planeEquation), (EntityPlayerMP) ent);
+						}
+					}
+				}
+			}
 		}
 		
 		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));

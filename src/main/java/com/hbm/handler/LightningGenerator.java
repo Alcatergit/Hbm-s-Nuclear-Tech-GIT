@@ -39,9 +39,9 @@ public class LightningGenerator {
 			value += 0.02F;
 			LightningNode next = child.children.get(0);
 			if(rand.nextFloat() < info.forkChance-value){
-				Vec3d randVec = BobMathUtil.randVecInCone(to.subtract(from).normalize(), 25, rand);
+				Vec3d randVec = BobMathUtil.randVecInCone(to.subtract(from).normalize(), info.forkConeDegrees, rand);
 				LightningNode fork1 = new LightningNode(child.pos);
-				float len = 1+rand.nextFloat()*4;
+				float len = 1+rand.nextFloat()*info.forkLengthRandom;
 				LightningNode fork2 = new LightningNode(child.pos.add(randVec.scale(len*from.subtract(to).lengthVector()*0.25F)));
 				fork1.children.add(fork2);
 				fork2.parent = fork1;
@@ -113,9 +113,11 @@ public class LightningGenerator {
 		public float forkSubdivMult = 1F;
 		public float forkSubdivisions = 1;
 		public int forkSubdivRecurse = 1;
+		public float forkLengthRandom = 4;
 		public float forkRandAmount = 0.2F;
 		public float forkRandAmountSubdivMultiplier = 0.25F;
 		public float randAmountSubdivMultiplier = 0.25F;
+		public float forkConeDegrees = 25;
 		public float subdivMult = 1.5F;
 	}
 }

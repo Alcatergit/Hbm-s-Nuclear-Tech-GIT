@@ -51,6 +51,7 @@ public class BeamPronter {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
 
+        
 		if(beam == EnumBeamType.SOLID) {
 			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
@@ -65,7 +66,7 @@ public class BeamPronter {
 		} else if (beam == EnumBeamType.SOLID){
 			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 		}
-
+		
 		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
 		Random rand = new Random(start);
 		double length = skeleton.lengthVector();
@@ -133,7 +134,7 @@ public class BeamPronter {
 		}
 		
 		if(beam == EnumBeamType.LINE) {
-            tessellator.setColorOpaque_I(innerColor);
+			tessellator.setColorOpaque_I(innerColor);
             tessellator.addVertex(0, 0, 0);
             tessellator.addVertex(0, skeleton.lengthVector(), 0);
 		}

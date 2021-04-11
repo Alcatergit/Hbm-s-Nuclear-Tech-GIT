@@ -93,7 +93,7 @@ public class WasteEarth extends Block {
 	@Override
 	public void updateTick(World world, BlockPos pos1, IBlockState state, Random rand) {
 		if(this.radIn > 0){
-			RadiationSavedData.incrementRad(world, pos1.getX(), pos1.getZ(), this.radIn, this.radMax);
+			RadiationSavedData.incrementRad(world, pos1, this.radIn, this.radMax);
 			world.scheduleUpdate(pos1, state.getBlock(), this.tickRate(world));
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos().setPos(pos1.getX(), pos1.getY(), pos1.getZ());

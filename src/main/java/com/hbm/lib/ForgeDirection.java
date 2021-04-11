@@ -1,9 +1,5 @@
 package com.hbm.lib;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.blocks.BlockDummyable;
-
 import net.minecraft.util.EnumFacing;
 
 public enum ForgeDirection {

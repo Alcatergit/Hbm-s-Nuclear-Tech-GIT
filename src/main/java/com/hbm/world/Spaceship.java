@@ -6,8 +6,8 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.FusionHatch;
 import com.hbm.blocks.machine.MachineBattery;
-import com.hbm.blocks.machine.MachineReactor;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
+import com.hbm.items.ModItems;
 import com.hbm.lib.HbmChestContents;
 
 import net.minecraft.block.Block;
@@ -16,12 +16,15 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 public class Spaceship extends WorldGenerator
 {
@@ -632,6 +635,10 @@ public class Spaceship extends WorldGenerator
 		if(world.getBlockState(pos.setPos(x + 8, y + -2, z + 38)).getBlock() == Blocks.CHEST)
 		{
 			WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(3), (TileEntityChest)world.getTileEntity(pos.setPos(x + 8, y + -2, z + 38)), 12);
+			if(rand.nextInt(10) == 0){
+				IItemHandlerModifiable handle = (IItemHandlerModifiable)((TileEntityChest)world.getTileEntity(pos.setPos(x + 8, y + -2, z + 38)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+				handle.setStackInSlot(rand.nextInt(handle.getSlots()), new ItemStack(ModItems.gun_vortex));
+			}
 		}
 		world.setBlockState(pos.setPos(x + 9, y + -2, z + 38), Block3.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + -2, z + 39), Block3.getDefaultState(), 3);

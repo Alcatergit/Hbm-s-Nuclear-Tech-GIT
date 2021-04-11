@@ -10,13 +10,13 @@ public class AnimationWrapper {
 		};
 	};
 	
-	Animation anim;
+	public Animation anim;
 	
-	long startTime;
-	float speedScale = 1;
-	boolean reverse;
-	EndResult endResult = EndResult.END;
-	int prevFrame = 0;
+	public long startTime;
+	public float speedScale = 1;
+	public boolean reverse;
+	public EndResult endResult = EndResult.END;
+	public int prevFrame = 0;
 	
 	public AnimationWrapper(Animation a){
 		this.anim = a;
@@ -73,6 +73,10 @@ public class AnimationWrapper {
 		
 		EndType type;
 		AnimationWrapper next;
+		
+		public EndResult(EndType type) {
+			this(type, null);
+		}
 		
 		public EndResult(EndType type, @Nullable AnimationWrapper next) {
 			this.type = type;

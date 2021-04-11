@@ -64,15 +64,10 @@ public class GunAnimationPacket implements IMessage {
 
 				if(m.type < 0 || m.type >= AnimType.values().length)
 					return null;
-
-				GunConfiguration config = ((ItemGunBase) stack.getItem()).mainConfig;
+				
+				
 				AnimType type = AnimType.values()[m.type];
-
-				BusAnimation animation = config.animations.get(type);
-
-				if(animation != null) {
-					HbmAnimations.hotbar[slot] = new Animation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
-				}
+				((ItemGunBase) stack.getItem()).startAnim(player, stack, slot, type);
 
 			} catch(Exception x) { }
 

@@ -21,7 +21,10 @@ import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.GunFXPacket;
 import com.hbm.packet.GunFXPacket.FXType;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.AnimType;
+import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
@@ -50,7 +53,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomModel, IItemHUD {
+public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 
 	public GunConfiguration mainConfig;
 	public GunConfiguration altConfig;
@@ -618,10 +621,15 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	public Crosshair getCrosshair() {
 		return mainConfig.crosshair;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public void startAnim(EntityPlayer player, ItemStack stack, int slot, AnimType type){
+		GunConfiguration config = ((ItemGunBase) stack.getItem()).mainConfig;
+		BusAnimation animation = config.animations.get(type);
 
-	@Override
-	public ModelResourceLocation getResourceLocation() {
-		return new ModelResourceLocation(this.getRegistryName(), "inventory");
+		if(animation != null) {
+			HbmAnimations.hotbar[slot] = new Animation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+		}
 	}
 	
 	@Override
@@ -649,7 +657,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IHasCustomMode
 	
 			if(gun.altConfig != null && gun.altConfig.reloadType == GunConfiguration.RELOAD_NONE) {
 				Item oldAmmo = ammo;
-				ammo = ItemGunBase.getBeltType(player, player.getHeldItemMainhand(), false);
+				ammo = ItemGunBase.getBeltType(player, player.getHeldItem(hand), false);
 	
 				if(ammo != oldAmmo) {
 					count = ItemGunBase.getBeltSize(player, ammo);

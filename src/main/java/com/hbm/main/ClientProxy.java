@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.function.Function;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
+import com.hbm.animloader.AnimationWrapper.EndResult;
+import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockModDoor;
@@ -180,10 +181,12 @@ import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
+import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.handler.JetpackHandler;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.particle.ParticleExSmoke;
@@ -207,9 +210,14 @@ import com.hbm.particle_instanced.InstancedParticleRenderer;
 import com.hbm.particle_instanced.ParticleContrailInstanced;
 import com.hbm.particle_instanced.ParticleExSmokeInstanced;
 import com.hbm.particle_instanced.ParticleRocketFlameInstanced;
-import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations;
+import com.hbm.render.anim.HbmAnimations.Animation;
+import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.entity.ElectricityRenderer;
 import com.hbm.render.entity.GasFlameRenderer;
 import com.hbm.render.entity.GasRenderer;
@@ -341,7 +349,9 @@ import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderBFLauncher;
 import com.hbm.render.item.weapon.ItemRenderBigSword;
 import com.hbm.render.item.weapon.ItemRenderBullshit;
+import com.hbm.render.item.weapon.ItemRenderCCPlasmaCannon;
 import com.hbm.render.item.weapon.ItemRenderCalamity;
+import com.hbm.render.item.weapon.ItemRenderCrucible;
 import com.hbm.render.item.weapon.ItemRenderCryolator;
 import com.hbm.render.item.weapon.ItemRenderEMPRay;
 import com.hbm.render.item.weapon.ItemRenderEuthanasia;
@@ -355,6 +365,8 @@ import com.hbm.render.item.weapon.ItemRenderGunHP;
 import com.hbm.render.item.weapon.ItemRenderGunJack;
 import com.hbm.render.item.weapon.ItemRenderGunSaturnite;
 import com.hbm.render.item.weapon.ItemRenderGunSonata;
+import com.hbm.render.item.weapon.ItemRenderHFSword;
+import com.hbm.render.item.weapon.ItemRenderHSSword;
 import com.hbm.render.item.weapon.ItemRenderImmolator;
 import com.hbm.render.item.weapon.ItemRenderMIRVLauncher;
 import com.hbm.render.item.weapon.ItemRenderMP;
@@ -597,6 +609,7 @@ import com.hbm.util.BobMathUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.client.particle.ParticleCloud;
@@ -612,23 +625,20 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.client.settings.KeyConflictContext;
@@ -1522,6 +1532,79 @@ public class ClientProxy extends ServerProxy {
 			double mZ = data.getDouble("mZ");
 			world.spawnParticle(EnumParticleTypes.getByName(data.getString("mode")), x, y, z, mX, mY, mZ);
 		}
+		
+		if("anim".equals(type)) {
+
+			EnumHand hand = EnumHand.values()[data.getInteger("hand")];
+			int slot = player.inventory.currentItem;
+			if(hand == EnumHand.OFF_HAND){
+				slot = 9;
+			}
+			String name = data.getString("name");
+			String mode = data.getString("mode");
+			if("crucible".equals(name)){
+				if("equip".equals(mode)){
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.crucible_equip, new EndResult(EndType.STAY));
+				}
+				if("crucible".equals(mode)) {
+
+					BusAnimation animation = new BusAnimation()
+							.addBus("GUARD_ROT", new BusAnimationSequence()
+									.addKeyframe(new BusAnimationKeyframe(90, 0, 1, 0))
+									.addKeyframe(new BusAnimationKeyframe(90, 0, 1, 800))
+									.addKeyframe(new BusAnimationKeyframe(0, 0, 1, 50)));
+
+					HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+				}
+
+				if("cSwing".equals(mode)) {
+
+					if(HbmAnimations.getRelevantTransformation("SWING_ROT", hand)[0] == 0) {
+
+						int offset = rand.nextInt(80)-20;
+
+						BusAnimation animation = new BusAnimation()
+								.addBus("SWING_ROT", new BusAnimationSequence()
+										.addKeyframe(new BusAnimationKeyframe(90 - offset, 90 - offset, -55, 75))
+										.addKeyframe(new BusAnimationKeyframe(90 + offset, 90 - offset, -45, 150))
+										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)))
+								.addBus("SWING_TRANS", new BusAnimationSequence()
+										.addKeyframe(new BusAnimationKeyframe(-0, 0, 0, 75))
+										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 150))
+										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)));
+
+						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.cSwing, 0.8F + player.getRNG().nextFloat() * 0.2F));
+
+						if(HbmAnimations.hotbar[slot] instanceof BlenderAnimation){
+							HbmAnimations.hotbar[slot].animation = animation;
+							HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
+						} else {
+							HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+						}
+					}
+				}
+			} else if("hs_sword".equals(name)){
+				if("equip".equals(mode)){
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.hs_sword_equip, new EndResult(EndType.STAY));
+				} else if("swing".equals(mode)){
+					BusAnimation animation = new BusAnimation()
+							.addBus("SWING", new BusAnimationSequence()
+									.addKeyframe(new BusAnimationKeyframe(120, 0, 0, 150))
+									.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)));
+					if(HbmAnimations.hotbar[slot] instanceof BlenderAnimation){
+						HbmAnimations.hotbar[slot].animation = animation;
+						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
+					} else {
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+					}
+				}
+			} else if("hf_sword".equals(name)){
+				if("equip".equals(mode)){
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.hf_sword_equip, new EndResult(EndType.STAY));
+				}
+			}
+			
+		}
 	}
 	
 	@Override
@@ -1682,6 +1765,10 @@ public class ClientProxy extends ServerProxy {
 		ModItems.ingot_meteorite.setTileEntityItemStackRenderer(new ItemRendererHot());
 		ModItems.ingot_meteorite_forged.setTileEntityItemStackRenderer(new ItemRendererHot());
 		ModItems.blade_meteorite.setTileEntityItemStackRenderer(new ItemRendererHot());
+		ModItems.crucible.setTileEntityItemStackRenderer(new ItemRenderCrucible());
+		ModItems.hs_sword.setTileEntityItemStackRenderer(new ItemRenderHSSword());
+		ModItems.hf_sword.setTileEntityItemStackRenderer(new ItemRenderHFSword());
+		ModItems.cc_plasma_gun.setTileEntityItemStackRenderer(new ItemRenderCCPlasmaCannon());
 		
 		ModItems.meteorite_sword_seared.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.5F, 0.0F));
 		ModItems.meteorite_sword_reforged.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.5F, 1.0F, 1.0F));
@@ -1707,27 +1794,22 @@ public class ClientProxy extends ServerProxy {
 		return audio;
 	}
 	
-	public static IBakedModel boxcar;
 	public static int boxcarCalllist;
 	
 	@Override
 	public void postInit(FMLPostInitializationEvent e) {
 		
-		try {
-			IModel model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(RefStrings.MODID, "models/boxcar.obj"));
-			boxcar = model.bake(model.getDefaultState(), DefaultVertexFormats.POSITION_TEX_NORMAL, BoxcarTextureGetter.INSTANCE);
-			boxcarCalllist = GL11.glGenLists(1);
-			GL11.glNewList(boxcarCalllist, GL11.GL_COMPILE);
-			RenderHelper.renderAll(boxcar);
-			GL11.glEndList();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		boxcarCalllist = GL11.glGenLists(1);
+		GL11.glNewList(boxcarCalllist, GL11.GL_COMPILE);
+		ResourceManager.boxcar.renderAll();
+		GL11.glEndList();
 		ResourceManager.loadAnimatedModels();
 		Minecraft.getMinecraft().getRenderManager().getSkinMap().forEach((p, r) -> {
 			r.addLayer(new JetpackHandler.JetpackLayer());
 		});
 		ParticleRenderLayer.register();
+		BobmazonOfferFactory.reset();
+		BobmazonOfferFactory.init();
 	}
 	
 	@Override
@@ -1754,16 +1836,5 @@ public class ClientProxy extends ServerProxy {
 		}
 		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
-	
-	private static enum BoxcarTextureGetter implements Function<ResourceLocation, TextureAtlasSprite>
-    {
-        INSTANCE;
-
-        @Override
-        public TextureAtlasSprite apply(ResourceLocation location)
-        {
-            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(new ResourceLocation(RefStrings.MODID, "models/boxcarflipv").toString());
-        }
-    }
 	
 }

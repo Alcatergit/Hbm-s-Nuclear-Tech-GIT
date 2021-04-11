@@ -186,7 +186,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 
             if (this.idleTime == 0 && getAttackTarget() != null) {
 
-            	RadiationSavedData.incrementRad(world, (int)posX, (int)posZ, 150, 1000);
+            	RadiationSavedData.incrementRad(world, this.getPosition(), 150, 1000);
             	flag = target.attackEntityFrom(ModDamageSource.radiation, 16.0F);
             	this.swingArm(EnumHand.MAIN_HAND);
             	this.playLivingSound();

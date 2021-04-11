@@ -60,7 +60,6 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		if(handlers.isEmpty())
 			return 0;
 		
-		
 		int part = resource.amount/handlers.size();
 		int totalDrained = 0;
 		int remaining = resource.amount;

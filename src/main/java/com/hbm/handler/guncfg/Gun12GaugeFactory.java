@@ -117,6 +117,47 @@ public class Gun12GaugeFactory {
 		return config;
 	}
 	
+	public static GunConfiguration getJShotgunConfig(){
+		GunConfiguration config = new GunConfiguration();
+		
+		config.rateOfFire = 8;
+		config.roundsPerCycle = 2;
+		config.gunMode = GunConfiguration.MODE_NORMAL;
+		config.firingMode = GunConfiguration.FIRE_MANUAL;
+		config.reloadDuration = 10;
+		config.firingDuration = 0;
+		config.ammoCap = 2;
+		config.durability = 3000;
+		config.reloadType = GunConfiguration.RELOAD_NONE;
+		config.allowsInfinity = true;
+		config.hasSights = true;
+		config.crosshair = Crosshair.L_CIRCLE;
+		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
+		config.firingSound = HBMSoundHandler.shottyShoot;
+		
+		config.animations.put(AnimType.ALT_CYCLE, new BusAnimation()
+				.addBus("JS_RECOIL2", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, -0.5, 1.5, 25))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250))
+						)
+				);
+		
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("JS_RECOIL", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0.5, 0, 0, 50))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 50))
+						)
+				);
+		
+		config.name = "Jade Shotgun";
+		config.manufacturer = "Aranim Industrial";
+		config.comment.add("Occult Weaponry");
+		
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.G12_NORMAL);
+		return config;
+	}
+	
 	public static BulletConfiguration get12GaugeConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();

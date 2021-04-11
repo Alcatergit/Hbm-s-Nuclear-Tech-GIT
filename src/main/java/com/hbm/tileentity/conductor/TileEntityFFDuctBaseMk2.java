@@ -69,7 +69,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		if(type != null)
-			compound.setString("fluidType", FluidRegistry.getFluidName(type));
+			compound.setString("fluidType", type.getName());
 		return super.writeToNBT(compound);
 	}
 
@@ -113,10 +113,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	}
 
 	public void onNeighborChange() {
-		rebuildCache();
-		updateConnections();
-		if(!world.isRemote)
-			PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		if(rebuildCache()){
+			updateConnections();
+			if(!world.isRemote)
+				PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		}
 	}
 
 	@Override
@@ -214,30 +215,34 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		}
 	}
 
-	protected void rebuildCache() {
+	protected boolean rebuildCache() {
+		boolean changed = false;
 		for(EnumFacing e : EnumFacing.VALUES) {
-
 			TileEntity te = world.getTileEntity(pos.offset(e));
 			if(tileentityCache[e.getIndex()] == null) {
 				if(te != null) {
 					if(network != null)
 						network.tryAdd(te);
 					tileentityCache[e.getIndex()] = te;
+					changed = true;
 				}
 			} else {
 				if(te == null) {
 					if(network != null)
 						network.checkForRemoval(tileentityCache[e.getIndex()]);
 					tileentityCache[e.getIndex()] = null;
+					changed = true;
 				} else if(te != tileentityCache[e.getIndex()]) {
 					if(network != null) {
 						network.checkForRemoval(tileentityCache[e.getIndex()]);
 						network.tryAdd(te);
 					}
 					tileentityCache[e.getIndex()] = te;
+					changed = true;
 				}
 			}
 		}
+		return changed;
 	}
 
 	public void updateConnections() {

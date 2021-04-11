@@ -1,22 +1,24 @@
 package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
+import org.objectweb.asm.Type;
 
+import com.hbm.handler.HbmShaderManager2;
 import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachineAssembler> {
@@ -29,25 +31,29 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
     @Override
 	public void render(TileEntityMachineAssembler assembler, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
     {
+    	Vec3d start = new Vec3d(assembler.getPos().getX()+0.05, assembler.getPos().getY()+1.5, assembler.getPos().getZ()+3.1);
+    	//RenderHelper.renderFlashLight(start, start.addVector(-20, 0, 0), 20, 1, ResourceManager.fl_cookie, partialTicks);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
+       // GL11.glPushMatrix();
+       // GL11.glTranslated(0, 5, 0);
+        //GlStateManager.bindTexture(RenderHelper.deferredNormalTex);
+       // ResourceManager.test.draw();
+        //GL11.glPopMatrix();
 		switch(assembler.getBlockMetadata())
 		{
 		case 2:
 			GL11.glRotatef(180, 0F, 1F, 0F);
-	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
+	        GL11.glTranslated(-0.5D, 0.0D, 0.5D); break;
 		case 4:
 			GL11.glRotatef(270, 0F, 1F, 0F);
-	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
+	        GL11.glTranslated(-0.5D, 0.0D, 0.5D); break;
 		case 3:
 			GL11.glRotatef(0, 0F, 1F, 0F);
-	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
+	        GL11.glTranslated(-0.5D, 0.0D, 0.5D); break;
 		case 5:
 			GL11.glRotatef(90, 0F, 1F, 0F);
-	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
+	        GL11.glTranslated(-0.5D, 0.0D, 0.5D); break;
 		}
 
 		bindTexture(ResourceManager.assembler_body_tex);
@@ -86,6 +92,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
         GlStateManager.shadeModel(GL11.GL_FLAT);*/
         
         GL11.glPopMatrix();
+        
         
         renderSlider(assembler, x, y, z, partialTicks);
     }

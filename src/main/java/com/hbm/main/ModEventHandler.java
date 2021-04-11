@@ -1,5 +1,6 @@
 package com.hbm.main;
 
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.HbmCapability;
@@ -25,21 +27,13 @@ import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
-import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BossSpawnHandler;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.JetpackHandler;
 import com.hbm.handler.MissileStruct;
 import com.hbm.handler.RadiationWorldHandler;
-import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.BreederRecipes;
-import com.hbm.inventory.CentrifugeRecipes;
-import com.hbm.inventory.CrystallizerRecipes;
-import com.hbm.inventory.CyclotronRecipes;
-import com.hbm.inventory.HadronRecipes;
-import com.hbm.inventory.MagicRecipes;
-import com.hbm.inventory.ShredderRecipes;
+import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.special.ItemHot;
@@ -83,7 +77,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -97,11 +93,11 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -116,6 +112,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.registries.DataSerializerEntry;
 
 public class ModEventHandler {
@@ -489,8 +486,7 @@ public class ModEventHandler {
 
 						if(event.world.getTotalWorldTime() % 20 == 0) {
 
-							Chunk chunk = entity.world.getChunkFromBlockCoords(new BlockPos(entity.posX, entity.posY, entity.posZ));
-							float rad = data.getRadNumFromCoord(chunk.x, chunk.z);
+							float rad = data.getRadNumFromCoord(entity.getPosition());
 
 							if(event.world.provider.isNether() && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
 								rad = RadiationConfig.hellRad;
@@ -843,6 +839,32 @@ public class ModEventHandler {
 			}
 		}
 	}
+	
+	public static Field r_handInventory = null;
+	public static Field r_armorArray = null;
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SubscribeEvent
+	public void onLivingUpdate(LivingUpdateEvent event){
+		if(r_handInventory == null){
+			r_handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
+			r_armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
+		}
+		NonNullList<ItemStack> handInventory = null;
+		NonNullList<ItemStack> armorArray = null;
+		try {
+			handInventory = (NonNullList<ItemStack>) r_handInventory.get(event.getEntityLiving());
+			armorArray = (NonNullList<ItemStack>) r_armorArray.get(event.getEntityLiving());
+			
+			if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getHeldItemMainhand().getItem() instanceof IEquipReceiver && !ItemStack.areItemStacksEqual(handInventory.get(0), event.getEntityLiving().getHeldItemMainhand())) {
+				((IEquipReceiver)event.getEntityLiving().getHeldItemMainhand().getItem()).onEquip((EntityPlayer) event.getEntityLiving(), EnumHand.MAIN_HAND);
+			}
+			if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getHeldItemOffhand().getItem() instanceof IEquipReceiver && !ItemStack.areItemStacksEqual(handInventory.get(0), event.getEntityLiving().getHeldItemOffhand())) {
+				((IEquipReceiver)event.getEntityLiving().getHeldItemOffhand().getItem()).onEquip((EntityPlayer) event.getEntityLiving(), EnumHand.OFF_HAND);
+			}
+		} catch(Exception e) { }
+		
+	}
 
 	@SubscribeEvent
 	public void onEntityJump(LivingJumpEvent event) {
@@ -976,20 +998,13 @@ public class ModEventHandler {
 	
 	@SubscribeEvent
 	public void craftingRegister(RegistryEvent.Register<IRecipe> e){
+		long mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		System.out.println("Memory usage before: " + mem);
 		CraftingManager.hack = e;
 		CraftingManager.init();
-		FluidTypeHandler.registerFluidProperties();
-		ShredderRecipes.registerShredder();
-		ShredderRecipes.registerOverrides();
-		CrystallizerRecipes.register();
-		CentrifugeRecipes.register();
-		BreederRecipes.registerFuels();
-		BreederRecipes.registerRecipes();
-		AssemblerRecipes.loadRecipes();
-		CyclotronRecipes.register();
-		HadronRecipes.register();
-		MagicRecipes.register();
 		CraftingManager.hack = null;
+		mem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		System.out.println("Memory usage after: " + mem);
 	}
 
 	// TODO should probably use these.

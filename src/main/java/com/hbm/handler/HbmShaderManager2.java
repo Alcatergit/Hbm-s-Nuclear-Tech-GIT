@@ -7,6 +7,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
@@ -14,14 +15,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL33;
+import org.lwjgl.opengl.GL32;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2.Shader.Uniform;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
@@ -31,9 +31,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
@@ -95,24 +95,63 @@ public class HbmShaderManager2 {
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
 	};
 	
-	public static void replaceDepthBuffer(){
-		
-	}
-	
-	public static final int bloomLayers = 4;
 	public static int height = 0;
     public static int width = 0;
+    public static final int bloomLayers = 4;
     public static Framebuffer[] bloomBuffers;
     public static Framebuffer bloomData;
-    
-	public static void bloom(){
-		if(true)
-			return;
+    public static Framebuffer distortionBuffer;
+	
+	public static void postProcess(){
 		if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
 			height = Minecraft.getMinecraft().displayHeight;
             width = Minecraft.getMinecraft().displayWidth;
-            recreateFBOs();
+            if(GeneralConfig.bloom)
+            	recreateBloomFBOs();
+            if(GeneralConfig.heatDistortion)
+            	recreateDistortionBuffer();
         }
+		if(GeneralConfig.bloom){
+			bloom();
+		}
+		if(GeneralConfig.heatDistortion){
+			heatDistortion();
+		}
+		GlStateManager.enableDepth();
+	}
+	
+	public static void heatDistortion(){
+		GL11.glFlush();
+		ResourceManager.heat_distortion_post.use();
+		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.bindTexture(Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
+		GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.heat_distortion_post.getShaderId(), "mc_tex"), 3);
+		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+		renderFboTriangle(distortionBuffer);
+		releaseShader();
+		
+		distortionBuffer.bindFramebuffer(true);
+		GlStateManager.clearColor(distortionBuffer.framebufferColor[0], distortionBuffer.framebufferColor[1], distortionBuffer.framebufferColor[2], distortionBuffer.framebufferColor[3]);
+		GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+	}
+	
+	public static void distort(float strength, Runnable render){
+		distortionBuffer.bindFramebuffer(false);
+		ResourceManager.heat_distortion_new.use();
+		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.heat_distortion_new.getShaderId(), "amount"), strength);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
+		render.run();
+		GlStateManager.disableBlend();
+		releaseShader();
+		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+	}
+	
+	public static void bloom(){
 		downsampleBloomData();
 		GlStateManager.enableBlend();
 		for(int i = bloomLayers-1; i >= 0; i --){
@@ -121,7 +160,6 @@ public class HbmShaderManager2 {
 			ResourceManager.bloom_h.use();
 			GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.bloom_h.getShaderId(), "frag_width"), 1F/(float)bloomBuffers[i*2].framebufferWidth);
 			renderFboTriangle(bloomBuffers[i*2], bloomBuffers[i*2+1].framebufferWidth, bloomBuffers[i*2+1].framebufferHeight);
-			
 			
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 			int tWidth, tHeight;
@@ -143,7 +181,9 @@ public class HbmShaderManager2 {
 		releaseShader();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableBlend();
-		bloomData.framebufferClear();
+		bloomData.bindFramebuffer(true);
+		GlStateManager.clearColor(bloomData.framebufferColor[0], bloomData.framebufferColor[1], bloomData.framebufferColor[2], bloomData.framebufferColor[3]);
+		GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 		
 		GlStateManager.enableAlpha();
@@ -164,7 +204,22 @@ public class HbmShaderManager2 {
 		releaseShader();
 	}
 	
-	public static void recreateFBOs(){
+	public static void recreateDistortionBuffer(){
+		if(distortionBuffer != null){
+			distortionBuffer.deleteFramebuffer();
+		}
+		distortionBuffer = new Framebuffer(width, height, true);
+		distortionBuffer.bindFramebufferTexture();
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
+		distortionBuffer.bindFramebuffer(false);
+		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+		OpenGlHelper.glFramebufferRenderbuffer(OpenGlHelper.GL_FRAMEBUFFER, OpenGlHelper.GL_DEPTH_ATTACHMENT, OpenGlHelper.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+		distortionBuffer.setFramebufferFilter(GL11.GL_LINEAR);
+		distortionBuffer.setFramebufferColor(0, 0, 0, 0);
+		distortionBuffer.framebufferClear();
+	}
+	
+	public static void recreateBloomFBOs(){
 		if(bloomBuffers != null)
 			for(Framebuffer buf : bloomBuffers){
 				buf.deleteFramebuffer();
@@ -234,7 +289,6 @@ public class HbmShaderManager2 {
         GlStateManager.colorMask(true, true, true, true);
 	}
 	
-	
     public static Framebuffer buf;
     
    /* public static void doPostProcess(){
@@ -275,9 +329,14 @@ public class HbmShaderManager2 {
         buf = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
     }*/
 	
-	public static Shader loadShader(ResourceLocation file) {
+    public static Shader loadShader(ResourceLocation file) {
+    	return loadShader(file, false);
+    }
+    
+	public static Shader loadShader(ResourceLocation file, boolean hasGeoShader) {
 		int vertexShader = 0;
 		int fragmentShader = 0;
+		int geometryShader = 0;
 		try {
 			int program = GL20.glCreateProgram();
 			
@@ -297,21 +356,40 @@ public class HbmShaderManager2 {
 				throw new RuntimeException("Error creating fragment shader: " + file);
 			}
 			
+			if(hasGeoShader){
+				geometryShader = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
+				GL20.glShaderSource(geometryShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".geo")));
+				GL20.glCompileShader(geometryShader);
+				if(GL20.glGetShaderi(geometryShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+					MainRegistry.logger.error(GL20.glGetShaderInfoLog(geometryShader, GL20.GL_INFO_LOG_LENGTH));
+					throw new RuntimeException("Error creating geometry shader: " + file);
+				}
+			}
+			
 			GL20.glAttachShader(program, vertexShader);
 			GL20.glAttachShader(program, fragmentShader);
+			if(hasGeoShader){
+				GL20.glAttachShader(program, geometryShader);
+			}
 			GL20.glLinkProgram(program);
 			if(GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
 				MainRegistry.logger.error(GL20.glGetProgramInfoLog(program, GL20.GL_INFO_LOG_LENGTH));
-				throw new RuntimeException("Error creating fragment shader: " + file);
+				throw new RuntimeException("Error linking shader: " + file);
 			}
 			
 			GL20.glDeleteShader(vertexShader);
 			GL20.glDeleteShader(fragmentShader);
+			if(hasGeoShader){
+				GL20.glDeleteShader(geometryShader);
+			}
 			
 			return new Shader(program);
 		} catch(Exception x) {
 			GL20.glDeleteShader(vertexShader);
 			GL20.glDeleteShader(fragmentShader);
+			if(hasGeoShader){
+				GL20.glDeleteShader(geometryShader);
+			}
 			x.printStackTrace();
 		}
 		return new Shader(0);

@@ -32,7 +32,7 @@ public class BlockAbsorber extends Block {
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		RadiationSavedData.decrementRad(world, pos.getX(), pos.getZ(), absorb);
+		RadiationSavedData.decrementRad(world, pos, absorb);
 
     	world.scheduleUpdate(pos, this, this.tickRate(world));
 	}

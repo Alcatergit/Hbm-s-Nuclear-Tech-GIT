@@ -170,6 +170,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent rocketFlame;
 	public static SoundEvent ballsLaser;
 	public static SoundEvent dartShoot;
+	public static SoundEvent cDeploy;
+	public static SoundEvent cSwing;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -366,6 +368,8 @@ public final class HBMSoundHandler {
 		rocketFlame = register("weapon.rocketFlame");
 		ballsLaser = register("weapon.ballsLaser");
 		dartShoot = register("weapon.dartShoot");
+		cDeploy = register("weapon.cDeploy");
+		cSwing = register("weapon.cSwing");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

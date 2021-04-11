@@ -197,13 +197,14 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	public void fillFluidInit(FluidTank tank) {
 		boolean update = needsUpdate;
 		
-		update = FFUtils.fillFluid(this, tank, world, pos.west(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.east(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.north(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.south(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.up(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.down(), 2000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.west(), 8000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.east(), 8000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.north(), 8000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.south(), 8000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.up(), 8000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.down(), 8000) || update;
 
+		
 		needsUpdate = update;
 	}
 

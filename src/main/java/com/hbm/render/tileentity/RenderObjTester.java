@@ -1,30 +1,29 @@
 package com.hbm.render.tileentity;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.handler.HbmShaderManager2;
-import com.hbm.handler.LightningGenerator;
-import com.hbm.handler.LightningGenerator.LightningGenInfo;
-import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.misc.BeamPronter;
+import com.hbm.render.util.ModelRendererUtil;
+import com.hbm.render.util.ModelRendererUtil.VertexData;
 import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,13 +32,13 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTester> {
-	
-	
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityObjTester te) {
@@ -140,7 +139,33 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
        // GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 0F, 1F, 0, 1);
         HbmShaderManager2.releaseShader();
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);*/
-        GL11.glTranslated(0, -3, 0);
+        
+        
+        GL11.glTranslated(0, 4, 0);
+        EntityCreeper creep = new EntityCreeper(Minecraft.getMinecraft().world);
+        creep.setPosition(te.getPos().getX()+0.5F, te.getPos().getY()+7, te.getPos().getZ()+0.5F);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ModelRendererUtil.getEntityTexture(creep));
+        List<Pair<Matrix4f, ModelRenderer>> boxes = ModelRendererUtil.getBoxesFromMob(creep);
+        Vec3d nor = new Vec3d(0, 1, 1).normalize();
+        float[] plane = new float[]{(float)nor.x, (float)nor.y, (float)nor.z, -0.5F};
+        GlStateManager.disableDepth();
+        HbmShaderManager2.distort(0.5F, () -> {
+        	for(Pair<Matrix4f, ModelRenderer> p : boxes){
+            	GL11.glPushMatrix();
+            	BufferBuilder buf = Tessellator.getInstance().getBuffer();
+            	buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+            	for(ModelBox b : p.getRight().cubeList){
+            		VertexData[] dat = ModelRendererUtil.cutAndCapModelBox(b, plane, p.getLeft());
+            		//dat[0].tessellate(buf);
+            		dat[1].tessellate(buf, false);
+            		//dat[2].tessellate(buf, true);
+            	}
+            	Tessellator.getInstance().draw();
+            	GL11.glPopMatrix();
+            }
+        });
+        GlStateManager.enableDepth();
+        GL11.glTranslated(0, -7, 0);
         GL11.glRotatef(90, 0, 1, 0);
 
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
@@ -242,7 +267,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         int bruh = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GlStateManager.bindTexture(bruh);
-        HbmShaderManager2.bloomBuffers[6].bindFramebufferTexture();
+        //HbmShaderManager2.bloomBuffers[6].bindFramebufferTexture();
         
        // buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
        /* buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();

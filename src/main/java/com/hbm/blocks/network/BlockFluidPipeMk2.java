@@ -54,9 +54,15 @@ public class BlockFluidPipeMk2 extends BlockContainer {
 	}
 	
 	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityFFDuctBaseMk2){
+			((TileEntityFFDuctBaseMk2)te).onNeighborChange();
+		}
+	}
+	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		
 		if(te instanceof TileEntityFFDuctBaseMk2){
 			((TileEntityFFDuctBaseMk2)te).onNeighborChange();
 		}

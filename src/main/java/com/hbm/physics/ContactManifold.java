@@ -49,7 +49,12 @@ public class ContactManifold {
 		contactCount --;
 	}
 	
-	public void addContact(Contact c){
+	/**
+	 * Adds a contact to this manifold
+	 * @param c - the contact to try to add
+	 * @return true if it added successfully
+	 */
+	public boolean addContact(Contact c){
 		int idx = getContactIndex(c);
 		boolean replace = true;
 		if(idx < 0){
@@ -66,7 +71,9 @@ public class ContactManifold {
 				contactCount ++;
 			}
 			contacts[idx] = c;
+			return true;
 		}
+		return false;
 	}
 	
 	//Idea from bullet physics engine, the point where the quad made from the other four points has the most area is the point that matters least

@@ -25,8 +25,8 @@ public class RenderSoyuzMultiblock extends TileEntitySpecialRenderer<TileEntityS
 	@Override
 	public void render(TileEntitySoyuzStruct te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
-
-		GL11.glTranslatef((float)x + 1, (float)y + 1, (float)z);
+		
+		GL11.glTranslatef((float)x, (float)y, (float)z);
 
 		GlStateManager.enableBlend();
 		GlStateManager.enableCull();

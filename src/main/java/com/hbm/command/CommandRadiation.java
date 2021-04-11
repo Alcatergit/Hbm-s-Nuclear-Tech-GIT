@@ -66,6 +66,7 @@ public class CommandRadiation extends CommandBase {
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 4 && args[0].equals("set") && isInteger(args[1]) && isInteger(args[2]) && isInteger(args[3])) {
 			int blockX;
+			int blockY;
 			int blockZ;
 			int amount;
 			if (args[1].equals("~"))
@@ -73,13 +74,17 @@ public class CommandRadiation extends CommandBase {
 			else
 				blockX = Integer.parseInt(args[1]);
 			if (args[2].equals("~"))
+				blockY = sender.getPosition().getY();
+			else
+				blockY = Integer.parseInt(args[2]);
+			if (args[3].equals("~"))
 				blockZ = sender.getPosition().getZ();
 			else
-				blockZ = Integer.parseInt(args[2]);
+				blockZ = Integer.parseInt(args[3]);
 			amount = Integer.parseInt(args[3]);
-			RadiationSavedData.getData(sender.getEntityWorld()).setRadForCoord(blockX >> 4, blockZ >> 4, amount);
+			RadiationSavedData.getData(sender.getEntityWorld()).setRadForCoord(new BlockPos(blockX, blockY, blockZ), amount);
 			sender.sendMessage(new TextComponentTranslation(
-					"Set radiation at coords (" + blockX + ", " + blockZ + ") to " + amount + "."));
+					"Set radiation at coords (" + blockX + ", " + blockY + ", " + blockZ + ") to " + amount + "."));
 			return;
 		} else if (args.length == 1 && (args[0].equals("clearall") || args[0].equals("reset"))) {
 			RadiationSavedData.getData(sender.getEntityWorld()).jettisonData();

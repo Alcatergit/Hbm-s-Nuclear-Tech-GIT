@@ -49,8 +49,9 @@ public class TileEntityPlasmaStruct extends TileEntity implements ITickable {
 					if(a == pos.getX() && b == pos.getY() && c == pos.getZ())
 						continue;
 
-					if(world.getBlockState(new BlockPos(a, b, c)).getBlock() != ModBlocks.fusion_heater)
+					if(world.getBlockState(new BlockPos(a, b, c)).getBlock() != ModBlocks.fusion_heater){
 						return;
+					}
 				}
 			}
 		}

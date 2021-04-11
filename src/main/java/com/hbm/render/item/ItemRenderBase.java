@@ -25,7 +25,7 @@ public class ItemRenderBase extends TEISRBase {
 			renderNonInv();
 			break;
 		case GUI:
-			RenderHelper.enableGUIStandardItemLighting();
+			GlStateManager.enableLighting();
 			GL11.glRotated(30, 1, 0, 0);
 			GL11.glRotated(45+180, 0, 1, 0);
 			GL11.glScaled(0.062, 0.062, 0.062);
@@ -36,7 +36,6 @@ public class ItemRenderBase extends TEISRBase {
 			break;
 		}
 		renderCommon();
-		RenderHelper.enableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
 	

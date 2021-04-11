@@ -105,7 +105,7 @@ public class ItemFFFluidDuct extends Item {
 		if(f == null)
 			return stack;
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setString("fluidType", FluidRegistry.getFluidName(f));
+		stack.getTagCompound().setString("fluidType", f.getName());
 		return stack;
 	}
 	

@@ -1,5 +1,8 @@
 package com.hbm.render.anim;
 
+import com.hbm.animloader.AnimationWrapper;
+import com.hbm.animloader.AnimationWrapper.EndResult;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,7 +43,27 @@ public class HbmAnimations {
 			this.animation = animation;
 		}
 	}
+	
+	//Drillgon200: So we're just going to piggyback off of this system because it would be weird to make another one.
+	public static class BlenderAnimation extends Animation {
 
+		public AnimationWrapper wrapper;
+		
+		public BlenderAnimation(String key, long startMillis, float scale, com.hbm.animloader.Animation animation, EndResult end) {
+			super(key, startMillis, null);
+			wrapper = new AnimationWrapper(startMillis, scale, animation).onEnd(end);
+		}
+		
+	}
+
+	public static AnimationWrapper getRelevantBlenderAnim(EnumHand hand){
+		Animation anim = getRelevantAnim(hand);
+		if(anim instanceof BlenderAnimation){
+			return ((BlenderAnimation) anim).wrapper;
+		}
+		return AnimationWrapper.EMPTY;
+	}
+	
 	public static Animation getRelevantAnim(EnumHand hand) {
 
 		EntityPlayer player = Minecraft.getMinecraft().player;
@@ -66,7 +89,7 @@ public class HbmAnimations {
 
 		Animation anim = HbmAnimations.getRelevantAnim(hand);
 
-		if(anim != null) {
+		if(anim != null && anim.animation != null) {
 
 			BusAnimation buses = anim.animation;
 			int millis = (int)(System.currentTimeMillis() - anim.startMillis);

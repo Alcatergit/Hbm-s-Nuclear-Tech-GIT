@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
@@ -49,7 +50,7 @@ public class YellowBarrel extends Block {
 		}
     	ExplosionNukeGeneric.waste(p_149695_1_, x, y, z, 35);
         
-        RadiationSavedData.incrementRad(p_149695_1_, x, z, 35, 1500);
+        RadiationSavedData.incrementRad(p_149695_1_, new BlockPos(x, y, z), 35, 1500);
 	}
 	
 	@Override
@@ -81,10 +82,11 @@ public class YellowBarrel extends Block {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
         
-		if(this == ModBlocks.yellow_barrel)
-    		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 5, 75);
-    	else
-    		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 0.5F, 5);
+		if(this == ModBlocks.yellow_barrel){
+    		RadiationSavedData.incrementRad(world, pos, 5, 75);
+		} else {
+			RadiationSavedData.incrementRad(world, pos, 0.5F, 5);
+		}
 
         world.scheduleUpdate(pos, this, this.tickRate(world));
 	}

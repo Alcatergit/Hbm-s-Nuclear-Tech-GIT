@@ -432,9 +432,9 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		if(tankTypes[0] != null)
-			compound.setString("tankType0", FluidRegistry.getFluidName(tankTypes[0]));
+			compound.setString("tankType0", tankTypes[0].getName());
 		if(tankTypes[1] != null)
-			compound.setString("tankType1", FluidRegistry.getFluidName(tankTypes[1]));
+			compound.setString("tankType1", tankTypes[1].getName());
 
 		compound.setInteger("solidfuel", solid);
 		compound.setLong("power", power);

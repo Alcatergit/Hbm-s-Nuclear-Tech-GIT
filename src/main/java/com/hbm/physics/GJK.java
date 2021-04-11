@@ -6,22 +6,24 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.hbm.particle.ParticleTauHit;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.util.BobMathUtil;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.Vec3d;
 
 public class GJK {
 
 	public static final int gjkMaxIterations = 64;
 	public static final int epaMaxIterations = 128;
+	public static float margin = 0;
 	
 	public static Simplex csoSimplex = new Simplex();
 	
 	//https://www.youtube.com/watch?v=Qupqu1xe7Io
-	public static GJKInfo colliding(@Nullable RigidBody bodyA, @Nullable RigidBody bodyB, Collider a, Collider b){
+	public static GJKInfo colliding(RigidBody bodyA, RigidBody bodyB, Collider a, Collider b){
+		return colliding(bodyA, bodyB, a, b, true);
+	}
+	public static boolean collidesAny(RigidBody bodyA, RigidBody bodyB, Collider a, Collider b){
+		return colliding(bodyA, bodyB, a, b, false) != null;
+	}
+	public static GJKInfo colliding(@Nullable RigidBody bodyA, @Nullable RigidBody bodyB, Collider a, Collider b, boolean epa){
 		GJKInfo returnInfo = new GJKInfo();
 		csoSimplex.reset();
 		Vec3 direction = new Vec3(0, 0, 1);
@@ -32,6 +34,8 @@ public class GJK {
 			if(supportCSO.dotProduct(direction) < 0){
 				//We didn't find a closer point
 				returnInfo.result = Result.SEPARATED;
+				if(!epa)
+					return null;
 				return returnInfo;
 			}
 			switch(csoSimplex.size){
@@ -64,7 +68,8 @@ public class GJK {
 				ao = csoSimplex.points[0].v.negate();
 				Vec3 dir = tetraCase(ab, ac, ad, ao);
 				if(dir == null){
-					EPA(bodyA, bodyB, a, b, returnInfo);
+					if(epa)
+						EPA(bodyA, bodyB, a, b, returnInfo);
 					return returnInfo;
 				} else {
 					direction = dir;
@@ -136,6 +141,7 @@ public class GJK {
 			csoSimplex.size--;
 			return triangleCase(ac, ad, ac.crossProduct(ad), ao);
 		} else if(ad.crossProduct(ab).dotProduct(ao) > 0){
+			csoSimplex.points[2] = csoSimplex.points[1];
 			csoSimplex.points[1] = csoSimplex.points[3];
 			csoSimplex.points[3] = null;
 			csoSimplex.size--;
@@ -175,8 +181,16 @@ public class GJK {
 	public static Vec3 localSupport(RigidBody body, Collider c, Vec3 worldDir){
 		if(body != null){
 			Vec3 localDir = body.globalToLocalVec(worldDir);
+			if(margin != 0){
+				localDir = localDir.normalize();
+				return body.localToGlobalPos(c.support(localDir).add(localDir.mult(margin)));
+			}
 			return body.localToGlobalPos(c.support(localDir));
 		} else {
+			if(margin != 0){
+				worldDir = worldDir.normalize();
+				return c.support(worldDir).add(worldDir.mult(margin));
+			}
 			return c.support(worldDir);
 		}
 	}
@@ -235,7 +249,7 @@ public class GJK {
 			Iterator<Mkv[]> itr = faces.iterator();
 			while(itr.hasNext()){
 				Mkv[] face = itr.next();
-				if(face[3].v.dotProduct(support.v) > 0){
+				if(face[3].v.dotProduct(support.v.subtract(face[0].v)) > 0){
 					itr.remove();
 					Mkv[] edge = new Mkv[]{face[1], face[0]};
 					if(!removeEdge(edge)){

@@ -207,7 +207,6 @@ public class ShredderRecipes {
 	public static ItemStack getDustByName(String name) {
 		
 		List<ItemStack> matches = OreDictionary.getOres("dust" + name);
-		
 		if(matches != null && !matches.isEmpty())
 			return matches.get(0).copy();
 		

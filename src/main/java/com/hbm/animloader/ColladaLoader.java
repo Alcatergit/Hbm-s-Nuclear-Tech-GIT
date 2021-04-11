@@ -14,6 +14,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,19 +39,24 @@ public class ColladaLoader {
 	
 	/*
 	 * My attempt at making a collada loader.
-	 * Some things to note: You can't use child of constraints with it, as this will break the linear interpolation and I don't know how to fix it
+	 * Some things to note: You can't use child of constraints with it with complete accuracy, 
+	 * as this will break the linear interpolation and I don't know how to fix it
 	 * To get around this, you can put multiple objects with different parents or origins and toggle their visibility.
 	 * It's hacky, but it works, at least if you don't need an object affected by multiple bones at the same time.
 	 */
 	
 	public static AnimatedModel load(ResourceLocation file) {
+		return load(file, false);
+	}
+	
+	public static AnimatedModel load(ResourceLocation file, boolean flipV) {
 		IResource res;
 		try {
 			res = Minecraft.getMinecraft().getResourceManager().getResource(file);
 			Document doc;
 			try {
 				doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(res.getInputStream());
-				return parse(doc.getDocumentElement());
+				return parse(doc.getDocumentElement(), flipV);
 			} catch(SAXException e) {
 				e.printStackTrace();
 			} catch(IOException e) {
@@ -66,14 +73,14 @@ public class ColladaLoader {
 	
 	//Model loading section
 	
-	private static AnimatedModel parse(Element root){
+	private static AnimatedModel parse(Element root, boolean flipV){
 		//Should get the first bone
 		Element scene = getFirstElement((Element)root.getElementsByTagName("library_visual_scenes").item(0));
 		AnimatedModel structure = new AnimatedModel(){
 			@Override
-			protected void renderWithIndex(float inter, int firstIndex, int nextIndex, IAnimatedModelCallback c) {
+			protected void renderWithIndex(float inter, int firstIndex, int nextIndex, float diffN, IAnimatedModelCallback c) {
 				for(AnimatedModel m : children){
-					m.renderWithIndex(inter, firstIndex, nextIndex, c);
+					m.renderWithIndex(inter, firstIndex, nextIndex, diffN, c);
 				}
 			}
 			@Override
@@ -88,7 +95,7 @@ public class ColladaLoader {
 				structure.children.add(parseStructure(node));
 			}
 		}
-		Map<String, Integer> geometry = parseGeometry((Element)root.getElementsByTagName("library_geometries").item(0));
+		Map<String, Integer> geometry = parseGeometry((Element)root.getElementsByTagName("library_geometries").item(0), flipV);
 		addGeometry(structure, geometry);
 		setAnimationController(structure, new AnimationController());
 		
@@ -191,7 +198,7 @@ public class ColladaLoader {
 	//Geometry loading section
 	
 	//Map of geometry name to display list id
-	private static Map<String, Integer> parseGeometry(Element root){
+	private static Map<String, Integer> parseGeometry(Element root, boolean flipV){
 		Map<String, Integer> allGeometry = new HashMap<String, Integer>();
 		for(Element e : getElementsByName(root, "geometry")){
 			String name = e.getAttribute("id");
@@ -214,6 +221,9 @@ public class ColladaLoader {
 					indices = ArrayUtils.addAll(indices, parseIndices(section));
 				}
 			}
+			if(name.equals("Cylinder_007_Cylinder-mesh")){
+				System.out.println("bruh " + positions.length + " " + normals.length + " " + texCoords.length);
+			}
 			if(positions.length == 0)
 				continue;
 			
@@ -221,11 +231,19 @@ public class ColladaLoader {
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
 			BufferBuilder buf = Tessellator.getInstance().getBuffer();
 			buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_NORMAL);
-			for(int i = 0; i < indices.length; i += 3){
-				buf.pos(positions[indices[i]*3], positions[indices[i]*3+1], positions[indices[i]*3+2])
-				.tex(texCoords[indices[i+2]*2], texCoords[indices[i+2]*2+1])
-				.normal(normals[indices[i+1]*3], normals[indices[i+1]*3+1], normals[indices[i+1]*3+2])
-				.endVertex();
+			if(indices.length > 0){
+				for(int i = 0; i < indices.length; i += 3){
+					float v = texCoords[indices[i+2]*2+1];
+					if(flipV){
+						v = 1-v;
+					}
+					buf.pos(positions[indices[i]*3], positions[indices[i]*3+1], positions[indices[i]*3+2])
+					.tex(texCoords[indices[i+2]*2], v)
+					.normal(normals[indices[i+1]*3], normals[indices[i+1]*3+1], normals[indices[i+1]*3+2])
+					.endVertex();
+				}
+			} else {
+				
 			}
 			
 			Tessellator.getInstance().draw();
@@ -279,8 +297,10 @@ public class ColladaLoader {
 	private static void addGeometry(AnimatedModel m, Map<String, Integer> geometry){
 		if(!"".equals(m.geo_name) && geometry.containsKey(m.geo_name))
 			m.callList = geometry.get(m.geo_name);
-		else
+		else {
 			m.hasGeometry = false;
+			m.callList = -1;
+		}
 		for(AnimatedModel child : m.children){
 			addGeometry(child, geometry);
 		}
@@ -335,7 +355,6 @@ public class ColladaLoader {
 				anim.numKeyFrames = t.length;
 			}
 		}
-		
 		return anim;
 	}
 	
@@ -387,7 +406,7 @@ public class ColladaLoader {
 	
 	private static float[] flipMatrix(float[] f){
 		if(f.length != 16){
-			System.out.println("Error transforming matrix to column major: array length not 16. This will not work!");
+			System.out.println("Error flipping matrix: array length not 16. This will not work!");
 			System.out.println("Matrix: " + f);
 		}
 		return new float[]{

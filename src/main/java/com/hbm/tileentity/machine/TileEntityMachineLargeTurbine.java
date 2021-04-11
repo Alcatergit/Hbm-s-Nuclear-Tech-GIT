@@ -191,9 +191,9 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		compound.setLong("power", power);
 		if(types[0] != null)
-			compound.setString("tankType0", FluidRegistry.getFluidName(types[0]));
+			compound.setString("tankType0", types[0].getName());
 		if(types[1] != null)
-			compound.setString("tankType1", FluidRegistry.getFluidName(types[1]));
+			compound.setString("tankType1", types[1].getName());
 		return super.writeToNBT(compound);
 	}
 

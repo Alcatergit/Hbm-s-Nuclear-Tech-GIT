@@ -34,9 +34,10 @@ public class TileEntitySoyuzStruct extends TileEntity implements ITickable {
 		for(int i = -6; i <= 6; i++)
 			for(int j = 3; j <= 4; j++)
 				for(int k = -6; k <= 6; k++)
-					if(world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).getBlock() != ModBlocks.struct_launcher)
+					if(world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).getBlock() != ModBlocks.struct_launcher){
 						return;
-
+					}
+		
 		for(int i = -1; i <= 1; i++)
 			for(int j = 3; j <= 4; j++)
 				for(int k = -8; k <= -7; k++)

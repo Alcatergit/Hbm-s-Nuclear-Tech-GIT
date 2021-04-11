@@ -387,9 +387,9 @@ public class TileEntityLaunchTable extends TileEntity implements ITickable, ICon
 		nbt.setTag("inventory", inventory.serializeNBT());
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		if(tankTypes[0] != null)
-			nbt.setString("tankType0", FluidRegistry.getFluidName(tankTypes[0]));
+			nbt.setString("tankType0", tankTypes[0].getName());
 		if(tankTypes[1] != null)
-			nbt.setString("tankType1", FluidRegistry.getFluidName(tankTypes[1]));
+			nbt.setString("tankType1", tankTypes[1].getName());
 		nbt.setInteger("solidfuel", solid);
 		nbt.setLong("power", power);
 		nbt.setInteger("padSize", padSize.ordinal());

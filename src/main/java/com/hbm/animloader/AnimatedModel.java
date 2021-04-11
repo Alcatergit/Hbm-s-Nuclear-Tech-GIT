@@ -15,6 +15,7 @@ public class AnimatedModel {
 
 	public static FloatBuffer auxGLMatrix = GLAllocation.createDirectFloatBuffer(16);
 
+	//Pointless...
 	public AnimationController controller;
 
 	public String name = "";
@@ -38,7 +39,7 @@ public class AnimatedModel {
 	
 	public void renderAnimated(long sysTime, IAnimatedModelCallback c) {
 		if(controller.activeAnim == AnimationWrapper.EMPTY) {
-			render();
+			render(c);
 			return;
 		}
 
@@ -74,6 +75,7 @@ public class AnimatedModel {
 			diff = activeAnim.anim.length - diff;
 		diff *= activeAnim.speedScale;
 		float remappedTime = MathHelper.clamp(BobMathUtil.remap(diff, 0, activeAnim.anim.length, 0, numKeyFrames - 1), 0, numKeyFrames - 1);
+		float diffN = BobMathUtil.remap01_clamp(diff, 0, activeAnim.anim.length);
 		int index = (int) remappedTime;
 		int first = index;
 		int next;
@@ -83,11 +85,11 @@ public class AnimatedModel {
 			next = first;
 		}
 		
-		renderWithIndex((float) fract(remappedTime), first, next, c);
+		renderWithIndex((float) fract(remappedTime), first, next, diffN, c);
 		controller.activeAnim.prevFrame = first;
 	}
 
-	protected void renderWithIndex(float inter, int firstIndex, int nextIndex, IAnimatedModelCallback c) {
+	protected void renderWithIndex(float inter, int firstIndex, int nextIndex, float diffN, IAnimatedModelCallback c) {
 		GL11.glPushMatrix();
 		boolean hidden = false;
 		if(hasTransform) {
@@ -102,28 +104,39 @@ public class AnimatedModel {
 			}
 		}
 		if(c != null)
-			hidden |= c.onRender(controller.activeAnim.prevFrame, firstIndex, name);
+			hidden |= c.onRender(controller.activeAnim.prevFrame, firstIndex, callList, diffN, name);
 		if(hasGeometry && !hidden) {
 			GL11.glCallList(callList);
 		}
+		if(c != null)
+			c.postRender(controller.activeAnim.prevFrame, firstIndex, callList, diffN, name);
 		for(AnimatedModel m : children) {
-			m.renderWithIndex(inter, firstIndex, nextIndex, c);
+			m.renderWithIndex(inter, firstIndex, nextIndex, diffN, c);
 		}
 		GL11.glPopMatrix();
 	}
 
 	public void render() {
+		render(null);
+	}
+	
+	public void render(IAnimatedModelCallback c) {
 		GL11.glPushMatrix();
 		if(hasTransform) {
 			auxGLMatrix.put(transform);
 			auxGLMatrix.rewind();
 			GL11.glMultMatrix(auxGLMatrix);
 		}
-		if(hasGeometry) {
+		boolean hidden = false;
+		if(c != null)
+			hidden = c.onRender(-1, -1, callList, -1, name);
+		if(hasGeometry && !hidden) {
 			GL11.glCallList(callList);
 		}
+		if(c != null)
+			c.postRender(-1, -1, callList, -1, name);
 		for(AnimatedModel m : children) {
-			m.render();
+			m.render(c);
 		}
 		GL11.glPopMatrix();
 	}
@@ -133,6 +146,8 @@ public class AnimatedModel {
 	}
 	
 	public static interface IAnimatedModelCallback {
-		public boolean onRender(int prevFrame, int currentFrame, String modelName);
+		//(prevFrame, currentFrame, model, diffN, modelName)
+		public boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName);
+		public default void postRender(int prevFrame, int currentFrame, int model, float diffN, String modelName){};
 	}
 }

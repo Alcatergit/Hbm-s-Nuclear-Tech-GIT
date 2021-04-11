@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.handler.RadiationSystemNT.RadPocket;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
@@ -47,11 +49,10 @@ public class ItemGeigerCounter extends Item {
 		setInt(stack, getInt(stack, "timer") + 1, "timer");
 		if(getInt(stack, "timer") == 10) {
 			setInt(stack, 0, "timer");
-			setInt(stack, check(world, new BlockPos((int)entity.posX, (int)entity.posY, (int)entity.posZ)), "ticker");
+			setInt(stack, check(world, entity.getPosition()), "ticker");
 		}
 		
 		int x = getInt(stack, "ticker");
-		
 		if(getInt(stack, "timer") % 5 == 0) {
 			if(x > 0) {
 				List<Integer> list = new ArrayList<Integer>();
@@ -101,8 +102,7 @@ public class ItemGeigerCounter extends Item {
 		
 		RadiationSavedData data = RadiationSavedData.getData(world);
 		
-		Chunk chunk = world.getChunkFromBlockCoords(pos);
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(chunk.x, chunk.z));
+		int rads = (int)Math.ceil(data.getRadNumFromCoord(pos));
 		
 		return rads;
 	}

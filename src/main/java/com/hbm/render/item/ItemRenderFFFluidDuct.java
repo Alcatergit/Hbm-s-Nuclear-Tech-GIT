@@ -20,7 +20,7 @@ public class ItemRenderFFFluidDuct extends TEISRBase {
 	@Override
 	public void renderByItem(ItemStack stack) {
 		GL11.glPushMatrix();
-		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+		GlStateManager.enableAlpha();
 		RenderHelper.bindBlockTexture();
 
 		Tessellator tes = Tessellator.getInstance();
@@ -121,7 +121,6 @@ public class ItemRenderFFFluidDuct extends TEISRBase {
 			GlStateManager.enableLighting();
 			
 		}
-		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 		super.renderByItem(stack);
 	}

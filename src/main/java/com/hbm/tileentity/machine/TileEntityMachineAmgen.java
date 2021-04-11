@@ -45,12 +45,11 @@ public class TileEntityMachineAmgen extends TileEntity implements ITickable, ISo
 			
 			if(block == ModBlocks.machine_amgen) {
 				RadiationSavedData data = RadiationSavedData.getData(world);
-				Chunk c = world.getChunkFromBlockCoords(pos);
-				float rad = data.getRadNumFromCoord(c.x, c.z);
+				float rad = data.getRadNumFromCoord(pos);
 				
 				power += rad;
 				
-				RadiationSavedData.decrementRad(world, pos.getX(), pos.getZ(), 5F);
+				RadiationSavedData.decrementRad(world, pos, 5F);
 				
 			} else if(block == ModBlocks.machine_geo) {
 				

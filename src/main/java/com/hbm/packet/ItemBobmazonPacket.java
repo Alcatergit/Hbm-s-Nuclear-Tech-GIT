@@ -91,7 +91,7 @@ public class ItemBobmazonPacket implements IMessage {
 				
 				ItemStack stack = offer.offer;
 				
-				Advancement req = offer.requirement.achievement;
+				Advancement req = offer.requirement.getAchievement();
 				
 				if(req != null && p.getAdvancements().getProgress(req).isDone() || p.capabilities.isCreativeMode) {
 					

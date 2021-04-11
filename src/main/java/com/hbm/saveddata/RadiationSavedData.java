@@ -6,11 +6,11 @@ import java.util.Map;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -44,7 +44,6 @@ public class RadiationSavedData extends WorldSavedData {
     }
     
     public void createEntry(int x, int y, float rad) {
-    	
     	contamination.put(new ChunkPos(x, y), new RadiationSaveStructure(x, y, rad));
         this.markDirty();
     }
@@ -56,12 +55,15 @@ public class RadiationSavedData extends WorldSavedData {
     }
     
     public void jettisonData() {
-    	
+    	if(GeneralConfig.advancedRadiation){
+    		RadiationSystemNT.jettisonData(worldObj);
+    		return;
+    	}
     	contamination.clear();
         this.markDirty();
     }
     
-    public void setRadForCoord(int x, int y, float radiation) {
+    public void setRadForChunkCoord(int x, int y, float radiation){
     	ChunkPos pos = new ChunkPos(x, y);
     	RadiationSaveStructure entry = contamination.get(pos);
     	
@@ -73,24 +75,51 @@ public class RadiationSavedData extends WorldSavedData {
     	
     	entry.radiation = radiation;
         this.markDirty();
-    	
     }
     
-    public RadiationSaveStructure getRadFromCoord(int x, int y) {
+    public void setRadForCoord(BlockPos pos, float radiation) {
+    	if(GeneralConfig.advancedRadiation){
+    		RadiationSystemNT.setRadForCoord(worldObj, pos, radiation);
+    		return;
+    	}
+    	ChunkPos cPos = new ChunkPos(pos);
+    	RadiationSaveStructure entry = contamination.get(cPos);
+    	
+    	if(entry == null) {
+
+    		entry = new RadiationSaveStructure(cPos.x, cPos.z, radiation);
+        	contamination.put(cPos, entry);
+    	}
+    	
+    	entry.radiation = radiation;
+        this.markDirty();
+    }
+    
+    private RadiationSaveStructure getRadFromCoord(int x, int y) {
     	ChunkPos pos = new ChunkPos(x, y);
     	return contamination.get(pos);
     }
     
-    public float getRadNumFromCoord(int x, int y) {
-    	ChunkPos pos = new ChunkPos(x, y);
-    	RadiationSaveStructure rad = contamination.get(pos);
+    private float getRadNumFromChunkCoord(int x, int y){
+    	RadiationSaveStructure rad = contamination.get(new ChunkPos(x, y));
+    	if(rad != null)
+    		return rad.radiation;
+    	return 0F;
+    }
+    
+    public float getRadNumFromCoord(BlockPos pos) {
+    	if(GeneralConfig.advancedRadiation){
+    		return RadiationSystemNT.getRadForCoord(worldObj, pos);
+    	}
+    	RadiationSaveStructure rad = contamination.get(new ChunkPos(pos));
     	if(rad != null)
     		return rad.radiation;
     	return 0F;
     }
     
     public void updateSystem() {
-    	
+    	if(GeneralConfig.advancedRadiation)
+    		return;
     	Map<ChunkPos, RadiationSaveStructure> tempList = new HashMap<ChunkPos, RadiationSaveStructure>(contamination);
     	
     	contamination.clear();
@@ -124,43 +153,42 @@ public class RadiationSavedData extends WorldSavedData {
     				
     				float[] rads = new float[9];
 
-    				rads[0] = getRadNumFromCoord(struct.chunkX + 1, struct.chunkY + 1);
-    				rads[1] = getRadNumFromCoord(struct.chunkX, struct.chunkY + 1);
-    				rads[2] = getRadNumFromCoord(struct.chunkX - 1, struct.chunkY + 1);
-    				rads[3] = getRadNumFromCoord(struct.chunkX - 1, struct.chunkY);
-    				rads[4] = getRadNumFromCoord(struct.chunkX - 1, struct.chunkY - 1);
-    				rads[5] = getRadNumFromCoord(struct.chunkX, struct.chunkY - 1);
-    				rads[6] = getRadNumFromCoord(struct.chunkX + 1, struct.chunkY - 1);
-    				rads[7] = getRadNumFromCoord(struct.chunkX + 1, struct.chunkY);
-    				rads[8] = getRadNumFromCoord(struct.chunkX, struct.chunkY);
+    				rads[0] = getRadNumFromChunkCoord(struct.chunkX + 1, struct.chunkY + 1);
+    				rads[1] = getRadNumFromChunkCoord(struct.chunkX, struct.chunkY + 1);
+    				rads[2] = getRadNumFromChunkCoord(struct.chunkX - 1, struct.chunkY + 1);
+    				rads[3] = getRadNumFromChunkCoord(struct.chunkX - 1, struct.chunkY);
+    				rads[4] = getRadNumFromChunkCoord(struct.chunkX - 1, struct.chunkY - 1);
+    				rads[5] = getRadNumFromChunkCoord(struct.chunkX, struct.chunkY - 1);
+    				rads[6] = getRadNumFromChunkCoord(struct.chunkX + 1, struct.chunkY - 1);
+    				rads[7] = getRadNumFromChunkCoord(struct.chunkX + 1, struct.chunkY);
+    				rads[8] = getRadNumFromChunkCoord(struct.chunkX, struct.chunkY);
     				
     				float main = 0.6F;
     				float side = 0.075F;
     				float corner = 0.025F;
     				
-    				setRadForCoord(struct.chunkX + 1, struct.chunkY + 1, rads[0] + struct.radiation * corner);
-    				setRadForCoord(struct.chunkX, struct.chunkY + 1, rads[1] + struct.radiation * side);
-    				setRadForCoord(struct.chunkX - 1, struct.chunkY + 1, rads[2] + struct.radiation * corner);
-    				setRadForCoord(struct.chunkX - 1, struct.chunkY, rads[3] + struct.radiation * side);
-    				setRadForCoord(struct.chunkX - 1, struct.chunkY - 1, rads[4] + struct.radiation * corner);
-    				setRadForCoord(struct.chunkX, struct.chunkY - 1, rads[5] + struct.radiation * side);
-    				setRadForCoord(struct.chunkX + 1, struct.chunkY - 1, rads[6] + struct.radiation * corner);
-    				setRadForCoord(struct.chunkX + 1, struct.chunkY, rads[7] + struct.radiation * side);
-    				setRadForCoord(struct.chunkX, struct.chunkY, rads[8] + struct.radiation * main);
+    				setRadForChunkCoord(struct.chunkX + 1, struct.chunkY + 1, rads[0] + struct.radiation * corner);
+    				setRadForChunkCoord(struct.chunkX, struct.chunkY + 1, rads[1] + struct.radiation * side);
+    				setRadForChunkCoord(struct.chunkX - 1, struct.chunkY + 1, rads[2] + struct.radiation * corner);
+    				setRadForChunkCoord(struct.chunkX - 1, struct.chunkY, rads[3] + struct.radiation * side);
+    				setRadForChunkCoord(struct.chunkX - 1, struct.chunkY - 1, rads[4] + struct.radiation * corner);
+    				setRadForChunkCoord(struct.chunkX, struct.chunkY - 1, rads[5] + struct.radiation * side);
+    				setRadForChunkCoord(struct.chunkX + 1, struct.chunkY - 1, rads[6] + struct.radiation * corner);
+    				setRadForChunkCoord(struct.chunkX + 1, struct.chunkY, rads[7] + struct.radiation * side);
+    				setRadForChunkCoord(struct.chunkX, struct.chunkY, rads[8] + struct.radiation * main);
     				
     			} else {
     				
-    				this.setRadForCoord(struct.chunkX, struct.chunkY, getRadNumFromCoord(struct.chunkX, struct.chunkY) + struct.radiation);
+    				this.setRadForChunkCoord(struct.chunkX, struct.chunkY, getRadNumFromChunkCoord(struct.chunkX, struct.chunkY) + struct.radiation);
     			}
     		}
     	}
-    	
         this.markDirty();
     }
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(!GeneralConfig.enableRads) {
+		if(!GeneralConfig.enableRads || GeneralConfig.advancedRadiation) {
 			return;
 		}
 		int count = nbt.getInteger("radCount");
@@ -203,34 +231,40 @@ public class RadiationSavedData extends WorldSavedData {
 	    return openInstance;
 	}
 	
-	public static void incrementRad(World worldObj, int x, int z, float rad, float maxRad) {
-		
+	public static void incrementRad(World worldObj, BlockPos pos, float rad, float maxRad) {
+		if(GeneralConfig.advancedRadiation){
+			RadiationSystemNT.incrementRad(worldObj, pos, rad, maxRad);
+			return;
+		}
 		RadiationSavedData data = getData(worldObj);
 		
-		Chunk chunk = worldObj.getChunkFromBlockCoords(new BlockPos(x, -1, z));
+		Chunk chunk = worldObj.getChunkFromBlockCoords(pos);
 		
-		float r = data.getRadNumFromCoord(chunk.x, chunk.z);
+		float r = data.getRadNumFromChunkCoord(chunk.x, chunk.z);
 		
 		if(r < maxRad) {
 			
-			data.setRadForCoord(chunk.x, chunk.z, r + rad);
+			data.setRadForChunkCoord(chunk.x, chunk.z, r + rad);
 		}
 	}
 	
-	public static void decrementRad(World worldObj, int x, int z, float rad) {
-		
+	public static void decrementRad(World worldObj, BlockPos pos, float rad) {
+		if(GeneralConfig.advancedRadiation){
+			RadiationSystemNT.decrementRad(worldObj, pos, rad);
+			return;
+		}
 		RadiationSavedData data = getData(worldObj);
 		
-		Chunk chunk = worldObj.getChunkFromBlockCoords(new BlockPos(x, -1, z));
+		Chunk chunk = worldObj.getChunkFromBlockCoords(pos);
 		
-		float r = data.getRadNumFromCoord(chunk.x, chunk.z);
+		float r = data.getRadNumFromChunkCoord(chunk.x, chunk.z);
 		
 		r -= rad;
 		
 		if(r > 0) {
-			data.setRadForCoord(chunk.x, chunk.z, r);
+			data.setRadForChunkCoord(chunk.x, chunk.z, r);
 		} else {
-			data.setRadForCoord(chunk.x, chunk.z, 0);
+			data.setRadForChunkCoord(chunk.x, chunk.z, 0);
 		}
 	}
 }

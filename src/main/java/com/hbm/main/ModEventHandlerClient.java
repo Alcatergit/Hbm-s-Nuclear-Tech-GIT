@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.Project;
@@ -30,11 +32,11 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.JetpackHandler;
-import com.hbm.handler.WorldSpaceFPRender;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
+import com.hbm.interfaces.IPostRender;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
@@ -52,6 +54,7 @@ import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunShotty;
+import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.RecoilHandler;
@@ -66,6 +69,7 @@ import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
+import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.entity.DSmokeRenderer;
 import com.hbm.render.item.AssemblyTemplateBakedModel;
 import com.hbm.render.item.AssemblyTemplateRender;
@@ -110,7 +114,6 @@ import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
 import glmath.glm.vec._2.Vec2;
-import glmath.glm.vec._4.d.Vec4d;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -135,6 +138,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
@@ -160,9 +164,11 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
@@ -172,12 +178,30 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 
 public class ModEventHandlerClient {
 
 	public static Set<EntityLivingBase> specialDeathEffectEntities = new HashSet<>();
 	public static ArrayDeque<Particle> firstPersonAuxParticles = Queues.newArrayDeque();
+
+	public static float deltaMouseX;
+	public static float deltaMouseY;
+	
+	public static void updateMouseDelta() {
+		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.inGameHasFocus && Display.isActive()) {
+			mc.mouseHelper.mouseXYChange();
+			float f = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+			float f1 = f * f * f * 8.0F;
+			deltaMouseX = (float) mc.mouseHelper.deltaX * f1;
+			deltaMouseY = (float) mc.mouseHelper.deltaY * f1;
+		} else {
+			deltaMouseX = 0;
+			deltaMouseY = 0;
+		}
+	}
 	
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event) {
@@ -431,6 +455,10 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.ingot_meteorite, reg);
 		swapModels(ModItems.ingot_meteorite_forged, reg);
 		swapModels(ModItems.blade_meteorite, reg);
+		swapModels(ModItems.crucible, reg);
+		swapModels(ModItems.hs_sword, reg);
+		swapModels(ModItems.hf_sword, reg);
+		swapModels(ModItems.cc_plasma_gun, reg);
 		
 		swapModels(ModItems.meteorite_sword_seared, reg);
 		swapModels(ModItems.meteorite_sword_reforged, reg);
@@ -604,9 +632,6 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"));
-
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcar"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "models/boxcarflipv"));
 
 		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		particle_base = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/particle_base"));
@@ -831,13 +856,40 @@ public class ModEventHandlerClient {
 	}
 	
 	@SubscribeEvent
+	public void renderTick(RenderTickEvent e){
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(player != null && player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
+			updateMouseDelta();
+			player.turn(deltaMouseX, deltaMouseY);
+			float oldPitch = player.rotationPitch;
+		    float oldYaw = player.rotationYaw;
+			float y = player.rotationYaw - ItemSwordCutter.yaw;
+			if(y > ItemSwordCutter.MAX_DYAW){
+				player.rotationYaw = ItemSwordCutter.yaw + ItemSwordCutter.MAX_DYAW;
+			}
+			if(y < -ItemSwordCutter.MAX_DYAW){
+				player.rotationYaw = ItemSwordCutter.yaw - ItemSwordCutter.MAX_DYAW;
+			}
+			float p = player.rotationPitch - ItemSwordCutter.pitch;
+			if(p > ItemSwordCutter.MAX_DPITCH){
+				player.rotationPitch = ItemSwordCutter.pitch + ItemSwordCutter.MAX_DPITCH;
+			}
+			if(p < -ItemSwordCutter.MAX_DPITCH){
+				player.rotationPitch = ItemSwordCutter.pitch - ItemSwordCutter.MAX_DPITCH;
+			}
+			player.prevRotationYaw += player.rotationYaw-oldYaw;
+			player.prevRotationPitch += player.rotationPitch-oldPitch;
+		}
+	}
+	
+	@SubscribeEvent
 	public void fovUpdate(FOVUpdateEvent e){
 		EntityPlayer player = e.getEntity();
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			e.setNewfov(e.getFov()*1.1F);
 		}
 	}
-
+	
 	@SubscribeEvent
 	public void inputUpdate(InputUpdateEvent e) {
 		EntityPlayer player = e.getEntityPlayer();
@@ -866,7 +918,6 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void clientTick(ClientTickEvent e) {
-		
 		if(e.phase == Phase.END) {
 			if(!firstPersonAuxParticles.isEmpty()){
 				Iterator<Particle> i = firstPersonAuxParticles.iterator();
@@ -891,10 +942,23 @@ public class ModEventHandlerClient {
 				if(isHooked)
 					player.distanceWalkedModified = player.prevDistanceWalkedModified; //Stops the held shotgun from bobbing when hooked
 			}
-			
 		}
 		if(Minecraft.getMinecraft().player != null){
 			JetpackHandler.clientTick(e);
+		}
+	}
+	
+	@SubscribeEvent
+	public void renderSpecificHand(RenderSpecificHandEvent e){
+		if(Minecraft.getMinecraft().player.getHeldItem(e.getHand()).getItem() == ModItems.crucible){
+			e.setCanceled(true);
+			Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, e.getPartialTicks(), e.getInterpolatedPitch(), EnumHand.MAIN_HAND, 0, Minecraft.getMinecraft().player.getHeldItem(e.getHand()), 0);
+		} else if(e.getHand() == EnumHand.MAIN_HAND && Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemSwordCutter){
+			Animation anim = HbmAnimations.getRelevantAnim(EnumHand.MAIN_HAND);
+			if(anim != null && anim.animation != null){
+				e.setCanceled(true);
+				Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, e.getPartialTicks(), e.getInterpolatedPitch(), EnumHand.MAIN_HAND, 0, Minecraft.getMinecraft().player.getHeldItem(e.getHand()), 0);
+			}
 		}
 	}
 	
@@ -910,7 +974,8 @@ public class ModEventHandlerClient {
 	FloatBuffer POSITION = GLAllocation.createDirectFloatBuffer(4);
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void renderWorld(RenderWorldLastEvent evt) {	
+	public void renderWorld(RenderWorldLastEvent evt) {
+		GlStateManager.enableDepth();
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
 		ClientProxy.renderingConstant = true;
 
@@ -1080,10 +1145,116 @@ public class ModEventHandlerClient {
 				RenderOverhead.renderThermalSight(evt.getPartialTicks());
 		}
 		
+		if(entity instanceof EntityPlayer && ((EntityPlayer) entity).getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.STONE)){
+			Vec3d start = new Vec3d(-0.38, -0.22, 0.3).rotatePitch(-(float) Math.toRadians(entity.rotationPitch)).rotateYaw(-(float) Math.toRadians(((EntityPlayer)entity).rotationYawHead)).add(entity.getPositionEyes(partialTicks));
+			RenderHelper.renderFlashLight(start, start.add(entity.getLook(partialTicks).scale(30)), 20, 5, ResourceManager.fl_cookie, partialTicks);
+		}
+		
+		if(entity instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer) entity;
+			net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
+			BufferBuilder buf = tes.getBuffer();
+			if(player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
+				if(Mouse.isButtonDown(1) && ItemSwordCutter.startPos != null){
+					/*ItemSwordCutter.x += deltaMouseX*0.01F;
+					ItemSwordCutter.y -= deltaMouseY*0.01F;
+					if(ItemSwordCutter.x + ItemSwordCutter.y == 0){
+						ItemSwordCutter.x = 1F;
+					}
+					double lenRcp = 1D/Math.sqrt(ItemSwordCutter.x*ItemSwordCutter.x+ItemSwordCutter.y*ItemSwordCutter.y);
+					ItemSwordCutter.x *= lenRcp;
+					ItemSwordCutter.y *= lenRcp;
+					double angle = Math.atan2(ItemSwordCutter.y, ItemSwordCutter.x);
+					GL11.glPushMatrix();
+					GL11.glTranslated(0, player.getEyeHeight(), 0);
+					GL11.glRotated(-player.rotationYaw-90, 0, 1, 0);
+					GL11.glRotated(-player.rotationPitch, 0, 0, 1);
+					GL11.glTranslated(-0.3, 0, 0);
+					GL11.glRotated(Math.toDegrees(angle), 1, 0, 0);
+					GL11.glTranslated(0, 0.2, 0);
+					GlStateManager.disableCull();
+					GlStateManager.disableTexture2D();
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.color(0.7F, 0.7F, 0.7F, 0.4F);
+					buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+					buf.pos(0, 0, -2).endVertex();
+					buf.pos(3, 0, -2).endVertex();
+					buf.pos(3, 0, 2).endVertex();
+					buf.pos(0, 0, 2).endVertex();
+					tes.draw();
+					GlStateManager.enableTexture2D();
+					GlStateManager.disableBlend();
+					GlStateManager.enableCull();
+					
+					Vec3d[] positions = BobMathUtil.worldFromLocal(new Vector4f(0, 0, -2, 1), new Vector4f(3, 0, -2, 1), new Vector4f(3, 0, 2, 1));
+					Vec3d norm = positions[1].subtract(positions[0]).crossProduct(positions[2].subtract(positions[0])).normalize();
+					ItemSwordCutter.plane = new Vec3d[]{positions[0], norm};
+					GL11.glPopMatrix();
+					GlStateManager.disableTexture2D();
+					GlStateManager.color(1F, 0F, 0F, 1F);
+					buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+					Vec3d pos1 = positions[1].subtract(player.getPositionEyes(partialTicks));
+					buf.pos(pos1.x, pos1.y+player.getEyeHeight(), pos1.z).endVertex();
+					buf.pos(pos1.x+norm.x, pos1.y+norm.y+player.getEyeHeight(), pos1.z+norm.z).endVertex();
+					tes.draw();
+					GlStateManager.enableTexture2D();
+					player.turn(deltaMouseX, deltaMouseY);
+					GlStateManager.color(1F, 1F, 1F, 1F);*/
+					Vec3d pos1 = ItemSwordCutter.startPos;
+					Vec3d pos2 = player.getLook(partialTicks);
+					Vec3d norm = ItemSwordCutter.startPos.crossProduct(player.getLook(partialTicks));
+					GlStateManager.disableTexture2D();
+					GlStateManager.color(0, 0, 0, 1);
+					GL11.glPushMatrix();
+					GL11.glLoadIdentity();
+					
+					GL11.glRotated(player.rotationPitch, 1, 0, 0);
+					GL11.glRotated(player.rotationYaw+180, 0, 1, 0);
+					
+					buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+					buf.pos(pos1.x, pos1.y, pos1.z).endVertex();
+					buf.pos(pos2.x, pos2.y, pos2.z).endVertex();
+					tes.draw();
+					GL11.glPopMatrix();
+					GlStateManager.color(1, 1, 1, 1);
+					GlStateManager.enableTexture2D();
+					if(norm.lengthSquared() > 0.001F){
+						ItemSwordCutter.planeNormal = norm.normalize();
+					}
+				} else {
+					ItemSwordCutter.clicked = false;
+					ItemSwordCutter.planeNormal = null;
+				}
+			}
+			/*Vec3d euler = BobMathUtil.getEulerAngles(player.getLookVec());
+			javax.vecmath.Matrix3f rot = BakedModelUtil.eulerToMat((float)Math.toRadians(euler.x), (float)Math.toRadians(euler.y+90), player.world.rand.nextFloat()*2F*(float)Math.PI);
+			Vec3d c1 = new Vec3d(rot.m00, rot.m01, rot.m02);
+			Vec3d c2 = new Vec3d(rot.m10, rot.m11, rot.m12);
+			Vec3d c3 = new Vec3d(rot.m20, rot.m21, rot.m22);
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, player.getEyeHeight(), 0);
+			Vec3d look = player.getLook(partialTicks).scale(2);
+			GL11.glTranslated(look.x, look.y, look.z);
+			GlStateManager.disableTexture2D();
+			buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+			buf.pos(0, 0, 0).endVertex();
+			buf.pos(c1.x, c1.y, c1.z).endVertex();
+			buf.pos(0, 0, 0).endVertex();
+			buf.pos(c2.x, c2.y, c2.z).endVertex();
+			buf.pos(0, 0, 0).endVertex();
+			buf.pos(c3.x, c3.y, c3.z).endVertex();
+			tes.draw();
+			GlStateManager.enableTexture2D();
+			GL11.glPopMatrix();*/
+		}
+		
 		for(Runnable r : ClientProxy.deferredRenderers){
 			r.run();
 		}
 		ClientProxy.deferredRenderers.clear();
+		
+		RenderHelper.renderFlashlights();
 		
 		//WorldSpaceFPRender.doHandRendering(evt);
 		
@@ -1092,7 +1263,25 @@ public class ModEventHandlerClient {
 				p.renderParticle(null, Minecraft.getMinecraft().getRenderViewEntity(), MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
 		}*/
 		//HbmShaderManager2.doPostProcess();
-		HbmShaderManager2.bloom();
+		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)){
+			HbmShaderManager2.postProcess();
+		}
+	}
+	
+	@SubscribeEvent
+	public void renderHand(RenderHandEvent e){
+		if(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender){
+			e.setCanceled(true);
+			Minecraft mc = Minecraft.getMinecraft();
+			boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
+			if (mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
+	        {
+	            mc.entityRenderer.enableLightmap();
+	            mc.entityRenderer.itemRenderer.renderItemInFirstPerson(e.getPartialTicks());
+	            mc.entityRenderer.disableLightmap();
+	        }
+			HbmShaderManager2.postProcess();
+		}
 	}
 	
 	@SubscribeEvent
@@ -1181,8 +1370,24 @@ public class ModEventHandlerClient {
 
 			long time = System.currentTimeMillis() - animation.startMillis;
 
-			if(time > animation.animation.getDuration())
-				HbmAnimations.hotbar[i] = null;
+			int duration = 0;
+			if(animation instanceof BlenderAnimation){
+				BlenderAnimation banim = ((BlenderAnimation)animation);
+				//duration = (int) Math.ceil(banim.wrapper.anim.length * (1F/Math.abs(banim.wrapper.speedScale)));
+				EnumHand hand = i < 9 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+				if(!Minecraft.getMinecraft().player.getHeldItem(hand).getUnlocalizedName().equals(banim.key))
+					HbmAnimations.hotbar[i] = null;
+				if(animation.animation != null){
+					if(time > animation.animation.getDuration()){
+						animation.animation = null;
+					}
+				}
+			} else {
+				duration = animation.animation.getDuration();
+				if(time > duration)
+					HbmAnimations.hotbar[i] = null;
+			}
+			
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_O) && Minecraft.getMinecraft().currentScreen == null) {
 			PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(0, 0, 0, 999, 0));
@@ -1243,6 +1448,8 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void clickHandler(MouseEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(event.getButton() == 1 && !event.isButtonstate())
+			ItemSwordCutter.canClick = true;
 
 		boolean m1 = ItemGunBase.m1;
 		boolean m2 = ItemGunBase.m2;

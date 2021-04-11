@@ -47,7 +47,7 @@ public class ContainerMachineBattery extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 1) {
-				if (!this.mergeItemStack(var5, 1, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 2, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}

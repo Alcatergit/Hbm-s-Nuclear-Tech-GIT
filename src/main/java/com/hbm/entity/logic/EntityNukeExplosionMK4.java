@@ -56,7 +56,7 @@ public class EntityNukeExplosionMK4 extends Entity {
 			float radMax = Math.min((float) (length / 2F * Math.pow(length, 1.5) / 35F), 15000);
 			// System.out.println(radMax);
 			float rad = radMax / 4F;
-			RadiationSavedData.incrementRad(world, (int) this.posX, (int) this.posZ, rad, radMax);
+			RadiationSavedData.incrementRad(world, this.getPosition(), rad, radMax);
 		}
 
 		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);

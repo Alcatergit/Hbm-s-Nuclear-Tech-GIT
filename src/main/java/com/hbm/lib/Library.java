@@ -427,6 +427,27 @@ public class Library {
 		return result;
 	}
 	
+	//Drillgon200: Turns out the closest point on a bounding box to a line is a pretty good method for determine if a cone and an AABB intersect.
+	//Actually that was a pretty garbage method. Changing it out for a slightly less efficient sphere culling algorithm that only gives false positives.
+	//https://bartwronski.com/2017/04/13/cull-that-cone/
+	//Idea is that we find the closest point on the cone to the center of the sphere and check if it's inside the sphere.
+	public static boolean isBoxCollidingCone(AxisAlignedBB box, Vec3d coneStart, Vec3d coneEnd, float degrees){
+		Vec3d center = box.getCenter();
+		double radius = center.distanceTo(new Vec3d(box.maxX, box.maxY, box.maxZ));
+		Vec3d V = center.subtract(coneStart);
+		double VlenSq = V.lengthSquared();
+		Vec3d direction = coneEnd.subtract(coneStart);
+		double size = direction.lengthVector();
+		double V1len  = V.dotProduct(direction.normalize());
+		double angRad = Math.toRadians(degrees);
+		double distanceClosestPoint = Math.cos(angRad) * Math.sqrt(VlenSq - V1len*V1len) - V1len * Math.sin(angRad);
+		 
+		boolean angleCull = distanceClosestPoint > radius;
+		boolean frontCull = V1len >  radius + size;
+		boolean backCull  = V1len < -radius;
+		return !(angleCull || frontCull || backCull);
+	}
+	
 	//Drillgon200: Basically the AxisAlignedBB calculateIntercept method except it clamps to edge instead of returning null
 	public static Vec3d closestPointOnBB(AxisAlignedBB box, Vec3d vecA, Vec3d vecB){
 		
@@ -497,7 +518,13 @@ public class Library {
 	
 	protected static boolean isClosest(Vec3d line1, Vec3d line2, @Nullable Vec3d p_186661_2_, Vec3d p_186661_3_)
     {
-        return p_186661_2_ == null || dist_to_segment_squared(p_186661_3_, line1, line2) < dist_to_segment_squared(p_186661_2_, line1, line2);
+		if(p_186661_2_ == null)
+			return true;
+		double d1 = dist_to_segment_squared(p_186661_3_, line1, line2);
+		double d2 = dist_to_segment_squared(p_186661_2_, line1, line2);
+		if(Math.abs(d1-d2) < 0.01)
+			return line1.squareDistanceTo(p_186661_3_) < line1.squareDistanceTo(p_186661_2_);
+        return d1 < d2;
     }
 	
 	//Drillgon200: https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment

@@ -4,6 +4,7 @@ import javax.vecmath.Matrix3f;
 
 import com.hbm.render.amlfrom1710.Vec3;
 
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class AABBCollider extends Collider {
@@ -48,5 +49,10 @@ public class AABBCollider extends Collider {
 		} else {
 			return new AABBCollider(box, density);
 		}
+	}
+
+	@Override
+	public void debugRender() {
+		RenderGlobal.drawSelectionBoundingBox(box, 1, 0, 0, 1);
 	}
 }

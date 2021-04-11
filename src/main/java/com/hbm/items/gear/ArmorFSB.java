@@ -323,8 +323,7 @@ public class ArmorFSB extends ItemArmor {
 
 		RadiationSavedData data = RadiationSavedData.getData(world);
 
-		Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, -1, z));
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(chunk.x, chunk.z));
+		int rads = (int)Math.ceil(data.getRadNumFromCoord(new BlockPos(x, y, z)));
 
 		return rads;
 	}
@@ -419,7 +418,6 @@ public class ArmorFSB extends ItemArmor {
 	}
 	
 	public ArmorFSB cloneStats(ArmorFSB original) {
-		
 		//lists aren't being modified after instantiation, so there's no need to dereference
 		this.effects = original.effects;
 		this.resistance = original.resistance;

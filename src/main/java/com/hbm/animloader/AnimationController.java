@@ -1,6 +1,9 @@
 package com.hbm.animloader;
 
 public class AnimationController {
+	
+	//Drillgon200: You know what? I'm pretty sure this class is entirely pointless and just acts as a stupid getter/setter for the wrapper.
+	//TODO delete
 
 	protected AnimationWrapper activeAnim = AnimationWrapper.EMPTY;
 

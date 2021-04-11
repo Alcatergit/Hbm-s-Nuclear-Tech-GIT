@@ -537,7 +537,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 				rad *= checkHull();
 				//System.out.println(rad);
 				
-				RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), rad, 50 * 4);
+				RadiationSavedData.incrementRad(world, pos, rad, 50 * 4);
 			}
 
 			MutableBlockPos mPos = new BlockPos.MutableBlockPos();
@@ -791,7 +791,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 
 		int rad = (int)(((long)fuel) * 25000L / (fuelBase * 15L));
 		
-		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), rad, 75000);
+		RadiationSavedData.incrementRad(world, pos, rad, 75000);
 
 		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 7.5F, true);
 		ExplosionNukeGeneric.waste(world, pos.getX(), pos.getY(), pos.getZ(), 35);

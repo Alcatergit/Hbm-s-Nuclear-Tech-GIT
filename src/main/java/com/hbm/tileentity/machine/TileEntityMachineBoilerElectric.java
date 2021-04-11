@@ -183,12 +183,12 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	public void fillFluidInit(FluidTank tank) {
 		boolean update = needsUpdate;
 
-		update = FFUtils.fillFluid(this, tank, world, pos.west(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.east(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.down(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.up(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.north(), 2000) || update;
-		update = FFUtils.fillFluid(this, tank, world, pos.south(), 2000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.west(), 16000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.east(), 16000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.down(), 16000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.up(), 16000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.north(), 16000) || update;
+		update = FFUtils.fillFluid(this, tank, world, pos.south(), 16000) || update;
 
 		needsUpdate = update;
 	}

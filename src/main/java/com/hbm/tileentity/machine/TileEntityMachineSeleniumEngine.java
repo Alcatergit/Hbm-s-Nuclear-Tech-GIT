@@ -105,7 +105,7 @@ public class TileEntityMachineSeleniumEngine extends TileEntity implements ITick
 		compound.setLong("powerTime", power);
 		compound.setLong("powerCap", powerCap);
 		tank.writeToNBT(compound);
-		compound.setString("tankType", FluidRegistry.getFluidName(tankType));
+		compound.setString("tankType", tankType.getName());
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}

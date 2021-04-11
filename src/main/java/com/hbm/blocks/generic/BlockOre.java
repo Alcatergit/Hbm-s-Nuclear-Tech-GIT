@@ -303,7 +303,7 @@ public class BlockOre extends Block {
         	return;
         }
 		if(this.radIn > 0){
-			RadiationSavedData.incrementRad(worldIn, pos.getX(), pos.getZ(), radIn, radMax);
+			RadiationSavedData.incrementRad(worldIn, pos, radIn, radMax);
 			worldIn.scheduleUpdate(pos, state.getBlock(), this.tickRate(worldIn));
 		}
 	}

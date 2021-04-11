@@ -227,7 +227,7 @@ public class FFUtils {
 	 */
 
 	public static boolean fillFluid(TileEntity tileEntity, FluidTank tank, World world, BlockPos toFill, int maxDrain) {
-		if(tank.getFluidAmount() <= 0 || tank.getFluid() == null) {
+		if(tank.getFluidAmount() <= 0 || tank.getFluid() == null || tank.getFluid().getFluid() == null) {
 			return false;
 		}
 		TileEntity te = world.getTileEntity(toFill);
@@ -240,7 +240,7 @@ public class FFUtils {
 				}
 			}
 			IFluidHandler tef = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-			if(tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), false) > 0) {
+			if(tef != null && tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), false) > 0) {
 				tank.drain(tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), true), true);
 				return true;
 			}

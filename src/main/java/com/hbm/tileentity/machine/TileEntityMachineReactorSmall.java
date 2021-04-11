@@ -279,7 +279,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 				}*/
 
 				float rad = (float) coreHeat / (float) maxCoreHeat * 50F;
-				RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), rad, rad * 4);
+				RadiationSavedData.incrementRad(world, pos, rad, rad * 4);
 			}
 
 			detectAndSendChanges();
@@ -296,7 +296,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		ExplosionNukeGeneric.waste(world, pos.getX(), pos.getY(), pos.getZ(), 35);
 		world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
 
-		RadiationSavedData.incrementRad(world, pos.getX(), pos.getZ(), 1000F, 2000F);
+		RadiationSavedData.incrementRad(world, pos, 1000F, 2000F);
 		if(MobConfig.enableElementals) {
 			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(100, 100, 100));
 

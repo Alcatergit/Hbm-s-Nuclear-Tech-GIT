@@ -277,6 +277,8 @@ public class OreDictManager {
 		OreDictionary.registerOre("oreLithium", ModBlocks.ore_gneiss_lithium);
 		OreDictionary.registerOre("oreRareEarth", ModBlocks.ore_gneiss_rare);
 		OreDictionary.registerOre("oreSchrabidium", ModBlocks.ore_gneiss_schrabidium);
+		
+		OreDictionary.registerOre("fuelCoke", ModItems.coke);
 	}
 
 }

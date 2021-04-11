@@ -106,15 +106,14 @@ public class HbmWorldGen implements IWorldGenerator {
 
 	private void generateSurface(World world, Random rand, int i, int j) {
 		
-		for(int x = 0; x < 16; x++) {
+		for(int x = 8; x < 24; x++) {
 
-			for(int z = 0; z < 16; z++) {
+			for(int z = 8; z < 24; z++) {
 
 				double unruh = Math.abs(generateUnruh(world.getSeed(), i + x, j + z, 4, 4)) * 1.5;
 				double thresh = 0.8D;
 
 				if(unruh >= thresh) {
-
 					int span = (int)(Math.floor((unruh - thresh) * 7));
 
 					for(int s = -span; s <= span; s++) {

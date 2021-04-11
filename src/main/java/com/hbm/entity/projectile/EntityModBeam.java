@@ -33,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -318,6 +319,7 @@ public class EntityModBeam extends Entity implements IProjectile {
 
             float f2;
 
+            
             if (movingobjectposition != null)
             {
                 if (movingobjectposition.entityHit != null && movingobjectposition.entityHit != this.shootingEntity)
@@ -338,7 +340,7 @@ public class EntityModBeam extends Entity implements IProjectile {
                     
                 	this.setDead();
                 }
-                else
+                else if(movingobjectposition.typeOfHit == Type.BLOCK)
                 {
                 	IBlockState newState = world.getBlockState(movingobjectposition.getBlockPos());
                     this.field_145791_d = movingobjectposition.getBlockPos().getX();

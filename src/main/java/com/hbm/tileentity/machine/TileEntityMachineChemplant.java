@@ -258,9 +258,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(inputValidForTank(1, 18))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
 			
-			if(!inventory.getStackInSlot(17).isEmpty() && !(inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(17).getItem() == ModItems.inf_water))
+			if(!inventory.getStackInSlot(17).isEmpty() && (inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(17).getItem() == ModItems.inf_water))
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
-			if(!inventory.getStackInSlot(18).isEmpty() && !(inventory.getStackInSlot(18).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(18).getItem() == ModItems.inf_water))
+			if(!inventory.getStackInSlot(18).isEmpty() && (inventory.getStackInSlot(18).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(18).getItem() == ModItems.inf_water))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
 			
 			FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11);
@@ -458,7 +458,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 	
 	protected boolean inputValidForTank(int tank, int slot){
-		
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tankTypes[tank] != null){
 			if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
 				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];

@@ -134,6 +134,8 @@
     "weapon.rocketFlame": {"category": "block", "sounds": [{"name": "hbm:weapon/rocketFlame", "stream": false}]},
     "weapon.ballsLaser": {"category": "block", "sounds": [{"name": "hbm:weapon/ballsLaser", "stream": false}]},
     "weapon.dartShoot": {"category": "player", "sounds": [{"name": "hbm:weapon/dartShoot", "stream": false}]},
+    "weapon.cDeploy": {"category": "player", "sounds": [{"name": "hbm:weapon/cDeploy", "stream": false}]},
+    "weapon.cSwing": {"category": "player", "sounds": [{"name": "hbm:weapon/cSwing", "stream": false}]},
 
     "weapon.reloadTurret": {"category": "player", "sounds": [{"name": "hbm:weapon/reloadTurret", "stream": false}]},
     "weapon.switchmode1": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode1", "stream": false}]},

@@ -30,6 +30,7 @@ public class GeneralConfig {
 	public static boolean enableBomberShortMode = false;
 	public static boolean enableVaults = true;
 	public static boolean enableRads = true;
+	public static boolean advancedRadiation = true;
 	public static boolean enableCataclysm = false;
 	public static boolean enableExtendedLogging = false;
 	public static boolean enableHardcoreTaint = false;
@@ -41,8 +42,14 @@ public class GeneralConfig {
 	public static boolean callListModels = true;
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = true;
+	public static boolean bloom = true;
+	public static boolean heatDistortion = true;
 	public static boolean enableBabyMode = false;
 	public static boolean recipes = true;
+	public static boolean shapeless = true;
+	public static boolean oredict = true;
+	public static boolean shaped = true;
+	public static boolean nonoredict = true;
 	public static boolean jei = true;
 	
 	public static void loadFromConfig(Configuration config){
@@ -92,8 +99,21 @@ public class GeneralConfig {
 		}
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
+		
 		recipes = config.get(CATEGORY_GENERAL, "1.28_enableRecipes", true).getBoolean(true);
+		shapeless = config.get(CATEGORY_GENERAL, "1.28_enableShapeless", true).getBoolean(true);
+		oredict = config.get(CATEGORY_GENERAL, "1.28_enableOreDict", true).getBoolean(true);
+		shaped = config.get(CATEGORY_GENERAL, "1.28_enableShaped", true).getBoolean(true);
+		nonoredict = config.get(CATEGORY_GENERAL, "1.28_enableNonOreDict", true).getBoolean(true);
+		
 		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
+		useShaders2 = config.get(CATEGORY_GENERAL, "1.29_enableShaders2", true).getBoolean(true);
+		bloom = config.get(CATEGORY_GENERAL, "1.30_enableBloom", true).getBoolean(true);
+		heatDistortion = config.get(CATEGORY_GENERAL, "1.30_enableHeatDistortion", true).getBoolean(true);
+		
+		Property adv_rads = config.get(CATEGORY_GENERAL, "1.31_enableAdvancedRadiation", true);
+		adv_rads.setComment("Enables a 3 dimensional version of the radiation system that also allows some blocks (like concrete bricks) to stop it from spreading");
+		advancedRadiation = adv_rads.getBoolean(true);
 	}
 
 }

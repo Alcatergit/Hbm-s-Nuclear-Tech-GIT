@@ -92,6 +92,7 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
 	        GlStateManager.depthMask(true);
 	        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 	        GlStateManager.shadeModel(GL11.GL_FLAT);
+	        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	        GlStateManager.disableBlend();
 	        GlStateManager.enableCull();
 	        GlStateManager.enableLighting();

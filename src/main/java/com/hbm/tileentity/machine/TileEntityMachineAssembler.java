@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -508,12 +509,12 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 		if(AssemblerRecipes.getOutputFromTempate(inventory.getStackInSlot(4)) == ItemStack.EMPTY || AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)) == null)
 			return false;
 		else {
-			List<AStack> list = AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4));
+			List<AStack> list = new ArrayList<>(AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4)));
 
 			for(int i = 0; i < list.size(); i++){
 				list.set(i, list.get(i).copy().singulize());
 			}
-
+			
 			if(inv.getStackInSlot(slot) == null)
 				return false;
 
@@ -672,7 +673,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).expand(2, 1, 2);
+		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1).grow(2, 1, 2).grow(10);
 	}
 
 	@Override

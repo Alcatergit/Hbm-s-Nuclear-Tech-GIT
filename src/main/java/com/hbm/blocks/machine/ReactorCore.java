@@ -29,7 +29,9 @@ public class ReactorCore extends BlockContainer {
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityMachineReactorLarge)worldIn.getTileEntity(pos)).dropProvider);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te instanceof TileEntityMachineReactorLarge)
+			InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityMachineReactorLarge)te).dropProvider);
 		super.breakBlock(worldIn, pos, state);
 	}
 	

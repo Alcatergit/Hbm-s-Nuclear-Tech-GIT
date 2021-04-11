@@ -187,7 +187,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 	
 	private int getColorFromBlock(ItemStack stack) {
 		
-		if(stack == null || stack.getItem() == null/* || stack.getItemDamage() < 0*/)
+		if(stack == null || stack.getItem() == null || stack.isEmpty()/* || stack.getItemDamage() < 0*/)
 			return 0;
 
 		if(MachineRecipes.mODE(stack, "oreCoal"))
