@@ -40,10 +40,13 @@ public class TileEntityTrappedBrick extends TileEntity implements ITickable {
 				setDetector();
 			}
 			
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, detector);
+			//Apparently I still need to do a check because some chunk pregenerators are buggy.
+			if(detector != null){
+				List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, detector);
 
-			if(!players.isEmpty())
-				trigger();
+				if(!players.isEmpty())
+					trigger();
+			}
 		}
 	}
 

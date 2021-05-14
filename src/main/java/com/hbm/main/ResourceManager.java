@@ -1,5 +1,7 @@
 package com.hbm.main;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -12,6 +14,7 @@ import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
+import com.hbm.render.LightRenderer;
 import com.hbm.render.Vbo;
 import com.hbm.render.WavefrontObjCalllist;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
@@ -22,8 +25,10 @@ import com.hbm.util.KeypadClient;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class ResourceManager {
 
@@ -151,7 +156,7 @@ public class ResourceManager {
 	//Sphere
 	public static final IModelCustom sphere_ruv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_ruv.obj"));
 	public static final IModelCustom sphere_iuv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_iuv.obj"));
-	public static final IModelCustom sphere_uv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.obj"));
+	public static IModelCustom sphere_uv = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.obj"));
 	public static final IModelCustom sphere_uv_anim = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sphere_uv.hmf"));
 	public static IModelCustom sphere_hq = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/sphere_hq.obj"));
 
@@ -172,7 +177,10 @@ public class ResourceManager {
 	public static final IModelCustom thompson = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/thompson.obj"));
 	public static final IModelCustom bolter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/bolter.obj"));
 	public static IModelCustom cc_plasma_cannon = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/cc_assault_rifle.obj"));
-
+	public static IModelCustom egon_hose = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/egon_hose.obj"));
+	public static IModelCustom egon_backpack = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/egon.obj"));
+	
+	
 	public static final IModelCustom grenade_frag = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/grenade_frag.obj"));
 	public static final IModelCustom grenade_aschrab = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/grenade_aschrab.obj"));
 	
@@ -282,6 +290,8 @@ public class ResourceManager {
 	public static final IModelCustom mine_he = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mine_he.obj"));
 	public static final IModelCustom mine_fat = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mine_fat.obj"));
 
+	public static IModelCustom spinny_light = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/spinny_light.obj"));
+	
 	//Derrick
 	public static final IModelCustom derrick = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/derrick.obj"));
 	
@@ -385,6 +395,7 @@ public class ResourceManager {
 	public static final ResourceLocation fensu_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu.png");
 
 	public static final ResourceLocation jshotgun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/jade_shotgun.png");
+	public static final ResourceLocation jshotgun_lmap = new ResourceLocation(RefStrings.MODID, "textures/models/jade_shotgun_lmap.png");
 	
 	//Forcefield
 	public static final IModelCustom forcefield_top = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/forcefield_top.obj"));
@@ -611,6 +622,8 @@ public class ResourceManager {
 
 	//Sliding Blast Door
 	public static final ResourceLocation sliding_blast_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door.png");
+	public static final ResourceLocation sliding_blast_door_variant1_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door_variant1.png");
+	public static final ResourceLocation sliding_blast_door_variant2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door_variant2.png");
 	public static final ResourceLocation sliding_blast_door_keypad_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sliding_blast_door_keypad.png");
 
 	//Silo hatch
@@ -702,9 +715,16 @@ public class ResourceManager {
 	//ChickenCom plasma gun
 	public static final ResourceLocation cc_plasma_cannon_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/cc_assault_rifle.png");
 	
+	//Gluon gun
+	public static final ResourceLocation egon_hose_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/egon_hose.png");
+	public static final ResourceLocation egon_display_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/egon_display.png");
+	public static final ResourceLocation egon_backpack_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/egon.png");
+	
 	public static final ResourceLocation crucible_spark = new ResourceLocation(RefStrings.MODID, "textures/misc/crucible_spark.png");
 	
 	public static final ResourceLocation lut = new ResourceLocation(RefStrings.MODID, "textures/misc/neutrallut.png");
+	
+	public static final ResourceLocation spinny_light_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/spinnylight.png");
 	
 	//Blast
 	public static final ResourceLocation fireball = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball.png");
@@ -734,6 +754,15 @@ public class ResourceManager {
 	public static final ResourceLocation bfg_particle = new ResourceLocation(RefStrings.MODID, "textures/models/bfg/particle.png");
 	public static final ResourceLocation bfg_smoke = new ResourceLocation(RefStrings.MODID, "textures/models/bfg/smoke3_bright2.png");
 
+	//Bullet VFX
+	public static final ResourceLocation bullet_impact = new ResourceLocation(RefStrings.MODID, "textures/misc/impact.png");
+	public static final ResourceLocation bullet_impact_occlusion = new ResourceLocation(RefStrings.MODID, "textures/misc/impact_occlusion.png");
+	public static final ResourceLocation bullet_impact_normal = new ResourceLocation(RefStrings.MODID, "textures/misc/impact_normal.png");
+	public static final ResourceLocation rock_fragments = new ResourceLocation(RefStrings.MODID, "textures/misc/rock_fragments.png");
+	public static final ResourceLocation twigs_and_leaves = new ResourceLocation(RefStrings.MODID, "textures/misc/twigs_and_leaves.png");
+	public static final ResourceLocation wood_fragments = new ResourceLocation(RefStrings.MODID, "textures/misc/wood_shards.png");
+	public static final ResourceLocation smoke_anim0 = new ResourceLocation(RefStrings.MODID, "textures/misc/smo0_blur4.png");
+	
 	public static final ResourceLocation fresnel_l = new ResourceLocation(RefStrings.MODID, "textures/models/bfg/fresnel.png");
 	public static final ResourceLocation fresnel_m = new ResourceLocation(RefStrings.MODID, "textures/models/bfg/fresnel_m.png");
 	public static final ResourceLocation fresnel_ms = new ResourceLocation(RefStrings.MODID, "textures/models/bfg/fresnel_ms.png");
@@ -990,7 +1019,15 @@ public class ResourceManager {
 	public static final ResourceLocation blood0 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood0.png");
 	public static final ResourceLocation blood_dec0 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_dec0.png");
 	public static final ResourceLocation blood_dec1 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_dec1.png");
+	public static final ResourceLocation blood_dec2 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_dec2.png");
+	public static final ResourceLocation blood_dec3 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_dec3.png");
+	public static final ResourceLocation blood_dec4 = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_dec4.png");
+	public static final ResourceLocation[] blood_decals = {blood_dec0, blood_dec1, blood_dec2, blood_dec3, blood_dec4};
+	public static final ResourceLocation blood_particles = new ResourceLocation(RefStrings.MODID, "textures/misc/blood_particles.png");
 	public static final ResourceLocation gore_generic = new ResourceLocation(RefStrings.MODID, "textures/misc/gore_generic.png");
+	public static final ResourceLocation crucible_cap = new ResourceLocation(RefStrings.MODID, "textures/misc/crucible_cap.png");
+	
+	public static final ResourceLocation shotgun_crosshair = new ResourceLocation(RefStrings.MODID, "textures/misc/shotgun_crosshair.png");
 	
 	//Debug
 	public static final ResourceLocation uv_debug = new ResourceLocation(RefStrings.MODID, "textures/misc/uv_debug.png");
@@ -1007,16 +1044,25 @@ public class ResourceManager {
 	public static ResourceLocation flare3 = new ResourceLocation(RefStrings.MODID, "textures/misc/flare3.png");
 	public static ResourceLocation flare3b = new ResourceLocation(RefStrings.MODID, "textures/misc/flare3b.png");
 	public static ResourceLocation gluon_beam_tex = new ResourceLocation(RefStrings.MODID, "textures/misc/gluonbeam.png");
+	public static ResourceLocation gluon_muzzle_smoke = new ResourceLocation(RefStrings.MODID, "textures/misc/gluon_muzzle_smoke.png");
+	public static ResourceLocation gluon_muzzle_glow = new ResourceLocation(RefStrings.MODID, "textures/misc/gluon_muzzle_glow.png");
+	public static ResourceLocation gluon_burn = new ResourceLocation(RefStrings.MODID, "textures/misc/gluon_burn.png");
 	
 	public static ResourceLocation tau_beam_tex = new ResourceLocation(RefStrings.MODID, "textures/misc/tau_beam.png");
 	public static ResourceLocation tau_lightning = new ResourceLocation(RefStrings.MODID, "textures/misc/tau_lightning.png");
 	public static ResourceLocation gluontau_hud = new ResourceLocation(RefStrings.MODID, "textures/misc/gluontau_hud.png");
 	
+	public static ResourceLocation mflash = new ResourceLocation(RefStrings.MODID, "textures/misc/mflash_4.png");
+	public static ResourceLocation beam_generic = new ResourceLocation(RefStrings.MODID, "textures/misc/beam_generic.png");
+	
 	//Book
 	public static ResourceLocation circle_big = new ResourceLocation(RefStrings.MODID, "textures/misc/circle_big.png");
 	
 	public static ResourceLocation jetpack_tex = new ResourceLocation(RefStrings.MODID, "textures/models/jetpack_anim.png");
-
+	public static ResourceLocation jetpack_hud_large = new ResourceLocation(RefStrings.MODID, "textures/gui/hud/jetpack_hud_large.png");
+	public static ResourceLocation jetpack_hud_small = new ResourceLocation(RefStrings.MODID, "textures/gui/hud/jetpack_hud_small.png");
+	public static ResourceLocation jetpack_hud_small_text = new ResourceLocation(RefStrings.MODID, "textures/gui/hud/jetpack_hud_small_text.png");
+	
 	public static ResourceLocation skin = new ResourceLocation(RefStrings.MODID, "textures/models/ducc_st_engineer.png");
 	
 	//ANIMATIONS
@@ -1130,11 +1176,22 @@ public class ResourceManager {
 	public static Shader flashlight_deferred = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_deferred")).withUniforms(shader -> {
 		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
-	public static Shader flashlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_post")).withUniforms(shader -> {
+	
+	
+	//The actual shaders used in flashlight rendering, not experimental
+	public static Shader albedo = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/albedo"));
+	public static Shader flashlight_depth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_depth"));
+	public static Shader flashlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_post")).withUniforms(shader -> {
 		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
-	public static Shader flashlight_depth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_depth"));
-	public static Shader cone_volume = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/cone_volume")).withUniforms(shader -> {
+	public static Shader pointlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/pointlight_post")).withUniforms(shader -> {
+		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+	});
+	public static Shader cone_volume = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/cone_volume")).withUniforms(shader -> {
+		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+	});
+	public static Shader flashlight_blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/blit"));
+	public static Shader volume_upscale = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/volume_upscale")).withUniforms(shader -> {
 		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	
@@ -1155,6 +1212,11 @@ public class ResourceManager {
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 	});
+	public static Shader flash_lmap = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flash_lmap")).withUniforms(HbmShaderManager2.LIGHTMAP);
+	public static Shader bimpact = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bimpact")).withUniforms(HbmShaderManager2.LIGHTMAP, HbmShaderManager2.WINDOW_SIZE);
+	public static Shader blood_dissolve = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood")).withUniforms(HbmShaderManager2.LIGHTMAP);
+	public static Shader gravitymap_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/gravitymap"));
+	public static Shader blood_flow_update = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood_flow_update"));
 	
 	public static Shader gpu_particle_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_render")).withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, shader -> {
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
@@ -1198,9 +1260,9 @@ public class ResourceManager {
 		hf_sword = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/hf_sword_equip.dae"), true);
 		hf_sword_equip = ColladaLoader.loadAnim(900, new ResourceLocation(RefStrings.MODID, "models/anim/hf_sword_equip.dae"));
 		
-		//jshotgun = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim1.dae"));
-		//jshotgun_anim0 = ColladaLoader.loadAnim(500, new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim0.dae"));
-		//jshotgun_anim1 = ColladaLoader.loadAnim(1000, new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim1.dae"));
+		jshotgun = ColladaLoader.load(new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim1.dae"), true);
+		jshotgun_anim0 = ColladaLoader.loadAnim(1500, new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim0.dae"));
+		jshotgun_anim1 = ColladaLoader.loadAnim(3000, new ResourceLocation(RefStrings.MODID, "models/anim/jshotgun_anim1.dae"));
 	}
 	
 	public static void init() {
@@ -1214,6 +1276,10 @@ public class ResourceManager {
 			soyuz_launcher_support = new WavefrontObjCalllist((WavefrontObject) soyuz_launcher_support);
 			sphere_hq = new WavefrontObjCalllist((HFRWavefrontObject)sphere_hq);
 			cc_plasma_cannon = new WavefrontObjCalllist((HFRWavefrontObject)cc_plasma_cannon);
+			egon_hose = new WavefrontObjCalllist((HFRWavefrontObject)egon_hose);
+			egon_backpack = new WavefrontObjCalllist((HFRWavefrontObject)egon_backpack);
+			spinny_light = new WavefrontObjCalllist((HFRWavefrontObject)spinny_light);
+			sphere_uv = new WavefrontObjCalllist((WavefrontObject)sphere_uv);
 		}
 		KeypadClient.load();
 		

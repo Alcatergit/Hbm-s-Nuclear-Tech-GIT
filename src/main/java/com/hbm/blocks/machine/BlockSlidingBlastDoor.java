@@ -58,7 +58,7 @@ public class BlockSlidingBlastDoor extends BlockDummyable {
 		if(world.isRemote && te instanceof IKeypadHandler) {
 			return handleClickClient(te, pos);
 		}
-		if(!world.isRemote) {
+		if(!world.isRemote && !playerIn.isSneaking()) {
 			if(world.getBlockState(pos).getBlock() == ModBlocks.sliding_blast_door_keypad)
 				return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 			int[] pos1 = findCore(world, pos.getX(), pos.getY(), pos.getZ());

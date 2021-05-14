@@ -6,7 +6,6 @@ import java.util.Random;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.JetpackBase;
-import com.hbm.items.gear.JetpackRegular;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
@@ -61,6 +60,17 @@ public class ItemSyringe extends Item {
 					player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
 				}
             }
+		}
+		if(this == ModItems.gas_mask_filter_mono && player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask_mono) {
+			if(!world.isRemote) {
+				if(player.inventory.armorInventory.get(3).getItemDamage() == 0)
+					return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+
+				player.inventory.armorInventory.get(3).setItemDamage(0);
+
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.gasmaskScrew, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				player.getHeldItem(hand).shrink(1);
+			}
 		}
 		if (this == ModItems.syringe_awesome) {
 			if (!world.isRemote) {
@@ -616,6 +626,9 @@ public class ItemSyringe extends Item {
 		}
 		if(this == ModItems.radaway_flush) {
 			tooltip.add("Removes 1000 RAD");
+		}
+		if(this == ModItems.gas_mask_filter_mono) {
+			tooltip.add("Repairs worn monoxide mask");
 		}
 	}
 }

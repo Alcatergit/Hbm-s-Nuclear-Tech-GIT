@@ -19,6 +19,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 
 	//0: closed, 1: open, 2: closing, 3: opening
 	public byte state = 0;
+	public byte texture = 0;
 	public long sysTime;
 	private int timer = 0;
 	public boolean shouldUseBB = true;
@@ -58,7 +59,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 					}
 				}
 			}
-			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state, texture), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, shouldUseBB == true ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
@@ -163,6 +164,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 		redstoned = compound.getBoolean("redstoned");
 		keypadLocked = compound.getBoolean("keypadLocked");
 		shouldUseBB = compound.getBoolean("shouldUseBB");
+		texture = compound.getByte("texture");
 		super.readFromNBT(compound);
 	}
 
@@ -174,6 +176,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 		compound.setBoolean("redstoned", redstoned);
 		compound.setBoolean("keypadLocked", keypadLocked);
 		compound.setBoolean("shouldUseBB", shouldUseBB);
+		compound.setByte("texture", texture);
 		return super.writeToNBT(compound);
 	}
 
@@ -184,7 +187,6 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 				sysTime = System.currentTimeMillis();
 			}
 			this.state = state;
-			
 		}
 	}
 
@@ -208,5 +210,25 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	@Override
 	public void toggle() {
 		tryToggle(null);
+	}
+	
+	@Override
+	public void setTextureState(byte tex){
+		this.texture = tex;
+	}
+	
+	@Override
+	public boolean setTexture(String tex) {
+		if(tex.equals("sliding_blast_door")){
+			this.texture = 0;
+			return true;
+		} else if(tex.equals("sliding_blast_door_variant1")){
+			this.texture = 1;
+			return true;
+		} else if(tex.equals("sliding_blast_door_variant2")){
+			this.texture = 2;
+			return true;
+		}
+		return false;
 	}
 }

@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.HbmCapability;
@@ -33,6 +32,7 @@ import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.JetpackHandler;
 import com.hbm.handler.MissileStruct;
 import com.hbm.handler.RadiationWorldHandler;
+import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
@@ -46,6 +46,7 @@ import com.hbm.packet.AssemblerRecipeSyncPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PlayerInformPacket;
 import com.hbm.packet.RadSurveyPacket;
+import com.hbm.particle.bullet_hit.EntityHitDataHandler;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
@@ -88,7 +89,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -109,8 +109,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.registries.DataSerializerEntry;
@@ -395,10 +397,12 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
-		if(!MainRegistry.allPipeNetworks.isEmpty()) {
+		if(!MainRegistry.allPipeNetworks.isEmpty() && !event.world.isRemote) {
 			Iterator<FFPipeNetwork> itr = MainRegistry.allPipeNetworks.iterator();
 			while(itr.hasNext()) {
 				FFPipeNetwork net = itr.next();
+				if(net.getNetworkWorld() != event.world)
+					continue;
 				if(net != null)
 					net.updateTick();
 				if(net.getPipes().isEmpty()) {
@@ -627,7 +631,16 @@ public class ModEventHandler {
 			TimedGenerator.automaton(event.world, 100);
 		}
 	}
-
+	
+	@SubscribeEvent
+	public void serverTick(ServerTickEvent e){
+		if(e.phase == Phase.START){
+			JetpackHandler.serverTick();
+		} else {
+			EntityHitDataHandler.updateSystem();
+		}
+	}
+	
 	// Drillgon200: So 1.12.2's going to ignore ISpecialArmor if the damage is
 	// unblockable, huh?
 	@SubscribeEvent
@@ -896,8 +909,10 @@ public class ModEventHandler {
 	
 	@SubscribeEvent
 	public void clientJoinServer(PlayerLoggedInEvent e) {
-		if(e.player instanceof EntityPlayerMP)
-			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(/*ItemAssemblyTemplate.recipes*/), (EntityPlayerMP) e.player);
+		if(e.player instanceof EntityPlayerMP){
+			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(AssemblerRecipes.recipeList, AssemblerRecipes.hidden), (EntityPlayerMP) e.player);
+			JetpackHandler.playerLoggedIn(e);
+		}
 		if(!e.player.world.isRemote) {
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
 
@@ -908,6 +923,11 @@ public class ModEventHandler {
 			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))
         		PacketDispatcher.wrapper.sendTo(new PlayerInformPacket("Press O to Duck!"), (EntityPlayerMP)e.player);
 		}
+	}
+	
+	@SubscribeEvent
+	public void worldSave(WorldEvent.Save e) {
+		JetpackHandler.worldSave(e);
 	}
 
 	@SubscribeEvent

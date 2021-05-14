@@ -221,9 +221,6 @@ public class ColladaLoader {
 					indices = ArrayUtils.addAll(indices, parseIndices(section));
 				}
 			}
-			if(name.equals("Cylinder_007_Cylinder-mesh")){
-				System.out.println("bruh " + positions.length + " " + normals.length + " " + texCoords.length);
-			}
 			if(positions.length == 0)
 				continue;
 			

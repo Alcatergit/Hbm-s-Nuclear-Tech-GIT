@@ -42,8 +42,6 @@ public class BossSpawnHandler {
 			}
 		}
 
-
-
 		if(MobConfig.enableRaids) {
 
 			if(world.getTotalWorldTime() % MobConfig.raidDelay == 0) {

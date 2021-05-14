@@ -510,11 +510,11 @@ public class ModelRendererUtil {
 		throw new RuntimeException("Failed to get quads!");
 	}
 	
-	public static ParticleSlicedMob[] generateCutParticles(Entity ent, float[] plane){
-		return generateCutParticles(ent, plane, null);
+	public static ParticleSlicedMob[] generateCutParticles(Entity ent, float[] plane, ResourceLocation capTex, float capBloom){
+		return generateCutParticles(ent, plane, capTex, capBloom, null);
 	}
 	
-	public static ParticleSlicedMob[] generateCutParticles(Entity ent, float[] plane, Consumer<List<Triangle>> capConsumer){
+	public static ParticleSlicedMob[] generateCutParticles(Entity ent, float[] plane, ResourceLocation capTex, float capBloom, Consumer<List<Triangle>> capConsumer){
 		
 		// Cut all mob boxes and store them in separate lists //
 		
@@ -599,10 +599,52 @@ public class ModelRendererUtil {
 			tes.draw();
 			GL11.glEndList();
 			
-			particles.add(new ParticleSlicedMob(ent.world, body, bodyDL, capDL, tex));
+			particles.add(new ParticleSlicedMob(ent.world, body, bodyDL, capDL, tex, capTex, capBloom));
 		}
 		
 		return particles.toArray(new ParticleSlicedMob[particles.size()]);
+	}
+	
+	public static RigidBody[] generateRigidBodiesFromBoxes(Entity ent, List<Pair<Matrix4f, ModelRenderer>> boxes){
+		RigidBody[] arr = new RigidBody[boxes.size()];
+		int i = 0;
+		for(Pair<Matrix4f, ModelRenderer> p : boxes){
+			RigidBody body = new RigidBody(ent.world, ent.posX, ent.posY, ent.posZ);
+			Collider[] colliders = new Collider[p.getRight().cubeList.size()];
+			int j = 0;
+			for(ModelBox b : p.getRight().cubeList){
+				Triangle[] data = triangulate(b, p.getLeft());
+				VertexData dat = compress(data);
+				colliders[j] = new ConvexMeshCollider(dat.positionIndices, dat.vertexArray(), 1); 
+				j++;
+			}
+			body.addColliders(colliders);
+			arr[i] = body;
+			i++;
+		}
+		return arr;
+	}
+	
+	public static int[] generateDisplayListsFromBoxes(List<Pair<Matrix4f, ModelRenderer>> boxes){
+		int[] lists = new int[boxes.size()];
+		int i = 0;
+		for(Pair<Matrix4f, ModelRenderer> p : boxes){
+			int list = GL11.glGenLists(1);
+			GL11.glNewList(list, GL11.GL_COMPILE);
+			Tessellator tes = Tessellator.getInstance();
+			BufferBuilder buf = tes.getBuffer();
+			buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_NORMAL);
+			for(ModelBox b : p.getRight().cubeList){
+				Triangle[] data = triangulate(b, p.getLeft());
+				VertexData dat = compress(data);
+				dat.tessellate(buf, true);
+			}
+			tes.draw();
+			GL11.glEndList();
+			lists[i] = list;
+			i++;
+		}
+		return lists;
 	}
 	
 	private static void generateChunks(List<List<CutModelData>> chunks, List<CutModelData> toSort){

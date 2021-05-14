@@ -11,7 +11,7 @@ public class EnchantmentUtil {
 	}
 
 	public static void removeEnchantment(ItemStack stack, Enchantment enchantment) {
-		if(stack.getEnchantmentTagList() == null)
+		if(stack.getEnchantmentTagList() == null || !stack.hasTagCompound())
 			return;
 		
 		int i = 0;

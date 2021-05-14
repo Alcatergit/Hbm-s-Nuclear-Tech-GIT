@@ -105,5 +105,13 @@ public class HbmAnimations {
 		}
 		return new double[] {0, 0, 0};
 	}
+	
+	public static float getTimeDifference(String bus, EnumHand hand){
+		Animation anim = HbmAnimations.getRelevantAnim(hand);
+		if(anim != null && anim.animation != null) {
+			return ((float)(System.currentTimeMillis() - anim.startMillis))/1000F;
+		}
+		return 0;
+	}
 
 }

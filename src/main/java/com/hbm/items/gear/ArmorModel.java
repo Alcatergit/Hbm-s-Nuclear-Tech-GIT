@@ -143,7 +143,7 @@ public class ArmorModel extends ItemArmor {
 				return this.modelGas;
 			}
 		}
-		if (this == ModItems.gas_mask_m65 || this == ModItems.hazmat_helmet_red || this == ModItems.hazmat_helmet_grey) {
+		if (this == ModItems.gas_mask_m65 || this == ModItems.hazmat_helmet_red || this == ModItems.hazmat_helmet_grey || this == ModItems.gas_mask_mono) {
 			if (armorSlot == EntityEquipmentSlot.HEAD) {
 				if (this.modelM65 == null) {
 					this.modelM65 = new ModelM65();
@@ -202,6 +202,9 @@ public class ArmorModel extends ItemArmor {
 		}
 		if (stack.getItem() == ModItems.hazmat_helmet_grey) {
 			return "hbm:textures/models/ModelHazGrey.png";
+		}
+		if (stack.getItem() == ModItems.gas_mask_mono) {
+			return "hbm:textures/models/ModelM65Mono.png";
 		}
 		/*if (stack.getItem() == ModItems.oxy_mask) {
 			return null;
@@ -317,6 +320,9 @@ public class ArmorModel extends ItemArmor {
 		}
 		if (stack.getItem() == ModItems.cape_schrabidium) {
 			list.add("Avalible for everyone");
+		}
+		if(this == ModItems.gas_mask_mono) {
+			list.add("Protects against carbon monoxide");
 		}
 	}
 	

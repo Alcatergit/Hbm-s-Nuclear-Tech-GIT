@@ -290,13 +290,15 @@ public class BeamPronter {
 		GlStateManager.depthMask(false);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		GlStateManager.disableCull();
 		
 		Vec3 diff = pos1.subtract(pos2);
 		float len = (float) diff.lengthVector();
 		Vec3 angles = BobMathUtil.getEulerAngles(diff);
-		GL11.glRotated(angles.xCoord+90, 0, 1, 0);
-		GL11.glRotated(angles.yCoord, 0, 0, -1);
 		GL11.glTranslated(pos1.xCoord, pos1.yCoord, pos1.zCoord);
+		
+		GL11.glRotated(angles.xCoord+90, 0, 1, 0);
+		GL11.glRotated(-angles.yCoord, 0, 0, 1);
 		
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
@@ -316,12 +318,14 @@ public class BeamPronter {
 		HbmShaderManager2.AUX_GL_BUFFER.rewind();
 		Matrix4f.invert(mvMatrix, mvMatrix);
 		Vector4f billboardPos = Matrix4f.transform(mvMatrix, new Vector4f(0, 0, 0, 1), null);
+		//System.out.println(billboardPos);
 		//GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "playerPos"), billboardPos.x, billboardPos.y, billboardPos.z);
 		
 		//GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "playerPos"), 0.0F, 0.1F, 0F);
 		int SUBDIVISIONS_PER_BLOCK = 16;
 		int subdivisions = (int)Math.ceil(len*SUBDIVISIONS_PER_BLOCK);
 		
+		//System.out.println(billboardPos);
 		ResourceManager.gluon_spiral.use();
 		GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "playerPos"), billboardPos.x, billboardPos.y, billboardPos.z);
 		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_spiral.getShaderId(), "subdivXAmount"), 1/(float)SUBDIVISIONS_PER_BLOCK);
@@ -344,12 +348,13 @@ public class BeamPronter {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		//GlStateManager.depthMask(true);
 		ResourceManager.gluon_beam.use();
+		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "beam_length"), len);
+		
 		buf.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
 		//GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "subdivXAmount"), 1/(float)SUBDIVISIONS_PER_BLOCK);
 		//GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.gluon_beam.getShaderId(), "subdivUAmount"), 1/(float)(subdivisions+1));
 		
-		
-		Vec3d vec = new Vec3d(billboardPos.x, billboardPos.y, billboardPos.z).crossProduct(new Vec3d(1, 0, 0)).normalize().scale(size*2);
+		Vec3d vec = new Vec3d(billboardPos.x, billboardPos.y, billboardPos.z).crossProduct(new Vec3d(1, 0, 0)).normalize();
 		for(int i = 0; i <= subdivisions; i ++){
 			float iN = ((float)i/(float)subdivisions);
 			float pos = iN*len;
@@ -358,13 +363,11 @@ public class BeamPronter {
 		}
 		tes.draw();
 		
-		
-		
-		
 		HbmShaderManager2.releaseShader();
 		
 		//System.out.println(System.nanoTime() - l);
 		GlStateManager.disableBlend();
+		GlStateManager.enableCull();
 		GL11.glPopMatrix();
 	}
 

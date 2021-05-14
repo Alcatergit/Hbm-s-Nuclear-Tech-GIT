@@ -52,7 +52,7 @@ public class AnimatedModel {
 			switch(activeAnim.endResult.type) {
 			case END:
 				controller.activeAnim = AnimationWrapper.EMPTY;
-				render();
+				render(c);
 				return;
 			case REPEAT:
 				activeAnim.startTime = sysTime - diff2;

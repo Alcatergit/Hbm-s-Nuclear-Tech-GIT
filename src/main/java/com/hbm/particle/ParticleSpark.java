@@ -148,6 +148,7 @@ public class ParticleSpark extends Particle {
 		GlStateManager.disableCull();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		RenderHelper.enableStandardItemLighting();
+		GlStateManager.disableLighting();
 		
         float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
         float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);

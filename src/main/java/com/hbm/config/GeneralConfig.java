@@ -51,6 +51,12 @@ public class GeneralConfig {
 	public static boolean shaped = true;
 	public static boolean nonoredict = true;
 	public static boolean jei = true;
+	public static boolean depthEffects = true;
+	public static boolean flashlight = true;
+	public static boolean flashlightVolumetric = true;
+	public static boolean bulletHoleNormalMapping = true;
+	public static int flowingDecalAmountMax = 20;
+	public static boolean bloodFX = true;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
@@ -93,10 +99,12 @@ public class GeneralConfig {
 		ssg_anim.setComment("Which supershotgun reload animation to use. True is Drillgon's animation, false is Bob's animation");
 		ssgAnim = ssg_anim.getBoolean();
 		instancedParticles = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_instancedParticles", "Enables instanced particle rendering for some particles, which makes them render several times faster. May not work on all computers, and will break with shaders.", true);
-		if(instancedParticles && !MainRegistry.proxy.opengl33()){
-			MainRegistry.logger.error("Warning - Open GL 3.3 not supported! Disabling instanced particles...");
-			instancedParticles = false;
-		}
+		depthEffects = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_depthBufferEffects", "Enables effects that make use of reading from the depth buffer", true);
+		flashlight = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_flashlights", "Enables dynamic directional lights", true);
+		flashlightVolumetric = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_flashlight_volumetrics", "Enables volumetric lighting for directional lights", true);
+		bulletHoleNormalMapping = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_bullet_hole_normal_mapping", "Enables normal mapping on bullet holes, which can improve visuals", true);
+		flowingDecalAmountMax = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.25_flowing_decal_max", "The maximum number of 'flowing' decals that can exist at once (eg blood that can flow down walls)", 20);
+		
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
 		
@@ -114,6 +122,24 @@ public class GeneralConfig {
 		Property adv_rads = config.get(CATEGORY_GENERAL, "1.31_enableAdvancedRadiation", true);
 		adv_rads.setComment("Enables a 3 dimensional version of the radiation system that also allows some blocks (like concrete bricks) to stop it from spreading");
 		advancedRadiation = adv_rads.getBoolean(true);
+		
+		bloodFX = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.32_enable_blood_effects", "Enables the over-the-top blood visual effects for some weapons", true);
+	
+		
+		if((instancedParticles || depthEffects || flowingDecalAmountMax > 0 || bloodFX) && !MainRegistry.proxy.opengl33()){
+			MainRegistry.logger.error("Warning - Open GL 3.3 not supported! Disabling 3.3 effects...");
+			instancedParticles = false;
+			depthEffects = false;
+			flowingDecalAmountMax = 0;
+			bloodFX = false;
+		}
+		if(!depthEffects){
+			flashlight = false;
+			bulletHoleNormalMapping = false;
+		}
+		if(!flashlight){
+			flashlightVolumetric = false;
+		}
 	}
 
 }

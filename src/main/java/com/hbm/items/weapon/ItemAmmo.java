@@ -37,7 +37,50 @@ public class ItemAmmo extends Item {
 			list.add(TextFormatting.YELLOW + "Armor-piercing penetrator filled");
 			list.add(TextFormatting.YELLOW + "with a powerful explosive charge");
 		}
-		
+
+		//NUKES
+		if(this == ModItems.ammo_nuke_low) {
+			list.add(TextFormatting.RED + "- Decreased blast radius");
+		}
+		if(this == ModItems.ammo_nuke_high) {
+			list.add(TextFormatting.BLUE + "+ Increased blast radius");
+			list.add(TextFormatting.BLUE + "+ Fallout");
+		}
+		if(this == ModItems.ammo_nuke_tots) {
+			list.add(TextFormatting.BLUE + "+ Increased bomb count");
+			list.add(TextFormatting.YELLOW + "* Fun for the whole family!");
+			list.add(TextFormatting.RED + "- Highly decreased accuracy");
+			list.add(TextFormatting.RED + "- Decreased blast radius");
+			list.add(TextFormatting.RED + "- Not recommended for the Proto MIRV");
+		}
+		if(this == ModItems.ammo_nuke_safe) {
+			list.add(TextFormatting.RED + "- Decreased blast radius");
+			list.add(TextFormatting.RED + "- No block damage");
+		}
+		if(this == ModItems.ammo_nuke_pumpkin) {
+			list.add(TextFormatting.RED + "- Not even a nuke");
+		}
+
+		//MIRV
+		if(this == ModItems.ammo_mirv_low) {
+			list.add(TextFormatting.RED + "- Decreased blast radius");
+		}
+		if(this == ModItems.ammo_mirv_high) {
+			list.add(TextFormatting.BLUE + "+ Increased blast radius");
+			list.add(TextFormatting.BLUE + "+ Fallout");
+		}
+		if(this == ModItems.ammo_mirv_safe) {
+			list.add(TextFormatting.RED + "- Decreased blast radius");
+			list.add(TextFormatting.RED + "- No block damage");
+		}
+		if(this == ModItems.ammo_mirv_special) {
+			list.add(TextFormatting.BLUE + "+ 6 Low-yield mini nukes");
+			list.add(TextFormatting.BLUE + "+ 6 Mini nukes");
+			list.add(TextFormatting.BLUE + "+ 6 Tiny tots");
+			list.add(TextFormatting.BLUE + "+ 6 Balefire shells");
+			list.add(TextFormatting.WHITE + "* Sticky!");
+		}
+
 		// FUEL
 		if(this == ModItems.ammo_fuel_napalm) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
@@ -129,7 +172,7 @@ public class ItemAmmo extends Item {
 		if(this == ModItems.ammo_12gauge_sleek) {
 			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
 		}
-		
+
 		// 20 GAUGE
 		if(this == ModItems.ammo_20gauge_flechette) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");
@@ -176,7 +219,7 @@ public class ItemAmmo extends Item {
 		if(this == ModItems.ammo_20gauge_sleek) {
 			list.add(TextFormatting.YELLOW + "* Fires a tracer which summons a storm of DU-flechettes");
 		}
-		
+
 		// .357 MAGNUM
 		if(this == ModItems.ammo_357_desh) {
 			list.add(TextFormatting.BLUE + "+ Fits every .357 model");
@@ -491,7 +534,7 @@ public class ItemAmmo extends Item {
 		if(this == ModItems.ammo_556_k) {
 			list.add(TextFormatting.YELLOW + "* It's a blank");
 		}
-		
+
 		//Drillgon200: New stuff (organization? Whatever)
 		if(this == ModItems.ammo_44_chlorophyte) {
 			list.add(TextFormatting.BLUE + "+ Increased damage");

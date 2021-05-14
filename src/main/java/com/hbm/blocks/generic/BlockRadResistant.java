@@ -22,7 +22,6 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-		System.out.println("rad added");
 		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 		super.onBlockAdded(worldIn, pos, state);
 	}

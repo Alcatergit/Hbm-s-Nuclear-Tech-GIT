@@ -9,8 +9,9 @@ import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketSpecialDeath;
-import com.hbm.particle.ParticleDecal;
+import com.hbm.particle.bullet_hit.ParticleDecalFlow;
 import com.hbm.render.util.BakedModelUtil;
+import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 
@@ -18,7 +19,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -32,6 +32,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWandD extends Item {
 
@@ -82,20 +84,7 @@ public class ItemWandD extends Item {
 				}
 			}
 		} else {
-			Vec3d look = player.getLookVec();
-			int dl = BakedModelUtil.generateDecalMesh(world, look, 1, pos.getX()+hitX, pos.getY()+hitY, pos.getZ()+hitZ);
-			look = look.scale(0.001F);
-			//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecal(world, dl, ResourceManager.blood_dec1, 80, pos.getX()+hitX-look.x, pos.getY()+hitY-look.y, pos.getZ()+hitZ-look.z));
-			
-			BlockPos[] blocks = new BlockPos[7];
-			blocks[0] = pos;
-			blocks[1] = pos.up();
-			blocks[2] = blocks[1].up();
-			blocks[3] = blocks[2].north();
-			blocks[4] = blocks[2].south();
-			blocks[5] = blocks[2].east();
-			blocks[6] = blocks[2].west();
-			//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(world, pos.getX(), pos.getY(), pos.getZ(), blocks[0], blocks));
+			clickClient(world, player, pos, hitX, hitY, hitZ);
 		}
 		if(b == ModBlocks.fluid_duct_mk2){
 			System.out.println("client: " + world.isRemote + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork() + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork().size());
@@ -118,6 +107,36 @@ public class ItemWandD extends Item {
 		return EnumActionResult.SUCCESS;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void clickClient(World world, EntityPlayer player, BlockPos pos, float hitX, float hitY, float hitZ){
+		Vec3d look = player.getLookVec();
+		int[] dl = BakedModelUtil.generateDecalMesh(world, look, 1, pos.getX()+hitX, pos.getY()+hitY, pos.getZ()+hitZ, DecalType.REGULAR);
+		//look = look.scale(0.001F);
+		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecal(world, dl[0], ResourceManager.blood_dec1, 80, pos.getX()+hitX-look.x, pos.getY()+hitY-look.y, pos.getZ()+hitZ-look.z));
+		
+		BlockPos[] blocks = new BlockPos[7];
+		blocks[0] = pos;
+		blocks[1] = pos.up();
+		blocks[2] = blocks[1].up();
+		blocks[3] = blocks[2].north();
+		blocks[4] = blocks[2].south();
+		blocks[5] = blocks[2].east();
+		blocks[6] = blocks[2].west();
+		//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(world, pos.getX(), pos.getY(), pos.getZ(), blocks[0], blocks));
+	
+		/*for(int i = 0; i < 4; i ++){
+			ParticleBloodParticle blood = new ParticleBloodParticle(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, world.rand.nextInt(9), 2, 1, 10+world.rand.nextInt(5));
+			blood.color(0.5F, 0F, 0F);
+			Vec3d dir = BobMathUtil.randVecInCone(new Vec3d(0, 1, 0), 20);
+			dir = dir.scale(0.3F + world.rand.nextFloat()*0.3);
+			blood.motion((float)dir.x, (float)dir.y, (float)dir.z);
+			ParticleBatchRenderer.addParticle(blood);
+		}*/
+		int[] data = BakedModelUtil.generateDecalMesh(world, look, 1, pos.getX()+hitX, pos.getY()+hitY, pos.getZ()+hitZ, DecalType.FLOW, ResourceManager.blood_particles, world.rand.nextInt(9), 4);
+		look = look.scale(0.001F);
+		Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecalFlow(world, data, 120, pos.getX()+hitX-look.x, pos.getY()+hitY-look.y, pos.getZ()+hitZ-look.z).shader(ResourceManager.blood_dissolve));
+	}
+	
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
 		if(target.world.isRemote){
@@ -136,7 +155,7 @@ public class ItemWandD extends Item {
 		} else {
 			if(!world.isRemote){
 				RayTraceResult r = Library.rayTraceIncludeEntities(player, 50, 1);
-				if(r.entityHit instanceof EntityLivingBase){
+				if(r != null && r.entityHit instanceof EntityLivingBase){
 					EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
 					ent.setHealth(0);
 					if(ent.getHealth() <= 0){

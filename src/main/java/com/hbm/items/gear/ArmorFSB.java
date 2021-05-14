@@ -6,10 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.annotation.Nullable;
+
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemGeigerCounter;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.ClientProxy;
+import com.hbm.packet.KeybindPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.RenderHelper;
-import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.material.Material;
@@ -33,9 +38,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -49,6 +54,9 @@ public class ArmorFSB extends ItemArmor {
 
 	public static Field nextStepDistance = null;
 	public static Field distanceWalkedOnStepModified = null;
+	
+	@SideOnly(Side.CLIENT)
+	public static boolean flashlightPress;
 	
 	private String texture = "";
 	private ResourceLocation overlay = null;
@@ -64,6 +72,7 @@ public class ArmorFSB extends ItemArmor {
 	public boolean thermal = false;
 	public boolean geigerSound = false;
 	public boolean customGeiger = false;
+	public Vec3d flashlightPosition = null;
 	public double gravity = 0;
 	public SoundEvent step;
 	public SoundEvent jump;
@@ -204,7 +213,6 @@ public class ArmorFSB extends ItemArmor {
 		return true;
 	}
 	
-	
     public static void handleTick(TickEvent.PlayerTickEvent event) {
 
 		EntityPlayer player = event.player;
@@ -277,17 +285,36 @@ public class ArmorFSB extends ItemArmor {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void updateClient(ItemStack stack, ArmorFSB fsbarmor, World world, Entity entity, int slot, boolean selected){
+		if(fsbarmor.flashlightPosition != null){
+			if(!flashlightPress && ClientProxy.fsbFlashlight.isKeyDown()){
+				PacketDispatcher.wrapper.sendToServer(new KeybindPacket(1));
+			}
+			flashlightPress = ClientProxy.fsbFlashlight.isKeyDown();
+		}
+	}
+	
 	@Override
-	public void onArmorTick(World world, EntityPlayer entity, ItemStack itemStack) {
-		if(this.armorType != EntityEquipmentSlot.CHEST)
+	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+	//	System.out.println("regular update");
+		if(this.armorType != EntityEquipmentSlot.CHEST || !(entity instanceof EntityPlayer))
 			return;
 
-		if(!hasFSBArmor(entity))
+		if(!hasFSBArmor((EntityPlayer) entity))
 			return;
-
+		ArmorFSB fsbarmor = (ArmorFSB) ((EntityPlayer) entity).inventory.armorInventory.get(2).getItem();
+		
+		if(world.isRemote){
+			updateClient(stack, fsbarmor, world, entity, itemSlot, isSelected);
+		}
+		
+		if(!fsbarmor.geigerSound)
+			return;
+		
 		if(world.getTotalWorldTime() % 5 == 0) {
 
-			int x = check(world, (int)entity.posX, (int)entity.posY, (int)entity.posZ);
+			int x = check((EntityPlayer)entity, world, (int)entity.posX, (int)entity.posY, (int)entity.posZ);
 
 			if(x > 0) {
 				List<Integer> list = new ArrayList<Integer>();
@@ -319,13 +346,19 @@ public class ArmorFSB extends ItemArmor {
 		}
 	}
 	
-	public static int check(World world, int x, int y, int z) {
-
-		RadiationSavedData data = RadiationSavedData.getData(world);
+	//Drillgon200: This method is literally never called in 1.12 for some unknown reason even though it absolutely looks like it should be.
+	//@Override
+	//public void onArmorTick(World world, EntityPlayer entity, ItemStack itemStack) {
+	//	
+	//}
+	
+	public static int check(@Nullable EntityPlayer player, World world, int x, int y, int z) {
+		return ItemGeigerCounter.check(player, world, new BlockPos(x, y, z));
+		/*RadiationSavedData data = RadiationSavedData.getData(world);
 
 		int rads = (int)Math.ceil(data.getRadNumFromCoord(new BlockPos(x, y, z)));
 
-		return rads;
+		return rads;*/
 	}
 	
 	//For crazier stuff not possible without hooking the event
@@ -412,6 +445,11 @@ public class ArmorFSB extends ItemArmor {
 		return this;
 	}
 	
+	public ArmorFSB enableFlashlight(Vec3d pos){
+		this.flashlightPosition = pos;
+		return this;
+	}
+	
 	public ArmorFSB setOverlay(String path) {
 		this.overlay = new ResourceLocation(path);
 		return this;
@@ -435,6 +473,7 @@ public class ArmorFSB extends ItemArmor {
 		this.step = original.step;
 		this.jump = original.jump;
 		this.fall = original.fall;
+		this.flashlightPosition = original.flashlightPosition;
 		//overlay doesn't need to be copied because it's helmet exclusive
 		return this;
 	}

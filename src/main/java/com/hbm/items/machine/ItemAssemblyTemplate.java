@@ -55,7 +55,7 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 	public String getItemStackDisplayName(ItemStack stack) {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 		int damage = getTagWithRecipeNumber(stack).getInteger("type");
-		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : null;
+		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : ItemStack.EMPTY;
 		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getUnlocalizedName() : "") + ".name")).trim();
 
 		if (s1 != null) {

@@ -50,11 +50,11 @@ public class TrailRenderer2 {
 	}
 	
 	public static void draw(Vec3d playerPos, List<Vec3d> points, float scale){
-		draw(playerPos, points, scale, false, null);
+		draw(playerPos, points, scale, false, false, null);
 	}
 	
-	public static void draw(Vec3d playerPos, List<Vec3d> points, float scale, boolean fadeEnd, @Nullable IColorGetter c){
-		generateAndBindVao(playerPos, points, scale, fadeEnd, c);
+	public static void draw(Vec3d playerPos, List<Vec3d> points, float scale, boolean fadeEnd, boolean fadeEnd2, @Nullable IColorGetter c){
+		generateAndBindVao(playerPos, points, scale, fadeEnd, fadeEnd2, c);
 		drawGeneratedVao();
 		unbindVao();
 	}
@@ -63,7 +63,7 @@ public class TrailRenderer2 {
 		GL11.glDrawElements(GL11.GL_TRIANGLES, (currentPointCount-1)*12, GL11.GL_UNSIGNED_INT, 0);
 	}
 	
-	public static void generateAndBindVao(Vec3d playerPos, List<Vec3d> points, float scale, boolean fadeEnd, @Nullable IColorGetter c){
+	public static void generateAndBindVao(Vec3d playerPos, List<Vec3d> points, float scale, boolean fadeEnd, boolean fadeEnd2, @Nullable IColorGetter c){
 		if(!init){
 			init = true;
 			init();
@@ -96,6 +96,8 @@ public class TrailRenderer2 {
 			float bruh = 1-MathHelper.clamp((iN-0.8F)*5, 0, 1);
 			if(fadeEnd)
 				bruh *= MathHelper.clamp(iN*5, 0, 1);
+			if(!fadeEnd2)
+				bruh = 1;
 			cross = tangent.crossProduct(playerPos.subtract(last)).normalize().scale(scale*Math.max(bruh, 0.1));
 			float uMiddle = (float)(i-0.5F)/(float)(points.size()-1);
 			if(c != null){
@@ -135,9 +137,18 @@ public class TrailRenderer2 {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element_buf);
 		aux_buf.rewind();
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, aux_buf, GL15.GL_DYNAMIC_DRAW);
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, BYTES_PER_VERTEX, 0);
+		GL11.glTexCoordPointer(2, GL11.GL_SHORT, BYTES_PER_VERTEX, 12);
+		GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, BYTES_PER_VERTEX, 16);
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 	}
 	
 	public static void unbindVao(){
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 		GL30.glBindVertexArray(0);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);

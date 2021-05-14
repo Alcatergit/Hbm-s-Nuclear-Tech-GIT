@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
+import com.hbm.particle.gluon.ParticleGluonDisintegration;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.util.ModelRendererUtil;
 

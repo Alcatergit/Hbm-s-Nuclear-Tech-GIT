@@ -24,6 +24,8 @@ public class EntityNukeExplosionMK4 extends Entity {
 	// How many rays are calculated per tick
 	public int speed;
 	public int length;
+	
+	public boolean mute = false;
 
 	public boolean fallout = true;
 	private int falloutAdd = 0;
@@ -59,10 +61,11 @@ public class EntityNukeExplosionMK4 extends Entity {
 			RadiationSavedData.incrementRad(world, this.getPosition(), rad, radMax);
 		}
 
-		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-		if(rand.nextInt(5) == 0)
-			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-
+		if(!mute) {
+			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+			if(rand.nextInt(5) == 0)
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+		}
 		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.length * 2);
 
 		if(explosion == null) {
@@ -179,6 +182,11 @@ public class EntityNukeExplosionMK4 extends Entity {
 	
 	public EntityNukeExplosionMK4 moreFallout(int fallout) {
 		falloutAdd = fallout;
+		return this;
+	}
+	
+	public EntityNukeExplosionMK4 mute() {
+		this.mute = true;
 		return this;
 	}
 }

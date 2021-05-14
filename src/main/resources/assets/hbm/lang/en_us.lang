@@ -1,6 +1,8 @@
-key.jetpack_activate=Activate Jetpack
-key.jetpack_hover=Activate Jetpack Hover Mode
 key.categories.hbm=Hbm's Nuclear Tech Mod
+key.jetpack_activate=Toggle Jetpack
+key.jetpack_hover=Toggle Jetpack Hover Mode
+key.jetpack_hud=Toggle Jetpack HUD mode
+key.fsb_flashlight=Toggle FSB Flashlights
 
 itemGroup.tabTest=Nuclear Tech Mod Test Tab
 itemGroup.tabParts=NTM Resources and Parts
@@ -320,6 +322,7 @@ item.record.glass.desc=? ? ?
 
 death.attack.nuclearBlast=%1$s was blown away by a nuclear explosion.
 death.attack.revolverBullet=%1$s was shot in the head by %2$s.
+death.attack.gunGib=%1$s was blasted into pieces by %2$s.
 death.attack.mudPoisoning=%1$s died in poisonous mud.
 death.attack.euthanized=%1$s was euthanized by %2$s.
 death.attack.euthanizedSelf=%1$s euthanized himself, what a dork.
@@ -363,6 +366,9 @@ death.attack.cloud=%1$s melted like a popsicle in the sun.
 death.attack.lead=%1$s died from lead poisoning.
 death.attack.taint=%1$s died from flux tumors.
 death.attack.lunar=%1$s forgot to charge their vital organs.
+death.attack.gluon=%1$s was deatomized by a stream of concentrated gluons.
+death.attack.slicer=%1$s was cut in half.
+death.attack.crucible=%1$s was bisected by a blade of pure Argent energy.
 
 item.redstone_sword.name=Redstone Sword
 item.big_sword.name=Great Sword
@@ -433,6 +439,8 @@ container.nukeN45=N45 Naval Mine
 container.nukeFstbmb=Balefire Bomb
 
 container.bombMulti=Multi Purpose Bomb
+
+tile.spinny_light.name=Spinny Light
 
 tile.nuke_gadget.name=The Gadget
 tile.nuke_boy.name=Little Boy
@@ -554,7 +562,9 @@ tile.machine_electric_furnace_on.name=Electric Furnace
 container.electricFurnace=Electric Furnace
 tile.machine_arc_furnace_off.name=Arc Furnace
 tile.machine_arc_furnace_on.name=Arc Furnace
+tile.machine_armor_table.name=Armor Modification Table
 container.arcFurnace=Arc Furnace
+container.armorTable=Armor Modification Table
 tile.machine_generator.name=Nuclear Reactor (Old)
 container.generator=Nuclear Reactor
 container.hadron=Particle Accelerator
@@ -844,7 +854,8 @@ item.niter.name=Niter
 item.ingot_copper.name=Industrial Grade Copper
 item.ingot_red_copper.name=Minecraft Grade Copper
 item.ingot_tungsten.name=Tungsten Ingot
-item.ingot_aluminium.name=Aluminium Ingot
+# Yeah, aluminum. -um gang!
+item.ingot_aluminium.name=Aluminum Ingot
 item.fluorite.name=Fluorite
 item.ingot_steel.name=Steel Ingot
 item.plate_steel.name=Steel Plate
@@ -943,7 +954,7 @@ item.nugget_pu238.name=Pu238 Nugget
 item.nugget_pu239.name=Pu239 Nugget
 item.nugget_pu240.name=Pu240 Nugget
 item.plate_titanium.name=Titanium Plate
-item.plate_aluminium.name=Aluminium Plate
+item.plate_aluminium.name=Aluminum Plate
 item.plate_armor_lunar.name=Lunar Plating
 item.plate_armor_ajr.name=Iron-Shod Armor Plating
 item.plate_armor_titanium.name=Titanium Armor Plate
@@ -965,7 +976,7 @@ item.crystal_sulfur.name=Sulfur Crystals
 item.crystal_niter.name=Niter Crystals
 item.crystal_copper.name=Copper Crystals
 item.crystal_tungsten.name=Tungsten Crystals
-item.crystal_aluminium.name=Aluminium Crystals
+item.crystal_aluminium.name=Aluminum Crystals
 item.crystal_fluorite.name=Fluorite Crystals
 item.crystal_beryllium.name=Beryllium Crystals
 item.crystal_lead.name=Lead Crystals
@@ -977,7 +988,7 @@ item.crystal_lithium.name=Lithium Crystals
 item.crystal_starmetal.name=Starmetal Crystals
 item.crystal_trixite.name=Trixite Crystals
 
-item.wire_aluminium.name=Aluminium Wire
+item.wire_aluminium.name=Aluminum Wire
 item.wire_copper.name=Copper Wire
 item.wire_gold.name=Gold Wire
 item.wire_schrabidium.name=Schrabidium Wire
@@ -1030,7 +1041,7 @@ item.assembly_lacunae.name=.5mm Assembly
 
 item.piston_selenium.name=Radial Engine Piston
 
-tile.block_aluminium.name=Block of Aluminium
+tile.block_aluminium.name=Block of Aluminum
 tile.block_copper.name=Block of Copper
 tile.block_fluorite.name=Block of Fluorite
 tile.block_niter.name=Block of Niter
@@ -1087,7 +1098,7 @@ tile.block_thorium_fuel.name=Block of Thorium Fuel
 tile.block_solinium.name=Block of Solinium
 tile.block_schrabidium_fuel.name=Block of Schrabidium Fuel
 
-tile.ore_aluminium.name=Aluminium Ore
+tile.ore_aluminium.name=Aluminum Ore
 tile.ore_copper.name=Copper Ore
 tile.ore_fluorite.name=Fluorite Ore
 tile.ore_niter.name=Niter Ore
@@ -1125,7 +1136,7 @@ tile.ore_nether_schrabidium.name=Nether Schrabidium Ore
 tile.ore_nether_coal.name=Burning Nether Coal Ore
 tile.ore_nether_smoldering.name=Smoldering Netherrack
 
-tile.ore_meteor_aluminium.name=Meteor Aluminium Ore
+tile.ore_meteor_aluminium.name=Meteor Aluminum Ore
 tile.ore_meteor_copper.name=Meteor Copper Ore
 tile.ore_meteor_sulfur.name=Meteor Sulfur Ore
 tile.ore_meteor_titanium.name=Meteor Titanium Ore
@@ -1153,7 +1164,7 @@ tile.ore_oil_sand.name=Tar Sand
 tile.deco_titanium.name=Titanium Deco Block
 tile.deco_red_copper.name=Red Copper Deco Block
 tile.deco_tungsten.name=Tungsten Deco Block
-tile.deco_aluminium.name=Aluminium Deco Block
+tile.deco_aluminium.name=Aluminum Deco Block
 tile.deco_steel.name=Steel Deco Block
 tile.deco_lead.name=Lead Deco Block
 tile.deco_beryllium.name=Beryllium Deco Block
@@ -1221,10 +1232,16 @@ tile.seal_frame.name=Silo Hatch Frame
 tile.seal_controller.name=Silo Hatch Opener
 tile.seal_hatch.name=Silo Hatch
 
+tile.silo_hatch.name=Silo Hatch
+
 tile.vault_door.name=Vault-Tec Blast Door
 tile.blast_door.name=Sliding Blast Door
 tile.sliding_blast_door.name=Sideways Sliding Blast Door
 tile.sliding_blast_door_2.name=Sideways Sliding Blast Door
+
+item.sliding_blast_door_skin0.name=Sideways Sliding Blast Door Default Skin
+item.sliding_blast_door_skin1.name=Sideways Sliding Blast Door Variant 1 Skin
+item.sliding_blast_door_skin2.name=Sideways Sliding Blast Door Variant 2 Skin
 
 item.door_metal.name=Metal Door
 item.door_office.name=Office Door
@@ -1245,7 +1262,7 @@ item.powder_schrabidium.name=Schrabidium Powder
 item.powder_semtex_mix.name=Semtex Blend
 item.powder_iron.name=Iron Powder
 item.powder_gold.name=Gold Powder
-item.powder_aluminium.name=Aluminium Powder
+item.powder_aluminium.name=Aluminum Powder
 item.powder_asbestos.name=Asbestos Powder
 item.powder_beryllium.name=Beryllium Powder
 item.powder_copper.name=Copper Powder
@@ -1627,6 +1644,7 @@ item.trinitite.name=Trinitite
 item.nuclear_waste.name=Nuclear Waste
 item.nuclear_waste_tiny.name=Tiny Pile of Nuclear Waste
 item.nugget.name=Chicken Nugget
+item.peas.name=Peas
 item.waste_uranium.name=Depleted Uranium Fuel
 item.waste_thorium.name=Depleted Thorium Fuel
 item.waste_plutonium.name=Depleted Plutonium Fuel
@@ -1818,6 +1836,7 @@ item.gun_uzi_saturnite.name=Saturnite Uzi
 item.gun_uzi_saturnite_silencer.name=Saturnite Uzi with Silencer
 item.gun_uboinik.name=Uboinik
 item.gun_ks23.name=Samuel the Big Shotgun
+item.gun_jshotgun.name=Occult Shotgun
 item.gun_lever_action.name=Mare's Leg (Original)
 item.gun_bolt_action.name=Dream Bolt-Action Rifle (Original)
 item.gun_lever_action_dark.name=Mare's Leg (Dark)
@@ -1850,6 +1869,7 @@ item.gun_dampfmaschine.name=Totally Not a Joke Weapon
 item.gun_folly.name=Prototype Digamma "Folly"
 item.gun_vortex.name=Vortex
 item.cc_plasma_gun.name=CC Plasma Gun
+item.gun_egon.name=Gluon Gun
 
 item.nossy_hat.name=Fabulous Hat
 item.beta.name=Beta Features
@@ -1889,6 +1909,18 @@ item.gun_spark_ammo.name=Electromagnetic Cartridge
 item.gun_hp_ammo.name=Ink Cartridge
 item.gun_euthanasia_ammo.name=Syringe
 item.gun_defabricator_ammo.name=Defabricator Energy Cell
+
+item.ammo_mirv.name=Mini MIRV
+item.ammo_mirv_high.name=Mini MIRV (High Yield)
+item.ammo_mirv_low.name=Mini MIRV (Low Yield)
+item.ammo_mirv_safe.name=Mini MIRV (Safe)
+item.ammo_mirv_special.name=Mini MILV
+item.ammo_nuke.name=Mini Nuke
+item.ammo_nuke_high.name=Mini Nuke (High Yield)
+item.ammo_nuke_low.name=Mini Nuke (Low Yield)
+item.ammo_nuke_pumpkin.name=Pumpkin Bomb
+item.ammo_nuke_safe.name=Mini Nuke (Safe)
+item.ammo_nuke_tots.name=Mini Nuke (Tiny Tots)
 
 item.ammo_12gauge.name=12 Gauge Buckshot
 item.ammo_12gauge_incendiary.name=12 Gauge Buckshot (Incendiary)
@@ -2110,11 +2142,11 @@ entity.entity_elder_one.name=Quackos The Elder One
 entity.entity_ntm_fbi.name=FBI Agent
 entity.entity_ntm_radiation_blaze.name=Meltdown Elemental
 
-item.cap_aluminium.name=Aluminium Cap
+item.cap_aluminium.name=Aluminum Cap
 item.hull_small_steel.name=Small Steel Shell
-item.hull_small_aluminium.name=Small Aluminium Shell
+item.hull_small_aluminium.name=Small Aluminum Shell
 item.hull_big_steel.name=Big Steel Shell
-item.hull_big_aluminium.name=Big Aluminium Shell
+item.hull_big_aluminium.name=Big Aluminum Shell
 item.hull_big_titanium.name=Big Titanium Shell
 item.fins_flat.name=Flat Steel Casing
 item.fins_small_steel.name=Small Steel Grid Fins
@@ -2175,6 +2207,7 @@ item.jetpack_boost.name=Boostpack
 item.jetpack_fly.name=Jetpack
 item.jetpack_break.name=Breakpack
 item.jetpack_vector.name=Vectored Jetpack
+item.jetpack_glider.name=Glider Jetpack
 item.jetpack_tank.name=Jetpack Reserve Fuel Tank
 
 item.gun_kit_1.name=Gun Oil
@@ -2690,7 +2723,7 @@ item.can_mrsugar.name='Dr. Sugar' Soft Drink
 item.can_overcharge.name=Overcharge Delirium XT
 item.can_luna.name=Black Mesa Luna - Dark Cola
 item.can_bepis.name=Bepis
-item.can_breen.name=Dr>Breens Private Reserve
+item.can_breen.name=Dr. Breens Private Reserve
 item.bottle_empty.name=Empty Bomb-Shaped Bottle
 item.bottle_nuka.name=Bottle of Nuka Cola
 item.bottle_cherry.name=Bottle of Nuka Cherry
@@ -2822,7 +2855,7 @@ item.rune_jera.name=Multiplicative Catalyst Matrix
 item.rune_thurisaz.name=Additive Catalyst Matrix
 
 item.ams_catalyst_blank.name=Blank Reaction Catalyst
-item.ams_catalyst_aluminium.name=Aluminium Reaction Catalyst
+item.ams_catalyst_aluminium.name=Aluminum Reaction Catalyst
 item.ams_catalyst_beryllium.name=Beryllium Reaction Catalyst
 item.ams_catalyst_caesium.name=Caeseium Reaction Catalyst
 item.ams_catalyst_cerium.name=Cerium Reaction Catalyst

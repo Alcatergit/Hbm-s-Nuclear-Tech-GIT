@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -10,37 +11,26 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapabilityProvider {
+public class TileEntityDiFurnace extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
 	
 	public int dualCookTime;
 	public int dualPower;
 	public static final int maxPower = 12800;
 	public static final int processingSpeed = 400;
-	//TODO side based access
-	public ItemStackHandler inventory = new ItemStackHandler(4){
-		protected void onContentsChanged(int slot) {
-			super.onContentsChanged(slot);
-			markDirty();
-		};
-		public boolean isItemValid(int slot, net.minecraft.item.ItemStack stack) {
-			if(slot == 3){
-				return false;
-			}
-			return true;
-		};
-		
-	};
 	
-	private String customName;
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {3};
+	private static final int[] slots_side = new int[] {1};
+	
+	public TileEntityDiFurnace() {
+		super(4);
+	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -144,17 +134,34 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 			return 0;
 		}
 	}
-
-	public void setCustomInventoryName(String displayName) {
-		this.customName = displayName;
-	}
 	
+	@Override
 	public String getName(){
-		return this.hasCustomName() ? this.customName : "container.diFurnace";
+		return "container.diFurnace";
 	}
 	
-	public boolean hasCustomName(){
-		return this.customName != null && this.customName.length() > 0;
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 3){
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return true;
 	}
 	
 	public boolean isUsableByPlayer(EntityPlayer player){
@@ -234,22 +241,6 @@ public class TileEntityDiFurnace extends TileEntity implements ITickable, ICapab
 	
 	public boolean isProcessing() {
 		return this.dualCookTime > 0;
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		}
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		}
-		return super.getCapability(capability, facing);
 	}
 	
 	private int detectDualCookTime;

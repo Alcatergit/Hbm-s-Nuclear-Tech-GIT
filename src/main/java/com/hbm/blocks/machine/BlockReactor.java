@@ -1,6 +1,7 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IFluidVisualConnectable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -14,8 +15,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 
-public class BlockReactor extends Block {
+public class BlockReactor extends Block implements IFluidVisualConnectable {
 
 	public static final PropertyBool ACTIVATED = PropertyBool.create("activated");
 
@@ -63,6 +65,11 @@ public class BlockReactor extends Block {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return meta == 0 ? this.getDefaultState().withProperty(ACTIVATED, false) : this.getDefaultState().withProperty(ACTIVATED, true);
+	}
+
+	@Override
+	public boolean shouldConnect(Fluid f) {
+		return this == ModBlocks.reactor_conductor;
 	}
 
 }

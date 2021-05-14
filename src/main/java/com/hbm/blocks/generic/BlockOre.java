@@ -309,6 +309,13 @@ public class BlockOre extends Block {
 	}
 	
 	@Override
+	public int tickRate(World world) {
+		if(this.radIn > 0)
+			return 20;
+		return 100;
+	}
+	
+	@Override
 	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!world.isRemote)

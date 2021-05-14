@@ -319,4 +319,12 @@ public class Vec3
 	 public Vec3d toVec3d(){
 		 return new Vec3d(xCoord, yCoord, zCoord);
 	 }
+
+	public Vec3 max(double d) {
+		return new Vec3(Math.max(xCoord, d), Math.max(yCoord, d), Math.max(zCoord, d));
+	}
+	
+	public Vec3 min(double d) {
+		return new Vec3(Math.min(xCoord, d), Math.min(yCoord, d), Math.min(zCoord, d));
+	}
 }

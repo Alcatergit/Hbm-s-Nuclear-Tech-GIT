@@ -49,7 +49,6 @@ public class GunAnimationPacket implements IMessage {
 		public IMessage onMessage(GunAnimationPacket m, MessageContext ctx) {
 
 			try {
-
 				EntityPlayer player = Minecraft.getMinecraft().player;
 				ItemStack stack = player.getHeldItem(m.hand);
 				int slot = player.inventory.currentItem;

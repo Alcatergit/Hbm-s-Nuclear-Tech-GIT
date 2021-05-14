@@ -27,8 +27,7 @@ public class ItemRenderHSSword extends TEISRBase {
 		case FIRST_PERSON_RIGHT_HAND:
 			EnumHand hand = type == TransformType.FIRST_PERSON_RIGHT_HAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 			GL11.glScaled(5, 5, 5);
-			GL11.glTranslated(-1.2, -0.4, -1.05);
-			GL11.glTranslated(1.5, -1.05, 1.6);
+			GL11.glTranslated(0.3, -1.45, 0.55);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(-20, 1, 0, 0);
 			GL11.glRotated(5, 0, 0, 1);

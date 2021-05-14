@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderSlidingBlastDoor extends TileEntitySpecialRenderer<TileEntitySlidingBlastDoor> {
 
@@ -74,7 +75,13 @@ public class RenderSlidingBlastDoor extends TileEntitySpecialRenderer<TileEntity
         }
         w.onEnd(new EndResult(EndType.STAY, null));
         if(te.getBlockType() == ModBlocks.sliding_blast_door){
-        	Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.sliding_blast_door_tex);
+        	ResourceLocation tex = null;
+        	switch(te.texture){
+        	case 0: tex = ResourceManager.sliding_blast_door_tex; break;
+        	case 1: tex = ResourceManager.sliding_blast_door_variant1_tex; break;
+        	case 2: tex = ResourceManager.sliding_blast_door_variant2_tex; break;
+        	}
+        	Minecraft.getMinecraft().getTextureManager().bindTexture(tex);
         	ResourceManager.door0.controller.setAnim(w);
             ResourceManager.door0.renderAnimated(time);
         } else if(te.getBlockType() == ModBlocks.sliding_blast_door_2){

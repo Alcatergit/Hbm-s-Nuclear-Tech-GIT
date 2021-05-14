@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
@@ -95,7 +96,7 @@ public class BulletConfigFactory {
 	public static BulletConfiguration standardNukeConfig() {
 
 		BulletConfiguration bullet = new BulletConfiguration();
-
+		
 		bullet.velocity = 3.0F;
 		bullet.spread = 0.005F;
 		bullet.wear = 10;
@@ -110,12 +111,11 @@ public class BulletConfigFactory {
 		bullet.HBRC = 0;
 		bullet.LBRC = 0;
 		bullet.bounceMod = 1.0;
-		bullet.doesPenetrate = false;
+		bullet.doesPenetrate = true;
 		bullet.doesBreakGlass = false;
-		bullet.nuke = 35;
 		bullet.style = BulletConfiguration.STYLE_NUKE;
 		bullet.plink = BulletConfiguration.PLINK_GRENADE;
-
+		
 		return bullet;
 	}
 
@@ -131,9 +131,9 @@ public class BulletConfigFactory {
 		bullet.gravity = 0D;
 		bullet.maxAge = 100;
 		bullet.doesRicochet = true;
-		bullet.ricochetAngle = 5;
-		bullet.HBRC = 10;
-		bullet.LBRC = 95;
+		bullet.ricochetAngle = 15;
+		bullet.HBRC = 5;
+		bullet.LBRC = 65;
 		bullet.bounceMod = 0.8;
 		bullet.doesPenetrate = false;
 		bullet.doesBreakGlass = true;
@@ -439,5 +439,31 @@ public class BulletConfigFactory {
 		};
 
 		return onUpdate;
+	}
+	
+	/*
+	 * Sizes:
+	 * 0 - safe
+	 * 1 - tot
+	 * 2 - small
+	 * 3 - medium
+	 * 4 - big
+	 */
+	public static void nuclearExplosion(EntityBulletBase bullet, int x, int y, int z, int size) {
+		
+		if(!bullet.world.isRemote) {
+
+			double posX = bullet.posX;
+			double posY = bullet.posY + 0.5;
+			double posZ = bullet.posZ;
+			
+			if(y >= 0) {
+				posX = x + 0.5;
+				posY = y + 1.5;
+				posZ = z + 0.5;
+			}
+			
+			ExplosionNukeSmall.explode(bullet.world, posX, posY, posZ, size);
+		}
 	}
 }

@@ -4,7 +4,11 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.animloader.AnimationWrapper;
+import com.hbm.animloader.AnimationWrapper.EndResult;
+import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
 
 import net.minecraft.client.Minecraft;
@@ -760,6 +764,23 @@ public class ItemRenderLibrary {
 		        bindTexture(ResourceManager.blast_door_slider_tex); ResourceManager.blast_door_slider.renderAll();
 		        bindTexture(ResourceManager.blast_door_block_tex); ResourceManager.blast_door_block.renderAll();
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.silo_hatch), new ItemRenderBase() {
+			@Override
+			public void renderInventory() {
+				GL11.glTranslated(15, -10, 10);
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			
+			@Override
+			public void renderCommon() {
+				GL11.glTranslated(0.5F, 2, -2);
+				GL11.glRotated(-120, 0, 1, 0);
+				bindTexture(ResourceManager.hatch_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.silo_hatch.render();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_microwave), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 4);
@@ -797,6 +818,38 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(0, -1, 0);
 				ResourceManager.solar_mirror.renderPart("Mirror");
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.spinny_light), new ItemRenderBase() {
+			@Override
+			public void renderInventory() {
+				GL11.glScaled(10, 10, 10);
+				GL11.glRotated(22.5, 1, 0, 0);
+				GL11.glTranslated(25, -4, 0);
+			}
+			@Override
+			public void renderCommon() {
+				bindTexture(ResourceManager.spinny_light_tex);
+				GL11.glTranslated(1.25, -1.25, -1.25);
+				GL11.glScaled(5, 5, 5);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.spinny_light.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(ModItems.jetpack_glider, new ItemRenderBase() {
+			@Override
+			public void renderInventory() {
+				GL11.glTranslated(-5, -6, 0);
+				GL11.glScaled(1.5, 1.5, 1.5);
+			}
+			
+			@Override
+			public void renderCommon() {
+				bindTexture(ResourceManager.jetpack_tex);
+				 AnimationWrapper w = new AnimationWrapper(0, ResourceManager.jetpack_activate);
+			     ResourceManager.jetpack.controller.setAnim(w);
+				 ResourceManager.jetpack.renderAnimated(ResourceManager.jetpack_activate.length);
+			}
+		});
 	}
 
 	private static void bindTexture(ResourceLocation res) {

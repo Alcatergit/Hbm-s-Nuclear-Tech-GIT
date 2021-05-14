@@ -597,7 +597,7 @@ public class HbmWorldGen implements IWorldGenerator {
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.netherPhosphorusSpawn, 6, 0, 127, ModBlocks.ore_nether_fire, Blocks.NETHERRACK);
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.netherCoalSpawn, 32, 16, 96, ModBlocks.ore_nether_coal, Blocks.NETHERRACK);
 		if(GeneralConfig.enablePlutoniumOre)
-			DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.netherPlutoniumSpawn, 4, 0, 127, ModBlocks.ore_nether_uranium, Blocks.NETHERRACK);
+			DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.netherPlutoniumSpawn, 4, 0, 127, ModBlocks.ore_nether_plutonium, Blocks.NETHERRACK);
 		for(int k = 0; k < 30; k++){
 			int x = i + rand.nextInt(16);
 			int z = j + rand.nextInt(16);

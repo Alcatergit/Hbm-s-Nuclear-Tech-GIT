@@ -254,6 +254,11 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	}
 	
 	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return slot == 0;
+	}
+	
+	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		return slot == 2;
 	}

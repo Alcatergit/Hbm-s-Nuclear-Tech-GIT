@@ -170,8 +170,23 @@ public final class HBMSoundHandler {
 	public static SoundEvent rocketFlame;
 	public static SoundEvent ballsLaser;
 	public static SoundEvent dartShoot;
-	public static SoundEvent cDeploy;
-	public static SoundEvent cSwing;
+	public static SoundEvent gluonStart;
+	public static SoundEvent gluonLoop;
+	public static SoundEvent gluonEnd;
+	public static SoundEvent gluonHit;
+	public static SoundEvent jetpack;
+	public static SoundEvent mukeExplosion;
+	public static SoundEvent crucibleStart;
+	public static SoundEvent crucibleEnd;
+	public static SoundEvent crucibleSwing;
+	public static SoundEvent crucibleLoop;
+	public static SoundEvent jsg_reload0;
+	public static SoundEvent jsg_reload1;
+	public static SoundEvent mob_gib;
+	public static SoundEvent blood_splat;
+	public static SoundEvent hit_dirt;
+	public static SoundEvent hit_metal;
+	public static SoundEvent hit_flesh;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -368,8 +383,23 @@ public final class HBMSoundHandler {
 		rocketFlame = register("weapon.rocketFlame");
 		ballsLaser = register("weapon.ballsLaser");
 		dartShoot = register("weapon.dartShoot");
-		cDeploy = register("weapon.cDeploy");
-		cSwing = register("weapon.cSwing");
+		gluonStart = register("weapon.gluonstart");
+		gluonLoop = register("weapon.gluonloop");
+		gluonEnd = register("weapon.gluonend");
+		gluonHit = register("weapon.gluonhit");
+		jetpack = register("weapon.jetpack");
+		mukeExplosion = register("weapon.mukeExplosion");
+		crucibleStart = register("weapon.crucible_start");
+		crucibleEnd = register("weapon.crucible_end");
+		crucibleSwing = register("weapon.crucible_swing");
+		crucibleLoop = register("weapon.crucible_loop");
+		jsg_reload0 = register("weapon.jsg_reload0");
+		jsg_reload1 = register("weapon.jsg_reload1");
+		mob_gib = register("weapon.mob_gib");
+		blood_splat = register("weapon.blood_splat");
+		hit_dirt = register("weapon.hit_dirt");
+		hit_metal = register("weapon.hit_metal");
+		hit_flesh = register("weapon.hit_flesh");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

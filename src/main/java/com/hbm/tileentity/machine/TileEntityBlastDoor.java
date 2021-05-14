@@ -28,7 +28,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return TileEntity.INFINITE_EXTENT_AABB;
+		return new AxisAlignedBB(pos, pos.up(6));
 	}
 	
 	@Override

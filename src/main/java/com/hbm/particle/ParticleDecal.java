@@ -2,15 +2,16 @@ package com.hbm.particle;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.util.BobMathUtil;
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.handler.HbmShaderManager2.Shader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -19,12 +20,26 @@ public class ParticleDecal extends Particle {
 
 	public ResourceLocation tex;
 	public int displayList;
+	public int texIdx = -1;
+	public int rows;
+	public Shader shader;
 	
 	public ParticleDecal(World worldIn, int dl, ResourceLocation texture, int maxAge, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.displayList = dl;
 		this.tex = texture;
 		this.particleMaxAge = maxAge;
+	}
+	
+	public ParticleDecal textureIndex(int idx, int rows){
+		this.rows = rows;
+		this.texIdx = idx;
+		return this;
+	}
+	
+	public ParticleDecal shader(Shader shader){
+		this.shader = shader;
+		return this;
 	}
 	
 	@Override
@@ -43,6 +58,24 @@ public class ParticleDecal extends Particle {
 	
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+		
+		if(texIdx != -1){
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+			float size = 1F/rows;
+	        float u = (texIdx%rows)*size;
+	        float v = (texIdx/4)*size;
+	        GL11.glTranslated(u, v, 0);
+	        GL11.glScaled(size, size, 1);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		}
+		
+		if(shader != null){
+			shader.use();
+		}
+		
+		
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
         int k = i & 65535;
@@ -71,6 +104,15 @@ public class ParticleDecal extends Particle {
 		GlStateManager.disableBlend();
 		GlStateManager.depthMask(true);
 		GL11.glPopMatrix();
+		
+		if(texIdx != -1){
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GL11.glPopMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		}
+		if(shader != null){
+			HbmShaderManager2.releaseShader();
+		}
 	}
 
 }

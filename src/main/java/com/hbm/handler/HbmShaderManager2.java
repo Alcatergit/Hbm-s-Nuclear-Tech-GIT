@@ -23,9 +23,11 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2.Shader.Uniform;
+import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle_instanced.InstancedParticleRenderer;
+import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -95,13 +97,72 @@ public class HbmShaderManager2 {
 		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
 	};
 	
+	public static final Uniform WINDOW_SIZE = shader -> {
+		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+	};
+	
 	public static int height = 0;
     public static int width = 0;
+    
     public static final int bloomLayers = 4;
     public static Framebuffer[] bloomBuffers;
     public static Framebuffer bloomData;
     public static Framebuffer distortionBuffer;
+    
+    public static int depthFrameBuffer = -1;
+    public static int depthTexture = -1;
+    
+    public static float[] inv_ViewProjectionMatrix = new float[16];
 	
+    public static void createInvMVP(){
+		GL11.glPushMatrix();
+    	GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
+    	GL11.glPopMatrix();
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, ClientProxy.AUX_GL_BUFFER2);
+		Matrix4f view = new Matrix4f();
+		Matrix4f proj = new Matrix4f();
+		view.load(ClientProxy.AUX_GL_BUFFER);
+		proj.load(ClientProxy.AUX_GL_BUFFER2);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		ClientProxy.AUX_GL_BUFFER2.rewind();
+		view.invert();
+		proj.invert();
+		Matrix4f.mul(view, proj, view);
+		view.store(ClientProxy.AUX_GL_BUFFER);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		ClientProxy.AUX_GL_BUFFER.get(inv_ViewProjectionMatrix);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+	}
+    
+    public static void blitDepth(){
+    	if(!GeneralConfig.depthEffects)
+    		return;
+    	if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth || depthFrameBuffer == -1){
+    		GL11.glDeleteTextures(depthTexture);
+    		GL30.glDeleteFramebuffers(depthFrameBuffer);
+    		
+    		depthFrameBuffer = GL30.glGenFramebuffers();
+    		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, depthFrameBuffer);
+    		depthTexture = GL11.glGenTextures();
+    		GlStateManager.bindTexture(depthTexture);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (FloatBuffer)null);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthTexture, 0);
+			int bruh = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+			if(bruh != GL30.GL_FRAMEBUFFER_COMPLETE){
+				System.out.println("Failed to create depth texture framebuffer! This is an error!");
+			}
+    	}
+    	GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, Minecraft.getMinecraft().getFramebuffer().framebufferObject);
+    	GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, depthFrameBuffer);
+    	GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
+    	
+    	Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+    }
+    
 	public static void postProcess(){
 		if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
 			height = Minecraft.getMinecraft().displayHeight;
@@ -286,6 +347,8 @@ public class HbmShaderManager2 {
         tessellator.draw();
         buf.unbindFramebufferTexture();
         GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.enableAlpha();
         GlStateManager.colorMask(true, true, true, true);
 	}
 	

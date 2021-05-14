@@ -104,6 +104,7 @@ public class BulletConfiguration {
 	public static final int STYLE_BF = 10;
 	public static final int STYLE_ORB = 11;
 	public static final int STYLE_METEOR = 12;
+	public static final int STYLE_TRACER = 13;
 
 	public static final int PLINK_NONE = 0;
 	public static final int PLINK_BULLET = 1;
@@ -145,6 +146,12 @@ public class BulletConfiguration {
 		this.doesRicochet = false;
 		this.doesPenetrate = false;
 		this.vPFX = "greendust";
+		return this;
+	}
+	
+	public BulletConfiguration accuracyMod(float mod) {
+		
+		this.spread *= mod;
 		return this;
 	}
 }

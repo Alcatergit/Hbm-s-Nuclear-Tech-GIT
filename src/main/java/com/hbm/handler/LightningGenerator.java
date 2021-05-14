@@ -92,7 +92,7 @@ public class LightningGenerator {
 			n = n.children.get(0);
 			toRender.add(n.pos.addVector(x, y, z));
 		}
-		TrailRenderer2.draw(playerPos, toRender, scale, fadeEnd, c);
+		TrailRenderer2.draw(playerPos, toRender, scale, fadeEnd, true, c);
 	}
 	
 	public static class LightningNode {

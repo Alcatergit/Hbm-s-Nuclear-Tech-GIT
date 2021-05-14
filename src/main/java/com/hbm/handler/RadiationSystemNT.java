@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.interfaces.IRadResistantBlock;
@@ -24,10 +22,12 @@ import com.hbm.packet.PacketDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -42,12 +42,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class RadiationSystemNT {
 
-	private static List<Pair<Chunk, Integer>> dirtyChunks = new ArrayList<>();
 	private static Map<World, WorldRadiationData> worldMap = new HashMap<>();
 	private static int ticks;
 	
 	public static void incrementRad(World world, BlockPos pos, float amount, float max){
-		if(pos.getY() < 0 || pos.getY() > 255)
+		if(pos.getY() < 0 || pos.getY() > 255 || !world.isBlockLoaded(pos))
 			return;
 		RadPocket p = getPocket(world, pos);
 		if(p.radiation < max){
@@ -99,6 +98,8 @@ public class RadiationSystemNT {
 	}
 	
 	public static boolean isSubChunkLoaded(World world, BlockPos pos){
+		if(pos.getY() > 255 || pos.getY() < 0)
+			return false;
 		WorldRadiationData worldRadData = worldMap.get(world);
 		if(worldRadData == null){
 			return false;
@@ -213,6 +214,8 @@ public class RadiationSystemNT {
 	}
 	
 	public static void updateRadiation(){
+		long time = System.currentTimeMillis();
+		//long lTime = System.nanoTime();
 		for(WorldRadiationData w : worldMap.values()){
 			//Avoid concurrent modification
 			List<RadPocket> itrActive = new ArrayList<>(w.activePockets);
@@ -220,10 +223,13 @@ public class RadiationSystemNT {
 			while(itr.hasNext()){
 				RadPocket p = itr.next();
 				BlockPos pos = p.parent.parent.getWorldPos(p.parent.yLevel);
+				PlayerChunkMapEntry entry = ((WorldServer)w.world).getPlayerChunkMap().getEntry(p.parent.parent.chunk.x, p.parent.parent.chunk.z);
+				if(entry == null || entry.getWatchingPlayers().isEmpty()){
+					((WorldServer)w.world).getChunkProvider().queueUnload(p.parent.parent.chunk);
+				}
 				p.radiation *= 0.999F;
 				p.radiation -= 0.05F;
 				p.parent.parent.chunk.markDirty();
-				
 				if(p.radiation <= 0) {
 					p.radiation = 0;
 					itr.remove();
@@ -267,77 +273,47 @@ public class RadiationSystemNT {
 								w.activePockets.add(sc2.pockets[idx]);
 							}
 						}
-						//incrementRad(st.chunk.getWorld(), nPos, p.radiation*amountPer, Float.MAX_VALUE);
 					}
 				}
 				if(amountPer != 0){
 					p.accumulatedRads += p.radiation * 0.6F;
+				}
+				if(System.currentTimeMillis()-time > 20){
+					break;
 				}
 			}
 			for(RadPocket p : w.activePockets){
 				p.radiation = p.accumulatedRads;
 				p.accumulatedRads = 0;
 			}
-			
-			/*List<ChunkRadiationStorage> updates = new ArrayList<>(w.data.values());
-			//long l = System.nanoTime();
-			for(ChunkRadiationStorage st : updates){
-				for(SubChunkRadiationStorage sc : st.chunks){
-					if(sc != null){
-						for(RadPocket p : sc.pockets){
-							BlockPos pos = st.getWorldPos(sc.yLevel);
-							p.radiation *= 0.999F;
-							p.radiation -= 0.05F;
-							
-							if(p.radiation <= 0) {
-								p.radiation = 0;
-							}
-							
-							float count = 0;
-							for(EnumFacing e : EnumFacing.VALUES){
-								count += p.connectionIndices[e.ordinal()].size();
-							}
-							float amountPer = 0.4F/count;
-							if(count == 0){
-								amountPer = 0;
-							}
-							if(p.radiation > 0 && count > 0){
-								for(EnumFacing e : EnumFacing.VALUES){
-									BlockPos nPos = pos.offset(e, 16);
-									if(!st.chunk.getWorld().isBlockLoaded(nPos) || nPos.getY() < 0 || nPos.getY() > 255)
-										continue;
-									if(p.connectionIndices[e.ordinal()].size() == 1 && p.connectionIndices[e.ordinal()].get(0) == -1){
-										rebuildChunkPockets(st.chunk.getWorld().getChunkFromBlockCoords(nPos), nPos.getY() >> 4);
-									} else {
-										SubChunkRadiationStorage sc2 = getSubChunkStorage(st.chunk.getWorld(), nPos);
-										for(int idx : p.connectionIndices[e.ordinal()]){
-											sc2.pockets[idx].radiation += p.radiation*amountPer;
-										}
-									}
-									//incrementRad(st.chunk.getWorld(), nPos, p.radiation*amountPer, Float.MAX_VALUE);
-								}
-							}
-							if(amountPer != 0){
-								p.radiation *= 0.6F;
-								st.chunk.markDirty();
-							}
-						}
-					}
-				}
-			}*/
-			//System.out.println(System.nanoTime()-l);
+		}
+		//System.out.println(System.nanoTime()-lTime);
+		if(System.currentTimeMillis()-time > 50){
+			System.out.println("Rads took too long: " + (System.currentTimeMillis()-time));
 		}
 	}
 	
 	public static void markChunkForRebuild(World world, BlockPos pos){
-		dirtyChunks.add(Pair.of(world.getChunkFromBlockCoords(pos), pos.getY() >> 4));
+		BlockPos chunkPos = new BlockPos(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
+		WorldRadiationData r = worldMap.get(world);
+		if(r.iteratingDirty){
+			r.dirtyChunks2.add(chunkPos);
+		} else {
+			r.dirtyChunks.add(chunkPos);
+		}
 	}
 	
 	private static void rebuildDirty(){
-		for(Pair<Chunk, Integer> c : dirtyChunks){
-			rebuildChunkPockets(c.getLeft(), c.getRight());
+		for(WorldRadiationData r : worldMap.values()){
+			r.iteratingDirty = true;
+			for(BlockPos b : r.dirtyChunks){
+				rebuildChunkPockets(r.world.getChunkFromChunkCoords(b.getX(), b.getZ()), b.getY());
+			}
+			r.iteratingDirty = false;
+			r.dirtyChunks.clear();
+			r.dirtyChunks.addAll(r.dirtyChunks2);
+			r.dirtyChunks2.clear();
 		}
-		dirtyChunks.clear();
 	}
 	
 	private static void rebuildChunkPockets(Chunk chunk, int yIndex){
@@ -686,6 +662,11 @@ public class RadiationSystemNT {
 	
 	public static class WorldRadiationData {
 		public World world;
+		//Keep two lists to avoid concurrent modification. If one is being iterated over, mark it dirty in the other set.
+		private Set<BlockPos> dirtyChunks = new HashSet<>();
+		private Set<BlockPos> dirtyChunks2 = new HashSet<>();
+		private boolean iteratingDirty = false;
+		
 		public Set<RadPocket> activePockets = new HashSet<>();
 		public Map<ChunkPos, ChunkRadiationStorage> data = new HashMap<>();
 		

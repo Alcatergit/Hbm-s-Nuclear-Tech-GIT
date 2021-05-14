@@ -1,5 +1,6 @@
 package com.hbm.explosion;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +13,6 @@ import com.google.common.collect.Lists;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
@@ -27,7 +27,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
@@ -48,6 +47,8 @@ public class ExplosionNT extends Explosion {
 	public Entity exploder;
 	/** A list of ChunkPositions of blocks affected by this explosion */
 	public final List<BlockPos> affectedBlockPositions;
+	
+	public static final List<ExAttrib> nukeAttribs = Arrays.asList(new ExAttrib[] {ExAttrib.FIRE, ExAttrib.NOPARTICLE, ExAttrib.NOSOUND, ExAttrib.NODROP, ExAttrib.NOHURT});
 
 	public ExplosionNT(World world, Entity exploder, double x, double y, double z, float strength) {
 		super(world, exploder, x, y, z, strength, false, true);
@@ -64,7 +65,22 @@ public class ExplosionNT extends Explosion {
 		atttributes.add(attrib);
 		return this;
 	}
+	
+	public ExplosionNT addAllAttrib(List<ExAttrib> attrib) {
+		atttributes.addAll(attrib);
+		return this;
+	}
+	
+	public ExplosionNT overrideResolution(int res) {
+		field_77289_h = res;
+		return this;
+	}
 
+	public void explode() {
+    	doExplosionA();
+    	doExplosionB(false);
+    }
+	
 	public void doExplosionA() {
 		float f = this.explosionSize;
 		HashSet hashset = new HashSet();
@@ -167,7 +183,8 @@ public class ExplosionNT extends Explosion {
 	}
 
 	public void doExplosionB(boolean p_77279_1_) {
-		this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+		if(!has(ExAttrib.NOSOUND))
+			this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
 		if(!has(ExAttrib.NOPARTICLE)) {
 			if(this.explosionSize >= 2.0F) {
@@ -214,7 +231,7 @@ public class ExplosionNT extends Explosion {
 			}
 
 			if(block.getMaterial() != Material.AIR) {
-				if(block.getBlock().canDropFromExplosion(this)) {
+				if(block.getBlock().canDropFromExplosion(this) && !has(ExAttrib.NODROP)) {
 					float chance = 1.0F;
 
 					if(!has(ExAttrib.ALLDROP))
@@ -270,13 +287,15 @@ public class ExplosionNT extends Explosion {
 
 	// this solution is a bit hacky but in the end easier to work with
 	public static enum ExAttrib {
-		FIRE, // classic vanilla fire explosion
-		BALEFIRE, // same with but with balefire
-		LAVA, // again the same thing but lava
-		ALLMOD, // block placer attributes like fire are applied for all
-				// destroyed blocks
-		ALLDROP, // miner TNT!
-		NOPARTICLE, NOHURT
+		FIRE,		//classic vanilla fire explosion
+		BALEFIRE,	//same with but with balefire
+		LAVA,		//again the same thing but lava
+		ALLMOD,		//block placer attributes like fire are applied for all destroyed blocks
+		ALLDROP,	//miner TNT!
+		NODROP,		//the opposite
+		NOPARTICLE,
+		NOSOUND,
+		NOHURT
 	}
 
 }

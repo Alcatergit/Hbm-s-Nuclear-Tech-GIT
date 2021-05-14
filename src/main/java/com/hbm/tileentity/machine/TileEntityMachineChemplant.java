@@ -184,7 +184,6 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	
 	@Override
 	public void update() {
-		
 		needsTankTypeUpdate = previousTemplate2 != inventory.getStackInSlot(4);
 		previousTemplate2 = inventory.getStackInSlot(4);
 		this.consumption = 100;
@@ -253,8 +252,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			
 			
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			if(inputValidForTank(0, 17))
+			if(inputValidForTank(0, 17)){
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
+			}
 			if(inputValidForTank(1, 18))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
 			
@@ -458,14 +458,16 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	}
 	
 	protected boolean inputValidForTank(int tank, int slot){
-		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tankTypes[tank] != null){
-			if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
+		if(!inventory.getStackInSlot(slot).isEmpty() && tankTypes[tank] != null){
+			return FFUtils.checkRestrictions(inventory.getStackInSlot(slot), f -> f.getFluid() == tankTypes[tank]);
+			/*if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
 				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];
 			}
+			
 			FluidStack test = FluidContainerRegistry.getFluidFromItem(inventory.getStackInSlot(slot).getItem());
 			if(test != null && test.getFluid() == tankTypes[tank]){
 				return true;
-			}
+			}*/
 			//Drillgon200: I really hope fluid container registry comes back.
 		}
 		

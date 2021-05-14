@@ -34,6 +34,7 @@ import com.hbm.items.armor.ArmorAJR;
 import com.hbm.items.armor.ArmorBJ;
 import com.hbm.items.armor.ArmorHEV;
 import com.hbm.items.armor.ArmorHat;
+import com.hbm.items.armor.ArmorLiquidator;
 import com.hbm.items.bomb.ItemBoy;
 import com.hbm.items.bomb.ItemFleija;
 import com.hbm.items.bomb.ItemGadget;
@@ -65,6 +66,7 @@ import com.hbm.items.gear.BigSword;
 import com.hbm.items.gear.HoeSchrabidium;
 import com.hbm.items.gear.JetpackBooster;
 import com.hbm.items.gear.JetpackBreak;
+import com.hbm.items.gear.JetpackGlider;
 import com.hbm.items.gear.JetpackRegular;
 import com.hbm.items.gear.JetpackVectorized;
 import com.hbm.items.gear.MaskOfInfamy;
@@ -101,6 +103,7 @@ import com.hbm.items.special.ItemChopper;
 import com.hbm.items.special.ItemCladding;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.items.special.ItemDigamma;
+import com.hbm.items.special.ItemDoorSkin;
 import com.hbm.items.special.ItemDrop;
 import com.hbm.items.special.ItemFuel;
 import com.hbm.items.special.ItemFusionShield;
@@ -147,6 +150,7 @@ import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.items.tool.ItemMultitoolPassive;
 import com.hbm.items.tool.ItemMultitoolTool;
 import com.hbm.items.tool.ItemOilDetector;
+import com.hbm.items.tool.ItemPeas;
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.items.tool.ItemScrewdriver;
 import com.hbm.items.tool.ItemSurveyScanner;
@@ -185,6 +189,7 @@ import com.hbm.items.weapon.ItemGrenade;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunCCPlasmaCannon;
 import com.hbm.items.weapon.ItemGunDart;
+import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.items.weapon.ItemGunGauss;
 import com.hbm.items.weapon.ItemGunJShotty;
 import com.hbm.items.weapon.ItemGunLacunae;
@@ -216,6 +221,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -223,12 +229,12 @@ public class ModItems {
 	
 	public static final List<Item> ALL_ITEMS = new ArrayList<Item>();
 	
-	public static final int guiID_item_folder = 99;
-	public static final int guiID_item_designator = 100;
-	public static final int guiID_item_sat_interface = 101;
-	public static final int guiID_item_bobmazon = 103;
-	public static final int guiID_item_sat_coord = 104;
-	public static final int guiID_item_book = 105;
+	public static final int guiID_item_folder = 1099;
+	public static final int guiID_item_designator = 10100;
+	public static final int guiID_item_sat_interface = 10101;
+	public static final int guiID_item_bobmazon = 10103;
+	public static final int guiID_item_sat_coord = 10104;
+	public static final int guiID_item_book = 10105;
 	
 	public static final Item redstone_sword = new RedstoneSword(ToolMaterial.STONE, "redstone_sword").setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item big_sword = new BigSword(ToolMaterial.DIAMOND, "big_sword").setCreativeTab(CreativeTabs.COMBAT);
@@ -434,6 +440,16 @@ public class ModItems {
 	public static final Item hazmat_paa_legs = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.LEGS, "hazmat_paa_legs").setMaxStackSize(1);
 	public static final Item hazmat_paa_boots = new ArmorHazmat(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.FEET, "hazmat_paa_boots").setMaxStackSize(1);
 	
+	public static final Item liquidator_helmet = new ArmorLiquidator(MainRegistry.aMatLiquidator, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/liquidator_helmet.png", "liquidator_helmet")
+			.setThreshold(1.0F)
+			.setBlastProtection(0.25F)
+			.setStep(HBMSoundHandler.metalStep)
+			.setJump(HBMSoundHandler.ironJump)
+			.setFall(HBMSoundHandler.ironLand).setMaxStackSize(1);
+	public static final Item liquidator_plate = new ArmorLiquidator(MainRegistry.aMatLiquidator, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/liquidator_1.png", "liquidator_plate").cloneStats((ArmorFSB) liquidator_helmet).setMaxStackSize(1);
+	public static final Item liquidator_legs = new ArmorLiquidator(MainRegistry.aMatLiquidator, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/liquidator_2.png", "liquidator_legs").cloneStats((ArmorFSB) liquidator_helmet).setMaxStackSize(1);
+	public static final Item liquidator_boots = new ArmorLiquidator(MainRegistry.aMatLiquidator, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/liquidator_1.png", "liquidator_boots").cloneStats((ArmorFSB) liquidator_helmet).setMaxStackSize(1);
+	
 	public static final Item australium_iii = new ArmorAustralium(MainRegistry.enumArmorMaterialAusIII, -1, EntityEquipmentSlot.CHEST, "australium_iii").setMaxStackSize(1);
 	
 	public static final Item asbestos_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialAsbestos, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/asbestos_1.png", "asbestos_helmet").setFireproof(true).setOverlay(RefStrings.MODID + ":textures/misc/overlay_asbestos.png").setMaxStackSize(1);
@@ -525,6 +541,7 @@ public class ModItems {
 	public static final Item ajr_helmet = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
 			.setFireproof(true)
 			.enableVATS(true)
+			.enableFlashlight(new Vec3d(-0.18, 0.2, 0.9))
 			.setHasGeigerSound(true)
 			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
 			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
@@ -559,6 +576,7 @@ public class ModItems {
 	public static final Item hev_helmet = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
 			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
 			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
+			.enableFlashlight(new Vec3d(0, -0.1, 0.8))
 			.setBlastProtection(0.25F)
 			.setMod(0.2F)
 			.setFireproof(true)
@@ -572,6 +590,7 @@ public class ModItems {
 	public static final Item goggles = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "goggles").setMaxStackSize(1);
 	public static final Item gas_mask = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask").setMaxStackSize(1);
 	public static final Item gas_mask_m65 = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_m65").setMaxStackSize(1);
+	public static final Item gas_mask_mono = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_mono").setMaxStackSize(1);
 	public static final Item hat = new ArmorHat(ArmorMaterial.IRON, 7, EntityEquipmentSlot.HEAD, "nossy_hat").setMaxStackSize(1);
 	public static final Item beta = new ItemDrop("beta").setMaxStackSize(1);
 	
@@ -579,6 +598,7 @@ public class ModItems {
 	public static final Item jetpack_break = new JetpackBreak(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.kerosene, 8000, "jetpack_break").setMaxStackSize(1);
 	public static final Item jetpack_fly = new JetpackRegular(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.kerosene, 12000, "jetpack_fly").setMaxStackSize(1);
 	public static final Item jetpack_vector = new JetpackVectorized(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.kerosene, 16000, "jetpack_vector").setMaxStackSize(1);
+	public static final Item jetpack_glider = new JetpackGlider(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, 20000, "jetpack_glider").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item cape_radiation = new ArmorModel(ArmorMaterial.CHAIN, -1, EntityEquipmentSlot.CHEST, "cape_radiation").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
 	public static final Item cape_gasmask = new ArmorModel(ArmorMaterial.CHAIN, -1, EntityEquipmentSlot.CHEST, "cape_gasmask").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
@@ -678,6 +698,7 @@ public class ModItems {
 	public static final Item gun_defabricator = new GunDefabricator("gun_defabricator").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_vortex = new ItemGunVortex(GunEnergyFactory.getVortexConfig(), "gun_vortex").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item cc_plasma_gun = new ItemGunCCPlasmaCannon(GunEnergyFactory.getCCPlasmaGunConfig(), "cc_plasma_gun").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_egon = new ItemGunEgon(GunEnergyFactory.getEgonConfig(), "gun_egon").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_euthanasia = new GunEuthanasia("gun_euthanasia").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger = new GunStinger("gun_stinger").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_skystinger = new GunStinger("gun_skystinger").setCreativeTab(MainRegistry.weaponTab);
@@ -1170,6 +1191,7 @@ public class ModItems {
 	public static final Item canteen_fab = new ItemCanteen(2 * 60, "canteen_fab").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item pancake = new ItemPancake(20, 20, false, "pancake").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item nugget = new ItemLemon(200, 200, false, "nugget").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item peas = new ItemPeas("peas").setCreativeTab(MainRegistry.consumableTab);
 	//Bongespob arcarmoni
 	public static final Item spongebob_macaroni = new ItemLemon(5, 5, false, "spongebob_macaroni").setCreativeTab(MainRegistry.consumableTab);
 	
@@ -1699,6 +1721,18 @@ public class ModItems {
 	public static final Item ammo_grenade_tracer = new ItemAmmo("ammo_grenade_tracer").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_grenade_kampf = new ItemAmmo("ammo_grenade_kampf").setCreativeTab(MainRegistry.weaponTab);
 	
+	public static final Item ammo_nuke = new ItemAmmo("ammo_nuke").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_nuke_low = new ItemAmmo("ammo_nuke_low").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_nuke_high = new ItemAmmo("ammo_nuke_high").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_nuke_tots = new ItemAmmo("ammo_nuke_tots").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_nuke_safe = new ItemAmmo("ammo_nuke_safe").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_nuke_pumpkin = new ItemAmmo("ammo_nuke_pumpkin").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_mirv = new ItemAmmo("ammo_mirv").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_mirv_low = new ItemAmmo("ammo_mirv_low").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_mirv_high = new ItemAmmo("ammo_mirv_high").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_mirv_safe = new ItemAmmo("ammo_mirv_safe").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item ammo_mirv_special = new ItemAmmo("ammo_mirv_special").setCreativeTab(null);
+	
 	public static final Item ammo_fuel = new ItemAmmo("ammo_fuel").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_napalm = new ItemAmmo("ammo_fuel_napalm").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_phosphorus = new ItemAmmo("ammo_fuel_phosphorus").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
@@ -2045,6 +2079,9 @@ public class ModItems {
 	public static final Item sat_interface = new ItemSatInterface("sat_interface").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item sat_coord = new ItemSatInterface("sat_coord").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	
+	public static final Item nugget_zirconium = new ItemCustomLore("nugget_zirconium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item gas_mask_filter_mono = new ItemSyringe("gas_mask_filter_mono").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	
 	//Missiles
 	public static final Item designator = new ItemDesignator("designator").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item designator_range = new ItemDesignatorRange("designator_range").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
@@ -2283,6 +2320,10 @@ public class ModItems {
 	public static final Item missile_skin_metal = new ItemCustomLore("missile_skin_metal").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	
 	public static final Item missile_custom = new ItemCustomMissile("missile_custom").setMaxStackSize(1).setCreativeTab(null);
+	
+	public static final Item sliding_blast_door_skin0 = new ItemDoorSkin("sliding_blast_door_skin0", "sliding_blast_door").setCreativeTab(MainRegistry.controlTab);
+	public static final Item sliding_blast_door_skin1 = new ItemDoorSkin("sliding_blast_door_skin1", "sliding_blast_door_variant1").setCreativeTab(MainRegistry.controlTab);
+	public static final Item sliding_blast_door_skin2 = new ItemDoorSkin("sliding_blast_door_skin2", "sliding_blast_door_variant2").setCreativeTab(MainRegistry.controlTab);
 	
 	//Door items
 	public static final Item door_metal = new ItemModDoor("door_metal").setCreativeTab(MainRegistry.blockTab);

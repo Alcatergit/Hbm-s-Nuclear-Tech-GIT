@@ -1,25 +1,37 @@
 package com.hbm.render.util;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
+import com.hbm.handler.HbmShaderManager2;
+import com.hbm.main.ClientProxy;
+import com.hbm.main.ResourceManager;
+import com.hbm.render.RenderHelper;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -31,12 +43,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class BakedModelUtil {
 
-	public static int generateDecalMesh(World world, Vec3d normal, float scale, float offsetX, float offsetY, float offsetZ){
+	private static BufferBuilder buffer = new BufferBuilder(1024*16);
+	private static final int BYTES_PER_VERTEX = 4*3 + 4*1 + 4*2 + 2*2 + 2*2;
+	
+	public static enum DecalType {
+		REGULAR,
+		VBO,
+		FLOW;
+	}
+	
+	public static int[] generateDecalMesh(World world, Vec3d normal, float scale, float offsetX, float offsetY, float offsetZ, DecalType type){
+		return generateDecalMesh(world, normal, scale, offsetX, offsetY, offsetZ, type, null);
+	}
+	
+	public static int[] generateDecalMesh(World world, Vec3d normal, float scale, float offsetX, float offsetY, float offsetZ, DecalType type, @Nullable ResourceLocation texture, int... data){
 		Vec3d euler = BobMathUtil.getEulerAngles(normal);
-		Matrix3f rot = eulerToMat((float)Math.toRadians(euler.x), (float)Math.toRadians(euler.y+90), world.rand.nextFloat()*2F*(float)Math.PI);
+		float roll = world.rand.nextFloat()*2F*(float)Math.PI;
+		Matrix3f rot = eulerToMat((float)Math.toRadians(euler.x), (float)Math.toRadians(euler.y+90), roll);
 		Vec3d c1 = new Vec3d(rot.m00, rot.m01, rot.m02);
 		Vec3d c2 = new Vec3d(rot.m10, rot.m11, rot.m12);
 		Vec3d c3 = new Vec3d(rot.m20, rot.m21, rot.m22);
+		//System.out.println(c1);
+		//System.out.println(c2);
+		//System.out.println(c3);
+		//System.out.println(normal);
+		//System.out.println();
 		
 		float[][] planes = new float[6][4];
 		planes[0] = new float[]{(float)c1.x, (float)c1.y, (float)c1.z, scale};
@@ -58,12 +89,12 @@ public class BakedModelUtil {
 					if(state.getRenderType() != EnumBlockRenderType.MODEL)
 						continue;
 					IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
-					List<Triangle> block_tris = triangulateBlockModel(world, pos, model, state, MathHelper.getPositionRandom(pos), i-offsetX, j-offsetY, k-offsetZ, true);
+					List<Triangle> block_tris = triangulateBlockModel(world, pos, model, state, MathHelper.getPositionRandom(pos), -offsetX, -offsetY, -offsetZ, true);
 					Iterator<Triangle> itr = block_tris.iterator();
 					while(itr.hasNext()){
 						Triangle t = itr.next();
 						Vec3d tnorm = t.v2.pos.subtract(t.v1.pos).crossProduct(t.v3.pos.subtract(t.v1.pos)).normalize();
-						if(tnorm.dotProduct(normal) > 0)
+						if(tnorm.dotProduct(normal) > -0.2)
 							itr.remove();
 					}
 					List<Triangle> newTris;
@@ -83,27 +114,233 @@ public class BakedModelUtil {
 				}
 			}
 		}
-		//Render into display list
-		int dl = GL11.glGenLists(1);
-		GL11.glNewList(dl, GL11.GL_COMPILE);
-		Tessellator tes = Tessellator.getInstance();
-		BufferBuilder buf = tes.getBuffer();
-		buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		for(Triangle t : tris){
-			Vec3d norm = t.v2.pos.subtract(t.v1.pos).crossProduct(t.v3.pos.subtract(t.v1.pos)).normalize();
-			Vector3f tex1 = new Vector3f((float)t.v1.pos.x, (float)t.v1.pos.y, (float)t.v1.pos.z);
-			rot.transform(tex1);
-			Vector3f tex2 = new Vector3f((float)t.v2.pos.x, (float)t.v2.pos.y, (float)t.v2.pos.z);
-			rot.transform(tex2);
-			Vector3f tex3 = new Vector3f((float)t.v3.pos.x, (float)t.v3.pos.y, (float)t.v3.pos.z);
-			rot.transform(tex3);
-			buf.pos(t.v1.pos.x, t.v1.pos.y, t.v1.pos.z).tex(tex1.x*0.5+0.5, tex1.y*0.5+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
-			buf.pos(t.v2.pos.x, t.v2.pos.y, t.v2.pos.z).tex(tex2.x*0.5+0.5, tex2.y*0.5+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
-			buf.pos(t.v3.pos.x, t.v3.pos.y, t.v3.pos.z).tex(tex3.x*0.5+0.5, tex3.y*0.5+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
+		int[] geo = new int[]{-1, -1};
+		if(type == DecalType.VBO){
+			geo[0] = GL15.glGenBuffers();
+			geo[1] = tris.size()*3;
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, geo[0]);
+			ByteBuffer buf = buffer.getByteBuffer();
+			buf.clear();
+			for(Triangle t : tris){
+				if(BYTES_PER_VERTEX*3 > buf.remaining()){
+					continue;
+				}
+				for(Vertex v : t.vertices()){
+					buf.putFloat((float)v.pos.x);
+					buf.putFloat((float) v.pos.y);
+					buf.putFloat((float)v.pos.z);
+					buf.put((byte)((int)(v.r*255F)));
+					buf.put((byte)((int)(v.g*255F)));
+					buf.put((byte)((int)(v.b*255F)));
+					buf.put((byte)((int)(v.a*255F)));
+					buf.putFloat(v.u);
+					buf.putFloat(v.v);
+					buf.putShort((short)(v.lmapU*65535));
+					buf.putShort((short)(v.lmapV*65535));
+					Vector3f projTex = new Vector3f((float)v.pos.x, (float)v.pos.y, (float)v.pos.z);
+					rot.transform(projTex);
+					projTex.x = projTex.x*0.5F/scale + 0.5F;
+					projTex.y = projTex.y*0.5F/scale + 0.5F;
+					buf.putShort((short) (projTex.x*65535));
+					buf.putShort((short) (projTex.y*65535));
+				}
+			}
+			buf.flip();
+			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buf, GL15.GL_STATIC_DRAW);
+			buf.clear();
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		} else {
+			if(type == DecalType.FLOW){
+				geo = new int[7];
+				if(texture == null){
+					throw new RuntimeException("Null texture");
+				}
+			}
+			//Render into display list
+			geo[0] = GL11.glGenLists(1);
+			GL11.glNewList(geo[0], GL11.GL_COMPILE);
+			Tessellator tes = Tessellator.getInstance();
+			BufferBuilder buf = tes.getBuffer();
+			buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_NORMAL);
+			for(Triangle t : tris){
+				Vec3d norm = t.v2.pos.subtract(t.v1.pos).crossProduct(t.v3.pos.subtract(t.v1.pos)).normalize();
+				Vector3f tex1 = new Vector3f((float)t.v1.pos.x, (float)t.v1.pos.y, (float)t.v1.pos.z);
+				rot.transform(tex1);
+				Vector3f tex2 = new Vector3f((float)t.v2.pos.x, (float)t.v2.pos.y, (float)t.v2.pos.z);
+				rot.transform(tex2);
+				Vector3f tex3 = new Vector3f((float)t.v3.pos.x, (float)t.v3.pos.y, (float)t.v3.pos.z);
+				rot.transform(tex3);
+				float invScale = 1F/scale;
+				buf.pos(t.v1.pos.x, t.v1.pos.y, t.v1.pos.z).tex(tex1.x*0.5*invScale+0.5, tex1.y*0.5*invScale+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
+				buf.pos(t.v2.pos.x, t.v2.pos.y, t.v2.pos.z).tex(tex2.x*0.5*invScale+0.5, tex2.y*0.5*invScale+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
+				buf.pos(t.v3.pos.x, t.v3.pos.y, t.v3.pos.z).tex(tex3.x*0.5*invScale+0.5, tex3.y*0.5*invScale+0.5).normal((float)norm.x, (float)norm.y, (float)norm.z).endVertex();
+				
+				//Vec3d tangent = new Vec3d(1, 0, 0).crossProduct(c1);
+				//Vector3f test1 = new Vector3f(0, 1, 0);
+				//Vector3f test2 = new Vector3f((float)norm.x, (float)norm.y, (float)norm.z);
+				//rot.transform(test1);
+				//rot.transform(test2);
+				//System.out.println(test1 + " " + test2);
+				//System.out.println(tangent + " " + norm.crossProduct(c2));
+				//System.out.println(tangent.normalize().dotProduct(new Vec3d(0, -1, 0)));
+				//System.out.println();
+			}
+			tes.draw();
+			GL11.glEndList();
+			if(type == DecalType.FLOW){
+				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				int texId = Minecraft.getMinecraft().getTextureManager().getTexture(texture).getGlTextureId();
+				int width = geo[5] = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+				int height = geo[6] = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+				
+				int fbo = geo[1] = GL30.glGenFramebuffers();
+				int fbo2 = geo[3] = GL30.glGenFramebuffers();
+				int gravmap = geo[2] = GL11.glGenTextures();
+				int gravmap2 = geo[4] = GL11.glGenTextures();
+				
+				int depth = GL30.glGenRenderbuffers();
+				GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depth);
+				GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
+				
+				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+				GlStateManager.bindTexture(gravmap);
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (IntBuffer)null);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+				GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap, 0);
+				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depth);
+				
+				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo2);
+				GlStateManager.bindTexture(gravmap2);
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (IntBuffer)null);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+				GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap2, 0);
+				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depth);
+				
+				
+				GlStateManager.colorMask(true, true, true, true);
+		        GlStateManager.enableDepth();
+		        GlStateManager.depthMask(true);
+		        GlStateManager.enableTexture2D();
+		        GlStateManager.disableLighting();
+		        GlStateManager.disableAlpha();
+		        GlStateManager.disableCull();
+		        
+		        GlStateManager.enableColorMaterial();
+
+		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				
+		        if(data.length > 0){
+		        	int texIdx = data[0];
+		        	int rows = data[1];
+		        	GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GL11.glPushMatrix();
+					GL11.glLoadIdentity();
+					float size = 1F/rows;
+			        float u = (texIdx%rows)*size;
+			        float v = (texIdx/4)*size;
+			        GL11.glTranslated(u, v, 0);
+			        GL11.glScaled(size, size, 1);
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		        }
+		        
+				GlStateManager.viewport(0, 0, width, height);
+				GlStateManager.bindTexture(texId);
+				GL11.glPushMatrix();
+				GL11.glLoadIdentity();
+				GlStateManager.matrixMode(GL11.GL_PROJECTION);
+				GL11.glPushMatrix();
+				GL11.glLoadIdentity();
+				ResourceManager.gravitymap_render.use();
+				
+				//Don't really know why this needs a negative roll but ok.
+				Matrix3f rot2 = eulerToMat((float)Math.toRadians(euler.x), (float)Math.toRadians(euler.y+90), 0);
+				Matrix3f mR = new Matrix3f();
+				mR.rotZ(-roll);
+				mR.mul(rot2);
+				Vec3d tanDir = new Vec3d(mR.m10, mR.m11, mR.m12);
+				
+				GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "tanDirection"), (float)tanDir.x, (float)tanDir.y, (float)tanDir.z);
+				Vector3f gravity = new Vector3f(0, 0.5F, 0);
+				//rot.transform(gravity);
+				GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "gravity"), gravity.x, gravity.y, gravity.z);
+				for(int i = 0; i < 3; i ++)
+					for(int j = 0; j < 3; j ++)
+						ClientProxy.AUX_GL_BUFFER.put(rot.getElement(i, j));
+				ClientProxy.AUX_GL_BUFFER.rewind();
+				GL20.glUniformMatrix3(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "matrix"), false, ClientProxy.AUX_GL_BUFFER);
+				GlStateManager.clearDepth(1);
+				GlStateManager.clearColor(0.5F, 0.5F, 0F, 1F);
+				GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+				GL11.glCallList(geo[0]);
+				//RenderHelper.renderFullscreenTriangle(true);
+				
+				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+				GlStateManager.clearDepth(1);
+				GlStateManager.clearColor(0.5F, 0.5F, 0F, 1F);
+				GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+				GL11.glCallList(geo[0]);
+				//RenderHelper.renderFullscreenTriangle(true);
+				HbmShaderManager2.releaseShader();
+				GL11.glPopMatrix();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GL11.glPopMatrix();
+				
+				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, 0);
+				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo2);
+				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, 0);
+				GL30.glDeleteRenderbuffers(depth);
+				
+				if(data.length > 0){
+					GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GL11.glPopMatrix();
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				}
+				
+				GlStateManager.depthMask(true);
+		        GlStateManager.enableDepth();
+		        GlStateManager.enableAlpha();
+		        GlStateManager.enableCull();
+		        //GlStateManager.enableLighting();
+		        GlStateManager.colorMask(true, true, true, true);
+				
+				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+				
+			}
 		}
-		tes.draw();
-		GL11.glEndList();
-		return dl;
+		
+		return geo;
+	}
+	
+	public static void enableBlockShaderVBOs(){
+		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 0);
+		GL20.glEnableVertexAttribArray(0);
+		//Color
+		GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_VERTEX, 12);
+		GL20.glEnableVertexAttribArray(1);
+		//Texcoord
+		GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 16);
+		GL20.glEnableVertexAttribArray(3);
+		//Lmap texcoord
+		GL20.glVertexAttribPointer(4, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 24);
+		GL20.glEnableVertexAttribArray(4);
+		//Projected texcoord
+		GL20.glVertexAttribPointer(5, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 28);
+		GL20.glEnableVertexAttribArray(5);
+	}
+	
+	public static void disableBlockShaderVBOs(){
+		GL20.glDisableVertexAttribArray(0);
+		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(3);
+		GL20.glDisableVertexAttribArray(4);
+		GL20.glDisableVertexAttribArray(5);
 	}
 	
 	public static AxisAlignedBB getBox(Vec3d a, Vec3d b, Vec3d c){
@@ -139,7 +376,22 @@ public class BakedModelUtil {
 	public static List<Triangle> triangulateBlockModel(World world, BlockPos pos, IBakedModel b, IBlockState state, long rand, float offsetX, float offsetY, float offsetZ, boolean checkSides){
 		List<Triangle> tris = new ArrayList<>();
 		
-		List<BakedQuad> l = new ArrayList<>();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(world, b, state, pos, buffer, true);
+		buffer.finishDrawing();
+		IntBuffer buf = buffer.getByteBuffer().asIntBuffer();
+		int[] vertexData = new int[DefaultVertexFormats.BLOCK.getIntegerSize()*4];
+		for(int i = 0; i < buf.limit(); i += DefaultVertexFormats.BLOCK.getIntegerSize()*4){
+			buf.get(vertexData);
+			Vertex v0 = new Vertex(vertexData, 0, offsetX, offsetY, offsetZ);
+			Vertex v1 = new Vertex(vertexData, 1, offsetX, offsetY, offsetZ);
+			Vertex v2 = new Vertex(vertexData, 2, offsetX, offsetY, offsetZ);
+			Vertex v3 = new Vertex(vertexData, 3, offsetX, offsetY, offsetZ);
+			tris.add(new Triangle(v0, v1, v2));
+			tris.add(new Triangle(v2, v3, v0));
+		}
+		
+		/*List<BakedQuad> l = new ArrayList<>();
 		for(EnumFacing e : EnumFacing.VALUES){
 			if(!checkSides || state.shouldSideBeRendered(world, pos, e)){
 				l.addAll(b.getQuads(state, e, rand));
@@ -155,7 +407,8 @@ public class BakedModelUtil {
 			Vertex v3 = new Vertex(vertexData, 3, offsetX, offsetY, offsetZ);
 			tris.add(new Triangle(v0, v1, v2));
 			tris.add(new Triangle(v2, v3, v0));
-		}
+		}*/
+		
 		return tris;
 	}
 	
@@ -240,9 +493,10 @@ public class BakedModelUtil {
 	
 	public static class Vertex {
 		public Vec3d pos;
-		public byte a, r, g, b;
+		public float a, r, g, b;
 		public float u, v;
-		public int normal;
+		public float lmapU;
+		public float lmapV;
 		
 		public Vertex(int[] vertexData, int offset, float oX, float oY, float oZ) {
 			offset *= 7;
@@ -251,13 +505,17 @@ public class BakedModelUtil {
 			float z = Float.intBitsToFloat(vertexData[2+offset])+oZ;
 			pos = new Vec3d(x, y, z);
 			int color = vertexData[3+offset];
-			a = (byte) ((color >> 24) & 255);
-			r = (byte) ((color >> 16) & 255);
-			g = (byte) ((color >> 8) & 255);
-			b = (byte) ((color) & 255);
+			a = ((color >> 24) & 255) / 255F;
+			b = ((color >> 16) & 255) / 255F;
+			g = ((color >> 8) & 255) / 255F;
+			r = ((color) & 255) / 255F;
 			u = Float.intBitsToFloat(vertexData[4+offset]);
 			v = Float.intBitsToFloat(vertexData[5+offset]);
-			normal = vertexData[6+offset];
+			int i = vertexData[6+offset];
+			int j = i >>> 16 & 65535;
+	        int k = i & 65535;
+	        lmapU = j/255F;
+	        lmapV = k/255F;
 		}
 		
 		public Vertex() {
@@ -266,13 +524,14 @@ public class BakedModelUtil {
 		public Vertex lerp(Vertex other, float amount){
 			Vertex l = new Vertex();
 			l.pos = pos.add(other.pos.subtract(pos).scale(amount));
-			l.a = (byte) (a + (other.a-a)*amount);
-			l.r = (byte) (r + (other.r-r)*amount);
-			l.g = (byte) (g + (other.g-g)*amount);
-			l.b = (byte) (b + (other.b-b)*amount);
+			l.a = a + (other.a-a)*amount;
+			l.r = r + (other.r-r)*amount;
+			l.g = g + (other.g-g)*amount;
+			l.b = b + (other.b-b)*amount;
 			l.u = u + (other.u-u)*amount;
 			l.v = v + (other.v-v)*amount;
-			l.normal = normal;
+			l.lmapU = lmapU + (other.lmapU-lmapU)*amount;
+			l.lmapV = lmapV + (other.lmapV-lmapV)*amount;
 			return l;
 		}
 	}
@@ -285,6 +544,10 @@ public class BakedModelUtil {
 			this.v1 = v1;
 			this.v2 = v2;
 			this.v3 = v3;
+		}
+		
+		public Vertex[] vertices(){
+			return new Vertex[]{v1, v2, v3};
 		}
 	}
 }

@@ -31,20 +31,20 @@ public class ItemRenderCCPlasmaCannon extends TEISRBase {
 			GL11.glScaled(0.5, 0.4, 0.5);
 			if(type == TransformType.FIRST_PERSON_RIGHT_HAND){
 				GL11.glRotated(178, 0, 1, 0);
-				GL11.glRotated(27+recoil[1]*0.5F, 0, 0, 1);
+				GL11.glRotated(27+recoil[1]*2F, 0, 0, 1);
 				GL11.glTranslated(4, -0.2, 0);
 				GL11.glRotated(7, 0, 0, 1);
 				GL11.glRotated(180, 0, 1, 0);
 			} else {
 				GL11.glRotated(180, 0, 1, 0);
-				GL11.glRotated(140+recoil[1]*0.5F, 0, 0, 1);
+				GL11.glRotated(140+recoil[1]*2F, 0, 0, 1);
 				GL11.glTranslated(4, 1, 1);
 				GL11.glRotated(7, 0, 0, 1);
 				GL11.glRotated(170, 0, 1, 0);
 				GL11.glRotated(180, 1, 0, 0);
 			}
 			
-			GL11.glTranslated(-recoil[2]*0.25F, 0, 0);
+			GL11.glTranslated(-recoil[2]*0.15F, 0, 0);
 			break;
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
@@ -66,10 +66,12 @@ public class ItemRenderCCPlasmaCannon extends TEISRBase {
 			break;
 		}
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		boolean prevBlend = GL11.glGetBoolean(GL11.GL_BLEND);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		ResourceManager.cc_plasma_cannon.renderAll();
-		GlStateManager.disableBlend();
+		if(!prevBlend)
+			GlStateManager.disableBlend();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 	}
 }

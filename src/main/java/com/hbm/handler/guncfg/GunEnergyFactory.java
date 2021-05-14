@@ -224,7 +224,7 @@ public class GunEnergyFactory {
 		config.animations.put(AnimType.CYCLE, new BusAnimation()
 				.addBus("RECOIL", new BusAnimationSequence()
 						.addKeyframe(new BusAnimationKeyframe(0, 1, -5, 25))
-						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 400))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 200))
 						));
 
 		config.config = new ArrayList<Integer>();
@@ -238,6 +238,36 @@ public class GunEnergyFactory {
 		config.config.add(BulletConfigSyncingUtil.CHL_R556);
 		config.config.add(BulletConfigSyncingUtil.R556_SLEEK);
 		config.config.add(BulletConfigSyncingUtil.R556_K);
+
+		return config;
+	}
+	
+	public static GunConfiguration getEgonConfig() {
+		GunConfiguration config = new GunConfiguration();
+
+		config.rateOfFire = 2;
+		config.roundsPerCycle = 1;
+		config.gunMode = GunConfiguration.MODE_NORMAL;
+		config.firingMode = GunConfiguration.FIRE_AUTO;
+		config.hasSights = false;
+		config.reloadDuration = 20;
+		config.firingDuration = 0;
+		config.ammoCap = 40;
+		config.reloadType = GunConfiguration.RELOAD_NONE;
+		config.allowsInfinity = true;
+		config.crosshair = Crosshair.NONE;
+		config.durability = 10000;
+		config.reloadSound = GunConfiguration.RSOUND_MAG;
+		config.firingSound = HBMSoundHandler.osiprShoot;
+		config.reloadSoundEnd = false;
+
+		config.name = "Gluon Gun";
+		config.manufacturer = "Black Mesa Research Facility";
+
+		config.comment.add("Working to make a better tomorrow for all mankind.");
+
+		config.config = new ArrayList<Integer>();
+		config.config.add(BulletConfigSyncingUtil.SPECIAL_GAUSS);
 
 		return config;
 	}

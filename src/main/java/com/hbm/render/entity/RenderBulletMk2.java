@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderSparks;
 import com.hbm.render.model.ModelBaleflare;
@@ -17,13 +18,20 @@ import com.hbm.render.model.ModelMIRV;
 import com.hbm.render.model.ModelMiniNuke;
 import com.hbm.render.model.ModelRocket;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderBulletMk2 extends Render<EntityBulletBase> {
@@ -77,15 +85,17 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	public void doRender(EntityBulletBase bullet, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		
-		GL11.glTranslatef((float) x, (float) y, (float) z);
-		GL11.glRotatef(bullet.prevRotationYaw + (bullet.rotationYaw - bullet.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(bullet.prevRotationPitch + (bullet.rotationPitch - bullet.prevRotationPitch) * partialTicks + 180, 0.0F, 0.0F, 1.0F);
-		GL11.glScalef(1.5F, 1.5F, 1.5F);
-
-		GL11.glRotatef(new Random(bullet.getEntityId()).nextInt(90) - 45, 1.0F, 0.0F, 0.0F);
-
 		int style = bullet.getDataManager().get(EntityBulletBase.STYLE);
 		int trail = bullet.getDataManager().get(EntityBulletBase.TRAIL);
+		
+		GL11.glTranslatef((float) x, (float) y, (float) z);
+		if(style != BulletConfiguration.STYLE_TRACER){
+			GL11.glRotatef(bullet.prevRotationYaw + (bullet.rotationYaw - bullet.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(bullet.prevRotationPitch + (bullet.rotationPitch - bullet.prevRotationPitch) * partialTicks + 180, 0.0F, 0.0F, 1.0F);
+			
+			GL11.glScalef(1.5F, 1.5F, 1.5F);
+			GL11.glRotatef(new Random(bullet.getEntityId()).nextInt(90) - 45, 1.0F, 0.0F, 0.0F);
+		}
 
 		switch (style) {
 		case BulletConfiguration.STYLE_NONE:
@@ -125,6 +135,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			break;
 		case BulletConfiguration.STYLE_METEOR: 
 			renderMeteor(trail); 
+			break;
+		case BulletConfiguration.STYLE_TRACER:
+			renderTracer(new Vec3d(bullet.motionX, bullet.motionY, bullet.motionZ).normalize(), bullet.getPositionEyes(partialTicks), partialTicks);
 			break;
 		default:
 			renderBullet(trail);
@@ -482,6 +495,42 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
         GlStateManager.enableLighting();
 	}
 
+	private void renderTracer(Vec3d bulletDirection, Vec3d bulletPos, float partialTicks) {
+		Entity rv = Minecraft.getMinecraft().getRenderViewEntity();
+		double eyeX = rv.prevPosX + (rv.posX-rv.prevPosX)*partialTicks;
+		double eyeY = rv.prevPosY + (rv.posY-rv.prevPosY)*partialTicks;
+		double eyeZ = rv.prevPosZ + (rv.posZ-rv.prevPosZ)*partialTicks;
+		Vec3d eyePos = new Vec3d(eyeX, eyeY, eyeZ).add(ActiveRenderInfo.getCameraPosition());
+		Vec3d tan = eyePos.subtract(bulletPos).crossProduct(bulletDirection).normalize().scale(0.05);
+		bulletDirection = bulletDirection.scale(10);
+		
+		bindTexture(ResourceManager.fresnel_ms);
+		Tessellator tes = Tessellator.getInstance();
+		BufferBuilder buf = tes.getBuffer();
+		GlStateManager.color(1, 0.7F, 0.5F, 1);
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
+		GlStateManager.enableBlend();
+		GlStateManager.disableCull();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buf.pos(tan.x, tan.y, tan.z).tex(1, 1).endVertex();
+		buf.pos(tan.x+bulletDirection.x, tan.y+bulletDirection.y, tan.z+bulletDirection.z).tex(1, 0).endVertex();
+		buf.pos(-tan.x+bulletDirection.x, -tan.y+bulletDirection.y, -tan.z+bulletDirection.z).tex(0, 0).endVertex();
+		buf.pos(-tan.x, -tan.y, -tan.z).tex(0, 1).endVertex();
+		buf.pos(tan.x, tan.y, tan.z).tex(1, 1).endVertex();
+		buf.pos(tan.x+bulletDirection.x, tan.y+bulletDirection.y, tan.z+bulletDirection.z).tex(1, 0).endVertex();
+		buf.pos(-tan.x+bulletDirection.x, -tan.y+bulletDirection.y, -tan.z+bulletDirection.z).tex(0, 0).endVertex();
+		buf.pos(-tan.x, -tan.y, -tan.z).tex(0, 1).endVertex();
+		tes.draw();
+		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.enableCull();
+		GlStateManager.depthMask(true);
+		GlStateManager.disableBlend();
+		GlStateManager.enableLighting();
+	}
+	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBulletBase entity) {
 		return bullet_rl;

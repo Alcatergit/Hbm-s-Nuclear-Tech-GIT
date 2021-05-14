@@ -2,6 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.items.weapon.ItemMissile.PartSize;
+import com.hbm.items.weapon.ItemCrucible;
+import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
@@ -101,6 +103,14 @@ public class AuxButtonPacket implements IMessage {
 
 						p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
 					}
+					return;
+				}
+				if(m.id == 1000){
+					boolean clicked = m.value > 0;
+					if(ctx.getServerHandler().player.getHeldItemMainhand().getItem() instanceof ItemCrucible){
+						ItemCrucible.doSpecialClick = clicked;
+					}
+					return;
 				}
 				/*if(m.value == 1000){
 					NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);

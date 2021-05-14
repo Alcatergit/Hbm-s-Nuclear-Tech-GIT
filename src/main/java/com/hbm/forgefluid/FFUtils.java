@@ -3,13 +3,11 @@ package com.hbm.forgefluid;
 import com.google.common.base.Predicate;
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
+import com.hbm.interfaces.IFluidVisualConnectable;
+import com.hbm.interfaces.IItemFluidHandler;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.JetpackBase;
-import com.hbm.items.gear.JetpackBooster;
-import com.hbm.items.gear.JetpackBreak;
-import com.hbm.items.gear.JetpackRegular;
-import com.hbm.items.gear.JetpackVectorized;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
@@ -17,6 +15,7 @@ import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -38,7 +37,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
 
 //Drillgon200: This is Library.java except for fluids
 //Drillgon200: Let's hope this works without bugs in 1.12.2...
@@ -287,7 +285,21 @@ public class FFUtils {
 				returnValue = true;
 			}
 			if(ifhi.drain(Integer.MAX_VALUE, false) == null) {
-
+				moveItems(slots, slot1, slot2, true);
+			}
+			return returnValue;
+		}
+		ItemStack stack = slots.getStackInSlot(slot1);
+		if(stack.getItem() instanceof IItemFluidHandler){
+			boolean returnValue = false;
+			IItemFluidHandler handler = (IItemFluidHandler) stack.getItem();
+			FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
+			if(contained != null)
+				if(tank.getFluid() == null || contained.getFluid() == tank.getFluid().getFluid()){
+					tank.fill(handler.drain(stack, Math.min(6000, tank.getCapacity() - tank.getFluidAmount()), true), true);
+					returnValue = true;
+				}
+			if(handler.drain(stack, Integer.MAX_VALUE, false) == null){
 				moveItems(slots, slot1, slot2, true);
 			}
 			return returnValue;
@@ -429,6 +441,25 @@ public class FFUtils {
 			}
 			stack = FluidUtil.getFluidContained(slots.getStackInSlot(slot1));
 			if(stack != null && ifhi.fill(new FluidStack(stack.getFluid(), Integer.MAX_VALUE), false) <= 0) {
+				moveItems(slots, slot1, slot2, true);
+			}
+			return returnValue;
+		}
+		ItemStack stack = slots.getStackInSlot(slot1);
+		if(stack.getItem() instanceof IItemFluidHandler){
+			boolean returnValue = false;
+			IItemFluidHandler handler = (IItemFluidHandler) stack.getItem();
+			FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
+			if(contained != null && handler.fill(stack, tank.getFluid(), false) <= 0){
+				moveItems(slots, slot1, slot2, true);
+				return false;
+			}
+			if(contained == null || contained.getFluid() == tank.getFluid().getFluid()){
+				tank.drain(handler.fill(stack, new FluidStack(tank.getFluid(), Math.min(6000, tank.getFluidAmount())), true), true);
+				returnValue = true;
+			}
+			contained = handler.drain(stack, Integer.MAX_VALUE, false);
+			if(contained != null && handler.fill(stack, new FluidStack(contained.getFluid(), Integer.MAX_VALUE), false) <= 0){
 				moveItems(slots, slot1, slot2, true);
 			}
 			return returnValue;
@@ -761,11 +792,14 @@ public class FFUtils {
 
 	public static boolean checkFluidConnectablesMk2(World world, BlockPos pos, Fluid type) {
 		TileEntity tileentity = world.getTileEntity(pos);
-		if(tileentity != null && tileentity instanceof IFluidPipeMk2 && ((IFluidPipeMk2) tileentity).getType() == type)
+		if(tileentity instanceof IFluidPipeMk2 && ((IFluidPipeMk2) tileentity).getType() == type)
 			return true;
 		if(tileentity != null && !(tileentity instanceof IFluidPipeMk2) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			return true;
 		}
+		Block block = world.getBlockState(pos).getBlock();
+		if(block instanceof IFluidVisualConnectable)
+			return ((IFluidVisualConnectable) block).shouldConnect(type);
 		return false;
 	}
 

@@ -3,15 +3,19 @@ package com.hbm.render.item.weapon;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.animloader.AnimationWrapper;
+import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.anim.HbmAnimations;
+import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.item.TEISRBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.Vec3d;
 
 public class ItemRenderHFSword extends TEISRBase {
 
@@ -22,11 +26,41 @@ public class ItemRenderHFSword extends TEISRBase {
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
 			EnumHand hand = type == TransformType.FIRST_PERSON_RIGHT_HAND ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
-			GL11.glTranslated(1.5, -1.05, 1.6);
+			GL11.glScaled(5, 5, 5);
+			GL11.glTranslated(0.3, -1.45, 0.55);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(-20, 1, 0, 0);
 			GL11.glRotated(5, 0, 0, 1);
 			
+			Animation anim = HbmAnimations.getRelevantAnim(hand);
+			if(ItemSwordCutter.startPos != null && anim != null && (ItemSwordCutter.clicked || anim.animation != null)){
+				double[] swing_rot = HbmAnimations.getRelevantTransformation("SWING", hand);
+				EntityPlayer p = Minecraft.getMinecraft().player;
+				Vec3d v = ItemSwordCutter.startPos.rotateYaw((float) Math.toRadians(p.rotationYaw+180)).rotatePitch((float) Math.toRadians(-p.rotationPitch));
+				double angle = Math.toDegrees(Math.atan2(v.y, v.x))-80;
+				float oX = 0.4F;
+				float oY = -1.55F;
+				float oZ = 0;
+				boolean flag = false;
+				if(anim.animation != null){
+					angle = ItemSwordCutter.prevAngle;
+					long time = System.currentTimeMillis() - anim.startMillis;
+					if(anim.animation.getDuration()-time < 400){
+						flag = true;
+					}
+				} else {
+					ItemSwordCutter.prevAngle = angle;
+				}
+				if(!flag){
+					GL11.glTranslated(0.3F, -0.1F, 0);
+					GL11.glTranslated(-oX, -oY, -oZ);
+					GL11.glRotated(-angle, 0, 0, 1);
+					GL11.glTranslated(oX, oY, oZ);
+					GL11.glTranslated(0F, -0.2F, 0F);
+					GL11.glRotated(10, 0, 1, 0);
+				}
+				GL11.glRotated(swing_rot[0], 1, 0, 0);
+			}
 			AnimationWrapper w = HbmAnimations.getRelevantBlenderAnim(hand);
 			if(w == AnimationWrapper.EMPTY){
 				GlStateManager.shadeModel(GL11.GL_FLAT);

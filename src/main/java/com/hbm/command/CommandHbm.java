@@ -96,7 +96,7 @@ public class CommandHbm extends CommandBase {
 				if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
 					Minecraft.getMinecraft().addScheduledTask(() -> {
 						ResourceManager.loadAnimatedModels();
-						ResourceManager.lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning")).withUniforms(shader -> {
+						ResourceManager.lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight")).withUniforms(shader -> {
 							GlStateManager.setActiveTexture(GL13.GL_TEXTURE4);
 							Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
 							GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
@@ -112,14 +112,14 @@ public class CommandHbm extends CommandBase {
 						ResourceManager.testlut = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/testlut"));
 						ResourceManager.flashlight_new = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight"), true);
 						ResourceManager.flashlight_nogeo = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_nogeo"));
-						ResourceManager.flashlight_depth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_depth"));
+						ResourceManager.flashlight_depth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_depth"));
 						ResourceManager.flashlight_deferred = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_deferred")).withUniforms(shader -> {
 							GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 						});
-						ResourceManager.flashlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_post")).withUniforms(shader -> {
+						ResourceManager.flashlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_post")).withUniforms(shader -> {
 							GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 						});
-						ResourceManager.cone_volume = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/cone_volume")).withUniforms(shader -> {
+						ResourceManager.cone_volume = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/cone_volume")).withUniforms(shader -> {
 							GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 						});
 						ResourceManager.heat_distortion_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/heat_distortion_post")).withUniforms(shader ->{
@@ -139,6 +139,48 @@ public class CommandHbm extends CommandBase {
 							GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
 							GL13.glActiveTexture(GL13.GL_TEXTURE0);
 						});
+						ResourceManager.gluon_beam = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_beam"))
+								.withUniforms(shader -> {
+									GL13.glActiveTexture(GL13.GL_TEXTURE3);
+									Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+									GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+									GL13.glActiveTexture(GL13.GL_TEXTURE4);
+									Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+									GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+									GL13.glActiveTexture(GL13.GL_TEXTURE0);
+									
+									float time = (System.currentTimeMillis()%10000000)/1000F;
+									GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+								});
+						
+						ResourceManager.gluon_spiral = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_spiral"))
+								.withUniforms(shader -> {
+									//Well, I accidentally uniformed the same noise sampler twice. That explains why the second noise didn't work.
+									GL13.glActiveTexture(GL13.GL_TEXTURE3);
+									Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
+									GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
+									GL13.glActiveTexture(GL13.GL_TEXTURE4);
+									Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
+									GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
+									GL13.glActiveTexture(GL13.GL_TEXTURE0);
+									
+									float time = (System.currentTimeMillis()%10000000)/1000F;
+									GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+								});
+						ResourceManager.flashlight_blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/blit"));
+						ResourceManager.albedo = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/albedo"));
+						ResourceManager.volume_upscale = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/volume_upscale")).withUniforms(shader -> {
+							GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+						});
+						ResourceManager.flash_lmap = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flash_lmap")).withUniforms(HbmShaderManager2.LIGHTMAP);
+						ResourceManager.pointlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/pointlight_post")).withUniforms(shader -> {
+							GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+						});
+						ResourceManager.flashlight_blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/blit"));
+						ResourceManager.bimpact = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bimpact")).withUniforms(HbmShaderManager2.LIGHTMAP, HbmShaderManager2.WINDOW_SIZE);
+						ResourceManager.blood_dissolve = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood")).withUniforms(HbmShaderManager2.LIGHTMAP);
+						ResourceManager.gravitymap_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/gravitymap"));
+						ResourceManager.blood_flow_update = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood_flow_update"));
 						sender.sendMessage(new TextComponentString("Reloaded resources!"));
 					});
 					

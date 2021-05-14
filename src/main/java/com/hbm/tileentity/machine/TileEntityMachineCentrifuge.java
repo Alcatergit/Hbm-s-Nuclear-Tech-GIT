@@ -2,18 +2,18 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.CentrifugeRecipes;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,55 +24,25 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCentrifuge extends TileEntity implements ITickable, IConsumer {
+public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IConsumer {
 
-	public ItemStackHandler inventory;
-	
 	public int dualCookTime;
 	public long power;
 	public boolean isProgressing;
 	public static final int maxPower = 100000;
 	public static final int processingSpeed = 200;
 	
-	//private static final int[] slots_top = new int[] {0};
-	//private static final int[] slots_bottom = new int[] {2, 3, 4, 5};
-	//private static final int[] slots_side = new int[] {0, 1};
-	
-	private String customName;
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {2, 3, 4, 5};
+	private static final int[] slots_side = new int[] {0, 1};
 	
 	public TileEntityMachineCentrifuge() {
-		inventory = new ItemStackHandler(6){
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				if(slot == 2 || slot == 3 || slot == 4 || slot == 5)
-				{
-					return false;
-				}
-				
-				if(slot == 1) {
-					return stack.getItem() instanceof IBatteryItem;
-				}
-				
-				return !(stack.getItem() instanceof IBatteryItem);
-			}
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(6);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.centrifuge";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public String getName() {
+		return "container.centrifuge";
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -90,6 +60,36 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	
 	public long getPowerRemainingScaled(int i) {
 		return (power * i) / maxPower;
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 2 || i == 3 || i == 4 || i == 5)
+		{
+			return false;
+		}
+		
+		if(i == 1) {
+			return stack.getItem() instanceof IBatteryItem;
+		}
+		
+		return !(stack.getItem() instanceof IBatteryItem);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return amount != 0 || slot != 1 || itemStack.getItem() == Items.BUCKET;
 	}
 	
 	@Override
@@ -283,22 +283,11 @@ public class TileEntityMachineCentrifuge extends TileEntity implements ITickable
 	@Override
 	public long getPower() {
 		return power;
-		
 	}
 
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
 	}
 
 }

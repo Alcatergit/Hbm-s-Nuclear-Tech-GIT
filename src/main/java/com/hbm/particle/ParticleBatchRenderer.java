@@ -37,6 +37,7 @@ public class ParticleBatchRenderer {
 
 	public static void registerRenderLayer(ParticleRenderLayer r){
 		layers.add(r);
+		r.isRegistered = true;
 	}
 	
 	public static void addParticle(ParticleLayerBase p) {
@@ -66,6 +67,9 @@ public class ParticleBatchRenderer {
 				if(layer == null){
 					throw new RuntimeException("Particle " + particle + " does not use a custom render layer!");
 				}
+				if(!layer.isRegistered){
+					registerRenderLayer(layer);
+				}
 				if(layer.particles.size() > 16384)
 					layer.particles.removeFirst();
 				
@@ -92,6 +96,8 @@ public class ParticleBatchRenderer {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		for(ParticleRenderLayer layer : layers) {
+			if(layer.particles.isEmpty())
+				continue;
 			layer.preRender();
 			for(ParticleLayerBase particle : layer.particles){
 				particle.renderParticle(Tessellator.getInstance().getBuffer(), entityIn, partialTicks, f, f4, f1, f2, f3);
@@ -105,7 +111,6 @@ public class ParticleBatchRenderer {
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 	}
 	
-	@SubscribeEvent
 	public static void renderLast(RenderWorldLastEvent event) {
 		renderParticles(Minecraft.getMinecraft().getRenderViewEntity(), event.getPartialTicks());
 	}

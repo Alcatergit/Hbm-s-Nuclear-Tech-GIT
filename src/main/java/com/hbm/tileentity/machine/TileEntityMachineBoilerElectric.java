@@ -69,7 +69,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (world.getTileEntity(pos) != this) {
+		if(world.getTileEntity(pos) != this) {
 			return false;
 		} else {
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
@@ -80,9 +80,9 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	public void readFromNBT(NBTTagCompound nbt) {
 		heat = nbt.getInteger("heat");
 		power = nbt.getLong("power");
-		if (nbt.hasKey("inventory"))
+		if(nbt.hasKey("inventory"))
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
-		if (nbt.hasKey("tanks"))
+		if(nbt.hasKey("tanks"))
 			FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		super.readFromNBT(nbt);
 	}
@@ -107,64 +107,64 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	@Override
 	public void update() {
 
-		if (!world.isRemote) {
-			if (needsUpdate) {
+		if(!world.isRemote) {
+			if(needsUpdate) {
 				needsUpdate = false;
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			age++;
-			if (age >= 20) {
+			if(age >= 20) {
 				age = 0;
 			}
 
-			if (age == 9 || age == 19)
+			if(age == 9 || age == 19)
 				fillFluidInit(tanks[1]);
 
 			power = Library.chargeTEFromItems(inventory, 4, power, maxPower);
 
-			if (this.inputValidForTank(0, 2))
-				if (FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3))
+			if(this.inputValidForTank(0, 2))
+				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3))
 					needsUpdate = true;
 
-			if (FFUtils.fillFluidContainer(inventory, tanks[1], 5, 6))
+			if(FFUtils.fillFluidContainer(inventory, tanks[1], 5, 6))
 				needsUpdate = true;
 
 			Object[] outs;
-			if (tanks[0].getFluid() != null)
+			if(tanks[0].getFluid() != null)
 				outs = MachineRecipes.getBoilerOutput(tanks[0].getFluid().getFluid());
 			else
 				outs = MachineRecipes.getBoilerOutput(null);
 
-			if (heat > 2000) {
+			if(heat > 2000) {
 				heat -= 30;
 			}
 
-			if (power > 0) {
+			if(power > 0) {
 				power -= 150;
 				heat += Math.min(((double) power / (double) maxPower * 300), 150);
 			} else {
 				heat -= 100;
 			}
 
-			if (power <= 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_electric_on) {
+			if(power <= 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_electric_on) {
 				power = 0;
 				MachineBoiler.updateBlockState(false, world, pos);
 			}
 
-			if (heat > maxHeat)
+			if(heat > maxHeat)
 				heat = maxHeat;
 
-			if (power > 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_electric_off) {
+			if(power > 0 && world.getBlockState(pos).getBlock() == ModBlocks.machine_boiler_electric_off) {
 				MachineBoiler.updateBlockState(true, world, pos);
 			}
 
-			if (outs != null) {
+			if(outs != null) {
 
-				for (int i = 0; i < (heat / ((Integer) outs[3]).intValue()); i++) {
-					if (tanks[0].getFluidAmount() >= ((Integer) outs[2]).intValue() && tanks[1].getFluidAmount() + ((Integer) outs[1]).intValue() <= tanks[1].getCapacity()) {
+				for(int i = 0; i < (heat / ((Integer) outs[3]).intValue()); i++) {
+					if(tanks[0].getFluidAmount() >= ((Integer) outs[2]).intValue() && tanks[1].getFluidAmount() + ((Integer) outs[1]).intValue() <= tanks[1].getCapacity()) {
 						tanks[0].drain((Integer) outs[2], true);
 						tanks[1].fill(new FluidStack((Fluid) outs[0], (Integer) outs[1]), true);
-						if (i == 0)
+						if(i == 0)
 							heat -= 35;
 						else
 							heat -= 50;
@@ -172,7 +172,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 				}
 			}
 
-			if (heat < 2000) {
+			if(heat < 2000) {
 				heat = 2000;
 			}
 
@@ -194,14 +194,13 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	}
 
 	private boolean isValidFluid(FluidStack stack) {
-		if (stack == null)
+		if(stack == null)
 			return false;
 		return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == ModForgeFluids.oil || stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam;
 	}
 
 	protected boolean inputValidForTank(int tank, int slot) {
-
-		if (isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+		if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
 			return true;
 		}
 		return false;
@@ -209,7 +208,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
-		if (tags.length != 2) {
+		if(tags.length != 2) {
 			return;
 		} else {
 			tanks[0].readFromNBT(tags[0]);
@@ -240,7 +239,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if (isValidFluid(resource)) {
+		if(isValidFluid(resource)) {
 			return tanks[0].fill(resource, doFill);
 		}
 		return 0;
@@ -248,7 +247,7 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if (resource == null || !resource.isFluidEqual(tanks[1].getFluid())) {
+		if(resource == null || !resource.isFluidEqual(tanks[1].getFluid())) {
 			return null;
 		}
 		return tanks[1].drain(resource.amount, doDrain);
@@ -265,27 +264,27 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	private void detectAndSendChanges() {
 		boolean mark = false;
-		if (detectPower != power) {
+		if(detectPower != power) {
 			detectPower = power;
 			mark = true;
 		}
-		if (detectHeat != heat) {
+		if(detectHeat != heat) {
 			detectHeat = heat;
 			mark = true;
 		}
-		if (!FFUtils.areTanksEqual(tanks[0], detectTanks[0])) {
+		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0])) {
 			needsUpdate = true;
 			detectTanks[0] = FFUtils.copyTank(tanks[0]);
 			mark = true;
 		}
-		if (!FFUtils.areTanksEqual(tanks[1], detectTanks[1])) {
+		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1])) {
 			needsUpdate = true;
 			detectTanks[1] = FFUtils.copyTank(tanks[1]);
 			mark = true;
 		}
 		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), heat, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		if (mark)
+		if(mark)
 			markDirty();
 	}
 
@@ -296,9 +295,9 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

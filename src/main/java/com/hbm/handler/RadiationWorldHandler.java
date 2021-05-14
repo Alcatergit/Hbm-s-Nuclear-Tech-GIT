@@ -23,7 +23,7 @@ public class RadiationWorldHandler {
 		//TODO fix this up for new radiation system
 		if(!(world instanceof WorldServer))
 			return;
-		if(!RadiationConfig.worldRadEffects)
+		if(!RadiationConfig.worldRadEffects || !GeneralConfig.enableRads)
 			return;
 		
 		int count = 50;//MainRegistry.worldRad;

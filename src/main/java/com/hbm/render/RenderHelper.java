@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -15,9 +16,9 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Project;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.entity.missile.EntityCarrier;
@@ -26,12 +27,13 @@ import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.Library;
 import com.hbm.main.ClientProxy;
+import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -50,7 +52,6 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,6 +72,11 @@ public class RenderHelper {
 	public static Field r_setTileEntities;
 	public static Field r_viewFrustum;
 	public static Method r_getRenderChunk;
+	
+	private static FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
+	private static FloatBuffer PROJECTION = GLAllocation.createDirectFloatBuffer(16);
+	private static IntBuffer VIEWPORT = GLAllocation.createDirectIntBuffer(16);
+	private static FloatBuffer POSITION = GLAllocation.createDirectFloatBuffer(4);
 	
 	public static boolean useFullPost = true;
 	public static boolean flashlightInit = false;
@@ -481,7 +487,7 @@ public class RenderHelper {
     	GL30.glBlitFramebuffer(0, 0, RenderHelper.width, RenderHelper.height, 0, 0, RenderHelper.width, RenderHelper.height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
 		
     	GL11.glPushMatrix();
-    	GL11.glTranslated(0, Minecraft.getMinecraft().getRenderViewEntity().getEyeHeight(), 0);
+    	//GL11.glTranslated(0, Minecraft.getMinecraft().getRenderViewEntity().getEyeHeight(), 0);
     	GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
     	GL11.glPopMatrix();
 		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, ClientProxy.AUX_GL_BUFFER2);
@@ -521,7 +527,6 @@ public class RenderHelper {
 			flashlightInit = true;
 		}
 		clearDeferredBuffer();
-		
 		double radians = Math.toRadians(degrees);
 		Vec3d startToEnd = end.subtract(start);
 		double height = startToEnd.lengthVector();
@@ -652,7 +657,7 @@ public class RenderHelper {
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, deferredFbo);
         GlStateManager.viewport(0, 0, RenderHelper.width, RenderHelper.height);
         
-        if(!useFullPost){        
+        if(!useFullPost){
 	        enableBlockVBOs();
 	        ResourceManager.flashlight_new.use();
 	        sendFlashlightUniforms(ResourceManager.flashlight_new.getShaderId(), new Vec3d(entPosX, entPosY, entPosZ), start, startToEnd.normalize(), (float)height, degrees, cookie);
@@ -761,7 +766,7 @@ public class RenderHelper {
         GlStateManager.disableBlend();
         GlStateManager.enableDepth();
         
-        volumetricRender(start, end, playerPos, (float) radius, degrees);
+        //volumetricRender(start, end, playerPos, (float) radius, degrees);
         
         GlStateManager.depthMask(true);
         flashlightLock = false;
@@ -812,7 +817,7 @@ public class RenderHelper {
 		GlStateManager.disableBlend();
 	}
 	
-	private static void renderConeMesh(Vec3d start, Vec3d normal, float height, float radius, int sides){
+	public static void renderConeMesh(Vec3d start, Vec3d normal, float height, float radius, int sides){
 		float[] vertices = new float[(1+sides)*3];
 		vertices[0] = 0;
 		vertices[1] = 0;
@@ -855,7 +860,7 @@ public class RenderHelper {
 		GL11.glPopMatrix();
 	}
 	
-	private static void enableBlockVBOs(){
+	public static void enableBlockVBOs(){
 		GlStateManager.glEnableClientState(32884);
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
         GlStateManager.glEnableClientState(32888);
@@ -865,7 +870,7 @@ public class RenderHelper {
         GlStateManager.glEnableClientState(32886);
 	}
 	
-	private static void disableBlockVBOs(){
+	public static void disableBlockVBOs(){
 		for (VertexFormatElement vertexformatelement : DefaultVertexFormats.BLOCK.getElements())
         {
             VertexFormatElement.EnumUsage vertexformatelement$enumusage = vertexformatelement.getUsage();
@@ -888,7 +893,7 @@ public class RenderHelper {
         }
 	}	
 	
-	private static void renderChunks(List<RenderChunk> toRender, double posX, double posY, double posZ){
+	public static void renderChunks(Collection<RenderChunk> toRender, double posX, double posY, double posZ){
 		for(RenderChunk chunk : toRender){
 			GL11.glPushMatrix();
 			BlockPos chunkPos = chunk.getPosition();
@@ -897,6 +902,9 @@ public class RenderHelper {
 			for(int i = 0; i < 3; i ++){
 				if(chunk.getCompiledChunk().isLayerEmpty(BlockRenderLayer.values()[i]))
 					continue;
+				if(i == 2){
+					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+				}
 				VertexBuffer buf = chunk.getVertexBufferByLayer(i);
 	            buf.bindBuffer();
 	            GlStateManager.glVertexPointer(3, 5126, 28, 0);
@@ -906,6 +914,9 @@ public class RenderHelper {
 	            GlStateManager.glTexCoordPointer(2, 5122, 28, 24);
 	            OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
 	            buf.drawArrays(GL11.GL_QUADS);
+	            if(i == 2){
+	            	Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+	            }
 			}
 			GL11.glPopMatrix();
 		}
@@ -992,7 +1003,11 @@ public class RenderHelper {
 	}
 	
 	public static void renderFullscreenTriangle(){
-		GlStateManager.colorMask(true, true, true, false);
+		renderFullscreenTriangle(false);
+	}
+	
+	public static void renderFullscreenTriangle(boolean alpha){
+		GlStateManager.colorMask(true, true, true, alpha);
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.enableTexture2D();
@@ -1010,6 +1025,9 @@ public class RenderHelper {
         bufferbuilder.pos(-1, 3, 0.0D).tex(0, 2).endVertex();
         tessellator.draw();
         GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
         GlStateManager.colorMask(true, true, true, true);
 	}
 	
@@ -1021,6 +1039,53 @@ public class RenderHelper {
         Particle.interpPosX = entPosX;
         Particle.interpPosY = entPosY;
         Particle.interpPosZ = entPosZ;
+	}
+	
+	public static float[] project(float x, float y, float z){
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, MODELVIEW);
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, PROJECTION);
+		GL11.glGetInteger(GL11.GL_VIEWPORT, VIEWPORT);
+		
+		Project.gluProject(x, y, z, MODELVIEW, PROJECTION, VIEWPORT, POSITION);
+		return new float[]{POSITION.get(0), POSITION.get(1), POSITION.get(2)};
+	}
+	
+	public static float[] unproject(float x, float y, float z){
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, MODELVIEW);
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, PROJECTION);
+		GL11.glGetInteger(GL11.GL_VIEWPORT, VIEWPORT);
+		
+		Project.gluUnProject(x, y, z, MODELVIEW, PROJECTION, VIEWPORT, POSITION);
+		return new float[]{POSITION.get(0), POSITION.get(1), POSITION.get(2)};
+	}
+	
+	public static Vec3d unproject_world(float[] inv_mvp, float x, float y, float z){
+		Matrix4f mat = new Matrix4f();
+		ClientProxy.AUX_GL_BUFFER.put(inv_mvp);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		mat.load(ClientProxy.AUX_GL_BUFFER);
+		ClientProxy.AUX_GL_BUFFER.rewind();
+		
+		Vector4f ndcPos = new Vector4f();
+		ndcPos.x = (2F*x)/(Minecraft.getMinecraft().displayWidth) - 1;
+		ndcPos.y = (2F*y)/(Minecraft.getMinecraft().displayHeight) - 1;
+		float near = 0;
+		float far = 1;
+		ndcPos.z = (2*z - near - far)/(far-near);
+		ndcPos.w = 1;
+		
+		Matrix4f.transform(mat, ndcPos, ndcPos);
+		float invW = 1F/ndcPos.w;
+		Vector3f worldPos = new Vector3f(ndcPos.x*invW, ndcPos.y*invW, ndcPos.z*invW);
+		
+		Entity ent = Minecraft.getMinecraft().getRenderViewEntity();
+		float partialTicks = MainRegistry.proxy.partialTicks();
+		double rPosX = ent.prevPosX + (ent.posX-ent.prevPosX)*partialTicks;
+		double rPosY = ent.prevPosY + (ent.posY-ent.prevPosY)*partialTicks;
+		double rPosZ = ent.prevPosZ + (ent.posZ-ent.prevPosZ)*partialTicks;
+		//Vec3d eyePos = ActiveRenderInfo.getCameraPosition();
+		
+		return new Vec3d(worldPos.x + rPosX, worldPos.y + rPosY, worldPos.z + rPosZ);
 	}
 	
 }

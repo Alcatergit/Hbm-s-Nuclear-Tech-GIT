@@ -35,7 +35,7 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource boat = (new DamageSource("boat")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource building = (new DamageSource("building")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource taint = (new DamageSource("taint")).setDamageIsAbsolute().setDamageBypassesArmor();
-	public static DamageSource ams = (new DamageSource("ams")).setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource ams = (new DamageSource("ams")).setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
 	public static DamageSource amsCore = (new DamageSource("amsCore")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource broadcast = (new DamageSource("broadcast")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource bang = (new DamageSource("bang")).setDamageIsAbsolute().setDamageBypassesArmor();
@@ -48,6 +48,9 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource exhaust = (new DamageSource("exhaust")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource spikes = (new DamageSource("spikes")).setDamageBypassesArmor();
 	public static DamageSource lunar = (new DamageSource("lunar")).setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource gluon = new DamageSource("gluon").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
+	public static DamageSource slicer = new DamageSource("slicer").setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource crucible = new DamageSource("crucible").setDamageIsAbsolute().setDamageBypassesArmor();
 	
 	public ModDamageSource(String p_i1566_1_) {
 		super(p_i1566_1_);
@@ -59,6 +62,10 @@ public class ModDamageSource extends DamageSource {
     public static DamageSource causeBulletDamage(EntityBulletBase base, Entity ent)
     {
         return (new EntityDamageSourceIndirect("revolverBullet", base, ent)).setProjectile();
+    }
+    public static DamageSource causeBulletGibDamage(EntityBulletBase base, Entity ent)
+    {
+        return (new EntityDamageSourceIndirect("gunGib", base, ent)).setProjectile();
     }
     public static DamageSource causeDisplacementDamage(EntityBullet p_76353_0_, Entity p_76353_1_)
     {

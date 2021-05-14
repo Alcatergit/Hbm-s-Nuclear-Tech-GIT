@@ -303,6 +303,8 @@ public class ModBlocks {
 	public static final Block deco_beryllium = new BlockOre(Material.IRON, "deco_beryllium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block deco_asbestos = new BlockOre(Material.IRON, "deco_asbestos").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	
+	public static final Block spinny_light = new BlockSpinnyLight(Material.IRON, "spinny_light").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(5.0F);
+	
 	public static final Block hazmat = new BlockBase(Material.CLOTH, "hazmat").setSoundType(SoundType.CLOTH).setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(100.0F);
 	
 	public static final Block tape_recorder = new DecoTapeRecorder(Material.ROCK, "tape_recorder").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(15.0F);
@@ -446,6 +448,9 @@ public class ModBlocks {
 	public static final Block barrel_antimatter = new BlockFluidBarrel(Material.IRON, 16000, "barrel_antimatter").setSoundType(SoundType.METAL).setHardness(2.0F).setResistance(5.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_barrel = 92;
 	
+	public static final Block machine_armor_table = new BlockArmorTable(Material.IRON, "machine_armor_table").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.consumableTab);
+	public static final int guiID_armor_table = 105;
+	
 	//Turrets
 	public static final Block turret_light = new TurretLight(Material.IRON, "turret_light").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.weaponTab);
 	public static final Block turret_heavy = new TurretHeavy(Material.IRON, "turret_heavy").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.weaponTab);
@@ -479,6 +484,7 @@ public class ModBlocks {
 	public static final Block seal_controller = new BlockSeal(Material.IRON, "seal_controller").setHardness(10.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block seal_hatch = new BlockHatch(Material.IRON, "seal_hatch").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	
+	public static final Block silo_hatch = new BlockSiloHatch(Material.IRON, "silo_hatch").setHardness(10.0F).setResistance(5000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block vault_door = new VaultDoor(Material.IRON, "vault_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block blast_door = new BlastDoor(Material.IRON, "blast_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block sliding_blast_door = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
@@ -910,6 +916,7 @@ public class ModBlocks {
 	
 	public static final Block dummy_block_vault = new DummyBlockVault(Material.IRON, "dummy_block_vault").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(null);
 	public static final Block dummy_block_blast = new DummyBlockBlast(Material.IRON, "dummy_block_blast").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(null);
+	public static final Block dummy_block_silo_hatch = new DummyBlockSiloHatch(Material.IRON, "dummy_block_silo_hatch").setHardness(10.0F).setResistance(5000.0F).setCreativeTab(null);
 	
 	public static final Block dummy_block_radgen = new DummyBlockRadGen(Material.IRON, "dummy_block_radgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final Block dummy_port_radgen = new DummyBlockRadGen(Material.IRON, "dummy_port_radgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);

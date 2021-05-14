@@ -3,6 +3,7 @@ package com.hbm.items.machine;
 import java.util.List;
 
 import com.hbm.items.ModItems;
+import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -15,6 +16,8 @@ public class ItemStamp extends Item {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(dura);
+		this.setCreativeTab(MainRegistry.controlTab);
+		this.setMaxStackSize(1);
 		
 		ModItems.ALL_ITEMS.add(this);
 	}

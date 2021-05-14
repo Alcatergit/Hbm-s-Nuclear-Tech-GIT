@@ -1,6 +1,8 @@
 package com.hbm.inventory;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,11 +13,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -29,16 +30,18 @@ import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.main.MainRegistry;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class AssemblerRecipes {
@@ -47,10 +50,17 @@ public class AssemblerRecipes {
 	public static File template;
 	private static final Gson gson = new Gson();
 	private static IForgeRegistry<Item> itemRegistry;
+	private static IForgeRegistry<Block> blockRegistry;
 	public static HashMap<ComparableStack, AStack[]> recipes = new HashMap<>();
 	public static HashMap<ComparableStack, Integer> time = new HashMap<>();
 	public static List<ComparableStack> recipeList = new ArrayList<>();
 	public static HashSet<ComparableStack> hidden = new HashSet<>();
+	
+	//Backup client recipes
+	public static HashMap<ComparableStack, AStack[]> backupRecipes;
+	public static HashMap<ComparableStack, Integer> backupTime;
+	public static List<ComparableStack> backupRecipeList;
+	public static HashSet<ComparableStack> backupHidden = new HashSet<>();
 
 	/**
 	 * Pre-Init phase: Finds the recipe config (if exists) and checks if a
@@ -69,21 +79,15 @@ public class AssemblerRecipes {
 		List<File> files = Arrays.asList(dir.listFiles());
 		for(File file : files) {
 			if(file.getName().equals("hbmAssembler.json")) {
-
 				config = file;
 			}
 		}
 	}
 
 	public static void loadRecipes() {
-
-		if(config == null) {
-			registerDefaults();
-		} else {
-			loadJSONRecipes();
-		}
+		registerDefaults();
+		loadRecipesFromConfig();
 		generateList();
-		saveTemplateJSON(template);
 	}
 
 	public static ItemStack getOutputFromTempate(ItemStack stack) {
@@ -190,7 +194,7 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModItems.warhead_mirv, 1), new AStack[] { new OreDictStack("plateTitanium", 20), new OreDictStack("plateSteel", 12), new ComparableStack(ModItems.ingot_pu239, 1), new ComparableStack(Blocks.TNT, 8), new OreDictStack("plateDenseLead", 6), new ComparableStack(ModItems.lithium, 4), new NbtComparableStack(ItemCell.getFullCell(ModForgeFluids.deuterium, 6)), }, 500);
 		makeRecipe(new ComparableStack(ModItems.warhead_thermo_endo, 1), new AStack[] { new ComparableStack(ModBlocks.therm_endo, 2), new OreDictStack("plateTitanium", 12), new OreDictStack("plateSteel", 6), }, 300);
 		makeRecipe(new ComparableStack(ModItems.warhead_thermo_exo, 1), new AStack[] { new ComparableStack(ModBlocks.therm_exo, 2), new OreDictStack("plateTitanium", 12), new OreDictStack("plateSteel", 6), }, 300);
-		makeRecipe(new ComparableStack(ModItems.fuel_tank_small, 1), new AStack[] { new ComparableStack(ItemFluidCanister.getFullCanister(ModForgeFluids.kerosene, 4)), new OreDictStack("plateTitanium", 6), new OreDictStack("plateSteel", 2), }, 100);
+		makeRecipe(new ComparableStack(ModItems.fuel_tank_small, 1), new AStack[] { new NbtComparableStack(ItemFluidCanister.getFullCanister(ModForgeFluids.kerosene, 4)), new OreDictStack("plateTitanium", 6), new OreDictStack("plateSteel", 2), }, 100);
 		makeRecipe(new ComparableStack(ModItems.fuel_tank_medium, 1), new AStack[] { new ComparableStack(ModItems.fuel_tank_small, 3), new OreDictStack("plateTitanium", 4), new OreDictStack("plateSteel", 2), }, 150);
 		makeRecipe(new ComparableStack(ModItems.fuel_tank_large, 1), new AStack[] { new ComparableStack(ModItems.fuel_tank_medium, 3), new OreDictStack("plateTitanium", 4), new OreDictStack("plateSteel", 2), }, 200);
 		makeRecipe(new ComparableStack(ModItems.thruster_small, 1), new AStack[] { new OreDictStack("plateSteel", 2), new ComparableStack(ModItems.hull_small_steel, 2), new ComparableStack(ModItems.wire_aluminium, 4), }, 100);
@@ -286,7 +290,7 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModBlocks.machine_dineutronium_battery, 1), new AStack[] { new ComparableStack(ModItems.ingot_dineutronium, 24), new ComparableStack(ModItems.powder_spark_mix, 12), new ComparableStack(ModItems.battery_spark_cell_1000, 1), new ComparableStack(ModItems.ingot_combine_steel, 32), new ComparableStack(ModItems.coil_magnetized_tungsten, 8), }, 1600);
 		makeRecipe(new ComparableStack(ModBlocks.machine_shredder, 1), new AStack[] { new OreDictStack("ingotSteel", 2), new OreDictStack("plateSteel", 4), new ComparableStack(ModItems.motor, 2), new ComparableStack(ModItems.wire_red_copper, 2), new ComparableStack(ModBlocks.steel_beam, 2), new ComparableStack(Blocks.IRON_BARS, 2), new ComparableStack(ModBlocks.red_wire_coated, 1), }, 200);
 		makeRecipe(new ComparableStack(ModBlocks.machine_well, 1), new AStack[] { new ComparableStack(ModBlocks.steel_scaffold, 20), new ComparableStack(ModBlocks.steel_beam, 8), new ComparableStack(ModItems.tank_steel, 2), new ComparableStack(ModItems.motor, 1), new ComparableStack(ModItems.pipes_steel, 3), new ComparableStack(ModItems.drill_titanium, 1), new ComparableStack(ModItems.wire_red_copper, 6), }, 250);
-		makeRecipe(new ComparableStack(ModBlocks.machine_pumpjack, 1), new AStack[] { new ComparableStack(ModBlocks.steel_scaffold, 8), new ComparableStack(ModBlocks.block_steel, 8), new ComparableStack(ModItems.pipes_steel, 4), new ComparableStack(ModItems.tank_steel, 4), new OreDictStack("ingotSteel", 24), new OreDictStack("plateSteel", 16), new OreDictStack("plateAluminum", 6), new ComparableStack(ModItems.drill_titanium, 1), new ComparableStack(ModItems.motor, 2), new ComparableStack(ModItems.wire_red_copper, 8), }, 400);
+		makeRecipe(new ComparableStack(ModBlocks.machine_pumpjack, 1), new AStack[] { new ComparableStack(ModBlocks.steel_scaffold, 8), new OreDictStack("blockSteel", 8), new ComparableStack(ModItems.pipes_steel, 4), new ComparableStack(ModItems.tank_steel, 4), new OreDictStack("ingotSteel", 24), new OreDictStack("plateSteel", 16), new OreDictStack("plateAluminum", 6), new ComparableStack(ModItems.drill_titanium, 1), new ComparableStack(ModItems.motor, 2), new ComparableStack(ModItems.wire_red_copper, 8), }, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_flare, 1), new AStack[] { new ComparableStack(ModBlocks.steel_scaffold, 28), new ComparableStack(ModItems.tank_steel, 2), new ComparableStack(ModItems.pipes_steel, 2), new ComparableStack(ModItems.hull_small_steel, 1), new ComparableStack(ModItems.thermo_element, 3), }, 200);
 		makeRecipe(new ComparableStack(ModBlocks.machine_refinery, 1), new AStack[] {new OreDictStack("ingotSteel", 16), new OreDictStack("plateSteel", 20), new OreDictStack("plateCopper", 16), new ComparableStack(ModItems.hull_big_steel, 6), new ComparableStack(ModItems.pipes_steel, 2), new ComparableStack(ModItems.coil_tungsten, 8), new ComparableStack(ModItems.wire_red_copper, 8), new ComparableStack(ModItems.circuit_copper, 2), new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.plate_polymer, 8), },350);
 		makeRecipe(new ComparableStack(ModBlocks.machine_epress, 1), new AStack[] { new OreDictStack("plateSteel", 8), new ComparableStack(ModItems.plate_polymer, 4), new ComparableStack(ModItems.pipes_steel, 1), new ComparableStack(ModItems.bolt_tungsten, 4), new ComparableStack(ModItems.coil_copper, 2), new ComparableStack(ModItems.motor, 1), new ComparableStack(ModItems.circuit_copper, 1), new NbtComparableStack(ItemFluidCanister.getFullCanister(ModForgeFluids.lubricant)), }, 160);
@@ -534,6 +538,8 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.coin_worm, 1)
 			}, 1200);
 		
+		makeRecipe(new ComparableStack(ModItems.gun_egon, 1), new AStack[] {new ComparableStack(ModItems.mechanism_special, 4), new OreDictStack("plateSteel", 16), new OreDictStack("plateLead", 24), new ComparableStack(ModItems.coil_advanced_torus, 32), new ComparableStack(ModItems.circuit_targeting_tier6, 4), new ComparableStack(ModItems.plate_polymer, 8), new ComparableStack(ModBlocks.machine_lithium_battery, 2), new ComparableStack(ModBlocks.machine_waste_drum, 1)}, 256);
+		
 		/// HIDDEN ///
 		hidden.add(new ComparableStack(ModBlocks.machine_radgen, 1));
 	}
@@ -549,254 +555,252 @@ public class AssemblerRecipes {
 		time.put(out, duration);
 	}
 
-	/*
-	 *  {
-	 *    recipes : [
-	 *      {
-	 *        output : [ "item", "hbm:item.tank_steel", 1, 0 ],
-	 *        duration : 100,
-	 *        input : [
-	 *          [ "dict", "plateSteel", 6 ],
-	 *          [ "dict", "plateTitanium", 2 ],
-	 *          [ "dict", "dyeGray", 1 ],
-	 *        ]
-	 *      },
-	 *      {
-	 *        output : [ "item", "hbm:plate_gold", 2, 0 ],
-	 *        duration : 20,
-	 *        input : [
-	 *          [ "dict", "ingotGold", 3 ],
-	 *          [ "item", "hbm:item.wire_gold", 5 ]
-	 *        ]
-	 *      }
-	 *    ]
-	 *  }
-	 */
-	private static void loadJSONRecipes() {
+	public static void loadRecipesFromConfig() {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
-		try {
-			JsonObject json = gson.fromJson(new FileReader(config), JsonObject.class);
-
-			JsonElement recipes = json.get("recipes");
-
-			if(recipes instanceof JsonArray) {
-
-				JsonArray recArray = recipes.getAsJsonArray();
-
-				//go through the recipes array
-				for(JsonElement recipe : recArray) {
-
-					if(recipe.isJsonObject()) {
-
-						JsonObject recObj = recipe.getAsJsonObject();
-
-						JsonElement input = recObj.get("input");
-						JsonElement output = recObj.get("output");
-						JsonElement duration = recObj.get("duration");
-
-						int time = 100;
-
-						if(duration.isJsonPrimitive()) {
-							if(duration.getAsJsonPrimitive().isNumber()) {
-								time = Math.max(1, duration.getAsJsonPrimitive().getAsInt());
-							}
-						}
-
-						if(!(input instanceof JsonArray)) {
-							MainRegistry.logger.error("Error reading recipe, no input found!");
-							continue;
-						}
-
-						if(!(output instanceof JsonArray)) {
-							MainRegistry.logger.error("Error reading recipe, no output found!");
-							continue;
-						}
-
-						Object outp = parseJsonArray(output.getAsJsonArray());
-						List<Object> inp = new ArrayList<>();
-
-						for(JsonElement in : input.getAsJsonArray()) {
-
-							if(in.isJsonArray()) {
-								Object i = parseJsonArray(in.getAsJsonArray());
-
-								if(i instanceof ComparableStack || i instanceof OreDictStack)
-									inp.add(i);
-							}
-						}
-
-						if(outp instanceof ComparableStack) {
-							AssemblerRecipes.recipes.put((ComparableStack) outp, Arrays.copyOf(inp.toArray(), inp.size(), AStack[].class));
-							AssemblerRecipes.time.put((ComparableStack) outp, time);
-						}
-					}
-				}
+		blockRegistry = GameRegistry.findRegistry(Block.class);
+		
+		File recipeConfig = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/assemblerConfig.cfg");
+		if (!recipeConfig.exists())
+			try {
+				recipeConfig.getParentFile().mkdirs();
+				FileWriter write = new FileWriter(recipeConfig);
+				write.write("# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
+						  + "# One line per recipe.\n"
+						  + "# For an oredict input item, replace the mod id with oredict, like oredict:plateSteel. These do not require metatdata\n"
+						  + "# Example for iron plates: 30;minecraft:iron_ingot,0,3;oredict:plateIron,2\n"
+						  + "# For an NBT item, use a 4th item parameter with the nbt string of the tag.\n"
+						  + "# The NBT string format is the same as used in commands\n"
+						  + "# Example for turning kerosene canisters into steel plates:\n"
+						  + "# 20;hbm:canister_fuel,0,2,{HbmFluidKey:{FluidName:\"kerosene\",Amount:1000}};hbm:plate_steel,0,32\n"
+						  + "#\n"
+						  + "# To remove a recipe, use the format: \n"
+						  + "# remove hbm:plate_iron,0,2\n"
+						  + "# This will remove any recipe with the output of two iron plates");
+				addConfigRecipes(write);
+				write.close();
+				
+			} catch (IOException e) {
+				MainRegistry.logger.log(Level.ERROR, "ERROR: Could not create config file: " + recipeConfig.getAbsolutePath());
+				e.printStackTrace();
+				return;
 			}
-
-		} catch(Exception e) {
-			//shush
+		
+		
+		
+		BufferedReader read = null;
+		try {
+			read = new BufferedReader(new FileReader(recipeConfig));
+			String currentLine = null;
+			int lineCount = 0;
+			
+			while((currentLine = read.readLine()) != null){
+				lineCount ++;
+				if(currentLine.startsWith("#") || currentLine.length() == 0)
+					continue;
+				if(currentLine.startsWith("remove"))
+					parseRemoval(currentLine, lineCount);
+				else
+					parseRecipe(currentLine, lineCount);
+			}
+		} catch (FileNotFoundException e) {
+			MainRegistry.logger.log(Level.ERROR, "Could not find assembler config file! This should never happen.");
+			e.printStackTrace();
+		} catch (IOException e){
+			MainRegistry.logger.log(Level.ERROR, "Error reading assembler config!");
+			e.printStackTrace();
+		} finally {
+			if(read != null)
+				try {
+					read.close();
+				} catch (IOException e) {}
 		}
+		
+	}
+	
+	public static void parseRemoval(String currentLine, int line){
+		String[] parts = currentLine.split(" ");
+		if(parts.length != 2){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler recipe removal on line " + line + ": does not have two parts. Skipping...");
+			return;
+		}
+		AStack stack = parseAStack(parts[1]);
+		if(stack == null){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[1] + "\" on line " + line + ". Skipping...");
+			return;
+		}
+		if(!(stack instanceof ComparableStack)){
+			MainRegistry.logger.log(Level.WARN, "Oredict stacks are not allowed as assembler outputs! Line number: " + line + " Skipping...");
+			return;
+		}
+		ComparableStack cStack = (ComparableStack) stack;
+		recipes.remove(cStack);
+		time.remove(cStack);
+		recipeList.remove(cStack);
 	}
 
-	private static Object parseJsonArray(JsonArray array) {
-		boolean dict = false;
-		String item = "";
-		int stacksize = 1;
-		int meta = 0;
-
-		if(array.size() < 2)
+	private static void parseRecipe(String currentLine, int line) {
+		String[] parts = currentLine.split(";");
+		if(parts.length != 3){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler recipe on line " + line + ": does not have three parts. Skipping...");
+			return;
+		}
+		int recipeTime = 0;
+		try {
+			recipeTime = Integer.parseInt(parts[0]);
+		} catch (NumberFormatException e){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler process time from \"" + parts[0] + "\" on line " + line + ". Skipping...");
+			return;
+		}
+		List<AStack> input = new ArrayList<>();
+		for(String s : parts[1].split("\\|")){
+			AStack stack = parseAStack(s);
+			if(stack == null){
+				MainRegistry.logger.log(Level.WARN, "Could not parse assembler input itemstack from \"" + s + "\" on line " + line + ". Skipping...");
+				return;
+			}
+			input.add(stack);
+		}
+		AStack output = parseAStack(parts[2]);
+		if(output == null){
+			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[2] + "\" on line " + line + ". Skipping...");
+			return;
+		}
+		if(!(output instanceof ComparableStack)){
+			MainRegistry.logger.log(Level.WARN, "Oredict stacks are not allowed as assembler outputs! Line number: " + line + " Skipping...");
+			return;
+		}
+		if(recipes.containsKey(output)){
+			MainRegistry.logger.log(Level.WARN, "Found duplicate assembler recipe outputs! This is not allowed! Line number: " + line + " Skipping...");
+		}
+		recipes.put((ComparableStack) output, input.toArray(new AStack[input.size()]));
+		time.put((ComparableStack) output, recipeTime);
+		recipeList.add((ComparableStack) output);
+	}
+	
+	//The whole point of these two methods below is to ignore the part inside braces for nbt tags.
+	//I'm sure there's a cleaner way to do this, but I'm not going to spend more time trying to figure it out.
+	private static String readSplitPart(int idx, String s){
+		StringBuilder build = new StringBuilder();
+		int braceCount = 0;
+		for(int i = idx; i < s.length(); i ++){
+			char c = s.charAt(i);
+			if(c == '{'){
+				braceCount ++;
+			} else if(c == '}'){
+				braceCount --;
+			}
+			if(braceCount == 0 && (c == '|' || c == ',' || c == ';'))
+				break;
+			build.append(c);
+		}
+		if(build.length() == 0)
 			return null;
+		return build.toString();
+	}
+	
+	private static String[] splitStringIgnoreBraces(String s){
+		List<String> list = new ArrayList<>();
+		int idx = 0;
+		while(idx < s.length()){
+			String part = readSplitPart(idx, s);
+			if(part != null)
+				list.add(part);
+			else
+				break;
+			if(list.size() >= 4)
+				break;
+			idx += part.length()+1;
+		}
+		return list.toArray(new String[list.size()]);
+	}
 
-		//is index 0 "item" or "dict"?
-		if(array.get(0).isJsonPrimitive()) {
-
-			if(array.get(0).getAsString().equals("item")) {
-				dict = false;
-			} else if(array.get(0).getAsString().equals("dict")) {
-				dict = true;
-			} else {
-
-				MainRegistry.logger.error("Error reading recipe, stack array does not have 'item' or 'dict' label!");
+	private static AStack parseAStack(String s){
+		String[] parts = splitStringIgnoreBraces(s);
+		if(parts.length == 3 || parts.length == 4){
+			Block block = null;
+			Item item = itemRegistry.getValue(new ResourceLocation(parts[0]));
+			if(item == null)
+				block = blockRegistry.getValue(new ResourceLocation(parts[0]));
+			if(item == null && block == null){
+				MainRegistry.logger.log(Level.WARN, "Could not parse item or block from \"" + parts[0] + "\", probably isn't a registered item. Skipping...");
 				return null;
 			}
-
-		} else {
-
-			MainRegistry.logger.error("Error reading recipe, label is not a valid data type!");
-			return null;
-		}
-
-		//is index 1 a string
-		if(array.get(1).isJsonPrimitive()) {
-
-			item = array.get(1).getAsString();
-
-		} else {
-			MainRegistry.logger.error("Error reading recipe, item string is not a valid data type!");
-			return null;
-		}
-
-		//if index 3 exists, eval it as a stacksize
-		if(array.size() > 2 && array.get(2).isJsonPrimitive()) {
-
-			if(array.get(2).getAsJsonPrimitive().isNumber()) {
-
-				stacksize = Math.min(64, Math.max(1, array.get(2).getAsJsonPrimitive().getAsNumber().intValue()));
-
-			} else {
-
-				MainRegistry.logger.error("Error reading recipe, stack size is not a valid data type!");
+			int meta = 0;
+			try {
+				meta = Integer.parseInt(parts[1]);
+			} catch (NumberFormatException e) {
+				MainRegistry.logger.log(Level.WARN, "Could not parse item metadata from \"" + parts[1] + "\". Skipping...");
 				return null;
 			}
-		}
-
-		//ore dict implementation
-		if(dict) {
-
-			if(OreDictionary.doesOreNameExist(item)) {
-				return new OreDictStack(item, stacksize);
-			} else {
-
-				MainRegistry.logger.error("Error reading recipe, ore dict name does not exist!");
+			if(meta < 0){
+				MainRegistry.logger.log(Level.WARN, "Bad item meta: " + meta + ". Skipping...");
 				return null;
 			}
-
-			//comparable stack
-		} else {
-
-			//if index 4 exists, eval it as a meta
-			if(array.size() > 3 && array.get(3).isJsonPrimitive()) {
-
-				if(array.get(3).getAsJsonPrimitive().isNumber()) {
-
-					meta = Math.max(0, array.get(3).getAsJsonPrimitive().getAsNumber().intValue());
-
-				} else {
-
-					MainRegistry.logger.error("Error reading recipe, metadata is not a valid data type!");
+			int amount = 0;
+			try {
+				amount = Integer.parseInt(parts[2]);
+			} catch (NumberFormatException e){
+				MainRegistry.logger.log(Level.WARN, "Could not parse item amount from \"" + parts[2] + "\". Skipping...");
+				return null;
+			}
+			if(amount < 0 || amount > 12*64){
+				MainRegistry.logger.log(Level.WARN, "Bad item amount: " + amount + ". Skipping...");
+				return null;
+			}
+			if(parts.length == 4){
+				String name = parts[3];
+				name.trim();
+				NBTTagCompound tag = parseNBT(name);
+				if(tag == null){
+					MainRegistry.logger.log(Level.WARN, "Failed to parse NBT tag: " + parts[3] + ". Skipping...");
 					return null;
 				}
+				ItemStack stack;
+				if(item == null)
+					stack = new ItemStack(block, amount, meta);
+				else
+					stack = new ItemStack(item, amount, meta);
+				stack.setTagCompound(tag);
+				return new NbtComparableStack(stack);
+			} else {
+				if(item == null)
+					return new ComparableStack(block, amount, meta);
+				return new ComparableStack(item, amount, meta);
 			}
-
-			Item it = itemRegistry.getValue(new ResourceLocation(item));
-
-			if(it == null) {
-
-				MainRegistry.logger.error("Item could not be found!");
-				return null;
-			}
-
-			return new ComparableStack(it, stacksize, meta);
 		}
-	}
-
-	public static void saveTemplateJSON(File dir) {
-		template = new File(dir.getAbsolutePath() + File.separatorChar + "hbmTemplate.json");
-		try {
-
-			JsonWriter writer = new JsonWriter(new FileWriter(template));
-			writer.setIndent("  ");
-
-			writer.beginObject();
-
-			writer.name("recipes").beginArray();
-
-			for(ComparableStack output : recipeList) {
-
-				writer.beginObject();
-				writer.name("output").beginArray();
-				writer.setIndent("");
-				writer.value("item");
-				writer.value(output.toStack().getItem().getRegistryName().toString());
-				writer.value(output.stacksize);
-				if(output.meta > 0)
-					writer.value(output.meta);
-				writer.endArray();
-				writer.setIndent("  ");
-
-				writer.name("input").beginArray();
-
-				AStack[] inputs = recipes.get(output);
-				for(AStack astack : inputs) {
-
-					writer.beginArray();
-					writer.setIndent("");
-
-					if(astack instanceof ComparableStack) {
-						ComparableStack comp = (ComparableStack) astack;
-
-						writer.value("item");
-						writer.value(comp.toStack().getItem().getRegistryName().toString());
-						writer.value(comp.stacksize);
-						if(comp.meta > 0)
-							writer.value(comp.meta);
-					}
-
-					if(astack instanceof OreDictStack) {
-						OreDictStack ore = (OreDictStack) astack;
-
-						writer.value("dict");
-						writer.value(ore.name);
-						writer.value(ore.stacksize);
-					}
-
-					writer.endArray();
-					writer.setIndent("  ");
+		if(parts.length == 2){
+			String[] ore = parts[0].split(":");
+			if(ore.length == 2 && ore[0].equals("oredict")){
+				String name = ore[1];
+				int amount = 0;
+				try {
+					amount = Integer.parseInt(parts[1]);
+				} catch (NumberFormatException e){
+					MainRegistry.logger.log(Level.WARN, "Could not parse item amount from \"" + parts[1] + "\". Skipping...");
+					return null;
 				}
-
-				writer.endArray();
-
-				writer.name("duration").value(time.get(output));
-
-				writer.endObject();
+				if(amount < 0 || amount > 12*64){
+					MainRegistry.logger.log(Level.WARN, "Bad item amount: " + amount + ". Skipping...");
+					return null;
+				}
+				return new OreDictStack(name, amount);
+			} else {
+				MainRegistry.logger.log(Level.WARN, "Could not parse ore dict name from \"" + parts[0] + "\". Skipping...");
 			}
-
-			writer.endArray();
-			writer.endObject();
-			writer.close();
-
-		} catch(IOException e) {
-			//shush
 		}
+		return null;
+	}
+	
+	private static NBTTagCompound parseNBT(String json){
+		try {
+			return JsonToNBT.getTagFromJson(json);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private static void addConfigRecipes(FileWriter write) throws IOException {
+			write.write("\n");
 	}
 }

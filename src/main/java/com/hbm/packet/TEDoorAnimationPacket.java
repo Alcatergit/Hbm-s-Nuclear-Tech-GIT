@@ -16,15 +16,21 @@ public class TEDoorAnimationPacket implements IMessage {
 
 	public int x, y, z;
 	public byte state;
+	public byte texture;
 	
 	public TEDoorAnimationPacket() {
 	}
 	
 	public TEDoorAnimationPacket(BlockPos pos, byte state) {
+		this(pos, state, (byte) -1);
+	}
+	
+	public TEDoorAnimationPacket(BlockPos pos, byte state, byte tex) {
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
 		this.state = state;
+		this.texture = tex;
 	}
 	
 	@Override
@@ -33,6 +39,9 @@ public class TEDoorAnimationPacket implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		state = buf.readByte();
+		if(buf.readableBytes() == 1){
+			texture = buf.readByte();
+		}
 	}
 
 	@Override
@@ -41,6 +50,9 @@ public class TEDoorAnimationPacket implements IMessage {
 		buf.writeInt(y);
 		buf.writeInt(z);
 		buf.writeByte(state);
+		if(texture != -1){
+			buf.writeByte(texture);
+		}
 	}
 	
 	public static class Handler implements IMessageHandler<TEDoorAnimationPacket, IMessage> {
@@ -54,6 +66,7 @@ public class TEDoorAnimationPacket implements IMessage {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 				if(te instanceof IAnimatedDoor){
 					((IAnimatedDoor) te).handleNewState(m.state);
+					((IAnimatedDoor) te).setTextureState(m.texture);
 				}
 			});
 			return null;

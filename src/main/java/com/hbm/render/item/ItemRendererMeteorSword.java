@@ -32,7 +32,7 @@ public class ItemRendererMeteorSword extends TEISRBase {
 	
 	@Override
 	public void renderByItem(ItemStack stack) {
-		GL11.glTranslated(0.5, 0.5, 0);
+		GL11.glTranslated(0.5, 0.5, 0.5);
 		if(type == TransformType.GUI){
 			//RenderHelper.enableGUIStandardItemLighting();
 

@@ -121,18 +121,18 @@ public class Gun12GaugeFactory {
 		GunConfiguration config = new GunConfiguration();
 		
 		config.rateOfFire = 8;
-		config.roundsPerCycle = 2;
+		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.reloadDuration = 10;
+		config.reloadDuration = 30;
 		config.firingDuration = 0;
 		config.ammoCap = 2;
 		config.durability = 3000;
-		config.reloadType = GunConfiguration.RELOAD_NONE;
+		config.reloadType = GunConfiguration.RELOAD_SINGLE;
 		config.allowsInfinity = true;
 		config.hasSights = true;
-		config.crosshair = Crosshair.L_CIRCLE;
-		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
+		config.crosshair = Crosshair.NONE;
+		config.reloadSound = null;
 		config.firingSound = HBMSoundHandler.shottyShoot;
 		
 		config.animations.put(AnimType.ALT_CYCLE, new BusAnimation()
@@ -145,7 +145,8 @@ public class Gun12GaugeFactory {
 		config.animations.put(AnimType.CYCLE, new BusAnimation()
 				.addBus("JS_RECOIL", new BusAnimationSequence()
 						.addKeyframe(new BusAnimationKeyframe(0.5, 0, 0, 50))
-						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 50))
+						.addKeyframe(new BusAnimationKeyframe(0.4, 0, 0, 150))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250))
 						)
 				);
 		
@@ -154,7 +155,7 @@ public class Gun12GaugeFactory {
 		config.comment.add("Occult Weaponry");
 		
 		config.config = new ArrayList<Integer>();
-		config.config.add(BulletConfigSyncingUtil.G12_NORMAL);
+		config.config.add(BulletConfigSyncingUtil.G12_DU);
 		return config;
 	}
 	

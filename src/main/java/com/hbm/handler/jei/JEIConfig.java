@@ -35,6 +35,7 @@ import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -185,6 +186,7 @@ public class JEIConfig implements IModPlugin {
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_ams_emitter));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_ams_limiter));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_reactor_small));
+		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.silo_hatch));
 	}
 
 	@Override

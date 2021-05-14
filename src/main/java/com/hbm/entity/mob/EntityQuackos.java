@@ -2,6 +2,7 @@ package com.hbm.entity.mob;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.lib.HBMSoundHandler;
 
 import net.minecraft.entity.Entity;
@@ -91,6 +92,11 @@ public class EntityQuackos extends EntityDuck {
      */
 	@Override
 	public void setDead() {
+		if(world.isRemote){
+			//Fix an issue where Quackos wouldn't get removed from the client world, causing ghost entities
+			//Shouldn't affect the logic though, he still can't be removed from the server by this method
+			super.setDead();
+		}
 	}
 	
 	/**
@@ -128,6 +134,28 @@ public class EntityQuackos extends EntityDuck {
 	}
 	
 	/**
+	 * BOW
+	 */
+	public void despawn() {
+		if(!world.isRemote) {
+			for(int i = 0; i < 150; i++) {
+				EntityBSmokeFX fx = new EntityBSmokeFX(world);
+				fx.setPositionAndRotation(posX + rand.nextDouble() * 20 - 10, posY + rand.nextDouble() * 25, posZ + rand.nextDouble() * 20 - 10, 0, 0);
+				world.spawnEntity(fx);
+			}
+		}
+		this.isDead = true;
+	}
+	
+	/**
+	 * BOW
+	 */
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+	
+	/**
      *  BOW
      */
 	@Override
@@ -142,5 +170,13 @@ public class EntityQuackos extends EntityDuck {
         if (passenger instanceof EntityLivingBase) {
             ((EntityLivingBase)passenger).renderYawOffset = this.renderYawOffset;
         }
+	}
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if(!world.isRemote && this.posY < -30) {
+			this.setPosition(this.posX + rand.nextGaussian() * 30, 256, this.posZ + rand.nextGaussian() * 30);
+		}
 	}
 }

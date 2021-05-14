@@ -189,9 +189,11 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
+import com.hbm.particle.ParticleBatchRenderer;
 import com.hbm.particle.ParticleExSmoke;
 import com.hbm.particle.ParticleHadron;
 import com.hbm.particle.ParticleLetter;
+import com.hbm.particle.ParticleMukeCloud;
 import com.hbm.particle.ParticleMukeFlash;
 import com.hbm.particle.ParticleMukeWave;
 import com.hbm.particle.ParticleRadiationFog;
@@ -206,6 +208,10 @@ import com.hbm.particle.bfg.ParticleBFGPrefire;
 import com.hbm.particle.bfg.ParticleBFGRing;
 import com.hbm.particle.bfg.ParticleBFGShockwave;
 import com.hbm.particle.bfg.ParticleBFGSmoke;
+import com.hbm.particle.bullet_hit.ParticleBloodParticle;
+import com.hbm.particle.bullet_hit.ParticleBulletImpact;
+import com.hbm.particle.bullet_hit.ParticleHitDebris;
+import com.hbm.particle.bullet_hit.ParticleSmokeAnim;
 import com.hbm.particle_instanced.InstancedParticleRenderer;
 import com.hbm.particle_instanced.ParticleContrailInstanced;
 import com.hbm.particle_instanced.ParticleExSmokeInstanced;
@@ -361,6 +367,7 @@ import com.hbm.render.item.weapon.ItemRenderGavel;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
 import com.hbm.render.item.weapon.ItemRenderGunAnim2;
 import com.hbm.render.item.weapon.ItemRenderGunDefab;
+import com.hbm.render.item.weapon.ItemRenderGunEgon;
 import com.hbm.render.item.weapon.ItemRenderGunHP;
 import com.hbm.render.item.weapon.ItemRenderGunJack;
 import com.hbm.render.item.weapon.ItemRenderGunSaturnite;
@@ -368,6 +375,7 @@ import com.hbm.render.item.weapon.ItemRenderGunSonata;
 import com.hbm.render.item.weapon.ItemRenderHFSword;
 import com.hbm.render.item.weapon.ItemRenderHSSword;
 import com.hbm.render.item.weapon.ItemRenderImmolator;
+import com.hbm.render.item.weapon.ItemRenderJShotgun;
 import com.hbm.render.item.weapon.ItemRenderMIRVLauncher;
 import com.hbm.render.item.weapon.ItemRenderMP;
 import com.hbm.render.item.weapon.ItemRenderMP40;
@@ -397,106 +405,12 @@ import com.hbm.render.item.weapon.ItemRenderXVL1456;
 import com.hbm.render.item.weapon.ItemRenderZOMG;
 import com.hbm.render.item.weapon.RenderGunB93;
 import com.hbm.render.misc.MissilePart;
-import com.hbm.render.tileentity.RenderAMSBase;
-import com.hbm.render.tileentity.RenderAMSEmitter;
-import com.hbm.render.tileentity.RenderAMSLimiter;
-import com.hbm.render.tileentity.RenderAssembler;
-import com.hbm.render.tileentity.RenderBigTurbine;
-import com.hbm.render.tileentity.RenderBlastDoor;
-import com.hbm.render.tileentity.RenderBombMulti;
-import com.hbm.render.tileentity.RenderBreeder;
-import com.hbm.render.tileentity.RenderBroadcaster;
-import com.hbm.render.tileentity.RenderCIWSTurret;
-import com.hbm.render.tileentity.RenderCable;
-import com.hbm.render.tileentity.RenderCapsule;
-import com.hbm.render.tileentity.RenderCentrifuge;
-import com.hbm.render.tileentity.RenderCheapoTurret;
-import com.hbm.render.tileentity.RenderChemplant;
-import com.hbm.render.tileentity.RenderCloudResidue;
-import com.hbm.render.tileentity.RenderCompactLauncher;
-import com.hbm.render.tileentity.RenderCore;
-import com.hbm.render.tileentity.RenderCoreComponent;
-import com.hbm.render.tileentity.RenderCrashedBomb;
-import com.hbm.render.tileentity.RenderCrystallizer;
-import com.hbm.render.tileentity.RenderCyclotron;
-import com.hbm.render.tileentity.RenderDecoBlock;
-import com.hbm.render.tileentity.RenderDecoBlockAlt;
-import com.hbm.render.tileentity.RenderDerrick;
-import com.hbm.render.tileentity.RenderEPress;
-import com.hbm.render.tileentity.RenderFENSU;
-import com.hbm.render.tileentity.RenderFlamerTurret;
-import com.hbm.render.tileentity.RenderFluidBarrel;
-import com.hbm.render.tileentity.RenderFluidDuct;
-import com.hbm.render.tileentity.RenderFluidDuctMk2;
-import com.hbm.render.tileentity.RenderFluidTank;
-import com.hbm.render.tileentity.RenderGasCent;
-import com.hbm.render.tileentity.RenderGasDuct;
-import com.hbm.render.tileentity.RenderGasFlare;
-import com.hbm.render.tileentity.RenderGeiger;
-import com.hbm.render.tileentity.RenderHeavyTurret;
-import com.hbm.render.tileentity.RenderIGenerator;
-import com.hbm.render.tileentity.RenderITER;
-import com.hbm.render.tileentity.RenderITERMultiblock;
-import com.hbm.render.tileentity.RenderKeypadBase;
-import com.hbm.render.tileentity.RenderLandmine;
-import com.hbm.render.tileentity.RenderLaserMiner;
-import com.hbm.render.tileentity.RenderLaunchPadTier1;
-import com.hbm.render.tileentity.RenderLaunchTable;
-import com.hbm.render.tileentity.RenderLightTurret;
-import com.hbm.render.tileentity.RenderMachineForceField;
-import com.hbm.render.tileentity.RenderMicrowave;
-import com.hbm.render.tileentity.RenderMiningDrill;
-import com.hbm.render.tileentity.RenderMissileAssembly;
-import com.hbm.render.tileentity.RenderMultiblock;
-import com.hbm.render.tileentity.RenderNukeBoy;
-import com.hbm.render.tileentity.RenderNukeCustom;
-import com.hbm.render.tileentity.RenderNukeFleija;
-import com.hbm.render.tileentity.RenderNukeFstbmb;
-import com.hbm.render.tileentity.RenderNukeGadget;
-import com.hbm.render.tileentity.RenderNukeMan;
-import com.hbm.render.tileentity.RenderNukeN2;
-import com.hbm.render.tileentity.RenderNukeN45;
-import com.hbm.render.tileentity.RenderNukePrototype;
-import com.hbm.render.tileentity.RenderNukeSolinium;
-import com.hbm.render.tileentity.RenderNukeTsar;
-import com.hbm.render.tileentity.RenderObjTester;
-import com.hbm.render.tileentity.RenderOilDuct;
-import com.hbm.render.tileentity.RenderPlasmaHeater;
-import com.hbm.render.tileentity.RenderPlasmaMultiblock;
-import com.hbm.render.tileentity.RenderPoleSatelliteReceiver;
-import com.hbm.render.tileentity.RenderPoleTop;
-import com.hbm.render.tileentity.RenderPress;
-import com.hbm.render.tileentity.RenderPuF6Tank;
-import com.hbm.render.tileentity.RenderPumpjack;
-import com.hbm.render.tileentity.RenderPylon;
-import com.hbm.render.tileentity.RenderRTG;
-import com.hbm.render.tileentity.RenderRadGen;
-import com.hbm.render.tileentity.RenderRadar;
-import com.hbm.render.tileentity.RenderRadioRec;
-import com.hbm.render.tileentity.RenderRadiobox;
-import com.hbm.render.tileentity.RenderRailgun;
-import com.hbm.render.tileentity.RenderRefinery;
-import com.hbm.render.tileentity.RenderRocketTurret;
-import com.hbm.render.tileentity.RenderSatDock;
-import com.hbm.render.tileentity.RenderSelenium;
-import com.hbm.render.tileentity.RenderSlidingBlastDoor;
-import com.hbm.render.tileentity.RenderSmallReactor;
-import com.hbm.render.tileentity.RenderSolarBoiler;
-import com.hbm.render.tileentity.RenderSolarMirror;
-import com.hbm.render.tileentity.RenderSoyuzLauncher;
-import com.hbm.render.tileentity.RenderSoyuzMultiblock;
-import com.hbm.render.tileentity.RenderSpitfireTurret;
-import com.hbm.render.tileentity.RenderStructureMarker;
-import com.hbm.render.tileentity.RenderTaint;
-import com.hbm.render.tileentity.RenderTauTurret;
-import com.hbm.render.tileentity.RenderTesla;
-import com.hbm.render.tileentity.RenderTestRender;
-import com.hbm.render.tileentity.RenderTurbofan;
-import com.hbm.render.tileentity.RenderUF6Tank;
-import com.hbm.render.tileentity.RenderVaultDoor;
+import com.hbm.render.modelrenderer.EgonBackpackRenderer;
+import com.hbm.render.tileentity.*;
 import com.hbm.render.util.HmfModelLoader;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.AudioWrapperClient;
+import com.hbm.sound.SoundLoopCrucible;
 import com.hbm.tileentity.TileEntityKeypadBase;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.bomb.RenderNukeMike;
@@ -538,6 +452,7 @@ import com.hbm.tileentity.deco.TileEntityDecoBlockAlt;
 import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
 import com.hbm.tileentity.deco.TileEntityDecoPoleTop;
 import com.hbm.tileentity.deco.TileEntityObjTester;
+import com.hbm.tileentity.deco.TileEntitySpinnyLight;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
@@ -595,6 +510,7 @@ import com.hbm.tileentity.machine.TileEntityPlasmaStruct;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
+import com.hbm.tileentity.machine.TileEntitySiloHatch;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntitySolarBoiler;
 import com.hbm.tileentity.machine.TileEntitySolarMirror;
@@ -608,8 +524,9 @@ import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleBlockDust;
 import net.minecraft.client.particle.ParticleCloud;
@@ -633,9 +550,11 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.World;
@@ -649,11 +568,14 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import paulscode.sound.SoundSystemConfig;
 
 public class ClientProxy extends ServerProxy {
 	
 	public static KeyBinding jetpackActivate;
 	public static KeyBinding jetpackHover;
+	public static KeyBinding jetpackHud;
+	public static KeyBinding fsbFlashlight;
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
 	
@@ -688,6 +610,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.registerKeyBinding(jetpackActivate);
 		jetpackHover = new KeyBinding("key.jetpack_hover", KeyConflictContext.IN_GAME, Keyboard.KEY_H, "key.categories.hbm");
 		ClientRegistry.registerKeyBinding(jetpackHover);
+		jetpackHud = new KeyBinding("key.jetpack_hud", KeyConflictContext.IN_GAME, Keyboard.KEY_U, "key.categories.hbm");
+		ClientRegistry.registerKeyBinding(jetpackHud);
+		fsbFlashlight = new KeyBinding("key.fsb_flashlight", KeyConflictContext.IN_GAME, Keyboard.KEY_NUMPAD6, "key.categories.hbm");
+		ClientRegistry.registerKeyBinding(fsbFlashlight);
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
@@ -794,6 +720,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySolarBoiler.class, new RenderSolarBoiler());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySolarMirror.class, new RenderSolarMirror());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineIGenerator.class, new RenderIGenerator());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiloHatch.class, new RenderSiloHatch());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpinnyLight.class, new RenderSpinnyLight());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -1330,6 +1258,71 @@ public class ClientProxy extends ServerProxy {
 			}
 		}
 		
+		if("muke".equals(type)) {
+
+			ParticleMukeWave wave = new ParticleMukeWave(world, x, y, z);
+			ParticleMukeFlash flash = new ParticleMukeFlash(world, x, y, z, data.getBoolean("balefire"));
+
+			Minecraft.getMinecraft().effectRenderer.addEffect(wave);
+			Minecraft.getMinecraft().effectRenderer.addEffect(flash);
+
+			//single swing: 			HT 15,  MHT 15
+			//double swing: 			HT 60,  MHT 50
+			//vic's immersive swing: 	HT 100, MHT 50
+			
+			if(player.getDisplayName().equals("Vic4Games")) {
+				player.hurtTime = 100;
+				player.maxHurtTime = 50;
+			} else {
+				player.hurtTime = 15;
+				player.maxHurtTime = 15;
+			}
+			player.attackedAtYaw = 0F;
+		}
+		
+		if("tinytot".equals(type)) {
+
+			ParticleMukeWave wave = new ParticleMukeWave(world, x, y, z);
+			Minecraft.getMinecraft().effectRenderer.addEffect(wave);
+			
+    		for(double d = 0.0D; d <= 1.6D; d += 0.1) {
+	    		ParticleMukeCloud cloud = new ParticleMukeCloud(world, x, y, z, rand.nextGaussian() * 0.05, d + rand.nextGaussian() * 0.02, rand.nextGaussian() * 0.05);
+	    		Minecraft.getMinecraft().effectRenderer.addEffect(cloud);
+    		}
+    		for(int i = 0; i < 50; i++) {
+	    		ParticleMukeCloud cloud = new ParticleMukeCloud(world, x, y + 0.5, z, rand.nextGaussian() * 0.5, rand.nextInt(5) == 0 ? 0.02 : 0, rand.nextGaussian() * 0.5);
+	    		Minecraft.getMinecraft().effectRenderer.addEffect(cloud);
+    		}
+    		for(int i = 0; i < 15; i++) {
+    			double ix = rand.nextGaussian() * 0.2;
+    			double iz = rand.nextGaussian() * 0.2;
+    			
+    			if(ix * ix + iz * iz > 0.75) {
+    				ix *= 0.5;
+    				iz *= 0.5;
+    			}
+    			
+    			double iy = 1.6 + (rand.nextDouble() * 2 - 1) * (0.75 - (ix * ix + iz * iz)) * 0.5;
+    			
+	    		ParticleMukeCloud cloud = new ParticleMukeCloud(world, x, y, z, ix, iy + rand.nextGaussian() * 0.02, iz);
+	    		Minecraft.getMinecraft().effectRenderer.addEffect(cloud);
+    		}
+			if(player.getDisplayName().equals("Vic4Games")) {
+				player.hurtTime = 100;
+				player.maxHurtTime = 50;
+			} else {
+				player.hurtTime = 15;
+				player.maxHurtTime = 15;
+			}
+			player.attackedAtYaw = 0F;
+		}
+		
+		if("justTilt".equals(type)) {
+			
+			player.hurtTime = player.maxHurtTime = data.getInteger("time");
+			player.attackedAtYaw = 0F;
+		}
+		
 		if("fireworks".equals(type)) {
 			int color = data.getInteger("color");
 			char c = (char)data.getInteger("char");
@@ -1519,10 +1512,154 @@ public class ClientProxy extends ServerProxy {
 		if("muke".equals(type)) {
 
 			ParticleMukeWave wave = new ParticleMukeWave(world, x, y, z);
-			ParticleMukeFlash flash = new ParticleMukeFlash(world, x, y, z);
+			ParticleMukeFlash flash = new ParticleMukeFlash(world, x, y, z, data.getBoolean("balefire"));
 
 			Minecraft.getMinecraft().effectRenderer.addEffect(wave);
 			Minecraft.getMinecraft().effectRenderer.addEffect(flash);
+		}
+		
+		if("bimpact".equals(type)){
+			Type hitType = Type.values()[data.getByte("hitType")];
+			Vec3d normal = new Vec3d(data.getFloat("nX"), data.getFloat("nY"), data.getFloat("nZ"));
+			if(hitType == Type.BLOCK){
+				@SuppressWarnings("deprecation")
+				IBlockState state = Block.getBlockById(data.getInteger("block")).getStateFromMeta(data.getByte("meta"));
+				Material mat = state.getMaterial();
+				float r = 1;
+				float g = 1;
+				float b = 1;
+				float scale = 1;
+				float randMotion = 0.2F;
+				int count = 10;
+				int smokeCount = 3;
+				int smokeScale = 5;
+				int smokeLife = 15;
+				if(mat == Material.IRON){
+					world.playSound(x, y, z, HBMSoundHandler.hit_metal, SoundCategory.BLOCKS, 1, 0.9F+world.rand.nextFloat()*0.2F, false);
+				} else {
+					world.playSound(x, y, z, HBMSoundHandler.hit_dirt, SoundCategory.BLOCKS, 1, 0.7F+world.rand.nextFloat()*0.3F, false);
+				}
+				if(mat == Material.ROCK || mat == Material.GROUND || mat == Material.GRASS || mat == Material.WOOD || mat == Material.LEAVES || mat == Material.SAND){
+					ResourceLocation tex = ResourceManager.rock_fragments;
+					if(mat == Material.WOOD){
+						tex = ResourceManager.wood_fragments;
+					} else if(mat == Material.LEAVES){
+						tex = ResourceManager.twigs_and_leaves;
+						smokeLife = 5;
+						smokeScale = 10;
+						smokeCount = 2;
+					}
+					if(mat == Material.GROUND || mat == Material.GRASS){
+						r = 0.8F;
+						g = 0.5F;
+						b = 0.3F;
+						scale = 0.6F;
+						count = 40;
+					}
+					if(mat == Material.SAND){
+						r = 1F;
+						g = 0.9F;
+						b = 0.6F;
+						scale = 0.1F;
+						randMotion = 0.5F;
+						count = 100;
+						smokeCount = 5;
+					}
+					for(int i = 0; i < count; i ++){
+						Vec3d dir = BobMathUtil.randVecInCone(normal, 45, world.rand);
+						dir = dir.scale(0.1F+world.rand.nextFloat()*randMotion);
+						Vec3d offset = normal.scale(0.2F);
+						ParticleHitDebris particle = new ParticleHitDebris(world, x+offset.x, y+offset.y, z+offset.z, tex, world.rand.nextInt(16), scale, 40+world.rand.nextInt(20));
+						offset = offset.scale(1);
+						particle.motion((float)dir.x, (float)dir.y, (float)dir.z);
+						particle.color(r, g, b);
+						ParticleBatchRenderer.addParticle(particle);
+					}
+					if(mat == Material.WOOD){
+						tex = ResourceManager.wood_fragments;
+						r = 0.8F;
+						g = 0.5F;
+						b = 0.3F;
+					}
+					if(mat == Material.LEAVES){
+						r = 0.2F;
+						g = 0.8F;
+						b = 0.4F;
+					}
+				}
+				if(mat != Material.LEAVES){
+					ParticleBulletImpact impact = new ParticleBulletImpact(world, x+normal.x*0.01F, y+normal.y*0.01F, z+normal.z*0.01F, 0.1F, 60+world.rand.nextInt(20), normal);
+					impact.color(r, g, b);
+					ParticleBatchRenderer.addParticle(impact);
+				}
+				if(mat == Material.SAND){
+					r *= 1.5;
+					g *= 1.5;
+					b *= 1.5;
+				}
+				if(mat == Material.IRON){
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setString("type", "spark");
+					nbt.setString("mode", "coneBurst");
+					nbt.setDouble("posX", x);
+					nbt.setDouble("posY", y);
+					nbt.setDouble("posZ", z);
+					nbt.setDouble("dirX", normal.x*0.6F);
+					nbt.setDouble("dirY", normal.y*0.6F);
+					nbt.setDouble("dirZ", normal.z*0.6F);
+					nbt.setFloat("r", 0.8F);
+					nbt.setFloat("g", 0.6F);
+					nbt.setFloat("b", 0.5F);
+					nbt.setFloat("a", 1.5F);
+					nbt.setInteger("lifetime", 1+rand.nextInt(2));
+					nbt.setFloat("width", 0.03F);
+					nbt.setFloat("length", 0.3F);
+					nbt.setFloat("randLength", 0.6F);
+					nbt.setFloat("gravity", 0.1F);
+					nbt.setFloat("angle", 60F);
+					nbt.setInteger("count", 2+rand.nextInt(2));
+					nbt.setFloat("randomVelocity", 0.3F);
+					effectNT(nbt);
+				} else {
+					for(int i = 0; i < smokeCount; i ++){
+						Vec3d dir = BobMathUtil.randVecInCone(normal, 30, world.rand);
+						dir = dir.scale(0.1+world.rand.nextFloat()*0.5);
+						ParticleSmokeAnim smoke = new ParticleSmokeAnim(world, x, y, z, 0.1F, smokeScale + world.rand.nextFloat()*smokeScale, 1, smokeLife);
+						smoke.color(r*0.5F, g*0.5F, b*0.5F);
+						smoke.motion((float)dir.x, (float)dir.y, (float)dir.z);
+						ParticleBatchRenderer.addParticle(smoke);
+					}
+				}
+				
+			} else if(hitType == Type.ENTITY){
+				world.playSound(x, y, z, HBMSoundHandler.hit_flesh, SoundCategory.BLOCKS, 1, 0.8F+world.rand.nextFloat()*0.4F, false);
+				Vec3d bulletDirection = new Vec3d(data.getFloat("dirX"), data.getFloat("dirY"), data.getFloat("dirZ"));
+				if(GeneralConfig.bloodFX){
+					for(int i = 0; i < 2; i ++){
+						int age = 10+world.rand.nextInt(5);
+						ParticleBloodParticle blood = new ParticleBloodParticle(world, x, y, z, world.rand.nextInt(9), 1+world.rand.nextFloat()*3, 0.5F+world.rand.nextFloat()*0.5F, age);
+						blood.color(0.5F, 0F, 0F);
+						Vec3d dir = BobMathUtil.randVecInCone(normal, 70, world.rand);
+						dir = dir.scale(0.05F + world.rand.nextFloat()*0.25);
+						if(i > 0){
+							dir = BobMathUtil.randVecInCone(bulletDirection.normalize(), 20, world.rand);
+							dir = dir.scale(1F + world.rand.nextFloat());
+							blood.setMaxAge((int) (age * 0.75F));
+						}
+						blood.motion((float)dir.x, (float)dir.y + 0.1F, (float)dir.z);
+						ParticleBatchRenderer.addParticle(blood);
+					}
+					for(int i = 0; i < 3; i ++){
+						Vec3d dir = BobMathUtil.randVecInCone(normal, 30, world.rand);
+						dir = dir.scale(0.1+world.rand.nextFloat()*0.5);
+						ParticleSmokeAnim smoke = new ParticleSmokeAnim(world, x, y, z, 0.1F, 3 + world.rand.nextFloat()*3, 1, 10);
+						smoke.color(0.4F, 0, 0);
+						smoke.motion((float)dir.x, (float)dir.y, (float)dir.z);
+						ParticleBatchRenderer.addParticle(smoke);
+					}
+				}
+				
+			}
 		}
 		
 		if("vanilla".equals(type)) {
@@ -1547,7 +1684,6 @@ public class ClientProxy extends ServerProxy {
 					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.crucible_equip, new EndResult(EndType.STAY));
 				}
 				if("crucible".equals(mode)) {
-
 					BusAnimation animation = new BusAnimation()
 							.addBus("GUARD_ROT", new BusAnimationSequence()
 									.addKeyframe(new BusAnimationKeyframe(90, 0, 1, 0))
@@ -1556,7 +1692,18 @@ public class ClientProxy extends ServerProxy {
 
 					HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
 				}
-
+				if("swing".equals(mode)){
+					BusAnimation animation = new BusAnimation()
+							.addBus("SWING", new BusAnimationSequence()
+									.addKeyframe(new BusAnimationKeyframe(120, 0, 0, 150))
+									.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)));
+					if(HbmAnimations.hotbar[slot] instanceof BlenderAnimation){
+						HbmAnimations.hotbar[slot].animation = animation;
+						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
+					} else {
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+					}
+				}
 				if("cSwing".equals(mode)) {
 
 					if(HbmAnimations.getRelevantTransformation("SWING_ROT", hand)[0] == 0) {
@@ -1565,15 +1712,15 @@ public class ClientProxy extends ServerProxy {
 
 						BusAnimation animation = new BusAnimation()
 								.addBus("SWING_ROT", new BusAnimationSequence()
-										.addKeyframe(new BusAnimationKeyframe(90 - offset, 90 - offset, -55, 75))
-										.addKeyframe(new BusAnimationKeyframe(90 + offset, 90 - offset, -45, 150))
+										.addKeyframe(new BusAnimationKeyframe(60 - offset, 60 - offset, -55, 75))
+										.addKeyframe(new BusAnimationKeyframe(60 + offset, 60 - offset, -45, 150))
 										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)))
 								.addBus("SWING_TRANS", new BusAnimationSequence()
-										.addKeyframe(new BusAnimationKeyframe(-0, 0, 0, 75))
-										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 150))
+										.addKeyframe(new BusAnimationKeyframe(-0, -10, 0, 75))
+										.addKeyframe(new BusAnimationKeyframe(0, -10, 0, 150))
 										.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)));
 
-						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.cSwing, 0.8F + player.getRNG().nextFloat() * 0.2F));
+						//Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.cSwing, 0.8F + player.getRNG().nextFloat() * 0.2F));
 
 						if(HbmAnimations.hotbar[slot] instanceof BlenderAnimation){
 							HbmAnimations.hotbar[slot].animation = animation;
@@ -1601,10 +1748,33 @@ public class ClientProxy extends ServerProxy {
 			} else if("hf_sword".equals(name)){
 				if("equip".equals(mode)){
 					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.hf_sword_equip, new EndResult(EndType.STAY));
+				} else if("swing".equals(mode)){
+					BusAnimation animation = new BusAnimation()
+							.addBus("SWING", new BusAnimationSequence()
+									.addKeyframe(new BusAnimationKeyframe(120, 0, 0, 150))
+									.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500)));
+					if(HbmAnimations.hotbar[slot] instanceof BlenderAnimation){
+						HbmAnimations.hotbar[slot].animation = animation;
+						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
+					} else {
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+					}
 				}
 			}
 			
 		}
+		
+		if("sound".equals(type)){
+			String mode = data.getString("mode");
+			if("crucible_loop".equals(mode)){
+				int id = data.getInteger("playerId");
+				Entity e = world.getEntityByID(id);
+				if(e instanceof EntityPlayer){
+					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
+				}
+			}
+		}
+		
 	}
 	
 	@Override
@@ -1657,6 +1827,9 @@ public class ClientProxy extends ServerProxy {
 	
 	@Override
 	public void preInit(FMLPreInitializationEvent evt){
+		if(SoundSystemConfig.getNumberNormalChannels() < 128){
+			SoundSystemConfig.setNumberNormalChannels(128);
+		}
 		OBJLoader.INSTANCE.addDomain(RefStrings.MODID);
 		
 		ItemRenderLibrary.init();
@@ -1769,6 +1942,8 @@ public class ClientProxy extends ServerProxy {
 		ModItems.hs_sword.setTileEntityItemStackRenderer(new ItemRenderHSSword());
 		ModItems.hf_sword.setTileEntityItemStackRenderer(new ItemRenderHFSword());
 		ModItems.cc_plasma_gun.setTileEntityItemStackRenderer(new ItemRenderCCPlasmaCannon());
+		ModItems.gun_egon.setTileEntityItemStackRenderer(new ItemRenderGunEgon());
+		ModItems.jshotgun.setTileEntityItemStackRenderer(new ItemRenderJShotgun());
 		
 		ModItems.meteorite_sword_seared.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.5F, 0.0F));
 		ModItems.meteorite_sword_reforged.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.5F, 1.0F, 1.0F));
@@ -1806,7 +1981,9 @@ public class ClientProxy extends ServerProxy {
 		ResourceManager.loadAnimatedModels();
 		Minecraft.getMinecraft().getRenderManager().getSkinMap().forEach((p, r) -> {
 			r.addLayer(new JetpackHandler.JetpackLayer());
+			r.getMainModel().bipedBody.addChild(new EgonBackpackRenderer(r.getMainModel()));
 		});
+		
 		ParticleRenderLayer.register();
 		BobmazonOfferFactory.reset();
 		BobmazonOfferFactory.init();

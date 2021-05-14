@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -269,6 +270,7 @@ import com.hbm.tileentity.deco.TileEntityDecoBlockAlt;
 import com.hbm.tileentity.deco.TileEntityDecoPoleSatelliteReceiver;
 import com.hbm.tileentity.deco.TileEntityGeysir;
 import com.hbm.tileentity.deco.TileEntityObjTester;
+import com.hbm.tileentity.deco.TileEntitySpinnyLight;
 import com.hbm.tileentity.deco.TileEntityTestRender;
 import com.hbm.tileentity.deco.TileEntityTrappedBrick;
 import com.hbm.tileentity.deco.TileEntityVent;
@@ -303,6 +305,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -314,6 +317,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import paulscode.sound.SoundSystemConfig;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -385,6 +389,7 @@ public class MainRegistry {
 	public static ArmorMaterial enumArmorMaterialAsbestos = EnumHelper.addArmorMaterial(RefStrings.MODID + ":ASBESTOS", RefStrings.MODID + ":ASBESTOS", 20, new int[] {1, 3, 4, 1}, 5, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0F);
 	public static ArmorMaterial aMatCobalt = EnumHelper.addArmorMaterial(RefStrings.MODID + ":COBALT", RefStrings.MODID + ":COBALT", 70, new int[] {3, 6, 8, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial aMatStarmetal = EnumHelper.addArmorMaterial(RefStrings.MODID + ":STARMETAL", RefStrings.MODID + ":STARMETAL", 150, new int[] {3, 6, 8, 3}, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial aMatLiquidator = EnumHelper.addArmorMaterial(RefStrings.MODID + ":LIQUIDATOR", RefStrings.MODID + ":LIQUIDATOR", 750, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	
 	// Tool Materials
 	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUM", 3, 10000, 50.0F, 100.0F, 200);
@@ -430,7 +435,6 @@ public class MainRegistry {
 			while(polaroidID == 4 || polaroidID == 9)
 				polaroidID = rand.nextInt(18) + 1;
 		}
-		
 		
 		if(SharedMonsterAttributes.MAX_HEALTH.clampValue(Integer.MAX_VALUE) <= 2000)
 			try{
@@ -493,6 +497,7 @@ public class MainRegistry {
 		enumToolMaterialDesh.setRepairItem(new ItemStack(ModItems.ingot_desh));
 		enumArmorMaterialAsbestos.setRepairItem(new ItemStack(ModItems.asbestos_cloth));
 		matMeteorite.setRepairItem(new ItemStack(ModItems.plate_paa));
+		aMatLiquidator.setRepairItem(new ItemStack(ModItems.plate_lead));
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityDummy.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy"));
@@ -661,6 +666,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineDetector.class, new ResourceLocation(RefStrings.MODID, "tileentity_he_detector"));
 		GameRegistry.registerTileEntity(TileEntityFireworks.class, new ResourceLocation(RefStrings.MODID, "tileentity_firework_box"));
 		GameRegistry.registerTileEntity(TileEntityMachineIGenerator.class, new ResourceLocation(RefStrings.MODID, "tileentity_igenerator"));
+		GameRegistry.registerTileEntity(TileEntitySiloHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_silo_hatch"));
+		GameRegistry.registerTileEntity(TileEntitySpinnyLight.class, new ResourceLocation(RefStrings.MODID, "tileentity_spinny_light"));
 		
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -864,7 +871,7 @@ public class MainRegistry {
 		ModItems.init();
 		ModBlocks.init();
 		OreDictManager.registerOres();
-		registerHazmatArmors();
+		HazmatRegistry.registerHazmats();
 		registerReactorFuels();
 	}
 
@@ -900,13 +907,6 @@ public class MainRegistry {
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
 		proxy.postInit(event);
-		Iterator<IRecipe> itr = net.minecraft.item.crafting.CraftingManager.REGISTRY.iterator();
-		int count = 0;
-		while(itr.hasNext()){
-			itr.next();
-			count++;
-		}
-		System.out.println("total recipe count " + count);
 	}
 
 	@EventHandler
@@ -919,109 +919,6 @@ public class MainRegistry {
 		BobmazonOfferFactory.init();
 	}
 
-	private void registerHazmatArmors() {
-		HazmatRegistry.registerHazmat(ModItems.hev_helmet, 0.5F);
-		HazmatRegistry.registerHazmat(ModItems.hev_plate, 1.0F);
-		HazmatRegistry.registerHazmat(ModItems.hev_legs, 0.7F);
-		HazmatRegistry.registerHazmat(ModItems.hev_boots, 0.3F);
-		
-		HazmatRegistry.registerHazmat(ModItems.ajr_helmet, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.ajr_plate, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.ajr_legs, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.ajr_boots, 0.2F);
-		
-		HazmatRegistry.registerHazmat(ModItems.cmb_helmet, 0.5F);
-		HazmatRegistry.registerHazmat(ModItems.cmb_plate, 1.1F);
-		HazmatRegistry.registerHazmat(ModItems.cmb_legs, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.cmb_boots, 0.2F);
-		
-		HazmatRegistry.registerHazmat(ModItems.hazmat_helmet, 0.2F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_plate, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_legs, 0.3F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_boots, 0.1F);
-
-		HazmatRegistry.registerHazmat(ModItems.hazmat_helmet_red, 0.3F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_plate_red, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_legs_red, 0.45F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_boots_red, 0.15F);
-
-		HazmatRegistry.registerHazmat(ModItems.hazmat_helmet_grey, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_plate_grey, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_legs_grey, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_boots_grey, 0.2F);
-
-		HazmatRegistry.registerHazmat(ModItems.t45_helmet, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.t45_plate, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.t45_legs, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.t45_boots, 0.2F);
-		
-		HazmatRegistry.registerHazmat(ModItems.paa_plate, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.paa_legs, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.paa_boots, 0.2F);
-
-		HazmatRegistry.registerHazmat(ModItems.hazmat_paa_helmet, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_paa_plate, 1.2F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_paa_legs, 0.9F);
-		HazmatRegistry.registerHazmat(ModItems.hazmat_paa_boots, 0.3F);
-		
-		HazmatRegistry.registerHazmat(ModItems.security_helmet, 0.2F);
-		HazmatRegistry.registerHazmat(ModItems.security_plate, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.security_legs, 0.3F);
-		HazmatRegistry.registerHazmat(ModItems.security_boots, 0.1F);
-		
-		HazmatRegistry.registerHazmat(ModItems.starmetal_helmet, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.starmetal_plate, 1.2F);
-		HazmatRegistry.registerHazmat(ModItems.starmetal_legs, 0.9F);
-		HazmatRegistry.registerHazmat(ModItems.starmetal_boots, 0.3F);
-
-		HazmatRegistry.registerHazmat(ModItems.jackt, 0.3F);
-		HazmatRegistry.registerHazmat(ModItems.jackt2, 0.3F);
-
-		HazmatRegistry.registerHazmat(ModItems.gas_mask, 0.15F);
-		HazmatRegistry.registerHazmat(ModItems.gas_mask_m65, 0.175F);
-
-		HazmatRegistry.registerHazmat(ModItems.steel_helmet, 0.04F);
-		HazmatRegistry.registerHazmat(ModItems.steel_plate, 0.08F);
-		HazmatRegistry.registerHazmat(ModItems.steel_legs, 0.06F);
-		HazmatRegistry.registerHazmat(ModItems.steel_boots, 0.02F);
-
-		HazmatRegistry.registerHazmat(ModItems.cobalt_helmet, 0.1F);
-		HazmatRegistry.registerHazmat(ModItems.cobalt_plate, 0.2F);
-		HazmatRegistry.registerHazmat(ModItems.cobalt_legs, 0.15F);
-		HazmatRegistry.registerHazmat(ModItems.cobalt_boots, 0.05F);
-		
-		HazmatRegistry.registerHazmat(Items.IRON_HELMET, 0.04F);
-		HazmatRegistry.registerHazmat(Items.IRON_CHESTPLATE, 0.08F);
-		HazmatRegistry.registerHazmat(Items.IRON_LEGGINGS, 0.06F);
-		HazmatRegistry.registerHazmat(Items.IRON_BOOTS, 0.02F);
-
-		HazmatRegistry.registerHazmat(Items.GOLDEN_HELMET, 0.04F);
-		HazmatRegistry.registerHazmat(Items.GOLDEN_CHESTPLATE, 0.08F);
-		HazmatRegistry.registerHazmat(Items.GOLDEN_LEGGINGS, 0.06F);
-		HazmatRegistry.registerHazmat(Items.GOLDEN_BOOTS, 0.02F);
-
-		HazmatRegistry.registerHazmat(ModItems.alloy_helmet, 0.08F);
-		HazmatRegistry.registerHazmat(ModItems.alloy_plate, 0.16F);
-		HazmatRegistry.registerHazmat(ModItems.alloy_legs, 0.12F);
-		HazmatRegistry.registerHazmat(ModItems.alloy_boots, 0.04F);
-
-		HazmatRegistry.registerHazmat(ModItems.schrabidium_helmet, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.schrabidium_plate, 1.2F);
-		HazmatRegistry.registerHazmat(ModItems.schrabidium_legs, 0.9F);
-		HazmatRegistry.registerHazmat(ModItems.schrabidium_boots, 0.3F);
-
-		HazmatRegistry.registerHazmat(ModItems.euphemium_helmet, 6F);
-		HazmatRegistry.registerHazmat(ModItems.euphemium_plate, 12F);
-		HazmatRegistry.registerHazmat(ModItems.euphemium_legs, 9F);
-		HazmatRegistry.registerHazmat(ModItems.euphemium_boots, 3F);
-		
-		HazmatRegistry.registerHazmat(ModItems.bj_helmet, 0.4F);
-		HazmatRegistry.registerHazmat(ModItems.bj_plate, 0.8F);
-		HazmatRegistry.registerHazmat(ModItems.bj_legs, 0.6F);
-		HazmatRegistry.registerHazmat(ModItems.bj_boots, 0.2F);
-
-	}
-	
 	private void registerReactorFuels(){
 		TileEntityMachineReactorLarge.registerFuelEntry(1, ReactorFuelType.URANIUM, ModItems.nugget_uranium_fuel);
 		TileEntityMachineReactorLarge.registerFuelEntry(9, ReactorFuelType.URANIUM, ModItems.ingot_uranium_fuel);

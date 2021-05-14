@@ -25,7 +25,7 @@ public class ParticleMukeWave extends Particle {
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/shockwave.png");
 	
 	public ParticleMukeWave(World worldIn, double posXIn, double posYIn, double posZIn) {
-		super(worldIn, posXIn, posYIn, posZIn);
+		super(worldIn, posXIn, posYIn+0.05, posZIn);
 		this.particleMaxAge = 25;
 	}
 	

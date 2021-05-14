@@ -33,6 +33,7 @@ import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineTransformer;
 import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityWireCoated;
+import com.hbm.util.BobMathUtil;
 
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.block.Block;
@@ -58,6 +59,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -335,25 +337,21 @@ public class Library {
 		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
 		Vec3d vec31 = player.getLook(f);
 		Vec3d vec32 = vec3.addVector(vec31.x * d, vec31.y * d, vec31.z * d);
-		
-		RayTraceResult result = player.world.rayTraceBlocks(vec3, vec32, false, true, true);
-		if(result != null)
-			vec32 = result.hitVec;
-		
-		AxisAlignedBB box = new AxisAlignedBB(vec3.x, vec3.y, vec3.z, vec32.x, vec32.y, vec32.z).grow(1D);
-		List<Entity> ents = player.world.getEntitiesInAABBexcluding(player, box, Predicates.and(EntitySelectors.IS_ALIVE, entity -> entity instanceof EntityLiving));
-		for(Entity ent : ents){
-			RayTraceResult test = ent.getEntityBoundingBox().grow(0.3D).calculateIntercept(vec3, vec32);
-			if(test != null){
-				if(result == null || vec3.squareDistanceTo(result.hitVec) > vec3.squareDistanceTo(test.hitVec)){
-					test.typeOfHit = RayTraceResult.Type.ENTITY;
-					test.entityHit = ent;
-					result = test;
-				}
-			}
-		}
-		
-		return result;
+		return rayTraceIncludeEntities(player.world, vec3, vec32, player);
+	}
+	
+	public static RayTraceResult rayTraceIncludeEntitiesCustomDirection(EntityPlayer player, Vec3d look, double d, float f) {
+		Vec3d vec3 = getPosition(f, player);
+		vec3 = vec3.addVector(0D, (double) player.eyeHeight, 0D);
+		Vec3d vec32 = vec3.addVector(look.x * d, look.y * d, look.z * d);
+		return rayTraceIncludeEntities(player.world, vec3, vec32, player);
+	}
+	
+	public static Vec3d changeByAngle(Vec3d oldDir, float yaw, float pitch){
+		Vec3d dir = new Vec3d(0, 0, 1);
+		dir = dir.rotatePitch((float) Math.toRadians(pitch)).rotateYaw((float) Math.toRadians(yaw));
+		Vec3d angles = BobMathUtil.getEulerAngles(oldDir);
+		return dir.rotatePitch((float) Math.toRadians(angles.y+90)).rotateYaw((float)Math.toRadians(angles.x));
 	}
 	
 	public static RayTraceResult rayTraceIncludeEntities(World w, Vec3d vec3, Vec3d vec32, @Nullable Entity excluded) {
@@ -635,7 +633,7 @@ public class Library {
     //Drillgon200: https://thebookofshaders.com/glossary/?search=smoothstep
     public static double smoothstep(double t, double edge0, double edge1){
     	t = MathHelper.clamp((t - edge0) / (edge1 - edge0), 0.0, 1.0);
-        return t * t * (3.0 - 2.0 * t);
+        return t * t * (3.0 - 2.0 * t);	
     }
 	
 	public static Vec3d getPosition(float interpolation, EntityPlayer player) {
@@ -927,6 +925,17 @@ public class Library {
 		}
 		return false;
 	}
+	
+	public static int countInventoryItem(InventoryPlayer inventory, Item ammo) {
+		int count = 0;
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo) {
+				count += stack.getCount();
+			}
+		}
+		return count;
+	}
 
 	public static void consumeInventoryItem(InventoryPlayer inventory, Item ammo) {
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -1143,6 +1152,11 @@ public class Library {
 		if(!player.inventory.addItemStackToInventory(stack)){
 			player.dropItem(stack, false, false);
 		}
+	}
+
+	public static Vec3d normalFromRayTrace(RayTraceResult r) {
+		Vec3i n = r.sideHit.getDirectionVec();
+		return new Vec3d(n.getX(), n.getY(), n.getZ());
 	}
 	
 }

@@ -83,6 +83,7 @@ public class OreDictManager {
 		OreDictionary.registerOre("nuggetNeptunium", ModItems.nugget_neptunium);
 		OreDictionary.registerOre("nuggetPolonium", ModItems.nugget_polonium);
 		OreDictionary.registerOre("nuggetSchrabidium", ModItems.nugget_schrabidium);
+		OreDictionary.registerOre("nuggetZirconium", ModItems.nugget_zirconium);
 		OreDictionary.registerOre("tinyU233", ModItems.nugget_u233);
 		OreDictionary.registerOre("tinyU235", ModItems.nugget_u235);
 		OreDictionary.registerOre("tinyU238", ModItems.nugget_u238);

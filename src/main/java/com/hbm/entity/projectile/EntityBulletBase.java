@@ -3,6 +3,8 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
@@ -19,8 +21,12 @@ import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.particle.bullet_hit.EntityHitDataHandler;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
@@ -46,6 +52,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -64,6 +71,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	private BulletConfiguration config;
 	public EntityLivingBase shooter;
 	public float overrideDamage;
+	public int overrideMaxAge = -1;
 
 	public EntityBulletBase(World world) {
 		super(world);
@@ -135,7 +143,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 		this.setSize(0.5F, 0.5F);
 
-		this.shoot(this.motionX, this.motionY, this.motionZ, 1.0F, this.config.spread);
+		this.shoot(this.motionX, this.motionY, this.motionZ, 2.0F, this.config.spread);
 		
 		this.getDataManager().set(STYLE, this.config.style);
 		this.getDataManager().set(TRAIL, this.config.trail);
@@ -164,6 +172,10 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		
 		this.getDataManager().set(STYLE, this.config.style);
 		this.getDataManager().set(TRAIL, this.config.trail);
+	}
+	
+	public void overrideStyle(int style){
+		this.getDataManager().set(STYLE, style);
 	}
 	
 	@Override
@@ -255,6 +267,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		vecDestination = new Vec3d(this.posX + this.motionX * this.config.velocity, this.posY + this.motionY * this.config.velocity, this.posZ + this.motionZ * this.config.velocity);
 
 		Entity victim = null;
+		RayTraceResult victimResult = null;
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(Math.abs(this.motionX * this.config.velocity), Math.abs(this.motionY * this.config.velocity), Math.abs(this.motionZ * this.config.velocity)).grow(1.0D));
 
 		double d0 = 0.0D;
@@ -269,11 +282,11 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().grow(f1);
 				RayTraceResult movingobjectposition1 = axisalignedbb1.calculateIntercept(vecOrigin, vecDestination);
 
-				if (movingobjectposition1 != null) {
+				if (movingobjectposition1 != null && movingobjectposition1.typeOfHit != Type.MISS) {
 					double d1 = vecOrigin.distanceTo(movingobjectposition1.hitVec);
-
 					if (d1 < d0 || d0 == 0.0D) {
 						victim = entity1;
+						victimResult = movingobjectposition1;
 						d0 = d1;
 					}
 				}
@@ -281,7 +294,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		}
 
 		if (victim != null) {
-			movement = new RayTraceResult(victim);
+			movement = victimResult;
+			movement.typeOfHit = Type.ENTITY;
+			movement.entityHit = victim;
 		}
 
 		/// ZONE 2 END ///
@@ -303,9 +318,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 				if (!world.isRemote) {
 					if (!config.doesPenetrate)
-						onEntityImpact(victim);
+						onEntityImpact(victim, movement);
 					else
-						onEntityHurt(victim);
+						onEntityHurt(victim, movement, true);
 				}
 
 				float damage = rand.nextFloat() * (config.dmgMax - config.dmgMin) + config.dmgMin;
@@ -333,7 +348,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				boolean doesRic = config.doesRicochet || hRic;
 
 				if (!config.isSpectral && !doesRic)
-					this.onBlockImpact(movement.getBlockPos());
+					this.onBlockImpact(movement.getBlockPos(), movement);
 
 				if (doesRic) {
 
@@ -390,7 +405,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 						} else {
 							if (!world.isRemote)
-								onBlockImpact(movement.getBlockPos());
+								onBlockImpact(movement.getBlockPos(), movement);
 						}
 
 						this.posX += (movement.hitVec.x - this.posX) * 0.6;
@@ -444,7 +459,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			this.prevRotationYaw += 360.0F;
 		}
 
-		if (this.ticksExisted > config.maxAge)
+		if (this.ticksExisted > config.maxAge || (overrideMaxAge != -1 && this.ticksExisted > overrideMaxAge))
 			this.setDead();
 
 		if(world.isRemote && !config.vPFX.isEmpty()) {
@@ -466,17 +481,43 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		// this.rotationYaw = this.prevRotationYaw + (this.rotationYaw -
 		// this.prevRotationYaw) * 0.2F;
 	}
+	
+	private void doHitVFX(@Nullable BlockPos pos, RayTraceResult hit){
+		if(getDataManager().get(STYLE) == BulletConfiguration.STYLE_TRACER){
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setString("type", "bimpact");
+			tag.setByte("hitType", (byte) hit.typeOfHit.ordinal());
+			Vec3d norm = Library.normalFromRayTrace(hit);
+			tag.setFloat("nX", (float) norm.x);
+			tag.setFloat("nY", (float) norm.y);
+			tag.setFloat("nZ", (float) norm.z);
+			tag.setFloat("dirX", (float) motionX);
+			tag.setFloat("dirY", (float) motionY);
+			tag.setFloat("dirZ", (float) motionZ);
+			if(hit.typeOfHit == Type.BLOCK){
+				IBlockState blockstate = world.getBlockState(pos);
+				Block block = blockstate.getBlock();
+				tag.setInteger("block", Block.getIdFromBlock(block));
+				tag.setByte("meta", (byte) block.getMetaFromState(blockstate));
+			}
+			PacketDispatcher.wrapper.sendToAllTracking(new AuxParticlePacketNT(tag, hit.hitVec.x, hit.hitVec.y, hit.hitVec.z), this);
+			if(hit.typeOfHit == Type.ENTITY && hit.entityHit instanceof EntityLivingBase){
+				EntityHitDataHandler.addHit((EntityLivingBase) hit.entityHit, this, hit.hitVec, new Vec3d(this.motionX, this.motionY, this.motionZ).normalize());
+			}
+		}
+	}
 
 	// for when a bullet dies by hitting a block
-	private void onBlockImpact(BlockPos pos) {
+	private void onBlockImpact(BlockPos pos, RayTraceResult hit) {
 		if(config.bImpact != null)
 			config.bImpact.behaveBlockHit(this, pos.getX(), pos.getY(), pos.getZ());
 		if (!world.isRemote)
 			this.setDead();
 		
-
 		IBlockState blockstate = world.getBlockState(pos);
 		Block block = blockstate.getBlock();
+		
+		doHitVFX(pos, hit);
 
 		if (config.incendiary > 0 && !this.world.isRemote) {
 			if (world.rand.nextInt(3) == 0 && world.getBlockState(new BlockPos((int) posX, (int) posY, (int) posZ)).getBlock() == Blocks.AIR)
@@ -581,18 +622,20 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	}
 
 	// for when a bullet dies by hitting an entity
-	private void onEntityImpact(Entity e) {
-		
-		onEntityHurt(e);
-		onBlockImpact(new BlockPos(e));
+	private void onEntityImpact(Entity e, RayTraceResult rt) {
+		onEntityHurt(e, rt, false);
+		onBlockImpact(new BlockPos(e), rt);
 
 		if(config.bHit != null)
 			config.bHit.behaveEntityHit(this, e);
 	}
 
 	// for when a bullet hurts an entity, not necessarily dying
-	private void onEntityHurt(Entity e) {
+	private void onEntityHurt(Entity e, RayTraceResult rt, boolean doVFX) {
 
+		if(doVFX)
+			doHitVFX(null, rt);
+		
 		if(config.bHurt != null)
 			config.bHurt.behaveEntityHurt(this, e);
 		
@@ -624,6 +667,11 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			ArmorUtil.damageSuit((EntityPlayer) e, 3, config.caustic);
 		}
 	}
+	
+	@Override
+	public float getEyeHeight() {
+		return 0;
+	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -638,7 +686,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		
 		this.getDataManager().set(BULLETCONFIG, cfg);
 
-		this.getDataManager().set(STYLE, this.config.style);
+		this.getDataManager().set(STYLE, nbt.getInteger("overrideStyle"));
 		this.getDataManager().set(TRAIL, this.config.trail);
 		
 		this.overrideDamage = nbt.getFloat("damage");
@@ -647,7 +695,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("config", this.getDataManager().get(BULLETCONFIG));
-		
+		nbt.setInteger("overrideStyle", this.getDataManager().get(STYLE));
 		nbt.setFloat("damage", this.overrideDamage);
 	}
 }

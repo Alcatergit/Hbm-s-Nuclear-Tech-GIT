@@ -79,9 +79,9 @@ public class ItemSwordCutter extends ItemSwordAbility implements IEquipReceiver 
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void swingClient(EntityLivingBase entityLiving, ItemStack stack){
+	public void swingClient(EntityLivingBase entityLiving, ItemStack stack){
 		if(clicked && planeNormal != null && entityLiving instanceof EntityPlayer){
-			PacketDispatcher.wrapper.sendToServer(new PacketMobSlicer(startPos.add(entityLiving.getPositionEyes(1)), planeNormal));
+			PacketDispatcher.wrapper.sendToServer(new PacketMobSlicer(startPos.add(entityLiving.getPositionEyes(1)), planeNormal, getTexId()));
 			planeNormal = null;
 			clicked = false;
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -91,6 +91,10 @@ public class ItemSwordCutter extends ItemSwordAbility implements IEquipReceiver 
 			nbt.setString("name", stack.getItem().getRegistryName().getResourcePath());
 			MainRegistry.proxy.effectNT(nbt);
 		}
+	}
+	
+	public byte getTexId(){
+		return 0;
 	}
 	
 	@Override

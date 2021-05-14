@@ -4,7 +4,7 @@ import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketSpecialDeath;
-import com.hbm.particle.ParticleGluonFlare;
+import com.hbm.particle.gluon.ParticleGluonFlare;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;

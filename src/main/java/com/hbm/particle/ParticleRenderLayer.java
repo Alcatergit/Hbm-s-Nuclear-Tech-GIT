@@ -33,6 +33,7 @@ public class ParticleRenderLayer {
 		};
 	};
 	
+	public boolean isRegistered = false;
 	protected ArrayDeque<ParticleLayerBase> particles = Queues.newArrayDeque();
 	
 	public void preRender(){

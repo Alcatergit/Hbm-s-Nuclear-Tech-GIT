@@ -25,11 +25,20 @@ public abstract class TileEntityMachineBase extends TileEntity {
 	private String customName;
 	
 	public TileEntityMachineBase(int scount) {
+		this(scount, 64);
+	}
+	
+	public TileEntityMachineBase(int scount, int slotlimit) {
 		inventory = new ItemStackHandler(scount){
 			@Override
 			protected void onContentsChanged(int slot) {
 				super.onContentsChanged(slot);
 				markDirty();
+			}
+			
+			@Override
+			public int getSlotLimit(int slot) {
+				return slotlimit;
 			}
 		};
 	}

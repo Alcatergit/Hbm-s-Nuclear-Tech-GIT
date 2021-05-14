@@ -1,73 +1,34 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityWasteDrum extends TileEntity implements ITickable {
+public class TileEntityWasteDrum extends TileEntityMachineBase implements ITickable {
 
 	public ItemStackHandler inventory;
 	
-	//private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+	private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 	
 	public boolean lock = false;
 	
-	private String customName;
-	
 	public TileEntityWasteDrum() {
-		inventory = new ItemStackHandler(12){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			
-			@Override
-			public int getSlotLimit(int slot) {
-				return 1;
-			}
-			
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				Item item = stack.getItem();
-				
-				return item == ModItems.waste_mox_hot || 
-						item == ModItems.waste_plutonium_hot || 
-						item == ModItems.waste_schrabidium_hot || 
-						item == ModItems.waste_thorium_hot || 
-						item == ModItems.waste_uranium_hot;
-			}
-			
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(this.isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				else
-					return ItemStack.EMPTY;
-			}
-		};
+		super(12, 1);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.wasteDrum";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public String getName() {
+		return "container.wasteDrum";
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -90,6 +51,38 @@ public class TileEntityWasteDrum extends TileEntity implements ITickable {
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		Item item = stack.getItem();
+		
+		return item == ModItems.waste_mox_hot || 
+				item == ModItems.waste_plutonium_hot || 
+				item == ModItems.waste_schrabidium_hot || 
+				item == ModItems.waste_thorium_hot || 
+				item == ModItems.waste_uranium_hot;
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return slots_arr;
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		Item item = itemStack.getItem();
+		
+		return item == ModItems.waste_mox || 
+				item == ModItems.waste_plutonium || 
+				item == ModItems.waste_schrabidium || 
+				item == ModItems.waste_thorium || 
+				item == ModItems.waste_uranium;
 	}
 	
 	@Override

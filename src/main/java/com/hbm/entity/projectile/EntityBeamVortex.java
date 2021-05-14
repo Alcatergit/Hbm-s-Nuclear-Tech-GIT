@@ -1,21 +1,11 @@
 package com.hbm.entity.projectile;
 
-import java.util.List;
-
 import com.hbm.lib.Library;
-import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
-import com.hbm.util.BobMathUtil;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityBeamVortex extends EntityBeamBase {

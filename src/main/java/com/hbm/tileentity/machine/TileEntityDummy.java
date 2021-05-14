@@ -40,10 +40,14 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		int x = compound.getInteger("tx");
-		int y = compound.getInteger("ty");
-		int z = compound.getInteger("tz");
-		this.target = new BlockPos(x, y, z);
+		if(compound.hasKey("tx")){
+			int x = compound.getInteger("tx");
+			int y = compound.getInteger("ty");
+			int z = compound.getInteger("tz");
+			this.target = new BlockPos(x, y, z);
+		} else {
+			this.target = null;
+		}
 	}
 	
 	@Override

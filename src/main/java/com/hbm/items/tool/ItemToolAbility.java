@@ -43,6 +43,7 @@ import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -306,12 +307,29 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     }
     
     @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    	ItemStack stack = player.getHeldItem(hand);
+    	if(this.breakAbility.size() < 2 || !canOperate(stack))
+    		return EnumActionResult.PASS;
+    	if(!worldIn.isRemote){
+    		switchMode(player, stack);
+    	}
+    	return EnumActionResult.SUCCESS;
+    }
+    
+    @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
     	ItemStack stack = player.getHeldItem(hand);
     	
     	if(world.isRemote || this.breakAbility.size() < 2 || !canOperate(stack))
     		return super.onItemRightClick(world, player, hand);
     	
+    	switchMode(player, stack);
+    	
+    	return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+    }
+    
+    private void switchMode(EntityPlayer player, ItemStack stack){
     	int i = getAbility(stack);
     	i++;
     	
@@ -343,9 +361,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility {
     	}
 
     	//Drillgon200: I hope "random.orb" referred to the experience orb sound
-        world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.25F, getCurrentAbility(stack) == null ? 0.75F : 1.25F);
-    	
-    	return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.25F, getCurrentAbility(stack) == null ? 0.75F : 1.25F);
     }
     
     private ToolAbility getCurrentAbility(ItemStack stack) {

@@ -6,54 +6,35 @@ import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineElectricFurnace extends TileEntity implements ITickable, IConsumer {
+public class TileEntityMachineElectricFurnace extends TileEntityMachineBase implements ITickable, IConsumer {
 
-	public ItemStackHandler inventory;
-	
 	public int dualCookTime;
 	public long power;
 	public static final long maxPower = 100000;
 	public static final int processingSpeed = 100;
 	
-	//private static final int[] slots_top = new int[] {1};
-	//private static final int[] slots_bottom = new int[] {2, 0};
-	//private static final int[] slots_side = new int[] {0};
-	
-	private String customName;
+	private static final int[] slots_top = new int[] {1};
+	private static final int[] slots_bottom = new int[] {2, 0};
+	private static final int[] slots_side = new int[] {0};
 	
 	public TileEntityMachineElectricFurnace() {
-		inventory = new ItemStackHandler(3){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(3);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.electricFurnace";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public String getName() {
+		return "container.electricFurnace";
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -80,6 +61,40 @@ public class TileEntityMachineElectricFurnace extends TileEntity implements ITic
 		compound.setInteger("cookTime", dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 0)
+			if(stack.getItem() instanceof IBatteryItem)
+				return true;
+		
+		if(i == 1)
+			return true;
+		
+		return false;
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(slot == 0)
+			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
+				return true;
+		if(slot == 2)
+			return true;
+		
+		return false;
 	}
 	
 	public int getDiFurnaceProgressScaled(int i) {
@@ -206,32 +221,16 @@ public class TileEntityMachineElectricFurnace extends TileEntity implements ITic
 	@Override
 	public void setPower(long i) {
 		power = i;
-		
 	}
 
 	@Override
 	public long getPower() {
 		return power;
-		
 	}
 
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else {
-			return super.getCapability(capability, facing);
-		}
 	}
 
 }

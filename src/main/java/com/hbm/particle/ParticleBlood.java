@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.BakedModelUtil;
+import com.hbm.render.util.BakedModelUtil.DecalType;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -68,9 +69,9 @@ public class ParticleBlood extends Particle {
 		if(r != null && r.typeOfHit == Type.BLOCK){
 			Vec3d hit = r.hitVec;
 			Vec3d direction = new Vec3d(motionX, motionY, motionZ).normalize();
-			int dl = BakedModelUtil.generateDecalMesh(world, direction, 1, (float)hit.x, (float)hit.y, (float)hit.z);
+			int[] dl = BakedModelUtil.generateDecalMesh(world, direction, 1, (float)hit.x, (float)hit.y, (float)hit.z, DecalType.REGULAR);
 			direction = direction.scale(0.001F);
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecal(world, dl, ResourceManager.blood_dec1, 120, (float)hit.x-direction.x, (float)hit.y-direction.y, (float)hit.z-direction.z));
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecal(world, dl[0], ResourceManager.blood_dec1, 120, (float)hit.x-direction.x, (float)hit.y-direction.y, (float)hit.z-direction.z));
 			setExpired();
 			return;
 		}

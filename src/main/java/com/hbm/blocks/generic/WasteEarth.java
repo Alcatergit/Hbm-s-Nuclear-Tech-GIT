@@ -97,18 +97,21 @@ public class WasteEarth extends Block {
 			world.scheduleUpdate(pos1, state.getBlock(), this.tickRate(world));
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos().setPos(pos1.getX(), pos1.getY(), pos1.getZ());
-		if((this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) && world.getBlockState(pos.add(0, 1, 0)).getBlock() == Blocks.AIR && rand.nextInt(10) == 0)
+		if((this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) && world.getBlockState(pos.add(0, 1, 0)).getBlock() == Blocks.AIR && rand.nextInt(1000) == 0)
     	{
     		Block b0;
     		int count = 0;
     		for(int i = -5; i < 5; i++) {
     			for(int j = -5; j < 6; j++) {
     				for(int k = -5; k < 5; k++) {
-    					b0 = world.getBlockState(pos.add(i, j, k)).getBlock();
-    					if((b0 instanceof BlockMushroom) || b0 == ModBlocks.mush)
-    					{
-    						count++;
+    					if(world.isBlockLoaded((pos.add(i, j, k)))){
+    						b0 = world.getBlockState(pos.add(i, j, k)).getBlock();
+        					if((b0 instanceof BlockMushroom) || b0 == ModBlocks.mush)
+        					{
+        						count++;
+        					}
     					}
+    					
     				}
     			}
     		}

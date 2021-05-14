@@ -107,17 +107,23 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	// Probably called before neighbor changed
 	@Override
 	public void onLoad() {
-		joinOrMakeNetwork();
-		rebuildCache();
-		updateConnections();
+		if(!world.isRemote){
+			world.getMinecraftServer().addScheduledTask(() -> {
+				joinOrMakeNetwork();
+				onNeighborChange();
+			});
+		} else {
+			joinOrMakeNetwork();
+			onNeighborChange();
+		}
 	}
+		
 
 	public void onNeighborChange() {
-		if(rebuildCache()){
-			updateConnections();
-			if(!world.isRemote)
-				PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		}
+		rebuildCache();
+		updateConnections();
+		if(!world.isRemote)
+			PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 	}
 
 	@Override
@@ -241,6 +247,10 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 					changed = true;
 				}
 			}
+		}
+		if(world.isRemote){
+			//System.out.println(this + " " + this.getPos() + " " + changed);
+			//new Exception().printStackTrace();
 		}
 		return changed;
 	}
