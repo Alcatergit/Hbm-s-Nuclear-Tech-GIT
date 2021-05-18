@@ -14,6 +14,8 @@ import com.hbm.main.MainRegistry;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleCrucibleSpark;
+import com.hbm.particle.ParticleFirstPerson;
+import com.hbm.particle.ParticleFirstPerson.ParticleType;
 import com.hbm.particle.lightning_test.TrailRenderer2;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
@@ -136,21 +138,26 @@ public class ItemRenderCrucible extends TEISRBase {
 							GlStateManager.color(1, 0.5F, 0.5F, 1);
 							TrailRenderer2.color[1] = 0.5F;
 							TrailRenderer2.color[2] = 0.5F;
-							for(Particle p : ModEventHandlerClient.firstPersonAuxParticles){
-								p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
+							for(ParticleFirstPerson p : ModEventHandlerClient.firstPersonAuxParticles){
+								if(p.getType() == ParticleType.CRUCIBLE)
+									p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
 							}
 							GlStateManager.color(1, 0.2F, 0.2F, 1);
 							TrailRenderer2.color[1] = 0.2F;
 							TrailRenderer2.color[2] = 0.2F;
 							TrailRenderer2.color[3] = 0.5F;
-							HbmShaderManager2.bloomData.bindFramebuffer(true);
-							for(Particle p : ModEventHandlerClient.firstPersonAuxParticles){
-								p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
+							if(GeneralConfig.bloom){
+								HbmShaderManager2.bloomData.bindFramebuffer(true);
+								for(Particle p : ModEventHandlerClient.firstPersonAuxParticles){
+									p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
+								}
+								
+								Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 							}
+							
 							TrailRenderer2.color[1] = 1F;
 							TrailRenderer2.color[2] = 1F;
 							TrailRenderer2.color[3] = 1F;
-							Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 							
 							GlStateManager.enableCull();
 						    GlStateManager.enableAlpha();

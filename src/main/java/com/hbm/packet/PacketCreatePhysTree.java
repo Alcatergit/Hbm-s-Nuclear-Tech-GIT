@@ -67,8 +67,8 @@ public class PacketCreatePhysTree implements IMessage {
 				Set<BlockPos> blocks = new HashSet<>();
 				int recurse = recurseFloodFill(m.pos, 0, blocks);
 				if(recurse > 0 && blocks.size() > 0){
-					//Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(Minecraft.getMinecraft().world, m.pos.getX(), m.pos.getY(), m.pos.getZ(), m.pos, blocks.toArray(new BlockPos[0])));
-					ModEventHandlerClient.firstPersonAuxParticles.add(new ParticlePhysicsBlocks(Minecraft.getMinecraft().world, m.pos.getX(), m.pos.getY(), m.pos.getZ(), m.pos, blocks.toArray(new BlockPos[0])));
+					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhysicsBlocks(Minecraft.getMinecraft().world, m.pos.getX(), m.pos.getY(), m.pos.getZ(), m.pos, blocks.toArray(new BlockPos[0])));
+					//ModEventHandlerClient.firstPersonAuxParticles.add(new ParticlePhysicsBlocks(Minecraft.getMinecraft().world, m.pos.getX(), m.pos.getY(), m.pos.getZ(), m.pos, blocks.toArray(new BlockPos[0])));
 				}
 			});
 			return null;

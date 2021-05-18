@@ -900,7 +900,7 @@ public class RenderHelper {
 			GL11.glTranslated(chunkPos.getX() - posX, chunkPos.getY() - posY, chunkPos.getZ() - posZ);
 			chunk.multModelviewMatrix();
 			for(int i = 0; i < 3; i ++){
-				if(chunk.getCompiledChunk().isLayerEmpty(BlockRenderLayer.values()[i]))
+				if(chunk.getCompiledChunk().isLayerEmpty(BlockRenderLayer.values()[i]) || chunk.getVertexBufferByLayer(i) == null)
 					continue;
 				if(i == 2){
 					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);

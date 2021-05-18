@@ -97,9 +97,9 @@ public class PacketSpecialDeath implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				Entity ent = Minecraft.getMinecraft().world.getEntityByID(m.entId);
 				if(ent instanceof EntityLivingBase){
-					ent.isDead = true;
 					switch(m.effectId){
 					case 0:
+						ent.setDead();
 						ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
 						DisintegrationParticleHandler.spawnGluonDisintegrateParticles(ent);
 						break;
@@ -115,10 +115,12 @@ public class PacketSpecialDeath implements IMessage {
 						}
 						break;
 					case 2:
+						ent.setDead();
 						ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
 						DisintegrationParticleHandler.spawnLightningDisintegrateParticles(ent, new Vec3(m.auxData[0], m.auxData[1], m.auxData[2]));
 						break;
 					case 3:
+						ent.setDead();
 						//ModEventHandlerClient.specialDeathEffectEntities.add((EntityLivingBase) ent);
 						float[] data = m.auxData;
 						int id = Float.floatToIntBits(data[4]);
@@ -190,6 +192,7 @@ public class PacketSpecialDeath implements IMessage {
 							Minecraft.getMinecraft().effectRenderer.addEffect(p);
 						break;
 					case 4:
+						ent.setDead();
 						@SuppressWarnings("unchecked")
 						List<BulletHit> bHits = (List<BulletHit>) m.auxObj;
 						List<Pair<Matrix4f, ModelRenderer>> boxes = ModelRendererUtil.getBoxesFromMob(ent);

@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunJShotty;
@@ -47,7 +48,7 @@ public class ItemRenderJShotgun extends TEISRBase {
 			AnimationWrapper reload = HbmAnimations.getRelevantBlenderAnim(hand);
 			float time = HbmAnimations.getTimeDifference("JS_RECOIL", hand);
 			float timeMax = 0.0375F;
-			if(time > 0 && time < timeMax){
+			if(time > 0 && time < timeMax && GeneralConfig.useShaders2){
 				ResourceManager.flash_lmap.use();
 				GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.jshotgun_lmap);
@@ -108,8 +109,10 @@ public class ItemRenderJShotgun extends TEISRBase {
 								GlStateManager.depthMask(true);
 								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevLx, prevLy);
 								GlStateManager.disableBlend();
-								ResourceManager.flash_lmap.use();
-								GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flash_lmap.getShaderId(), "flash_map"), 3);
+								if(GeneralConfig.useShaders2){
+									ResourceManager.flash_lmap.use();
+									GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flash_lmap.getShaderId(), "flash_map"), 3);
+								}
 							}
 						}
 						return true;

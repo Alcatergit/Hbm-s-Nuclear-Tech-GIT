@@ -53,7 +53,7 @@ public class RadiationSystemNT {
 			p.radiation += amount;
 		}
 		if(amount > 0){
-			WorldRadiationData data = worldMap.get(world);
+			WorldRadiationData data = getWorldRadData(world);
 			data.activePockets.add(p);
 		}
 	}
@@ -72,7 +72,7 @@ public class RadiationSystemNT {
 		RadPocket p = getPocket(world, pos);
 		p.radiation = Math.max(amount, 0);
 		if(amount > 0){
-			WorldRadiationData data = worldMap.get(world);
+			WorldRadiationData data = getWorldRadData(world);
 			data.activePockets.add(p);
 		}
 	}
@@ -84,7 +84,7 @@ public class RadiationSystemNT {
 	}
 	
 	public static void jettisonData(World world){
-		WorldRadiationData data = worldMap.get(world);
+		WorldRadiationData data = getWorldRadData(world);
 		data.data.clear();
 		data.activePockets.clear();
 	}
@@ -94,7 +94,7 @@ public class RadiationSystemNT {
 	}
 	
 	public static Collection<RadPocket> getActiveCollection(World world){
-		return worldMap.get(world).activePockets;
+		return getWorldRadData(world).activePockets;
 	}
 	
 	public static boolean isSubChunkLoaded(World world, BlockPos pos){
@@ -125,12 +125,17 @@ public class RadiationSystemNT {
 		return sc;
 	}
 	
-	public static ChunkRadiationStorage getChunkStorage(World world, BlockPos pos){
+	private static WorldRadiationData getWorldRadData(World world){
 		WorldRadiationData worldRadData = worldMap.get(world);
 		if(worldRadData == null){
 			worldRadData = new WorldRadiationData(world);
 			worldMap.put(world, worldRadData);
 		}
+		return worldRadData;
+	}
+	
+	public static ChunkRadiationStorage getChunkStorage(World world, BlockPos pos){
+		WorldRadiationData worldRadData = getWorldRadData(world);
 		ChunkRadiationStorage st = worldRadData.data.get(new ChunkPos(pos));
 		if(st == null){
 			st = new ChunkRadiationStorage(worldRadData, world.getChunkFromBlockCoords(pos));
@@ -159,7 +164,7 @@ public class RadiationSystemNT {
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
 			return;
 		if(!e.getWorld().isRemote){
-			WorldRadiationData data = worldMap.get(e.getWorld());
+			WorldRadiationData data = getWorldRadData(e.getWorld());
 			if(data.data.containsKey(e.getChunk().getPos())){
 				data.data.get(e.getChunk().getPos()).unload();
 				data.data.remove(e.getChunk().getPos());
@@ -173,7 +178,7 @@ public class RadiationSystemNT {
 			return;
 		if(!e.getWorld().isRemote){
 			if(e.getData().hasKey("hbmRadDataNT")){
-				WorldRadiationData data = worldMap.get(e.getWorld());
+				WorldRadiationData data = getWorldRadData(e.getWorld());
 				ChunkRadiationStorage cData = new ChunkRadiationStorage(data, e.getChunk());
 				cData.readFromNBT(e.getData().getCompoundTag("hbmRadDataNT"));
 				data.data.put(e.getChunk().getPos(), cData);
@@ -186,7 +191,7 @@ public class RadiationSystemNT {
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
 			return;
 		if(!e.getWorld().isRemote){
-			WorldRadiationData data = worldMap.get(e.getWorld());
+			WorldRadiationData data = getWorldRadData(e.getWorld());
 			if(data.data.containsKey(e.getChunk().getPos())){
 				NBTTagCompound tag = new NBTTagCompound();
 				data.data.get(e.getChunk().getPos()).writeToNBT(tag);
@@ -294,8 +299,10 @@ public class RadiationSystemNT {
 	}
 	
 	public static void markChunkForRebuild(World world, BlockPos pos){
+		if(!GeneralConfig.advancedRadiation)
+			return;
 		BlockPos chunkPos = new BlockPos(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
-		WorldRadiationData r = worldMap.get(world);
+		WorldRadiationData r = getWorldRadData(world);
 		if(r.iteratingDirty){
 			r.dirtyChunks2.add(chunkPos);
 		} else {

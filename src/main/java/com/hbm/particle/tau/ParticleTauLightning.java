@@ -3,22 +3,21 @@ package com.hbm.particle.tau;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.particle.ParticleCustomMatrix;
+import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleTauLightning extends ParticleCustomMatrix {
+public class ParticleTauLightning extends ParticleFirstPerson {
 
 	public float workingAlpha;
 	public float rotationOverLife;
@@ -98,6 +97,11 @@ public class ParticleTauLightning extends ParticleCustomMatrix {
         GlStateManager.enableCull();
         GlStateManager.disableBlend();
         GL11.glPopMatrix();
+	}
+	
+	@Override
+	public ParticleType getType() {
+		return ParticleType.TAU;
 	}
 
 }

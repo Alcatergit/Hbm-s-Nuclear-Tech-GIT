@@ -70,6 +70,7 @@ import com.hbm.packet.MeathookJumpPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.particle.ParticleBatchRenderer;
 import com.hbm.particle.ParticleDSmokeFX;
+import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.particle.gluon.ParticleGluonBurnTrail;
 import com.hbm.render.LightRenderer;
 import com.hbm.render.RenderHelper;
@@ -102,7 +103,6 @@ import com.hbm.render.item.weapon.GunRevolverRender;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
 import com.hbm.render.item.weapon.ItemRenderGunEgon;
-import com.hbm.render.item.weapon.ItemRenderJShotgun;
 import com.hbm.render.item.weapon.ItemRenderRedstoneSword;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.RenderAccessoryUtility;
@@ -204,7 +204,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ModEventHandlerClient {
 
 	public static Set<EntityLivingBase> specialDeathEffectEntities = new HashSet<>();
-	public static ArrayDeque<Particle> firstPersonAuxParticles = Queues.newArrayDeque();
+	public static ArrayDeque<ParticleFirstPerson> firstPersonAuxParticles = Queues.newArrayDeque();
 
 	public static float deltaMouseX;
 	public static float deltaMouseY;
@@ -949,7 +949,7 @@ public class ModEventHandlerClient {
 	public void clientTick(ClientTickEvent e) {
 		if(e.phase == Phase.END) {
 			if(!firstPersonAuxParticles.isEmpty()){
-				Iterator<Particle> i = firstPersonAuxParticles.iterator();
+				Iterator<ParticleFirstPerson> i = firstPersonAuxParticles.iterator();
 				while(i.hasNext()){
 					Particle p = i.next();
 					p.onUpdate();
@@ -1324,7 +1324,7 @@ public class ModEventHandlerClient {
 			
 			//FSB world rendering
 			if(ArmorFSB.hasFSBArmor(player)){
-				ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
+				ItemStack plate = player.inventory.armorInventory.get(2);
 				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 				if(chestplate.flashlightPosition != null && plate.hasTagCompound() && plate.getTagCompound().getBoolean("flActive")){
 					Vec3d start = chestplate.flashlightPosition.rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYaw)).add(player.getPositionEyes(partialTicks));

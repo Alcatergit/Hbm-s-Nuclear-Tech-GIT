@@ -31,6 +31,7 @@ public class ItemRenderGunEgon extends TEISRBase {
 		GlStateManager.enableCull();
 		switch(type){
 		case FIRST_PERSON_LEFT_HAND:
+			return;
 		case FIRST_PERSON_RIGHT_HAND:
 			GL11.glScaled(0.5, 0.4, 0.5);
 			if(type == TransformType.FIRST_PERSON_RIGHT_HAND){

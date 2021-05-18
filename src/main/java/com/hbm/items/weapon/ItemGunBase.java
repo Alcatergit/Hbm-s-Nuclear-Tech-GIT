@@ -91,7 +91,6 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 			if(hand != null) {
 				if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && world.isRemote) {
 					updateClient(stack, world, (EntityPlayer) entity, itemSlot, hand);
-					
 				} else {
 					updateServer(stack, world, (EntityPlayer) entity, itemSlot, hand);
 				}

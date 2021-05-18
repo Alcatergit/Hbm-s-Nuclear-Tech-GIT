@@ -164,6 +164,8 @@ public class HbmShaderManager2 {
     }
     
 	public static void postProcess(){
+		if(!GeneralConfig.useShaders2)
+			return;
 		if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
 			height = Minecraft.getMinecraft().displayHeight;
             width = Minecraft.getMinecraft().displayWidth;
@@ -181,7 +183,7 @@ public class HbmShaderManager2 {
 		GlStateManager.enableDepth();
 	}
 	
-	public static void heatDistortion(){
+	private static void heatDistortion(){
 		GL11.glFlush();
 		ResourceManager.heat_distortion_post.use();
 		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
@@ -212,7 +214,7 @@ public class HbmShaderManager2 {
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 	}
 	
-	public static void bloom(){
+	private static void bloom(){
 		downsampleBloomData();
 		GlStateManager.enableBlend();
 		for(int i = bloomLayers-1; i >= 0; i --){
@@ -397,6 +399,9 @@ public class HbmShaderManager2 {
     }
     
 	public static Shader loadShader(ResourceLocation file, boolean hasGeoShader) {
+		if(!GeneralConfig.useShaders2){
+			return new Shader(0);
+		}
 		int vertexShader = 0;
 		int fragmentShader = 0;
 		int geometryShader = 0;
@@ -489,6 +494,8 @@ public class HbmShaderManager2 {
 		}
 		
 		public void use(){
+			if(shader == 0)
+				return;
 			GL20.glUseProgram(shader);
 			for(Uniform u : uniforms){
 				u.apply(shader);
@@ -497,6 +504,24 @@ public class HbmShaderManager2 {
 		
 		public int getShaderId(){
 			return shader;
+		}
+		
+		public void uniform1f(String name, float v0){
+			if(shader == 0)
+				return;
+			GL20.glUniform1f(GL20.glGetUniformLocation(shader, name), v0);
+		}
+		
+		public void uniform1i(String name, int v0){
+			if(shader == 0)
+				return;
+			GL20.glUniform1i(GL20.glGetUniformLocation(shader, name), v0);
+		}
+		
+		public void uniform3f(String name, float v0, float v1, float v2){
+			if(shader == 0)
+				return;
+			GL20.glUniform3f(GL20.glGetUniformLocation(shader, name), v0, v1, v2);
 		}
 		
 		public static interface Uniform {

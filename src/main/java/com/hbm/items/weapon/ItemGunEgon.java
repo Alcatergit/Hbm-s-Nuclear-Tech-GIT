@@ -59,13 +59,15 @@ public class ItemGunEgon extends ItemGunBase {
 	@SideOnly(Side.CLIENT)
 	protected void updateClient(ItemStack stack, World world, EntityPlayer player, int slot, EnumHand hand) {
 		super.updateClient(stack, world, player, slot, hand);
+		if(hand == EnumHand.OFF_HAND)
+			return;
 		if(player == Minecraft.getMinecraft().player){
 			if(m1 && Library.countInventoryItem(player.inventory, getBeltType(player, stack, true)) >= 2){
 				activeTicks = Math.min(activeTicks + 1, 5);
 				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+1);
 				Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 				RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
-				if(r != null && r.hitVec != null){
+				if(r != null && r.hitVec != null && r.typeOfHit != Type.MISS && r.sideHit != null){
 					Vec3i norm = r.sideHit.getDirectionVec();
 					Vec3d pos = r.hitVec.addVector(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
 					ParticleGluonFlare flare = new ParticleGluonFlare(world, pos.x, pos.y, pos.z, player);
@@ -121,6 +123,8 @@ public class ItemGunEgon extends ItemGunBase {
 	@Override
 	protected void updateServer(ItemStack stack, World world, EntityPlayer player, int slot, EnumHand hand) {
 		super.updateServer(stack, world, player, slot, hand);
+		if(hand == EnumHand.OFF_HAND)
+			return;
 		if(getIsMouseDown(stack) && Library.countInventoryItem(player.inventory, getBeltType(player, stack, true)) >= 2){
 			setIsFiring(stack, true);
 			if(world.getWorldTime() % 5 == 0){
@@ -173,6 +177,8 @@ public class ItemGunEgon extends ItemGunBase {
 	}
 	
 	public static float getFirstPersonAnimFade(EntityPlayer ent){
+		if(ent.getHeldItemMainhand().getItem() != ModItems.gun_egon)
+			return 0;
 		return MathHelper.clamp((m1 && Library.countInventoryItem(ent.inventory, getBeltType(ent, ent.getHeldItemMainhand(), true)) >= 2 ? activeTicks + MainRegistry.proxy.partialTicks() : activeTicks - MainRegistry.proxy.partialTicks() )/5F, 0, 1);
 	}
 	

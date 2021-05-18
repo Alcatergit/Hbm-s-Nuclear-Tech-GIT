@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -95,7 +96,7 @@ public class ParticleGluonFlare extends Particle {
 			Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
         	RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, partialTicks);
         	Vec3d pos = null;
-			if(r != null && r.hitVec != null){
+			if(r != null && r.hitVec != null && r.typeOfHit != Type.MISS && r.sideHit != null){
 				Vec3i norm = r.sideHit.getDirectionVec();
 				pos = r.hitVec.addVector(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
 			} else {

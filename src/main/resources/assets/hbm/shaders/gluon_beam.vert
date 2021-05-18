@@ -13,10 +13,10 @@ out vec2 texCoord;
 
 vec4 getPos(float x, vec2 tex){
 	//return vec4(x, sin(tex.s*15)*3, 0, gl_Vertex.w);
-	vec2 texCoord1 = vec2(x/16F-time*0.7, 0.5-time*0.4);
-	vec2 texCoord1_1 = vec2(x/16F-time*0.7, 0.9-time*0.05);
-	vec2 texCoord2 = vec2(x/12F-time*0.8, 0.2-time*0.6);
-	vec2 texCoord3 = vec2(tex.s/8F-time*0.05, 0.2-time*0.3);
+	vec2 texCoord1 = vec2(x/16.0-time*0.7, 0.5-time*0.4);
+	vec2 texCoord1_1 = vec2(x/16.0-time*0.7, 0.9-time*0.05);
+	vec2 texCoord2 = vec2(x/12.0-time*0.8, 0.2-time*0.6);
+	vec2 texCoord3 = vec2(tex.s/8.0-time*0.05, 0.2-time*0.3);
 	vec4 sample_1 = (textureLod(noise_1, texCoord1, 0)*2-1)*clamp(pow(textureLod(noise_1, texCoord1_1, 0).b, 8)*12, 0, 0.4);
 	vec4 sample_2 = textureLod(noise_1, texCoord2, 0);
 	vec4 sample_3 = (smoothstep(0, 1, textureLod(noise_1, texCoord3, 0))-0.5)*0.4;

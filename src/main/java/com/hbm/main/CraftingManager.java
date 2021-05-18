@@ -2069,11 +2069,12 @@ public class CraftingManager {
 	public static ResourceLocation getRecipeName(ItemStack output){
 		ResourceLocation loc = new ResourceLocation(RefStrings.MODID, output.getItem().getRegistryName().getResourcePath());
 		int i = 0;
-		while(net.minecraft.item.crafting.CraftingManager.REGISTRY.containsKey(loc)){
+		ResourceLocation r_loc = loc;
+		while(net.minecraft.item.crafting.CraftingManager.REGISTRY.containsKey(r_loc)){
 			i++;
-			loc = new ResourceLocation(RefStrings.MODID, loc.getResourcePath() + "_" + i);
+			r_loc = new ResourceLocation(RefStrings.MODID, loc.getResourcePath() + "_" + i);
 		}
-		return loc;
+		return r_loc;
 	}
 	
 	public static NonNullList<Ingredient> buildInput(Object[] args){

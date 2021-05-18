@@ -396,6 +396,8 @@ public class FFUtils {
 		FluidStack fluid = FluidUtil.getFluidContained(stack);
 		if(stack.getItem() == ModItems.fluid_barrel_infinite)
 			return true;
+		if(fluid == null)
+			return false;
 		if(fluidRestrictor.apply(fluid))
 			return true;
 		
@@ -432,16 +434,18 @@ public class FFUtils {
 			IFluidHandlerItem ifhi = FluidUtil.getFluidHandler(slots.getStackInSlot(slot1));
 			FluidStack stack = FluidUtil.getFluidContained(slots.getStackInSlot(slot1));
 			if(stack != null && ifhi.fill(tank.getFluid(), false) <= 0) {
-				moveItems(slots, slot1, slot2, true);
+				moveItems(slots, slot1, slot2, false);
 				return false;
 			}
 			if(stack == null || stack.getFluid() == tank.getFluid().getFluid()) {
 				tank.drain(ifhi.fill(new FluidStack(tank.getFluid(), Math.min(6000, tank.getFluidAmount())), true), true);
 				returnValue = true;
 			}
+			slots.setStackInSlot(slot1, ifhi.getContainer());
 			stack = FluidUtil.getFluidContained(slots.getStackInSlot(slot1));
+			System.out.println(stack + " " + ifhi.drain(Integer.MAX_VALUE, false));
 			if(stack != null && ifhi.fill(new FluidStack(stack.getFluid(), Integer.MAX_VALUE), false) <= 0) {
-				moveItems(slots, slot1, slot2, true);
+				moveItems(slots, slot1, slot2, false);
 			}
 			return returnValue;
 		}

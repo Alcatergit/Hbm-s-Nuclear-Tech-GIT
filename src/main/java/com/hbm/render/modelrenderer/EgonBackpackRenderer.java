@@ -22,7 +22,9 @@ public class EgonBackpackRenderer extends ModelRenderer {
 			return;
 		GL11.glPushMatrix();
 		//Oh neat, bob made the model so it would fit perfectly without screwing around with mostly right translations.
+		GL11.glTranslated(0, 0.75F, 0);
 		GL11.glScaled(0.0625, 0.0625, 0.0625);
+		GL11.glRotated(180, 0, 0, 1);
 		GL11.glRotated(90, 0, 1, 0);
 		int tex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.egon_backpack_tex);

@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.weapon.ItemGunGauss;
 import com.hbm.main.ResourceManager;
-import com.hbm.particle.ParticleCustomMatrix;
+import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleTauMuzzleLightning extends ParticleCustomMatrix {
+public class ParticleTauMuzzleLightning extends ParticleFirstPerson {
 
 	float randU;
 	int nextPositionTime;
@@ -115,5 +115,9 @@ public class ParticleTauMuzzleLightning extends ParticleCustomMatrix {
 		GlStateManager.enableLighting();
 	}
 
+	@Override
+	public ParticleType getType() {
+		return ParticleType.TAU;
+	}
 	
 }

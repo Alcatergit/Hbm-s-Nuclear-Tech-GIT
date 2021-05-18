@@ -446,12 +446,13 @@ public class MainRegistry {
 				f.set(SharedMonsterAttributes.MAX_HEALTH, Integer.MAX_VALUE);
 			} catch(Exception e){}
 
+		reloadConfig();
+		
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
 		PacketDispatcher.registerPackets();
 
-		reloadConfig();
 		HbmPotion.init();
 
 		CapabilityManager.INSTANCE.register(RadiationCapability.IEntityRadioactive.class, new RadiationCapability.EntityRadioactiveStorage(), RadiationCapability.EntityRadioactive.FACTORY);

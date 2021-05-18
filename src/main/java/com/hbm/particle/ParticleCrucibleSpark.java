@@ -20,7 +20,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleCrucibleSpark extends Particle {
+public class ParticleCrucibleSpark extends ParticleFirstPerson {
 
 	public float stretch;
 	public int timeUntilChange = 0;
@@ -131,6 +131,11 @@ public class ParticleCrucibleSpark extends Particle {
         }
         Tessellator.getInstance().draw();
        
+	}
+	
+	@Override
+	public ParticleType getType() {
+		return ParticleType.CRUCIBLE;
 	}
 
 	

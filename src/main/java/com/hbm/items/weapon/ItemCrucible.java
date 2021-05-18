@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IPostRender;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.ModEventHandlerClient;
@@ -101,7 +102,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 				flag = true;
 			}
 		}
-		if(flag && w.rand.nextInt(20) == 0){
+		if(flag && w.rand.nextInt(20) == 0 && GeneralConfig.useShaders2){
 			ModEventHandlerClient.firstPersonAuxParticles.add(new ParticleCrucibleLightning(w, 0, (w.rand.nextFloat()-0.5F)*0.2F, 0.7F-w.rand.nextFloat()*0.25F).lifetime(10));
 		}
 	}

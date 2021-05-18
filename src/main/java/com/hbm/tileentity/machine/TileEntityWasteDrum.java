@@ -16,8 +16,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityWasteDrum extends TileEntityMachineBase implements ITickable {
 
-	public ItemStackHandler inventory;
-	
 	private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 	
 	public boolean lock = false;

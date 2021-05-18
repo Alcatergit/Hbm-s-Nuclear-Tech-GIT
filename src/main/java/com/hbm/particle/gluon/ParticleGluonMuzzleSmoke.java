@@ -1,19 +1,16 @@
 package com.hbm.particle.gluon;
 
-import org.lwjgl.opengl.GL11;
-
+import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ParticleGluonMuzzleSmoke extends Particle {
+public class ParticleGluonMuzzleSmoke extends ParticleFirstPerson {
 
 	public int type;
 	public ResourceLocation tex;
@@ -101,6 +98,11 @@ public class ParticleGluonMuzzleSmoke extends Particle {
         }
 	
       //  GL11.glPopMatrix();
+	}
+	
+	@Override
+	public ParticleType getType() {
+		return ParticleType.GLUON;
 	}
 
 }

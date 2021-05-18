@@ -15,7 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticleCrucibleLightning extends Particle {
+public class ParticleCrucibleLightning extends ParticleFirstPerson {
 
 	public LightningNode node;
 	
@@ -62,6 +62,11 @@ public class ParticleCrucibleLightning extends Particle {
 		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.crucible_lightning.getShaderId(), "time"), (particleAge/2)*2/*+partialTicks*/);
 		LightningGenerator.render(node, ItemRenderCrucible.playerPos, 0.0015F, 0, 0, 0, true, null);
 		HbmShaderManager2.releaseShader();
+	}
+	
+	@Override
+	public ParticleType getType() {
+		return ParticleType.CRUCIBLE;
 	}
 
 }

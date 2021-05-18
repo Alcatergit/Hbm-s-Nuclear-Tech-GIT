@@ -102,19 +102,17 @@ public class ContainerArmorTable extends Container {
 			var3 = var5.copy();
 
 			if(par2 <= 8) {
+				ItemStack copy = var5.copy();
 				if(!this.mergeItemStack(var5, 9, this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				} else {
-					var4.onTake(p_82846_1_, var5);
+					var4.onTake(p_82846_1_, copy);
 				}
 			} else {
-				
 				if(var5.getItem() instanceof ItemArmor) {
 					if(!this.mergeItemStack(var5, 8, 9, false))
 						return ItemStack.EMPTY;
-					
 				} else if(this.inventorySlots.get(8) != null && var5.getItem() instanceof ItemArmorMod) {
-					
 					ItemArmorMod mod = (ItemArmorMod)var5.getItem();
 					int slot = mod.type;
 					

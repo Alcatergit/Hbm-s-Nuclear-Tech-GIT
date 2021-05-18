@@ -1868,7 +1868,7 @@ item.gun_defabricator.name=Defabricator
 item.gun_dampfmaschine.name=Totally Not a Joke Weapon
 item.gun_folly.name=Prototype Digamma "Folly"
 item.gun_vortex.name=Vortex
-item.cc_plasma_gun.name=CC Plasma Gun
+item.cc_plasma_gun.name=[WIP] CC Plasma Gun
 item.gun_egon.name=Gluon Gun
 
 item.nossy_hat.name=Fabulous Hat
