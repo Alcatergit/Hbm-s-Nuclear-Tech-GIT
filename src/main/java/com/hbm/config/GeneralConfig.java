@@ -1,10 +1,13 @@
 package com.hbm.config;
 
+import java.util.Locale;
+
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GLContext;
 
 import com.hbm.main.MainRegistry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -58,6 +61,8 @@ public class GeneralConfig {
 	public static int flowingDecalAmountMax = 20;
 	public static boolean bloodFX = true;
 	
+	public static boolean disableShadersMac = true;
+	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
 		enableDebugMode = config.get(CATEGORY_GENERAL, "1.00_enableDebugMode", false).getBoolean(false);
@@ -104,6 +109,7 @@ public class GeneralConfig {
 		flashlightVolumetric = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_flashlight_volumetrics", "Enables volumetric lighting for directional lights", true);
 		bulletHoleNormalMapping = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_bullet_hole_normal_mapping", "Enables normal mapping on bullet holes, which can improve visuals", true);
 		flowingDecalAmountMax = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.25_flowing_decal_max", "The maximum number of 'flowing' decals that can exist at once (eg blood that can flow down walls)", 20);
+		disableShadersMac  = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.25_disable_shader_mac", "Automatically disables shaders on macs", true);
 		
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
@@ -125,11 +131,15 @@ public class GeneralConfig {
 		
 		bloodFX = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.32_enable_blood_effects", "Enables the over-the-top blood visual effects for some weapons", true);
 	
-		
-		if(((instancedParticles || depthEffects || flowingDecalAmountMax > 0 || bloodFX) && !MainRegistry.proxy.opengl33()) || !useShaders2){
+		String s = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+		boolean mac = disableShadersMac && s.contains("mac");
+		if(((instancedParticles || depthEffects || flowingDecalAmountMax > 0 || bloodFX) && !MainRegistry.proxy.opengl33()) || !useShaders2 || mac){
 			MainRegistry.logger.error("Warning - Open GL 3.3 not supported! Disabling 3.3 effects...");
 			if(!useShaders2){
 				MainRegistry.logger.error("Shader effects manually disabled");
+			}
+			if(mac){
+				MainRegistry.logger.error("Shader effects automatically disabled - we're running on a mac.");
 			}
 			instancedParticles = false;
 			depthEffects = false;

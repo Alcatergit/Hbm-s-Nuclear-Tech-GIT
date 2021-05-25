@@ -66,14 +66,11 @@ public class SatelliteSavedData extends WorldSavedData {
 	}
 	
 	public static SatelliteSavedData getData(World worldObj) {
-
 		SatelliteSavedData data = (SatelliteSavedData)worldObj.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 	    if(data == null) {
 	        worldObj.getPerWorldStorage().setData("satellites", new SatelliteSavedData());
-	        
 	        data = (SatelliteSavedData)worldObj.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 	    }
-	    
 	    return data;
 	}
 }

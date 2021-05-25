@@ -1554,14 +1554,6 @@ public class ModEventHandlerClient {
 		NetworkPlayerInfo info = Minecraft.getMinecraft().getConnection().getPlayerInfo(player.getUniqueID());
 		if(cloak != null)
 			RenderAccessoryUtility.loadCape(info, cloak);
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
-			for(ModelRenderer r : evt.getRenderer().getMainModel().bipedBody.childModels){
-				if(r instanceof EgonBackpackRenderer){
-					r.showModel = true;
-					break;
-				}
-			}
-		}
 	}
 
 	@SubscribeEvent
@@ -1584,6 +1576,31 @@ public class ModEventHandlerClient {
 			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
+			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+				for(ModelRenderer r : renderer.bipedBody.childModels){
+					if(r instanceof EgonBackpackRenderer){
+						r.showModel = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void postRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event){
+		if(event.getEntity() instanceof AbstractClientPlayer &&event.getRenderer().getMainModel() instanceof ModelBiped){
+			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
+			ModelBiped renderer = (ModelBiped) event.getRenderer().getMainModel();
+			
+			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+				for(ModelRenderer r : renderer.bipedBody.childModels){
+					if(r instanceof EgonBackpackRenderer){
+						r.showModel = false;
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -1591,14 +1608,6 @@ public class ModEventHandlerClient {
 	public void postRenderPlayer(RenderPlayerEvent.Post event) {
 		JetpackHandler.postRenderPlayer(event.getEntityPlayer());
 		EntityPlayer player = event.getEntityPlayer();
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
-			for(ModelRenderer r : event.getRenderer().getMainModel().bipedBody.childModels){
-				if(r instanceof EgonBackpackRenderer){
-					r.showModel = false;
-					break;
-				}
-			}
-		}
 		//GLUON GUN//
 		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){

@@ -393,17 +393,14 @@ public class FFUtils {
 	
 	//Jesus H. Christ I hate this class
 	public static boolean checkRestrictions(ItemStack stack, Predicate<FluidStack> fluidRestrictor) {
-		FluidStack fluid = FluidUtil.getFluidContained(stack);
 		if(stack.getItem() == ModItems.fluid_barrel_infinite)
 			return true;
-		if(fluid == null)
-			return false;
-		if(fluidRestrictor.apply(fluid))
+		FluidStack fluid = FluidUtil.getFluidContained(stack);
+		if(fluid != null && fluidRestrictor.apply(fluid))
 			return true;
-		
 		if(FluidContainerRegistry.hasFluid(stack.getItem())){
 			fluid = FluidContainerRegistry.getFluidFromItem(stack.getItem());
-			if(fluidRestrictor.apply(fluid))
+			if(fluid != null && fluidRestrictor.apply(fluid))
 				return true;
 		}
 		return false;
