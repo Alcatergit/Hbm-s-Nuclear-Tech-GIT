@@ -1,53 +1,10 @@
-1.12.2 port of the HBM's Nuclear Tech mod for minecraft 1.7.10. If you've somehow found this page and want to try the latest version, put a comment here or message me on Discord (Discord username is Drillgon200#0288) and I'll make a build and upload it.
+This is my fork of Drillgon200's 1.12.2 port of HBM's Nuclear Tech mod for minecraft 1.7.10 that I will use to experiment on and port current 1.7.10 features to 1.12.2.
 
-# Hbm-s-Nuclear-Tech-GIT
+The latest version can be found on https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-reloaded
+
+# Original Mod
 
 https://minecraft.curseforge.com/projects/hbms-nuclear-tech-mod?gameCategorySlug=mc-mods&projectID=235439
-
-## Installation Instructions
-Tired of waiting until the next version comes out? Here is a tutorial on how to compile the very newest version yourself:
-1. Download the forge 1.12.2 latest mdk and put it in a new folder
-2. Extract the mdk
-3. Go into the extracted folder (you should see some gradle files) and open the terminal of your choice (terminal, cmd, powershell). On windows you can do this by shift right clicking in the folder and clicking either 'Open powershell window here' or a similar option for cmd
-4. Download the zip file of this repo and extract it somewhere
-5. Copy the com, cofh, and glmath folders to src/main/java (delete the example mod first). Copy assets, META_INF, hbm_at.cfg, mcmod.info, and pack.mcmeta to src/main/resources
-6. Edit build.gradle, change `modid` to `hbm` and `com.yourname.modid` to `com.hbm`.
-7. Scroll down in the build.gradle until you see the dependencies section, then paste this at the bottom of it
-```
-    // compile against the JEI API but do not include it at runtime
-    deobf "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-```
-8. Open gradle.properties and stick this at the bottom of it
-```
-mc_version=1.12.2
-jei_version=4.15.0.291
-```
-9. I have no idea what to do actually, and am still figuring out how to set up a new workspace myself.
-
-## Installation Instructions
-Tired of waiting until the next version comes out? Here is a tutorial on how to compile the very newest version yourself:
-1. Download minecraft forge 1.7.10 src
-2. Unpack it somewhere
-3. Go to the new folder and run `gradlew setupDecompWorkspace` on windows or `./gradlew setupDecompWorkspace` on linux
-4. Download the source and insert it into `src/main/java/`
-5. Open build.gradle with a text editor of your choice and write this into the dependencies brackets:
-```
-compile files('lib/CodeChickenCore-1.7.10-1.0.4.29-dev.jar')
-compile files('lib/CodeChickenLib-1.7.10-1.1.3.140-dev.jar')
-compile files('lib/NotEnoughItems-1.7.10-1.0.3.74-dev.jar')
-```
-6. Download these exact versions of NEI and it's core mods and insert them into the lib folder (if there is none, create one in the dev environment's main directory, I forgot)
-7. Open up the CMD in the main directory and run `gradlew build` on windows or `./gradlew build` on linux
-8. Head to `build/libs` and get the jar
-9. Open the jar with an archieve manager of your choice and insert the mod's asset folder into the jar's main directory
-10. The jar is now done, ready for use!
-
-If you want to do some changes in the code yourself, start here after 6. and continue with 7. once you are done:
-1) Get the IDE of your choice and prepare the workspace (for eclipse, it's `gradlew eclipse` or `./gradlew eclipse`, then use the eclipse folder as workspace directory in eclipse)
-2) Meddle with the code, you can run the code in the IDE (eclipse has a convenient green play button)
-3) Save changes, close the IDE and continue with 7. of the previous list
 
 
 This software is licensed under the GNU Public License version 3. In short: This software is free, you may run the software freely, create modified versions, distribute this software and distribute modified versions, as long as the modified software too has a free software license. You win this round, Stallman.
