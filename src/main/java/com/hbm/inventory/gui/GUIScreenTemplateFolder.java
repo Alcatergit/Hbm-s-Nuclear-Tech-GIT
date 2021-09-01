@@ -7,7 +7,6 @@ import java.util.List;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;

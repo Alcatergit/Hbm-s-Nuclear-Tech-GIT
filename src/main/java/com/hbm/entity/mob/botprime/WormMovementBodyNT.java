@@ -2,10 +2,7 @@ package com.hbm.entity.mob.botprime;
 
 import java.util.List;
 
-import com.hbm.entity.mob.sodtekhnologiyah.EntityWormBase;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 

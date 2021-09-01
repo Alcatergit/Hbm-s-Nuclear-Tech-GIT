@@ -150,7 +150,7 @@ public class ItemMultiDetonator extends Item {
 		stack.getTagCompound().setIntArray("zValues", ArrayUtils.add(zs, z));
 	}
 	
-	private static int[][] getLocations(ItemStack stack){
+	public static int[][] getLocations(ItemStack stack){
 		if(!stack.hasTagCompound())
 			return null;
 		int[] xs = stack.getTagCompound().getIntArray("xValues");

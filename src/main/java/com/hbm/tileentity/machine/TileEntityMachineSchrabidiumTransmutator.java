@@ -30,9 +30,9 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 
 	private AudioWrapper audio;
 	
-	//private static final int[] slots_top = new int[] { 0 };
-	//private static final int[] slots_bottom = new int[] { 1, 2 };
-	//private static final int[] slots_side = new int[] { 3, 2 };
+	private static final int[] slots_top = new int[] { 0 };
+	private static final int[] slots_bottom = new int[] { 1, 2 };
+	private static final int[] slots_side = new int[] { 3, 2 };
 
 	public TileEntityMachineSchrabidiumTransmutator() {
 		super(4);
@@ -60,6 +60,12 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			break;
 		}
 		return false;
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
 	}
 	
 	@Override
@@ -227,16 +233,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	@Override
 	public long getMaxPower() {
 		return maxPower;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
 	}
 
 }

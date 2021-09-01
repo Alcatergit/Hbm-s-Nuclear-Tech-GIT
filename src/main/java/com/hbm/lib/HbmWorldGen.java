@@ -391,80 +391,82 @@ public class HbmWorldGen implements IWorldGenerator {
 				int y = world.getHeight(x, z);
 
 				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)) {
-					world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
+					boolean set = world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
 
-					switch (rand.nextInt(10)) {
-					case 0:
-					case 1:
-					case 2:
-					case 3:
-						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(10),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(4) + 3);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
-						break;
-					case 4:
-					case 5:
-					case 6:
-						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(11),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 2);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
-						break;
-					case 7:
-					case 8:
-						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(12),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.02);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
-						break;
-					case 9:
-						WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(13),
-								(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(2) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.0);
-						((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
-						break;
+					if(set){
+						switch (rand.nextInt(10)) {
+						case 0:
+						case 1:
+						case 2:
+						case 3:
+							WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(10),
+									(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(4) + 3);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
+							break;
+						case 4:
+						case 5:
+						case 6:
+							WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(11),
+							(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 2);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
+							break;
+						case 7:
+						case 8:
+							WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(12),
+									(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(3) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.02);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
+							break;
+						case 9:
+							WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(13),
+									(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(2) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(0.0);
+							((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();
+							break;
+						}
+
+						if (GeneralConfig.enableDebugMode)
+							MainRegistry.logger.info("[Debug] Successfully spawned safe at " + x + " " + (y + 1) + " " + z);
 					}
-
-					if (GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned safe at " + x + " " + (y + 1) + " " + z);
 				}
+			}
+			
+			if (WorldConfig.meteorStructure > 0 && rand.nextInt(WorldConfig.meteorStructure) == 0) {
+				int x = i + rand.nextInt(16);
+				int z = j + rand.nextInt(16);
 				
-				if (WorldConfig.meteorStructure > 0 && rand.nextInt(WorldConfig.meteorStructure) == 0) {
-					int x1 = i + rand.nextInt(16);
-					int z1 = j + rand.nextInt(16);
-					
-					CellularDungeonFactory.meteor.generate(world, x, 10, z, rand);
-					
-					if(GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at " + x + " 10 " + z);
-					
-					int y1 = world.getHeight(x, z);
-					
-					for(int f = 0; f < 3; f++)
-						world.setBlockState(new BlockPos(x1, y1 + f, z1), ModBlocks.meteor_pillar.getDefaultState());
-					world.setBlockState(new BlockPos(x1, y1 + 3, z1), ModBlocks.meteor_brick_chiseled.getDefaultState());
-					
-					for(int f = 0; f < 10; f++) {
+				CellularDungeonFactory.meteor.generate(world, x, 10, z, rand);
+				
+				if(GeneralConfig.enableDebugMode)
+					MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at " + x + " 10 " + z);
+				
+				int y = world.getHeight(x, z);
+				
+				for(int f = 0; f < 3; f++)
+					world.setBlockState(new BlockPos(x, y + f, z), ModBlocks.meteor_pillar.getDefaultState());
+				world.setBlockState(new BlockPos(x, y + 3, z), ModBlocks.meteor_brick_chiseled.getDefaultState());
+				
+				for(int f = 0; f < 10; f++) {
 
-						x1 = i + rand.nextInt(65) - 32;
-						z1 = j + rand.nextInt(65) - 32;
-						y1 = world.getHeight(x1, z1);
-						
-						if(world.getBlockState(new BlockPos(x1, y1, z1)).isSideSolid(world, new BlockPos(x1, y1, z1), EnumFacing.UP)) {
-							world.setBlockState(new BlockPos(x1, y1 - 1, z1), Blocks.SKULL.getDefaultState().withProperty(BlockSkull.FACING, EnumFacing.UP), 2);
-							TileEntitySkull skull = (TileEntitySkull)world.getTileEntity(new BlockPos(x1, y1 - 1, z1));
+					x = i + rand.nextInt(65) - 32;
+					z = j + rand.nextInt(65) - 32;
+					y = world.getHeight(x, z);
+					
+					if(world.getBlockState(new BlockPos(x, y, z)).isSideSolid(world, new BlockPos(x, y, z), EnumFacing.UP)) {
+						if(world.setBlockState(new BlockPos(x, y - 1, z), Blocks.SKULL.getDefaultState().withProperty(BlockSkull.FACING, EnumFacing.UP), 2)){
+							TileEntitySkull skull = (TileEntitySkull)world.getTileEntity(new BlockPos(x, y - 1, z));
 							
 							if(skull != null)
 								skull.setType(rand.nextInt(16));
 						}
 					}
 				}
-
 			}
 			
 			if((biome == Biomes.JUNGLE || biome == Biomes.JUNGLE_EDGE || biome == Biomes.JUNGLE_HILLS) &&

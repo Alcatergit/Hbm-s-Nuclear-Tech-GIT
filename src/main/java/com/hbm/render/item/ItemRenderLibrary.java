@@ -5,8 +5,6 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.animloader.AnimationWrapper;
-import com.hbm.animloader.AnimationWrapper.EndResult;
-import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;

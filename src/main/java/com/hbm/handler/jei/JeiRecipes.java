@@ -276,29 +276,23 @@ public class JeiRecipes {
 	public static class AssemblerRecipeWrapper implements IRecipeWrapper {
 
 		ItemStack output;
-		List<ItemStack> inputs;
+		List<List<ItemStack>> inputs;
 		int time;
-		
-		public AssemblerRecipeWrapper(ItemStack output, List<ItemStack> inputs, int time) {
-			this.output = output;
-			this.inputs = inputs;
-			this.time = time;
-		}
 		
 		public AssemblerRecipeWrapper(ItemStack output, AStack[] inputs, int time) {
 			this.output = output;
-			List<ItemStack> list = new ArrayList<>(inputs.length);
+			List<List<ItemStack>> list = new ArrayList<>(inputs.length);
 			for(AStack s : inputs)
-				list.add(s.getStack());
+				list.add(s.getStackList());
 			this.inputs = list;
 			this.time = time;
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			List<ItemStack> in = Library.copyItemStackList(inputs);
+			List<List<ItemStack>> in = Library.copyItemStackListList(inputs);
 			while(in.size() < 12)
-				in.add(new ItemStack(ModItems.nothing));
+				in.add(Arrays.asList(new ItemStack(ModItems.nothing)));
 			int index = -1;
 			for(int i = 0; i < AssemblerRecipes.recipeList.size(); i++){
 				if(AssemblerRecipes.recipeList.get(i).isApplicable(output)){
@@ -307,11 +301,11 @@ public class JeiRecipes {
 				}
 			}
 			if(index >= 0)
-				in.add(ItemAssemblyTemplate.getTemplate(index));
+				in.add(Arrays.asList(ItemAssemblyTemplate.getTemplate(index)));
 			else {
-				in.add(new ItemStack(ModItems.nothing));
+				in.add(Arrays.asList(new ItemStack(ModItems.nothing)));
 			}
-			ingredients.setInputs(VanillaTypes.ITEM, in);
+			ingredients.setInputLists(VanillaTypes.ITEM, in);
 			ingredients.setOutput(VanillaTypes.ITEM, output.copy());
 		}
 		

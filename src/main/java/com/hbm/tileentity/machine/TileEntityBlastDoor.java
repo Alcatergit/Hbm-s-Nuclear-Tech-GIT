@@ -1,7 +1,14 @@
 package com.hbm.tileentity.machine;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.DummyBlockBlast;
+import com.hbm.inventory.control_panel.ControlEvent;
+import com.hbm.inventory.control_panel.ControlEventSystem;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEVaultPacket;
@@ -17,7 +24,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityBlastDoor extends TileEntityLockableBase implements ITickable {
+public class TileEntityBlastDoor extends TileEntityLockableBase implements ITickable, IControllable {
 
 	public boolean isOpening = false;
 	//0: closed, 1: opening/closing, 2:open
@@ -28,7 +35,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos, pos.up(6));
+		return new AxisAlignedBB(pos, pos.up(6).add(1, 1, 1)).grow(0.25F);
 	}
 	
 	@Override
@@ -110,14 +117,14 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			isOpening = true;
 			state = 1;
-
+			broadcastControlEvt();
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 0.5F, 0.75F);
 		}
 	}
 	
 	public void finishOpen() {
 		state = 2;
-
+		broadcastControlEvt();
 		this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 0.5F,
 				1.0F);
 	}
@@ -125,17 +132,22 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public void close() {
 		if(state == 2) {
 	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
-			isOpening = false;
+			
+	    	isOpening = false;
 			state = 1;
-
+			broadcastControlEvt();
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 0.5F, 0.75F);
 		}
 	}
 	
 	public void finishClose() {
 		state = 0;
-
+		broadcastControlEvt();
 		this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStop, SoundCategory.BLOCKS, 0.5F, 1.0F);
+	}
+	
+	public void broadcastControlEvt(){
+		ControlEventSystem.get(world).broadcastToSubscribed(this, ControlEvent.newEvent("door_open_state").setVar("state", new DataValueFloat(state)));
 	}
 	
 	public void openNeigh() {
@@ -277,7 +289,6 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	}
 	
 	public void tryToggle() {
-
 		if(canOpen()) {
 			open();
 			openNeigh();
@@ -331,6 +342,35 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		compound.setInteger("timer", timer);
 		compound.setBoolean("redstoned", redstoned);
 		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public void receiveEvent(BlockPos from, ControlEvent e){
+		if(e.name.equals("toggle")){
+			tryToggle();
+		}
+	}
+	
+	@Override
+	public List<String> getInEvents(){
+		return Arrays.asList("door_toggle");
+	}
+	
+	@Override
+	public List<String> getOutEvents(){
+		return Arrays.asList("door_open_state");
+	}
+	
+	@Override
+	public void validate(){
+		super.validate();
+		ControlEventSystem.get(world).addControllable(this);
+	}
+	
+	@Override
+	public void invalidate(){
+		super.invalidate();
+		ControlEventSystem.get(world).removeControllable(this);
 	}
 	
 }

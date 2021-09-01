@@ -1,4 +1,4 @@
-#version 130
+#version 120
 
 varying vec2 texCoord;
 varying vec2 blurTexCoords[11];

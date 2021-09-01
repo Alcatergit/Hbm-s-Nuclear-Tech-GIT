@@ -2,8 +2,6 @@ package com.hbm.inventory.gui;
 
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerHadron;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;

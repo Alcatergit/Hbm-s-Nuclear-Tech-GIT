@@ -401,7 +401,7 @@ public class Silo extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 7, y + -20, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + -20, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 9, y + -20, z + 10), Block2.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 10, y + -20, z + 10), Blocks.UNPOWERED_REPEATER.getDefaultState().withProperty(BlockRedstoneRepeater.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 10, y + -20, z + 10), Blocks.UNPOWERED_REPEATER.getDefaultState().withProperty(BlockRedstoneRepeater.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 11, y + -20, z + 10), Blocks.REDSTONE_WIRE.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 12, y + -20, z + 10), Blocks.REDSTONE_WIRE.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 13, y + -20, z + 10), Blocks.IRON_BARS.getDefaultState(), 3);

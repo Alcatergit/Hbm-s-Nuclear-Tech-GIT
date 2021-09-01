@@ -1,9 +1,10 @@
 package com.hbm.particle.bullet_hit;
 
+import java.nio.IntBuffer;
+
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -13,24 +14,22 @@ import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleLayerBase;
 import com.hbm.particle.ParticleRenderLayer;
+import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.util.BobMathUtil;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -64,21 +63,6 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 			vertices[2] = new Vec3d(0.5, 0, 0.5);
 			vertices[3] = new Vec3d(-0.5, 0, 0.5);
 			vbo = BakedModelUtil.generateDecalMesh(worldIn, normal.scale(-1), scale, (float)posX, (float)posY, (float)posZ, DecalType.VBO);
-			BlockPos pos = new BlockPos(posX-normal.x*0.2F, posY-normal.y*0.2F, posZ-normal.z*0.2F);
-			IBlockState state = world.getBlockState(pos);
-			/*if(state != null){
-				vbo[0] = GL11.glGenLists(1);
-				GL11.glNewList(vbo[0], GL11.GL_COMPILE);
-				Tessellator tes = Tessellator.getInstance();
-				BufferBuilder buf = tes.getBuffer();
-				buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-				IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
-				Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelSmooth(world, model, state, pos, buf, true, MathHelper.getPositionRandom(pos));
-				tes.draw();
-				GL11.glEndList();
-			} else {
-				vbo = null;
-			}*/
 		} else {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
@@ -131,7 +115,7 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 	
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		if(vbo == null)
+		if(GeneralConfig.bulletHoleNormalMapping && vbo == null)
 			return;
 		float fade = 1-MathHelper.clamp((particleAge+partialTicks)-(particleMaxAge-10), 0, 10)*0.1F;
 		this.particleAlpha = fade;
@@ -156,13 +140,14 @@ public class ParticleBulletImpact extends ParticleLayerBase {
         if(GeneralConfig.bulletHoleNormalMapping){
         	GL11.glPushMatrix();
         	GL11.glTranslated(f5, f6, f7);
-        	GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo[0]);
+        	GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, vbo[0]);
         	BakedModelUtil.enableBlockShaderVBOs();
         	GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vbo[1]);
         	BakedModelUtil.disableBlockShaderVBOs();
         	//GL11.glCallList(vbo[0]);
         	GL11.glPopMatrix();
         } else {
+        	scale *= 2;
         	buffer.pos(vertices[0].x*scale+f5, vertices[0].y*scale+f6, vertices[0].z*scale+f7).tex(0, 0).color(particleRed, particleGreen, particleBlue, particleAlpha).lightmap(j, k).endVertex();
             buffer.pos(vertices[1].x*scale+f5, vertices[1].y*scale+f6, vertices[1].z*scale+f7).tex(1, 0).color(particleRed, particleGreen, particleBlue, particleAlpha).lightmap(j, k).endVertex();
             buffer.pos(vertices[2].x*scale+f5, vertices[2].y*scale+f6, vertices[2].z*scale+f7).tex(1, 1).color(particleRed, particleGreen, particleBlue, particleAlpha).lightmap(j, k).endVertex();
@@ -197,16 +182,17 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 			if(GeneralConfig.bulletHoleNormalMapping){
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				ResourceManager.bimpact.use();
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.bullet_impact_normal);
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE4);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+4);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.bullet_impact_occlusion);
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE5);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+5);
 				GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-				GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.bimpact.getShaderId(), "normalMap"), 3);
-				GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.bimpact.getShaderId(), "occlusionMap"), 4);
-				GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.bimpact.getShaderId(), "depthBuffer"), 5);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
+				System.out.println(GL20.glGetAttribLocation(ResourceManager.bimpact.getShaderId(), "tex"));
+				ResourceManager.bimpact.uniform1i("normalMap", 3);
+				ResourceManager.bimpact.uniform1i("occlusionMap", 4);
+				ResourceManager.bimpact.uniform1i("depthBuffer", 5);
 			} else {
 				Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 			}
@@ -216,7 +202,7 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 		public void postRender() {
 			if(GeneralConfig.bulletHoleNormalMapping){
 				HbmShaderManager2.releaseShader();
-				GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+				GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 			} else {
 				Tessellator.getInstance().draw();
 			}

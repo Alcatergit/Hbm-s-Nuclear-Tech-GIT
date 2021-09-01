@@ -97,4 +97,24 @@ public class WavefrontObjCalllist implements IModelCustom {
 			}
 		}
 	}
+
+	@Override
+	public void tessellateAll(Tessellator tes){
+		throw new RuntimeException("Tessellate operation not supported on display list object");
+	}
+
+	@Override
+	public void tessellatePart(Tessellator tes, String name){
+		throw new RuntimeException("Tessellate operation not supported on display list object");
+	}
+
+	@Override
+	public void tessellateOnly(Tessellator tes, String... names){
+		throw new RuntimeException("Tessellate operation not supported on display list object");
+	}
+
+	@Override
+	public void tessellateAllExcept(Tessellator tes, String... excluded){
+		throw new RuntimeException("Tessellate operation not supported on display list object");
+	}
 }

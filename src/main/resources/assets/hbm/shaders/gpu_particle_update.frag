@@ -1,4 +1,5 @@
-#version 330 core
+#version 120
+#extension GL_EXT_gpu_shader4 : enable
 
 //Contains position and color
 uniform sampler2D particleData0;
@@ -7,7 +8,7 @@ uniform sampler2D particleData1;
 //Contains age, max age, and particle id
 uniform sampler2D particleData2;
 
-in vec2 texCoord;
+varying vec2 texCoord;
 
 vec4 colorFromFloat(float f){
 	int argb = int(f*2147483647);

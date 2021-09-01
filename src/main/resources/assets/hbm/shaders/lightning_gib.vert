@@ -1,8 +1,8 @@
-#version 330 compatibility
+#version 120
 
-out vec2 texCoord;
-out vec2 lightmapTexCoord;
-out vec3 lightSum;
+varying vec2 texCoord;
+varying vec2 lightmapTexCoord;
+varying vec3 lightSum;
 
 void main(){
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;

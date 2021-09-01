@@ -62,7 +62,7 @@ public class ContainerCrystallizer extends Container {
 				if (!this.mergeItemStack(var5, 0, 2, false))
 					if (!this.mergeItemStack(var5, 3, 4, false))
 						if (!this.mergeItemStack(var5, 5, 7, false))
-							return null;
+							return ItemStack.EMPTY;
 			}
 			
 			if (var5.isEmpty())

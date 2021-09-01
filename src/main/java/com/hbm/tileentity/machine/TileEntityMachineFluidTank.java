@@ -3,12 +3,10 @@ package com.hbm.tileentity.machine;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.items.ModItems;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +23,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineFluidTank extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
@@ -34,6 +31,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	public short mode = 0;
 	public static final short modes = 4;
 	public int age = 0;
+	public static int[] slots = { 2 };
 	
 	public TileEntityMachineFluidTank() {
 		super(6);
@@ -56,6 +54,11 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		tank.writeToNBT(compound);
 		compound.setShort("mode", mode);
 		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return slots;
 	}
 	
 	@Override
@@ -193,9 +196,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);
@@ -204,9 +205,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return true;
 		} else {
 			return super.hasCapability(capability, facing);

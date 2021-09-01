@@ -1,9 +1,9 @@
-#version 330 compatibility
+#version 120
 
-out vec2 texCoord;
-out vec2 lightCoord;
-out vec4 color;
-out vec3 lighting;
+varying vec2 texCoord;
+varying vec2 lightCoord;
+varying vec4 color;
+varying vec3 lighting;
 
 void main(){
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;

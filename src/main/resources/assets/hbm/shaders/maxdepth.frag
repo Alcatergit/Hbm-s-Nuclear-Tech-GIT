@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 void main(){
 	gl_FragDepth = 0;

@@ -1,6 +1,6 @@
-#version 330 compatibility
+#version 120
 
-out vec2 texCoord;
+varying vec2 texCoord;
 
 void main(){
 	gl_FrontColor = gl_Color;

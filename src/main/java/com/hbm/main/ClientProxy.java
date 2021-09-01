@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
@@ -216,6 +217,7 @@ import com.hbm.particle_instanced.InstancedParticleRenderer;
 import com.hbm.particle_instanced.ParticleContrailInstanced;
 import com.hbm.particle_instanced.ParticleExSmokeInstanced;
 import com.hbm.particle_instanced.ParticleRocketFlameInstanced;
+import com.hbm.render.GLCompat;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.anim.BusAnimation;
@@ -464,6 +466,7 @@ import com.hbm.tileentity.machine.TileEntityBarrel;
 import com.hbm.tileentity.machine.TileEntityBlackBook;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
+import com.hbm.tileentity.machine.TileEntityControlPanel;
 import com.hbm.tileentity.machine.TileEntityCore;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreInjector;
@@ -722,6 +725,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineIGenerator.class, new RenderIGenerator());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiloHatch.class, new RenderSiloHatch());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpinnyLight.class, new RenderSpinnyLight());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityControlPanel.class, new RenderControlPanel());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -1823,6 +1827,16 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public boolean opengl33() {
 		return GLContext.getCapabilities().OpenGL33;
+	}
+	
+	@Override
+	public void checkGLCaps(){
+		GLCompat.error = GLCompat.init();
+		if(GLCompat.error.isEmpty()){
+			MainRegistry.logger.log(Level.INFO, "Advanced rendering fully supported");
+		} else {
+			MainRegistry.logger.log(Level.ERROR, "Advanced rendering not supported: " + GLCompat.error);
+		}
 	}
 	
 	@Override

@@ -926,6 +926,21 @@ public class Library {
 		return false;
 	}
 	
+	public static boolean hasInventoryOreDict(InventoryPlayer inventory, String name) {
+		int oreId = OreDictionary.getOreID(name);
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.isEmpty())
+				continue;
+			int[] ids = OreDictionary.getOreIDs(stack);
+			for(int id : ids){
+				if(id == oreId)
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	public static int countInventoryItem(InventoryPlayer inventory, Item ammo) {
 		int count = 0;
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -1139,6 +1154,16 @@ public class Library {
 	public static List<ItemStack> copyItemStackList(List<ItemStack> inputs) {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		inputs.forEach(stack -> {list.add(stack.copy());});
+		return list;
+	}
+	
+	public static List<List<ItemStack>> copyItemStackListList(List<List<ItemStack>> inputs) {
+		List<List<ItemStack>> list = new ArrayList<List<ItemStack>>(inputs.size());
+		inputs.forEach(list2 -> {
+			List<ItemStack> newList = new ArrayList<>(list2.size());
+			list2.forEach(stack -> {newList.add(stack.copy());});
+			list.add(newList);
+			});
 		return list;
 	}
 	

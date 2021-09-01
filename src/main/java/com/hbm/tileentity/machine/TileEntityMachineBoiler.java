@@ -9,12 +9,12 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -28,12 +28,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineBoiler extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineBoiler extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
 	public int burnTime;
 	public int heat = 2000;
@@ -41,39 +37,24 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	public int age = 0;
 	public FluidTank[] tanks;
 
-	//private static final int[] slots_top = new int[] { 4 };
-	//private static final int[] slots_bottom = new int[] { 6 };
-	//private static final int[] slots_side = new int[] { 4 };
-
-	private String customName;
+	private static final int[] slots_top = new int[] {4};
+	private static final int[] slots_bottom = new int[] {6};
+	private static final int[] slots_side = new int[] {4};
 
 	private boolean needsUpdate = false;
 
 	public TileEntityMachineBoiler() {
-		inventory = new ItemStackHandler(7){
-			@Override
-			protected void onContentsChanged(int slot) {
-				super.onContentsChanged(slot);
-				markDirty();
-			}
-		};
+		super(7);
 		tanks = new FluidTank[2];
 		tanks[0] = new FluidTank(8000);
 		tanks[1] = new FluidTank(8000);
 	}
 
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineBoiler";
+	@Override
+	public String getName(){
+		return "container.machineBoiler";
 	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-
+	
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if (world.getTileEntity(pos) != this) {
 			return false;
@@ -83,11 +64,32 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	}
 
 	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return false;
+	}
+	
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 4)
+			if(TileEntityFurnace.getItemBurnTime(stack) > 0)
+				return true;
+		return false;
+	}
+	
+	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		heat = nbt.getInteger("heat");
 		burnTime = nbt.getInteger("burnTime");
-		if (nbt.hasKey("inventory"))
-			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		if (nbt.hasKey("tanks"))
 			FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		super.readFromNBT(nbt);
@@ -97,7 +99,6 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("heat", heat);
 		nbt.setInteger("burnTime", burnTime);
-		nbt.setTag("inventory", inventory.serializeNBT());
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		return super.writeToNBT(nbt);
 	}
@@ -209,11 +210,9 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	}
 
 	protected boolean inputValidForTank(int tank, int slot) {
-
-		if (inventory.getStackInSlot(slot).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+		if(inventory.getStackInSlot(slot).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
 			return true;
 		}
-
 		return false;
 	}
 	
@@ -262,14 +261,12 @@ public class TileEntityMachineBoiler extends TileEntity implements ITickable, IF
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

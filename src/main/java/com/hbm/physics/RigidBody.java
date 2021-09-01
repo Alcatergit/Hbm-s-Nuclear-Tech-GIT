@@ -10,7 +10,6 @@ import javax.vecmath.Quat4f;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.flashlight.Vec3f;
 import com.hbm.main.ClientProxy;
 import com.hbm.physics.GJK.GJKInfo;
 import com.hbm.physics.GJK.Result;
@@ -21,7 +20,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

@@ -40,6 +40,8 @@ public class ServerProxy
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
 	
+	public void checkGLCaps(){};
+	
 	public File getDataDir(){
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
 	}

@@ -3,8 +3,6 @@ package com.hbm.particle_instanced;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ModEventHandlerClient;
 
 import net.minecraft.world.World;

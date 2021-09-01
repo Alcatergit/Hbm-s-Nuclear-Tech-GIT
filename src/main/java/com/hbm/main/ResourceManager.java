@@ -1,7 +1,5 @@
 package com.hbm.main;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -14,7 +12,7 @@ import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.LightRenderer;
+import com.hbm.render.GLCompat;
 import com.hbm.render.Vbo;
 import com.hbm.render.WavefrontObjCalllist;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
@@ -25,10 +23,8 @@ import com.hbm.util.KeypadClient;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class ResourceManager {
 
@@ -407,6 +403,14 @@ public class ResourceManager {
 	public static final IModelCustom gavel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/gavel.obj"));
 	public static final IModelCustom crucible = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/crucible.obj"));
 	
+	
+	//Control panel
+	public static final IModelCustom control_panel0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/control0.obj"));
+	public static final IModelCustom ctrl_button0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button0.obj"));
+	public static final ResourceLocation control_panel0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/control0.png");
+	public static final ResourceLocation ctrl_button0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0.png");
+	public static final ResourceLocation ctrl_button0_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0_gui.png");
+	
 	////Textures TEs
 
 	public static final ResourceLocation universal = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");
@@ -711,6 +715,8 @@ public class ResourceManager {
 	public static final ResourceLocation vortex_hit = new ResourceLocation(RefStrings.MODID, "textures/particle/vortex_hit.png");
 	public static final ResourceLocation vortex_beam2 = new ResourceLocation(RefStrings.MODID, "textures/particle/vortex_beam2.png");
 	public static final ResourceLocation vortex_flash = new ResourceLocation(RefStrings.MODID, "textures/particle/vortex_flash.png");
+	
+	public static final ResourceLocation white = new ResourceLocation(RefStrings.MODID, "textures/misc/white.png");
 	
 	//ChickenCom plasma gun
 	public static final ResourceLocation cc_plasma_cannon_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/cc_assault_rifle.png");
@@ -1096,35 +1102,42 @@ public class ResourceManager {
 	public static Animation hf_sword_equip;
 
 	//SHADERS
-	public static Shader lit_particles = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lit_particles"))
-			.withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, HbmShaderManager2.LIGHTMAP);
+	public static Shader lit_particles = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lit_particles"), shader -> {
+		GLCompat.bindAttribLocation(shader, 0, "pos");
+		GLCompat.bindAttribLocation(shader, 1, "offsetPos");
+		GLCompat.bindAttribLocation(shader, 2, "scale");
+		GLCompat.bindAttribLocation(shader, 3, "texData");
+		GLCompat.bindAttribLocation(shader, 4, "color");
+		GLCompat.bindAttribLocation(shader, 5, "lightmap");
+	}).withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, HbmShaderManager2.LIGHTMAP);
+	
 	public static Shader gluon_beam = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_beam"))
 			.withUniforms(shader -> {
-				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
-				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				shader.uniform1i("noise_1", 3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
-				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				shader.uniform1i("noise_1", 4);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 				
 				float time = (System.currentTimeMillis()%10000000)/1000F;
-				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+				shader.uniform1f("time", time);
 			});
 	
 	public static Shader gluon_spiral = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gluon_spiral"))
 			.withUniforms(shader -> {
 				//Well, I accidentally uniformed the same noise sampler twice. That explains why the second noise didn't work.
-				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_1);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 3);
-				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				shader.uniform1i("noise_1", 3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise_1"), 4);
-				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				shader.uniform1i("noise_1", 4);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 				
 				float time = (System.currentTimeMillis()%10000000)/1000F;
-				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+				shader.uniform1f("time", time);
 			});
 	
 	//Drillgon200: Did I need a shader for this? No, not really, but it's somewhat easier to create a sin wave pattern programmatically than to do it in paint.net.
@@ -1137,44 +1150,51 @@ public class ResourceManager {
 	public static Shader heat_distortion = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/heat_distortion"))
 			.withUniforms(shader -> {
 				Framebuffer buffer = Minecraft.getMinecraft().getFramebuffer();
-				GL13.glActiveTexture(GL13.GL_TEXTURE3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+3);
 				GlStateManager.bindTexture(buffer.framebufferTexture);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "fbo_tex"), 3);
-				GL13.glActiveTexture(GL13.GL_TEXTURE4);
+				shader.uniform1i("fbo_tex", 3);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-				GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
-				GL13.glActiveTexture(GL13.GL_TEXTURE0);
+				shader.uniform1i("noise", 4);
+				GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 				
 				float time = (System.currentTimeMillis()%10000000)/1000F;
-				GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
-				GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+				shader.uniform1f("time", time);
+				shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 			});
 	
 	public static Shader desaturate = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/desaturate"));
-	public static Shader test_trail = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/trail"));
+	public static Shader test_trail = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/trail"), shader ->{
+		GLCompat.bindAttribLocation(shader, 0, "pos");
+		GLCompat.bindAttribLocation(shader, 1, "tex");
+		GLCompat.bindAttribLocation(shader, 2, "color");
+	});
 	public static Shader blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blit"));
 	public static Shader downsample = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/downsample"));
 	public static Shader bloom_h = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_h"));
 	public static Shader bloom_v = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_v"));
 	public static Shader bloom_test = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bloom_test"));
-	public static Shader lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning")).withUniforms(shader -> {
-		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+	public static Shader lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning"), shader ->{
+		GLCompat.bindAttribLocation(shader, 0, "pos");
+		GLCompat.bindAttribLocation(shader, 1, "tex");
+		GLCompat.bindAttribLocation(shader, 2, "color");
+	}).withUniforms(shader -> {
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		shader.uniform1i("noise", 4);
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 	});
 	public static Shader maxdepth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/maxdepth"));
 	public static Shader lightning_gib = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lightning_gib")).withUniforms(HbmShaderManager2.LIGHTMAP, shader -> {
-		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		shader.uniform1i("noise", 4);
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 	});
 	public static Shader testlut = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/testlut"));
-	public static Shader flashlight_new = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight"), true);
 	public static Shader flashlight_nogeo = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_nogeo"));
 	public static Shader flashlight_deferred = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flashlight_deferred")).withUniforms(shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	
 	
@@ -1182,54 +1202,64 @@ public class ResourceManager {
 	public static Shader albedo = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/albedo"));
 	public static Shader flashlight_depth = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_depth"));
 	public static Shader flashlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/flashlight_post")).withUniforms(shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	public static Shader pointlight_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/pointlight_post")).withUniforms(shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	public static Shader cone_volume = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/cone_volume")).withUniforms(shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	public static Shader flashlight_blit = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/blit"));
 	public static Shader volume_upscale = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/lighting/volume_upscale")).withUniforms(shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	});
 	
 	public static Shader heat_distortion_post = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/heat_distortion_post")).withUniforms(shader ->{
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE4);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+4);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		shader.uniform1i("noise", 4);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		float time = (System.currentTimeMillis()%10000000)/1000F;
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "time"), time);
+		shader.uniform1f("time", time);
 	});
 	
 	public static Shader heat_distortion_new = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/heat_distortion_new"));
-	public static Shader crucible_lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/crucible_lightning")).withUniforms(shader -> {
-		GL13.glActiveTexture(GL13.GL_TEXTURE4);
+	public static Shader crucible_lightning = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/crucible_lightning"), shader ->{
+		GLCompat.bindAttribLocation(shader, 0, "pos");
+		GLCompat.bindAttribLocation(shader, 1, "tex");
+		GLCompat.bindAttribLocation(shader, 2, "in_color");
+	}).withUniforms(shader -> {
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0+4);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.noise_2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "noise"), 4);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		shader.uniform1i("noise", 4);
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0);
 	});
 	public static Shader flash_lmap = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/flash_lmap")).withUniforms(HbmShaderManager2.LIGHTMAP);
-	public static Shader bimpact = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bimpact")).withUniforms(HbmShaderManager2.LIGHTMAP, HbmShaderManager2.WINDOW_SIZE);
+	public static Shader bimpact = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/bimpact"), shader -> {
+		GLCompat.bindAttribLocation(shader, 0, "pos");
+		GLCompat.bindAttribLocation(shader, 1, "vColor");
+		GLCompat.bindAttribLocation(shader, 3, "tex");
+		GLCompat.bindAttribLocation(shader, 4, "lightTex");
+		GLCompat.bindAttribLocation(shader, 5, "projTex");
+	}).withUniforms(HbmShaderManager2.LIGHTMAP, HbmShaderManager2.WINDOW_SIZE);
 	public static Shader blood_dissolve = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood")).withUniforms(HbmShaderManager2.LIGHTMAP);
 	public static Shader gravitymap_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/gravitymap"));
 	public static Shader blood_flow_update = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/blood/blood_flow_update"));
 	
 	public static Shader gpu_particle_render = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_render")).withUniforms(HbmShaderManager2.MODELVIEW_MATRIX, HbmShaderManager2.PROJECTION_MATRIX, HbmShaderManager2.INV_PLAYER_ROT_MATRIX, shader -> {
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData0"), 2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData1"), 3);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData2"), 4);
-		GL20.glUniform4f(GL20.glGetUniformLocation(shader, "particleTypeTexCoords[0]"), ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMinV(), ModEventHandlerClient.contrail.getMaxU() - ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMaxV() - ModEventHandlerClient.contrail.getMinV());
+		shader.uniform1i("lightmap", 1);
+		shader.uniform1i("particleData0", 2);
+		shader.uniform1i("particleData1", 3);
+		shader.uniform1i("particleData2", 4);
+		shader.uniform4f("particleTypeTexCoords[0]", ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMinV(), ModEventHandlerClient.contrail.getMaxU() - ModEventHandlerClient.contrail.getMinU(), ModEventHandlerClient.contrail.getMaxV() - ModEventHandlerClient.contrail.getMinV());
 	});
 
 	public static Shader gpu_particle_udpate = HbmShaderManager2.loadShader(new ResourceLocation(RefStrings.MODID, "shaders/gpu_particle_update")).withUniforms(shader -> {
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData0"), 2);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData1"), 3);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "particleData2"), 4);
+		shader.uniform1i("particleData0", 2);
+		shader.uniform1i("particleData1", 3);
+		shader.uniform1i("particleData2", 4);
 	});
 
 	public static final Vbo test = Vbo.setupTestVbo();

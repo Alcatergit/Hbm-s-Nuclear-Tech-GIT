@@ -10,10 +10,10 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL21;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.util.glu.Project;
 import org.lwjgl.util.vector.Matrix4f;
 
@@ -151,7 +151,7 @@ public class LightRenderer {
 		double entPosZ = renderView.lastTickPosZ + (renderView.posZ - renderView.lastTickPosZ) * partialTicks;
 		Vec3d playerPos = new Vec3d(entPosX, entPosY, entPosZ);
 		
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, albedoFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, albedoFbo);
 		renderObjects(playerPos, chunksToRender, entitiesToRender, tilesToRender, ResourceManager.albedo, partialTicks);
 		
 		if(!init){
@@ -166,7 +166,7 @@ public class LightRenderer {
 			if(l.shadows){
 				GlStateManager.viewport(0, 0, 1024, 1024);
 				clearShadowBuffer();
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowFbo);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, shadowFbo);
 				//GlStateManager.viewport(0, 0, 1024, 1024);
 				ResourceManager.flashlight_depth.use();
 				renderShadowForLight(playerPos, l, partialTicks);
@@ -175,8 +175,8 @@ public class LightRenderer {
 			//Render the light into the accumulation buffer
 			GlStateManager.viewport(0, 0, width, height);
 			ResourceManager.flashlight_post.use();
-			sendPostShaderUniforms(l, playerPos, ResourceManager.flashlight_post.getShaderId());
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, lightAccFbo);
+			sendPostShaderUniforms(l, playerPos, ResourceManager.flashlight_post);
+			GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, lightAccFbo);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 			Vec3d vec = l.end.subtract(l.start).normalize();
@@ -201,7 +201,7 @@ public class LightRenderer {
 			//Render volume
 			if(GeneralConfig.flashlightVolumetric && l.volume){
 				GlStateManager.viewport(0, 0, width/2, height/2);
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, volAccFbo);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, volAccFbo);
 				volumetricRender(l, playerPos);
 				GlStateManager.viewport(0, 0, width, height);
 				didRenderVolume = true;
@@ -210,8 +210,8 @@ public class LightRenderer {
 		}
 		for(PointLight light : point_lights){
 			ResourceManager.pointlight_post.use();
-			sendPointLightUniforms(light, playerPos, ResourceManager.pointlight_post.getShaderId());
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, lightAccFbo);
+			sendPointLightUniforms(light, playerPos, ResourceManager.pointlight_post);
+			GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, lightAccFbo);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 			float rad = light.radius + 0.1F;
@@ -243,14 +243,14 @@ public class LightRenderer {
 			//Blit volume data to light data
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, lightAccFbo);
+			GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, lightAccFbo);
 			ResourceManager.volume_upscale.use();
-			GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+			GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 			GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
-			GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-			GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.volume_upscale.getShaderId(), "depthTex"), 3);
+			GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
+			ResourceManager.volume_upscale.uniform1i("depthTex", 3);
 			GlStateManager.bindTexture(volAccTex);
-			GL20.glUniform2f(GL20.glGetUniformLocation(ResourceManager.volume_upscale.getShaderId(), "zNearFar"), 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
+			ResourceManager.volume_upscale.uniform2f("zNearFar", 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
 			RenderHelper.renderFullscreenTriangle();
 			GlStateManager.disableBlend();
 		}
@@ -259,10 +259,10 @@ public class LightRenderer {
 		GlStateManager.bindTexture(lightAccTex);
 		mcFbo.bindFramebuffer(true);
 		ResourceManager.flashlight_blit.use();
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 		GlStateManager.bindTexture(mcFbo.framebufferTexture);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-		GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flashlight_blit.getShaderId(), "target"), 3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
+		ResourceManager.flashlight_blit.uniform1i("target", 3);
 		RenderHelper.renderFullscreenTriangle();
 		
 		HbmShaderManager2.releaseShader();
@@ -279,36 +279,36 @@ public class LightRenderer {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		ResourceManager.cone_volume.use();
-		int shader = ResourceManager.cone_volume.getShaderId();
+		Shader shader = ResourceManager.cone_volume;
 		float height = (float) vec.lengthVector();
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "height"), height);
+		shader.uniform1f("height", height);
 		vec = vec.normalize();
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "cosAngle"), (float) Math.cos(Math.toRadians(light.degrees)));
+		shader.uniform1f("cosAngle", (float) Math.cos(Math.toRadians(light.degrees)));
 		Vec3d pos = light.start.subtract(playerPos);
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "pos"), (float) pos.x, (float) pos.y, (float) pos.z);
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "direction"), (float) vec.x, (float) vec.y, (float) vec.z);
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "radius"), (float) light.radius * 0.5F);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "useShadows"), light.shadows ? 1 : 0);
+		shader.uniform3f("pos", (float) pos.x, (float) pos.y, (float) pos.z);
+		shader.uniform3f("direction", (float) vec.x, (float) vec.y, (float) vec.z);
+		shader.uniform1f("radius", (float) light.radius * 0.5F);
+		shader.uniform1f("useShadows", light.shadows ? 1 : 0);
 	
 		Vec3d camPos = ActiveRenderInfo.getCameraPosition();
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "camPos"), (float) camPos.x, (float) camPos.y, (float) camPos.z);
+		shader.uniform3f("camPos", (float) camPos.x, (float) camPos.y, (float) camPos.z);
 		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(light.cookie);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 		GlStateManager.bindTexture(shadowTex);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "shadow"), 3);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE4);
+		shader.uniform1i("shadow", 3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+4);
 		GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "depth"), 4);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		shader.uniform1i("depth", 4);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		
 		ClientProxy.AUX_GL_BUFFER.put(HbmShaderManager2.inv_ViewProjectionMatrix);
 		ClientProxy.AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "inv_ViewProjectionMatrix"), false, ClientProxy.AUX_GL_BUFFER);
+		shader.uniformMatrix4("inv_ViewProjectionMatrix", false, ClientProxy.AUX_GL_BUFFER);
 		
 		light.viewProjectionMatrix.store(ClientProxy.AUX_GL_BUFFER);
 		ClientProxy.AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "flashlight_ViewProjectionMatrix"), false, ClientProxy.AUX_GL_BUFFER);
+		shader.uniformMatrix4("flashlight_ViewProjectionMatrix", false, ClientProxy.AUX_GL_BUFFER);
 		
 		GlStateManager.enableCull();
 		//renderConeMesh(pos, vec, height, radius, 8);
@@ -346,14 +346,14 @@ public class LightRenderer {
 
 		for(Entity ent : entitiesToRender){
         	Minecraft.getMinecraft().getRenderManager().renderEntityStatic(ent, partialTicks, false);
-        	if(GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) != shader.getShaderId()){
+        	if(GL11.glGetInteger(GLCompat.GL_CURRENT_PROGRAM) != shader.getShaderId()){
         		blacklistedObjects.add(ent.getClass());
         		shader.use();
         	}
         }
         for(TileEntity te : tilesToRender){
         	TileEntityRendererDispatcher.instance.render(te, partialTicks, -1);
-        	if(GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) != shader.getShaderId()){
+        	if(GL11.glGetInteger(GLCompat.GL_CURRENT_PROGRAM) != shader.getShaderId()){
         		blacklistedObjects.add(te.getClass());
         		shader.use();
         	}
@@ -439,93 +439,94 @@ public class LightRenderer {
 		GL11.glPopMatrix();
 	}
 	
-	private static void sendPostShaderUniforms(DirectionalLight light, Vec3d entityPos, int shader){
+	private static void sendPostShaderUniforms(DirectionalLight light, Vec3d entityPos, Shader shader){
 		Vec3d pos = light.start.subtract(entityPos);
 		float height = (float) light.end.subtract(light.start).lengthVector();
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "height"), height);
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "fs_Pos"), (float)pos.x, (float)pos.y, (float)pos.z);
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "zNearFar"), 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "eyeHeight"), Minecraft.getMinecraft().player.getEyeHeight());
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "brightness"), light.brightness);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "useShadows"), light.shadows ? 1 : 0);
+		shader.uniform1f("height", height);
+		shader.uniform3f("fs_Pos", (float)pos.x, (float)pos.y, (float)pos.z);
+		shader.uniform2f("zNearFar", 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
+		shader.uniform1f("eyeHeight", Minecraft.getMinecraft().player.getEyeHeight());
+		shader.uniform1f("brightness", light.brightness);
+		shader.uniform1f("useShadows", light.shadows ? 1 : 0);
+		shader.uniform2f("shadowTexSize", 1024, 1024);
 		
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		GlStateManager.bindTexture(albedoTex);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 		GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE4);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+4);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(light.cookie);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE5);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+5);
 		GlStateManager.bindTexture(shadowTex);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "mc_tex"), 0);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "depthBuffer"), 3);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "flashlightTex"), 4);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "shadowTex"), 5);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
+		shader.uniform1i("mc_tex", 0);
+		shader.uniform1i("depthBuffer", 3);
+		shader.uniform1i("flashlightTex", 4);
+		shader.uniform1i("shadowTex", 5);
 		
 		
 		light.viewProjectionMatrix.store(ClientProxy.AUX_GL_BUFFER);
 		ClientProxy.AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "flashlight_ViewProjectionMatrix"), false, ClientProxy.AUX_GL_BUFFER);
+		shader.uniformMatrix4("flashlight_ViewProjectionMatrix", false, ClientProxy.AUX_GL_BUFFER);
 		
 		ClientProxy.AUX_GL_BUFFER.put(HbmShaderManager2.inv_ViewProjectionMatrix);
 		ClientProxy.AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "inv_ViewProjectionMatrix"), false, ClientProxy.AUX_GL_BUFFER);
+		shader.uniformMatrix4("inv_ViewProjectionMatrix", false, ClientProxy.AUX_GL_BUFFER);
 	}
 	
-	private static void sendPointLightUniforms(PointLight light, Vec3d entityPos, int shader){
+	private static void sendPointLightUniforms(PointLight light, Vec3d entityPos, Shader shader){
 		Vec3d pos = light.pos.subtract(entityPos);
 		Vec3d camPos = ActiveRenderInfo.getCameraPosition();
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "light_pos"), (float)pos.x, (float)pos.y, (float)pos.z);
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "cam_pos"), (float)camPos.x, (float)camPos.y, (float)camPos.z);
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "brightness"), light.energy);
-		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "radius"), light.radius);
-		GL20.glUniform3f(GL20.glGetUniformLocation(shader, "light_color"), (float)light.color.x, (float)light.color.y, (float)light.color.z);
+		shader.uniform3f("light_pos", (float)pos.x, (float)pos.y, (float)pos.z);
+		shader.uniform3f("cam_pos", (float)camPos.x, (float)camPos.y, (float)camPos.z);
+		shader.uniform1f("brightness", light.energy);
+		shader.uniform1f("radius", light.radius);
+		shader.uniform3f("light_color", (float)light.color.x, (float)light.color.y, (float)light.color.z);
 		
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		GlStateManager.bindTexture(albedoTex);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 		GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "mc_tex"), 0);
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "depthBuffer"), 3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
+		shader.uniform1i("mc_tex", 0);
+		shader.uniform1i("depthBuffer", 3);
 		
 		ClientProxy.AUX_GL_BUFFER.put(HbmShaderManager2.inv_ViewProjectionMatrix);
 		ClientProxy.AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "inv_ViewProjectionMatrix"), false, ClientProxy.AUX_GL_BUFFER);
+		shader.uniformMatrix4("inv_ViewProjectionMatrix", false, ClientProxy.AUX_GL_BUFFER);
 	}
 
 	private static void initShadowBuffer(){
-		shadowFbo = GL30.glGenFramebuffers();
+		shadowFbo = GLCompat.genFramebuffers();
 		shadowTex = GL11.glGenTextures();
 		
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, shadowFbo);
 		GlStateManager.bindTexture(shadowTex);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, 1024, 1024, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (FloatBuffer)null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_DEPTH_COMPONENT24, 1024, 1024, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (FloatBuffer)null);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, shadowTex, 0);
+		GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, shadowTex, 0);
 	}
 	
 	private static void clearShadowBuffer(){
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, shadowFbo);
 		GlStateManager.clearDepth(1);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	private static void recreateBuffers() {
 		GL11.glDeleteTextures(albedoTex);
-		GL30.glDeleteFramebuffers(albedoFbo);
-		GL30.glDeleteRenderbuffers(albedoDepth);
-		albedoFbo = GL30.glGenFramebuffers();
+		GLCompat.deleteFramebuffers(albedoFbo);
+		GLCompat.deleteRenderbuffers(albedoDepth);
+		albedoFbo = GLCompat.genFramebuffers();
 		albedoTex = GL11.glGenTextures();
-		albedoDepth = GL30.glGenRenderbuffers();
+		albedoDepth = GLCompat.genRenderbuffers();
 
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, albedoFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, albedoFbo);
 
 		GlStateManager.bindTexture(albedoTex);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (FloatBuffer) null);
@@ -533,50 +534,50 @@ public class LightRenderer {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, albedoTex, 0);
+		GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, albedoTex, 0);
 
-		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, albedoDepth);
-		GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, albedoDepth);
+		GLCompat.bindRenderbuffer(GLCompat.GL_RENDERBUFFER, albedoDepth);
+		GLCompat.renderbufferStorage(GLCompat.GL_RENDERBUFFER, GLCompat.GL_DEPTH_COMPONENT24, width, height);
+		GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, albedoDepth);
 
 		
 		GL11.glDeleteTextures(lightAccTex);
-		GL30.glDeleteFramebuffers(lightAccFbo);
-		lightAccFbo = GL30.glGenFramebuffers();
+		GLCompat.deleteFramebuffers(lightAccFbo);
+		lightAccFbo = GLCompat.genFramebuffers();
 		lightAccTex = GL11.glGenTextures();
 		
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, lightAccFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, lightAccFbo);
 		GlStateManager.bindTexture(lightAccTex);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (FloatBuffer) null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (FloatBuffer) null);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, lightAccTex, 0);
+		GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, lightAccTex, 0);
 		
 		
 		GL11.glDeleteTextures(volAccTex);
-		GL30.glDeleteFramebuffers(volAccFbo);
-		volAccFbo = GL30.glGenFramebuffers();
+		GLCompat.deleteFramebuffers(volAccFbo);
+		volAccFbo = GLCompat.genFramebuffers();
 		volAccTex = GL11.glGenTextures();
 		
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, volAccFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, volAccFbo);
 		GlStateManager.bindTexture(volAccTex);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width/2, height/2, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (FloatBuffer) null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, width/2, height/2, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (FloatBuffer) null);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, volAccTex, 0);
+		GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, volAccTex, 0);
 		
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 	}
 	
 	private static void clearAccumulationBuffer(){
 		GlStateManager.clearColor(0, 0, 0, 1);
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, lightAccFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, lightAccFbo);
 		GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, volAccFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, volAccFbo);
 		GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 	}
@@ -584,7 +585,7 @@ public class LightRenderer {
 	private static void clearAlbedoBuffer(){
 		GlStateManager.clearColor(0, 0, 0, 1);
 		GlStateManager.clearDepth(1);
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, albedoFbo);
+		GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, albedoFbo);
 		GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 	}

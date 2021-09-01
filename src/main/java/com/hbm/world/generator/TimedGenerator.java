@@ -3,8 +3,6 @@ package com.hbm.world.generator;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class TimedGenerator {

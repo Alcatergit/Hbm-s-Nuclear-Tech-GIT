@@ -140,6 +140,10 @@ public class AdvancementManager {
 	}
 	
 	public static boolean hasAdvancement(EntityPlayer player, Advancement a){
+		if(a == null){
+			MainRegistry.logger.log(Level.ERROR, "Failed to test null advancement! This should never happen.");
+			return false;
+		}
 		if(player instanceof EntityPlayerMP){
 			return ((EntityPlayerMP)player).getAdvancements().getProgress(a).isDone();
 		}

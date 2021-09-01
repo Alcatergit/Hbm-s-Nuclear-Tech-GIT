@@ -1,7 +1,7 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex;
-in vec2 texCoord;
+varying vec2 texCoord;
 
 void main(){
 	vec4 color = texture2D(tex, texCoord);

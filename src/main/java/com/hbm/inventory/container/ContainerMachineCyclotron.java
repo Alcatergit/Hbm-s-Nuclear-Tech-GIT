@@ -1,6 +1,5 @@
 package com.hbm.inventory.container;
 
-import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.inventory.SlotUpgrade;
 import com.hbm.items.ModItems;

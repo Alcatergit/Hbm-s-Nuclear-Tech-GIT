@@ -98,6 +98,8 @@ import com.hbm.inventory.container.ContainerSoyuzLauncher;
 import com.hbm.inventory.container.ContainerUF6Tank;
 import com.hbm.inventory.container.ContainerWasteDrum;
 import com.hbm.inventory.container.ContainerWatzCore;
+import com.hbm.inventory.control_panel.ContainerControlEdit;
+import com.hbm.inventory.control_panel.GuiControlEdit;
 import com.hbm.inventory.gui.*;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
@@ -121,6 +123,7 @@ import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityBarrel;
+import com.hbm.tileentity.machine.TileEntityControlPanel;
 import com.hbm.tileentity.machine.TileEntityConverterHeRf;
 import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityCore;
@@ -605,12 +608,16 @@ public class GuiHandler implements IGuiHandler {
 			if(entity instanceof TileEntityMachineIGenerator) {
 				return new ContainerIGenerator(player.inventory, (TileEntityMachineIGenerator) entity);
 			}
-		case ModBlocks.guiID_armor_table: {
+		case ModBlocks.guiID_armor_table:
 			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() == ModBlocks.machine_armor_table) {
 				return new ContainerArmorTable(player.inventory);
 			}
 			return null;
-		}
+		case ModBlocks.guiID_control_panel:
+			if(entity instanceof TileEntityControlPanel){
+				return new ContainerControlEdit(player.inventory, (TileEntityControlPanel)entity);
+			}
+			return null;
 		case ModItems.guiID_item_book:
 			return new ContainerBook(player.inventory);
 		}
@@ -1017,12 +1024,16 @@ public class GuiHandler implements IGuiHandler {
 			if(entity instanceof TileEntityMachineIGenerator) {
 				return new GUIIGenerator(player.inventory, (TileEntityMachineIGenerator) entity);
 			}
-		case ModBlocks.guiID_armor_table: {
+		case ModBlocks.guiID_armor_table:
 			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() == ModBlocks.machine_armor_table) {
 				return new GUIArmorTable(player.inventory);
 			}
 			return null;
-		}
+		case ModBlocks.guiID_control_panel:
+			if(entity instanceof TileEntityControlPanel){
+				return new GuiControlEdit(player.inventory, (TileEntityControlPanel)entity);
+			}
+			return null;
 		// ITEM GUIS
 		case ModItems.guiID_item_folder:
 			return new GUIScreenTemplateFolder(player);

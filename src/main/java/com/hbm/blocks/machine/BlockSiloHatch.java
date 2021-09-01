@@ -5,7 +5,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
-import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 
 import net.minecraft.block.BlockContainer;

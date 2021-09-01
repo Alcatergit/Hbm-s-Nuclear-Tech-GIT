@@ -176,7 +176,7 @@ public class TileEntityForceField extends TileEntity implements ITickable, ICons
 		}
 	}
 	
-private int impact(Entity e) {
+	private int impact(Entity e) {
 		
 		double mass = e.height * e.width * e.width;
 		double speed = getMotionWithFallback(e);

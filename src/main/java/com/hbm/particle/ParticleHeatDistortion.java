@@ -3,7 +3,6 @@ package com.hbm.particle;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
@@ -119,9 +118,9 @@ public class ParticleHeatDistortion extends Particle {
         float heat_fade = MathHelper.clamp(1-BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0.8, 1), 0.8F, 1F, 0F, 1.1F), 0, 1);
 		heat_fade *= MathHelper.clamp(BobMathUtil.remap((float)MathHelper.clamp(timeScale, 0, 0.2), 0F, 0.2F, 0F, 1.1F), 0, 1);
         ResourceManager.heat_distortion.use();
-        GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.heat_distortion.getShaderId(), "amount"), heatAmount*heat_fade*0.15F);
+        ResourceManager.heat_distortion.uniform1f("amount", heatAmount*heat_fade*0.15F);
         float time = (System.currentTimeMillis()%10000000)/1000F;
-		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.heat_distortion.getShaderId(), "time"), time+timeOffset);
+        ResourceManager.heat_distortion.uniform1f("time", time+timeOffset);
         
 		//TODO calling glFlush here is probably a *terrible* idea for performance. I should find a better solution.
 		GL11.glFlush();

@@ -1,8 +1,8 @@
 package com.hbm.inventory;
 
+import java.util.Arrays;
 import java.util.List;
 
-import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 
 import net.minecraft.block.Block;
@@ -86,6 +86,7 @@ public class RecipesCommon {
 
 		public abstract AStack copy();
 		public abstract ItemStack getStack();
+		public abstract List<ItemStack> getStackList();
 		
 		@Override
 		public String toString() {
@@ -157,6 +158,11 @@ public class RecipesCommon {
 		@Override
 		public ItemStack getStack() {
 			return toStack();
+		}
+		
+		@Override
+		public List<ItemStack> getStackList(){
+			return Arrays.asList(getStack());
 		}
 		
 		public String[] getDictKeys() {
@@ -332,6 +338,11 @@ public class RecipesCommon {
 		public ItemStack getStack() {
 			ItemStack stack = toStacks().get(0);
 			return new ItemStack(stack.getItem(), stacksize, stack.getMetadata());
+		}
+		
+		@Override
+		public List<ItemStack> getStackList(){
+			return toStacks();
 		}
 		
 		@Override

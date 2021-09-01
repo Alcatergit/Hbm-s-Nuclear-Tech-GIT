@@ -34,6 +34,7 @@ import com.hbm.handler.HbmShaderManager;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.JetpackHandler;
 import com.hbm.interfaces.IConstantRenderer;
+import com.hbm.interfaces.ICustomSelectionBox;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
@@ -128,12 +129,12 @@ import com.hbm.util.I18nUtil;
 
 import glmath.glm.vec._2.Vec2;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.particle.Particle;
@@ -167,6 +168,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -174,6 +176,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
@@ -773,6 +776,7 @@ public class ModEventHandlerClient {
 	public static boolean renderingDepthOnly = false;
 
 	// Called from asm via coremod, in ChunkRenderContainer#preRenderChunk
+	@Deprecated
 	public static void preRenderChunk(RenderChunk chunk) {
 		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
@@ -780,6 +784,7 @@ public class ModEventHandlerClient {
 	}
 
 	// Called from asm via coremod, in Profiler#endStartSection
+	@Deprecated
 	public static void profilerStart(String name) {
 		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
@@ -826,6 +831,7 @@ public class ModEventHandlerClient {
 	}
 
 	// Called from asm via coremod, in RenderManager#renderEntity
+	@Deprecated
 	public static void onEntityRender(Entity e) {
 		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
@@ -848,6 +854,7 @@ public class ModEventHandlerClient {
 	}
 
 	// Called from asm via coremod, in TileEntityRendererDispatcher#render
+	@Deprecated
 	public static void onTileEntityRender(TileEntity t) {
 		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
@@ -866,6 +873,7 @@ public class ModEventHandlerClient {
 	}
 
 	// Called from asm via coremod, in GlStateManager#disableLighting
+	@Deprecated
 	public static void onLightingDisable() {
 		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
 			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightingEnabled"), 0);
@@ -873,6 +881,7 @@ public class ModEventHandlerClient {
 	}
 
 	// Called from asm via coremod, in GlStateManager#enableLighting
+	@Deprecated
 	public static void onLightingEnable() {
 		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
 			GL20.glUniform1i(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "lightingEnabled"), 1);
@@ -1469,7 +1478,7 @@ public class ModEventHandlerClient {
 
 		/// HANDLE GEIGER COUNTER AND JETPACK HUD ///
 		if(event.getType() == ElementType.HOTBAR) {
-			if(!(ArmorFSB.hasFSBArmor(player) && ((ArmorFSB)player.inventory.armorInventory.get(3).getItem()).customGeiger)) {
+			if(!(ArmorFSB.hasFSBArmorHelmet(player) && ((ArmorFSB)player.inventory.armorInventory.get(3).getItem()).customGeiger)) {
 				if(Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
 	
 					float rads = 0;
@@ -1548,6 +1557,9 @@ public class ModEventHandlerClient {
 			renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 		}
 		JetpackHandler.preRenderPlayer(player);
+		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+			EgonBackpackRenderer.showBackpack = true;
+		}
 		
 		ResourceLocation cloak = RenderAccessoryUtility.getCloakFromPlayer(player);
 		// GL11.glRotated(180, 1, 0, 0);
@@ -1565,7 +1577,7 @@ public class ModEventHandlerClient {
 		if(specialDeathEffectEntities.contains(event.getEntity())){
 			event.setCanceled(true);
 		}
-		if(event.getEntity() instanceof AbstractClientPlayer &&event.getRenderer().getMainModel() instanceof ModelBiped){
+		if(event.getEntity() instanceof AbstractClientPlayer && event.getRenderer().getMainModel() instanceof ModelBiped){
 			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
 
 			ModelBiped renderer = (ModelBiped) event.getRenderer().getMainModel();
@@ -1576,31 +1588,6 @@ public class ModEventHandlerClient {
 			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
-			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
-				for(ModelRenderer r : renderer.bipedBody.childModels){
-					if(r instanceof EgonBackpackRenderer){
-						r.showModel = true;
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	@SubscribeEvent
-	public void postRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event){
-		if(event.getEntity() instanceof AbstractClientPlayer &&event.getRenderer().getMainModel() instanceof ModelBiped){
-			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
-			ModelBiped renderer = (ModelBiped) event.getRenderer().getMainModel();
-			
-			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
-				for(ModelRenderer r : renderer.bipedBody.childModels){
-					if(r instanceof EgonBackpackRenderer){
-						r.showModel = false;
-						break;
-					}
-				}
-			}
 		}
 	}
 	
@@ -1610,6 +1597,9 @@ public class ModEventHandlerClient {
 		EntityPlayer player = event.getEntityPlayer();
 		//GLUON GUN//
 		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
+		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+			EgonBackpackRenderer.showBackpack = false;
+		}
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){
 			GL11.glPushMatrix();
 			float partialTicks = event.getPartialRenderTick();
@@ -1753,6 +1743,33 @@ public class ModEventHandlerClient {
 	}
 
 	@SubscribeEvent
+	public void drawBlockSelectionBox(DrawBlockHighlightEvent evt){
+		if(evt.getTarget().typeOfHit == RayTraceResult.Type.BLOCK){
+			BlockPos pos = evt.getTarget().getBlockPos();
+			IBlockState state =  Minecraft.getMinecraft().world.getBlockState(pos);
+			Block block = state.getBlock();
+			if(block instanceof ICustomSelectionBox){
+				GlStateManager.enableBlend();
+	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	            GlStateManager.glLineWidth(2.0F);
+	            GlStateManager.disableTexture2D();
+	            GlStateManager.depthMask(false);
+	            EntityPlayer player = evt.getPlayer();
+	            float partialTicks = evt.getPartialTicks();
+	            double d3 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+                double d4 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+                double d5 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+				if(((ICustomSelectionBox)block).renderBox(Minecraft.getMinecraft().world, player, state, evt.getTarget().getBlockPos(), pos.getX()-d3, pos.getY()-d4, pos.getZ()-d5, partialTicks)){
+					evt.setCanceled(true);
+				}
+				GlStateManager.depthMask(true);
+	            GlStateManager.enableTexture2D();
+	            GlStateManager.disableBlend();
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public void drawTooltip(ItemTooltipEvent event) {
 
 		ItemStack stack = event.getItemStack();
@@ -1760,7 +1777,7 @@ public class ModEventHandlerClient {
 
 		double rad = HazmatRegistry.getResistance(stack);
 
-		rad = ((int) (rad * 100)) / 100F;
+		rad = ((int) (rad * 100)) / 100D;
 
 		if(rad > 0)
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.radResistance", rad));

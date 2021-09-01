@@ -17,7 +17,6 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.GLContext;
 
 import com.hbm.config.GeneralConfig;
@@ -42,6 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 @Spaghetti("Oh god, 85% of this class is useless unused trash")
+@Deprecated
 public class HbmShaderManager {
 
 	private static float targetWidth;

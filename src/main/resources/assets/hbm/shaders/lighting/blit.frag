@@ -1,9 +1,9 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex;
 uniform sampler2D target;
 
-in vec2 tex_coord;
+varying vec2 tex_coord;
 
 void main(){
 	vec4 light = texture2D(tex, tex_coord);

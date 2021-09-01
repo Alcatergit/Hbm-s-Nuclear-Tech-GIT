@@ -7,7 +7,6 @@ import com.hbm.blocks.generic.DecoPoleSatelliteReceiver;
 import com.hbm.blocks.generic.DecoSteelPoles;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.blocks.machine.MachineElectricFurnace;
-import com.hbm.blocks.machine.MachineReactor;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;

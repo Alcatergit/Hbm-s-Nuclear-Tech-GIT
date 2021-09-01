@@ -1,32 +1,11 @@
 package com.hbm.handler;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
-import org.lwjgl.util.vector.Vector4f;
-
-import com.hbm.animloader.AnimationWrapper;
-import com.hbm.animloader.AnimationWrapper.EndResult;
-import com.hbm.animloader.AnimationWrapper.EndType;
-import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.packet.AuxButtonPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.particle.ParticleLightningHandGlow;
-import com.hbm.particle.ParticleLightningStrip;
-import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;

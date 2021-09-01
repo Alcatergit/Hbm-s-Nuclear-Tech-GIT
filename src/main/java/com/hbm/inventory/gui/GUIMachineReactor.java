@@ -1,22 +1,12 @@
 package com.hbm.inventory.gui;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Project;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
-
-import com.hbm.handler.HbmShaderManager2;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.container.ContainerReactor;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;

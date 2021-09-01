@@ -1,8 +1,6 @@
 package com.hbm.render.item.weapon;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
@@ -14,6 +12,7 @@ import com.hbm.items.weapon.ItemGunJShotty;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
@@ -50,11 +49,11 @@ public class ItemRenderJShotgun extends TEISRBase {
 			float timeMax = 0.0375F;
 			if(time > 0 && time < timeMax && GeneralConfig.useShaders2){
 				ResourceManager.flash_lmap.use();
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.jshotgun_lmap);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-				GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flash_lmap.getShaderId(), "flash_map"), 3);
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+				ResourceManager.flash_lmap.uniform1i("flash_map", 3);
+				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 			}
 			double[] recoil = HbmAnimations.getRelevantTransformation("JS_RECOIL", hand);
 			GL11.glScaled(2.5, 2.5, 2.5);
@@ -111,7 +110,7 @@ public class ItemRenderJShotgun extends TEISRBase {
 								GlStateManager.disableBlend();
 								if(GeneralConfig.useShaders2){
 									ResourceManager.flash_lmap.use();
-									GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flash_lmap.getShaderId(), "flash_map"), 3);
+									ResourceManager.flash_lmap.uniform1i("flash_map", 3);
 								}
 							}
 						}

@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.lib.Library;
+import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.misc.LensVisibilityHandler;
 
@@ -109,13 +110,12 @@ public class ParticleGluonFlare extends Particle {
         
         GL11.glTranslated(f5, f6, f7);
 		if(visibilityId == -1){
-			FloatBuffer mat = GLAllocation.createDirectFloatBuffer(16);
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, mat);
-			visibilityId = LensVisibilityHandler.generate(mat);
+			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
+			visibilityId = LensVisibilityHandler.generate(ClientProxy.AUX_GL_BUFFER);
 		}
-		FloatBuffer mat = LensVisibilityHandler.getMatrixBuf(visibilityId);
-		mat.rewind();
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, mat);
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
+		LensVisibilityHandler.putMatrixBuf(visibilityId, ClientProxy.AUX_GL_BUFFER);
+		
 		float visibility = LensVisibilityHandler.getVisibility(visibilityId);
 		visibility *= visibility;
 		

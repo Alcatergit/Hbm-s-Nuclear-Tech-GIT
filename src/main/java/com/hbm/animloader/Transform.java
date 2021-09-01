@@ -2,7 +2,6 @@ package com.hbm.animloader;
 
 import java.nio.FloatBuffer;
 
-import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 

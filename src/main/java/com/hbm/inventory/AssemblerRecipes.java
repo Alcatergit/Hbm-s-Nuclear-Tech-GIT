@@ -16,7 +16,6 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -257,7 +256,7 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModItems.fuse, 1), new AStack[] { new OreDictStack("plateSteel", 2), new ComparableStack(Blocks.GLASS_PANE, 1), new ComparableStack(ModItems.wire_aluminium, 1), }, 100);
 		makeRecipe(new ComparableStack(ModItems.redcoil_capacitor, 1), new AStack[] { new OreDictStack("plateGold", 3), new ComparableStack(ModItems.fuse, 1), new ComparableStack(ModItems.wire_advanced_alloy, 4), new ComparableStack(ModItems.coil_advanced_alloy, 6), new ComparableStack(Blocks.REDSTONE_BLOCK, 2), }, 200);
 		makeRecipe(new ComparableStack(ModItems.titanium_filter, 1), new AStack[] { new OreDictStack("plateLead", 3), new ComparableStack(ModItems.fuse, 1), new ComparableStack(ModItems.wire_tungsten, 4), new OreDictStack("plateTitanium", 6), new ComparableStack(ModItems.ingot_u238, 2), }, 200);
-		makeRecipe(new ComparableStack(ModItems.part_lithium, 1), new AStack[] { new ComparableStack(ModItems.plate_polymer, 1), new ComparableStack(ModItems.powder_lithium, 1), }, 50);
+		makeRecipe(new ComparableStack(ModItems.part_lithium, 1), new AStack[] { new ComparableStack(ModItems.plate_polymer, 1), new OreDictStack("dustLithium", 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.part_beryllium, 1), new AStack[] { new ComparableStack(ModItems.plate_polymer, 1), new ComparableStack(ModItems.powder_beryllium, 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.part_carbon, 1), new AStack[] { new ComparableStack(ModItems.plate_polymer, 1), new OreDictStack("dustCoal", 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.part_copper, 1), new AStack[] { new ComparableStack(ModItems.plate_polymer, 1), new OreDictStack("dustCopper", 1), }, 50);
@@ -285,7 +284,7 @@ public class AssemblerRecipes {
 		//makeRecipe(new ComparableStack(ModBlocks.machine_industrial_generator, 1), new AStack[] {new ComparableStack(ModItems.generator_front, 1), new ComparableStack(ModItems.generator_steel, 3), new ComparableStack(ModItems.rotor_steel, 3), new OreDictStack("ingotSteel", 6), new ComparableStack(ModItems.board_copper, 4), new ComparableStack(ModItems.wire_gold, 8), new ComparableStack(ModBlocks.red_wire_coated, 2), new ComparableStack(ModItems.pedestal_steel, 2), new ComparableStack(ModItems.circuit_copper, 4), },500);
 		makeRecipe(new ComparableStack(ModBlocks.machine_rtg_grey, 1), new AStack[] { new ComparableStack(ModItems.rtg_unit, 5), new OreDictStack("plateSteel", 8), new ComparableStack(ModItems.wire_red_copper, 4), new ComparableStack(ModItems.ingot_polymer, 6), }, 200);
 		makeRecipe(new ComparableStack(ModBlocks.machine_battery, 1), new AStack[] { new OreDictStack("ingotSteel", 4), new OreDictStack("dustSulfur", 12), new OreDictStack("dustLead", 12), new OreDictStack("ingotRedCopperAlloy", 2), new ComparableStack(ModItems.wire_red_copper, 4), }, 200);
-		makeRecipe(new ComparableStack(ModBlocks.machine_lithium_battery, 1), new AStack[] { new ComparableStack(ModItems.ingot_polymer, 4), new OreDictStack("dustCobalt", 12), new ComparableStack(ModItems.powder_lithium, 12), new ComparableStack(ModItems.ingot_advanced_alloy, 2), new ComparableStack(ModItems.wire_red_copper, 4), }, 400);
+		makeRecipe(new ComparableStack(ModBlocks.machine_lithium_battery, 1), new AStack[] { new ComparableStack(ModItems.ingot_polymer, 4), new OreDictStack("dustCobalt", 12), new OreDictStack("dustLithium", 12), new ComparableStack(ModItems.ingot_advanced_alloy, 2), new ComparableStack(ModItems.wire_red_copper, 4), }, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_schrabidium_battery, 1), new AStack[] { new OreDictStack("ingotDesh", 4), new ComparableStack(ModItems.powder_neptunium, 12), new ComparableStack(ModItems.powder_schrabidium, 12), new ComparableStack(ModItems.ingot_schrabidium, 2), new ComparableStack(ModItems.wire_schrabidium, 4), }, 800);
 		makeRecipe(new ComparableStack(ModBlocks.machine_dineutronium_battery, 1), new AStack[] { new ComparableStack(ModItems.ingot_dineutronium, 24), new ComparableStack(ModItems.powder_spark_mix, 12), new ComparableStack(ModItems.battery_spark_cell_1000, 1), new ComparableStack(ModItems.ingot_combine_steel, 32), new ComparableStack(ModItems.coil_magnetized_tungsten, 8), }, 1600);
 		makeRecipe(new ComparableStack(ModBlocks.machine_shredder, 1), new AStack[] { new OreDictStack("ingotSteel", 2), new OreDictStack("plateSteel", 4), new ComparableStack(ModItems.motor, 2), new ComparableStack(ModItems.wire_red_copper, 2), new ComparableStack(ModBlocks.steel_beam, 2), new ComparableStack(Blocks.IRON_BARS, 2), new ComparableStack(ModBlocks.red_wire_coated, 1), }, 200);
@@ -544,7 +543,7 @@ public class AssemblerRecipes {
 		hidden.add(new ComparableStack(ModBlocks.machine_radgen, 1));
 	}
 
-	private static void makeRecipe(ComparableStack out, AStack[] in, int duration) {
+	public static void makeRecipe(ComparableStack out, AStack[] in, int duration) {
 
 		if(out == null || Item.REGISTRY.getNameForObject(out.item) == null) {
 			MainRegistry.logger.error("Canceling assembler registration, item was null!");
@@ -623,7 +622,7 @@ public class AssemblerRecipes {
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler recipe removal on line " + line + ": does not have two parts. Skipping...");
 			return;
 		}
-		AStack stack = parseAStack(parts[1]);
+		AStack stack = parseAStack(parts[1], 64);
 		if(stack == null){
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[1] + "\" on line " + line + ". Skipping...");
 			return;
@@ -653,14 +652,14 @@ public class AssemblerRecipes {
 		}
 		List<AStack> input = new ArrayList<>();
 		for(String s : parts[1].split("\\|")){
-			AStack stack = parseAStack(s);
+			AStack stack = parseAStack(s, 12*64);
 			if(stack == null){
 				MainRegistry.logger.log(Level.WARN, "Could not parse assembler input itemstack from \"" + s + "\" on line " + line + ". Skipping...");
 				return;
 			}
 			input.add(stack);
 		}
-		AStack output = parseAStack(parts[2]);
+		AStack output = parseAStack(parts[2], 64);
 		if(output == null){
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[2] + "\" on line " + line + ". Skipping...");
 			return;
@@ -714,7 +713,7 @@ public class AssemblerRecipes {
 		return list.toArray(new String[list.size()]);
 	}
 
-	private static AStack parseAStack(String s){
+	private static AStack parseAStack(String s, int maxSize){
 		String[] parts = splitStringIgnoreBraces(s);
 		if(parts.length == 3 || parts.length == 4){
 			Block block = null;
@@ -743,7 +742,7 @@ public class AssemblerRecipes {
 				MainRegistry.logger.log(Level.WARN, "Could not parse item amount from \"" + parts[2] + "\". Skipping...");
 				return null;
 			}
-			if(amount < 0 || amount > 12*64){
+			if(amount < 0 || amount > maxSize){
 				MainRegistry.logger.log(Level.WARN, "Bad item amount: " + amount + ". Skipping...");
 				return null;
 			}

@@ -1,8 +1,6 @@
 package com.hbm.particle;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.util.BobMathUtil;
 

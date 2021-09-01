@@ -5,6 +5,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityWasteDrum;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +48,12 @@ public class WasteDrum extends BlockContainer {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
+		if(!world.isRemote)
+			((TileEntityWasteDrum) world.getTileEntity(pos)).updateWater();
 	}
 	
 	@Override

@@ -1,19 +1,20 @@
-#version 330 compatibility
+#version 120
+#extension GL_EXT_geometry_shader4 : enable
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
-in vec3 worldPosV[];
-in vec3 normalV[];
-in vec3 colorV[];
-in vec4 fragPosShadowSpaceV[];
-in vec2 texture_coordV[];
+varying vec3 worldPosV[];
+varying vec3 normalV[];
+varying vec3 colorV[];
+varying vec4 fragPosShadowSpaceV[];
+varying vec2 texture_coordV[];
 
-out vec3 worldPos;
-out vec3 normal;
-out vec3 color;
-out vec4 fragPosShadowSpace;
-out vec2 texture_coord;
+varying vec3 worldPos;
+varying vec3 normal;
+varying vec3 color;
+varying vec4 fragPosShadowSpace;
+varying vec2 texture_coord;
 
 void main(){
 	normal = normalize(cross(worldPosV[1]-worldPosV[0], worldPosV[2]-worldPosV[0]));

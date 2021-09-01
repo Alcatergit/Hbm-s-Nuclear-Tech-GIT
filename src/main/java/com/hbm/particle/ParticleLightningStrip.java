@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.LightningGenerator;
@@ -93,8 +92,8 @@ public class ParticleLightningStrip extends Particle {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 			ResourceManager.lightning.use();
-		    GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "duck"), 1F, 1F, 1F, 1F);
-		    GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "age"), this.particleAge+partialTicks);
+		    ResourceManager.lightning.uniform4f("duck", 1F, 1F, 1F, 1F);
+		    ResourceManager.lightning.uniform1f("age", this.particleAge+partialTicks);
 		    int list = GL11.glGenLists(1);
 		    GL11.glNewList(list, GL11.GL_COMPILE);
 		    float time = (this.particleAge+partialTicks)*0.012F;
@@ -105,7 +104,7 @@ public class ParticleLightningStrip extends Particle {
 		    	float override = (float)(i)/(float)points.size();
 		    	
 		    	override = 1-MathHelper.clamp(override-time*time*time, 0.001F, 1F);
-		    	GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "fadeoverride"), override);
+		    	ResourceManager.lightning.uniform1f("fadeoverride", override);
 		    	if(p.fork != null){
 		    		if(doTransform){
 		    			LightningGenerator.render(p.fork, new Vec3d(interpPosX, interpPosY+entityIn.getEyeHeight(), interpPosZ), width*0.5F, (float)pos.x, (float)pos.y, (float)pos.z, false, null);
@@ -115,8 +114,8 @@ public class ParticleLightningStrip extends Particle {
 		    	}
 		    	currentPoints.add(pos);
 		    }
-		    GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "fadeoverride"), 1F);
-		    GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "vertices"), currentPoints.size()*3+2);
+		    ResourceManager.lightning.uniform1f("fadeoverride", 1F);
+		    ResourceManager.lightning.uniform1i("vertices", currentPoints.size()*3+2);
 			if(doTransform){
 				TrailRenderer2.draw(new Vec3d(interpPosX, interpPosY+entityIn.getEyeHeight(), interpPosZ), currentPoints, width);
 			} else {
@@ -125,7 +124,7 @@ public class ParticleLightningStrip extends Particle {
 			GL11.glEndList();
 			GL11.glCallList(list);
 			HbmShaderManager2.bloomData.bindFramebuffer(false);
-			GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "duck"), 0.6F, 0.8F, 1F, 1F);
+			ResourceManager.lightning.uniform4f("duck", 0.6F, 0.8F, 1F, 1F);
 			GL11.glCallList(list);
 			GL11.glCallList(list);
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);

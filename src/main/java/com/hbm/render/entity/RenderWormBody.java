@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.entity.mob.botprime.EntityBOTPrimeBody;
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.client.renderer.GlStateManager;

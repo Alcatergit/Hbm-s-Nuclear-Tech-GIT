@@ -56,7 +56,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 		boolean flag = true;
 		
 		for(int k = 1; k < 12; k++) {
-			if(world.getBlockState(mPos.setPos(pos.getX() + 3, pos.getY() + k, pos.getZ())).getBlock() != ModBlocks.struct_scaffold)
+			if(world.getBlockState(mPos.setPos(pos.getX(), pos.getY() + k, pos.getZ()+3)).getBlock() != ModBlocks.struct_scaffold)
 				flag = false;
 		}
 		
@@ -74,7 +74,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 		flag = true;
 		
 		for(int k = 1; k < 12; k++) {
-			if(world.getBlockState(mPos.setPos(pos.getX(), pos.getY() + k, pos.getZ() + 3)).getBlock() != ModBlocks.struct_scaffold)
+			if(world.getBlockState(mPos.setPos(pos.getX(), pos.getY() + k, pos.getZ() - 3)).getBlock() != ModBlocks.struct_scaffold)
 				flag = false;
 		}
 		
@@ -83,7 +83,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 		flag = true;
 		
 		for(int k = 1; k < 12; k++) {
-			if(world.getBlockState(mPos.setPos(pos.getX(), pos.getY() + k, pos.getZ() - 3)).getBlock() != ModBlocks.struct_scaffold)
+			if(world.getBlockState(mPos.setPos(pos.getX()+3, pos.getY() + k, pos.getZ())).getBlock() != ModBlocks.struct_scaffold)
 				flag = false;
 		}
 		
@@ -115,7 +115,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 		switch(meta) {
 		case NORTH:
 			for(int i = 1; i < 12; i++)
-				world.setBlockState(pos.add(3, i, 0), Blocks.AIR.getDefaultState());
+				world.setBlockState(pos.add(0, i, 3), Blocks.AIR.getDefaultState());
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
@@ -143,7 +143,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 			
 		case SOUTH:
 			for(int i = 1; i < 12; i++)
-				world.setBlockState(pos.add(0, i, 3), Blocks.AIR.getDefaultState());
+				world.setBlockState(pos.add(0, i, -3), Blocks.AIR.getDefaultState());
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
@@ -157,7 +157,7 @@ public class TileEntityMultiblock extends TileEntity implements ITickable {
 			
 		case WEST:
 			for(int i = 1; i < 12; i++)
-				world.setBlockState(pos.add(0, i, -3), Blocks.AIR.getDefaultState());
+				world.setBlockState(pos.add(3, i, 0), Blocks.AIR.getDefaultState());
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)

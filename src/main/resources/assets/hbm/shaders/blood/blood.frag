@@ -1,8 +1,8 @@
-#version 330 compatibility
+#version 120
 
-in vec2 texCoord;
-in vec2 lightCoord;
-in vec4 color;
+varying vec2 texCoord;
+varying vec2 lightCoord;
+varying vec4 color;
 
 uniform sampler2D texture;
 uniform sampler2D lightmap;

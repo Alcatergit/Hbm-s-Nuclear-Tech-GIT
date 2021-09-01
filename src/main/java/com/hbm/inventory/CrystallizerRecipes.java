@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -128,7 +129,11 @@ public class CrystallizerRecipes {
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.ITEM, input);
+			if(inputs != null){
+				ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(inputs));
+			} else {
+				ingredients.setInput(VanillaTypes.ITEM, input);
+			}
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		

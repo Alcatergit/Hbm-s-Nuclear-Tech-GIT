@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D noise_1;
 uniform sampler2D noise_2;
@@ -9,7 +9,7 @@ uniform float subdivUAmount;
 uniform vec3 playerPos;
 uniform float len;
 
-out vec2 texCoord;
+varying vec2 texCoord;
 
 vec4 getPos(float x, vec2 tex){
 	//return vec4(x, sin(tex.s*15)*3, 0, gl_Vertex.w);
@@ -17,9 +17,9 @@ vec4 getPos(float x, vec2 tex){
 	vec2 texCoord1_1 = vec2(x/16.0-time*0.7, 0.9-time*0.05);
 	vec2 texCoord2 = vec2(x/12.0-time*0.8, 0.2-time*0.6);
 	vec2 texCoord3 = vec2(tex.s/8.0-time*0.05, 0.2-time*0.3);
-	vec4 sample_1 = (textureLod(noise_1, texCoord1, 0)*2-1)*clamp(pow(textureLod(noise_1, texCoord1_1, 0).b, 8)*12, 0, 0.4);
-	vec4 sample_2 = textureLod(noise_1, texCoord2, 0);
-	vec4 sample_3 = (smoothstep(0, 1, textureLod(noise_1, texCoord3, 0))-0.5)*0.4;
+	vec4 sample_1 = (texture2DLod(noise_1, texCoord1, 0)*2-1)*clamp(pow(texture2DLod(noise_1, texCoord1_1, 0).b, 8)*12, 0, 0.4);
+	vec4 sample_2 = texture2DLod(noise_1, texCoord2, 0);
+	vec4 sample_3 = (smoothstep(0, 1, texture2DLod(noise_1, texCoord3, 0))-0.5)*0.4;
 	sample_1 += (sample_2*2-1)*0.4*pow(sample_2.g, 4);
 	sample_1 *= clamp(tex.x*20, 0, 1) * clamp(20-tex.x*20, 0, 1);
 	sample_1.rg += vec2(sin(x*6-time*20)*4*abs(gl_Vertex.z), cos(x*6-time*20)*4*abs(gl_Vertex.z)) * clamp(x*2, 0, 1) * clamp((len-x)*2, 0, 1);

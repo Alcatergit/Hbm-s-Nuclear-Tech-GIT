@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex;
 uniform sampler2D lightmap;
@@ -6,9 +6,9 @@ uniform sampler2D noise;
 uniform float age;
 uniform int bloom;
 
-in vec2 texCoord;
-in vec2 lightmapTexCoord;
-in vec3 lightSum;
+varying vec2 texCoord;
+varying vec2 lightmapTexCoord;
+varying vec3 lightSum;
 
 void main(){
 	vec4 texture = texture2D(tex, texCoord);

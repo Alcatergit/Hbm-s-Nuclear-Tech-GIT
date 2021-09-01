@@ -11,14 +11,15 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class EgonBackpackRenderer extends ModelRenderer {
 
+	public static boolean showBackpack = false;
+	
 	public EgonBackpackRenderer(ModelBase model) {
 		super(model);
-		this.showModel = false;
 	}
 	
 	@Override
 	public void render(float scale) {
-		if(!showModel)
+		if(!showBackpack)
 			return;
 		GL11.glPushMatrix();
 		//Oh neat, bob made the model so it would fit perfectly without screwing around with mostly right translations.

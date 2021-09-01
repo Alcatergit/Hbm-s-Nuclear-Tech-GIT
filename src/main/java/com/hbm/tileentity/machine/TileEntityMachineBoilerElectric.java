@@ -12,10 +12,12 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,12 +30,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineBoilerElectric extends TileEntity implements ITickable, IFluidHandler, IConsumer, ITankPacketAcceptor {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineBoilerElectric extends TileEntityMachineBase implements ITickable, IFluidHandler, IConsumer, ITankPacketAcceptor {
 
 	public long power;
 	public int heat = 2000;
@@ -43,29 +41,20 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 	boolean needsUpdate = false;
 	public FluidTank[] tanks;
 
-	// private static final int[] slots_top = new int[] {4};
-	/// private static final int[] slots_bottom = new int[] {6};
-	/// private static final int[] slots_side = new int[] {4};
-
-	private String customName;
+	private static final int[] slots_top = new int[] {4};
+	private static final int[] slots_bottom = new int[] {6};
+	private static final int[] slots_side = new int[] {4};
 
 	public TileEntityMachineBoilerElectric() {
-		inventory = new ItemStackHandler(7);
+		super(7);
 		tanks = new FluidTank[2];
 		tanks[0] = new FluidTank(16000);
 		tanks[1] = new FluidTank(16000);
 	}
-
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineElectricBoiler";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
+	
+	@Override
+	public String getName(){
+		return "container.machineElectricBoiler";
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -76,6 +65,29 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 		}
 	}
 
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return false;
+	}
+	
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 4)
+			if(stack != null && stack.getItem() instanceof IBatteryItem)
+				return true;
+		return false;
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		heat = nbt.getInteger("heat");
@@ -290,14 +302,12 @@ public class TileEntityMachineBoilerElectric extends TileEntity implements ITick
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

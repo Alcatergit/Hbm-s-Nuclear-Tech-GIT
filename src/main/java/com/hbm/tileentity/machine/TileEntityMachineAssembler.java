@@ -165,20 +165,20 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			TileEntity te = null;
 			TileEntity te2 = null;
 			if(meta == 2) {
-				te = world.getTileEntity(pos.add(-2, 0, 0));
-				te2 = world.getTileEntity(pos.add(3, 0, -1));
+				te2 = world.getTileEntity(pos.add(-2, 0, 0));
+				te = world.getTileEntity(pos.add(3, 0, -1));
 			}
 			if(meta == 3) {
-				te = world.getTileEntity(pos.add(2, 0, 0));
-				te2 = world.getTileEntity(pos.add(-3, 0, 1));
+				te2 = world.getTileEntity(pos.add(2, 0, 0));
+				te = world.getTileEntity(pos.add(-3, 0, 1));
 			}
 			if(meta == 4) {
-				te = world.getTileEntity(pos.add(0, 0, 2));
-				te2 = world.getTileEntity(pos.add(-1, 0, -3));
+				te2 = world.getTileEntity(pos.add(0, 0, 2));
+				te = world.getTileEntity(pos.add(-1, 0, -3));
 			}
 			if(meta == 5) {
-				te = world.getTileEntity(pos.add(0, 0, -2));
-				te2 = world.getTileEntity(pos.add(1, 0, 3));
+				te2 = world.getTileEntity(pos.add(0, 0, -2));
+				te = world.getTileEntity(pos.add(1, 0, 3));
 			}
 
 			tryExchangeTemplates(te, te2);
@@ -205,7 +205,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			data.setInteger("progress", progress);
 			data.setInteger("maxProgress", maxProgress);
 			data.setBoolean("isProgressing", isProgressing);
-			data.setInteger("recipe", !inventory.getStackInSlot(4).isEmpty() ? inventory.getStackInSlot(4).getItemDamage() : -1);
+			data.setInteger("recipe", !inventory.getStackInSlot(4).isEmpty() ? ItemAssemblyTemplate.getRecipeIndex(inventory.getStackInSlot(4)) : -1);
 			this.networkPack(data, 150);
 		} else {
 
@@ -694,15 +694,4 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 
 		return count;
 	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
-	}
-
 }

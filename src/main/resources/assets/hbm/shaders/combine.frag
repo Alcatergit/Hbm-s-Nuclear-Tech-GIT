@@ -1,4 +1,4 @@
-#version 130
+#version 120
 
 uniform sampler2D image;
 uniform sampler2D mcImage;

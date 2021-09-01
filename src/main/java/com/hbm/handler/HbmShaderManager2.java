@@ -7,17 +7,13 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -27,7 +23,7 @@ import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle_instanced.InstancedParticleRenderer;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.GLCompat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -64,19 +60,19 @@ public class HbmShaderManager2 {
 		Matrix4f.mul(pMatrix, mvMatrix, mvMatrix).store(AUX_GL_BUFFER);
 		AUX_GL_BUFFER.rewind();
 		
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "modelViewProjectionMatrix"), false, AUX_GL_BUFFER);
+		shader.uniformMatrix4("modelViewProjectionMatrix", false, AUX_GL_BUFFER);
 	};
 	
 	public static final Uniform MODELVIEW_MATRIX = shader -> {
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, AUX_GL_BUFFER);
 		AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "modelview"), false, AUX_GL_BUFFER);
+		shader.uniformMatrix4("modelview", false, AUX_GL_BUFFER);
 	};
 	
 	public static final Uniform PROJECTION_MATRIX = shader -> {
 		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, AUX_GL_BUFFER);
 		AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "projection"), false, AUX_GL_BUFFER);
+		shader.uniformMatrix4("projection", false, AUX_GL_BUFFER);
 	};
 	
 	public static final Uniform INV_PLAYER_ROT_MATRIX = shader -> {
@@ -90,15 +86,15 @@ public class HbmShaderManager2 {
 		mat.rotate((float) Math.toRadians(-pitch), new Vector3f(1, 0, 0));
 		mat.store(AUX_GL_BUFFER);
 		AUX_GL_BUFFER.rewind();
-		GL20.glUniformMatrix4(GL20.glGetUniformLocation(shader, "invPlayerRot"), false, AUX_GL_BUFFER);
+		shader.uniformMatrix4("invPlayerRot", false, AUX_GL_BUFFER);
 	};
 	
 	public static final Uniform LIGHTMAP = shader -> {
-		GL20.glUniform1i(GL20.glGetUniformLocation(shader, "lightmap"), 1);
+		shader.uniform1i("lightmap", 1);
 	};
 	
 	public static final Uniform WINDOW_SIZE = shader -> {
-		GL20.glUniform2f(GL20.glGetUniformLocation(shader, "windowSize"), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		shader.uniform2f("windowSize", Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 	};
 	
 	public static int height = 0;
@@ -139,10 +135,10 @@ public class HbmShaderManager2 {
     		return;
     	if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth || depthFrameBuffer == -1){
     		GL11.glDeleteTextures(depthTexture);
-    		GL30.glDeleteFramebuffers(depthFrameBuffer);
+    		GLCompat.deleteFramebuffers(depthFrameBuffer);
     		
-    		depthFrameBuffer = GL30.glGenFramebuffers();
-    		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, depthFrameBuffer);
+    		depthFrameBuffer = GLCompat.genFramebuffers();
+    		GLCompat.bindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, depthFrameBuffer);
     		depthTexture = GL11.glGenTextures();
     		GlStateManager.bindTexture(depthTexture);
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, (FloatBuffer)null);
@@ -150,15 +146,15 @@ public class HbmShaderManager2 {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-			GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthTexture, 0);
-			int bruh = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
-			if(bruh != GL30.GL_FRAMEBUFFER_COMPLETE){
+			GLCompat.framebufferTexture2D(OpenGlHelper.GL_FRAMEBUFFER, OpenGlHelper.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthTexture, 0);
+			int bruh = OpenGlHelper.glCheckFramebufferStatus(OpenGlHelper.GL_FRAMEBUFFER);
+			if(bruh != OpenGlHelper.GL_FRAMEBUFFER_COMPLETE){
 				System.out.println("Failed to create depth texture framebuffer! This is an error!");
 			}
     	}
-    	GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, Minecraft.getMinecraft().getFramebuffer().framebufferObject);
-    	GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, depthFrameBuffer);
-    	GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
+    	GLCompat.bindFramebuffer(GLCompat.GL_READ_FRAMEBUFFER, Minecraft.getMinecraft().getFramebuffer().framebufferObject);
+    	GLCompat.bindFramebuffer(GLCompat.GL_DRAW_FRAMEBUFFER, depthFrameBuffer);
+    	GLCompat.blitFramebuffer(0, 0, width, height, 0, 0, width, height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
     	
     	Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
     }
@@ -186,12 +182,12 @@ public class HbmShaderManager2 {
 	private static void heatDistortion(){
 		GL11.glFlush();
 		ResourceManager.heat_distortion_post.use();
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE3);
-		GL13.glActiveTexture(GL13.GL_TEXTURE3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
+		GLCompat.activeTexture(GLCompat.GL_TEXTURE0+3);
 		GlStateManager.bindTexture(Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
-		GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.heat_distortion_post.getShaderId(), "mc_tex"), 3);
-		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		GLCompat.uniform1i(GLCompat.getUniformLocation(ResourceManager.heat_distortion_post.getShaderId(), "mc_tex"), 3);
+		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		renderFboTriangle(distortionBuffer);
 		releaseShader();
@@ -205,7 +201,7 @@ public class HbmShaderManager2 {
 	public static void distort(float strength, Runnable render){
 		distortionBuffer.bindFramebuffer(false);
 		ResourceManager.heat_distortion_new.use();
-		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.heat_distortion_new.getShaderId(), "amount"), strength);
+		GLCompat.uniform1f(GLCompat.getUniformLocation(ResourceManager.heat_distortion_new.getShaderId(), "amount"), strength);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 		render.run();
@@ -221,7 +217,7 @@ public class HbmShaderManager2 {
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ZERO);
 			bloomBuffers[i*2+1].bindFramebuffer(true);
 			ResourceManager.bloom_h.use();
-			GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.bloom_h.getShaderId(), "frag_width"), 1F/(float)bloomBuffers[i*2].framebufferWidth);
+			GLCompat.uniform1f(GLCompat.getUniformLocation(ResourceManager.bloom_h.getShaderId(), "frag_width"), 1F/(float)bloomBuffers[i*2].framebufferWidth);
 			renderFboTriangle(bloomBuffers[i*2], bloomBuffers[i*2+1].framebufferWidth, bloomBuffers[i*2+1].framebufferHeight);
 			
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
@@ -231,15 +227,15 @@ public class HbmShaderManager2 {
 				tWidth = Minecraft.getMinecraft().getFramebuffer().framebufferWidth;
 				tHeight = Minecraft.getMinecraft().getFramebuffer().framebufferHeight;
 			} else {
-				GlStateManager.glBlendEquation(GL14.GL_MAX);
+				GLCompat.blendEquation(GLCompat.GL_MAX);
 				bloomBuffers[(i-1)*2].bindFramebuffer(true);
 				tWidth = bloomBuffers[(i-1)*2].framebufferWidth;
 				tHeight = bloomBuffers[(i-1)*2].framebufferHeight;
 			}
 			ResourceManager.bloom_v.use();
-			GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.bloom_v.getShaderId(), "frag_height"), 1F/(float)bloomBuffers[i*2].framebufferHeight);
+			GLCompat.uniform1f(GLCompat.getUniformLocation(ResourceManager.bloom_v.getShaderId(), "frag_height"), 1F/(float)bloomBuffers[i*2].framebufferHeight);
 			renderFboTriangle(bloomBuffers[i*2+1], tWidth, tHeight);
-			GlStateManager.glBlendEquation(GL14.GL_FUNC_ADD);
+			GLCompat.blendEquation(GLCompat.GL_FUNC_ADD);
 		}
 		releaseShader();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -257,11 +253,11 @@ public class HbmShaderManager2 {
 	public static void downsampleBloomData(){
 		bloomBuffers[0].bindFramebuffer(true);
 		ResourceManager.downsample.use();
-		GL20.glUniform2f(GL20.glGetUniformLocation(ResourceManager.downsample.getShaderId(), "texel"), 1F/(float)bloomData.framebufferTextureWidth, 1F/(float)bloomData.framebufferTextureHeight);
+		GLCompat.uniform2f(GLCompat.getUniformLocation(ResourceManager.downsample.getShaderId(), "texel"), 1F/(float)bloomData.framebufferTextureWidth, 1F/(float)bloomData.framebufferTextureHeight);
 		renderFboTriangle(bloomData, bloomBuffers[0].framebufferWidth, bloomBuffers[0].framebufferHeight);
 		for(int i = 1; i < bloomLayers; i ++){
 			bloomBuffers[i*2].bindFramebuffer(true);
-			GL20.glUniform2f(GL20.glGetUniformLocation(ResourceManager.downsample.getShaderId(), "texel"), 1F/(float)bloomBuffers[(i-1)*2].framebufferTextureWidth, 1F/(float)bloomBuffers[(i-1)*2].framebufferTextureHeight);
+			GLCompat.uniform2f(GLCompat.getUniformLocation(ResourceManager.downsample.getShaderId(), "texel"), 1F/(float)bloomBuffers[(i-1)*2].framebufferTextureWidth, 1F/(float)bloomBuffers[(i-1)*2].framebufferTextureHeight);
 			renderFboTriangle(bloomBuffers[(i-1)*2], bloomBuffers[i*2].framebufferWidth, bloomBuffers[i*2].framebufferHeight);
 		}
 		releaseShader();
@@ -273,9 +269,9 @@ public class HbmShaderManager2 {
 		}
 		distortionBuffer = new Framebuffer(width, height, true);
 		distortionBuffer.bindFramebufferTexture();
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
 		distortionBuffer.bindFramebuffer(false);
-		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+		GLCompat.bindRenderbuffer(GLCompat.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
 		OpenGlHelper.glFramebufferRenderbuffer(OpenGlHelper.GL_FRAMEBUFFER, OpenGlHelper.GL_DEPTH_ATTACHMENT, OpenGlHelper.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
 		distortionBuffer.setFramebufferFilter(GL11.GL_LINEAR);
 		distortionBuffer.setFramebufferColor(0, 0, 0, 0);
@@ -291,10 +287,10 @@ public class HbmShaderManager2 {
 			bloomData.deleteFramebuffer();
 		bloomData = new Framebuffer(width, height, true);
 		bloomData.bindFramebufferTexture();
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
 		bloomData.bindFramebuffer(false);
-		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
-		OpenGlHelper.glFramebufferRenderbuffer(OpenGlHelper.GL_FRAMEBUFFER, OpenGlHelper.GL_DEPTH_ATTACHMENT, OpenGlHelper.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+		GLCompat.bindRenderbuffer(GLCompat.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
+		GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, Minecraft.getMinecraft().getFramebuffer().depthBuffer);
 		bloomData.setFramebufferFilter(GL11.GL_LINEAR);
 		bloomData.setFramebufferColor(0, 0, 0, 0);
 		bloomData.framebufferClear();
@@ -306,9 +302,9 @@ public class HbmShaderManager2 {
 			bloomBuffers[i*2] = new Framebuffer((int)bloomW, (int)bloomH, false);
 			bloomBuffers[i*2+1] = new Framebuffer((int)bloomW, (int)bloomH, false);
 			bloomBuffers[i*2].bindFramebufferTexture();
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, (int)bloomW, (int)bloomH, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, (int)bloomW, (int)bloomH, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
 			bloomBuffers[i*2+1].bindFramebufferTexture();
-			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL30.GL_RGBA16F, (int)bloomW, (int)bloomH, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
+			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GLCompat.GL_RGBA16F, (int)bloomW, (int)bloomH, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_SHORT, (IntBuffer)null);
 			bloomBuffers[i*2].setFramebufferFilter(GL11.GL_LINEAR);
 			bloomBuffers[i*2+1].setFramebufferFilter(GL11.GL_LINEAR);
 			bloomBuffers[i*2].setFramebufferColor(0, 0, 0, 0);
@@ -395,69 +391,51 @@ public class HbmShaderManager2 {
     }*/
 	
     public static Shader loadShader(ResourceLocation file) {
-    	return loadShader(file, false);
+    	return loadShader(file, null);
     }
     
-	public static Shader loadShader(ResourceLocation file, boolean hasGeoShader) {
+	public static Shader loadShader(ResourceLocation file, Consumer<Integer> attribBinder) {
 		if(!GeneralConfig.useShaders2){
 			return new Shader(0);
 		}
 		int vertexShader = 0;
 		int fragmentShader = 0;
-		int geometryShader = 0;
 		try {
-			int program = GL20.glCreateProgram();
+			int program = GLCompat.createProgram();
 			
-			vertexShader = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-			GL20.glShaderSource(vertexShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".vert")));
-			GL20.glCompileShader(vertexShader);
-			if(GL20.glGetShaderi(vertexShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-				MainRegistry.logger.error(GL20.glGetShaderInfoLog(vertexShader, GL20.GL_INFO_LOG_LENGTH));
+			vertexShader = GLCompat.createShader(GLCompat.GL_VERTEX_SHADER);
+			GLCompat.shaderSource(vertexShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".vert")));
+			GLCompat.compileShader(vertexShader);
+			if(GLCompat.getShaderi(vertexShader, GLCompat.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+				MainRegistry.logger.error(GLCompat.getShaderInfoLog(vertexShader, GLCompat.GL_INFO_LOG_LENGTH));
 				throw new RuntimeException("Error creating vertex shader: " + file);
 			}
 			
-			fragmentShader = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-			GL20.glShaderSource(fragmentShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".frag")));
-			GL20.glCompileShader(fragmentShader);
-			if(GL20.glGetShaderi(fragmentShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-				MainRegistry.logger.error(GL20.glGetShaderInfoLog(fragmentShader, GL20.GL_INFO_LOG_LENGTH));
+			fragmentShader = GLCompat.createShader(GLCompat.GL_FRAGMENT_SHADER);
+			GLCompat.shaderSource(fragmentShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".frag")));
+			GLCompat.compileShader(fragmentShader);
+			if(GLCompat.getShaderi(fragmentShader, GLCompat.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+				MainRegistry.logger.error(GLCompat.getShaderInfoLog(fragmentShader, GLCompat.GL_INFO_LOG_LENGTH));
 				throw new RuntimeException("Error creating fragment shader: " + file);
 			}
 			
-			if(hasGeoShader){
-				geometryShader = GL20.glCreateShader(GL32.GL_GEOMETRY_SHADER);
-				GL20.glShaderSource(geometryShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".geo")));
-				GL20.glCompileShader(geometryShader);
-				if(GL20.glGetShaderi(geometryShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-					MainRegistry.logger.error(GL20.glGetShaderInfoLog(geometryShader, GL20.GL_INFO_LOG_LENGTH));
-					throw new RuntimeException("Error creating geometry shader: " + file);
-				}
-			}
-			
-			GL20.glAttachShader(program, vertexShader);
-			GL20.glAttachShader(program, fragmentShader);
-			if(hasGeoShader){
-				GL20.glAttachShader(program, geometryShader);
-			}
-			GL20.glLinkProgram(program);
-			if(GL20.glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-				MainRegistry.logger.error(GL20.glGetProgramInfoLog(program, GL20.GL_INFO_LOG_LENGTH));
+			GLCompat.attachShader(program, vertexShader);
+			GLCompat.attachShader(program, fragmentShader);
+			if(attribBinder != null)
+				attribBinder.accept(program);
+			GLCompat.linkProgram(program);
+			if(GLCompat.getProgrami(program, GLCompat.GL_LINK_STATUS) == GL11.GL_FALSE) {
+				MainRegistry.logger.error(GLCompat.getProgramInfoLog(program, GLCompat.GL_INFO_LOG_LENGTH));
 				throw new RuntimeException("Error linking shader: " + file);
 			}
 			
-			GL20.glDeleteShader(vertexShader);
-			GL20.glDeleteShader(fragmentShader);
-			if(hasGeoShader){
-				GL20.glDeleteShader(geometryShader);
-			}
+			GLCompat.deleteShader(vertexShader);
+			GLCompat.deleteShader(fragmentShader);
 			
 			return new Shader(program);
 		} catch(Exception x) {
-			GL20.glDeleteShader(vertexShader);
-			GL20.glDeleteShader(fragmentShader);
-			if(hasGeoShader){
-				GL20.glDeleteShader(geometryShader);
-			}
+			GLCompat.deleteShader(vertexShader);
+			GLCompat.deleteShader(fragmentShader);
 			x.printStackTrace();
 		}
 		return new Shader(0);
@@ -474,7 +452,7 @@ public class HbmShaderManager2 {
 	}
 	
 	public static void releaseShader(){
-		GL20.glUseProgram(0);
+		GLCompat.useProgram(0);
 	}
 	
 	public static class Shader {
@@ -496,9 +474,9 @@ public class HbmShaderManager2 {
 		public void use(){
 			if(shader == 0)
 				return;
-			GL20.glUseProgram(shader);
+			GLCompat.useProgram(shader);
 			for(Uniform u : uniforms){
-				u.apply(shader);
+				u.apply(this);
 			}
 		}
 		
@@ -506,26 +484,50 @@ public class HbmShaderManager2 {
 			return shader;
 		}
 		
-		public void uniform1f(String name, float v0){
-			if(shader == 0)
-				return;
-			GL20.glUniform1f(GL20.glGetUniformLocation(shader, name), v0);
-		}
-		
 		public void uniform1i(String name, int v0){
 			if(shader == 0)
 				return;
-			GL20.glUniform1i(GL20.glGetUniformLocation(shader, name), v0);
+			GLCompat.uniform1i(GLCompat.getUniformLocation(shader, name), v0);
+		}
+		
+		public void uniform1f(String name, float v0){
+			if(shader == 0)
+				return;
+			GLCompat.uniform1f(GLCompat.getUniformLocation(shader, name), v0);
+		}
+		
+		public void uniform2f(String name, float v0, float v1){
+			if(shader == 0)
+				return;
+			GLCompat.uniform2f(GLCompat.getUniformLocation(shader, name), v0, v1);
 		}
 		
 		public void uniform3f(String name, float v0, float v1, float v2){
 			if(shader == 0)
 				return;
-			GL20.glUniform3f(GL20.glGetUniformLocation(shader, name), v0, v1, v2);
+			GLCompat.uniform3f(GLCompat.getUniformLocation(shader, name), v0, v1, v2);
+		}
+		
+		public void uniform4f(String name, float v0, float v1, float v2, float v3){
+			if(shader == 0)
+				return;
+			GLCompat.uniform4f(GLCompat.getUniformLocation(shader, name), v0, v1, v2, v3);
+		}
+		
+		public void uniformMatrix3(String name, boolean transpose, FloatBuffer matrix){
+			if(shader == 0)
+				return;
+			GLCompat.uniformMatrix3(GLCompat.getUniformLocation(shader, name), transpose, matrix);
+		}
+		
+		public void uniformMatrix4(String name, boolean transpose, FloatBuffer matrix){
+			if(shader == 0)
+				return;
+			GLCompat.uniformMatrix4(GLCompat.getUniformLocation(shader, name), transpose, matrix);
 		}
 		
 		public static interface Uniform {
-			public void apply(int shader);
+			public void apply(Shader shader);
 		}
 	}
 }

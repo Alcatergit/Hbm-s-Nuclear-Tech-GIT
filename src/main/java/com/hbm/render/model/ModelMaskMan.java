@@ -1,8 +1,6 @@
 package com.hbm.render.model;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.main.ResourceManager;
 

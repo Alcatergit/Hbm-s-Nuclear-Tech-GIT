@@ -1,12 +1,12 @@
-#version 330 compatibility
+#version 120
 
-in vec2 texCoord;
-in vec2 lightCoord;
-in vec2 projCoord;
-in vec3 worldNormal;
-in vec3 worldTangent;
-in vec4 color;
-in vec3 lighting;
+varying vec2 texCoord;
+varying vec2 lightCoord;
+varying vec2 projCoord;
+varying vec3 worldNormal;
+varying vec3 worldTangent;
+varying vec4 color;
+varying vec3 lighting;
 
 uniform sampler2D blockTex;
 uniform sampler2D lightmap;

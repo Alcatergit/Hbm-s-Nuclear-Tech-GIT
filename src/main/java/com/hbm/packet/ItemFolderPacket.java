@@ -7,10 +7,7 @@ import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -81,7 +76,7 @@ public class ItemFolderPacket implements IMessage {
 				}
 
 				if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
-					if(Library.hasInventoryItem(p.inventory, ModItems.plate_iron) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
+					if(Library.hasInventoryOreDict(p.inventory, "plateIron") && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_iron);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))

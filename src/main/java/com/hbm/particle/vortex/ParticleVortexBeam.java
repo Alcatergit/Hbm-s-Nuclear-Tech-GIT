@@ -3,7 +3,6 @@ package com.hbm.particle.vortex;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.particle.ParticleSpark;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;

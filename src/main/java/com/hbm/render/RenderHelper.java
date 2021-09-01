@@ -33,7 +33,6 @@ import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -346,6 +345,36 @@ public class RenderHelper {
         tessellator.draw();
 	}
 	
+	public static void drawGuiRectColor(float x, float y, float u, float v, float width, float height, float uMax, float vMax, float r, float g, float b, float a){
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder.pos(x, y + height, 0.0D).tex(u, vMax).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x + width, y + height, 0.0D).tex(uMax, vMax).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x + width, y, 0.0D).tex(uMax, v).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x, y, 0.0D).tex(u, v).color(r, g, b, a).endVertex();
+        tessellator.draw();
+	}
+	
+	public static void drawGuiRectBatched(float x, float y, float u, float v, float width, float height, float uMax, float vMax){
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.pos(x, y + height, 0.0D).tex(u, vMax).endVertex();
+        bufferbuilder.pos(x + width, y + height, 0.0D).tex(uMax, vMax).endVertex();
+        bufferbuilder.pos(x + width, y, 0.0D).tex(uMax, v).endVertex();
+        bufferbuilder.pos(x, y, 0.0D).tex(u, v).endVertex();
+	}
+	
+	public static void drawGuiRectBatchedColor(float x, float y, float u, float v, float width, float height, float uMax, float vMax, float r, float g, float b, float a){
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.pos(x, y + height, 0.0D).tex(u, vMax).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x + width, y + height, 0.0D).tex(uMax, vMax).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x + width, y, 0.0D).tex(uMax, v).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(x, y, 0.0D).tex(u, v).color(r, g, b, a).endVertex();
+	}
+	
+	@Deprecated
 	private static void initializeFL(){
 		shadowFbo = GL30.glGenFramebuffers();
 		shadowFboTex = GL11.glGenTextures();
@@ -364,6 +393,7 @@ public class RenderHelper {
 		}
 	}
 	
+	@Deprecated
 	private static void clearFLShadowBuffer(){
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowFbo);
 		GlStateManager.clearDepth(1);
@@ -371,11 +401,13 @@ public class RenderHelper {
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 	}
 	
+	@Deprecated
 	private static void bindFLShadowBuffer(){
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, shadowFbo);
 		GlStateManager.viewport(0, 0, 1024, 1024);
 	}
 	
+	@Deprecated
 	private static void deleteDeferredFbo(){
 		GL11.glDeleteTextures(deferredColorTex);
 		GL11.glDeleteTextures(deferredPositionTex);
@@ -390,6 +422,7 @@ public class RenderHelper {
 		deferredDepthTex = -1;
 	}
 	
+	@Deprecated
 	private static void recreateDeferredFbo(){
 		deferredFbo = GL30.glGenFramebuffers();
 		deferredColorTex = GL11.glGenTextures();
@@ -462,6 +495,7 @@ public class RenderHelper {
 		}
 	}
 	
+	@Deprecated
 	private static void clearDeferredBuffer(){
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, deferredFbo);
 		GlStateManager.clearColor(0, 0, 0, 1);
@@ -474,6 +508,7 @@ public class RenderHelper {
 		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 	}
 	
+	@Deprecated
 	public static void renderFlashlights(){
 		RenderHelper.renderingFlashlights = true;
 		if(height != Minecraft.getMinecraft().displayHeight || width != Minecraft.getMinecraft().displayWidth){
@@ -513,7 +548,7 @@ public class RenderHelper {
 		RenderHelper.renderingFlashlights = false;
 	}
 	
-	@SuppressWarnings("deprecation")
+	@Deprecated
 	public static void renderFlashLight(Vec3d start, Vec3d end, float degrees, float brightness, ResourceLocation cookie, float partialTicks){
 		if(flashlightLock)
 			return;
@@ -658,13 +693,14 @@ public class RenderHelper {
         GlStateManager.viewport(0, 0, RenderHelper.width, RenderHelper.height);
         
         if(!useFullPost){
+        	/*
 	        enableBlockVBOs();
 	        ResourceManager.flashlight_new.use();
 	        sendFlashlightUniforms(ResourceManager.flashlight_new.getShaderId(), new Vec3d(entPosX, entPosY, entPosZ), start, startToEnd.normalize(), (float)height, degrees, cookie);
 	       
 	        GL11.glPushMatrix();
 	        GlStateManager.doPolygonOffset(-4, -4);
-	        
+	        */
 	        //setup necessary matrices
 	        /*Matrix4f flashlight_view = new Matrix4f();
 	        Matrix4f flashlight_project = new Matrix4f();
@@ -675,7 +711,7 @@ public class RenderHelper {
 	       // Matrix4f.mul(flashlight_project, flashlight_view, flashlight_view);
 	        flashlight_view.store(ClientProxy.AUX_GL_BUFFER);
 	        ClientProxy.AUX_GL_BUFFER.rewind();*/
-	        ClientProxy.AUX_GL_BUFFER.put(projecion);
+	        /*ClientProxy.AUX_GL_BUFFER.put(projecion);
 	        ClientProxy.AUX_GL_BUFFER.rewind();
 	        GL20.glUniformMatrix4(GL20.glGetUniformLocation(ResourceManager.flashlight_new.getShaderId(), "shadow_view"), false, ClientProxy.AUX_GL_BUFFER2);
 	        GL20.glUniformMatrix4(GL20.glGetUniformLocation(ResourceManager.flashlight_new.getShaderId(), "shadow_proj"), false, ClientProxy.AUX_GL_BUFFER);
@@ -746,6 +782,7 @@ public class RenderHelper {
 	        GlStateManager.bindTexture(shadowFboTex);
 	        GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.flashlight_deferred.getShaderId(), "shadowTex"), 7);
 	        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+	        */
         } else {
         	GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, deferredFbo);
         	
@@ -772,6 +809,7 @@ public class RenderHelper {
         flashlightLock = false;
 	}
 	
+	@Deprecated
 	private static void volumetricRender(Vec3d start, Vec3d end, Vec3d playerPos, float radius, float degrees){
 		Vec3d vec = end.subtract(start);
 		GlStateManager.enableBlend();
@@ -922,6 +960,7 @@ public class RenderHelper {
 		}
 	}
 	
+	@Deprecated
 	private static void sendFlashlightUniforms(int shader, Vec3d playerPos, Vec3d pos, Vec3d normal, float height, float degrees, ResourceLocation flashlight_tex){
 		pos = pos.subtract(playerPos);
 		pos = BobMathUtil.viewFromLocal(new Vector4f((float)pos.x, (float)pos.y, (float)pos.z, 1))[0];
@@ -941,6 +980,7 @@ public class RenderHelper {
 		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
 	}
 	
+	@Deprecated
 	private static void sendFlashLightPostUniforms(int shader, Vec3d playerPos, Vec3d pos, float height, float brightness, float[] shadowView, float[] shadowProjection, ResourceLocation flashlight_tex){
 		pos = pos.subtract(playerPos);
 		//pos = BobMathUtil.viewFromLocal(new Vector4f((float)pos.x, (float)pos.y, (float)pos.z, 1))[0];
@@ -1086,6 +1126,22 @@ public class RenderHelper {
 		//Vec3d eyePos = ActiveRenderInfo.getCameraPosition();
 		
 		return new Vec3d(worldPos.x + rPosX, worldPos.y + rPosY, worldPos.z + rPosZ);
+	}
+	
+	public static boolean intersects2DBox(float x, float y, float[] box){
+		return x > box[0] && x < box[2] && y > box[1] && y < box[3];
+	}
+	
+	public static boolean boxesOverlap(float[] box1, float[] box2){
+		return box1[0] < box2[2] && box1[2] > box2[0] && box1[1] < box2[3] && box1[3] > box2[1];
+	}
+	
+	public static boolean boxContainsOther(float[] box, float[] other){
+		return box[0] <= other[0] && box[1] <= other[1] && box[2] >= other[2] && box[3] >= other[3];
+	}
+	
+	public static float[] getBoxCenter(float[] box){
+		return new float[]{box[0]+(box[2]-box[0])*0.5F, box[1]+(box[3]-box[1])*0.5F};
 	}
 	
 }

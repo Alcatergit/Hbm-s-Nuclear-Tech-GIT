@@ -1,9 +1,9 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D texture;
 uniform float angle;
 
-in vec2 texCoord;
+varying vec2 texCoord;
 
 void main(){
 	vec2 loc = normalize(texCoord*2 - 1);

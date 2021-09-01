@@ -7,9 +7,12 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.PriorityQueue;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,12 +46,12 @@ public class Tessellator
     /** The color (RGBA) value to be used for the following draw call. */
     private int color;
     /** Whether the current draw object for this tessellator has color values. */
-    private boolean hasColor;
+    public boolean hasColor;
     /** Whether the current draw object for this tessellator has texture coordinates. */
     private boolean hasTexture;
     private boolean hasBrightness;
     /** Whether the current draw object for this tessellator has normal values. */
-    private boolean hasNormals;
+    public boolean hasNormals;
     /** The index into the raw buffer to be used for the next data. */
     private int rawBufferIndex;
     /**
@@ -251,13 +254,21 @@ public class Tessellator
      */
     public void startDrawingQuads()
     {
-        this.startDrawing(7);
+        this.startDrawing(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
     }
 
+    public void startDrawingQuadsColor(){
+    	startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+    }
+    
+    public void startDrawing(int mode){
+    	startDrawing(mode, DefaultVertexFormats.POSITION_TEX_NORMAL);
+    }
+    
     /**
      * Resets tessellator state and prepares for drawing (with the specified draw mode).
      */
-    public void startDrawing(int glMode)
+    public void startDrawing(int glMode, VertexFormat format)
     {
        /* if (this.isDrawing)
         {
@@ -274,7 +285,7 @@ public class Tessellator
             this.hasBrightness = false;
             this.isColorDisabled = false;
         }*/
-    	net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, DefaultVertexFormats.POSITION_TEX_NORMAL);
+    	net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, format);
     }
 
     /**

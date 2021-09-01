@@ -108,7 +108,6 @@ public class ItemGeigerCounter extends Item {
 				rads += 100;
 			}
 		}
-		
 		return rads;
 	}
 	

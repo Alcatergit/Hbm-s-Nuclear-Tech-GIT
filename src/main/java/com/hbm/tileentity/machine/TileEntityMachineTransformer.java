@@ -36,7 +36,6 @@ public class TileEntityMachineTransformer extends TileEntity implements ITickabl
 			age++;
 			
 			if(age == delay) {
-				
 				maxPower /= (20D / delay);
 				long saved = 0;
 				

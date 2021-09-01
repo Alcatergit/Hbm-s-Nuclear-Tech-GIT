@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;

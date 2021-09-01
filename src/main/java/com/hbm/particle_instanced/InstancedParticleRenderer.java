@@ -6,19 +6,14 @@ import java.util.Iterator;
 import java.util.Queue;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL33;
 
 import com.google.common.collect.Queues;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
-import com.hbm.render.Vbo;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -105,15 +100,15 @@ public class InstancedParticleRenderer {
 		}
 		particleBuffer.rewind();
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, particleDataVbo);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, particleBuffer, GL15.GL_DYNAMIC_DRAW);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, particleDataVbo);
+		GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, particleBuffer, GLCompat.GL_DYNAMIC_DRAW);
 		
-		GL30.glBindVertexArray(vao);
+		GLCompat.bindVertexArray(vao);
 		ResourceManager.lit_particles.use();
-		GL31.glDrawArraysInstanced(GL11.GL_QUADS, 0, 4, faceCount);
+		GLCompat.drawArraysInstanced(GL11.GL_QUADS, 0, 4, faceCount);
 		HbmShaderManager2.releaseShader();
-		GL30.glBindVertexArray(0);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindVertexArray(0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 		
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -122,8 +117,8 @@ public class InstancedParticleRenderer {
 	}
 	
 	public static void setup(){
-		int particleQuadVbo = GL15.glGenBuffers();
-		int particleDataVbo = GL15.glGenBuffers();
+		int particleQuadVbo = GLCompat.genBuffers();
+		int particleDataVbo = GLCompat.genBuffers();
 		float[] vertexData = {
 				-0.5F, -0.5F, 0,
 				0.5F, -0.5F, 0,
@@ -133,39 +128,39 @@ public class InstancedParticleRenderer {
 		for(float f : vertexData)
 			data.putFloat(f);
 		data.rewind();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, particleQuadVbo);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data, GL15.GL_STATIC_DRAW);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, particleQuadVbo);
+		GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, data, GLCompat.GL_STATIC_DRAW);
 		
-		int vao = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(vao);
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 12, 0);
-		GL20.glEnableVertexAttribArray(0);
+		int vao = GLCompat.genVertexArrays();
+		GLCompat.bindVertexArray(vao);
+		GLCompat.vertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 12, 0);
+		GLCompat.enableVertexAttribArray(0);
 		
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, particleDataVbo);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, particleDataVbo);
 		//Position, scale, tex (texcoord offset and a texcoord size), color (1 byte per channel), lightmap (two shorts).
-		GL20.glVertexAttribPointer(1, 3, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 0);
-		GL20.glEnableVertexAttribArray(1);
+		GLCompat.vertexAttribPointer(1, 3, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 0);
+		GLCompat.enableVertexAttribArray(1);
 		//Scale
-		GL20.glVertexAttribPointer(2, 1, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 12);
-		GL20.glEnableVertexAttribArray(2);
+		GLCompat.vertexAttribPointer(2, 1, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 12);
+		GLCompat.enableVertexAttribArray(2);
 		//tex
-		GL20.glVertexAttribPointer(3, 4, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 16);
-		GL20.glEnableVertexAttribArray(3);
+		GLCompat.vertexAttribPointer(3, 4, GL11.GL_FLOAT, false, BYTES_PER_PARTICLE, 16);
+		GLCompat.enableVertexAttribArray(3);
 		//color
-		GL20.glVertexAttribPointer(4, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_PARTICLE, 32);
-		GL20.glEnableVertexAttribArray(4);
+		GLCompat.vertexAttribPointer(4, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_PARTICLE, 32);
+		GLCompat.enableVertexAttribArray(4);
 		//lightmap
-		GL20.glVertexAttribPointer(5, 2, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_PARTICLE, 36);
-		GL20.glEnableVertexAttribArray(5);
+		GLCompat.vertexAttribPointer(5, 2, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_PARTICLE, 36);
+		GLCompat.enableVertexAttribArray(5);
 		
-		GL33.glVertexAttribDivisor(1, 1);
-		GL33.glVertexAttribDivisor(2, 1);
-		GL33.glVertexAttribDivisor(3, 1);
-		GL33.glVertexAttribDivisor(4, 1);
-		GL33.glVertexAttribDivisor(5, 1);
+		GLCompat.vertexAttribDivisor(1, 1);
+		GLCompat.vertexAttribDivisor(2, 1);
+		GLCompat.vertexAttribDivisor(3, 1);
+		GLCompat.vertexAttribDivisor(4, 1);
+		GLCompat.vertexAttribDivisor(5, 1);
 		
-		GL30.glBindVertexArray(0);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindVertexArray(0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 		
 		InstancedParticleRenderer.vao = vao;
 		InstancedParticleRenderer.particleDataVbo = particleDataVbo;

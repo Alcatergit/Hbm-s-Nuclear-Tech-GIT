@@ -9,7 +9,6 @@ import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.weapon.ItemRenderCrucible;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -59,7 +58,7 @@ public class ParticleCrucibleLightning extends ParticleFirstPerson {
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		ResourceManager.crucible_lightning.use();
 		//Purposefully low frame rate for an artistic feel
-		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.crucible_lightning.getShaderId(), "time"), (particleAge/2)*2/*+partialTicks*/);
+		ResourceManager.crucible_lightning.uniform1f("time", (particleAge/2)*2);
 		LightningGenerator.render(node, ItemRenderCrucible.playerPos, 0.0015F, 0, 0, 0, true, null);
 		HbmShaderManager2.releaseShader();
 	}

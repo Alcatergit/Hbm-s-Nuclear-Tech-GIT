@@ -41,7 +41,6 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -136,6 +135,9 @@ public class ItemGunEgon extends ItemGunBase {
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
 			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase){
 				EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
+				if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
+					return;
+				}
 				float damage = Math.min(ent.getHealth(), 2);
 				ent.getCombatTracker().trackDamage(ModDamageSource.gluon, ent.getHealth(), damage);
 				ent.setHealth(ent.getHealth()-damage);

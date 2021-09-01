@@ -15,7 +15,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketSpecialDeath;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;

@@ -53,16 +53,10 @@ public class TurretCIWS extends TurretBase {
 			te.spin += 5;
 		
 		if(te.spin > 25 && i % 2 == 0) {
-			Vec3d vector = new Vec3d(
-					-Math.sin(yaw / 180.0F * (float) Math.PI) * Math.cos(pitch / 180.0F * (float) Math.PI),
-					-Math.sin(pitch / 180.0F * (float) Math.PI),
-					Math.cos(yaw / 180.0F * (float) Math.PI) * Math.cos(pitch / 180.0F * (float) Math.PI));
-			
-			vector.normalize();
-			
+			Vec3d vector = new Vec3d(0, 0, 1).rotatePitch((float)Math.toRadians(-pitch)).rotateYaw((float)Math.toRadians(-yaw));
 			if(!world.isRemote) {
 				
-				rayShot(world, vector, x + vector.x * 2.5 + 0.5, y + vector.y * 2.5 + 0.5, z + vector.z * 2.5 + 0.5, 100, 10.0F, WeaponConfig.ciwsHitrate);
+				rayShot(world, vector, x + vector.x * 2.5 + 0.5, y + vector.y * 2.5 + 0.5, z + vector.z * 2.5 + 0.5, 200, 10.0F, WeaponConfig.ciwsHitrate);
 				
 				EntityGasFlameFX smoke = new EntityGasFlameFX(world);
 				smoke.posX = x + vector.x * 2.5 + 0.5;
@@ -109,14 +103,19 @@ public class TurretCIWS extends TurretBase {
 		AxisAlignedBB box = new AxisAlignedBB(pos.x, pos.y, pos.z, test.x, test.y, test.z).grow(1.0D);
 		List<Entity> ents = world.getEntitiesWithinAABBExcludingEntity(null, box);
 		for(Entity ent : ents){
+			//System.out.println(ent);
+			//System.out.println(ent.getEntityBoundingBox().grow(1.0D).calculateIntercept(pos, test));
+			//Vec3d turret = new Vec3d(ent.posX - (posX + 0.5), ent.posY + ent.getEyeHeight() - (posY + 1.5), ent.posZ - (posZ + 0.5));
+			//System.out.println(vec  +"    " + turret.normalize());
 			if(ent.getEntityBoundingBox().grow(1.0D).calculateIntercept(pos, test) != null){
 				if(rand.nextInt(100) < hitPercent) {
 					if(ent instanceof EntityLivingBase){
 						ent.hurtResistantTime = 0;
 						((EntityLivingBase) ent).hurtTime = 0;
 						ent.attackEntityFrom(ModDamageSource.shrapnel, 10.0F);
-					} else 
+					} else {
 						ent.attackEntityFrom(ModDamageSource.shrapnel, 10.0F);
+					}
 				}
 			}
 		}

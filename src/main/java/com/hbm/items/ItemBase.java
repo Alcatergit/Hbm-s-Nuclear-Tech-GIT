@@ -2,7 +2,6 @@ package com.hbm.items;
 
 import com.hbm.main.MainRegistry;
 
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.Item;
 
 public class ItemBase extends Item {

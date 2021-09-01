@@ -5,8 +5,6 @@ import java.util.List;
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
 import com.hbm.items.ModItems;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;

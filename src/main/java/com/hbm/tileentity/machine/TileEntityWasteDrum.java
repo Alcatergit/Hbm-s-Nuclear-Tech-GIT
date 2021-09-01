@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -10,15 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityWasteDrum extends TileEntityMachineBase implements ITickable {
 
 	private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 	
-	public boolean lock = false;
+	private int water = 0;
 	
 	public TileEntityWasteDrum() {
 		super(12, 1);
@@ -36,19 +34,6 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 		}else{
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
 		}
-	}
-	
-	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		super.readFromNBT(compound);
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setTag("inventory", inventory.serializeNBT());
-		return super.writeToNBT(compound);
 	}
 	
 	@Override
@@ -84,24 +69,48 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
+	public void readFromNBT(NBTTagCompound compound){
+		water = compound.getInteger("water");
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound){
+		compound.setInteger("water", water);
+		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public void onLoad(){
+		updateWater();
+	}
+	
+	public void updateWater(){
+		water = 0;
+
+		Block b = world.getBlockState(pos.east()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+		b = world.getBlockState(pos.west()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+		b = world.getBlockState(pos.up()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+		b = world.getBlockState(pos.down()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+		b = world.getBlockState(pos.south()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+		b = world.getBlockState(pos.north()).getBlock();
+		if(b == Blocks.WATER || b == Blocks.FLOWING_WATER)
+			water++;
+	}
+	
+	@Override
 	public void update() {
 		if(!world.isRemote) {
-			
-			int water = 0;
-
-			if(world.getBlockState(pos.east()).getBlock() == Blocks.WATER || world.getBlockState(pos.east()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			if(world.getBlockState(pos.west()).getBlock() == Blocks.WATER || world.getBlockState(pos.west()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			if(world.getBlockState(pos.up()).getBlock() == Blocks.WATER || world.getBlockState(pos.up()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			if(world.getBlockState(pos.down()).getBlock() == Blocks.WATER || world.getBlockState(pos.down()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			if(world.getBlockState(pos.south()).getBlock() == Blocks.WATER || world.getBlockState(pos.south()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			if(world.getBlockState(pos.north()).getBlock() == Blocks.WATER || world.getBlockState(pos.north()).getBlock() == Blocks.FLOWING_WATER)
-				water++;
-			
 			if(water > 0) {
 				
 				int r = 60 * 60 * 20 / water;
@@ -129,18 +138,4 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 		}
 	}
 	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else {
-			return super.getCapability(capability, facing);
-		}
-	}
-
 }
