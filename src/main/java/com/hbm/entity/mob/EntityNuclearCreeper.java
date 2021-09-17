@@ -127,9 +127,9 @@ public class EntityNuclearCreeper extends EntityMob {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(STATE, Integer.valueOf(-1));
-		this.dataManager.register(POWERED, Boolean.valueOf(false));
-		this.dataManager.register(IGNITED, Boolean.valueOf(false));
+		this.dataManager.register(STATE, -1);
+		this.dataManager.register(POWERED, Boolean.FALSE);
+		this.dataManager.register(IGNITED, Boolean.FALSE);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 
-		if(((Boolean) this.dataManager.get(POWERED)).booleanValue()) {
+		if((Boolean) this.dataManager.get(POWERED)) {
 			compound.setBoolean("powered", true);
 		}
 
@@ -154,7 +154,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		this.dataManager.set(POWERED, Boolean.valueOf(compound.getBoolean("powered")));
+		this.dataManager.set(POWERED, compound.getBoolean("powered"));
 
 		if(compound.hasKey("Fuse", 99)) {
 			this.fuseTime = compound.getShort("Fuse");
@@ -333,7 +333,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Returns true if the creeper is powered by a lightning bolt.
 	 */
 	public boolean getPowered() {
-		return this.dataManager.get(POWERED).booleanValue();
+		return this.dataManager.get(POWERED);
 	}
 
 	/**
@@ -354,14 +354,14 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Returns the current state of creeper, -1 is idle, 1 is 'in fuse'
 	 */
 	public int getCreeperState() {
-		return this.dataManager.get(STATE).intValue();
+		return this.dataManager.get(STATE);
 	}
 
 	/**
 	 * Sets the state of creeper, -1 to idle and 1 to be 'in fuse'
 	 */
 	public void setCreeperState(int i) {
-		this.dataManager.set(STATE, Integer.valueOf(i));
+		this.dataManager.set(STATE, i);
 	}
 
 	/**
@@ -370,7 +370,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	@Override
 	public void onStruckByLightning(EntityLightningBolt p_70077_1_) {
 		super.onStruckByLightning(p_70077_1_);
-		this.dataManager.set(POWERED, Boolean.valueOf(true));
+		this.dataManager.set(POWERED, Boolean.TRUE);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.inventory.getCurrentItem();
 
-		if(itemstack != null && itemstack.getItem() == Items.FLINT_AND_STEEL) {
+		if(itemstack.getItem() == Items.FLINT_AND_STEEL) {
 			this.world.playSound(null, this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
 			player.swingArm(hand);
 
@@ -424,11 +424,11 @@ public class EntityNuclearCreeper extends EntityMob {
 	}
 
 	public boolean hasIgnited() {
-		return this.dataManager.get(IGNITED).booleanValue();
+		return this.dataManager.get(IGNITED);
 	}
 
 	public void ignite() {
-		this.dataManager.set(IGNITED, Boolean.valueOf(true));
+		this.dataManager.set(IGNITED, Boolean.TRUE);
 	}
 
 	public void setPowered(boolean power) {

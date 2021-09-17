@@ -52,14 +52,14 @@ public class BlockModDoor extends Block {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.valueOf(false)).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf(false)).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.FALSE).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.FALSE).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		state = state.getActualState(source, pos);
 		EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
-		boolean flag = !((Boolean) state.getValue(OPEN)).booleanValue();
+		boolean flag = !(Boolean) state.getValue(OPEN);
 		boolean flag1 = state.getValue(HINGE) == BlockDoor.EnumHingePosition.RIGHT;
 
 		switch(enumfacing) {
@@ -126,8 +126,8 @@ public class BlockModDoor extends Block {
 			BlockPos blockpos = iblockstate.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
 			IBlockState iblockstate1 = pos == blockpos ? iblockstate : worldIn.getBlockState(blockpos);
 
-			if(iblockstate1.getBlock() == this && ((Boolean) iblockstate1.getValue(OPEN)).booleanValue() != open) {
-				worldIn.setBlockState(blockpos, iblockstate1.withProperty(OPEN, Boolean.valueOf(open)), 10);
+			if(iblockstate1.getBlock() == this && (Boolean) iblockstate1.getValue(OPEN) != open) {
+				worldIn.setBlockState(blockpos, iblockstate1.withProperty(OPEN, open), 10);
 				worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
 				worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			}
@@ -176,11 +176,11 @@ public class BlockModDoor extends Block {
 			} else {
 				boolean flag = worldIn.isBlockPowered(pos) || worldIn.isBlockPowered(blockpos1);
 
-				if(blockIn != this && (flag || blockIn.getDefaultState().canProvidePower()) && flag != ((Boolean) iblockstate1.getValue(POWERED)).booleanValue()) {
-					worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, Boolean.valueOf(flag)), 2);
+				if(blockIn != this && (flag || blockIn.getDefaultState().canProvidePower()) && flag != (Boolean) iblockstate1.getValue(POWERED)) {
+					worldIn.setBlockState(blockpos1, iblockstate1.withProperty(POWERED, flag), 2);
 
-					if(flag != ((Boolean) state.getValue(OPEN)).booleanValue()) {
-						worldIn.setBlockState(pos, state.withProperty(OPEN, Boolean.valueOf(flag)), 2);
+					if(flag != (Boolean) state.getValue(OPEN)) {
+						worldIn.setBlockState(pos, state.withProperty(OPEN, flag), 2);
 						worldIn.markBlockRangeForRenderUpdate(pos, pos);
 						worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 					}
@@ -309,7 +309,7 @@ public class BlockModDoor extends Block {
 	 * Convert the given metadata into a BlockState for this Block
 	 */
 	public IBlockState getStateFromMeta(int meta) {
-		return (meta & 8) > 0 ? this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(HINGE, (meta & 1) > 0 ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.valueOf((meta & 2) > 0)) : this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(FACING, EnumFacing.getHorizontal(meta & 3).rotateYCCW()).withProperty(OPEN, Boolean.valueOf((meta & 4) > 0));
+		return (meta & 8) > 0 ? this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.UPPER).withProperty(HINGE, (meta & 1) > 0 ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, (meta & 2) > 0) : this.getDefaultState().withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER).withProperty(FACING, EnumFacing.getHorizontal(meta & 3).rotateYCCW()).withProperty(OPEN, (meta & 4) > 0);
 	}
 
 	/**
@@ -325,13 +325,13 @@ public class BlockModDoor extends Block {
 				i |= 1;
 			}
 
-			if(((Boolean) state.getValue(POWERED)).booleanValue()) {
+			if((Boolean) state.getValue(POWERED)) {
 				i |= 2;
 			}
 		} else {
 			i = i | ((EnumFacing) state.getValue(FACING)).rotateY().getHorizontalIndex();
 
-			if(((Boolean) state.getValue(OPEN)).booleanValue()) {
+			if((Boolean) state.getValue(OPEN)) {
 				i |= 4;
 			}
 		}
