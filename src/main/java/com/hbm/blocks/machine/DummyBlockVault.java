@@ -67,7 +67,7 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb {
 		} else if(!player.isSneaking())
 		{
 			TileEntity til = world.getTileEntity(pos);
-			if(til != null && til instanceof TileEntityDummy) {
+			if(til != null && til instanceof TileEntityDummy && ((TileEntityDummy)til).target != null) {
 						
 				TileEntityVaultDoor entity = (TileEntityVaultDoor) world.getTileEntity(((TileEntityDummy)til).target);
 				if(entity != null)
@@ -80,7 +80,7 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb {
 			return true;
 		} else {
 			TileEntity te = world.getTileEntity(pos);
-			if(te != null && te instanceof TileEntityDummy) {
+			if(te != null && te instanceof TileEntityDummy && ((TileEntityDummy)te).target != null) {
 						
 				TileEntityVaultDoor entity = (TileEntityVaultDoor) world.getTileEntity(((TileEntityDummy)te).target);
 				if(entity != null)

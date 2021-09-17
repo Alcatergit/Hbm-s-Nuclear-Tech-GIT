@@ -2,19 +2,18 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemStamp;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -23,12 +22,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineEPress extends TileEntity implements ITickable, IConsumer {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineEPress extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public int progress = 0;
 	public long power = 0;
@@ -38,38 +33,13 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	public int meta;
 	boolean isRetracting = false;
 
-	private String customName;
-	
 	public TileEntityMachineEPress() {
-		inventory = new ItemStackHandler(4) {
-			
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				if(stack.getItem() instanceof ItemStamp && slot == 1)
-					return true;
-				if(stack.getItem() instanceof IBatteryItem && slot == 0)
-					return true;
-				return slot == 2;
-			}
-		};
+		super(4);
 	}
 
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.epress";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public String getName(){
+		return "container.epress";
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -79,6 +49,32 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
 		}
 	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack){
+		if(stack.getItem() instanceof ItemStamp && i == 1)
+			return true;
+		
+		if(i == 0 && stack.getItem() instanceof IBatteryItem)
+			return true;
+		
+		return i == 2;
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return e.ordinal() == 0 ? new int[] { 3 } : new int[]{ 0, 1, 2 };
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return slot == 3;
+	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -86,8 +82,6 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 		compound.setLong("power", power);
 		compound.setBoolean("ret", isRetracting);
 		compound.setTag("inventory", inventory.serializeNBT());
-		if(customName != null)
-			compound.setString("customname", customName);
 		return super.writeToNBT(compound);
 	}
 	
@@ -98,8 +92,6 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 		isRetracting = compound.getBoolean("ret");
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		if(compound.hasKey("customname"))
-			customName = compound.getString("customname");
 		super.readFromNBT(compound);
 	}
 	
@@ -187,10 +179,6 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 			mark = true;
 			detectIsRetracting = isRetracting;
 		}
-		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))){
-			mark = true;
-			detectCustomName = customName;
-		}
 		if(!Library.areItemsEqual(inventory.getStackInSlot(2), detectItem)){
 			detectItem = inventory.getStackInSlot(2).copy();
 		}
@@ -239,11 +227,11 @@ public class TileEntityMachineEPress extends TileEntity implements ITickable, IC
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+		return super.getCapability(capability, facing);
 	}
 }

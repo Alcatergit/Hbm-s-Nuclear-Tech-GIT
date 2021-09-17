@@ -9,12 +9,14 @@ import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -30,10 +32,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCMBFactory extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineCMBFactory extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
-	public ItemStackHandler inventory;
-	
 	public long power = 0;
 	public int process = 0;
 	public int soundCycle = 0;
@@ -43,61 +43,67 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 	public Fluid tankType = ModForgeFluids.watz;
 	public boolean needsUpdate = false;
 
-	//private static final int[] slots_top = new int[] {1, 3};
-	//private static final int[] slots_bottom = new int[] {0, 2, 4};
-	//private static final int[] slots_side = new int[] {0, 2};
-	
-	private String customName;
+	private static final int[] slots_top = new int[] {1, 3};
+	private static final int[] slots_bottom = new int[] {0, 2, 4};
+	private static final int[] slots_side = new int[] {0, 2};
 	
 	public TileEntityMachineCMBFactory() {
-		inventory = new ItemStackHandler(6){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				if(slot == 1){
-					if(stack.getItem() == ModItems.ingot_magnetized_tungsten || stack.getItem() == ModItems.powder_magnetized_tungsten){
-						return true;
-					} else {
-						return false;
-					}
-				}
-				if(slot == 3){
-					if(stack.getItem() == ModItems.ingot_advanced_alloy || stack.getItem() == ModItems.powder_advanced_alloy){
-						return true;
-					} else {
-						return false;
-					}
-				}
-				if(slot == 4){
-					return false;
-				}
-				return true;
-			}
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				else
-					return ItemStack.EMPTY;
-			}
-		};
+		super(6);
 		tank = new FluidTank(8000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineCMB";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+	@Override
+	public String getName(){
+		return "container.machineCMB";
 	}
 	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int amount){
+		return this.isItemValidForSlot(slot, stack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack, int amount){
+		if(i == 4)
+			return true;
+		if(i == 0)
+			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
+				return true;
+		if(i == 2)
+			if(FFUtils.containsFluid(itemStack, ModForgeFluids.watz))
+				return true;
+		return false;
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack){
+		switch(i)
+		{
+		case 0:
+			if(stack.getItem() instanceof IBatteryItem)
+				return true;
+			break;
+		case 1:
+			if(stack.getItem() == ModItems.ingot_magnetized_tungsten || stack.getItem() == ModItems.powder_magnetized_tungsten)
+				return true;
+			break;
+		case 2:
+			if(FFUtils.containsFluid(stack, ModForgeFluids.watz))
+				return true;
+			break;
+		case 3:
+			if(stack.getItem() == ModItems.ingot_advanced_alloy || stack.getItem() == ModItems.powder_advanced_alloy)
+				return true;
+			break;
+		}
+		
+		return false;
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -114,8 +120,6 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 		power = compound.getLong("power");
 		tank.readFromNBT(compound);
 		process = compound.getShort("process");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
 	
@@ -124,7 +128,6 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 		compound.setLong("power", power);
 		tank.writeToNBT(compound);
 		compound.setShort("process", (short) process);
-		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
 	
@@ -288,9 +291,7 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);
@@ -299,9 +300,7 @@ public class TileEntityMachineCMBFactory extends TileEntity implements ITickable
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return true;
 		} else {
 			return super.hasCapability(capability, facing);

@@ -8,8 +8,6 @@ import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;

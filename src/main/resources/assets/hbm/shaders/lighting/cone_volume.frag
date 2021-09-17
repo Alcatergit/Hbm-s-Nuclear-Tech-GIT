@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 const float G_SCATTERING = 0.5;
 const float PI = 3.1415926535897932384626433832795;
@@ -167,7 +167,7 @@ float pointLightFalloff(float radius, float dist){
 
 
 void main(){
-	float offset = ditherPattern[(int(gl_FragCoord.x)%4)*4 + (int(gl_FragCoord.y)%4)];
+	float offset = ditherPattern[int(mod(gl_FragCoord.x, 4))*4 + int(mod(gl_FragCoord.y, 4))];
 	vec2 uv = gl_FragCoord.xy/(windowSize*0.5);
 	float depthSample = texture2D(depth, uv).r;
 	vec3 world = worldPos(vec3(gl_FragCoord.xy, depthSample)) - camPos;

@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform vec2 windowSize;
 uniform vec3 fs_Pos;
@@ -6,6 +6,7 @@ uniform float height;
 uniform vec2 zNearFar;
 uniform float eyeHeight;
 uniform float brightness;
+uniform vec2 shadowTexSize;
 
 uniform sampler2D mc_tex;
 uniform sampler2D depthBuffer;
@@ -91,12 +92,12 @@ vec3 generateNormal(vec3 world_pos){
 
 float calcShadow(vec3 proj_coord){
 	float shadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(shadowTex, 0);
+	vec2 texelSize = 1.0 / shadowTexSize;
 	for(int x = -1; x <= 1; ++x)
 	{
     	for(int y = -1; y <= 1; ++y)
     	{
-        	float pcfDepth = texture(shadowTex, proj_coord.xy + vec2(x, y) * texelSize).r; 
+        	float pcfDepth = texture2D(shadowTex, proj_coord.xy + vec2(x, y) * texelSize).r; 
         	shadow += proj_coord.z - 0.0001777 > pcfDepth ? 1.0 : 0.0;        
     	}    
 	}

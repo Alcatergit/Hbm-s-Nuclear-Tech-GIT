@@ -54,6 +54,7 @@ import com.hbm.blocks.generic.BlockClorine;
 import com.hbm.blocks.generic.BlockClorineSeal;
 import com.hbm.blocks.generic.BlockCoalBurning;
 import com.hbm.blocks.generic.BlockCoalOil;
+import com.hbm.blocks.generic.BlockControlPanel;
 import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.generic.BlockFallingRad;
 import com.hbm.blocks.generic.BlockGeysir;
@@ -867,6 +868,10 @@ public class ModBlocks {
 	public static final Block fluid_duct_mk2 = new BlockFluidPipeMk2(Material.IRON, "fluid_duct_mk2").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(0.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block chain = new BlockChain(Material.IRON, "dungeon_chain").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
+	
+	//Control panel
+	public static final int guiID_control_panel = 106;
+	public static final Block control0 = new BlockControlPanel(Material.IRON, "control_panel0").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 	
 	//Fluids
 	public static final Material fluidtoxic = new MaterialLiquid(MapColor.GREEN).setReplaceable();

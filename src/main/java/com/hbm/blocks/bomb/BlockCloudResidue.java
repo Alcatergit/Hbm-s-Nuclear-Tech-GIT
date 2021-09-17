@@ -1,6 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -12,7 +11,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;

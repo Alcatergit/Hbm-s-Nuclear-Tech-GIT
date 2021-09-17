@@ -3,7 +3,6 @@ package com.hbm.render;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 
 import net.minecraft.client.renderer.GLAllocation;
 
@@ -34,11 +33,11 @@ public class Vbo {
 	}
 	
 	public void draw(){
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, vboId);
 		preDraw();
 		GL11.glDrawArrays(drawMode, 0, numVertices);
 		postDraw();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 	}
 	
 	private void postDraw(){
@@ -56,7 +55,7 @@ public class Vbo {
 		Vertex[] vertices = new Vertex[]{bottomLeft, bottomRight, topRight, topLeft};
 		
 		
-		int vboId = GL15.glGenBuffers();
+		int vboId = GLCompat.genBuffers();
 		ByteBuffer data = GLAllocation.createDirectByteBuffer(vertices.length*BYTES_PER_VERTEX);
 		for(Vertex v : vertices){
 			data.putFloat(v.x);
@@ -75,9 +74,9 @@ public class Vbo {
 			data.put((byte)(v.a*255));
 		}
 		data.rewind();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, data, GL15.GL_STATIC_DRAW);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, vboId);
+		GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, data, GLCompat.GL_STATIC_DRAW);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 		
 		Vbo vbo = new Vbo(vboId, GL11.GL_QUADS, vertices.length);
 		return vbo;

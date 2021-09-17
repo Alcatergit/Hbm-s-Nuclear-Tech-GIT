@@ -228,7 +228,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 				return;
 				// this piece stops the "stomp" from reaching below ground
 			} else if(b.isNormalCube()) {
-
 				return;
 			}
 		}

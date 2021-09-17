@@ -1,11 +1,11 @@
-#version 330 compatibility
+#version 120
 
 uniform vec3 tanDirection;
 uniform mat3 matrix;
 
-out vec2 texCoord;
-out vec3 normal;
-out vec3 tangent;
+varying vec2 texCoord;
+varying vec3 normal;
+varying vec3 tangent;
 
 void main(){
 	texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st;

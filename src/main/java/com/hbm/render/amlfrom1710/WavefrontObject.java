@@ -185,6 +185,7 @@ public class WavefrontObject implements IModelCustom
         tessellator.draw();
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void tessellateAll(Tessellator tessellator)
     {
@@ -210,6 +211,7 @@ public class WavefrontObject implements IModelCustom
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void tessellateOnly(Tessellator tessellator, String... groupNames) {
         for (GroupObject groupObject : groupObjects)
@@ -237,6 +239,7 @@ public class WavefrontObject implements IModelCustom
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void tessellatePart(Tessellator tessellator, String partName) {
         for (GroupObject groupObject : groupObjects)
@@ -269,6 +272,7 @@ public class WavefrontObject implements IModelCustom
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void tessellateAllExcept(Tessellator tessellator, String... excludedGroupNames)
     {

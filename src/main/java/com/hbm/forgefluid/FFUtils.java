@@ -727,8 +727,16 @@ public class FFUtils {
 	}
 
 	public static boolean containsFluid(ItemStack stack, Fluid fluid) {
-		if(FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid)
+		if(stack.getItem() == ModItems.fluid_barrel_infinite)
 			return true;
+		FluidStack contained = FluidUtil.getFluidContained(stack);
+		if(contained != null && contained.getFluid() == fluid)
+			return true;
+		if(FluidContainerRegistry.hasFluid(stack.getItem())){
+			contained = FluidContainerRegistry.getFluidFromItem(stack.getItem());
+			if(contained != null && contained.getFluid() == fluid)
+				return true;
+		}
 		return false;
 	}
 

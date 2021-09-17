@@ -117,6 +117,15 @@ public class ArmorFSB extends ItemArmor {
 
 		return false;
     }
+	
+	public static boolean hasFSBArmorHelmet(EntityPlayer player){
+		ItemStack plate = player.inventory.armorInventory.get(2);
+
+		if(plate != null && plate.getItem() instanceof ArmorFSB) {
+			return !((ArmorFSB)plate.getItem()).noHelmet && hasFSBArmor(player);
+		}
+		return false;
+	}
 
     public static boolean hasFSBArmorIgnoreCharge(EntityPlayer player) {
 

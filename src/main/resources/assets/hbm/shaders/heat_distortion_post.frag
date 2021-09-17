@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D texture;
 uniform sampler2D noise;
@@ -6,7 +6,7 @@ uniform sampler2D mc_tex;
 uniform float time;
 uniform vec2 windowSize;
 
-in vec2 tex_coord;
+varying vec2 tex_coord;
 
 void main(){
 	float amount = texture2D(texture, tex_coord).r;

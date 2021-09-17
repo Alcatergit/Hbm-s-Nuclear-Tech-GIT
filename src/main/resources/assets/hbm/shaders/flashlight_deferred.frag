@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D colors;
 uniform sampler2D positions;

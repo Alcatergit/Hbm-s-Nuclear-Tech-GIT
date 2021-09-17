@@ -1,11 +1,9 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockHadronDiode;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityTickingBase;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityHadronDiode extends TileEntityTickingBase {

@@ -4,12 +4,12 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.MemoryUtil;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 
 import com.hbm.lib.RefStrings;
+import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.GLCompat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,7 +36,10 @@ public class LensVisibilityHandler {
 	
 	public static int generate(FloatBuffer matrix){
 		int id = findId();
-		LensSpikeInfo i = new LensSpikeInfo(matrix);
+		float[] mat = new float[16];
+		matrix.get(mat);
+		matrix.rewind();
+		LensSpikeInfo i = new LensSpikeInfo(mat);
 		lensSpikes.put(id, i);
 		return id;
 	}
@@ -57,12 +60,20 @@ public class LensVisibilityHandler {
 		return 0.0F;
 	}
 	
-	public static FloatBuffer getMatrixBuf(int id){
+	public static float[] getMatrixBuf(int id){
 		LensSpikeInfo i = lensSpikes.get(id);
 		if(i != null){
 			return i.modelviewMatrix;
 		}
 		return null;
+	}
+	
+	public static void putMatrixBuf(int id, FloatBuffer matrix){
+		LensSpikeInfo i = lensSpikes.get(id);
+		if(i != null){
+			matrix.get(i.modelviewMatrix);
+			matrix.rewind();
+		}
 	}
 	
 	@SubscribeEvent
@@ -73,15 +84,15 @@ public class LensVisibilityHandler {
 	}
 	
 	public static class LensSpikeInfo {
-		public FloatBuffer modelviewMatrix;
+		public float[] modelviewMatrix;
 		public float visibility = 0.0F;
 		private int totalFragmentsQuery;
 		private int fragmentsPassedQuery;
 		
-		public LensSpikeInfo(FloatBuffer matrix) {
+		public LensSpikeInfo(float[] matrix) {
 			this.modelviewMatrix = matrix;
-			totalFragmentsQuery = GL15.glGenQueries();
-			fragmentsPassedQuery = GL15.glGenQueries();
+			totalFragmentsQuery = GLCompat.genQueries();
+			fragmentsPassedQuery = GLCompat.genQueries();
 			
 			GlStateManager.colorMask(false, false, false, false);
 			GlStateManager.depthMask(false);
@@ -89,17 +100,19 @@ public class LensVisibilityHandler {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.turbofan_blades_tex);
 			
 			GL11.glPushMatrix();
-			GL11.glLoadMatrix(modelviewMatrix);
+			ClientProxy.AUX_GL_BUFFER.put(matrix);
+			ClientProxy.AUX_GL_BUFFER.rewind();
+			GL11.glLoadMatrix(ClientProxy.AUX_GL_BUFFER);
 			GL11.glScaled(0.05, 0.05, 0.05);
 			GlStateManager.disableDepth();
-			GL15.glBeginQuery(GL15.GL_SAMPLES_PASSED, totalFragmentsQuery);
+			GLCompat.beginQuery(GLCompat.GL_SAMPLES_PASSED, totalFragmentsQuery);
 			GL11.glCallList(checkSphere);
-			GL15.glEndQuery(GL15.GL_SAMPLES_PASSED);
+			GLCompat.endQuery(GLCompat.GL_SAMPLES_PASSED);
 			
 			GlStateManager.enableDepth();
-			GL15.glBeginQuery(GL15.GL_SAMPLES_PASSED, fragmentsPassedQuery);
+			GLCompat.beginQuery(GLCompat.GL_SAMPLES_PASSED, fragmentsPassedQuery);
 			GL11.glCallList(checkSphere);
-			GL15.glEndQuery(GL15.GL_SAMPLES_PASSED);
+			GLCompat.endQuery(GLCompat.GL_SAMPLES_PASSED);
 			GL11.glPopMatrix();
 			
 			GlStateManager.colorMask(true, true, true, true);
@@ -108,11 +121,11 @@ public class LensVisibilityHandler {
 		}
 		
 		public void updateVisibility(){
-			int totalDone = GL15.glGetQueryObjectui(totalFragmentsQuery, GL15.GL_QUERY_RESULT_AVAILABLE);
-			int passedDone = GL15.glGetQueryObjectui(fragmentsPassedQuery, GL15.GL_QUERY_RESULT_AVAILABLE);
+			int totalDone = GLCompat.getQueryObject(totalFragmentsQuery, GLCompat.GL_QUERY_RESULT_AVAILABLE);
+			int passedDone = GLCompat.getQueryObject(fragmentsPassedQuery, GLCompat.GL_QUERY_RESULT_AVAILABLE);
 			if(totalDone != 0 && passedDone != 0){
-				float total = GL15.glGetQueryObjectui(totalFragmentsQuery, GL15.GL_QUERY_RESULT);
-				float passed = GL15.glGetQueryObjectui(fragmentsPassedQuery, GL15.GL_QUERY_RESULT);
+				float total = GLCompat.getQueryObject(totalFragmentsQuery, GLCompat.GL_QUERY_RESULT);
+				float passed = GLCompat.getQueryObject(fragmentsPassedQuery, GLCompat.GL_QUERY_RESULT);
 				visibility = passed/total;
 				
 				GlStateManager.colorMask(false, false, false, false);
@@ -121,17 +134,19 @@ public class LensVisibilityHandler {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.turbofan_blades_tex);
 				
 				GL11.glPushMatrix();
-				GL11.glLoadMatrix(modelviewMatrix);
+				ClientProxy.AUX_GL_BUFFER.put(modelviewMatrix);
+				ClientProxy.AUX_GL_BUFFER.rewind();
+				GL11.glLoadMatrix(ClientProxy.AUX_GL_BUFFER);
 				GL11.glScaled(0.1, 0.1, 0.1);
 				GlStateManager.disableDepth();
-				GL15.glBeginQuery(GL15.GL_SAMPLES_PASSED, totalFragmentsQuery);
+				GLCompat.beginQuery(GLCompat.GL_SAMPLES_PASSED, totalFragmentsQuery);
 				GL11.glCallList(checkSphere);
-				GL15.glEndQuery(GL15.GL_SAMPLES_PASSED);
+				GLCompat.endQuery(GLCompat.GL_SAMPLES_PASSED);
 				
 				GlStateManager.enableDepth();
-				GL15.glBeginQuery(GL15.GL_SAMPLES_PASSED, fragmentsPassedQuery);
+				GLCompat.beginQuery(GLCompat.GL_SAMPLES_PASSED, fragmentsPassedQuery);
 				GL11.glCallList(checkSphere);
-				GL15.glEndQuery(GL15.GL_SAMPLES_PASSED);
+				GLCompat.endQuery(GLCompat.GL_SAMPLES_PASSED);
 				GL11.glPopMatrix();
 				
 				GlStateManager.colorMask(true, true, true, true);
@@ -141,8 +156,8 @@ public class LensVisibilityHandler {
 		}
 		
 		public void cleanup(){
-			GL15.glDeleteQueries(totalFragmentsQuery);
-			GL15.glDeleteQueries(fragmentsPassedQuery);
+			GLCompat.deleteQueries(totalFragmentsQuery);
+			GLCompat.deleteQueries(fragmentsPassedQuery);
 			//That modelViewMatrix not being deleted might cause a memory leak, but if it does, I don't know what to do about it in java!
 		}
 	}

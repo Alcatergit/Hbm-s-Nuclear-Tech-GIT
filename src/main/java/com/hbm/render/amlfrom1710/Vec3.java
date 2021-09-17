@@ -1,9 +1,6 @@
 package com.hbm.render.amlfrom1710;
 
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Tuple3f;
-import javax.vecmath.Vector3f;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 

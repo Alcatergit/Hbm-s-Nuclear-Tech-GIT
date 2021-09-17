@@ -1,10 +1,10 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D texture;
 uniform vec4 duck;
 
-in vec2 pass_tex;
-in vec4 pass_color;
+varying vec2 pass_tex;
+varying vec4 pass_color;
 
 void main(){
 	gl_FragColor = duck;

@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxGaugePacket;

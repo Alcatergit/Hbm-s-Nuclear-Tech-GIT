@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
-import com.hbm.main.ResourceManager;
 import com.hbm.physics.RigidBody;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;

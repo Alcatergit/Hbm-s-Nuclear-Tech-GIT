@@ -75,8 +75,6 @@ public class CrystallizerRecipeHandler implements IRecipeCategory<CrystallizerRe
 		guiItemStacks.set(ingredients);
 		guiItemStacks.set(3, JeiRecipes.getBatteries());
 		guiItemStacks.set(1, ItemFluidIcon.getStack(ModForgeFluids.acid));
-		if(recipeWrapper.inputs != null)
-			guiItemStacks.set(0, recipeWrapper.inputs);
 	}
 
 }

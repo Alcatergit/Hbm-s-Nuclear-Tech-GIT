@@ -1,18 +1,18 @@
-#version 330 compatibility
+#version 120
 
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec4 vColor;
-layout (location = 3) in vec2 tex;
-layout (location = 4) in vec2 lightTex;
-layout (location = 5) in vec2 projTex;
+attribute vec3 pos;
+attribute vec4 vColor;
+attribute vec2 tex;
+attribute vec2 lightTex;
+attribute vec2 projTex;
 
-out vec2 texCoord;
-out vec2 lightCoord;
-out vec2 projCoord;
-out vec3 worldNormal;
-out vec3 worldTangent;
-out vec4 color;
-out vec3 lighting;
+varying vec2 texCoord;
+varying vec2 lightCoord;
+varying vec2 projCoord;
+varying vec3 worldNormal;
+varying vec3 worldTangent;
+varying vec4 color;
+varying vec3 lighting;
 
 void main(){
 	gl_Position = gl_ModelViewProjectionMatrix * vec4(pos, 1);

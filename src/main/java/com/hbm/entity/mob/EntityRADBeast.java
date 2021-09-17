@@ -2,15 +2,11 @@ package com.hbm.entity.mob;
 
 import java.util.List;
 
-import org.lwjgl.opengl.ARBImaging;
-import org.lwjgl.opengl.GL14;
-
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.entity.Entity;

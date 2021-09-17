@@ -24,7 +24,7 @@ public class Face
             faceNormal = this.calculateFaceNormal();
         }
 
-        tessellator.setNormal(faceNormal.x, faceNormal.y, faceNormal.z);
+        //tessellator.setNormal(faceNormal.x, faceNormal.y, faceNormal.z);
 
         float averageU = 0F;
         float averageV = 0F;
@@ -45,7 +45,7 @@ public class Face
 
         for (int i = 0; i < vertices.length; ++i)
         {
-
+        	tessellator.setNormal(vertexNormals[i].x, vertexNormals[i].y, vertexNormals[i].z);
             if ((textureCoordinates != null) && (textureCoordinates.length > 0))
             {
                 offsetU = textureOffset;

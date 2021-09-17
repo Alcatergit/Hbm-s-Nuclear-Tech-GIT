@@ -2,7 +2,6 @@ package com.hbm.util;
 
 import com.hbm.capability.RadiationCapability;
 import com.hbm.handler.HazmatRegistry;
-import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
@@ -11,13 +10,10 @@ import com.hbm.saveddata.RadiationSavedData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 public class ContaminationUtil {
 

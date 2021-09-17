@@ -1,7 +1,7 @@
-#version 330 compatibility
+#version 120
 
-out vec3 frag_normal;
-out vec3 frag_pos;
+varying vec3 frag_normal;
+varying vec3 frag_pos;
 
 void main(){
 	frag_normal = (gl_NormalMatrix * gl_Normal).xyz;

@@ -1,6 +1,6 @@
-#version 330 compatibility
+#version 120
 
-out vec2 tex_coord;
+varying vec2 tex_coord;
 
 void main(){
 	tex_coord = gl_MultiTexCoord0.st;

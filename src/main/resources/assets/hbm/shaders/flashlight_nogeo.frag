@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 //const int radius = 1;
 
@@ -10,11 +10,11 @@ uniform sampler2D flashlightTex;
 uniform sampler2D shadowTex;
 uniform sampler2D mc_tex;
 
-in vec3 worldPos;
-in vec3 normal;
-in vec3 color;
-in vec4 fragPosShadowSpace;
-in vec2 texture_coord;
+varying vec3 worldPos;
+varying vec3 normal;
+varying vec3 color;
+varying vec4 fragPosShadowSpace;
+varying vec2 texture_coord;
 
 //float calcShadow(vec3 proj_coord){
 	//float texel = 1/1024;
@@ -37,12 +37,12 @@ in vec2 texture_coord;
 
 float calcShadow(vec3 proj_coord){
 	float shadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(shadowTex, 0);
+	vec2 texelSize = 1.0 / vec2(1024);
 	for(int x = -1; x <= 1; ++x)
 	{
     	for(int y = -1; y <= 1; ++y)
     	{
-        	float pcfDepth = texture(shadowTex, proj_coord.xy + vec2(x, y) * texelSize).r; 
+        	float pcfDepth = texture2D(shadowTex, proj_coord.xy + vec2(x, y) * texelSize).r; 
         	shadow += proj_coord.z - 0.0001777 > pcfDepth ? 1.0 : 0.0;        
     	}    
 	}

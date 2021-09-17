@@ -10,7 +10,6 @@ import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -31,7 +30,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -74,7 +72,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 					if(stack != null && stack.getItem() instanceof IBatteryItem)
 						return true;
 
-				return slot != 4 && stack != null && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+				return slot != 4 && stack != null;
 			}
 
 			@Override
@@ -104,7 +102,11 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
 				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
 				if(isValidFluidForTank(0, new FluidStack(f, 1000))){
-					tankTypes[0] = f;
+					if(tankTypes[0] != f){
+						tankTypes[0] = f;
+						tanks[0].setFluid(null);
+						tanks[1].setFluid(null);
+					}
 					inventory.setStackInSlot(1, inventory.getStackInSlot(0));
 					inventory.setStackInSlot(0, ItemStack.EMPTY);
 				}
@@ -188,9 +190,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null) {
-			FluidStack f = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
-			if(f != null && f.getFluid() == tankTypes[tank])
-				return true;
+			return FFUtils.checkRestrictions(inventory.getStackInSlot(slot), f -> f.getFluid() == tankTypes[tank]);
 		}
 		return false;
 	}

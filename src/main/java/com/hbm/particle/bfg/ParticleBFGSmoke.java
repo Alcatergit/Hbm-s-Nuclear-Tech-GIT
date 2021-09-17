@@ -2,8 +2,6 @@ package com.hbm.particle.bfg;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.handler.HbmShaderManager;
-import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
 

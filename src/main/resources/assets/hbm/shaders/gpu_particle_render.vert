@@ -1,4 +1,5 @@
-#version 330 core
+#version 120
+#extension GL_EXT_gpu_shader4 : enable
 
 //Verticals are flipped because for some reason textures are upside down otherwise
 const vec2 BOTTOM_LEFT = vec2(-0.5, 0.5);
@@ -7,8 +8,6 @@ const vec2 TOP_LEFT = vec2(-0.5, -0.5);
 const vec2 TOP_RIGHT = vec2(0.5, -0.5);
 const int PARTICLE_TEX_SIZE = 1024;
 const int MAX_PARTICLE_TYPES = 1;
-
-layout (location = 0) in vec3 pos;
 
 uniform mat4 modelview;
 uniform mat4 projection;
@@ -21,9 +20,9 @@ uniform sampler2D particleData1;
 uniform sampler2D particleData2;
 uniform vec4 particleTypeTexCoords[MAX_PARTICLE_TYPES];
 
-out vec2 pass_tex;
-out vec2 pass_lightmap;
-out vec4 pass_color;
+varying vec2 pass_tex;
+varying vec2 pass_lightmap;
+varying vec4 pass_color;
 
 vec4 colorFromFloat(float f){
 	int argb = int(f*2147483647);
@@ -35,11 +34,12 @@ vec4 colorFromFloat(float f){
 }
 
 void main(){
+	vec3 pos = gl_Position.xyz;
 	vec2 particle_coord = vec2((gl_InstanceID%PARTICLE_TEX_SIZE)/PARTICLE_TEX_SIZE, 
 								(gl_InstanceID/PARTICLE_TEX_SIZE)/PARTICLE_TEX_SIZE);
-	vec4 dat0 = textureLod(particleData0, particle_coord, 0);
-	vec4 dat1 = textureLod(particleData1, particle_coord, 0);
-	vec4 dat2 = textureLod(particleData2, particle_coord, 0);
+	vec4 dat0 = texture2DLod(particleData0, particle_coord, 0);
+	vec4 dat1 = texture2DLod(particleData1, particle_coord, 0);
+	vec4 dat2 = texture2DLod(particleData2, particle_coord, 0);
 	
 	int particleId = int(dat2.z*32767);
 	vec3 offsetPos = dat0.xyz;

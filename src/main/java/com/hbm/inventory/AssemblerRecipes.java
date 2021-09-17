@@ -16,7 +16,6 @@ import java.util.List;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -544,7 +543,7 @@ public class AssemblerRecipes {
 		hidden.add(new ComparableStack(ModBlocks.machine_radgen, 1));
 	}
 
-	private static void makeRecipe(ComparableStack out, AStack[] in, int duration) {
+	public static void makeRecipe(ComparableStack out, AStack[] in, int duration) {
 
 		if(out == null || Item.REGISTRY.getNameForObject(out.item) == null) {
 			MainRegistry.logger.error("Canceling assembler registration, item was null!");
@@ -623,7 +622,7 @@ public class AssemblerRecipes {
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler recipe removal on line " + line + ": does not have two parts. Skipping...");
 			return;
 		}
-		AStack stack = parseAStack(parts[1]);
+		AStack stack = parseAStack(parts[1], 64);
 		if(stack == null){
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[1] + "\" on line " + line + ". Skipping...");
 			return;
@@ -653,14 +652,14 @@ public class AssemblerRecipes {
 		}
 		List<AStack> input = new ArrayList<>();
 		for(String s : parts[1].split("\\|")){
-			AStack stack = parseAStack(s);
+			AStack stack = parseAStack(s, 12*64);
 			if(stack == null){
 				MainRegistry.logger.log(Level.WARN, "Could not parse assembler input itemstack from \"" + s + "\" on line " + line + ". Skipping...");
 				return;
 			}
 			input.add(stack);
 		}
-		AStack output = parseAStack(parts[2]);
+		AStack output = parseAStack(parts[2], 64);
 		if(output == null){
 			MainRegistry.logger.log(Level.WARN, "Could not parse assembler output itemstack from \"" + parts[2] + "\" on line " + line + ". Skipping...");
 			return;
@@ -714,7 +713,7 @@ public class AssemblerRecipes {
 		return list.toArray(new String[list.size()]);
 	}
 
-	private static AStack parseAStack(String s){
+	private static AStack parseAStack(String s, int maxSize){
 		String[] parts = splitStringIgnoreBraces(s);
 		if(parts.length == 3 || parts.length == 4){
 			Block block = null;
@@ -743,7 +742,7 @@ public class AssemblerRecipes {
 				MainRegistry.logger.log(Level.WARN, "Could not parse item amount from \"" + parts[2] + "\". Skipping...");
 				return null;
 			}
-			if(amount < 0 || amount > 12*64){
+			if(amount < 0 || amount > maxSize){
 				MainRegistry.logger.log(Level.WARN, "Bad item amount: " + amount + ". Skipping...");
 				return null;
 			}

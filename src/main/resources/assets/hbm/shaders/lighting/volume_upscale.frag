@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex;
 uniform sampler2D depthTex;
@@ -17,8 +17,8 @@ void main(){
 	vec2 texCoord = gl_FragCoord.xy*texelSize;
 	float depth = texture2D(depthTex, texCoord).r;
 	
-	int xOffset = int(gl_FragCoord.x) % 2 == 0 ? -1 : 1;
-	int yOffset = int(gl_FragCoord.y) % 2 == 0 ? -1 : 1;
+	int xOffset = int(mod(gl_FragCoord.x, 2)) == 0 ? -1 : 1;
+	int yOffset = int(mod(gl_FragCoord.y, 2)) == 0 ? -1 : 1;
 	ivec2[] offsets = ivec2[](ivec2(0, 0), ivec2(0, yOffset), ivec2(xOffset, 0), ivec2(xOffset, yOffset));
 	
 	vec3 totalColor = vec3(0);

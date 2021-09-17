@@ -9,7 +9,6 @@ import com.hbm.saveddata.RadiationSavedData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.world.chunk.Chunk;
 
 public class TileEntityGeiger extends TileEntity implements ITickable {
 

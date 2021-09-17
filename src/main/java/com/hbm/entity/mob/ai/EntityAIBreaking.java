@@ -2,7 +2,6 @@ package com.hbm.entity.mob.ai;
 
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;

@@ -6,9 +6,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+
+import com.hbm.render.GLCompat;
 
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.math.MathHelper;
@@ -28,25 +27,25 @@ public class TrailRenderer2 {
 	public static float[] color = new float[]{1, 1, 1, 1};
 	
 	public static void init(){
-		array_buf = GL15.glGenBuffers();
-		element_buf = GL15.glGenBuffers();
-		vao = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(vao);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array_buf);
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element_buf);
+		array_buf = GLCompat.genBuffers();
+		element_buf = GLCompat.genBuffers();
+		vao = GLCompat.genVertexArrays();
+		GLCompat.bindVertexArray(vao);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, array_buf);
+		GLCompat.bindBuffer(GLCompat.GL_ELEMENT_ARRAY_BUFFER, element_buf);
 		//pos
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 0);
-		GL20.glEnableVertexAttribArray(0);
+		GLCompat.vertexAttribPointer(0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 0);
+		GLCompat.enableVertexAttribArray(0);
 		//tex
-		GL20.glVertexAttribPointer(1, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 12);
-		GL20.glEnableVertexAttribArray(1);
+		GLCompat.vertexAttribPointer(1, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 12);
+		GLCompat.enableVertexAttribArray(1);
 		//color
-		GL20.glVertexAttribPointer(2, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_VERTEX, 16);
-		GL20.glEnableVertexAttribArray(2);
+		GLCompat.vertexAttribPointer(2, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_VERTEX, 16);
+		GLCompat.enableVertexAttribArray(2);
 		
-		GL30.glBindVertexArray(0);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		GLCompat.bindVertexArray(0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindBuffer(GLCompat.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
 	public static void draw(Vec3d playerPos, List<Vec3d> points, float scale){
@@ -110,10 +109,10 @@ public class TrailRenderer2 {
 			putVertex(current.add(cross), iN, 1F);
 			putVertex(current.add(cross.scale(-1)), iN, 0F);
 		}
-		GL30.glBindVertexArray(vao);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, array_buf);
+		GLCompat.bindVertexArray(vao);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, array_buf);
 		aux_buf.rewind();
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, aux_buf, GL15.GL_DYNAMIC_DRAW);
+		GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, aux_buf, GLCompat.GL_DYNAMIC_DRAW);
 		
 		for(int i = 0; i < points.size()-1; i ++){
 			int offset = i*3;
@@ -134,9 +133,9 @@ public class TrailRenderer2 {
 			aux_buf.putInt(1+offset);
 		}
 		
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, element_buf);
+		GLCompat.bindBuffer(GLCompat.GL_ELEMENT_ARRAY_BUFFER, element_buf);
 		aux_buf.rewind();
-		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, aux_buf, GL15.GL_DYNAMIC_DRAW);
+		GLCompat.bufferData(GLCompat.GL_ELEMENT_ARRAY_BUFFER, aux_buf, GLCompat.GL_DYNAMIC_DRAW);
 		GL11.glVertexPointer(3, GL11.GL_FLOAT, BYTES_PER_VERTEX, 0);
 		GL11.glTexCoordPointer(2, GL11.GL_SHORT, BYTES_PER_VERTEX, 12);
 		GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, BYTES_PER_VERTEX, 16);
@@ -149,9 +148,9 @@ public class TrailRenderer2 {
 		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
-		GL30.glBindVertexArray(0);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		GLCompat.bindVertexArray(0);
+		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
+		GLCompat.bindBuffer(GLCompat.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
 	private static void putVertex(Vec3d pos, float texU, float texV){

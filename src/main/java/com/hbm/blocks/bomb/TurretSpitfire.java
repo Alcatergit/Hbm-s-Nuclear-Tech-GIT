@@ -1,17 +1,11 @@
 package com.hbm.blocks.bomb;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL44;
-
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.bomb.TileEntityTurretSpitfire;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;

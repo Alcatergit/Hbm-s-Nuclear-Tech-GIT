@@ -68,9 +68,9 @@ public class ParticleLightningFade extends Particle {
         GL11.glTranslated(-interpPosX, -interpPosY, -interpPosZ);
         
         ResourceManager.lightning.use();
-        GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "duck"), 1F, 1F, 1F, 1F);
+        ResourceManager.lightning.uniform4f("duck", 1F, 1F, 1F, 1F);
 	    float ageN = ((float)this.particleAge+partialTicks)/((float)this.particleMaxAge);
-	    GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "fadeoverride"), ageN);
+	    ResourceManager.lightning.uniform1f("fadeoverride", ageN);
         //ResourceManager.test_trail.use();
         //GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 1F, 1, 1F, 1F);
 	    IColorGetter cg = pos -> {
@@ -82,7 +82,7 @@ public class ParticleLightningFade extends Particle {
         LightningGenerator.render(node, new Vec3d(entPosX, entPosY+entityIn.getEyeHeight(), entPosZ), width, 0, 0, 0, true, cg);
         HbmShaderManager2.bloomData.bindFramebuffer(false);
         //GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 0.6F, 0.8F, 1F, 1F);
-        GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.lightning.getShaderId(), "duck"), 0.6F, 0.8F, 1F, 1F);
+        ResourceManager.lightning.uniform4f("duck", 0.6F, 0.8F, 1F, 1F);
         
         LightningGenerator.render(node, new Vec3d(entPosX, entPosY+entityIn.getEyeHeight(), entPosZ), width, 0, 0, 0, true, cg);
         LightningGenerator.render(node, new Vec3d(entPosX, entPosY+entityIn.getEyeHeight(), entPosZ), width, 0, 0, 0, true, cg);

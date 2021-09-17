@@ -487,7 +487,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 	}
 
 	public static Item getBeltType(EntityPlayer player, ItemStack stack, boolean main) {
-
+		if(!(stack.getItem() instanceof ItemGunBase))
+			return null;
 		ItemGunBase gun = (ItemGunBase)stack.getItem();
 		GunConfiguration guncfg = main ? gun.mainConfig : (gun.altConfig != null ? gun.altConfig : gun.mainConfig);
 		Item ammo = BulletConfigSyncingUtil.pullConfig(guncfg.config.get(0)).ammo;

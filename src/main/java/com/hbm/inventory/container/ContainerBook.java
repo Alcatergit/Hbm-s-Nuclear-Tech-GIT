@@ -1,6 +1,5 @@
 package com.hbm.inventory.container;
 
-import com.hbm.handler.jei.JeiRecipes;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;

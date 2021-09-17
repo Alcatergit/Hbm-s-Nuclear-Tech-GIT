@@ -26,8 +26,6 @@ public class RenderMachineForceField extends TileEntitySpecialRenderer<TileEntit
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
-		if(te.color != 65280)
-			System.out.println(te.color);	
         bindTexture(ResourceManager.forcefield_base_tex);
         
         ResourceManager.radar_body.renderAll();

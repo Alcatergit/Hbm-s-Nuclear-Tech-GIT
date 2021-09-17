@@ -1,13 +1,14 @@
-#version 330 compatibility
+#version 120
 
-const ivec2[] offsets = ivec2[](ivec2(1, 0), ivec2(-1, 0), ivec2(0, 1), ivec2(0, -1));
+const vec2[] offsets = vec2[](vec2(1, 0), vec2(-1, 0), vec2(0, 1), vec2(0, -1));
 
 uniform float cutoff;
 uniform sampler2D gravmap;
+uniform vec2 size;
 
 void main(){
-	ivec2 fragPos = ivec2(gl_FragCoord.xy);
-	vec3 currentTexel = texelFetch(gravmap, fragPos, 0).xyz;
+	vec2 fragPos = gl_FragCoord.xy/size;
+	vec3 currentTexel = texture2D(gravmap, fragPos).xyz;
 	vec2 grav = currentTexel.xy*2 - 1;
 	float cutScale = max(currentTexel.z-cutoff, 0)/(1-cutoff);
 	float val = cutScale * cutScale * int(currentTexel.z > cutoff);
@@ -17,8 +18,8 @@ void main(){
 	
 	float amountToAdd = 0;
 	for(int i = 0; i < 4; i ++){
-		ivec2 offPos = fragPos + offsets[i];
-		vec3 sample = texelFetch(gravmap, offPos, 0).xyz;
+		vec2 offPos = fragPos + offsets[i]/size;
+		vec3 sample = texture2D(gravmap, offPos).xyz;
 		vec2 sampleGrav = sample.xy*2 - 1;
 		float cutScaleSample = max(sample.z-cutoff, 0)/(1-cutoff);
 		float amountLostSample = cutScaleSample * cutScaleSample * int(sample.z > cutoff);
@@ -28,4 +29,5 @@ void main(){
 	}
 	amountToAdd = min(amountToAdd, maxToAdd);
 	gl_FragColor = vec4(currentTexel.xy, clamp((currentTexel.z-amountLost)+amountToAdd, 0, 1), 1);
+	//gl_FragColor = vec4(currentTexel, 1);
 }

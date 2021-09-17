@@ -10,7 +10,6 @@ import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;

@@ -102,20 +102,22 @@ public class ItemSyringe extends Item {
 		{
             if (!world.isRemote)
             {
+            	
+            	player.getHeldItem(hand).shrink(1);
+            	if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty))) {
+					player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
+				}
+            	
             	if(rand.nextInt(2) == 0)
             		player.attackEntityFrom(ModDamageSource.euthanizedSelf, 30);
             	else
             		player.attackEntityFrom(ModDamageSource.euthanizedSelf2, 30);
                 
-            	player.getHeldItem(hand).shrink(1);
+            	
                 world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
                 if (player.getHeldItem(hand).isEmpty()) {
 					return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, new ItemStack(ModItems.syringe_empty));
-				}
-
-				if (!player.inventory.addItemStackToInventory(new ItemStack(ModItems.syringe_empty))) {
-					player.dropItem(new ItemStack(ModItems.syringe_empty, 1, 0), false);
 				}
             }
 		}

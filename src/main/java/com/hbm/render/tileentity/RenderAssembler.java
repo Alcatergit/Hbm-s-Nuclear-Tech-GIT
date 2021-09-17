@@ -1,14 +1,8 @@
 package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
-import org.objectweb.asm.Type;
-
-import com.hbm.handler.HbmShaderManager2;
 import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.LightRenderer;
-import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
 import net.minecraft.client.Minecraft;

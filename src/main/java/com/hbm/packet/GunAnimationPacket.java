@@ -1,12 +1,7 @@
 package com.hbm.packet;
 
-import com.hbm.handler.GunConfiguration;
 import com.hbm.items.weapon.ItemGunBase;
-import com.hbm.render.anim.BusAnimation;
-import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.AnimType;
-import com.hbm.render.anim.HbmAnimations.Animation;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

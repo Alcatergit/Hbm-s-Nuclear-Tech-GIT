@@ -12,7 +12,6 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -34,7 +33,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -343,17 +341,9 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 
 	protected boolean inputValidForTank(int tank, int slot){
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null){
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
-				return true;
-			}
+			return FFUtils.checkRestrictions(inventory.getStackInSlot(slot), f -> f.getFluid() == tankTypes[tank]);
 		}
 		return false;
-	}
-	
-	private boolean isValidFluidForTank(int tank, FluidStack stack) {
-		if(stack == null || tanks[tank] == null)
-			return false;
-		return stack.getFluid() == tankTypes[tank];
 	}
 	
 	public void attemptPower(int i) {

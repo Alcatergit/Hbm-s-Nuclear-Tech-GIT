@@ -6,12 +6,9 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.main.ResourceManager;
 import com.hbm.particle.lightning_test.TrailRenderer2;
-import com.hbm.render.RenderHelper;
 import com.hbm.util.BobMathUtil;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

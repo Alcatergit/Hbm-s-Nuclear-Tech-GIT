@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex_mask;
 uniform sampler2D noise;
@@ -7,7 +7,7 @@ uniform float amount;
 uniform float time;
 uniform vec2 windowSize;
 
-in vec2 texCoord;
+varying vec2 texCoord;
 
 void main(){
 	vec2 screen_uv = gl_FragCoord.xy/windowSize;

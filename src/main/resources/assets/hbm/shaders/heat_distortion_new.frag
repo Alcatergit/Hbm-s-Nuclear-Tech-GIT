@@ -1,9 +1,9 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex_mask;
 uniform float amount;
 
-in vec2 texCoord;
+varying vec2 texCoord;
 
 void main(){
 	vec4 mask = texture2D(tex_mask, texCoord);

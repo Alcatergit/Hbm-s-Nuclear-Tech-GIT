@@ -13,7 +13,6 @@ import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.client.resources.I18n;

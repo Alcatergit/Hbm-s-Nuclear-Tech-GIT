@@ -1,8 +1,6 @@
 package com.hbm.entity.mob.botprime;
 
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
-import com.hbm.entity.mob.sodtekhnologiyah.EntityBallsOTronSegment;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

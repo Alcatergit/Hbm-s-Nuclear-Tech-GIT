@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 130
 
 //const int radius = 1;
 

@@ -1,17 +1,18 @@
-#version 330 compatibility
+#version 120
+#extension GL_EXT_gpu_shader4 : enable
 
-layout (location = 0) in vec3 pos;
-layout (location = 1) in vec2 tex;
-layout (location = 2) in vec4 color;
+attribute vec3 pos;
+attribute vec2 tex;
+attribute vec4 color;
 
 uniform int vertices;
 uniform float age;
 uniform float fadeoverride;
 
-out vec2 pass_tex;
-out vec2 noise_tex;
-out vec4 pass_color;
-out float fade;
+varying vec2 pass_tex;
+varying vec2 noise_tex;
+varying vec4 pass_color;
+varying float fade;
 
 void main(){
 	if(fadeoverride != 1){

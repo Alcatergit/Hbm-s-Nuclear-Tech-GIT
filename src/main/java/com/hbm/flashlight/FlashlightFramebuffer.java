@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 
+@Deprecated
 public class FlashlightFramebuffer extends Framebuffer {
 
 	public int positionTexture;

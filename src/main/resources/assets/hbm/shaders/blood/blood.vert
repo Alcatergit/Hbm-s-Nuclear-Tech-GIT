@@ -1,8 +1,8 @@
-#version 330 compatibility
+#version 120
 
-out vec2 texCoord;
-out vec2 lightCoord;
-out vec4 color;
+varying vec2 texCoord;
+varying vec2 lightCoord;
+varying vec4 color;
 
 void main(){
 	texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st;

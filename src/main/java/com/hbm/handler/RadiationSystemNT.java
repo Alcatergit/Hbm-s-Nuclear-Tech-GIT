@@ -3,6 +3,7 @@ package com.hbm.handler;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,9 @@ import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -330,6 +334,7 @@ public class RadiationSystemNT {
 				if(p.radiation <= 0) {
 					//If there's no more radiation, set it to 0 and remove
 					p.radiation = 0;
+					p.accumulatedRads = 0;
 					itr.remove();
 					p.parent.parent.chunk.markDirty();
 					continue;
@@ -340,12 +345,15 @@ public class RadiationSystemNT {
 					//We just try 10 random coordinates of the sub chunk
 					//If the coordinate is inside this pocket and the block at the coordinate is air, 
 					//use it to spawn a rad particle at that block and break
+					//Also only spawn it if it's close to the ground, otherwise you get a giant fart when nukes go off.
 					for(int i = 0; i < 10; i ++){
 						BlockPos randPos = new BlockPos(w.world.rand.nextInt(16), w.world.rand.nextInt(16), w.world.rand.nextInt(16));
 						if(p.parent.pocketsByBlock == null || p.parent.pocketsByBlock[randPos.getX()*16*16+randPos.getY()*16+randPos.getZ()] == p){
 							randPos = randPos.add(p.parent.parent.getWorldPos(p.parent.yLevel));
 							IBlockState state = w.world.getBlockState(randPos);
-							if(state.getBlock().isAir(state, w.world, randPos)){
+							Vec3d rPos = new Vec3d(randPos.getX()+0.5, randPos.getY()+0.5, randPos.getZ()+0.5);
+							RayTraceResult trace = w.world.rayTraceBlocks(rPos, rPos.addVector(0, -6, 0));
+							if(state.getBlock().isAir(state, w.world, randPos) && trace != null && trace.typeOfHit == Type.BLOCK){
 								PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(randPos.getX()+0.5F, randPos.getY()+0.5F, randPos.getZ()+0.5F, 3), new TargetPoint(w.world.provider.getDimension(), randPos.getX(), randPos.getY(), randPos.getZ(), 100));
 								break;
 							}
@@ -401,7 +409,7 @@ public class RadiationSystemNT {
 				RadPocket p = itr.next();
 				p.radiation = p.accumulatedRads;
 				p.accumulatedRads = 0;
-				if(p.radiation == 0){
+				if(p.radiation <= 0){
 					itr.remove();
 				}
 			}
@@ -452,6 +460,9 @@ public class RadiationSystemNT {
 		}
 	}
 	
+	//Reduces array reallocations
+	private static RadPocket[] pocketsByBlock = null;
+	
 	/**
 	 * Divides a 16x16x16 sub chunk into pockets that are separated by radiation resistant blocks.
 	 * These pockets are also linked to other pockets in neighboring chunks
@@ -459,13 +470,19 @@ public class RadiationSystemNT {
 	 * @param yIndex - the Y index of the sub chunk to rebuild
 	 */
 	private static void rebuildChunkPockets(Chunk chunk, int yIndex){
+		//long ms = System.currentTimeMillis();
+		//long ns = System.nanoTime();
 		BlockPos subChunkPos = new BlockPos(chunk.getPos().x << 4, yIndex << 4, chunk.getPos().z << 4);
 		//Initialize all the necessary variables. A list of pockets for the sub chunk, the block storage for this sub chunk,
 		//an array of rad pockets for fast pocket lookup by blockpos, chunk radiation storage for this position
 		//And finally a new sub chunk that will be added to the chunk radiation storage when it's filled with data
 		List<RadPocket> pockets = new ArrayList<>();
 		ExtendedBlockStorage blocks = chunk.getBlockStorageArray()[yIndex];
-		RadPocket[] pocketsByBlock = new RadPocket[16*16*16];
+		if(pocketsByBlock == null) {
+			pocketsByBlock = new RadPocket[16*16*16];
+		} else {
+			Arrays.fill(pocketsByBlock, null);
+		}
 		ChunkRadiationStorage st = getChunkStorage(chunk.getWorld(), subChunkPos);
 		SubChunkRadiationStorage subChunk = new SubChunkRadiationStorage(st, subChunkPos.getY(), null, null);
 		
@@ -474,10 +491,12 @@ public class RadiationSystemNT {
 			for(int x = 0; x < 16; x ++){
 				for(int y = 0; y < 16; y ++){
 					for(int z = 0; z < 16; z ++){
+						if(pocketsByBlock[x*16*16+y*16+z] != null)
+							continue;
 						Block block = blocks.get(x, y, z).getBlock();
 						//If it's not a radiation resistant block and there isn't currently a pocket here,
 						//Do a flood fill pocket build
-						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1) && pocketsByBlock[x*16*16+y*16+z] == null){
+						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
 							pockets.add(buildPocket(subChunk, chunk.getWorld(), new BlockPos(x, y, z), subChunkPos, blocks, pocketsByBlock, pockets.size()));
 						}
 					}
@@ -488,7 +507,7 @@ public class RadiationSystemNT {
 			RadPocket pocket = new RadPocket(subChunk, 0);
 			//Absolute garbage code
 			//All it's supposed to do is loop around the edges of the chunk and connect pockets in neighboring chunks to this one
-			for(EnumFacing facing : EnumFacing.VALUES){
+			/*for(EnumFacing facing : EnumFacing.VALUES){
 				for(int x = 0; x < 16; x ++){
 					for(int y = 0; y < 16; y ++){
 						for(int z = 0; z < 16; z ++){
@@ -517,15 +536,57 @@ public class RadiationSystemNT {
 						}
 					}
 				}
+			}*/
+			for(int x = 0; x < 16; x ++){
+				for(int y = 0; y < 16; y ++){
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(x, 0, y), pocket, EnumFacing.DOWN);
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(x, 15, y), pocket, EnumFacing.UP);
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(x, y, 0), pocket, EnumFacing.NORTH);
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(x, y, 15), pocket, EnumFacing.SOUTH);
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(0, y, x), pocket, EnumFacing.WEST);
+					doEmptyChunk(chunk, subChunkPos, new BlockPos(15, y, x), pocket, EnumFacing.EAST);
+				}
 			}
 			pockets.add(pocket);
 		}
 		//If there's only one pocket, we don't need to waste memory by storing a whole 16x16x16 array, so just store null.
 		subChunk.pocketsByBlock = pockets.size() == 1 ? null : pocketsByBlock;
+		if(subChunk.pocketsByBlock != null)
+			pocketsByBlock = null;
 		subChunk.pockets = pockets.toArray(new RadPocket[pockets.size()]);
 		//Finally, put the newly built sub chunk into the chunk
 		st.setForYLevel(yIndex << 4, subChunk);
+		//System.out.println(System.currentTimeMillis()-ms);
+		//System.out.println("b " + (System.nanoTime()-ns));
 	}
+	
+	private static void doEmptyChunk(Chunk chunk, BlockPos subChunkPos, BlockPos pos, RadPocket pocket, EnumFacing facing){
+		//long l = System.nanoTime();
+		BlockPos newPos = pos.offset(facing);
+		BlockPos outPos = newPos.add(subChunkPos);
+		Block block = chunk.getWorld().getBlockState(outPos).getBlock();
+		//If the block isn't radiation resistant...
+		if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+			if(!isSubChunkLoaded(chunk.getWorld(), outPos)){
+				//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
+				//Chunk still needs to be loaded to propagate radiation into it
+				if(!pocket.connectionIndices[facing.ordinal()].contains(-1)){
+					pocket.connectionIndices[facing.ordinal()].add(-1);
+				}
+			} else {
+				//If it is loaded, see if the pocket at that position is already connected to us. If not, add it as a connection.
+				//Setting outPocket's connection will be handled in setForYLevel
+				
+				RadPocket outPocket = getPocket(chunk.getWorld(), outPos);
+				if(!pocket.connectionIndices[facing.ordinal()].contains(Integer.valueOf(outPocket.index)))
+					pocket.connectionIndices[facing.ordinal()].add(outPocket.index);
+			}
+		}
+		//System.out.println(System.nanoTime()-l);
+	}
+	
+	//To reduce a lot of reallocations
+	private static Queue<BlockPos> stack = new ArrayDeque<>(1024);
 	
 	/**
 	 * Builds a pocket using a flood fill.
@@ -541,13 +602,14 @@ public class RadiationSystemNT {
 	private static RadPocket buildPocket(SubChunkRadiationStorage subChunk, World world, BlockPos start, BlockPos subChunkWorldPos, ExtendedBlockStorage chunk, RadPocket[] pocketsByBlock, int index){
 		//Create the new pocket we're going to use
 		RadPocket pocket = new RadPocket(subChunk, index);
-		Queue<BlockPos> stack = new ArrayDeque<>();
+		//Just to make sure...
+		stack.clear();
 		stack.add(start);
 		//Do the flood fill
 		while(!stack.isEmpty()){
 			BlockPos pos = stack.poll();
 			Block block = chunk.get(pos.getX(), pos.getY(), pos.getZ()).getBlock();
-			if((block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1) || pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null){
+			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
 				//If the block is radiation resistant or we've already flood filled here, continue
 				continue;
 			}
@@ -921,7 +983,6 @@ public class RadiationSystemNT {
 							if(idx >= 0)
 								st.pocketsByBlock[j] = st.pockets[idx];
 						}
-					} else {
 					}
 					chunks[i] = st;
 				} else {

@@ -1,4 +1,4 @@
-#version 130
+#version 120
 
 uniform sampler2D image;
 varying vec2 texCoord;

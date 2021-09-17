@@ -1,14 +1,15 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.inventory.MachineRecipes;
+import com.hbm.items.machine.ItemStamp;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -19,10 +20,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachinePress extends TileEntity implements ITickable, ICapabilityProvider {
+public class TileEntityMachinePress extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
 	public int progress = 0;
 	public int power = 0;
@@ -35,15 +35,10 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 	public boolean isRetracting = false;
 	public boolean test = true;
 
-	public ItemStackHandler inventory = new ItemStackHandler(4) {
-		protected void onContentsChanged(int slot) {
-			super.onContentsChanged(slot);
-			markDirty();
-		};
-	};
-
-	private String customName;
-
+	public TileEntityMachinePress(){
+		super(4);
+	}
+	
 	public int getPowerScaled(int i) {
 		return (power * i) / maxPower;
 	}
@@ -56,14 +51,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 	public int getProgressScaled(int i) {
 		return (progress * i) / maxProgress;
-	}
-
-	public int getSizeInventory() {
-		return inventory.getSlots();
-	}
-
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
 	}
 
 	@Override
@@ -82,10 +69,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		detectIsRetracting = !isRetracting;
 		if(nbt.hasKey("inventory"))
 			((ItemStackHandler) inventory).deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
-		if(nbt.hasKey("CustomName", 8)) {
-			this.customName = nbt.getString("CustomName");
-		}
-		detectCustomName = customName == null ? "" : null;
 	}
 
 	@Override
@@ -100,15 +83,7 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 		nbt.setTag("inventory", ((ItemStackHandler) inventory).serializeNBT());
 
-		if(this.hasCustomName()) {
-			nbt.setString("CustomName", this.customName);
-		}
 		return nbt;
-	}
-
-	public boolean hasCustomName() {
-
-		return this.customName != null && this.customName.length() > 0;
 	}
 
 	@Override
@@ -215,23 +190,19 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-			return true;
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		}
 		return super.getCapability(capability, facing);
 	}
 
-	public String getName() {
-		return this.hasCustomName() ? this.customName : "container.press";
+	@Override
+	public String getName(){
+		return "container.press";
 	}
-
+	
 	public boolean isUsableByPlayer(EntityPlayer player) {
 		if(player.world.getTileEntity(this.pos) != this) {
 			return false;
@@ -239,13 +210,39 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 			return player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64;
 		}
 	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? new int[] { 3 } : new int[]{ 0, 1, 2 };
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return slot == 3;
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack){
+		if(stack.getItem() instanceof ItemStamp && i == 1)
+			return true;
+		
+		if(TileEntityFurnace.getItemBurnTime(stack) > 0 && i == 0)
+			return true;
+		
+		return i == 2;
+	}
 
 	private int detectProgress;
 	private int detectPower;
 	private int detectBurnTime;
 	private int detectMaxBurn;
 	private boolean detectIsRetracting;
-	private String detectCustomName;
 
 	private void detectAndSendChanges() {
 
@@ -269,10 +266,6 @@ public class TileEntityMachinePress extends TileEntity implements ITickable, ICa
 		if(detectIsRetracting != isRetracting) {
 			mark = true;
 			detectIsRetracting = isRetracting;
-		}
-		if((detectCustomName == null && customName != null) || (detectCustomName != null && customName == null) || (detectCustomName != null && !detectCustomName.equals(customName))) {
-			mark = true;
-			detectCustomName = customName;
 		}
 		if(mark)
 			markDirty();

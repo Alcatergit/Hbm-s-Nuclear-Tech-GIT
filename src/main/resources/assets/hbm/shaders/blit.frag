@@ -1,8 +1,8 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D tex;
 
-in vec2 tex_coord;
+varying vec2 tex_coord;
 
 void main(){
 	gl_FragColor = texture2D(tex, tex_coord);

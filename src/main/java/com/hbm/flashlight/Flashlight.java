@@ -23,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+@Deprecated
 public class Flashlight {
 
 	public static final int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;

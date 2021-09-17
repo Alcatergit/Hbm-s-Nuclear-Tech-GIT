@@ -1,14 +1,14 @@
-#version 330 compatibility
+#version 120
 
 uniform sampler2D texture;
 uniform sampler2D noise;
 uniform vec4 duck;
 uniform float age;
 
-in vec2 pass_tex;
-in vec2 noise_tex;
-in vec4 pass_color;
-in float fade;
+varying vec2 pass_tex;
+varying vec2 noise_tex;
+varying vec4 pass_color;
+varying float fade;
 
 void main(){
 	float noise = texture2D(noise, pass_tex * vec2(6, 0.25)).g;

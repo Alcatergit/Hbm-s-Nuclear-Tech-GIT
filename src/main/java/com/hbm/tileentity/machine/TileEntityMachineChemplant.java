@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -19,6 +18,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEChemplantPacket;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -37,7 +37,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -50,14 +49,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityMachineChemplant extends TileEntity implements IConsumer, ITankPacketAcceptor, ITickable {
-
-	public ItemStackHandler inventory = new ItemStackHandler(21) {
-		protected void onContentsChanged(int slot) {
-			super.onContentsChanged(slot);
-			markDirty();
-		};
-	};
+public class TileEntityMachineChemplant extends TileEntityMachineBase implements IConsumer, ITankPacketAcceptor, ITickable {
 
 	public long power;
 	public static final long maxPower = 100000;
@@ -78,9 +70,8 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 	
 	Random rand = new Random();
 	
-	private String customName;
-	
 	public TileEntityMachineChemplant() {
+		super(21);
 		tanks = new FluidTank[4];
 		tanks[0] = new FluidTank(24000);
 		tanks[1] = new FluidTank(24000);
@@ -258,9 +249,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 			if(inputValidForTank(1, 18))
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
 			
-			if(!inventory.getStackInSlot(17).isEmpty() && (inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(17).getItem() == ModItems.inf_water))
+			if((tankTypes[0] == FluidRegistry.WATER && inventory.getStackInSlot(17).getItem() == ModItems.inf_water) || inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite)
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
-			if(!inventory.getStackInSlot(18).isEmpty() && (inventory.getStackInSlot(18).getItem() == ModItems.fluid_barrel_infinite || inventory.getStackInSlot(18).getItem() == ModItems.inf_water))
+			if((tankTypes[1] == FluidRegistry.WATER && inventory.getStackInSlot(18).getItem() == ModItems.inf_water) || inventory.getStackInSlot(18).getItem() == ModItems.fluid_barrel_infinite)
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
 			
 			FFUtils.fillFluidContainer(inventory, tanks[2], 9, 11);
@@ -984,13 +975,12 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) :
-			capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new ChemplantFluidHandler(tanks, tankTypes)) :
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new ChemplantFluidHandler(tanks, tankTypes)) :
 				super.getCapability(capability, facing);
 	}
 	
@@ -1078,11 +1068,9 @@ public class TileEntityMachineChemplant extends TileEntity implements IConsumer,
 		return inventory.getStackInSlot(i);
 	}
 
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.chemplant";
+	@Override
+	public String getName(){
+		return "container.chemplant";
 	}
 	
 	private long detectPower;

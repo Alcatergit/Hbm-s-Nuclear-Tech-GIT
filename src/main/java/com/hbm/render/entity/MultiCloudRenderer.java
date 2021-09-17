@@ -3,8 +3,6 @@ package com.hbm.render.entity;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityModFX;
 
 import net.minecraft.client.Minecraft;

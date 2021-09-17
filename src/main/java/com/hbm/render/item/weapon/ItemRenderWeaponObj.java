@@ -2,11 +2,8 @@ package com.hbm.render.item.weapon;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.animloader.AnimationWrapper;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
 
@@ -14,9 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.Vec3d;
 
 public class ItemRenderWeaponObj extends TEISRBase {
 

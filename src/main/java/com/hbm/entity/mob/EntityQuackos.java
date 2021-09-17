@@ -1,7 +1,5 @@
 package com.hbm.entity.mob;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.lib.HBMSoundHandler;
 

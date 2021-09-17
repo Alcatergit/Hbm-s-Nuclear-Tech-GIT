@@ -9,10 +9,7 @@ import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.tileentity.machine.TileEntityMachineRadar;
-
 import api.hbm.entity.IRadarDetectable;
-import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

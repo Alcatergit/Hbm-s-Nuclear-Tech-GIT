@@ -5,14 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
-import com.hbm.physics.AABBCollider;
-import com.hbm.physics.RigidBody;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
@@ -23,12 +19,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -237,16 +231,16 @@ public class ParticleLightningGib extends Particle {
 			GlStateManager.color(1F, 1F, 1F, a);
 			ResourceManager.lightning_gib.use();
 			float age = this.particleAge + partialTicks;
-			GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.lightning_gib.getShaderId(), "age"), age);
+			ResourceManager.lightning_gib.uniform1f("age", age);
 			int i = this.getBrightnessForRender(partialTicks);
 			int j = i >> 16 & 65535;
 	        int k = i & 65535;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, k, j);
-			GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.lightning_gib.getShaderId(), "bloom"), 0);
+			ResourceManager.lightning_gib.uniform1i("bloom", 0);
 			GL11.glCallList(dl);
 			HbmShaderManager2.bloomData.bindFramebuffer(false);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-			GL20.glUniform1i(GL20.glGetUniformLocation(ResourceManager.lightning_gib.getShaderId(), "bloom"), 1);
+			ResourceManager.lightning_gib.uniform1i("bloom", 1);
 			GL11.glCallList(dl);
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 			HbmShaderManager2.releaseShader();

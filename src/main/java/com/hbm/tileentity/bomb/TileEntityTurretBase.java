@@ -21,6 +21,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -66,16 +67,22 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 
 				Vec3d turret = new Vec3d(target.posX - (pos.getX() + 0.5), target.posY + target.getEyeHeight() - (pos.getY() + 1), target.posZ - (pos.getZ() + 0.5));
 				if (this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretSpitfire || this instanceof TileEntityTurretCheapo) {
-					turret = new Vec3d(target.posX - (pos.getX() + 0.5), target.posY + target.getEyeHeight() - (pos.getY() + 1.5), target.posZ - (pos.getZ() + 0.5));
+					Vec3d targetPos = target.getEntityBoundingBox().getCenter();
+					turret = new Vec3d(targetPos.x - (pos.getX() + 0.5), targetPos.y - (pos.getY() + 1.5), targetPos.z - (pos.getZ() + 0.5));
 				}
 
 				oldRotationPitch = rotationPitch;
 				oldRotationYaw = rotationYaw;
-				rotationPitch = -Math.asin(turret.y / turret.lengthVector()) * 180 / Math.PI;
+				//rotationPitch = -Math.asin(turret.y / turret.lengthVector()) * 180 / Math.PI;
+				double sqrt = MathHelper.sqrt(turret.x * turret.x + turret.z * turret.z);
+				rotationPitch = -Math.atan2(turret.y, sqrt) * 180 / Math.PI;
 				rotationYaw = -Math.atan2(turret.x, turret.z) * 180 / Math.PI;
 
-				if (rotationPitch < -60)
-					rotationPitch = -60;
+				float maxAngle = -60;
+				if(this instanceof TileEntityTurretCIWS)
+					maxAngle = -80;
+				if (rotationPitch < maxAngle)
+					rotationPitch = maxAngle;
 				if (rotationPitch > 30)
 					rotationPitch = 30;
 

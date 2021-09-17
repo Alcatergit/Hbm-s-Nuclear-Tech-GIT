@@ -1,4 +1,4 @@
-#version 330 compatibility
+#version 120
 
 uniform vec2 windowSize;
 uniform vec3 light_pos;

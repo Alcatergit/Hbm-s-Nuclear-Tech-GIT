@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.client.IRenderHandler;
 
 public class RenderFallout extends Render<EntityFalloutRain> {
 
@@ -93,18 +91,9 @@ public class RenderFallout extends Render<EntityFalloutRain> {
    
     protected void renderRainSnow(float p_78474_1_) {
         MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        IRenderHandler renderer = null;
-        if ((renderer = this.mc.world.provider.getWeatherRenderer()) != null) {
-            renderer.render(p_78474_1_, this.mc.world, mc);
-            return;
-        }
- 
-        // float f1 = this.mc.theWorld.getRainStrength(p_78474_1_);
- 
         float f1 = 1;
  
         if (f1 > 0.0F) {
-            // this.enableLightmap((double)p_78474_1_);
  
             if (this.rainXCoords == null) {
                 this.rainXCoords = new float[1024];

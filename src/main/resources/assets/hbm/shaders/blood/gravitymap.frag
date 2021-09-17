@@ -1,10 +1,10 @@
-#version 330 compatibility
+#version 120
 
 uniform vec3 gravity;
 
-in vec2 texCoord;
-in vec3 normal;
-in vec3 tangent;
+varying vec2 texCoord;
+varying vec3 normal;
+varying vec3 tangent;
 
 uniform sampler2D texture;
 

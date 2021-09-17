@@ -9,7 +9,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.Library;
 
 import mezz.jei.api.recipe.IFocus;

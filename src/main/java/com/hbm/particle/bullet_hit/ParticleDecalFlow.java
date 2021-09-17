@@ -1,21 +1,20 @@
 package com.hbm.particle.bullet_hit;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -54,9 +53,10 @@ public class ParticleDecalFlow extends Particle {
 		//Flow update
 		GlStateManager.viewport(0, 0, data[5], data[6]);
 		ResourceManager.blood_flow_update.use();
-		GL20.glUniform1f(GL20.glGetUniformLocation(ResourceManager.blood_flow_update.getShaderId(), "cutoff"), 0.05F);
+		ResourceManager.blood_flow_update.uniform2f("size", data[5], data[6]);
+		ResourceManager.blood_flow_update.uniform1f("cutoff", 0.05F);
 		for(int i = 0; i < 2; i ++){
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, data[pong ? 3 : 1]);
+			GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, data[pong ? 3 : 1]);
 			GlStateManager.bindTexture(data[pong ? 2 : 4]);
 			RenderHelper.renderFullscreenTriangle();
 			pong = !pong;
@@ -70,9 +70,9 @@ public class ParticleDecalFlow extends Particle {
 			setExpired();
 			GL11.glDeleteLists(data[0], 1);
 			GL11.glDeleteTextures(data[2]);
-			GL30.glDeleteFramebuffers(data[1]);
+			GLCompat.deleteFramebuffers(data[1]);
 			GL11.glDeleteTextures(data[4]);
-			GL30.glDeleteFramebuffers(data[3]);
+			GLCompat.deleteFramebuffers(data[3]);
 		}
 	}
 	
@@ -127,6 +127,7 @@ public class ParticleDecalFlow extends Particle {
 		GlStateManager.disableBlend();
 		GlStateManager.depthMask(true);
 		GL11.glPopMatrix();
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.turbofan_blades_tex);
 		
 		if(texIdx != -1){

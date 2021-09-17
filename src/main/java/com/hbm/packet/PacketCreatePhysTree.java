@@ -3,7 +3,6 @@ package com.hbm.packet;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.hbm.main.ModEventHandlerClient;
 import com.hbm.physics.ParticlePhysicsBlocks;
 
 import io.netty.buffer.ByteBuf;
@@ -11,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

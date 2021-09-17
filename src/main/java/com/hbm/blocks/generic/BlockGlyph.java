@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class BlockGlyph extends Block {
@@ -40,6 +41,11 @@ public class BlockGlyph extends Block {
 				items.add(new ItemStack(this, 1, i));
 	        }
 		}
+	}
+	
+	@Override
+	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn){
+		super.onBlockDestroyedByExplosion(worldIn, pos, explosionIn);
 	}
 	
 	@Override

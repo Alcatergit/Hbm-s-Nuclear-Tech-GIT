@@ -6,7 +6,6 @@ import com.hbm.animloader.AnimationWrapper;
 import com.hbm.config.GeneralConfig;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.anim.HbmAnimations;
-import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.item.TEISRBase;
 
 import net.minecraft.client.Minecraft;

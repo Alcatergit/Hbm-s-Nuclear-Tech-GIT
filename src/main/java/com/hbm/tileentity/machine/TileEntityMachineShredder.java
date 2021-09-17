@@ -7,12 +7,13 @@ import com.hbm.items.machine.ItemBlades;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -21,9 +22,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineShredder extends TileEntity implements ITickable, IConsumer {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineShredder extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
 	public int progress;
@@ -31,33 +30,50 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 	public static final long maxPower = 10000;
 	public static final int processingSpeed = 60;
 	
-	//private static final int[] slots_top = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8};
-	//private static final int[] slots_bottom = new int[] {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
-	//private static final int[] slots_side = new int[] {27, 28, 29};
-	
-	private String customName;
+	private static final int[] slots_top = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8};
+	private static final int[] slots_bottom = new int[] {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
+	private static final int[] slots_side = new int[] {27, 28, 29};
 	
 	public TileEntityMachineShredder() {
-		inventory = new ItemStackHandler(30){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			
-		};
+		super(30);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineShredder";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+	@Override
+	public String getName(){
+		return "container.machineShredder";
 	}
 	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack){
+		if(i == 0)
+			return true;
+		if(i == 2)
+			if(stack.getItem() instanceof IBatteryItem || stack.getItem() instanceof ItemBlades)
+				return true;
+	
+		return false;
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		if(slot >= 9 && slot <= 26)
+			return true;
+		if(slot >= 27 && slot <= 29)
+		if(itemStack.getItemDamage() == itemStack.getMaxDamage() && itemStack.getMaxDamage() > 0)
+			return true;
+	
+	return false;
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -281,14 +297,4 @@ public class TileEntityMachineShredder extends TileEntity implements ITickable, 
 		return 0;
 	}
 	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
 }

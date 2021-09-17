@@ -4,9 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.ClientProxy;
-
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderChicken;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.passive.EntityChicken;

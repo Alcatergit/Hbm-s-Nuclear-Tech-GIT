@@ -281,7 +281,6 @@ public class CentrifugeRecipes {
 		public final List<ItemStack> inputs;
 		
 		public CentrifugeRecipe(ItemStack input, List<ItemStack> outputs) {
-			Bone b;
 			this.input = input;
 			this.inputs = null;
 			this.outputs = outputs; 
@@ -295,7 +294,11 @@ public class CentrifugeRecipes {
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.ITEM, input);
+			if(inputs != null){
+				ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(inputs));
+			} else {
+				ingredients.setInput(VanillaTypes.ITEM, input);
+			}
 			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
 		

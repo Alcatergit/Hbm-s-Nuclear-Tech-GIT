@@ -12,15 +12,12 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.GLCompat;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.block.state.IBlockState;
@@ -116,9 +113,9 @@ public class BakedModelUtil {
 		}
 		int[] geo = new int[]{-1, -1};
 		if(type == DecalType.VBO){
-			geo[0] = GL15.glGenBuffers();
+			geo[0] = GLCompat.genBuffers();
 			geo[1] = tris.size()*3;
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, geo[0]);
+			GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, geo[0]);
 			ByteBuffer buf = buffer.getByteBuffer();
 			buf.clear();
 			for(Triangle t : tris){
@@ -146,9 +143,9 @@ public class BakedModelUtil {
 				}
 			}
 			buf.flip();
-			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buf, GL15.GL_STATIC_DRAW);
+			GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, buf, GLCompat.GL_STATIC_DRAW);
 			buf.clear();
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+			GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
 		} else {
 			if(type == DecalType.FLOW){
 				geo = new int[7];
@@ -190,38 +187,39 @@ public class BakedModelUtil {
 			if(type == DecalType.FLOW){
 				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 				int texId = Minecraft.getMinecraft().getTextureManager().getTexture(texture).getGlTextureId();
 				int width = geo[5] = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
 				int height = geo[6] = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
 				
-				int fbo = geo[1] = GL30.glGenFramebuffers();
-				int fbo2 = geo[3] = GL30.glGenFramebuffers();
+				int fbo = geo[1] = GLCompat.genFramebuffers();
+				int fbo2 = geo[3] = GLCompat.genFramebuffers();
 				int gravmap = geo[2] = GL11.glGenTextures();
 				int gravmap2 = geo[4] = GL11.glGenTextures();
 				
-				int depth = GL30.glGenRenderbuffers();
-				GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depth);
-				GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, width, height);
+				int depth = GLCompat.genRenderbuffers();
+				GLCompat.bindRenderbuffer(GLCompat.GL_RENDERBUFFER, depth);
+				GLCompat.renderbufferStorage(GLCompat.GL_RENDERBUFFER, GLCompat.GL_DEPTH_COMPONENT24, width, height);
 				
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, fbo);
 				GlStateManager.bindTexture(gravmap);
 				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (IntBuffer)null);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-				GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap, 0);
-				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depth);
+				GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap, 0);
+				GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, depth);
 				
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo2);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, fbo2);
 				GlStateManager.bindTexture(gravmap2);
 				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (IntBuffer)null);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-				GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap2, 0);
-				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depth);
+				GLCompat.framebufferTexture2D(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, gravmap2, 0);
+				GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, depth);
 				
 				
 				GlStateManager.colorMask(true, true, true, true);
@@ -266,22 +264,23 @@ public class BakedModelUtil {
 				mR.mul(rot2);
 				Vec3d tanDir = new Vec3d(mR.m10, mR.m11, mR.m12);
 				
-				GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "tanDirection"), (float)tanDir.x, (float)tanDir.y, (float)tanDir.z);
+				ResourceManager.gravitymap_render.uniform3f("tanDirection", (float)tanDir.x, (float)tanDir.y, (float)tanDir.z);
 				Vector3f gravity = new Vector3f(0, 0.5F, 0);
 				//rot.transform(gravity);
-				GL20.glUniform3f(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "gravity"), gravity.x, gravity.y, gravity.z);
+				ResourceManager.gravitymap_render.uniform3f("gravity", gravity.x, gravity.y, gravity.z);
 				for(int i = 0; i < 3; i ++)
 					for(int j = 0; j < 3; j ++)
 						ClientProxy.AUX_GL_BUFFER.put(rot.getElement(i, j));
-				ClientProxy.AUX_GL_BUFFER.rewind();
-				GL20.glUniformMatrix3(GL20.glGetUniformLocation(ResourceManager.gravitymap_render.getShaderId(), "matrix"), false, ClientProxy.AUX_GL_BUFFER);
+				ClientProxy.AUX_GL_BUFFER.flip();
+				ResourceManager.gravitymap_render.uniformMatrix3("matrix", false, ClientProxy.AUX_GL_BUFFER);
+				ClientProxy.AUX_GL_BUFFER.clear();
 				GlStateManager.clearDepth(1);
 				GlStateManager.clearColor(0.5F, 0.5F, 0F, 1F);
 				GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 				GL11.glCallList(geo[0]);
 				//RenderHelper.renderFullscreenTriangle(true);
 				
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, fbo);
 				GlStateManager.clearDepth(1);
 				GlStateManager.clearColor(0.5F, 0.5F, 0F, 1F);
 				GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
@@ -292,10 +291,10 @@ public class BakedModelUtil {
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 				GL11.glPopMatrix();
 				
-				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, 0);
-				GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo2);
-				GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, 0);
-				GL30.glDeleteRenderbuffers(depth);
+				GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, 0);
+				GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, fbo2);
+				GLCompat.framebufferRenderbuffer(GLCompat.GL_FRAMEBUFFER, GLCompat.GL_DEPTH_ATTACHMENT, GLCompat.GL_RENDERBUFFER, 0);
+				GLCompat.deleteRenderbuffers(depth);
 				
 				if(data.length > 0){
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
@@ -319,28 +318,28 @@ public class BakedModelUtil {
 	}
 	
 	public static void enableBlockShaderVBOs(){
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 0);
-		GL20.glEnableVertexAttribArray(0);
+		GLCompat.vertexAttribPointer(0, 3, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 0);
+		GLCompat.enableVertexAttribArray(0);
 		//Color
-		GL20.glVertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_VERTEX, 12);
-		GL20.glEnableVertexAttribArray(1);
+		GLCompat.vertexAttribPointer(1, 4, GL11.GL_UNSIGNED_BYTE, true, BYTES_PER_VERTEX, 12);
+		GLCompat.enableVertexAttribArray(1);
 		//Texcoord
-		GL20.glVertexAttribPointer(3, 2, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 16);
-		GL20.glEnableVertexAttribArray(3);
+		GLCompat.vertexAttribPointer(3, 2, GL11.GL_FLOAT, false, BYTES_PER_VERTEX, 16);
+		GLCompat.enableVertexAttribArray(3);
 		//Lmap texcoord
-		GL20.glVertexAttribPointer(4, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 24);
-		GL20.glEnableVertexAttribArray(4);
+		GLCompat.vertexAttribPointer(4, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 24);
+		GLCompat.enableVertexAttribArray(4);
 		//Projected texcoord
-		GL20.glVertexAttribPointer(5, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 28);
-		GL20.glEnableVertexAttribArray(5);
+		GLCompat.vertexAttribPointer(5, 2, GL11.GL_UNSIGNED_SHORT, true, BYTES_PER_VERTEX, 28);
+		GLCompat.enableVertexAttribArray(5);
 	}
 	
 	public static void disableBlockShaderVBOs(){
-		GL20.glDisableVertexAttribArray(0);
-		GL20.glDisableVertexAttribArray(1);
-		GL20.glDisableVertexAttribArray(3);
-		GL20.glDisableVertexAttribArray(4);
-		GL20.glDisableVertexAttribArray(5);
+		GLCompat.disableVertexAttribArray(0);
+		GLCompat.disableVertexAttribArray(1);
+		GLCompat.disableVertexAttribArray(3);
+		GLCompat.disableVertexAttribArray(4);
+		GLCompat.disableVertexAttribArray(5);
 	}
 	
 	public static AxisAlignedBB getBox(Vec3d a, Vec3d b, Vec3d c){

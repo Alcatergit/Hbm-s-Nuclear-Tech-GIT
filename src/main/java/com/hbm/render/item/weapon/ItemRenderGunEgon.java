@@ -8,7 +8,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.gluon.ParticleGluonMuzzleSmoke;
-import com.hbm.particle.tau.ParticleTauParticle;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
 
