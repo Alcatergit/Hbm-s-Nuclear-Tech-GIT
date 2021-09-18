@@ -87,12 +87,12 @@ public class BlockGeysir extends BlockContainer {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		boolean active = state.getValue(ACTIVE);
-		return active == true ? 1 : 0;
+		return active ? 1 : 0;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(ACTIVE, meta > 0 ? true : false);
+		return this.getDefaultState().withProperty(ACTIVE, meta > 0);
 	}
 
 }
