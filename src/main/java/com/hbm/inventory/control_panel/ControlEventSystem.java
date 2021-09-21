@@ -34,13 +34,13 @@ public class ControlEventSystem {
 			if(!controllablesByEventName.containsKey(s)){
 				controllablesByEventName.put(s, new HashMap<>());
 			}
-			controllablesByEventName.get(s).put(c.getPos(), c);
+			controllablesByEventName.get(s).put(pos(), c);
 		}
 		allControllables.add(c);
 	}
 	
 	public void removeControllable(IControllable c){
-		positionSubscriptions.remove(c.getPos());
+		positionSubscriptions.remove(pos());
 		for(String s : c.getInEvents()){
 			if(s.equals("tick")){
 				tickables.remove(c);
@@ -119,7 +119,7 @@ public class ControlEventSystem {
 		if(systems.containsKey(evt.world)){
 			ControlEventSystem s = systems.get(evt.world);
 			for(IControllable c : s.tickables){
-				c.receiveEvent(c.getPos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getWorldTime()));
+				c.receiveEvent(pos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getWorldTime()));
 			}
 		}
 	}
