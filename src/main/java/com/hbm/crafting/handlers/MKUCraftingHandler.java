@@ -22,7 +22,7 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
 		
-		if(world == null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
+		if(world == null || world.provider == null || world.getWorldInfo() == null)
 			return false;
 		
 		if(MKURecipe == null || world.getSeed() != lastSeed)
@@ -47,7 +47,7 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	public static void generateRecipe(World world) {
 		Random rand = new Random(world.getSeed());
 		
-		if(lastSeed == world.getSeed() && MKURecipe != null)
+		if(lastSeed == world.getSeed() && MKURecipe != null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
 			return;
 		
 		lastSeed = world.getSeed();
