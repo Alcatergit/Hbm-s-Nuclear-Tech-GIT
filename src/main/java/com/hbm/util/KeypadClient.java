@@ -11,7 +11,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.packet.KeypadServerPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.render.WavefrontObjCalllist;
+import com.hbm.render.WavefrontObjDisplayList;
 import com.hbm.render.amlfrom1710.WavefrontObject;
 
 import net.minecraft.client.Minecraft;
@@ -129,7 +129,7 @@ public class KeypadClient extends Keypad {
 	}
 	
 	public static void load(){
-		WavefrontObjCalllist model = new WavefrontObjCalllist(new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/keypad.obj")));
+		WavefrontObjDisplayList model = new WavefrontObjDisplayList(new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/keypad.obj")));
 		mainModel = model.getListForName("Keypad");
 		displayModel = model.getListForName("Display");
 		for(int i = 0; i < 9; i++){

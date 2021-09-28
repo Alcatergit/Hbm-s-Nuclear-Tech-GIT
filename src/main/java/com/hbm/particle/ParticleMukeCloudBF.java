@@ -13,7 +13,7 @@ public class ParticleMukeCloudBF extends ParticleMukeCloud {
 		super(world, x, y, z, mx, my, mz);
 	}
 	
-	public static ResourceLocation getTexture() {
+	public ResourceLocation getTexture() {
 		return texture;
 	}
 }

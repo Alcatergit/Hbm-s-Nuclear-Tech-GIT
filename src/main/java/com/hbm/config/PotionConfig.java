@@ -5,7 +5,16 @@ import net.minecraftforge.common.config.Property;
 
 public class PotionConfig {
 
-	public static void loadFromConfig(Configuration config) {
+	public static int taintID = 62;
+	public static int radiationID = 63;
+	public static int bangID = 64;
+	public static int mutationID = 65;
+	public static int radxID = 66;
+	public static int leadID = 67;
+	
+	public static int potionSickness = 0;
+	
+	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_POTION = "08_potion_effects";
 		Property propTaintID = config.get(CATEGORY_POTION, "8.00_taintPotionID", 62);
 		propTaintID.setComment("What potion ID the taint effect will have");
@@ -25,12 +34,13 @@ public class PotionConfig {
 		Property propLeadID = config.get(CATEGORY_POTION, "8.05_leadPotionID", 67);
 		propLeadID.setComment("What potion ID the lead poisoning effect will have");
 		leadID = propLeadID.getInt();
-	}
+		
+		String s = CommonConfig.createConfigString(config, CATEGORY_POTION, "8.S0_potionSickness", "Valid configs include \"NORMAL\" and \"TERRARIA\", otherwise potion sickness is turned off", "OFF");
 
-	public static int taintID = 62;
-	public static int radiationID = 63;
-	public static int bangID = 64;
-	public static int mutationID = 65;
-	public static int radxID = 66;
-	public static int leadID = 67;
+		if("normal".equals(s.toLowerCase()))
+			potionSickness = 1;
+		if("terraria".equals(s.toLowerCase()))
+			potionSickness = 2;
+	}
+	
 }

@@ -7,18 +7,25 @@ import net.minecraftforge.common.config.Property;
 
 public class CommonConfig {
 
-	private static String[] createConfigStringList(Configuration config, String category, String name, String comment) {
-	
-	    Property prop = config.get(category, name, new String[] { "PLACEHOLDER" } );
-	    prop.setComment(comment);
-	    return prop.getStringList();
-	}
-
 	public static boolean createConfigBool(Configuration config, String category, String name, String comment, boolean def) {
 	
 	    Property prop = config.get(category, name, def);
 	    prop.setComment(comment);
 	    return prop.getBoolean();
+	}
+	
+	public static String createConfigString(Configuration config, String category, String name, String comment, String def) {
+
+		Property prop = config.get(category, name, def);
+		prop.setComment(comment);
+		return prop.getString();
+	}
+
+	public static String[] createConfigStringList(Configuration config, String category, String name, String comment) {
+
+		Property prop = config.get(category, name, new String[] { "PLACEHOLDER" });
+		prop.setComment(comment);
+		return prop.getStringList();
 	}
 
 	public static int createConfigInt(Configuration config, String category, String name, String comment, int def) {

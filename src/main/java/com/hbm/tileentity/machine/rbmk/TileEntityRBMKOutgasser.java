@@ -1,0 +1,297 @@
+package com.hbm.tileentity.machine.rbmk;
+
+import java.util.HashMap;
+
+import com.hbm.blocks.ModBlocks;
+import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.packet.FluidTankPacket;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IFluidHandler, ITankPacketAcceptor {
+
+	public FluidTank gas;
+	public Fluid gasType;
+	public double progress;
+	public static final int duration = 10000;
+
+	public TileEntityRBMKOutgasser() {
+		super(2);
+		gas = new FluidTank(64000);
+		gasType = ModForgeFluids.tritium;
+	}
+
+	@Override
+	public String getName() {
+		return "container.rbmkOutgasser";
+	}
+	
+	@Override
+	public void update() {
+		
+		if(!world.isRemote) {
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, gas), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
+			NBTTagCompound type = new NBTTagCompound();
+			type.setString("gasType", gasType.getName());
+			networkPack(type, 50);
+			
+			if(world.getTotalWorldTime() % 10 == 0)
+				fillFluidInit(gas);
+			
+			if(!canProcess()) {
+				this.progress = 0;
+			}
+		}
+		
+		super.update();
+	}
+	
+	@Override
+	public void networkUnpack(NBTTagCompound nbt){
+		if(nbt.hasKey("steamType")){
+			this.gasType = FluidRegistry.getFluid(nbt.getString("gasType"));
+		} else {
+			super.networkUnpack(nbt);
+		}
+	}
+
+	@Override
+	public void receiveFlux(NType type, double flux) {
+		
+		if(canProcess()) {
+			
+			if(type == NType.FAST)
+				flux *= 0.2D;
+			
+			progress += flux * RBMKDials.getOutgasserMod(world);
+			
+			if(progress > duration) {
+				process();
+				this.markDirty();
+			}
+		}
+	}
+	
+	private static HashMap<Object, ItemStack> recipes = new HashMap<>();
+	
+	static {
+		recipes.put("blockLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 10000));
+		recipes.put("ingotLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
+		recipes.put("dustLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
+		recipes.put(new ComparableStack(ModItems.powder_lithium_tiny), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 100));
+		recipes.put("ingotGold", new ItemStack(ModItems.ingot_au198));
+		recipes.put("nuggetGold", new ItemStack(ModItems.nugget_au198));
+		recipes.put("dustGold", new ItemStack(ModItems.powder_au198));
+		recipes.put(new ComparableStack(Blocks.BROWN_MUSHROOM), new ItemStack(ModBlocks.mush));
+		recipes.put(new ComparableStack(Blocks.RED_MUSHROOM), new ItemStack(ModBlocks.mush));
+		recipes.put(new ComparableStack(Items.MUSHROOM_STEW), new ItemStack(ModItems.glowing_stew));
+	}
+	
+	private boolean canProcess() {
+		
+		if(inventory.getStackInSlot(0).isEmpty())
+			return false;
+		
+		ItemStack output = getOutput(inventory.getStackInSlot(0));
+		
+		if(output == null)
+			return false;
+		
+		if(output.getItem() == ModItems.fluid_icon) {
+			return ItemFluidIcon.getFluid(output) == gasType && gas.getFluidAmount() + ItemFluidIcon.getQuantity(output) <= gas.getCapacity();
+		}
+		
+		if(inventory.getStackInSlot(1).isEmpty())
+			return true;
+		
+		return inventory.getStackInSlot(1).getItem() == output.getItem() && inventory.getStackInSlot(1).getItemDamage() == output.getItemDamage() && inventory.getStackInSlot(1).getCount() + output.getCount() <= inventory.getStackInSlot(1).getMaxStackSize();
+	}
+	
+	public static ItemStack getOutput(ItemStack stack) {
+		
+		if(stack == null || stack.getItem() == null)
+			return null;
+		
+		ComparableStack comp = new ComparableStack(stack);
+		
+		if(recipes.containsKey(comp))
+			return recipes.get(comp);
+		
+		String[] dictKeys = comp.getDictKeys();
+		
+		for(String key : dictKeys) {
+			
+			if(recipes.containsKey(key))
+				return recipes.get(key);
+		}
+		
+		return null;
+	}
+	
+	private void process() {
+		
+		ItemStack output = getOutput(inventory.getStackInSlot(0));
+		inventory.getStackInSlot(0).shrink(1);
+		this.progress = 0;
+		
+		if(output.getItem() == ModItems.fluid_icon) {
+			gas.fill(new FluidStack(gasType, ItemFluidIcon.getQuantity(output)), true);
+			return;
+		}
+		
+		if(inventory.getStackInSlot(1).isEmpty()) {
+			inventory.setStackInSlot(1, output.copy());
+		} else {
+			inventory.getStackInSlot(1).grow(output.getCount());
+		}
+	}
+
+	public void fillFluidInit(FluidTank tank) {
+		fillFluid(this.pos.getX(), this.pos.getY() + RBMKDials.getColumnHeight(world) + 1, this.pos.getZ(), tank);
+		
+		if(world.getBlockState(pos.down()) == ModBlocks.rbmk_loader) {
+
+			fillFluid(this.pos.getX() + 1, this.pos.getY() - 1, this.pos.getZ(), tank);
+			fillFluid(this.pos.getX() - 1, this.pos.getY() - 1, this.pos.getZ(), tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 1, this.pos.getZ() + 1, tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 1, this.pos.getZ() - 1, tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 2, this.pos.getZ(), tank);
+		}
+		
+		if(world.getBlockState(pos.down(2)) == ModBlocks.rbmk_loader) {
+
+			fillFluid(this.pos.getX() + 1, this.pos.getY() - 2, this.pos.getZ(), tank);
+			fillFluid(this.pos.getX() - 1, this.pos.getY() - 2, this.pos.getZ(), tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 2, this.pos.getZ() + 1, tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 2, this.pos.getZ() - 1, tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 1, this.pos.getZ(), tank);
+			fillFluid(this.pos.getX(), this.pos.getY() - 3, this.pos.getZ(), tank);
+		}
+	}
+
+	public void fillFluid(int x, int y, int z, FluidTank tank) {
+		FFUtils.fillFluid(this, tank, world, new BlockPos(x, y, z), tank.getCapacity());
+	}
+	
+	
+	@Override
+	public void onMelt(int reduce) {
+		
+		int count = 4 + world.rand.nextInt(2);
+		
+		for(int i = 0; i < count; i++) {
+			spawnDebris(DebrisType.BLANK);
+		}
+		
+		super.onMelt(reduce);
+	}
+
+	@Override
+	public ColumnType getConsoleType() {
+		return ColumnType.OUTGASSER;
+	}
+
+	@Override
+	public NBTTagCompound getNBTForConsole() {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setInteger("gas", this.gas.getFluidAmount());
+		data.setInteger("maxGas", this.gas.getCapacity());
+		data.setString("type", gasType.getName());
+		data.setDouble("progress", this.progress);
+		return data;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		
+		this.progress = nbt.getDouble("progress");
+		this.gas.readFromNBT(nbt.getCompoundTag("gas"));
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		
+		nbt.setDouble("progress", this.progress);
+		nbt.setTag("gas", gas.writeToNBT(new NBTTagCompound()));
+		
+		return nbt;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		return getOutput(itemStack) != null && i == 0;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+		return i == 1;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_) {
+		return new int[] {0, 1};
+	}
+
+	@Override
+	public void recievePacket(NBTTagCompound[] tags){
+		if(tags.length == 1){
+			gas.readFromNBT(tags[0]);
+		}
+	}
+
+	@Override
+	public IFluidTankProperties[] getTankProperties(){
+		return gas.getTankProperties();
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill){
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, boolean doDrain){
+		return gas.drain(resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain){
+		return gas.drain(maxDrain, doDrain);
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		return super.getCapability(capability, facing);
+	}
+}

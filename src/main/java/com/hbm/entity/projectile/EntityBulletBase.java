@@ -15,8 +15,6 @@ import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
@@ -55,6 +53,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -73,6 +72,10 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	public float overrideDamage;
 	public int overrideMaxAge = -1;
 
+	public BulletConfiguration getConfig() {
+		return config;
+	}
+	
 	public EntityBulletBase(World world) {
 		super(world);
 		this.setSize(0.5F, 0.5F);
@@ -587,21 +590,12 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		}
 
 		if (config.nuke > 0 && !world.isRemote) {
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, config.nuke, posX, posY, posZ));
-
-			if (MainRegistry.polaroidID == 11) {
-				if (rand.nextInt(100) >= 0) {
-					ExplosionParticleB.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
-				} else {
-					ExplosionParticle.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
-				}
-			} else {
-				if (rand.nextInt(100) == 0) {
-					ExplosionParticleB.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
-				} else {
-					ExplosionParticle.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
-				}
-			}
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, config.nuke, posX, posY, posZ).mute());
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "muke");
+			if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0) data.setBoolean("balefire", true);
+			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
+			world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
 		}
 
 		if (config.destroysBlocks && !world.isRemote) {

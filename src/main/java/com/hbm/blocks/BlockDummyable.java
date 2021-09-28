@@ -92,13 +92,13 @@ public abstract class BlockDummyable extends BlockContainer {
     	}
 	}
 	
-	public int[] findCore(World world, int x, int y, int z) {
+	public int[] findCore(IBlockAccess world, int x, int y, int z) {
     	positions.clear();
     	return findCoreRec(world, x, y, z);
     }
     
     List<BlockPos> positions = new ArrayList<BlockPos>();
-    public int[] findCoreRec(World world, int x, int y, int z) {
+    public int[] findCoreRec(IBlockAccess world, int x, int y, int z) {
     	
     	BlockPos pos = new BlockPos(x, y, z);
     	IBlockState state = world.getBlockState(pos);
@@ -159,6 +159,8 @@ public abstract class BlockDummyable extends BlockContainer {
 			dir = ForgeDirection.getOrientation(4);
 		}
 		
+		dir = getDirModified(dir);
+		
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -192,6 +194,10 @@ public abstract class BlockDummyable extends BlockContainer {
 
     	super.onBlockPlacedBy(world, pos, state, player, itemStack);
     }
+    
+    protected ForgeDirection getDirModified(ForgeDirection dir) {
+		return dir;
+	}
     
     protected boolean checkRequirement(World world, int x, int y, int z, ForgeDirection dir, int o) {
 		return MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o, getDimensions(), x, y, z, dir);

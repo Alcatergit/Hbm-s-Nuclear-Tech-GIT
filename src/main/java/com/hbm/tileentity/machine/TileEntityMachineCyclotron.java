@@ -5,8 +5,6 @@ import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -17,6 +15,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -183,16 +182,25 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		int rand = world.rand.nextInt(10);
 
 		if(rand < 2) {
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5));
-			ExplosionParticle.spawnMush(world, pos.getX() + 0.5, pos.getY() - 3,  pos.getZ() + 0.5);
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5).mute());
+			
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "muke");
+			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
 		} else if(rand < 4) {
-			EntityBalefire bf = new EntityBalefire(world);
+			EntityBalefire bf = new EntityBalefire(world).mute();
 			bf.posX = pos.getX() + 0.5;
 			bf.posY = pos.getY() + 1.5;
-			bf.posZ =  pos.getZ() + 0.5;
+			bf.posZ = pos.getZ() + 0.5;
 			bf.destructionRange = (int)(BombConfig.fatmanRadius * 1.5);
 			world.spawnEntity(bf);
-			ExplosionParticleB.spawnMush(world, pos.getX() + 0.5, pos.getY() - 3,  pos.getZ() + 0.5);
+			
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "muke");
+			data.setBoolean("balefire", true);
+			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
 		} else if(rand < 5) {
 			EntityBlackHole bl = new EntityBlackHole(world, 1.5F + world.rand.nextFloat());
 			bl.posX = pos.getX() + 0.5F;

@@ -15,6 +15,7 @@ import com.hbm.main.ClientProxy;
 import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.RenderHelper;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.material.Material;
@@ -33,6 +34,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -72,6 +74,7 @@ public class ArmorFSB extends ItemArmor {
 	public boolean thermal = false;
 	public boolean geigerSound = false;
 	public boolean customGeiger = false;
+	public boolean hardLanding = false;
 	public Vec3d flashlightPosition = null;
 	public double gravity = 0;
 	public SoundEvent step;
@@ -166,22 +169,25 @@ public class ArmorFSB extends ItemArmor {
 
 				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 				
-				if(chestplate.damageThreshold >= event.getAmount() && !event.getSource().isUnblockable()) {
-					event.setCanceled(true);
-				}
-
-				if(chestplate.fireproof && event.getSource().isFireDamage()) {
-					player.extinguish();
-					event.setCanceled(true);
-				}
-				if(chestplate.resistance.get(event.getSource().getDamageType()) != null &&
-						chestplate.resistance.get(event.getSource().getDamageType()) <= 0) {
-					event.setCanceled(true);
-				}
+				chestplate.handleAttack(event, chestplate);
 			}
 		}
     }
 
+    public void handleAttack(LivingAttackEvent event, ArmorFSB chestplate){
+    	if(chestplate.damageThreshold >= event.getAmount() && !event.getSource().isUnblockable()) {
+			event.setCanceled(true);
+		}
+
+		if(chestplate.fireproof && event.getSource().isFireDamage()) {
+			event.getEntityLiving().extinguish();
+			event.setCanceled(true);
+		}
+		if(chestplate.resistance.get(event.getSource().getDamageType()) != null &&
+				chestplate.resistance.get(event.getSource().getDamageType()) <= 0) {
+			event.setCanceled(true);
+		}
+    }
 	
     public static void handleHurt(LivingHurtEvent event) {
 
@@ -194,26 +200,30 @@ public class ArmorFSB extends ItemArmor {
 
 				ArmorFSB chestplate = (ArmorFSB)player.inventory.armorInventory.get(2).getItem();
 
-				if(event.getAmount() < 100){
-					if(!event.getSource().isUnblockable())
-						event.setAmount(event.getAmount()-chestplate.damageThreshold);
-					
-					if(chestplate.damageMod != -1) {
-						event.setAmount(event.getAmount()*chestplate.damageMod);
-					}
-	
-					if(chestplate.resistance.get(event.getSource().getDamageType()) != null) {
-						event.setAmount(event.getAmount()*chestplate.resistance.get(event.getSource().getDamageType()));
-					}
-	
-					if(chestplate.blastProtection != -1 && event.getSource().isExplosion()) {
-						event.setAmount(event.getAmount()*chestplate.blastProtection);
-					}
-	
-					if(chestplate.damageCap != -1) {
-						event.setAmount(Math.min(event.getAmount(), chestplate.damageCap));
-					}
-				}
+				chestplate.handleHurt(event, chestplate);
+			}
+		}
+    }
+    
+    public void handleHurt(LivingHurtEvent event, ArmorFSB chestplate){
+    	if(event.getAmount() < 100){
+			if(!event.getSource().isUnblockable())
+				event.setAmount(event.getAmount()-chestplate.damageThreshold);
+			
+			if(chestplate.damageMod != -1) {
+				event.setAmount(event.getAmount()*chestplate.damageMod);
+			}
+
+			if(chestplate.resistance.get(event.getSource().getDamageType()) != null) {
+				event.setAmount(event.getAmount()*chestplate.resistance.get(event.getSource().getDamageType()));
+			}
+
+			if(chestplate.blastProtection != -1 && event.getSource().isExplosion()) {
+				event.setAmount(event.getAmount()*chestplate.blastProtection);
+			}
+
+			if(chestplate.damageCap != -1) {
+				event.setAmount(Math.min(event.getAmount(), chestplate.damageCap));
 			}
 		}
     }
@@ -289,6 +299,30 @@ public class ArmorFSB extends ItemArmor {
 
 			ArmorFSB chestplate = (ArmorFSB) player.inventory.armorInventory.get(2).getItem();
 
+			if(chestplate.hardLanding && player.fallDistance > 10) {
+
+				// player.playSound(Block.soundTypeAnvil.func_150496_b(), 2.0F,
+				// 0.5F);
+
+				List<Entity> entities = player.world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(3, 0, 3));
+
+				for(Entity e : entities) {
+
+					Vec3 vec = Vec3.createVectorHelper(player.posX - e.posX, 0, player.posZ - e.posZ);
+
+					if(vec.lengthVector() < 3) {
+
+						double intensity = 3 - vec.lengthVector();
+						e.motionX += vec.xCoord * intensity * -2;
+						e.motionY += 0.1D * intensity;
+						e.motionZ += vec.zCoord * intensity * -2;
+
+						e.attackEntityFrom(DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), (float) (intensity * 10));
+					}
+				}
+				// return;
+			}
+			
 			if(chestplate.fall != null)
 				player.playSound(chestplate.fall, 1.0F, 1.0F);
 		}
@@ -388,6 +422,11 @@ public class ArmorFSB extends ItemArmor {
 		this.customGeiger = geiger;
 		return this;
 	}
+	
+	public ArmorFSB setHasHardLanding(boolean hardLanding) {
+		this.hardLanding = hardLanding;
+		return this;
+	}
 
 	public ArmorFSB setGravity(double gravity) {
 		this.gravity = gravity;
@@ -478,6 +517,7 @@ public class ArmorFSB extends ItemArmor {
 		this.geigerSound = original.geigerSound;
 		this.customGeiger = original.customGeiger;
 		this.thermal = original.thermal;
+		this.hardLanding = original.hardLanding;
 		this.gravity = original.gravity;
 		this.step = original.step;
 		this.jump = original.jump;
@@ -549,6 +589,10 @@ public class ArmorFSB extends ItemArmor {
     	if(thermal) {
     		list.add(TextFormatting.RED + "  " + I18nUtil.resolveKey("armor.thermal"));
     	}
+    	
+    	if(hardLanding) {
+			list.add(TextFormatting.RED + "  " + I18nUtil.resolveKey("armor.hardLanding"));
+		}
     	
     	if(gravity != 0) {
     		list.add(TextFormatting.BLUE + "  " + I18nUtil.resolveKey("armor.gravity", gravity));

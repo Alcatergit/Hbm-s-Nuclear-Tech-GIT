@@ -1,0 +1,156 @@
+package com.hbm.blocks.gas;
+
+import java.util.Random;
+
+import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.ArmorUtil;
+import com.hbm.items.ModItems;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.main.MainRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.HbmWorldUtility;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+public abstract class BlockGasBase extends Block {
+	
+	float red;
+	float green;
+	float blue;
+
+	public BlockGasBase(float r, float g, float b, String s) {
+		super(ModBlocks.materialGas);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
+		this.setHardness(0.0F);
+		this.setResistance(0.0F);
+		this.lightOpacity = 0;
+		this.red = r;
+		this.green = g;
+		this.blue = b;
+		
+		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state){
+		return false;
+	}
+	
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state){
+		return EnumBlockRenderType.INVISIBLE;
+	}
+	
+	@Override
+	public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid){
+		return false;
+	}
+	
+	@Override
+	public boolean isCollidable(){
+		return false;
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos){
+		return NULL_AABB;
+	}
+	
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune){
+		return Items.AIR;
+	}
+	
+	@Override
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side){
+		return false;
+	}
+	
+	@Override
+	public boolean isBlockNormalCube(IBlockState state){
+		return false;
+	}
+	
+	@Override
+	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos){
+		return true;
+	}
+
+	@Override
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
+		if(!world.isRemote)
+			world.scheduleUpdate(pos, this, 10);
+	}
+
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
+		if(!world.isRemote) {
+			
+			HbmWorldUtility.setImmediateScheduledUpdates(world, false); //prevent recursive loop when some dumbass forgets to clean up immediate updating
+
+			if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
+				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ())))
+					world.scheduleUpdate(pos, this, getDelay(world));
+		}
+	}
+	
+	public abstract ForgeDirection getFirstDirection(World world, int x, int y, int z);
+
+	public ForgeDirection getSecondDirection(World world, int x, int y, int z) {
+		return getFirstDirection(world, x, y, z);
+	}
+
+	public boolean tryMove(World world, int x, int y, int z, ForgeDirection dir) {
+
+		if(world.getBlockState(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)).getBlock() == Blocks.AIR) {
+			world.setBlockToAir(new BlockPos(x, y, z));
+			world.setBlockState(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ), this.getDefaultState());
+			world.scheduleUpdate(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ), this, getDelay(world));
+			return true;
+		}
+
+		return false;
+	}
+
+	public int getDelay(World world) {
+		return 2;
+	}
+
+	public ForgeDirection randomHorizontal(World world) {
+		return ForgeDirection.getOrientation(world.rand.nextInt(4) + 2);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand){
+		super.randomDisplayTick(stateIn, worldIn, pos, rand);
+		EntityPlayer p = MainRegistry.proxy.me();
+		if(ArmorUtil.checkArmorPiece(p, ModItems.ashglasses, 3)) {
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "vanillaExt");
+			data.setString("mode", "cloud");
+			data.setDouble("posX", pos.getX() + 0.5);
+			data.setDouble("posY", pos.getY() + 0.5);
+			data.setDouble("posZ", pos.getZ() + 0.5);
+			data.setFloat("r", red);
+			data.setFloat("g", green);
+			data.setFloat("b", blue);
+			MainRegistry.proxy.effectNT(data);
+		}
+	}
+	
+}

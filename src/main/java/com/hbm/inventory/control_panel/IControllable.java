@@ -13,6 +13,6 @@ public interface IControllable {
 	
 	public void receiveEvent(BlockPos from, ControlEvent e);
 	
-	public BlockPos getPos();
-	public World getWorld();
+	public BlockPos getControlPos();
+	public World getControlWorld();
 }

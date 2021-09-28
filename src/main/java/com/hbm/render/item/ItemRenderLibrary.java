@@ -5,14 +5,21 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.animloader.AnimationWrapper;
+import com.hbm.animloader.AnimationWrapper.EndResult;
+import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.tileentity.RenderDemonLamp;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemRenderLibrary {
@@ -846,6 +853,487 @@ public class ItemRenderLibrary {
 				 AnimationWrapper w = new AnimationWrapper(0, ResourceManager.jetpack_activate);
 			     ResourceManager.jetpack.controller.setAnim(w);
 				 ResourceManager.jetpack.renderAnimated(ResourceManager.jetpack_activate.length);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.lamp_demon), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(8, 8, 8);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(RenderDemonLamp.tex);
+				RenderDemonLamp.demon_lamp.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_chekhov), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(-0.75, 0, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_chekhov_tex); ResourceManager.turret_chekhov.renderPart("Body");
+				bindTexture(ResourceManager.turret_chekhov_barrels_tex); ResourceManager.turret_chekhov.renderPart("Barrels");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_friendly), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(-0.75, 0, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_friendly_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_friendly_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_chekhov_tex); ResourceManager.turret_chekhov.renderPart("Body");
+				bindTexture(ResourceManager.turret_chekhov_barrels_tex); ResourceManager.turret_chekhov.renderPart("Barrels");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_jeremy), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(-0.5, 0, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_jeremy_tex); ResourceManager.turret_jeremy.renderPart("Gun");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_tauon), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_tauon_tex); ResourceManager.turret_tauon.renderPart("Cannon");
+				ResourceManager.turret_tauon.renderPart("Rotor");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_richard), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_richard_tex); ResourceManager.turret_richard.renderPart("Launcher");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_howard), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4.5, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(-0.75, 0, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_ciws_tex); ResourceManager.turret_howard.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_howard_tex); ResourceManager.turret_howard.renderPart("Body");
+				bindTexture(ResourceManager.turret_howard_barrels_tex); ResourceManager.turret_howard.renderPart("BarrelsTop");
+				bindTexture(ResourceManager.turret_howard_barrels_tex); ResourceManager.turret_howard.renderPart("BarrelsBottom");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_howard_damaged), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4.5, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(-0.75, 0, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_rusted); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_ciws_rusted); ResourceManager.turret_howard.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_howard_rusted); ResourceManager.turret_howard_damaged.renderPart("Body");
+				bindTexture(ResourceManager.turret_howard_barrels_rusted); ResourceManager.turret_howard_damaged.renderPart("BarrelsTop");
+				bindTexture(ResourceManager.turret_howard_barrels_rusted); ResourceManager.turret_howard_damaged.renderPart("BarrelsBottom");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_maxwell), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(-1, -3, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_ciws_tex); ResourceManager.turret_howard.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_maxwell_tex); ResourceManager.turret_maxwell.renderPart("Microwave");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.turret_fritz), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turret_base_tex); ResourceManager.turret_chekhov.renderPart("Base");
+				bindTexture(ResourceManager.turret_carriage_tex); ResourceManager.turret_chekhov.renderPart("Carriage");
+				bindTexture(ResourceManager.turret_fritz_tex); ResourceManager.turret_fritz.renderPart("Gun");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_console), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.rbmk_console_tex);
+				ResourceManager.rbmk_console.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		ItemRenderBase rbmkRod = new ItemRenderBase(){
+			public void renderInventory(ItemStack stack){
+				GL11.glTranslated(0, -5.5, 0);
+				GL11.glScaled(3.65, 3.65, 3.65);
+			}
+			public void renderCommon(ItemStack stack){
+				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
+				Tessellator tes = Tessellator.instance;
+				tes.startDrawing(GL11.GL_TRIANGLES);
+				for(int i = 0; i < 4; i ++){
+					ResourceManager.rbmk_element.tessellatePart(tes, "Column");
+					ResourceManager.rbmk_element.tessellatePart(tes, "Rods");
+					tes.addTranslation(0, 1, 0);
+				}
+				tes.draw();
+			}
+			public boolean doNullTransform(){
+				return true;
+			}
+		};
+		ItemRenderBase rbmkControl = new ItemRenderBase(){
+			public void renderInventory(ItemStack stack){
+				GL11.glTranslated(0, -5.5, 0);
+				GL11.glScaled(3.65, 3.65, 3.65);
+			}
+			public void renderCommon(ItemStack stack){
+				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
+				Tessellator tes = Tessellator.instance;
+				tes.startDrawing(GL11.GL_TRIANGLES);
+				for(int i = 0; i < 4; i ++){
+					ResourceManager.rbmk_rods.tessellatePart(tes, "Column");
+					if(i < 3)
+						tes.addTranslation(0, 1, 0);
+				}
+				if(Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_boiler)
+					ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
+				tes.draw();
+			}
+			public boolean doNullTransform(){
+				return true;
+			}
+		};
+		ItemRenderBase rbmkPassive = new ItemRenderBase(){
+			public void renderInventory(ItemStack stack){
+				GL11.glTranslated(0, -5.5, 0);
+				GL11.glScaled(3.65, 3.65, 3.65);
+			}
+			public void renderCommon(ItemStack stack){
+				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
+				Tessellator tes = Tessellator.instance;
+				tes.startDrawing(GL11.GL_TRIANGLES);
+				for(int i = 0; i < 4; i ++){
+					ResourceManager.rbmk_reflector.tessellatePart(tes, "Column");
+					tes.addTranslation(0, 1, 0);
+				}
+				ResourceManager.rbmk_reflector.tessellatePart(tes, "Lid");
+				tes.draw();
+			}
+			public boolean doNullTransform(){
+				return true;
+			}
+		};
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_rod), rbmkRod);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_rod_mod), rbmkRod);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_rod_reasim), rbmkRod);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_rod_reasim_mod), rbmkRod);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_control), rbmkControl);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_control_mod), rbmkControl);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_control_auto), rbmkControl);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_blank), rbmkPassive);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_boiler), rbmkControl);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_reflector), rbmkPassive);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_absorber), rbmkPassive);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_moderator), rbmkPassive);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_outgasser), rbmkPassive);
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_bat9000), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(2, 2, 2);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.bat9000_tex); ResourceManager.bat9000.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_orbus), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(2, 2, 2);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.orbus_tex); ResourceManager.orbus.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fraction_tower), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3.25, 3.25, 3.25);
+			}
+			public void renderCommon() {
+				GL11.glScaled(1, 1, 1);
+				bindTexture(ResourceManager.fraction_tower_tex); ResourceManager.fraction_tower.renderAll();
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.fraction_spacer), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glScaled(3.25, 3.25, 3.25);
+			}
+			public void renderCommon() {
+				GL11.glScaled(1, 1, 1);
+				bindTexture(ResourceManager.fraction_spacer_tex); ResourceManager.fraction_spacer.renderAll();
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_tower_small), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				GL11.glScaled(0.25, 0.25, 0.25);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.tower_small_tex); ResourceManager.tower_small.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_tower_large), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(4 * 0.95, 4 * 0.95, 4 * 0.95);
+			}
+			public void renderCommon() {
+				GL11.glScaled(0.25, 0.25, 0.25);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.tower_large_tex); ResourceManager.tower_large.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_storage_drum), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -3, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				GL11.glScaled(2, 2, 2);
+				bindTexture(ResourceManager.waste_drum_tex);
+				ResourceManager.waste_drum.renderAll();
+			}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_chungus), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0.5, 0, 0);
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			public void renderCommon() {
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glRotated(90, 0, 1, 0);
+				bindTexture(ResourceManager.chungus_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.chungus.renderPart("Body");
+				ResourceManager.chungus.renderPart("Lever");
+				ResourceManager.chungus.renderPart("Blades");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_silex), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3.25, 3.25, 3.25);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.silex_tex); ResourceManager.silex.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.control0), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(-2.5, -1, 0);
+				GL11.glScaled(12, 12, 12);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(1.5, 1, -1);
+				bindTexture(ResourceManager.control_panel0_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.control_panel0.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+			public boolean doNullTransform(){
+				return true;
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.large_vehicle_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(1.8, 1.8, 1.8);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.large_vehicle_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.large_vehicle_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.water_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.water_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.water_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.qe_containment), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -3.5, 0);
+				GL11.glScaled(3.8, 3.8, 3.8);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.qe_containment_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.qe_containment_door.renderAllExcept("decal");
+				bindTexture(ResourceManager.qe_containment_decal);
+				ResourceManager.qe_containment_door.renderPart("decal");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.qe_sliding_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -3.5, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.qe_sliding_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.qe_sliding_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.fire_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -3.5, 0);
+				GL11.glScaled(3.6, 3.6, 3.6);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.fire_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.fire_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.small_hatch), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4.5, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.small_hatch_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.small_hatch.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.round_airlock_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.round_airlock_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.round_airlock_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.secure_access_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(2.4, 2.4, 2.4);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.secure_access_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.secure_access_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.sliding_seal_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -5, 0);
+				GL11.glScaled(7, 7, 7);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.sliding_seal_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.sliding_seal_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.transition_seal), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -4.5, 0);
+				GL11.glScaled(0.5, 0.5, 0.5);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.transition_seal_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				AnimationWrapper w = new AnimationWrapper(System.currentTimeMillis(), ResourceManager.transition_seal_anim).onEnd(new EndResult(EndType.STAY, null));
+				ResourceManager.transition_seal.controller.setAnim(w);
+				ResourceManager.transition_seal.renderAnimated(System.currentTimeMillis());
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.bm_power_box), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -6, 0);
+				GL11.glScaled(18, 18, 18);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.bm_box_lever_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.bm_box_lever.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}
 		});
 	}

@@ -1,5 +1,9 @@
 package com.hbm.inventory.control_panel;
 
+import com.hbm.inventory.control_panel.nodes.Node;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 public class NodeElement {
 
 	public Node parent;
@@ -23,5 +27,20 @@ public class NodeElement {
 	
 	public boolean onClick(float x, float y){
 		return false;
+	}
+	
+	public NBTTagCompound writeToNBT(NBTTagCompound tag, NodeSystem sys){
+		tag.setFloat("oX", offsetX);
+		tag.setFloat("oY", offsetY);
+		tag.setInteger("idx", index);
+		tag.setInteger("pIdx", sys.nodes.indexOf(parent));
+		return tag;
+	}
+	
+	public void readFromNBT(NBTTagCompound tag, NodeSystem sys){
+		offsetX = tag.getFloat("oX");
+		offsetY = tag.getFloat("oY");
+		index = tag.getInteger("idx");
+		parent = sys.nodes.get(tag.getInteger("pIdx"));
 	}
 }

@@ -93,6 +93,31 @@ public class BulletConfigFactory {
 		return bullet;
 	}
 
+	public static BulletConfiguration standardShellConfig() {
+		
+		BulletConfiguration bullet = new BulletConfiguration();
+		
+		bullet.velocity = 3.0F;
+		bullet.spread = 0.005F;
+		bullet.wear = 10;
+		bullet.bulletsMin = 1;
+		bullet.bulletsMax = 1;
+		bullet.gravity = 0.005D;
+		bullet.maxAge = 300;
+		bullet.doesRicochet = true;
+		bullet.ricochetAngle = 10;
+		bullet.HBRC = 2;
+		bullet.LBRC = 100;
+		bullet.bounceMod = 0.8;
+		bullet.doesPenetrate = false;
+		bullet.doesBreakGlass = false;
+		bullet.style = BulletConfiguration.STYLE_GRENADE;
+		bullet.plink = BulletConfiguration.PLINK_GRENADE;
+		bullet.vPFX = "smoke";
+		
+		return bullet;
+	}
+	
 	public static BulletConfiguration standardNukeConfig() {
 
 		BulletConfiguration bullet = new BulletConfiguration();
@@ -250,7 +275,7 @@ public class BulletConfigFactory {
 		return bullet;
 	}
 	
-	public static IBulletImpactBehavior getPhosphorousEffect(final int radius, final int duration, final int count, final double motion) {
+	public static IBulletImpactBehavior getPhosphorousEffect(final int radius, final int duration, final int count, final double motion, float hazeChance) {
 		
 		IBulletImpactBehavior impact = new IBulletImpactBehavior() {
 
@@ -280,6 +305,11 @@ public class BulletConfigFactory {
 				data.setDouble("motion", motion);
 				
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, bullet.posX, bullet.posY, bullet.posZ), new TargetPoint(bullet.dimension, bullet.posX, bullet.posY, bullet.posZ, 50));
+				if(bullet.world.rand.nextFloat() < hazeChance) {
+					NBTTagCompound haze = new NBTTagCompound();
+					haze.setString("type", "haze");
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(haze, bullet.posX, bullet.posY, bullet.posZ), new TargetPoint(bullet.dimension, bullet.posX, bullet.posY, bullet.posZ, 150));
+				}
 			}
 		};
 		

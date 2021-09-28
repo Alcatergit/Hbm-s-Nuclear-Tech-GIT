@@ -8,6 +8,7 @@ import com.hbm.sound.AudioWrapper;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
@@ -37,6 +38,8 @@ public class ServerProxy
 	public void registerMissileItems(IRegistry<ModelResourceLocation, IBakedModel> reg) { }
 
 	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float pitch) { return null; }
+	
+	public AudioWrapper getLoopedSoundStartStop(World world, SoundEvent sound, SoundEvent start, SoundEvent stop, SoundCategory cat, float x, float y, float z, float volume, float pitch){return null;}
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
 	
@@ -69,4 +72,8 @@ public class ServerProxy
 	public void displayTooltip(String msg) { }
 	
 	public void setRecoil(float rec){};
+	
+	public boolean isVanished(Entity e) {
+		return false;
+	}
 }

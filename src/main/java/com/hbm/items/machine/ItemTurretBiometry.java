@@ -39,7 +39,7 @@ public class ItemTurretBiometry extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
 		ItemStack stack = player.getHeldItem(handIn);
-		addName(stack, player.getUniqueID().toString());
+		addName(stack, player.getDisplayName().getUnformattedText());
 
         if(world.isRemote)
         	player.sendMessage(new TextComponentTranslation("Added player data!"));

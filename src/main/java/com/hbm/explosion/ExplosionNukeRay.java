@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.lib.Library;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class ExplosionNukeRay {
@@ -165,6 +167,7 @@ public class ExplosionNukeRay {
 			float res = strength;
 			
 			FloatTriplet lastPos = null;
+			Explosion dummy = Library.explosionDummy(world, x, y, z);
 			
 			for(int i = 0; i < length; i ++) {
 				
@@ -176,9 +179,9 @@ public class ExplosionNukeRay {
 				float z0 = (float) (posZ + (vec.zCoord * i));
 				pos.setPos(x0, y0, z0);
 				if(!world.getBlockState(pos).getMaterial().isLiquid())
-					res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, null, null), 1.25);
+					res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, null, dummy), 1.25);
 				else
-					res -= Math.pow(Blocks.AIR.getExplosionResistance(world, pos, null, null), 1.25);
+					res -= Math.pow(Blocks.AIR.getExplosionResistance(world, pos, null, dummy), 1.25);
 
 				if(res > 0 && world.getBlockState(pos).getBlock() != Blocks.AIR) {
 					lastPos = new FloatTriplet(x0, y0, z0);
@@ -193,6 +196,7 @@ public class ExplosionNukeRay {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void collectTipExperimental(int count) {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		for(int k = 0; k < count; k++) {
@@ -223,9 +227,9 @@ public class ExplosionNukeRay {
 				fac *= 0.07D;
 				
 				if(!world.getBlockState(pos).getMaterial().isLiquid())
-					res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, null, null), 7.5D - fac);
+					res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(null), 7.5D - fac);
 				else
-					res -= Math.pow(Blocks.AIR.getExplosionResistance(world, pos, null, null), 7.5D - fac);
+					res -= Math.pow(Blocks.AIR.getExplosionResistance(null), 7.5D - fac);
 
 				if(res > 0 && world.getBlockState(pos).getBlock() != Blocks.AIR) {
 					lastPos = new FloatTriplet(x0, y0, z0);
@@ -314,6 +318,7 @@ public class ExplosionNukeRay {
 	}*/
 	
 	//currently used by mk4
+	@SuppressWarnings("deprecation")
 	public void collectTipMk4_5(int count) {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int amountProcessed = 0;
@@ -372,9 +377,9 @@ public class ExplosionNukeRay {
 					fac *= 0.07D;
 					
 					if(!world.getBlockState(pos).getMaterial().isLiquid())
-						res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, null, null), 7.5D - fac);
+						res -= Math.pow(world.getBlockState(pos).getBlock().getExplosionResistance(null), 7.5D - fac);
 					else
-						res -= Math.pow(Blocks.AIR.getExplosionResistance(world, pos, null, null), 7.5D - fac);
+						res -= Math.pow(Blocks.AIR.getExplosionResistance(null), 7.5D - fac);
 	
 					if(res > 0 && world.getBlockState(pos).getBlock() != Blocks.AIR) {
 						lastPos = new FloatTriplet(x0, y0, z0);

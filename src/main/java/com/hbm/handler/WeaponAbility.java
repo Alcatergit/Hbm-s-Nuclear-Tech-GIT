@@ -11,6 +11,8 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.util.WeightedRandomObject;
 
 import net.minecraft.block.Block;
@@ -53,8 +55,8 @@ public abstract class WeaponAbility {
 
 		@Override
 		public void onHit(World world, EntityPlayer player, Entity victim, IItemAbility tool) {
-			
-			ContaminationUtil.applyRadData(victim, rad);
+			if(victim instanceof EntityLivingBase)
+				ContaminationUtil.contaminate((EntityLivingBase)victim, HazardType.RADIATION, ContaminationType.CREATIVE, rad);
 		}
 
 		@Override
@@ -280,6 +282,33 @@ public abstract class WeaponAbility {
 		@Override
 		public String getFullName() {
 			return I18n.format(getName());
+		}
+	}
+	
+	public static class FireAbility extends WeaponAbility {
+		
+		int duration;
+		
+		public FireAbility(int duration) {
+			this.duration = duration;
+		}
+
+		@Override
+		public void onHit(World world, EntityPlayer player, Entity victim, IItemAbility tool) {
+			
+			if(victim instanceof EntityLivingBase) {
+				victim.setFire(duration);
+			}
+		}
+
+		@Override
+		public String getName() {
+			return "weapon.ability.fire";
+		}
+
+		@Override
+		public String getFullName() {
+			return I18n.format(getName()) + " (" + duration + ")";
 		}
 	}
 

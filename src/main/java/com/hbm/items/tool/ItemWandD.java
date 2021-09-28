@@ -21,8 +21,10 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -32,6 +34,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,6 +79,8 @@ public class ItemWandD extends Item {
 					int x = pos1.getBlockPos().getX();
 					int z = pos1.getBlockPos().getZ();
 					int y = world.getHeight(x, z);
+					world.setBlockState(new BlockPos(x, y, z), Blocks.CHEST.getDefaultState());
+					((TileEntityChest)world.getTileEntity(new BlockPos(x, y, z))).setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, world.rand.nextLong());
 
 					//new Ruin001().generate_r0(world, world.rand, x, y - 8, z);
 					//CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);

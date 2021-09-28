@@ -1,5 +1,8 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:control_panel0" }
+		"facing=north": { "model": "hbm:control_panel0" },
+		"facing=south": { "model": "hbm:control_panel0" },
+		"facing=east": { "model": "hbm:control_panel0" },
+		"facing=west": { "model": "hbm:control_panel0" }
 	}
 }

@@ -20,6 +20,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -346,7 +347,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 
 	@Override
 	public void receiveEvent(BlockPos from, ControlEvent e){
-		if(e.name.equals("toggle")){
+		if(e.name.equals("door_toggle")){
 			tryToggle();
 		}
 	}
@@ -371,6 +372,16 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public void invalidate(){
 		super.invalidate();
 		ControlEventSystem.get(world).removeControllable(this);
+	}
+
+	@Override
+	public BlockPos getControlPos(){
+		return getPos();
+	}
+
+	@Override
+	public World getControlWorld(){
+		return getWorld();
 	}
 	
 }

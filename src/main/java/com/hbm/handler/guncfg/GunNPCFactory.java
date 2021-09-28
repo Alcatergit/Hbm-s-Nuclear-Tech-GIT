@@ -4,16 +4,28 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.util.BobMathUtil;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class GunNPCFactory {
 
@@ -220,6 +232,115 @@ public class GunNPCFactory {
 		bullet.doesRicochet = false;
 		bullet.setToBolt(BulletConfiguration.BOLT_LASER);
 
+		return bullet;
+	}
+	
+	public static BulletConfiguration getRocketUFOConfig() {
+		
+		BulletConfiguration bullet = GunRocketFactory.getRocketConfig();
+		
+		bullet.vPFX = "reddust";
+		bullet.destroysBlocks = false;
+		bullet.explosive = 0F;
+		
+		bullet.bUpdate = new IBulletUpdateBehavior() {
+			
+			double angle = 90;
+			double range = 100;
+
+			@Override
+			public void behaveUpdate(EntityBulletBase bullet) {
+				
+				if(bullet.world.isRemote)
+					return;
+				
+				if(bullet.world.getEntityByID(bullet.getEntityData().getInteger("homingTarget")) == null) {
+					chooseTarget(bullet);
+				}
+				
+				Entity target = bullet.world.getEntityByID(bullet.getEntityData().getInteger("homingTarget"));
+				
+				if(target != null) {
+					
+					if(bullet.getDistance(target) < 5) {
+						bullet.getConfig().bImpact.behaveBlockHit(bullet, -1, -1, -1);
+						bullet.setDead();
+						return;
+					}
+					
+					Vec3 delta = Vec3.createVectorHelper(target.posX - bullet.posX, target.posY + target.height / 2 - bullet.posY, target.posZ - bullet.posZ);
+					delta = delta.normalize();
+					
+					double vel = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).lengthVector();
+
+					bullet.motionX = delta.xCoord * vel;
+					bullet.motionY = delta.yCoord * vel;
+					bullet.motionZ = delta.zCoord * vel;
+				}
+			}
+			
+			private void chooseTarget(EntityBulletBase bullet) {
+				
+				List<EntityLivingBase> entities = bullet.world.getEntitiesWithinAABB(EntityLivingBase.class, bullet.getEntityBoundingBox().grow(range, range, range));
+				
+				Vec3 mot = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ);
+				
+				EntityLivingBase target = null;
+				double targetAngle = angle;
+				
+				for(EntityLivingBase e : entities) {
+					
+					if(!e.isEntityAlive() || e == bullet.shooter)
+						continue;
+					
+					Vec3 delta = Vec3.createVectorHelper(e.posX - bullet.posX, e.posY + e.height / 2 - bullet.posY, e.posZ - bullet.posZ);
+					RayTraceResult r = bullet.world.rayTraceBlocks(Vec3.createVectorHelper(bullet.posX, bullet.posY, bullet.posZ).toVec3d(), Vec3.createVectorHelper(e.posX, e.posY + e.height / 2, e.posZ).toVec3d(), false, true, false);
+					if(r != null && r.typeOfHit != Type.MISS)
+						continue;
+					
+					double dist = e.getDistanceSq(bullet);
+					
+					if(dist < range * range) {
+						
+						double deltaAngle = BobMathUtil.getCrossAngle(mot, delta);
+					
+						if(deltaAngle < targetAngle) {
+							target = e;
+							targetAngle = deltaAngle;
+						}
+					}
+				}
+				
+				if(target != null) {
+					bullet.getEntityData().setInteger("homingTarget", target.getEntityId());
+				}
+			}
+		};
+		
+		bullet.bImpact = new IBulletImpactBehavior() {
+
+			@Override
+			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
+
+				bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, HBMSoundHandler.ufoBlast, SoundCategory.HOSTILE, 5.0F, 0.9F + bullet.world.rand.nextFloat() * 0.2F);
+				bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.HOSTILE, 5.0F, 0.5F);
+				ExplosionNukeGeneric.dealDamage(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 10, 50);
+				
+				for(int i = 0; i < 3; i++) {
+					NBTTagCompound data = new NBTTagCompound();
+					data.setString("type", "plasmablast");
+					data.setFloat("r", 0.0F);
+					data.setFloat("g", 0.75F);
+					data.setFloat("b", 1.0F);
+					data.setFloat("pitch", -30F + 30F * i);
+					data.setFloat("yaw", bullet.world.rand.nextFloat() * 180F);
+					data.setFloat("scale", 5F);
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, bullet.posX, bullet.posY, bullet.posZ),
+							new TargetPoint(bullet.world.provider.getDimension(), bullet.posX, bullet.posY, bullet.posZ, 100));
+				}
+			}
+		};
+		
 		return bullet;
 	}
 }

@@ -104,9 +104,8 @@ public class ParticleGluonBurnTrail extends Particle {
 	
 	@Override
 	public void renderParticle(BufferBuilder buf, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		GL11.glPushMatrix();
 		RenderHelper.resetParticleInterpPos(entityIn, partialTicks);
-		GL11.glTranslated(-interpPosX, -interpPosY, -interpPosZ);
+		//GL11.glTranslated(-interpPosX, -interpPosY, -interpPosZ);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.gluon_burn);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
@@ -131,11 +130,11 @@ public class ParticleGluonBurnTrail extends Particle {
 			float nextFade = 1-BobMathUtil.remap01_clamp(next.age+partialTicks, 50, 60);
 			float midFade = prevFade + (nextFade-prevFade)*0.5F;
 			
-			Vec3d prevPos1 = prev.pos.add(prev.tangent.scale(particleScale));
-			Vec3d prevPos2 = prev.pos.add(prev.tangent.scale(-particleScale));
-			Vec3d mid = prev.pos.add(next.pos.subtract(prev.pos).scale(0.5F));
-			Vec3d nextPos1 = next.pos.add(next.tangent.scale(particleScale));
-			Vec3d nextPos2 = next.pos.add(next.tangent.scale(-particleScale));
+			Vec3d prevPos1 = prev.pos.add(prev.tangent.scale(particleScale)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d prevPos2 = prev.pos.add(prev.tangent.scale(-particleScale)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d mid = prev.pos.add(next.pos.subtract(prev.pos).scale(0.5F)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d nextPos1 = next.pos.add(next.tangent.scale(particleScale)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d nextPos2 = next.pos.add(next.tangent.scale(-particleScale)).subtract(interpPosX, interpPosY, interpPosZ);
 			float prevU = prev.uCoord;
 			float nextU = next.uCoord;
 			float midU = prevU + (nextU-prevU)*0.5F;
@@ -177,11 +176,11 @@ public class ParticleGluonBurnTrail extends Particle {
 			float prevFade = (1-BobMathUtil.remap01_clamp(prev.age+partialTicks, 2, 12))*0.75F;
 			float nextFade = (1-BobMathUtil.remap01_clamp(next.age+partialTicks, 2, 12))*0.75F;
 			
-			Vec3d prevPos1 = prev.pos.add(prev.tangent.scale(particleScale*prevFade));
-			Vec3d prevPos2 = prev.pos.add(prev.tangent.scale(-particleScale*prevFade));
-			Vec3d mid = prev.pos.add(next.pos.subtract(prev.pos).scale(0.5F));
-			Vec3d nextPos1 = next.pos.add(next.tangent.scale(particleScale*nextFade));
-			Vec3d nextPos2 = next.pos.add(next.tangent.scale(-particleScale*nextFade));
+			Vec3d prevPos1 = prev.pos.add(prev.tangent.scale(particleScale*prevFade)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d prevPos2 = prev.pos.add(prev.tangent.scale(-particleScale*prevFade)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d mid = prev.pos.add(next.pos.subtract(prev.pos).scale(0.5F)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d nextPos1 = next.pos.add(next.tangent.scale(particleScale*nextFade)).subtract(interpPosX, interpPosY, interpPosZ);
+			Vec3d nextPos2 = next.pos.add(next.tangent.scale(-particleScale*nextFade)).subtract(interpPosX, interpPosY, interpPosZ);
 			float prevU = prev.uCoord;
 			float nextU = next.uCoord;
 			float midU = prevU + (nextU-prevU)*0.5F;
@@ -213,7 +212,6 @@ public class ParticleGluonBurnTrail extends Particle {
 		GlStateManager.disableBlend();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-		GL11.glPopMatrix();
 	}
 
 	private static class Node {

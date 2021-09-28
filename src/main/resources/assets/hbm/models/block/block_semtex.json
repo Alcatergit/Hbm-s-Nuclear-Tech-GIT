@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "hbm:blocks/block_semtex",
+		"up": "hbm:blocks/block_semtex",
+		"north": "hbm:blocks/block_semtex",
+		"south": "hbm:blocks/block_semtex_front",
+		"west": "hbm:blocks/block_semtex",
+		"east": "hbm:blocks/block_semtex",
+		"particle": "hbm:blocks/block_semtex"
+	}
+}

@@ -261,13 +261,12 @@ public class JetpackHandler {
 				
 				//Same thing as lunar's glider, I figured I should make it consistent
 				if(player.motionY < -0.08) {
-					double mo = player.motionY * -0.4;
-					player.motionY += mo;
-					
 					Vec3d vec = player.getLookVec();
-
+					double mo = player.motionY * -0.4;
+					player.motionY += mo*(1-Math.abs(vec.y));
+					
 					player.motionX += vec.x*mo;
-					player.motionY += vec.y*mo;
+					player.motionY += vec.y*mo*(1-Math.abs(vec.y));
 					player.motionZ += vec.z*mo;
 				}
 			}

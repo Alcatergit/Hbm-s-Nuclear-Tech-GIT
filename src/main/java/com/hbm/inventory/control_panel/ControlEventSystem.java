@@ -34,13 +34,12 @@ public class ControlEventSystem {
 			if(!controllablesByEventName.containsKey(s)){
 				controllablesByEventName.put(s, new HashMap<>());
 			}
-			controllablesByEventName.get(s).put(c.getPos(), c);
+			controllablesByEventName.get(s).put(c.getControlPos(), c);
 		}
 		allControllables.add(c);
 	}
 	
 	public void removeControllable(IControllable c){
-		positionSubscriptions.remove(c.getPos());
 		for(String s : c.getInEvents()){
 			if(s.equals("tick")){
 				tickables.remove(c);
@@ -56,15 +55,32 @@ public class ControlEventSystem {
 	}
 	
 	public void subscribeTo(IControllable subscriber, IControllable target){
-		if(!positionSubscriptions.containsKey(target.getPos())){
-			positionSubscriptions.put(target.getPos(), new HashSet<>());
+		if(!positionSubscriptions.containsKey(target.getControlPos())){
+			positionSubscriptions.put(target.getControlPos(), new HashSet<>());
 		}
-		positionSubscriptions.get(target.getPos()).add(subscriber);
+		positionSubscriptions.get(target.getControlPos()).add(subscriber);
+	}
+	
+	public void subscribeTo(IControllable subscriber, BlockPos target){
+		if(!positionSubscriptions.containsKey(target)){
+			positionSubscriptions.put(target, new HashSet<>());
+		}
+		positionSubscriptions.get(target).add(subscriber);
 	}
 	
 	public void unsubscribeFrom(IControllable subscriber, IControllable target){
-		if(positionSubscriptions.containsKey(target.getPos())){
-			positionSubscriptions.get(target.getPos()).remove(subscriber);
+		if(positionSubscriptions.containsKey(target.getControlPos())){
+			positionSubscriptions.get(target.getControlPos()).remove(subscriber);
+			if(positionSubscriptions.get(target.getControlPos()).isEmpty())
+				positionSubscriptions.remove(target.getControlPos());
+		}
+	}
+	
+	public void unsubscribeFrom(IControllable subscriber, BlockPos target){
+		if(positionSubscriptions.containsKey(target)){
+			positionSubscriptions.get(target).remove(subscriber);
+			if(positionSubscriptions.get(target).isEmpty())
+				positionSubscriptions.remove(target);
 		}
 	}
 	
@@ -100,11 +116,11 @@ public class ControlEventSystem {
 	}
 	
 	public void broadcastToSubscribed(IControllable ctrl, ControlEvent evt){
-		Set<IControllable> subscribed = positionSubscriptions.get(ctrl);
+		Set<IControllable> subscribed = positionSubscriptions.get(ctrl.getControlPos());
 		if(subscribed == null)
 			return;
 		for(IControllable sub : subscribed){
-			sub.receiveEvent(ctrl.getPos(), evt);
+			sub.receiveEvent(ctrl.getControlPos(), evt);
 		}
 	}
 	
@@ -119,7 +135,7 @@ public class ControlEventSystem {
 		if(systems.containsKey(evt.world)){
 			ControlEventSystem s = systems.get(evt.world);
 			for(IControllable c : s.tickables){
-				c.receiveEvent(c.getPos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getWorldTime()));
+				c.receiveEvent(c.getControlPos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getWorldTime()));
 			}
 		}
 	}

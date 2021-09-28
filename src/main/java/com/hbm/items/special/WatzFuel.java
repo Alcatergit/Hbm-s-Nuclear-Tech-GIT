@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class WatzFuel extends ItemRadioactive {
+public class WatzFuel extends ItemHazard {
 
 	public int lifeTime;
 	public int power;

@@ -173,10 +173,11 @@ public class WeaponSpecial extends ItemSword {
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(this == ModItems.shimmer_sledge) {
-			if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, player, null) < 6000) {
+			if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).getBlock().getExplosionResistance(null) < 6000) {
 				
 				EntityRubble rubble = new EntityRubble(world);
 				rubble.posX = pos.getX() + 0.5F;
@@ -209,13 +210,13 @@ public class WeaponSpecial extends ItemSword {
         	world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.kaping, SoundCategory.PLAYERS, 3.0F, 1.0F);
 
         	if(!world.isRemote) {
-				if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).getBlock().getExplosionResistance(world, pos, player, null) < 6000) {
+				if(world.getBlockState(pos).getBlock() != Blocks.AIR && world.getBlockState(pos).getBlock().getExplosionResistance(null) < 6000) {
 					world.destroyBlock(pos, false);
 				}
-				if(world.getBlockState(pos.up()).getBlock() != Blocks.AIR && world.getBlockState(pos.up()).getBlock().getExplosionResistance(world, pos.up(), player, null) < 6000) {
+				if(world.getBlockState(pos.up()).getBlock() != Blocks.AIR && world.getBlockState(pos.up()).getBlock().getExplosionResistance(null) < 6000) {
 					world.destroyBlock(pos.up(), false);
 				}
-				if(world.getBlockState(pos.down()).getBlock() != Blocks.AIR && world.getBlockState(pos.down()).getBlock().getExplosionResistance(world, pos.down(), player, null) < 6000) {
+				if(world.getBlockState(pos.down()).getBlock() != Blocks.AIR && world.getBlockState(pos.down()).getBlock().getExplosionResistance(null) < 6000) {
 					world.destroyBlock(pos.down(), false);
 				}
         	}

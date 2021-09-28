@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "axis=y":    { "model": "hbm:block_graphite_fuel" },
+        "axis=z":     { "model": "hbm:block_graphite_fuel", "x": 90 },
+        "axis=x":     { "model": "hbm:block_graphite_fuel", "x": 90, "y": 90 },
+        "axis=none":   { "model": "hbm:block_graphite_fuel" }
+    }
+}
