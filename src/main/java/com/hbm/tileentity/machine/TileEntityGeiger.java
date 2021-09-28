@@ -49,9 +49,9 @@ public class TileEntityGeiger extends TileEntity implements ITickable {
 				int r = list.get(world.rand.nextInt(list.size()));
 				
 				if(r > 0)
-		        	world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.geigerSounds[Math.min(r, 5)], SoundCategory.BLOCKS, 1.0F, 1.0F);
+		        	world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.geigerSounds[r-1], SoundCategory.BLOCKS, 1.0F, 1.0F);
 			} else if(world.rand.nextInt(50) == 0) {
-				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.geigerSounds[(1 + world.rand.nextInt(1))], SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.geigerSounds[(world.rand.nextInt(1))], SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		}
 		

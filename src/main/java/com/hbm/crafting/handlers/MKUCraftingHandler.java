@@ -11,6 +11,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.HbmWorldUtility;
 import net.minecraft.world.World;
 
 public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
@@ -21,7 +22,7 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
 		
-		if(world == null)
+		if(world == null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
 			return false;
 		
 		if(MKURecipe == null || world.getSeed() != lastSeed)

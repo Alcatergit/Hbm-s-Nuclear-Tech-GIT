@@ -78,9 +78,9 @@ public class ItemGeigerCounter extends Item {
 				int r = list.get(rand.nextInt(list.size()));
 				
 				if(r > 0)
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r], SoundCategory.PLAYERS, 1.0F, 1.0F);
+					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			} else if(rand.nextInt(50) == 0) {
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(1 + rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
+				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 		}
 	}
