@@ -2,15 +2,19 @@ package com.hbm.entity.mob;
 
 import java.util.List;
 
-import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.mob.ai.EntityAINuclearCreeperSwell;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
+import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,10 +43,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -64,7 +70,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	/** Explosion radius for this creeper. */
 	private int explosionRadius = 20;
 
-	public EntityNuclearCreeper(World p_i1733_1_) {
+	public EntityNuclearCreeper(World p_i1733_1_){
 		super(p_i1733_1_);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAINuclearCreeperSwell(this));
@@ -78,14 +84,14 @@ public class EntityNuclearCreeper extends EntityMob {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
+	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean attackEntityFrom(DamageSource source, float amount){
 
 		if(source == ModDamageSource.radiation || source == ModDamageSource.mudPoisoning) {
 			this.heal(amount);
@@ -99,25 +105,25 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Returns true if the newer Entity AI code should be run
 	 */
 	@Override
-	public boolean isAIDisabled() {
+	public boolean isAIDisabled(){
 		return false;
 	}
 
 	@Override
-	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier){
 		super.dropFewItems(wasRecentlyHit, lootingModifier);
 
-        if(rand.nextInt(3) == 0)
-        	this.dropItem(ModItems.coin_creeper, 1);
+		if(rand.nextInt(3) == 0)
+			this.dropItem(ModItems.coin_creeper, 1);
 	}
-	
+
 	/**
 	 * Called when the mob is falling. Calculates and applies fall damage.
 	 */
 	@Override
-	public void fall(float distance, float damageMultiplier) {
+	public void fall(float distance, float damageMultiplier){
 		super.fall(distance, damageMultiplier);
-		this.timeSinceIgnited = (int) (this.timeSinceIgnited + distance * 1.5F);
+		this.timeSinceIgnited = (int)(this.timeSinceIgnited + distance * 1.5F);
 
 		if(this.timeSinceIgnited > this.fuseTime - 5) {
 			this.timeSinceIgnited = this.fuseTime - 5;
@@ -125,7 +131,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void entityInit(){
 		super.entityInit();
 		this.dataManager.register(STATE, -1);
 		this.dataManager.register(POWERED, Boolean.FALSE);
@@ -136,15 +142,15 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * (abstract) Protected helper method to write subclass entity data to NBT.
 	 */
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(NBTTagCompound compound){
 		super.writeEntityToNBT(compound);
 
 		if((Boolean) this.dataManager.get(POWERED)) {
 			compound.setBoolean("powered", true);
 		}
 
-		compound.setShort("Fuse", (short) this.fuseTime);
-		compound.setByte("ExplosionRadius", (byte) this.explosionRadius);
+		compound.setShort("Fuse", (short)this.fuseTime);
+		compound.setByte("ExplosionRadius", (byte)this.explosionRadius);
 		compound.setBoolean("ignited", this.hasIgnited());
 	}
 
@@ -152,7 +158,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(NBTTagCompound compound){
 		super.readEntityFromNBT(compound);
 		this.dataManager.set(POWERED, compound.getBoolean("powered"));
 
@@ -173,7 +179,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Called to update the entity's position/logic.
 	 */
 	@Override
-	public void onUpdate() {
+	public void onUpdate(){
 		if(this.isDead) {
 			this.isDead = false;
 			this.heal(10.0F);
@@ -223,7 +229,7 @@ public class EntityNuclearCreeper extends EntityMob {
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for(int i1 = 0; i1 < list.size(); ++i1) {
-			Entity entity = (Entity) list.get(i1);
+			Entity entity = (Entity)list.get(i1);
 			double d4 = entity.getDistance(this.posX, this.posY, this.posZ) / 4;
 
 			if(d4 <= 1.0D) {
@@ -233,15 +239,13 @@ public class EntityNuclearCreeper extends EntityMob {
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
 				if(d9 < wat) {
 					if(entity instanceof EntityLivingBase && !(entity instanceof EntityNuclearCreeper)) {
-						//Library.applyRadiation(entity, 20, 9, 5, 2);
-
-						ContaminationUtil.applyRadData(entity, 0.25F);
+						ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.25F);
 					}
 				}
 			}
 		}
 
-		strength = (int) f;
+		strength = (int)f;
 
 		super.onUpdate();
 
@@ -254,7 +258,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Returns the sound this mob makes when it is hurt.
 	 */
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn){
 		return SoundEvents.ENTITY_CREEPER_HURT;
 	}
 
@@ -262,7 +266,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Returns the sound this mob makes on death.
 	 */
 	@Override
-	protected SoundEvent getDeathSound() {
+	protected SoundEvent getDeathSound(){
 		return SoundEvents.ENTITY_CREEPER_DEATH;
 	}
 
@@ -270,16 +274,16 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Called when the mob's health reaches 0.
 	 */
 	@Override
-	public void onDeath(DamageSource p_70645_1_) {
+	public void onDeath(DamageSource p_70645_1_){
 		super.onDeath(p_70645_1_);
 
 		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
 
-        for(EntityPlayer player : players) {
-        	AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
-        }
-		
-		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow) (p_70645_1_.getImmediateSource())).shootingEntity == null)) {
+		for(EntityPlayer player : players) {
+			AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
+		}
+
+		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow)(p_70645_1_.getImmediateSource())).shootingEntity == null)) {
 			int i = rand.nextInt(11);
 			int j = rand.nextInt(3);
 			if(i == 0)
@@ -303,7 +307,7 @@ public class EntityNuclearCreeper extends EntityMob {
 			if(i == 8)
 				this.dropItem(ModItems.syringe_metal_stimpak, 1);
 			if(i == 9) {
-				switch(rand.nextInt(4)) {
+				switch(rand.nextInt(4)){
 				case 0:
 					this.dropItem(ModItems.t45_helmet, 1);
 					break;
@@ -325,7 +329,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity p_70652_1_) {
+	public boolean attackEntityAsMob(Entity p_70652_1_){
 		return true;
 	}
 
@@ -341,12 +345,12 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * when it is ignited.
 	 */
 	@SideOnly(Side.CLIENT)
-	public float getCreeperFlashIntensity(float p_70831_1_) {
+	public float getCreeperFlashIntensity(float p_70831_1_){
 		return (this.lastActiveTime + (this.timeSinceIgnited - this.lastActiveTime) * p_70831_1_) / (this.fuseTime - 2);
 	}
 
 	@Override
-	protected Item getDropItem() {
+	protected Item getDropItem(){
 		return Item.getItemFromBlock(Blocks.TNT);
 	}
 
@@ -368,7 +372,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * Called when a lightning bolt hits the entity.
 	 */
 	@Override
-	public void onStruckByLightning(EntityLightningBolt p_70077_1_) {
+	public void onStruckByLightning(EntityLightningBolt p_70077_1_){
 		super.onStruckByLightning(p_70077_1_);
 		this.dataManager.set(POWERED, Boolean.TRUE);
 	}
@@ -378,7 +382,7 @@ public class EntityNuclearCreeper extends EntityMob {
 	 * gets into the saddle on a pig.
 	 */
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+	protected boolean processInteract(EntityPlayer player, EnumHand hand){
 		ItemStack itemstack = player.inventory.getCurrentItem();
 
 		if(itemstack.getItem() == Items.FLINT_AND_STEEL) {
@@ -395,28 +399,26 @@ public class EntityNuclearCreeper extends EntityMob {
 		return super.processInteract(player, hand);
 	}
 
-	private void explode() {
+	private void explode(){
 		if(!this.world.isRemote) {
 
-			if(this.getPowered()) {
-				//this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, (float)(this.explosionRadius * 2), flag);
-				this.explosionRadius *= 3;
-			}
-
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, explosionRadius, posX, posY, posZ));
+			boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
 			if(this.getPowered()) {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, 1000, explosionRadius * 0.005F);
-				entity2.posX = this.posX;
-				entity2.posY = this.posY;
-				entity2.posZ = this.posZ;
-				this.world.spawnEntity(entity2);
-			} else {
-				if(rand.nextInt(100) == 0) {
-					ExplosionParticleB.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
+
+				NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "muke");
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
+				world.playSound(null, posX, posY + 0.5, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
+
+				if(flag) {
+					world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 50, posX, posY, posZ).mute());
 				} else {
-					ExplosionParticle.spawnMush(this.world, (int) this.posX, (int) this.posY - 3, (int) this.posZ);
+					ExplosionNukeGeneric.dealDamage(world, posX, posY + 0.5, posZ, 100);
 				}
+			} else {
+
+				ExplosionNukeSmall.explode(world, posX, posY + 0.5, posZ, ExplosionNukeSmall.medium);
 			}
 
 			this.setDead();
@@ -431,7 +433,7 @@ public class EntityNuclearCreeper extends EntityMob {
 		this.dataManager.set(IGNITED, Boolean.TRUE);
 	}
 
-	public void setPowered(boolean power) {
+	public void setPowered(boolean power){
 		this.dataManager.set(POWERED, power);
 	}
 }

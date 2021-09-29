@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.control_panel.DataValue.DataType;
+import com.hbm.inventory.control_panel.nodes.Node;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NodeConnection extends NodeElement {
 
@@ -23,7 +28,7 @@ public class NodeConnection extends NodeElement {
 	public int connectionIndex;
 	
 	public DataValue defaultValue;
-	public boolean isDrawingLine = false;
+	public boolean drawsLine = false;
 	public boolean isInput;
 	public DataType type;
 	public StringBuilder builder;
@@ -39,6 +44,41 @@ public class NodeConnection extends NodeElement {
 		this.connectionIndex = -1;
 		this.isInput = isInput;
 		this.type = type;
+	}
+	
+	public NBTTagCompound writeToNBT(NBTTagCompound tag, NodeSystem sys){
+		super.writeToNBT(tag, sys);
+		tag.setString("eleType", "connection");
+		tag.setString("name", name);
+		tag.setInteger("connectionIdx", connectionIndex);
+		tag.setInteger("nodeIdx", sys.nodes.indexOf(connection));
+		tag.setBoolean("isInput", isInput);
+		tag.setInteger("type", type.ordinal());
+		tag.setTag("default", defaultValue.writeToNBT());
+		tag.setBoolean("drawLine", drawsLine);
+		return tag;
+	}
+	
+	public void readFromNBT(NBTTagCompound tag, NodeSystem sys){
+		super.readFromNBT(tag, sys);
+		name = tag.getString("name");
+		connectionIndex = tag.getInteger("connectionIdx");
+		int nodeIdx = tag.getInteger("nodeIdx");
+		if(nodeIdx == -1){
+			connection = null;
+		} else {
+			connection = sys.nodes.get(nodeIdx);
+		}
+		isInput = tag.getBoolean("isInput");
+		type = DataType.values()[tag.getInteger("type") % DataType.values().length];
+		defaultValue = DataValue.newFromNBT(tag.getTag("default"));
+		if(defaultValue == null){
+			type = DataType.NUMBER;
+			defaultValue = new DataValueFloat(0);
+		}
+		drawsLine = tag.getBoolean("drawLine");
+		builder = null;
+		isTyping = false;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -69,7 +109,7 @@ public class NodeConnection extends NodeElement {
 		//Will only run for input nodes as well, since the output node doesn't maintain a connection
 		if(connection != null){
 			NodeConnection n = connection.outputs.get(connectionIndex);
-			isDrawingLine = false;
+			drawsLine = false;
 			connection = null;
 			connectionIndex = -1;
 			return n;
@@ -90,6 +130,7 @@ public class NodeConnection extends NodeElement {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void render(float mX, float mY){
 		float[] color = type.getColor();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(NodeSystem.node_tex);
@@ -132,8 +173,9 @@ public class NodeConnection extends NodeElement {
 		GL11.glPopMatrix();
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void drawLine(float mouseX, float mouseY){
-		if(isDrawingLine){
+		if(drawsLine){
 			BufferBuilder buf = Tessellator.getInstance().getBuffer();
 			buf.pos(offsetX + (isInput ? 0 : 40), offsetY+10, 0).endVertex();
 			if(connectionIndex == -1 || !isInput){
@@ -146,6 +188,7 @@ public class NodeConnection extends NodeElement {
 	}
 	
 	//minX, minY, maxX, maxY
+	@SideOnly(Side.CLIENT)
 	public float[] getPortBox(){
 		float oX = offsetX;
 		if(!isInput)
@@ -153,6 +196,7 @@ public class NodeConnection extends NodeElement {
 		return new float[]{-2+oX, -2+offsetY+10, 2+oX, 2+offsetY+10};
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public float[] getValueBox(){
 		if(enumSelector != null)
 			return enumSelector.getBox();
@@ -167,6 +211,7 @@ public class NodeConnection extends NodeElement {
 		return defaultValue;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void startTyping(){
 		isTyping = true;
 		builder = new StringBuilder();
@@ -174,6 +219,7 @@ public class NodeConnection extends NodeElement {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SideOnly(Side.CLIENT)
 	public void stopTyping(){
 		DataValue val = new DataValueString(builder.toString());
 		builder = null;
@@ -200,6 +246,7 @@ public class NodeConnection extends NodeElement {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void keyTyped(char c, int key){
 		if(key == Keyboard.KEY_BACK){
 			if(builder.length() > 0)

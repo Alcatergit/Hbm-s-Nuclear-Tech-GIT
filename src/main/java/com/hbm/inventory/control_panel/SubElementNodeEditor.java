@@ -1,5 +1,6 @@
 package com.hbm.inventory.control_panel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
+import com.hbm.inventory.control_panel.nodes.Node;
+import com.hbm.inventory.control_panel.nodes.NodeCancelEvent;
+import com.hbm.inventory.control_panel.nodes.NodeEventBroadcast;
+import com.hbm.inventory.control_panel.nodes.NodeGetVar;
+import com.hbm.inventory.control_panel.nodes.NodeInput;
+import com.hbm.inventory.control_panel.nodes.NodeMath;
+import com.hbm.inventory.control_panel.nodes.NodeSetVar;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
 import com.hbm.render.RenderHelper;
@@ -42,7 +50,14 @@ public class SubElementNodeEditor extends SubElement {
 	}
 	
 	protected void setData(Map<String, NodeSystem> map, ControlEvent c, List<ControlEvent> sendEvents){
-		currentSystem = map.computeIfAbsent(c.name, e -> new NodeSystem(this));
+		currentSystem = map.computeIfAbsent(c.name, e -> new NodeSystem(gui.currentEditControl, this));
+		currentSystem.nodeEditor = this;
+		currentSystem.gui = gui;
+		currentSystem.activeNode = null;
+		currentSystem.selectedNodes = new ArrayList<>();
+		currentSystem.drag = false;
+		currentSystem.dragDist = 0;
+		
 		currentEvent = c;
 		gridX = 0;
 		gridY = 0;
@@ -73,7 +88,7 @@ public class SubElementNodeEditor extends SubElement {
 						if(s2.equals("Event Data")){
 							Map<String, DataValue> vars = new HashMap<>(currentEvent.vars);
 							vars.put(sendEvents == null ? "to index" : "from index", new DataValueFloat(0));
-							node = new InputNode(x, y, "Event Data").setVars(vars);
+							node = new NodeInput(x, y, "Event Data").setVars(vars);
 						} else if(s2.equals("Get Variable")){
 							node = new NodeGetVar(x, y, gui.currentEditControl);
 						}
@@ -138,6 +153,12 @@ public class SubElementNodeEditor extends SubElement {
 				return null;
 			});
 			addMenu.addItems("{expandable}Input", "{expandable}Output", "{expandable}Math", "{expandable}Logic");
+		}
+		if(code == Keyboard.KEY_DELETE || code == Keyboard.KEY_X){
+			List<Node> selected = new ArrayList<>(currentSystem.selectedNodes);
+			for(Node n : selected){
+				currentSystem.removeNode(n);
+			}
 		}
 		if(currentSystem != null){
 			currentSystem.keyTyped(typedChar, code);
@@ -253,7 +274,19 @@ public class SubElementNodeEditor extends SubElement {
 	@Override
 	protected void actionPerformed(GuiButton button){
 		if(button == back){
+			if(currentSystem != null){
+				currentSystem.removeClientData();
+				currentSystem = null;
+			}
 			gui.popElement();
+		}
+	}
+	
+	@Override
+	public void onClose(){
+		if(currentSystem != null){
+			currentSystem.removeClientData();
+			currentSystem = null;
 		}
 	}
 	

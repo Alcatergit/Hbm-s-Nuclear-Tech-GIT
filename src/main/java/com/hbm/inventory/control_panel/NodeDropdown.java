@@ -5,12 +5,14 @@ import java.util.function.Supplier;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.inventory.control_panel.nodes.Node;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class NodeDropdown extends NodeElement {
 
@@ -26,6 +28,16 @@ public class NodeDropdown extends NodeElement {
 		list.close();
 		resetOffset();
 		this.nameGetter = nameGetter;
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound tag, NodeSystem sys){
+		throw new RuntimeException("Dropdown node should not be serialized!");
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag, NodeSystem sys){
+		throw new RuntimeException("Dropdown node should not be serialized!");
 	}
 	
 	@Override

@@ -1,11 +1,18 @@
 package com.hbm.entity.logic;
 
-import com.hbm.explosion.ExplosionLarge;
+import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IConstantRenderer;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,8 +29,36 @@ public class EntityDeathBlast extends Entity implements IConstantRenderer {
 	public void onUpdate() {
 		if(this.ticksExisted >= maxAge && !world.isRemote) {
 			this.setDead();
-    		
-    		ExplosionLarge.explodeFire(world, posX, posY, posZ, 25, true, true, true);
+
+			/*new ExplosionNT(worldObj, null, posX, posY, posZ, 35).addAllAttrib(ExplosionNT.nukeAttribs).explode();
+			new ExplosionNT(worldObj, null, posX + 10, posY, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
+			new ExplosionNT(worldObj, null, posX - 10, posY, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
+			new ExplosionNT(worldObj, null, posX, posY, posZ + 10, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
+			new ExplosionNT(worldObj, null, posX, posY, posZ - 10, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
+			
+			for(int k = 1; k < 6; k++)
+				new ExplosionNT(worldObj, null, posX, posY - k * 7, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();*/
+			
+			world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, 40, posX, posY, posZ).mute());
+			
+			int count = 100;
+			for(int i = 0; i < count; i++) {
+				
+				Vec3 vec = Vec3.createVectorHelper(0.2, 0, 0);
+				vec.rotateAroundY((float)(2 * Math.PI * i / (float)count));
+				
+				EntityBulletBase laser = new EntityBulletBase(world, BulletConfigSyncingUtil.MASKMAN_BOLT);
+				laser.setPosition(posX, posY + 2, posZ);
+				laser.motionX = vec.xCoord;
+				laser.motionZ = vec.zCoord;
+				laser.motionY = -0.01;
+				world.spawnEntity(laser);
+			}
+			
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("type", "muke");
+			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(world.provider.getDimension(), posX, posY, posZ, 250));
+			world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 25.0F, 0.9F);
 		}
 	}
 	

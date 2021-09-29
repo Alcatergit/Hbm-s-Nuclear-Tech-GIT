@@ -17,7 +17,7 @@ public class PacketDispatcher {
 		//PressPacket
 		wrapper.registerMessage(TEPressPacket.Handler.class, TEPressPacket.class, i++, Side.CLIENT);
 		//Send chunk radiation packet to individual players
-		wrapper.registerMessage(RadSurveyPacket.Handler.class, RadSurveyPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(SurveyPacket.Handler.class, SurveyPacket.class, i++, Side.CLIENT);
 		//Packet for rendering of rubble
 		wrapper.registerMessage(ParticleBurstPacket.Handler.class, ParticleBurstPacket.class, i++, Side.CLIENT);
 		//Packet for updating assembler progress
@@ -138,6 +138,10 @@ public class PacketDispatcher {
 		//Sync packet for jetpack data
 		wrapper.registerMessage(JetpackSyncPacket.Handler.class, JetpackSyncPacket.class, i++, Side.SERVER);
 		wrapper.registerMessage(JetpackSyncPacket.Handler.class, JetpackSyncPacket.class, i-1, Side.CLIENT);
+		wrapper.registerMessage(ExtPropPacket.Handler.class, ExtPropPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(NBTControlPacket.Handler.class, NBTControlPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(AnvilCraftPacket.Handler.class, AnvilCraftPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(ControlPanelUpdatePacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.CLIENT);
 	}
 	
 	public static void sendTo(IMessage message, EntityPlayerMP player){

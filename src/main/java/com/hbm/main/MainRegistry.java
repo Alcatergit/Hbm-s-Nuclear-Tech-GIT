@@ -13,7 +13,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.capability.HbmCapability;
-import com.hbm.capability.RadiationCapability;
+import com.hbm.capability.HbmLivingCapability;
 import com.hbm.command.CommandHbm;
 import com.hbm.command.CommandRadiation;
 import com.hbm.config.BombConfig;
@@ -44,7 +44,9 @@ import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeCloudBig;
 import com.hbm.entity.effect.EntityNukeCloudNoShroom;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityQuasar;
 import com.hbm.entity.effect.EntityRagingVortex;
+import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.grenade.EntityGrenadeASchrab;
 import com.hbm.entity.grenade.EntityGrenadeBlackHole;
@@ -130,6 +132,7 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.missile.EntityMissileVolcano;
 import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.entity.missile.EntitySoyuzCapsule;
 import com.hbm.entity.mob.EntityCyberCrab;
@@ -143,6 +146,7 @@ import com.hbm.entity.mob.EntityRADBeast;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.mob.EntityTeslaCrab;
+import com.hbm.entity.mob.EntityUFO;
 import com.hbm.entity.mob.botprime.EntityBOTPrimeBody;
 import com.hbm.entity.mob.botprime.EntityBOTPrimeHead;
 import com.hbm.entity.particle.EntityBSmokeFX;
@@ -184,6 +188,7 @@ import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.entity.projectile.EntityModBeam;
 import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityPlasmaBeam;
+import com.hbm.entity.projectile.EntityRBMKDebris;
 import com.hbm.entity.projectile.EntityRailgunBlast;
 import com.hbm.entity.projectile.EntityRainbow;
 import com.hbm.entity.projectile.EntityRocket;
@@ -194,16 +199,22 @@ import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
+import com.hbm.entity.siege.SiegeTier;
+import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.GuiHandler;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HazmatRegistry;
+import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.MultiblockBBHandler;
+import com.hbm.hazard.HazardRegistry;
+import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.CentrifugeRecipes;
@@ -212,6 +223,8 @@ import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.inventory.HadronRecipes;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.OreDictManager;
+import com.hbm.inventory.RefineryRecipes;
+import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
@@ -223,6 +236,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.TileEntityKeypadBase;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.TileEntityProxyEnergy;
@@ -248,14 +262,6 @@ import com.hbm.tileentity.bomb.TileEntityNukePrototype;
 import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
-import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
-import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
-import com.hbm.tileentity.bomb.TileEntityTurretFlamer;
-import com.hbm.tileentity.bomb.TileEntityTurretHeavy;
-import com.hbm.tileentity.bomb.TileEntityTurretLight;
-import com.hbm.tileentity.bomb.TileEntityTurretRocket;
-import com.hbm.tileentity.bomb.TileEntityTurretSpitfire;
-import com.hbm.tileentity.bomb.TileEntityTurretTau;
 import com.hbm.tileentity.conductor.TileEntityCable;
 import com.hbm.tileentity.conductor.TileEntityCableSwitch;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
@@ -278,6 +284,41 @@ import com.hbm.tileentity.generic.TileEntityCloudResidue;
 import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge.ReactorFuelType;
+import com.hbm.tileentity.machine.pile.TileEntityPileFuel;
+import com.hbm.tileentity.machine.pile.TileEntityPileSource;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKAbsorber;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBlank;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKInlet;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKModerator;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutgasser;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutlet;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKReflector;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRodReaSim;
+import com.hbm.tileentity.turret.TileEntityTurretBrandon;
+import com.hbm.tileentity.turret.TileEntityTurretCIWS;
+import com.hbm.tileentity.turret.TileEntityTurretCheapo;
+import com.hbm.tileentity.turret.TileEntityTurretChekhov;
+import com.hbm.tileentity.turret.TileEntityTurretFlamer;
+import com.hbm.tileentity.turret.TileEntityTurretFriendly;
+import com.hbm.tileentity.turret.TileEntityTurretFritz;
+import com.hbm.tileentity.turret.TileEntityTurretHeavy;
+import com.hbm.tileentity.turret.TileEntityTurretHoward;
+import com.hbm.tileentity.turret.TileEntityTurretHowardDamaged;
+import com.hbm.tileentity.turret.TileEntityTurretJeremy;
+import com.hbm.tileentity.turret.TileEntityTurretLight;
+import com.hbm.tileentity.turret.TileEntityTurretMaxwell;
+import com.hbm.tileentity.turret.TileEntityTurretRichard;
+import com.hbm.tileentity.turret.TileEntityTurretRocket;
+import com.hbm.tileentity.turret.TileEntityTurretSpitfire;
+import com.hbm.tileentity.turret.TileEntityTurretTau;
+import com.hbm.tileentity.turret.TileEntityTurretTauon;
+import com.hbm.world.feature.SchistStratum;
 import com.hbm.world.generator.CellularDungeonFactory;
 
 import net.minecraft.block.BlockDispenser;
@@ -295,6 +336,9 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -302,8 +346,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -315,6 +361,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
 public class MainRegistry {
@@ -387,6 +434,9 @@ public class MainRegistry {
 	public static ArmorMaterial aMatCobalt = EnumHelper.addArmorMaterial(RefStrings.MODID + ":COBALT", RefStrings.MODID + ":COBALT", 70, new int[] {3, 6, 8, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial aMatStarmetal = EnumHelper.addArmorMaterial(RefStrings.MODID + ":STARMETAL", RefStrings.MODID + ":STARMETAL", 150, new int[] {3, 6, 8, 3}, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial aMatLiquidator = EnumHelper.addArmorMaterial(RefStrings.MODID + ":LIQUIDATOR", RefStrings.MODID + ":LIQUIDATOR", 750, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial aMatFau = EnumHelper.addArmorMaterial(RefStrings.MODID + ":DIGAMMA", RefStrings.MODID + ":DIGAMMA", 150, new int[] { 3, 8, 6, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	public static ArmorMaterial aMatDNS = EnumHelper.addArmorMaterial(RefStrings.MODID + ":DNT_NANO", RefStrings.MODID + ":DNT_NANO", 150, new int[] { 3, 8, 6, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
+	
 	
 	// Tool Materials
 	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUM", 3, 10000, 50.0F, 100.0F, 200);
@@ -449,15 +499,24 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
+		SchistStratum schist = new SchistStratum();
+		MinecraftForge.EVENT_BUS.register(schist); //DecorateBiomeEvent.Pre
+		
+		if(event.getSide() == Side.CLIENT) {
+			HbmKeybinds keyHandler = new HbmKeybinds();
+			MinecraftForge.EVENT_BUS.register(keyHandler);
+		}
+		
 		PacketDispatcher.registerPackets();
 
 		HbmPotion.init();
 
-		CapabilityManager.INSTANCE.register(RadiationCapability.IEntityRadioactive.class, new RadiationCapability.EntityRadioactiveStorage(), RadiationCapability.EntityRadioactive.FACTORY);
+		CapabilityManager.INSTANCE.register(HbmLivingCapability.IEntityHbmProps.class, new HbmLivingCapability.EntityHbmPropsStorage(), HbmLivingCapability.EntityHbmProps.FACTORY);
 		CapabilityManager.INSTANCE.register(HbmCapability.IHBMData.class, new HbmCapability.HBMDataStorage(), HbmCapability.HBMData.FACTORY);
 		ModForgeFluids.init();
 		ModItems.preInit();
 		ModBlocks.preInit();
+		OreDictManager.registerOres();
 		BulletConfigSyncingUtil.loadConfigsForSync();
 		CellularDungeonFactory.init();
 		Satellite.register();
@@ -465,6 +524,8 @@ public class MainRegistry {
 		AssemblerRecipes.preInit(event.getModConfigurationDirectory());
 		MultiblockBBHandler.init();
 		ControlEvent.init();
+		SiegeTier.registerTiers();
+		HazardRegistry.registerItems();
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
@@ -498,6 +559,8 @@ public class MainRegistry {
 		enumArmorMaterialAsbestos.setRepairItem(new ItemStack(ModItems.asbestos_cloth));
 		matMeteorite.setRepairItem(new ItemStack(ModItems.plate_paa));
 		aMatLiquidator.setRepairItem(new ItemStack(ModItems.plate_lead));
+		aMatFau.setRepairItem(new ItemStack(ModItems.plate_armor_fau));
+		aMatDNS.setRepairItem(new ItemStack(ModItems.plate_armor_dnt));
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 		GameRegistry.registerTileEntity(TileEntityDummy.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy"));
@@ -669,6 +732,45 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntitySiloHatch.class, new ResourceLocation(RefStrings.MODID, "tileentity_silo_hatch"));
 		GameRegistry.registerTileEntity(TileEntitySpinnyLight.class, new ResourceLocation(RefStrings.MODID, "tileentity_spinny_light"));
 		GameRegistry.registerTileEntity(TileEntityControlPanel.class, new ResourceLocation(RefStrings.MODID, "tileentity_control_panel"));
+		GameRegistry.registerTileEntity(TileEntityCrateTungsten.class, new ResourceLocation(RefStrings.MODID, "tileentity_crate_tungsten"));
+		GameRegistry.registerTileEntity(TileEntityDemonLamp.class, new ResourceLocation(RefStrings.MODID, "tileentity_demon_lamp"));
+		GameRegistry.registerTileEntity(TileEntityTurretChekhov.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_chekhov"));
+		GameRegistry.registerTileEntity(TileEntityTurretJeremy.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_jeremy"));
+		GameRegistry.registerTileEntity(TileEntityTurretTauon.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_tauon"));
+		GameRegistry.registerTileEntity(TileEntityTurretFriendly.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_friendly"));
+		GameRegistry.registerTileEntity(TileEntityTurretRichard.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_richard"));
+		GameRegistry.registerTileEntity(TileEntityTurretHoward.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_howard"));
+		GameRegistry.registerTileEntity(TileEntityTurretHowardDamaged.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_howard_damaged"));
+		GameRegistry.registerTileEntity(TileEntityTurretMaxwell.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_maxwell"));
+		GameRegistry.registerTileEntity(TileEntityTurretFritz.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_fritz"));
+		GameRegistry.registerTileEntity(TileEntityTurretBrandon.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_brandon"));
+		GameRegistry.registerTileEntity(TileEntityRBMKRod.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_rod"));
+		GameRegistry.registerTileEntity(TileEntityRBMKRodReaSim.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_rod_reasim"));
+		GameRegistry.registerTileEntity(TileEntityRBMKControlManual.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_control"));
+		GameRegistry.registerTileEntity(TileEntityRBMKControlAuto.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_control_auto"));
+		GameRegistry.registerTileEntity(TileEntityRBMKBlank.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_blank"));
+		GameRegistry.registerTileEntity(TileEntityRBMKBoiler.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_boiler"));
+		GameRegistry.registerTileEntity(TileEntityRBMKReflector.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_reflector"));
+		GameRegistry.registerTileEntity(TileEntityRBMKAbsorber.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_absorber"));
+		GameRegistry.registerTileEntity(TileEntityRBMKModerator.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_moderator"));
+		GameRegistry.registerTileEntity(TileEntityRBMKOutgasser.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_outgasser"));
+		GameRegistry.registerTileEntity(TileEntityRBMKConsole.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_console"));
+		GameRegistry.registerTileEntity(TileEntityRBMKInlet.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_inlet"));
+		GameRegistry.registerTileEntity(TileEntityRBMKOutlet.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_outlet"));
+		GameRegistry.registerTileEntity(TileEntityStorageDrum.class, new ResourceLocation(RefStrings.MODID, "tileentity_storage_drum"));
+		GameRegistry.registerTileEntity(TileEntityPileFuel.class, new ResourceLocation(RefStrings.MODID, "tileentity_pile_fuel"));
+		GameRegistry.registerTileEntity(TileEntityPileSource.class, new ResourceLocation(RefStrings.MODID, "tileentity_pile_source"));
+		GameRegistry.registerTileEntity(TileEntityMachineBAT9000.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_bat9000"));
+		GameRegistry.registerTileEntity(TileEntityMachineOrbus.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_orbus"));
+		GameRegistry.registerTileEntity(TileEntityCondenser.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_condenser"));
+		GameRegistry.registerTileEntity(TileEntityChungus.class, new ResourceLocation(RefStrings.MODID, "tileentity_chungus"));
+		GameRegistry.registerTileEntity(TileEntitySpacer.class, new ResourceLocation(RefStrings.MODID, "tileentity_spacer"));
+		GameRegistry.registerTileEntity(TileEntityMachineFractionTower.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_frac_tower"));
+		GameRegistry.registerTileEntity(TileEntityTowerSmall.class, new ResourceLocation(RefStrings.MODID, "tileentity_tower_small"));
+		GameRegistry.registerTileEntity(TileEntityTowerLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_tower_large"));
+		GameRegistry.registerTileEntity(TileEntitySILEX.class, new ResourceLocation(RefStrings.MODID, "tileentity_silex"));
+		GameRegistry.registerTileEntity(TileEntityDoorGeneric.class, new ResourceLocation(RefStrings.MODID, "tileentity_door_generic"));
+		GameRegistry.registerTileEntity(TileEntityBMPowerBox.class, new ResourceLocation(RefStrings.MODID, "tileentity_bm_power_box"));
 		
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk4"), EntityNukeExplosionMK4.class, "entity_nuke_mk4", i++, MainRegistry.instance, 1000, 1, true);
@@ -836,6 +938,12 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_radiation_blaze"), EntityRADBeast.class, "entity_ntm_radiation_blaze", i++, MainRegistry.instance, 1000, 1, true, 0x303030, 0x008000);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_firework_ball"), EntityFireworks.class, "entity_firework_ball", i++, MainRegistry.instance, 1000, 1, true);
 		
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_rbmk_debris"), EntityRBMKDebris.class, "entity_rbmk_debris", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_spear"), EntitySpear.class, "entity_spear", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_missile_volcano"), EntityMissileVolcano.class, "entity_missile_volcano", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_ufo"), EntityUFO.class, "entity_ntm_ufo", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_digamma_quasar"), EntityQuasar.class, "entity_digamma_quasar", i++, MainRegistry.instance, 1000, 1, true);
+		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new LoadingCallback() {
 
 			@Override
@@ -871,7 +979,6 @@ public class MainRegistry {
 	public void init(FMLInitializationEvent event) {
 		ModItems.init();
 		ModBlocks.init();
-		OreDictManager.registerOres();
 		HazmatRegistry.registerHazmats();
 		registerReactorFuels();
 		ControlRegistry.init();
@@ -890,11 +997,15 @@ public class MainRegistry {
 		BreederRecipes.registerFuels();
 		BreederRecipes.registerRecipes();
 		AssemblerRecipes.loadRecipes();
+		ExplosionNukeGeneric.loadSoliniumFromFile();
 		CyclotronRecipes.register();
 		HadronRecipes.register();
 		MagicRecipes.register();
-		
+		SILEXRecipes.register();
+		AnvilRecipes.register();
+		RefineryRecipes.registerFractions();
 		TileEntityNukeCustom.registerBombItems();
+		ArmorUtil.register();
 		
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));
@@ -913,6 +1024,7 @@ public class MainRegistry {
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent evt) {
+		RBMKDials.createDials(evt.getServer().getEntityWorld());
 		evt.registerServerCommand(new CommandRadiation());
 		evt.registerServerCommand(new CommandHbm());
 		AdvancementManager.init(evt.getServer());

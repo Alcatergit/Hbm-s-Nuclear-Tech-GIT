@@ -3,11 +3,13 @@ package com.hbm.capability;
 import java.util.concurrent.Callable;
 
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
+import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -18,6 +20,14 @@ public class HbmCapability {
 	public interface IHBMData {
 		public boolean getKeyPressed(EnumKeybind key);
 		public void setKeyPressed(EnumKeybind key, boolean pressed);
+		public boolean getEnableBackpack();
+		public boolean getEnableHUD();
+		public void setEnableBackpack(boolean b);
+		public void setEnableHUD(boolean b);
+		
+		public default boolean isJetpackActive() {
+			return getEnableBackpack() && getKeyPressed(EnumKeybind.JETPACK);
+		}
 	}
 	
 	public static class HBMData implements IHBMData {
@@ -26,6 +36,9 @@ public class HbmCapability {
 		
 		private boolean[] keysPressed = new boolean[EnumKeybind.values().length];
 		
+		public boolean enableBackpack = true;
+		public boolean enableHUD = true;
+		
 		@Override
 		public boolean getKeyPressed(EnumKeybind key) {
 			return keysPressed[key.ordinal()];
@@ -33,7 +46,46 @@ public class HbmCapability {
 
 		@Override
 		public void setKeyPressed(EnumKeybind key, boolean pressed) {
+			if(!getKeyPressed(key) && pressed) {
+				
+				if(key == EnumKeybind.TOGGLE_JETPACK) {
+					this.enableBackpack = !this.enableBackpack;
+					
+					if(this.enableBackpack)
+						MainRegistry.proxy.displayTooltip(TextFormatting.GREEN + "Jetpack ON");
+					else
+						MainRegistry.proxy.displayTooltip(TextFormatting.RED + "Jetpack OFF");
+				}
+				if(key == EnumKeybind.TOGGLE_HEAD) {
+					this.enableHUD = !this.enableHUD;
+					
+					if(this.enableHUD)
+						MainRegistry.proxy.displayTooltip(TextFormatting.GREEN + "HUD ON");
+					else
+						MainRegistry.proxy.displayTooltip(TextFormatting.RED + "HUD OFF");
+				}
+			}
 			keysPressed[key.ordinal()] = pressed;
+		}
+		
+		@Override
+		public boolean getEnableBackpack(){
+			return enableBackpack;
+		}
+
+		@Override
+		public boolean getEnableHUD(){
+			return enableHUD;
+		}
+
+		@Override
+		public void setEnableBackpack(boolean b){
+			enableBackpack = b;
+		}
+
+		@Override
+		public void setEnableHUD(boolean b){
+			enableHUD = b;
 		}
 		
 	}
@@ -46,15 +98,20 @@ public class HbmCapability {
 			for(EnumKeybind key : EnumKeybind.values()){
 				tag.setBoolean(key.name(), instance.getKeyPressed(key));
 			}
+			tag.setBoolean("enableBackpack", instance.getEnableBackpack());
+			tag.setBoolean("enableHUD", instance.getEnableHUD());
 			return tag;
 		}
 
 		@Override
 		public void readNBT(Capability<IHBMData> capability, IHBMData instance, EnumFacing side, NBTBase nbt) {
 			if(nbt instanceof NBTTagCompound){
+				NBTTagCompound tag = (NBTTagCompound)nbt;
 				for(EnumKeybind key : EnumKeybind.values()){
-					instance.setKeyPressed(key, ((NBTTagCompound)nbt).getBoolean(key.name()));
+					instance.setKeyPressed(key, tag.getBoolean(key.name()));
 				}
+				instance.setEnableBackpack(tag.getBoolean("enableBackpack"));
+				instance.setEnableHUD(tag.getBoolean("enableHUD"));
 			}
 		}
 		
@@ -71,6 +128,24 @@ public class HbmCapability {
 
 			@Override
 			public void setKeyPressed(EnumKeybind key, boolean pressed) {
+			}
+
+			@Override
+			public boolean getEnableBackpack(){
+				return false;
+			}
+
+			@Override
+			public boolean getEnableHUD(){
+				return false;
+			}
+
+			@Override
+			public void setEnableBackpack(boolean b){
+			}
+
+			@Override
+			public void setEnableHUD(boolean b){
 			}
 		};
 		

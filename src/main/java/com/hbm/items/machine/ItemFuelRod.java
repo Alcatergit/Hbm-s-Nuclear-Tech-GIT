@@ -2,7 +2,7 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
-import com.hbm.items.special.ItemRadioactive;
+import com.hbm.items.special.ItemHazard;
 import com.hbm.lib.Library;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public class ItemFuelRod extends ItemRadioactive {
+public class ItemFuelRod extends ItemHazard {
 	
 	private int lifeTime;
 	private int heat;

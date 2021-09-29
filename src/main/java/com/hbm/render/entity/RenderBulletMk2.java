@@ -138,6 +138,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		case BulletConfiguration.STYLE_TRACER:
 			renderTracer(new Vec3d(bullet.motionX, bullet.motionY, bullet.motionZ).normalize(), bullet.getPositionEyes(partialTicks), partialTicks);
 			break;
+		case BulletConfiguration.STYLE_APDS:
+			renderAPDS(); 
+			break;
 		default:
 			renderBullet(trail);
 			break;
@@ -528,6 +531,18 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
+	}
+	
+	private void renderAPDS() {
+		
+		GL11.glScaled(2, 2, 2);
+		GL11.glRotated(90, 0, 0, 1);
+		GL11.glRotated(90, 0, 1, 0);
+		
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		bindTexture(ResourceManager.flechette_tex);
+		ResourceManager.projectiles.renderPart("Flechette");
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 	}
 	
 	@Override

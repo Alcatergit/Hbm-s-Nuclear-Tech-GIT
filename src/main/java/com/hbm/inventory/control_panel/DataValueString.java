@@ -1,9 +1,12 @@
 package com.hbm.inventory.control_panel;
 
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagString;
+
 public class DataValueString extends DataValue {
 
-	public final String str;
-	private final float floatVal;
+	public String str;
+	private float floatVal;
 	
 	public DataValueString(String s){
 		this.str = s;
@@ -45,6 +48,22 @@ public class DataValueString extends DataValue {
 	@Override
 	public DataType getType(){
 		return DataType.STRING;
+	}
+
+	@Override
+	public NBTBase writeToNBT(){
+		return new NBTTagString(str);
+	}
+
+	@Override
+	public void readFromNBT(NBTBase nbt){
+		str = ((NBTTagString)nbt).getString();
+		float num = 0;
+		try {
+			num = Float.parseFloat(str);
+		} catch(Exception x){
+		}
+		floatVal = num;
 	}
 
 }

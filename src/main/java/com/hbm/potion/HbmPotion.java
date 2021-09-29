@@ -2,14 +2,17 @@ package com.hbm.potion;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
-import com.hbm.capability.RadiationCapability;
+import com.hbm.capability.HbmLivingCapability;
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.PotionConfig;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,6 +36,8 @@ public class HbmPotion extends Potion {
 	public static HbmPotion radaway;
 	public static HbmPotion telekinesis;
 	public static HbmPotion phosphorus;
+	public static HbmPotion stability;
+	public static HbmPotion potionsickness;
 	
 	public HbmPotion(boolean isBad, int color, String name, int x, int y){
 		super(isBad, color);
@@ -51,6 +56,8 @@ public class HbmPotion extends Potion {
 		radaway = registerPotion(false, 0xBB4B00, "potion.hbm_radaway", 7, 0);
 		telekinesis = registerPotion(true, 0x00F3FF, "potion.hbm_telekinesis", 0, 1);
 		phosphorus = registerPotion(true, 0xFFFF00, "potion.hbm_phosphorus", 1, 1);
+		stability = registerPotion(false, 0xD0D0D0, "potion.hbm_stability", 2, 1);
+		potionsickness = registerPotion(false, 0xff8080, "potion.hbm_potionsickness", 3, 1);
 	}
 
 	public static HbmPotion registerPotion(boolean isBad, int color, String name, int x, int y) {
@@ -84,7 +91,7 @@ public class HbmPotion extends Potion {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getStatusIconIndex() {
-		ResourceLocation loc = new ResourceLocation("hbm","textures/gui/potions.png");
+		ResourceLocation loc = new ResourceLocation(RefStrings.MODID, "textures/gui/potions.png");
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);
 		return super.getStatusIconIndex();
 	}
@@ -111,19 +118,11 @@ public class HbmPotion extends Potion {
 			} 
 		}
 		if(this == radiation) {
-			
-			/*if (entity.getHealth() > entity.getMaxHealth() - (level + 1)) {
-				entity.attackEntityFrom(ModDamageSource.radiation, 1);
-			}*/
-			
-			//RadEntitySavedData data = RadEntitySavedData.getData(entity.worldObj);
-			//data.increaseRad(entity, (float)(level + 1F) * 0.05F);
-			
-			ContaminationUtil.applyRadData(entity, (float)(level + 1F) * 0.05F);
+			ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, (float)(level + 1F) * 0.05F);
 		}
 		if(this == radaway) {
-			if(entity.hasCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null))
-				entity.getCapability(RadiationCapability.EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(level+1);
+			if(entity.hasCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
+				entity.getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(level+1);
 		}
 		if(this == bang) {
 			

@@ -1,6 +1,7 @@
 package com.hbm.lib;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 
 public enum ForgeDirection {
 
@@ -71,6 +72,17 @@ public enum ForgeDirection {
     public ForgeDirection getRotation(ForgeDirection axis)
     {
     	return getOrientation(ROTATION_MATRIX[axis.ordinal()][ordinal()]);
+    }
+    
+    public Rotation getBlockRotation(){
+    	switch(this){
+    	case NORTH: return Rotation.NONE;
+    	case SOUTH: return Rotation.CLOCKWISE_180;
+    	case EAST: return Rotation.COUNTERCLOCKWISE_90;
+    	case WEST: return Rotation.CLOCKWISE_90;
+    	default:
+    	return Rotation.NONE;
+    	}
     }
     
     public EnumFacing toEnumFacing(){

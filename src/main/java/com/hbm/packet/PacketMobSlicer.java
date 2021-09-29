@@ -3,6 +3,7 @@ package com.hbm.packet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -10,6 +11,7 @@ import com.hbm.lib.ModDamageSource;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -56,7 +58,8 @@ public class PacketMobSlicer implements IMessage {
 		@Override
 		public IMessage onMessage(PacketMobSlicer m, MessageContext ctx) {
 			EntityPlayerMP p = ctx.getServerHandler().player;
-			if(!(p.getHeldItemMainhand().getItem() instanceof ItemSwordCutter))
+			ItemStack heldStack = p.getHeldItemMainhand();
+			if(!(heldStack.getItem() instanceof ItemSwordCutter))
 				return null;
 			p.getServer().addScheduledTask(()->{
 				List<EntityLivingBase> attack = new ArrayList<>();
@@ -69,6 +72,12 @@ public class PacketMobSlicer implements IMessage {
 					if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && !attack.contains(r.entityHit)){
 						attack.add((EntityLivingBase) r.entityHit);
 					}
+				}
+				if(heldStack.getItem() instanceof ItemCrucible){
+					if(ItemCrucible.getCharges(heldStack) == 0)
+						return;
+					if(!attack.isEmpty())
+						ItemCrucible.discharge(heldStack);
 				}
 				for(EntityLivingBase victim : attack){
 					Vec3d pos = m.pos.subtract(victim.posX, victim.posY, victim.posZ);

@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import java.io.IOException;
 
+import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.TileEntityTickingBase;
 
@@ -81,10 +82,8 @@ public class NBTPacket implements IMessage {
 					NBTTagCompound nbt = m.buffer.readCompoundTag();
 
 					if(nbt != null) {
-						if(te instanceof TileEntityMachineBase)
-							((TileEntityMachineBase) te).networkUnpack(nbt);
-						 if(te instanceof TileEntityTickingBase)
-							 ((TileEntityTickingBase) te).networkUnpack(nbt);
+						 if(te instanceof INBTPacketReceiver)
+								((INBTPacketReceiver) te).networkUnpack(nbt);
 					}
 
 				} catch(IOException e) {

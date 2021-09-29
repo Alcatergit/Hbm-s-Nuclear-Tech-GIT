@@ -1,6 +1,6 @@
 package com.hbm.items.special;
 
-public class ItemSchraranium extends ItemRadioactive {
+public class ItemSchraranium extends ItemHazard {
 
 	public ItemSchraranium(float radiation, boolean fire, boolean blinding, String s) {
 		super(radiation, fire, blinding, s);

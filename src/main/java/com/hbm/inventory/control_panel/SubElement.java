@@ -30,4 +30,6 @@ public class SubElement {
 	}
 	protected void update(){
 	}
+	public void onClose(){
+	}
 }

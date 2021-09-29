@@ -2,6 +2,7 @@ package com.hbm.items.food;
 
 import java.util.List;
 
+import com.hbm.config.VersatileConfig;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
@@ -53,6 +54,8 @@ public class ItemCanteen extends Item {
 			entityLiving.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60 * 20, 1));
 		}
 
+		VersatileConfig.applyPotionSickness(entityLiving, 5);
+		
 		return stack;
 	}
 	
@@ -68,7 +71,9 @@ public class ItemCanteen extends Item {
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if(playerIn.getHeldItem(handIn).getItemDamage() == 0)
+		if(VersatileConfig.hasPotionSickness(playerIn))
+			return super.onItemRightClick(worldIn, playerIn, handIn);
+		if(playerIn.getHeldItem(handIn).getItemDamage() == 0 && !VersatileConfig.hasPotionSickness(playerIn))
 			playerIn.setActiveHand(handIn);
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}

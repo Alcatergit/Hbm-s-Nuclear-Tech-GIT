@@ -1,0 +1,90 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl FrameMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_frame
+
+newmtl MeshMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_mesh
+
+newmtl SideMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side
+
+newmtl SideRustyMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side_rusty
+
+newmtl SideGreenMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side_green
+
+newmtl SideGreenRustyMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side_green_rusty
+
+newmtl SideMarkedMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side_marked
+
+newmtl SideRedMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_side_red
+
+newmtl TopMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top
+
+newmtl TopRustyMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top_rusty
+
+newmtl TopGreenMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top_green
+
+newmtl TopGreenRustyMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top_green_rusty
+
+newmtl TopMarkedMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top_marked
+
+newmtl TopRedMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/pipe_top_red
+
+
+
+

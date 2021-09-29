@@ -60,7 +60,7 @@ public class HbmFluidHandlerGasCanister implements ICapabilityProvider, IFluidHa
 	
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(resource == null)
+		if(resource == null || container.getCount() > 1)
 			return 0;
 		FluidStack contained = getFluid();
 		int filled;
@@ -86,13 +86,15 @@ public class HbmFluidHandlerGasCanister implements ICapabilityProvider, IFluidHa
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(resource == null || (getFluid() != null && getFluid().getFluid() != resource.getFluid()))
+		if(container.getCount() > 1 || resource == null || (getFluid() != null && getFluid().getFluid() != resource.getFluid()))
 			return null;
 		return drain(resource.amount, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
+		if(container.getCount() > 1)
+			return null;
 		FluidStack contained = getFluid();
 		if(contained == null)
 			return null;
@@ -107,12 +109,16 @@ public class HbmFluidHandlerGasCanister implements ICapabilityProvider, IFluidHa
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(container.getCount() > 1)
+			return false;
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(container.getCount() > 1)
+			return null;
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ? (T)this : null;
 	}
 

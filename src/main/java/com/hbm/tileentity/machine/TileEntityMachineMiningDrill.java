@@ -15,6 +15,8 @@ import com.hbm.packet.TEDrillPacket;
 import com.hbm.sound.SoundLoopMachine;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.block.IDrillInteraction;
+import api.hbm.block.IMiningDrill;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +38,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineMiningDrill extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineMiningDrill extends TileEntityMachineBase implements ITickable, IConsumer, IMiningDrill {
 
 	public long power;
 	public int warning;
@@ -656,6 +658,19 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		IBlockState b = world.getBlockState(pos);
 		ItemStack stack = new ItemStack(b.getBlock().getItemDropped(b, rand, fortune), b.getBlock().quantityDropped(b, fortune, rand), b.getBlock().damageDropped(b));
 
+		if(b.getBlock() instanceof IDrillInteraction) {
+			IDrillInteraction in = (IDrillInteraction) b.getBlock();
+			
+			ItemStack sta = in.extractResource(world, x, y, z, b, this);
+
+			if(sta != null && hasSpace(sta)) {
+				this.addItemToInventory(sta);
+			}
+			
+			if(!in.canBreak(world, x, y, z, b, this))
+				return true; //true because the block is still there and mining should continue
+		}
+		
 		// yup that worked
 		if(stack != null && stack.getItem() == null) {
 			world.destroyBlock(pos, false);
@@ -776,6 +791,16 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+
+	@Override
+	public DrillType getDrillTier(){
+		return DrillType.INDUSTRIAL;
+	}
+
+	@Override
+	public int getDrillRating(){
+		return 50;
 	}
 
 }
