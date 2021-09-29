@@ -31,6 +31,9 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 			coneMeshes = new int[EnumDyeColor.values().length];
 			for(int i = 0; i < coneMeshes.length; i ++){
 				float[] color = EnumDyeColor.values()[i].getColorComponentValues();
+				if(EnumDyeColor.values()[i] == EnumDyeColor.RED){
+					color = new float[]{1, 0, 0};
+				}
 				coneMeshes[i] = generateConeMesh(5, 3, 12, color[0], color[1], color[2]);
 			}
 		}
@@ -61,6 +64,9 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, powered ? DestFactor.ONE : DestFactor.ONE_MINUS_SRC_ALPHA);
 		float[] color = te.color.getColorComponentValues();
+		if(te.color == EnumDyeColor.RED){
+			color = new float[]{1, 0, 0};
+		}
 		GlStateManager.color(color[0], color[1], color[2], 0.61F);
 		ResourceManager.spinny_light.renderPart("dome");
 		GL11.glPopMatrix();

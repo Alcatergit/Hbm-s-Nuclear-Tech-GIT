@@ -21,7 +21,14 @@ public class SpecialContainerFillLists {
 		NITAN(ModForgeFluids.nitan, new ModelResourceLocation(RefStrings.MODID + ":canister_superfuel", "inventory")),
 		BIOFUEL(ModForgeFluids.biofuel, new ModelResourceLocation(RefStrings.MODID + ":canister_biofuel", "inventory")),
 		CANOLA(ModForgeFluids.lubricant, new ModelResourceLocation(RefStrings.MODID + ":canister_canola", "inventory")),
-		REOIL(ModForgeFluids.reclaimed, new ModelResourceLocation(RefStrings.MODID + ":canister_reoil", "inventory"));
+		REOIL(ModForgeFluids.reclaimed, new ModelResourceLocation(RefStrings.MODID + ":canister_reoil", "inventory")),
+		HEAVYOIL(ModForgeFluids.heavyoil, new ModelResourceLocation(RefStrings.MODID + ":canister_heavyoil", "inventory")),
+		BITUMEN(ModForgeFluids.bitumen, new ModelResourceLocation(RefStrings.MODID + ":canister_bitumen", "inventory")),
+		SMEAR(ModForgeFluids.smear, new ModelResourceLocation(RefStrings.MODID + ":canister_smear", "inventory")),
+		HEATINGOIL(ModForgeFluids.heatingoil, new ModelResourceLocation(RefStrings.MODID + ":canister_heatingoil", "inventory")),
+		NAPHTHA(ModForgeFluids.naphtha, new ModelResourceLocation(RefStrings.MODID + ":canister_naphtha", "inventory")),
+		LIGHTOIL(ModForgeFluids.lightoil, new ModelResourceLocation(RefStrings.MODID + ":canister_lightoil", "inventory")),
+		GASOLINE(ModForgeFluids.gasoline, new ModelResourceLocation(RefStrings.MODID + ":canister_gasoline", "inventory"));
 		
 		private Fluid fluid;
 		private Pair<ModelResourceLocation, IBakedModel> renderPair;

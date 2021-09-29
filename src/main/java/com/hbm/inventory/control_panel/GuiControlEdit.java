@@ -8,6 +8,8 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.NBTControlPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityControlPanel;
 
 import net.minecraft.client.Minecraft;
@@ -17,7 +19,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ClickType;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiControlEdit extends GuiContainer {
@@ -47,6 +49,19 @@ public class GuiControlEdit extends GuiContainer {
 		this.xSize = 216;
 		this.ySize = 234;
 		res = new ScaledResolution(Minecraft.getMinecraft());
+	}
+	
+	@Override
+	public void onGuiClosed(){
+		placement.onClose();
+		choice.onClose();
+		linker.onClose();
+		eventEditor.onClose();
+		nodeEditor.onClose();
+		NBTTagCompound tag = new NBTTagCompound();
+		control.panel.writeToNBT(tag);
+		tag.setString("full_set", "");
+		PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(tag, control.getPos()));
 	}
 	
 	@Override

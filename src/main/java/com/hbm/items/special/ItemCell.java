@@ -14,6 +14,8 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,8 +24,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -42,12 +46,15 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCell extends ItemRadioactive {
+public class ItemCell extends Item {
 
 	public ItemCell(String s) {
-		super(0.0F, s);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
 		this.setMaxDamage(1000);
 		this.setContainerItem(this);
+		
+		ModItems.ALL_ITEMS.add(this);
 	}
 
 	@Override
@@ -100,9 +107,9 @@ public class ItemCell extends ItemRadioactive {
 			return;
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if(hasFluid(stack, ModForgeFluids.tritium)){
-			ContaminationUtil.applyRadData(entityIn, 0.5F / 20F);
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F / 20F);
 		} else if(hasFluid(stack, ModForgeFluids.sas3)){
-			ContaminationUtil.applyRadData(entityIn, 10F / 20F);
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 10F / 20F);
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
 		}
 	}
@@ -124,7 +131,7 @@ public class ItemCell extends ItemRadioactive {
 				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
 					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.aschrab, 1000), true);
 			}
-			ContaminationUtil.applyRadDirect(player, 50F);
+			ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.CREATIVE, 50.0F);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
@@ -229,6 +236,26 @@ public class ItemCell extends ItemRadioactive {
 			return true;
 		}
 		return false;
+	}
+
+	public static boolean hasEmptyCell(EntityPlayer player){
+		InventoryPlayer inv = player.inventory;
+		for(int i = 0; i < inv.getSizeInventory(); i ++){
+			if(isEmptyCell(inv.getStackInSlot(i))){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void consumeEmptyCell(EntityPlayer player){
+		InventoryPlayer inv = player.inventory;
+		for(int i = 0; i < inv.getSizeInventory(); i ++){
+			if(isEmptyCell(inv.getStackInSlot(i))){
+				inv.getStackInSlot(i).shrink(1);
+				return;
+			}
+		}
 	}
 
 }

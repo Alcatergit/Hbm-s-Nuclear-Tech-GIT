@@ -7,6 +7,7 @@ import com.hbm.main.ModEventHandlerClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -85,7 +86,7 @@ public class ParticleRadiationFog extends Particle {
         this.particleRed = 0.85F;
         this.particleGreen = 0.9F;
         this.particleBlue = 0.5F;
-        this.particleAlpha = alpha;
+        this.particleAlpha = MathHelper.clamp(alpha, 0, 1);
 		
 		Random rand = new Random(50);
 		

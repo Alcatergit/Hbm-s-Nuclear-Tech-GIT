@@ -170,8 +170,6 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 			FFUtils.fillFluidContainer(inventory, tanks[3], 7, 8);
 			FFUtils.fillFluidContainer(inventory, tanks[4], 9, 10);
 			
-			
-			
 			if(sulfur >= maxSulfur) {
 				if(inventory.getStackInSlot(11).isEmpty()) {
 					inventory.setStackInSlot(11, new ItemStack(ModItems.sulfur));

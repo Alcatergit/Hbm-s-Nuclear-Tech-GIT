@@ -16,6 +16,8 @@ import com.hbm.handler.guncfg.Gun556mmFactory;
 import com.hbm.handler.guncfg.Gun5mmFactory;
 import com.hbm.handler.guncfg.Gun75BoltFactory;
 import com.hbm.handler.guncfg.Gun9mmFactory;
+import com.hbm.handler.guncfg.GunCannonFactory;
+import com.hbm.handler.guncfg.GunDGKFactory;
 import com.hbm.handler.guncfg.GunDartFactory;
 import com.hbm.handler.guncfg.GunEnergyFactory;
 import com.hbm.handler.guncfg.GunFatmanFactory;
@@ -67,6 +69,14 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int ROCKET_CHAINSAW_LASER = i++;
 	public static int ROCKET_TOXIC_LASER = i++;
 	public static int ROCKET_PHOSPHORUS_LASER = i++;
+	
+	public static int SHELL_NORMAL = i++;
+	public static int SHELL_EXPLOSIVE = i++;
+	public static int SHELL_AP = i++;
+	public static int SHELL_DU = i++;
+	public static int SHELL_W9 = i++;
+	public static int DGK_NORMAL = i++;
+	public static int FLA_NORMAL = i++;
 
 	public static int ROCKET_NORMAL = i++;
 	public static int ROCKET_HE = i++;
@@ -128,6 +138,9 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int BMG50_STAR = i++;
 	public static int BMG50_PHOSPHORUS = i++;
 	public static int BMG50_SLEEK = i++;
+	public static int BMG50_FLECHETTE_NORMAL = i++;
+	public static int BMG50_FLECHETTE_AM = i++;
+	public static int BMG50_FLECHETTE_PO = i++;
 
 	public static int R5_NORMAL = i++;
 	public static int R5_EXPLOSIVE = i++;
@@ -242,6 +255,8 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	
 	public static int NEEDLE_GPS = i++;
 	
+	public static int UFO_ROCKET = i++;
+	
 	public static void loadConfigsForSync() {
 		
 		configSet.put(TEST_CONFIG, BulletConfigFactory.getTestConfig());
@@ -280,6 +295,14 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(ROCKET_CHAINSAW_LASER, GunRocketFactory.getRocketRPCConfig().setToGuided());
 		configSet.put(ROCKET_TOXIC_LASER, GunRocketFactory.getRocketChlorineConfig().setToGuided());
         
+		configSet.put(SHELL_NORMAL, GunCannonFactory.getShellConfig());
+		configSet.put(SHELL_EXPLOSIVE, GunCannonFactory.getShellExplosiveConfig());
+		configSet.put(SHELL_AP, GunCannonFactory.getShellAPConfig());
+		configSet.put(SHELL_DU, GunCannonFactory.getShellDUConfig());
+		configSet.put(SHELL_W9, GunCannonFactory.getShellW9Config());
+		configSet.put(DGK_NORMAL, GunDGKFactory.getDGKConfig());
+		configSet.put(FLA_NORMAL, GunEnergyFactory.getTurretConfig());
+		
 		configSet.put(ROCKET_NORMAL, GunRocketFactory.getRocketConfig());
 		configSet.put(ROCKET_HE, GunRocketFactory.getRocketHEConfig());
 		configSet.put(ROCKET_INCENDIARY, GunRocketFactory.getRocketIncendiaryConfig());
@@ -340,6 +363,9 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(BMG50_DU, Gun50BMGFactory.get50BMGDUConfig());
 		configSet.put(BMG50_STAR, Gun50BMGFactory.get50BMGStarConfig());
 		configSet.put(BMG50_SLEEK, Gun50BMGFactory.get50BMGSleekConfig());
+		configSet.put(BMG50_FLECHETTE_NORMAL, Gun50BMGFactory.get50BMGFlechetteConfig());
+		configSet.put(BMG50_FLECHETTE_AM, Gun50BMGFactory.get50BMGFlechetteAMConfig());
+		configSet.put(BMG50_FLECHETTE_PO, Gun50BMGFactory.get50BMGFlechettePOConfig());
         
 		configSet.put(R5_NORMAL, Gun5mmFactory.get5mmConfig());
 		configSet.put(R5_EXPLOSIVE, Gun5mmFactory.get5mmExplosiveConfig());
@@ -453,6 +479,8 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(WORM_LASER, GunNPCFactory.getWormHeadBolt());
 		
 		configSet.put(NEEDLE_GPS, GunDartFactory.getGPSConfig());
+		
+		configSet.put(UFO_ROCKET, GunNPCFactory.getRocketUFOConfig());
 	}
 	
 	public static BulletConfiguration pullConfig(int key) {

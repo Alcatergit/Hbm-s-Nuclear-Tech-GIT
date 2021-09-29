@@ -27,15 +27,31 @@ public class AudioDynamic extends MovingSound {
 		this.zPosF = z;
 	}
 
+	public void setAttenuation(ISound.AttenuationType type){
+		this.attenuationType = type;
+		volume = intendedVolume;
+	}
+	
 	@Override
 	public void update() {
-
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		float f = 0;
-		
 		if(player != null) {
-			f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
-			volume = func(f, intendedVolume);
+			if(attenuationType == ISound.AttenuationType.LINEAR){
+				/*float f3 = intendedVolume;
+                float f2 = 16.0F;
+
+                if (f3 > 1.0F)
+                {
+                    f2 *= f3;
+                }
+                f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
+                volume = 1-f2/f;
+                System.out.println(volume);*/
+			} else {
+				f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
+				volume = func(f, intendedVolume);
+			}
 		} else {
 			volume = intendedVolume;
 		}

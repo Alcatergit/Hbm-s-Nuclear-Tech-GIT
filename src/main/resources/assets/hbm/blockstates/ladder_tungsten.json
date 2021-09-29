@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "hbm:ladder_tungsten" },
+        "facing=east":  { "model": "hbm:ladder_tungsten", "y": 90 },
+        "facing=south": { "model": "hbm:ladder_tungsten", "y": 180 },
+        "facing=west":  { "model": "hbm:ladder_tungsten", "y": 270 }
+    }
+}

@@ -1,0 +1,20 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:digamma_feel"
+		},
+		"title": {
+			"translate": "hbm.achievement.digammaFeel"
+		},
+		"description": {
+			"translate": "hbm.achievement.digammaFeel.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	}
+}

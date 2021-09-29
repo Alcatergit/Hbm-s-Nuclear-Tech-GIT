@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.block.Block;
@@ -40,6 +41,9 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 		Item item = stack.getItem();
 		
+		if(item instanceof ItemRBMKRod)
+			return true;
+		
 		return item == ModItems.waste_mox_hot || 
 				item == ModItems.waste_plutonium_hot || 
 				item == ModItems.waste_schrabidium_hot || 
@@ -60,6 +64,10 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		Item item = itemStack.getItem();
+		
+		if(item instanceof ItemRBMKRod) {
+			return ItemRBMKRod.getCoreHeat(itemStack) < 50 && ItemRBMKRod.getHullHeat(itemStack) < 50;
+		}
 		
 		return item == ModItems.waste_mox || 
 				item == ModItems.waste_plutonium || 
@@ -117,7 +125,13 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 				
 				for(int i = 0; i < 12; i++) {
 					
-					if(world.rand.nextInt(r) == 0) {
+					if(inventory.getStackInSlot(i).getItem() instanceof ItemRBMKRod) {
+						
+						ItemRBMKRod rod = (ItemRBMKRod) inventory.getStackInSlot(i).getItem();
+						rod.updateHeat(world, inventory.getStackInSlot(i), 0.025D);
+						rod.provideHeat(world, inventory.getStackInSlot(i), 20D, 0.025D);
+						
+					} else if(world.rand.nextInt(r) == 0) {
 						
 						if(!inventory.getStackInSlot(i).isEmpty()) {
 							

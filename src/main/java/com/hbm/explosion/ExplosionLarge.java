@@ -102,6 +102,7 @@ public class ExplosionLarge {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void jolt(World world, double posX, double posY, double posZ, double strength, int count, double vel) {
 		
 		for(int j = 0; j < count; j++) {
@@ -131,7 +132,7 @@ public class ExplosionLarge {
 					
 					if(block != Blocks.AIR) {
 						
-						if(block.getExplosionResistance(world, pos, null, null) > 70)
+						if(block.getExplosionResistance(null) > 70)
 							continue;
 			            
 			            EntityRubble rubble = new EntityRubble(world);

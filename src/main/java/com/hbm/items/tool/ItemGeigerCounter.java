@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.HbmLivingProps;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.weapon.ItemGunEgon;
@@ -16,6 +17,7 @@ import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,18 +43,18 @@ public class ItemGeigerCounter extends Item {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if(!(entity instanceof EntityLivingBase) || world.isRemote)
+			return;
+		
 		if(entity instanceof EntityPlayer) {
+			
 			if(ArmorFSB.hasFSBArmor((EntityPlayer)entity) && ((ArmorFSB)((EntityPlayer)entity).inventory.armorInventory.get(2).getItem()).geigerSound)
 				return;
 		}
-		setInt(stack, getInt(stack, "timer") + 1, "timer");
-		if(getInt(stack, "timer") == 10) {
-			setInt(stack, 0, "timer");
-			setInt(stack, check(entity instanceof EntityPlayer ? (EntityPlayer)entity : null, world, entity.getPosition()), "ticker");
-		}
 		
-		int x = getInt(stack, "ticker");
-		if(getInt(stack, "timer") % 5 == 0) {
+		float x = HbmLivingProps.getRadBuf((EntityLivingBase)entity);
+		
+		if(world.getTotalWorldTime() % 5 == 0) {
 			if(x > 0) {
 				List<Integer> list = new ArrayList<Integer>();
 
@@ -76,9 +78,9 @@ public class ItemGeigerCounter extends Item {
 				int r = list.get(rand.nextInt(list.size()));
 				
 				if(r > 0)
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[Math.min(r, 5)], SoundCategory.PLAYERS, 1.0F, 1.0F);
+					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			} else if(rand.nextInt(50) == 0) {
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(1 + rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
+				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 		}
 	}

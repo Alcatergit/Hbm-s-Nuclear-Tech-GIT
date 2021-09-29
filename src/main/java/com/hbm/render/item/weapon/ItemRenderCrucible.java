@@ -9,6 +9,7 @@ import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
+import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ModEventHandlerClient;
@@ -49,6 +50,7 @@ public class ItemRenderCrucible extends TEISRBase {
 		if(buf == null){
 			buf = GLAllocation.createDirectByteBuffer(8*4).asDoubleBuffer();
 		}
+		boolean depleted = ItemCrucible.getCharges(itemStackIn) == 0;
 		switch(type){
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
@@ -96,7 +98,10 @@ public class ItemRenderCrucible extends TEISRBase {
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 				return;
 			}
-			
+			if(depleted){
+				GL11.glTranslated(-0.1, -0.25, 0.1);
+				w.startTime = System.currentTimeMillis()-400;
+			}
 			double[] sRot = HbmAnimations.getRelevantTransformation("SWING_ROT", hand);
 			double[] sTrans = HbmAnimations.getRelevantTransformation("SWING_TRANS", hand);
 			GL11.glTranslated(sTrans[0], sTrans[1], sTrans[2]);
@@ -146,8 +151,9 @@ public class ItemRenderCrucible extends TEISRBase {
 							TrailRenderer2.color[3] = 0.5F;
 							if(GeneralConfig.bloom){
 								HbmShaderManager2.bloomData.bindFramebuffer(true);
-								for(Particle p : ModEventHandlerClient.firstPersonAuxParticles){
-									p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
+								for(ParticleFirstPerson p : ModEventHandlerClient.firstPersonAuxParticles){
+									if(p.getType() == ParticleType.CRUCIBLE)
+										p.renderParticle(Tessellator.getInstance().getBuffer(), entity, MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
 								}
 								
 								Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);

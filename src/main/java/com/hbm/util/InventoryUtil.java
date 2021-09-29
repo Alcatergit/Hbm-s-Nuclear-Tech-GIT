@@ -1,7 +1,15 @@
 package com.hbm.util;
 
+import java.util.List;
+
+import com.hbm.inventory.AnvilRecipes.AnvilOutput;
+import com.hbm.inventory.RecipesCommon.AStack;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.oredict.OreDictionary;
 
 //'t was about time
 public class InventoryUtil {
@@ -182,5 +190,138 @@ public class InventoryUtil {
 			return false;
 
 		return stack1.getTagCompound().equals(stack2.getTagCompound());
+	}
+	
+	/**
+	 * Checks if a player has matching item stacks in his inventory and removes them if so desired
+	 * @param player
+	 * @param stacks the AStacks (comparable or ore-dicted)
+	 * @param shouldRemove whether it should just return true or false or if a successful check should also remove all the items
+	 * @return whether the player has the required item stacks or not
+	 */
+	public static boolean doesPlayerHaveAStacks(EntityPlayer player, List<AStack> stacks, boolean shouldRemove) {
+		
+		NonNullList<ItemStack> original = player.inventory.mainInventory;
+		ItemStack[] inventory = new ItemStack[original.size()];
+		AStack[] input = new AStack[stacks.size()];
+		
+		//first we copy the inputs into an array because 1. it's easier to deal with and 2. we can dick around with the stack sized with no repercussions
+		for(int i = 0; i < input.length; i++) {
+			input[i] = stacks.get(i).copy();
+		}
+		
+		//then we copy the inventory so we can dick around with it as well without making actual modifications to the player's inventory
+		for(int i = 0; i < original.size(); i++) {
+			inventory[i] = original.get(i).copy();
+		}
+		
+		//now we go through every ingredient...
+		for(int i = 0; i < input.length; i++) {
+			
+			AStack stack = input[i];
+			
+			//...and compare each ingredient to every stack in the inventory
+			for(int j = 0; j < inventory.length; j++) {
+				
+				ItemStack inv = inventory[j];
+				
+				//we check if it matches but ignore stack size for now
+				if(stack.matchesRecipe(inv, true)) {
+					//and NOW we care about the stack size
+					int size = Math.min(stack.count(), inv.getCount());
+					stack.setCount(stack.count()-size);
+					inv.setCount(inv.getCount()-size);
+					
+					//spent stacks are removed from the equation so that we don't cross ourselves later on
+					if(stack.count() <= 0) {
+						input[i] = null;
+						break;
+					}
+					
+					if(inv.getCount() <= 0) {
+						inventory[j] = ItemStack.EMPTY;
+					}
+				}
+			}
+		}
+		
+		for(AStack stack : input) {
+			if(stack != null) {
+				return false;
+			}
+		}
+		
+		if(shouldRemove) {
+			for(int i = 0; i < original.size(); i++) {
+				if(inventory[i] != null && inventory[i].getCount() <= 0)
+					original.set(i, ItemStack.EMPTY);
+				else
+					original.set(i, inventory[i]);
+			}
+		}
+		
+		return true;
+	}
+	
+	public static void giveChanceStacksToPlayer(EntityPlayer player, List<AnvilOutput> stacks) {
+		
+		for(AnvilOutput out : stacks) {
+			if(out.chance == 1.0F || player.getRNG().nextFloat() < out.chance) {
+				if(!player.inventory.addItemStackToInventory(out.stack.copy())) {
+					player.dropItem(out.stack.copy(), false);
+				}
+			}
+		}
+	}
+	
+	public static boolean hasOreDictMatches(EntityPlayer player, String dict, int count) {
+		return countOreDictMatches(player, dict) >= count;
+	}
+	
+	public static int countOreDictMatches(EntityPlayer player, String dict) {
+		
+		int count = 0;
+		
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
+			
+			ItemStack stack = player.inventory.mainInventory.get(i);
+			
+			if(stack != null) {
+				
+				int[] ids = OreDictionary.getOreIDs(stack);
+				
+				for(int id : ids) {
+					if(OreDictionary.getOreName(id).equals(dict)) {
+						count += stack.getCount();
+						break;
+					}
+				}
+			}
+		}
+		
+		return count;
+	}
+	
+	public static void consumeOreDictMatches(EntityPlayer player, String dict, int count) {
+		
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
+			
+			ItemStack stack = player.inventory.mainInventory.get(i);
+			
+			if(stack != null) {
+				
+				int[] ids = OreDictionary.getOreIDs(stack);
+				
+				for(int id : ids) {
+					if(OreDictionary.getOreName(id).equals(dict)) {
+						
+						int toConsume = Math.min(count, stack.getCount());
+						player.inventory.decrStackSize(i, toConsume);
+						count -= toConsume;
+						break;
+					}
+				}
+			}
+		}
 	}
 }

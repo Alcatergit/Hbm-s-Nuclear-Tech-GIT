@@ -5,6 +5,7 @@ import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityHadronDiode;
 import com.hbm.tileentity.machine.TileEntityHadronDiode.DiodeConfig;
 
+import api.hbm.block.IToolable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -20,7 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockHadronDiode extends BlockContainer {
+public class BlockHadronDiode extends BlockContainer implements IToolable {
 
 	public static final PropertyInteger[] textures = new PropertyInteger[6];
 	static {
@@ -48,24 +49,20 @@ public class BlockHadronDiode extends BlockContainer {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(player.getHeldItem(hand).getItem() == ModItems.screwdriver) {
-
-    		if(!world.isRemote) {
-    			TileEntityHadronDiode diode = (TileEntityHadronDiode) world.getTileEntity(pos);
-    			int config = diode.getConfig(facing.ordinal()).ordinal();
-    			config += 1;
-    			config %= DiodeConfig.values().length;
-    			diode.setConfig(facing.ordinal(), config);
-    			resetBlockState(world, pos);
-    		}
-
-			//world.markBlockRangeForRenderUpdate(pos, pos);
-
-    		return true;
-    	} else {
-    		return false;
-    	}
+	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool){
+		if(tool != ToolType.SCREWDRIVER)
+			return false;
+		
+		if(!world.isRemote) {
+			TileEntityHadronDiode diode = (TileEntityHadronDiode) world.getTileEntity(new BlockPos(x, y, z));
+			int config = diode.getConfig(side.ordinal()).ordinal();
+			config += 1;
+			config %= DiodeConfig.values().length;
+			diode.setConfig(side.ordinal(), config);
+			resetBlockState(world, new BlockPos(x, y, z));
+		}
+		
+		return true;
 	}
 	
 	public static void resetBlockState(World world, BlockPos pos){

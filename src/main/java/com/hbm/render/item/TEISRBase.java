@@ -13,4 +13,8 @@ public class TEISRBase extends TileEntityItemStackRenderer {
 	/** Can be null. */
 	public EntityLivingBase entity;
 	public World world;
+	
+	public boolean doNullTransform(){
+		return false;
+	}
 }

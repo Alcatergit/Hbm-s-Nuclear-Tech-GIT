@@ -102,7 +102,7 @@ public class RenderAccessoryUtility {
 
 		return null;
 	}
-
+	
 	public static void loadCape(NetworkPlayerInfo info, ResourceLocation rl) {
 		try {
 			// Map<Type, ResourceLocation> playerTextures =

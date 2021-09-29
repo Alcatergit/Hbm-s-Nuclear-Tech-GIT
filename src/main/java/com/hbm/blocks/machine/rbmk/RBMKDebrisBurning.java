@@ -1,0 +1,67 @@
+package com.hbm.blocks.machine.rbmk;
+
+import java.util.Random;
+
+import com.hbm.blocks.ModBlocks;
+import com.hbm.main.MainRegistry;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+public class RBMKDebrisBurning extends RBMKDebris {
+
+	public RBMKDebrisBurning(String s){
+		super(s);
+	}
+	
+	@Override
+	public int tickRate(World world) {
+
+		return 100 + world.rand.nextInt(20);
+	}
+
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
+		if(!world.isRemote) {
+			
+			if(rand.nextInt(5) == 0) {
+				NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "rbmkflame");
+				data.setInteger("maxAge", 300);
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.25 + rand.nextDouble() * 0.5, pos.getY() + 1.75, pos.getZ() + 0.25 + rand.nextDouble() * 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 1.75, pos.getZ() + 0.5, 75));
+				MainRegistry.proxy.effectNT(data);
+				world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F);
+			}
+			
+			if(rand.nextInt(100) == 0) {
+				world.setBlockState(pos, ModBlocks.pribris.getDefaultState());
+			} else {
+				world.scheduleUpdate(pos, this, this.tickRate(world));
+			}
+		}
+	}
+
+	@Override
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
+		super.onBlockAdded(world, pos, state);
+
+		if(!world.isRemote) {
+			if(world.rand.nextInt(3) == 0) {
+				NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "rbmkflame");
+				data.setInteger("maxAge", 300);
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.25 + world.rand.nextDouble() * 0.5, pos.getY() + 1.75, pos.getZ() + 0.25 + world.rand.nextDouble() * 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 1.75, pos.getZ() + 0.5, 75));
+				MainRegistry.proxy.effectNT(data);
+			}
+		}
+
+		world.scheduleUpdate(pos, this, this.tickRate(world));
+	}
+}

@@ -18,19 +18,30 @@ import net.minecraft.world.World;
 public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock {
 
 	BlockRenderLayer layer;
+	boolean doesDrop = false;
 	
-	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
+	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, boolean doesDrop, String s) {
 		super(materialIn, false);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.layer = layer;
+		this.doesDrop = doesDrop;
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+	
+	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
+		this(materialIn, layer, false, s);
 	}
 	
 	@Override
 	public Block setSoundType(SoundType sound) {
 		return super.setSoundType(sound);
+	}
+	
+	@Override
+	public int quantityDropped(Random random){
+		return doesDrop ? 1 : 0;
 	}
 	
 	@Override

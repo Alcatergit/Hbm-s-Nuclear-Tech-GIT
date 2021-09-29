@@ -1,6 +1,7 @@
 package com.hbm.items.special;
 
 import java.util.List;
+import java.util.Random;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -292,7 +293,43 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.nugget_mox_fuel) {
 			list.add("Moxie says: " + TextFormatting.BOLD + "TAX EVASION.");
 		}
+		if(this == ModItems.billet_mox_fuel) {
+			list.add(TextFormatting.ITALIC + "Pocket-Moxie!");
+		}
+		
+		if(this == ModItems.ingot_lanthanium)
+		{
+			list.add("'Lanthanum'");
+		}
+		
+		if(this == ModItems.ingot_tantalium || this == ModItems.nugget_tantalium || this == ModItems.gem_tantalium || this == ModItems.powder_tantalium)
+		{
+			list.add("'Tantalum'");
+		}
+		if(this == ModItems.undefined && world != null) {
+			
+			if(world.rand.nextInt(10) == 0) {
+				list.add(TextFormatting.DARK_RED + "UNDEFINED");
+			} else {
+				Random rand = new Random(System.currentTimeMillis() / 500);
+				
+				if(setSize == 0)
+					setSize = Item.REGISTRY.getKeys().size();
+				
+				int r = rand.nextInt(setSize);
+				
+				Item item = Item.getItemById(r);
+				
+				if(item != null) {
+					list.add(new ItemStack(item).getDisplayName());
+				} else {
+					list.add(TextFormatting.RED + "ERROR #" + r);
+				}
+			}
+		}
 	}
+	
+	static int setSize = 0;
 
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
