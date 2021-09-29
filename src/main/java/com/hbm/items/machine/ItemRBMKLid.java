@@ -1,17 +1,15 @@
 package com.hbm.items.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -33,7 +31,7 @@ public class ItemRBMKLid extends Item {
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos bpos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
 		Block b = world.getBlockState(bpos).getBlock();
 		
-		if(b instanceof RBMKBase) {
+		if(!world.isRemote && b instanceof RBMKBase) {
 			RBMKBase rbmk = (RBMKBase) b;
 			
 			int[] pos = rbmk.findCore(world, bpos.getX(), bpos.getY(), bpos.getZ());
@@ -61,6 +59,9 @@ public class ItemRBMKLid extends Item {
 			}
 			
 			world.setBlockState(new BlockPos(pos[0], pos[1], pos[2]), world.getBlockState(new BlockPos(pos[0], pos[1], pos[2])).withProperty(BlockDummyable.META, meta + RBMKBase.offset), 3);
+			NBTTagCompound nbt = tile.writeToNBT(new NBTTagCompound());
+			world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2])).readFromNBT(nbt);
+			
 			player.getHeldItem(hand).shrink(1);
 			
 			return EnumActionResult.SUCCESS;

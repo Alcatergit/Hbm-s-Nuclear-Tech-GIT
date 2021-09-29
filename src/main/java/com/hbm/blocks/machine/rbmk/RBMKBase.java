@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -169,6 +170,8 @@ public abstract class RBMKBase extends BlockDummyable implements IToolable {
 						}
 						
 						world.setBlockState(new BlockPos(pos[0], pos[1], pos[2]), this.getDefaultState().withProperty(META, DIR_NO_LID.ordinal() + BlockDummyable.offset), 3);
+						NBTTagCompound nbt = rbmk.writeToNBT(new NBTTagCompound());
+						world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2])).readFromNBT(nbt);
 					}
 					
 					return true;

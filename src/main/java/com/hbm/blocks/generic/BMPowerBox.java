@@ -72,6 +72,8 @@ public class BMPowerBox extends BlockContainer {
 			boolean oldIsOn = state.getValue(IS_ON);
 			worldIn.playSound(null, pos.getX(),  pos.getY(),  pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1, oldIsOn ? 0.9F : 1);
 			worldIn.setBlockState(pos, state.withProperty(IS_ON, !oldIsOn));
+			worldIn.notifyNeighborsOfStateChange(pos, this, false);
+	        worldIn.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
 			box = (TileEntityBMPowerBox)worldIn.getTileEntity(pos);
 			box.ticksPlaced = worldIn.getTotalWorldTime();
 			ControlEventSystem.get(worldIn).broadcastToSubscribed(box, ControlEvent.newEvent("lever_toggle").setVar("isOn", !oldIsOn));
@@ -79,6 +81,11 @@ public class BMPowerBox extends BlockContainer {
 			return true;
 		}
 		
+		return true;
+	}
+	
+	@Override
+	public boolean canProvidePower(IBlockState state){
 		return true;
 	}
 	

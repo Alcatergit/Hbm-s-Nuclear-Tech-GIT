@@ -1,13 +1,24 @@
 package com.hbm.tileentity.deco;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.hbm.blocks.machine.BlockSpinnyLight;
+import com.hbm.inventory.control_panel.ControlEvent;
+import com.hbm.inventory.control_panel.ControlEventSystem;
+import com.hbm.inventory.control_panel.IControllable;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-public class TileEntitySpinnyLight extends TileEntity {
+public class TileEntitySpinnyLight extends TileEntity implements IControllable {
 	
 	public EnumDyeColor color = EnumDyeColor.WHITE;
 	public long timeAdded = 0;
@@ -57,5 +68,50 @@ public class TileEntitySpinnyLight extends TileEntity {
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(this.pos, this.pos.add(1, 1, 1)).grow(10);
+	}
+
+	@Override
+	public void receiveEvent(BlockPos from, ControlEvent e){
+		if(e.name.equals("spinny_light_power")){
+			boolean on = e.vars.get("isOn").getBoolean();
+			IBlockState state = world.getBlockState(pos);
+			boolean power = state.getValue(BlockSpinnyLight.POWERED);
+			if(on && !power){
+				world.setBlockState(pos, state.withProperty(BlockSpinnyLight.POWERED, true));
+				NBTTagCompound tag = writeToNBT(new NBTTagCompound());
+				world.getTileEntity(pos).readFromNBT(tag);
+			} else if(!on && power){
+				world.setBlockState(pos, state.withProperty(BlockSpinnyLight.POWERED, false));
+				NBTTagCompound tag = writeToNBT(new NBTTagCompound());
+				world.getTileEntity(pos).readFromNBT(tag);
+			}
+		}
+	}
+	
+	@Override
+	public List<String> getInEvents(){
+		return Arrays.asList("spinny_light_power");
+	}
+
+	@Override
+	public BlockPos getControlPos(){
+		return getPos();
+	}
+
+	@Override
+	public World getControlWorld(){
+		return getWorld();
+	}
+	
+	@Override
+	public void validate(){
+		super.validate();
+		ControlEventSystem.get(world).addControllable(this);
+	}
+	
+	@Override
+	public void invalidate(){
+		super.invalidate();
+		ControlEventSystem.get(world).removeControllable(this);
 	}
 }

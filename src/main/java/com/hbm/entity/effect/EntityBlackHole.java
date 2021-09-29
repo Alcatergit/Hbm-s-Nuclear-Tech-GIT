@@ -1,6 +1,8 @@
 package com.hbm.entity.effect;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.interfaces.IConstantRenderer;
@@ -65,11 +67,13 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 					int y0 = (int)(this.posY + (vec.yCoord * i));
 					int z0 = (int)(this.posZ + (vec.zCoord * i));
 					
-					if(world.getBlockState(new BlockPos(x0, y0, z0)).getMaterial().isLiquid()) {
-						world.setBlockState(new BlockPos(x0, y0, z0), Blocks.AIR.getDefaultState());
+					BlockPos des = new BlockPos(x0, y0, z0);
+					
+					if(world.getBlockState(des).getMaterial().isLiquid()) {
+						world.setBlockState(des, Blocks.AIR.getDefaultState());
 					}
 					
-					if(world.getBlockState(new BlockPos(x0, y0, z0)).getBlock()	 != Blocks.AIR) {
+					if(world.getBlockState(des).getBlock() != Blocks.AIR) {
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x0 + 0.5F;
 						rubble.posY = y0;
@@ -79,7 +83,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 						
 						world.spawnEntity(rubble);
 					
-						world.setBlockState(new BlockPos(x0, y0, z0), Blocks.AIR.getDefaultState());
+						world.setBlockState(des, Blocks.AIR.getDefaultState());
 						break;
 					}
 				}

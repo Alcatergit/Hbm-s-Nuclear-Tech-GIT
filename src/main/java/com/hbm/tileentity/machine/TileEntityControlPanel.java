@@ -48,6 +48,13 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 	public void onLoad(){
 		if(world.isRemote)
 			loadClient();
+		else {
+			for(Control c : panel.controls){
+				for(BlockPos b : c.connectedSet){
+					ControlEventSystem.get(world).subscribeTo(this, b);
+				}
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

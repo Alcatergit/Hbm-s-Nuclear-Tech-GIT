@@ -1,7 +1,9 @@
 package com.hbm.tileentity;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.generic.BlockDoorGeneric;
@@ -11,7 +13,6 @@ import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDoorAnimationPacket;
@@ -38,8 +39,9 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	public DoorDecl doorType;
 	public int openTicks = 0;
 	public long animStartTime = 0;
-	public boolean redstoned = false;
+	public int redstonePower;
 	public boolean shouldUseBB = false;
+	public Set<BlockPos> activatedBlocks = new HashSet<>(4);
 
 	private AudioWrapper audio;
 	private AudioWrapper audio2;
@@ -139,6 +141,15 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 				broadcastControlEvt();
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state, (byte)(shouldUseBB ? 1 : 0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+			
+			if(redstonePower == -1 && state == 0){
+				tryToggle(-1);
+			} else if(redstonePower > 0 && state == 1){
+				tryToggle(-1);
+			}
+			if(redstonePower == -1){
+				redstonePower = 0;
+			}
 		}
 	}
 
@@ -160,6 +171,10 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	}
 
 	public boolean tryToggle(EntityPlayer player){
+		if(state == 0 && redstonePower > 0){
+			//Redstone "power locks" doors, just like minecraft iron doors
+			return false;
+		}
 		if(this.state == 0) {
 			if(!world.isRemote && canAccess(player)) {
 				this.state = 3;
@@ -287,8 +302,13 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		this.state = tag.getByte("state");
 		this.openTicks = tag.getInteger("openTicks");
 		this.animStartTime = tag.getInteger("animStartTime");
-		this.redstoned = tag.getBoolean("redstoned");
+		this.redstonePower = tag.getInteger("redstoned");
 		this.shouldUseBB = tag.getBoolean("shouldUseBB");
+		NBTTagCompound activatedBlocks = tag.getCompoundTag("activatedBlocks");
+		this.activatedBlocks.clear();
+		for(int i = 0; i < activatedBlocks.getKeySet().size()/3; i ++){
+			this.activatedBlocks.add(new BlockPos(activatedBlocks.getInteger("x"+i), activatedBlocks.getInteger("y"+i), activatedBlocks.getInteger("z"+i)));
+		}
 		super.readFromNBT(tag);
 	}
 
@@ -297,8 +317,17 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		tag.setByte("state", state);
 		tag.setInteger("openTicks", openTicks);
 		tag.setLong("animStartTime", animStartTime);
-		tag.setBoolean("redstoned", redstoned);
+		tag.setInteger("redstoned", redstonePower);
 		tag.setBoolean("shouldUseBB", shouldUseBB);
+		NBTTagCompound activatedBlocks = new NBTTagCompound();
+		int i = 0;
+		for(BlockPos p : this.activatedBlocks){
+			activatedBlocks.setInteger("x"+i, p.getX());
+			activatedBlocks.setInteger("y"+i, p.getY());
+			activatedBlocks.setInteger("z"+i, p.getZ());
+			i++;
+		}
+		tag.setTag("activatedBlocks", activatedBlocks);
 		return super.writeToNBT(tag);
 	}
 
@@ -351,6 +380,25 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	@Override
 	public World getControlWorld(){
 		return getWorld();
+	}
+
+	public void updateRedstonePower(BlockPos pos){
+		//Drillgon200: Best I could come up with without having to use dummy tile entities
+		boolean powered = world.isBlockIndirectlyGettingPowered(pos) > 0;
+		boolean contained = activatedBlocks.contains(pos);
+		if(!contained && powered){
+			activatedBlocks.add(pos);
+			if(redstonePower == -1){
+				redstonePower = 0;
+			}
+			redstonePower++;
+		} else if(contained && !powered){
+			activatedBlocks.remove(pos);
+			redstonePower--;
+			if(redstonePower == 0){
+				redstonePower = -1;
+			}
+		}
 	}
 
 }

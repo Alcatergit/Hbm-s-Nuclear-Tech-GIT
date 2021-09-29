@@ -7,6 +7,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -84,6 +85,21 @@ public class BlockDoorGeneric extends BlockDummyable {
 		if(box.minY == 0 && box.maxY == 0)
 			return;
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
+		if(!world.isRemote){
+			int[] corePos = findCore(world, pos.getX(), pos.getY(), pos.getZ());
+			if(corePos != null){
+				TileEntity core = world.getTileEntity(new BlockPos(corePos[0], corePos[1], corePos[2]));
+				if(core instanceof TileEntityDoorGeneric){
+					TileEntityDoorGeneric door = (TileEntityDoorGeneric)core;
+					door.updateRedstonePower(pos);
+				}
+			}
+		}
+		super.neighborChanged(state, world, pos, blockIn, fromPos);
 	}
 	
 	@Override

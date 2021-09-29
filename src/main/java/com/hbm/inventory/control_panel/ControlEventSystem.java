@@ -26,6 +26,8 @@ public class ControlEventSystem {
 	private Map<BlockPos, Set<IControllable>> positionSubscriptions = new HashMap<>();
 	
 	public void addControllable(IControllable c){
+		if(allControllables.contains(c))
+			return;
 		for(String s : c.getInEvents()){
 			if(s.equals("tick")){
 				tickables.add(c);
@@ -58,14 +60,16 @@ public class ControlEventSystem {
 		if(!positionSubscriptions.containsKey(target.getControlPos())){
 			positionSubscriptions.put(target.getControlPos(), new HashSet<>());
 		}
-		positionSubscriptions.get(target.getControlPos()).add(subscriber);
+		if(!positionSubscriptions.get(target).contains(subscriber))
+			positionSubscriptions.get(target.getControlPos()).add(subscriber);
 	}
 	
 	public void subscribeTo(IControllable subscriber, BlockPos target){
 		if(!positionSubscriptions.containsKey(target)){
 			positionSubscriptions.put(target, new HashSet<>());
 		}
-		positionSubscriptions.get(target).add(subscriber);
+		if(!positionSubscriptions.get(target).contains(subscriber))
+			positionSubscriptions.get(target).add(subscriber);
 	}
 	
 	public void unsubscribeFrom(IControllable subscriber, IControllable target){
