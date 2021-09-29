@@ -2,14 +2,8 @@ package com.hbm.items.gear;
 
 import java.util.List;
 
-import com.hbm.capability.HbmCapability;
-import com.hbm.capability.HbmCapability.IHBMData;
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.items.armor.JetpackBase;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.entity.particle.EntityGasFlameFX;
+import com.hbm.items.ModItems;
 import com.hbm.render.model.ModelJetPack;
 
 import net.minecraft.client.model.ModelBiped;
@@ -18,30 +12,30 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class JetpackBooster extends JetpackBase {
+public class JetpackBooster extends ItemArmor {
 
 	private ModelJetPack model;
 	public static int maxFuel = 750;
 
 	public JetpackBooster(ArmorMaterial p_i45325_1_, int p_i45325_2_, EntityEquipmentSlot p_i45325_3_, String s) {
-		super(p_i45325_1_, p_i45325_2_, p_i45325_3_, ModForgeFluids.balefire, 32000, s);
+		super(p_i45325_1_, p_i45325_2_, p_i45325_3_);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
+		
+		ModItems.ALL_ITEMS.add(this);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("High-powered vectorized jetpack.");
-		tooltip.add("Highly increased fuel consumption.");
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.add("Kerosene: " + getFuel(stack) + "mB / " + maxFuel + "mB");
 	}
 
 
@@ -50,6 +44,7 @@ public class JetpackBooster extends JetpackBase {
 		return armorType == EntityEquipmentSlot.CHEST;
 	}
 
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
@@ -68,42 +63,87 @@ public class JetpackBooster extends JetpackBase {
 		return "hbm:textures/models/JetPack.png";
 	}
 
-	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
     	
-		IHBMData props = HbmCapability.getData(player);
-
-		if(!world.isRemote) {
-
-			if(getFuel(stack) > 0 && props.isJetpackActive()) {
-
-				NBTTagCompound data = new NBTTagCompound();
-				data.setString("type", "jetpack");
-				data.setInteger("player", player.getEntityId());
-				data.setInteger("mode", 1);
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 100));
-			}
-		}
-
-		if(getFuel(stack) > 0 && props.isJetpackActive()) {
-
-			if(player.motionY < 0.6D)
-				player.motionY += 0.1D;
-
-			Vec3d look = player.getLookVec();
-
-			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).lengthVector() < 5) {
-				player.motionX += look.x * 0.25;
-				player.motionY += look.y * 0.25;
-				player.motionZ += look.z * 0.25;
-
-				if(look.y > 0)
-					player.fallDistance = 0;
-			}
-
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.flamethrowerShoot, SoundCategory.PLAYERS, 0.25F, 1.0F);
-			this.useUpFuel(player, stack, 1);
-		}
+    	if(player.isSneaking() && this.getBoost(stack) == 0 && this.getCooldown(stack) == 0 && getFuel(stack) > 0) {
+    		this.setBoost(stack, 15);
+    		this.setCooldown(stack, 40);
+    	}
+    	
+    	if(this.getBoost(stack) > 0) {
+    		
+    		Vec3d vec = new Vec3d(player.getLookVec().x, 0, player.getLookVec().z);
+    		vec.normalize();
+    		player.motionY += 0.15;
+    		
+    		this.setBoost(stack, this.getBoost(stack) - 1);
+    		
+	    	if(!world.isRemote) {
+	    		EntityGasFlameFX fx = new EntityGasFlameFX(world);
+	    		fx.posX = player.posX - vec.x;
+	    		fx.posY = player.posY - 1;
+	    		fx.posZ = player.posZ - vec.z;
+	    		fx.motionY = -0.1;
+	    		world.spawnEntity(fx);
+    		}
+    		
+    		setFuel(stack, getFuel(stack) - 1);
+    		
+    		if(player.motionY > 0)
+    			player.fallDistance = 0;
+    	}
+    	
+    	if(this.getCooldown(stack) > 0)
+    		this.setCooldown(stack, this.getCooldown(stack) - 1);
+    	
+    	if(getFuel(stack) == 0)
+    		this.setBoost(stack, 0);
     }
     
+    public void setBoost(ItemStack stack, int i) {
+    	if(!stack.hasTagCompound())
+    		stack.setTagCompound(new NBTTagCompound());
+    	
+    	stack.getTagCompound().setInteger("boost", i);
+    }
+    
+    public int getBoost(ItemStack stack) {
+    	if(!stack.hasTagCompound())
+    		return 0;
+    	
+    	return stack.getTagCompound().getInteger("boost");
+    }
+    
+    public void setCooldown(ItemStack stack, int i) {
+    	if(!stack.hasTagCompound())
+    		stack.setTagCompound(new NBTTagCompound());
+    	
+    	stack.getTagCompound().setInteger("cool", i);
+    }
+    
+    public int getCooldown(ItemStack stack) {
+    	if(!stack.hasTagCompound())
+    		return 0;
+    	
+    	return stack.getTagCompound().getInteger("cool");
+    }
+	
+    public static int getFuel(ItemStack stack) {
+		if(stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			return 0;
+		}
+		
+		return stack.getTagCompound().getInteger("fuel");
+		
+	}
+	
+	public static void setFuel(ItemStack stack, int i) {
+		if(stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
+		
+		stack.getTagCompound().setInteger("fuel", i);
+		
+	}
 }

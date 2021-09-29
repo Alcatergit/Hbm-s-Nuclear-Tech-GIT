@@ -2,15 +2,12 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
-import com.hbm.blocks.turret.TurretBase;
+import com.hbm.blocks.bomb.TurretBase;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.tileentity.turret.TileEntityTurretBase;
-import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
-import com.hbm.tileentity.turret.TileEntityTurretCheapo;
+import com.hbm.tileentity.bomb.TileEntityTurretBase;
+import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -27,7 +24,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -74,46 +70,6 @@ public class ItemTurretControl extends Item {
 									turret.rotationPitch = -30;
 								if (turret.rotationPitch > 15)
 									turret.rotationPitch = 15;
-							}
-						}
-					}
-					if(te != null && te instanceof TileEntityTurretBaseNT) {
-						TileEntityTurretBaseNT turret = (TileEntityTurretBaseNT) te;
-						
-						RayTraceResult rpos = Library.rayTrace(player, 200, 1, true, true, false);
-						
-						if(pos == null)
-							rpos = Library.rayTrace(player, 200, 1);
-						
-						if(pos != null) { 
-							
-							Vec3 vecOrigin = Vec3.createVectorHelper(player.posX, player.posY + player.eyeHeight - player.getYOffset(), player.posZ);
-							Vec3 vecDestination = Vec3.createVectorHelper(rpos.getBlockPos().getX(), rpos.getBlockPos().getY(), rpos.getBlockPos().getZ());
-							
-							//List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.addCoord(pos.blockX, pos.blockY, pos.blockZ).expand(1.0, 1.0, 1.0));
-							List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(200, 200, 200));
-							
-							for(Entity e : list) {
-
-								if (e.canBeCollidedWith() && e != player) {
-									
-									RayTraceResult mop = e.getEntityBoundingBox().expand(0.2, 0.2, 0.2).calculateIntercept(vecOrigin.toVec3d(), vecDestination.toVec3d());
-									
-									if(mop != null) {
-										
-										rpos = mop;
-										rpos.typeOfHit = RayTraceResult.Type.ENTITY;
-										rpos.entityHit = e;
-									}
-								}
-							}
-							
-							if(rpos.typeOfHit == RayTraceResult.Type.ENTITY) {
-								turret.target = rpos.entityHit;
-								turret.turnTowards(turret.getEntityPos(rpos.entityHit));
-								
-							} else {
-								turret.turnTowards(Vec3.createVectorHelper(rpos.getBlockPos().getX() + 0.5, rpos.getBlockPos().getY() + 0.5, rpos.getBlockPos().getZ() + 0.5).toVec3d());
 							}
 						}
 					}

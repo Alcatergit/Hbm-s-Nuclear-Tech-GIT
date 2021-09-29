@@ -27,7 +27,6 @@ public class CrystallizerRecipes {
 	private static List<IRecipeWrapper> jeiRecipes = null;
 
 	public static void register() {
-		recipes.put("oreCoal", new ItemStack(ModItems.crystal_coal));
 		recipes.put("oreIron", new ItemStack(ModItems.crystal_iron));
 		recipes.put("oreGold", new ItemStack(ModItems.crystal_gold));
 		recipes.put("oreRedstone", new ItemStack(ModItems.crystal_redstone));
@@ -49,8 +48,6 @@ public class CrystallizerRecipes {
 		recipes.put("oreLithium", new ItemStack(ModItems.crystal_lithium));
 		recipes.put("oreStarmetal", new ItemStack(ModItems.crystal_starmetal));
 		recipes.put("oreRareEarth", new ItemStack(ModItems.crystal_rare));
-		recipes.put("oreCobalt", new ItemStack(ModItems.crystal_cobalt));
-		recipes.put("oreCinnabar", new ItemStack(ModItems.crystal_cinnebar));
 		
 		recipes.put(new ComparableStack(ModBlocks.ore_nether_fire), new ItemStack(ModItems.crystal_phosphorus));
 		recipes.put(new ComparableStack(ModBlocks.ore_tikite), new ItemStack(ModItems.crystal_trixite));
@@ -62,10 +59,6 @@ public class CrystallizerRecipes {
 		recipes.put(new ComparableStack(ModBlocks.gravel_obsidian), new ItemStack(ModBlocks.brick_obsidian));
 		recipes.put("blockRedstone", new ItemStack(ModItems.nugget_mercury));
 		
-		recipes.put(new ComparableStack(ModItems.cinnebar), new ItemStack(ModItems.nugget_mercury, 3));
-		recipes.put("blockCoal", new ItemStack(ModBlocks.block_graphite));
-		recipes.put(new ComparableStack(ModBlocks.stone_gneiss), new ItemStack(ModItems.powder_lithium));
-		
 		recipes.put(new ComparableStack(ModItems.powder_diamond), new ItemStack(Items.DIAMOND));
 		recipes.put(new ComparableStack(ModItems.powder_emerald), new ItemStack(Items.EMERALD));
 		recipes.put(new ComparableStack(ModItems.powder_lapis), new ItemStack(Items.DYE, 1, 4));
@@ -75,15 +68,6 @@ public class CrystallizerRecipes {
 		recipes.put(new ComparableStack(ModItems.meteorite_sword_treated), new ItemStack(ModItems.meteorite_sword_etched, 1));
 		
 		recipes.put(new ComparableStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER));
-		recipes.put(new ComparableStack(ModItems.coal_infernal), new ItemStack(ModItems.solid_fuel));
-		
-		List<ItemStack> quartz = OreDictionary.getOres("crystalCertusQuartz");
-		
-		if(quartz != null && !quartz.isEmpty()) {
-			ItemStack qItem = quartz.get(0).copy();
-			qItem.setCount(6);
-			recipes.put("oreCertusQuartz", qItem);
-		}
 	}
 
 	public static ItemStack getOutput(ItemStack stack) {

@@ -11,10 +11,10 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemRTGPellet extends ItemHazard {
+public class ItemRTGPellet extends ItemRadioactive {
 
-	public ItemRTGPellet(float radiation, boolean fire, String s) {
-		super(radiation, fire, s);
+	public ItemRTGPellet(float radiation, String s) {
+		super(radiation, s);
 	}
 	
 	private static final String[] facts = new String[] {

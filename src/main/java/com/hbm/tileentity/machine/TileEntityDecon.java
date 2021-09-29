@@ -2,7 +2,7 @@ package com.hbm.tileentity.machine;
 
 import java.util.List;
 
-import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -18,8 +18,8 @@ public class TileEntityDecon extends TileEntity implements ITickable {
 
 			if(!entities.isEmpty()) {
 				for(Entity e : entities) {
-					if(e.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
-						e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(0.5F);
+					if(e.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+						e.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).decreaseRads(0.5F);
 				}
 			}
 		}

@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -64,10 +62,6 @@ public class RecipesCommon {
 			return stacksize;
 		}
 		
-		public void setCount(int c){
-			stacksize = c;
-		}
-		
 		/*
 		 * Is it unprofessional to pool around in child classes from an abstract superclass? Do I look like I give a shit?
 		 */
@@ -89,14 +83,6 @@ public class RecipesCommon {
 
 			return false;
 		}
-		
-		/**
-		 * Whether the supplied itemstack is applicable for a recipe (e.g. anvils). Slightly different from {@code isApplicable}.
-		 * @param stack the ItemStack to check
-		 * @param ignoreSize whether size should be ignored entirely or if the ItemStack needs to be >at least< the same size as this' size
-		 * @return
-		 */
-		public abstract boolean matchesRecipe(ItemStack stack, boolean ignoreSize);
 
 		public abstract AStack copy();
 		public abstract ItemStack getStack();
@@ -200,22 +186,9 @@ public class RecipesCommon {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			if(item == null) {
-				MainRegistry.logger.error("ComparableStack has a null item! This is a serious issue!");
-				Thread.dumpStack();
-				item = Items.STICK;
-			}
-			
 			ResourceLocation name = Item.REGISTRY.getNameForObject(item);
-			
-			if(name == null) {
-				MainRegistry.logger.error("ComparableStack holds an item that does not seem to be registered. How does that even happen?");
-				Thread.dumpStack();
-				item = Items.STICK; //we know sticks have a name, so sure, why not
-			}
-			
 			if(name != null)
-				result = prime * result + Item.REGISTRY.getNameForObject(item).hashCode(); //using the int ID will cause fucky-wuckys if IDs are scrambled
+				result = prime * result + name.hashCode(); //using the int ID will cause fucky-wuckys if IDs are scrambled
 			result = prime * result + meta;
 			result = prime * result + stacksize;
 			return result;
@@ -270,24 +243,6 @@ public class RecipesCommon {
 				return 1;
 
 			return 0;
-		}
-		
-		@Override
-		public boolean matchesRecipe(ItemStack stack, boolean ignoreSize) {
-			
-			if(stack == null)
-				return false;
-			
-			if(stack.getItem() != this.item)
-				return false;
-			
-			if(this.meta != OreDictionary.WILDCARD_VALUE && stack.getItemDamage() != this.meta)
-				return false;
-			
-			if(!ignoreSize && stack.getCount() < this.stacksize)
-				return false;
-			
-			return true;
 		}
 		
 		@Override
@@ -355,11 +310,6 @@ public class RecipesCommon {
 		}
 		
 		@Override
-		public boolean matchesRecipe(ItemStack stack, boolean ignoreSize){
-			return super.matchesRecipe(stack, ignoreSize) && Library.tagContainsOther(this.stack.getTagCompound(), stack.getTagCompound());
-		}
-		
-		@Override
 		public String toString() {
 			return "NbtComparableStack: " + stack.toString();
 		}
@@ -392,11 +342,7 @@ public class RecipesCommon {
 		
 		@Override
 		public List<ItemStack> getStackList(){
-			List<ItemStack> list = Library.copyItemStackList(toStacks());
-			for(ItemStack stack : list){
-				stack.setCount(this.stacksize);
-			}
-			return list;
+			return toStacks();
 		}
 		
 		@Override
@@ -419,28 +365,6 @@ public class RecipesCommon {
 				return -1;
 
 			return 0;
-		}
-		
-		@Override
-		public boolean matchesRecipe(ItemStack stack, boolean ignoreSize) {
-			
-			if(stack == null || stack.isEmpty())
-				return false;
-			
-			if(!ignoreSize && stack.getCount() < this.stacksize)
-				return false;
-			
-			int[] ids = OreDictionary.getOreIDs(stack);
-			
-			if(ids == null || ids.length == 0)
-				return false;
-			
-			for(int i = 0; i < ids.length; i++) {
-				if(this.name.equals(OreDictionary.getOreName(ids[i])))
-					return true;
-			}
-			
-			return false;
 		}
 
 		@Override

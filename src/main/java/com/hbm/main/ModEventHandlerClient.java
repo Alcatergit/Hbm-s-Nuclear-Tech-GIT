@@ -19,11 +19,10 @@ import org.lwjgl.util.glu.Project;
 import com.google.common.collect.Queues;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
-import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
-import com.hbm.entity.siege.SiegeTier;
 import com.hbm.flashlight.Flashlight;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
@@ -47,7 +46,6 @@ import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.gui.GUIArmorTable;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ItemArmorMod;
-import com.hbm.items.armor.JetpackBase;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.machine.ItemAssemblyTemplate;
@@ -56,14 +54,9 @@ import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.items.machine.ItemRBMKPellet;
 import com.hbm.items.special.ItemHot;
-import com.hbm.items.special.ItemWasteLong;
-import com.hbm.items.special.ItemWasteShort;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemFluidCanister;
-import com.hbm.items.tool.ItemGuideBook;
-import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.items.weapon.ItemGunShotty;
@@ -121,7 +114,6 @@ import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.util.RenderOverhead;
-import com.hbm.render.world.RenderNTMSkybox;
 import com.hbm.sound.GunEgonSoundHandler;
 import com.hbm.sound.MovingSoundChopper;
 import com.hbm.sound.MovingSoundChopperMine;
@@ -132,7 +124,6 @@ import com.hbm.sound.MovingSoundXVL1456;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
@@ -184,9 +175,6 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderSurface;
-import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -283,7 +271,6 @@ public class ModEventHandlerClient {
 		if(item == Items.AIR)
 			return;
 
-		//Drillgon200: I hate myself for making this
 		if(item == ModItems.chemistry_icon) {
 			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + EnumChemistryTemplate.getEnum(i).getName().toLowerCase(), "inventory"));
@@ -309,37 +296,9 @@ public class ModEventHandlerClient {
 		} else if(item == Item.getItemFromBlock(ModBlocks.brick_jungle_trap)){
 			for(int i = 0; i < Trap.values().length; i ++)
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-		} else if(item instanceof ItemGuideBook){
-			for(int i = 0; i < ItemGuideBook.BookType.values().length; i ++)
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		} else if(item instanceof ItemHot){
-			for(int i = 0; i < 15; i ++)
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			ModelLoader.setCustomModelResourceLocation(item, 15, new ModelResourceLocation(item.getRegistryName() + "_hot", "inventory"));
-		} else if(item instanceof ItemRBMKPellet){
-			for(int xe = 0; xe < 2; xe ++){
-				for(int en = 0; en < 5; en ++){
-					ModelLoader.setCustomModelResourceLocation(item, en+xe*5, new ModelResourceLocation(item.getRegistryName() + "_e" + en + (xe > 0 ? "_xe" : ""), "inventory"));
-				}
-			}
-			//for(int i = 0; i < 10; i ++)
-			//	ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-		} else if(item instanceof ItemWasteLong){
-			for(int i = 0; i < ItemWasteLong.WasteClass.values().length; i ++){
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
-		} else if(item instanceof ItemWasteShort){
-			for(int i = 0; i < ItemWasteShort.WasteClass.values().length; i ++){
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
-		} else if(item == ModItems.coin_siege){
-			for(int i = 0; i < SiegeTier.getLength(); i ++){
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":coin_siege_" + SiegeTier.tiers[i].name, "inventory"));
-			}
-		} else if(item == Item.getItemFromBlock(ModBlocks.volcano_core)){
-			for(int i = 0; i < 4; i ++){
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-			}
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(item.getRegistryName() + "_hot", "inventory"));
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, ((IHasCustomModel) item).getResourceLocation());
 		} else {
@@ -518,8 +477,6 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.diamond_gavel, reg);
 		swapModelsNoGui(ModItems.mese_gavel, reg);
 		swapModels(ModItems.gun_bolter, reg);
-		swapModels(ModItems.ingot_steel_dusted, reg);
-		swapModels(ModItems.ingot_chainsteel, reg);
 		swapModels(ModItems.ingot_meteorite, reg);
 		swapModels(ModItems.ingot_meteorite_forged, reg);
 		swapModels(ModItems.blade_meteorite, reg);
@@ -529,7 +486,6 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.cc_plasma_gun, reg);
 		swapModels(ModItems.gun_egon, reg);
 		swapModels(ModItems.jshotgun, reg);
-		swapModels(ModItems.gun_ar15, reg);
 		
 		swapModels(ModItems.meteorite_sword_seared, reg);
 		swapModels(ModItems.meteorite_sword_reforged, reg);
@@ -703,17 +659,6 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"));
-		
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_still"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_flowing"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/pain_still"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/pain_flowing"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastefluid_still"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastefluid_flowing"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastegas_still"));
-		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastegas_flowing"));
 
 		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		particle_base = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/particle_base"));
@@ -1009,24 +954,6 @@ public class ModEventHandlerClient {
 		JetpackHandler.inputUpdate(e);
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void setNTMSkybox(ClientTickEvent event){
-		if(event.phase == Phase.START) {
-			
-			World world = Minecraft.getMinecraft().world;
-			
-			if(world != null && world.provider instanceof WorldProviderSurface && !RenderNTMSkybox.didLastRender) {
-				
-				IRenderHandler sky = world.provider.getSkyRenderer();
-				if(!(sky instanceof RenderNTMSkybox)) {
-					world.provider.setSkyRenderer(new RenderNTMSkybox(sky));
-				}
-			}
-			
-			RenderNTMSkybox.didLastRender = false;
-		}
-	}
-	
 	@SubscribeEvent
 	public void clientTick(ClientTickEvent e) {
 		if(e.phase == Phase.END) {
@@ -1077,35 +1004,6 @@ public class ModEventHandlerClient {
 		if(Minecraft.getMinecraft().player != null){
 			JetpackHandler.clientTick(e);
 		}
-	}
-	
-	@SubscribeEvent
-	public void onArmorRenderEvent(RenderPlayerEvent.Pre event){
-		EntityPlayer player = event.getEntityPlayer();
-		GL11.glPushMatrix();
-		GL11.glTranslated(0, player.isSneaking() ? 1.1 : 1.4, 0);
-		GL11.glRotated(180, 0, 0, 1);
-		
-		for(int i = 0; i < 4; i++) {
-			
-			ItemStack armor = player.inventory.armorItemInSlot(i);
-			
-			if(armor != null && ArmorModHandler.hasMods(armor)) {
-				
-				for(ItemStack mod : ArmorModHandler.pryMods(armor)) {
-					
-					if(mod != null && mod.getItem() instanceof ItemArmorMod) {
-						((ItemArmorMod)mod.getItem()).modRender(event, armor);
-					}
-				}
-			}
-			
-			//because armor that isn't ItemArmor doesn't render at all
-			if(armor != null && armor.getItem() instanceof JetpackBase) {
-				((ItemArmorMod)armor.getItem()).modRender(event, armor);
-			}
-		}
-		GL11.glPopMatrix();
 	}
 	
 	@SubscribeEvent
@@ -1357,31 +1255,26 @@ public class ModEventHandlerClient {
 					GlStateManager.enableTexture2D();
 					player.turn(deltaMouseX, deltaMouseY);
 					GlStateManager.color(1F, 1F, 1F, 1F);*/
-					if(!(player.getHeldItemMainhand().getItem() instanceof ItemCrucible && ItemCrucible.getCharges(player.getHeldItemMainhand()) == 0)){
-						Vec3d pos1 = ItemSwordCutter.startPos;
-						Vec3d pos2 = player.getLook(partialTicks);
-						Vec3d norm = ItemSwordCutter.startPos.crossProduct(player.getLook(partialTicks));
-						GlStateManager.disableTexture2D();
-						GlStateManager.color(0, 0, 0, 1);
-						GL11.glPushMatrix();
-						GL11.glLoadIdentity();
-						
-						GL11.glRotated(player.rotationPitch, 1, 0, 0);
-						GL11.glRotated(player.rotationYaw+180, 0, 1, 0);
-						
-						buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-						buf.pos(pos1.x, pos1.y, pos1.z).endVertex();
-						buf.pos(pos2.x, pos2.y, pos2.z).endVertex();
-						tes.draw();
-						GL11.glPopMatrix();
-						GlStateManager.color(1, 1, 1, 1);
-						GlStateManager.enableTexture2D();
-						if(norm.lengthSquared() > 0.001F){
-							ItemSwordCutter.planeNormal = norm.normalize();
-						}
-					} else {
-						ItemSwordCutter.clicked = false;
-						ItemSwordCutter.planeNormal = null;
+					Vec3d pos1 = ItemSwordCutter.startPos;
+					Vec3d pos2 = player.getLook(partialTicks);
+					Vec3d norm = ItemSwordCutter.startPos.crossProduct(player.getLook(partialTicks));
+					GlStateManager.disableTexture2D();
+					GlStateManager.color(0, 0, 0, 1);
+					GL11.glPushMatrix();
+					GL11.glLoadIdentity();
+					
+					GL11.glRotated(player.rotationPitch, 1, 0, 0);
+					GL11.glRotated(player.rotationYaw+180, 0, 1, 0);
+					
+					buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+					buf.pos(pos1.x, pos1.y, pos1.z).endVertex();
+					buf.pos(pos2.x, pos2.y, pos2.z).endVertex();
+					tes.draw();
+					GL11.glPopMatrix();
+					GlStateManager.color(1, 1, 1, 1);
+					GlStateManager.enableTexture2D();
+					if(norm.lengthSquared() > 0.001F){
+						ItemSwordCutter.planeNormal = norm.normalize();
 					}
 				} else {
 					ItemSwordCutter.clicked = false;
@@ -1531,13 +1424,6 @@ public class ModEventHandlerClient {
 		}
 	}
 	
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void cancelVanished(RenderLivingEvent.Pre<EntityLivingBase> event){
-		if(MainRegistry.proxy.isVanished(event.getEntity())){
-			event.setCanceled(true);
-		}
-	}
-	
 	@SubscribeEvent
 	public void preRenderEvent(RenderLivingEvent.Pre<EntityLivingBase> event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
@@ -1597,8 +1483,8 @@ public class ModEventHandlerClient {
 	
 					float rads = 0;
 	
-					if(player.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
-						rads = player.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).getRads();
+					if(player.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+						rads = player.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null).getRads();
 	
 					RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
 				}
@@ -1607,13 +1493,8 @@ public class ModEventHandlerClient {
 				JetpackHandler.renderHUD(player, event.getResolution());
 			}
 		}
-		
-		/// DODD DIAG HOOK FOR RBMK
-		if(event.getType() == ElementType.CROSSHAIRS) {
-			TileEntityRBMKBase.diagnosticPrintHook(event);
-		}
 
-		/// HANDLE ANIMATION BUSES ///
+		/// HANLDE ANIMATION BUSES ///
 
 		if(event.getType() == ElementType.ALL){
 			for(int i = 0; i < HbmAnimations.hotbar.length; i++) {
@@ -1655,7 +1536,7 @@ public class ModEventHandlerClient {
 		}
 	}
 	
-	@SubscribeEvent(priority = EventPriority.HIGH)
+	@SubscribeEvent
 	public void preRenderPlayer(RenderPlayerEvent.Pre evt) {
 		PotionEffect invis = evt.getEntityPlayer().getActivePotionEffect(MobEffects.INVISIBILITY);
 
@@ -1716,7 +1597,9 @@ public class ModEventHandlerClient {
 		EntityPlayer player = event.getEntityPlayer();
 		//GLUON GUN//
 		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
-		EgonBackpackRenderer.showBackpack = false;
+		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+			EgonBackpackRenderer.showBackpack = false;
+		}
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){
 			GL11.glPushMatrix();
 			float partialTicks = event.getPartialRenderTick();

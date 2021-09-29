@@ -20,7 +20,6 @@ public class EntityBalefire extends Entity {
 	public ExplosionBalefire exp;
 	public int speed = 1;
 	public boolean did = false;
-	public boolean mute = false;
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -28,7 +27,7 @@ public class EntityBalefire extends Entity {
 		destructionRange = nbt.getInteger("destructionRange");
 		speed = nbt.getInteger("speed");
 		did = nbt.getBoolean("did");
-		mute = nbt.getBoolean("mute");
+		
     	
 		exp = new ExplosionBalefire((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
 		exp.readFromNbt(nbt, "exp_");
@@ -43,8 +42,7 @@ public class EntityBalefire extends Entity {
 		nbt.setInteger("destructionRange", destructionRange);
 		nbt.setInteger("speed", speed);
 		nbt.setBoolean("did", did);
-		nbt.setBoolean("mute", mute);
-		
+    	
 		if(exp != null)
 			exp.saveToNbt(nbt, "exp_");
 		
@@ -81,13 +79,12 @@ public class EntityBalefire extends Entity {
         	}
         }
         
-    	if(!mute && rand.nextInt(5) == 0)
+    	if(rand.nextInt(5) == 0)
         	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
         	
         if(!flag)
         {
-        	if(!mute)
-        		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+        	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
         	ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2);
         }
         
@@ -96,9 +93,4 @@ public class EntityBalefire extends Entity {
 
 	@Override
 	protected void entityInit() { }
-	
-	public EntityBalefire mute() {
-		this.mute = true;
-		return this;
-	}
 }

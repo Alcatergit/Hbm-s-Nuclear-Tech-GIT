@@ -139,7 +139,7 @@ public class ParticleMukeCloud extends Particle {
 		GlStateManager.enableLighting();
 	}
 	
-	public ResourceLocation getTexture() {
+	public static ResourceLocation getTexture() {
 		return texture;
 	}
 

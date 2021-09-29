@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 public class ControlEvent {
 
 	private static final HashMap<String, ControlEvent> REGISTRY = new HashMap<>();
@@ -51,27 +49,6 @@ public class ControlEvent {
 		return evt;
 	}
 	
-	public NBTTagCompound writeToNBT(NBTTagCompound tag){
-		tag.setString("name", this.name);
-		NBTTagCompound vars = new NBTTagCompound();
-		for(Entry<String, DataValue> e : this.vars.entrySet()){
-			vars.setTag(e.getKey(), e.getValue().writeToNBT());
-		}
-		tag.setTag("vars", vars);
-		return tag;
-	}
-	
-	public static ControlEvent readFromNBT(NBTTagCompound tag){
-		ControlEvent evt = ControlEvent.newEvent(tag.getString("name"));
-		NBTTagCompound vars = tag.getCompoundTag("vars");
-		for(String k : vars.getKeySet()){
-			DataValue val = DataValue.newFromNBT(vars.getTag(k));
-			if(val != null)
-				evt.vars.put(k, val);
-		}
-		return evt;
-	}
-	
 	public static ControlEvent newEvent(String name){
 		return getRegisteredEvent(name).copy();
 	}
@@ -90,12 +67,7 @@ public class ControlEvent {
 	public static void init(){
 		register(new ControlEvent("tick").setVar("time", 0));
 		register(new ControlEvent("door_open_state").setVar("state", 0));
-		register(new ControlEvent("door_toggle").setVar("passcode", 0));
-		register(new ControlEvent("turret_set_target").setVar("players", false).setVar("passive", false).setVar("hostile", true).setVar("machines", true));
-		register(new ControlEvent("turret_switch").setVar("isOn", true));
-		register(new ControlEvent("lever_toggle").setVar("isOn", false));
-		register(new ControlEvent("spinny_light_power").setVar("isOn", false));
-		register(new ControlEvent("siren_set_state").setVar("isOn", false));
+		register(new ControlEvent("door_toggle"));
 		register(new ControlEvent("ctrl_button_press"));
 		register(new ControlEvent("initialize"));
 	}

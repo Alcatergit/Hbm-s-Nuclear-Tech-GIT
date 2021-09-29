@@ -1,7 +1,5 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
@@ -12,11 +10,9 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
 
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
@@ -35,14 +31,6 @@ public class JetpackBreak extends JetpackBase {
 		return "hbm:textures/models/JetPackBlue.png";
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-		tooltip.add("Regular jetpack that will automatically hover mid-air.");
-		tooltip.add("Sneaking will stop hover mode.");
-    	tooltip.add("Hover mode will consume less fuel and increase air-mobility.");
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-	}
-	
 	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
 		IHBMData props = HbmCapability.getData(player);
 		if(world.isRemote) {

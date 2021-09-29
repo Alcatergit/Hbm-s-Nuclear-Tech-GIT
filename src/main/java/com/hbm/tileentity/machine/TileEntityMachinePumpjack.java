@@ -131,7 +131,6 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 		return (power * i) / maxPower;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		int timer = 20;
@@ -185,7 +184,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 						Block b = state.getBlock();
 						if(b == ModBlocks.oil_pipe)
 							continue;
-						if((b.isReplaceable(world, checkPos) || b.getExplosionResistance(null) < 100) && !(b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty)) {
+						if((b.isReplaceable(world, checkPos) || b.getExplosionResistance(world, checkPos, null, null) < 100) && !(b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty)) {
 							world.setBlockState(checkPos, ModBlocks.oil_pipe.getDefaultState());
 							
 							//Code 2: The drilling ended

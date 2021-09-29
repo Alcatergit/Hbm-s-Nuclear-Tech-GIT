@@ -607,7 +607,6 @@ public class ExplosionChaos {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void pulse(World world, int x, int y, int z, int bombStartStrength) {
 
 		int r = bombStartStrength;
@@ -623,7 +622,7 @@ public class ExplosionChaos {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
-						if(world.getBlockState(new BlockPos(X, Y, Z)).getBlock().getExplosionResistance(null) <= 70)
+						if(world.getBlockState(new BlockPos(X, Y, Z)).getBlock().getExplosionResistance(world, new BlockPos(X, Y, Z), null, null) <= 70)
 							pDestruction(world, X, Y, Z);
 					}
 				}

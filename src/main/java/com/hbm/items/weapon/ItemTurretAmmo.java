@@ -3,7 +3,7 @@ package com.hbm.items.weapon;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.turret.TileEntityTurretBase;
+import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;

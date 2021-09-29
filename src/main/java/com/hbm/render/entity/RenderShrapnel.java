@@ -2,7 +2,6 @@ package com.hbm.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelShrapnel;
 
@@ -33,12 +32,6 @@ public class RenderShrapnel extends Render<Entity> {
 		GL11.glRotatef((rocket.ticksExisted % 360) * 10, 1, 1, 1);
 
 		bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/entity/shrapnel.png"));
-		
-		if(rocket instanceof EntityShrapnel) {
-			if(rocket.getDataManager().get(EntityShrapnel.TRAIL) == 2) { //scale up lava blobs
-				GL11.glScaled(3, 3, 3);
-			}
-		}
 		
 		mine.renderAll(0.0625F);
 		GL11.glPopMatrix();

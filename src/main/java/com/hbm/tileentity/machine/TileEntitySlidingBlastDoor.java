@@ -3,17 +3,13 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDoorAnimationPacket;
-import com.hbm.sound.AudioWrapper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -28,8 +24,6 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	public boolean shouldUseBB = true;
 	public boolean redstoned = false;
 	public boolean keypadLocked = false;
-	
-	private AudioWrapper audio;
 
 	@Override
 	public void update() {
@@ -186,43 +180,8 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	}
 
 	@Override
-	public void onChunkUnload(){
-		if(audio != null) {
-			audio.stopSound();
-			audio = null;
-    	}
-	}
-	
-	@Override
-	public void invalidate(){
-		if(audio != null) {
-			audio.stopSound();
-			audio = null;
-    	}
-		super.invalidate();
-	}
-	
-	@Override
 	public void handleNewState(byte state) {
 		if(this.state != state){
-			if(this.state == 0 && state == 3){
-				if(audio == null){
-					audio = MainRegistry.proxy.getLoopedSoundStartStop(world, HBMSoundHandler.qe_sliding_opening, null, HBMSoundHandler.qe_sliding_opened, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2, 1);
-					audio.startSound();
-				}
-			}
-			if(this.state == 1 && state == 2){
-				if(audio == null){
-					audio = MainRegistry.proxy.getLoopedSoundStartStop(world, HBMSoundHandler.qe_sliding_opening, null, HBMSoundHandler.qe_sliding_shut, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2, 1);
-					audio.startSound();
-				}
-			}
-			if((this.state == 3 && state == 1) || (this.state == 2 && state == 0)){
-				if(audio != null){
-					audio.stopSound();
-					audio = null;
-				}
-			}
 			if(this.state < 2 && state >= 2){
 				sysTime = System.currentTimeMillis();
 			}

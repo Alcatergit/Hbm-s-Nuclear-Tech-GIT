@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -39,7 +37,7 @@ public class ExplosionHurtUtil {
 			double interpolation = 1 - (dist / radius);
 			float rad = (float) (outer + (inner - outer) * interpolation);
 
-			ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, rad);
+			ContaminationUtil.applyRadData(entity, rad);
 		}
 	}
 }

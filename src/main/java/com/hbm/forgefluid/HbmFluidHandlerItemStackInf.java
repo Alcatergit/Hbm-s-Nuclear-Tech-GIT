@@ -16,18 +16,17 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 public class HbmFluidHandlerItemStackInf implements IFluidHandlerItem, ICapabilityProvider {
 
 	public static final String FLUID_NBT_KEY = "HbmFluidKey";
+	public static final int MAX_DRAIN_AMOUNT = 50;
 
 	private ItemStack container;
-	private int maxDrainAmount;
 	
-	public HbmFluidHandlerItemStackInf(ItemStack stack, int maxDrain){
+	public HbmFluidHandlerItemStackInf(ItemStack stack){
 		container = stack;
-		this.maxDrainAmount = maxDrain;
 	}
 	
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[]{new FluidTankProperties(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2 ? new FluidStack(FluidRegistry.WATER, maxDrainAmount) : null, maxDrainAmount)};
+		return new IFluidTankProperties[]{new FluidTankProperties(container.getItem() == ModItems.inf_water ? new FluidStack(FluidRegistry.WATER, MAX_DRAIN_AMOUNT) : null, MAX_DRAIN_AMOUNT)};
 	}
 	
 	@Override
@@ -37,17 +36,17 @@ public class HbmFluidHandlerItemStackInf implements IFluidHandlerItem, ICapabili
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2)
-			return new FluidStack(FluidRegistry.WATER, maxDrainAmount);
+		if(container.getItem() == ModItems.inf_water)
+			return new FluidStack(FluidRegistry.WATER, MAX_DRAIN_AMOUNT);
 		if(resource == null)
 			return null;
-		return new FluidStack(resource.getFluid(), maxDrainAmount);
+		return new FluidStack(resource.getFluid(), MAX_DRAIN_AMOUNT);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2)
-			return new FluidStack(FluidRegistry.WATER, maxDrainAmount);
+		if(container.getItem() == ModItems.inf_water)
+			return new FluidStack(FluidRegistry.WATER, MAX_DRAIN_AMOUNT);
 		return null;
 	}
 

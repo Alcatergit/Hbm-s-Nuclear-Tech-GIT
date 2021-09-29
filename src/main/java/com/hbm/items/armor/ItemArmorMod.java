@@ -9,7 +9,6 @@ import com.hbm.items.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -80,7 +79,7 @@ public class ItemArmorMod extends Item {
 	
 	public void modDamage(LivingHurtEvent event, ItemStack armor) { }
 	
-	public Multimap<String, AttributeModifier> getModifiers(EntityEquipmentSlot slot, ItemStack armor) { return null; }
+	public Multimap<String, AttributeModifier> getModifiers(ItemStack armor) { return null; }
 	
 	@SideOnly(Side.CLIENT)
 	public void modRender(RenderPlayerEvent.Pre event, ItemStack armor) { }

@@ -2,14 +2,11 @@ package com.hbm.items.food;
 
 import java.util.List;
 
-import com.hbm.config.VersatileConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -42,7 +39,6 @@ public class ItemEnergy extends Item {
         		worldIn.newExplosion(player, player.posX, player.posY, player.posZ, 5F, true, true);
         		return super.onItemUseFinish(stack, worldIn, entity);
         	}
-			VersatileConfig.applyPotionSickness(player, 5);
 			if(!player.capabilities.isCreativeMode) {
 				stack.shrink(1);
 			}
@@ -88,13 +84,13 @@ public class ItemEnergy extends Item {
 				player.heal(6F);
 				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30 * 20, 0));
 				player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30 * 20, 2));
-				ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 5.0F);
+				ContaminationUtil.applyRadDirect(player, 5.0F);
 			}
 			if(this == ModItems.bottle_nuka) {
 				player.heal(4F);
 				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30 * 20, 1));
 				player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 30 * 20, 1));
-				ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 5.0F);
+				ContaminationUtil.applyRadDirect(player, 5.0F);
 			}
 			if(this == ModItems.bottle_sparkle) {
 				player.heal(10F);
@@ -102,7 +98,7 @@ public class ItemEnergy extends Item {
 				player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 120 * 20, 2));
 				player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 120 * 20, 2));
 				player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 120 * 20, 1));
-				ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 5.0F);
+				ContaminationUtil.applyRadDirect(player, 5.0F);
 			}
 			if(!player.capabilities.isCreativeMode)
 				if(this == ModItems.bottle_cherry || this == ModItems.bottle_nuka) {
@@ -118,7 +114,7 @@ public class ItemEnergy extends Item {
 				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30 * 20, 1));
 				player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30 * 20, 2));
 				player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30 * 20, 1));
-				ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 15.0F);
+				ContaminationUtil.applyRadDirect(player, 15.0F);
 				if(!player.capabilities.isCreativeMode) {
 					Library.addToInventoryOrDrop(player, new ItemStack(ModItems.cap_quantum));
 					if(stack.isEmpty()) {
@@ -145,7 +141,7 @@ public class ItemEnergy extends Item {
                 player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 120 * 20, 0));
                 player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 120 * 20, 4));
                 player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 120 * 20, 1));
-                ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 15.0F);
+                ContaminationUtil.applyRadDirect(player, 15.0F);
                 
                 if(!player.capabilities.isCreativeMode){
                 	Library.addToInventoryOrDrop(player, new ItemStack(ModItems.cap_rad));

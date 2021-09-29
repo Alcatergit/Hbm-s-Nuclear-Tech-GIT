@@ -1,7 +1,5 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -147,7 +145,7 @@ public class ModelJetPack extends ModelBiped {
 		this.JetPack.rotationPointY = this.bipedBody.rotationPointY;
 		this.JetPack.rotationPointZ = this.bipedBody.rotationPointZ;
 		this.JetPack.rotateAngleX = this.bipedBody.rotateAngleX;
-		this.JetPack.rotateAngleY = this.bipedBody.rotateAngleY + (float)Math.toRadians(f3);
+		this.JetPack.rotateAngleY = this.bipedBody.rotateAngleY;
 		this.JetPack.rotateAngleZ = this.bipedBody.rotateAngleZ;
 	}
 

@@ -2,98 +2,43 @@ package com.hbm.items.armor;
 
 import java.util.List;
 
-import com.hbm.handler.ArmorModHandler;
-import com.hbm.handler.ArmorUtil;
+import com.hbm.items.ModItems;
 import com.hbm.render.model.ModelJetPack;
 import com.hbm.util.I18nUtil;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class JetpackBase extends ItemArmorMod {
+public class JetpackBase extends ItemArmor {
 
 	private ModelJetPack model;
 	public Fluid fuel;
 	public int maxFuel;
 	
 	public JetpackBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, Fluid fuel, int maxFuel, String s) {
-		super(ArmorModHandler.plate_only, false, true, false, false, s);
+		super(materialIn, renderIndexIn, equipmentSlotIn);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
 		this.fuel = fuel;
 		this.maxFuel = maxFuel;
+		
+		ModItems.ALL_ITEMS.add(this);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.LIGHT_PURPLE + I18nUtil.resolveKey(fuel.getUnlocalizedName()) + ": " + getFuel(stack) + "mB / " + this.maxFuel + "mB");
-		tooltip.add("");
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(TextFormatting.GOLD + "Can be worn on its own!");
-	}
-	
-	@Override
-	public void addDesc(List<String> list, ItemStack stack, ItemStack armor) {
-		
-		ItemStack jetpack = ArmorModHandler.pryMods(armor)[ArmorModHandler.plate_only];
-		
-		if(jetpack == null)
-			return;
-		
-		list.add(TextFormatting.RED + "  " + stack.getDisplayName() + " (" + I18nUtil.resolveKey(fuel.getUnlocalizedName()) + ": " + getFuel(jetpack) + "mB / " + this.maxFuel + "mB");
-	}
-	
-	@Override
-	public void modUpdate(EntityLivingBase entity, ItemStack armor) {
-		
-		if(!(entity instanceof EntityPlayer))
-			return;
-		
-		ItemStack jetpack = ArmorModHandler.pryMods(armor)[ArmorModHandler.plate_only];
-		
-		if(jetpack == null)
-			return;
-				
-		onArmorTick(entity.world, (EntityPlayer)entity, jetpack);
-		ArmorUtil.resetFlightTime((EntityPlayer)entity);
-		
-		ArmorModHandler.applyMod(armor, jetpack);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void modRender(Pre event, ItemStack armor) {
-
-		ModelBiped modelJetpack = getArmorModel(event.getEntityLiving(), null, EntityEquipmentSlot.CHEST, null);
-		
-		EntityPlayer player = event.getEntityPlayer();
-
-		RenderPlayer renderer = event.getRenderer();
-		ModelBiped model = renderer.getMainModel();
-		modelJetpack.isSneak = model.isSneak;
-		
-		float interp = event.getPartialRenderTick();
-		float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset)*interp;
-		float yawWrapped = MathHelper.wrapDegrees(yaw+180);
-		float pitch = player.rotationPitch;
-		
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(this.getArmorTexture(armor, event.getEntity(), this.getEquipmentSlot(armor), null)));
-		modelJetpack.render(event.getEntityPlayer(), 0.0F, 0.0F, 0, yawWrapped, pitch, 0.0625F);
+		tooltip.add(I18nUtil.resolveKey(fuel.getUnlocalizedName()) + ": " + getFuel(stack) + "mB / " + this.maxFuel + "mB");
 	}
 	
 	@Override

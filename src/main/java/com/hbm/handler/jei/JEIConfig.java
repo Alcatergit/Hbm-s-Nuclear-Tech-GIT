@@ -5,7 +5,6 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
-import com.hbm.inventory.gui.GUIAnvil;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
 import com.hbm.inventory.gui.GUIHadron;
@@ -22,7 +21,6 @@ import com.hbm.inventory.gui.GUIMachinePress;
 import com.hbm.inventory.gui.GUIMachineReactor;
 import com.hbm.inventory.gui.GUIMachineRefinery;
 import com.hbm.inventory.gui.GUIMachineShredder;
-import com.hbm.inventory.gui.GUISILEX;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
@@ -60,9 +58,6 @@ public class JEIConfig implements IModPlugin {
 	public static final String BOOK = "hbm.book_of";
 	public static final String FUSION_BYPRODUCT = "hbm.fusionbyproduct";
 	public static final String HADRON = "hbm.hadron";
-	public static final String SILEX = "hbm.silex";
-	public static final String SMITHING = "hbm.smithing";
-	public static final String ANVIL = "hbm.anvil";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -88,9 +83,6 @@ public class JEIConfig implements IModPlugin {
 		//registry.addRecipeCatalyst(new ItemStack(ModItems.book_of_), BOOK);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.iter), FUSION_BYPRODUCT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.hadron_core), HADRON);
-		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_silex), SILEX);
-		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
-		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -109,9 +101,6 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getBookRecipes(), BOOK);
 		registry.addRecipes(JeiRecipes.getFusionByproducts(), FUSION_BYPRODUCT);
 		registry.addRecipes(JeiRecipes.getHadronRecipes(), HADRON);
-		registry.addRecipes(JeiRecipes.getSILEXRecipes(), SILEX);
-		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
-		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -130,9 +119,6 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUICrystallizer.class, 103, 34, 23, 16, CRYSTALLIZER);
 		registry.addRecipeClickArea(GUIBook.class, 89, 34, 23, 16, BOOK);
 		registry.addRecipeClickArea(GUIHadron.class, 71, 28, 32, 32, HADRON);
-		registry.addRecipeClickArea(GUISILEX.class, 45, 82, 113-45, 125-82, SILEX);
-		registry.addRecipeClickArea(GUIAnvil.class, 34, 26, 52-34, 44-26, SMITHING);
-		registry.addRecipeClickArea(GUIAnvil.class, 12, 50, 48-12, 66-50, ANVIL);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
@@ -223,10 +209,7 @@ public class JEIConfig implements IModPlugin {
 				new CrystallizerRecipeHandler(help),
 				new BookRecipeHandler(help),
 				new FusionRecipeHandler(help),
-				new HadronRecipeHandler(help),
-				new SILEXRecipeHandler(help),
-				new SmithingRecipeHandler(help),
-				new AnvilRecipeHandler(help));
+				new HadronRecipeHandler(help));
 	}
 
 	@Override

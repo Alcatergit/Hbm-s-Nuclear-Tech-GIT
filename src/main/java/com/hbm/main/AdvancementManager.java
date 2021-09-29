@@ -87,18 +87,11 @@ public class AdvancementManager {
 	public static Advancement achStratum;
 	public static Advancement achMeltdown;
 	public static Advancement achOmega12;
-	public static Advancement digammaSee;
-	public static Advancement digammaFeel;
-	public static Advancement digammaKnow;
-	public static Advancement digammaKauaiMoho;
-	public static Advancement digammaUpOnTop;
-	public static Advancement achSomeWounds;
 	
 	public static Advancement bossCreeper;
 	public static Advancement bossMeltdown;
 	public static Advancement bossMaskman;
 	public static Advancement bossWorm;
-	public static Advancement bossUFO;
 
 	public static void init(MinecraftServer serv){
 		net.minecraft.advancements.AdvancementManager adv = serv.getAdvancementManager();
@@ -124,18 +117,11 @@ public class AdvancementManager {
 		achStratum = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achstratum"));
 		achMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achmeltdown"));
 		achOmega12 = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achomega12"));
-		digammaSee = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammasee"));
-		digammaFeel = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammafeel"));
-		digammaKnow = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammaknow"));
-		digammaKauaiMoho = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammakauaimoho"));
-		digammaUpOnTop = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammaupontop"));
-		achSomeWounds = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsomewounds"));
 		
 		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));
 		bossMaskman = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmaskman"));
 		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossworm"));
-		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossufo"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

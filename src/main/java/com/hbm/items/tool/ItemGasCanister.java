@@ -3,7 +3,6 @@ package com.hbm.items.tool;
 import java.util.List;
 
 import com.hbm.forgefluid.HbmFluidHandlerGasCanister;
-import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
@@ -45,30 +44,6 @@ public class ItemGasCanister extends Item implements IHasCustomModel {
 	
 	
 	@Override
-	public int getItemStackLimit(ItemStack stack){
-		return isFullOrEmpty(stack) ? 64 : 1;
-	}
-	
-	public static boolean isFullOrEmpty(ItemStack stack){
-		if(stack.hasTagCompound() && stack.getItem() == ModItems.gas_canister){
-			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerGasCanister.FLUID_NBT_KEY));
-			if(f == null)
-				return true;
-			return f.amount == 4000 || f.amount == 0;
-			
-		} else if(stack.getItem() == ModItems.gas_canister){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean isEmptyCanister(ItemStack out) {
-		if(out.getItem() == ModItems.gas_canister && FluidUtil.getFluidContained(out) == null)
-			return true;
-		return false;
-	}
-	
-	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
@@ -100,8 +75,6 @@ public class ItemGasCanister extends Item implements IHasCustomModel {
 	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerGasCanister(stack, cap);
 	}
 

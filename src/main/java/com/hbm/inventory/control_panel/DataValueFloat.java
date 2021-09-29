@@ -1,8 +1,5 @@
 package com.hbm.inventory.control_panel;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagFloat;
-
 public class DataValueFloat extends DataValue {
 
 	public float num;
@@ -40,17 +37,6 @@ public class DataValueFloat extends DataValue {
 			return enums[i];
 		}
 		return enums[0];
-	}
-
-	@Override
-	public NBTBase writeToNBT(){
-		return new NBTTagFloat(num);
-	}
-
-	@Override
-	public void readFromNBT(NBTBase nbt){
-		NBTTagFloat f = (NBTTagFloat)nbt;
-		num = f.getFloat();
 	}
 
 }

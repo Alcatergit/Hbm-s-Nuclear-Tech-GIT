@@ -44,8 +44,6 @@ public class SubElementEventEditor extends SubElement {
 	protected void accumulateEventTypes(List<IControllable> list){
 		gui.getButtons().removeAll(receiveButtons);
 		gui.getButtons().removeAll(sendButtons);
-		receiveButtons.clear();
-		sendButtons.clear();
 		receiveEvents.clear();
 		sendEvents.clear();
 		for(IControllable c : list){
@@ -161,8 +159,8 @@ public class SubElementEventEditor extends SubElement {
 					itr.remove();
 			}
 			for(IControllable c : gui.linker.linked)
-				if(!gui.currentEditControl.connectedSet.contains(c.getControlPos()))
-					gui.currentEditControl.connectedSet.add(c.getControlPos());
+				if(!gui.currentEditControl.connectedSet.contains(c.getPos()))
+					gui.currentEditControl.connectedSet.add(c.getPos());
 			
 			float[] gridMouse = gui.placement.convertToGridSpace(gui.mouseX, gui.mouseY);
 			gui.currentEditControl.receiveEvent(ControlEvent.newEvent("initialize"));

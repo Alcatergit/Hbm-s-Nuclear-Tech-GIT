@@ -60,17 +60,6 @@ public class GeneralConfig {
 	public static boolean bulletHoleNormalMapping = true;
 	public static int flowingDecalAmountMax = 20;
 	public static boolean bloodFX = true;
-	public static int crucibleMaxCharges = 3;
-	
-	public static boolean enable528 = false;
-	public static boolean enable528ReasimBoilers = true;
-	public static boolean enable528ColtanDeposit = true;
-	public static boolean enable528ColtanSpawn = false;
-	public static boolean enable528BedrockDeposit = true;
-	public static boolean enable528BedrockSpawn = false;
-	public static boolean enableReflectorCompat = false;
-	public static int coltanRate = 2;
-	public static int bedrockRate = 50;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
@@ -121,7 +110,7 @@ public class GeneralConfig {
 		
 		callListModels = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.26_callListModels", "Enables call lists for a few models, making them render extremely fast", true);
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
-		enableReflectorCompat = config.get(CATEGORY_GENERAL, "1.24_enableReflectorCompat", false).getBoolean(false);
+		enableBabyMode = true;
 		
 		recipes = config.get(CATEGORY_GENERAL, "1.28_enableRecipes", true).getBoolean(true);
 		shapeless = config.get(CATEGORY_GENERAL, "1.28_enableShapeless", true).getBoolean(true);
@@ -160,28 +149,6 @@ public class GeneralConfig {
 		if(!flashlight){
 			flashlightVolumetric = false;
 		}
-		
-		crucibleMaxCharges = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.33_crucible_max_charges", "How many times you can use the crucible before recharge", 3);
-		if(crucibleMaxCharges <= 0)
-			crucibleMaxCharges = 3;
-		
-		final String CATEGORY_528 = "528";
-
-		config.addCustomCategoryComment(CATEGORY_528, "CAUTION\n"
-				+ "528 Mode: Please proceed with caution!\n"
-				+ "528-Modus: Lassen Sie Vorsicht walten!\n"
-				+ "Ñ�Ð¿Ð¾Ñ�Ð¾Ð±-528: Ð´ÐµÐ¹Ñ�Ñ‚Ð²Ð¾Ð²Ð°Ñ‚ÑŒ Ñ� Ð¾Ñ�Ñ‚Ð¾Ñ€Ð¾Ð¶Ð½Ð¾Ñ�Ñ‚ÑŒÑŽ!");
-		
-		enable528 = CommonConfig.createConfigBool(config, CATEGORY_528, "enable528Mode", "The central toggle for 528 mode.", false);
-		enable528ReasimBoilers = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_forceReasimBoilers", "Keeps the RBMK dial for ReaSim boilers on, preventing use of non-ReaSim boiler columns and forcing the use of steam in-/outlets", true);
-		enable528ColtanDeposit = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableColtanDepsoit", "Enables the coltan deposit. A large amount of coltan will spawn around a single random location in the world.", true);
-		enable528ColtanSpawn = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableColtanSpawning", "Enables coltan ore as a random spawn in the world. Unlike the deposit option, coltan will not just spawn in one central location.", false);
-		enable528BedrockDeposit = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableBedrockDepsoit", "Enables bedrock coltan ores in the coltan deposit. These ores can be drilled to extract infinite coltan, albeit slowly.", true);
-		enable528BedrockSpawn = CommonConfig.createConfigBool(config, CATEGORY_528, "X528_enableBedrockSpawning", "Enables the bedrock coltan ores as a rare spawn. These will be rarely found anywhere in the world.", false);
-		coltanRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_oreColtanFrequency", "Determines how many coltan ore veins are to be expected in a chunk. These values do not affect the frequency in deposits, and only apply if random coltan spanwing is enabled.", 2);
-		bedrockRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_bedrockColtanFrequency", "Determines how often (1 in X) bedrock coltan ores spawn. Applies for both the bedrock ores in the coltan deposit (if applicable) and the random bedrock ores (if applicable)", 50);
-		
-		if(enable528) enableBabyMode = false;
 	}
 
 }

@@ -1,11 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import java.util.Arrays;
-import java.util.List;
 
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemCassette.SoundType;
 import com.hbm.items.machine.ItemCassette.TrackType;
@@ -17,13 +13,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineSiren extends TileEntity implements ITickable, IControllable {
+public class TileEntityMachineSiren extends TileEntity implements ITickable {
 
 	public ItemStackHandler inventory;
 	
@@ -32,7 +26,6 @@ public class TileEntityMachineSiren extends TileEntity implements ITickable, ICo
 	//private static final int[] slots_side = new int[] { 0 };
 	
 	public boolean lock = false;
-	public boolean ctrlActive = false;
 	
 	private String customName;
 	
@@ -90,7 +83,7 @@ public class TileEntityMachineSiren extends TileEntity implements ITickable, ICo
 				return;
 			}
 			
-			boolean active = ctrlActive || world.isBlockIndirectlyGettingPowered(pos) > 0;
+			boolean active = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			
 			if(getCurrentType().getType().name().equals(SoundType.LOOP.name())) {
 				
@@ -126,39 +119,5 @@ public class TileEntityMachineSiren extends TileEntity implements ITickable, ICo
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
-	}
-
-	@Override
-	public void receiveEvent(BlockPos from, ControlEvent e){
-		if(e.name.equals("siren_set_state")){
-			ctrlActive = e.vars.get("isOn").getBoolean();
-		}
-	}
-
-	@Override
-	public List<String> getInEvents(){
-		return Arrays.asList("siren_set_state");
-	}
-
-	@Override
-	public BlockPos getControlPos(){
-		return getPos();
-	}
-
-	@Override
-	public World getControlWorld(){
-		return getWorld();
-	}
-	
-	@Override
-	public void validate(){
-		super.validate();
-		ControlEventSystem.get(world).addControllable(this);
-	}
-	
-	@Override
-	public void invalidate(){
-		super.invalidate();
-		ControlEventSystem.get(world).removeControllable(this);
 	}
 }

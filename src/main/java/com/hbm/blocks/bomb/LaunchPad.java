@@ -29,7 +29,6 @@ import com.hbm.entity.missile.EntityMissileRain;
 import com.hbm.entity.missile.EntityMissileSchrabidium;
 import com.hbm.entity.missile.EntityMissileStrong;
 import com.hbm.entity.missile.EntityMissileTaint;
-import com.hbm.entity.missile.EntityMissileVolcano;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -349,15 +348,6 @@ public class LaunchPad extends BlockContainer implements IBomb {
 				}
 				if (entity.inventory.getStackInSlot(0).getItem() == ModItems.missile_emp_strong && entity.power >= 75000) {
 					EntityMissileEMPStrong missile = new EntityMissileEMPStrong(world, x + 0.5F, y + 2F, z + 0.5F, xCoord, zCoord);
-					if (!world.isRemote)
-						world.spawnEntity(missile);
-					entity.power -= 75000;
-
-					entity.inventory.setStackInSlot(0, ItemStack.EMPTY);
-					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.missileTakeoff, SoundCategory.BLOCKS, 2.0F, 1.0F);
-				}
-				if(entity.inventory.getStackInSlot(0).getItem() == ModItems.missile_volcano) {
-					EntityMissileVolcano missile = new EntityMissileVolcano(world, x + 0.5F, y + 2F, z + 0.5F, xCoord, zCoord);
 					if (!world.isRemote)
 						world.spawnEntity(missile);
 					entity.power -= 75000;

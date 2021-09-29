@@ -93,7 +93,6 @@ public class MudBlock extends BlockFluidClassic {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void reactToBlocks2(World world, BlockPos pos) {
 		if(world.getBlockState(pos).getMaterial() != ModBlocks.fluidmud) {
 			IBlockState state = world.getBlockState(pos);
@@ -156,7 +155,7 @@ public class MudBlock extends BlockFluidClassic {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			} else if (state.getMaterial() == Material.WEB) {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());
-			} else if (block.getExplosionResistance(null) < 1.2F) {
+			} else if (block.getExplosionResistance(world, pos, null, null) < 1.2F) {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			}
 		}

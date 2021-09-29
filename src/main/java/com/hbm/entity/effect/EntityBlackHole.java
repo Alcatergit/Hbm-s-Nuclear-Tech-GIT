@@ -1,35 +1,25 @@
 package com.hbm.entity.effect;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityRubble;
-import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.items.ModItems;
-import com.hbm.lib.ModDamageSource;
-import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.explosion.ExplosionNukeGeneric;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityBlackHole extends Entity implements IConstantRenderer {
+public class EntityBlackHole extends Entity {
 
 	public static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityBlackHole.class, DataSerializers.FLOAT);
 	
@@ -46,123 +36,76 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		float size = this.getDataManager().get(SIZE);
 		
-		float size = this.dataManager.get(SIZE);
-		
-		if(!world.isRemote) {
-			for(int k = 0; k < size * 2; k++) {
-				double phi = rand.nextDouble() * (Math.PI * 2);
-				double costheta = rand.nextDouble() * 2 - 1;
-				double theta = Math.acos(costheta);
-				double x = Math.sin( theta) * Math.cos( phi );
-				double y = Math.sin( theta) * Math.sin( phi );
-				double z = Math.cos( theta );
-				
-				Vec3 vec = Vec3.createVectorHelper(x, y, z);
-				int length = (int)Math.ceil(size * 15);
-				
-				for(int i = 0; i < length; i ++) {
-					int x0 = (int)(this.posX + (vec.xCoord * i));
-					int y0 = (int)(this.posY + (vec.yCoord * i));
-					int z0 = (int)(this.posZ + (vec.zCoord * i));
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		for(int k = 0; k < size * 5; k++) {
+			double phi = rand.nextDouble() * (Math.PI * 2);
+			double costheta = rand.nextDouble() * 2 - 1;
+			double theta = Math.acos(costheta);
+			double x = Math.sin( theta) * Math.cos( phi );
+			double y = Math.sin( theta) * Math.sin( phi );
+			double z = Math.cos( theta );
+			
+			Vec3d vec = new Vec3d(x, y, z);
+			int length = (int)Math.ceil(size * 15);
+			
+			for(int i = 0; i < length; i ++) {
+				int x0 = (int)(this.posX + (vec.x * i));
+				int y0 = (int)(this.posY + (vec.y * i));
+				int z0 = (int)(this.posZ + (vec.z * i));
+				pos.setPos(x0, y0, z0);
+				if(!world.isRemote) {
 					
-					BlockPos des = new BlockPos(x0, y0, z0);
-					
-					if(world.getBlockState(des).getMaterial().isLiquid()) {
-						world.setBlockState(des, Blocks.AIR.getDefaultState());
+					if(world.getBlockState(pos).getMaterial().isLiquid()) {
+						world.setBlockToAir(pos);
 					}
 					
-					if(world.getBlockState(des).getBlock() != Blocks.AIR) {
+					if(world.getBlockState(pos).getBlock() != Blocks.AIR) {
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x0 + 0.5F;
 						rubble.posY = y0;
 						rubble.posZ = z0 + 0.5F;
-						IBlockState st = world.getBlockState(new BlockPos(x0, y0, z0));
-						rubble.setMetaBasedOnBlock(st.getBlock(), st.getBlock().getMetaFromState(st));
+						IBlockState state = world.getBlockState(pos);
+						Block block = state.getBlock();
+						rubble.setMetaBasedOnBlock(block, block.getMetaFromState(state));
 						
 						world.spawnEntity(rubble);
 					
-						world.setBlockState(des, Blocks.AIR.getDefaultState());
+						world.setBlockToAir(pos);
 						break;
 					}
 				}
 			}
 		}
+
+		ExplosionNukeGeneric.succ(world, (int)this.posX, (int)this.posY, (int)this.posZ, (int)Math.ceil(size * 15));
 		
-		double range = size * 15;
-		
-		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(
-				posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
-		
-		for(Entity e : entities) {
-			
-			if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
-				continue;
-			
-			if(e instanceof EntityFallingBlock && !world.isRemote && e.ticksExisted > 1) {
-				
-				double x = e.posX;
-				double y = e.posY;
-				double z = e.posZ;
-				Block b = ((EntityFallingBlock)e).getBlock().getBlock();
-				int meta = b.getMetaFromState(((EntityFallingBlock)e).getBlock());
-				
-				e.setDead();
-				
-				EntityRubble rubble = new EntityRubble(world);
-				rubble.setMetaBasedOnBlock(b, meta);
-				rubble.setPositionAndRotation(x, y, z, 0, 0);
-				rubble.motionX = e.motionX;
-				rubble.motionY = e.motionY;
-				rubble.motionZ = e.motionZ;
-				world.spawnEntity(rubble);
-			}
-			
-			Vec3 vec = Vec3.createVectorHelper(posX - e.posX, posY - e.posY, posZ - e.posZ);
-			
-			double dist = vec.lengthVector();
-			
-			if(dist > range)
-				continue;
-			
-			vec = vec.normalize();
-			
-			if(!(e instanceof EntityItem))
-				vec.rotateAroundY((float)Math.toRadians(15));
-			
-			double speed = 0.1D;
-			e.motionX += vec.xCoord * speed;
-			e.motionY += vec.yCoord * speed * 2;
-			e.motionZ += vec.zCoord * speed;
-			
-			if(e instanceof EntityBlackHole)
-				continue;
-			
-			if(dist < size * 1.5) {
-				e.attackEntityFrom(ModDamageSource.blackhole, 1000);
-				
-				if(!(e instanceof EntityLivingBase))
-					e.setDead();
-				
-				if(!world.isRemote && e instanceof EntityItem) {
-					EntityItem item = (EntityItem) e;
-					ItemStack stack = item.getItem();
-					
-					if(stack.getItem() == ModItems.pellet_antimatter || stack.getItem() == ModItems.flame_pony) {
-						this.setDead();
-						world.createExplosion(null, this.posX, this.posY, this.posZ, 5.0F, true);
-						return;
+		if(ExplosionNukeGeneric.dedify(world, (int)this.posX, (int)this.posY, (int)this.posZ, (int)Math.ceil(size * 2))) {
+			this.setDead();
+			MutableBlockPos deathPos = new BlockPos.MutableBlockPos();
+			int r = (int)Math.ceil(size);
+			int r2 = r * r;
+			int r22 = r2 / 2;
+			for (int xx = -r; xx < r; xx++) {
+				int X = xx + (int)this.posX;
+				int XX = xx * xx;
+				for (int yy = -r; yy < r; yy++) {
+					int Y = yy + (int)this.posY;
+					int YY = XX + yy * yy;
+					for (int zz = -r; zz < r; zz++) {
+						int Z = zz + (int)this.posZ;
+						int ZZ = YY + zz * zz;
+						if (ZZ < r22) {
+							deathPos.setPos(X, Y, Z);
+							world.setBlockState(deathPos, ModBlocks.gravel_obsidian.getDefaultState());
+						}
 					}
 				}
 			}
+			
+			world.createExplosion(null, this.posX, this.posY, this.posZ, 5.0F, true);
 		}
-		
-		this.setPosition(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-		
-		this.motionX *= 0.99D;
-		this.motionY *= 0.99D;
-		this.motionZ *= 0.99D;
 	}
 	
 	@Override

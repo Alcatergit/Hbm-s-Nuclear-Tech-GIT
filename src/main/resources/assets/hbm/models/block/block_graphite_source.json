@@ -1,8 +1,0 @@
-{
-	"parent": "block/cube_bottom_top",
-	"textures": {
-		"top": "hbm:blocks/block_graphite_source",
-		"bottom": "hbm:blocks/block_graphite_source",
-		"side": "hbm:blocks/block_graphite"
-	}
-}

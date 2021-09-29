@@ -1,7 +1,0 @@
-{
-	"parent": "block/cube_column",
-	"textures": {
-		"end" : "hbm:blocks/brick_concrete",
-		"side": "hbm:blocks/brick_concrete_marked"
-	}
-}

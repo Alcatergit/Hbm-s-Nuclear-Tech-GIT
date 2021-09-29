@@ -46,7 +46,7 @@ public class GunDartFactory {
 		config.name = "Needle Gun";
 		config.manufacturer = "-";
 
-		config.config = new ArrayList<>();
+		config.config = new ArrayList();
 		config.config.add(BulletConfigSyncingUtil.NEEDLE_GPS);
 
 		return config;

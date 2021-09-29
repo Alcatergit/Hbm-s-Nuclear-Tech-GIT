@@ -306,7 +306,6 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private boolean blocksRad(BlockPos pos) {
 
 		Block b = world.getBlockState(pos).getBlock();
@@ -314,7 +313,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		if(b == ModBlocks.block_lead || b == ModBlocks.block_desh || b == ModBlocks.brick_concrete)
 			return true;
 
-		if(b.getExplosionResistance(null) >= 100)
+		if(b.getExplosionResistance(world, pos, null, null) >= 100)
 			return true;
 
 		return false;

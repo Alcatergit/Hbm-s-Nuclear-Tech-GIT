@@ -3,13 +3,11 @@ package com.hbm.inventory.control_panel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.control_panel.ContainerControlEdit.SlotDisableable;
 import com.hbm.inventory.control_panel.ContainerControlEdit.SlotItemHandlerDisableable;
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.lib.RefStrings;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -89,13 +87,6 @@ public class SubElementLinker extends SubElement {
 					int[][] locs = ItemMultiDetonator.getLocations(stack);
 					for (int i = 0; i < locs[0].length; i++) {
 						BlockPos pos = new BlockPos(locs[0][i], locs[1][i], locs[2][i]);
-						Block b = world.getBlockState(pos).getBlock();
-						if(b instanceof BlockDummyable){
-							int[] core = ((BlockDummyable)b).findCore(world, pos.getX(), pos.getY(), pos.getZ());
-							if(core != null){
-								pos = new BlockPos(core[0], core[1], core[2]);
-							}
-						}
 						TileEntity te = world.getTileEntity(pos);
 						if(te instanceof IControllable && !linked.contains(te)){
 							linked.add((IControllable)te);
@@ -130,7 +121,7 @@ public class SubElementLinker extends SubElement {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
 		for(IControllable c : linked){
-			BlockPos pos = c.getControlPos();
+			BlockPos pos = c.getPos();
 			linkedButtons.add(new ButtonHoverText(gui.currentButtonId(), cX-73, cY-90 + i*22, 170, 20, "(" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ")", "<Click to remove>"));
 			i = (i+1)%3;
 		}

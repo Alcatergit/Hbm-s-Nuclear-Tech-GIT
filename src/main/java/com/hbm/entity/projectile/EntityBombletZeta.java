@@ -4,21 +4,19 @@ import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
+import com.hbm.explosion.ExplosionParticle;
+import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,13 +74,14 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
     				ExplosionChaos.spawnChlorine(world, this.posX + 0.5F - motionX, this.posY + 0.5F - motionY, this.posZ + 0.5F - motionZ, 75, 2, 0);
     			}
     			if(type == 4) {
-    				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ).mute());
+    				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ));
     				
-    				NBTTagCompound data = new NBTTagCompound();
-    				data.setString("type", "muke");
-    				if(rand.nextInt(100) == 0) data.setBoolean("balefire", true);
-    				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
-    				world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
+    	        	if(rand.nextInt(100) == 0)
+    	        	{
+    	        		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY, (int)this.posZ);
+    	        	} else {
+    	        		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY, (int)this.posZ);
+    	        	}
     			}
     		}
     		this.setDead();

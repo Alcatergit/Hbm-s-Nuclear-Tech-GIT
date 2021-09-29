@@ -5,7 +5,6 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
-import com.hbm.items.ModItems;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
@@ -19,7 +18,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDoor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -664,12 +662,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 10), Blocks.BRICK_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 0, z + 10), ModBlocks.crate_iron.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
         WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(1), (TileEntityCrateIron)world.getTileEntity(pos.setPos(x + 6, y + 0, z + 10)), 8);
-		
-        if(world.rand.nextInt(5) == 0) {
-			((TileEntityCrateIron)world.getTileEntity(pos.setPos(x + 6, y + 0, z + 10))).inventory.setStackInSlot(11, new ItemStack(ModItems.morning_glory));
-		}
-        
-        world.setBlockState(pos.setPos(x + 7, y + 0, z + 10), Blocks.BRICK_BLOCK.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 7, y + 0, z + 10), Blocks.BRICK_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 0, z + 10), Blocks.BRICK_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 10, y + 0, z + 10), ModBlocks.fence_metal.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 11), Blocks.BRICK_BLOCK.getDefaultState(), 3);

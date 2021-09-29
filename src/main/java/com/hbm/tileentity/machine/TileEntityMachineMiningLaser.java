@@ -21,8 +21,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
 
-import api.hbm.block.IDrillInteraction;
-import api.hbm.block.IMiningDrill;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,7 +49,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor, IMiningDrill {
+public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public int age = 0;
@@ -246,7 +244,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		IBlockState state = world.getBlockState(new BlockPos(targetX, targetY, targetZ));
 		Block b = state.getBlock();
 		boolean normal = true;
-		boolean doesBreak = true;
 
 		if(b == Blocks.LIT_REDSTONE_ORE){
 			b = Blocks.REDSTONE_ORE;
@@ -294,24 +291,10 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 				}
 			}
 		}
-		
-		if(normal && b instanceof IDrillInteraction) {
-			IDrillInteraction in = (IDrillInteraction) b;
-			ItemStack drop = in.extractResource(world, targetX, targetY, targetZ, state, this);
-			
-			if(drop != null) {
-				world.spawnEntity(new EntityItem(world, targetX + 0.5, targetY + 0.5, targetZ + 0.5, drop.copy()));
-			}
-			
-			doesBreak = in.canBreak(world, targetX, targetY, targetZ, state, this);
-		}
 
-		if(doesBreak){
-			if(normal)
-				b.dropBlockAsItem(world, new BlockPos(targetX, targetY, targetZ), state, fortune);
-			world.destroyBlock(new BlockPos(targetX, targetY, targetZ), false);
-		}
-		
+		if(normal)
+			b.dropBlockAsItem(world, new BlockPos(targetX, targetY, targetZ), state, fortune);
+		world.destroyBlock(new BlockPos(targetX, targetY, targetZ), false);
 		suckDrops();
 
 		if(doesScream()) {
@@ -709,16 +692,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		compound.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		compound.setBoolean("isOn", isOn);
 		return super.writeToNBT(compound);
-	}
-
-	@Override
-	public DrillType getDrillTier(){
-		return DrillType.HITECH;
-	}
-
-	@Override
-	public int getDrillRating(){
-		return 100;
 	}
 
 }

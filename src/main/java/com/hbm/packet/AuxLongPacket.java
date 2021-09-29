@@ -1,7 +1,6 @@
 package com.hbm.packet;
 
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
-import com.hbm.tileentity.machine.TileEntityCoreReceiver;
 import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
 
 import io.netty.buffer.ByteBuf;
@@ -61,15 +60,14 @@ public class AuxLongPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(AuxLongPacket m, MessageContext ctx) {
+
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				try {
 					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+
 					if(te instanceof TileEntityCoreEmitter){
 						if(m.id == 0)
 							((TileEntityCoreEmitter) te).prev = m.value;
-					} else if(te instanceof TileEntityCoreReceiver){
-						if(m.id == 0)
-							((TileEntityCoreReceiver)te).joules = m.value;
 					} else if(te instanceof TileEntityMachineTeleporter){
 						((TileEntityMachineTeleporter) te).target = m.value == 0 ? null : BlockPos.fromLong(m.value);
 					}

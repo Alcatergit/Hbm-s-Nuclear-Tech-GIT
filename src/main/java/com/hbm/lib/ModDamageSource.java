@@ -22,7 +22,6 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource euthanizedSelf = (new DamageSource("euthanizedSelf")).setDamageBypassesArmor();
 	public static DamageSource euthanizedSelf2 = (new DamageSource("euthanizedSelf2")).setDamageBypassesArmor();
 	public static DamageSource tauBlast = (new DamageSource("tauBlast")).setDamageBypassesArmor().setDamageIsAbsolute();
-	public static DamageSource digamma = (new DamageSource("digamma")).setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
 	public static DamageSource radiation = (new DamageSource("radiation")).setDamageBypassesArmor();
 	public static DamageSource suicide = (new DamageSource("suicide")).setProjectile();
 	public static DamageSource teleporter = (new DamageSource("teleporter")).setDamageIsAbsolute();
@@ -52,9 +51,6 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource gluon = new DamageSource("gluon").setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
 	public static DamageSource slicer = new DamageSource("slicer").setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource crucible = new DamageSource("crucible").setDamageIsAbsolute().setDamageBypassesArmor();
-	public static DamageSource monoxide = (new DamageSource("monoxide")).setDamageIsAbsolute().setDamageBypassesArmor();
-	public static DamageSource asbestos = (new DamageSource("asbestos")).setDamageIsAbsolute().setDamageBypassesArmor();
-	public static DamageSource mku = (new DamageSource("mku")).setDamageIsAbsolute().setDamageBypassesArmor();
 	
 	public ModDamageSource(String p_i1566_1_) {
 		super(p_i1566_1_);
@@ -79,7 +75,7 @@ public class ModDamageSource extends DamageSource {
     {
         return new EntityDamageSourceIndirect("tau", p_76353_0_, p_76353_1_).setProjectile().setDamageBypassesArmor().setDamageIsAbsolute();
     }
-    public static DamageSource causeCombineDamage(Entity p_76353_0_, Entity p_76353_1_)
+    public static DamageSource causeCombineDamage(EntityCombineBall p_76353_0_, Entity p_76353_1_)
     {
         return (new EntityDamageSourceIndirect("cmb", p_76353_0_, p_76353_1_)).setProjectile().setDamageBypassesArmor();
     }

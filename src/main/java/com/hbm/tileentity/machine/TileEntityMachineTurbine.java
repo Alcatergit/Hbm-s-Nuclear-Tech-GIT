@@ -87,7 +87,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 		tanks[0] = new FluidTank(64000);
 		tankTypes[0] = ModForgeFluids.steam;
 		tanks[1] = new FluidTank(128000);
-		tankTypes[1] = ModForgeFluids.spentsteam;
+		tankTypes[1] = FluidRegistry.WATER;
 		needsTankTypeUpdate = false;
 	}
 

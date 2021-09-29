@@ -11,7 +11,6 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.handler.HbmKeybinds;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
 import com.hbm.items.ModItems;
@@ -134,7 +133,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 			
 			if(mainConfig.reloadType != GunConfiguration.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
 				
-				if(Keyboard.isKeyDown(HbmKeybinds.reloadKey.getKeyCode()) && (getMag(stack) < mainConfig.ammoCap || (mainConfig.allowsInfinity && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0))) {
+				if(Keyboard.isKeyDown(Keyboard.KEY_R) && getMag(stack) < mainConfig.ammoCap) {
 					PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 2, hand));
 					setIsReloading(stack, true);
 					resetReloadCycle(stack);

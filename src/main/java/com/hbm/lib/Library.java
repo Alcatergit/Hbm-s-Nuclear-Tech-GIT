@@ -15,8 +15,8 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
-import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
-import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
+import com.hbm.capability.RadiationCapability.EntityRadiationProvider;
+import com.hbm.capability.RadiationCapability.IEntityRadioactive;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
@@ -60,7 +60,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -332,20 +331,6 @@ public class Library {
 		return player.world.rayTraceBlocks(vec3, vec32, b1, b2, b3);
 	}
 	
-	public static AxisAlignedBB rotateAABB(AxisAlignedBB box, EnumFacing facing){
-		switch(facing){
-		case NORTH:
-			return new AxisAlignedBB(box.minX, box.minY, 1-box.minZ, box.maxX, box.maxY, 1-box.maxZ);
-		case SOUTH:
-			return box;
-		case EAST:
-			return new AxisAlignedBB(box.minZ, box.minY, box.minX, box.maxZ, box.maxY, box.maxX);
-		case WEST:
-			return new AxisAlignedBB(1-box.minZ, box.minY, box.minX, 1-box.maxZ, box.maxY, box.maxX);
-		default:
-			return box;
-		}
-	}
 	
 	public static RayTraceResult rayTraceIncludeEntities(EntityPlayer player, double d, float f) {
 		Vec3d vec3 = getPosition(f, player);
@@ -649,10 +634,6 @@ public class Library {
     public static double smoothstep(double t, double edge0, double edge1){
     	t = MathHelper.clamp((t - edge0) / (edge1 - edge0), 0.0, 1.0);
         return t * t * (3.0 - 2.0 * t);	
-    }
-    public static float smoothstep(float t, float edge0, float edge1){
-    	t = MathHelper.clamp((t - edge0) / (edge1 - edge0), 0.0F, 1.0F);
-        return t * t * (3.0F - 2.0F * t);	
     }
 	
 	public static Vec3d getPosition(float interpolation, EntityPlayer player) {
@@ -1186,10 +1167,10 @@ public class Library {
 		return list;
 	}
 	
-	public static IEntityHbmProps getEntRadCap(Entity e){
-		if(e.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
-			return e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null);
-		return EntityHbmPropsProvider.DUMMY;
+	public static IEntityRadioactive getEntRadCap(Entity e){
+		if(e.hasCapability(EntityRadiationProvider.ENT_RAD_CAP, null))
+			return e.getCapability(EntityRadiationProvider.ENT_RAD_CAP, null);
+		return EntityRadiationProvider.DUMMY;
 	}
 
 	public static void addToInventoryOrDrop(EntityPlayer player, ItemStack stack) {
@@ -1201,11 +1182,6 @@ public class Library {
 	public static Vec3d normalFromRayTrace(RayTraceResult r) {
 		Vec3i n = r.sideHit.getDirectionVec();
 		return new Vec3d(n.getX(), n.getY(), n.getZ());
-	}
-	
-	
-	public static Explosion explosionDummy(World w, double x, double y, double z){
-		return new Explosion(w, null, x, y, z, 1000, false, false);
 	}
 	
 }

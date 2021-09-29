@@ -90,21 +90,13 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		CORDITE,
 		KEVLAR,
 		CONCRETE,
-		CONCRETE_ASBESTOS,
 		SOLID_FUEL,
 		ELECTROLYSIS,
 		XENON,
 		SATURN,
 		BALEFIRE,
 		SCHRABIDIC,
-		SCHRABIDATE,
-		COLTAN_CLEANING,
-		COLTAN_PAIN,
-		COLTAN_CRYSTAL,
-		VIT_LIQUID,
-		VIT_GAS,
-		TEL,
-		GASOLINE;
+		SCHRABIDATE;
 		
 		public static EnumChemistryTemplate getEnum(int i) {
 			if(i < EnumChemistryTemplate.values().length)
@@ -271,8 +263,6 @@ public static int getProcessTime(ItemStack stack) {
         	return 40;
         case CONCRETE:
         	return 100;
-        case CONCRETE_ASBESTOS:
-        	return 100;
         case SOLID_FUEL:
         	return 200;
         case ELECTROLYSIS:
@@ -287,20 +277,6 @@ public static int getProcessTime(ItemStack stack) {
         	return 100;
         case SCHRABIDATE:
         	return 600;
-        case COLTAN_CLEANING:
-        	return 60;
-        case COLTAN_PAIN:
-        	return 120;
-        case COLTAN_CRYSTAL:
-        	return 80;
-        case VIT_LIQUID:
-        	return 100;
-        case VIT_GAS:
-        	return 100;
-        case TEL:
-        	return 40;
-        case GASOLINE:
-        	return 40;
         default:
         	return 100;
         }

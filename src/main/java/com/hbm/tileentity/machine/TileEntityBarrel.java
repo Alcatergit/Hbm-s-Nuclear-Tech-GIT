@@ -1,9 +1,9 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.BlockFluidBarrel;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
-import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -11,14 +11,12 @@ import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -60,46 +58,42 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 				fillFluidInit(tank);
 			
 			if(tank.getFluid() != null && tank.getFluidAmount() > 0) {
-				checkFluidInteraction();
+				
+				Block b = this.getBlockType();
+				
+				//for when you fill antimatter into a matter tank
+				if(b != ModBlocks.barrel_antimatter && FluidTypeHandler.isAntimatter(tank.getFluid().getFluid())) {
+					world.destroyBlock(pos, false);
+					world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
+				}
+				
+				//for when you fill hot or corrosive liquids into a plastic tank
+				if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosive(tank.getFluid().getFluid()) || FluidTypeHandler.isHot(tank.getFluid().getFluid()))) {
+					world.destroyBlock(pos, false);
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				}
+				
+				//for when you fill corrosive liquid into an iron tank
+				if(b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosive(tank.getFluid().getFluid())) {
+					BlockFluidBarrel.keepInventory = true;
+					world.setBlockState(pos, ModBlocks.barrel_corroded.getDefaultState());
+					this.validate();
+					world.setTileEntity(pos, this);
+					
+					BlockFluidBarrel.keepInventory = false;
+					
+					//Drillgon200: Heck if I know what random.fizz is.
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				}
+				
+				if(b == ModBlocks.barrel_corroded && world.rand.nextInt(3) == 0) {
+					tank.drain(1, true);
+				}
 			}
 			
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			if(!FFUtils.areTanksEqual(tank, compareTank))
 				markDirty();
-		}
-	}
-	
-	public void checkFluidInteraction(){
-		Block b = this.getBlockType();
-		Fluid f = tank.getFluid().getFluid();
-		
-		//for when you fill antimatter into a matter tank
-		if(b != ModBlocks.barrel_antimatter && FluidTypeHandler.containsTrait(f, FluidTrait.AMAT)) {
-			world.destroyBlock(pos, false);
-			world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
-		}
-		
-		//for when you fill hot or corrosive liquids into a plastic tank
-		if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosive(f) || FluidTypeHandler.isHot(f))) {
-			world.destroyBlock(pos, false);
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
-		}
-		
-		//for when you fill corrosive liquid into an iron tank
-		if((b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosive(f)) ||
-				(b == ModBlocks.barrel_steel && FluidTypeHandler.isCorrosive2(f))) {
-			world.setBlockState(pos, ModBlocks.barrel_corroded.getDefaultState());
-			this.validate();
-			world.setTileEntity(pos, this);
-			
-			tank.setCapacity(6000);
-			tank.drain(Math.max(0, tank.getFluidAmount()-tank.getCapacity()), true);
-			
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
-		}
-		
-		if(b == ModBlocks.barrel_corroded && world.rand.nextInt(3) == 0) {
-			tank.drain(1, true);
 		}
 	}
 	

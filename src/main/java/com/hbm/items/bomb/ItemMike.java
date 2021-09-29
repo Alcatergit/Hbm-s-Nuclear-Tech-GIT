@@ -2,14 +2,14 @@ package com.hbm.items.bomb;
 
 import java.util.List;
 
-import com.hbm.items.special.ItemHazard;
+import com.hbm.items.special.ItemRadioactive;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemMike extends ItemHazard {
+public class ItemMike extends ItemRadioactive {
 
 	public ItemMike(float radiation, String s) {
 		super(radiation, s);

@@ -66,7 +66,7 @@ public class ItemHot extends Item {
     		if(h > 0) {
     			stack.getTagCompound().setInteger("heat", h - 1);
     		} else {
-    			stack.getTagCompound().removeTag("heat");
+    			stack.setTagCompound(null);
     		}
     	}
 	}

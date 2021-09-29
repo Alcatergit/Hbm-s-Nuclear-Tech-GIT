@@ -17,7 +17,7 @@ public class BusAnimationSequence {
 		SCALE
 	}
 
-	private List<BusAnimationKeyframe> keyframes = new ArrayList<>();
+	private List<BusAnimationKeyframe> keyframes = new ArrayList();
 	public EnumTransformation transformationType;
 
 	//appends a keyframe at the end of the sequence

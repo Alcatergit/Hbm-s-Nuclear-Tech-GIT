@@ -7,7 +7,6 @@ import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
-import api.hbm.block.IToolable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -16,19 +15,15 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 
-public class BlockFluidPipeMk2 extends BlockContainer implements IToolable {
+public class BlockFluidPipeMk2 extends BlockContainer {
 
 	public static final PropertyBool EXTRACTS = PropertyBool.create("extracts");
 	
@@ -155,31 +150,6 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return meta > 0 ? this.getDefaultState().withProperty(EXTRACTS, true) : this.getDefaultState().withProperty(EXTRACTS, false);
-	}
-
-	@Override
-	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool){
-		if(tool == ToolType.SCREWDRIVER){
-			Fluid type = null;
-			BlockPos pos = new BlockPos(x, y, z);
-			IBlockState state = world.getBlockState(pos);
-			TileEntity te = world.getTileEntity(pos);
-			if(te instanceof TileEntityFFDuctBaseMk2){
-				type = ((TileEntityFFDuctBaseMk2) te).getType();
-			}
-			
-			boolean extracts = state.getValue(BlockFluidPipeMk2.EXTRACTS);
-			world.setBlockState(pos, ModBlocks.fluid_duct_mk2.getDefaultState().withProperty(BlockFluidPipeMk2.EXTRACTS, !extracts));
-			
-			te = world.getTileEntity(pos);
-			if(te instanceof TileEntityFFDuctBaseMk2){
-				((TileEntityFFDuctBaseMk2) te).setType(type);
-			}
-			
-			player.swingArm(hand);
-			return true;
-		}
-		return false;
 	}
 	
 }

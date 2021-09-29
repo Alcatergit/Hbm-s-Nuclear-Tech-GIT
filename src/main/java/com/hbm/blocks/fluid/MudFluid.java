@@ -12,6 +12,7 @@ public class MudFluid extends Fluid {
 
 	public MudFluid(){
 		super("mud_fluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_flowing"), Color.white);
+		FluidRegistry.addBucketForFluid(this);
 	}
 
 }

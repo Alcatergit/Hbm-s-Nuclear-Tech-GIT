@@ -227,16 +227,6 @@ public class RenderHelper {
 		float blue = (float) (color & 255) / 255.0F;
 		GlStateManager.color(red, green, blue, 1.0F);
 	}
-	
-	public static void unpackColor(int color, float[] col){
-		float red = (float) (color >> 16 & 255) / 255.0F;
-		float green = (float) (color >> 8 & 255) / 255.0F;
-		float blue = (float) (color & 255) / 255.0F;
-		col[0] = red;
-		col[1] = green;
-		col[2] = blue;
-	}
-	
 	public static void resetColor(){
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}

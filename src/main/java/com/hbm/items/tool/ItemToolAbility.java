@@ -14,7 +14,6 @@ import com.hbm.handler.ToolAbility.SilkAbility;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
 
-import api.hbm.item.IDepthRockTool;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +48,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRockTool {
+public class ItemToolAbility extends ItemTool implements IItemAbility {
 
 	private EnumToolType toolType;
 	private EnumRarity rarity = EnumRarity.COMMON;
@@ -383,17 +382,5 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     protected boolean canOperate(ItemStack stack) {
     	return true;
     }
-
-    public ItemToolAbility setDepthRockBreaker() {
-		this.rockBreaker = true;
-		return this;
-	}
-	
-	private boolean rockBreaker = false;
-    
-	@Override
-	public boolean canBreakRock(World world, EntityPlayer player, ItemStack tool, IBlockState block, BlockPos pos){
-		return canOperate(tool) && this.rockBreaker;
-	}
 
 }

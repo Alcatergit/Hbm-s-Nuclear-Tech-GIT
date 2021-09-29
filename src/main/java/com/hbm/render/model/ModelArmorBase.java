@@ -24,16 +24,6 @@ public class ModelArmorBase extends ModelBiped {
 
 	public ModelArmorBase(int type) {
 		this.type = type;
-		
-		//generate null defaults to prevent major breakage from using incomplete models
-		head = new ModelRendererObj(null);
-		body = new ModelRendererObj(null);
-		leftArm = new ModelRendererObj(null).setRotationPoint(-5.0F, 2.0F, 0.0F);
-		rightArm = new ModelRendererObj(null).setRotationPoint(5.0F, 2.0F, 0.0F);
-		leftLeg = new ModelRendererObj(null).setRotationPoint(1.9F, 12.0F, 0.0F);
-		rightLeg = new ModelRendererObj(null).setRotationPoint(-1.9F, 12.0F, 0.0F);
-		leftFoot = new ModelRendererObj(null).setRotationPoint(1.9F, 12.0F, 0.0F);
-		rightFoot = new ModelRendererObj(null).setRotationPoint(-1.9F, 12.0F, 0.0F);
 	}
 
 	@Override

@@ -75,13 +75,6 @@ public class ItemFluidIcon extends Item {
 		return stack;
 	}
 	
-	public static int getQuantity(ItemStack stack){
-		if(stack.hasTagCompound()){
-			return stack.getTagCompound().getInteger("fill");
-		}
-		return 0;
-	}
-	
 	public static Fluid getFluid(ItemStack stack){
 		if(stack == null || !stack.hasTagCompound())
 			return null;

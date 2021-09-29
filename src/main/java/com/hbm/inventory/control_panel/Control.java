@@ -7,13 +7,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.hbm.render.amlfrom1710.IModelCustom;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +29,6 @@ public abstract class Control {
 	public Map<String, NodeSystem> receiveNodeMap = new HashMap<>();
 	//A map of all variables, either used internally by the control or in the node systems
 	public Map<String, DataValue> vars = new HashMap<>();
-	public Map<String, DataValue> varsPrev = new HashMap<>();
 	//A set of the custom variables the user is allowed to remove
 	public Set<String> customVarNames = new HashSet<>();
 	public float posX;
@@ -58,7 +54,6 @@ public abstract class Control {
 	public void receiveEvent(ControlEvent evt){
 		NodeSystem sys = receiveNodeMap.get(evt.name);
 		if(sys != null){
-			sys.resetCachedValues();
 			sys.receiveEvent(panel, this, evt);
 		}
 	}
@@ -69,90 +64,5 @@ public abstract class Control {
 	
 	public DataValue getGlobalVar(String name){
 		return panel.getVar(name);
-	}
-	
-	public NBTTagCompound writeToNBT(NBTTagCompound tag){
-		tag.setString("name", ControlRegistry.getName(this.getClass()));
-		tag.setString("myName", name);
-		NBTTagCompound vars = new NBTTagCompound();
-		for(Entry<String, DataValue> e : this.vars.entrySet()) {
-			vars.setTag(e.getKey(), e.getValue().writeToNBT());
-		}
-		tag.setTag("vars", vars);
-		
-		NBTTagCompound sendNodes = new NBTTagCompound();
-		for(Entry<String, NodeSystem> e : sendNodeMap.entrySet()){
-			sendNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
-		}
-		tag.setTag("sendNodes", sendNodes);
-		
-		NBTTagCompound receiveNodes = new NBTTagCompound();
-		for(Entry<String, NodeSystem> e : receiveNodeMap.entrySet()){
-			receiveNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
-		}
-		tag.setTag("receiveNodes", receiveNodes);
-		
-		NBTTagCompound customVarNames = new NBTTagCompound();
-		int i = 0;
-		for(String s : this.customVarNames){
-			customVarNames.setString("var" + i, s);
-			i++;
-		}
-		tag.setTag("customvarnames", customVarNames);
-		
-		NBTTagCompound connectedSet = new NBTTagCompound();
-		for(i = 0; i < this.connectedSet.size(); i ++){
-			connectedSet.setInteger("px"+i, this.connectedSet.get(i).getX());
-			connectedSet.setInteger("py"+i, this.connectedSet.get(i).getY());
-			connectedSet.setInteger("pz"+i, this.connectedSet.get(i).getZ());
-		}
-		tag.setTag("connectedset", connectedSet);
-		
-		tag.setFloat("posX", posX);
-		tag.setFloat("posY", posY);
-		return tag;
-	}
-	
-	public void readFromNBT(NBTTagCompound tag){
-		NBTTagCompound vars = tag.getCompoundTag("vars");
-		for(String k : vars.getKeySet()) {
-			NBTBase base = vars.getTag(k);
-			DataValue val = DataValue.newFromNBT(base);
-			if(val != null) {
-				this.vars.put(k, val);
-			}
-		}
-		
-		sendNodeMap.clear();
-		receiveNodeMap.clear();
-		
-		NBTTagCompound sendNodes = tag.getCompoundTag("sendNodes");
-		for(String s : sendNodes.getKeySet()){
-			NodeSystem sys = new NodeSystem(this);
-			sendNodeMap.put(s, sys);
-			sys.readFromNBT(sendNodes.getCompoundTag(s));
-		}
-		NBTTagCompound receiveNodes = tag.getCompoundTag("receiveNodes");
-		for(String s : receiveNodes.getKeySet()){
-			NodeSystem sys = new NodeSystem(this);
-			receiveNodeMap.put(s, sys);
-			sys.readFromNBT(receiveNodes.getCompoundTag(s));
-		}
-		
-		NBTTagCompound customVarNames = tag.getCompoundTag("customvarnames");
-		for(int i = 0; i < customVarNames.getKeySet().size(); i ++){
-			this.customVarNames.add(customVarNames.getString("var"+i));
-		}
-		
-		NBTTagCompound connectedSet = tag.getCompoundTag("connectedset");
-		for(int i = 0; i < connectedSet.getKeySet().size()/3; i ++){
-			int x = connectedSet.getInteger("px"+i);
-			int y = connectedSet.getInteger("py"+i);
-			int z = connectedSet.getInteger("pz"+i);
-			this.connectedSet.add(new BlockPos(x, y, z));
-		}
-		
-		this.posX = tag.getFloat("posX");
-		this.posY = tag.getFloat("posY");
 	}
 }

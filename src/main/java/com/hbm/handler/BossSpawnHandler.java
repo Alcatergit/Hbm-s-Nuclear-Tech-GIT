@@ -66,33 +66,6 @@ public class BossSpawnHandler {
 			}
 		}
 		
-		if(MobConfig.enableRaids) {
-			
-			if(world.getTotalWorldTime() % MobConfig.raidDelay == 0) {
-				
-				if(world.rand.nextInt(MobConfig.raidChance) == 0 && !world.playerEntities.isEmpty() && world.provider.isSurfaceWorld()) {
-					
-					EntityPlayer player = (EntityPlayer) world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
-					
-					if(player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getLong("fbiMark") < world.getTotalWorldTime()) {
-						player.sendMessage(new TextComponentString("FBI, OPEN UP!").setStyle(new Style().setColor(TextFormatting.RED)));
-						
-						Vec3 vec = Vec3.createVectorHelper(MobConfig.raidAttackDistance, 0, 0);
-						vec.rotateAroundY((float)(Math.PI * 2) * world.rand.nextFloat());
-						
-						for(int i = 0; i < MobConfig.raidAmount; i++) {
-	
-							double spawnX = player.posX + vec.xCoord + world.rand.nextGaussian() * 5;
-							double spawnZ = player.posZ + vec.zCoord + world.rand.nextGaussian() * 5;
-							double spawnY = world.getHeight((int)spawnX, (int)spawnZ);
-							
-							trySpawn(world, (float)spawnX, (float)spawnY, (float)spawnZ, new EntityFBI(world));
-						}
-					}
-				}
-			}
-		}
-		
 		if(MobConfig.enableElementals) {
 
 			if(world.getTotalWorldTime() % MobConfig.elementalDelay == 0) {
@@ -139,10 +112,5 @@ public class BossSpawnHandler {
 			ForgeEventFactory.doSpecialSpawn(e, world, x, y, z, null);
 			e.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(e)), null);
 		}
-	}
-	
-	public static void markFBI(EntityPlayer player) {
-		if(!player.world.isRemote)
-			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setLong("fbiMark", player.world.getTotalWorldTime() + 20 * 60 * 20);
 	}
 }

@@ -10,11 +10,6 @@ import java.util.Map.Entry;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.AnvilRecipes;
-import com.hbm.inventory.AnvilRecipes.AnvilConstructionRecipe;
-import com.hbm.inventory.AnvilRecipes.AnvilOutput;
-import com.hbm.inventory.AnvilRecipes.OverlayType;
-import com.hbm.inventory.AnvilSmithingRecipe;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
@@ -32,7 +27,6 @@ import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-import com.hbm.util.WeightedRandomObject;
 
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.ingredients.IIngredients;
@@ -64,9 +58,6 @@ public class JeiRecipes {
 	private static List<BookRecipe> bookRecipes = null;
 	private static List<FusionRecipe> fusionByproducts = null;
 	private static List<HadronRecipe> hadronRecipes = null;
-	private static List<SILEXRecipe> silexRecipes = null;
-	private static List<SmithingRecipe> smithingRecipes = null;
-	private static List<AnvilRecipe> anvilRecipes = null;
 	
 	private static List<ItemStack> batteries = null;
 	private static Map<Integer, List<ItemStack>> reactorFuelMap = new HashMap<Integer, List<ItemStack>>();
@@ -393,77 +384,6 @@ public class JeiRecipes {
 		
 	}
 	
-	public static class SILEXRecipe implements IRecipeWrapper {
-
-		List<List<ItemStack>> input;
-		List<Double> chances;
-		List<ItemStack> outputs;
-		double produced;
-		
-		public SILEXRecipe(List<ItemStack> inputs, List<Double> chances, List<ItemStack> outputs, double produced){
-			input = new ArrayList<>(1);
-			input.add(inputs);
-			this.chances = chances;
-			this.outputs = outputs;
-			this.produced = produced;
-		}
-		
-		@Override
-		public void getIngredients(IIngredients ingredients){
-			ingredients.setInputLists(VanillaTypes.ITEM, input);
-			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
-		}
-		
-	}
-	
-	public static class AnvilRecipe implements IRecipeWrapper {
-
-		List<List<ItemStack>> inputs;
-		List<ItemStack> outputs;
-		List<Float> chances;
-		int tierLower;
-		int tierUpper;
-		OverlayType overlay;
-		
-		public AnvilRecipe(List<List<ItemStack>> inp, List<ItemStack> otp, List<Float> chance, int tL, int tU, OverlayType ovl){
-			inputs = inp;
-			outputs = otp;
-			chances = chance;
-			tierLower = tL;
-			tierUpper = tU;
-			overlay = ovl;
-		}
-		
-		@Override
-		public void getIngredients(IIngredients ingredients){
-			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
-		}
-		
-	}
-	
-	public static class SmithingRecipe implements IRecipeWrapper {
-
-		List<List<ItemStack>> inputs;
-		ItemStack output;
-		int tier;
-		
-		public SmithingRecipe(List<ItemStack> left, List<ItemStack> right, ItemStack out, int tier){
-			inputs = new ArrayList<>(2);
-			inputs.add(left);
-			inputs.add(right);
-			output = out;
-			this.tier = tier;
-		}
-		
-		@Override
-		public void getIngredients(IIngredients ingredients){
-			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-			ingredients.setOutput(VanillaTypes.ITEM, output);
-		}
-		
-	}
-	
 	
 	
 	
@@ -567,9 +487,7 @@ public class JeiRecipes {
 		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.pellet_coal) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.pellet_coal));
 		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.biomass) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.biomass));
 		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.powder_lignite) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.powder_lignite));
-		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.coke) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.coke));
-		
-		
+
 		recipes.put(new Object[] { i_stamps_plate, new ItemStack(Items.IRON_INGOT) }, getPressResultNN(MachineRecipes.stamps_plate.get(0), Items.IRON_INGOT));
 		recipes.put(new Object[] { i_stamps_plate, new ItemStack(Items.GOLD_INGOT) }, getPressResultNN(MachineRecipes.stamps_plate.get(0), Items.GOLD_INGOT));
 		recipes.put(new Object[] { i_stamps_plate, new ItemStack(ModItems.ingot_titanium) }, getPressResultNN(MachineRecipes.stamps_plate.get(0), ModItems.ingot_titanium));
@@ -592,8 +510,6 @@ public class JeiRecipes {
 		recipes.put(new Object[] { i_stamps_wire, new ItemStack(ModItems.ingot_magnetized_tungsten) }, getPressResultNN(MachineRecipes.stamps_wire.get(0), ModItems.ingot_magnetized_tungsten));
 
 		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_raw));
-		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_bismuth_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_bismuth_raw));
-		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_tantalium_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_tantalium_raw));
 
 		recipes.put(new Object[] { i_stamps_357, new ItemStack(ModItems.assembly_iron) }, getPressResultNN(i_stamps_357.get(0).getItem(), ModItems.assembly_iron));
 		recipes.put(new Object[] { i_stamps_357, new ItemStack(ModItems.assembly_steel) }, getPressResultNN(i_stamps_357.get(0).getItem(), ModItems.assembly_steel));
@@ -672,7 +588,6 @@ public class JeiRecipes {
 			}
 		} catch (Exception x) {
 			MainRegistry.logger.error("Unable to register alloy recipes for NEI!");
-			x.printStackTrace();
 		}
 		for(Map.Entry<ItemStack[], ItemStack> entry : recipes.entrySet()){
 			List<ItemStack> inputs = new ArrayList<ItemStack>(2);
@@ -890,55 +805,4 @@ public class JeiRecipes {
 		return hadronRecipes;
 	}
 	
-	public static List<SILEXRecipe> getSILEXRecipes(){
-		if(silexRecipes != null)
-			return silexRecipes;
-		silexRecipes = new ArrayList<>();
-		for(Entry<List<ItemStack>, com.hbm.inventory.SILEXRecipes.SILEXRecipe> e : com.hbm.inventory.SILEXRecipes.getRecipes().entrySet()){
-			com.hbm.inventory.SILEXRecipes.SILEXRecipe out = e.getValue();
-			double weight = 0;
-			for(WeightedRandomObject obj : out.outputs) {
-				weight += obj.itemWeight;
-			}
-			List<Double> chances = new ArrayList<>(out.outputs.size());
-			List<ItemStack> outputs = new ArrayList<>(chances.size());
-			for(int i = 0; i < out.outputs.size(); i++) {
-				WeightedRandomObject obj = out.outputs.get(i);
-				outputs.add(obj.asStack());
-				chances.add(100 * obj.itemWeight / weight);
-			}
-			silexRecipes.add(new SILEXRecipe(e.getKey(), chances, outputs, (double)out.fluidProduced/out.fluidConsumed));
-		}
-		return silexRecipes;
-	}
-	
-	public static List<SmithingRecipe> getSmithingRecipes(){
-		if(smithingRecipes != null)
-			return smithingRecipes;
-		smithingRecipes = new ArrayList<>();
-		for(AnvilSmithingRecipe r : AnvilRecipes.getSmithing()){
-			smithingRecipes.add(new SmithingRecipe(r.getLeft(), r.getRight(), r.getSimpleOutput(), r.tier));
-		}
-		return smithingRecipes;
-	}
-	
-	public static List<AnvilRecipe> getAnvilRecipes(){
-		if(anvilRecipes != null)
-			return anvilRecipes;
-		anvilRecipes = new ArrayList<>();
-		for(AnvilConstructionRecipe r : AnvilRecipes.getConstruction()){
-			List<List<ItemStack>> inputs = new ArrayList<>(r.input.size());
-			List<ItemStack> outputs = new ArrayList<>(r.output.size());
-			List<Float> chances = new ArrayList<>(r.output.size());
-			for(AStack sta : r.input){
-				inputs.add(sta.getStackList());
-			}
-			for(AnvilOutput sta : r.output){
-				outputs.add(sta.stack.copy());
-				chances.add(sta.chance);
-			}
-			anvilRecipes.add(new AnvilRecipe(inputs, outputs, chances, r.tierLower, r.tierUpper, r.getOverlay()));
- 		}
-		return anvilRecipes;
-	}
 }

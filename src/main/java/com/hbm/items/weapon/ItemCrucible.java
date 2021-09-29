@@ -1,10 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IPostRender;
 import com.hbm.lib.HBMSoundHandler;
@@ -19,22 +14,15 @@ import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,8 +39,6 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	@Override
 	public void onEquip(EntityPlayer player, EnumHand hand) {
 		super.onEquip(player, hand);
-		if(getCharges(player.getHeldItem(hand)) == 0)
-			return;
 		if(!(player instanceof EntityPlayerMP))
 			return;
 		//World world = player.world;
@@ -66,13 +52,6 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	}
 	
 	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items){
-		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-			items.add(charge(new ItemStack(this)));
-		}
-	}
-	
-	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
 		if(!(entityLiving instanceof EntityPlayerMP)){
 			super.onEntitySwing(entityLiving, stack);
@@ -80,7 +59,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 		}
 		if(!doSpecialClick){
 			EnumHand hand = stack == entityLiving.getHeldItemMainhand() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
-			
+
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("type", "anim");
 			nbt.setInteger("hand", hand.ordinal());
@@ -88,8 +67,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 			nbt.setString("name", this.getRegistryName().getResourcePath());
 			PacketDispatcher.wrapper.sendTo(new AuxParticlePacketNT(nbt, 0, 0, 0), (EntityPlayerMP)entityLiving);
 		}
-		if(getCharges(stack) > 0)
-			entityLiving.world.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.crucibleSwing, SoundCategory.PLAYERS, 1, 1);
+		entityLiving.world.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.crucibleSwing, SoundCategory.PLAYERS, 1, 1);
 
 		return true;
 	}
@@ -101,7 +79,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(isSelected && worldIn.isRemote && getCharges(stack) > 0 && entityIn instanceof EntityPlayer){
+		if(isSelected && worldIn.isRemote && entityIn instanceof EntityPlayer){
 			updateClient(worldIn, (EntityPlayer) entityIn, itemSlot);
 		}
 	}
@@ -130,8 +108,9 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase victim, EntityLivingBase attacker) {
 		if(!doSpecialClick){
-			discharge(stack);
-			if(!attacker.world.isRemote && getCharges(stack) > 0 && !victim.isEntityAlive()) {
+			//attacker.world.playSound(null, victim.posX, victim.posY, victim.posZ, SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 1.0F, 0.75F + victim.getRNG().nextFloat() * 0.2F);
+
+			if(!attacker.world.isRemote && !victim.isEntityAlive()) {
 				int count = Math.min((int)Math.ceil(victim.getMaxHealth() / 3D), 250);
 
 				NBTTagCompound data = new NBTTagCompound();
@@ -144,63 +123,6 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 			}
 		}
 		return super.hitEntity(stack, victim, attacker);
-	}
-	
-	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
-		String charge = TextFormatting.RED + "Charge [";
-		
-		int charges = getCharges(stack);
-		for(int i = 0; i < GeneralConfig.crucibleMaxCharges; i++)
-			if(charges > i)
-				charge += "||||||";
-			else
-				charge += "   ";
-		
-		charge += "]";
-		
-		list.add(charge);
-	}
-	
-	public static int getCharges(ItemStack stack){
-		if(stack.hasTagCompound()){
-			return stack.getTagCompound().getInteger("charges");
-		}
-		return 0;
-	}
-	
-	public static ItemStack charge(ItemStack stack){
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("charges", GeneralConfig.crucibleMaxCharges);
-		return stack;
-	}
-	
-	public static void discharge(ItemStack stack){
-		if(!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("charges", Math.max(0, getCharges(stack)-1));
-	}
-	
-	@Override
-	public boolean showDurabilityBar(ItemStack stack){
-		return true;
-	}
-	
-	@Override
-	public double getDurabilityForDisplay(ItemStack stack){
-		return 1-(double)getCharges(stack)/GeneralConfig.crucibleMaxCharges;
-	}
-	
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack){
-		Multimap<String, AttributeModifier> map = HashMultimap.<String, AttributeModifier> create();
-		boolean charged = getCharges(stack) > 0;
-		if(slot == EntityEquipmentSlot.MAINHAND) {
-			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Tool modifier", charged ? movement : movement*0.8F, 1));
-			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", charged ? (double) this.damage : 5, 0));
-		}
-		return map;
 	}
 
 }

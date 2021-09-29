@@ -1,9 +1,103 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.NTMAnvil;
 import com.hbm.interfaces.Spaghetti;
-import com.hbm.inventory.container.*;
+import com.hbm.inventory.container.ContainerAMSBase;
+import com.hbm.inventory.container.ContainerAMSEmitter;
+import com.hbm.inventory.container.ContainerAMSLimiter;
+import com.hbm.inventory.container.ContainerArmorTable;
+import com.hbm.inventory.container.ContainerBarrel;
+import com.hbm.inventory.container.ContainerBombMulti;
+import com.hbm.inventory.container.ContainerBook;
+import com.hbm.inventory.container.ContainerCentrifuge;
+import com.hbm.inventory.container.ContainerCompactLauncher;
+import com.hbm.inventory.container.ContainerConverterHeRf;
+import com.hbm.inventory.container.ContainerConverterRfHe;
+import com.hbm.inventory.container.ContainerCore;
+import com.hbm.inventory.container.ContainerCoreAdvanced;
+import com.hbm.inventory.container.ContainerCoreEmitter;
+import com.hbm.inventory.container.ContainerCoreInjector;
+import com.hbm.inventory.container.ContainerCoreReceiver;
+import com.hbm.inventory.container.ContainerCoreStabilizer;
+import com.hbm.inventory.container.ContainerCoreTitanium;
+import com.hbm.inventory.container.ContainerCrateIron;
+import com.hbm.inventory.container.ContainerCrateSteel;
+import com.hbm.inventory.container.ContainerCrystallizer;
+import com.hbm.inventory.container.ContainerDiFurnace;
+import com.hbm.inventory.container.ContainerElectricFurnace;
+import com.hbm.inventory.container.ContainerFWatzCore;
+import com.hbm.inventory.container.ContainerForceField;
+import com.hbm.inventory.container.ContainerFusionMultiblock;
+import com.hbm.inventory.container.ContainerHadron;
+import com.hbm.inventory.container.ContainerIGenerator;
+import com.hbm.inventory.container.ContainerITER;
+import com.hbm.inventory.container.ContainerLaunchPadTier1;
+import com.hbm.inventory.container.ContainerLaunchTable;
+import com.hbm.inventory.container.ContainerMachineArcFurnace;
+import com.hbm.inventory.container.ContainerMachineAssembler;
+import com.hbm.inventory.container.ContainerMachineBattery;
+import com.hbm.inventory.container.ContainerMachineBoiler;
+import com.hbm.inventory.container.ContainerMachineBoilerElectric;
+import com.hbm.inventory.container.ContainerMachineCMBFactory;
+import com.hbm.inventory.container.ContainerMachineChemplant;
+import com.hbm.inventory.container.ContainerMachineCoal;
+import com.hbm.inventory.container.ContainerMachineCyclotron;
+import com.hbm.inventory.container.ContainerMachineDiesel;
+import com.hbm.inventory.container.ContainerMachineEPress;
+import com.hbm.inventory.container.ContainerMachineFluidTank;
+import com.hbm.inventory.container.ContainerMachineGasCent;
+import com.hbm.inventory.container.ContainerMachineGasFlare;
+import com.hbm.inventory.container.ContainerMachineGenerator;
+import com.hbm.inventory.container.ContainerMachineKeyForge;
+import com.hbm.inventory.container.ContainerMachineLargeTurbine;
+import com.hbm.inventory.container.ContainerMachineMiningDrill;
+import com.hbm.inventory.container.ContainerMachineMissileAssembly;
+import com.hbm.inventory.container.ContainerMachineOilWell;
+import com.hbm.inventory.container.ContainerMachinePress;
+import com.hbm.inventory.container.ContainerMachinePumpjack;
+import com.hbm.inventory.container.ContainerMachineRTG;
+import com.hbm.inventory.container.ContainerMachineRadGen;
+import com.hbm.inventory.container.ContainerMachineRadar;
+import com.hbm.inventory.container.ContainerMachineReactorSmall;
+import com.hbm.inventory.container.ContainerMachineRefinery;
+import com.hbm.inventory.container.ContainerMachineSatLinker;
+import com.hbm.inventory.container.ContainerMachineSchrabidiumTransmutator;
+import com.hbm.inventory.container.ContainerMachineSelenium;
+import com.hbm.inventory.container.ContainerMachineShredder;
+import com.hbm.inventory.container.ContainerMachineSiren;
+import com.hbm.inventory.container.ContainerMachineTeleLinker;
+import com.hbm.inventory.container.ContainerMachineTeleporter;
+import com.hbm.inventory.container.ContainerMachineTurbine;
+import com.hbm.inventory.container.ContainerMachineTurbofan;
+import com.hbm.inventory.container.ContainerMicrowave;
+import com.hbm.inventory.container.ContainerMiningLaser;
+import com.hbm.inventory.container.ContainerNukeBoy;
+import com.hbm.inventory.container.ContainerNukeCustom;
+import com.hbm.inventory.container.ContainerNukeFleija;
+import com.hbm.inventory.container.ContainerNukeFstbmb;
+import com.hbm.inventory.container.ContainerNukeFurnace;
+import com.hbm.inventory.container.ContainerNukeGadget;
+import com.hbm.inventory.container.ContainerNukeMan;
+import com.hbm.inventory.container.ContainerNukeMike;
+import com.hbm.inventory.container.ContainerNukeN2;
+import com.hbm.inventory.container.ContainerNukeN45;
+import com.hbm.inventory.container.ContainerNukePrototype;
+import com.hbm.inventory.container.ContainerNukeSolinium;
+import com.hbm.inventory.container.ContainerNukeTsar;
+import com.hbm.inventory.container.ContainerPlasmaHeater;
+import com.hbm.inventory.container.ContainerPuF6Tank;
+import com.hbm.inventory.container.ContainerRailgun;
+import com.hbm.inventory.container.ContainerReactor;
+import com.hbm.inventory.container.ContainerReactorControl;
+import com.hbm.inventory.container.ContainerReactorMultiblock;
+import com.hbm.inventory.container.ContainerRtgFurnace;
+import com.hbm.inventory.container.ContainerSafe;
+import com.hbm.inventory.container.ContainerSatDock;
+import com.hbm.inventory.container.ContainerSoyuzCapsule;
+import com.hbm.inventory.container.ContainerSoyuzLauncher;
+import com.hbm.inventory.container.ContainerUF6Tank;
+import com.hbm.inventory.container.ContainerWasteDrum;
+import com.hbm.inventory.container.ContainerWatzCore;
 import com.hbm.inventory.control_panel.ContainerControlEdit;
 import com.hbm.inventory.control_panel.GuiControlEdit;
 import com.hbm.inventory.gui.*;
@@ -41,7 +135,6 @@ import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
-import com.hbm.tileentity.machine.TileEntityCrateTungsten;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
@@ -99,27 +192,11 @@ import com.hbm.tileentity.machine.TileEntityMicrowave;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntityRtgFurnace;
-import com.hbm.tileentity.machine.TileEntitySILEX;
 import com.hbm.tileentity.machine.TileEntitySafe;
 import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
-import com.hbm.tileentity.machine.TileEntityStorageDrum;
 import com.hbm.tileentity.machine.TileEntityWasteDrum;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutgasser;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
-import com.hbm.tileentity.turret.TileEntityTurretChekhov;
-import com.hbm.tileentity.turret.TileEntityTurretFriendly;
-import com.hbm.tileentity.turret.TileEntityTurretFritz;
-import com.hbm.tileentity.turret.TileEntityTurretHoward;
-import com.hbm.tileentity.turret.TileEntityTurretJeremy;
-import com.hbm.tileentity.turret.TileEntityTurretMaxwell;
-import com.hbm.tileentity.turret.TileEntityTurretRichard;
-import com.hbm.tileentity.turret.TileEntityTurretTauon;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -541,120 +618,10 @@ public class GuiHandler implements IGuiHandler {
 				return new ContainerControlEdit(player.inventory, (TileEntityControlPanel)entity);
 			}
 			return null;
-		case ModBlocks.guiID_crate_tungsten:
-			if(entity instanceof TileEntityCrateTungsten) {
-				return new ContainerCrateTungsten(player.inventory, (TileEntityCrateTungsten) entity);
-			}
-			return null;
-		case ModBlocks.guiID_chekhov: {
-			if(entity instanceof TileEntityTurretChekhov) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretChekhov) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_friendly: {
-			if(entity instanceof TileEntityTurretFriendly) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretFriendly) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_jeremy: {
-			if(entity instanceof TileEntityTurretJeremy) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretJeremy) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_tauon: {
-			if(entity instanceof TileEntityTurretTauon) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretTauon) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_richard: {
-			if(entity instanceof TileEntityTurretRichard) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretRichard) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_howard: {
-			if(entity instanceof TileEntityTurretHoward) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretHoward) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_maxwell: {
-			if(entity instanceof TileEntityTurretMaxwell) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretMaxwell) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_fritz: {
-			if(entity instanceof TileEntityTurretFritz) {
-				return new ContainerTurretBase(player.inventory, (TileEntityTurretFritz) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_rbmk_rod: {
-			if(entity instanceof TileEntityRBMKRod) {
-				return new ContainerRBMKRod(player.inventory, (TileEntityRBMKRod) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_boiler: {
-			if(entity instanceof TileEntityRBMKBoiler) {
-				return new ContainerRBMKBoiler(player.inventory, (TileEntityRBMKBoiler) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_control: {
-			if(entity instanceof TileEntityRBMKControlManual) {
-				return new ContainerRBMKControl(player.inventory, (TileEntityRBMKControlManual) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_control_auto: {
-			if(entity instanceof TileEntityRBMKControlAuto) {
-				return new ContainerRBMKControlAuto(player.inventory, (TileEntityRBMKControlAuto) entity);
-			}
-			return null;
-		}
-		
-		case ModBlocks.guiID_rbmk_outgasser: {
-			if(entity instanceof TileEntityRBMKOutgasser) {
-				return new ContainerRBMKOutgasser(player.inventory, (TileEntityRBMKOutgasser) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_storage_drum: {
-			if(entity instanceof TileEntityStorageDrum) {
-				return new ContainerStorageDrum(player.inventory, (TileEntityStorageDrum) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_silex: {
-			if(entity instanceof TileEntitySILEX) {
-				return new ContainerSILEX(player.inventory, (TileEntitySILEX) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_anvil: {
-			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof NTMAnvil) {
-				return new ContainerAnvil(player.inventory, ((NTMAnvil)world.getBlockState(new BlockPos(x, y, z)).getBlock()).tier);
-			}
-			return null;
-		}
 		case ModItems.guiID_item_book:
 			return new ContainerBook(player.inventory);
 		}
-		
+
 		return null;
 	}
 
@@ -1067,123 +1034,6 @@ public class GuiHandler implements IGuiHandler {
 				return new GuiControlEdit(player.inventory, (TileEntityControlPanel)entity);
 			}
 			return null;
-		case ModBlocks.guiID_crate_tungsten: 
-			if(entity instanceof TileEntityCrateTungsten) {
-				return new GUICrateTungsten(player.inventory, (TileEntityCrateTungsten) entity);
-			}
-			return null;
-		case ModBlocks.guiID_chekhov: {
-			if(entity instanceof TileEntityTurretChekhov) {
-				return new GUITurretChekhov(player.inventory, (TileEntityTurretChekhov) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_friendly: {
-			if(entity instanceof TileEntityTurretFriendly) {
-				return new GUITurretFriendly(player.inventory, (TileEntityTurretFriendly) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_jeremy: {
-			if(entity instanceof TileEntityTurretJeremy) {
-				return new GUITurretJeremy(player.inventory, (TileEntityTurretJeremy) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_tauon: {
-			if(entity instanceof TileEntityTurretTauon) {
-				return new GUITurretTauon(player.inventory, (TileEntityTurretTauon) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_richard: {
-			if(entity instanceof TileEntityTurretRichard) {
-				return new GUITurretRichard(player.inventory, (TileEntityTurretRichard) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_howard: {
-			if(entity instanceof TileEntityTurretHoward) {
-				return new GUITurretHoward(player.inventory, (TileEntityTurretHoward) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_maxwell: {
-			if(entity instanceof TileEntityTurretMaxwell) {
-				return new GUITurretMaxwell(player.inventory, (TileEntityTurretMaxwell) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_fritz: {
-			if(entity instanceof TileEntityTurretFritz) {
-				return new GUITurretFritz(player.inventory, (TileEntityTurretFritz) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_rbmk_rod: {
-			if(entity instanceof TileEntityRBMKRod) {
-				return new GUIRBMKRod(player.inventory, (TileEntityRBMKRod) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_boiler: {
-			if(entity instanceof TileEntityRBMKBoiler) {
-				return new GUIRBMKBoiler(player.inventory, (TileEntityRBMKBoiler) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_control: {
-			if(entity instanceof TileEntityRBMKControlManual) {
-				return new GUIRBMKControl(player.inventory, (TileEntityRBMKControlManual) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_control_auto: {
-			if(entity instanceof TileEntityRBMKControlAuto) {
-				return new GUIRBMKControlAuto(player.inventory, (TileEntityRBMKControlAuto) entity);
-			}
-			return null;
-		}
-
-		case ModBlocks.guiID_rbmk_outgasser: {
-			if(entity instanceof TileEntityRBMKOutgasser) {
-				return new GUIRBMKOutgasser(player.inventory, (TileEntityRBMKOutgasser) entity);
-			}
-			return null;
-		}
-		
-		case ModBlocks.guiID_rbmk_console: {
-			if(entity instanceof TileEntityRBMKConsole) {
-				return new GUIRBMKConsole(player.inventory, (TileEntityRBMKConsole) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_storage_drum: {
-			if(entity instanceof TileEntityStorageDrum) {
-				return new GUIStorageDrum(player.inventory, (TileEntityStorageDrum) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_silex: {
-			if(entity instanceof TileEntitySILEX) {
-				return new GUISILEX(player.inventory, (TileEntitySILEX) entity);
-			}
-			return null;
-		}
-		case ModBlocks.guiID_anvil: {
-			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof NTMAnvil) {
-				return new GUIAnvil(player, ((NTMAnvil)world.getBlockState(new BlockPos(x, y, z)).getBlock()).tier);
-			}
-			return null;
-		}
 		// ITEM GUIS
 		case ModItems.guiID_item_folder:
 			return new GUIScreenTemplateFolder(player);
@@ -1199,8 +1049,6 @@ public class GuiHandler implements IGuiHandler {
 			break;
 		case ModItems.guiID_item_book:
 			return new GUIBook(player.inventory);
-		case ModItems.guiID_item_guide:
-			return new GUIScreenGuide(player);
 		}
 		
 		return null;

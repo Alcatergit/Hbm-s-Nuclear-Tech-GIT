@@ -8,6 +8,8 @@ import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityNukeN45;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
+import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
+import com.hbm.tileentity.bomb.TileEntityTurretCheapo;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
@@ -30,8 +32,6 @@ import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
-import com.hbm.tileentity.turret.TileEntityTurretCIWS;
-import com.hbm.tileentity.turret.TileEntityTurretCheapo;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

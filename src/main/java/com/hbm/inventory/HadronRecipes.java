@@ -32,7 +32,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_copper),
-				80,
+				160,
 				new ItemStack(ModItems.particle_aproton),
 				new ItemStack(ModItems.particle_aelectron),
 				true
@@ -40,7 +40,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_amat),
 				new ItemStack(ModItems.particle_amat),
-				80,
+				1600,
 				new ItemStack(ModItems.particle_aschrab),
 				new ItemStack(ModItems.particle_empty),
 				false
@@ -48,7 +48,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_aschrab),
 				new ItemStack(ModItems.particle_aschrab),
-				100000,
+				2400,
 				new ItemStack(ModItems.particle_dark),
 				new ItemStack(ModItems.particle_empty),
 				false
@@ -56,7 +56,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_amat),
-				1000,
+				400,
 				new ItemStack(ModItems.particle_muon),
 				new ItemStack(ModItems.particle_empty),
 				true
@@ -64,23 +64,15 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_lead),
-				4000,
+				8000,
 				new ItemStack(ModItems.particle_higgs),
 				new ItemStack(ModItems.particle_empty),
 				false
 				));
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_muon),
-				new ItemStack(ModItems.particle_higgs),
-				1000,
-				new ItemStack(ModItems.particle_tachyon),
-				new ItemStack(ModItems.particle_empty),
-				true
-				));
-		recipes.add(new HadronRecipe(
-				new ItemStack(ModItems.particle_muon),
 				new ItemStack(ModItems.particle_dark),
-				100000,
+				800,
 				new ItemStack(ModItems.particle_strange),
 				new ItemStack(ModItems.particle_empty),
 				false
@@ -88,7 +80,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_strange),
 				new ItemStack(ModItems.powder_magic),
-				500000,
+				24000,
 				new ItemStack(ModItems.particle_sparkticle),
 				new ItemStack(ModItems.dust),
 				false
@@ -96,7 +88,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_sparkticle),
 				new ItemStack(ModItems.particle_higgs),
-				1000000,
+				200000,
 				new ItemStack(ModItems.particle_digamma),
 				new ItemStack(ModItems.particle_empty),
 				false
@@ -104,7 +96,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(Items.CHICKEN),
 				new ItemStack(Items.CHICKEN),
-				100,
+				800,
 				new ItemStack(ModItems.nugget),
 				new ItemStack(ModItems.nugget),
 				false

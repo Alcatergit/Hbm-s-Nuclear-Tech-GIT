@@ -105,7 +105,6 @@ public class BulletConfiguration {
 	public static final int STYLE_ORB = 11;
 	public static final int STYLE_METEOR = 12;
 	public static final int STYLE_TRACER = 13;
-	public static final int STYLE_APDS = 14;
 
 	public static final int PLINK_NONE = 0;
 	public static final int PLINK_BULLET = 1;

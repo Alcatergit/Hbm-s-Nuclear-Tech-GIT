@@ -187,36 +187,6 @@ public final class HBMSoundHandler {
 	public static SoundEvent hit_dirt;
 	public static SoundEvent hit_metal;
 	public static SoundEvent hit_flesh;
-	public static SoundEvent vomit;
-	public static SoundEvent chekhov_fire;
-	public static SoundEvent jeremy_fire;
-	public static SoundEvent jeremy_reload;
-	public static SoundEvent richard_fire;
-	public static SoundEvent howard_fire;
-	public static SoundEvent howard_reload;
-	public static SoundEvent rbmk_explosion;
-	public static SoundEvent rbmk_az5_cover;
-	public static SoundEvent chungus_lever;
-	public static SoundEvent dflash;
-	public static SoundEvent cough;
-	public static SoundEvent ufoBeam;
-	public static SoundEvent ufoBlast;
-	
-	public static SoundEvent transitionSealOpen;
-	public static SoundEvent garage;
-	public static SoundEvent garage_stop;
-	public static SoundEvent door_spinny;
-	public static SoundEvent wgh_big_start;
-	public static SoundEvent wgh_big_stop;
-	public static SoundEvent wgh_start;
-	public static SoundEvent wgh_stop;
-	public static SoundEvent alarm6;
-	public static SoundEvent qe_sliding_shut;
-	public static SoundEvent qe_sliding_opened;
-	public static SoundEvent qe_sliding_opening;
-	public static SoundEvent hatch_open;
-	public static SoundEvent sliding_seal_open;
-	public static SoundEvent sliding_seal_stop;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -248,8 +218,6 @@ public final class HBMSoundHandler {
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");
 	public static SoundEvent vortalCombat = registerBypass("music.recordvortalcombat");
 	public static SoundEvent glass = registerBypass("music.transmission");
-	
-	public static SoundEvent metalBlock = registerBypass("step.metalBlock");
 	
 	public static SoundEvent[] geigerSounds;
 
@@ -432,35 +400,6 @@ public final class HBMSoundHandler {
 		hit_dirt = register("weapon.hit_dirt");
 		hit_metal = register("weapon.hit_metal");
 		hit_flesh = register("weapon.hit_flesh");
-		vomit = register("entity.vomit");
-		chekhov_fire = register("turret.chekhov_fire");
-		jeremy_fire = register("turret.jeremy_fire");
-		jeremy_reload = register("turret.jeremy_reload");
-		richard_fire = register("turret.richard_fire");
-		howard_fire = register("turret.howard_fire");
-		howard_reload = register("turret.howard_reload");
-		rbmk_explosion = register("block.rbmk_explosion");
-		rbmk_az5_cover = register("block.rbmk_az5_cover");
-		chungus_lever = register("block.chungusLever");
-		dflash = register("weapon.dFlash");
-		cough = register("player.cough");
-		ufoBeam = register("entity.ufoBeam");
-		ufoBlast = register("entity.ufoBlast");
-		transitionSealOpen = register("block.door.transitionseal");
-		garage = register("block.door.garage");
-		garage_stop = register("block.door.garagestop");
-		door_spinny = register("block.door.lever");
-		wgh_big_start = register("block.door.wgh_big_start");
-		wgh_big_stop = register("block.door.wgh_big_stop");
-		wgh_start = register("block.door.wgh_start");
-		wgh_stop = register("block.door.wgh_stop");
-		alarm6 = register("block.door.alarm6");
-		qe_sliding_shut = register("block.door.qe_sliding_shut");
-		qe_sliding_opened = register("block.door.qe_sliding_opened");
-		qe_sliding_opening = register("block.door.qe_sliding_opening");
-		hatch_open = register("block.door.hatch_open");
-		sliding_seal_open = register("block.door.sliding_seal_open");
-		sliding_seal_stop = register("block.door.sliding_seal_stop");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
 	}

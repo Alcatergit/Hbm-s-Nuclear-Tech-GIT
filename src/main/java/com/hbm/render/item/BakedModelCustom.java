@@ -67,7 +67,9 @@ public class BakedModelCustom implements IBakedModel {
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		renderer.type = cameraTransformType;
 		Pair<? extends IBakedModel, Matrix4f> par = renderer.itemModel.handlePerspective(cameraTransformType);
-		return Pair.of(this, renderer.doNullTransform() && cameraTransformType == TransformType.GUI ? null : par.getRight());
+		//Matrix4f a = new Matrix4f();
+		//a.setIdentity();
+		return Pair.of(this, par.getRight());
 	}
 
 }

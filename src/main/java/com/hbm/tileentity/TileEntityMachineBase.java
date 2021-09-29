@@ -18,7 +18,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 @Spaghetti("Not spaghetti in itself, but for the love of god please use this base class for all machines")
-public abstract class TileEntityMachineBase extends TileEntity implements INBTPacketReceiver {
+public abstract class TileEntityMachineBase extends TileEntity {
 
 	public ItemStackHandler inventory;
 	

@@ -1,16 +1,12 @@
 package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.WeaponConfig;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityTickingBase;
@@ -24,59 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IConsumer {
 
-	public static Map<World, List<Entity>> radarDetectableEntityMap = new HashMap<>();
-	
-	@SubscribeEvent
-	public static void onWorldLoad(WorldEvent.Load e){
-		if(!e.getWorld().isRemote){
-			radarDetectableEntityMap.put(e.getWorld(), new ArrayList<>());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload e){
-		if(!e.getWorld().isRemote){
-			radarDetectableEntityMap.remove(e.getWorld());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent e){
-		if(!e.getWorld().isRemote && (e.getEntity() instanceof EntityPlayer || e.getEntity() instanceof IRadarDetectable)){
-			radarDetectableEntityMap.get(e.getWorld()).add(e.getEntity());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void worldTick(WorldTickEvent e){
-		if(!e.world.isRemote){
-			List<Entity> list = radarDetectableEntityMap.get(e.world);
-			if(list != null && !list.isEmpty()){
-				Iterator<Entity> itr = list.iterator();
-				while(itr.hasNext()){
-					Entity ent = itr.next();
-					if(ent.isDead)
-						itr.remove();
-				}
-			}
-		}
-	}
-	
 	public List<int[]> nearbyMissiles = new ArrayList<int[]>();
-	private int ticks = 0;
 	int pingTimer = 0;
 	int lastPower;
 	final static int maxTimer = 40;
@@ -111,25 +61,20 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		if(!world.isRemote) {
 			nearbyMissiles.clear();
 
-			if(ticks >= 5){
-				ticks = 0;
-				if(power > 0) {
-					allocateMissiles();
+			if(power > 0) {
+				allocateMissiles();
 
-					power -= 500;
+				power -= 500;
 
-					if(power < 0)
-						power = 0;
-				}
-				
-				if(lastPower != getRedPower())
-					world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
-
-				sendMissileData();
+				if(power < 0)
+					power = 0;
 			}
-
-			ticks++;
 			
+			if(lastPower != getRedPower())
+				world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+
+			sendMissileData();
+
 			if(world.getBlockState(pos.down()).getBlock() != ModBlocks.muffler) {
 
 				pingTimer++;
@@ -148,7 +93,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		
 		nearbyMissiles.clear();
 		
-		/*List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000, pos.getZ() + 0.5 + WeaponConfig.radarRange));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000, pos.getZ() + 0.5 + WeaponConfig.radarRange));
 
 		for(Entity e : list) {
 
@@ -158,17 +103,6 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 			
 			if(e instanceof IRadarDetectable && e.posY >= pos.getY() + WeaponConfig.radarBuffer) {
 				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY });
-			}
-		}*/
-		
-		for(Entity e : radarDetectableEntityMap.get(world)){
-			if(e.posY < pos.getY()+WeaponConfig.radarBuffer || e.posX > pos.getX()+0.5+WeaponConfig.radarRange || e.posX < pos.getX()+0.5-WeaponConfig.radarRange || e.posZ > pos.getZ()+0.5+WeaponConfig.radarRange || e.posZ < pos.getZ()+0.5-WeaponConfig.radarRange){
-				continue;
-			}
-			if(e instanceof EntityPlayer){
-				nearbyMissiles.add(new int[]{(int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY});
-			} else {
-				nearbyMissiles.add(new int[]{(int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY});
 			}
 		}
 	}

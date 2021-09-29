@@ -3,9 +3,6 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.capability.HbmCapability;
-import com.hbm.capability.HbmLivingProps;
-import com.hbm.config.VersatileConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.JetpackBase;
@@ -28,7 +25,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,13 +43,12 @@ public class ItemSyringe extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if(this == ModItems.syringe_antidote && !VersatileConfig.hasPotionSickness(player))
+		if(this == ModItems.syringe_antidote)
 		{
             if (!world.isRemote)
             {
             	player.clearActivePotions();
-            	VersatileConfig.applyPotionSickness(player, 5);
-            	
+            
             	player.getHeldItem(hand).shrink(1);
             	world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
@@ -411,12 +406,12 @@ public class ItemSyringe extends Item {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase entity, EntityLivingBase attacker) {
 		World world = entity.world;
-		if(this == ModItems.syringe_antidote && !VersatileConfig.hasPotionSickness(entity))
+		if(this == ModItems.syringe_antidote)
 		{
             if (!entity.world.isRemote)
             {
             	entity.clearActivePotions();
-            	VersatileConfig.applyPotionSickness(entity, 5);
+            
             	stack.shrink(1);
             	world.playSound(null,  entity.posX,  entity.posY,  entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
@@ -588,14 +583,6 @@ public class ItemSyringe extends Item {
             }
 		}
 		
-		if(this == ModItems.syringe_mkunicorn) {
-			if(!world.isRemote) {
-				HbmLivingProps.setContagion(entity, 3 * 60 * 60 * 20);
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.syringeUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				stack.shrink(1);
-			}
-		}
-		
 		return false;
 	}
 
@@ -644,9 +631,6 @@ public class ItemSyringe extends Item {
 		}
 		if(this == ModItems.gas_mask_filter_mono) {
 			tooltip.add("Repairs worn monoxide mask");
-		}
-		if(this == ModItems.syringe_mkunicorn) {
-			tooltip.add(TextFormatting.RED + "?");
 		}
 	}
 }

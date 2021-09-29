@@ -2,14 +2,11 @@ package com.hbm.blocks.fluid;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -50,8 +47,7 @@ public class ToxicBlock extends BlockFluidClassic {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.setInWeb();
-		if(entityIn instanceof EntityLivingBase)
-			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 1.0F);
+		ContaminationUtil.applyRadData(entityIn, 1.0F);
 	}
 	
 	@Override

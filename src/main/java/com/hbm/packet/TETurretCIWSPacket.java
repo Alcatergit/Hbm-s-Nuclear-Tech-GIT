@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.tileentity.turret.TileEntityTurretCIWS;
+import com.hbm.tileentity.bomb.TileEntityTurretCIWS;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

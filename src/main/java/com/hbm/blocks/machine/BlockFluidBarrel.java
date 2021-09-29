@@ -53,11 +53,11 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.YELLOW + "Cannot store corrosive fluids");
 			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 		}
-		
+
 		if(this == ModBlocks.barrel_corroded) {
 			list.add(TextFormatting.AQUA + "Capacity: 6,000mB");
 			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
+			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
 			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 			list.add(TextFormatting.RED + "Leaky");
 		}
@@ -73,22 +73,14 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
 			list.add(TextFormatting.GREEN + "Can store hot fluids");
 			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store highly corrosive fluids properly");
 			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 		}
 		
 		if(this == ModBlocks.barrel_antimatter) {
 			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
 			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
+			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
 			list.add(TextFormatting.GREEN + "Can store antimatter");
-		}
-		
-		if(this == ModBlocks.barrel_tcalloy) {
-			list.add(TextFormatting.AQUA + "Capacity: 24,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
 		}
 	}
 	

@@ -120,8 +120,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 								break;
 							}
 							
-							@SuppressWarnings("deprecation")
-							float hardness = b.getBlock().getExplosionResistance(null);
+							float hardness = b.getBlock().getExplosionResistance(world, pos1, null, null);
 							if(hardness < 6000 && world.rand.nextInt(20) == 0) {
 								world.destroyBlock(pos1, false);
 							}

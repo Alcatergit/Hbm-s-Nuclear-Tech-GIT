@@ -1,17 +1,7 @@
 package com.hbm.explosion;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import org.apache.logging.log4j.Level;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.VersatileConfig;
@@ -31,8 +21,7 @@ import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.turret.TileEntityTurretBase;
+import com.hbm.tileentity.bomb.TileEntityTurretBase;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
@@ -50,7 +39,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -326,14 +314,13 @@ public class ExplosionNukeGeneric {
 		}
 	}
 */
-	@SuppressWarnings("deprecation")
 	public static int destruction(World world, BlockPos pos) {
 		int rand;
 		if (!world.isRemote) {
 			IBlockState b = world.getBlockState(pos);
-			if (b.getBlock().getExplosionResistance(null)>=200f) {	//500 is the resistance of liquids
+			if (b.getBlock().getExplosionResistance(world, pos, null, null)>=200f) {	//500 is the resistance of liquids
 				//blocks to be spared
-				int protection = (int)(b.getBlock().getExplosionResistance(null)/300f);
+				int protection = (int)(b.getBlock().getExplosionResistance(world, pos, null, null)/300f);
 				if (b.getBlock() == ModBlocks.brick_concrete) {
 					rand = random.nextInt(8);
 					if (rand == 0) {
@@ -368,16 +355,15 @@ public class ExplosionNukeGeneric {
 		return 0;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static int vaporDest(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			IBlockState b = world.getBlockState(pos);
-			if (b.getBlock().getExplosionResistance(null)<0.5f //most light things
+			if (b.getBlock().getExplosionResistance(world, pos, null, null)<0.5f //most light things
 					|| b.getBlock() == Blocks.WEB || b.getBlock() == ModBlocks.red_cable
 					|| b.getBlock() instanceof BlockLiquid) {
 				world.setBlockToAir(pos);
 				return 0;
-			} else if (b.getBlock().getExplosionResistance(null)<=3.0f && !b.isOpaqueCube()){
+			} else if (b.getBlock().getExplosionResistance(world, pos, null, null)<=3.0f && !b.isOpaqueCube()){
 				if(b.getBlock() != Blocks.CHEST && b.getBlock() != Blocks.FARMLAND){
 					//destroy all medium resistance blocks that aren't chests or farmland
 					world.setBlockToAir(pos);
@@ -389,7 +375,7 @@ public class ExplosionNukeGeneric {
 					&& world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
 				world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState(),2);
 			}
-			return (int)( b.getBlock().getExplosionResistance(null)/300f);
+			return (int)( b.getBlock().getExplosionResistance(world, pos, null, null)/300f);
 		}
 		return 0;
 	}
@@ -661,71 +647,10 @@ public class ExplosionNukeGeneric {
 		}
 	}
 	
-	public static void loadSoliniumFromFile(){
-		File config = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/solinium.cfg");
-		if (!config.exists())
-			try {
-				config.getParentFile().mkdirs();
-				FileWriter write = new FileWriter(config);
-				write.write("# Format: modid:blockName|modid:blockName\n" + 
-							"# Left blocks are transformed to right, one per line\n");
-				write.close();
-				
-			} catch (IOException e) {
-				MainRegistry.logger.log(Level.ERROR, "ERROR: Could not create config file: " + config.getAbsolutePath());
-				e.printStackTrace();
-				return;
-			}
-		if(config.exists()){
-			BufferedReader read = null;
-			int lineCount = 0;
-			try {
-				read = new BufferedReader(new FileReader(config));
-				String currentLine = null;
-				
-				while((currentLine = read.readLine()) != null){
-					lineCount ++;
-					if(currentLine.startsWith("#") || currentLine.length() == 0)
-						continue;
-					String[] blocks = currentLine.trim().split("|");
-					if(blocks.length != 2)
-						continue;
-					String[] modidBlock1 = blocks[0].split(":");
-					String[] modidBlock2 = blocks[0].split(":");
-					Block b1 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock1[0], modidBlock1[1]));
-					Block b2 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock2[0], modidBlock2[1]));
-					if(b1 == null || b2 == null){
-						MainRegistry.logger.log(Level.ERROR, "Failed to find block for solinium config on line: " + lineCount);
-						continue;
-					}
-					soliniumConfig.put(b1, b2);
-				}
-			} catch (FileNotFoundException e) {
-				MainRegistry.logger.log(Level.ERROR, "Could not find solinium config file! This should never happen.");
-				e.printStackTrace();
-			} catch (IOException e){
-				MainRegistry.logger.log(Level.ERROR, "Error reading solinium config!");
-				e.printStackTrace();
-			} finally {
-				if(read != null)
-					try {
-						read.close();
-					} catch (IOException e) {}
-			}
-		}
-	}
-	
-	public static Map<Block, Block> soliniumConfig = new HashMap<>();
-	
 	public static void solinium(World world, BlockPos pos) {
 		if (!world.isRemote) {
 			IBlockState b = world.getBlockState(pos);
 			Material m = b.getMaterial();
-			
-			if(soliniumConfig.containsKey(b.getBlock())){
-				world.setBlockState(pos, soliniumConfig.get(b.getBlock()).getDefaultState());
-				return;
-			}
 			
 			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_mycelium) {
 				world.setBlockState(pos, Blocks.DIRT.getDefaultState());

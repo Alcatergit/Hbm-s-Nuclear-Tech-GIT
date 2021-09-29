@@ -194,7 +194,7 @@ public class ExplosionNT extends Explosion {
 			}
 		}
 
-		Iterator<BlockPos> iterator;
+		Iterator iterator;
 		BlockPos chunkposition;
 		int i;
 		int j;
@@ -202,9 +202,9 @@ public class ExplosionNT extends Explosion {
 		IBlockState block;
 
 		iterator = this.affectedBlockPositions.iterator();
-		
+
 		while(iterator.hasNext()) {
-			chunkposition = iterator.next();
+			chunkposition = (BlockPos) iterator.next();
 			i = chunkposition.getX();
             j = chunkposition.getY();
             k = chunkposition.getZ();
@@ -241,31 +241,6 @@ public class ExplosionNT extends Explosion {
 				}
 
 				block.getBlock().onBlockExploded(this.worldObj, new BlockPos(i, j, k), this);
-				
-				if(block.isNormalCube()) {
-					
-					if(has(ExAttrib.DIGAMMA)) {
-						this.worldObj.setBlockState(new BlockPos(i, j, k), ModBlocks.ash_digamma.getDefaultState());
-						
-						if(this.explosionRNG.nextInt(5) == 0 && this.worldObj.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.AIR)
-							this.worldObj.setBlockState(new BlockPos(i, j + 1, k), ModBlocks.fire_digamma.getDefaultState());
-						
-					} else if(has(ExAttrib.DIGAMMA_CIRCUIT)) {
-						
-						if(i % 3 == 0 && k % 3 == 0) {
-							this.worldObj.setBlockState(new BlockPos(i, j, k), ModBlocks.pribris_digamma.getDefaultState());
-						} else if((i % 3 == 0 || k % 3 == 0) && this.explosionRNG.nextBoolean()) {
-							this.worldObj.setBlockState(new BlockPos(i, j, k), ModBlocks.pribris_digamma.getDefaultState());
-						} else {
-							this.worldObj.setBlockState(new BlockPos(i, j, k), ModBlocks.ash_digamma.getDefaultState());
-							
-							if(this.explosionRNG.nextInt(5) == 0 && this.worldObj.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.AIR)
-								this.worldObj.setBlockState(new BlockPos(i, j + 1, k), ModBlocks.fire_digamma.getDefaultState());
-						}
-					} else if(has(ExAttrib.LAVA_V)) {
-						this.worldObj.setBlockState(new BlockPos(i, j, k), ModBlocks.volcanic_lava_block.getDefaultState());
-					}
-				}
 			}
 		}
 
@@ -314,10 +289,7 @@ public class ExplosionNT extends Explosion {
 	public static enum ExAttrib {
 		FIRE,		//classic vanilla fire explosion
 		BALEFIRE,	//same with but with balefire
-		DIGAMMA,
-		DIGAMMA_CIRCUIT,
 		LAVA,		//again the same thing but lava
-		LAVA_V,		//again the same thing but volcaniclava
 		ALLMOD,		//block placer attributes like fire are applied for all destroyed blocks
 		ALLDROP,	//miner TNT!
 		NODROP,		//the opposite

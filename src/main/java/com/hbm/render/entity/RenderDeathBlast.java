@@ -37,16 +37,18 @@ public class RenderDeathBlast extends Render<EntityDeathBlast> {
 		GL11.glPushMatrix();
     	GL11.glTranslatef((float)x, (float)y, (float)z);
     	GlStateManager.disableLighting();
-    	GlStateManager.enableCull();
-    	GlStateManager.disableTexture2D();
-    	GlStateManager.shadeModel(GL11.GL_SMOOTH);
-    	GlStateManager.depthMask(false);
+        GlStateManager.enableCull();
+        GlStateManager.disableTexture2D();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.depthMask(false);
 
 		GL11.glPushMatrix();
+			//GL11.glRotatef((entity.ticksExisted % 360) * 10, 0, 1, 0);
 	        GlStateManager.enableBlend();
 	        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+	        //GL11.glDisable(GL11.GL_ALPHA_TEST);
 	        
-	        GlStateManager.color(1, 0, 0);
+	        GlStateManager.color(1.0F, 0, 0);
 	        
 	        Vec3 vector = Vec3.createVectorHelper(0.5D, 0, 0);
 	
@@ -54,32 +56,35 @@ public class RenderDeathBlast extends Render<EntityDeathBlast> {
 	        BufferBuilder buf = tessellator.getBuffer();
 			RenderHelper.disableStandardItemLighting();
 			
-			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 	        for(int i = 0; i < 8; i++) {
-	            buf.pos(vector.xCoord, 250.0D, vector.zCoord).color(1F, 0, 0, 1).endVertex();
-	            buf.pos(vector.xCoord, 0.0D, vector.zCoord).color(1F, 0, 0, 1).endVertex();
+	            buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+	            buf.pos(vector.xCoord, 250.0D, vector.zCoord).color(1.0F, 0, 0, 1.0F).endVertex();
+	            buf.pos(vector.xCoord, 0.0D, vector.zCoord).color(1.0F, 0, 0, 1.0F).endVertex();
 	        	vector.rotateAroundY(45);
-	        	buf.pos(vector.xCoord, 0.0D, vector.zCoord).color(1F, 0, 0, 1).endVertex();
-	            buf.pos(vector.xCoord, 250.0D, vector.zCoord).color(1F, 0, 0, 1).endVertex();
+	            buf.pos(vector.xCoord, 0.0D, vector.zCoord).color(1.0F, 0, 0, 1.0F).endVertex();
+	            buf.pos(vector.xCoord, 250.0D, vector.zCoord).color(1.0F, 0, 0, 1.0F).endVertex();
+	            tessellator.draw();
 	        }
 
-	        for(int i = 0; i < 8; i++) {
-	            buf.pos(vector.xCoord / 2, 250.0D, vector.zCoord / 2).color(1F, 0, 1, 1).endVertex();
-	            buf.pos(vector.xCoord / 2, 0.0D, vector.zCoord / 2).color(1F, 0, 1, 1).endVertex();
-	        	vector.rotateAroundY(45);
-	            buf.pos(vector.xCoord / 2, 0.0D, vector.zCoord / 2).color(1F, 0, 1, 1).endVertex();
-	            buf.pos(vector.xCoord / 2, 250.0D, vector.zCoord / 2).color(1F, 0, 1, 1).endVertex();
-	        }
+	        GlStateManager.color(1.0F, 0, 1.0F);
 	        
-	        tessellator.draw();
+	        for(int i = 0; i < 8; i++) {
+	        	buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+	        	buf.pos(vector.xCoord / 2, 250.0D, vector.zCoord / 2).color(1.0F, 0, 1.0F, 1.0F).endVertex();
+	        	buf.pos(vector.xCoord / 2, 0.0D, vector.zCoord / 2).color(1.0F, 0, 1.0F, 1.0F).endVertex();
+	        	vector.rotateAroundY(45);
+	        	buf.pos(vector.xCoord / 2, 0.0D, vector.zCoord / 2).color(1.0F, 0, 1.0F, 1.0F).endVertex();
+	        	buf.pos(vector.xCoord / 2, 250.0D, vector.zCoord / 2).color(1.0F, 0, 1.0F, 1.0F).endVertex();
+	            tessellator.draw();
+	        }
 	    GL11.glPopMatrix();
         
-	    GlStateManager.depthMask(true);
-	    GlStateManager.disableCull();
-	    GlStateManager.disableBlend();
-	    GlStateManager.enableTexture2D();
-	    GlStateManager.shadeModel(GL11.GL_FLAT);
-
+        GlStateManager.depthMask(true);
+        GlStateManager.disableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        
         GL11.glPopMatrix();
         
         renderOrb(entity, x, y, z, entityYaw, partialTicks);
@@ -91,36 +96,30 @@ public class RenderDeathBlast extends Render<EntityDeathBlast> {
         GlStateManager.disableLighting();
         GlStateManager.enableCull();
         GlStateManager.disableTexture2D();
-        GlStateManager.alphaFunc(GL11.GL_GEQUAL, 0);
 		
-		float scale = 10 - 10F * (((float)entity.ticksExisted) / ((float)EntityDeathBlast.maxAge));
-		float alpha = (((float)entity.ticksExisted) / ((float)EntityDeathBlast.maxAge));
+		double scale = 15 - 15D * (((double)entity.ticksExisted+p_76986_9_) / ((double)EntityDeathBlast.maxAge));
+		float alpha = ((float)(entity.ticksExisted+p_76986_9_) / (float)(EntityDeathBlast.maxAge));
 		
 		if(scale < 0)
 			scale = 0;
-		
-        GlStateManager.color(1, 0, 1, alpha);
+        GL11.glColor4d(1.0, 0, 1.0, alpha);
 
 		GlStateManager.enableBlend();
         GL11.glScaled(scale, scale, scale);
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        //OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         sphere.renderAll();
 
+        GlStateManager.color(1.0F, 0, 0, alpha);
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glScaled(1.25, 1.25, 1.25);
-        GlStateManager.color(1.0F, 0, 0, alpha * 0.125F);
+        GL11.glScaled(1.5, 1.5, 1.5);
+        sphere.renderAll();
         
-        for(int i = 0; i < 8; i++) {
-        	sphere.renderAll();
-            GL11.glScaled(1.05, 1.05, 1.05);
-        }
-        
-        GlStateManager.disableBlend();
+		GlStateManager.disableBlend();
         GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableCull();
-        GlStateManager.alphaFunc(GL11.GL_GEQUAL, 0.1F);
-        GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableCull();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         
         GL11.glPopMatrix();
 	}
