@@ -61,7 +61,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
 	        this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 	        this.tasks.addTask(6, new EntityAILookIdle(this));
 	        this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true));
-	        this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false, new Class[0]));
+	        this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
 	        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityOcelot>(this, EntityOcelot.class, true));
 	}
 	
@@ -79,7 +79,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
 	}
 
 	 /**
-	     * The maximum height from where the entity is alowed to jump (used in pathfinder)
+	     * The maximum height from where the entity is allowed to jump (used in pathfinder)
 	     */
 	    public int getMaxFallHeight()
 	    {
@@ -99,9 +99,9 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(STATE, Integer.valueOf(-1));
-		this.dataManager.register(POWERED, Boolean.valueOf(false));
-        this.dataManager.register(IGNITED, Boolean.valueOf(false));
+		this.dataManager.register(STATE, -1);
+		this.dataManager.register(POWERED, Boolean.FALSE);
+        this.dataManager.register(IGNITED, Boolean.FALSE);
 	}
 	
 	@Override
@@ -109,7 +109,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
     {
         super.writeEntityToNBT(compound);
 
-        if (((Boolean)this.dataManager.get(POWERED)).booleanValue())
+        if ((Boolean) this.dataManager.get(POWERED))
         {
             compound.setBoolean("powered", true);
         }
@@ -126,7 +126,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
     public void readEntityFromNBT(NBTTagCompound compound)
     {
         super.readEntityFromNBT(compound);
-        this.dataManager.set(POWERED, Boolean.valueOf(compound.getBoolean("powered")));
+        this.dataManager.set(POWERED, compound.getBoolean("powered"));
 
         if (compound.hasKey("Fuse", 99))
         {
@@ -225,7 +225,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
      */
     public boolean getPowered()
     {
-        return this.dataManager.get(POWERED).booleanValue();
+        return this.dataManager.get(POWERED);
     }
 
     /**
@@ -248,7 +248,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
      */
     public int getCreeperState()
     {
-        return this.dataManager.get(STATE).intValue();
+        return this.dataManager.get(STATE);
     }
 
     /**
@@ -256,7 +256,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
      */
     public void setCreeperState(int i)
     {
-        this.dataManager.set(STATE, Integer.valueOf(i));
+        this.dataManager.set(STATE, i);
     }
 
     /**
@@ -266,7 +266,7 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
 	public void onStruckByLightning(EntityLightningBolt p_70077_1_)
     {
         super.onStruckByLightning(p_70077_1_);
-        this.dataManager.set(POWERED, Boolean.valueOf(true));
+        this.dataManager.set(POWERED, Boolean.TRUE);
     }
 
     /**
@@ -345,9 +345,9 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
     }
     
     public void ignite() {
-        this.dataManager.set(IGNITED, Boolean.valueOf(true));
+        this.dataManager.set(IGNITED, Boolean.TRUE);
     }
     public boolean hasIgnited(){
-    	return this.dataManager.get(IGNITED).booleanValue();
+    	return this.dataManager.get(IGNITED);
     }
 }

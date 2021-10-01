@@ -164,7 +164,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
 	@Override
 	protected void entityInit() {
-		this.getDataManager().register(CRITICAL, Boolean.valueOf(false));
+		this.getDataManager().register(CRITICAL, Boolean.FALSE);
 	}
 	
 	@Override
@@ -424,14 +424,11 @@ public class EntityRocketHoming extends Entity implements IProjectile {
                 }
             }
 
-            if (true)
+            //for (i = 0; i < 4; ++i)
             {
-                //for (i = 0; i < 4; ++i)
-                {
-                	//this.worldObj.spawnParticle("cloud", this.posX, this.posY, this.posZ, /*0, 0, 0 this.posX + this.motionX * (double)i / 4.0D, this.posY + this.motionY * (double)i / 4.0D, this.posZ + this.motionZ * (double)i / 4.0D,*/ -this.motionX/4, -this.motionY/4, -this.motionZ/4);
-                	if(!world.isRemote && this.ticksExisted > 1)
-                		this.world.spawnEntity(new EntityTSmokeFX(world, this.posX, this.posY, this.posZ, 0, 0, 0));
-                }
+                //this.worldObj.spawnParticle("cloud", this.posX, this.posY, this.posZ, /*0, 0, 0 this.posX + this.motionX * (double)i / 4.0D, this.posY + this.motionY * (double)i / 4.0D, this.posZ + this.motionZ * (double)i / 4.0D,*/ -this.motionX/4, -this.motionY/4, -this.motionZ/4);
+                if(!world.isRemote && this.ticksExisted > 1)
+                    this.world.spawnEntity(new EntityTSmokeFX(world, this.posX, this.posY, this.posZ, 0, 0, 0));
             }
 
             this.posX += this.motionX;
