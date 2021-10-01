@@ -13,14 +13,31 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 
 public class ContainerBook extends Container {
 
 	public InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
-    public IInventory craftResult = new InventoryCraftResult();
+    public InventoryCraftResult craftResult = new InventoryCraftResult();
+    public World world;
+    public EntityPlayer player;
     
     public ContainerBook(InventoryPlayer inventory) {
-    	this.addSlotToContainer(new SlotCrafting(inventory.player, this.craftMatrix, this.craftResult, 0, 124, 35));
+    	this.world = inventory.player.world;
+    	this.player = inventory.player;
+    	this.addSlotToContainer(new SlotCrafting(inventory.player, this.craftMatrix, this.craftResult, 0, 124, 35){
+    		@Override
+    		public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack){
+    			 NonNullList<ItemStack> nonnulllist = CraftingManager.getRemainingItems(craftMatrix, thePlayer.world);
+    			 for(ItemStack sta : nonnulllist){
+    				 sta.shrink(1);
+    			 }
+    			 onCraftMatrixChanged(craftMatrix);
+    			return stack;
+    		}
+    	});
 
         for (int l = 0; l < 2; ++l) {
             for (int i1 = 0; i1 < 2; ++i1) {

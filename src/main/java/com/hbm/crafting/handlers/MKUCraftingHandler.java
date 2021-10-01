@@ -21,7 +21,7 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
-
+		
 		if(world == null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
 			return false;
 		

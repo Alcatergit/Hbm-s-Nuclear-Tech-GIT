@@ -19,6 +19,7 @@ import org.lwjgl.util.glu.Project;
 import com.google.common.collect.Queues;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
+import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
@@ -1298,7 +1299,7 @@ public class ModEventHandlerClient {
 		}
 		
 		
-		if(ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player)) {
+		if(ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player) && HbmCapability.getData(Minecraft.getMinecraft().player).getEnableHUD()) {
 			ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 
@@ -1541,7 +1542,7 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void preRenderEvent(RenderLivingEvent.Pre<EntityLivingBase> event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(ArmorFSB.hasFSBArmor(player)) {
+		if(ArmorFSB.hasFSBArmor(player) && HbmCapability.getData(player).getEnableHUD()) {
 			ItemStack plate = player.inventory.armorInventory.get(2);
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 

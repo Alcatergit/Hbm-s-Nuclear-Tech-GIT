@@ -115,7 +115,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.briquette_lignite);
 			if(input.getItem() == ModItems.meteorite_sword_reforged)
 				return new ItemStack(ModItems.meteorite_sword_hardened);
-			if(input.getItem() == ModItems.coke)
+			if(mODE(input, "fuelCoke"))
 				return new ItemStack(ModItems.ingot_graphite);
 		}
 

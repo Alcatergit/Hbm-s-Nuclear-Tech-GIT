@@ -127,7 +127,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			if(item == ModItems.powder_lignite) return 150;
 			if(item == ModItems.powder_coal) return 200;
 			if(item == ModItems.briquette_lignite) return 200;
-			if(item == ModItems.coke) return 400;
+			if(MachineRecipes.mODE(itemStack, "fuelCoke")) return 400;
 			if(item == ModItems.solid_fuel) return 400;
 			
 			return 0;

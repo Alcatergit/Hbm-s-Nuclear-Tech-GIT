@@ -86,7 +86,6 @@ public class JetpackBooster extends JetpackBase {
 		}
 
 		if(getFuel(stack) > 0 && props.isJetpackActive()) {
-
 			if(player.motionY < 0.6D)
 				player.motionY += 0.1D;
 

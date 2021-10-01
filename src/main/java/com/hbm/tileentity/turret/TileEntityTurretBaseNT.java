@@ -564,7 +564,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 			if(wl == null || wl.isEmpty())
 				return true;
 			
-			return !wl.contains(((EntityPlayer)e).getDisplayName());
+			return !wl.contains(((EntityPlayer)e).getDisplayName().getUnformattedText());
 		}
 		
 		return false;

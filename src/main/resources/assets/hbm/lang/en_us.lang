@@ -2435,6 +2435,7 @@ item.v1.name=V1
 item.stealth_boy.name=Stealth Device
 
 entity.entity_bullet.name=Bullet
+entity.entity_bullet_mk2.name=Bullet
 entity.entity_rocket.name=Rocket
 entity.entity_schrabnel.name=Schrabnel
 entity.entity_nuclear_creeper.name=Nuclear Creeper
