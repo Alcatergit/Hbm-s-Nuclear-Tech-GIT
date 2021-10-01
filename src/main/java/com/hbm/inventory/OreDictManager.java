@@ -13,6 +13,7 @@ import com.hbm.hazard.HazardEntry;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
 import com.hbm.interfaces.Untested;
+import com.hbm.items.ModItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
@@ -34,6 +35,8 @@ public class OreDictManager {
 		new DictFrame("NetherQuartz").gem(Items.QUARTZ).dust(powder_quartz);
 		new DictFrame("Diamond").dust(powder_diamond).ore(gravel_diamond);
 		new DictFrame("Emerald").dust(powder_emerald);
+		
+		new DictFrame("Coke").makeItem("fuel", ModItems.coke);
 		
 		/*
 		 * RADIOACTIVE
@@ -196,7 +199,7 @@ public class OreDictManager {
 	
 	@Untested
 	public static String getReflector() {
-		return GeneralConfig.enableReflectorCompat ? "plateDenseLead" : "plateTungCar"; //let's just mangle the name into "tungCar" so that it can't conflict with anything ever
+		return GeneralConfig.enableReflectorCompat ? OreDictManager.getReflector() : "plateTungCar"; //let's just mangle the name into "tungCar" so that it can't conflict with anything ever
 	}
 	
 	public static class DictFrame {

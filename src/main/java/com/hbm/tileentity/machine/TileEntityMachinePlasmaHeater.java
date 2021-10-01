@@ -91,25 +91,26 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 
 			if(world.getBlockState(new BlockPos(pos.getX() + dir.offsetX * dist, pos.getY() + 2, pos.getZ() + dir.offsetZ * dist)).getBlock() == ModBlocks.iter) {
 				int[] pos1 = ((MachineITER)ModBlocks.iter).findCore(world, pos.getX() + dir.offsetX * dist, pos.getY() + 2, pos.getZ() + dir.offsetZ * dist);
-
+				Fluid type = plasma.getFluid() == null ? null : plasma.getFluid().getFluid();
+				
 				if(pos1 != null) {
 					TileEntity te = world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 
 					if(te instanceof TileEntityITER) {
 						TileEntityITER iter = (TileEntityITER)te;
 
-						if(iter.plasma.getFluidAmount() == 0 && this.plasmaType != null) {
-							iter.plasmaType = this.plasmaType;
+						if(iter.plasma.getFluidAmount() == 0 && type != null) {
+							iter.plasmaType = type;
 						}
 
 						if(iter.isOn) {
 
-							if(this.plasmaType != null && iter.plasmaType == this.plasmaType) {
+							if(type != null && iter.plasmaType == type) {
 
 								int toLoad = Math.min(iter.plasma.getCapacity() - iter.plasma.getFluidAmount(), this.plasma.getFluidAmount());
 								toLoad = Math.min(toLoad, 40);
 								this.plasma.drain(toLoad, true);
-								iter.plasma.fill(new FluidStack(iter.plasmaType, toLoad), true);
+								iter.plasma.fill(new FluidStack(type, toLoad), true);
 								this.markDirty();
 								iter.markDirty();
 							}

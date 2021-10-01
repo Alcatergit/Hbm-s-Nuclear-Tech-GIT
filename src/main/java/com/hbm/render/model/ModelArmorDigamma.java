@@ -38,11 +38,11 @@ public class ModelArmorDigamma extends ModelArmorBase {
 		
 		body.copyTo(cassette);
 		
-		if(type == 0) {
+		if(type == 3) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.fau_helmet);
 			head.render(par7);
 		}
-		if(type == 1) {
+		if(type == 2) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.fau_chest);
 			body.render(par7);
 	        GL11.glEnable(GL11.GL_BLEND);
@@ -53,12 +53,12 @@ public class ModelArmorDigamma extends ModelArmorBase {
 			leftArm.render(par7);
 			rightArm.render(par7);
 		}
-		if(type == 2) {
+		if(type == 1) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.fau_leg);
 			leftLeg.render(par7);
 			rightLeg.render(par7);
 		}
-		if(type == 3) {
+		if(type == 0) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.fau_leg);
 			leftFoot.render(par7);
 			rightFoot.render(par7);

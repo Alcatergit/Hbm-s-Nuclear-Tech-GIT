@@ -92,83 +92,34 @@ public class WasteEarth extends Block {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos1, IBlockState state, Random rand) {
-		if(this.radIn > 0){
-			RadiationSavedData.incrementRad(world, pos1, this.radIn, this.radMax);
-			world.scheduleUpdate(pos1, state.getBlock(), this.tickRate(world));
+		int x = pos1.getX();
+		int y = pos1.getY();
+		int z = pos1.getZ();
+		if(this == ModBlocks.waste_mycelium && GeneralConfig.enableMycelium) {
+			for(int i = -1; i < 2; i++) {
+				for(int j = -1; j < 2; j++) {
+					for(int k = -1; k < 2; k++) {
+						Block b0 = world.getBlockState(new BlockPos(x + i, y + j, z + k)).getBlock();
+						IBlockState b1 = world.getBlockState(new BlockPos(x + i, y + j + 1, z + k));
+						if(!b1.isOpaqueCube() && (b0 == Blocks.DIRT || b0 == Blocks.GRASS || b0 == Blocks.MYCELIUM || b0 == ModBlocks.waste_earth)) {
+							world.setBlockState(new BlockPos(x + i, y + j, z + k), ModBlocks.waste_mycelium.getDefaultState());
+						}
+					}
+				}
+			}
 		}
-		MutableBlockPos pos = new BlockPos.MutableBlockPos().setPos(pos1.getX(), pos1.getY(), pos1.getZ());
-		if((this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) && world.getBlockState(pos.add(0, 1, 0)).getBlock() == Blocks.AIR && rand.nextInt(1000) == 0)
-    	{
-    		Block b0;
-    		int count = 0;
-    		for(int i = -5; i < 5; i++) {
-    			for(int j = -5; j < 6; j++) {
-    				for(int k = -5; k < 5; k++) {
-    					if(world.isBlockLoaded((pos.add(i, j, k)))){
-    						b0 = world.getBlockState(pos.add(i, j, k)).getBlock();
-        					if((b0 instanceof BlockMushroom) || b0 == ModBlocks.mush)
-        					{
-        						count++;
-        					}
-    					}
-    					
-    				}
-    			}
-    		}
-    		if(count > 0 && count < 5)
-    			world.setBlockState(pos.add(0, 1, 0), ModBlocks.mush.getDefaultState());
-    	}
-    	
-    	if(this == ModBlocks.waste_mycelium && GeneralConfig.enableMycelium)
-    	{
-    		for(int i = -1; i < 2; i++) {
-    			for(int j = -1; j < 2; j++) {
-    				for(int k = -1; k < 2; k++) {
-    					IBlockState bs = world.getBlockState(pos.add(0, 1, 0));
-    					Block b0 = world.getBlockState(pos.add(i, j, k)).getBlock();
-    					Block b1 = world.getBlockState(pos.add(0, 1, 0)).getBlock();
-    					if(!bs.isOpaqueCube() && (b0 == Blocks.DIRT || b0 == Blocks.GRASS || b0 == Blocks.MYCELIUM || b0 == ModBlocks.waste_earth))
-    					{
-    						world.setBlockState(pos.add(i, j, k), ModBlocks.waste_mycelium.getDefaultState());
-    					}
-    				}
-    			}
-    		}
-    		
-    		if(rand.nextInt(10) == 0) {
-        		Block b0;
-        		int count = 0;
-        		for(int i = -5; i < 5; i++) {
-        			for(int j = -5; j < 6; j++) {
-        				for(int k = -5; k < 5; k++) {
-        					b0 = world.getBlockState(pos.add(i, j, k)).getBlock();
-        					if(b0 == ModBlocks.mush)
-        					{
-        						count++;
-        					}
-        				}
-        			}
-        		}
-        		if(count < 5)
-        			world.setBlockState(pos.add(0, 1, 0), ModBlocks.mush.getDefaultState());
-    		}
-    	}
-    	
-    	if(this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium)
-    	{
-            if (!world.isRemote)
-            {
-                if (world.getLight(pos.add(0, 1, 0)) < 4 && world.getLight(pos.add(0, 1, 0)) > 2)
-                {
-                	
-                	world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-                }
-            }
-    	}
-    	
-    	if(GeneralConfig.enableAutoCleanup && (this == ModBlocks.waste_earth | this == ModBlocks.waste_mycelium))
-    		if(!world.isRemote)
-    			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+
+		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) {
+			
+			if(GeneralConfig.enableAutoCleanup || (world.getLightBrightness(new BlockPos(x, y + 1, z)) < 4 && world.getBlockLightOpacity(new BlockPos(x, y + 1, z)) > 2)) {
+				world.setBlockState(new BlockPos(x, y, z), Blocks.DIRT.getDefaultState());
+				
+			}
+			
+			if(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock() instanceof BlockMushroom) {
+				world.setBlockState(new BlockPos(x, y + 1, z), ModBlocks.mush.getDefaultState());
+			}
+		}
 	}
 
 	@Override

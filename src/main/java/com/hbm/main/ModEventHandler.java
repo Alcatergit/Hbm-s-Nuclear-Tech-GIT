@@ -24,6 +24,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
+import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.entity.logic.IChunkLoader;
@@ -44,6 +45,7 @@ import com.hbm.handler.JetpackHandler;
 import com.hbm.handler.MissileStruct;
 import com.hbm.handler.RadiationWorldHandler;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
+import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.interfaces.IBomb;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.IEquipReceiver;
@@ -61,6 +63,7 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AssemblerRecipeSyncPacket;
 import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PlayerInformPacket;
 import com.hbm.packet.SurveyPacket;
@@ -1218,6 +1221,10 @@ public class ModEventHandler {
 		if(e.player instanceof EntityPlayerMP){
 			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(AssemblerRecipes.recipeList, AssemblerRecipes.hidden), (EntityPlayerMP) e.player);
 			JetpackHandler.playerLoggedIn(e);
+			IHBMData props = HbmCapability.getData(e.player);
+			
+			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()));
+			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()));
 		}
 		if(!e.player.world.isRemote) {
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
