@@ -356,7 +356,7 @@ public class ModEventHandler {
 	}
 
 	private static final String hash = "41eb77f138ce350932e33b6b26b233df9aad0c0c80c6a49cb9a54ddd8fae3f83";
-	private static final String hash2 = "d804688a79ee3194aba92468595d38fbf2be975c266f4805ee2e9b5c5b6f8a56";
+
 
 	@SubscribeEvent
 	public void onClickSign(PlayerInteractEvent event) {
