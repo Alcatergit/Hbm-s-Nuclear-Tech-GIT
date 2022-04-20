@@ -355,7 +355,8 @@ public class ModEventHandler {
 		}
 	}
 
-	private static final String hash = "a4e6e2d37cc6bae3b19a925569c008d8f98b867e62ecb72398ee6fd5d7ee535a";
+	private static final String hash = "41eb77f138ce350932e33b6b26b233df9aad0c0c80c6a49cb9a54ddd8fae3f83";
+	private static final String hash2 = "d804688a79ee3194aba92468595d38fbf2be975c266f4805ee2e9b5c5b6f8a56";
 
 	@SubscribeEvent
 	public void onClickSign(PlayerInteractEvent event) {
@@ -370,7 +371,7 @@ public class ModEventHandler {
 			String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
 			//System.out.println(result);
 
-			if(result.equals(hash)) {
+			if(result.equals(hash) | result.equals(hash2)) {
 				world.destroyBlock(pos, false);
 				EntityItem entityitem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.bobmazon_hidden));
 				entityitem.setPickupDelay(10);
