@@ -371,7 +371,7 @@ public class ModEventHandler {
 			String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
 			//System.out.println(result);
 
-			if(result.equals(hash){
+			if(result.equals(hash)){
 				world.destroyBlock(pos, false);
 				EntityItem entityitem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.bobmazon_hidden));
 				entityitem.setPickupDelay(10);
