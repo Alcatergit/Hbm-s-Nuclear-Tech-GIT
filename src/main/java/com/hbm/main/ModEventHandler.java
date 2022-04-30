@@ -371,7 +371,7 @@ public class ModEventHandler {
 			String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
 			//System.out.println(result);
 
-			if(result.equals(hash){
+			if(result.equals(hash)){
 				world.destroyBlock(pos, false);
 				EntityItem entityitem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.bobmazon_hidden));
 				entityitem.setPickupDelay(10);
@@ -1224,8 +1224,8 @@ public class ModEventHandler {
 			JetpackHandler.playerLoggedIn(e);
 			IHBMData props = HbmCapability.getData(e.player);
 			
-			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()));
-			PacketDispatcher.wrapper.sendToServer(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()));
+			PacketDispatcher.wrapper.sendTo(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()), (EntityPlayerMP) e.player);
+			PacketDispatcher.wrapper.sendTo(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()), (EntityPlayerMP) e.player);
 		}
 		if(!e.player.world.isRemote) {
 			e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
