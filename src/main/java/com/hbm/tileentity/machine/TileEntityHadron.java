@@ -37,7 +37,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 public class TileEntityHadron extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
-	public static final long maxPower = 1000000000;
+	public static final long maxPower = 10000000;
 
 	public boolean isOn = false;
 	public boolean analysisOnly = false;
@@ -268,7 +268,6 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 		int momentum;
 		int charge;
 		int analysis;
-		static final int maxCharge = 80;
 		boolean isCheckExempt = false;
 
 		boolean expired = false;
@@ -283,7 +282,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 			this.posY = posY;
 			this.posZ = posZ;
 
-			this.charge = maxCharge;
+			this.charge = 0;
 			this.momentum = 0;
 		}
 		
@@ -453,15 +452,13 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 
 							TileEntityHadronPower plug = (TileEntityHadronPower)te;
 
-							int req = Particle.maxCharge - p.charge;			//how many "charge points" the particle needs to be fully charged
-							long bit = TileEntityHadronPower.maxPower / Particle.maxCharge;		//how much HE one "charge point" is
+							long bit = 10000;		//how much HE one "charge point" is
 
 							int times = (int) (plug.getPower() / bit);	//how many charges the plug has to offer
 
-							int total = Math.min(req, times);			//whichever is less, the charges in the plug or the required charges
+							p.charge += times;			//whichever is less, the charges in the plug or the required charges
 
-							p.charge += total;
-							plug.setPower(plug.getPower() - total * bit);
+							plug.setPower(plug.getPower() - times * bit);
 
 							continue;
 						}

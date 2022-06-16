@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.hbm.items.ModItems;
+import com.hbm.items.armor.ItemModCladding;
+import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -36,14 +38,26 @@ public class HazmatRegistry {
 
 	public static float getCladding(ItemStack stack) {
 
-		if(stack.hasTagCompound() && stack.getTagCompound().getFloat("hfr_cladding") > 0)
+		if (stack.hasTagCompound() && stack.getTagCompound().getFloat("hfr_cladding") > 0.0F) {
 			return stack.getTagCompound().getFloat("hfr_cladding");
+		} else {
+			if (ArmorModHandler.hasMods(stack)) {
+				ItemStack[] mods = ArmorModHandler.pryMods(stack);
+				ItemStack cladding = mods[5];
+				if (cladding != null && cladding.getItem() instanceof ItemModCladding) {
+					return (float)((ItemModCladding)cladding.getItem()).rad;
+				}
+			}
 
-		return 0;
+			return 0.0F;
+		}
 	}
 
 	public static float getResistance(EntityLivingBase player) {
 		float res = 0.0F;
+		if (player.getUniqueID().toString().equals(Library.Pu_238)) {
+			res += 0.4F;
+		}
 
 		for(ItemStack stack : player.getArmorInventoryList()) {
 			if(!stack.isEmpty()) {
@@ -52,7 +66,7 @@ public class HazmatRegistry {
 		}
 
 		if(player.isPotionActive(HbmPotion.radx))
-			res += 0.4F;
+			res += 0.2F;
 
 		return res;
 

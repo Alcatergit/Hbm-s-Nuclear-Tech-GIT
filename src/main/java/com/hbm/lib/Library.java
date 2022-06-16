@@ -101,7 +101,7 @@ public class Library {
 	public static String ShimmeringBlaze = "061bc566-ec74-4307-9614-ac3a70d2ef38";
 	public static String FifeMiner = "37e5eb63-b9a2-4735-9007-1c77d703daa3";
 	public static String lag_add = "259785a0-20e9-4c63-9286-ac2f93ff528f";
-	
+	public static String Pu_238 = "c95fdfd3-bea7-4255-a44b-d21bc3df95e3";
 	public static Set<String> contributors = Sets.newHashSet(new String[] {
 			"06ab7c03-55ce-43f8-9d3c-2850e3c652de", //mustang_rudolf
 			"5bf069bc-5b46-4179-aafe-35c0a07dee8b", //JMF781
@@ -1079,10 +1079,6 @@ public class Library {
                 {
                     return false;
                 }
-                else if (a.getTagCompound() == null && b.getTagCompound() != null)
-                {
-                    return false;
-                }
                 else
                 {
                     return (a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound())) && a.areCapsCompatible(b);
@@ -1138,8 +1134,9 @@ public class Library {
 	public static boolean tagContainsOther(NBTTagCompound tester, NBTTagCompound container){
 		if(tester == null && container == null){
 			return true;
-		} if(tester == null ^ container == null){
-			return false;
+		} else if (tester == null && container != null) {
+			return true;
+		} else if (tester != null && container == null) {
 		} else {
 			for(String s : tester.getKeySet()){
 				if(!container.hasKey(s)){

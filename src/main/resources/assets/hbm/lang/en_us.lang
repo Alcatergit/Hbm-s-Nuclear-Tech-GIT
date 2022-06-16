@@ -1018,7 +1018,7 @@ tile.hadron_plating_voltz.name=Particle Accelerator Plating (VOLTZ)
 tile.hadron_plating_yellow.name=Particle Accelerator Plating (YelloDye)
 tile.hadron_access.name=Particle Accelerator Access Terminal
 tile.hadron_core.name=Particle Accelerator Core Component
-tile.hadron_power.name=Particle Accelerator Power Plugtankish wanted
+tile.hadron_power.name=Particle Accelerator Power Plug
 
 tile.dfc_emitter.name=DFC Emitter
 container.dfcEmitter=DFC Emitter
