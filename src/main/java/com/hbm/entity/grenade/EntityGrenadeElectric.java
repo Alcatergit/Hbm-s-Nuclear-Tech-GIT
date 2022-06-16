@@ -33,8 +33,8 @@ public class EntityGrenadeElectric extends EntityGrenadeBouncyBase
         {
             this.setDead();
             this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, true);
+            this.world.addWeatherEffect(new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, false));
         }
-            this.world.spawnEntity(new EntityLightningBolt(this.world, this.posX, this.posY, this.posZ, false));
     }
 
 	@Override

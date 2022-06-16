@@ -115,11 +115,14 @@ public abstract class BlockGasBase extends Block {
 	}
 
 	public boolean tryMove(World world, int x, int y, int z, ForgeDirection dir) {
+		BlockPos newPos = new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
 
-		if(world.getBlockState(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)).getBlock() == Blocks.AIR) {
+		if (!world.isBlockLoaded(newPos)) {
+			return false;
+		} else if (world.getBlockState(newPos).getBlock() == Blocks.AIR) {
 			world.setBlockToAir(new BlockPos(x, y, z));
-			world.setBlockState(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ), this.getDefaultState());
-			world.scheduleUpdate(new BlockPos(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ), this, getDelay(world));
+			world.setBlockState(newPos, this.getDefaultState());
+			world.scheduleUpdate(newPos, this, this.getDelay(world));
 			return true;
 		}
 

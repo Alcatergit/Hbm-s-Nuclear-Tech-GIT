@@ -134,7 +134,6 @@ public class ArmorUtil {
 		player.inventory.armorInventory.get(slot).setItemDamage(j += amount);
 	
 		if(player.inventory.armorInventory.get(slot).getItemDamage() >= player.inventory.armorInventory.get(slot).getMaxDamage()) {
-			System.out.println(player.inventory.armorInventory.get(slot).getMaxDamage());
 			player.inventory.armorInventory.set(slot, ItemStack.EMPTY);
 		}
 	}

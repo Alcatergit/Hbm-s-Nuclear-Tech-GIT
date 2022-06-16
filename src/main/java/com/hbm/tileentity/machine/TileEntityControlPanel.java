@@ -163,5 +163,15 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 			ControlEvent evt = ControlEvent.readFromNBT(data);
 			panel.controls.get(data.getInteger("click_control")).receiveEvent(evt);
 		}
+
+	}
+	public void validate() {
+		super.validate();
+		ControlEventSystem.get(this.world).addControllable(this);
+	}
+
+	public void invalidate() {
+		super.invalidate();
+		ControlEventSystem.get(this.world).removeControllable(this);
 	}
 }

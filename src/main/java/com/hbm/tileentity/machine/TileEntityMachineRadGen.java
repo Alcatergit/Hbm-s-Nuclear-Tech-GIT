@@ -10,6 +10,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -58,7 +59,9 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 			}
 		};
 	}
-	
+
+	private static int[] accessibleSlots = new int[]{0};
+
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : "container.radGen";
 	}
@@ -66,6 +69,7 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 	public boolean hasCustomInventoryName() {
 		return this.customName != null && this.customName.length() > 0;
 	}
+
 
 	public void setCustomName(String name) {
 		this.customName = name;
@@ -96,6 +100,14 @@ public class TileEntityMachineRadGen extends TileEntity implements ITickable, IS
 		compound.setInteger("strength", strength);
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
+	}
+
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return accessibleSlots;
+	}
+
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		return i == 0 && this.getRads(stack) > 0;
 	}
 	
 	@Override

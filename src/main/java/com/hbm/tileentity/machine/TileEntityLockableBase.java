@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 
 public class TileEntityLockableBase extends TileEntity {
@@ -21,7 +23,11 @@ public class TileEntityLockableBase extends TileEntity {
 	public boolean isLocked() {
 		return isLocked;
 	}
-	
+
+	public boolean canLock(EntityPlayer player, EnumHand hand, EnumFacing facing) {
+		return true;
+	}
+
 	public void lock() {
 		
 		if(lock == 0) {

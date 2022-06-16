@@ -124,13 +124,14 @@ public class TileEntityMachineFractionTower extends TileEntity implements ITicka
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
+		FFUtils.deserializeFluidArray(nbt.getTagList("types", 10), types);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
-		
+		nbt.setTag("types", FFUtils.serializeFluidArray(types));
 		return nbt;
 	}
 

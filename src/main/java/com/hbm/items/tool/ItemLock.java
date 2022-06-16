@@ -28,23 +28,21 @@ public class ItemLock extends ItemKeyPin {
 		ItemStack stack = player.getHeldItem(hand);
 		if(getPins(stack) != 0) {
 			TileEntity te = world.getTileEntity(pos);
-			
-			if(te != null && te instanceof TileEntityLockableBase) {
-				TileEntityLockableBase tile = (TileEntityLockableBase)te;
-				
-				if(tile.isLocked())
-					return EnumActionResult.FAIL;
-				
-				tile.setPins(getPins(stack));
-				tile.lock();
-				tile.setMod(lockMod);
 
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				stack.shrink(1);
-				
-				return EnumActionResult.SUCCESS;
+			if(te != null && te instanceof TileEntityLockableBase) {
+				TileEntityLockableBase tile = (TileEntityLockableBase) te;
+
+				if (!tile.isLocked() && tile.canLock(player, hand, facing)) {
+					tile.setPins(getPins(stack));
+					tile.lock();
+					tile.setMod(this.lockMod);
+					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					stack.shrink(1);
+					return EnumActionResult.SUCCESS;
+				}
+
+				return EnumActionResult.FAIL;
 			}
-			
 			if(te != null && te instanceof TileEntityDummy) {
 				
 				TileEntityDummy dummy = (TileEntityDummy)te;

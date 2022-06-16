@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.machine.TileEntityDummyPort;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 
 import net.minecraft.block.BlockContainer;
@@ -38,7 +39,7 @@ public class DummyBlockRadGen extends BlockContainer implements IDummy {
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDummy();
+		return new TileEntityDummyPort();
 	}
 	
 	@Override

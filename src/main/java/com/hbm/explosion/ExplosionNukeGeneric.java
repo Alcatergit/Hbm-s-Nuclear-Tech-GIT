@@ -691,7 +691,7 @@ public class ExplosionNukeGeneric {
 					if(blocks.length != 2)
 						continue;
 					String[] modidBlock1 = blocks[0].split(":");
-					String[] modidBlock2 = blocks[0].split(":");
+					String[] modidBlock2 = blocks[1].split(":");
 					Block b1 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock1[0], modidBlock1[1]));
 					Block b2 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock2[0], modidBlock2[1]));
 					if(b1 == null || b2 == null){

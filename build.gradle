@@ -10,8 +10,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.6.5.2"
-version = "1.6.5a-Gv2"
+version = "1.6.8.1"
+version = "1.6.8a-G"
 group = "com.hbm" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "hbm"
 

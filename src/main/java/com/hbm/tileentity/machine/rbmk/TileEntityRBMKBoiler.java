@@ -137,6 +137,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		feed.readFromNBT(nbt.getCompoundTag("feed"));
 		steam.readFromNBT(nbt.getCompoundTag("steam"));
 		steamType = FluidRegistry.getFluid(nbt.getString("steamType"));
+		if (this.steamType == null) {
+			this.steamType = ModForgeFluids.steam;
+		}
 	}
 	
 	@Override
@@ -159,6 +162,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		
 		if(data.hasKey("compression")) {
 			int newAmount = 0;
+			if (this.steamType == null) {
+				this.steamType = ModForgeFluids.steam;
+			}
 			if(steamType == ModForgeFluids.steam){
 				steamType = ModForgeFluids.hotsteam;
 				newAmount = steam.getFluidAmount()/10;
@@ -186,6 +192,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public void networkUnpack(NBTTagCompound nbt){
 		if(nbt.hasKey("steamType2")){
 			this.steamType = FluidRegistry.getFluid(nbt.getString("steamType2"));
+			if (this.steamType == null) {
+				this.steamType = ModForgeFluids.steam;
+			}
 		} else {
 			super.networkUnpack(nbt);
 		}

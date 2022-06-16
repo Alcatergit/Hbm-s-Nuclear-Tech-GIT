@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,8 +39,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IConsumer {
 
 	public static Map<World, List<Entity>> radarDetectableEntityMap = new HashMap<>();
-	
-	@SubscribeEvent
+
+	@SubscribeEvent(
+			priority = EventPriority.HIGHEST
+	)
 	public static void onWorldLoad(WorldEvent.Load e){
 		if(!e.getWorld().isRemote){
 			radarDetectableEntityMap.put(e.getWorld(), new ArrayList<>());
@@ -56,7 +59,13 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 	@SubscribeEvent
 	public static void entityJoinWorld(EntityJoinWorldEvent e){
 		if(!e.getWorld().isRemote && (e.getEntity() instanceof EntityPlayer || e.getEntity() instanceof IRadarDetectable)){
-			radarDetectableEntityMap.get(e.getWorld()).add(e.getEntity());
+			List list = (List)radarDetectableEntityMap.get(e.getWorld());
+			if (list == null) {
+				list = new ArrayList();
+				radarDetectableEntityMap.put(e.getWorld(), list);
+			}
+
+			((List)list).add(e.getEntity());
 		}
 	}
 	

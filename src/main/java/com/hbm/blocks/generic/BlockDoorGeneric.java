@@ -9,6 +9,7 @@ import com.hbm.tileentity.TileEntityDoorGeneric;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -82,7 +83,7 @@ public class BlockDoorGeneric extends BlockDummyable {
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState){
 		AxisAlignedBB box = state.getCollisionBoundingBox(worldIn, pos);
-		if(box.minY == 0 && box.maxY == 0)
+		if(box!= null && (box.minY == 0 && box.maxY == 0))
 			return;
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 	}
@@ -100,6 +101,14 @@ public class BlockDoorGeneric extends BlockDummyable {
 			}
 		}
 		super.neighborChanged(state, world, pos, blockIn, fromPos);
+	}
+
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+		return true;
+	}
+
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 	
 	@Override

@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -766,6 +767,34 @@ public class FFUtils {
 				return true;
 		}
 		return false;
+	}
+
+	public static NBTTagList serializeFluidArray(Fluid[] fluids) {
+		NBTTagList list = new NBTTagList();
+
+		for(int i = 0; i < fluids.length; ++i) {
+			if (fluids[i] != null) {
+				list.appendTag(new NBTTagString(FluidRegistry.getFluidName(fluids[i])));
+			} else {
+				list.appendTag(new NBTTagString("ntmNullFluid"));
+			}
+		}
+
+		return list;
+	}
+
+	public static void deserializeFluidArray(NBTTagList fluidList, Fluid[] fluids) {
+		for(int i = 0; i < fluidList.tagCount(); ++i) {
+			String fluidName = fluidList.getStringTagAt(i);
+			if (i < fluids.length) {
+				if (fluidName != null && !fluidName.equals("ntmNullFluid")) {
+					fluids[i] = FluidRegistry.getFluid(fluidName);
+				} else {
+					fluids[i] = null;
+				}
+			}
+		}
+
 	}
 
 	public static NBTTagList serializeTankArray(FluidTank[] tanks){

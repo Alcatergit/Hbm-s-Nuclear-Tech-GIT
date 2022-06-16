@@ -22,11 +22,13 @@ import com.hbm.tileentity.machine.TileEntityLockableBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -168,6 +170,15 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	@Override
 	public void onLoad(){
 		doorType = ((BlockDoorGeneric)this.getBlockType()).type;
+	}
+
+	public boolean canLock(EntityPlayer player, EnumHand hand, EnumFacing facing) {
+		if (this.redstonePower > 0) {
+			player.sendMessage(new TextComponentString("Cannot lock while redstone powered"));
+			return false;
+		} else {
+			return canLock(player, hand, facing);
+		}
 	}
 
 	public boolean tryToggle(EntityPlayer player){

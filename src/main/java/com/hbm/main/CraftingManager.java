@@ -54,6 +54,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class CraftingManager {
 
 	public static RegistryEvent.Register<IRecipe> hack;
+	public static boolean registeringFluids = false;
 
 	public static void init(){
 		if(!GeneralConfig.recipes) {
@@ -1062,7 +1063,7 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.syringe_metal_psycho, 1), new Object[] { " N ", "NSN", " N ", 'N', Items.GLOWSTONE_DUST, 'S', ModItems.syringe_metal_empty });
 		addShapedRecipe(new ItemStack(ModItems.pill_iodine, 8), new Object[] { "IF", 'I', ModItems.powder_iodine, 'F', ModItems.fluorite });
 		addShapedRecipe(new ItemStack(ModItems.plan_c, 1), new Object[] { "PFP", 'P', ModItems.powder_poison, 'F', ModItems.fluorite });
-		addShapelessOreRecipe(new ItemStack(ModItems.radx, 1), new Object[] { "dustCoal", "dustFluorite", "dustFluorite" });
+		addShapelessOreRecipe(new ItemStack(ModItems.radx, 1), new Object[] { "dustCoal", "dustCoal", "dustFluorite" });
 		addShapedRecipe(new ItemStack(ModItems.med_bag, 1), new Object[] { "LLL", "SIS", "LLL", 'L', Items.LEATHER, 'S', ModItems.syringe_metal_stimpak, 'I', ModItems.syringe_antidote });
 		addShapedRecipe(new ItemStack(ModItems.med_bag, 1), new Object[] { "LLL", "SIS", "LLL", 'L', Items.LEATHER, 'S', ModItems.syringe_metal_stimpak, 'I', ModItems.pill_iodine });
 		addShapedRecipe(new ItemStack(ModItems.med_bag, 1), new Object[] { "LL", "SI", "LL", 'L', Items.LEATHER, 'S', ModItems.syringe_metal_super, 'I', ModItems.radaway });
@@ -1086,7 +1087,7 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModBlocks.rail_booster, 6), new Object[] { "S S", "CIC", "SRS", 'S', "ingotSteel", 'I', "plateIron", 'R', "ingotMingrade", 'C', ModItems.coil_copper });
 
 		addShapedRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.bomb_multi), 1), new Object[] { "AAD", "CHF", "AAD", 'A', ModItems.wire_aluminium, 'C', ModItems.circuit_aluminium, 'H', ModItems.hull_small_aluminium, 'F', ModItems.fins_quad_titanium, 'D', new ItemStack(Items.DYE, 1, 15) });
-		addShapelessOreRecipe(new ItemStack(ModItems.powder_ice, 4), new Object[] { Items.SNOWBALL, "dustNiter", "dustRedstone" });
+		addShapelessOreRecipe(new ItemStack(ModItems.powder_ice, 4), new Object[] { Items.SNOWBALL, "dustSaltpeter", "dustRedstone" });
 		addShapelessOreRecipe(new ItemStack(ModItems.powder_poison, 4), new Object[] { Items.SPIDER_EYE, "dustRedstone", "gemQuartz" });
 		addShapelessOreRecipe(new ItemStack(ModItems.pellet_gas, 2), new Object[] { Items.WATER_BUCKET, "dustGlowstone", "plateSteel" });
 

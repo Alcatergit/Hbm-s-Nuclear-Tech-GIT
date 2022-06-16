@@ -21,13 +21,13 @@ import net.minecraftforge.items.ItemStackHandler;
 public abstract class TileEntityMachineBase extends TileEntity implements INBTPacketReceiver {
 
 	public ItemStackHandler inventory;
-	
+
 	private String customName;
-	
+
 	public TileEntityMachineBase(int scount) {
 		this(scount, 64);
 	}
-	
+
 	public TileEntityMachineBase(int scount, int slotlimit) {
 		inventory = new ItemStackHandler(scount){
 			@Override
@@ -46,7 +46,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements INBTPa
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : getName();
 	}
-	
+
 	public abstract String getName();
 
 	public boolean hasCustomInventoryName() {

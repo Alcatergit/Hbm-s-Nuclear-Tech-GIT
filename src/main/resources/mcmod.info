@@ -4,7 +4,7 @@
     "name": "HBM's Nuclear Tech Mod",
     "description": "A mod that adds all kinds of nukes and other things",
     "version": "${version}",
-    "credits": "\n\nHBMMods, creator\nDrillgon200, Original 1.12.2 port\nTheOriginalGolem Custom 1.12.2 Version\n\nSten89, bug tester\nGB_Doge_9000, bug tester\nHoboy, textures and models\nDoctor17, Russian translations\ngrangerave\nrodolphito\n\nCrowbar Collective, gluon gun sounds",
+    "credits": "\n\nHBMMods, creator\nDrillgon200, Original 1.12.2 port\nTheOriginalGolem Custom 1.12.2 Version\n\nSten89, bug tester\nGB_Doge_9000, bug tester\nHoboy, textures and models\nDoctor17, Russian translations\ngrangerave\nrodolphito\nmexikoedi, log spam fix\n\nCrowbar Collective, gluon gun sounds",
     "logoFile": "assets/hbm/textures/logo.png",
     "mcversion": "${mcversion}",
     "url": "https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT",

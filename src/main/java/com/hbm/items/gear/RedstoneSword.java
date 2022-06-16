@@ -83,7 +83,6 @@ public class RedstoneSword extends ItemSword implements IHasCustomModel {
         	return EnumActionResult.PASS;
         } else {
         	if(worldIn.isAirBlock(editpos) && worldIn.isBlockFullCube(pos)){
-        		System.out.println(player.getHeldItem(hand).getItemDamage());
         		 worldIn.playSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F, false);
                  worldIn.setBlockState(editpos, Blocks.REDSTONE_WIRE.getDefaultState(), 1);
                  player.getHeldItem(hand).damageItem(14, player);

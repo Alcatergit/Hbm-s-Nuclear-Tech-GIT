@@ -44,6 +44,10 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 		this.getDataManager().set(SIZE, size);
 	}
 
+	public boolean isImmuneToExplosions() {
+		return true;
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();

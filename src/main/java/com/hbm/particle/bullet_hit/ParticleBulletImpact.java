@@ -3,8 +3,6 @@ package com.hbm.particle.bullet_hit;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL33;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -189,7 +187,6 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+5);
 				GlStateManager.bindTexture(HbmShaderManager2.depthTexture);
 				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
-				System.out.println(GL20.glGetAttribLocation(ResourceManager.bimpact.getShaderId(), "tex"));
 				ResourceManager.bimpact.uniform1i("normalMap", 3);
 				ResourceManager.bimpact.uniform1i("occlusionMap", 4);
 				ResourceManager.bimpact.uniform1i("depthBuffer", 5);
