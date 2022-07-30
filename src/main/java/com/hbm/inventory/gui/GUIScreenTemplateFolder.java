@@ -15,9 +15,11 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.ItemFolderPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
@@ -29,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import org.lwjgl.input.Keyboard;
 
 public class GUIScreenTemplateFolder extends GuiScreen {
 	
@@ -41,24 +44,55 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     List<ItemStack> stacks = new ArrayList<ItemStack>();
     List<FolderButton> buttons = new ArrayList<FolderButton>();
     private final EntityPlayer player;
-    
+	private final List<ItemStack> allStacks;
+	private GuiTextField search;
+	private void search(String sub) {
+
+		stacks.clear();
+
+		this.currentPage = 0;
+
+		if(sub == null || sub.isEmpty()) {
+			stacks.addAll(allStacks);
+			updateButtons();
+			return;
+		}
+
+		sub = sub.toLowerCase();
+
+		for(ItemStack stack : allStacks) {
+			if(stack.getDisplayName().toLowerCase().contains(sub)) {
+				stacks.add(stack);
+			} else if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
+				Fluid fluid = ItemForgeFluidIdentifier.getType(stack);
+
+				if(I18nUtil.resolveKey(fluid.getUnlocalizedName()).toLowerCase().contains(sub)) {
+					stacks.add(stack);
+				}
+			}
+		}
+
+		updateButtons();
+	}
+
     public GUIScreenTemplateFolder(EntityPlayer player) {
     	
     	this.player = player;
+		this.allStacks = new ArrayList<>();
 
     	//Stamps
 		for(Item i : MachineRecipes.stamps_plate)
-			stacks.add(new ItemStack(i));
+			allStacks.add(new ItemStack(i));
 		for(Item i : MachineRecipes.stamps_wire)
-			stacks.add(new ItemStack(i));
+			allStacks.add(new ItemStack(i));
 		for(Item i : MachineRecipes.stamps_circuit)
-			stacks.add(new ItemStack(i));
+			allStacks.add(new ItemStack(i));
 		//Tracks
     	for(int i = 1; i < ItemCassette.TrackType.values().length; i++)
-    		stacks.add(new ItemStack(ModItems.siren_track, 1, i));
+			allStacks.add(new ItemStack(ModItems.siren_track, 1, i));
     	//Fluid IDs
     	for(Fluid fluid : FluidRegistry.getRegisteredFluids().values())
-    		stacks.add(ItemForgeFluidIdentifier.getStackFromFluid(fluid));
+			allStacks.add(ItemForgeFluidIdentifier.getStackFromFluid(fluid));
     	//Assembly Templates
     	//for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++)
     	//	stacks.add(new ItemStack(ModItems.assembly_template, 1, i));
@@ -67,11 +101,13 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 			tag.setInteger("type", i);
 			ItemStack stack = new ItemStack(ModItems.assembly_template, 1, 0);
 			stack.setTagCompound(tag);
-			stacks.add(stack);
+			allStacks.add(stack);
 		}
     	//Chemistry Templates
     	for(int i = 0; i < ItemChemistryTemplate.EnumChemistryTemplate.values().length; i++)
-    		stacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
+			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
+
+		search(null);
     }
     
     int getPageCount() {
@@ -101,6 +137,13 @@ public class GUIScreenTemplateFolder extends GuiScreen {
         this.guiTop = (this.height - this.ySize) / 2;
 
         updateButtons();
+
+		Keyboard.enableRepeatEvents(true);
+		this.search = new GuiTextField(0, this.fontRenderer, guiLeft + 61, guiTop + 213, 48, 12);
+		this.search.setTextColor(0xffffff);
+		this.search.setDisabledTextColour(0xffffff);
+		this.search.setEnableBackgroundDrawing(false);
+		this.search.setMaxStringLength(100);
     }
 	
 	@Override
@@ -124,6 +167,12 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     }
 
     protected void mouseClicked(int i, int j, int k) {
+		if(i >= guiLeft + 45 && i < guiLeft + 117 && j >= guiTop + 211 && j < guiTop + 223) {
+			this.search.setFocused(true);
+		} else  {
+			this.search.setFocused(false);
+		}
+
     	try {
     		for(FolderButton b : buttons)
     			if(b.isMouseOnButton(i, j))
@@ -148,18 +197,28 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
+		if(search.isFocused())
+			drawTexturedModalRect(guiLeft + 45, guiTop + 211, 176, 54, 72, 12);
+
 		for(FolderButton b : buttons)
 			b.drawButton(b.isMouseOnButton(i, j));
 		for(FolderButton b : buttons)
 			b.drawIcon(b.isMouseOnButton(i, j));
+
+		search.drawTextBox();
 	}
-	
+
+	@Override
     protected void keyTyped(char p_73869_1_, int p_73869_2_)
     {
-        if (p_73869_2_ == 1 || p_73869_2_ == this.mc.gameSettings.keyBindInventory.getKeyCode())
-        {
-            this.mc.player.closeScreen();
-        }
+		if (this.search.textboxKeyTyped(p_73869_1_, p_73869_2_)) {
+			this.search(this.search.getText());
+			return;
+		}
+
+		if(p_73869_2_ == 1 || p_73869_2_ == this.mc.gameSettings.keyBindInventory.getKeyCode()) {
+			this.mc.player.closeScreen();
+		}
         
     }
 	
