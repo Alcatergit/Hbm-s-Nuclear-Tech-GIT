@@ -69,6 +69,12 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 				if(I18nUtil.resolveKey(fluid.getUnlocalizedName()).toLowerCase().contains(sub)) {
 					stacks.add(stack);
 				}
+			} else if (stack.getItem() instanceof ItemCassette) {
+				TrackType track = ItemCassette.getType(stack);
+
+				if (I18nUtil.resolveKey(track.getTrackTitle()).toLowerCase().contains(sub)){
+					stacks.add(stack);
+				}
 			}
 		}
 
