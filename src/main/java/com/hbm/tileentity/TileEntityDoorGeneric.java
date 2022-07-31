@@ -177,7 +177,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			player.sendMessage(new TextComponentString("Cannot lock while redstone powered"));
 			return false;
 		} else {
-			return canLock(player, hand, facing);
+			return true;
 		}
 	}
 
