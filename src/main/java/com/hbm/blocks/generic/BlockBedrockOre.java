@@ -24,7 +24,7 @@ public class BlockBedrockOre extends Block implements IDrillInteraction {
 
 	@Override
 	public boolean canBreak(World world, int x, int y, int z, IBlockState state, IMiningDrill drill) {
-		return false;
+		return drill.getDrillRating() > 70;
 	}
 
 	@Override
