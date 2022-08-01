@@ -168,7 +168,7 @@ public class GeneralConfig {
 			crucibleMaxCharges = 3;
 		}
 
-		enableWelcomeMessage = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.34_enableWelcomeMessage", "Enable the welcome message which appears when you load into the game", true);
+		enableWelcomeMessage = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.34_enableWelcomeMessage", "Enables the welcome message which appears in the chat when you load into the game", true);
 
 		final String CATEGORY_528 = "528";
 
