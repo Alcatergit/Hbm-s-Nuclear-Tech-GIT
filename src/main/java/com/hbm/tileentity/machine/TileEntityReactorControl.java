@@ -169,7 +169,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		
         		hullHeat = reactor.hullHeat;
         		coreHeat = reactor.coreHeat;
-        		fuel = reactor.fuel * 100 / reactor.maxFuel;
+        		fuel = reactor.fuel * 100 / Math.max(1, reactor.maxFuel);
         		water = reactor.tanks[0].getFluidAmount();
         		cool = reactor.tanks[1].getFluidAmount();
         		steam = reactor.tanks[2].getFluidAmount();

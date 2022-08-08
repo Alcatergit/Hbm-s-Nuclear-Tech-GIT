@@ -271,7 +271,7 @@ public class ModBlocks {
 	public static final Block ore_cinnebar = new BlockOre(Material.ROCK, "ore_cinnebar").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_coltan = new BlockOre(Material.ROCK, "ore_coltan").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(10.0F);
 	
-	public static final Block ore_bedrock_coltan = new BlockBedrockOre("ore_bedrock_coltan").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(10.0F);
+	public static final Block ore_bedrock_coltan = new BlockBedrockOre("ore_bedrock_coltan").setCreativeTab(MainRegistry.blockTab).setBlockUnbreakable().setResistance(1000000);
 	
 	public static final Block ore_oil = new BlockOre(Material.ROCK, "ore_oil").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_oil_empty = new BlockBase(Material.ROCK, "ore_oil_empty").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);

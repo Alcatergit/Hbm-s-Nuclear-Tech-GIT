@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class GeneralConfig {
 
 	public static boolean enableDebugMode = true;
+	public static boolean enableWelcomeMessage = true;
 	public static boolean enableMycelium = false;
 	public static boolean enablePlutoniumOre = false;
 	public static boolean enableDungeons = true;
@@ -162,9 +163,13 @@ public class GeneralConfig {
 		}
 		
 		crucibleMaxCharges = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.33_crucible_max_charges", "How many times you can use the crucible before recharge", 3);
-		if(crucibleMaxCharges <= 0)
-			crucibleMaxCharges = 3;
 		
+		if(crucibleMaxCharges <= 0){
+			crucibleMaxCharges = 3;
+		}
+
+		enableWelcomeMessage = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.34_enableWelcomeMessage", "Enables the welcome message which appears in the chat when you load into the game", true);
+
 		final String CATEGORY_528 = "528";
 
 		config.addCustomCategoryComment(CATEGORY_528, "CAUTION\n"
@@ -181,7 +186,9 @@ public class GeneralConfig {
 		coltanRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_oreColtanFrequency", "Determines how many coltan ore veins are to be expected in a chunk. These values do not affect the frequency in deposits, and only apply if random coltan spanwing is enabled.", 2);
 		bedrockRate = CommonConfig.createConfigInt(config, CATEGORY_528, "X528_bedrockColtanFrequency", "Determines how often (1 in X) bedrock coltan ores spawn. Applies for both the bedrock ores in the coltan deposit (if applicable) and the random bedrock ores (if applicable)", 50);
 		
-		if(enable528) enableBabyMode = false;
+		if(enable528){
+			enableBabyMode = false;
+		}
 	}
 
 }

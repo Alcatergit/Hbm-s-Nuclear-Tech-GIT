@@ -6,6 +6,7 @@ import com.hbm.packet.PacketDispatcher;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -42,4 +43,14 @@ public class EntityWaterSplash extends EntityThrowable {
     	}
 	}
 
+	@Override
+	public boolean writeToNBTOptional(NBTTagCompound nbt) {
+		return false;
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.setDead();
+	}
 }

@@ -106,11 +106,11 @@ public class TileEntityForceField extends TileEntity implements ITickable, ICons
 	}
 	
 	public int getHealthScaled(int i) {
-		return (health * i) / maxHealth;
+		return (health * i) / Math.max(1, maxHealth);
 	}
 	
 	public long getPowerScaled(long i) {
-		return (power * i) / maxPower;
+		return (power * i) / Math.max(1, maxPower);
 	}
 	
 	@Override
