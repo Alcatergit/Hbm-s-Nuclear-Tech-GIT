@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IConsumer;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.config.GeneralConfig;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
@@ -37,8 +38,8 @@ public class TileEntityConverterHeRf extends TileEntityMachineBase implements IT
 	public void update() {
 		if (!world.isRemote) {
 
-			storage.setCapacity((int)power * 4);
-			storage.setEnergyStored((int)power * 4);
+			storage.setCapacity((int)power * GeneralConfig.rfConversionRate);
+			storage.setEnergyStored((int)power * GeneralConfig.rfConversionRate);
 			
 			buf = storage.getEnergyStored();
 			
@@ -68,7 +69,7 @@ public class TileEntityConverterHeRf extends TileEntityMachineBase implements IT
 				}
 			}
 			
-			power = storage.getEnergyStored() / 4;
+			power = storage.getEnergyStored() / GeneralConfig.rfConversionRate;
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("rf", storage.getEnergyStored());
 			data.setInteger("maxrf", storage.getEnergyStored());

@@ -7,6 +7,7 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.config.GeneralConfig;
 
 import cofh.redstoneflux.api.IEnergyReceiver;
 import cofh.redstoneflux.impl.EnergyStorage;
@@ -36,7 +37,7 @@ public class TileEntityConverterRfHe extends TileEntityMachineBase implements IT
 	public void update() {
 		if (!world.isRemote) {
 
-			power = storage.getEnergyStored() / 4;
+			power = storage.getEnergyStored() / GeneralConfig.rfConversionRate;
 			maxPower = Math.max(1000000, power);
 			
 			buf = storage.getEnergyStored();
@@ -45,7 +46,7 @@ public class TileEntityConverterRfHe extends TileEntityMachineBase implements IT
 			ffgeuaInit();
 			tact = true;
 			ffgeuaInit();
-			storage.setEnergyStored((int)power * 4);
+			storage.setEnergyStored((int)power * GeneralConfig.rfConversionRate);
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("rf", storage.getEnergyStored());
 			data.setInteger("maxrf", storage.getEnergyStored());

@@ -18,6 +18,7 @@ public class GeneralConfig {
 
 	public static boolean enableDebugMode = true;
 	public static boolean enableWelcomeMessage = true;
+	public static int rfConversionRate = 4;
 	public static boolean enableMycelium = false;
 	public static boolean enablePlutoniumOre = false;
 	public static boolean enableDungeons = true;
@@ -169,6 +170,8 @@ public class GeneralConfig {
 		}
 
 		enableWelcomeMessage = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.34_enableWelcomeMessage", "Enables the welcome message which appears in the chat when you load into the game", true);
+
+		rfConversionRate = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.35_rfConversionRate", "Controls how much RF you get per HE and vice versa", 4);
 
 		final String CATEGORY_528 = "528";
 

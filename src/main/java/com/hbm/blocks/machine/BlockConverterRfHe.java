@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityConverterRfHe;
+import com.hbm.config.GeneralConfig;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -47,7 +48,7 @@ public class BlockConverterRfHe extends BlockContainer {
 			if(entity != null)
 			{
 				player.sendMessage(new TextComponentString("Note: Buffer may not accuratly represent current conversion rate, keep tact rates in mind."));
-				player.sendMessage(new TextComponentString("HE: " + (entity.buf / 4)));
+				player.sendMessage(new TextComponentString("HE: " + (entity.buf / GeneralConfig.rfConversionRate)));
 				player.sendMessage(new TextComponentString("RF: " + entity.buf));
 				//FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_converter_rf_he, world, x, y, z);
 			}
