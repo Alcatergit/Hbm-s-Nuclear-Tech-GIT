@@ -102,6 +102,8 @@ public class Library {
 	public static String FifeMiner = "37e5eb63-b9a2-4735-9007-1c77d703daa3";
 	public static String lag_add = "259785a0-20e9-4c63-9286-ac2f93ff528f";
 	public static String Pu_238 = "c95fdfd3-bea7-4255-a44b-d21bc3df95e3";
+
+	public static String Golem = "058b52a6-05b7-4d11-8cfa-2db665d9a521";
 	public static Set<String> contributors = Sets.newHashSet(new String[] {
 			"06ab7c03-55ce-43f8-9d3c-2850e3c652de", //mustang_rudolf
 			"5bf069bc-5b46-4179-aafe-35c0a07dee8b", //JMF781

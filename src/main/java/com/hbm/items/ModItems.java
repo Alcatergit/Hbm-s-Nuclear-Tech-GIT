@@ -35,6 +35,7 @@ import com.hbm.handler.guncfg.GunRocketFactory;
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.armor.ArmorAJR;
 import com.hbm.items.armor.ArmorAJRO;
+import com.hbm.items.armor.ArmorRPA;
 import com.hbm.items.armor.ArmorAshGlasses;
 import com.hbm.items.armor.ArmorBJ;
 import com.hbm.items.armor.ArmorBJJetpack;
@@ -610,6 +611,23 @@ public class ModItems {
 	public static final Item ajro_plate = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_plate").cloneStats((ArmorFSB) ajro_helmet);
 	public static final Item ajro_legs = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "ajro_legs").cloneStats((ArmorFSB) ajro_helmet);
 	public static final Item ajro_boots = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_boots").cloneStats((ArmorFSB) ajro_helmet);
+
+	public static final Item rpa_helmet = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
+			.setFireproof(true)
+			.enableVATS(true)
+			.setHasGeigerSound(true)
+			.setHasHardLanding(true)
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.setBlastProtection(0.25F)
+			.setStep(HBMSoundHandler.metalStep)
+			.setJump(HBMSoundHandler.ironJump)
+			.setFall(HBMSoundHandler.ironLand)
+			.addResistance("monoxide", 0F)
+			.addResistance("fall", 0);
+	public static final Item rpa_plate = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_plate").cloneStats((ArmorFSB) rpa_helmet);
+	public static final Item rpa_legs = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "RPA_legs").cloneStats((ArmorFSB) rpa_helmet);
+	public static final Item rpa_boots = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_boots").cloneStats((ArmorFSB) rpa_helmet);
 	
 	public static final Item fau_helmet = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 2500, 0, "fau_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
 			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))

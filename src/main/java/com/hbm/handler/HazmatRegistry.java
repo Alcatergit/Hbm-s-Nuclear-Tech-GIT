@@ -59,6 +59,10 @@ public class HazmatRegistry {
 			res += 0.4F;
 		}
 
+		if (player.getUniqueID().toString().equals(Library.Golem)) {
+			res += 4.0F;
+		}
+
 		for(ItemStack stack : player.getArmorInventoryList()) {
 			if(!stack.isEmpty()) {
 				res += getResistance(stack);
@@ -97,6 +101,7 @@ public class HazmatRegistry {
 
 		double t45 = 1D; // 90%
 		double ajr = 1.3D; // 95%
+		double rpa = 2D;
 		double bj = 1D; // 90%
 		double hev = 1.3D; // 95%
 		double fau = 4D; // 99.99%
@@ -136,10 +141,16 @@ public class HazmatRegistry {
 		HazmatRegistry.registerHazmat(ModItems.ajr_plate, ajr * chest);
 		HazmatRegistry.registerHazmat(ModItems.ajr_legs, ajr * legs);
 		HazmatRegistry.registerHazmat(ModItems.ajr_boots, ajr * boots);
+
 		HazmatRegistry.registerHazmat(ModItems.ajro_helmet, ajr * helmet);
 		HazmatRegistry.registerHazmat(ModItems.ajro_plate, ajr * chest);
 		HazmatRegistry.registerHazmat(ModItems.ajro_legs, ajr * legs);
 		HazmatRegistry.registerHazmat(ModItems.ajro_boots, ajr * boots);
+
+		HazmatRegistry.registerHazmat(ModItems.rpa_helmet, rpa * helmet);
+		HazmatRegistry.registerHazmat(ModItems.rpa_plate, rpa * chest);
+		HazmatRegistry.registerHazmat(ModItems.rpa_legs, rpa * legs);
+		HazmatRegistry.registerHazmat(ModItems.rpa_boots, rpa * boots);
 
 		HazmatRegistry.registerHazmat(ModItems.bj_helmet, bj * helmet);
 		HazmatRegistry.registerHazmat(ModItems.bj_plate, bj * chest);
