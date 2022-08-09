@@ -24,7 +24,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.6.8a-Gv6'
+version = '1.6.9a-G'
 group = 'com.hbm' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'hbm'
 
