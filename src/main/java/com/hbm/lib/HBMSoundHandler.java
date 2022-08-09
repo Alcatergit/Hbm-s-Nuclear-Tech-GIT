@@ -243,6 +243,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent iron = registerBypass("step.iron");
 	public static SoundEvent ironLand = registerBypass("step.iron_land");
 	public static SoundEvent ironJump = registerBypass("step.iron_jump");
+	public static SoundEvent poweredStep = registerBypass("step.powered");
 	
 	public static SoundEvent lambdaCore = registerBypass("music.recordlambdacore");
 	public static SoundEvent sectorSweep = registerBypass("music.recordsectorsweep");

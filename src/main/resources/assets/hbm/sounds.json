@@ -193,6 +193,7 @@
     "step.iron_land": {"category": "player", "sounds": [{"name": "hbm:footsteps/iron_land", "stream": false}]},
     "step.iron": {"category": "player", "sounds": ["hbm:footsteps/iron1", "hbm:footsteps/iron2", "hbm:footsteps/iron3", "hbm:footsteps/iron4"]},
     "step.metalBlock": {"category": "block", "sounds": ["hbm:footsteps/metalStep1", "hbm:footsteps/metalStep2", "hbm:footsteps/metalStep3", "hbm:footsteps/metalStep4"]},
+    "step.powered": {"category": "block", "sounds": ["hbm:footsteps/powered1", "hbm:footsteps/powered2", "hbm:footsteps/powered3"]},
     
     "block.door.transitionseal": {"category": "player", "sounds": [{"name": "hbm:block/doors/transition_seal_open", "stream": false}]},
     "block.door.garage": {"category": "player", "sounds": [{"name": "hbm:block/doors/garage_move", "stream": false}]},

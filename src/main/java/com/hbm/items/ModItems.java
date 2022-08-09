@@ -621,9 +621,9 @@ public class ModItems {
 			.setBlastProtection(0.25F)
 			.setMod(0.1F)
 			.setThreshold(20.0F)
-			.setStep(HBMSoundHandler.metalStep)
-			.setJump(HBMSoundHandler.ironJump)
-			.setFall(HBMSoundHandler.ironLand)
+			.setStep(HBMSoundHandler.poweredStep)
+			.setJump(HBMSoundHandler.poweredStep)
+			.setFall(HBMSoundHandler.poweredStep)
 			.addResistance("monoxide", 0F)
 			.addResistance("fall", 0);
 	public static final Item rpa_plate = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_plate").cloneStats((ArmorFSB) rpa_helmet);
