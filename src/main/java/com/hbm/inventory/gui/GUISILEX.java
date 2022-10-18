@@ -80,12 +80,6 @@ public class GUISILEX extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		if(silex.mode != EnumWavelengths.NULL) {
-			float freq = 0.0125F * (float)Math.pow(2, silex.mode.ordinal());
-			int color = (silex.mode != EnumWavelengths.VISIBLE) ? silex.mode.guiColor : Color.HSBtoRGB(silex.getWorld().getTotalWorldTime() / 50.0F, 0.5F, 1F);// & 16777215;
-			drawWave(81, 46, 16, 84, 0.5F, freq, color, 3F, 1F);
-		}
-		
 		if(silex.tank.getFluidAmount() > 0) {
 			
 			if(silex.getTankType() == ModForgeFluids.acid || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType())) {
@@ -103,6 +97,12 @@ public class GUISILEX extends GuiInfoContainer {
 
 		int i = silex.getFluidScaled(52);
 		drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType() == ModForgeFluids.acid ? 43 : 50, i, 7);
+
+		if(silex.mode != EnumWavelengths.NULL) {
+			float freq = 0.0125F * (float)Math.pow(2, silex.mode.ordinal());
+			int color = (silex.mode != EnumWavelengths.VISIBLE) ? silex.mode.guiColor : Color.HSBtoRGB(silex.getWorld().getTotalWorldTime() / 50.0F, 0.5F, 1F);// & 16777215;
+			drawWave(81, 46, 16, 84, 0.5F, freq, color, 3F, 1F);
+		}
 	}
 
 	private void drawWave(int x, int y, int height, int width, float resolution, float freq, int color, float thickness, float mult) {

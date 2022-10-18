@@ -424,9 +424,11 @@ public class Tessellator
     public void addVertex(double x, double y, double z)
     {
     	if(hasColor){
+            GL11.glPushMatrix();
             GlStateManager.color(r, g, b, a);
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();//.color(r, g, b, a)
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();//
     		//System.out.println(r + " " + g + " " + b + " " + a);
+            GL11.glPopMatrix();
     	}
         else{
             net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();

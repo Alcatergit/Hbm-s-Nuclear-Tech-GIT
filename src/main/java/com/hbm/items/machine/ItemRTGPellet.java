@@ -155,18 +155,18 @@ public class ItemRTGPellet extends ItemHazard {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		super.addInformation(stack, world, list, flagIn);
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
-		list.add(I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)));
+		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {
-			list.add("Fuel left: "+BobMathUtil.toPercentage((float)instance.getDecay(instance, stack), 1F));
+			list.add("§aFuel left: "+((int)(instance.getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
 			list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
 			list.add("EXTENDED INFO:");
 			list.add(String.format("%s / %s ticks", instance.getLifespan(stack), instance.getMaxLifespan()));
 			final String[] halfLife = BobMathUtil.ticksToDate(instance.getHalfLife());
 			final String[] timeLeft = BobMathUtil.ticksToDate(instance.getLifespan(stack));
 			final String[] maxLife = BobMathUtil.ticksToDate(instance.getMaxLifespan());
-			list.add(String.format("Half life:      %sy %sd %sh %sm", (Object[]) halfLife));
+			list.add(String.format("§aHalf life:      %sy %sd %sh %sm§r", (Object[]) halfLife));
 			list.add(String.format("Time remaining: %sy %sd %sh %sm", (Object[]) timeLeft));
-			list.add(String.format("Maximum life:   %sy %sd %sh %sm", (Object[]) maxLife));
+			list.add(String.format("Decay Time:     %sy %sd %sh %sm", (Object[]) maxLife));
 		}
 	}
 

@@ -7,14 +7,13 @@ import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import com.hbm.render.amlfrom1710.Tessellator;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import com.hbm.render.amlfrom1710.Vec3;
 
 public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachinePumpjack> {
 	
-	int i;
+	int rotation;
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityMachinePumpjack te) {
@@ -41,7 +40,7 @@ public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachineP
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		
-		bindTexture(ResourceManager.pumpjack_tex);
+		this.bindTexture(ResourceManager.pumpjack_tex);
 		ResourceManager.pumpjack.renderPart("Base");
 
 		GL11.glPushMatrix();
@@ -63,97 +62,54 @@ public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachineP
 		ResourceManager.pumpjack.renderPart("Carriage");
 		GL11.glPopMatrix();
 		
-		Vec3 backPos = Vec3.createVectorHelper(0, 0, -2);
-		backPos.rotateAroundX(-(float)Math.sin(Math.toRadians(rotation)) * 0.25F);
-		
-		Vec3 rot = Vec3.createVectorHelper(0, 0.5, 0);
-		rot.rotateAroundX(-(float)Math.toRadians(rotation - 90));
-
-		GlStateManager.disableTexture2D();
-        GlStateManager.disableLighting();
+		renderTileEntityAt4(rotation);
+		GlStateManager.enableCull();
+	}
+    
+	public void renderTileEntityAt4(float rotation)
+    {
+        GL11.glPushMatrix();
+        GL11.glTranslated(0, 1, 0);
+        GlStateManager.enableLighting();
         GlStateManager.disableCull();
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
-		Tessellator tess = Tessellator.instance;
-		tess.startDrawingQuads();
-		tess.setColorRGBA_F(0.5F, 0.5F, 0.5F, 1F);
-		
-		for(int i = -1; i <= 1; i += 2) {
 
-			tess.addVertex(0.53125 * i, 1.5 + rot.yCoord, -5.5 + rot.zCoord - 0.0625D);
-			tess.addVertex(0.53125 * i, 1.5 + rot.yCoord, -5.5 + rot.zCoord + 0.0625D);
-
-			tess.addVertex(0.53125 * i, 3.5 + backPos.yCoord, -3.5 + backPos.zCoord + 0.0625D);
-			tess.addVertex(0.53125 * i, 3.5 + backPos.yCoord, -3.5 + backPos.zCoord - 0.0625D);
-		}
-		
-		tess.setColorRGBA_F(0.2F, 0.2F, 0.2F, 1F);
-		
-		double pd = 0.03125D;
-		double width = 0.25D;
+		float j = (float) Math.sin((rotation / (180 / Math.PI))) * 15;
+		float t = (float) Math.sin((rotation / (180 / Math.PI))) * 0.5F;
+		float u = (float) Math.sin(((rotation + 90) / (180 / Math.PI)));
+		float v = (float) Math.sin((j / (180 / Math.PI)));
+		float w = (float) Math.sin(((j + 90) / (180 / Math.PI)));
+		drawConnection(0.53125, 0.5 + t, -5.4 - u, 0.53125, 2.5 + v, -2.5 - w);
+		drawConnection(-0.53125, 0.5 + t, -5.4 - u, -0.53125, 2.5 + v, -2.5 - w);
 
 		double height = -Math.sin(Math.toRadians(rotation));
-		
-		for(int i = -1; i <= 1; i += 2) {
+		drawConnection(0.0D, -0.75D, 0.0D, 0.0D, height + 1D, 0.0D);
 
-			float pRot = -(float)(Math.sin(Math.toRadians(rotation)) * 0.25);
-			
-			Vec3 frontPos = Vec3.createVectorHelper(0, 0, 1);
-			frontPos.rotateAroundX(pRot);
-
-			double dist = 0.03125D;
-			Vec3 frontRad = Vec3.createVectorHelper(0, 0, 2.5 + dist);
-			double cutlet = 360D / 32D;
-			frontRad.rotateAroundX(pRot);
-			frontRad.rotateAroundX(-(float)Math.toRadians(cutlet * -3));
-			
-			for(int j = 0; j < 4; j++) {
-
-				double sumY = frontPos.yCoord + frontRad.yCoord;
-				double sumZ = frontPos.zCoord + frontRad.zCoord;
-				if(frontRad.yCoord < 0) sumZ = 3.5 + dist * 0.5;
+		drawConnection(0.25D, height + 1D, 0.0D, 0.25D, height + 2.5D, 0.0D);
+		drawConnection(-0.25D, height + 1D, 0.0D, -0.25D, height + 2.5D, 0.0D);
+        GL11.glPopMatrix();
+        GL11.glPopMatrix();
+    }
 	
-				tess.addVertex((width - pd) * i, 3.5 + sumY, -3.5 + sumZ);
-				tess.addVertex((width + pd) * i, 3.5 + sumY, -3.5 + sumZ);
-
-				frontRad.rotateAroundX(-(float)Math.toRadians(cutlet));
-
-				sumY = frontPos.yCoord + frontRad.yCoord;
-				sumZ = frontPos.zCoord + frontRad.zCoord;
-				if(frontRad.yCoord < 0) sumZ = 3.5 + dist * 0.5;
-	
-				tess.addVertex((width + pd) * i, 3.5 + sumY, -3.5 + sumZ);
-				tess.addVertex((width - pd) * i, 3.5 + sumY, -3.5 + sumZ);
-			}
-
-			double sumY = frontPos.yCoord + frontRad.yCoord;
-			double sumZ = frontPos.zCoord + frontRad.zCoord;
-			if(frontRad.yCoord < 0) sumZ = 3.5 + dist * 0.5;
-			
-			tess.addVertex((width + pd) * i, 3.5 + sumY, -3.5 + sumZ);
-			tess.addVertex((width - pd) * i, 3.5 + sumY, -3.5 + sumZ);
-			
-			tess.addVertex((width - pd) * i, 2 + height, 0);
-			tess.addVertex((width + pd) * i, 2 + height, 0);
-		}
-		
-		double p = 0.03125D;
-		tess.addVertex(p, height + 1.5, p);
-		tess.addVertex(-p, height + 1.5, -p);
-		tess.addVertex(-p, 0.75, -p);
-		tess.addVertex(p, 0.75,  p);
-		tess.addVertex(-p, height + 1.5, p);
-		tess.addVertex(p, height + 1.5, -p);
-		tess.addVertex(p, 0.75, -p);
-		tess.addVertex(-p, 0.75, p);
-		
-		tess.draw();
-		
-		GlStateManager.enableLighting();
+	public void drawConnection(double x, double y, double z, double a, double b, double c) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buf = tessellator.getBuffer();
+        buf.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+        buf.pos(x + 0.05F, y, z).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(x - 0.05F, y, z).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(a + 0.05F, b, c).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(a - 0.05F, b, c).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        tessellator.draw();
+        buf.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+        buf.pos(x, y, z + 0.05F).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(x, y, z - 0.05F).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(a, b, c + 0.05F).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        buf.pos(a, b, c - 0.05F).color(0.6F, 0.6F, 0.6F, 1.0F).endVertex();
+        tessellator.draw();
+        GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
-		
-		GL11.glShadeModel(GL11.GL_FLAT);
-		GL11.glPopMatrix();
 	}
 }

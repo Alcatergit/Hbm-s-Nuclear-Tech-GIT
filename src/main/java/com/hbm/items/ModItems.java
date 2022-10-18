@@ -1198,7 +1198,11 @@ public class ModItems {
 	public static final Item fallout = new ItemHazard("falloutitem").addRadiation(ItemHazard.fo * ItemHazard.powder).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item containment_box = new ItemLeadBox("containment_box").setCreativeTab(null);
 	
-	
+	public static final Item pellet_rtg_depleted_bismuth = new ItemHazard(1F, "pellet_rtg_depleted_bismuth").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_lead = new ItemHazard(0.5F, "pellet_rtg_depleted_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_mercury = new ItemHazard(4.25F, "pellet_rtg_depleted_mercury").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_neptunium = new ItemHazard(3.75F, "pellet_rtg_depleted_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_zirconium = new ItemHazard(2F, "pellet_rtg_depleted_zirconium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	public static final Item pellet_rtg_radium = new ItemRTGPellet(3, ItemHazard.ra226 * ItemHazard.rtg, "pellet_rtg_radium").setDecays(ModItems.pellet_rtg_depleted_lead, 14016000000L, 1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item pellet_rtg_weak = new ItemRTGPellet(5, ItemHazard.u238 * ItemHazard.rtg, "pellet_rtg_weak").setDecays(ModItems.pellet_rtg_depleted_lead, 876000000L, 2).setCreativeTab(MainRegistry.controlTab);
@@ -1210,15 +1214,8 @@ public class ModItems {
 	public static final Item pellet_rtg_polonium = new ItemRTGPellet(50, ItemHazard.po210 * ItemHazard.rtg, "pellet_rtg_polonium").setDecays(ModItems.pellet_rtg_depleted_lead, 3321024L, 3).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
 	public static final Item pellet_rtg_gold = new ItemRTGPellet(200, ItemHazard.au198 * ItemHazard.rtg, "pellet_rtg_gold").setDecays(ModItems.pellet_rtg_depleted_mercury, 64728L, 4).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
 	public static final Item pellet_rtg_lead = new ItemRTGPellet(600, ItemHazard.pb209 * ItemHazard.rtg, "pellet_rtg_lead").setDecays(ModItems.pellet_rtg_depleted_bismuth, 3253L, 6).addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, 10000 * ItemHazard.rtg, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_bismuth, 500L, 10).addFire(150).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
-
-
-	public static final Item pellet_rtg_depleted_bismuth = new ItemHazard(1F, "pellet_rtg_depleted_bismuth").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_lead = new ItemHazard(0.5F, "pellet_rtg_depleted_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_mercury = new ItemHazard(4.25F, "pellet_rtg_depleted_mercury").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_neptunium = new ItemHazard(3.75F, "pellet_rtg_depleted_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_zirconium = new ItemHazard(2F, "pellet_rtg_depleted_zirconium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-
+	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, 20000 * ItemHazard.rtg, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_bismuth, 500L, 10).addFire(150).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
+	
 	public static final Item tritium_deuterium_cake = new ItemCustomLore("tritium_deuterium_cake").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
 	//That's a lot of rods
@@ -2839,7 +2836,7 @@ public class ModItems {
 	public static final Item boy_target = new ItemBoy(5F, "boy_target").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item boy_shielding = new ItemBoy(0F, "boy_shielding").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item man_core = new ItemManMike(5F, "man_core");
+	public static final Item man_core = new ItemManMike(5F, "man_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item man_explosive = new ItemBase("man_explosive").setCreativeTab(MainRegistry.nukeTab);
 	public static final Item man_explosive8 = new ItemManMike(0F, "man_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item man_igniter = new ItemMan("man_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
