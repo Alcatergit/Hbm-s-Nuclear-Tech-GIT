@@ -8,6 +8,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.packet.FluidTankPacket;
@@ -94,28 +95,15 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		}
 	}
 	
-	private static HashMap<Object, ItemStack> recipes = new HashMap<>();
 	
-	static {
-		recipes.put("blockLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 10000));
-		recipes.put("ingotLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
-		recipes.put("dustLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
-		recipes.put(new ComparableStack(ModItems.powder_lithium_tiny), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 100));
-		recipes.put("ingotGold", new ItemStack(ModItems.ingot_au198));
-		recipes.put("nuggetGold", new ItemStack(ModItems.nugget_au198));
-		recipes.put("dustGold", new ItemStack(ModItems.powder_au198));
-		recipes.put(new ComparableStack(Blocks.BROWN_MUSHROOM), new ItemStack(ModBlocks.mush));
-		recipes.put(new ComparableStack(Blocks.RED_MUSHROOM), new ItemStack(ModBlocks.mush));
-		recipes.put(new ComparableStack(Items.MUSHROOM_STEW), new ItemStack(ModItems.glowing_stew));
-	}
 	
 	private boolean canProcess() {
 		
 		if(inventory.getStackInSlot(0).isEmpty())
 			return false;
 		
-		ItemStack output = getOutput(inventory.getStackInSlot(0));
-		
+		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
+
 		if(output == null)
 			return false;
 		
@@ -128,31 +116,11 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		
 		return inventory.getStackInSlot(1).getItem() == output.getItem() && inventory.getStackInSlot(1).getItemDamage() == output.getItemDamage() && inventory.getStackInSlot(1).getCount() + output.getCount() <= inventory.getStackInSlot(1).getMaxStackSize();
 	}
-	
-	public static ItemStack getOutput(ItemStack stack) {
-		
-		if(stack == null || stack.getItem() == null)
-			return null;
-		
-		ComparableStack comp = new ComparableStack(stack);
-		
-		if(recipes.containsKey(comp))
-			return recipes.get(comp);
-		
-		String[] dictKeys = comp.getDictKeys();
-		
-		for(String key : dictKeys) {
-			
-			if(recipes.containsKey(key))
-				return recipes.get(key);
-		}
-		
-		return null;
-	}
+
 	
 	private void process() {
 		
-		ItemStack output = getOutput(inventory.getStackInSlot(0));
+		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
 		inventory.getStackInSlot(0).shrink(1);
 		this.progress = 0;
 		
@@ -243,7 +211,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-		return getOutput(itemStack) != null && i == 0;
+		return RBMKOutgasserRecipes.getOutput(itemStack) != null && i == 0;
 	}
 
 	@Override

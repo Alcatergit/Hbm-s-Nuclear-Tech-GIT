@@ -226,6 +226,7 @@ import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.ShredderRecipes;
+import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -771,6 +772,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityTowerSmall.class, new ResourceLocation(RefStrings.MODID, "tileentity_tower_small"));
 		GameRegistry.registerTileEntity(TileEntityTowerLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_tower_large"));
 		GameRegistry.registerTileEntity(TileEntitySILEX.class, new ResourceLocation(RefStrings.MODID, "tileentity_silex"));
+		GameRegistry.registerTileEntity(TileEntityFEL.class, new ResourceLocation(RefStrings.MODID, "tileentity_fel"));
 		GameRegistry.registerTileEntity(TileEntityDoorGeneric.class, new ResourceLocation(RefStrings.MODID, "tileentity_door_generic"));
 		GameRegistry.registerTileEntity(TileEntityBMPowerBox.class, new ResourceLocation(RefStrings.MODID, "tileentity_bm_power_box"));
 		
@@ -1008,6 +1010,7 @@ public class MainRegistry {
 		RefineryRecipes.registerFractions();
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
+		RBMKOutgasserRecipes.registerOverrides();
 		
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));

@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineRtgFurnace;
 import com.hbm.items.ModItems;
+import com.hbm.util.RTGUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,8 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 	public ItemStackHandler inventory;
 
 	public int dualCookTime;
-	public static final int processingSpeed = 100;
+	public int heat;
+	public static final int processingSpeed = 1800;
 
 	// private static final int[] slots_top = new int[] {0};
 	// private static final int[] slots_bottom = new int[] {4};
@@ -58,13 +60,7 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 	}
 
 	public boolean isLoaded() {
-
-		for(int i = 1; i <= 3; i++) {
-			if(!(!inventory.getStackInSlot(i).isEmpty() && (inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg || inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_polonium)))
-				return false;
-		}
-
-		return true;
+		return RTGUtil.hasHeat(inventory);
 	}
 	
 	@Override
@@ -153,12 +149,13 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 		boolean flag1 = false;
 		
 		if(!world.isRemote)
-		{
+		{	
+			heat = RTGUtil.updateRTGs(inventory);
 			if(hasPower() && canProcess())
 			{
-				dualCookTime++;
+				dualCookTime+=heat;
 				
-				if(this.dualCookTime == TileEntityRtgFurnace.processingSpeed)
+				if(this.dualCookTime >= TileEntityRtgFurnace.processingSpeed)
 				{
 					this.dualCookTime = 0;
 					this.processItem();
@@ -167,7 +164,6 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 			}else{
 				dualCookTime = 0;
 			}
-			
 			boolean trigger = true;
 			
 			if(hasPower() && canProcess() && this.dualCookTime == 0)

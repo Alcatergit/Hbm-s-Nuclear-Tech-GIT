@@ -15,7 +15,9 @@ public class WatzFuel extends ItemHazard {
 	public int heat;
 	public float heatMultiplier;
 	public float decayMultiplier;
-	
+	public float irad;
+	public boolean iblind;
+
 	/**
 	 * Constructor for a new Watz fuel pellet
 	 * @param lifeTime
@@ -27,6 +29,8 @@ public class WatzFuel extends ItemHazard {
 	 */
 	public WatzFuel(float radiation, boolean blinding, int lifeTime, int power, float powerMultiplier, int heat, float heatMultiplier, float decayMultiplier, String s) {
 		super(radiation, false, blinding, s);
+		this.irad = radiation;
+		this.iblind = blinding;
 		this.lifeTime = lifeTime * 100;
 		this.power = power/10;
 		this.powerMultiplier = powerMultiplier;
@@ -39,6 +43,13 @@ public class WatzFuel extends ItemHazard {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(this.irad > 0F){
+			list.add("§a[Radioactive]§r");
+			list.add("§e" + this.irad + "RAD/s§r");
+		}
+		if(this.iblind){
+			list.add("§3[Blinding]§r");
+		}
 		list.add("Max age:          " + this.lifeTime/100 + " ticks");
 		list.add("Power per tick:  " + (power) + "HE");
 		list.add("Power multiplier: " + (powerMultiplier >= 1 ? "+" : "") + (Math.round(powerMultiplier * 1000) * .10 - 100) + "%");

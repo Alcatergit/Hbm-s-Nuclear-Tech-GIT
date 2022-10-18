@@ -2,6 +2,8 @@ package com.hbm.handler.jei;
 
 import com.hbm.handler.jei.JeiRecipes.SILEXRecipe;
 import com.hbm.lib.RefStrings;
+import com.hbm.util.I18nUtil;
+import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -12,6 +14,7 @@ import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 
@@ -44,26 +47,6 @@ public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 	public IDrawable getBackground(){
 		return background;
 	}
-
-	@Override
-	public void drawExtras(Minecraft minecraft){
-		if(currentDrawHack != null){
-			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-
-			int sep = currentDrawHack.outputs.size() > 4 ? 3 : 2;
-			for(int i = 0; i < currentDrawHack.outputs.size(); i ++){
-				double chance = currentDrawHack.chances.get(i);
-				if(i < sep) {
-					fontRenderer.drawString(((int)(chance * 10D) / 10D)+"%", 88, 33 + i * 18 - 9 * ((Math.min(currentDrawHack.outputs.size(), sep) + 1) / 2), 0x404040);
-				} else {
-					fontRenderer.drawString(((int)(chance * 10D) / 10D)+"%", 136, 33 + (i - sep) * 18 - 9 * ((Math.min(currentDrawHack.outputs.size() - sep, sep) + 1)/2), 0x404040);
-				}
-			}
-			
-			String am = ((int)(currentDrawHack.produced * 10D) / 10D) + "x";
-			fontRenderer.drawString(am, 55 - fontRenderer.getStringWidth(am) / 2, 51, 0x404040);
-		}
-	}
 	
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, SILEXRecipe recipeWrapper, IIngredients ingredients){
@@ -72,12 +55,13 @@ public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 		
 		guiItemStacks.init(0, true, 13, 31);
 		
-		int sep = recipeWrapper.outputs.size() > 4 ? 3 : 2;
-		for(int i = 0; i < recipeWrapper.outputs.size(); i ++){
+		int rec_size = recipeWrapper.outputs.size();
+		int sep = rec_size > 4 ? 3 : 2;
+		for(int i = 0; i < rec_size; i ++){
 			if(i < sep) {
-				guiItemStacks.init(i+1, false, 71, 27 + i * 18 - 9 * ((Math.min(recipeWrapper.outputs.size(), sep) + 1) / 2));
+				guiItemStacks.init(i+1, false, 71, 28 + i * 18 - 9 * ((Math.min(rec_size, sep) + 1) / 2));
 			} else {
-				guiItemStacks.init(i+1, false, 119, 27 + (i - sep) * 18 - 9 * ((Math.min(recipeWrapper.outputs.size() - sep, sep) + 1)/2));
+				guiItemStacks.init(i+1, false, 119, 28 + (i - sep) * 18 - 9 * ((Math.min(rec_size - sep, sep) + 1)/2));
 			}
 		}
 		

@@ -92,17 +92,20 @@ public class ContaminationUtil {
 
 	public static void printGeigerData(EntityPlayer player) {
 
-		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 10)) / 10D;
+		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 1000)) / 1000D;
 
 		RadiationSavedData data = RadiationSavedData.getData(player.world);
-		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 10)) / 10D;
-		double env = ((int)(HbmLivingProps.getRadBuf(player) * 10D)) / 10D;
+		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
+		double env = ((int)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
 
 		double res = ((int)(10000D - ContaminationUtil.calculateRadiationMod(player) * 10000)) / 100D;
 		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;
 
+		double rec = ((int)(env* (100-res)/100D * 1000D))/ 1000D;
+
 		String chunkPrefix = getPreffixFromRad(rads);
 		String envPrefix = getPreffixFromRad(env);
+		String recPrefix = getPreffixFromRad(rec);
 		String radPrefix = "";
 		String resPrefix = "" + TextFormatting.WHITE;
 
@@ -127,8 +130,39 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentString("===== ☢ ").appendSibling(new TextComponentTranslation("geiger.title")).appendSibling(new TextComponentString(" ☢ =====")).setStyle(new Style().setColor(TextFormatting.GOLD)));
 		player.sendMessage(new TextComponentTranslation("geiger.chunkRad").appendSibling(new TextComponentString(" " + chunkPrefix + rads + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.envRad").appendSibling(new TextComponentString(" " + envPrefix + env + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + recPrefix + rec + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRad").appendSibling(new TextComponentString(" " + radPrefix + eRad + " RAD")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + res + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+	}
+
+	public static void printDosimeterData(EntityPlayer player) {
+
+		double rads = (double)(ContaminationUtil.getPlayerRads(player));
+		boolean limit = false;
+		
+		if(rads > 3.6D) {
+			rads = 3.6D;
+			limit = true;
+		}
+		rads = ((int)(1000D * rads))/ 1000D;
+		String radsPrefix = getPreffixFromRad(rads);
+		
+		player.sendMessage(new TextComponentString("===== ☢ ").appendSibling(new TextComponentTranslation("dosimeter.title")).appendSibling(new TextComponentString(" ☢ =====")).setStyle(new Style().setColor(TextFormatting.GOLD)));
+		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + radsPrefix + (limit ? ">" : "") + rads + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+	}
+
+	public static void printDiagnosticData(EntityPlayer player) {
+
+		double digamma = ((int)(HbmLivingProps.getDigamma(player) * 1000)) / 1000D;
+		double halflife = ((int)((1D - Math.pow(0.5, digamma)) * 10000)) / 100D;
+		
+		player.sendMessage(new TextComponentString("===== Ϝ ").appendSibling(new TextComponentTranslation("digamma.title")).appendSibling(new TextComponentString(" Ϝ =====")).setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerDigamma").appendSibling(new TextComponentString(TextFormatting.RED + " " + digamma + " DRX")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(TextFormatting.RED + " " + halflife + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+	}
+
+	public static double getPlayerRads(EntityPlayer player) {
+		return (double)(HbmLivingProps.getRadBuf(player)) * (double)(ContaminationUtil.calculateRadiationMod(player));
 	}
 	
 	public static String getPreffixFromRad(double rads) {

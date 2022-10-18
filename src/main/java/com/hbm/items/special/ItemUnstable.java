@@ -85,7 +85,9 @@ public class ItemUnstable extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(stack.getItemDamage() != 0)
     		return;
-		tooltip.add("Decay: " + (getTimer(stack) * 100 / timer) + "%");
+    	tooltip.add("§4[Unstable]§r");
+		tooltip.add("§cDecay Time: " + (int)timer/20 + "s - Explosion Radius: "+ radius+"m§r");
+		tooltip.add("§cDecay: " + (getTimer(stack) * 100 / timer) + "%§r");
 	}
 
 }

@@ -208,6 +208,7 @@ public class ResourceManager {
 	//Centrifuge
 	public static final IModelCustom centrifuge_new = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/centrifuge_new.obj"));
 	public static final IModelCustom silex = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/silex.obj"));
+	public static final IModelCustom fel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fel.obj"));
 	
 	//Magnusson Device
 	public static final IModelCustom microwave = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/machines/microwave.obj"));
@@ -277,9 +278,7 @@ public class ResourceManager {
 	public static final IModelCustom radgen_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/rad_gen_rotor.obj"));
 
 	//Pumpjack
-	public static final IModelCustom pumpjack_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/pumpjack_base.obj"));
-	public static final IModelCustom pumpjack_head = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/pumpjack_head.obj"));
-	public static final IModelCustom pumpjack_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/pumpjack_rotor.obj"));
+	public static final IModelCustom pumpjack = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/pumpjack.obj"));
 
 	//Refinery
 	public static final IModelCustom refinery = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/refinery.obj"));
@@ -537,9 +536,7 @@ public class ResourceManager {
 	public static final ResourceLocation derrick_tex = new ResourceLocation(RefStrings.MODID, "textures/models/derrick.png");
 	
 	//Pumpjack
-	public static final ResourceLocation pumpjack_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack_base.png");
-	public static final ResourceLocation pumpjack_head_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack_head.png");
-	public static final ResourceLocation pumpjack_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack_rotor.png");
+	public static final ResourceLocation pumpjack_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack.png");
 
 	//Refinery
 	public static final ResourceLocation refinery_tex = new ResourceLocation(RefStrings.MODID, "textures/models/refinery.png");
@@ -607,6 +604,7 @@ public class ResourceManager {
 	public static final ResourceLocation centrifuge_new_tex = new ResourceLocation(RefStrings.MODID, "textures/models/centrifuge_new.png");
 	public static final ResourceLocation centrifuge_gas_tex = new ResourceLocation(RefStrings.MODID, "textures/models/centrifuge_gas.png");
 	public static final ResourceLocation silex_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/silex.png");
+	public static final ResourceLocation fel_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fel.png");
 	
 	//Magnusson Device
 	public static final ResourceLocation microwave_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/microwave.png");

@@ -29,22 +29,20 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		GL11.glRotatef(180, 0F, 1F, 0F);
-		GL11.glRotatef(90, 0F, 1F, 0F);
 		switch(te.getBlockMetadata())
 		{
 		case 2:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 3:
 			GL11.glRotatef(270, 0F, 1F, 0F); break;
-		case 5:
+		case 4:
 			GL11.glRotatef(0, 0F, 1F, 0F); break;
+		case 3:
+			GL11.glRotatef(90, 0F, 1F, 0F); break;
+		case 5:
+			GL11.glRotatef(180, 0F, 1F, 0F); break;
 		}
 
         bindTexture(ResourceManager.tank_tex);
-        ResourceManager.fluidtank.renderPart("Tank");
+        ResourceManager.fluidtank.renderPart("Frame");
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GL11.glPopMatrix();
@@ -59,18 +57,16 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
         GlStateManager.enableAlpha();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-		GL11.glRotatef(90, 0F, 1F, 0F);
 		switch(tileEntity.getBlockMetadata())
 		{
 		case 2:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 3:
 			GL11.glRotatef(270, 0F, 1F, 0F); break;
-		case 5:
+		case 4:
 			GL11.glRotatef(0, 0F, 1F, 0F); break;
+		case 3:
+			GL11.glRotatef(90, 0F, 1F, 0F); break;
+		case 5:
+			GL11.glRotatef(180, 0F, 1F, 0F); break;
 		}
 
 		String s = "NONE";
@@ -95,7 +91,7 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 		}
 
         bindTexture(rotTexture);
-        ResourceManager.fluidtank.renderPart("Label");
+        ResourceManager.fluidtank.renderPart("Tank");
 
         GL11.glPopMatrix();
     }

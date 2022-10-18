@@ -105,7 +105,7 @@ public class ExplosionBalefire {
 				if(b == ModBlocks.block_schrabidium_cluster) {
 					
 					if(worldObj.rand.nextInt(10) == 0) {
-						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.balefire.getDefaultState());
+						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.fire_balefire.getDefaultState());
 						worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
 					}
 					return;
@@ -117,7 +117,7 @@ public class ExplosionBalefire {
 			}
 			
 			if(worldObj.rand.nextInt(10) == 0) {
-				worldObj.setBlockState(new BlockPos(pX, depth + 1, pZ), ModBlocks.balefire.getDefaultState());
+				worldObj.setBlockState(new BlockPos(pX, depth + 1, pZ), ModBlocks.fire_balefire.getDefaultState());
 				
 				Block b = worldObj.getBlockState(new BlockPos(pX, y, pZ)).getBlock();
 				

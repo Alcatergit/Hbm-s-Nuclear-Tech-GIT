@@ -5,6 +5,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
+import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.inventory.gui.GUIAnvil;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
@@ -24,6 +25,7 @@ import com.hbm.inventory.gui.GUIMachineRefinery;
 import com.hbm.inventory.gui.GUIMachineShredder;
 import com.hbm.inventory.gui.GUISILEX;
 import com.hbm.inventory.gui.GUITestDiFurnace;
+import com.hbm.inventory.gui.GUIRBMKOutgasser;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.main.MainRegistry;
@@ -63,6 +65,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String SILEX = "hbm.silex";
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
+	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -91,6 +94,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_silex), SILEX);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.rbmk_outgasser), RBMKOUTGASSER);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -112,6 +116,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getSILEXRecipes(), SILEX);
 		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
 		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
+		registry.addRecipes(RBMKOutgasserRecipes.getRBMKOutgasserRecipes(), RBMKOUTGASSER);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -133,6 +138,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUISILEX.class, 45, 82, 113-45, 125-82, SILEX);
 		registry.addRecipeClickArea(GUIAnvil.class, 34, 26, 52-34, 44-26, SMITHING);
 		registry.addRecipeClickArea(GUIAnvil.class, 12, 50, 48-12, 66-50, ANVIL);
+		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 78, 43, 97-78, 62-43, RBMKOUTGASSER);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
@@ -226,7 +232,8 @@ public class JEIConfig implements IModPlugin {
 				new HadronRecipeHandler(help),
 				new SILEXRecipeHandler(help),
 				new SmithingRecipeHandler(help),
-				new AnvilRecipeHandler(help));
+				new AnvilRecipeHandler(help),
+				new RBMKOutgasserRecipeHandler(help));
 	}
 
 	@Override

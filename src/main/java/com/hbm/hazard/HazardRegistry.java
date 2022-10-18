@@ -20,14 +20,17 @@ import net.minecraft.init.Items;
 public class HazardRegistry {
 
 	//CO60		             5a		β−	030.00Rad/s	Spicy
+	//SR90		            29a		β−	015.00Rad/s Spicy
 	//TC99		       211,000a		β−	002.75Rad/s	Spicy
 	//I181		           192h		β−	150.00Rad/s	2 much spice :(
 	//XE135		             9h		β−	aaaaaaaaaaaaaaaa
 	//CS137		            30a		β−	020.00Rad/s	Spicy
 	//AU192		            64h		β−	500.00Rad/s	2 much spice :(
+	//PB209		             3h		β−	10,000.00Rad/s mama mia my face is melting off
 	//AT209		             5h		β+	like 2k or sth idk bruv
 	//PO210		           138d		α	075.00Rad/s	Spicy
 	//RA226		         1,600a		α	007.50Rad/s
+	//AC227		            22a		β−	030.00Rad/s Spicy
 	//TH232		14,000,000,000a		α	000.10Rad/s
 	//U233		       160,000a		α	005.00Rad/s
 	//U235		   700,000,000a		α	001.00Rad/s
@@ -41,14 +44,17 @@ public class HazardRegistry {
 	//AM242		           141a		β−	009.50Rad/s
 
 	public static final float co60 = 30.0F;
+	public static final float sr90 = 15.0F;
 	public static final float tc99 = 2.75F;
 	public static final float i131 = 150.0F;
 	public static final float xe135 = 1250.0F;
 	public static final float cs137 = 20.0F;
 	public static final float au198 = 500.0F;
+	public static final float pb209 = 10000.0F;
 	public static final float at209 = 2000.0F;
 	public static final float po210 = 75.0F;
 	public static final float ra226 = 7.5F;
+	public static final float ac227 = 30.0F;
 	public static final float th232 = 0.1F;
 	public static final float thf = 1.75F;
 	public static final float u = 0.35F;
@@ -73,16 +79,22 @@ public class HazardRegistry {
 	public static final float sa326 = 15.0F;
 	public static final float sa327 = 17.5F;
 	public static final float saf = 5.85F;
+	public static final float gh336 = 5.0F;
 	public static final float radsource_mult = 0.5F;
 	public static final float pobe = po210 * radsource_mult;
 	public static final float rabe = ra226 * radsource_mult;
 	public static final float pube = pu238 * radsource_mult;
+	public static final float aupb = (au198 + pb209) * 0.5F;
+	public static final float zfb_bi = u235 * 0.35F;
+	public static final float zfb_pu241 = pu241 * 0.5F;
+	public static final float zfb_am_mix = amrg * 0.5F;
 
 	public static final float sr = sa326 * 0.1F;
 	public static final float sb = sa326 * 0.1F;
 	public static final float trx = 25.0F;
 	public static final float trn = 0.1F;
 	public static final float wst = 15.0F;
+	public static final float wstv = 7.5F;
 	public static final float yc = u;
 	public static final float fo = 10F;
 

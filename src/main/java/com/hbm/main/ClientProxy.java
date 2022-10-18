@@ -537,6 +537,7 @@ import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
 import com.hbm.tileentity.machine.TileEntitySILEX;
+import com.hbm.tileentity.machine.TileEntityFEL;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntitySolarBoiler;
@@ -827,6 +828,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerSmall.class, new RenderSmallTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerLarge.class, new RenderLargeTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySILEX.class, new RenderSILEX());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFEL.class, new RenderFEL());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
@@ -1004,6 +1006,7 @@ public class ClientProxy extends ServerProxy {
 	    RenderingRegistry.registerEntityRenderingHandler(EntityQuasar.class, RenderQuasar.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.radwater_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_metal, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_office, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());

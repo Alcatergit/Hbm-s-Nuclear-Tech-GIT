@@ -349,26 +349,26 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 		if(e == EnumFacing.EAST) {
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 2), 2000) || needsUpdate;
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-3, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-3, 0, -2), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-4, 0, 2), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-4, 0, -2), 2000) || needsUpdate;
 		}
 		if(e == EnumFacing.SOUTH) {
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -2), 2000) || needsUpdate;
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -3), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -3), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -4), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -4), 2000) || needsUpdate;
 		}
 		if(e == EnumFacing.WEST) {
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 2), 2000) || needsUpdate;
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(3, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(3, 0, -2), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(4, 0, 2), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(4, 0, -2), 2000) || needsUpdate;
 		}
 		if(e == EnumFacing.NORTH) {
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 2), 2000) || needsUpdate;
 			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 3), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 3), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 4), 2000) || needsUpdate;
+			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 4), 2000) || needsUpdate;
 		}
 	}
 	

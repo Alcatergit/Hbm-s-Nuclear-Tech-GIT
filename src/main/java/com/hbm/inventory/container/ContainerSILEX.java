@@ -18,12 +18,12 @@ public class ContainerSILEX extends Container {
 		silex = te;
 
 		//Input
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 0, 116, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 0, 80, 12));
 		//Fluid ID
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 1, 44, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 1, 8, 24));
 		//Fluid Container
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 2, 62, 36));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 3, 80, 36));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 2, 26, 24));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 3, 44, 24));
 		//Output
 		this.addSlotToContainer(new SlotItemHandler(te.inventory, 4, 116, 90));
 		//Output Queue

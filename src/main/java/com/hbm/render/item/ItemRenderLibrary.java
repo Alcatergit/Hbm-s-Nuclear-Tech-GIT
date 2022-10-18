@@ -285,9 +285,9 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon() {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.tank_tex); ResourceManager.fluidtank.renderPart("Tank");
+				bindTexture(ResourceManager.tank_tex); ResourceManager.fluidtank.renderPart("Frame");
 				GlStateManager.shadeModel(GL11.GL_FLAT);
-				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Label");
+				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Tank");
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_well), new ItemRenderBase() {
@@ -310,11 +310,7 @@ public class ItemRenderLibrary {
 		        GlStateManager.disableCull();
 				GL11.glScaled(0.5, 0.5, 0.5);
 				GL11.glTranslatef(0, 0, 3);
-				bindTexture(ResourceManager.pumpjack_base_tex); ResourceManager.pumpjack_base.renderAll();
-		        GL11.glTranslated(0, 3.5, -2.5);
-				bindTexture(ResourceManager.pumpjack_head_tex); ResourceManager.pumpjack_head.renderAll();
-		        GL11.glTranslated(0, -2, -3);
-				bindTexture(ResourceManager.pumpjack_rotor_tex); ResourceManager.pumpjack_rotor.renderAll();
+				bindTexture(ResourceManager.pumpjack_tex); ResourceManager.pumpjack.renderAll();
 		        GlStateManager.enableCull();
 			}});
 
@@ -1182,6 +1178,18 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.silex_tex); ResourceManager.silex.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fel), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(2, 2, 2);
+			}
+			public void renderCommon() {
+				GL11.glTranslated(1, 0, 0);
+				GL11.glRotated(90, 0, -1, 0);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.fel_tex); ResourceManager.fel.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.control0), new ItemRenderBase() {

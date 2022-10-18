@@ -16,9 +16,13 @@ public class ItemFuelRod extends ItemHazard {
 	
 	private int lifeTime;
 	private int heat;
+	private float irad;
+	private boolean iblind;
 
 	public ItemFuelRod(float radiation, boolean blinding, int life, int heat, String s) {
 		super(radiation, false, blinding, s);
+		this.irad = radiation;
+		this.iblind = blinding;
 		this.lifeTime = life;
 		this.heat = heat;
 		this.setMaxDamage(100);
@@ -27,7 +31,12 @@ public class ItemFuelRod extends ItemHazard {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.YELLOW + "[Reactor Fuel Rod]");
+		tooltip.add(TextFormatting.GREEN + "[Radioactive]");
+		tooltip.add(TextFormatting.YELLOW + "" + this.irad + "RAD/s");
+		if(this.iblind){
+			tooltip.add(TextFormatting.DARK_AQUA + "[Blinding]");
+		}
+		tooltip.add(TextFormatting.GOLD + "[Reactor Fuel Rod]");
 		
 		tooltip.add(TextFormatting.DARK_AQUA + "  Generates " + heat + " heat per tick");
 		tooltip.add(TextFormatting.DARK_AQUA + "  Lasts " + Library.getShortNumber(lifeTime) + " ticks");

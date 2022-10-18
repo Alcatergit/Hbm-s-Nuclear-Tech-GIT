@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -283,8 +284,8 @@ public class Tessellator
             this.hasColor = false;
             this.hasTexture = false;
             this.hasBrightness = false;
-            this.isColorDisabled = false;
         }*/
+        this.isColorDisabled = false;
     	net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, format);
     }
 
@@ -422,15 +423,14 @@ public class Tessellator
      */
     public void addVertex(double x, double y, double z)
     {
-    	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
-    	buf.pos(x+xOffset, y+yOffset, z+zOffset);
     	if(hasColor){
-    		buf.color(r, g, b, a);
+            GlStateManager.color(r, g, b, a);
+    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();//.color(r, g, b, a)
     		//System.out.println(r + " " + g + " " + b + " " + a);
     	}
-    	if(hasNormals)
-    		buf.normal(normalTestX, normalTestY, normalTestZ);
-    	buf.endVertex();
+        else{
+            net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();
+        }
        /* if (rawBufferIndex >= rawBufferSize - 32) 
         {
             if (rawBufferSize == 0)

@@ -10,6 +10,7 @@ import com.hbm.saveddata.AuxSavedData;
 
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -115,14 +116,39 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 	}
 
 	private void stomp(MutableBlockPos pos, double dist) {
+		int stoneDepth = 0;
+		int maxStoneDepth = 0;
+		if(dist > 88)
+			maxStoneDepth = 0;
+		else if(dist > 48)
+			maxStoneDepth = 1;
+		else if(dist > 26)
+			maxStoneDepth = 2;
+		else if(dist > 15)
+			maxStoneDepth = 3;
+		else if(dist > 8)
+			maxStoneDepth = 4;
+		else if(dist > 5)
+			maxStoneDepth = 5;
+		else if(dist <= 5)
+			maxStoneDepth = 6;
 
-		int depth = 0;
-
+		boolean reachedStone = false;
 		for(int y = 255; y >= 0; y--) {
 			pos.setY(y);
 			IBlockState b = world.getBlockState(pos);
 			// int meta = world.getBlockMetadata(x, y, z);
-
+			
+			if(reachedStone){
+				stoneDepth++;
+			}
+			else{
+				reachedStone = b.getMaterial() == Material.ROCK;
+			}
+			if(reachedStone && stoneDepth > maxStoneDepth){
+					return;
+			}
+			
 			if(b.getMaterial() == Material.AIR)
 				continue;
 
@@ -135,24 +161,42 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 				world.setBlockToAir(pos);
 			}
 
+			// if(b.getBlock() == Blocks.WATER) {
+			// 	world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
+			// }
+
 			else if(b.getBlock() == Blocks.STONE) {
-
-				depth++;
-				if(dist < 5)
-					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				else if(dist < 15)
-					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				else if(dist < 75)
+				if(dist > 88 || stoneDepth==maxStoneDepth)
 					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+				else if(dist > 48 || stoneDepth==maxStoneDepth-1)
+					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
+				else if(dist > 26 || stoneDepth==maxStoneDepth-2)
+					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
+				else if(dist > 15 || stoneDepth==maxStoneDepth-3)
+					world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
+				else if(dist > 8 || stoneDepth==maxStoneDepth-4)
+					world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
+				else if(dist > 5 || stoneDepth==maxStoneDepth-5)
+					world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
+				else if(dist <= 5 || stoneDepth==maxStoneDepth-6)
+					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
 				else
-					return;
-
-				if(depth > 2)
 					return;
 
 			} else if(b.getBlock() == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-				return;
+
+			} else if(b.getBlock() == Blocks.DIRT) {
+				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+
+			} else if(b.getBlock() == Blocks.SNOW_LAYER) {
+				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+
+			} else if(b.getBlock() == Blocks.SNOW) {
+				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			}
+			 else if(b.getBlock() instanceof BlockBush || b.getBlock() == Blocks.TALLGRASS) {
+				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
 
 			} else if(b.getBlock() == Blocks.MYCELIUM) {
 				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
@@ -202,7 +246,24 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 			else if(b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
-
+			// else if(b.getBlock() == ModBlocks.sellafield_4) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			// }
+			// else if(b.getBlock() == ModBlocks.sellafield_3) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
+			// }
+			// else if(b.getBlock() == ModBlocks.sellafield_2) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
+			// }
+			// else if(b.getBlock() == ModBlocks.sellafield_1) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
+			// }
+			// else if(b.getBlock() == ModBlocks.sellafield_0) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
+			// }
+			// else if(b.getBlock() == ModBlocks.sellafield_slaked) {
+			// 	world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
+			// }
 			else if(b.getBlock() == ModBlocks.ore_uranium) {
 				if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
@@ -227,8 +288,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				return;
 				// this piece stops the "stomp" from reaching below ground
-			} else if(b.isNormalCube()) {
-				return;
 			}
 		}
 	}

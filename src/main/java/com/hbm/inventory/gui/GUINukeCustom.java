@@ -41,7 +41,7 @@ public class GUINukeCustom extends GuiInfoContainer {
 
 		text = new String[] { TextFormatting.YELLOW + "Conventional Explosives (Level " + testNuke.tnt + "/" + Math.min(testNuke.tnt, NukeCustom.maxTnt) + ")",
 				"Caps at " + NukeCustom.maxTnt,
-				"N²-like above level 75",
+				"NÂ²-like above level 75",
 				TextFormatting.ITALIC + "\"Goes boom\"" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 16, guiTop + 89, 18, 18, mouseX, mouseY, text);
 

@@ -9,9 +9,9 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class DigammaFlame extends Block {
 
 	public DigammaFlame(String s) {
-		super(Material.FIRE);
+		super(Material.AIR);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		

@@ -31,6 +31,7 @@ public class CrystallizerRecipes {
 		recipes.put("oreIron", new ItemStack(ModItems.crystal_iron));
 		recipes.put("oreGold", new ItemStack(ModItems.crystal_gold));
 		recipes.put("oreRedstone", new ItemStack(ModItems.crystal_redstone));
+		recipes.put("oreLapis", new ItemStack(ModItems.crystal_lapis));
 		recipes.put("oreDiamond", new ItemStack(ModItems.crystal_diamond));
 		recipes.put("oreUranium", new ItemStack(ModItems.crystal_uranium));
 		recipes.put("oreThorium", new ItemStack(ModItems.crystal_thorium));

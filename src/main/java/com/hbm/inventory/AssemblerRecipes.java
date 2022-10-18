@@ -218,8 +218,6 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModItems.circuit_aluminium, 1), new AStack[] { new ComparableStack(ModItems.circuit_raw, 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.circuit_copper, 1), new AStack[] {new ComparableStack(ModItems.circuit_aluminium, 1), new ComparableStack(ModItems.wire_copper, 4), new OreDictStack("dustNetherQuartz", 1), new OreDictStack("plateCopper", 1), },100);
 		makeRecipe(new ComparableStack(ModItems.circuit_red_copper, 1), new AStack[] {new ComparableStack(ModItems.circuit_copper, 1), new ComparableStack(ModItems.wire_red_copper, 4), new OreDictStack("dustGold", 1), new ComparableStack(ModItems.plate_polymer, 1), },150);
-		makeRecipe(new ComparableStack(ModItems.pellet_rtg, 1), new AStack[] { new ComparableStack(ModItems.nugget_pu238, 5), new OreDictStack("plateIron", 2), }, 50);
-		makeRecipe(new ComparableStack(ModItems.pellet_rtg_weak, 1), new AStack[] { new ComparableStack(ModItems.nugget_u238, 4), new ComparableStack(ModItems.nugget_pu238, 1), new OreDictStack("plateIron", 2), }, 50);
 		makeRecipe(new ComparableStack(ModItems.tritium_deuterium_cake, 1), new AStack[] { new NbtComparableStack(ItemCell.getFullCell(ModForgeFluids.deuterium, 6)), new NbtComparableStack(ItemCell.getFullCell(ModForgeFluids.tritium, 2)), new ComparableStack(ModItems.lithium, 4), }, 150);
 		makeRecipe(new ComparableStack(ModItems.pellet_cluster, 1), new AStack[] { new OreDictStack("plateSteel", 4), new ComparableStack(Blocks.TNT, 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.pellet_buckshot, 1), new AStack[] { new OreDictStack("nuggetLead", 6), }, 50);
@@ -663,6 +661,18 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.pipes_steel, 1),
 				new ComparableStack(ModItems.crystal_diamond, 1)
 			}, 400);
+
+		makeRecipe(new ComparableStack(ModBlocks.machine_fel, 1), new AStack[] {
+				new ComparableStack(ModBlocks.fusion_conductor, 16),
+				new ComparableStack(ModBlocks.machine_lithium_battery, 2),
+				new OreDictStack("ingotSteel", 16),
+				new OreDictStack("plateSteel", 24),
+				new OreDictStack("ingotDesh", 8),
+				new ComparableStack(ModItems.circuit_red_copper, 4),
+				new ComparableStack(ModItems.wire_red_copper, 64),
+				new ComparableStack(ModItems.coil_advanced_torus, 16),
+				new ComparableStack(ModItems.circuit_gold, 1)
+		}, 400);
 		
 		makeRecipe(new ComparableStack(ModBlocks.rbmk_blank, 1), new AStack[] {
 				new ComparableStack(ModBlocks.concrete_asbestos, 4),

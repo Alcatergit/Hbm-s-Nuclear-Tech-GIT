@@ -1,5 +1,7 @@
 package com.hbm.inventory.gui;
 
+import java.awt.Color;
+
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
@@ -7,10 +9,13 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.container.ContainerSILEX;
+import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntitySILEX;
+import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -36,7 +41,7 @@ public class GUISILEX extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 		
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 54, 52, 7, silex.tank, ModForgeFluids.acid);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 42, 52, 7, silex.tank, ModForgeFluids.acid);
 		
 		if(silex.current != null) {
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 27, guiTop + 72, 16, 52, mouseX, mouseY, new String[] { silex.currentFill + "/" + TileEntitySILEX.maxFill + "mB", silex.current.toStack().getDisplayName() });
@@ -60,8 +65,12 @@ public class GUISILEX extends GuiInfoContainer {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.silex.hasCustomInventoryName() ? this.silex.getInventoryName() : I18n.format(this.silex.getInventoryName());
 
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+		this.fontRenderer.drawString(name, (this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2)-54, 8, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+
+		if(silex.mode != EnumWavelengths.NULL) {
+			this.fontRenderer.drawString(silex.mode.textColor + I18nUtil.resolveKey(silex.mode.name), 100 + (32 - this.fontRenderer.getStringWidth(I18nUtil.resolveKey(silex.mode.name)) / 2), 16, 0);
+		}
 	}
 
 	@Override
@@ -70,13 +79,19 @@ public class GUISILEX extends GuiInfoContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+
+		if(silex.mode != EnumWavelengths.NULL) {
+			float freq = 0.0125F * (float)Math.pow(2, silex.mode.ordinal());
+			int color = (silex.mode != EnumWavelengths.VISIBLE) ? silex.mode.guiColor : Color.HSBtoRGB(silex.getWorld().getTotalWorldTime() / 50.0F, 0.5F, 1F);// & 16777215;
+			drawWave(81, 46, 16, 84, 0.5F, freq, color, 3F, 1F);
+		}
 		
 		if(silex.tank.getFluidAmount() > 0) {
 			
 			if(silex.getTankType() == ModForgeFluids.acid || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType())) {
-				drawTexturedModalRect(guiLeft + 43, guiTop + 53, 176, 118, 54, 9);
+				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 118, 54, 9);
 			} else {
-				drawTexturedModalRect(guiLeft + 43, guiTop + 53, 176, 109, 54, 9);
+				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 109, 54, 9);
 			}
 		}
 
@@ -87,6 +102,40 @@ public class GUISILEX extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft + 26, guiTop + 124 - f, 176, 109 - f, 16, f);
 
 		int i = silex.getFluidScaled(52);
-		drawTexturedModalRect(guiLeft + 44, guiTop + 54, 176, silex.getTankType() == ModForgeFluids.acid ? 43 : 50, i, 7);
+		drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType() == ModForgeFluids.acid ? 43 : 50, i, 7);
+	}
+
+	private void drawWave(int x, int y, int height, int width, float resolution, float freq, int color, float thickness, float mult) {
+		float samples = ((float)width) / resolution;
+		float scale = ((float)height)/2F;
+		float offset = (float)((float)silex.getWorld().getTotalWorldTime() % (4*Math.PI/freq));
+		for(int i = 1; i < samples; i++) {
+			double currentX = offset + x + i*resolution;
+			double nextX = offset + x + (i+1)*resolution;
+			double currentY = y + scale*Math.sin(currentX*freq);
+			double nextY = y + scale*Math.sin(nextX*freq);
+			drawLine(thickness, color, currentX-offset, currentY, nextX-offset, nextY);
+			
+			
+		}
+	}
+
+	private void drawLine(float width, int color, double x1, double y1, double x2, double y2) {
+		
+		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glLineWidth(width);
+		
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.startDrawing(1);
+		tessellator.setColorOpaque_I(color);
+		
+		tessellator.addVertex(guiLeft + x1, guiTop + y1, this.zLevel);
+		tessellator.addVertex(guiLeft + x2, guiTop + y2, this.zLevel);
+		tessellator.draw();
+		
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glPopMatrix();
 	}
 }

@@ -289,7 +289,7 @@ public class ExplosionNT extends Explosion {
 					if(has(ExAttrib.FIRE))
 						this.worldObj.setBlockState(chunkposition, Blocks.FIRE.getDefaultState());
 					else if(has(ExAttrib.BALEFIRE))
-						this.worldObj.setBlockState(chunkposition, ModBlocks.balefire.getDefaultState());
+						this.worldObj.setBlockState(chunkposition, ModBlocks.fire_balefire.getDefaultState());
 					else if(has(ExAttrib.LAVA))
 						this.worldObj.setBlockState(chunkposition, Blocks.FLOWING_LAVA.getDefaultState());
 				}

@@ -69,6 +69,10 @@ public class WasteEarth extends Block {
 
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 0));
     	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.waste_dirt) {
+
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 0));
+    	}
     	
     	if (entity instanceof EntityLivingBase && this == ModBlocks.frozen_grass) {
     	
@@ -109,7 +113,7 @@ public class WasteEarth extends Block {
 			}
 		}
 
-		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium) {
+		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_dirt || this == ModBlocks.waste_mycelium) {
 			
 			if(GeneralConfig.enableAutoCleanup || (world.getLightBrightness(new BlockPos(x, y + 1, z)) < 4 && world.getBlockLightOpacity(new BlockPos(x, y + 1, z)) > 2)) {
 				world.setBlockState(new BlockPos(x, y, z), Blocks.DIRT.getDefaultState());

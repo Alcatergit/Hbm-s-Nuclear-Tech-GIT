@@ -230,13 +230,6 @@ public class ItemCustomLore extends Item {
 				list.add("RTG fuel pellet for infinite energy! (almost)");
 		}
 
-		if(this == ModItems.pellet_rtg_weak) {
-			if(MainRegistry.polaroidID == 11)
-				list.add("Meh.");
-			else
-				list.add("Cheaper and weaker pellet, now with more U238!");
-		}
-
 		if(this == ModItems.rod_lithium) {
 			list.add("Turns into Tritium Rod");
 		}
@@ -284,7 +277,7 @@ public class ItemCustomLore extends Item {
 			if(MainRegistry.polaroidID == 11)
 				list.add("Polonium 4 U and me.");
 			else
-				list.add("More powderful RTG pellet, made from finest polonium!");
+				list.add("Tastes nice in Tea");
 		}
 		if(this == ModItems.mech_key)
 		{
@@ -300,6 +293,16 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.ingot_lanthanium)
 		{
 			list.add("'Lanthanum'");
+		}
+
+		if(this == ModItems.ingot_gh336 || this == ModItems.billet_gh336 || this == ModItems.nugget_gh336)
+		{
+			list.add("Seaborgium's colleague");
+		}
+
+		if(this == ModItems.billet_flashlead)
+		{
+			list.add("The lattice decays, causing antimatter-matter annihilation reactions, causing the release of pions, decaying into muons, catalyzing fusion of the nuclei, creating the new element. Please try to keep up.");
 		}
 		
 		if(this == ModItems.ingot_tantalium || this == ModItems.nugget_tantalium || this == ModItems.gem_tantalium || this == ModItems.powder_tantalium)

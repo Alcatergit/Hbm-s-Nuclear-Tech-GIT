@@ -189,6 +189,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.crystal_iron, new ItemStack(ModItems.powder_iron, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_gold, new ItemStack(ModItems.powder_gold, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_redstone, new ItemStack(Items.REDSTONE, 8));
+		ShredderRecipes.setRecipe(ModItems.crystal_lapis, new ItemStack(ModItems.powder_lapis, 12));
 		ShredderRecipes.setRecipe(ModItems.crystal_diamond, new ItemStack(ModItems.powder_diamond, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_uranium, new ItemStack(ModItems.powder_uranium, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_plutonium, new ItemStack(ModItems.powder_plutonium, 3));
@@ -238,6 +239,10 @@ public class ShredderRecipes {
 		
 		ShredderRecipes.setRecipe(ModItems.ingot_schrabidate, new ItemStack(ModItems.powder_schrabidate, 1));
 		ShredderRecipes.setRecipe(ModBlocks.block_schrabidate, new ItemStack(ModItems.powder_schrabidate, 9));
+		ShredderRecipes.setRecipe(ModItems.ingot_ac227, new ItemStack(ModItems.powder_ac227, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_co60, new ItemStack(ModItems.powder_co60, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_ra226, new ItemStack(ModItems.powder_ra226, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_sr90, new ItemStack(ModItems.powder_sr90, 1));
 
 		ShredderRecipes.setRecipe(ModBlocks.turret_light, new ItemStack(ModItems.powder_steel, 16));
 		ShredderRecipes.setRecipe(ModBlocks.turret_heavy, new ItemStack(ModItems.powder_steel, 16));
