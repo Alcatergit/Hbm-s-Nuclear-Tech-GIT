@@ -361,6 +361,10 @@ public class ModItems {
 	public static final Item insert_xsapi = new ItemModInsert(2500, 0.9F, 0.75F, 1F, 1F, "insert_xsapi").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_steel = new ItemModInsert(1000, 1F, 0.95F, 0.75F, 0.95F, "insert_steel").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_du = new ItemModInsert(1500, 0.9F, 0.85F, 0.5F, 0.9F, "insert_du").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item insert_polonium = new ItemModInsert(500, 0.9F, 1F, 0.95F, 0.9F, "insert_polonium").addRadiation(100F).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item insert_ghiorsium = new ItemModInsert(2000, 0.8F, 0.75F, 0.35F, 0.9F, "insert_ghiorsium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item insert_di = new ItemModInsert(4000, 1F, 0.01F, 0.01F, 0.01F, "insert_di").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item insert_era = new ItemModInsert(25, 0.5F, 1F, 0.25F, 1F, "insert_era").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_yharonite = new ItemModInsert(9999, 0.01F, 1F, 1F, 1F, "insert_yharonite").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_doxium = new ItemModInsert(9999, 5.0F, 1F, 1F, 1F, "insert_doxium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item armor_polish = new ItemModPolish("armor_polish").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -388,8 +392,6 @@ public class ModItems {
 	public static final Item injector_5htp = new ItemModAuto("injector_5htp").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item injector_knife = new ItemModKnife("injector_knife").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item medal_liquidator = new ItemModMedal("medal_liquidator").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item insert_polonium = new ItemModInsert(500, 0.9F, 1F, 0.95F, 0.9F, "insert_polonium").addRadiation(100F).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item insert_era = new ItemModInsert(25, 0.5F, 1F, 0.25F, 1F, "insert_era").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set = new ItemModServos("servo_set").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set_desh = new ItemModServos("servo_set_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);

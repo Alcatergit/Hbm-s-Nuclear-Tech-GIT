@@ -779,49 +779,49 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModBlocks.concrete, 4), new Object[] { "CC", "CC", 'C', ModBlocks.concrete_smooth });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_orange, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeOrange"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_orange });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_orange });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_black, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeBlack"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_black });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_black });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_blue, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeBlue"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_blue });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_blue });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_brown, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeBrown"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_brown });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_brown });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_cyan, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeCyan"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_cyan });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_cyan });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_gray, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeGray"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_gray });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_gray });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_green, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeGreen"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_green });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_green });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_light_blue, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeLightBlue"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_light_blue });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_light_blue });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_lime, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeLime"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_lime });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_lime });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_magenta, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeMagenta"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_magenta });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_magenta });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_pink, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyePink"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_pink });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_pink });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_purple, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyePurple"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_purple });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_purple });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_silver, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeSilver"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_silver });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_silver });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_red, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeRed"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_red });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_red });
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.concrete_yellow, 8), new Object[] { "CCC", "CDC", "CCC", 'C', ModBlocks.concrete_smooth, 'D',  "dyeYellow"});
-		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { "C", 'C', ModBlocks.concrete_yellow });
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_yellow });
 
 		addShapedRecipe(new ItemStack(ModBlocks.concrete_pillar, 8), new Object[] { "CBC", "CBC", "CBC", 'C', ModBlocks.concrete_smooth, 'B', Blocks.IRON_BARS });
 		addShapedRecipe(new ItemStack(ModBlocks.brick_concrete, 4), new Object[] { " C ", "CBC", " C ", 'C', ModBlocks.concrete_smooth, 'B', Items.CLAY_BALL });
