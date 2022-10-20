@@ -17,7 +17,7 @@ public class TEPumpjackPacket implements IMessage {
 	int x;
 	int y;
 	int z;
-	int spin;
+	float spin;
 	boolean progress;
 
 	public TEPumpjackPacket()
@@ -25,7 +25,7 @@ public class TEPumpjackPacket implements IMessage {
 		
 	}
 
-	public TEPumpjackPacket(int x, int y, int z, int spin, boolean bool)
+	public TEPumpjackPacket(int x, int y, int z, float spin, boolean bool)
 	{
 		this.x = x;
 		this.y = y;
@@ -39,7 +39,7 @@ public class TEPumpjackPacket implements IMessage {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
-		spin = buf.readInt();
+		spin = buf.readFloat();
 		progress = buf.readBoolean();
 	}
 
@@ -48,7 +48,7 @@ public class TEPumpjackPacket implements IMessage {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
-		buf.writeInt(spin);
+		buf.writeFloat(spin);
 		buf.writeBoolean(progress);
 	}
 

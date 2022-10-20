@@ -814,9 +814,9 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 	public boolean isSubmerged() {
 
-		return world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER &&
-				world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER &&
-				world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER &&
+		return world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER ||
+				world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER ||
+				world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER ||
 				world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;
 	}
 

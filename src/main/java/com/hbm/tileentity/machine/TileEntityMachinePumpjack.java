@@ -56,7 +56,8 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
 	public boolean isProgressing;
-	public int rotation;
+	public float rotation;
+	public float prevRotation;
 	
 	//private static final int[] slots_top = new int[] {1};
 	//private static final int[] slots_bottom = new int[] {2, 0};
@@ -107,7 +108,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 	public void readFromNBT(NBTTagCompound compound) {
 		this.power = compound.getLong("powerTime");
 		this.age = compound.getInteger("age");
-		this.rotation = compound.getInteger("rotation");
+		this.rotation = compound.getFloat("rotation");
 		tankTypes[0] = ModForgeFluids.oil;
 		tankTypes[1] = ModForgeFluids.gas;
 		if(compound.hasKey("tanks"))
@@ -121,7 +122,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setInteger("age", age);
-		compound.setInteger("rotation", rotation);
+		compound.setFloat("rotation", rotation);
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
@@ -135,7 +136,7 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 	@Override
 	public void update() {
 		int timer = 20;
-		
+		prevRotation = rotation;
 		age++;
 		age2++;
 		if(age >= timer)
@@ -236,7 +237,6 @@ public class TileEntityMachinePumpjack extends TileEntity implements ITickable, 
 			
 			isProgressing = warning == 0;
 			rotation += (warning == 0 ? 5 : 0);
-			rotation = rotation % 360;
 
 			PacketDispatcher.wrapper.sendToAllAround(new TEPumpjackPacket(pos.getX(), pos.getY(), pos.getZ(), rotation, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));

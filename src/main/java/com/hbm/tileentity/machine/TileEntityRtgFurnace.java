@@ -21,7 +21,7 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 
 	public int dualCookTime;
 	public int heat;
-	public static final int processingSpeed = 6000;
+	public static final int processingSpeed = 3000;
 
 	// private static final int[] slots_top = new int[] {0};
 	// private static final int[] slots_bottom = new int[] {4};

@@ -146,6 +146,22 @@ item.rbmk_fuel_zfb_am_mix.name=Fuel Grade Americium RBMK ZFB Rod
 item.rbmk_fuel_zfb_bismuth.name=Bismuth RBMK ZFB Rod
 item.rbmk_fuel_zfb_pu241.name=Pu-241 RBMK ZFB Rod
 
+tile.concrete_orange.name=Orange Concrete
+tile.concrete_magenta.name=Magenta Concrete
+tile.concrete_light_blue.name=Light Blue Concrete
+tile.concrete_yellow.name=Yellow Concrete
+tile.concrete_lime.name=Lime Concrete
+tile.concrete_pink.name=Pink Concrete
+tile.concrete_gray.name=Gray Concrete
+tile.concrete_silver.name=Light Gray Concrete
+tile.concrete_cyan.name=Cyan Concrete
+tile.concrete_purple.name=Purple Concrete
+tile.concrete_blue.name=Blue Concrete
+tile.concrete_brown.name=Brown Concrete
+tile.concrete_green.name=Green Concrete
+tile.concrete_red.name=Red Concrete
+tile.concrete_black.name=Black Concrete
+
 desc.item.rtgDecay=Decays into: %s
 desc.item.rtgHeat=Heat Level: %s
 

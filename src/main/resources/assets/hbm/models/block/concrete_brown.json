@@ -2,4 +2,5 @@
 	"parent": "block/cube_all",
 	"textures": {
 		"all": "hbm:blocks/concrete_brown"
+	}
 }

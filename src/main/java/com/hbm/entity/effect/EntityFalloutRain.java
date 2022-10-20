@@ -243,7 +243,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 				}
 			}
 
-			else if(b.getMaterial() == Material.WOOD && b.isOpaqueCube() && b.getBlock() != ModBlocks.waste_log) {
+			else if(b.getMaterial() == Material.WOOD && b.getBlock() != ModBlocks.waste_log) {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 			// else if(b.getBlock() == ModBlocks.sellafield_4) {

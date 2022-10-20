@@ -1,5 +1,6 @@
 package com.hbm.render.tileentity;
 
+import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
@@ -54,38 +55,40 @@ public class RenderSmallReactor extends TileEntitySpecialRenderer<TileEntityMach
 
 		        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
+		        float intensity = 0.25F + (float) (Math.random() * 0.015F) + (0.125F * reactor.coreHeat / 1000F);
 		        double top = 1.375;
 		        double bottom = 1.375;
+		        GlStateManager.color(0.4F, 0.9F, 1.0F, intensity);
 
-		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(d, bottom - d, -d).endVertex();
+		        buf.pos(d, top + d, -d).endVertex();
+		        buf.pos(d, top + d, d).endVertex();
+		        buf.pos(d, bottom - d, d).endVertex();
 
-		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, -d).endVertex();
+		        buf.pos(-d, top + d, -d).endVertex();
+		        buf.pos(-d, top + d, d).endVertex();
+		        buf.pos(-d, bottom - d, d).endVertex();
 
-		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, d).endVertex();
+		        buf.pos(-d, top + d, d).endVertex();
+		        buf.pos(d, top + d, d).endVertex();
+		        buf.pos(d, bottom - d, d).endVertex();
 
-		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, -d).endVertex();
+		        buf.pos(-d, top + d, -d).endVertex();
+		        buf.pos(d, top + d, -d).endVertex();
+		        buf.pos(d, bottom - d, -d).endVertex();
 
-		        buf.pos(-d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, top + d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, top + d, -d).endVertex();
+		        buf.pos(-d, top + d, d).endVertex();
+		        buf.pos(d, top + d, d).endVertex();
+		        buf.pos(d, top + d, -d).endVertex();
 
-		        buf.pos(-d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(-d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, bottom - d, d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
-		        buf.pos(d, bottom - d, -d).color(0.4F, 0.9F, 1.0F, 0.15F).endVertex();
+		        buf.pos(-d, bottom - d, -d).endVertex();
+		        buf.pos(-d, bottom - d, d).endVertex();
+		        buf.pos(d, bottom - d, d).endVertex();
+		        buf.pos(d, bottom - d, -d).endVertex();
 
 		        tess.draw();
 	        }

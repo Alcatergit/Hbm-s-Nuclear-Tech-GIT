@@ -44,13 +44,13 @@ public class ItemModInsert extends ItemArmorMod implements IItemHazard {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		if(damageMod != 1F)
-			list.add(TextFormatting.RED + (damageMod < 1 ? "-" : "+") + Math.abs(Math.round((1F - damageMod) * 100)) + "% damage");
+			list.add(TextFormatting.RED + (damageMod < 1 ? "-" : "+") + Math.abs(Math.round((1F - damageMod) * 100)) + "% Damage");
 		if(projectileMod != 1F)
-			list.add(TextFormatting.YELLOW + "-" + Math.round((1F - projectileMod) * 100) + "% projectile damage");
+			list.add(TextFormatting.YELLOW + "-" + Math.round((1F - projectileMod) * 100) + "% Projectile Damage");
 		if(explosionMod != 1F)
-			list.add(TextFormatting.YELLOW + "-" + Math.round((1F - explosionMod) * 100) + "% explosion damage");
+			list.add(TextFormatting.YELLOW + "-" + Math.round((1F - explosionMod) * 100) + "% Explosion Damage");
 		if(speed != 1F)
-			list.add(TextFormatting.BLUE + "-" + Math.round((1F - speed) * 100) + "% speed");
+			list.add(TextFormatting.BLUE + "-" + Math.round((1F - speed) * 100) + "% Speed");
 		
 		if(this == ModItems.insert_polonium)
 			list.add(TextFormatting.DARK_RED + "+100 RAD/s");
