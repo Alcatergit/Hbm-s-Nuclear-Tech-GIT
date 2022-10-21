@@ -146,6 +146,7 @@ item.rbmk_fuel_zfb_am_mix.name=Fuel Grade Americium RBMK ZFB Rod
 item.rbmk_fuel_zfb_bismuth.name=Bismuth RBMK ZFB Rod
 item.rbmk_fuel_zfb_pu241.name=Pu-241 RBMK ZFB Rod
 
+tile.concrete_white.name=White Concrete
 tile.concrete_orange.name=Orange Concrete
 tile.concrete_magenta.name=Magenta Concrete
 tile.concrete_light_blue.name=Light Blue Concrete
@@ -163,7 +164,7 @@ tile.concrete_red.name=Red Concrete
 tile.concrete_black.name=Black Concrete
 
 desc.item.rtgDecay=Decays into: %s
-desc.item.rtgHeat=Heat Level: %s
+desc.item.rtgHeat=Heat: %s
 
 trait.blinding=Blinding
 trait.breeding=Worth %s operations in breeding reactor
@@ -179,6 +180,7 @@ trait.radResistance=Radiation resistance: %s
 trait.asbestos=Asbestos
 trait.hydro=Hydroexplosive
 trait.unstable=Unstable
+trait.coal=Coal Dust
 
 trait.rbmk.coreTemp=Core temp: %s
 trait.rbmk.depletion=Depletion: %s
@@ -1466,7 +1468,13 @@ item.assembly_lacunae.name=.5mm Assembly
 
 item.piston_selenium.name=Radial Engine Piston
 
+tile.pink_double_slab.name=Pink Wood Double Slab
+tile.radwater_block.name=Irradiated Water
+
 tile.block_aluminium.name=Block of Aluminium
+tile.block_saturnite.name=Block of Saturnite
+tile.block_ra226.name=Block of Radium-226
+tile.block_poylmer.name=Block of Polymer
 tile.block_copper.name=Block of Copper
 tile.block_fluorite.name=Block of Fluorite
 tile.block_niter.name=Block of Niter
@@ -3150,7 +3158,8 @@ tile.absorber.name=Radiation Absorber
 tile.absorber_red.name=Enhanced Radiation Absorber
 tile.absorber_green.name=Advanced Radiation Absorber
 tile.absorber_pink.name=Elite Radiation Absorber
-tile.decon.name=Player Decontaminator
+tile.decon.name=Radiation Decontaminator
+tile.decon_digamma.name=Digamma Decontaminator
 tile.machine_amgen.name=Ambience Radiation Generator
 tile.machine_geo.name=Geothermal Electric Generator
 tile.machine_minirtg.name=Radio Isotope Cell
@@ -3503,6 +3512,8 @@ item.insert_esapi.name=ESAPI Insert
 item.insert_kevlar.name=Kevlar Insert
 item.insert_sapi.name=SAPI Insert
 item.insert_polonium.name=Polonium Insert
+item.insert_ghiorsium.name=Ghiorsium Insert
+item.insert_di.name=Dineutronium Insert
 item.insert_steel.name=Heavy Steel Insert
 item.insert_xsapi.name=XSAPI Insert
 item.insert_yharonite.name=Yharonite Insert
@@ -3806,6 +3817,7 @@ item.horseshoe_magnet.name=Horseshoe Magnet
 item.shackles.name=Shackles
 item.scrumpy.name=Bottle of Scrumpy
 item.medal_liquidator.name=Liquidator Medal
+item.medal_ghoul.name=Certified Ghoul
 tile.steel_grate.name=Steel Grate
 item.siox.name=SiOX Cancer Medication
 item.ingot_smore.name=S'more Ingot

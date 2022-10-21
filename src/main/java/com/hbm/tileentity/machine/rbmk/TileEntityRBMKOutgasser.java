@@ -35,8 +35,8 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 
 	public FluidTank gas;
 	public Fluid gasType;
-	public double progress;
-	public static final int duration = 10000;
+	public double progress = 0;
+	public int duration = 10000;
 
 	public TileEntityRBMKOutgasser() {
 		super(2);
@@ -102,11 +102,12 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		if(inventory.getStackInSlot(0).isEmpty())
 			return false;
 		
-		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
-
-		if(output == null)
+		int requiredFlux = RBMKOutgasserRecipes.getRequiredFlux(inventory.getStackInSlot(0));
+		if (requiredFlux == -1)
 			return false;
-		
+		duration = requiredFlux;
+
+		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
 		if(output.getItem() == ModItems.fluid_icon) {
 			return ItemFluidIcon.getFluid(output) == gasType && gas.getFluidAmount() + ItemFluidIcon.getQuantity(output) <= gas.getCapacity();
 		}
@@ -196,6 +197,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		super.readFromNBT(nbt);
 		
 		this.progress = nbt.getDouble("progress");
+		this.duration = nbt.getInteger("duration");
 		this.gas.readFromNBT(nbt.getCompoundTag("gas"));
 	}
 	
@@ -204,6 +206,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		super.writeToNBT(nbt);
 		
 		nbt.setDouble("progress", this.progress);
+		nbt.setInteger("duration", this.duration);
 		nbt.setTag("gas", gas.writeToNBT(new NBTTagCompound()));
 		
 		return nbt;

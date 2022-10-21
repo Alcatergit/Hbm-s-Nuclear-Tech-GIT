@@ -273,6 +273,8 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.nugget_gh336, 9), new Object[] { "#", '#', ModItems.ingot_gh336 });
 		addShapedRecipe(new ItemStack(ModItems.ingot_u238m2, 1), new Object[] { "###", "###", "###", '#', ModItems.nugget_u238m2 });
 		addShapedRecipe(new ItemStack(ModItems.nugget_u238m2, 9), new Object[] { "#", '#', ModItems.ingot_u238m2 });
+		addShapedRecipe(new ItemStack(ModItems.ingot_ra226, 1), new Object[] { "###", "###", "###", '#', ModItems.nugget_ra226 });
+		addShapedRecipe(new ItemStack(ModItems.nugget_ra226, 9), new Object[] { "#", '#', ModItems.ingot_ra226 });
 
 
 		addShapedRecipe(new ItemStack(ModItems.powder_steel, 1), new Object[] { "###", "###", "###", '#', ModItems.powder_steel_tiny });
@@ -777,6 +779,9 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModBlocks.brick_light, 4), new Object[] { "FBF", "BFB", "FBF", 'F', Blocks.OAK_FENCE, 'B', Blocks.BRICK_BLOCK });
 		addShapedRecipe(new ItemStack(ModBlocks.brick_asbestos, 2), new Object[] { " A ", "ABA", " A ", 'B', ModBlocks.brick_light, 'A', ModItems.ingot_asbestos });
 		addShapedRecipe(new ItemStack(ModBlocks.concrete, 4), new Object[] { "CC", "CC", 'C', ModBlocks.concrete_smooth });
+
+		addShapelessOreRecipe(new ItemStack(ModBlocks.concrete_white, 8), new Object[] {ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, "dyeWhite"});
+		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_white });
 
 		addShapelessOreRecipe(new ItemStack(ModBlocks.concrete_orange, 8), new Object[] {ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, ModBlocks.concrete_smooth, "dyeOrange"});
 		addShapelessRecipe(new ItemStack(ModBlocks.concrete_smooth), new Object[] { ModBlocks.concrete_orange });
@@ -2120,6 +2125,7 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.bathwater_mk2, 1), new Object[] { "MWM", "WBW", "MWM", 'M', ModItems.bottle_mercury, 'W', ModItems.nuclear_waste, 'B', ModItems.bathwater });
 		addShapedRecipe(new ItemStack(ModItems.back_tesla, 1), new Object[] { "DGD", "GTG", "DGD", 'D', ModItems.ducttape, 'G', ModItems.wire_gold, 'T', ModBlocks.tesla });
 		addShapedRecipe(new ItemStack(ModItems.medal_liquidator, 1), new Object[] { "GBG", "BFB", "GBG", 'G', ModItems.nugget_au198, 'B', ModItems.ingot_boron, 'F', ModItems.debris_fuel });
+		addShapedRecipe(new ItemStack(ModItems.medal_ghoul, 1), new Object[] { "GEG", "BFB", "GEG", 'G', ModItems.nugget_u238m2, 'B', ModBlocks.pribris_digamma, 'E', ModItems.glitch, 'F', ModItems.medal_liquidator });
 		addShapelessRecipe(new ItemStack(ModItems.injector_5htp, 1), new Object[] { ModItems.five_htp, ModItems.circuit_targeting_tier1, ModItems.plate_saturnite });
 		addShapelessRecipe(new ItemStack(ModItems.injector_knife, 1), new Object[] { ModItems.injector_5htp, Items.IRON_SWORD });
 		addShapedRecipe(new ItemStack(ModItems.shackles, 1), new Object[] { "CIC", "C C", "I I", 'I', ModItems.ingot_chainsteel, 'C', ModBlocks.chain });

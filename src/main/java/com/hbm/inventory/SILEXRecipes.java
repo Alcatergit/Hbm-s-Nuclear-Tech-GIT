@@ -14,6 +14,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.util.WeightedRandomObject;
 
 import net.minecraft.init.Blocks;
@@ -692,6 +693,21 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_i131_tiny), 3))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_co60_tiny), 3))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 5))
+				);
+
+		recipes.put(new ComparableStack(ModBlocks.mush_block, 1), new SILEXRecipe(100, 640, EnumWavelengths.DRX)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.biomass_compressed), 80))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.egg_balefire_shard), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_poison), 6))
+				.addOut(new WeightedRandomObject(new ItemStack(ModBlocks.mush), 46))
+				);
+		recipes.put(new ComparableStack(ModBlocks.ancient_scrap, 1), new SILEXRecipe(100, 640, EnumWavelengths.DRX)
+				.addOut(new WeightedRandomObject(new ItemStack(ModBlocks.block_electrical_scrap), 1000))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.undefined), 200))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.chlorine_pinwheel), 45))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.ingot_electronium), 30))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.glitch), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.singularity_spark), 2))
 				);
 	}
 	

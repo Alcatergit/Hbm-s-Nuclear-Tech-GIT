@@ -20,17 +20,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockDecon extends BlockContainer {
 
-	public BlockDecon(Material materialIn, String s) {
+	public static float radRemove;
+	public static float digammaRemove;
+	public BlockDecon(Material materialIn, String s, float rad, float digamma) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		
+		this.radRemove = rad;
+		this.digammaRemove = digamma;
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDecon();
+		return new TileEntityDecon(this.radRemove, this.digammaRemove);
 	}
 	
 	@Override

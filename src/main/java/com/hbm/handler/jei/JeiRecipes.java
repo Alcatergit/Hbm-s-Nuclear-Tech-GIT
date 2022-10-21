@@ -428,9 +428,9 @@ public class JeiRecipes {
 			for(int i = 0; i < output_size; i ++){
 				double chance = this.chances.get(i);
 				if(i < sep) {
-					fontRenderer.drawString(((int)(chance * 10D) / 10D)+"%", 88, 33 + i * 18 - 9 * ((Math.min(output_size, sep) + 1) / 2), 0x404040);
+					fontRenderer.drawString(((int)(chance * 100D) / 100D)+"%", 90, 33 + i * 18 - 9 * ((Math.min(output_size, sep) + 1) / 2), 0x404040);
 				} else {
-					fontRenderer.drawString(((int)(chance * 10D) / 10D)+"%", 136, 33 + (i - sep) * 18 - 9 * ((Math.min(output_size - sep, sep) + 1)/2), 0x404040);
+					fontRenderer.drawString(((int)(chance * 100D) / 100D)+"%", 138, 33 + (i - sep) * 18 - 9 * ((Math.min(output_size - sep, sep) + 1)/2), 0x404040);
 				}
 			}
 			

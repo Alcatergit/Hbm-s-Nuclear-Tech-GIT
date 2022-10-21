@@ -29,7 +29,7 @@ public class GUIRBMKOutgasser extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 		
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 112, guiTop + 21, 16, 48, rod.gas);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 23, 14, 58, rod.gas);
 		
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -40,6 +40,23 @@ public class GUIRBMKOutgasser extends GuiInfoContainer {
 		
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString("Flux", 21, 34, 4210752);
+		String fluxNumbers = formatNumber((float)rod.progress)+"/"+formatNumber((float)rod.duration);
+		this.fontRenderer.drawString(fluxNumbers, 123-this.fontRenderer.getStringWidth(fluxNumbers), 34, 0x46EA00);
+	}
+
+	protected String formatNumber(float number){
+		if(number < 1000D)
+			return String.format("%5.1f ", number);
+		if(number < 1000000D)
+			return String.format("%5.1fk", number/1000F);
+		if(number < 1000000000D)
+			return String.format("%5.1fM", number/1000000F);
+		if(number < 1000000000000D)
+			return String.format("%5.1fG", number/1000000000F);
+		if(number < 1000000000000000D)
+			return String.format("%5.1fT", number/1000000000000F);
+		return "";
 	}
 
 	@Override
@@ -49,10 +66,10 @@ public class GUIRBMKOutgasser extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		int progress = (int) (rod.progress * 13 / TileEntityRBMKOutgasser.duration);
-		drawTexturedModalRect(guiLeft + 82, guiTop + 50, 176, 0, progress, 6);
+		int progress = (int) (rod.progress * 45 / rod.duration);
+		drawTexturedModalRect(guiLeft + 66, guiTop + 58, 190, 0, progress, 6);
 		
-		int gas = (int) (rod.gas.getFluidAmount() * 42 / rod.gas.getCapacity());
-		drawTexturedModalRect(guiLeft + 115, guiTop + 66 - gas, 188, 42 - gas, 10, gas);
+		int gas = (int) (rod.gas.getFluidAmount() * 58 / rod.gas.getCapacity());
+		drawTexturedModalRect(guiLeft + 143, guiTop + 82 - gas, 176, 58 - gas, 14, gas);
 	}
 }

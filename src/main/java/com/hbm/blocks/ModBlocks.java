@@ -226,6 +226,7 @@ public class ModBlocks {
 	public static final Block reinforced_stone = new BlockBase(Material.ROCK, "reinforced_stone").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(3000.0F);
 	public static final Block concrete = new BlockBase(Material.ROCK, "concrete").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
 	public static final Block concrete_smooth = new BlockBase(Material.ROCK, "concrete_smooth").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
+	public static final Block concrete_white = new BlockBase(Material.ROCK, "concrete_white").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
 	public static final Block concrete_orange = new BlockBase(Material.ROCK, "concrete_orange").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
 	public static final Block concrete_magenta = new BlockBase(Material.ROCK, "concrete_magenta").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
 	public static final Block concrete_light_blue = new BlockBase(Material.ROCK, "concrete_light_blue").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(4000.0F);
@@ -1158,7 +1159,9 @@ public class ModBlocks {
 	public static final Block absorber_red = new BlockAbsorber(Material.IRON, 10F, "absorber_red").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block absorber_green = new BlockAbsorber(Material.IRON, 100F, "absorber_green").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block absorber_pink = new BlockAbsorber(Material.IRON, 10000F, "absorber_pink").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block decon = new BlockDecon(Material.IRON, "decon").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block decon = new BlockDecon(Material.IRON, "decon", 0.5F, 0.0F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block decon_digamma = new BlockDecon(Material.IRON, "decon_digamma", 0.0F, 0.001F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	
 	
 	public static final Block volcano_core = new BlockVolcano("volcano_core").setBlockUnbreakable().setResistance(10000.0F).setCreativeTab(MainRegistry.nukeTab);
 	

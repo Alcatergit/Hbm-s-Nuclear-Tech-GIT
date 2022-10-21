@@ -812,12 +812,20 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			markDirty();
 	}
 
-	public boolean isSubmerged() {
+	public boolean[] getSubmergedDirection() {
+		boolean[] sides = new boolean[4];
+		sides[0] = world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;//North
+		sides[1] = world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER;//South
+		sides[2] = world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER;//East
+		sides[3] = world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER;//West
+		return sides;
+	}
 
-		return world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER ||
-				world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER ||
-				world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER ||
-				world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;
+	public boolean isSubmerged() {
+		return world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER || //North
+		world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER || //South
+		world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER || //East
+		world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER;//West
 	}
 
 }

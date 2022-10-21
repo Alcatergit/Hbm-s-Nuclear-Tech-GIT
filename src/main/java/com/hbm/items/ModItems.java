@@ -391,7 +391,9 @@ public class ModItems {
 	public static final Item shackles = new ItemModShackles("shackles").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item injector_5htp = new ItemModAuto("injector_5htp").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item injector_knife = new ItemModKnife("injector_knife").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item medal_liquidator = new ItemModMedal("medal_liquidator").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item decontamination_module = new ItemModMedal("decontamination_module", 0.025F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item medal_liquidator = new ItemModMedal("medal_liquidator", 0.5F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item medal_ghoul = new ItemModMedal("medal_ghoul", 2.5F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set = new ItemModServos("servo_set").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set_desh = new ItemModServos("servo_set_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);

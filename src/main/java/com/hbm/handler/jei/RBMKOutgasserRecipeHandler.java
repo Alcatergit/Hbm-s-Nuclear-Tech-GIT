@@ -24,8 +24,8 @@ public class RBMKOutgasserRecipeHandler implements IRecipeCategory<RBMKOutgasser
 	protected final IDrawableAnimated progressAnimated;
 	
 	public RBMKOutgasserRecipeHandler(IGuiHelper help) {
-		background = help.createDrawable(gui_rl, 28, 17, 119, 71);
-		progressStatic = help.createDrawable(gui_rl, 176, 0, 12, 6);
+		background = help.createDrawable(gui_rl, 12, 17, 152, 72);
+		progressStatic = help.createDrawable(gui_rl, 190, 0, 44, 6);
 		progressAnimated = help.createAnimatedDrawable(progressStatic, 100, StartDirection.LEFT, false);
 	}
 	
@@ -51,15 +51,15 @@ public class RBMKOutgasserRecipeHandler implements IRecipeCategory<RBMKOutgasser
 	
 	@Override
 	public void drawExtras(Minecraft minecraft) {
-		progressAnimated.draw(minecraft, 54, 33);
+		progressAnimated.draw(minecraft, 66-12, 58-17);
 	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, RBMKOutgasserRecipe recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(0, true, 47-28, 44-17);
-		guiItemStacks.init(1, false, 111-28, 68-17);
+		guiItemStacks.init(0, true, 47-12, 52-17);
+		guiItemStacks.init(1, false, 111-12, 52-17);
 		
 		guiItemStacks.set(ingredients);
 	}

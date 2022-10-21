@@ -31,6 +31,8 @@ public class HbmLivingCapability {
 		
 		public float getDigamma();
 		public void setDigamma(float dig);
+		public void increaseDigamma(float dig);
+		public void decreaseDigamma(float dig);
 		
 		public int getAsbestos();
 		public void setAsbestos(int asbestos);
@@ -114,6 +116,16 @@ public class HbmLivingCapability {
 		@Override
 		public void setDigamma(float dig){
 			digamma = dig;
+		}
+
+		@Override
+		public void increaseDigamma(float dig){
+			this.digamma = MathHelper.clamp(this.digamma + dig, 0, 1000);
+		}
+		
+		@Override
+		public void decreaseDigamma(float dig){
+			this.digamma = MathHelper.clamp(this.digamma - dig, 0, 1000);
 		}
 
 		@Override
@@ -249,6 +261,12 @@ public class HbmLivingCapability {
 			}
 			@Override
 			public void setDigamma(float dig){
+			}
+			@Override
+			public void increaseDigamma(float dig){
+			}
+			@Override
+			public void decreaseDigamma(float dig){
 			}
 			@Override
 			public int getAsbestos(){

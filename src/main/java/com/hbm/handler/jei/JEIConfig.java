@@ -138,7 +138,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUISILEX.class, 45, 82, 113-45, 125-82, SILEX);
 		registry.addRecipeClickArea(GUIAnvil.class, 34, 26, 52-34, 44-26, SMITHING);
 		registry.addRecipeClickArea(GUIAnvil.class, 12, 50, 48-12, 66-50, ANVIL);
-		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 78, 43, 97-78, 62-43, RBMKOUTGASSER);
+		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 64, 53, 48, 16, RBMKOUTGASSER);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
