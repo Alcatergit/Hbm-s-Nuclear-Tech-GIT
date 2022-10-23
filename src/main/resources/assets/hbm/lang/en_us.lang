@@ -36,6 +36,23 @@ armor.sprintBoost=Sprint Boost
 armor.electricJetpack=Electric Jetpack
 armor.glider=Glider
 
+chem.DUCRETE=Ducretisation
+
+tile.ducrete.name=Ducrete
+tile.ducrete_smooth.name=Smooth Ducrete
+tile.ducrete_brick.name=Ducrete Brick
+tile.ducrete_reinforced.name=Reinforced Durcete
+
+tile.deco_rbmk.name=RBMK Deco
+tile.deco_rbmk_smooth=RBMK Smooth Deco
+
+item.lung_diagnostic.name=Lung Diagnostic
+lung_scanner.title=Lung Diagnostic
+lung_scanner.total=Total
+lung_scanner.player_asbestos_health=Lung Health:
+lung_scanner.player_coal_health=Lung Health:
+lung_scanner.player_total_health=Lung Health:
+
 tile.waste_dirt.name=Contaminated Dirt
 item.rod_cobalt.name=Cobalt Rod
 item.rod_co60.name=Cobalt-60 Rod
@@ -107,6 +124,7 @@ item.powder_co60_tiny.name=Tiny Pile of Cobalt-60 Powder
 item.powder_iodine_tiny.name=Tiny Pile of Iodine Powder
 
 item.blades_aluminum.name=Aluminum Shredder Blades
+item.decontamination_module.name=Decontamination Module
 
 item.pellet_rtg_radium.name=Radium-226 RTG Pellet
 item.pellet_rtg_weak.name=Uranium-238 RTG Pellet
@@ -927,10 +945,13 @@ tile.machine_coal_on.name=Combustion Generator
 container.machineCoal=Combustion Generator
 tile.machine_boiler_off.name=Boiler
 tile.machine_boiler_on.name=Boiler
-container.machineBoiler=Boiler
 tile.machine_boiler_electric_off.name=Electric Boiler
 tile.machine_boiler_electric_on.name=Electric Boiler
+tile.machine_boiler_rtg_off.name=RTG Boiler
+tile.machine_boiler_rtg_on.name=RTG Boiler
+container.machineBoiler=Boiler
 container.machineElectricBoiler=Electric Boiler
+container.machineRTGBoiler=RTG Boiler
 container.machineITER=Fusion Reactor
 container.machineLargeTurbine=Industrial Steam Turbine
 tile.machine_large_turbine.name=Industrial Steam Turbine
@@ -1003,6 +1024,8 @@ container.crateIron=Iron Crate
 tile.crate_steel.name=Steel Crate
 tile.crate_tungsten.name=Tungsten Crate
 container.crateSteel=Steel Crate
+tile.crate_desh.name=Desh Crate
+container.crateDesh=Desh Crate
 tile.safe.name=Safe
 tile.sand_polonium.name=Polonium Sand
 container.safe=Safe

@@ -42,6 +42,7 @@ import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
+import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
@@ -53,6 +54,7 @@ import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
+import com.hbm.tileentity.machine.TileEntityMachineBoilerRTG;
 import com.hbm.tileentity.machine.TileEntityMachineCMBFactory;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
@@ -221,6 +223,11 @@ public class GuiHandler implements IGuiHandler {
 				return new ContainerMachineBoilerElectric(player.inventory, (TileEntityMachineBoilerElectric) entity);
 			}
 			return null;
+		case ModBlocks.guiID_machine_boiler_rtg:
+			if(entity instanceof TileEntityMachineBoilerRTG) {
+				return new ContainerMachineBoilerRTG(player.inventory, (TileEntityMachineBoilerRTG) entity);
+			}
+			return null;
 		case ModBlocks.guiID_machine_epress:
 			if(entity instanceof TileEntityMachineEPress) {
 				return new ContainerMachineEPress(player.inventory, (TileEntityMachineEPress) entity);
@@ -281,6 +288,10 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_crate_steel:
 			if(entity instanceof TileEntityCrateSteel) {
 				return new ContainerCrateSteel(player.inventory, (TileEntityCrateSteel) entity);
+			}
+		case ModBlocks.guiID_crate_desh:
+			if(entity instanceof TileEntityCrateDesh) {
+				return new ContainerCrateDesh(player.inventory, (TileEntityCrateDesh) entity);
 			}
 		case ModBlocks.guiID_safe:
 			if(entity instanceof TileEntitySafe) {
@@ -725,6 +736,11 @@ public class GuiHandler implements IGuiHandler {
 				return new GUIMachineBoilerElectric(player.inventory, (TileEntityMachineBoilerElectric) entity);
 			}
 			return null;
+		case ModBlocks.guiID_machine_boiler_rtg:
+			if(entity instanceof TileEntityMachineBoilerRTG) {
+				return new GUIMachineBoilerRTG(player.inventory, (TileEntityMachineBoilerRTG) entity);
+			}
+			return null;
 		case ModBlocks.guiID_machine_epress:
 			if(entity instanceof TileEntityMachineEPress) {
 				return new GUIMachineEPress(player.inventory, (TileEntityMachineEPress) entity);
@@ -785,6 +801,10 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_crate_steel:
 			if(entity instanceof TileEntityCrateSteel) {
 				return new GUICrateSteel(player.inventory, (TileEntityCrateSteel) entity);
+			}
+		case ModBlocks.guiID_crate_desh:
+			if(entity instanceof TileEntityCrateDesh) {
+				return new GUICrateDesh(player.inventory, (TileEntityCrateDesh) entity);
 			}
 		case ModBlocks.guiID_safe:
 			if(entity instanceof TileEntitySafe) {

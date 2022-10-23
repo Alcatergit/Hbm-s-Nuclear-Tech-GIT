@@ -62,6 +62,10 @@ public class BlockBase extends Block {
 			tooltip.add("Deposit location: X:-300; Z:200");
 			tooltip.add("Estimated quantity: 4680");
 		}
+		float hardness = this.getExplosionResistance(null);
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
 	}
 
 	public Block setSoundType(SoundType sound){

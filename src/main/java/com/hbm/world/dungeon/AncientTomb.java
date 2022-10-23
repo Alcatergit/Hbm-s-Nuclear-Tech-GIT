@@ -8,11 +8,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.world.generator.DungeonToolbox;
 
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.util.EnumFacing;
 
 public class AncientTomb {
 
@@ -64,10 +66,10 @@ public class AncientTomb {
 		world.setBlockState(new BlockPos(x, yOff + 3, z + 2), ModBlocks.brick_concrete_marked.getDefaultState());
 		world.setBlockState(new BlockPos(x, yOff + 3, z - 2), ModBlocks.brick_concrete_marked.getDefaultState());
 
-		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
-		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
-		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
-		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
+		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
+		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
+		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
+		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
 		
 		/// PRINT SPIKES ///
 		int spikeCount = 36 + rand.nextInt(15);

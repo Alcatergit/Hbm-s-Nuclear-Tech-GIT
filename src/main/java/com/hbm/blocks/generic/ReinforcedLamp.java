@@ -1,13 +1,14 @@
 package com.hbm.blocks.generic;
 
 import java.util.Random;
-
+import java.util.List;
 import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -78,4 +79,11 @@ public class ReinforcedLamp extends Block {
 		return new ItemStack(ModBlocks.reinforced_lamp_off);
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
+	}
 }

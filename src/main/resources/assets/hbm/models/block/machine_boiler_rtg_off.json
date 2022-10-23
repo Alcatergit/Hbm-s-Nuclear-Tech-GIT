@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/machine_boiler_base",
+		"front": "hbm:blocks/machine_boiler_nuclear_front",
+		"side": "hbm:blocks/machine_boiler_nuclear"
+	}
+}

@@ -3,7 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.tileentity.machine.TileEntityDecon;
+import com.hbm.tileentity.machine.TileEntityDeconRad;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -18,22 +18,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockDecon extends BlockContainer {
+public class BlockDeconRad extends BlockContainer {
 
 	public static float radRemove;
-	public static float digammaRemove;
-	public BlockDecon(Material materialIn, String s, float rad, float digamma) {
+	public BlockDeconRad(Material materialIn, String s, float rad) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.radRemove = rad;
-		this.digammaRemove = digamma;
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDecon(this.radRemove, this.digammaRemove);
+		return new TileEntityDeconRad(this.radRemove);
 	}
 	
 	@Override

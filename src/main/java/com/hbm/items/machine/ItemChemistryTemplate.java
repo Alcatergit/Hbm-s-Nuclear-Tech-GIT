@@ -91,6 +91,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		KEVLAR,
 		CONCRETE,
 		CONCRETE_ASBESTOS,
+		DUCRETE,
 		SOLID_FUEL,
 		ELECTROLYSIS,
 		XENON,
@@ -273,6 +274,8 @@ public static int getProcessTime(ItemStack stack) {
         	return 100;
         case CONCRETE_ASBESTOS:
         	return 100;
+        case DUCRETE:
+        	return 200;
         case SOLID_FUEL:
         	return 200;
         case ELECTROLYSIS:

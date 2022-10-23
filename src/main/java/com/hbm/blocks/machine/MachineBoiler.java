@@ -7,6 +7,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
+import com.hbm.tileentity.machine.TileEntityMachineBoilerRTG;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -56,6 +57,8 @@ public class MachineBoiler extends BlockContainer {
 			return new TileEntityMachineBoiler();
 		if (this == ModBlocks.machine_boiler_electric_off || this == ModBlocks.machine_boiler_electric_on)
 			return new TileEntityMachineBoilerElectric();
+		if (this == ModBlocks.machine_boiler_rtg_off || this == ModBlocks.machine_boiler_rtg_on)
+			return new TileEntityMachineBoilerRTG();
 		return null;
 	}
 
@@ -65,6 +68,8 @@ public class MachineBoiler extends BlockContainer {
 			return Item.getItemFromBlock(ModBlocks.machine_boiler_off);
 		if (this == ModBlocks.machine_boiler_electric_off || this == ModBlocks.machine_boiler_electric_on)
 			return Item.getItemFromBlock(ModBlocks.machine_boiler_electric_off);
+		if (this == ModBlocks.machine_boiler_rtg_off || this == ModBlocks.machine_boiler_rtg_on)
+			return Item.getItemFromBlock(ModBlocks.machine_boiler_rtg_off);
 		return super.getItemDropped(state, rand, fortune);
 	}
 
@@ -109,6 +114,9 @@ public class MachineBoiler extends BlockContainer {
 			if (tileentity instanceof TileEntityMachineBoilerElectric) {
 				((TileEntityMachineBoilerElectric) tileentity).setCustomName(stack.getDisplayName());
 			}
+			if (tileentity instanceof TileEntityMachineBoilerRTG) {
+				((TileEntityMachineBoilerRTG) tileentity).setCustomName(stack.getDisplayName());
+			}
 		}
 	}
 
@@ -137,6 +145,14 @@ public class MachineBoiler extends BlockContainer {
 					player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_boiler_electric, world, pos.getX(), pos.getY(), pos.getZ());
 				}
 			}
+			if(te instanceof TileEntityMachineBoilerRTG) {
+				
+				TileEntityMachineBoilerRTG entity = (TileEntityMachineBoilerRTG) te;
+				if(entity != null)
+				{
+					player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_boiler_rtg, world, pos.getX(), pos.getY(), pos.getZ());
+				}
+			}
 			return true;
 		} else {
 			return false;
@@ -155,13 +171,20 @@ public class MachineBoiler extends BlockContainer {
 				world.setBlockState(pos, ModBlocks.machine_boiler_off.getDefaultState().withProperty(FACING, i.getValue(FACING)));
 			}
 		}
-
-		if (i.getBlock() == ModBlocks.machine_boiler_electric_off || i.getBlock() == ModBlocks.machine_boiler_electric_on)
+		if (i.getBlock() == ModBlocks.machine_boiler_electric_off || i.getBlock() == ModBlocks.machine_boiler_electric_on){
 			if (isProcessing && i.getBlock() != ModBlocks.machine_boiler_electric_on) {
 				world.setBlockState(pos, ModBlocks.machine_boiler_electric_on.getDefaultState().withProperty(FACING, i.getValue(FACING)));
 			} else if (i.getBlock() != ModBlocks.machine_boiler_electric_off) {
 				world.setBlockState(pos, ModBlocks.machine_boiler_electric_off.getDefaultState().withProperty(FACING, i.getValue(FACING)));
 			}
+		}
+		if (i.getBlock() == ModBlocks.machine_boiler_rtg_off || i.getBlock() == ModBlocks.machine_boiler_rtg_on){
+			if (isProcessing && i.getBlock() != ModBlocks.machine_boiler_rtg_on) {
+				world.setBlockState(pos, ModBlocks.machine_boiler_rtg_on.getDefaultState().withProperty(FACING, i.getValue(FACING)));
+			} else if (i.getBlock() != ModBlocks.machine_boiler_rtg_off) {
+				world.setBlockState(pos, ModBlocks.machine_boiler_rtg_off.getDefaultState().withProperty(FACING, i.getValue(FACING)));
+			}
+		}
 		keepInventory = false;
 		if (entity != null) {
 			entity.validate();
@@ -179,6 +202,10 @@ public class MachineBoiler extends BlockContainer {
 			}
 			if (tileentity instanceof TileEntityMachineBoilerElectric) {
 				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineBoilerElectric) tileentity);
+				worldIn.updateComparatorOutputLevel(pos, this);
+			}
+			if (tileentity instanceof TileEntityMachineBoilerRTG) {
+				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineBoilerRTG) tileentity);
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 			
@@ -221,7 +248,7 @@ public class MachineBoiler extends BlockContainer {
 				default:
 					break;
 				}
-			} else {
+			} else if(this == ModBlocks.machine_boiler_electric_on){
 				EnumFacing enumfacing = (EnumFacing) stateIn.getValue(FACING);
 				double d0 = (double) pos.getX() + 0.5D;
 				double d1 = (double) pos.getY() + 0.25 + rand.nextDouble() * 6.0D / 16.0D;
@@ -254,6 +281,8 @@ public class MachineBoiler extends BlockContainer {
 			return new ItemStack(ModBlocks.machine_boiler_off);
 		if (this == ModBlocks.machine_boiler_electric_on || this == ModBlocks.machine_boiler_electric_off)
 			return new ItemStack(ModBlocks.machine_boiler_electric_off);
+		if (this == ModBlocks.machine_boiler_rtg_on || this == ModBlocks.machine_boiler_rtg_off)
+			return new ItemStack(ModBlocks.machine_boiler_rtg_off);
 		return super.getPickBlock(state, target, world, pos, player);
 	}
 

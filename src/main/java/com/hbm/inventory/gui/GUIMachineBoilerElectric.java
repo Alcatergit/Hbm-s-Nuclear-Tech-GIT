@@ -29,10 +29,10 @@ public class GUIMachineBoilerElectric extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 16, 52, diFurnace.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, diFurnace.tanks[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 69 - 52, 16, 52, diFurnace.tanks[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 69 - 52, 16, 52, diFurnace.tanks[1]);
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 102, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int)((double)diFurnace.heat / 100D)) + "°C"});
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 84, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int)((double)diFurnace.heat / 100D)) + "°C"});
 		
 		String[] text = new String[] { "Heat produced:",
 				"  1.5°C/t",
@@ -57,7 +57,7 @@ public class GUIMachineBoilerElectric extends GuiInfoContainer {
 	//		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 32, 16, 16, guiLeft - 8, guiTop + 36 + 16 + 32, text2);
 	//	}
 		
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 123, guiTop + 69 - 34, 7, 34, diFurnace.power, TileEntityMachineBoilerElectric.maxPower);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 105, guiTop + 69 - 34, 7, 34, diFurnace.power, TileEntityMachineBoilerElectric.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -83,19 +83,19 @@ public class GUIMachineBoilerElectric extends GuiInfoContainer {
 			dud = (TileEntityMachineBoilerElectric) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 		
 		if(dud.power > 0)
-			drawTexturedModalRect(guiLeft + 97, guiTop + 34, 176, 0, 18, 18);
+			drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 0, 18, 18);
 
 		int j = (int)dud.getHeatScaled(17);
-		drawTexturedModalRect(guiLeft + 103, guiTop + 33 - j, 194, 16 - j, 6, j);
+		drawTexturedModalRect(guiLeft + 85, guiTop + 33 - j, 194, 16 - j, 6, j);
 
 		int i = (int)dud.getPowerScaled(34);
-		drawTexturedModalRect(guiLeft + 123, guiTop + 69 - i, 200, 34 - i, 7, i);
+		drawTexturedModalRect(guiLeft + 105, guiTop + 69 - i, 200, 34 - i, 7, i);
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
 		
-		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
-		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
+		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 44, 97);
+		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 116, 97);
 	}
 }

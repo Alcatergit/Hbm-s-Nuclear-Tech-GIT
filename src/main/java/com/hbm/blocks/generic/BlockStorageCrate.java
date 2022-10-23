@@ -8,6 +8,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
+import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntitySafe;
 
 import net.minecraft.block.Block;
@@ -52,6 +53,8 @@ public class BlockStorageCrate extends BlockContainer {
 			return new TileEntityCrateSteel();
 		if(this == ModBlocks.crate_tungsten)
 			return new TileEntityCrateTungsten();
+		if(this == ModBlocks.crate_desh)
+			return new TileEntityCrateDesh();
 		if(this == ModBlocks.safe)
 			return new TileEntitySafe();
 		return null;
@@ -88,6 +91,9 @@ public class BlockStorageCrate extends BlockContainer {
 			}
 			if(entity instanceof TileEntityCrateTungsten && ((TileEntityCrateTungsten)entity).canAccess(player)) {
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_tungsten, world, x, y, z);
+			}
+			if(entity instanceof TileEntityCrateDesh && ((TileEntityCrateDesh)entity).canAccess(player)) {
+				player.openGui(MainRegistry.instance, ModBlocks.guiID_crate_desh, world, x, y, z);
 			}
 			if(entity instanceof TileEntitySafe && ((TileEntitySafe)entity).canAccess(player)) {
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_safe, world, x, y, z);

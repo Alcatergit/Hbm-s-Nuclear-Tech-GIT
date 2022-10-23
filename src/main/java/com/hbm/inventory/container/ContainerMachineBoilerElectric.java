@@ -24,13 +24,13 @@ private TileEntityMachineBoilerElectric diFurnace;
 		//this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf, 1, 8, 53));
 		
 		//Input IO
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 44, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 44, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 26, 17));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 26, 53));
 		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 98, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 80, 53));
 		//Output IO
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 152, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 152, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 134, 17));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 134, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

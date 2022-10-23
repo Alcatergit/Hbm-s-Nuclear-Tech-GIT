@@ -1,5 +1,6 @@
 package com.hbm.util;
 
+import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.entity.mob.EntityNuclearCreeper;
@@ -158,7 +159,21 @@ public class ContaminationUtil {
 		
 		player.sendMessage(new TextComponentString("===== Ϝ ").appendSibling(new TextComponentTranslation("digamma.title")).appendSibling(new TextComponentString(" Ϝ =====")).setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)));
 		player.sendMessage(new TextComponentTranslation("digamma.playerDigamma").appendSibling(new TextComponentString(TextFormatting.RED + " " + digamma + " DRX")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
-		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(TextFormatting.RED + " " + halflife + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(TextFormatting.RED + String.format(" %6.2f", halflife) + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+	}
+
+	public static void printLungDiagnosticData(EntityPlayer player) {
+
+		float playerAsbestos = 100F-((int)(10000F * HbmLivingProps.getAsbestos(player) / EntityHbmProps.maxAsbestos))/100F;
+		float playerBlacklung = 100F-((int)(10000F * HbmLivingProps.getBlackLung(player) / EntityHbmProps.maxBlacklung))/100F;
+		float playerTotal = 100F - (playerAsbestos * playerBlacklung/100F);
+		
+
+		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));
+		player.sendMessage(new TextComponentTranslation("trait.asbestos").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentTranslation("lung_scanner.player_asbestos_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerAsbestos)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
+		player.sendMessage(new TextComponentTranslation("trait.coal").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentTranslation("lung_scanner.player_coal_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerBlacklung)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.total").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentTranslation("lung_scanner.player_total_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerTotal)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
+	
 	}
 
 	public static double getPlayerRads(EntityPlayer player) {

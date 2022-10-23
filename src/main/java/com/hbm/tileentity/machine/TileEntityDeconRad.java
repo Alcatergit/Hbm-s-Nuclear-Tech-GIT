@@ -12,15 +12,12 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.AxisAlignedBB;
 
-public class TileEntityDecon extends TileEntity implements ITickable {
+public class TileEntityDeconRad extends TileEntity implements ITickable {
 
 	private static float radRemove;
-	private static float digammaRemove;
-	public TileEntityDecon(float rad, float dig) {
-		System.out.println("New Tile+ "+rad+"rad "+dig+"dig");
+	public TileEntityDeconRad(float rad) {
 		super();
 		this.radRemove = rad;
-		this.digammaRemove = dig;
 	}
 
 	@Override
@@ -32,12 +29,7 @@ public class TileEntityDecon extends TileEntity implements ITickable {
 				for(Entity e : entities) {
 					if(e.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null)){
 						if(this.radRemove > 0.0F){
-							System.out.println("Raddec "this.radRemove);
 							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(this.radRemove);
-						}
-						if(this.digammaRemove > 0.0F){
-							System.out.println("DigaDec "this.digammaRemove);
-							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseDigamma(this.digammaRemove);
 						}
 					}
 				}
