@@ -981,7 +981,7 @@ public class ModItems {
 	public static final Item ingot_actinium = new ItemCustomLore("ingot_actinium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_neodymium = new ItemBase("ingot_neodymium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_bromine = new ItemBase("ingot_bromine").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_caesium = new ItemBase("ingot_caesium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_caesium = new ItemHazard(0.0F, true, "ingot_caesium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_cerium = new ItemBase("ingot_cerium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_lanthanium = new ItemCustomLore("ingot_lanthanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_tantalium = new ItemCustomLore("ingot_tantalium").setCreativeTab(MainRegistry.partsTab);
@@ -1184,7 +1184,7 @@ public class ModItems {
 	public static final Item powder_astatine = new ItemCustomLore("powder_astatine").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_neodymium = new ItemCustomLore("powder_neodymium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_neodymium_tiny = new ItemBase("powder_neodymium_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_caesium = new ItemCustomLore("powder_caesium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_caesium = new ItemHazard(0.0F, true, "powder_caesium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_australium = new ItemCustomLore("powder_australium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_weidanium = new ItemCustomLore("powder_weidanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_reiium = new ItemCustomLore("powder_reiium").setCreativeTab(MainRegistry.partsTab);

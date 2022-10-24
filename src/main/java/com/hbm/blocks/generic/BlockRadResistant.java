@@ -36,8 +36,8 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	}
 	
 	@Override
-	public float getResistance(){
-		return 1;
+	public boolean isRadResistant(){
+		return true;
 	}
 
 	@Override

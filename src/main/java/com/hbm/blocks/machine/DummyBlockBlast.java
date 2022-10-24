@@ -2,6 +2,8 @@ package com.hbm.blocks.machine;
 
 import java.util.Random;
 
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IDummy;
@@ -26,10 +28,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb {
+public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IRadResistantBlock{
 
 	public static boolean safeBreak = false;
-	
+
 	public DummyBlockBlast(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
@@ -54,6 +56,7 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb {
     		}
     	}
     	world.removeTileEntity(pos);
+		RadiationSystemNT.markChunkForRebuild(world, pos);
 	}
 	
 	@Override
@@ -133,5 +136,16 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb {
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return new ItemStack(ModBlocks.blast_door);
+	}
+
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.onBlockAdded(worldIn, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
 	}
 }

@@ -880,8 +880,30 @@ public class ResourceManager {
 	public static final ResourceLocation spinny_light_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/spinnylight.png");
 	
 	//Blast
-	public static final ResourceLocation fireball = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball.png");
-	public static final ResourceLocation balefire = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire.png");
+	public static final ResourceLocation fireball_0 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_0.png");
+	public static final ResourceLocation fireball_1 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_1.png");
+	public static final ResourceLocation fireball_2 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_2.png");
+	public static final ResourceLocation fireball_3 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_3.png");
+	public static final ResourceLocation fireball_4 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_4.png");
+	public static final ResourceLocation fireball_5 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_5.png");
+	public static final ResourceLocation fireball_6 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_6.png");
+	public static final ResourceLocation fireball_7 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_7.png");
+	public static final ResourceLocation fireball_8 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_8.png");
+	public static final ResourceLocation fireball_9 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_9.png");
+	public static final ResourceLocation fireball_10 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/fireball/fireball_10.png");
+
+	public static final ResourceLocation balefire_0 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_0.png");
+	public static final ResourceLocation balefire_1 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_1.png");
+	public static final ResourceLocation balefire_2 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_2.png");
+	public static final ResourceLocation balefire_3 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_3.png");
+	public static final ResourceLocation balefire_4 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_4.png");
+	public static final ResourceLocation balefire_5 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_5.png");
+	public static final ResourceLocation balefire_6 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_6.png");
+	public static final ResourceLocation balefire_7 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_7.png");
+	public static final ResourceLocation balefire_8 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_8.png");
+	public static final ResourceLocation balefire_9 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_9.png");
+	public static final ResourceLocation balefire_10 = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/balefire/balefire_10.png");
+
 	public static final ResourceLocation tomblast = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/tomblast.png");
 	public static final ResourceLocation dust = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/dust.png");
 

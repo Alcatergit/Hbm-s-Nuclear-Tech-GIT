@@ -19,7 +19,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	private static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityNukeCloudSmall.class,
 			DataSerializers.VARINT);
 	// 17
-	private static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityNukeCloudSmall.class,
+	public static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityNukeCloudSmall.class,
 			DataSerializers.VARINT);
 	// 18
 	public static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityNukeCloudSmall.class,

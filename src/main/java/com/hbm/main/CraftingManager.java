@@ -1448,6 +1448,7 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModItems.geiger_counter, 1), new Object[] { "GPP", "WCS", "WBB", 'W', ModItems.wire_gold, 'P', ModItems.ingot_polymer, 'C', ModItems.circuit_copper, 'G', "ingotGold", 'S', "plateSteel", 'B', ModItems.ingot_beryllium });
 		addShapedOreRecipe(new ItemStack(ModItems.dosimeter, 1), new Object[] { "WGW", "WCW", "WBW", 'W', "plankWood", 'G', "paneGlass", 'C', ModItems.circuit_aluminium, 'B', "ingotBeryllium" });
 		addShapelessOreRecipe(new ItemStack(ModItems.digamma_diagnostic), new Object[] { ModItems.geiger_counter, ModItems.billet_polonium, "ingotAsbestos" });
+		addShapedRecipe(new ItemStack(ModItems.lung_diagnostic, 1), new Object[] { "WGW", "WCW", "WBW", 'W', "ingotAluminum", 'G', ModItems.gas_mask_filter, 'C', ModItems.ingot_asbestos, 'B', ModItems.circuit_red_copper });
 		
 
 		addShapedOreRecipe(new ItemStack(ModItems.key, 1), new Object[] { "  B", " B ", "P  ", 'P', "plateSteel", 'B', ModItems.bolt_tungsten });

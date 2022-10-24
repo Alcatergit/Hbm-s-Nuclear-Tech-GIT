@@ -16,6 +16,8 @@ import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.packet.LoopedSoundPacket;
+import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.util.ITickable;
 import net.minecraft.entity.EntityLivingBase;
@@ -226,6 +228,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 				}
 			}
 			
+			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
 			NBTTagCompound data = new NBTTagCompound();
 			data.setLong("power", power);
 			data.setString("mode", mode.toString());

@@ -22,7 +22,12 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 
 	BlockRenderLayer layer;
 	boolean doesDrop = false;
+	boolean isRadResistant = false;
 	
+	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
+		this(materialIn, layer, false, s);
+	}
+
 	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, boolean doesDrop, String s) {
 		super(materialIn, false);
 		this.setUnlocalizedName(s);
@@ -32,9 +37,17 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-	
-	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
-		this(materialIn, layer, false, s);
+
+	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, boolean doesDrop, boolean isRadResistant, String s) {
+		super(materialIn, false);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
+		this.layer = layer;
+		this.doesDrop = doesDrop;
+		this.isRadResistant = isRadResistant;
+		
+		ModBlocks.ALL_BLOCKS.add(this);
+		
 	}
 	
 	@Override
@@ -49,7 +62,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-		if(this == ModBlocks.reinforced_glass){
+		if(this.isRadResistant){
 			RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 		}
 		super.onBlockAdded(worldIn, pos, state);
@@ -57,7 +70,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		if(this == ModBlocks.reinforced_glass){
+		if(this.isRadResistant){
 			RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 		}
 		super.breakBlock(worldIn, pos, state);
@@ -79,14 +92,16 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	}
 	
 	@Override
-	public float getResistance() {
-		return this == ModBlocks.reinforced_glass ? 1 : 0;
+	public boolean isRadResistant(){
+		return this.isRadResistant;
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		float hardness = this.getExplosionResistance(null);
-		tooltip.add("§2[Radiation Shielding]§r");
+		if(this.isRadResistant){
+			tooltip.add("§2[Radiation Shielding]§r");
+		}
 		if(hardness > 50){
 			tooltip.add("§6Blast Resistance: "+hardness+"§r");
 		}

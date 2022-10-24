@@ -8,6 +8,17 @@ import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
+//Chunkloading stuff
+import java.util.ArrayList;
+import java.util.List;
+import com.hbm.entity.logic.IChunkLoader;
+import com.hbm.main.MainRegistry;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraft.util.math.ChunkPos;
+
+
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockBush;
@@ -25,10 +36,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public class EntityFalloutRain extends Entity implements IConstantRenderer {
+public class EntityFalloutRain extends Entity implements IConstantRenderer, IChunkLoader {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
 	public int revProgress;
 	public int radProgress;
+
+	private Ticket loaderTicket;
 
 	public EntityFalloutRain(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -57,6 +70,58 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.isImmuneToFire = true;
+	}
+
+	@Override
+	protected void entityInit() {
+		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
+		this.dataManager.register(SCALE, Integer.valueOf(0));
+	}
+
+	@Override
+	public void init(Ticket ticket) {
+		if(!world.isRemote) {
+			
+            if(ticket != null) {
+            	
+                if(loaderTicket == null) {
+                	
+                	loaderTicket = ticket;
+                	loaderTicket.bindEntity(this);
+                	loaderTicket.getModData();
+                }
+
+                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
+            }
+        }
+	}
+
+	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
+	@Override
+	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
+		if(!world.isRemote && loaderTicket != null)
+        {
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+            }
+
+            loadedChunks.clear();
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
+
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.forceChunk(loaderTicket, chunk);
+            }
+        }
 	}
 
 	@Override
@@ -289,13 +354,16 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer {
 				return;
 				// this piece stops the "stomp" from reaching below ground
 			}
+			else if(b == ModBlocks.brick_concrete) {
+				if(rand.nextInt(80) == 0)
+					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
+				return;
+				// this piece stops the "stomp" from reaching below ground
+			}
 		}
 	}
 
-	@Override
-	protected void entityInit() {
-		this.dataManager.register(SCALE, Integer.valueOf(0));
-	}
+	
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {

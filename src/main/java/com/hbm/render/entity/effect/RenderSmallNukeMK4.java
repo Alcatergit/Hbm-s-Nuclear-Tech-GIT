@@ -88,6 +88,56 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     		GL11.glPopMatrix();
         }
 	}
+
+	private ResourceLocation getMushroomTexture(float cloudAgePercent, boolean isBalefire){
+		if(isBalefire){
+			if(cloudAgePercent < 0.010)
+				return ResourceManager.balefire_0;
+			else if(cloudAgePercent < 0.15)
+				return ResourceManager.balefire_1;
+			else if(cloudAgePercent < 0.19)
+				return ResourceManager.balefire_2;
+			else if(cloudAgePercent < 0.23)
+				return ResourceManager.balefire_3;
+			else if(cloudAgePercent < 0.28)
+				return ResourceManager.balefire_4;
+			else if(cloudAgePercent < 0.35)
+				return ResourceManager.balefire_5;
+			else if(cloudAgePercent < 0.44)
+				return ResourceManager.balefire_6;
+			else if(cloudAgePercent < 0.55)
+				return ResourceManager.balefire_7;
+			else if(cloudAgePercent < 0.70)
+				return ResourceManager.balefire_8;
+			else if(cloudAgePercent < 0.88)
+				return ResourceManager.balefire_9;
+			else
+				return ResourceManager.balefire_10;
+		}else{
+			if(cloudAgePercent < 0.10)
+				return ResourceManager.fireball_0;
+			else if(cloudAgePercent < 0.15)
+				return ResourceManager.fireball_1;
+			else if(cloudAgePercent < 0.19)
+				return ResourceManager.fireball_2;
+			else if(cloudAgePercent < 0.23)
+				return ResourceManager.fireball_3;
+			else if(cloudAgePercent < 0.28)
+				return ResourceManager.fireball_4;
+			else if(cloudAgePercent < 0.35)
+				return ResourceManager.fireball_5;
+			else if(cloudAgePercent < 0.44)
+				return ResourceManager.fireball_6;
+			else if(cloudAgePercent < 0.55)
+				return ResourceManager.fireball_7;
+			else if(cloudAgePercent < 0.70)
+				return ResourceManager.fireball_8;
+			else if(cloudAgePercent < 0.88)
+				return ResourceManager.fireball_9;
+			else
+				return ResourceManager.fireball_10;
+		}
+	}
 	
 	/**
 	 * Wrapper for the entire mush (head + stem)
@@ -98,64 +148,43 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	private void mushWrapper(EntityNukeCloudSmall cloud, float interp) {
 
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE) * 5;
+    	float maxage = cloud.getDataManager().get(EntityNukeCloudSmall.MAXAGE);
+
+    	double height = Math.max(20 - 1000 / (cloud.ticksExisted + interp - 13), 0);
+    	boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
+    	float percentageAge = (float)(cloud.ticksExisted+interp)/maxage;
+    	double raise_speed = 0.035 * Math.pow(0.2, percentageAge);
 
 		GL11.glPushMatrix();
-
 		GL11.glScalef(size, size, size);
-
-		boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
-
-		if(balefire)
-			bindTexture(ResourceManager.balefire);
-		else
-			bindTexture(ResourceManager.fireball);
-
+		bindTexture(getMushroomTexture(percentageAge, balefire));
 		GlStateManager.disableCull();
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-
-		//Float [0, 1] for the initial solid-colored layer fade-in
-		float func = MathHelper.clamp((cloud.ticksExisted + interp) * 0.0075F, 0, 1);
-		//Function that determines how high the cloud has risen. The values are the results of trial and error and i forgot what they mean
-		double height = Math.max(20 - 30 * 20 / ((((cloud.ticksExisted + interp) * 0.5) - 60 * 0.1) + 1), 0);
-
-		if(balefire)
-			GlStateManager.color(1.0F - (1.0F - 0.64F) * func, 1.0F, 1.0F - (1.0F - 0.5F) * func, 1F);
-		else
-			GlStateManager.color(1.0F, 1.0F - (1.0F - 0.7F) * func, 1.0F - (1.0F - 0.48F) * func, 1F);
-
-        renderMushHead(cloud.ticksExisted + interp, height);
-        renderMushStem(cloud.ticksExisted + interp, height);
-		GlStateManager.enableLighting();
-		GlStateManager.enableTexture2D();
-
-		//Float [0.75, 0] That determines the occupancy of the texture layer
-		float texAlpha = func * 0.875F;
-
-		GlStateManager.color(1, 1, 1, texAlpha);
-		//Sets blend to "how you'd expect it" mode
-		//Drillgon200: AKA src alpha, one minus src alpha
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-		GlStateManager.enableBlend();
+		GlStateManager.color(1, 1, 1, 1);
 
 		//And now we fuck with texture transformations
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-
-        GL11.glTranslated(0, -(cloud.ticksExisted + interp) * 0.035, 0);
-
+        GL11.glTranslated(0, -(cloud.ticksExisted + interp) * raise_speed, 0);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
-        GL11.glPushMatrix();
-        	//It's the thing that makes glow-in-the-dark work
-	        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-	        renderMushHead(cloud.ticksExisted + interp, height);
-	        renderMushStem(cloud.ticksExisted + interp, height);
-	        GL11.glPopAttrib();
-	    GlStateManager.enableLighting();
-        GL11.glPopMatrix();
-
+        if(percentageAge < 0.5){
+	    	GL11.glPushMatrix();
+	        	//It's the thing that makes glow-in-the-dark work
+		        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		        renderMushHead(cloud.ticksExisted + interp, height);
+		        renderMushStem(cloud.ticksExisted + interp, height);
+		        GL11.glPopAttrib();
+		    GlStateManager.enableLighting();
+	        GL11.glPopMatrix();
+        }
+        else{
+        	GL11.glPushMatrix();
+	        	renderMushHead(cloud.ticksExisted + interp, height);
+		        renderMushStem(cloud.ticksExisted + interp, height);
+	        GL11.glPopMatrix();
+        }
+        
         //Clean this up otherwise the game becomes one-dimensional
         //Drillgon200: Really should have used push/pop matrix here, but whatever.
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
@@ -196,17 +225,6 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     		tessellateCloudlet(buf, cloudlet.posX, cloudlet.posY - cloud.posY + 2, cloudlet.posZ, scale, (int) cloud.getDataManager().get(EntityNukeCloudSmall.TYPE));
     	}
     	tess.draw();
-
-    	/*Random rand = new Random(cloud.getEntityId());
-    	float size = cloud.getDataWatcher().getWatchableObjectFloat(18);
-    	
-    	for(int i = 0; i < 300 * size; i++) {
-    		
-    		float scale = size * 10;
-    		Vec3 vec = Vec3.createVectorHelper(rand.nextGaussian() * scale, 0, rand.nextGaussian() * scale);
-    		
-    		tessellateCloudlet(tess, vec.xCoord, (scale - vec.lengthVector()) * rand.nextDouble() * 0.5, vec.zCoord - 10, (float)(cloud.age * cloud.cloudletLife) / cloud.maxAge, cloud.getDataWatcher().getWatchableObjectByte(19));
-    	}*/
 
 		GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
@@ -347,7 +365,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 		float alpha = 1F - Math.max(age / (float)(EntityNukeCloudSmall.cloudletLife), 0F);
 		float alphaorig = alpha;
 
-		float scale = 5F * (alpha * 0.5F + 0.5F);
+		float scale = 2.5F * alpha + 2.5F;
 
 		if(age < 3)
 			alpha = age * 0.333F;

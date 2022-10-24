@@ -44,6 +44,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(6000, "ingotU233", new ItemStack(ModItems.ingot_u235));
 		RBMKOutgasserRecipes.setRecipe(8000, "ingotU235", new ItemStack(ModItems.ingot_u238));
 		RBMKOutgasserRecipes.setRecipe(10000, "ingotU235", new ItemStack(ModItems.ingot_u238));
+		RBMKOutgasserRecipes.setRecipe(17000, "ingotNp237", new ItemStack(ModItems.ingot_pu238));
 		RBMKOutgasserRecipes.setRecipe(12000, "ingotU238", new ItemStack(ModItems.ingot_pu239));
 		RBMKOutgasserRecipes.setRecipe(15000, "ingotPu238", new ItemStack(ModItems.ingot_pu239));
 		RBMKOutgasserRecipes.setRecipe(21000, "ingotPu239", new ItemStack(ModItems.ingot_pu240));

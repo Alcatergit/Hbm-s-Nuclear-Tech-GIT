@@ -1,5 +1,7 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
@@ -7,6 +9,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -148,4 +151,12 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock {
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[Radiation Shielding]§r");
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
+	}
 }

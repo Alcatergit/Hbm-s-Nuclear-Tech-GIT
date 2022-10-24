@@ -2,6 +2,8 @@ package com.hbm.blocks.machine;
 
 import java.util.List;
 
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IKeypadHandler;
@@ -26,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockSlidingBlastDoor extends BlockDummyable {
+public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResistantBlock {
 
 	public BlockSlidingBlastDoor(Material materialIn, String s) {
 		super(materialIn, s);
@@ -44,6 +46,11 @@ public class BlockSlidingBlastDoor extends BlockDummyable {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[Radiation Shielding]§r");
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
 		if(this == ModBlocks.sliding_blast_door){
 			tooltip.add("Variant: Window");
 		} else if(this == ModBlocks.sliding_blast_door_2){
@@ -151,6 +158,23 @@ public class BlockSlidingBlastDoor extends BlockDummyable {
 			world.setBlockState(pos2, ModBlocks.sliding_blast_door_keypad.getDefaultState().withProperty(META, meta2+extra));
 			BlockDummyable.safeRem = false;
 		}
+	}
+
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.onBlockAdded(worldIn, pos, state);
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
 	}
 
 }

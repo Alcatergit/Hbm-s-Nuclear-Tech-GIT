@@ -59,6 +59,14 @@ public class BreederRecipes {
 		recipes.put(new ComparableStack(ModItems.rod_dual_pu240), new BreederRecipe(ModItems.rod_dual_waste, 3));
 		recipes.put(new ComparableStack(ModItems.rod_quad_pu240), new BreederRecipe(ModItems.rod_quad_waste, 3));
 
+		//NEW
+		recipes.put(new ComparableStack(ModItems.rod_cobalt), new BreederRecipe(ModItems.rod_co60, 2));
+		recipes.put(new ComparableStack(ModItems.rod_dual_cobalt), new BreederRecipe(ModItems.rod_dual_co60, 2));
+		recipes.put(new ComparableStack(ModItems.rod_quad_cobalt), new BreederRecipe(ModItems.rod_quad_co60, 2));
+		recipes.put(new ComparableStack(ModItems.rod_ra226), new BreederRecipe(ModItems.rod_ac227, 4));
+		recipes.put(new ComparableStack(ModItems.rod_dual_ra226), new BreederRecipe(ModItems.rod_dual_ac227, 4));
+		recipes.put(new ComparableStack(ModItems.rod_quad_ra226), new BreederRecipe(ModItems.rod_quad_ac227, 4));
+
 		//advanced
 		recipes.put(new ComparableStack(ModItems.rod_schrabidium), new BreederRecipe(ModItems.rod_solinium, 3));
 		recipes.put(new ComparableStack(ModItems.rod_dual_schrabidium), new BreederRecipe(ModItems.rod_dual_solinium, 3));

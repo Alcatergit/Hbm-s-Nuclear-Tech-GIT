@@ -1,5 +1,9 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
@@ -7,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -26,7 +31,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock {
+public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRadResistantBlock {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -306,4 +311,29 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock {
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.onBlockAdded(worldIn, pos, state);
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[Radiation Shielding]§r");
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
+	}
 }

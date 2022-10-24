@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockSiloHatch;
 import com.hbm.blocks.machine.DummyBlockSiloHatch;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDoorAnimationPacket;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -47,6 +49,10 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 					facing = world.getBlockState(pos).getValue(BlockSiloHatch.FACING).getOpposite();
 				timer ++;
 				if(state == 2){
+					if(timer == 1){
+						BlockPos hydrolics = pos.offset(facing, 5);
+						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloclose, SoundCategory.BLOCKS, 1F, 1F);
+					}
 					if(timer == 50){
 						BlockPos mid = pos.offset(facing, 3);
 						for(int i = -1; i <= 1; i ++){
@@ -59,6 +65,10 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 						state = 0;
 					}
 				} else if(state == 3){
+					if(timer == 1){
+						BlockPos hydrolics = pos.offset(facing, 5);
+						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloopen, SoundCategory.BLOCKS, 1F, 1F);
+					}
 					if(timer == 70){
 						BlockPos mid = pos.offset(facing, 3);
 						for(int i = -1; i <= 1; i ++){

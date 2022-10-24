@@ -206,8 +206,8 @@ public class RenderSmallNukeMK3 extends Render<EntityNukeCloudSmall> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityNukeCloudSmall entity) {
 		if(entity.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1)
-			return ResourceManager.balefire;
-		return ResourceManager.fireball;
+			return ResourceManager.balefire_2;
+		return ResourceManager.fireball_2;
 	}
 
 }

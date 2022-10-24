@@ -443,7 +443,7 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
 
-		return hardness < 70 && hardness >= 0;
+		return (hardness < 70 && hardness >= 0) || b.getMaterial().isLiquid();
 	}
 
 	public boolean isMinableOreo(BlockPos pos) {
