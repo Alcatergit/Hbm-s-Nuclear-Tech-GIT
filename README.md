@@ -1,6 +1,6 @@
 # <u>**Aionoso's HBM Nuclear Tech Mod 1.12.2 Fork**</u>
 
-This is my fork of the original 1.12.2 port made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
+This is my fork of the 1.12.2 port made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
 
 
 The latest version can be found on https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-reloaded or under the [releases page](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT/releases).
