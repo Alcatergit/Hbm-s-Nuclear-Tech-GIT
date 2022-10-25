@@ -1,9 +1,11 @@
 package com.hbm.inventory.gui;
 
 import java.io.IOException;
+import java.lang.Math;
 
 import com.hbm.inventory.container.ContainerMachineBattery;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
@@ -13,6 +15,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,7 +35,18 @@ public class GUIMachineBattery extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, battery.power, battery.maxPower);
+		String deltaText = Library.getShortNumber(Math.abs(battery.powerDelta*20)) + "HE/s";
+		if(battery.powerDelta > 0) 
+			deltaText = TextFormatting.GREEN + "+" + deltaText;
+		else if(battery.powerDelta < 0) 
+			deltaText = TextFormatting.RED + "-" + deltaText;
+		else 
+			deltaText = TextFormatting.YELLOW + "0HE/s";
+
+		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
+
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, mouseX, mouseY, info);
+
 
 		String[] text = new String[] { "Click the buttons on the right",
 				"to change battery behavior for",

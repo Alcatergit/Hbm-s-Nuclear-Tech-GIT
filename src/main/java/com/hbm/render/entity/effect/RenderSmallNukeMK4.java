@@ -153,7 +153,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     	double height = Math.max(20 - 1000 / (cloud.ticksExisted + interp - 13), 0);
     	boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
     	float percentageAge = (float)(cloud.ticksExisted+interp)/maxage;
-    	double raise_speed = 0.035 * Math.pow(0.2, percentageAge);
+    	double raise_speed = 0.08 * Math.pow(0.3, percentageAge);
 
 		GL11.glPushMatrix();
 		GL11.glScalef(size, size, size);
@@ -182,6 +182,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
         	GL11.glPushMatrix();
 	        	renderMushHead(cloud.ticksExisted + interp, height);
 		        renderMushStem(cloud.ticksExisted + interp, height);
+	         GlStateManager.disableLighting();
 	        GL11.glPopMatrix();
         }
         

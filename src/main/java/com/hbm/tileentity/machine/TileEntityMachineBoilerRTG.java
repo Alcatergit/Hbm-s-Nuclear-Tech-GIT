@@ -144,12 +144,11 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 			
 
 			if(heat > 2000) {
-				heat -= 30;
+				heat -= 40;
 			}
-			rtgPower += RTGUtil.updateRTGs(inventory);
+			rtgPower = Math.min(RTGUtil.updateRTGs(inventory), maxRTGPower);
 			if(rtgPower > 0) {
-				rtgPower -= 15;
-				heat += Math.min((300 * rtgPower / maxRTGPower), 100);
+				heat += rtgPower*5;
 			} else {
 				heat -= 100;
 			}
@@ -173,9 +172,9 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 						tanks[1].fill(new FluidStack((Fluid) outs[0], (Integer) outs[1]), true);
 						needsUpdate = true;
 						if(i == 0)
-							heat -= 25;
+							heat -= 45;
 						else
-							heat -= 50;
+							heat -= 60;
 					}
 				}
 			}

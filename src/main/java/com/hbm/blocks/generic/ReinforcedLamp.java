@@ -3,6 +3,8 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 import java.util.List;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ReinforcedLamp extends Block {
+public class ReinforcedLamp extends Block implements IRadResistantBlock {
 
 	private final boolean isOn;
 	
@@ -44,6 +46,7 @@ public class ReinforcedLamp extends Block {
             	worldIn.setBlockState(pos, ModBlocks.reinforced_lamp_on.getDefaultState(), 2);
             }
         }
+        RadiationSystemNT.markChunkForRebuild(world, pos);
 	}
 	
 	@Override
@@ -82,8 +85,20 @@ public class ReinforcedLamp extends Block {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[Radiation Shielding]§r");
 		if(hardness > 50){
 			tooltip.add("§6Blast Resistance: "+hardness+"§r");
 		}
+	}
+	
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(world, pos);
+		super.breakBlock(world, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
 	}
 }

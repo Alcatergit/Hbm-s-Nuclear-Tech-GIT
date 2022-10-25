@@ -40,16 +40,12 @@ public class GUIMachineBoilerRTG extends GuiInfoContainer {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { "RTG Heat: "+dud.rtgPower });
 
 		
-		String[] text = new String[] { "Heat produced:",
-				"  1.5°C/t",
-				"  or 30°C/s",
+		String[] text = new String[] { "RTG to Heat",
+				"  1 RTG Heat -> 1°C/s",
 				"Heat consumed:",
-				"  0.15°C/t",
-				"  or 3.0°C/s (base)",
-				"  0.25°C/t",
-				"  or 5.0°C/t (once boiling point is reached)",
-				"  0.4°C/t",
-				"  or 8.0°C/t (for every subsequent multiple of boiling point)" };
+				"  0.40°C/t or  8.0°C/s (base)",
+				"  0.45°C/t or  9.0°C/s (once boiling point is reached)",
+				"  0.60°C/t or 12.0°C/s (for every subsequent multiple of boiling point)"};
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
 		String[] text1 = new String[] { "Boiling rate:",
@@ -81,7 +77,7 @@ public class GUIMachineBoilerRTG extends GuiInfoContainer {
 			dud = (TileEntityMachineBoilerRTG) rtgBoiler.getWorld().getTileEntity(rtgBoiler.getPos());
 		
 		if(dud.rtgPower > 0)
-			drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 0, 18, 18);
+			drawTexturedModalRect(guiLeft + 79, guiTop + 35, 176, 0, 18, 18);
 
 		int j = (int)dud.getHeatScaled(17);
 		drawTexturedModalRect(guiLeft + 85, guiTop + 33 - j, 194, 16 - j, 6, j);

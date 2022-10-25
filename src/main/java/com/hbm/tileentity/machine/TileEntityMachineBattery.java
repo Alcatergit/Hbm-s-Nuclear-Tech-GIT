@@ -3,6 +3,8 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.packet.AuxGaugePacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ISource;
@@ -16,12 +18,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IConsumer, ISource {
 
 	public long power = 0;
+	public long powerDelta = 0;
 	public long maxPower = 1000000;
-	
+
+	private int powerDeltaCount = 0;	
 	//0: input only
 	//1: buffer
 	//2: output only
@@ -82,6 +87,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("conducts", conducts);
 		compound.setLong("power", power);
+		compound.setLong("powerDelta", powerDelta);
 		compound.setShort("redLow", redLow);
 		compound.setShort("redHigh", redHigh);
 		detectPower = power + 1;
@@ -92,6 +98,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("power");
+		powerDelta = compound.getLong("powerDelta");
 		this.conducts = compound.getBoolean("conducts");
 		this.redLow = compound.getShort("redLow");
 		this.redHigh = compound.getShort("redHigh");
@@ -161,10 +168,22 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 				if(age == 9 || age == 19)
 					ffgeuaInit();
 			}
-			
+			long powerBefore = power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			power = Library.chargeItemsFromTE(inventory, 1, power, maxPower);
 			
+			long newDelta = power-powerBefore;
+			if(newDelta == 0){
+				powerDeltaCount += 1;
+				if(powerDeltaCount > 20){
+					powerDelta = newDelta;
+					powerDeltaCount = 0;
+				}
+			}else{
+				powerDelta = newDelta;
+				powerDeltaCount = 0;
+			}
+
 			detectAndSendChanges();
 		}
 		
@@ -174,6 +193,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public void networkUnpack(NBTTagCompound nbt) { 
 
 		this.power = nbt.getLong("power");
+		this.powerDelta = nbt.getLong("powerDelta");
 		this.maxPower = nbt.getLong("maxPower");
 		this.redLow = nbt.getShort("redLow");
 		this.redHigh = nbt.getShort("redHigh");
@@ -267,6 +287,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			mark = true;
 			detectPower = power;
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), (int)powerDelta, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		
 		if(mark)
 			markDirty();

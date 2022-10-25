@@ -30,7 +30,26 @@ public class BobMathUtil {
 
 	public static Field r_viewMat;
 	public static Random rand = new Random();
-	
+
+	public static String getShortNumber(long number){
+		if(number < 1000D){
+			return ""+number;
+		}else if(number < 1000D){
+			return String.format("%6.2fk", number/1000F);
+		}else if(number < 1000000D){
+			return String.format("%6.2fM", number/1000000F);
+		}else if(number < 1000000000D){
+			return String.format("%6.2fG", number/1000000000F);
+		}else if(number < 1000000000000D){
+			return String.format("%6.2fT", number/1000000000000F);
+		}else if(number < 1000000000000000D){
+			return String.format("%6.2fE", number/1000000000000000F);
+		}else if(number < 1000000000000000000D){
+			return String.format("%6.2fP", number/1000000000000000000F);
+		}
+		return "INFINTE";
+	}
+			
 	public static double getAngleFrom2DVecs(double x1, double z1, double x2, double z2) {
 
 		double upper = x1 * x2 + z1 * z2;
