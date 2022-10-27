@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -9,6 +11,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -74,19 +77,31 @@ public class NukeTsar extends BlockContainer implements IBomb {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeTsar entity = (TileEntityNukeTsar) worldIn.getTileEntity(pos);
 		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0 && !worldIn.isRemote) {
-			if(entity.isReady() && !entity.isFilled()) {
-				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
-				entity.clearSlots();
-				worldIn.setBlockToAir(pos);
-				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
-			}
-
-			if(entity.isFilled()) {
+			boolean isReady = entity.isReady();
+			boolean isStage1Filled = entity.isStage1Filled();
+			boolean isStage2Filled = entity.isStage2Filled();
+			boolean isStage3Filled = entity.isStage3Filled();
+			if(isStage3Filled) {
 				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius);
-			}
+			}else if(isStage1Filled) {
+				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
+				entity.clearSlots();
+				worldIn.setBlockToAir(pos);
+				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/2);
+			}else if(isStage2Filled) {
+				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
+				entity.clearSlots();
+				worldIn.setBlockToAir(pos);
+				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/3);
+			}else if(isReady) {
+				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
+				entity.clearSlots();
+				worldIn.setBlockToAir(pos);
+				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/5);
+			}			
 		}
 	}
 
@@ -107,25 +122,30 @@ public class NukeTsar extends BlockContainer implements IBomb {
 			entity2.posZ = z;
 			world.spawnEntity(entity2);
 		}
-
 		return false;
 	}
 
 	@Override
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeTsar entity = (TileEntityNukeTsar) world.getTileEntity(pos);
-		if(entity.isReady() && !entity.isFilled()) {
-			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
-			entity.clearSlots();
-			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
-		}
-
-		if(entity.isFilled()) {
+		boolean isReady = entity.isReady();
+		boolean isStage1Filled = entity.isStage1Filled();
+		boolean isStage2Filled = entity.isStage2Filled();
+		if(isStage2Filled) {
 			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
 			entity.clearSlots();
 			world.setBlockToAir(pos);
 			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius);
+		}else if(isStage1Filled) {
+			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+			entity.clearSlots();
+			world.setBlockToAir(pos);
+			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.mikeRadius);
+		}else if(isReady) {
+			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+			entity.clearSlots();
+			world.setBlockToAir(pos);
+			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
 		}
 	}
 	
@@ -194,4 +214,13 @@ public class NukeTsar extends BlockContainer implements IBomb {
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§6[Thermonuclear Bomb]§r");
+		tooltip.add("§eRadius: "+BombConfig.tsarRadius+"m§r");
+		if(!BombConfig.disableNuclear){
+			tooltip.add("§a[Fallout]§r");
+			tooltip.add("§gRadius: "+(int)BombConfig.tsarRadius*(1+BombConfig.falloutRange/100)+"m§r");
+		}
+	}
 }

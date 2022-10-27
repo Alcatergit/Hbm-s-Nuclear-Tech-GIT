@@ -1,6 +1,7 @@
 package com.hbm.blocks.bomb;
 
 import java.util.Random;
+import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
@@ -11,6 +12,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -217,4 +219,9 @@ public class NukeFleija extends BlockContainer implements IBomb {
 		return new BlockStateContainer(this, new IProperty[]{FACING});
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§b[Schrabidium Bomb]§r");
+		tooltip.add("§eRadius: "+BombConfig.fleijaRadius+"m§r");
+	}
 }

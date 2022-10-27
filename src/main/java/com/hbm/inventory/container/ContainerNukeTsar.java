@@ -17,24 +17,35 @@ private TileEntityNukeTsar nukeTsar;
 		
 		nukeTsar = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 35, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 71, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 35, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 71, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 53, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 98, 35));
+		//Core
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 41, 39)); // Plutonium Core
+
+		//Lenses
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 66, 93)); // Top Left
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 84, 93)); // Top Right
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 66, 111)); // Bottom Left
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 84, 111)); // Bottom Right
+
+		//Stage 1 
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 111, 102)); // Uranium coating
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 129, 102)); // Deuterium tank
+
+		//Stage 1
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 155, 102)); // Uranium coating
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 173, 102)); // Deuterium tank
+
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 48 + j * 18, 138 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 48 + i * 18, 196));
 		}
 	}
 	

@@ -27,12 +27,9 @@ import net.minecraft.world.World;
 
 public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	// Strength of the blast
-	public int strength;
-	// How many rays should be created
-	public int count;
+	public int radius;
 	// How many rays are calculated per tick
 	public int speed;
-	public int length;
 	
 	public boolean mute = false;
 
@@ -46,17 +43,15 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		super(p_i1582_1_);
 	}
 
-	public EntityNukeExplosionMK4(World world, int strength, int count, int speed, int length) {
+	public EntityNukeExplosionMK4(World world, int radius, int speed) {
 		super(world);
-		this.strength = strength;
-		this.count = count;
+		this.radius = radius;
 		this.speed = speed;
-		this.length = length;
 	}
 
 	@Override
 	public void onUpdate() {
-		if(strength == 0) {
+		if(radius == 0) {
 			this.setDead();
 			return;
 		}
@@ -65,7 +60,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			RadiationSavedData.getData(world);
 
 			// float radMax = (float) (length / 2F * Math.pow(length, 2) / 35F);
-			float radMax = Math.min((float) (length / 2F * Math.pow(length, 1.5) / 35F), 15000);
+			float radMax = Math.min((float) (radius * Math.pow(radius, 1.5) * 17.5F), 1500000);
 			// System.out.println(radMax);
 			float rad = radMax / 4F;
 			RadiationSavedData.incrementRad(world, this.getPosition(), rad, radMax);
@@ -76,41 +71,22 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			if(rand.nextInt(5) == 0)
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
 		}
-		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.length * 2);
+		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.radius * 2);
 
 		if(explosion == null) {
 
-			explosion = new ExplosionNukeRay(world, (int) this.posX, (int) this.posY, (int) this.posZ, this.strength, this.count, this.speed, this.length);
-
-			// MainRegistry.logger.info("START: " + System.currentTimeMillis());
-
-			/*if(!world.isRemote)
-				for(int x = (int) (posX - 1); x <= (int) (posX + 1); x++)
-					for(int y = (int) (posY - 1); y <= (int) (posY + 1); y++)
-						for(int z = (int) (posZ - 1); z <= (int) (posZ + 1); z++)
-							world.setBlock(x, y, z, Blocks.air);*/
+			explosion = new ExplosionNukeRay(world, (int) this.posX, (int) this.posY, (int) this.posZ, this.radius);
 		}
-
-		// if(explosion.getStoredSize() < count / length) {
 		if(!explosion.isAusf3Complete) {
-			// if(!world.isRemote)
-			// MainRegistry.logger.info(explosion.getStoredSize() + " / " +
-			// count / length);
-			// explosion.collectTip(speed * 10);
-			explosion.collectTipMk4_5(speed * 10);
+			explosion.collectTipMk6(speed);
 		} else if(explosion.getStoredSize() > 0) {
-			// if(!world.isRemote)
-			// MainRegistry.logger.info(explosion.getProgress() + " / " + count
-			// / length);
 			explosion.processTip(BombConfig.mk4);
 		} else if(fallout) {
-			// MainRegistry.logger.info("STOP: " + System.currentTimeMillis());
-
 			EntityFalloutRain fallout = new EntityFalloutRain(this.world);
 			fallout.posX = this.posX;
 			fallout.posY = this.posY;
 			fallout.posZ = this.posZ;
-			fallout.setScale((int) (this.length * 1.8 + falloutAdd) * BombConfig.falloutRange / 100);
+			fallout.setScale((int) (this.radius * 1.8 + falloutAdd) * BombConfig.falloutRange / 100);
 
 			this.world.spawnEntity(fallout);
 
@@ -183,19 +159,15 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 
 	public static EntityNukeExplosionMK4 statFac(World world, int r, double x, double y, double z) {
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized explosion at " + x + " / " + y + " / " + z + " with strength " + r + "!");
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
 
 		if(r == 0)
 			r = 25;
 
-		r *= 2;
-
 		EntityNukeExplosionMK4 mk4 = new EntityNukeExplosionMK4(world);
-		mk4.strength = (int) (r);
-		mk4.count = (int) (4 * Math.PI * Math.pow(mk4.strength, 2) * 25);
-		mk4.speed = (int) Math.ceil(100000 / mk4.strength);
+		mk4.radius = (int) (r);
+		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.length = mk4.strength / 2;
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -204,16 +176,14 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	public static EntityNukeExplosionMK4 statFacExperimental(World world, int r, double x, double y, double z) {
 
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized eX explosion at " + x + " / " + y + " / " + z + " with strength " + r + "!");
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized eX explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
 
 		r *= 2;
 
 		EntityNukeExplosionMK4 mk4 = new EntityNukeExplosionMK4(world);
-		mk4.strength = (int) (r);
-		mk4.count = (int) (4 * Math.PI * Math.pow(mk4.strength, 2) * 25);
-		mk4.speed = (int) Math.ceil(100000 / mk4.strength);
+		mk4.radius = (int) (r);
+		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.length = mk4.strength / 2;
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -222,16 +192,14 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	public static EntityNukeExplosionMK4 statFacNoRad(World world, int r, double x, double y, double z) {
 
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized nR explosion at " + x + " / " + y + " / " + z + " with strength " + r + "!");
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized nR explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
 
 		r *= 2;
 
 		EntityNukeExplosionMK4 mk4 = new EntityNukeExplosionMK4(world);
-		mk4.strength = (int) (r);
-		mk4.count = (int) (4 * Math.PI * Math.pow(mk4.strength, 2) * 25);
-		mk4.speed = (int) Math.ceil(100000 / mk4.strength);
+		mk4.radius = (int) (r);
+		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.length = mk4.strength / 2;
 		mk4.fallout = false;
 		return mk4;
 	}

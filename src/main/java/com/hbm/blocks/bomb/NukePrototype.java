@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleija;
@@ -10,6 +12,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukePrototype;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -211,4 +214,9 @@ public class NukePrototype extends BlockContainer implements IBomb {
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§b[Schrabidium Bomb]§r");
+		tooltip.add("§eRadius: "+BombConfig.prototypeRadius+"m§r");
+	}
 }

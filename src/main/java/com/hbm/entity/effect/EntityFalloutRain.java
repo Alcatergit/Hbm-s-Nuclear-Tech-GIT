@@ -43,6 +43,13 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	private Ticket loaderTicket;
 
+	private double s1;
+	private double s2;
+	private double s3;
+	private double s4;
+	private double s5;
+	private double s6;
+
 	public EntityFalloutRain(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
@@ -66,7 +73,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		return true;
 	}
 
-	public EntityFalloutRain(World p_i1582_1_, int maxAge) {
+	public EntityFalloutRain(World p_i1582_1_, int maxage) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.isImmuneToFire = true;
@@ -182,20 +189,21 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	private void stomp(MutableBlockPos pos, double dist) {
 		int stoneDepth = 0;
-		int maxStoneDepth = 0;
-		if(dist > 88)
+		int maxStoneDepth = 0;		
+
+		if(dist > s1)
 			maxStoneDepth = 0;
-		else if(dist > 48)
+		else if(dist > s2)
 			maxStoneDepth = 1;
-		else if(dist > 26)
+		else if(dist > s3)
 			maxStoneDepth = 2;
-		else if(dist > 15)
+		else if(dist > s4)
 			maxStoneDepth = 3;
-		else if(dist > 8)
+		else if(dist > s5)
 			maxStoneDepth = 4;
-		else if(dist > 5)
+		else if(dist > s6)
 			maxStoneDepth = 5;
-		else if(dist <= 5)
+		else if(dist <= s6)
 			maxStoneDepth = 6;
 
 		boolean reachedStone = false;
@@ -217,6 +225,10 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			if(b.getMaterial() == Material.AIR)
 				continue;
 
+			if(b.getBlock() == Blocks.BEDROCK){
+				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+			}
+
 			if(b.getBlock().isFlammable(world, pos, EnumFacing.UP)) {
 				if(rand.nextInt(5) == 0)
 					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
@@ -231,19 +243,19 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			// }
 
 			else if(b.getBlock() == Blocks.STONE) {
-				if(dist > 88 || stoneDepth==maxStoneDepth)
+				if(dist > s1 || stoneDepth==maxStoneDepth)
 					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
-				else if(dist > 48 || stoneDepth==maxStoneDepth-1)
+				else if(dist > s2 || stoneDepth==maxStoneDepth-1)
 					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				else if(dist > 26 || stoneDepth==maxStoneDepth-2)
+				else if(dist > s3 || stoneDepth==maxStoneDepth-2)
 					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				else if(dist > 15 || stoneDepth==maxStoneDepth-3)
+				else if(dist > s4 || stoneDepth==maxStoneDepth-3)
 					world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-				else if(dist > 8 || stoneDepth==maxStoneDepth-4)
+				else if(dist > s5 || stoneDepth==maxStoneDepth-4)
 					world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
-				else if(dist > 5 || stoneDepth==maxStoneDepth-5)
+				else if(dist > s6 || stoneDepth==maxStoneDepth-5)
 					world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
-				else if(dist <= 5 || stoneDepth==maxStoneDepth-6)
+				else if(dist <= s6 || stoneDepth==maxStoneDepth-6)
 					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
 				else
 					return;
@@ -382,6 +394,13 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	public void setScale(int i) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
+		s1 = 0.88 * i;
+		s2 = 0.48 * i;
+		s3 = 0.26 * i;
+		s4 = 0.15 * i;
+		s5 = 0.08 * i;
+		s6 = 0.05 * i;
+
 	}
 
 	public int getScale() {

@@ -46,7 +46,7 @@ public class ReinforcedLamp extends Block implements IRadResistantBlock {
             	worldIn.setBlockState(pos, ModBlocks.reinforced_lamp_on.getDefaultState(), 2);
             }
         }
-        RadiationSystemNT.markChunkForRebuild(world, pos);
+        RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 	}
 	
 	@Override
@@ -92,9 +92,9 @@ public class ReinforcedLamp extends Block implements IRadResistantBlock {
 	}
 	
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		RadiationSystemNT.markChunkForRebuild(world, pos);
-		super.breakBlock(world, pos, state);
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		super.breakBlock(worldIn, pos, state);
 	}
 
 	@Override

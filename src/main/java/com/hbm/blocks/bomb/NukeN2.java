@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -9,6 +11,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeN2;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -180,6 +183,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§c[Extreme Bomb]§r");
+		tooltip.add("§eRadius: "+BombConfig.n2Radius+"m§r");
 	}
 
 }

@@ -753,7 +753,7 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModItems.blades_schrabidium, 1), new Object[] { "PIP", 'P', "plateSchrabidium", 'I', new ItemStack(ModItems.blades_schrabidium, 1, OreDictionary.WILDCARD_VALUE) });
 
 		addShapedRecipe(new ItemStack(ModItems.laser_crystal_nano, 1), new Object[] { "QPQ", "ACA", "QPQ", 'Q', ModBlocks.glass_quartz, 'P', ModItems.ingot_graphite, 'A', ModItems.powder_polymer, 'C', ModItems.filter_coal });
-		addShapedRecipe(new ItemStack(ModItems.laser_crystal_pentacene, 1), new Object[] { "QAQ", "SES", "QAQ", 'Q', ModBlocks.glass_quartz, 'A', ModItems.ingot_advanced_alloy, 'S', ModItems.powder_weidanium, 'E', ModItems.crystal_energy });
+		addShapedRecipe(new ItemStack(ModItems.laser_crystal_pentacene, 1), new Object[] { "QSQ", "AEA", "QSQ", 'Q', ModBlocks.glass_quartz, 'A', ModItems.powder_advanced_alloy, 'S', ModItems.ingot_cerium, 'E', ModItems.crystal_energy });
 		addShapedRecipe(new ItemStack(ModItems.laser_crystal_co2, 1), new Object[] { "QDQ", "NCN", "QDQ", 'Q', ModBlocks.glass_quartz, 'D', ModItems.ingot_desh, 'N', ModItems.ingot_niobium, 'C', ModItems.part_carbon });
 		addShapedRecipe(new ItemStack(ModItems.laser_crystal_bismuth, 1), new Object[] {"QUQ", "BCB", "QTQ", 'Q', ModBlocks.glass_quartz, 'U', ModItems.ingot_uranium, 'T', ModItems.ingot_th232, 'B', ModItems.nugget_bismuth, 'C', ModItems.crystal_rare });
 		addShapedRecipe(new ItemStack(ModItems.laser_crystal_cmb, 1), new Object[] {"QBQ", "CSC", "QBQ", 'Q', ModBlocks.glass_quartz, 'B', ModItems.ingot_combine_steel, 'C', ModItems.nugget_daffergon, 'S', ModItems.powder_xe135});
@@ -1859,7 +1859,7 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.ammo_fuel_vaporizer, 1), new Object[] { "PSP", "SNS", "PSP", 'P', ModItems.ingot_phosphorus, 'S', ModItems.crystal_sulfur, 'N', ModItems.ammo_fuel_napalm });
 		addShapedOreRecipe(new ItemStack(ModBlocks.det_cord, 8), new Object[] { "TNT", "NGN", "TNT", 'T', "plateSteel", 'N', "dustSaltpeter", 'G', "gunpowder" });
 		addShapedOreRecipe(new ItemStack(ModBlocks.det_charge, 1), new Object[] { "PDP", "DTD", "PDP", 'P', "plateSteel", 'D', ModBlocks.det_cord, 'T', ModItems.ingot_semtex });
-		addShapedRecipe(new ItemStack(ModBlocks.det_nuke, 1), new Object[] { "PDP", "DCD", "PDP", 'P', ModItems.plate_desh, 'D', ModBlocks.det_charge, 'C', ModItems.man_core });
+		addShapedRecipe(new ItemStack(ModBlocks.det_nuke, 1), new Object[] { "PDP", "DCD", "PDP", 'P', ModItems.plate_desh, 'D', ModItems.man_explosive8, 'C', ModItems.man_core });
 		addShapedOreRecipe(new ItemStack(ModBlocks.det_miner, 3), new Object[] { "FFF", "ITI", "ITI", 'F', Items.FLINT, 'I', "plateIron", 'T', Blocks.TNT });
 		addShapedOreRecipe(new ItemStack(ModBlocks.det_miner, 12), new Object[] { "FFF", "ITI", "ITI", 'F', Items.FLINT, 'I', "plateSteel", 'T', ModItems.ingot_semtex });
 		addShapedRecipe(new ItemStack(ModItems.cobalt_helmet, 1), new Object[] { "EEE", "E E", 'E', ModItems.ingot_cobalt });
@@ -2096,7 +2096,7 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModBlocks.anvil_iron, 1), new Object[] { "III", " B ", "III", 'I', "ingotIron", 'B', "blockIron" });
 		addShapedOreRecipe(new ItemStack(ModBlocks.anvil_lead, 1), new Object[] { "III", " B ", "III", 'I', "ingotLead", 'B', "blockLead" });
 		addShapedRecipe(new ItemStack(ModBlocks.anvil_murky, 1), new Object[] { "UUU", "UAU", "UUU", 'U', ModItems.undefined, 'A', ModBlocks.anvil_steel });
-		addShapedOreRecipe(new ItemStack(ModBlocks.machine_fraction_tower), new Object[] { "SHS", "SGS", "SHS", 'S', "plateSteel", 'H', ModItems.hull_big_steel, 'G', ModBlocks.steel_grate });
+		addShapedOreRecipe(new ItemStack(ModBlocks.machine_fraction_tower), new Object[] { "SHS", "SGS", "SHS", 'S', "plateSteel", 'H', ModItems.hull_big_steel, 'G', ModItems.ingot_lanthanium });
 		addShapedRecipe(new ItemStack(ModBlocks.fraction_spacer), new Object[] { "BHB", 'H', ModItems.hull_big_steel, 'B', Blocks.IRON_BARS });
 
 		//Cladding
