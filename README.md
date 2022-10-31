@@ -1,4 +1,4 @@
-# <u>**Aionoso's HBM Nuclear Tech Mod 1.12.2 Fork**</u>
+# <u>**Alcaters's HBM Nuclear Tech Mod 1.12.2 Fork**</u>
 
 This is my fork of the 1.12.2 port made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
 
