@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 public class ExplosionNukeRay {
 	private int maxSamples;
 	private float phi;
+	public boolean isContained=true;
 	
 	World world;
 	int posX;
@@ -74,6 +75,11 @@ public class ExplosionNukeRay {
 				}
 				
 				if(rayEnergy <= 0 || l == this.radius) {
+					if(isContained==true){
+						if(l == this.radius){
+							isContained = false;
+						}
+					}
 					if(affectedBlocks.size() < Integer.MAX_VALUE - 100) {
 						affectedBlocks.add(new FloatTriplet(lastPos.xCoord, lastPos.yCoord, lastPos.zCoord));
 					}

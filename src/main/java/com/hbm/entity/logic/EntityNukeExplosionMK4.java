@@ -81,7 +81,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			explosion.collectTipMk6(speed);
 		} else if(explosion.getStoredSize() > 0) {
 			explosion.processTip(BombConfig.mk4);
-		} else if(fallout) {
+		} else if(fallout && explosion.isContained==false) {
 			EntityFalloutRain fallout = new EntityFalloutRain(this.world);
 			fallout.posX = this.posX;
 			fallout.posY = this.posY;
@@ -159,7 +159,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 
 	public static EntityNukeExplosionMK4 statFac(World world, int r, double x, double y, double z) {
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized explosion at " + x + " / " + y + " / " + z + " with radius " + r + "!");
 
 		if(r == 0)
 			r = 25;
@@ -176,9 +176,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	public static EntityNukeExplosionMK4 statFacExperimental(World world, int r, double x, double y, double z) {
 
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized eX explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
-
-		r *= 2;
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized eX explosion at " + x + " / " + y + " / " + z + " with radius " + r + "!");
 
 		EntityNukeExplosionMK4 mk4 = new EntityNukeExplosionMK4(world);
 		mk4.radius = (int) (r);
@@ -192,9 +190,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	public static EntityNukeExplosionMK4 statFacNoRad(World world, int r, double x, double y, double z) {
 
 		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
-			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized nR explosion at " + x + " / " + y + " / " + z + " with diameter " + r + "!");
-
-		r *= 2;
+			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized nR explosion at " + x + " / " + y + " / " + z + " with radius " + r + "!");
 
 		EntityNukeExplosionMK4 mk4 = new EntityNukeExplosionMK4(world);
 		mk4.radius = (int) (r);

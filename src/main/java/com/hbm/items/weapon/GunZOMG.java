@@ -95,8 +95,12 @@ public class GunZOMG extends Item {
 						player.sendMessage(new TextComponentTranslation("[ZOMG] Gun has been validated!"));
 					}
 
-					//if(Library.superuser.contains(player.getUniqueID().toString())) {
-					if(Library.hasInventoryItem(player.inventory, ModItems.polaroid)) {
+					if(Library.superuser.contains(player.getUniqueID().toString())) {
+						if (!worldIn.isRemote) {
+							player.sendMessage(new TextComponentTranslation("[ZOMG] Welcome, gigachad!"));
+						}
+						stack.getTagCompound().setBoolean("superuser", true);
+					} else if(Library.hasInventoryItem(player.inventory, ModItems.polaroid)) {
 						if (!worldIn.isRemote) {
 							player.sendMessage(new TextComponentTranslation("[ZOMG] Welcome, superuser!"));
 						}

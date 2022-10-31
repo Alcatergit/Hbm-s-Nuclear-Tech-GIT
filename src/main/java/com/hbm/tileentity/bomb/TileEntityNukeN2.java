@@ -62,26 +62,19 @@ public class TileEntityNukeN2 extends TileEntity {
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
+
+public int countCharges() {
+		int charges = 0;
+		for(int i = 0; i < 12; i++){
+			if(inventory.getStackInSlot(i).getItem() == ModItems.n2_charge)
+				charges += 1;
+		}
+		return charges;
+	}
+
 	
 public boolean isReady() {
-		
-			if(inventory.getStackInSlot(0).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(1).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(2).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(3).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(4).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(5).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(6).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(7).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(8).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(9).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(10).getItem() == ModItems.n2_charge && 
-			inventory.getStackInSlot(11).getItem() == ModItems.n2_charge)
-			{
-				return true;
-			}
-		
-		return false;
+		return countCharges() > 0;
 	}
 	
 	public void clearSlots() {

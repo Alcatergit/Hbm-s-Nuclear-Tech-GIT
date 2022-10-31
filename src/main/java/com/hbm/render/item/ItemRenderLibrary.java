@@ -203,15 +203,21 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_radgen), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -1, 0);
-				GL11.glRotated(90, 0, 1, 0);
 				GL11.glScaled(4.5, 4.5, 4.5);
 			}
 			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glTranslated(0, 0, 1.5);
-		        bindTexture(ResourceManager.radgen_body_tex); ResourceManager.radgen_body.renderAll();
-				GL11.glTranslated(0, 1.5, 0);
-		        bindTexture(ResourceManager.turbofan_blades_tex); ResourceManager.radgen_rotor.renderAll();
+								GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslated(0.5, 0, 0);
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.radgen_body_tex);
+				ResourceManager.radgen_body.renderPart("Base");
+				ResourceManager.radgen_body.renderPart("Rotor");
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL11.glColor3f(0F, 1F, 0F);
+				ResourceManager.radgen_body.renderPart("Light");
+				GL11.glColor3f(1F, 1F, 1F);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL11.glShadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fensu), new ItemRenderBase() {

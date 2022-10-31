@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.config.RadiationConfig;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.lib.Library;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -68,47 +69,7 @@ public class EntityBlast extends Entity {
 	}
 	
 	private boolean canHurt(Entity e) {
-		
-		if(e instanceof EntityPlayer) {
-			EntityPlayer p = (EntityPlayer) e;
-			if(p.getUniqueID().equals("192af5d7-ed0f-48d8-bd89-9d41af8524f8"))
-				return false;
-		}
-		
-		return !isObstructed(world, posX, posY, posZ, e.posX, e.posY + e.getEyeHeight(), e.posZ);
-	}
-	
-	private static boolean canBlock(IBlockState b) {
-		
-		/*if(b == ModBlocks.concrete || b == ModBlocks.concrete_bricks || b == ModBlocks.vault_door || b == ModBlocks.vault_door_dummy || b == Blocks.obsidian)
-			return true;
-		
-		if(Block.getIdFromBlock(b) == 699 || Block.getIdFromBlock(b) == 700 || Block.getIdFromBlock(b) == 701 || Block.getIdFromBlock(b) == 702)
-			return true;*/
-		
-		//Drillgon200: NTM doesn't have whatever a blast shield is
-		//if(MainRegistry.blastShields.contains(b))
-		//	return true;
-		
-		return false;
-	}
-	
-	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
-		
-		Vec3d vector = new Vec3d(a - x, b - y, c - z);
-		double length = vector.lengthVector();
-		Vec3d nVec = vector.normalize();
-		
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(float i = 0; i < length; i += 0.25F) {
-			pos.setPos((int) Math.round(x + (nVec.x * i)), (int) Math.round(y + (nVec.y * i)), (int) Math.round(z + (nVec.z * i)));
-			IBlockState tile = world.getBlockState(pos);
-
-			if(canBlock(tile))
-				return true;
-		}
-		
-		return false;
+		return !Library.isObstructed(world, posX, posY, posZ, e.posX, e.posY + e.getEyeHeight(), e.posZ);
 	}
 	
 	public static EntityBlast statFac(World world, double posX, double posY, double posZ, int size, int damage, int exCount, float exSize, boolean exFire) {

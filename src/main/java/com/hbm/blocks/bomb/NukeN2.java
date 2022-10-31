@@ -77,11 +77,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) worldIn.getTileEntity(pos);
 		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0 && !worldIn.isRemote) {
-			if(entity.isReady()) {
+			int charges = entity.countCharges();
+			if(charges > 0) {
 				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
-				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.n2Radius);
+				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
 			}
 		}
 	}
@@ -112,11 +113,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	@Override
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) world.getTileEntity(pos);
-		if(entity.isReady()) {
+		int charges = entity.countCharges();
+		if(charges > 0) {
 			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
 			entity.clearSlots();
 			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.n2Radius);
+			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
 		}
 	}
 	
@@ -189,6 +191,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§c[Extreme Bomb]§r");
 		tooltip.add("§eRadius: "+BombConfig.n2Radius+"m§r");
+		tooltip.add("§e -Each Charge Adds: "+(int)(BombConfig.n2Radius/12)+"m§r");
 	}
 
 }
