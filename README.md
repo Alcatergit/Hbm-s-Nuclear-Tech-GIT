@@ -19,3 +19,6 @@ Download the repository, then open a shell prompt in that folder, then type the 
 Press enter.
 
 Now just wait for the build to finish and the new Jar file will be in `Hbm-s-Nuclear-Tech-GIT\build\libs`.
+
+
+Discord: Alcater#2644
