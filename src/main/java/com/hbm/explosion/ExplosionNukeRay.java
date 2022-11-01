@@ -28,7 +28,7 @@ public class ExplosionNukeRay {
 
 	private List<FloatTriplet> affectedBlocks = new ArrayList<FloatTriplet>();
 	public boolean isAusf3Complete = false;
-	private Random rand = new Random();
+	public Random rand = new Random();
 	
 	public ExplosionNukeRay(World world, int x, int y, int z, int radius) {
 		this.world = world;
@@ -48,14 +48,12 @@ public class ExplosionNukeRay {
 	@SuppressWarnings("deprecation")
 	public void collectTipMk6(int count) {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int raysProcessed = 0;
-		float randomness = 0.05F; // 8%
-		
+		int raysProcessed = 0;		
 		
 		FloatTriplet lastPos = new FloatTriplet(posX, posY, posZ);
 		for(int s = currentSample; s < this.maxSamples; s++) {
 			FloatTriplet direction = getNormalFibVec(s);
-			float rayEnergy = (float)(radius * (rand.nextDouble()*randomness+1-randomness/2));
+			float rayEnergy = (float)radius*0.6F;
 			for(int l = 0; l < this.radius+1; l++){
 				float x0 = (float) (posX + direction.xCoord * l);
 				float y0 = (float) (posY + direction.yCoord * l);

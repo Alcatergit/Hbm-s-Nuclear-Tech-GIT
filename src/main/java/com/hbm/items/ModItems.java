@@ -2535,7 +2535,7 @@ public class ModItems {
 	public static final ItemRBMKPellet rbmk_pellet_hes = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Schrabidium-326", "rbmk_pellet_hes").addRadiation(ItemHazard.saf * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_leaus = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Australium (Tasmanite)", "rbmk_pellet_leaus");
 	public static final ItemRBMKPellet rbmk_pellet_heaus = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Australium (Ayerite)", "rbmk_pellet_heaus");
-	public static final ItemRBMKPellet rbmk_pellet_heuno = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Unobtanium", "rbmk_pellet_heuno");
+	public static final ItemRBMKPellet rbmk_pellet_unobtanium = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Unobtanium", "rbmk_pellet_unobtanium");
 	public static final ItemRBMKPellet rbmk_pellet_po210be = (ItemRBMKPellet) new ItemRBMKPellet("Polonium-210 & Beryllium Neutron Source", "rbmk_pellet_po210be").addRadiation(ItemHazard.pobe * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_ra226be = (ItemRBMKPellet) new ItemRBMKPellet("Radium-226 & Beryllium Neutron Source", "rbmk_pellet_ra226be").addRadiation(ItemHazard.rabe * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_pu238be = (ItemRBMKPellet) new ItemRBMKPellet("Plutonium-238 & Beryllium Neutron Source", "rbmk_pellet_pu238be").addRadiation(ItemHazard.pube * ItemHazard.billet).toItem();
@@ -2705,13 +2705,13 @@ public class ModItems {
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(2D)
 			.setMeltingPoint(5211);
-	public static final ItemRBMKRod rbmk_fuel_unobtanium = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heuno, "rbmk_fuel_heuno")
-			.setYield(10000000D)
-			.setStats(200)
-			.setFunction(EnumBurnFunc.QUADRATIC)
-			.setHeat(0.000001D)
-			.setDiffusion(0.01D)
-			.setMeltingPoint(16000);
+	public static final ItemRBMKRod rbmk_fuel_unobtanium = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_unobtanium, "rbmk_fuel_unobtanium")
+			.setYield(100000000D)
+			.setStats(100)
+			.setFunction(EnumBurnFunc.LINEAR)
+			.setHeat(0.001D)
+			.setDiffusion(0.5D)
+			.setMeltingPoint(4000);
 	public static final ItemRBMKRod rbmk_fuel_po210be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_po210be, "rbmk_fuel_po210be")
 			.setYield(25000000D)
 			.setStats(15, 40)
