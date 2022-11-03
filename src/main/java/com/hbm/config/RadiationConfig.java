@@ -9,7 +9,7 @@ public class RadiationConfig {
 	public static int cont = 0;
 	public static int fogRad = 100;
 	public static int fogCh = 20;
-	public static float hellRad = 0.1F;
+	public static float hellRad = 0.66F;
 	public static int worldRad = 10;
 	public static int worldRadThreshold = 20;
 	public static boolean worldRadEffects = true;
@@ -39,7 +39,7 @@ public class RadiationConfig {
 		fogChance.setComment("1:n chance of fog spawning every second");
 		fogCh = fogChance.getInt();
 		// nether radiation
-		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 0);
+		Property netherRad = config.get(CATEGORY_NUKE, "6.10_netherRad", 66);
 		netherRad.setComment("RAD/s in the nether in hundredths");
 		hellRad = netherRad.getInt() * 0.01F;
 		worldRad = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.10_worldRadCount", "How many block operations radiation can perform per tick", 10);

@@ -190,8 +190,9 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§c[Extreme Bomb]§r");
-		tooltip.add("§eRadius: "+BombConfig.n2Radius+"m§r");
-		tooltip.add("§e -Each Charge Adds: "+(int)(BombConfig.n2Radius/12)+"m§r");
+		tooltip.add(" §eRadius: "+BombConfig.n2Radius+"m§r");
+		tooltip.add("");
+		tooltip.add("§eEach Charge Adds: "+(int)(BombConfig.n2Radius/12)+"m§r");
 	}
 
 }

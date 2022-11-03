@@ -54,6 +54,7 @@ public class ModDamageSource extends DamageSource {
 	public static DamageSource crucible = new DamageSource("crucible").setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource monoxide = (new DamageSource("monoxide")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource asbestos = (new DamageSource("asbestos")).setDamageIsAbsolute().setDamageBypassesArmor();
+    public static DamageSource blacklung = (new DamageSource("blacklung")).setDamageIsAbsolute().setDamageBypassesArmor();
 	public static DamageSource mku = (new DamageSource("mku")).setDamageIsAbsolute().setDamageBypassesArmor();
 	
 	public ModDamageSource(String p_i1566_1_) {

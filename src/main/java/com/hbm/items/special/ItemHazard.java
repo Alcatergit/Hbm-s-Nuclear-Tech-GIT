@@ -94,10 +94,12 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 	public static final float sb = sa326 * 0.2F; //Schrabidate
 	public static final float trx = 25.0F;
 	public static final float trn = 0.1F;
-	public static final float wst = 15.0F; //Nuclear Waste
-	public static final float wstv = 7.5F;
+	public static final float wst = 150.0F; //Nuclear Waste
+	public static final float wstv = 75F; //Nuclear Waste Vitrified
 	public static final float yc = u * 1.2F; //Yellowcake
 	public static final float fo = 10F; //Fallout
+	public static final float radspice = 20_000.0F;
+	public static final float unof = 10_000.0F;
 
 	public static final float nugget = 0.1F;
 	public static final float ingot = 1.0F;

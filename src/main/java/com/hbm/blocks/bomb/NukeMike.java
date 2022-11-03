@@ -211,10 +211,10 @@ public class NukeMike extends BlockContainer implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§6[Thermonuclear Bomb]§r");
-		tooltip.add("§eRadius: "+BombConfig.mikeRadius+"m§r");
+		tooltip.add(" §eRadius: "+BombConfig.mikeRadius+"m§r");
 		if(!BombConfig.disableNuclear){
-			tooltip.add("§a[Fallout]§r");
-			tooltip.add("§gRadius: "+(int)BombConfig.mikeRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			tooltip.add("§2[Fallout]§r");
+			tooltip.add(" §aRadius: "+(int)BombConfig.mikeRadius*(1+BombConfig.falloutRange/100)+"m§r");
 		}
 	}
 }

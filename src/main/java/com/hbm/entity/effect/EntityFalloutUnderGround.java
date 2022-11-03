@@ -164,6 +164,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 			if(this.currentSample >= this.maxSamples-1) {
 				this.done=true;
+				this.setDead();
 			}
 		}
 	}
@@ -239,11 +240,13 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.COAL_ORE) {
-				int ra = rand.nextInt(50);
-				if(ra < 7) {
-					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
-				} else if(ra < 10) {
-					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+				if(l < s6){
+					int ra = rand.nextInt(150);
+					if(ra < 7) {
+						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+					} else if(ra < 10) {
+						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+					}
 				}
 				return;
 
@@ -286,7 +289,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				if(rand.nextInt(60) == 0)
 					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
 				return;
-			} else if(b.getMaterial() == Material.ROCK){
+			} else if(b.getMaterial() == Material.ROCK || b.getMaterial() == Material.IRON){
 				return;
 			}
 		}

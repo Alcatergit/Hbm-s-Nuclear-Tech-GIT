@@ -115,7 +115,4 @@ public class RenderTaint extends TileEntitySpecialRenderer<TileEntityTaint> {
 
 		GL11.glPopMatrix();
 	}
-	
-	
-
 }

@@ -83,6 +83,6 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§a[Balefire Bomb]§r");
-		tooltip.add("§eRadius: 250m§r");
+		tooltip.add(" §eRadius: 250m§r");
 	}
 }

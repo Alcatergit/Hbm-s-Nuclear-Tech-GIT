@@ -39,7 +39,6 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	private Ticket loaderTicket;
 
 	ExplosionNukeRay explosion;
-	EntityFalloutUnderGround falloutBall;
 
 	public EntityNukeExplosionMK4(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -84,27 +83,23 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		} else if(explosion.getStoredSize() > 0) {
 			explosion.processTip(BombConfig.mk4);
 		} else if(fallout) {
-			if(falloutBall == null){
-				falloutBall = new EntityFalloutUnderGround(this.world);
-				falloutBall.posX = this.posX;
-				falloutBall.posY = this.posY;
-				falloutBall.posZ = this.posZ;
-				falloutBall.setScale((int) (this.radius + falloutAdd));
+			EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(this.world);
+			falloutBall.posX = this.posX;
+			falloutBall.posY = this.posY;
+			falloutBall.posZ = this.posZ;
+			falloutBall.setScale((int) (this.radius + falloutAdd));
 
-				this.world.spawnEntity(falloutBall);
-			} else if(falloutBall.done){
-				falloutBall.setDead();
-				if(!explosion.isContained){
-					EntityFalloutRain falloutRain = new EntityFalloutRain(this.world);
-					falloutRain.posX = this.posX;
-					falloutRain.posY = this.posY;
-					falloutRain.posZ = this.posZ;
-					falloutRain.setScale((int) (this.radius * 1.8 + falloutAdd) * BombConfig.falloutRange / 100);
+			this.world.spawnEntity(falloutBall);
+			if(!explosion.isContained){
+				EntityFalloutRain falloutRain = new EntityFalloutRain(this.world);
+				falloutRain.posX = this.posX;
+				falloutRain.posY = this.posY;
+				falloutRain.posZ = this.posZ;
+				falloutRain.setScale((int) (this.radius * 1.8 + falloutAdd) * BombConfig.falloutRange / 100);
 
-					this.world.spawnEntity(falloutRain);
-				}
-				this.setDead();
+				this.world.spawnEntity(falloutRain);
 			}
+			this.setDead();
 		} else {
 			this.setDead();
 		}

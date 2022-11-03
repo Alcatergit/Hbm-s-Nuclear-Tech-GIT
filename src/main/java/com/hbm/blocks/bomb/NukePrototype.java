@@ -217,6 +217,6 @@ public class NukePrototype extends BlockContainer implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§b[Schrabidium Bomb]§r");
-		tooltip.add("§eRadius: "+BombConfig.prototypeRadius+"m§r");
+		tooltip.add(" §eRadius: "+BombConfig.prototypeRadius+"m§r");
 	}
 }

@@ -541,8 +541,8 @@ public class ModBlocks {
 	public static final Block block_graphite_source = new BlockGraphiteSource("block_graphite_source");
 	
 	public static final Block block_reiium = new BlockRadResistant(Material.IRON, "block_reiium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
-	public static final Block block_australium = new BlockRadResistant(Material.IRON, "block_australium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_weidanium = new BlockRadResistant(Material.IRON, "block_weidanium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block block_australium = new BlockRadResistant(Material.IRON, "block_australium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_verticium = new BlockRadResistant(Material.IRON, "block_verticium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_unobtainium = new BlockRadResistant(Material.IRON, "block_unobtainium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_daffergon = new BlockRadResistant(Material.IRON, "block_daffergon").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
@@ -574,13 +574,13 @@ public class ModBlocks {
 	public static final Block basalt_brick = new BlockBase(Material.ROCK, "basalt_brick").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block basalt_polished = new BlockBase(Material.ROCK, "basalt_polished").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block basalt_tiles = new BlockBase(Material.ROCK, "basalt_tiles").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
-	
+
+	public static final Block ore_reiium = new BlockBase(Material.ROCK, "ore_reiium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block ore_weidanium = new BlockBase(Material.ROCK, "ore_weidanium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_australium = new BlockBase(Material.ROCK, "ore_australium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
-	public static final Block ore_weidanium = new BlockBase(Material.ROCK, "ore_weidanium").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
-	public static final Block ore_reiium = new BlockBase(Material.ROCK, "ore_reiium").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
-	public static final Block ore_unobtainium = new BlockBase(Material.ROCK, "ore_unobtainium").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
-	public static final Block ore_daffergon = new BlockBase(Material.ROCK, "ore_daffergon").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
-	public static final Block ore_verticium = new BlockBase(Material.ROCK, "ore_verticium").setCreativeTab(null).setHardness(5.0F).setResistance(10.0F);
+	public static final Block ore_verticium = new BlockBase(Material.ROCK, "ore_verticium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block ore_unobtainium = new BlockBase(Material.ROCK, "ore_unobtainium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block ore_daffergon = new BlockBase(Material.ROCK, "ore_daffergon").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	
 	public static final Block block_cap_nuka = new BlockCap(Material.IRON, "block_cap_nuka").setSoundType(SoundType.METAL).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block block_cap_quantum = new BlockCap(Material.IRON, "block_cap_quantum").setSoundType(SoundType.METAL).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);

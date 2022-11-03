@@ -152,6 +152,36 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + radsPrefix + (limit ? ">" : "") + rads + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
+	public static String getTextColorFromPercent(double percent){
+		if(percent < 0.5)
+			return ""+TextFormatting.GREEN;
+		else if(percent < 0.6)
+			return ""+TextFormatting.YELLOW;
+		else if(percent < 0.7)
+			return ""+TextFormatting.GOLD;
+		else if(percent < 0.8)
+			return ""+TextFormatting.RED;
+		else if(percent < 0.9)
+			return ""+TextFormatting.DARK_RED;
+		else
+			return ""+TextFormatting.DARK_GRAY;
+	}
+
+	public static String getTextColorLung(double percent){
+		if(percent < 0.25)
+			return ""+TextFormatting.GREEN;
+		else if(percent < 0.5)
+			return ""+TextFormatting.YELLOW;
+		else if(percent < 0.75)
+			return ""+TextFormatting.GOLD;
+		else if(percent < 0.8)
+			return ""+TextFormatting.RED;
+		else if(percent < 0.95)
+			return ""+TextFormatting.DARK_RED;
+		else
+			return ""+TextFormatting.DARK_GRAY;
+	}
+
 	public static void printDiagnosticData(EntityPlayer player) {
 
 		double digamma = ((int)(HbmLivingProps.getDigamma(player) * 1000)) / 1000D;
@@ -159,7 +189,7 @@ public class ContaminationUtil {
 		
 		player.sendMessage(new TextComponentString("===== Ϝ ").appendSibling(new TextComponentTranslation("digamma.title")).appendSibling(new TextComponentString(" Ϝ =====")).setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)));
 		player.sendMessage(new TextComponentTranslation("digamma.playerDigamma").appendSibling(new TextComponentString(TextFormatting.RED + " " + digamma + " DRX")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
-		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(TextFormatting.RED + String.format(" %6.2f", halflife) + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(getTextColorFromPercent(halflife/100D) + String.format(" %6.2f", halflife) + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
 	}
 
 	public static void printLungDiagnosticData(EntityPlayer player) {
@@ -170,9 +200,9 @@ public class ContaminationUtil {
 		
 
 		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));
-		player.sendMessage(new TextComponentTranslation("trait.asbestos").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentTranslation("lung_scanner.player_asbestos_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerAsbestos)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
-		player.sendMessage(new TextComponentTranslation("trait.coal").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentTranslation("lung_scanner.player_coal_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerBlacklung)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
-		player.sendMessage(new TextComponentTranslation("lung_scanner.total").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentTranslation("lung_scanner.player_total_health")).setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(" %6.2f", playerTotal)+" %")).setStyle(new Style().setColor(TextFormatting.BLUE)));
+		player.sendMessage(new TextComponentTranslation("trait.asbestos").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerAsbestos/100D)+" %6.2f", playerAsbestos)+" %")));
+		player.sendMessage(new TextComponentTranslation("trait.coal").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerBlacklung/100D)+" %6.2f", playerBlacklung)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.total").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerTotal/100D)+" %6.2f", playerTotal)+" %")));
 	
 	}
 

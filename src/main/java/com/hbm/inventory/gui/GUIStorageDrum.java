@@ -23,7 +23,7 @@ public class GUIStorageDrum extends GuiInfoContainer {
 		drum = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 234;
+		this.ySize = 237;
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class GUIStorageDrum extends GuiInfoContainer {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.drum.hasCustomInventoryName() ? this.drum.getInventoryName() : I18n.format(this.drum.getInventoryName());
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 14, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override

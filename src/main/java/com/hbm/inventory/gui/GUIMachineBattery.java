@@ -23,6 +23,8 @@ public class GUIMachineBattery extends GuiInfoContainer {
 
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_battery.png");
 	private TileEntityMachineBattery battery;
+	private long prevDelta;
+	private long powerDelta;
 
 	public GUIMachineBattery(InventoryPlayer invPlayer, TileEntityMachineBattery tedf) {
 		super(new ContainerMachineBattery(invPlayer, tedf));
@@ -30,18 +32,27 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		this.xSize = 176;
 		this.ySize = 166;
+		this.prevDelta = battery.powerDelta;
+		this.powerDelta = battery.powerDelta;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		String deltaText = Library.getShortNumber(Math.abs(battery.powerDelta*20)) + "HE/s";
-		if(battery.powerDelta > 0) 
+		if(battery.powerDelta == 0 && prevDelta != 0)
+			powerDelta = prevDelta;
+		else
+			powerDelta = battery.powerDelta;
+
+		String deltaText = Library.getShortNumber(Math.abs(powerDelta)) + "HE/s";
+		if(powerDelta > 0) 
 			deltaText = TextFormatting.GREEN + "+" + deltaText;
-		else if(battery.powerDelta < 0) 
+		else if(powerDelta < 0) 
 			deltaText = TextFormatting.RED + "-" + deltaText;
 		else 
 			deltaText = TextFormatting.YELLOW + "0HE/s";
+
+		System.out.println("GUI delta: "+powerDelta);
 
 		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
 
@@ -51,6 +62,7 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		String[] text = new String[] { "Click the buttons on the right",
 				"to change battery behavior for",
 				"when redstone is or isn't applied." };
+		prevDelta = battery.powerDelta;
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

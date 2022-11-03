@@ -20,33 +20,33 @@ public class ContainerMachineRTG extends Container {
 		
 		testNuke = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 44, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 62, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 98, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 26, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 44, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 62, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 80, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 98, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 26, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 44, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 62, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 13, 80, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 98, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 44, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 62, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 98, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 26, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 44, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 62, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 80, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 98, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 26, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 44, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 62, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 13, 80, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 98, 58));
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 94 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 152));
 		}
 	}
 	

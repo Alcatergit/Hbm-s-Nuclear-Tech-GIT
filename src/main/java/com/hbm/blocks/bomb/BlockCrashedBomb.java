@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityBalefire;
@@ -10,6 +12,7 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.bomb.TileEntityCrashedBomb;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -138,6 +141,12 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§a[Balefire Bomb]§r");
+		tooltip.add(" §eRadius: "+(int) (BombConfig.fatmanRadius * 1.25)+"m§r");
 	}
 
 	@Override

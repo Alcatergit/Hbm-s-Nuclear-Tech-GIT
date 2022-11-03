@@ -76,10 +76,10 @@ public class DetCord extends Block implements IBomb {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		if(this == ModBlocks.det_nuke){
 			tooltip.add("§2[Nuclear Bomb]§r");
-			tooltip.add("§eRadius: "+BombConfig.missileRadius+"m§r");
+			tooltip.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
 			if(!BombConfig.disableNuclear){
-				tooltip.add("§a[Fallout]§r");
-				tooltip.add("§gRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
+				tooltip.add("§2[Fallout]§r");
+				tooltip.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
 			}
 		}
 	}

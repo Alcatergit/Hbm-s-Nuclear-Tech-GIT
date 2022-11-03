@@ -664,8 +664,8 @@ public class ModEventHandler {
 								entity instanceof EntitySkeleton ||
 								entity instanceof EntityQuackos)
 
-						if(eRad > 2500)
-							entRad.setRads(2500);
+						if(eRad > 2500000)
+							entRad.setRads(2500000);
 
 						if(eRad >= 1000) {
 							entity.attackEntityFrom(ModDamageSource.radiation, 1000F);

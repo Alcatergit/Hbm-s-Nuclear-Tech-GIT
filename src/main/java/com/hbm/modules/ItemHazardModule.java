@@ -150,12 +150,24 @@ public class ItemHazardModule {
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
 		}
 	}
+
+	private String formatRads(float radiation){
+		String rads = "";
+		if(radiation < 1000000){
+			rads = radiation+"";
+			
+		} else if(radiation < 1000000000){
+			rads = ((int)radiation/1000)/1000+"M";
+		} else
+			rads = ((int)radiation/1000000)/1000+"G";
+		return rads;
+	}
 	
 	public void addInformation(ItemStack stack, List<String> list, ITooltipFlag flagIn) {
 		
 		if(this.radiation * tempMod > 0) {
 			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
-			String rad = "" + (Math.floor(radiation * tempMod * 1000) / 1000);
+			String rad = formatRads(radiation * tempMod);
 			list.add(TextFormatting.YELLOW + (rad + "RAD/s"));
 			
 			if(stack.getCount() > 1) {

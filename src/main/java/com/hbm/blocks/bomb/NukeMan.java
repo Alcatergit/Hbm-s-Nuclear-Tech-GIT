@@ -230,10 +230,10 @@ public class NukeMan extends BlockContainer implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§2[Nuclear Bomb]§r");
-		tooltip.add("§eRadius: "+BombConfig.manRadius+"m§r");
+		tooltip.add(" §eRadius: "+BombConfig.manRadius+"m§r");
 		if(!BombConfig.disableNuclear){
-			tooltip.add("§a[Fallout]§r");
-			tooltip.add("§gRadius: "+(int)BombConfig.manRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			tooltip.add("§2[Fallout]§r");
+			tooltip.add(" §aRadius: "+(int)BombConfig.manRadius*(1+BombConfig.falloutRange/100)+"m§r");
 		}
 	}
 }

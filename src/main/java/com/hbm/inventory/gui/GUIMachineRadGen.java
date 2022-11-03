@@ -37,7 +37,6 @@ public class GUIMachineRadGen extends GuiInfoContainer {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
 		String[] text1 = new String[] { "Power generation rate:",
-				"  1 kHE/t",
 				"  20 kHE/s",
 				"(Generation rate at maximum performance)" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);

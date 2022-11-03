@@ -301,11 +301,13 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			else if(bblock == Blocks.COAL_ORE) {
-				int ra = rand.nextInt(150);
-				if(ra < 7) {
-					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
-				} else if(ra < 10) {
-					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+				if(dist < s5){
+					int ra = rand.nextInt(150);
+					if(ra < 7) {
+						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+					} else if(ra < 10) {
+						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+					}
 				}
 				return;
 			}

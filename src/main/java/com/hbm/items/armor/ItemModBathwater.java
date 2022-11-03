@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
+import com.hbm.potion.HbmPotion;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -24,25 +25,36 @@ public class ItemModBathwater extends ItemArmorMod {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
-		String color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.BLUE : TextFormatting.LIGHT_PURPLE);
+		String color = "";
+		if(this == ModItems.bathwater)
+			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.BLUE : TextFormatting.LIGHT_PURPLE);
 		
 		if(this == ModItems.bathwater_mk2)
 			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.GREEN : TextFormatting.YELLOW);
 
-		list.add(color + "Inflicts poison on the attacker");
+		if(this == ModItems.bathwater_mk3){
+			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.RED : TextFormatting.DARK_RED);
+			list.add(color + "Inflicts radiation on the attacker");
+		} else
+			list.add(color + "Inflicts poison on the attacker");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}
 	
 	@Override
 	public void addDesc(List<String> list, ItemStack stack, ItemStack armor) {
-		
-		String color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.BLUE : TextFormatting.LIGHT_PURPLE);
+		String color = "";
+		if(this == ModItems.bathwater)
+			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.BLUE : TextFormatting.LIGHT_PURPLE);
 		
 		if(this == ModItems.bathwater_mk2)
 			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.GREEN : TextFormatting.YELLOW);
-		
-		list.add(color + "  " + stack.getDisplayName() + " (Poisons attackers)");
+
+		if(this == ModItems.bathwater_mk3){
+			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.RED : TextFormatting.DARK_RED);
+			list.add(color + "  " + stack.getDisplayName() + " (Contaminates attackers)");
+		} else
+			list.add(color + "  " + stack.getDisplayName() + " (Poisons attackers)");
 	}
 	
 	@Override
@@ -61,6 +73,9 @@ public class ItemModBathwater extends ItemArmorMod {
 					
 					if(this == ModItems.bathwater_mk2)
 						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(MobEffects.WITHER, 200, 4));
+
+					if(this == ModItems.bathwater_mk3)
+						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(HbmPotion.radiation, 200, 49));
 				}
 			}
 		}

@@ -59,9 +59,9 @@ public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 		int sep = rec_size > 4 ? 3 : 2;
 		for(int i = 0; i < rec_size; i ++){
 			if(i < sep) {
-				guiItemStacks.init(i+1, false, 71, 28 + i * 18 - 9 * ((Math.min(rec_size, sep) + 1) / 2));
+				guiItemStacks.init(i+1, false, 72, 28 + i * 18 - 9 * ((Math.min(rec_size, sep) + 1) / 2));
 			} else {
-				guiItemStacks.init(i+1, false, 119, 28 + (i - sep) * 18 - 9 * ((Math.min(rec_size - sep, sep) + 1)/2));
+				guiItemStacks.init(i+1, false, 120, 28 + (i - sep) * 18 - 9 * ((Math.min(rec_size - sep, sep) + 1)/2));
 			}
 		}
 		

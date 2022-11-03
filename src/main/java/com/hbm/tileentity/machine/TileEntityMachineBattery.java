@@ -22,11 +22,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IConsumer, ISource {
 
+	public long[] log = new long[20];
 	public long power = 0;
 	public long powerDelta = 0;
 	public long maxPower = 1000000;
 
-	private int powerDeltaCount = 0;	
 	//0: input only
 	//1: buffer
 	//2: output only
@@ -168,21 +168,18 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 				if(age == 9 || age == 19)
 					ffgeuaInit();
 			}
-			long powerBefore = power;
+			long prevPower = this.power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			power = Library.chargeItemsFromTE(inventory, 1, power, maxPower);
-			
-			long newDelta = power-powerBefore;
-			if(newDelta == 0){
-				powerDeltaCount += 1;
-				if(powerDeltaCount > 20){
-					powerDelta = newDelta;
-					powerDeltaCount = 0;
-				}
-			}else{
-				powerDelta = newDelta;
-				powerDeltaCount = 0;
+
+			long avg = (power + prevPower) / 2;
+			this.powerDelta = avg - this.log[0];
+
+			for(int i = 1; i < this.log.length; i++) {
+				this.log[i - 1] = this.log[i];
 			}
+			
+			this.log[this.log.length-1] = avg;
 
 			detectAndSendChanges();
 		}
