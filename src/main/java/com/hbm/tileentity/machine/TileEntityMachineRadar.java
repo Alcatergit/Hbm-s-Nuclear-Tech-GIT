@@ -144,7 +144,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 				pingTimer++;
 
 				if(power > 0 && pingTimer >= maxTimer) {
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					pingTimer = 0;
 				}
 			}

@@ -196,7 +196,7 @@ public class ContaminationUtil {
 
 		float playerAsbestos = 100F-((int)(10000F * HbmLivingProps.getAsbestos(player) / EntityHbmProps.maxAsbestos))/100F;
 		float playerBlacklung = 100F-((int)(10000F * HbmLivingProps.getBlackLung(player) / EntityHbmProps.maxBlacklung))/100F;
-		float playerTotal = 100F - (playerAsbestos * playerBlacklung/100F);
+		float playerTotal = (playerAsbestos * playerBlacklung/100F);
 		
 
 		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));

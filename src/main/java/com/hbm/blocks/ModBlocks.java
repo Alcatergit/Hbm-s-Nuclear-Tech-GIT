@@ -141,6 +141,7 @@ import com.hbm.blocks.machine.rbmk.RBMKOutlet;
 import com.hbm.blocks.machine.rbmk.RBMKReflector;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.blocks.machine.rbmk.RBMKRodReaSim;
+import com.hbm.blocks.machine.rbmk.RBMKCraneConsole;
 import com.hbm.blocks.network.BlockCable;
 import com.hbm.blocks.network.BlockConveyor;
 import com.hbm.blocks.network.BlockFluidDuct;
@@ -867,6 +868,7 @@ public class ModBlocks {
 	public static final int guiID_rbmk_control_auto = 120;
 	public static final int guiID_rbmk_console = 121;
 	public static final int guiID_rbmk_outgasser = 122;
+	public static final Block rbmk_crane_console = new RBMKCraneConsole("rbmk_crane_console").setCreativeTab(MainRegistry.machineTab);
 	public static final Block rbmk_rod = new RBMKRod(false, "rbmk_rod", "rbmk_element").setCreativeTab(MainRegistry.machineTab);
 	public static final Block rbmk_rod_mod = new RBMKRod(true, "rbmk_rod_mod", "rbmk_element_mod").setCreativeTab(MainRegistry.machineTab);
 	public static final Block rbmk_rod_reasim = new RBMKRodReaSim(false, "rbmk_rod_reasim", "rbmk_element_reasim").setCreativeTab(MainRegistry.machineTab);

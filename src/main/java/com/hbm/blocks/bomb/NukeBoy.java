@@ -97,7 +97,8 @@ public class NukeBoy extends BlockContainer implements IBomb {
 			if(GeneralConfig.enableNukeClouds) {
 				world.spawnEntity(EntityNukeCloudSmall.statFac(world, x, y, z, BombConfig.boyRadius));
 			} else {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, 3000);
+				int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(BombConfig.boyRadius, 3)/Math.pow(48, 3)));
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, maxLifetime);
 				entity2.posX = x;
 				entity2.posY = y - 11;
 				entity2.posZ = z;

@@ -785,8 +785,41 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 			
-			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_mycelium) {
-				world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.DIRT || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_dirt || b.getBlock() == ModBlocks.waste_mycelium) {
+				if(random.nextInt(5) < 2)
+					world.setBlockState(pos, Blocks.DIRT.getStateFromMeta(1));
+				else
+					world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_slaked) {
+				world.setBlockState(pos, Blocks.STONE.getDefaultState());
+				return;
+			}
+
+			if( b.getBlock() == ModBlocks.sellafield_0 || b.getBlock() == ModBlocks.sellafield_1) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(5));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_2 || b.getBlock() == ModBlocks.sellafield_3) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(3));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_4 || b.getBlock() == ModBlocks.sellafield_core) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(1));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_trinitite) {
+				world.setBlockState(pos, Blocks.SAND.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_trinitite_red) {
+				world.setBlockState(pos, Blocks.SAND.getStateFromMeta(1));
 				return;
 			}
 			

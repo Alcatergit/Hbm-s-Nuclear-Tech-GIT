@@ -152,15 +152,15 @@ public class NukeMan extends BlockContainer implements IBomb {
 		world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 		
     	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.manRadius, x + 0.5, y + 0.5, z + 0.5));
-
+    	int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(BombConfig.manRadius, 3)/Math.pow(48, 3)));
     	if (GeneralConfig.enableNukeClouds) {
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.manRadius * 0.005F);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, maxLifetime, BombConfig.manRadius * 0.005F);
 			entity2.posX = x;
 			entity2.posY = y;
 			entity2.posZ = z;
 			world.spawnEntity(entity2);
 		} else {
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, 1000);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, maxLifetime);
 			entity2.posX = x;
 			entity2.posY = y - 17;
 			entity2.posZ = z;

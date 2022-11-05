@@ -292,6 +292,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKAbsorber;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBlank;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKCraneConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKInlet;
@@ -761,6 +762,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityRBMKModerator.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_moderator"));
 		GameRegistry.registerTileEntity(TileEntityRBMKOutgasser.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_outgasser"));
 		GameRegistry.registerTileEntity(TileEntityRBMKConsole.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_console"));
+		GameRegistry.registerTileEntity(TileEntityRBMKCraneConsole.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_crane_console"));
 		GameRegistry.registerTileEntity(TileEntityRBMKInlet.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_inlet"));
 		GameRegistry.registerTileEntity(TileEntityRBMKOutlet.class, new ResourceLocation(RefStrings.MODID, "tileentity_rbmk_outlet"));
 		GameRegistry.registerTileEntity(TileEntityStorageDrum.class, new ResourceLocation(RefStrings.MODID, "tileentity_storage_drum"));

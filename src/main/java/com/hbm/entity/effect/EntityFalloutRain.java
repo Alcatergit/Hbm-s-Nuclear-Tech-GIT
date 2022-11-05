@@ -347,27 +347,33 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			// 	world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
 			// }
 			else if(bblock == ModBlocks.ore_uranium) {
-				if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+				if(dist <= s6){
+					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+				}
 				return;
 			}
 
 			else if(bblock == ModBlocks.ore_nether_uranium) {
-				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+				if(dist <= s5){
+					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+						world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+				}
 				return;
 
 			}
 
 			else if(bblock == ModBlocks.ore_gneiss_uranium) {
-				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+				if(dist <= s4){
+					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+				}
 				return;
 				// this piece stops the "stomp" from reaching below ground
 			}

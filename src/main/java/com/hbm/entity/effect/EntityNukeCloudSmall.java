@@ -28,7 +28,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	// 19
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeCloudSmall.class,
 			DataSerializers.BYTE);
-	public int maxAge = 1000;
+	public int maxAge;
 	public int age;
 	public static int cloudletLife = 50;
 	public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
@@ -39,15 +39,21 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
 		this.age = 0;
-		this.noClip = true;
+		this.maxAge = 275000;
 	}
 
-	public EntityNukeCloudSmall(World p_i1582_1_, int maxAge, float scale) {
-		super(p_i1582_1_);
+	public EntityNukeCloudSmall(World p_i1582_1_, int maxLifeAge, float scale) {
+		this(p_i1582_1_);
 		this.setSize(20, 40);
+		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
-		this.maxAge = maxAge;
+		this.age = 0;
+
+		this.isImmuneToFire = true;
+		this.maxAge = maxLifeAge;
+		this.dataManager.set(AGE, 0);
 		this.dataManager.set(SCALE, scale);
+		this.dataManager.set(MAXAGE, maxLifeAge);
 		this.noClip = true;
 	}
 
@@ -56,7 +62,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		this.age++;
 		world.setLastLightningBolt(2);
 
-		if (this.age >= this.maxAge) {
+		if (this.age >= maxAge) {
 			this.age = 0;
 			this.setDead();
 		}
@@ -85,7 +91,6 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	        }
         }
 
-		this.dataManager.set(MAXAGE, maxAge);
 		this.dataManager.set(AGE, age);
 	}
 
@@ -118,24 +123,27 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	}
 
 	public static EntityNukeCloudSmall statFac(World world, double x, double y, double z, float radius) {
-
-		EntityNukeCloudSmall cloud = new EntityNukeCloudSmall(world, (int) radius * 5, radius * 0.005F);
+		int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(radius, 3)/Math.pow(48, 3)));
+		EntityNukeCloudSmall cloud = new EntityNukeCloudSmall(world, maxLifetime, radius * 0.005F);
 		cloud.posX = x;
 		cloud.posY = y;
 		cloud.posZ = z;
+		cloud.maxAge = maxLifetime;
 		cloud.dataManager.set(TYPE, (byte) 0);
+		cloud.dataManager.set(MAXAGE, maxLifetime);
 
 		return cloud;
 	}
 
-	public static EntityNukeCloudSmall statFacBale(World world, double x, double y, double z, float radius,
-			int maxAge) {
-
-		EntityNukeCloudSmall cloud = new EntityNukeCloudSmall(world, (int) radius * 5, radius * 0.005F);
+	public static EntityNukeCloudSmall statFacBale(World world, double x, double y, double z, float radius, int maxAge) {
+		int maxLifetime = (int)Math.max(100, 5 * 250 * (Math.pow(radius, 3)/Math.pow(200, 3)));
+		EntityNukeCloudSmall cloud = new EntityNukeCloudSmall(world, maxLifetime, radius * 0.005F);
 		cloud.posX = x;
 		cloud.posY = y;
 		cloud.posZ = z;
+		cloud.maxAge = maxLifetime;
 		cloud.dataManager.set(TYPE, (byte) 1);
+		cloud.dataManager.set(MAXAGE, maxLifetime);
 
 		return cloud;
 	}
@@ -143,7 +151,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
-		return distance < 25000;
+		return distance < 250000;
 	}
 	
 	public static class Cloudlet {

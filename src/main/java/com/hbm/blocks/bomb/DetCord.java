@@ -62,8 +62,8 @@ public class DetCord extends Block implements IBomb {
 			}
 			if(this == ModBlocks.det_nuke) {
 				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
-
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.missileRadius * 0.005F);
+				int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(BombConfig.missileRadius, 3)/Math.pow(48, 3)));
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, maxLifetime, BombConfig.missileRadius * 0.005F);
 				entity2.posX = pos.getX();
 				entity2.posY = pos.getY();
 				entity2.posZ = pos.getZ();

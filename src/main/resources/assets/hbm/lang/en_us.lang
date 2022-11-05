@@ -2844,6 +2844,7 @@ item.mp_warhead_15_he.name=Size 15 HE Warhead
 item.mp_warhead_15_incendiary.name=Size 15 Incendiary Warhead
 item.mp_warhead_10_nuclear_large.name=Size 10 Nuclear Warhead
 item.mp_warhead_15_nuclear.name=Size 15 Nuclear Warhead
+item.mp_warhead_15_thermo.name=Size 15 Thermonuclear Warhead
 item.mp_warhead_15_nuclear_shark.name=Size 15 Nuclear Warhead
 item.mp_warhead_15_boxcar.name=Size 15 Boxcar?
 item.mp_warhead_15_n2.name=Size 15 N² Mine

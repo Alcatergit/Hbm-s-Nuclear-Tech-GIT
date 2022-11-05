@@ -9,6 +9,7 @@ import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
+import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -18,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver {
+public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IRBMKLoadable {
 	
 	//amount of "neutron energy" buffered for the next tick to use for the reaction
 	public double fluxFast;
@@ -314,5 +315,32 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		}
 		
 		return data;
+	}
+
+	@Override
+	public boolean canLoad(ItemStack toLoad) {
+		return toLoad != null && inventory.getStackInSlot(0).isEmpty();
+	}
+
+	@Override
+	public void load(ItemStack toLoad) {
+		inventory.setStackInSlot(0, toLoad.copy());
+		this.markDirty();
+	}
+
+	@Override
+	public boolean canUnload() {
+		return inventory.getStackInSlot(0).isEmpty();
+	}
+
+	@Override
+	public ItemStack provideNext() {
+		return inventory.getStackInSlot(0);
+	}
+
+	@Override
+	public void unload() {
+		inventory.setStackInSlot(0, ItemStack.EMPTY);
+		this.markDirty();
 	}
 }

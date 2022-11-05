@@ -2969,8 +2969,8 @@ public class ModItems {
 	public static final Item missile_buster = new ItemBase("missile_buster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_buster_strong = new ItemBase("missile_buster_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_drill = new ItemBase("missile_drill").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
-	public static final Item missile_nuclear = new ItemBase("missile_nuclear").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
-	public static final Item missile_nuclear_cluster = new ItemBase("missile_nuclear_cluster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_nuclear = new ItemCustomLore("missile_nuclear").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_nuclear_cluster = new ItemCustomLore("missile_nuclear_cluster").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_volcano = new ItemCustomLore("missile_volcano").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_emp_strong = new ItemBase("missile_emp_strong").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_endo = new ItemBase("missile_endo").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
@@ -3171,7 +3171,7 @@ public class ModItems {
 	public static final Item mp_warhead_15_incendiary = new ItemMissile("mp_warhead_15_incendiary").makeWarhead(WarheadType.INC, 35F, 2.5F, PartSize.SIZE_15).setHealth(10F).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_nuclear = new ItemMissile("mp_warhead_15_nuclear").makeWarhead(WarheadType.NUCLEAR, 125F, 5F, PartSize.SIZE_15).setTitle("Auntie Bertha").setHealth(15F).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_nuclear_shark = ((ItemMissile) mp_warhead_15_nuclear).copy("mp_warhead_15_nuclear_shark").setRarity(Rarity.UNCOMMON).setTitle("Discount Bullet Bill").setWittyText("Nose art on a cannon bullet? Who does that?");
-	public static final Item mp_warhead_15_thermo = new ItemMissile("mp_warhead_15_thermo").makeWarhead(WarheadType.TX, 250F, 5F, PartSize.SIZE_15).setHealth(25F).setRarity(Rarity.RARE).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item mp_warhead_15_thermo = new ItemMissile("mp_warhead_15_thermo").makeWarhead(WarheadType.TX, 250F, 6.5F, PartSize.SIZE_15).setHealth(25F).setRarity(Rarity.RARE).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_boxcar = new ItemMissile("mp_warhead_15_boxcar").makeWarhead(WarheadType.TX, 500F, 7.5F, PartSize.SIZE_15).setWittyText("?!?!").setHealth(35F).setRarity(Rarity.LEGENDARY).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_n2 = new ItemMissile("mp_warhead_15_n2").makeWarhead(WarheadType.N2, 100F, 5F, PartSize.SIZE_15).setWittyText("[screams geometrically]").setHealth(20F).setRarity(Rarity.RARE).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_balefire = new ItemMissile("mp_warhead_15_balefire").makeWarhead(WarheadType.BALEFIRE, 100F, 7.5F, PartSize.SIZE_15).setRarity(Rarity.LEGENDARY).setAuthor("VT-6/24").setHealth(15F).setWittyText("Hightower, never forgetti.").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);

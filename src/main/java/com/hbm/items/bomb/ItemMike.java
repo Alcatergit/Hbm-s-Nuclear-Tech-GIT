@@ -20,6 +20,7 @@ public class ItemMike extends ItemHazard {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
 		list.add("Ivy Mike");
+		list.add("Tsar Bomba");
 		super.addInformation(stack, world, list, flagIn);
 	}
 }

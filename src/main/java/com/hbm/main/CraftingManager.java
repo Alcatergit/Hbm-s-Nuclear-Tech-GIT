@@ -489,8 +489,7 @@ public class CraftingManager {
 		addShapelessRecipe(new ItemStack(ModItems.billet_zfb_pu241, 6), new Object[] { ModItems.billet_zirconium, ModItems.billet_zirconium, ModItems.billet_zirconium,  ModItems.billet_u235, ModItems.billet_pu240, ModItems.billet_pu241 });
 		addShapelessRecipe(new ItemStack(ModItems.billet_zfb_am_mix, 6), new Object[] { ModItems.billet_zirconium, ModItems.billet_zirconium, ModItems.billet_zirconium,  ModItems.billet_pu241, ModItems.billet_pu241, ModItems.billet_am_mix });
 
-		addShapelessRecipe(new ItemStack(ModItems.billet_unobtainium), new Object[] { ModItems.nugget_unobtainium, ModItems.nugget_unobtainium, ModItems.nugget_unobtainium,  ModItems.nugget_radspice, ModItems.nugget_dineutronium, ModItems.nugget_am241 });
-		addShapelessRecipe(new ItemStack(ModItems.billet_unobtainium, 3), new Object[] { ModItems.ingot_unobtainium, ModItems.ingot_unobtainium, ModItems.ingot_unobtainium,  ModItems.ingot_radspice, ModItems.ingot_dineutronium, ModItems.ingot_am241 });
+		addShapelessRecipe(new ItemStack(ModItems.billet_unobtainium, 4), new Object[] { ModBlocks.block_unobtainium, ModBlocks.block_unobtainium, ModBlocks.block_unobtainium,  ModItems.ingot_radspice, ModItems.ingot_dineutronium, ModItems.ingot_am241 });
 
 		addShapelessRecipe(new ItemStack(ModItems.rod_water, 1), new Object[] { ModItems.rod_empty, Items.WATER_BUCKET });
 		addShapelessRecipe(new ItemStack(ModItems.rod_dual_water, 1), new Object[] { ModItems.rod_dual_empty, Items.WATER_BUCKET, Items.WATER_BUCKET });

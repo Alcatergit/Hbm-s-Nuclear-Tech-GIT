@@ -40,8 +40,8 @@ public class EntityMIRV extends EntityThrowable {
     		if(!this.world.isRemote)
     		{
     	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.mirvRadius, posX, posY, posZ));
-
-    			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, 1000, BombConfig.mirvRadius * 0.005F);
+    	    	int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(BombConfig.mirvRadius, 3)/Math.pow(48, 3)));
+    			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, maxLifetime, BombConfig.mirvRadius * 0.005F);
     	    	entity2.posX = this.posX;
     	    	entity2.posY = this.posY;
     	    	entity2.posZ = this.posZ;

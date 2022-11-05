@@ -39,9 +39,9 @@ public class ItemDetonator extends Item {
 		list.add("right-click to detonate!");
 		if(stack.getTagCompound() == null)
 		{
-			list.add("No position set!");
+			list.add("§eNo position set§r");
 		} else {
-			list.add("Set pos to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z"));
+			list.add("§aSet pos to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z")+"§r");
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class ItemDetonator extends Item {
 			
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation("Position set!"));
+				player.sendMessage(new TextComponentTranslation("§e[Position set]§r"));
 			}
 			
 	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.AMBIENT, 1.0F, 1.0F);
@@ -77,7 +77,7 @@ public class ItemDetonator extends Item {
 		if(stack.getTagCompound() == null)
 		{
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("Error: Position not set."));
+				player.sendMessage(new TextComponentTranslation("§c[Error]: Position not set.§r"));
 		} else {
 			 int x = stack.getTagCompound().getInteger("x");
 			 int y = stack.getTagCompound().getInteger("y");
@@ -96,12 +96,12 @@ public class ItemDetonator extends Item {
 				}
 				if(world.isRemote)
 				{
-		    		player.sendMessage(new TextComponentTranslation("Detonated!"));
+		    		player.sendMessage(new TextComponentTranslation("§2[Detonated]§r"));
 				}
 			 } else {
 				if(world.isRemote)
 				{
-					player.sendMessage(new TextComponentTranslation("Error: Target incompatible or too far away."));
+					player.sendMessage(new TextComponentTranslation("§e[Error]: Target incompatible or too far away.§r"));
 				}
 			 }
 		}

@@ -34,6 +34,8 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	public static final IModelCustom shockwave = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/effect/ring_roller.obj"));
 	public static final IModelCustom thinring = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/effect/ring_thin.obj"));
 	private static final ResourceLocation cloudlet = new ResourceLocation(RefStrings.MODID + ":textures/particle/particle_base.png");
+
+	private static final double lightmapSizeMult = 0.01D;
 	
 	protected RenderSmallNukeMK4(RenderManager renderManager) {
 		super(renderManager);
@@ -89,56 +91,165 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
         }
 	}
 
-	private ResourceLocation getMushroomTexture(float cloudAgePercent, boolean isBalefire){
-		if(isBalefire){
-			if(cloudAgePercent < 0.010)
-				return ResourceManager.balefire_0;
-			else if(cloudAgePercent < 0.15)
-				return ResourceManager.balefire_1;
-			else if(cloudAgePercent < 0.19)
-				return ResourceManager.balefire_2;
-			else if(cloudAgePercent < 0.23)
-				return ResourceManager.balefire_3;
-			else if(cloudAgePercent < 0.28)
-				return ResourceManager.balefire_4;
-			else if(cloudAgePercent < 0.35)
-				return ResourceManager.balefire_5;
-			else if(cloudAgePercent < 0.44)
-				return ResourceManager.balefire_6;
-			else if(cloudAgePercent < 0.55)
-				return ResourceManager.balefire_7;
-			else if(cloudAgePercent < 0.70)
-				return ResourceManager.balefire_8;
-			else if(cloudAgePercent < 0.88)
-				return ResourceManager.balefire_9;
-			else
-				return ResourceManager.balefire_10;
+	private ResourceLocation getMushroomTexture(float cloudAgePercent, boolean isBalefire, boolean isEmissive){
+		if(cloudAgePercent < 0.10){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_0_e;
+				}else{
+					return ResourceManager.balefire_0;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_0_e;
+				}else{
+					return ResourceManager.fireball_0;
+				}
+			}
+		}else if(cloudAgePercent < 0.15){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_1_e;
+				}else{
+					return ResourceManager.balefire_1;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_1_e;
+				}else{
+					return ResourceManager.fireball_1;
+				}
+			}
+		}else if(cloudAgePercent < 0.19){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_2_e;
+				}else{
+					return ResourceManager.balefire_2;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_2_e;
+				}else{
+					return ResourceManager.fireball_2;
+				}
+			}
+		}else if(cloudAgePercent < 0.23){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_3_e;
+				}else{
+					return ResourceManager.balefire_3;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_3_e;
+				}else{
+					return ResourceManager.fireball_3;
+				}
+			}
+		}else if(cloudAgePercent < 0.28){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_4_e;
+				}else{
+					return ResourceManager.balefire_4;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_4_e;
+				}else{
+					return ResourceManager.fireball_4;
+				}
+			}
+		}else if(cloudAgePercent < 0.35){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_5_e;
+				}else{
+					return ResourceManager.balefire_5;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_5_e;
+				}else{
+					return ResourceManager.fireball_5;
+				}
+			}
+		}else if(cloudAgePercent < 0.44){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_6_e;
+				}else{
+					return ResourceManager.balefire_6;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_6_e;
+				}else{
+					return ResourceManager.fireball_6;
+				}
+			}
+		}else if(cloudAgePercent < 0.55){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_7_e;
+				}else{
+					return ResourceManager.balefire_7;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_7_e;
+				}else{
+					return ResourceManager.fireball_7;
+				}
+			}
+		}else if(cloudAgePercent < 0.70){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_8_e;
+				}else{
+					return ResourceManager.balefire_8;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_8_e;
+				}else{
+					return ResourceManager.fireball_8;
+				}
+			}
+		}else if(cloudAgePercent < 0.88){
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_9_e;
+				}else{
+					return ResourceManager.balefire_9;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_9_e;
+				}else{
+					return ResourceManager.fireball_9;
+				}
+			}
 		}else{
-			if(cloudAgePercent < 0.10)
-				return ResourceManager.fireball_0;
-			else if(cloudAgePercent < 0.15)
-				return ResourceManager.fireball_1;
-			else if(cloudAgePercent < 0.19)
-				return ResourceManager.fireball_2;
-			else if(cloudAgePercent < 0.23)
-				return ResourceManager.fireball_3;
-			else if(cloudAgePercent < 0.28)
-				return ResourceManager.fireball_4;
-			else if(cloudAgePercent < 0.35)
-				return ResourceManager.fireball_5;
-			else if(cloudAgePercent < 0.44)
-				return ResourceManager.fireball_6;
-			else if(cloudAgePercent < 0.55)
-				return ResourceManager.fireball_7;
-			else if(cloudAgePercent < 0.70)
-				return ResourceManager.fireball_8;
-			else if(cloudAgePercent < 0.88)
-				return ResourceManager.fireball_9;
-			else
-				return ResourceManager.fireball_10;
+			if(isBalefire){
+				if(isEmissive){
+					return ResourceManager.balefire_10_e;
+				}else{
+					return ResourceManager.balefire_10;
+				}
+			}else{
+				if(isEmissive){
+					return ResourceManager.fireball_10_e;
+				}else{
+					return ResourceManager.fireball_10;
+				}
+			}
 		}
 	}
 	
+
 	/**
 	 * Wrapper for the entire mush (head + stem)
 	 * Renders the entire thing twice to allow for smooth color gradients
@@ -150,51 +261,52 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE) * 5;
     	float maxage = cloud.getDataManager().get(EntityNukeCloudSmall.MAXAGE);
 
+    	
     	double height = Math.max(20 - 1000 / (cloud.ticksExisted + interp - 13), 0);
     	boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
     	float percentageAge = maxage > 0 ? (float)(cloud.ticksExisted+interp)/maxage : 0F;
     	double raise_speed = 0.033F * Math.pow(0.1, percentageAge) + 0.005F;
 
-		GL11.glPushMatrix();
-		GL11.glScalef(size, size, size);
-		bindTexture(getMushroomTexture(percentageAge, balefire));
-		GlStateManager.disableCull();
-		GlStateManager.color(1, 1, 1, 1);
 
-		//And now we fuck with texture transformations
-        GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GL11.glPushMatrix();
+		GlStateManager.disableLighting();
+		GlStateManager.disableCull();
+
+		GL11.glScalef(size, size, size);
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
         GL11.glTranslated(0, -(cloud.ticksExisted + interp) * raise_speed, 0);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
-        if(percentageAge < 0.5){
-	    	GL11.glPushMatrix();
-	        	//It's the thing that makes glow-in-the-dark work
-		        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		        renderMushHead(cloud.ticksExisted + interp, height);
-		        renderMushStem(cloud.ticksExisted + interp, height);
-		        GL11.glPopAttrib();
-		    GlStateManager.enableLighting();
-	        GL11.glPopMatrix();
-        }
-        else{
-        	GL11.glPushMatrix();
-	        	renderMushHead(cloud.ticksExisted + interp, height);
-		        renderMushStem(cloud.ticksExisted + interp, height);
-	         GlStateManager.disableLighting();
-	        GL11.glPopMatrix();
-        }
-        
-        //Clean this up otherwise the game becomes one-dimensional
-        //Drillgon200: Really should have used push/pop matrix here, but whatever.
-        GlStateManager.matrixMode(GL11.GL_TEXTURE);
+
+		GL11.glPushMatrix();
+			bindTexture(getMushroomTexture(percentageAge, balefire, false));
+
+	        renderMushHead(cloud.ticksExisted + interp, height, false);
+	        renderMushStem(cloud.ticksExisted + interp, height, false);
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+			bindTexture(getMushroomTexture(percentageAge, balefire, true));
+			GlStateManager.enableAlpha();
+			GlStateManager.enableBlend();
+
+	        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+	        renderMushHead(cloud.ticksExisted + interp, height, true);
+	        renderMushStem(cloud.ticksExisted + interp, height, true);
+	        GL11.glPopAttrib();
+
+		    GlStateManager.disableBlend();
+		GL11.glPopMatrix();
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
-		GlStateManager.disableBlend();
 		GlStateManager.enableCull();
-
+		GlStateManager.enableLighting();
 		GL11.glPopMatrix();
 	}
 	
@@ -310,15 +422,20 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	 * @param progress Lifetime + interpolation number
 	 * @param height The current animation offset
 	 */
-	private void renderMushHead(float progress, double height) {
+	private void renderMushHead(float progress, double height, boolean outer) {
 
 		GL11.glPushMatrix();
 
 		double expansion = 100;
 		double width = Math.min(progress, expansion) / expansion * 0.3 + 0.7;
 
-		GL11.glTranslated(0, -26 + height, 0);
-		GL11.glScaled(width, 1, width);
+		if(outer){
+			GL11.glTranslated(0, -26*(1+lightmapSizeMult) + height, 0);
+			GL11.glScaled(width*(1+lightmapSizeMult), 1+lightmapSizeMult, width*(1+lightmapSizeMult));
+		}else{
+			GL11.glTranslated(0, -26 + height, 0);
+			GL11.glScaled(width, 1, width);
+		}
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -335,11 +452,16 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	 * @param progress Lifetime + interpolation number
 	 * @param height The current animation offset
 	 */
-	private void renderMushStem(float progress, double height) {
+	private void renderMushStem(float progress, double height, boolean outer) {
 
 		GL11.glPushMatrix();
 
-		GL11.glTranslated(0, -26 + height, 0);
+		if(outer){
+			GL11.glTranslated(0, -26 + height, 0);
+			GL11.glScaled(1+lightmapSizeMult, 1+lightmapSizeMult, 1+lightmapSizeMult);
+		}else{
+			GL11.glTranslated(0, -26 + height, 0);
+		}
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glDisable(GL11.GL_ALPHA_TEST);

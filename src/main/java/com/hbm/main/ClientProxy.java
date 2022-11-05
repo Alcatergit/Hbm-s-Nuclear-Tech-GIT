@@ -556,6 +556,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKAbsorber;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBlank;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKCraneConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKModerator;
@@ -646,6 +647,12 @@ public class ClientProxy extends ServerProxy {
 	public static KeyBinding jetpackHover;
 	public static KeyBinding jetpackHud;
 	public static KeyBinding fsbFlashlight;
+
+	public static KeyBinding craneUpKey;
+	public static KeyBinding craneDownKey;
+	public static KeyBinding craneLeftKey;
+	public static KeyBinding craneRightKey;
+	public static KeyBinding craneLoadKey;
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
 	
@@ -684,6 +691,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.registerKeyBinding(jetpackHud);
 		fsbFlashlight = new KeyBinding("key.fsb_flashlight", KeyConflictContext.IN_GAME, Keyboard.KEY_NUMPAD6, "key.categories.hbm");
 		ClientRegistry.registerKeyBinding(fsbFlashlight);
+
 		HbmKeybinds.register();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
@@ -810,6 +818,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlManual.class, new RenderRBMKControlRod());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlAuto.class, new RenderRBMKControlRod());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKConsole.class, new RenderRBMKConsole());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKCraneConsole.class, new RenderRBMKCraneConsole());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKAbsorber.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKBlank.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKBoiler.class, new RenderRBMKLid());
@@ -2155,12 +2164,17 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public boolean getIsKeyPressed(EnumKeybind key) {
 
-		if(key == EnumKeybind.JETPACK)
-			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
-		if(key == EnumKeybind.TOGGLE_JETPACK)
-			return HbmKeybinds.jetpackKey.isKeyDown();
-		if(key == EnumKeybind.TOGGLE_HEAD)
-			return HbmKeybinds.hudKey.isKeyDown();
+		switch(key){
+		case JETPACK:			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+		case TOGGLE_JETPACK:	return HbmKeybinds.jetpackKey.isKeyDown();
+		case TOGGLE_HEAD:		return HbmKeybinds.hudKey.isKeyDown();
+		case RELOAD:			return HbmKeybinds.reloadKey.isKeyDown();
+		case CRANE_UP:			return HbmKeybinds.craneUpKey.isKeyDown();
+		case CRANE_DOWN:		return HbmKeybinds.craneDownKey.isKeyDown();
+		case CRANE_LEFT:		return HbmKeybinds.craneLeftKey.isKeyDown();
+		case CRANE_RIGHT:		return HbmKeybinds.craneRightKey.isKeyDown();
+		case CRANE_LOAD:		return HbmKeybinds.craneLoadKey.isKeyDown();
+		}
 
 		return false;
 	}

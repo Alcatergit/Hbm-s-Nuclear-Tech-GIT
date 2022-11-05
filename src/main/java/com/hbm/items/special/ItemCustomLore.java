@@ -3,6 +3,7 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
@@ -308,6 +309,24 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.ingot_tantalium || this == ModItems.nugget_tantalium || this == ModItems.gem_tantalium || this == ModItems.powder_tantalium)
 		{
 			list.add("'Tantalum'");
+		}
+		if(this == ModItems.missile_nuclear)
+		{
+			list.add("§2[Nuclear Missile]§r");
+			list.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2[Fallout]§r");
+				list.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			}
+		}
+		if(this == ModItems.missile_nuclear_cluster)
+		{
+			list.add("§6[Thermonuclear Missile]§r");
+			list.add(" §eRadius: "+BombConfig.missileRadius*2+"m§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2[Fallout]§r");
+				list.add(" §aRadius: "+(int)BombConfig.missileRadius*2*(1+BombConfig.falloutRange/100)+"m§r");
+			}
 		}
 		if(this == ModItems.undefined && world != null) {
 			

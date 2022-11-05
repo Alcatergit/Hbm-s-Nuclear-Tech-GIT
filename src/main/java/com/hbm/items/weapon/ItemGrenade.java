@@ -44,6 +44,7 @@ import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.items.ModItems;
+import com.hbm.config.BombConfig;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -300,6 +301,12 @@ public class ItemGrenade extends Item {
 			list.add("");
 			list.add("\"Why did it not blow up????\"");
 			list.add(TextFormatting.ITALIC + "If it didn't blow up it means it worked.");
+		}
+		if (this == ModItems.grenade_nuclear) {
+			list.add("§2[Nuclear Grenade]§r");
+			list.add(" §eRadius: "+(int)BombConfig.fatmanRadius/2+"m§r");
+			list.add("§2[Fallout]§r");
+			list.add(" §aRadius: "+(int)(BombConfig.fatmanRadius/2*(1+BombConfig.falloutRange/100))+"m§r");
 		}
 	}
 	

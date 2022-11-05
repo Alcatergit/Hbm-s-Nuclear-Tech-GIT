@@ -43,11 +43,11 @@ public class ItemDesignatorRange extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(stack.getTagCompound() != null)
 		{
-			tooltip.add("Target Coordinates:");
-			tooltip.add("X: " + String.valueOf(stack.getTagCompound().getInteger("xCoord")));
-			tooltip.add("Z: " + String.valueOf(stack.getTagCompound().getInteger("zCoord")));
+			tooltip.add("§aTarget Coordinates:§r");
+			tooltip.add("§aX: " + String.valueOf(stack.getTagCompound().getInteger("xCoord"))+"§r");
+			tooltip.add("§aZ: " + String.valueOf(stack.getTagCompound().getInteger("zCoord"))+"§r");
 		} else {
-			tooltip.add("Please select a target.");
+			tooltip.add("§ePlease select a target.§r");
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class ItemDesignatorRange extends Item {
 			
 	        if(world.isRemote)
 			{
-	        	player.sendMessage(new TextComponentTranslation("Position set to X:" + x + ", Z:" + z));
+	        	player.sendMessage(new TextComponentTranslation("§aPosition set to X:" + x + ", Z:" + z+"§r"));
 			}
 	        
         	world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
