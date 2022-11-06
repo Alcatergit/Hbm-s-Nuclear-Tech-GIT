@@ -50,9 +50,9 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(800000, "ingotPu240", new ItemStack(ModItems.ingot_pu241));
 		RBMKOutgasserRecipes.setRecipe(6000000, "ingotPu241", new ItemStack(ModItems.ingot_am241));
 		RBMKOutgasserRecipes.setRecipe(75000, "ingotAm241", new ItemStack(ModItems.ingot_am242));
-		RBMKOutgasserRecipes.setRecipe(6900, "ingotSolinium", new ItemStack(ModItems.ingot_schrabidium));
-		RBMKOutgasserRecipes.setRecipe(69000, "ingotSchrabidium", new ItemStack(ModItems.nugget_euphemium));
-		RBMKOutgasserRecipes.setRecipe(690000, "ingotEuphemium", new ItemStack(ModItems.nugget_dineutronium));
+		RBMKOutgasserRecipes.setRecipe(69000, "ingotSchrabidium", new ItemStack(ModItems.ingot_solinium));
+		RBMKOutgasserRecipes.setRecipe(690000, "ingotSolinium", new ItemStack(ModItems.nugget_euphemium));
+		RBMKOutgasserRecipes.setRecipe(6900000, "ingotEuphemium", new ItemStack(ModItems.nugget_dineutronium));
 		RBMKOutgasserRecipes.setRecipe(5000, ModItems.ingot_cobalt, new ItemStack(ModItems.ingot_co60));
 		RBMKOutgasserRecipes.setRecipe(9000, "dustCobalt", new ItemStack(ModItems.powder_co60));
 		RBMKOutgasserRecipes.setRecipe(45000, ModItems.ingot_iodine, new ItemStack(ModItems.ingot_i131));

@@ -2095,6 +2095,7 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModBlocks.rbmk_rod_reasim, 1), new Object[] { "ZCZ", "ZRZ", "ZCZ", 'C', ModItems.hull_small_steel, 'R', ModBlocks.rbmk_blank, 'Z', "ingotZirconium" });
 		addShapedRecipe(new ItemStack(ModBlocks.rbmk_rod_reasim_mod, 1), new Object[] { "BGB", "GRG", "BGB", 'G', ModBlocks.block_graphite, 'R', ModBlocks.rbmk_rod_reasim, 'B', ModItems.ingot_tcalloy });
 		addShapedRecipe(new ItemStack(ModBlocks.rbmk_outgasser, 1), new Object[] { "GHG", "GRG", "GTG", 'G', ModBlocks.steel_grate, 'H', Blocks.HOPPER, 'T', ModItems.tank_steel, 'R', ModBlocks.rbmk_blank });
+		addShapedRecipe(new ItemStack(ModBlocks.rbmk_storage, 1), new Object[] { "C", "R", "C", 'C', ModBlocks.crate_steel, 'R', ModBlocks.rbmk_blank });
 		addShapedOreRecipe(new ItemStack(ModBlocks.rbmk_loader, 1), new Object[] { "SCS", "CBC", "SCS", 'S', "plateSteel", 'C', "ingotCopper", 'B', ModItems.tank_steel });
 		addShapedOreRecipe(new ItemStack(ModBlocks.rbmk_steam_inlet, 1), new Object[] { "SCS", "CBC", "SCS", 'S', "ingotSteel", 'C', "plateIron", 'B', ModItems.tank_steel });
 		addShapedOreRecipe(new ItemStack(ModBlocks.rbmk_steam_outlet, 1), new Object[] { "SCS", "CBC", "SCS", 'S', "ingotSteel", 'C', "plateCopper", 'B', ModItems.tank_steel });
@@ -2539,7 +2540,9 @@ public class CraftingManager {
 			addShapedOreRecipe(new ItemStack(ModItems.reactor_sensor, 1), new Object[] { "WPW", "CMC", "PPP", 'W', ModItems.wire_tungsten, 'P', "plateLead", 'C', ModItems.circuit_targeting_tier3, 'M', ModItems.magnetron });
 			addShapedOreRecipe(new ItemStack(ModBlocks.reactor_ejector, 1), new Object[] { "CLC", "MHM", "CLC", 'C', ModBlocks.brick_concrete, 'L', "plateLead", 'M', ModItems.motor, 'H', ModBlocks.reactor_hatch });
 			addShapedOreRecipe(new ItemStack(ModBlocks.reactor_inserter, 1), new Object[] { "CLC", "MHM", "CLC", 'C', ModBlocks.brick_concrete, 'L', "plateCopper", 'M', ModItems.motor, 'H', ModBlocks.reactor_hatch });
-			addShapedRecipe(new ItemStack(ModBlocks.rbmk_console, 1), new Object[] { "PPP", "PCP", "PPP", 'C', ModItems.circuit_targeting_tier3, 'P', Items.POTATO });
+			addShapedOreRecipe(new ItemStack(ModBlocks.rbmk_console, 1), new Object[] { "BBB", "DGD", "DCD", 'B', ModItems.ingot_boron, 'D', ModBlocks.deco_rbmk, 'G', "paneGlass", 'C', ModItems.circuit_targeting_tier3 });
+			addShapedRecipe(new ItemStack(ModBlocks.rbmk_crane_console, 1), new Object[] { "BCN", "DDD", 'B', ModItems.ingot_boron, 'D', ModBlocks.deco_rbmk, 'C', ModItems.circuit_targeting_tier3, 'N', ModItems.gun_fatman_ammo });
+			
 			addShapedRecipe(new ItemStack(ModBlocks.hadron_core, 1), new Object[] { "CCC", "DSD", "CCC", 'C', ModBlocks.hadron_coil_alloy, 'D', ModBlocks.hadron_diode, 'S', ModItems.circuit_schrabidium });
 			addShapedRecipe(new ItemStack(ModBlocks.rbmk_rod, 1), new Object[] { "C", "R", "C", 'C', ModItems.hull_small_steel, 'R', ModBlocks.rbmk_blank });
 			addShapedRecipe(new ItemStack(ModBlocks.rbmk_rod_mod, 1), new Object[] { "BGB", "GRG", "BGB", 'G', ModBlocks.block_graphite, 'R', ModBlocks.rbmk_rod, 'B', ModItems.nugget_bismuth });

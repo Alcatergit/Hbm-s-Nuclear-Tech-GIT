@@ -38,6 +38,10 @@ armor.glider=Glider
 
 fluid.radwater_fluid=Radiated Water
 
+tile.rbmk_crane_console.name=RBMK Crane Console
+container.rbmkStorage=RBMK Storage
+tile.rbmk_storage.name=RBMK Storage Column
+
 chem.DUCRETE=Ducretisation
 
 tile.ducrete.name=Ducrete

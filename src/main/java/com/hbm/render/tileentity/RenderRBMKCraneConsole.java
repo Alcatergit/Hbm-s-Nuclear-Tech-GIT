@@ -65,6 +65,9 @@ public class RenderRBMKCraneConsole extends TileEntitySpecialRenderer<TileEntity
 		bindTexture(ResourceManager.mini_nuke_tex);
 		ResourceManager.rbmk_crane_console.renderPart("MiniNuke");
 		
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+
 		GlStateManager.disableTexture2D();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GlStateManager.disableLighting();

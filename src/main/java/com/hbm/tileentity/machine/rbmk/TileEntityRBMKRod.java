@@ -330,7 +330,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 
 	@Override
 	public boolean canUnload() {
-		return inventory.getStackInSlot(0).isEmpty();
+		return !inventory.getStackInSlot(0).isEmpty();
 	}
 
 	@Override

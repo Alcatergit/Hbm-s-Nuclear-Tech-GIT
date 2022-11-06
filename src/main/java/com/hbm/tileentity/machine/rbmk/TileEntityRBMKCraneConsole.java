@@ -65,7 +65,6 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 
 	public TileEntityRBMKCraneConsole() {
 		super(1);
-		inventory.setStackInSlot(0, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -83,16 +82,15 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 			} else {
 				progress = 0;
 				goesDown = false;
-				
-				if(!world.isRemote && this.canTargetInteract()) {
-					if(!inventory.getStackInSlot(0).isEmpty()) {
-						getColumnAtPos().load(inventory.getStackInSlot(0));
-						inventory.setStackInSlot(0, ItemStack.EMPTY);
 
-					} else {
+				if(!world.isRemote && this.canTargetInteract()) {
+					if(inventory.getStackInSlot(0).isEmpty()) {
 						IRBMKLoadable column = getColumnAtPos();
 						inventory.setStackInSlot(0, column.provideNext());
 						column.unload();
+					} else {
+						getColumnAtPos().load(inventory.getStackInSlot(0));
+						inventory.setStackInSlot(0, ItemStack.EMPTY);
 					}
 					
 					this.markDirty();
@@ -164,7 +162,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		
 		if(!world.isRemote) {
 			
-			if(inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			if(!inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
 				this.loadedHeat = ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0));
 				this.loadedEnrichment = ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0));
 			} else {
@@ -197,7 +195,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	public boolean hasItemLoaded() {
 		
 		if(!world.isRemote)
-			return inventory.getStackInSlot(0).isEmpty();
+			return !inventory.getStackInSlot(0).isEmpty();
 		else
 			return this.hasLoaded;
 	}

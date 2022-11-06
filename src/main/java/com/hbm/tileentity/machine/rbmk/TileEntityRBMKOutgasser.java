@@ -31,7 +31,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IFluidHandler, ITankPacketAcceptor, IRBMKLoadable {
 
 	public FluidTank gas;
 	public Fluid gasType;
@@ -264,5 +264,32 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean canLoad(ItemStack toLoad) {
+		return toLoad != null && inventory.getStackInSlot(0).isEmpty();
+	}
+
+	@Override
+	public void load(ItemStack toLoad) {
+		inventory.setStackInSlot(0, toLoad.copy());
+		this.markDirty();
+	}
+
+	@Override
+	public boolean canUnload() {
+		return !inventory.getStackInSlot(1).isEmpty();
+	}
+
+	@Override
+	public ItemStack provideNext() {
+		return inventory.getStackInSlot(1);
+	}
+
+	@Override
+	public void unload() {
+		inventory.setStackInSlot(1, ItemStack.EMPTY);
+		this.markDirty();
 	}
 }
