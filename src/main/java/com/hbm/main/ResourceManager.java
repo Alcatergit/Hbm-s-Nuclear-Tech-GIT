@@ -1206,7 +1206,8 @@ public class ResourceManager {
 	public static final ResourceLocation mp_w_15_thermo_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/mp_w_15_thermo.png");
 	public static final ResourceLocation mp_w_15_n2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/mp_w_15_n2.png");
 	public static final ResourceLocation mp_w_15_balefire_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/mp_w_15_balefire.png");
-
+	public static final ResourceLocation mp_w_15_volcano_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/mp_w_15_volcano.png");
+	
 	//Keypad
 	public static final ResourceLocation keypad_tex = new ResourceLocation(RefStrings.MODID, "textures/models/keypad.png");
 	public static final ResourceLocation keypad_error_tex = new ResourceLocation(RefStrings.MODID, "textures/models/keypad_error.png");

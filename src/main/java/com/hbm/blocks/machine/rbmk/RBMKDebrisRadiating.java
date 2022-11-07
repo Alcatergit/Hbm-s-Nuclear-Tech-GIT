@@ -114,7 +114,10 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 			
 			if(len < 15) {
-				e.attackEntityFrom(DamageSource.IN_FIRE, (int)(50/len));
+				int fireDmg = 40000;
+				fireDmg /= (float)Math.sqrt(res);
+				fireDmg /= (float)(len * len);
+				e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
 			}
 			
 			if(e instanceof EntityPlayer && len < 10) {

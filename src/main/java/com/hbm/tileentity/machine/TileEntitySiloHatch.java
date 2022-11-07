@@ -67,7 +67,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 				} else if(state == 3){
 					if(timer == 1){
 						BlockPos hydrolics = pos.offset(facing, 5);
-						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloopen, SoundCategory.BLOCKS, 3F, 1F);
+						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloopen, SoundCategory.BLOCKS, 4F, 1F);
 					}
 					if(timer == 70){
 						BlockPos mid = pos.offset(facing, 3);

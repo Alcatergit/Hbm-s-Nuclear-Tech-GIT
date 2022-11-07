@@ -65,13 +65,7 @@ public class RenderRBMKCraneConsole extends TileEntitySpecialRenderer<TileEntity
 		bindTexture(ResourceManager.mini_nuke_tex);
 		ResourceManager.rbmk_crane_console.renderPart("MiniNuke");
 		
-		GL11.glPopMatrix();
-		GL11.glPushMatrix();
-
-		GlStateManager.disableTexture2D();
-		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		GlStateManager.disableLighting();
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		bindTexture(ResourceManager.chemplant_fluid_tex);//Light Texture
 		
 		//loading indicator
 		if(console.isCraneLoading()) GL11.glColor3f(0.8F, 0.8F, 0F);	//is the crane loading? yellow
@@ -84,10 +78,8 @@ public class RenderRBMKCraneConsole extends TileEntitySpecialRenderer<TileEntity
 		else GL11.glColor3f(1F, 0F, 0F);								//not valid? red
 		ResourceManager.rbmk_crane_console.renderPart("Lamp2");
 		
-		GlStateManager.enableLighting();
-		GL11.glPopAttrib();
-		GlStateManager.enableTexture2D();
 		GL11.glColor3f(1F, 1F, 1F);
+
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 
@@ -96,9 +88,9 @@ public class RenderRBMKCraneConsole extends TileEntitySpecialRenderer<TileEntity
 			bindTexture(ResourceManager.rbmk_crane_tex);
 
 			int height = console.height - 6;
-			double cranePosX = (-console.getPos().getX() + console.centerX);
-			double cranePosY = (-console.getPos().getY() + console.centerY) + 1;
-			double cranePosZ = (-console.getPos().getZ() + console.centerZ);
+			double cranePosX = (console.centerX - console.getPos().getX());
+			double cranePosY = (console.centerY - console.getPos().getY()) + 1;
+			double cranePosZ = (console.centerZ - console.getPos().getZ());
 			
 			GL11.glTranslated(cranePosX, cranePosY, cranePosZ);
 			switch(console.getBlockMetadata() - BlockDummyable.offset) {

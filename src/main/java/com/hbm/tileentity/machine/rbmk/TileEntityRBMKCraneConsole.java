@@ -53,7 +53,6 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	public double lastPosLeft = 0;
 	public double posFront = 0;
 	public double posLeft = 0;
-	private static final double speed = 0.05D;
 	
 	private boolean goesDown = false;
 	public double lastProgress = 1D;
@@ -63,18 +62,38 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	public double loadedHeat;
 	public double loadedEnrichment;
 
+	private boolean up = false;
+	private boolean down = false;
+	private boolean left = false;
+	private boolean right = false;
+
+	private boolean craneLeft = false;
+	private boolean craneRight = false;
+	private boolean craneUp = false;
+	private boolean craneDown = false;
+
+	private static final double speed = 0.05D; // 1/coolDown DO NOT CHANGE
+	private static final short coolDown = 20; //in Ticks DO NOT CHANGE
+	private short ticksSince = 0; //ticks since button press
+
 	public TileEntityRBMKCraneConsole() {
 		super(1);
+	}
+
+	private boolean isCooledDown(){
+		if(ticksSince < coolDown){
+			ticksSince++;
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 	@Override
 	public void update() {
 		
-		if(world.isRemote) {
-			lastTiltFront = tiltFront;
-			lastTiltLeft = tiltLeft;
-		}
-
+		lastTiltFront = tiltFront;
+		lastTiltLeft = tiltLeft;
 		if(goesDown) {
 			
 			if(progress > 0) {
@@ -130,31 +149,66 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		if(players.size() > 0 && !isCraneLoading()) {
 			EntityPlayer player = players.get(0);
 			IHBMData props = HbmCapability.getData(player);
-			boolean up = props.getKeyPressed(EnumKeybind.CRANE_UP);
-			boolean down = props.getKeyPressed(EnumKeybind.CRANE_DOWN);
-			boolean left = props.getKeyPressed(EnumKeybind.CRANE_LEFT);
-			boolean right = props.getKeyPressed(EnumKeybind.CRANE_RIGHT);
-			
-			if(up && !down) {
-				tiltFront = 30;
-				if(!world.isRemote) posFront += speed;
+			up = props.getKeyPressed(EnumKeybind.CRANE_UP);
+			down = props.getKeyPressed(EnumKeybind.CRANE_DOWN);
+			left = props.getKeyPressed(EnumKeybind.CRANE_LEFT);
+			right = props.getKeyPressed(EnumKeybind.CRANE_RIGHT);
+
+
+			if(up == down){
+				up = false;
+				down = false;
+			}else{
+				if(up){
+					tiltFront = 30;
+				}else{
+					tiltFront = -30;
+				}
 			}
-			if(!up && down) {
-				tiltFront = -30;
-				if(!world.isRemote) posFront -= speed;
+
+			if(left == right){
+				left = false;
+				right = false;
+			}else{
+				if(left){
+					tiltLeft = 30;
+				}else{
+					tiltLeft = -30;
+				}
 			}
-			if(left && !right) {
-				tiltLeft = 30;
-				if(!world.isRemote) posLeft += speed;
-			}
-			if(!left && right) {
-				tiltLeft = -30;
-				if(!world.isRemote) posLeft -= speed;
-			}
-			
 			if(props.getKeyPressed(EnumKeybind.CRANE_LOAD)) {
 				goesDown = true;
 			}
+		}else{
+			up = false;
+			down = false;
+			left = false;
+			right = false;
+		}
+
+		if(isCooledDown()){
+			if(craneUp != up || craneDown != down || craneLeft != left || craneRight != right) //activating cooldown bc of change in direction
+				ticksSince = 1;
+			else if(craneUp || craneDown || craneLeft  || craneRight) //activating cooldown bc to keep going if moving
+				ticksSince = 1;
+			craneUp = up;
+			craneDown = down;
+			craneLeft = left;
+			craneRight = right;
+		}
+
+		if(!world.isRemote){
+			if(craneUp)
+				posFront += speed;
+
+			if(craneDown)
+				posFront -= speed;
+
+			if(craneLeft)
+				posLeft += speed;
+
+			if(craneRight)
+				posLeft -= speed;
 		}
 		
 		posFront = MathHelper.clamp(posFront, -spanB, spanF);

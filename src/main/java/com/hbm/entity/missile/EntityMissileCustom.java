@@ -408,6 +408,17 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			nuke.posZ = posZ;
 			world.spawnEntity(nuke);
 			break;
+		case VOLCANO:
+			ExplosionLarge.buster(world, posX, posY, posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), strength, strength * 2);
+			for(int x = -1; x <= 1; x++) {
+				for(int y = -1; y <= 1; y++) {
+					for(int z = -1; z <= 1; z++) {
+						world.setBlockState(new BlockPos((int)Math.floor(posX + x), (int)Math.floor(posY + y), (int)Math.floor(posZ + z)), ModBlocks.volcanic_lava_block.getDefaultState());
+					}
+				}
+			}
+			world.setBlockState(new BlockPos((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ)), ModBlocks.volcano_core.getDefaultState());
+			break;
 		case BALEFIRE:
 			EntityBalefire bf = new EntityBalefire(world);
 			bf.posX = this.posX;

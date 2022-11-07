@@ -36,6 +36,7 @@ armor.sprintBoost=Sprint Boost
 armor.electricJetpack=Electric Jetpack
 armor.glider=Glider
 
+item.mp_warhead_15_volcano.name=Size 15 Volcano Warhead
 fluid.radwater_fluid=Radiated Water
 
 tile.rbmk_crane_console.name=RBMK Crane Console
@@ -386,10 +387,6 @@ potion.hbm_telekinesis=! ! !
 potion.hbm_phosphorus=Phosphorus Burns
 potion.hbm_stability=Stability
 
-radar.detectMissiles=Detect Missiles
-radar.detectPlayers=Detect Players
-radar.redMode=Redstone Mode$On: Redstone output based on range$Off: Redstone output based on tier
-radar.smartMode=Smart Mode$Redstone output ignores ascending missiles
 
 rbmk.heat=Column temperature: %s
 rbmk.boiler.water=Feedwater: %s / %s
