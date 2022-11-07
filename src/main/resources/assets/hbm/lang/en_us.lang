@@ -36,6 +36,10 @@ armor.sprintBoost=Sprint Boost
 armor.electricJetpack=Electric Jetpack
 armor.glider=Glider
 
+item.grenade_solinium.name=Solinium Grenade
+
+
+
 item.mp_warhead_15_volcano.name=Size 15 Volcano Warhead
 fluid.radwater_fluid=Radiated Water
 
@@ -60,10 +64,9 @@ item.powder_radspice.name=Neovelin Powder
 
 item.lung_diagnostic.name=Lung Diagnostic
 lung_scanner.title=Lung Diagnostic
-lung_scanner.total=Total
-lung_scanner.player_asbestos_health=Lung Health:
-lung_scanner.player_coal_health=Lung Health:
-lung_scanner.player_total_health=Lung Health:
+lung_scanner.player_asbestos_health=Lung Health [Asbestos]:
+lung_scanner.player_coal_health=Lung Health [Coal]:
+lung_scanner.player_total_health=Lung Health Total:
 
 tile.waste_dirt.name=Contaminated Dirt
 item.rod_cobalt.name=Cobalt Rod
@@ -657,6 +660,7 @@ item.record.ss.desc=Valve - Sector Sweep
 item.record.vc.desc=Valve - Vortal Combat
 item.record.glass.desc=? ? ?
 
+
 death.attack.mku=%1$s died from unknown causes.
 death.attack.nuclearBlast=%1$s was blown away by a nuclear explosion.
 death.attack.revolverBullet=%1$s was shot in the head by %2$s.
@@ -710,6 +714,7 @@ death.attack.crucible=%1$s was bisected by a blade of pure Argent energy.
 death.attack.monoxide=%1$s forgot to change the batteries in their carbon monoxide detector.
 death.attack.digamma=%1$s stepped into the abyss.
 death.attack.asbestos=%1$s is now entitled to financial compensation.
+death.attack.blacklung=%1$s gave his life to the coal mines.
 
 item.redstone_sword.name=Redstone Sword
 item.big_sword.name=Great Sword

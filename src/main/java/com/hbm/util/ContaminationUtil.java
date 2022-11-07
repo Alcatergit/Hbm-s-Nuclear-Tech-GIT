@@ -168,15 +168,15 @@ public class ContaminationUtil {
 	}
 
 	public static String getTextColorLung(double percent){
-		if(percent < 0.25)
+		if(percent > 0.9)
 			return ""+TextFormatting.GREEN;
-		else if(percent < 0.5)
+		else if(percent > 0.75)
 			return ""+TextFormatting.YELLOW;
-		else if(percent < 0.75)
+		else if(percent > 0.5)
 			return ""+TextFormatting.GOLD;
-		else if(percent < 0.8)
+		else if(percent > 0.25)
 			return ""+TextFormatting.RED;
-		else if(percent < 0.95)
+		else if(percent > 0.1)
 			return ""+TextFormatting.DARK_RED;
 		else
 			return ""+TextFormatting.DARK_GRAY;
@@ -200,9 +200,9 @@ public class ContaminationUtil {
 		
 
 		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));
-		player.sendMessage(new TextComponentTranslation("trait.asbestos").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerAsbestos/100D)+" %6.2f", playerAsbestos)+" %")));
-		player.sendMessage(new TextComponentTranslation("trait.coal").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerBlacklung/100D)+" %6.2f", playerBlacklung)+" %")));
-		player.sendMessage(new TextComponentTranslation("lung_scanner.total").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerTotal/100D)+" %6.2f", playerTotal)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_asbestos_health").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerAsbestos/100D)+" %6.2f", playerAsbestos)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_coal_health").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerBlacklung/100D)+" %6.2f", playerBlacklung)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_total_health").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerTotal/100D)+" %6.2f", playerTotal)+" %")));
 	
 	}
 

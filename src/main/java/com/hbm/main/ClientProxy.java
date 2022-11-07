@@ -80,6 +80,7 @@ import com.hbm.entity.grenade.EntityGrenadeSchrabidium;
 import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
+import com.hbm.entity.grenade.EntityGrenadeSolinium;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.item.EntityFireworks;
 import com.hbm.entity.item.EntityMovingItem;
@@ -950,6 +951,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenadeMk2.class, RenderGrenade.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenadeASchrab.class, RenderGrenade.FACTORY);
 		registerGrenadeRenderer(EntityGrenadeZOMG.class, ModItems.grenade_zomg);
+		registerGrenadeRenderer(EntityGrenadeSolinium.class, ModItems.grenade_solinium);
 		registerGrenadeRenderer(EntityGrenadeShrapnel.class, ModItems.grenade_shrapnel);
 		registerGrenadeRenderer(EntityGrenadeBlackHole.class, ModItems.grenade_black_hole);
 		registerGrenadeRenderer(EntityGrenadeGascan.class, ModItems.grenade_gascan);

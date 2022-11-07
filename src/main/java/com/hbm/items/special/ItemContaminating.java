@@ -14,7 +14,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemContaminating extends ItemHazard {
-
+	
+	private int burntime;
 	private int falloutBallRadius = 0;
 
 	public ItemContaminating(float radiation, String s){
@@ -56,5 +57,10 @@ public class ItemContaminating extends ItemHazard {
 			list.add(TextFormatting.DARK_GREEN + "[Contaminating Drop]");
 			list.add(TextFormatting.GREEN + " Radius: "+falloutBallRadius+"m");
 		}
+	}
+
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		return burntime;
 	}
 }

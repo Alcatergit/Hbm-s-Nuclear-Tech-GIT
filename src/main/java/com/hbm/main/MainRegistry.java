@@ -87,6 +87,7 @@ import com.hbm.entity.grenade.EntityGrenadeSchrabidium;
 import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
+import com.hbm.entity.grenade.EntityGrenadeSolinium;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.item.EntityFireworks;
 import com.hbm.entity.item.EntityMovingItem;
@@ -861,6 +862,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_mk2"), EntityGrenadeMk2.class, "entity_grenade_mk2", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_aschrab"), EntityGrenadeASchrab.class, "entity_grenade_aschrab", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_zomg"), EntityGrenadeZOMG.class, "entity_grenade_zomg", i++, MainRegistry.instance, 250, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_solinium"), EntityGrenadeSolinium.class, "entity_grenade_solinium", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_shrapnel"), EntityGrenadeShrapnel.class, "entity_grenade_shrapnel", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_black_hole"), EntityGrenadeBlackHole.class, "entity_grenade_black_hole", i++, MainRegistry.instance, 250, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_grenade_gascan"), EntityGrenadeGascan.class, "entity_grenade_gascan", i++, MainRegistry.instance, 250, 1, true);
@@ -1224,6 +1226,13 @@ public class MainRegistry {
             protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_, ItemStack stack)
             {
                 return new EntityGrenadeZOMG(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
+            }
+        });
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.grenade_solinium, new BehaviorProjectileDispense() {
+			@Override
+            protected IProjectile getProjectileEntity(World p_82499_1_, IPosition p_82499_2_, ItemStack stack)
+            {
+                return new EntityGrenadeSolinium(p_82499_1_, p_82499_2_.getX(), p_82499_2_.getY(), p_82499_2_.getZ());
             }
         });
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.grenade_shrapnel, new BehaviorProjectileDispense() {

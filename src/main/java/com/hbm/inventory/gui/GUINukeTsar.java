@@ -2,17 +2,17 @@ package com.hbm.inventory.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.BombConfig;
 import com.hbm.inventory.container.ContainerNukeTsar;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GUINukeTsar extends GuiContainer {
+public class GUINukeTsar extends GuiInfoContainer {
 	
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/tsarBombaSchematic.png");
 	private TileEntityNukeTsar testNuke;
@@ -35,6 +35,17 @@ public class GUINukeTsar extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		String[] info = null;
+		if(testNuke.isStage3Filled())
+			info = new String[] { "Nuke Radius: "+ (int)BombConfig.tsarRadius +"m"};
+		else if(testNuke.isStage1Filled())
+			info = new String[] { "Nuke Radius: "+ (int)BombConfig.tsarRadius/2 + "m"};
+		else if(testNuke.isStage2Filled())
+			info = new String[] { "Nuke Radius: "+ (int)BombConfig.tsarRadius/3 + "m"};
+		else if(testNuke.isReady())
+			info = new String[] { "Nuke Radius: "+ (int)BombConfig.tsarRadius/5 + "m"};
+		if(info != null)
+			this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 40, guiTop + 17, 176, 60, mouseX, mouseY, info);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
