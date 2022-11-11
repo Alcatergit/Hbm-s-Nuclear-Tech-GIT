@@ -8,7 +8,12 @@ import net.minecraft.util.ITickable;
 
 public class TileEntityMachineDetector extends TileEntity implements ITickable, IConsumer {
 
-	long power;
+	private long power;
+
+	public TileEntityMachineDetector(){
+		super();
+		this.power = 0;
+	}
 	
 	@Override
 	public void update() {
@@ -17,13 +22,13 @@ public class TileEntityMachineDetector extends TileEntity implements ITickable, 
 			int meta = this.getBlockMetadata();
 			int state = 0;
 
-			if(power > 0) {
+			if(this.power > 0) {
 				state = 1;
-				power--;
+				this.power -= 1;
 			}
 
 			if(meta != state) {
-				world.setBlockState(pos, world.getBlockState(pos).withProperty(PowerDetector.IS_ON, state > 0 ? true : false));
+				PowerDetector.updateBlockState(state==1 ? true: false, world, pos);
 				this.markDirty();
 			}
 		}
@@ -31,17 +36,17 @@ public class TileEntityMachineDetector extends TileEntity implements ITickable, 
 
 	@Override
 	public void setPower(long i) {
-		power = i;
+		this.power = i;
 	}
 
 	@Override
 	public long getPower() {
-		return power;
+		return this.power;
 	}
 
 	@Override
 	public long getMaxPower() {
-		return 20;
+		return 30;
 	}
 
 }

@@ -8,6 +8,7 @@ import com.hbm.items.armor.ItemModCladding;
 import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
 
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -55,12 +56,9 @@ public class HazmatRegistry {
 
 	public static float getResistance(EntityLivingBase player) {
 		float res = 0.0F;
-		if (player.getUniqueID().toString().equals(Library.Pu_238)) {
-			res += 0.4F;
-		}
 
-		if (player.getUniqueID().toString().equals(Library.Golem)) {
-			res += 4.0F;
+		if (player.getUniqueID().toString().equals(Library.HbMinecraft) || player.getUniqueID().toString().equals(Library.Golem) || player.getUniqueID().toString().equals(Library.Drillgon) || player.getUniqueID().toString().equals(Library.Malpon)) {
+			res += 1.0F;
 		}
 
 		for(ItemStack stack : player.getArmorInventoryList()) {
@@ -68,9 +66,9 @@ public class HazmatRegistry {
 				res += getResistance(stack);
 			}
 		}
-
-		if(player.isPotionActive(HbmPotion.radx))
-			res += 0.2F;
+		PotionEffect radx = player.getActivePotionEffect(HbmPotion.radx);
+		if(radx != null)
+			res += 0.1F * radx.getAmplifier();
 
 		return res;
 

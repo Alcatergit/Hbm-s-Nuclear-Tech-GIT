@@ -333,13 +333,27 @@ public class EntityEffectHandler {
 		int freq = Math.max((int) (1000 - 950 * total), 20);
 		
 		World world = entity.world;
-		
-		if(total > 0.75D) {
-			entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, 2));
-		}
-		
-		if(total > 0.95D) {
+		Random rand = new Random(entity.getEntityId());
+
+		if(total > 0.8D) {
+			entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, 6));
 			entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 0));
+			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 3));
+			if(rand.nextInt(250) == 0)
+				entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 2));
+		}
+		else if(total > 0.65D) {
+			entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, 2));
+			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
+			if(rand.nextInt(500) == 0)
+				entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0));
+		} 
+		else if(total > 0.45D) {
+			entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, 1));
+			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 1));
+		}
+		else if(total > 0.25D) {
+			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 0));
 		}
 		
 		if(world.getTotalWorldTime() % freq == entity.getEntityId() % freq) {

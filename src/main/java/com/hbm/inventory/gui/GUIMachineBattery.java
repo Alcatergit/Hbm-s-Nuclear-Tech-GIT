@@ -52,8 +52,6 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		else 
 			deltaText = TextFormatting.YELLOW + "0HE/s";
 
-		System.out.println("GUI delta: "+powerDelta);
-
 		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
 
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, mouseX, mouseY, info);

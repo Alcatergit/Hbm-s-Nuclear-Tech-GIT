@@ -37,7 +37,7 @@ public class RenderCloudResidue extends TileEntitySpecialRenderer<TileEntityClou
 		float f2 = 0;
 		float f3 = 1;
 		double d2 = 0.05000000074505806D;
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("hbm:textures/blocks/residue.png"));
+		bindTexture(new ResourceLocation("hbm:textures/blocks/residue.png"));
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float f6 = world.getLightBrightness(te.getPos());
 		GlStateManager.disableLighting();
@@ -112,7 +112,7 @@ public class RenderCloudResidue extends TileEntitySpecialRenderer<TileEntityClou
 			buf.pos(0.0F, 0.0F + d2, 0.0D).tex(f, f3).color(f6, f6, f6, 1.0F).endVertex();
 		}
 		tessellator.draw();
-
+		GlStateManager.enableLighting();
 		GL11.glPopMatrix();
 	}
 }

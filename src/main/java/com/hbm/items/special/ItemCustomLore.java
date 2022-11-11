@@ -404,6 +404,7 @@ public class ItemCustomLore extends Item {
 			this == ModItems.powder_iodine_tiny || 
 			this == ModItems.powder_i131_tiny || 
 			this == ModItems.powder_co60_tiny || 
+			this == ModItems.powder_cobalt_tiny || 
 			this == ModItems.powder_niobium_tiny || 
 			this == ModItems.powder_cerium_tiny || 
 			this == ModItems.powder_neodymium_tiny || 
@@ -417,10 +418,10 @@ public class ItemCustomLore extends Item {
 			this == ModItems.dynosphere_euphemium_charged ||  
 			this == ModItems.plate_euphemium ||  
 			this == ModItems.rod_euphemium ||  
-			this == ModItems.rod_quad_euphemium ||  
+			this == ModItems.rod_quad_euphemium || 
+			this == ModItems.rod_daffergon || 
 			this == ModItems.watch || 
-			this == ModItems.undefined || 
-			this == ModItems.canteen_fab) {
+			this == ModItems.undefined) {
 			return EnumRarity.EPIC;
 		}
 
@@ -439,7 +440,6 @@ public class ItemCustomLore extends Item {
 
 			this == ModItems.plate_schrabidium || 
 			this == ModItems.plate_saturnite || 
-			this == ModItems.plate_saturnite || 
 			
 			this == ModItems.circuit_schrabidium || 
 			this == ModItems.gun_revolver_schrabidium_ammo || 
@@ -452,10 +452,10 @@ public class ItemCustomLore extends Item {
     		this == ModItems.crystal_schraranium ||
     		this == ModItems.crystal_trixite ||
     		ItemCell.hasFluid(stack, ModForgeFluids.sas3) || 
+    		this == ModItems.rod_unobtainium || 
     		this == ModItems.rod_schrabidium || 
 			this == ModItems.rod_dual_schrabidium || 
 			this == ModItems.rod_quad_schrabidium ||
-			this == ModItems.rod_solinium || 
 			this == ModItems.rod_dual_solinium || 
 			this == ModItems.rod_quad_solinium) {
 			return EnumRarity.RARE;

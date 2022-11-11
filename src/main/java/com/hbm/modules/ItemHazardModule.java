@@ -154,11 +154,11 @@ public class ItemHazardModule {
 	private String formatRads(float radiation){
 		String rads = "";
 		if(radiation < 1000000){
-			rads = ((int)(radiation*1000))/1000+"";
+			rads = ((int)(radiation*1000F))/1000F+"";
 		} else if(radiation < 1000000000){
-			rads = ((int)(radiation/1000))/1000+"M";
+			rads = ((int)(radiation/1000F))/1000F+"M";
 		} else
-			rads = ((int)(radiation/1000000))/1000+"G";
+			rads = ((int)(radiation/1000000F))/1000F+"G";
 		return rads;
 	}
 	

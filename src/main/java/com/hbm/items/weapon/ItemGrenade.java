@@ -306,7 +306,7 @@ public class ItemGrenade extends Item {
 			list.add(TextFormatting.ITALIC + "If it didn't blow up it means it worked.");
 		}
 		if (this == ModItems.grenade_solinium) {
-			list.add("§3[Solonium Grenade]§r");
+			list.add("§3[Solinium Grenade]§r");
 			list.add(" §eRadius: "+(int)BombConfig.soliniumRadius/10+"m§r");
 		}
 		if (this == ModItems.grenade_nuclear) {

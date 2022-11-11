@@ -230,15 +230,17 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			if(bblock == Blocks.BEDROCK){
 				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+				return;
 			}
 
 			if(bblock.isFlammable(world, pos, EnumFacing.UP)) {
-				if(rand.nextInt(5) == 0)
+				if(world.isAirBlock(pos.add(0, 1, 0)))
 					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
 			}
 
 			if(bblock == Blocks.LEAVES || bblock == Blocks.LEAVES2) {
 				world.setBlockToAir(pos);
+				continue;
 			}
 
 			// if(b.getBlock() == Blocks.WATER) {
@@ -262,25 +264,31 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
 				else
 					return;
+				continue;
 
 			} else if(bblock == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+				continue;
 
 			} else if(bblock == Blocks.DIRT) {
 				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				continue;
 
 			} else if(bblock == Blocks.SNOW_LAYER) {
 				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+				continue;
 
 			} else if(bblock == Blocks.SNOW) {
 				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+				continue;
 			}
 			 else if(bblock instanceof BlockBush || bblock == Blocks.TALLGRASS) {
 				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
 				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
-				return;
+				continue;
 			} else if(bblock == Blocks.SAND) {
 
 				if(rand.nextInt(60) == 0) {
@@ -314,6 +322,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			else if(bblock == Blocks.LOG || bblock == Blocks.LOG2) {
 				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+				continue;
 			}
 
 			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
@@ -323,10 +332,12 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				} else {
 					world.setBlockToAir(pos);
 				}
+				continue;
 			}
 
 			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log) {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				continue;
 			}
 			// else if(b.getBlock() == ModBlocks.sellafield_4) {
 			// 	world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());

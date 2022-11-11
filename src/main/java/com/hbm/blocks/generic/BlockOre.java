@@ -112,7 +112,7 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.block_meteor_treasure)
 		{
-			switch(rand.nextInt(36)) {
+			switch(rand.nextInt(37)) {
 			case 0: return ModItems.coil_advanced_alloy;
 			case 1: return ModItems.plate_advanced_alloy;
 			case 2: return ModItems.powder_desh_mix;
@@ -149,6 +149,7 @@ public class BlockOre extends Block {
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
 			case 35: return ModItems.glitch;
+			case 36: return ModItems.nugget_radspice;
 			}
 		}
 		if(this == ModBlocks.ore_nether_fire)

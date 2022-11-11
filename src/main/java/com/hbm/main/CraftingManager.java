@@ -1144,7 +1144,7 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.grenade_if_hopwire, 1), new Object[] { " A ", "AGA", " A ", 'G', ModItems.grenade_if_generic, 'A', ModItems.powder_power });
 		addShapedRecipe(new ItemStack(ModItems.grenade_if_null, 1), new Object[] { "BAB", "AGA", "BAB", 'G', ModItems.grenade_if_generic, 'A', Blocks.OBSIDIAN, 'B', ModItems.ingot_saturnite });
 
-		addShapedRecipe(new ItemStack(ModItems.bomb_waffle, 1), new Object[] { "WEW", "MPM", "WEW", 'W', Items.WHEAT, 'E', Items.EGG, 'M', Items.MILK_BUCKET, 'P', ModItems.man_core });
+		addShapedRecipe(new ItemStack(ModItems.bomb_waffle, 1), new Object[] { "WEW", "MPM", "WEW", 'W', Items.WHEAT, 'E', Items.EGG, 'M', Items.MILK_BUCKET, 'P', ModItems.demon_core_open });
 		addShapedRecipe(new ItemStack(ModItems.schnitzel_vegan, 3), new Object[] { "RWR", "WPW", "RWR", 'W', ModItems.nuclear_waste, 'R', Items.REEDS, 'P', Items.PUMPKIN_SEEDS });
 		addShapedRecipe(new ItemStack(ModItems.cotton_candy, 2), new Object[] { " S ", "SPS", " H ", 'P', ModItems.nugget_pu239, 'S', Items.SUGAR, 'H', Items.STICK });
 		addShapedRecipe(new ItemStack(ModItems.apple_schrabidium, 1, 0), new Object[] { "SSS", "SAS", "SSS", 'S', ModItems.nugget_schrabidium, 'A', Items.APPLE });
@@ -2775,10 +2775,12 @@ public class CraftingManager {
 		for(String o : ore)
 			addShapelessOreRecipe(new ItemStack(billet, 3), new Object[] { o, o });
 		addShapelessRecipe(new ItemStack(billet, 3), new Object[] { ingot, ingot });
+		addShapelessRecipe(new ItemStack(ingot, 2), new Object[] { billet, billet, billet });
 	}
 
 	public static void addBilletByIngot(Item billet, Item ingot){
 		addShapelessRecipe(new ItemStack(billet, 3), new Object[] { ingot, ingot });
+		addShapelessRecipe(new ItemStack(ingot, 2), new Object[] { billet, billet, billet });
 	}
 
 	//Fill rods with one billet

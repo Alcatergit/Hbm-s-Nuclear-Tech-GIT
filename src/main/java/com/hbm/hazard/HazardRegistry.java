@@ -77,7 +77,7 @@ public class HazardRegistry {
 	public static final float amf = 4.75F; //Americium Fuel
 	public static final float mox = 2.5F; //Moxie ^w^
 	public static final float sa326 = 15.0F; //Schrabidium
-	public static final float sa327 = 17.5F; //Solonium
+	public static final float sa327 = 17.5F; //Solinium
 	public static final float saf = 5.85F; //Schrabidium Fuel
 	public static final float les = 2.52F;
 	public static final float mes = 5.25F;

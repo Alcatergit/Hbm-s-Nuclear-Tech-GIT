@@ -5,12 +5,12 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
+import com.hbm.items.special.ItemCustomLore;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorMod extends Item {
+public class ItemArmorMod extends ItemCustomLore {
 
 	public final int type;
 	public final boolean helmet;
@@ -28,20 +28,17 @@ public class ItemArmorMod extends Item {
 	public final boolean boots;
 	
 	public ItemArmorMod(int type, boolean helmet, boolean chestplate, boolean leggings, boolean boots, String s) {
+		super(s);
 		this.type = type;
 		this.helmet = helmet;
 		this.chestplate = chestplate;
 		this.leggings = leggings;
 		this.boots = boots;
-		
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		
-		ModItems.ALL_ITEMS.add(this);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, list, flagIn);
 		list.add(TextFormatting.DARK_PURPLE + "Applicable to:");
 		
 		if(helmet && chestplate && leggings && boots) {

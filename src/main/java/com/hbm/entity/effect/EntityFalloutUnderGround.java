@@ -202,7 +202,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			
 			} else if(bblock == Blocks.LEAVES || bblock == Blocks.LEAVES2) {
 				world.setBlockToAir(pos);
-				return;
+				continue;
 
 			} else if(bblock == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
@@ -214,11 +214,11 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 			} else if(bblock == Blocks.SNOW_LAYER) {
 				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
-				return;
+				continue;
 
 			} else if(bblock == Blocks.SNOW) {
 				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
-				return;
+				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
 				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
@@ -260,9 +260,11 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				} else {
 					world.setBlockToAir(pos);
 				}
+				return;
 
 			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log) {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				return;
 
 			} else if(bblock == ModBlocks.ore_uranium) {
 				if(l <= s6){

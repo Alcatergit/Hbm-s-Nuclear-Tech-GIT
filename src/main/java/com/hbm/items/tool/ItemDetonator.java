@@ -61,7 +61,7 @@ public class ItemDetonator extends Item {
 			
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation("§e[Position set]§r"));
+				player.sendMessage(new TextComponentTranslation("§a[Position set]§r"));
 			}
 			
 	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.AMBIENT, 1.0F, 1.0F);
@@ -101,7 +101,7 @@ public class ItemDetonator extends Item {
 			 } else {
 				if(world.isRemote)
 				{
-					player.sendMessage(new TextComponentTranslation("§e[Error]: Target incompatible or too far away.§r"));
+					player.sendMessage(new TextComponentTranslation("§c[Error]: Target incompatible or too far away.§r"));
 				}
 			 }
 		}

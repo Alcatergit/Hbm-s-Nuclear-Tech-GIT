@@ -37,7 +37,7 @@ public class RenderTaint extends TileEntitySpecialRenderer<TileEntityTaint> {
 		float f2 = 0;
 		float f3 = 1;
 		double d2 = 0.05000000074505806D;
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("hbm:textures/blocks/taint_" + te.getBlockMetadata() + ".png"));
+		bindTexture(new ResourceLocation("hbm:textures/blocks/taint_" + te.getBlockMetadata() + ".png"));
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float f6 = world.getLightBrightness(te.getPos());
 		GlStateManager.disableLighting();

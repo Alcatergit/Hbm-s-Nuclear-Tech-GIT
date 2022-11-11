@@ -195,7 +195,7 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add("§3[Solonium Bomb]§r");
+		tooltip.add("§3[Solinium Bomb]§r");
 		tooltip.add(" §eRadius: "+BombConfig.soliniumRadius+"m§r");
 		tooltip.add("");
 		tooltip.add("§dThis Neutron Bomb is the weaponized daughter of the G.E.C.K§r");
