@@ -11,6 +11,7 @@ import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -342,5 +343,10 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public void unload() {
 		inventory.setStackInSlot(0, ItemStack.EMPTY);
 		this.markDirty();
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return new int[] {0};
 	}
 }

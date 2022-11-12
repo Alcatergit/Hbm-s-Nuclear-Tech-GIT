@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "hbm:blocks/waste_grass_tall"
+    }
+}

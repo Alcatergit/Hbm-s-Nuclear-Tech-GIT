@@ -53,6 +53,30 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn){
+		if(this == ModItems.cotton_candy) {
+            list.add("Gives you a radioactive sugarshock");
+            list.add("§b[SPEED V]§r");
+    	}
+    	if(this == ModItems.schnitzel_vegan) {
+            list.add("Wasteschnitzel is all i need.");
+            list.add("§c[STRENGTH X]§r");
+    	}
+    	if(this == ModItems.apple_lead) {
+            list.add("Lead shields radiation right? So lets eat some it");
+            list.add("Might have some side effects");
+            list.add("§a[RAD-X (0.5)]§r");
+    	}
+    	if(this == ModItems.apple_lead1) {
+            list.add("Lead shields radiation right? So lets eat a lot it");
+            list.add("I will survive it right? - right?");
+            list.add("§a[RAD-X (1)]§r");
+    	}
+    	if(this == ModItems.apple_lead2) {
+            list.add("Lead shields radiation right? So lets eat tons of it");
+            list.add("Yeah thats leathal if not extremely healthy");
+            list.add("§a[RAD-X (4)]§r");
+    	}
+
 		this.module.addInformation(stack, list, flagIn);
 		super.addInformation(stack, world, list, flagIn);
 	}
@@ -72,27 +96,31 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 	    	ExplosionParticle.spawnMush(worldIn, (int)player.posX, (int)player.posY - 3, (int)player.posZ);
 		}
 		if(stack.getItem() == ModItems.cotton_candy){
-			player.addPotionEffect(new PotionEffect(MobEffects.POISON, 15 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 5 * 20, 0));
+			player.addPotionEffect(new PotionEffect(MobEffects.POISON, 15 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 25 * 20, 2));
-			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 25 * 20, 2));
-			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30 * 20, 4));
+			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 25 * 20, 5));
 		}
 		if(stack.getItem() == ModItems.schnitzel_vegan){
 			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10 * 20, 0));
-        	player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 30 * 20, 0));
+        	player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 3 * 20, 0));
         	player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 3 * 60 * 20, 4));
         	player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 3 * 20, 0));
+        	player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 30 * 20, 10));
         	
         	player.setFire(5 * 20);
         	player.motionY = 2;
 		}
 		if(stack.getItem() == ModItems.apple_schrabidium){
+			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10 * 20, 0));
+        	player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 3 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 600, 4));
-			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 6000, 0));
-			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 6000, 0));
+			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 600, 0));
+			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 600, 0));
 		}
 		if(stack.getItem() == ModItems.apple_schrabidium1){
+			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10 * 20, 0));
+        	player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 3 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 1200, 4));
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 1200, 4));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 1200, 0));
@@ -105,6 +133,8 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 			player.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 1200, 9));
 		}
 		if(stack.getItem() == ModItems.apple_schrabidium2){
+			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 10 * 20, 0));
+        	player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 3 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 2147483647, 4));
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 2147483647, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 2147483647, 0));
@@ -117,25 +147,25 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 			player.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 2147483647, 99));
 		}
 		if(stack.getItem() == ModItems.apple_lead){
-			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 1 * 20, 0));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 15 * 60 * 20, 5));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 15 * 20, 0));
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 15 * 60 * 20, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 1 * 20, 0));
 			player.addPotionEffect(new PotionEffect(HbmPotion.lead, 2 * 20, 1));
 			player.attackEntityFrom(ModDamageSource.lead, 1F);
 		}
 		if(stack.getItem() == ModItems.apple_lead1){
-			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 15 * 20, 0));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 15 * 60 * 20, 10));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 60 * 20, 0));
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 15 * 60 * 20, 4));
+			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 15 * 20, 0));
 			player.addPotionEffect(new PotionEffect(HbmPotion.lead, 4 * 20, 2));
 			player.attackEntityFrom(ModDamageSource.lead, 10F);
 		}
 		if(stack.getItem() == ModItems.apple_lead2){
-			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 30 * 20, 0));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 60 * 60 * 20, 40));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 4 * 60 * 20, 0));
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 60 * 60 * 20, 16));
+			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 30 * 20, 0));
 			player.addPotionEffect(new PotionEffect(HbmPotion.lead, 8 * 20, 4));
-			player.attackEntityFrom(ModDamageSource.lead, 24F);
+			player.attackEntityFrom(ModDamageSource.lead, 19F);
 		}
 	}
 

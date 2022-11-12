@@ -22,7 +22,7 @@ public class BlockMushHuge extends Block {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
-		this.setSoundType(SoundType.GROUND);
+		this.setSoundType(SoundType.PLANT);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	

@@ -265,7 +265,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     	double height = Math.max(20 - 1000 / (cloud.ticksExisted + interp - 13), 0);
     	boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
     	float percentageAge = maxage > 0 ? (float)(cloud.ticksExisted+interp)/maxage : 0F;
-    	double raise_speed = 0.033F * Math.pow(0.1, percentageAge) + 0.005F;
+    	double raise_speed = 0.016F * Math.pow(0.1, percentageAge) + 0.006F;
 
 
 		GL11.glPushMatrix();

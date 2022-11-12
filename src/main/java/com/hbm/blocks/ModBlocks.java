@@ -116,6 +116,7 @@ import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.blocks.generic.ReinforcedLamp;
 import com.hbm.blocks.generic.Spikes;
 import com.hbm.blocks.generic.TrappedBrick;
+import com.hbm.blocks.generic.WasteGrassTall;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.blocks.generic.YellowBarrel;
@@ -489,6 +490,7 @@ public class ModBlocks {
 	public static final Block block_waste_vitrified = new BlockNuclearWaste("block_waste_vitrified").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).addRadiation(ItemHazard.wst * 0.5F * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block waste_earth = new WasteEarth(Material.GROUND, true, 0.25F, 7.5F, "waste_earth").setSoundType(SoundType.GROUND).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_dirt = new WasteEarth(Material.GROUND, false, 0.15F, 5F, "waste_dirt").setSoundType(SoundType.GROUND).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block waste_grass_tall = new WasteGrassTall(Material.PLANTS, "waste_grass_tall").setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_mycelium = new WasteEarth(Material.GROUND, true, 1.0F, 25.0F, "waste_mycelium").setSoundType(SoundType.GROUND).setLightLevel(1.0F).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_trinitite = new BlockOre(Material.SAND, "waste_trinitite").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_trinitite_red = new BlockOre(Material.SAND, "waste_trinitite_red").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
@@ -1043,6 +1045,8 @@ public class ModBlocks {
 	
 	public static final Block machine_radgen = new MachineRadGen(Material.IRON, "machine_radgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_radgen = 58;
+	
+	public static final Block radsensor = new RadSensor(Material.IRON, "radsensor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	public static final Block machine_amgen = new MachineAmgen(Material.IRON, "machine_amgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_geo = new MachineAmgen(Material.IRON, "machine_geo").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

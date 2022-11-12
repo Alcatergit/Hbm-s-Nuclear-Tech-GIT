@@ -29,7 +29,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(true);
-		this.setSoundType(SoundType.GROUND);
+		this.setSoundType(SoundType.PLANT);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -42,7 +42,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 		if (pos.getY() >= 0 && pos.getY() < 256)
         {
             Block block = world.getBlockState(pos.down()).getBlock();
-            return block == ModBlocks.waste_earth || block == ModBlocks.waste_mycelium;
+            return block == ModBlocks.waste_earth || block == ModBlocks.waste_mycelium || block == ModBlocks.waste_dirt;
         }
         else
         {
@@ -68,7 +68,7 @@ public class BlockMush extends BlockBush implements IGrowable {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		this.checkAndDropBlock(worldIn, pos, state);
-		if(GeneralConfig.enableMycelium && worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.waste_earth && rand.nextInt(5) == 0){
+		if(GeneralConfig.enableMycelium && (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.waste_mycelium || worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.waste_earth) && rand.nextInt(5) == 0){
 			worldIn.setBlockState(pos.down(), ModBlocks.waste_mycelium.getDefaultState());
 		}
 		

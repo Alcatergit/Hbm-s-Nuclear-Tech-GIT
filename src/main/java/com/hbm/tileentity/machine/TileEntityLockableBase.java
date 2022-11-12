@@ -2,7 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemKey;
+import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
@@ -81,7 +81,7 @@ public class TileEntityLockableBase extends TileEntity {
 		} else {
 			ItemStack stack = player.getHeldItemMainhand();
 			
-			if(stack.getItem() instanceof ItemKey && ItemKey.getPins(stack) == this.lock) {
+			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
 	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}

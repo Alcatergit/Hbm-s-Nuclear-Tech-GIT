@@ -640,6 +640,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineSeleniumEngine.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_selenium"));
 		GameRegistry.registerTileEntity(TileEntityReactorControl.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_reactor_control"));
 		GameRegistry.registerTileEntity(TileEntityMachineRadGen.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radgen"));
+		GameRegistry.registerTileEntity(TileEntityRadSensor.class, new ResourceLocation(RefStrings.MODID, "tileentity_radsensor"));
 		GameRegistry.registerTileEntity(TileEntityMachineAmgen.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_amgen"));
 		GameRegistry.registerTileEntity(TileEntityMachineSPP.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_spp"));
 		GameRegistry.registerTileEntity(TileEntityMachineArcFurnace.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_arc_furnace"));

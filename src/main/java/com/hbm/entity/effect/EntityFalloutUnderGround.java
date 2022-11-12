@@ -21,8 +21,11 @@ import net.minecraft.util.math.ChunkPos;
 
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -200,8 +203,13 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 				return;
 			
-			} else if(bblock == Blocks.LEAVES || bblock == Blocks.LEAVES2) {
+			} else if(bblock instanceof BlockLeaves) {
 				world.setBlockToAir(pos);
+				continue;
+
+			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {
+				world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_earth.getDefaultState());
+				world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
 				continue;
 
 			} else if(bblock == Blocks.GRASS) {
@@ -209,7 +217,13 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.DIRT) {
-				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				BlockDirt.DirtType meta = b.getValue(BlockDirt.VARIANT);
+				if(meta == BlockDirt.DirtType.DIRT)
+					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
+					world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+				else if(meta == BlockDirt.DirtType.PODZOL)
+					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 				return;
 
 			} else if(bblock == Blocks.SNOW_LAYER) {
@@ -250,16 +264,18 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				}
 				return;
 
-			} else if(bblock == Blocks.LOG || bblock == Blocks.LOG2) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-
 			} else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
 				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
 				if(meta == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+					world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
 				} else {
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
 				}
+				return;
+
+
+			} else if(bblock instanceof BlockLog) {
+				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				return;
 
 			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log) {

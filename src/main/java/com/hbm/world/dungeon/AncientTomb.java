@@ -66,10 +66,10 @@ public class AncientTomb {
 		world.setBlockState(new BlockPos(x, yOff + 3, z + 2), ModBlocks.brick_concrete_marked.getDefaultState());
 		world.setBlockState(new BlockPos(x, yOff + 3, z - 2), ModBlocks.brick_concrete_marked.getDefaultState());
 
-		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
-		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
-		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
-		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.UP));
+		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
+		DungeonToolbox.generateBox(world, x + 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
+		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z - 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
+		DungeonToolbox.generateBox(world, x - 5, yOff + 2, z + 5, 1, 7, 1, ModBlocks.concrete_pillar.getDefaultState());
 		
 		/// PRINT SPIKES ///
 		int spikeCount = 36 + rand.nextInt(15);
