@@ -39,10 +39,10 @@ public class RadSensor extends BlockContainer {
 
 	    	TileEntityRadSensor entity = (TileEntityRadSensor) world.getTileEntity(pos);
 	    	player.sendMessage(new TextComponentString("§6===== ☢ Radiaton Sensor ☢ =====§r"));
-    		player.sendMessage(new TextComponentString("§eCurrent Chunk radiation: §a"+entity.chunkRads+"RAD/s§r"));
-			player.sendMessage(new TextComponentString("§eRedstone Signal Output: §c"+entity.redstoneOutput+"§r"));
-			player.sendMessage(new TextComponentString("§eRecieved radiation dose: §a"+entity.recievedDose+"RAD"));
-			player.sendMessage(new TextComponentString("§eComparator Signal Output: §c"+entity.comparatorOutput+"§r"));
+    		player.sendMessage(new TextComponentString("§eCurrent chunk radiation: §a"+entity.chunkRads+"RAD/s§r"));
+			player.sendMessage(new TextComponentString("§eRedstone signal output: §c"+entity.redstoneOutput+"§r"));
+			player.sendMessage(new TextComponentString("§eRecieved radiation dose: §a"+entity.recievedDose+"RAD§r"));
+			player.sendMessage(new TextComponentString("§eComparator signal output: §c"+entity.comparatorOutput+"§r"));
 			return true;
 		} else {
 			return false;
@@ -68,6 +68,8 @@ public class RadSensor extends BlockContainer {
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		if(side == EnumFacing.UP)
+			return 0;
 		TileEntityRadSensor entity = (TileEntityRadSensor) blockAccess.getTileEntity(pos);
         return entity.redstoneOutput;
 	}

@@ -21,11 +21,7 @@ public class RenderCloudResidue extends TileEntitySpecialRenderer<TileEntityClou
 
 	@Override
 	public void render(TileEntityCloudResidue te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GL11.glPushMatrix();
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buf = tessellator.getBuffer();
 		World world = te.getWorld();
-		GL11.glTranslated(x, y, z);
 		boolean ceil = world.getBlockState(te.getPos().up()).isNormalCube();
 		boolean floor = world.getBlockState(te.getPos().down()).isNormalCube();
 		boolean side1 = world.getBlockState(te.getPos().south()).isNormalCube();
@@ -36,10 +32,18 @@ public class RenderCloudResidue extends TileEntitySpecialRenderer<TileEntityClou
 		float f1 = 1;
 		float f2 = 0;
 		float f3 = 1;
+		float f6 = world.getLightBrightness(te.getPos());
 		double d2 = 0.05000000074505806D;
+
+		GL11.glPushMatrix();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buf = tessellator.getBuffer();
+
+		GL11.glTranslated(x, y, z);
+
 		bindTexture(new ResourceLocation("hbm:textures/blocks/residue.png"));
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		float f6 = world.getLightBrightness(te.getPos());
+		
 		GlStateManager.disableLighting();
 		if (side2) {
 
@@ -112,7 +116,6 @@ public class RenderCloudResidue extends TileEntitySpecialRenderer<TileEntityClou
 			buf.pos(0.0F, 0.0F + d2, 0.0D).tex(f, f3).color(f6, f6, f6, 1.0F).endVertex();
 		}
 		tessellator.draw();
-		GlStateManager.enableLighting();
 		GL11.glPopMatrix();
 	}
 }

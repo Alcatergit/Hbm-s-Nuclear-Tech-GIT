@@ -21,11 +21,7 @@ public class RenderTaint extends TileEntitySpecialRenderer<TileEntityTaint> {
 
 	@Override
 	public void render(TileEntityTaint te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GL11.glPushMatrix();
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buf = tessellator.getBuffer();
 		World world = te.getWorld();
-		GL11.glTranslated(x, y, z);
 		boolean ceil = world.getBlockState(te.getPos().up()).isNormalCube();
 		boolean floor = world.getBlockState(te.getPos().down()).isNormalCube();
 		boolean side1 = world.getBlockState(te.getPos().south()).isNormalCube();
@@ -36,10 +32,18 @@ public class RenderTaint extends TileEntitySpecialRenderer<TileEntityTaint> {
 		float f1 = 1;
 		float f2 = 0;
 		float f3 = 1;
+		float f6 = world.getLightBrightness(te.getPos());
 		double d2 = 0.05000000074505806D;
+
+		GL11.glPushMatrix();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buf = tessellator.getBuffer();
+
+		GL11.glTranslated(x, y, z);
+		
 		bindTexture(new ResourceLocation("hbm:textures/blocks/taint_" + te.getBlockMetadata() + ".png"));
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		float f6 = world.getLightBrightness(te.getPos());
+		
 		GlStateManager.disableLighting();
 		if (side2) {
 

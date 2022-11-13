@@ -39,7 +39,7 @@ armor.glider=Glider
 item.grenade_solinium.name=Solinium Grenade
 
 tile.radsensor.name=Radiation Sensor
-tile.waste_grass_tall=Waste Grass
+tile.waste_grass_tall.name=Waste Grass
 
 item.mp_warhead_15_volcano.name=Size 15 Volcano Warhead
 fluid.radwater_fluid=Radiated Water

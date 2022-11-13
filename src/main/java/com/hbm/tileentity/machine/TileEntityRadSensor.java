@@ -4,6 +4,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.Library;
 import com.hbm.saveddata.RadiationSavedData;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +17,8 @@ public class TileEntityRadSensor extends TileEntity implements ITickable {
 
 	public float chunkRads = 0;
 	public float recievedDose = 0;
+
+	public float lastChunkRads = 0;
 
 	public int redstoneOutput = 0;
 	public int comparatorOutput = 0;
@@ -104,23 +107,32 @@ public class TileEntityRadSensor extends TileEntity implements ITickable {
 			return 14;
 		return 15;
 	}
-
 	
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			lastRedstoneOutput = redstoneOutput;
-			lastComparatorOutput = comparatorOutput;
+			
 
 			RadiationSavedData data = RadiationSavedData.getData(world);
-			chunkRads = data.getRadNumFromCoord(pos);
-			recievedDose += chunkRads/20F;
+			chunkRads = (data.getRadNumFromCoord(pos) + lastChunkRads)/2F;
+			
+			if(world.isBlockPowered(pos.add(0, -1, 0))){
+				recievedDose = 0;
+			}else{
+				recievedDose += chunkRads/20F;
+			}
 
 			redstoneOutput = getRestoneOutput();
 			comparatorOutput = getComparatorOutput();
 
+			
 			if(redstoneOutput != lastRedstoneOutput || lastComparatorOutput != comparatorOutput)
 				world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+
+			lastChunkRads = chunkRads;
+
+			lastRedstoneOutput = redstoneOutput;
+			lastComparatorOutput = comparatorOutput;
 		}
 	}
 }

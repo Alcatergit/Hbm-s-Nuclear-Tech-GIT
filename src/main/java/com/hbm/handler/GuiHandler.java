@@ -1174,7 +1174,7 @@ public class GuiHandler implements IGuiHandler {
 		case ModItems.guiID_item_folder:
 			return new GUIScreenTemplateFolder(player);
 		case ModItems.guiID_item_designator:
-			return new GUIScreenDesignator(player, x);
+			return new GUIScreenDesignator(player);
 		case ModItems.guiID_item_sat_interface:
 			return new GUIScreenSatInterface(player);
 		case ModItems.guiID_item_sat_coord:

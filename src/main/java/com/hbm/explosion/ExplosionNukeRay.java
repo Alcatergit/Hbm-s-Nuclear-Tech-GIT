@@ -95,9 +95,9 @@ public class ExplosionNukeRay {
 
 	private float getNukeResistance(MutableBlockPos pos){
 		if(world.getBlockState(pos).getMaterial().isLiquid())
-			return 0F;
+			return 0.1F;
 		else
-			return world.getBlockState(pos).getBlock().getExplosionResistance(null);
+			return world.getBlockState(pos).getBlock().getExplosionResistance(null)+0.1F;
 	}
 
 	private FloatTriplet getNormalFibVec(int sample){
