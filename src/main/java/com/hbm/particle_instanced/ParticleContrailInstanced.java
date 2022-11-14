@@ -10,15 +10,16 @@ import net.minecraft.world.World;
 
 public class ParticleContrailInstanced extends ParticleInstanced {
 
-	private int age;
+	private int age = 0;
 	private int maxAge;
 	private float scale;
 	private float[] vals = new float[4*6];
+
 	
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleTexture = ModEventHandlerClient.contrail;
-		maxAge = 100 + rand.nextInt(40);
+		maxAge = 600 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.scale = 4F;
@@ -28,7 +29,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public ParticleContrailInstanced(World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		this.particleTexture = ModEventHandlerClient.contrail;
-		maxAge = 100 + rand.nextInt(40);
+		maxAge = 600 + rand.nextInt(50);
 
 		this.particleRed = red;
 		this.particleGreen = green;
@@ -42,11 +43,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		Random urandom = new Random(this.hashCode());
 		for(int i = 0; i < 6; i ++){
 			//The three random values that are added to the position when rendering
-			vals[i*4] = (float) (urandom.nextGaussian()*0.5);
-			vals[i*4+1] = (float) (urandom.nextGaussian()*0.5);
-			vals[i*4+2] = (float) (urandom.nextGaussian()*0.5);
-			//The color mod
-			vals[i*4+3] = urandom.nextFloat() * 0.2F + 0.2F;
+			vals[i*4] = (float) (urandom.nextGaussian()*0.5F);
+			vals[i*4+1] = (float) (urandom.nextGaussian()*0.5F);
+			vals[i*4+2] = (float) (urandom.nextGaussian()*0.5F);
 		}
 	}
 	
@@ -55,9 +54,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		particleAlpha = 1 - ((float) age / (float) maxAge);
+		particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
 
-		++this.age;
+		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
@@ -70,8 +69,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		float x = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX));
 		float y = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY));
 		float z = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ));
-		this.particleScale = particleAlpha + 0.5F * this.scale;
-		for(int ii = 0; ii < 6; ii ++){
+		this.particleScale = (1-particleAlpha)*3F + 1F + 0.5F * this.scale;
+		float mod = particleAlpha * 0.1F;
+		for(int ii = 0; ii < 6; ii++){
 			
 			buf.putFloat(x+vals[ii*4]);
 			buf.putFloat(y+vals[ii*4+1]);
@@ -84,7 +84,6 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 			buf.putFloat(this.particleTexture.getMaxU()-this.particleTexture.getMinU());
 			buf.putFloat(this.particleTexture.getMaxV()-this.particleTexture.getMinV());
 			
-			float mod = vals[ii*4+3];
 			byte r = (byte) (MathHelper.clamp(this.particleRed+mod, 0, 1)*255);
 			byte g = (byte) (MathHelper.clamp(this.particleGreen+mod, 0, 1)*255);
 			byte b = (byte) (MathHelper.clamp(this.particleBlue+mod, 0, 1)*255);

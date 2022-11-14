@@ -6,12 +6,14 @@ import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.world.World;
 
 public class TileEntityRadSensor extends TileEntity implements ITickable {
 
@@ -107,7 +109,22 @@ public class TileEntityRadSensor extends TileEntity implements ITickable {
 			return 14;
 		return 15;
 	}
-	
+
+	public static int getRedstonePower(World world, BlockPos blockPos, EnumFacing side) {
+	    BlockPos offsetPos = blockPos.offset(side);
+	    int worldPower = world.getRedstonePower(offsetPos, side);
+	    if (worldPower >= 15) {
+	        return worldPower;
+	    } else {
+	        IBlockState offsetState = world.getBlockState(offsetPos);
+	        if(offsetState.getBlock() instanceof BlockRedstoneWire) {
+	            int wirePower = offsetState.getValue(BlockRedstoneWire.POWER);
+	            return Math.max(worldPower, wirePower);
+	        }
+	        return worldPower;
+	    }
+	}
+		
 	@Override
 	public void update() {
 		if(!world.isRemote) {
@@ -116,7 +133,7 @@ public class TileEntityRadSensor extends TileEntity implements ITickable {
 			RadiationSavedData data = RadiationSavedData.getData(world);
 			chunkRads = (data.getRadNumFromCoord(pos) + lastChunkRads)/2F;
 			
-			if(world.isBlockPowered(pos.add(0, -1, 0))){
+			if(0 < getRedstonePower(world, pos, EnumFacing.DOWN)){
 				recievedDose = 0;
 			}else{
 				recievedDose += chunkRads/20F;

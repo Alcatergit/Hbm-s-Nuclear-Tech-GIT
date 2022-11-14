@@ -1128,7 +1128,7 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exKerosene".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.8F, 0.7F, 1F);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exSolid".equals(type)) {
@@ -1136,7 +1136,7 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exHydrogen".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.7F, 0.7F, 0.7F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.9F, 0.9F, 1F);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exBalefire".equals(type)) {

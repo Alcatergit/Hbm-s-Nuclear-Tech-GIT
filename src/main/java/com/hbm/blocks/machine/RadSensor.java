@@ -65,6 +65,11 @@ public class RadSensor extends BlockContainer {
 	public boolean canProvidePower(IBlockState state) {
 		return true;
 	}
+
+	@Override
+	public boolean getWeakChanges(IBlockAccess world, BlockPos pos){
+		return false;
+	}
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
