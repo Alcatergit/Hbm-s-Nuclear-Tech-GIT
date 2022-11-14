@@ -1,6 +1,6 @@
 # <u>**Alcaters HBM Nuclear Tech Mod 1.12.2 Fork**</u>
 
-This is my fork of the 1.12.2 fort made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
+This is my fork of the 1.12.2 fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
 
 [![Support Server](https://img.shields.io/discord/320301110759784449.svg?color=7289da&label=HBM&logo=discord&style=flat-square)](https://discord.gg/ZFJDFBN)
 
