@@ -1,0 +1,9 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": "hbm:blocks/brick_obsidian",
+        "top": "hbm:blocks/brick_obsidian",
+        "side": "hbm:blocks/brick_obsidian"
+    }
+}
+

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom,variant=default": { "model": "hbm:ducrete_reinforced" },
+        "half=top,variant=default": { "model": "hbm:ducrete_reinforced" }
+    }
+}

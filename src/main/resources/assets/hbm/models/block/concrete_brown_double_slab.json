@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "hbm:blocks/concrete_brown_double_slab"
+    }
+}

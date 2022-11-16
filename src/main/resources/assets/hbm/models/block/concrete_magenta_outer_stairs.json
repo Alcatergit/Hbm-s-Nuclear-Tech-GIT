@@ -1,0 +1,8 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "hbm:blocks/concrete_magenta",
+        "top": "hbm:blocks/concrete_magenta",
+        "side": "hbm:blocks/concrete_magenta"
+    }
+}

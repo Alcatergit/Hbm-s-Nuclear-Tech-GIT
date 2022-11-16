@@ -1,0 +1,9 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": "hbm:blocks/ducrete_brick",
+        "top": "hbm:blocks/ducrete_brick",
+        "side": "hbm:blocks/ducrete_brick"
+    }
+}
+

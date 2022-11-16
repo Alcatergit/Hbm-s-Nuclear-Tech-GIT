@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "hbm:blocks/concrete_yellow",
+        "top": "hbm:blocks/concrete_yellow",
+        "side": "hbm:blocks/concrete_yellow"
+    }
+}
