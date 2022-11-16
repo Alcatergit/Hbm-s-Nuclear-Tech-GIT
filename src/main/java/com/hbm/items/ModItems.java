@@ -2110,6 +2110,7 @@ public class ModItems {
 	public static final Item wire_advanced_alloy = new ItemBase("wire_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_advanced_alloy = new ItemBase("coil_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_advanced_torus = new ItemBase("coil_advanced_torus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_gold = new ItemBase("wire_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_gold = new ItemBase("coil_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_gold_torus = new ItemBase("coil_gold_torus").setCreativeTab(MainRegistry.partsTab);
 	public static final Item wire_red_copper = new ItemBase("wire_red_copper").setCreativeTab(MainRegistry.partsTab);
@@ -2119,7 +2120,6 @@ public class ModItems {
 	public static final Item wire_copper = new ItemBase("wire_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper = new ItemBase("coil_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper_torus = new ItemBase("coil_copper_torus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_gold = new ItemBase("wire_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item wire_schrabidium = new ItemHazard(0.5F, false, true, "wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item wire_magnetized_tungsten = new ItemBase("wire_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_magnetized_tungsten = new ItemBase("coil_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);

@@ -1240,15 +1240,16 @@ public class ModEventHandler {
 			PacketDispatcher.sendTo(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()), playerMP);
 
 			if (GeneralConfig.enableWelcomeMessage) {
-				e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
+				e.player.sendMessage(new TextComponentTranslation("§3Welcome back§r"));
 			}
 
 			if(HTTPHandler.newVersion) {
-				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "New version " + HTTPHandler.versionNumber + " is available!"));
+				e.player.sendMessage(new TextComponentString("§ePOG - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
+				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
 			}
 			
 			if(HTTPHandler.optifine){
-				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Optifine detected, may cause compatibility issues. Check log for details."));
+				e.player.sendMessage(new TextComponentString("Optifine detected, may cause compatibility issues. Check log for details."));
 			}
 			
 			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))

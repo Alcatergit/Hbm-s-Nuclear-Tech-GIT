@@ -297,7 +297,7 @@ public class RecipesCommon {
 		
 		@Override
 		public String toString() {
-			return "ComparableStack: item, " + item.getRegistryName() + ", meta, " + meta + ", stack size, " + stacksize;
+			return "ComparableStack: { "+stacksize+" x "+item.getRegistryName()+"@"+meta+" }";
 		}
 	}
 	
