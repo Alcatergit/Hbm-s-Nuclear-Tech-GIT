@@ -19,6 +19,7 @@ import com.hbm.explosion.ExplosionHurtUtil;
 import com.hbm.explosion.ExplosionNukeAdvanced;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionSolinium;
+import com.hbm.explosion.ExplosionDrying;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.main.MainRegistry;
 
@@ -38,6 +39,7 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 	public ExplosionNukeAdvanced vap;
 	public ExplosionFleija expl;
 	public ExplosionSolinium sol;
+	public ExplosionDrying dry;
 	public int speed = 1;
 	public float coefficient = 1;
 	public float coefficient2 = 1;
@@ -83,6 +85,10 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
     			sol = new ExplosionSolinium((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
     			sol.readFromNbt(nbt, "sol_");
     		}
+    		if(extType == 2) {
+    			dry = new ExplosionDrying((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
+    			dry.readFromNbt(nbt, "dry_");
+    		}
     	}
     	
     	this.did = true;
@@ -113,6 +119,8 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 			expl.saveToNbt(nbt, "expl_");
 		if(sol != null)
 			sol.saveToNbt(nbt, "sol_");
+		if(dry != null)
+			dry.saveToNbt(nbt, "dry_");
 		
 	}
 
@@ -141,6 +149,8 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
         			expl = new ExplosionFleija((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
         		if(extType == 1)
         			sol = new ExplosionSolinium((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
+        		if(extType == 2)
+        			dry = new ExplosionDrying((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
         	}
         	
         	this.did = true;
@@ -166,6 +176,9 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
         				this.setDead();
         		if(extType == 1)
         			if(sol.update())
+        				this.setDead();
+        		if(extType == 2)
+        			if(dry.update())
         				this.setDead();
         	}
         }

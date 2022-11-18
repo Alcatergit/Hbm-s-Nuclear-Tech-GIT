@@ -711,17 +711,20 @@ public class ResourceManager {
 	public static final ResourceLocation satdock_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sat_dock.png");
 
 	//Vault Door
-	public static final ResourceLocation vault_cog_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_cog.png");
+	public static final ResourceLocation vault_cog_1_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_cog_1.png");
+	public static final ResourceLocation vault_cog_2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_cog_2.png");
+	public static final ResourceLocation vault_cog_3_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_cog_3.png");
+	public static final ResourceLocation vault_cog_4_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_cog_4.png");
 	public static final ResourceLocation vault_frame_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_frame.png");
-	public static final ResourceLocation vault_label_101_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_101.png");
-	public static final ResourceLocation vault_label_87_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_87.png");
-	public static final ResourceLocation vault_label_106_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_106.png");
-	public static final ResourceLocation stable_cog_tex = new ResourceLocation(RefStrings.MODID, "textures/models/stable_cog.png");
-	public static final ResourceLocation stable_label_tex = new ResourceLocation(RefStrings.MODID, "textures/models/stable_label.png");
-	public static final ResourceLocation stable_label_99_tex = new ResourceLocation(RefStrings.MODID, "textures/models/stable_label_99.png");
-	public static final ResourceLocation vault4_cog_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault4_cog.png");
-	public static final ResourceLocation vault4_label_111_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault4_label_111.png");
-	public static final ResourceLocation vault4_label_81_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault4_label_81.png");
+	public static final ResourceLocation vault_label_1_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_1.png");
+	public static final ResourceLocation vault_label_2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_2.png");
+	public static final ResourceLocation vault_label_3_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_3.png");
+	public static final ResourceLocation vault_label_4_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_4.png");
+	public static final ResourceLocation vault_label_5_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_5.png");
+	public static final ResourceLocation vault_label_6_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_6.png");
+	public static final ResourceLocation vault_label_7_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_7.png");
+	public static final ResourceLocation vault_label_8_tex = new ResourceLocation(RefStrings.MODID, "textures/models/vault_label_8.png");
+
 	
 	//Solar Tower
 	public static final ResourceLocation solar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/solar_boiler.png");

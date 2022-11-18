@@ -65,21 +65,17 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 			return true;
 		} else if(player.getHeldItemMainhand().getItem() instanceof ItemLock || player.getHeldItemMainhand().getItem() == ModItems.key_kit) {
 			return false;
-			
-		} if(!player.isSneaking()) {
+		} 
+		if(!player.isSneaking()) {
 			
 			TileEntitySiloHatch entity = (TileEntitySiloHatch) world.getTileEntity(pos);
-			if(entity != null)
-			{
-				if(entity.isLocked()) {
-					if(entity.canAccess(player))
-						entity.tryToggle();
-				} else {
+			if(entity != null) {
+				if(entity.canAccess(player)){
 					entity.tryToggle();
-				}
+					return true;
+				}	
 			}
-			
-			return true;
+			return false;
 		}
 		
 		return false;

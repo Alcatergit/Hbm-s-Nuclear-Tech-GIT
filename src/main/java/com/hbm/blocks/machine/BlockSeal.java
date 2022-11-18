@@ -48,8 +48,7 @@ public class BlockSeal extends Block implements IBomb {
 		if(world.isRemote)
 		{
 			return true;
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
 			int i = BlockSeal.getFrameSize(world, pos);
 			
 			if(i != 0)

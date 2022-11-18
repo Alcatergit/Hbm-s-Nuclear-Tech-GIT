@@ -22,7 +22,7 @@ public class ParticleContrail extends Particle {
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 600 + rand.nextInt(50);
+		maxAge = 400 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.particleScale = 1F;

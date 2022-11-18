@@ -62,26 +62,25 @@ public class RenderVaultDoor extends TileEntitySpecialRenderer<TileEntityVaultDo
         GL11.glRotated(timer[2], 1, 0, 0);
         GL11.glTranslated(0.0D, -2.5D, 0.0D);
 
-        
-        switch(te.type) {
-        case 1:
-        case 2: bindTexture(ResourceManager.vault_cog_tex); break;
-        case 3:
-        case 4: bindTexture(ResourceManager.stable_cog_tex); break;
-        case 5:
-        case 6: bindTexture(ResourceManager.vault4_cog_tex); break;
-        default: bindTexture(ResourceManager.vault_cog_tex); break;
+        switch((int)(te.type / 8F)) {
+        case 0: bindTexture(ResourceManager.vault_cog_1_tex); break;
+        case 1: bindTexture(ResourceManager.vault_cog_2_tex); break;
+        case 2: bindTexture(ResourceManager.vault_cog_3_tex); break;
+        case 3: bindTexture(ResourceManager.vault_cog_4_tex); break;
+        default: bindTexture(ResourceManager.vault_cog_1_tex); break;
         }
         ResourceManager.vault_cog.renderAll();
         
-        switch(te.type) {
-        case 1: bindTexture(ResourceManager.vault_label_87_tex); break;
-        case 2: bindTexture(ResourceManager.vault_label_106_tex); break;
-        case 3: bindTexture(ResourceManager.stable_label_tex); break;
-        case 4: bindTexture(ResourceManager.stable_label_99_tex); break;
-        case 5: bindTexture(ResourceManager.vault4_label_111_tex); break;
-        case 6: bindTexture(ResourceManager.vault4_label_81_tex); break;
-        default: bindTexture(ResourceManager.vault_label_101_tex); break;
+        switch(te.type % 8) {
+            case 0: bindTexture(ResourceManager.vault_label_1_tex); break;
+            case 1: bindTexture(ResourceManager.vault_label_2_tex); break;
+            case 2: bindTexture(ResourceManager.vault_label_3_tex); break;
+            case 3: bindTexture(ResourceManager.vault_label_4_tex); break;
+            case 4: bindTexture(ResourceManager.vault_label_5_tex); break;
+            case 5: bindTexture(ResourceManager.vault_label_6_tex); break;
+            case 6: bindTexture(ResourceManager.vault_label_7_tex); break;
+            case 7: bindTexture(ResourceManager.vault_label_8_tex); break;
+            default: bindTexture(ResourceManager.vault_label_4_tex); break;
         }
         ResourceManager.vault_label.renderAll();
 

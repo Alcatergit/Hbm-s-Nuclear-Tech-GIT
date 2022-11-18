@@ -19,7 +19,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleTexture = ModEventHandlerClient.contrail;
-		maxAge = 600 + rand.nextInt(50);
+		maxAge = 400 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.scale = 4F;

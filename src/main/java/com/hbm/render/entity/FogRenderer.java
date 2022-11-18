@@ -47,7 +47,7 @@ public class FogRenderer extends Render<EntityFogFX> {
 
 		GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(0.85F, 0.9F, 0.5F, alpha);
+        GL11.glColor4f(1.0F, 0.6F, 0.3F, alpha);
        
       //  GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);

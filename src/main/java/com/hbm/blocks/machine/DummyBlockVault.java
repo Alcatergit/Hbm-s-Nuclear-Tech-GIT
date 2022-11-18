@@ -74,12 +74,14 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb, IR
 				TileEntityVaultDoor entity = (TileEntityVaultDoor) world.getTileEntity(((TileEntityDummy)til).target);
 				if(entity != null)
 				{
-					if(entity.canAccess(player))
+					if(entity.canAccess(player)){
 						entity.tryToggle();
+						return true;
+					}
 				}
 			}
+			return false;
 			
-			return true;
 		} else {
 			TileEntity te = world.getTileEntity(pos);
 			if(te != null && te instanceof TileEntityDummy && ((TileEntityDummy)te).target != null) {
@@ -93,7 +95,7 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb, IR
 				}
 			}
 			
-			return true;
+			return false;
 		}
 	}
 	

@@ -67,17 +67,13 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock {
 		} if(!player.isSneaking()) {
 			
 			TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(pos);
-			if(entity != null)
-			{
-				if(entity.isLocked()) {
-					if(entity.canAccess(player))
-						entity.tryToggle();
-				} else {
+			if(entity != null) {
+				if(entity.canAccess(player)){
 					entity.tryToggle();
-				}
+					return true;
+				}	
 			}
-			
-			return true;
+			return false;
 		}
 		
 		return false;

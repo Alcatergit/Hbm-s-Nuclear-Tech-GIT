@@ -234,17 +234,13 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 		} if(!player.isSneaking()) {
 			
 			TileEntityVaultDoor entity = (TileEntityVaultDoor) world.getTileEntity(pos);
-			if(entity != null)
-			{
-				if(entity.isLocked()) {
-					if(entity.canAccess(player))
-						entity.tryToggle();
-				} else {
+			if(entity != null) {
+				if(entity.canAccess(player)){
 					entity.tryToggle();
-				}
+					return true;
+				}	
 			}
-			
-			return true;
+			return false;
 		} else {
 			
 			TileEntityVaultDoor entity = (TileEntityVaultDoor) world.getTileEntity(pos);
@@ -254,7 +250,7 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 				if(entity.type >= TileEntityVaultDoor.maxTypes)
 					entity.type = 0;
 			}
-			return true;
+			return false;
 		}
 	}
 	

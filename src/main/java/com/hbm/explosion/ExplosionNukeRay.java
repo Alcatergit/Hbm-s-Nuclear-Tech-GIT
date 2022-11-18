@@ -40,7 +40,7 @@ public class ExplosionNukeRay {
 		//this.startY = strength;
 		//Mk 4.5, must be int32
 		this.currentSample = 0;
-		this.maxSamples = (int) (20 * 4 * Math.PI * Math.pow(radius, 2));
+		this.maxSamples = (int) (5 * Math.PI * Math.pow(radius, 2));
 		this.phi = (float)(Math.PI * (3 - Math.sqrt(5)));
 	}
 
@@ -53,7 +53,7 @@ public class ExplosionNukeRay {
 		FloatTriplet lastPos = new FloatTriplet(posX, posY, posZ);
 		for(int s = currentSample; s < this.maxSamples; s++) {
 			FloatTriplet direction = getNormalFibVec(s);
-			float rayEnergy = (float)radius*0.6F;
+			float rayEnergy = (float)radius * 0.7F;
 			for(int l = 0; l < this.radius+1; l++){
 				float x0 = (float) (posX + direction.xCoord * l);
 				float y0 = (float) (posY + direction.yCoord * l);

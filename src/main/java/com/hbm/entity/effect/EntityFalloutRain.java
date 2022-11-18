@@ -1,5 +1,7 @@
 package com.hbm.entity.effect;
 
+import java.util.*;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.config.RadiationConfig;
@@ -23,8 +25,10 @@ import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
@@ -54,6 +58,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	private double s4;
 	private double s5;
 	private double s6;
+	private double fallingRadius;
+
+	private boolean firstTick = true;
+	private final List<Long> chunksToProcess = new ArrayList<>();
+	private final List<Long> outerChunksToProcess = new ArrayList<>();
+
+	private static int tickDelayStatic = 12;
+	private int tickDelay = 0;
 
 	public EntityFalloutRain(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -136,52 +148,95 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
         }
 	}
 
+	private void gatherChunks() {
+		Set<Long> chunks = new LinkedHashSet<>(); // LinkedHashSet preserves insertion order
+		Set<Long> outerChunks = new LinkedHashSet<>();
+		int outerRange = getScale();
+		// Basically defines something like the step size, but as indirect proportion. The actual angle used for rotation will always end up at 360° for angle == adjustedMaxAngle
+		// So yea, I mathematically worked out that 20 is a good value for this, with the minimum possible being 18 in order to reach all chunks
+		int adjustedMaxAngle = 20 * outerRange / 32; // step size = 20 * chunks / 2
+		for (int angle = 0; angle <= adjustedMaxAngle; angle++) {
+			Vec3 vector = Vec3.createVectorHelper(outerRange, 0, 0);
+			vector.rotateAroundY((float) (angle * Math.PI / 180.0 / (adjustedMaxAngle / 360.0))); // Ugh, mutable data classes (also, ugh, radians; it uses degrees in 1.18; took me two hours to debug)
+			outerChunks.add(ChunkPos.asLong((int) (posX + vector.xCoord) >> 4, (int) (posZ + vector.zCoord) >> 4));
+		}
+		for (int distance = 0; distance <= outerRange; distance += 8) for (int angle = 0; angle <= adjustedMaxAngle; angle++) {
+			Vec3 vector = Vec3.createVectorHelper(distance, 0, 0);
+			vector.rotateAroundY((float) (angle * Math.PI / 180.0 / (adjustedMaxAngle / 360.0)));
+			long chunkCoord = ChunkPos.asLong((int) (posX + vector.xCoord) >> 4, (int) (posZ + vector.zCoord) >> 4);
+			if (!outerChunks.contains(chunkCoord)) chunks.add(chunkCoord);
+		}
+
+		chunksToProcess.addAll(chunks);
+		outerChunksToProcess.addAll(outerChunks);
+		Collections.reverse(chunksToProcess); // So it starts nicely from the middle
+		Collections.reverse(outerChunksToProcess);
+	}
+
 	@Override
 	public void onUpdate() {
 
 		if(!world.isRemote) {
-			MutableBlockPos pos = new BlockPos.MutableBlockPos();
-			for(int i = 0; i < BombConfig.fSpeed; i++) {
+			if(firstTick) {
+				if (chunksToProcess.isEmpty() && outerChunksToProcess.isEmpty()) gatherChunks();
+				firstTick = false;
+			}
 
-				Vec3 vec = Vec3.createVectorHelper(radProgress * 0.5, 0, 0);
-				double circum = radProgress * 2 * Math.PI * 2;
 
-				///
-				if(circum == 0)
-					circum = 1;
-				///
-
-				double part = 360D / circum;
-
-				vec.rotateAroundY((float) (part * revProgress));
-
-				int x = (int) (posX + vec.xCoord);
-				int z = (int) (posZ + vec.zCoord);
-
-				double dist = radProgress * 100 / getScale() * 0.5;
-				pos.setPos(x, 0, z);
-				stomp(pos, dist);
-
-				revProgress++;
-
-				if(revProgress > circum) {
-					revProgress = 0;
-					radProgress++;
-				}
-
-				if(radProgress > getScale() * 2D) {
-					done=true;
-					this.setDead();
+			if(tickDelay == 0) {
+				tickDelay = tickDelayStatic;
+				
+				if (!chunksToProcess.isEmpty()) {
+					long chunkPos = chunksToProcess.remove(chunksToProcess.size() - 1); // Just so it doesn't shift the whole list every time
+					int chunkPosX = (int) (chunkPos & Integer.MAX_VALUE);
+					int chunkPosZ = (int) (chunkPos >> 32 & Integer.MAX_VALUE);
+					for(int x = chunkPosX << 4; x < (chunkPosX << 4) + 16; x++) {
+						for(int z = chunkPosZ << 4; z < (chunkPosZ << 4) + 16; z++) {
+							stomp(new MutableBlockPos(x, 0, z), Math.hypot(x - posX, z - posZ) * 100F / (float)getScale());
+						}
+					}
+					
+				} else if (!outerChunksToProcess.isEmpty()) {
+					long chunkPos = outerChunksToProcess.remove(outerChunksToProcess.size() - 1);
+					int chunkPosX = (int) (chunkPos & Integer.MAX_VALUE);
+					int chunkPosZ = (int) (chunkPos >> 32 & Integer.MAX_VALUE);
+					for(int x = chunkPosX << 4; x < (chunkPosX << 4) + 16; x++) {
+						for(int z = chunkPosZ << 4; z < (chunkPosZ << 4) + 16; z++) {
+							double distance = Math.hypot(x - posX, z - posZ);
+							if(distance <= getScale()) {
+								stomp(new MutableBlockPos(x, 0, z), distance * 100F / (float)getScale());
+							}
+						}
+					}
+					
+				} else {
+					setDead();
 				}
 			}
 
+			tickDelay--;
+
+
 			if(this.isDead) {
+				this.done = true;
 				if(RadiationConfig.rain > 0 && getScale() > 150) {
 					world.getWorldInfo().setRaining(true);
 					world.getWorldInfo().setThundering(true);
 					world.getWorldInfo().setRainTime(RadiationConfig.rain);
 					world.getWorldInfo().setThunderTime(RadiationConfig.rain);
 					AuxSavedData.setThunder(world, RadiationConfig.rain);
+				}
+			}
+		}
+	}
+
+	private void letFall(World world, MutableBlockPos pos, int maxDepth){
+		for(int i = 0; i <= maxDepth; i++) {
+			if(!world.isAirBlock(pos.add(0, i, 0))){
+				float hardness = world.getBlockState(pos.add(0, i, 0)).getBlock().getExplosionResistance(null);
+				if(hardness > 0 && hardness < 10){
+					EntityFallingBlock entityFallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY() + 0.5D + i, pos.getZ() + 0.5D, world.getBlockState(pos.add(0, i, 0)));
+					world.spawnEntity(entityFallingBlock);
 				}
 			}
 		}
@@ -206,29 +261,39 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		else if(dist <= s6)
 			maxStoneDepth = 6;
 
+		boolean lastReachedStone = false;
 		boolean reachedStone = false;
+		int contactHeight = 420;
+		boolean gapFound = false;
 		for(int y = 255; y >= 0; y--) {
 			pos.setY(y);
 			IBlockState b = world.getBlockState(pos);
 			Block bblock = b.getBlock();
 			Material bmaterial = b.getMaterial();
+			lastReachedStone = reachedStone;
+
+			if(bblock.isNormalCube(b) && contactHeight == 420)
+				contactHeight = Math.min(y+1, 255);
 			
-			if(reachedStone){
+			if(reachedStone && bmaterial != Material.AIR){
 				stoneDepth++;
 			}
 			else{
 				reachedStone = b.getMaterial() == Material.ROCK;
 			}
 			if(reachedStone && stoneDepth > maxStoneDepth){
-					return;
+				break;
 			}
 			
-			if(bmaterial == Material.AIR)
+			if(bmaterial == Material.AIR){
+				if(y < contactHeight && contactHeight < 420)
+					gapFound = true;
 				continue;
+			}
 
 			if(bblock == Blocks.BEDROCK){
 				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
-				return;
+				break;
 			}
 
 			if(bblock.isFlammable(world, pos, EnumFacing.UP)) {
@@ -244,6 +309,11 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			// if(b.getBlock() == Blocks.WATER) {
 			// 	world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
 			// }
+
+			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s4){
+				world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
+				continue;
+			}
 
 			else if(bblock == Blocks.STONE) {
 				if(dist > s1 || stoneDepth==maxStoneDepth)
@@ -261,7 +331,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				else if(dist <= s6 || stoneDepth==maxStoneDepth-6)
 					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
 				else
-					return;
+					break;
 				continue;
 
 			} else if(bblock == Blocks.GRASS) {
@@ -299,17 +369,17 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
 				}
-				return;
+				break;
 			}
 
 			else if(bblock == Blocks.CLAY) {
 				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
-				return;
+				break;
 			}
 
 			else if(bblock == Blocks.MOSSY_COBBLESTONE) {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
-				return;
+				break;
 			}
 
 			else if(bblock == Blocks.COAL_ORE) {
@@ -321,7 +391,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 					}
 				}
-				return;
+				break;
 			}
 
 			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
@@ -343,24 +413,30 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				continue;
 			}
-			// else if(b.getBlock() == ModBlocks.sellafield_4) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
-			// }
-			// else if(b.getBlock() == ModBlocks.sellafield_3) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
-			// }
-			// else if(b.getBlock() == ModBlocks.sellafield_2) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
-			// }
-			// else if(b.getBlock() == ModBlocks.sellafield_1) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-			// }
-			// else if(b.getBlock() == ModBlocks.sellafield_0) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-			// }
-			// else if(b.getBlock() == ModBlocks.sellafield_slaked) {
-			// 	world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-			// }
+			else if(b.getBlock() == ModBlocks.sellafield_4) {
+				world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+				continue;
+			}
+			else if(b.getBlock() == ModBlocks.sellafield_3) {
+				world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
+				continue;
+			}
+			else if(b.getBlock() == ModBlocks.sellafield_2) {
+				world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
+				continue;
+			}
+			else if(b.getBlock() == ModBlocks.sellafield_1) {
+				world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
+				continue;
+			}
+			else if(b.getBlock() == ModBlocks.sellafield_0) {
+				world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
+				continue;
+			}
+			else if(b.getBlock() == ModBlocks.sellafield_slaked) {
+				world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
+				continue;
+			}
 			else if(bblock == ModBlocks.ore_uranium) {
 				if(dist <= s6){
 					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
@@ -368,7 +444,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					else
 						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
 				}
-				return;
+				break;
 			}
 
 			else if(bblock == ModBlocks.ore_nether_uranium) {
@@ -378,7 +454,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					else
 						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				}
-				return;
+				break;
 
 			}
 
@@ -389,16 +465,18 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					else
 						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				}
-				return;
+				break;
 				// this piece stops the "stomp" from reaching below ground
 			}
 			else if(bblock == ModBlocks.brick_concrete) {
 				if(rand.nextInt(80) == 0)
 					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
-				return;
+				break;
 				// this piece stops the "stomp" from reaching below ground
 			}
 		}
+		if(gapFound && dist < fallingRadius)
+			letFall(world, pos, contactHeight-pos.getY());
 	}
 
 	
@@ -426,6 +504,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		s4 = 0.15 * i;
 		s5 = 0.08 * i;
 		s6 = 0.05 * i;
+		fallingRadius = 0.6 * i + 16;
 
 	}
 

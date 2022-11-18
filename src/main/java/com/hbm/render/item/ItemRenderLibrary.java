@@ -756,8 +756,8 @@ public class ItemRenderLibrary {
 				GL11.glScaled(3, 3, 3);
 			}
 			public void renderCommon() {
-		        bindTexture(ResourceManager.vault_cog_tex); ResourceManager.vault_cog.renderAll();
-		        bindTexture(ResourceManager.vault_label_101_tex); ResourceManager.vault_label.renderAll();
+		        bindTexture(ResourceManager.vault_cog_1_tex); ResourceManager.vault_cog.renderAll();
+		        bindTexture(ResourceManager.vault_label_4_tex); ResourceManager.vault_label.renderAll();
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.blast_door), new ItemRenderBase() {

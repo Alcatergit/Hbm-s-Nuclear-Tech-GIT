@@ -256,27 +256,27 @@ public class BlockOre extends Block {
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_1)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 1));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 25 * 20, 1));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_2)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 3));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_3)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 3));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 7));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_4)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 4));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 10 * 20, 15));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_core)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 5));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 5 * 20, 79));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.block_waste)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 49));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_ooze)
     	{

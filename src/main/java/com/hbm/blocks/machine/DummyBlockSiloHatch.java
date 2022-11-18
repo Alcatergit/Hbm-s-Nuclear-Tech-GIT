@@ -67,23 +67,21 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 		} else if(player.getHeldItemMainhand().getItem() instanceof ItemLock || player.getHeldItemMainhand().getItem() == ModItems.key_kit) {
 			return false;
 			
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
 			TileEntity til = world.getTileEntity(pos);
 			if(til != null && til instanceof TileEntityDummy) {
 						
 				TileEntitySiloHatch entity = (TileEntitySiloHatch) world.getTileEntity(((TileEntityDummy)til).target);
-				if(entity != null)
-				{
-					if(entity.canAccess(player))
+				if(entity != null) {
+					if(entity.canAccess(player)){
 						entity.tryToggle();
+						return true;
+					}	
 				}
 			}
-			
-			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	@Override

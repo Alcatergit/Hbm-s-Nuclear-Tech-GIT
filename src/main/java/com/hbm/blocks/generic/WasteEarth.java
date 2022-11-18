@@ -67,11 +67,11 @@ public class WasteEarth extends Block {
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
 		if (entity instanceof EntityLivingBase && this == ModBlocks.waste_earth) {
 
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 0));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 4));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.waste_dirt) {
 
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 0));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 9));
     	}
     	
     	if (entity instanceof EntityLivingBase && this == ModBlocks.frozen_grass) {
@@ -80,7 +80,12 @@ public class WasteEarth extends Block {
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.waste_mycelium) {
     	
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 3));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 29));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
+    	}
+    	if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red)) {
+    	
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 1 * 20, 49));
     	}
 	}
 	

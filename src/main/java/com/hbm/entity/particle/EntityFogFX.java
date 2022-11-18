@@ -22,7 +22,7 @@ public class EntityFogFX extends EntityModFX {
 	        this.motionX += p_i1226_8_;
 	        this.motionY += p_i1226_10_;
 	        this.motionZ += p_i1226_12_;
-	        this.particleRed = this.particleGreen = this.particleBlue = (float)(Math.random() * 0.30000001192092896D);
+	        this.particleRed = this.particleGreen = this.particleBlue = 0.3F;
 	        this.particleScale *= 0.75F;
 	        this.particleScale *= p_i1226_14_;
 	        this.smokeParticleScale = this.particleScale;

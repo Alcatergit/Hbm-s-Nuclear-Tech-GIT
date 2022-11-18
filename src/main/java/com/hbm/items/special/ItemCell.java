@@ -166,12 +166,12 @@ public class ItemCell extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
 		if(ItemCell.hasFluid(stack, ModForgeFluids.amat)){
-			tooltip.add("Warning: Exposure to matter will");
-			tooltip.add("lead to violent annihilation!");
+			tooltip.add("§eExposure to matter will lead to violent annihilation!§r");
+			tooltip.add("§c[Dangerous Drop]§r");
 		}
 		if(ItemCell.hasFluid(stack, ModForgeFluids.aschrab)){
-			tooltip.add("Warning: Exposure to matter will");
-			tooltip.add("create a fólkvangr field!");
+			tooltip.add("§eExposure to matter will create a fólkvangr field!§r");
+			tooltip.add("§c[Dangerous Drop]§r");
 		}
 	}
 

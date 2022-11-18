@@ -15,16 +15,19 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityDrying;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionNukeRay;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
 
+import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	// Strength of the blast
@@ -35,10 +38,15 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	public boolean mute = false;
 
 	public boolean fallout = true;
+	private boolean floodPlease = false;
 	private int falloutAdd = 0;
 	private Ticket loaderTicket;
 
 	ExplosionNukeRay explosion;
+	EntityFalloutUnderGround falloutBall;
+	EntityDrying dryingBomb;
+	EntityFalloutRain falloutRain;
+	EntityDrying waterBomb;
 
 	public EntityNukeExplosionMK4(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -57,7 +65,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			return;
 		}
 
-		if(!world.isRemote && fallout && explosion != null) {
+		if(!world.isRemote && fallout && explosion != null && falloutRain == null) {
 			RadiationSavedData.getData(world);
 
 			// float radMax = (float) (length / 2F * Math.pow(length, 2) / 35F);
@@ -74,34 +82,56 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		}
 		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.radius * 2);
 
-		if(explosion == null) {
-
-			explosion = new ExplosionNukeRay(world, (int) this.posX, (int) this.posY, (int) this.posZ, this.radius);
+		if(dryingBomb == null){
+			dryingBomb = new EntityDrying(this.world);
+			dryingBomb.posX = this.posX;
+			dryingBomb.posY = this.posY;
+			dryingBomb.posZ = this.posZ;
+			dryingBomb.setScale(this.radius+16);
+			this.world.spawnEntity(dryingBomb);
 		}
-		if(!explosion.isAusf3Complete) {
-			explosion.collectTipMk6(speed);
-		} else if(explosion.getStoredSize() > 0) {
-			explosion.processTip(BombConfig.mk4);
-		} else if(fallout) {
-			EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(this.world);
-			falloutBall.posX = this.posX;
-			falloutBall.posY = this.posY;
-			falloutBall.posZ = this.posZ;
-			falloutBall.setScale((int) (this.radius + falloutAdd));
+		if(dryingBomb.done){
 
-			this.world.spawnEntity(falloutBall);
-			if(!explosion.isContained){
-				EntityFalloutRain falloutRain = new EntityFalloutRain(this.world);
-				falloutRain.posX = this.posX;
-				falloutRain.posY = this.posY;
-				falloutRain.posZ = this.posZ;
-				falloutRain.setScale((int) (this.radius * 1.8 + falloutAdd) * BombConfig.falloutRange / 100);
+			if(explosion == null) {
 
-				this.world.spawnEntity(falloutRain);
+				explosion = new ExplosionNukeRay(world, (int) this.posX, (int) this.posY, (int) this.posZ, this.radius);
 			}
-			this.setDead();
-		} else {
-			this.setDead();
+			if(!explosion.isAusf3Complete) {
+				explosion.collectTipMk6(speed);
+			} else if(explosion.getStoredSize() > 0) {
+				explosion.processTip(BombConfig.mk4);
+			} else if(fallout) {
+				if(falloutBall == null){
+					falloutBall = new EntityFalloutUnderGround(this.world);
+					falloutBall.posX = this.posX;
+					falloutBall.posY = this.posY;
+					falloutBall.posZ = this.posZ;
+					falloutBall.setScale((int) (this.radius * (BombConfig.falloutRange / 100) + falloutAdd));
+					this.world.spawnEntity(falloutBall);
+				}
+				if(falloutBall.done){
+					if(floodPlease){
+						waterBomb = new EntityDrying(this.world);
+						waterBomb.posX = this.posX;
+						waterBomb.posY = this.posY;
+						waterBomb.posZ = this.posZ;
+						waterBomb.dryingmode = false;
+						waterBomb.setScale(this.radius+16);
+						this.world.spawnEntity(waterBomb);
+					}
+					if(!explosion.isContained){
+						falloutRain = new EntityFalloutRain(this.world);
+						falloutRain.posX = this.posX;
+						falloutRain.posY = this.posY;
+						falloutRain.posZ = this.posZ;
+						falloutRain.setScale((int) (this.radius * (1+BombConfig.falloutRange / 100) + falloutAdd));
+						this.world.spawnEntity(falloutRain);
+					}
+					this.setDead();
+				}
+			} else {
+				this.setDead();
+			}
 		}
 	}
 
@@ -177,6 +207,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
+		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -191,6 +222,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
+		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -205,6 +237,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
+		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
 		mk4.fallout = false;
 		return mk4;
 	}

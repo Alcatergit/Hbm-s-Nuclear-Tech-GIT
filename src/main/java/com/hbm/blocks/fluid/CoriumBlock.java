@@ -65,7 +65,7 @@ public class CoriumBlock extends BlockFluidClassic {
 		entity.attackEntityFrom(ModDamageSource.radiation, 200F);
 		
 		if(entity instanceof EntityLivingBase)
-			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 10F);
+			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 500F);
 	}
 	
 	@Override

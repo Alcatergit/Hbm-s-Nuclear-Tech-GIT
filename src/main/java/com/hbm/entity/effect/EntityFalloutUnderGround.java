@@ -335,14 +335,14 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 	public void setScale(int i) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
-		s1 = 0.88 * i;
-		s2 = 0.68 * i;
-		s3 = 0.46 * i;
-		s4 = 0.35 * i;
-		s5 = 0.28 * i;
-		s6 = 0.15 * i;
+		s1 = 0.8 * i;
+		s2 = 0.6 * i;
+		s3 = 0.4 * i;
+		s4 = 0.3 * i;
+		s5 = 0.2 * i;
+		s6 = 0.1 * i;
 		radius = i;
-		maxSamples = (int)(4 * Math.PI * Math.pow(i, 2));
+		maxSamples = (int)(Math.PI * Math.pow(i, 2));
 	}
 
 	public int getScale() {

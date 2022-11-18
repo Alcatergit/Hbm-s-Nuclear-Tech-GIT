@@ -76,8 +76,8 @@ public class TileEntityLockableBase extends TileEntity {
 	
 	public boolean canAccess(EntityPlayer player) {
 		
-		if(!isLocked || player == null) {
-			return true;
+		if(player == null) { //!isLocked || 
+			return false;
 		} else {
 			ItemStack stack = player.getHeldItemMainhand();
 			

@@ -73,17 +73,16 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 			if(til != null && til instanceof TileEntityDummy) {
 						
 				TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(((TileEntityDummy)til).target);
-				if(entity != null)
-				{
-					if(entity.canAccess(player))
+				if(entity != null) {
+					if(entity.canAccess(player)){
 						entity.tryToggle();
+						return true;
+					}	
 				}
 			}
-			
-			return true;
+
 		}
-		
-		return true;
+		return false;
 	}
 
 	@Override

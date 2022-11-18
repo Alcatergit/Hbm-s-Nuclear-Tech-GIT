@@ -148,6 +148,7 @@ import com.hbm.blocks.network.BlockCable;
 import com.hbm.blocks.network.BlockConveyor;
 import com.hbm.blocks.network.BlockFluidDuct;
 import com.hbm.blocks.network.BlockFluidPipeMk2;
+import com.hbm.blocks.network.BlockFluidPipeSolid;
 import com.hbm.blocks.network.CableSwitch;
 import com.hbm.blocks.test.KeypadTest;
 import com.hbm.blocks.test.TestObjTester;
@@ -212,8 +213,6 @@ public class ModBlocks {
 	public static final Block crystal_virus = new CrystalVirus(Material.IRON, "crystal_virus").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	public static final Block crystal_hardened = new BlockBase(Material.IRON, "crystal_hardened").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	public static final Block crystal_pulsar = new CrystalPulsar(Material.IRON, "crystal_pulsar").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
-	public static final Block taint = new BlockTaint(Material.IRON, "taint").setCreativeTab(null).setHardness(15.0F).setResistance(10.0F);
-	public static final Block residue = new BlockCloudResidue(Material.IRON, "residue").setHardness(0.5F).setResistance(0.5F).setCreativeTab(null);
 	public static final Block fire_balefire = new Balefire("fire_balefire").setHardness(0.0F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block fire_digamma = new DigammaFlame("fire_digamma").setHardness(0.0F).setResistance(150F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block digamma_matter = new DigammaMatter("digamma_matter").setBlockUnbreakable().setResistance(18000000).setCreativeTab(null);
@@ -346,45 +345,6 @@ public class ModBlocks {
 	public static final Block tile_lab_slab = new BlockGenericSlab(Material.ROCK, false, "tile_lab_slab").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(10.0F);
 	public static final Block tile_lab_cracked_slab = new BlockGenericSlab(Material.ROCK, false, "tile_lab_cracked_slab").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(10.0F);
 	public static final Block tile_lab_broken_slab = new BlockGenericSlab(Material.ROCK, false, "tile_lab_broken_slab").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(10.0F);
-
-	//double slabs
-	public static final Block reinforced_brick_double_slab = new BlockGenericSlab(Material.ROCK, true, "reinforced_brick_double_slab").setCreativeTab(null).setLightOpacity(15).setHardness(15.0F).setResistance(8000.0F);
-	public static final Block reinforced_sand_double_slab = new BlockGenericSlab(Material.ROCK, true, "reinforced_sand_double_slab").setCreativeTab(null).setLightOpacity(15).setHardness(15.0F).setResistance(400.0F);
-	public static final Block reinforced_stone_double_slab = new BlockGenericSlab(Material.ROCK, true, "reinforced_stone_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(3000.0F);
-	public static final Block brick_concrete_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_concrete_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(6000.0F);
-	public static final Block brick_concrete_mossy_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_concrete_mossy_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(6000.0F);
-	public static final Block brick_concrete_cracked_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_concrete_cracked_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(2000.0F);
-	public static final Block brick_concrete_broken_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_concrete_broken_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(1500.0F);
-	public static final Block brick_compound_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_compound_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(10000.0F);
-	public static final Block brick_asbestos_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_asbestos_double_slab").setCreativeTab(null).setResistance(1000.0F);
-	public static final Block brick_obsidian_double_slab = new BlockGenericSlab(Material.ROCK, true, "brick_obsidian_double_slab").setCreativeTab(null).setLightOpacity(15).setHardness(15.0F).setResistance(8000.0F);
-	public static final Block cmb_brick_reinforced_double_slab = new BlockGenericSlab(Material.ROCK, true, "cmb_brick_reinforced_double_slab").setCreativeTab(null).setHardness(25.0F).setResistance(60000.0F);
-	public static final Block concrete_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_smooth_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_smooth_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_white_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_white_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_orange_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_orange_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_magenta_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_magenta_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_light_blue_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_light_blue_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_yellow_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_yellow_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_lime_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_lime_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_pink_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_pink_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_gray_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_gray_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_silver_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_silver_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_cyan_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_cyan_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_purple_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_purple_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_blue_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_blue_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_brown_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_brown_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_green_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_green_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_red_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_red_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_black_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_black_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block concrete_asbestos_double_slab = new BlockGenericSlab(Material.ROCK, true, "concrete_asbestos_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(4000.0F);
-	public static final Block ducrete_smooth_double_slab = new BlockGenericSlab(Material.ROCK, true, "ducrete_smooth_double_slab").setCreativeTab(null).setHardness(20.0F).setResistance(8000.0F);
-	public static final Block ducrete_double_slab = new BlockGenericSlab(Material.ROCK, true, "ducrete_double_slab").setCreativeTab(null).setHardness(20.0F).setResistance(8000.0F);
-	public static final Block ducrete_brick_double_slab = new BlockGenericSlab(Material.ROCK, true, "ducrete_brick_double_slab").setCreativeTab(null).setHardness(15.0F).setResistance(12000.0F);
-	public static final Block ducrete_reinforced_double_slab = new BlockGenericSlab(Material.ROCK, true, "ducrete_reinforced_double_slab").setCreativeTab(null).setHardness(20.0F).setResistance(24000.0F);
-	public static final Block tile_lab_double_slab = new BlockGenericSlab(Material.ROCK, true, "tile_lab_double_slab").setSoundType(SoundType.GLASS).setCreativeTab(null).setHardness(1.0F).setResistance(20.0F);
-	public static final Block tile_lab_cracked_double_slab = new BlockGenericSlab(Material.ROCK, true, "tile_lab_cracked_double_slab").setSoundType(SoundType.GLASS).setCreativeTab(null).setHardness(1.0F).setResistance(20.0F);
-	public static final Block tile_lab_broken_double_slab = new BlockGenericSlab(Material.ROCK, true, "tile_lab_broken_double_slab").setSoundType(SoundType.GLASS).setCreativeTab(null).setHardness(1.0F).setResistance(20.0F);
 		
 
 	
@@ -610,8 +570,8 @@ public class ModBlocks {
 	public static final Block waste_dirt = new WasteEarth(Material.GROUND, false, 0.15F, 5F, "waste_dirt").setSoundType(SoundType.GROUND).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_grass_tall = new WasteGrassTall(Material.PLANTS, "waste_grass_tall").setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_mycelium = new WasteEarth(Material.GROUND, true, 1.0F, 25.0F, "waste_mycelium").setSoundType(SoundType.GROUND).setLightLevel(1.0F).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block waste_trinitite = new BlockOre(Material.SAND, "waste_trinitite").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block waste_trinitite_red = new BlockOre(Material.SAND, "waste_trinitite_red").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block waste_trinitite = new WasteEarth(Material.SAND, false, 0.15F, 5F, "waste_trinitite").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block waste_trinitite_red = new WasteEarth(Material.SAND, false, 0.15F, 5F, "waste_trinitite_red").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_log = new WasteLog(Material.WOOD, "waste_log").setSoundType(SoundType.WOOD).setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_planks = new BlockOre(Material.WOOD, "waste_planks").setSoundType(SoundType.WOOD).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	
@@ -629,13 +589,13 @@ public class ModBlocks {
 	public static final Block block_semtex = new BlockSemtex(Material.TNT, "block_semtex").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(2.0F);
 	public static final Block block_smore = new BlockBase(Material.ROCK, "block_smore").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F);
 	
-	public static final Block sellafield_slaked = new BlockBase(Material.ROCK, "sellafield_slaked").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_0 = new BlockOre(Material.ROCK, 0.5F, 10.0F, "sellafield_0").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_1 = new BlockOre(Material.ROCK, 1.0F, 15.0F, "sellafield_1").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_2 = new BlockOre(Material.ROCK, 2.5F, 25.0F, "sellafield_2").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_3 = new BlockOre(Material.ROCK, 4.0F, 40.0F, "sellafield_3").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_4 = new BlockOre(Material.ROCK, 5.0F, 50.0F, "sellafield_4").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_core = new BlockOre(Material.ROCK, 10.0F, 150.0F, "sellafield_core").setSoundType(SoundType.STONE).setHardness(10.0F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_slaked = new BlockBase(Material.ROCK, "sellafield_slaked").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_0 = new BlockOre(Material.ROCK, 0.5F, 5.0F, "sellafield_0").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_1 = new BlockOre(Material.ROCK, 1.0F, 10.0F, "sellafield_1").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_2 = new BlockOre(Material.ROCK, 2.0F, 20.0F, "sellafield_2").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_3 = new BlockOre(Material.ROCK, 4.0F, 40.0F, "sellafield_3").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_4 = new BlockOre(Material.ROCK, 8.0F, 80.0F, "sellafield_4").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_core = new BlockOre(Material.ROCK, 40.0F, 4000.0F, "sellafield_core").setSoundType(SoundType.STONE).setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.blockTab);
 	
 	public static final Block geysir_water = new BlockGeysir(Material.ROCK, "geysir_water").setSoundType(SoundType.STONE).setHardness(5.0F);
 	public static final Block geysir_chlorine = new BlockGeysir(Material.ROCK, "geysir_chlorine").setSoundType(SoundType.STONE).setHardness(5.0F);
@@ -856,22 +816,22 @@ public class ModBlocks {
 	public static final Block seal_hatch = new BlockHatch(Material.IRON, "seal_hatch").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	
 	public static final Block silo_hatch = new BlockSiloHatch(Material.IRON, "silo_hatch").setHardness(10.0F).setResistance(5000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block vault_door = new VaultDoor(Material.IRON, "vault_door").setHardness(10.0F).setResistance(36000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block blast_door = new BlastDoor(Material.IRON, "blast_door").setHardness(10.0F).setResistance(18000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block sliding_blast_door = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block sliding_blast_door_2 = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_2").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block sliding_blast_door_keypad = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_keypad").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(null);
+	public static final Block vault_door = new VaultDoor(Material.IRON, "vault_door").setHardness(1000.0F).setResistance(36000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block blast_door = new BlastDoor(Material.IRON, "blast_door").setHardness(500.0F).setResistance(18000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door").setHardness(150.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door_2 = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_2").setHardness(150.0F).setResistance(7500.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block sliding_blast_door_keypad = new BlockSlidingBlastDoor(Material.IRON, "sliding_blast_door_keypad").setHardness(150.0F).setResistance(7500.0F).setCreativeTab(null);
 	
-	public static final Block small_hatch = new BlockDoorGeneric(Material.IRON, DoorDecl.HATCH, false, "small_hatch").setHardness(10.0F).setResistance(1000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block small_hatch = new BlockDoorGeneric(Material.IRON, DoorDecl.HATCH, false, "small_hatch").setHardness(100.0F).setResistance(1000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block sliding_seal_door = new BlockDoorGeneric(Material.IRON, DoorDecl.SLIDING_SEAL_DOOR, false, "sliding_seal_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block qe_containment = new BlockDoorGeneric(Material.IRON, DoorDecl.QE_CONTAINMENT, true, "qe_containment").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block qe_sliding_door = new BlockDoorGeneric(Material.IRON, DoorDecl.QE_SLIDING, false, "qe_sliding").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block fire_door = new BlockDoorGeneric(Material.IRON, DoorDecl.FIRE_DOOR, true, "fire_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block water_door = new BlockDoorGeneric(Material.IRON, DoorDecl.WATER_DOOR, false, "water_door").setHardness(10.0F).setResistance(500.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block large_vehicle_door = new BlockDoorGeneric(Material.IRON, DoorDecl.LARGE_VEHICLE_DOOR, true, "large_vehicle_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block round_airlock_door = new BlockDoorGeneric(Material.IRON, DoorDecl.ROUND_AIRLOCK_DOOR, true, "round_airlock_door").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block secure_access_door = new BlockDoorGeneric(Material.IRON, DoorDecl.SECURE_ACCESS_DOOR, true, "secure_access_door").setHardness(20.0F).setResistance(20000.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block transition_seal = new BlockDoorGeneric(Material.IRON, DoorDecl.TRANSITION_SEAL, true, "transition_seal").setHardness(50.0F).setResistance(1000000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block qe_containment = new BlockDoorGeneric(Material.IRON, DoorDecl.QE_CONTAINMENT, true, "qe_containment").setHardness(100.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block qe_sliding_door = new BlockDoorGeneric(Material.IRON, DoorDecl.QE_SLIDING, false, "qe_sliding").setHardness(100.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block fire_door = new BlockDoorGeneric(Material.IRON, DoorDecl.FIRE_DOOR, true, "fire_door").setHardness(100.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block water_door = new BlockDoorGeneric(Material.IRON, DoorDecl.WATER_DOOR, false, "water_door").setHardness(50.0F).setResistance(500.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block large_vehicle_door = new BlockDoorGeneric(Material.IRON, DoorDecl.LARGE_VEHICLE_DOOR, true, "large_vehicle_door").setHardness(100.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block round_airlock_door = new BlockDoorGeneric(Material.IRON, DoorDecl.ROUND_AIRLOCK_DOOR, true, "round_airlock_door").setHardness(100.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block secure_access_door = new BlockDoorGeneric(Material.IRON, DoorDecl.SECURE_ACCESS_DOOR, true, "secure_access_door").setHardness(200.0F).setResistance(20000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block transition_seal = new BlockDoorGeneric(Material.IRON, DoorDecl.TRANSITION_SEAL, true, "transition_seal").setHardness(1000.0F).setResistance(1000000.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	public static final Block keypad_test = new KeypadTest(Material.IRON, "keypad_test").setHardness(15.0F).setResistance(7500.0F).setCreativeTab(null);
 	public static final Block bm_power_box = new BMPowerBox(Material.IRON, "bm_power_box").setHardness(10.0F).setResistance(15.0F).setCreativeTab(MainRegistry.blockTab);
@@ -1306,6 +1266,9 @@ public class ModBlocks {
 	
 	
 	public static final Block volcano_core = new BlockVolcano("volcano_core").setBlockUnbreakable().setResistance(10000.0F).setCreativeTab(MainRegistry.nukeTab);
+	public static final Block taint = new BlockTaint(Material.IRON, "taint").setCreativeTab(MainRegistry.nukeTab).setHardness(15.0F).setResistance(10.0F);
+	public static final Block residue = new BlockCloudResidue(Material.IRON, "residue").setHardness(0.5F).setResistance(0.5F).setCreativeTab(MainRegistry.nukeTab);
+	
 	
 	public static final Block vent_chlorine = new BlockVent(Material.IRON, "vent_chlorine").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block vent_cloud = new BlockVent(Material.IRON, "vent_cloud").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -1339,8 +1302,11 @@ public class ModBlocks {
 	//public static final Block oil_duct = new BlockOilDuct(Material.IRON, "oil_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	//public static final Block gas_duct_solid = new GasDuctSolid(Material.IRON, "gas_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	//public static final Block gas_duct = new BlockGasDuct(Material.IRON, "gas_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block fluid_duct = new BlockFluidDuct(Material.IRON, "fluid_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+
 	public static final Block fluid_duct_mk2 = new BlockFluidPipeMk2(Material.IRON, "fluid_duct_mk2").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block fluid_duct_solid = new BlockFluidPipeSolid(Material.IRON, "fluid_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	
 	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(0.0F).setResistance(2.0F).setCreativeTab(null);
 	public static final Block chain = new BlockChain(Material.IRON, "dungeon_chain").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 	
@@ -1434,9 +1400,9 @@ public class ModBlocks {
 	public static final Block dummy_block_cyclotron = new DummyBlockCyclotron(Material.IRON, "dummy_block_cyclotron").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final Block dummy_port_cyclotron = new DummyBlockCyclotron(Material.IRON, "dummy_port_cyclotron").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	
-	public static final Block dummy_block_vault = new DummyBlockVault(Material.IRON, "dummy_block_vault").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(null);
-	public static final Block dummy_block_blast = new DummyBlockBlast(Material.IRON, "dummy_block_blast").setHardness(10.0F).setResistance(10000.0F).setCreativeTab(null);
-	public static final Block dummy_block_silo_hatch = new DummyBlockSiloHatch(Material.IRON, "dummy_block_silo_hatch").setHardness(10.0F).setResistance(5000.0F).setCreativeTab(null);
+	public static final Block dummy_block_vault = new DummyBlockVault(Material.IRON, "dummy_block_vault").setHardness(1000.0F).setResistance(10000.0F).setCreativeTab(null);
+	public static final Block dummy_block_blast = new DummyBlockBlast(Material.IRON, "dummy_block_blast").setHardness(500.0F).setResistance(10000.0F).setCreativeTab(null);
+	public static final Block dummy_block_silo_hatch = new DummyBlockSiloHatch(Material.IRON, "dummy_block_silo_hatch").setHardness(100.0F).setResistance(5000.0F).setCreativeTab(null);
 	
 	public static final Block dummy_block_radgen = new DummyBlockRadGen(Material.IRON, "dummy_block_radgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final Block dummy_port_radgen = new DummyBlockRadGen(Material.IRON, "dummy_port_radgen").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);

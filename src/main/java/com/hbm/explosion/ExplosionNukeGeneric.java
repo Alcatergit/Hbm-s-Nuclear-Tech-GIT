@@ -822,6 +822,11 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.SAND.getStateFromMeta(1));
 				return;
 			}
+
+			if(b.getBlock() == ModBlocks.taint) {
+				world.setBlockState(pos, ModBlocks.stone_gneiss.getDefaultState());
+				return;
+			}
 			
 			if(m == Material.CACTUS || m == Material.CORAL || m == Material.LEAVES || m == Material.PLANTS || m == Material.SPONGE || m == Material.VINE || m == Material.GOURD || m == Material.WOOD) {
 				world.setBlockToAir(pos);
