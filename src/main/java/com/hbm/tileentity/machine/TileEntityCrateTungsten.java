@@ -1,5 +1,8 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemKeyPin;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.ILaserable;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCrucible;
@@ -13,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -38,6 +42,27 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			return false;
 		} else {
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
+		}
+	}
+
+	public boolean canAccess(EntityPlayer player) {
+		
+		if(!this.isLocked() || player == null) {
+			return true;
+		} else {
+			ItemStack stack = player.getHeldItemMainhand();
+			
+			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			if(stack.getItem() == ModItems.key_red) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			return this.tryPick(player);
 		}
 	}
 

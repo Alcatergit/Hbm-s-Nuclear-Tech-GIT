@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
@@ -95,7 +96,7 @@ public class TileEntityLockableBase extends TileEntity {
 		}
 	}
 	
-	private boolean tryPick(EntityPlayer player) {
+	public boolean tryPick(EntityPlayer player) {
 
 		boolean canPick = false;
 		ItemStack stack = player.getHeldItemMainhand();

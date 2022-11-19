@@ -18,6 +18,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraft.util.math.ChunkPos;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -165,16 +166,17 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 
 	private void dry(MutableBlockPos pos) {
 		if(dryingmode){
-			for(int y = 63; y > 1; y--) {
+			for(int y = 62; y > 1; y--) {
 				pos.setY(y);
 				if(!world.isAirBlock(pos)){
-					if(world.getBlockState(pos).getMaterial().isLiquid()){
+					Block b = world.getBlockState(pos).getBlock();
+					if(b == Blocks.WATER || b == Blocks.FLOWING_WATER){
 						world.setBlockToAir(pos);
 					}
 				}
 			}
 		} else {
-			for(int y = 63; y > 40; y--) {
+			for(int y = 62; y > 40; y--) {
 				pos.setY(y);
 				if(world.isAirBlock(pos)){
 					world.setBlockState(pos, Blocks.WATER.getDefaultState());

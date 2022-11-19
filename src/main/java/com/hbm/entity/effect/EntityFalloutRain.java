@@ -285,7 +285,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				break;
 			}
 			
-			if(bmaterial == Material.AIR){
+			if(bmaterial == Material.AIR || bmaterial.isLiquid()){
 				if(y < contactHeight && contactHeight < 420)
 					gapFound = true;
 				continue;

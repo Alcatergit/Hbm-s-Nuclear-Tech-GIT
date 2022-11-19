@@ -1,5 +1,11 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemKeyPin;
+import com.hbm.lib.HBMSoundHandler;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +27,27 @@ public class TileEntityCrateSteel extends TileEntityLockableBase {
 				super.onContentsChanged(slot);
 			}
 		};
+	}
+
+	public boolean canAccess(EntityPlayer player) {
+		
+		if(!this.isLocked() || player == null) {
+			return true;
+		} else {
+			ItemStack stack = player.getHeldItemMainhand();
+			
+			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			if(stack.getItem() == ModItems.key_red) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			return this.tryPick(player);
+		}
 	}
 	
 	public String getInventoryName() {

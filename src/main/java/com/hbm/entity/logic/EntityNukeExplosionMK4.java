@@ -21,7 +21,8 @@ import com.hbm.explosion.ExplosionNukeRay;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
 
-import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,16 +111,16 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 					this.world.spawnEntity(falloutBall);
 				}
 				if(falloutBall.done){
-					if(floodPlease){
-						waterBomb = new EntityDrying(this.world);
-						waterBomb.posX = this.posX;
-						waterBomb.posY = this.posY;
-						waterBomb.posZ = this.posZ;
-						waterBomb.dryingmode = false;
-						waterBomb.setScale(this.radius+16);
-						this.world.spawnEntity(waterBomb);
-					}
 					if(!explosion.isContained){
+						if(floodPlease){
+							waterBomb = new EntityDrying(this.world);
+							waterBomb.posX = this.posX;
+							waterBomb.posY = this.posY;
+							waterBomb.posZ = this.posZ;
+							waterBomb.dryingmode = false;
+							waterBomb.setScale(this.radius+16);
+							this.world.spawnEntity(waterBomb);
+						}
 						falloutRain = new EntityFalloutRain(this.world);
 						falloutRain.posX = this.posX;
 						falloutRain.posY = this.posY;
@@ -186,6 +187,11 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
         }
 	}
 
+	private static boolean isWet(World world, BlockPos pos){
+		Biome b = world.getBiome(pos);
+		return b.getTempCategory() == Biome.TempCategory.OCEAN || b.isHighHumidity() || b == Biomes.BEACH || b == Biomes.OCEAN || b == Biomes.RIVER  || b == Biomes.DEEP_OCEAN || b == Biomes.FROZEN_OCEAN || b == Biomes.FROZEN_RIVER || b == Biomes.STONE_BEACH || b == Biomes.SWAMPLAND;
+	}
+
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
 
@@ -207,7 +213,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
+		mk4.floodPlease = isWet(world, new BlockPos(x, y, z));
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -222,7 +228,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
+		mk4.floodPlease = isWet(world, new BlockPos(x, y, z));
 		if(BombConfig.disableNuclear)
 			mk4.fallout = false;
 		return mk4;
@@ -237,7 +243,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		mk4.radius = (int) (r);
 		mk4.speed = (int) 1000*BombConfig.mk4/r;
 		mk4.setPosition(x, y, z);
-		mk4.floodPlease = world.getBiome(new BlockPos(x, y, z)).getTempCategory() == TempCategory.OCEAN;
+		mk4.floodPlease = isWet(world, new BlockPos(x, y, z));
 		mk4.fallout = false;
 		return mk4;
 	}

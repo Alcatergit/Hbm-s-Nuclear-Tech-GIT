@@ -190,6 +190,10 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		return (waste * i) / maxWaste;
 	}
 
+	public int getRodsScaled(int i) {
+		return (rods * i) / rodsMax;
+	}
+
 	public int getSteamScaled(int i) {
 		return (tanks[2].getFluidAmount() * i) / tanks[2].getCapacity();
 	}
@@ -765,7 +769,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		//function of SHS produced per tick
 		//maxes out at heat% * tank capacity / 20
 		
-		double statSteMaFiFiLe = 8000;
+		double statSteMaFiFiLe = 32000;
 		
 		double steam = (((double)hullHeat / (double)maxHullHeat) * (/*(double)tanks[2].getMaxFill()*/statSteMaFiFiLe / 50D)) * size;
 		
