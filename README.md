@@ -2,9 +2,8 @@
 
 This is my fork of the 1.12.2 fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
 
-[![Support Server](https://img.shields.io/discord/320301110759784449.svg?color=7289da&label=HBM&logo=discord&style=flat-square)](https://discord.gg/ZFJDFBN)
 
-The latest version can be found on https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-reloaded or under the [releases page](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT/releases).
+The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-1-12-2-alcater-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
 
 ### **Want to contribute?**
 
