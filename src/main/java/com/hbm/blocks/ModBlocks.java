@@ -1335,7 +1335,7 @@ public class ModBlocks {
 	public static final Block control0 = new BlockControlPanel(Material.IRON, "control_panel0").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 	
 	//Fluids
-	public static final Material fluidtoxic = new MaterialLiquid(MapColor.GREEN).setReplaceable();
+	public static final Material fluidtoxic = new MaterialLiquid(MapColor.YELLOW).setReplaceable();
 	public static Block toxic_block;
 
 	public static final Material fluidradwater = new MaterialLiquid(MapColor.GREEN).setReplaceable();

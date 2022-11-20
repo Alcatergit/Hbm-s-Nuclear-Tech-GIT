@@ -45,6 +45,10 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	public void doRender(EntityNukeCloudSmall cloud, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
+        int cloudAge = cloud.getDataManager().get(EntityNukeCloudSmall.AGE);
+        if(cloud.age < cloudAge-20){
+	        cloud.age = cloudAge;
+	    }
 
         mushWrapper(cloud, partialTicks);
         cloudletWrapper(cloud, partialTicks);
@@ -74,11 +78,11 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	 */
 	private void flashWrapper(EntityNukeCloudSmall cloud, float interp) {
 
-        if(cloud.age < 60) {
+        if(cloud.age < 100) {
 
     		GL11.glPushMatrix();
     		//Function [0, 1] that determines the scale and intensity (inverse!) of the flash
-        	double scale = (cloud.ticksExisted + interp) / 60D;
+        	double scale = (cloud.age + interp) / 100D;
         	GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 
         	//Euler function to slow down the scale as it progresses
@@ -91,8 +95,9 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
         }
 	}
 
-	private ResourceLocation getMushroomTexture(float cloudAgePercent, boolean isBalefire, boolean isEmissive){
-		if(cloudAgePercent < 0.10){
+	private ResourceLocation getMushroomTexture(float cloudAge, boolean isBalefire, boolean isEmissive, float radius){
+		float sizeFactor = (float)(Math.pow(radius, 2) / 15129);
+		if(cloudAge < 100F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_0_e;
@@ -106,7 +111,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_0;
 				}
 			}
-		}else if(cloudAgePercent < 0.15){
+		}else if(cloudAge < 140F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_1_e;
@@ -120,7 +125,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_1;
 				}
 			}
-		}else if(cloudAgePercent < 0.19){
+		}else if(cloudAge < 200F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_2_e;
@@ -134,7 +139,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_2;
 				}
 			}
-		}else if(cloudAgePercent < 0.23){
+		}else if(cloudAge < 300F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_3_e;
@@ -148,7 +153,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_3;
 				}
 			}
-		}else if(cloudAgePercent < 0.28){
+		}else if(cloudAge < 460F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_4_e;
@@ -162,7 +167,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_4;
 				}
 			}
-		}else if(cloudAgePercent < 0.35){
+		}else if(cloudAge < 720F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_5_e;
@@ -176,7 +181,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_5;
 				}
 			}
-		}else if(cloudAgePercent < 0.44){
+		}else if(cloudAge < 1140F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_6_e;
@@ -190,7 +195,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_6;
 				}
 			}
-		}else if(cloudAgePercent < 0.55){
+		}else if(cloudAge < 1820F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_7_e;
@@ -204,7 +209,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_7;
 				}
 			}
-		}else if(cloudAgePercent < 0.70){
+		}else if(cloudAge < 2920F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_8_e;
@@ -218,7 +223,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 					return ResourceManager.fireball_8;
 				}
 			}
-		}else if(cloudAgePercent < 0.88){
+		}else if(cloudAge < 4700F * sizeFactor){
 			if(isBalefire){
 				if(isEmissive){
 					return ResourceManager.balefire_9_e;
@@ -262,10 +267,10 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
     	float maxage = cloud.getDataManager().get(EntityNukeCloudSmall.MAXAGE);
 
     	
-    	double height = Math.max(20 - 1000 / (cloud.ticksExisted + interp - 13), 0);
+    	double height = Math.max(20 - 1000 / (cloud.age + interp - 13), 0);
     	boolean balefire = cloud.getDataManager().get(EntityNukeCloudSmall.TYPE) == 1;
-    	float percentageAge = maxage > 0 ? (float)(cloud.ticksExisted+interp)/maxage : 0F;
-    	double raise_speed = 0.016F * Math.pow(0.1, percentageAge) + 0.006F;
+    	float percentageAge = maxage > 0 ? (float)(cloud.age+interp)/maxage : 0F;
+    	double raise_speed = 0.014F * Math.pow(0.02, percentageAge) + 0.005F;
 
 
 		GL11.glPushMatrix();
@@ -276,26 +281,26 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glTranslated(0, -(cloud.ticksExisted + interp) * raise_speed, 0);
+        GL11.glTranslated(0, -(cloud.age + interp) * raise_speed, 0);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 
 		GL11.glPushMatrix();
-			bindTexture(getMushroomTexture(percentageAge, balefire, false));
+			bindTexture(getMushroomTexture(cloud.age, balefire, false, size*40F));
 
-	        renderMushHead(cloud.ticksExisted + interp, height, false);
-	        renderMushStem(cloud.ticksExisted + interp, height, false);
+	        renderMushHead(cloud.age + interp, height, false);
+	        renderMushStem(cloud.age + interp, height, false);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
-			bindTexture(getMushroomTexture(percentageAge, balefire, true));
+			bindTexture(getMushroomTexture(cloud.age, balefire, true, size*40F));
 			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
 
 	        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-	        renderMushHead(cloud.ticksExisted + interp, height, true);
-	        renderMushStem(cloud.ticksExisted + interp, height, true);
+	        renderMushHead(cloud.age + interp, height, true);
+	        renderMushStem(cloud.age + interp, height, true);
 	        GL11.glPopAttrib();
 
 		    GlStateManager.disableBlend();

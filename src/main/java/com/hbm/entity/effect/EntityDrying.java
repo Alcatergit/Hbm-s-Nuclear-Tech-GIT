@@ -166,7 +166,7 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 
 	private void dry(MutableBlockPos pos) {
 		if(dryingmode){
-			for(int y = 62; y > 1; y--) {
+			for(int y = 255; y > 1; y--) {
 				pos.setY(y);
 				if(!world.isAirBlock(pos)){
 					Block b = world.getBlockState(pos).getBlock();
@@ -176,11 +176,13 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 				}
 			}
 		} else {
-			for(int y = 62; y > 40; y--) {
+			for(int y = 62; y > 1; y--) {
 				pos.setY(y);
 				if(world.isAirBlock(pos)){
 					world.setBlockState(pos, Blocks.WATER.getDefaultState());
-				}
+				} else if(world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER){
+					world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				} 
 			}
 		}
 	}
@@ -205,7 +207,11 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 	public void setScale(int i) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
 		this.maxArea = i * i * 8;
-		this.xlast = - i;
+		this.xlast = -i;
+		if(i > 250)
+			this.speed = (int)(BombConfig.mk4*2F);
+		if(!dryingmode)
+			this.speed = (int)(this.speed * 0.25F);
 	}
 
 	public int getScale() {

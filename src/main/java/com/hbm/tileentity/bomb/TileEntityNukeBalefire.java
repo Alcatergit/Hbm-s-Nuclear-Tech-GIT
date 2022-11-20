@@ -122,7 +122,7 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 		bf.posZ = pos.getZ() + 0.5;
 		bf.destructionRange = (int) 250;
 		world.spawnEntity(bf);
-		world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 250 * 1.5F, 1000));
+		world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 250F));
 	}
 
 	public String getMinutes() {

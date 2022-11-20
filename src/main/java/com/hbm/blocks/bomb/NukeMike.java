@@ -105,15 +105,14 @@ public class NukeMike extends BlockContainer implements IBomb {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
 			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.mikeRadius, x + 0.5, y + 0.5, z + 0.5));
-			int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(r, 3)/Math.pow(48, 3)));
 			if(GeneralConfig.enableNukeClouds) {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, maxLifetime, r * 0.005F);
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, r);
 				entity2.posX = x;
 				entity2.posY = y;
 				entity2.posZ = z;
 				world.spawnEntity(entity2);
 			} else {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, maxLifetime);
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, r);
 				entity2.posX = x;
 				entity2.posY = y - (r / 10);
 				entity2.posZ = z;

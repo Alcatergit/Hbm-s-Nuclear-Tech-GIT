@@ -782,9 +782,15 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		} else if(tankTypes[2] == ModForgeFluids.superhotsteam){
 			
 		}
-		
-		tanks[0].drain((int)Math.ceil(water), true);
-		tanks[2].fill(new FluidStack(tankTypes[2], (int)Math.floor(steam)), true);
+
+		if(tanks[0].getFluidAmount() > 0){
+			if(tanks[0].getFluidAmount() < water){
+				steam = steam * tanks[0].getFluidAmount()/water;
+				water = tanks[0].getFluidAmount();
+			}
+			tanks[0].drain((int)Math.ceil(water), true);
+			tanks[2].fill(new FluidStack(tankTypes[2], (int)Math.floor(steam)), true);
+		}
 		
 	}
 

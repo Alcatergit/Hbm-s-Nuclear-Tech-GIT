@@ -402,7 +402,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		case TX:
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) strength, posX, posY, posZ));
 	    	
-			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, maxLifetime, strength * 0.005F);
+			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, strength);
 			nuke.posX = posX;
 			nuke.posY = posY;
 			nuke.posZ = posZ;
@@ -426,12 +426,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			bf.posZ = this.posZ;
 			bf.destructionRange = (int) strength;
 			world.spawnEntity(bf);
-			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, posX, posY + 5, posZ, strength * 1.5F, 1000));
+			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, posX, posY + 5, posZ, strength));
 			break;
 		case N2:
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, (int) strength, posX, posY, posZ));
 
-			EntityNukeCloudSmall n2 = new EntityNukeCloudSmall(world, maxLifetime, strength * 0.005F);
+			EntityNukeCloudSmall n2 = new EntityNukeCloudSmall(world, strength);
 			n2.posX = posX;
 			n2.posY = posY;
 			n2.posZ = posZ;

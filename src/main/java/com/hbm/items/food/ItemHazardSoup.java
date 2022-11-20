@@ -73,9 +73,9 @@ public class ItemHazardSoup extends ItemSoup implements IItemHazard {
 			bf.posX = player.posX;
 			bf.posY = player.posX;
 			bf.posZ = player.posZ;
-			bf.destructionRange = (int) 20;
+			bf.destructionRange = (int) 25;
 			worldIn.spawnEntity(bf);
-			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 20 * 1.5F, 1000));
+			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 25));
 		}
 		if(stack.getItem() == ModItems.balefire_and_ham){
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
@@ -86,9 +86,9 @@ public class ItemHazardSoup extends ItemSoup implements IItemHazard {
 			bf.posX = player.posX;
 			bf.posY = player.posX;
 			bf.posZ = player.posZ;
-			bf.destructionRange = (int) 40;
+			bf.destructionRange = (int) 50;
 			worldIn.spawnEntity(bf);
-			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 40 * 1.5F, 1000));
+			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 50));
 		}
 	}
 }

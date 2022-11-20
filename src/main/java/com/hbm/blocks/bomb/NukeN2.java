@@ -99,8 +99,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, r, x + 0.5, y + 0.5, z + 0.5));
-    		int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(r, 3)/Math.pow(48, 3)));
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, maxLifetime, r * 0.005F);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, r);
 			entity2.posX = x;
 			entity2.posY = y;
 			entity2.posZ = z;

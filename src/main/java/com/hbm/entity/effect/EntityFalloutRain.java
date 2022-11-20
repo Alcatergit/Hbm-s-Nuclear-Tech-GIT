@@ -369,7 +369,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
 				}
-				break;
+				continue;
 			}
 
 			else if(bblock == Blocks.CLAY) {
@@ -391,7 +391,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 					}
 				}
-				break;
+				continue;
 			}
 
 			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
@@ -475,7 +475,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				// this piece stops the "stomp" from reaching below ground
 			}
 		}
-		if(gapFound && dist < fallingRadius)
+		if(dist < fallingRadius && gapFound)
 			letFall(world, pos, contactHeight-pos.getY());
 	}
 
@@ -504,7 +504,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		s4 = 0.15 * i;
 		s5 = 0.08 * i;
 		s6 = 0.05 * i;
-		fallingRadius = 0.6 * i + 16;
+		fallingRadius = 0.55 * i + 16;
 
 	}
 

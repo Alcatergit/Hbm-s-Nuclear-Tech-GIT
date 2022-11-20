@@ -32,8 +32,7 @@ public class EntityMissileNuclear extends EntityMissileBaseAdvanced {
     	entity.coefficient = 10.0F;*/
     	
     	this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius, posX, posY, posZ));
-    	int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(BombConfig.missileRadius, 3)/Math.pow(48, 3)));
-		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, maxLifetime, BombConfig.missileRadius * 0.005F);
+		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, BombConfig.missileRadius);
     	entity2.posX = this.posX;
     	entity2.posY = this.posY/* - 9*/;
     	entity2.posZ = this.posZ;

@@ -61,9 +61,9 @@ public class GUIMachineMiningDrill extends GuiInfoContainer {
 		
 		int k = diFurnace.warning;
 		if(k == 2)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 17, 192, 0, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 16, 192, 0, 18, 18);
 		if(k == 1)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 17, 208, 0, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 16, 210, 0, 18, 18);
 		
 		this.drawInfoPanel(guiLeft + 141, guiTop + 39, 8, 8, 8);
 	}
