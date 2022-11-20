@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom,variant=default": { "model": "hbm:concrete_light_blue" },
+        "half=top,variant=default": { "model": "hbm:concrete_light_blue" }
+    }
+}

@@ -22,14 +22,14 @@ public class ItemKeyPin extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(getPins(stack) != 0)
-			tooltip.add("Pin configuration: " + getPins(stack));
+			tooltip.add("§aPin configuration: (" + getPins(stack)+")§r");
 		else
-			tooltip.add("Pins not set!");
+			tooltip.add("§cPins not set§r");
 		
 		if(this == ModItems.key_fake) {
 
 			tooltip.add("");
-			tooltip.add("Pins can neither be changed, nor copied.");
+			tooltip.add("§ePins can neither be changed, nor copied.§r");
 		}
 	}
 	

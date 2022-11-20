@@ -1,10 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.WeaponConfig;
@@ -14,96 +11,45 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityTickingBase;
+import com.hbm.capability.HbmLivingProps;
 
 import api.hbm.entity.IRadarDetectable;
 import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@Mod.EventBusSubscriber(modid = RefStrings.MODID)
+
 public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IConsumer {
 
-	public static Map<World, List<Entity>> radarDetectableEntityMap = new HashMap<>();
-
-	@SubscribeEvent(
-			priority = EventPriority.HIGHEST
-	)
-	public static void onWorldLoad(WorldEvent.Load e){
-		if(!e.getWorld().isRemote){
-			radarDetectableEntityMap.put(e.getWorld(), new ArrayList<>());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload e){
-		if(!e.getWorld().isRemote){
-			radarDetectableEntityMap.remove(e.getWorld());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void entityJoinWorld(EntityJoinWorldEvent e){
-		if(!e.getWorld().isRemote && (e.getEntity() instanceof EntityPlayer || e.getEntity() instanceof IRadarDetectable)){
-			List list = (List)radarDetectableEntityMap.get(e.getWorld());
-			if (list == null) {
-				list = new ArrayList();
-				radarDetectableEntityMap.put(e.getWorld(), list);
-			}
-
-			((List)list).add(e.getEntity());
-		}
-	}
-	
-	@SubscribeEvent
-	public static void worldTick(WorldTickEvent e){
-		if(!e.world.isRemote){
-			List<Entity> list = radarDetectableEntityMap.get(e.world);
-			if(list != null && !list.isEmpty()){
-				Iterator<Entity> itr = list.iterator();
-				while(itr.hasNext()){
-					Entity ent = itr.next();
-					if(ent.isDead)
-						itr.remove();
-				}
-			}
-		}
-	}
-	
+	public List<Entity> entList = new ArrayList();
 	public List<int[]> nearbyMissiles = new ArrayList<int[]>();
-	private int ticks = 0;
-	int pingTimer = 0;
-	int lastPower;
+	public int pingTimer = 0;
+	public int lastPower;
 	final static int maxTimer = 40;
+
+	public boolean scanMissiles = true;
+	public boolean scanPlayers = false;
+	public boolean smartMode = true;
+	public boolean redMode = true;
+
+	public boolean jammed = false;
+
+	public float prevRotation;
+	public float rotation;
 
 	public long power = 0;
 	public static final int maxPower = 100000;
 	
-	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		power = compound.getLong("power");
-		super.readFromNBT(compound);
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setLong("power", power);
-		return super.writeToNBT(compound);
-	}
 	
 	@Override
 	public String getInventoryName() {
@@ -115,92 +61,147 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		if(pos.getY() < WeaponConfig.radarAltitude)
 			return;
 		
-		int lastPower = getRedPower();
+		
 		
 		if(!world.isRemote) {
 			nearbyMissiles.clear();
 
-			if(ticks >= 5){
-				ticks = 0;
-				if(power > 0) {
-					allocateMissiles();
 
-					power -= 500;
+			if(power > 0) {
+				allocateMissiles();
 
-					if(power < 0)
-						power = 0;
-				}
-				
-				if(lastPower != getRedPower())
-					world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
+				power -= 500;
 
-				sendMissileData();
+				if(power < 0)
+					power = 0;
 			}
+			
+			if(lastPower != getRedPower())
+				world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 
-			ticks++;
+			sendMissileData();
+			lastPower = getRedPower();
 			
 			if(world.getBlockState(pos.down()).getBlock() != ModBlocks.muffler) {
 
 				pingTimer++;
 
 				if(power > 0 && pingTimer >= maxTimer) {
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					pingTimer = 0;
 				}
 			}
 			
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		} else {
+
+			prevRotation = rotation;
+			
+			if(power > 0) {
+				rotation += 5F;
+			}
+			
+			if(rotation >= 360) {
+				rotation -= 360F;
+				prevRotation -= 360F;
+			}
 		}
+	}
+
+
+	public void handleButtonPacket(int value, int meta) {
+		
+		switch(meta) {
+		case 0: this.scanMissiles = !this.scanMissiles; break;
+		case 1: this.scanPlayers = !this.scanPlayers; break;
+		case 2: this.smartMode = !this.smartMode; break;
+		case 3: this.redMode = !this.redMode; break;
+		}
+	}
+
+	public boolean isEntityApproaching(Entity e){
+		boolean xAxisApproaching = (pos.getX() < e.posX  && e.motionX < 0) || (pos.getX() > e.posX  && e.motionX > 0);
+		boolean zAxisApproaching = (pos.getZ() < e.posZ && e.motionZ < 0) || (pos.getZ() > e.posZ && e.motionZ > 0);
+		return xAxisApproaching && zAxisApproaching;
 	}
 	
 	private void allocateMissiles() {
 		
 		nearbyMissiles.clear();
+		entList.clear();
+		jammed = false;
 		
-		/*List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000, pos.getZ() + 0.5 + WeaponConfig.radarRange));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0D, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000D, pos.getZ() + 0.5 + WeaponConfig.radarRange));
 
 		for(Entity e : list) {
+			
+			if(e.posY < pos.getY() + WeaponConfig.radarBuffer)
+				continue;
+			
+			if(e instanceof EntityLivingBase && HbmLivingProps.getDigamma((EntityLivingBase) e) > 0.001) {
+				this.jammed = true;
+				nearbyMissiles.clear();
+				entList.clear();
+				return;
+			}
 
-			if(e instanceof EntityPlayer && e.posY >= pos.getY() + WeaponConfig.radarBuffer) {
+			if(e instanceof EntityPlayer && this.scanPlayers) {
 				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY });
+				entList.add(e);
 			}
 			
-			if(e instanceof IRadarDetectable && e.posY >= pos.getY() + WeaponConfig.radarBuffer) {
+			if(e instanceof IRadarDetectable && this.scanMissiles) {
 				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY });
-			}
-		}*/
-		
-		for(Entity e : radarDetectableEntityMap.get(world)){
-			if(e.posY < pos.getY()+WeaponConfig.radarBuffer || e.posX > pos.getX()+0.5+WeaponConfig.radarRange || e.posX < pos.getX()+0.5-WeaponConfig.radarRange || e.posZ > pos.getZ()+0.5+WeaponConfig.radarRange || e.posZ < pos.getZ()+0.5-WeaponConfig.radarRange){
-				continue;
-			}
-			if(e instanceof EntityPlayer){
-				nearbyMissiles.add(new int[]{(int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY});
-			} else {
-				nearbyMissiles.add(new int[]{(int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY});
+				
+				if(this.smartMode){
+					if(e.motionY <= 0 && isEntityApproaching(e)){
+						entList.add(e);
+					}
+				}
+				else{
+					entList.add(e);
+				}
 			}
 		}
 	}
 	
-	public int getRedPower() {
+	public int getRedPower() { //redstone output
 		
-		if(!nearbyMissiles.isEmpty()) {
+		if(!entList.isEmpty()) {
 			
-			double maxRange = WeaponConfig.radarRange * Math.sqrt(2D);
-			
-			int power = 0;
-			
-			for(int i = 0; i < nearbyMissiles.size(); i++) {
+			/// PROXIMITY ///
+			if(redMode) {
 				
-				int[] j = nearbyMissiles.get(i);
-				double dist = Math.sqrt(Math.pow(j[0] - pos.getX(), 2) + Math.pow(j[1] - pos.getZ(), 2));
-				int p = 15 - (int)Math.floor(dist / maxRange * 15);
+				double maxRange = WeaponConfig.radarRange * Math.sqrt(2D);
 				
-				if(p > power)
-					power = p;
+				int power = 0;
+				
+				for(int i = 0; i < entList.size(); i++) {
+					
+					Entity e = entList.get(i);
+					double dist = Math.sqrt(Math.pow(e.posX - pos.getX(), 2) + Math.pow(e.posZ - pos.getZ(), 2));
+					int p = 15 - (int)Math.floor(dist / maxRange * 15);
+					
+					if(p > power)
+						power = p;
+				}
+				
+				return power;
+				
+			/// TIER ///
+			} else {
+				
+				int power = 0;
+				
+				for(int i = 0; i < nearbyMissiles.size(); i++) {
+					
+					if(nearbyMissiles.get(i)[3] + 1 > power) {
+						power = nearbyMissiles.get(i)[3] + 1;
+					}
+				}
+				
+				return power;
 			}
-			
-			return power;
 		}
 		
 		return 0;
@@ -210,6 +211,11 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		
 		NBTTagCompound data = new NBTTagCompound();
 		data.setLong("power", power);
+		data.setBoolean("scanMissiles", scanMissiles);
+		data.setBoolean("scanPlayers", scanPlayers);
+		data.setBoolean("smartMode", smartMode);
+		data.setBoolean("redMode", redMode);
+		data.setBoolean("jammed", jammed);
 		data.setInteger("count", this.nearbyMissiles.size());
 
 		for(int i = 0; i < this.nearbyMissiles.size(); i++) {
@@ -226,6 +232,11 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 	public void networkUnpack(NBTTagCompound data) {
 		this.nearbyMissiles.clear();
 		this.power = data.getLong("power");
+		this.scanMissiles = data.getBoolean("scanMissiles");
+		this.scanPlayers = data.getBoolean("scanPlayers");
+		this.smartMode = data.getBoolean("smartMode");
+		this.redMode = data.getBoolean("redMode");
+		this.jammed = data.getBoolean("jammed");
 
 		int count = data.getInteger("count");
 
@@ -238,6 +249,26 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 
 			this.nearbyMissiles.add(new int[] {x, z, type, y});
 		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		power = compound.getLong("power");
+		scanMissiles =compound.getBoolean("scanMissiles");
+		scanPlayers = compound.getBoolean("scanPlayers");
+		smartMode = compound.getBoolean("smartMode");
+		redMode = compound.getBoolean("redMode");
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setLong("power", power);
+		compound.setBoolean("scanMissiles", scanMissiles);
+		compound.setBoolean("scanPlayers", scanPlayers);
+		compound.setBoolean("smartMode", smartMode);
+		compound.setBoolean("redMode", redMode);
+		return super.writeToNBT(compound);
 	}
 	
 	public long getPowerScaled(long i) {

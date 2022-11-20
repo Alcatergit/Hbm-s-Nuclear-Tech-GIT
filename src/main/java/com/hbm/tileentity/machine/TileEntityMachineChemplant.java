@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -8,6 +9,8 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemistryTemplate;
@@ -316,11 +319,19 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 					tryFillContainerCap(cap, i);
 				}
 			}
-			
-			if(te2 != null && te2.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
+
+			if(te2 != null && te2.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
 				IItemHandler cap = te2.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
-				for(int i = 0; i < cap.getSlots(); i ++){
-					tryFillAssemblerCap(cap, i);
+				int[] slots;
+				if(te2 instanceof TileEntityMachineBase){
+					slots = ((TileEntityMachineBase)te2).getAccessibleSlotsFromSide(MultiblockHandler.intToEnumFacing(meta).rotateY());
+					tryFillAssemblerCap(cap, slots, (TileEntityMachineBase)te2);
+				}
+				else{
+					slots = new int[cap.getSlots()];
+					for(int i = 0; i< slots.length; i++)
+						slots[i] = i;
+					tryFillAssemblerCap(cap, slots, null);
 				}
 			}
 			
@@ -690,160 +701,104 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			return false;
 		}
 	
-	/**Loads assembler's input queue from chests*/
-	/*public boolean tryFillAssembler(IInventory inventory, int slot) {
+	private int getValidSlot(AStack nextIngredient){
+		int firstFreeSlot = -1;
+		int stackCount = (int)Math.ceil(nextIngredient.count() / 64F);
+		int stacksFound = 0;
 
-		FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(slots[4]);
-		FluidStack[] outputs = MachineRecipes.getFluidOutputFromTempate(slots[4]);
+		nextIngredient = nextIngredient.singulize();
 		
-		if(!((MachineRecipes.getChemInputFromTempate(slots[4]) != null || !Library.isArrayEmpty(inputs)) && 
-				(MachineRecipes.getChemOutputFromTempate(slots[4]) != null || !Library.isArrayEmpty(outputs))))
-			return false;
-		else {
-			List<ItemStack> list = MachineRecipes.getChemInputFromTempate(slots[4]);
-			if(list == null || list.isEmpty())
-				return false;
-			
-			for(int i = 0; i < list.size(); i++)
-				list.get(i).stackSize = 1;
-
-
-			if(inventory.getStackInSlot(slot) == null)
-				return false;
-			
-			ItemStack stack = inventory.getStackInSlot(slot).copy();
-			stack.stackSize = 1;
-			
-			boolean flag = false;
-			
-			for(int i = 0; i < list.size(); i++)
-				if(ItemStack.areItemStacksEqual(stack, list.get(i)) && ItemStack.areItemStackTagsEqual(stack, list.get(i)))
-					flag = true;
-			
-			if(!flag)
-				return false;
-			
-		}
-		
-		for(int i = 13; i < 17; i++) {
-			
-			if(slots[i] != null) {
-			
-				ItemStack sta1 = inventory.getStackInSlot(slot).copy();
-				ItemStack sta2 = slots[i].copy();
-				if(sta1 != null && sta2 != null) {
-					sta1.stackSize = 1;
-					sta2.stackSize = 1;
-			
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && slots[i].stackSize < slots[i].getMaxStackSize()) {
-						ItemStack sta3 = inventory.getStackInSlot(slot).copy();
-						sta3.stackSize--;
-						if(sta3.stackSize <= 0)
-							sta3 = null;
-						inventory.setInventorySlotContents(slot, sta3);
+		for(int k = 13; k < 17; k++) { //scaning inventory if some of the ingredients allready exist
+			if(stacksFound < stackCount){
+				ItemStack assStack = inventory.getStackInSlot(k).copy();
+				if(assStack.isEmpty()){
+					if(firstFreeSlot < 13)
+						firstFreeSlot = k;
+					continue;
+				} else { // check if there are already enough filled stacks is full
 				
-						slots[i].stackSize++;
-						return true;
+					assStack.setCount(1);
+					if(nextIngredient.isApplicable(assStack)){ // check if it is the right item
+
+						if(inventory.getStackInSlot(k).getCount() < assStack.getMaxStackSize()) // is that stack full?
+							return k; // found a not full slot where we already have that ingredient
+						else
+							stacksFound++;
 					}
 				}
+			}else {
+				return -1; // All required stacks are full
 			}
 		}
-		
-		for(int i = 13; i < 17; i++) {
+		if(firstFreeSlot < 13) // nothing free in assembler inventory anymore
+			return -2;
+		return firstFreeSlot;
+	}
 
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(slots[i] == null && sta2 != null) {
-				sta2.stackSize = 1;
-				slots[i] = sta2.copy();
-				
-				ItemStack sta3 = inventory.getStackInSlot(slot).copy();
-				sta3.stackSize--;
-				if(sta3.stackSize <= 0)
-					sta3 = null;
-				inventory.setInventorySlotContents(slot, sta3);
-				
-				return true;
-			}
-		}
-		
-		return false;
-	}*/
-	
-	public boolean tryFillAssemblerCap(IItemHandler inv, int slot) {
-		
-		FluidStack[] inputs = MachineRecipes.getFluidInputFromTempate(inventory.getStackInSlot(4));
-		FluidStack[] outputs = MachineRecipes.getFluidOutputFromTempate(inventory.getStackInSlot(4));
-		
-		if(!((MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(inputs)) && 
-				(MachineRecipes.getChemOutputFromTempate(inventory.getStackInSlot(4)) != null || !Library.isArrayEmpty(outputs))))
+	//private int extractIngredient(IItemHandler container)
+
+
+	public boolean tryFillAssemblerCap(IItemHandler container, int[] allowedSlots, TileEntityMachineBase te) {
+		if(allowedSlots.length < 1)
+			return false;
+		if(MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)) == null) //No recipe template found
 			return false;
 		else {
-			List<ItemStack> list = MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4));
-			if(list == null)
-				return false;
-			for(int i = 0; i < list.size(); i++)
-				list.get(i).setCount(1);
-			
+			List<ItemStack> recipeIngredients = MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)); //Loading Ingredients
 
-			if(inv.getStackInSlot(slot) == null)
-				return false;
-			
-			ItemStack stack = inv.getStackInSlot(slot).copy();
-			stack.setCount(1);
-			
-			boolean flag = false;
-			
-			for(int i = 0; i < list.size(); i++)
-				if(isItemAcceptable(stack, list.get(i)))
-					flag = true;
-			
-			if(!flag)
-				return false;
-			
-		}
-		
-		for(int i = 13; i < 17; i++) {
-			
-			if(inventory.getStackInSlot(i).getItem() != Items.AIR) {
-			
-				ItemStack sta1 = inv.getStackInSlot(slot).copy();
-				ItemStack sta2 = inventory.getStackInSlot(i).copy();
-				if(sta1 != null && sta2 != null) {
-					sta1.setCount(1);;
-					sta2.setCount(1);;
-			
-					if(isItemAcceptable(sta1, sta2) && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize()) {
-						ItemStack sta3 = inv.getStackInSlot(slot).copy();
-						sta3.shrink(1);
-						if(sta3.getCount() <= 0)
-							sta3 = ItemStack.EMPTY;
-						inv.extractItem(slot, 1, false);
+			for(int ig = 0; ig < recipeIngredients.size(); ig++) {
+
+				AStack nextIngredient = new ComparableStack(recipeIngredients.get(ig).copy()); // getting new ingredient
 				
-						inventory.getStackInSlot(i).grow(1);;
-						return true;
-					}
+				int ingredientSlot = getValidSlot(nextIngredient);
+
+
+				if(ingredientSlot < 13)
+					continue; // Ingredient filled or Assembler is full
+				
+				int possibleAmount = inventory.getStackInSlot(ingredientSlot).getMaxStackSize() - inventory.getStackInSlot(ingredientSlot).getCount(); // how many items do we need to fill the stack?
+				
+				if(possibleAmount == 0){ // full
+					System.out.println("This should never happen method getValidSlot broke");
+					continue;
+				}
+				// Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
+
+				for(int slot : allowedSlots) {
+					if(container.getStackInSlot(slot) == null || container.getStackInSlot(slot).isEmpty()){ // check next slot in chest if it is empty
+						continue;
+					}else{ // found an item in chest
+						ItemStack stack = container.getStackInSlot(slot).copy();
+						ItemStack compareStack = stack.copy();
+						compareStack.setCount(1);
+
+						if(nextIngredient.isApplicable(compareStack)){ // bingo found something
+
+							int foundCount = Math.min(stack.getCount(), possibleAmount);
+							if(te != null && !te.canExtractItem(slot, stack, foundCount))
+								break;
+							if(foundCount > 0){
+
+								possibleAmount -= foundCount;
+								container.extractItem(slot, foundCount, false);
+
+								if(inventory.getStackInSlot(ingredientSlot) == null || inventory.getStackInSlot(ingredientSlot).isEmpty()){
+
+									stack.setCount(foundCount);
+									inventory.setStackInSlot(ingredientSlot, stack);
+
+								}else{
+									inventory.getStackInSlot(ingredientSlot).grow(foundCount); // transfer complete
+								}
+							}else{
+								break; // ingredientSlot filled
+							}
+						}
+					}	
 				}
 			}
+			return true;
 		}
-		
-		for(int i = 13; i < 17; i++) {
-
-			ItemStack sta2 = inv.getStackInSlot(slot).copy();
-			if(inventory.getStackInSlot(i).getItem() == Items.AIR && (sta2 != null && sta2.getItem() != Items.AIR)) {
-				sta2.setCount(1);;
-				inventory.setStackInSlot(i, sta2.copy());
-				
-				ItemStack sta3 = inv.getStackInSlot(slot).copy();
-				sta3.shrink(1);;
-				if(sta3.isEmpty())
-					sta3 = ItemStack.EMPTY;
-				inv.extractItem(slot, 1, false);
-				
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	
 	//boolean true: remove items, boolean false: simulation mode

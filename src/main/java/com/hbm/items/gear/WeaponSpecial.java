@@ -141,8 +141,7 @@ public class WeaponSpecial extends ItemSword {
 			if(attacker.fallDistance >= 20 && !((EntityPlayer)attacker).capabilities.isCreativeMode) {
 				if(!world.isRemote) {
 					world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 100, target.posX, target.posY, target.posZ));
-
-					EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, 100 * 0.005F);
+					EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 100F);
 					entity2.posX = target.posX;
 					entity2.posY = target.posY;
 					entity2.posZ = target.posZ;

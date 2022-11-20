@@ -26,7 +26,7 @@ public class ItemSelfcharger extends Item implements IBatteryItem {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-		tooltip.add(TextFormatting.YELLOW + "" + Library.getShortNumber(charge) + "HE/t");
+		tooltip.add(TextFormatting.YELLOW + "" + Library.getShortNumber(charge*20) + "HE/s");
 	}
 	
 	@Override

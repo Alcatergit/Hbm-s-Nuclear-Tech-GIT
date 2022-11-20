@@ -11,6 +11,8 @@ import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -50,14 +52,16 @@ public class RadiationWorldHandler {
 									continue;
 								}
 								BlockPos pos = startPos.add(i, j, k);
-								if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
-									world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-								} else if(world.getBlockState(pos).getBlock() == Blocks.TALLGRASS) {
-									world.setBlockState(pos, Blocks.AIR.getDefaultState());
-								} else if(world.getBlockState(pos).getBlock() == Blocks.LEAVES) {
-									world.setBlockState(pos, Blocks.AIR.getDefaultState());
-								} else if(world.getBlockState(pos).getBlock() == Blocks.LEAVES2) {
-									world.setBlockState(pos, Blocks.AIR.getDefaultState());
+								if(!world.isAirBlock(pos)){
+									if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
+										world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+									} else if(world.getBlockState(pos).getBlock() == Blocks.DIRT) {
+										world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+									} else if(world.getBlockState(pos).getBlock() instanceof BlockBush) {
+										world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
+									} else if(world.getBlockState(pos).getBlock() instanceof BlockLeaves) {
+										world.setBlockState(pos, Blocks.AIR.getDefaultState());
+									}
 								}
 							}
 						}
@@ -101,15 +105,16 @@ public class RadiationWorldHandler {
 						int z = coords.getZStart() + b;
 						int y = world.getHeight(x, z) - world.rand.nextInt(2);
 						BlockPos pos = new BlockPos(x, y, z);
-
-						if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
-							world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-						} else if(world.getBlockState(pos).getBlock() == Blocks.TALLGRASS) {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState());
-						} else if(world.getBlockState(pos).getBlock() == Blocks.LEAVES) {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState());
-						} else if(world.getBlockState(pos).getBlock() == Blocks.LEAVES2) {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState());
+						if(!world.isAirBlock(pos)){
+							if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
+								world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+							} else if(world.getBlockState(pos).getBlock() == Blocks.DIRT) {
+								world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+							} else if(world.getBlockState(pos).getBlock() instanceof BlockBush) {
+								world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
+							} else if(world.getBlockState(pos).getBlock() instanceof BlockLeaves) {
+								world.setBlockState(pos, Blocks.AIR.getDefaultState());
+							}
 						}
 					}
 				}

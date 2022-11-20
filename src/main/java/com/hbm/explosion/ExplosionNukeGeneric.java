@@ -39,6 +39,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -422,7 +423,11 @@ public class ExplosionNukeGeneric {
 			int rand;
 			IBlockState bs = world.getBlockState(pos);
 			Block b = bs.getBlock();
-			if (b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR) {
+			if(b == Blocks.AIR){
+				return;	
+			}
+
+			else if (b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR) {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 
@@ -472,6 +477,30 @@ public class ExplosionNukeGeneric {
 				} else {
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(),2);
 				}
+			}
+
+			else if(b == Blocks.DIRT) {
+				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+			}
+
+			else if(b == Blocks.SNOW_LAYER) {
+				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+			} 
+
+			else if(b == Blocks.SNOW) {
+				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			}
+
+			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {
+				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+			}
+
+			else if(b == Blocks.STONE){
+				world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+			}
+
+			else if(b == Blocks.BEDROCK){
+				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 			}
 
 			else if (b == Blocks.RED_MUSHROOM_BLOCK) {
@@ -547,7 +576,12 @@ public class ExplosionNukeGeneric {
 		if (!world.isRemote) {
 			int rand;
 			Block b = world.getBlockState(pos).getBlock();
-			if (b == Blocks.GLASS || b == Blocks.STAINED_GLASS
+
+			if(b == Blocks.AIR){
+				return;	
+			}
+
+			else if (b == Blocks.GLASS || b == Blocks.STAINED_GLASS
 					|| b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR
 					|| b == Blocks.LEAVES || b == Blocks.LEAVES2) {
 				world.setBlockToAir(pos);
@@ -572,6 +606,30 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.CLAY) {
 				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
+			}
+
+			else if(b == Blocks.DIRT) {
+				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+			}
+
+			else if(b == Blocks.SNOW_LAYER) {
+				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+			} 
+
+			else if(b == Blocks.SNOW) {
+				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			}
+
+			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {
+				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+			}
+
+			else if(b == Blocks.STONE){
+				world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+			}
+
+			else if(b == Blocks.BEDROCK){
+				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 			}
 
 			else if (b == Blocks.MOSSY_COBBLESTONE) {
@@ -727,8 +785,46 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 			
-			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_mycelium) {
-				world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+			if(b.getBlock() == Blocks.GRASS || b.getBlock() == Blocks.DIRT || b.getBlock() == Blocks.MYCELIUM || b.getBlock() == ModBlocks.waste_earth || b.getBlock() == ModBlocks.waste_dirt || b.getBlock() == ModBlocks.waste_mycelium) {
+				if(random.nextInt(5) < 2)
+					world.setBlockState(pos, Blocks.DIRT.getStateFromMeta(1));
+				else
+					world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_slaked) {
+				world.setBlockState(pos, Blocks.STONE.getDefaultState());
+				return;
+			}
+
+			if( b.getBlock() == ModBlocks.sellafield_0 || b.getBlock() == ModBlocks.sellafield_1) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(5));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_2 || b.getBlock() == ModBlocks.sellafield_3) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(3));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.sellafield_4 || b.getBlock() == ModBlocks.sellafield_core) {
+				world.setBlockState(pos, Blocks.STONE.getStateFromMeta(1));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_trinitite) {
+				world.setBlockState(pos, Blocks.SAND.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_trinitite_red) {
+				world.setBlockState(pos, Blocks.SAND.getStateFromMeta(1));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.taint) {
+				world.setBlockState(pos, ModBlocks.stone_gneiss.getDefaultState());
 				return;
 			}
 			

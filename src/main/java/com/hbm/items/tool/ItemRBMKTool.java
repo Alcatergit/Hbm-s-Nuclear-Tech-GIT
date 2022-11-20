@@ -8,6 +8,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKCraneConsole;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.Block;
@@ -66,6 +67,23 @@ public class ItemRBMKTool extends Item {
 				int[] pos = ((BlockDummyable)b).findCore(world, bpos.getX(), bpos.getY(), bpos.getZ());
 				
 				TileEntityRBMKConsole console = (TileEntityRBMKConsole)world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+				int tx = stack.getTagCompound().getInteger("posX");
+				int ty = stack.getTagCompound().getInteger("posY");
+				int tz = stack.getTagCompound().getInteger("posZ");
+				console.setTarget(tx, ty, tz);
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".set").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+			}
+			
+			return EnumActionResult.SUCCESS;
+		}
+
+		if(b == ModBlocks.rbmk_crane_console && stack.hasTagCompound()) {
+			
+			if(!world.isRemote) {
+				
+				int[] pos = ((BlockDummyable)b).findCore(world, bpos.getX(), bpos.getY(), bpos.getZ());
+				
+				TileEntityRBMKCraneConsole console = (TileEntityRBMKCraneConsole)world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 				int tx = stack.getTagCompound().getInteger("posX");
 				int ty = stack.getTagCompound().getInteger("posY");
 				int tz = stack.getTagCompound().getInteger("posZ");

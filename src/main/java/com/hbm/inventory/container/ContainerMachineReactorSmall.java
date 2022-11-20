@@ -21,24 +21,24 @@ public class ContainerMachineReactorSmall extends Container {
 		seleniumEngine = tedf;
 		
 		//Rods
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 98, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 134, 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 116, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 152, 36));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 98, 54));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 134, 54));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 80, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 116, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 152, 72));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 98, 90));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 134, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 95, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 131, 22));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 77, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 113, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 149, 40));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 95, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 131, 58));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 77, 76));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 113, 76));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 149, 76));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 10, 95, 94));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 11, 131, 94));
 		
 		//Fluid IO
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 8, 90));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 8, 108));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 26, 90));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 26, 108));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 6, 60));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 13, 6, 78));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 14, 24, 60));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 15, 24, 78));
 		
 		for(int i = 0; i < 3; i++)
 		{

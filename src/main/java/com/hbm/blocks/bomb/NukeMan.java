@@ -1,6 +1,7 @@
 package com.hbm.blocks.bomb;
 
 import java.util.Random;
+import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
@@ -13,6 +14,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -144,52 +146,20 @@ public class NukeMan extends BlockContainer implements IBomb {
 	public boolean igniteTestBomb(World world, int x, int y, int z)
 	{
 		if (!world.isRemote) {
-			/*
-		dealDamage(world,x,y,z, 30);
-		detonateTestBomb(world,x,y,z, 30);
-		vapor(world,x,y,z, 30);
-		dealDamage(world,x,y,z, 60);
-		detonateTestBomb(world,x,y,z, 60);
-		vapor(world,x,y,z, 60);
-		dealDamage(world,x,y,z, 90);
-		detonateTestBomb(world,x,y,z, 90);
-		vapor(world,x,y,z, 90);
-		dealDamage(world,x,y,z, 120);
-		detonateTestBomb(world,x,y,z, 120);
-		vapor(world,x,y,z, 120);
-		*/
+
 		if(world.getTileEntity(new BlockPos(x, y, z)) instanceof TileEntityNukeMan)
 			((TileEntityNukeMan)world.getTileEntity(new BlockPos(x, y, z))).clearSlots();
-		//world.spawnParticle("hugeexplosion", x, y, z, 0, 0, 0); //spawns a huge explosion particle
 		world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
-		/*ExplosionNukeGeneric.detonateTestBomb(world, x, y, z, 175);
-		ExplosionNukeGeneric.vapor(world, x, y, z, 195);
-		ExplosionNukeGeneric.waste(world, x, y, z, 250);
-		ExplosionNukeGeneric.dealDamage(world, x, y, z, 195);*/
-
-    	/*EntityNukeExplosion entity = new EntityNukeExplosion(world);
-    	entity.posX = x;
-    	entity.posY = y;
-    	entity.posZ = z;
-    	entity.destructionRange = 175;
-    	entity.vaporRange = 195;
-    	entity.wasteRange = 250;
-    	entity.damageRange = 195;
-    	
-    	world.spawnEntityInWorld(entity);*/
 		
     	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.manRadius, x + 0.5, y + 0.5, z + 0.5));
-    	
-    	//ExplosionNukeAdvanced.mush(world, x, y, z);
-
     	if (GeneralConfig.enableNukeClouds) {
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.manRadius * 0.005F);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, BombConfig.manRadius);
 			entity2.posX = x;
 			entity2.posY = y;
 			entity2.posZ = z;
 			world.spawnEntity(entity2);
 		} else {
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, 1000);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, BombConfig.manRadius);
 			entity2.posX = x;
 			entity2.posY = y - 17;
 			entity2.posZ = z;
@@ -256,4 +226,13 @@ public class NukeMan extends BlockContainer implements IBomb {
         }
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§2[Nuclear Bomb]§r");
+		tooltip.add(" §eRadius: "+BombConfig.manRadius+"m§r");
+		if(!BombConfig.disableNuclear){
+			tooltip.add("§2[Fallout]§r");
+			tooltip.add(" §aRadius: "+(int)BombConfig.manRadius*(1+BombConfig.falloutRange/100)+"m§r");
+		}
+	}
 }

@@ -23,15 +23,15 @@ public class GUIStorageDrum extends GuiInfoContainer {
 		drum = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 222;
+		this.ySize = 237;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 16, guiTop + 17, 9, 108, drum.tanks[0], ModForgeFluids.wastefluid);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 151, guiTop + 17, 9, 108, drum.tanks[1], ModForgeFluids.wastegas);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 16, guiTop + 23, 9, 108, drum.tanks[0], ModForgeFluids.wastefluid);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 151, guiTop + 23, 9, 108, drum.tanks[1], ModForgeFluids.wastegas);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -50,8 +50,8 @@ public class GUIStorageDrum extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		int liquid = drum.tanks[0].getFluidAmount() * 106 / drum.tanks[0].getCapacity();
-		drawTexturedModalRect(guiLeft + 17, guiTop + 124 - liquid, 176, 106 - liquid, 7, liquid);
+		drawTexturedModalRect(guiLeft + 17, guiTop + 130 - liquid, 176, 106 - liquid, 7, liquid);
 		int gas = drum.tanks[1].getFluidAmount() * 106 / drum.tanks[1].getCapacity();
-		drawTexturedModalRect(guiLeft + 152, guiTop + 124 - gas, 183, 106 - gas, 7, gas);
+		drawTexturedModalRect(guiLeft + 152, guiTop + 130 - gas, 183, 106 - gas, 7, gas);
 	}
 }

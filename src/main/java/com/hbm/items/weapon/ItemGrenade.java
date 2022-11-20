@@ -42,8 +42,10 @@ import com.hbm.entity.grenade.EntityGrenadeSchrabidium;
 import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
+import com.hbm.entity.grenade.EntityGrenadeSolinium;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.items.ModItems;
+import com.hbm.config.BombConfig;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -120,6 +122,9 @@ public class ItemGrenade extends Item {
 			if (this == ModItems.grenade_nuclear) {
 				worldIn.spawnEntity(new EntityGrenadeNuclear(worldIn, playerIn, handIn));
 			}
+			if (this == ModItems.grenade_solinium) {
+				worldIn.spawnEntity(new EntityGrenadeSolinium(worldIn, playerIn, handIn));
+			}
 			if (this == ModItems.grenade_pulse) {
 				worldIn.spawnEntity(new EntityGrenadePulse(worldIn, playerIn, handIn));
 			}
@@ -168,7 +173,6 @@ public class ItemGrenade extends Item {
 			if (this == ModItems.grenade_burst) {
 				worldIn.spawnEntity(new EntityGrenadeBurst(worldIn, playerIn, handIn));
 			}
-
 			if (this == ModItems.grenade_if_generic) {
 				worldIn.spawnEntity(new EntityGrenadeIFGeneric(worldIn, playerIn, handIn));
 			}
@@ -218,7 +222,7 @@ public class ItemGrenade extends Item {
 			return EnumRarity.RARE;
 		}
 
-		if (this == ModItems.grenade_plasma || this == ModItems.grenade_zomg || this == ModItems.grenade_black_hole || this == ModItems.grenade_pink_cloud) {
+		if (this == ModItems.grenade_plasma || this == ModItems.grenade_zomg || this == ModItems.grenade_black_hole || this == ModItems.grenade_pink_cloud || this == ModItems.grenade_solinium) {
 			return EnumRarity.EPIC;
 		}
 
@@ -301,10 +305,19 @@ public class ItemGrenade extends Item {
 			list.add("\"Why did it not blow up????\"");
 			list.add(TextFormatting.ITALIC + "If it didn't blow up it means it worked.");
 		}
+		if (this == ModItems.grenade_solinium) {
+			list.add("§3[Solinium Grenade]§r");
+			list.add(" §eRadius: "+(int)BombConfig.soliniumRadius/10+"m§r");
+		}
+		if (this == ModItems.grenade_nuclear) {
+			list.add("§2[Nuclear Grenade]§r");
+			list.add(" §eRadius: "+(int)BombConfig.fatmanRadius/2+"m§r");
+			list.add("§2[Fallout]§r");
+			list.add(" §aRadius: "+(int)(BombConfig.fatmanRadius/2*(1+BombConfig.falloutRange/100))+"m§r");
+		}
 	}
 	
 	public static int getFuseTicks(Item grenade) {
 		return ((ItemGrenade)grenade).fuse * 20;
 	}
-
 }

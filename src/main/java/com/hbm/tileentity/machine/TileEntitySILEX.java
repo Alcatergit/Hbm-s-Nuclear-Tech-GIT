@@ -15,6 +15,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
 import com.hbm.util.WeightedRandomObject;
+import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,14 +36,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntitySILEX extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
-	
-	public int laser = 0;
+
+	public EnumWavelengths mode = EnumWavelengths.NULL;
+	public boolean hasLaser;
 	public FluidTank tank;
 	public ComparableStack current;
 	public int currentFill;
 	public static final int maxFill = 16000;
 	public int progress;
-	public final int processTime = 100;
+	public final int processTime = 80;
 	
 	//0: Input
 	//1: Fluid ID
@@ -87,6 +89,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("fill", currentFill);
 			data.setInteger("progress", progress);
+			data.setString("mode", mode.toString());
 			
 			if(this.current != null) {
 				data.setInteger("item", Item.getIdFromItem(this.current.item));
@@ -95,6 +98,8 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tank), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			this.networkPack(data, 50);
+
+			this.mode = EnumWavelengths.NULL;
 		}
 	}
 	
@@ -102,6 +107,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		
 		this.currentFill = nbt.getInteger("fill");
 		this.progress = nbt.getInteger("progress");
+		this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
 		
 		if(this.currentFill > 0) {
 			this.current = new ComparableStack(Item.getItemById(nbt.getInteger("item")), 1, nbt.getInteger("meta"));
@@ -172,7 +178,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 			if(load <= maxFill - this.currentFill && load <= tank.getFluidAmount()) {
 				this.currentFill += load;
 				this.current = new ComparableStack(inventory.getStackInSlot(0)).makeSingular();
-				tank.drain(load, true);
+				tank.drain(load*3, true);
 				inventory.getStackInSlot(0).shrink(1);
 			}
 		}
@@ -187,14 +193,17 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		
 		if(recipe == null)
 			return false;
+
+		if(!(recipe.laserStrength.ordinal() == this.mode.ordinal()))
+			return false;
 		
 		if(currentFill < recipe.fluidConsumed)
 			return false;
 		
 		if(!inventory.getStackInSlot(4).isEmpty())
 			return false;
-		
-		progress++;
+
+		progress ++;
 		
 		if(progress >= processTime) {
 			
@@ -267,6 +276,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		super.writeToNBT(nbt);
 		nbt.setTag("tank", this.tank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("fill", this.currentFill);
+		nbt.setString("mode", mode.toString());
 		
 		if(this.current != null) {
 			nbt.setInteger("item", Item.getIdFromItem(this.current.item));

@@ -16,13 +16,13 @@ import net.minecraft.world.World;
 public class ParticleContrail extends Particle {
 
 	private TextureManager theRenderEngine;
-	private int age;
+	private int age = 0;
 	private int maxAge;
 
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 100 + rand.nextInt(40);
+		maxAge = 400 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.particleScale = 1F;
@@ -31,7 +31,7 @@ public class ParticleContrail extends Particle {
 	public ParticleContrail(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		theRenderEngine = p_i1213_1_;
-		maxAge = 100 + rand.nextInt(40);
+		maxAge = 600 + rand.nextInt(50);
 
 		this.particleRed = red;
 		this.particleGreen = green;
@@ -40,14 +40,15 @@ public class ParticleContrail extends Particle {
 		this.particleScale = scale;
 	}
 
+
 	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		particleAlpha = 1 - ((float) age / (float) maxAge);
+		particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
 
-		++this.age;
+		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
@@ -74,7 +75,7 @@ public class ParticleContrail extends Particle {
 		float f1 = f + 0.0624375F;
 		float f2 = (float) this.particleTextureIndexY / 16.0F;
 		float f3 = f2 + 0.0624375F;
-		float f4 = particleAlpha + 0.5F * this.particleScale;
+		float f4 = (1-particleAlpha)*3F + 1F + 0.5F * this.particleScale;
 
 		if (this.particleTexture != null) {
 			f = this.particleTexture.getMinU();
@@ -83,14 +84,13 @@ public class ParticleContrail extends Particle {
 			f3 = this.particleTexture.getMaxV();
 		}
 
+		float mod = particleAlpha * 0.1F;
 		Random urandom = new Random(this.hashCode());
 		for (int ii = 0; ii < 6; ii++) {
 			
 			float f5 = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX) + urandom.nextGaussian() * 0.5);
 			float f6 = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY) + urandom.nextGaussian() * 0.5);
 			float f7 = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ) + urandom.nextGaussian() * 0.5);
-			
-			float mod = urandom.nextFloat() * 0.2F + 0.2F;
 			
 			int i = this.getBrightnessForRender(partialTicks);
 			int j = i >> 16 & 65535;

@@ -41,7 +41,7 @@ public class ItemSurveyScanner extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add("Right click to perform scan.");
 		tooltip.add("Shift click to change mode.");
-		tooltip.add("Current mode: " + (getMode(stack) == 0 ? "Resources" : "Structures"));
+		tooltip.add("Current mode: " + (getMode(stack) == 0 ? "§3Resources§r" : "§6Structures§r"));
 	}
 	
 	public int getMode(ItemStack stack) {

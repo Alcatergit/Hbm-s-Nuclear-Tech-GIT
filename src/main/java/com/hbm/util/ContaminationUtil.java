@@ -1,5 +1,6 @@
 package com.hbm.util;
 
+import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.entity.mob.EntityNuclearCreeper;
@@ -92,17 +93,20 @@ public class ContaminationUtil {
 
 	public static void printGeigerData(EntityPlayer player) {
 
-		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 10)) / 10D;
+		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 1000)) / 1000D;
 
 		RadiationSavedData data = RadiationSavedData.getData(player.world);
-		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 10)) / 10D;
-		double env = ((int)(HbmLivingProps.getRadBuf(player) * 10D)) / 10D;
+		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
+		double env = ((int)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
 
 		double res = ((int)(10000D - ContaminationUtil.calculateRadiationMod(player) * 10000)) / 100D;
 		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;
 
+		double rec = ((int)(env* (100-res)/100D * 1000D))/ 1000D;
+
 		String chunkPrefix = getPreffixFromRad(rads);
 		String envPrefix = getPreffixFromRad(env);
+		String recPrefix = getPreffixFromRad(rec);
 		String radPrefix = "";
 		String resPrefix = "" + TextFormatting.WHITE;
 
@@ -127,8 +131,83 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentString("===== ☢ ").appendSibling(new TextComponentTranslation("geiger.title")).appendSibling(new TextComponentString(" ☢ =====")).setStyle(new Style().setColor(TextFormatting.GOLD)));
 		player.sendMessage(new TextComponentTranslation("geiger.chunkRad").appendSibling(new TextComponentString(" " + chunkPrefix + rads + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.envRad").appendSibling(new TextComponentString(" " + envPrefix + env + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + recPrefix + rec + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRad").appendSibling(new TextComponentString(" " + radPrefix + eRad + " RAD")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + res + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+	}
+
+	public static void printDosimeterData(EntityPlayer player) {
+
+		double rads = (double)(ContaminationUtil.getPlayerRads(player));
+		boolean limit = false;
+		
+		if(rads > 3.6D) {
+			rads = 3.6D;
+			limit = true;
+		}
+		rads = ((int)(1000D * rads))/ 1000D;
+		String radsPrefix = getPreffixFromRad(rads);
+		
+		player.sendMessage(new TextComponentString("===== ☢ ").appendSibling(new TextComponentTranslation("dosimeter.title")).appendSibling(new TextComponentString(" ☢ =====")).setStyle(new Style().setColor(TextFormatting.GOLD)));
+		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + radsPrefix + (limit ? ">" : "") + rads + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+	}
+
+	public static String getTextColorFromPercent(double percent){
+		if(percent < 0.5)
+			return ""+TextFormatting.GREEN;
+		else if(percent < 0.6)
+			return ""+TextFormatting.YELLOW;
+		else if(percent < 0.7)
+			return ""+TextFormatting.GOLD;
+		else if(percent < 0.8)
+			return ""+TextFormatting.RED;
+		else if(percent < 0.9)
+			return ""+TextFormatting.DARK_RED;
+		else
+			return ""+TextFormatting.DARK_GRAY;
+	}
+
+	public static String getTextColorLung(double percent){
+		if(percent > 0.9)
+			return ""+TextFormatting.GREEN;
+		else if(percent > 0.75)
+			return ""+TextFormatting.YELLOW;
+		else if(percent > 0.5)
+			return ""+TextFormatting.GOLD;
+		else if(percent > 0.25)
+			return ""+TextFormatting.RED;
+		else if(percent > 0.1)
+			return ""+TextFormatting.DARK_RED;
+		else
+			return ""+TextFormatting.DARK_GRAY;
+	}
+
+	public static void printDiagnosticData(EntityPlayer player) {
+
+		double digamma = ((int)(HbmLivingProps.getDigamma(player) * 1000)) / 1000D;
+		double halflife = ((int)((1D - Math.pow(0.5, digamma)) * 10000)) / 100D;
+		
+		player.sendMessage(new TextComponentString("===== Ϝ ").appendSibling(new TextComponentTranslation("digamma.title")).appendSibling(new TextComponentString(" Ϝ =====")).setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerDigamma").appendSibling(new TextComponentString(TextFormatting.RED + " " + digamma + " DRX")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+		player.sendMessage(new TextComponentTranslation("digamma.playerHealth").appendSibling(new TextComponentString(getTextColorFromPercent(halflife/100D) + String.format(" %6.2f", halflife) + "%")).setStyle(new Style().setColor(TextFormatting.LIGHT_PURPLE)));
+	}
+
+	public static void printLungDiagnosticData(EntityPlayer player) {
+
+		float playerAsbestos = 100F-((int)(10000F * HbmLivingProps.getAsbestos(player) / EntityHbmProps.maxAsbestos))/100F;
+		float playerBlacklung = 100F-((int)(10000F * HbmLivingProps.getBlackLung(player) / EntityHbmProps.maxBlacklung))/100F;
+		float playerTotal = (playerAsbestos * playerBlacklung/100F);
+		
+
+		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_asbestos_health").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerAsbestos/100D)+" %6.2f", playerAsbestos)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_coal_health").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerBlacklung/100D)+" %6.2f", playerBlacklung)+" %")));
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_total_health").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerTotal/100D)+" %6.2f", playerTotal)+" %")));
+	
+	}
+
+	public static double getPlayerRads(EntityPlayer player) {
+		return (double)(HbmLivingProps.getRadBuf(player)) * (double)(ContaminationUtil.calculateRadiationMod(player));
 	}
 	
 	public static String getPreffixFromRad(double rads) {

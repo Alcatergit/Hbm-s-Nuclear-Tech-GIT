@@ -1,130 +1,179 @@
 package com.hbm.inventory.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.lwjgl.input.Keyboard;
 
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.ItemDesignatorPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumHand;
 
 public class GUIScreenDesignator extends GuiScreen {
 
 	protected static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_designator.png");
     protected int xSize = 176;
-    protected int ySize = 178;
+    protected int ySize = 126;
     protected int guiLeft;
     protected int guiTop;
-    int shownX;
-    int shownZ;
-    int currentPage = 0;
-    List<ItemStack> stacks = new ArrayList<ItemStack>();
-    List<FolderButton> buttons = new ArrayList<FolderButton>();
+
+    protected short hereButtonCoolDown = 0;
+    protected short saveButtonCoolDown = 0;
+
     private final EntityPlayer player;
-    private EnumHand hand;
+
+    private GuiTextField xField;
+    private GuiTextField zField;
+
     
-    public GUIScreenDesignator(EntityPlayer player, int hand) {
-    	this.hand = hand == 1 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+    public GUIScreenDesignator(EntityPlayer player) {
     	this.player = player;
-    	
     }
     
-    public void drawScreen(int mouseX, int mouseY, float f)
-    {
+    public void drawScreen(int mouseX, int mouseY, float f) {
         this.drawDefaultBackground();
         this.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
-        this.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        GlStateManager.enableLighting();
         GlStateManager.disableLighting();
+        this.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        GlStateManager.enableLighting();
+        if(isOnXButton(mouseX, mouseY))
+            this.drawHoveringText("Click to Flip X to -X", mouseX, mouseY);
+        if(isOnZButton(mouseX, mouseY))
+            this.drawHoveringText("Click to Flip Z to -Z", mouseX, mouseY);
+        if(isOnHereButton(mouseX, mouseY))
+            this.drawHoveringText("Set coordinates to player position", mouseX, mouseY);
+        if(isOnSaveButton(mouseX, mouseY))
+            this.drawHoveringText("Save coordinates", mouseX, mouseY);
+        if(isOnDistanceField(mouseX, mouseY))
+            this.drawHoveringText("Distance from player to coordinates", mouseX, mouseY);
+    }
+
+    protected void loadSavedCoords(){
+        ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+                
+        if(stack == null || stack.getItem() != ModItems.designator_manual) {
+            stack = player.getHeldItem(EnumHand.OFF_HAND);
+            if(stack == null || stack.getItem() != ModItems.designator_manual)
+                return;
+        }
+        if(stack.hasTagCompound()){
+            this.xField.setText(Integer.toString(stack.getTagCompound().getInteger("xCoord")));
+            this.zField.setText(Integer.toString(stack.getTagCompound().getInteger("zCoord")));
+        }else{
+            this.xField.setText("0");
+            this.zField.setText("0");
+        }
     }
     
-    public void initGui()
-    {
+    public void initGui() {
+
         super.initGui();
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
 
-		shownX = 0;
-		shownZ = 0;
-		ItemStack stack = player.getHeldItem(hand);
-		
-		if(stack != null && stack.getItem() == ModItems.designator_manual && stack.hasTagCompound()) {
-			shownX = stack.getTagCompound().getInteger("xCoord");
-			shownZ = stack.getTagCompound().getInteger("zCoord");
-		}
-		
-		updateButtons();
-    }
-    
-    private void updateButtons() {
-    	buttons.clear();
+        Keyboard.enableRepeatEvents(true);
+        this.xField = new GuiTextField(0, this.fontRenderer, guiLeft + 38, guiTop + 38, 115, 10);
+        this.xField.setTextColor(0xCC24B5);
+        this.xField.setDisabledTextColour(0x991B88);
+        this.xField.setEnableBackgroundDrawing(false);
+        this.xField.setMaxStringLength(10);
 
-    	buttons.add(new FolderButton(guiLeft + 25,	guiTop + 26, 0, 0, 0, 1, null));
-    	buttons.add(new FolderButton(guiLeft + 52,	guiTop + 26, 1, 0, 0, 5, null));
-    	buttons.add(new FolderButton(guiLeft + 79,	guiTop + 26, 2, 0, 0, 10, null));
-    	buttons.add(new FolderButton(guiLeft + 106,	guiTop + 26, 3, 0, 0, 50, null));
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 26, 4, 0, 0, 100, null));
-
-    	buttons.add(new FolderButton(guiLeft + 25,	guiTop + 62, 5, 1, 0, 1, null));
-    	buttons.add(new FolderButton(guiLeft + 52,	guiTop + 62, 6, 1, 0, 5, null));
-    	buttons.add(new FolderButton(guiLeft + 79,	guiTop + 62, 7, 1, 0, 10, null));
-    	buttons.add(new FolderButton(guiLeft + 106,	guiTop + 62, 8, 1, 0, 50, null));
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 62, 9, 1, 0, 100, null));
-
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 44, 10, 2, 0, 0, "Set coord to current X position..."));
-
-    	buttons.add(new FolderButton(guiLeft + 25,	guiTop + 26 + 72, 0, 0, 1, 1, null));
-    	buttons.add(new FolderButton(guiLeft + 52,	guiTop + 26 + 72, 1, 0, 1, 5, null));
-    	buttons.add(new FolderButton(guiLeft + 79,	guiTop + 26 + 72, 2, 0, 1, 10, null));
-    	buttons.add(new FolderButton(guiLeft + 106,	guiTop + 26 + 72, 3, 0, 1, 50, null));
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 26 + 72, 4, 0, 1, 100, null));
-
-    	buttons.add(new FolderButton(guiLeft + 25,	guiTop + 62 + 72, 5, 1, 1, 1, null));
-    	buttons.add(new FolderButton(guiLeft + 52,	guiTop + 62 + 72, 6, 1, 1, 5, null));
-    	buttons.add(new FolderButton(guiLeft + 79,	guiTop + 62 + 72, 7, 1, 1, 10, null));
-    	buttons.add(new FolderButton(guiLeft + 106,	guiTop + 62 + 72, 8, 1, 1, 50, null));
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 62 + 72, 9, 1, 1, 100, null));
-
-    	buttons.add(new FolderButton(guiLeft + 133,	guiTop + 44 + 72, 10, 2, 1, 0, "Set coord to current Z position..."));
+        this.zField = new GuiTextField(1, this.fontRenderer, guiLeft + 38, guiTop + 60, 115, 10);
+        this.zField.setTextColor(0xCC24B5);
+        this.zField.setDisabledTextColour(0x991B88);
+        this.zField.setEnableBackgroundDrawing(false);
+        this.zField.setMaxStringLength(10);
+        loadSavedCoords();
     }
 
-    protected void mouseClicked(int i, int j, int k) {
-    	try {
-    		for(FolderButton b : buttons)
-    			if(b.isMouseOnButton(i, j))
-    				b.executeAction();
-    	} catch (Exception ex) { }
+    protected boolean isOnHereButton(int i, int j){
+        return this.guiLeft+112 < i && this.guiLeft+112+18 > i && this.guiTop+87 < j && this.guiTop+87+18 > j;
+    }
+
+    protected boolean isOnSaveButton(int i, int j){
+        return this.guiLeft+139 < i && this.guiLeft+139+18 > i && this.guiTop+87 < j && this.guiTop+87+18 > j;
+    }
+
+    protected boolean isOnXButton(int i, int j){
+        return this.guiLeft+14 < i && this.guiLeft+14+18 > i && this.guiTop+33 < j && this.guiTop+33+18 > j;
+    }
+
+    protected boolean isOnZButton(int i, int j){
+        return this.guiLeft+14 < i && this.guiLeft+14+18 > i && this.guiTop+55 < j && this.guiTop+55+18 > j;
+    }
+
+    protected boolean isOnDistanceField(int i, int j){
+        return this.guiLeft+34 < i && this.guiLeft+34+67 > i && this.guiTop+89 < j && this.guiTop+89+14 > j;
+    }
+
+    protected void mouseClicked(int i, int j, int k) throws IOException {
+        super.mouseClicked(i, j, k);
+    	
+        this.xField.mouseClicked(i, j, k);
+        this.zField.mouseClicked(i, j, k);
+
+    	if(player != null){
+            if(this.isOnXButton(i, j)){
+                this.xField.setText(Integer.toString(-1 * NumberUtils.toInt(this.xField.getText())));
+                mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.buttonYes, 1.0F));
+            }
+
+            if(this.isOnZButton(i, j)){
+                this.zField.setText(Integer.toString(-1 * NumberUtils.toInt(this.zField.getText())));
+                mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.buttonYes, 1.0F));
+            }
+
+            if(this.isOnHereButton(i, j)) {
+                hereButtonCoolDown = 20;
+                this.xField.setText(Integer.toString((int) player.posX));
+                this.zField.setText(Integer.toString((int) player.posZ));
+                mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.buttonYes, 1.0F));
+            }
+
+            if(this.isOnSaveButton(i, j) && saveButtonCoolDown == 0) {
+                saveButtonCoolDown = 20;
+                this.formatInput();
+	    		mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.techBleep, 1.0F));
+	    		PacketDispatcher.wrapper.sendToServer(new ItemDesignatorPacket(Integer.parseInt(xField.getText()), Integer.parseInt(zField.getText())));
+            }
+    	}
+    }
+
+    protected void formatInput(){
+        this.xField.setText(Integer.toString(NumberUtils.toInt(this.xField.getText())));
+        this.zField.setText(Integer.toString(NumberUtils.toInt(this.zField.getText())));
     }
 	
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
+        String name = "Manual Designator";
+        this.fontRenderer.drawString(name, this.guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, this.guiTop + 12, 0xCCCCCC);
 
-		//this.fontRendererObj.drawString(I18n.format((currentPage + 1) + "/" + (getPageCount() + 1)), 
-		//		guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(I18n.format((currentPage + 1) + "/" + (getPageCount() + 1))) / 2, guiTop + 10, 4210752);
-		
-		for(FolderButton b : buttons)
-			if(b.isMouseOnButton(i, j))
-				b.drawString(i, j);
+        this.formatInput();
 
-		String x = String.valueOf(shownX);
-		String z = String.valueOf(shownZ);
-		GlStateManager.disableLighting();
-		this.fontRenderer.drawString("X: " + x, 
-				guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth("X: " + x) / 2, guiTop + 50, 4210752);
-		this.fontRenderer.drawString("Z: " + z, 
-				guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth("Z: " + z) / 2, guiTop + 50 + 18 * 4, 4210752);
-		GlStateManager.enableLighting();
+        this.xField.drawTextBox();
+        this.zField.drawTextBox();
+
+        int posx = NumberUtils.toInt(this.xField.getText());
+        int posz = NumberUtils.toInt(this.zField.getText());
+
+        String distance = Math.min(((int) Math.sqrt(Math.pow(posx-player.posX, 2)+Math.pow(posz-player.posZ, 2))), 99999999) + " m";
+
+        this.fontRenderer.drawString(distance, this.guiLeft + 97 - this.fontRenderer.getStringWidth(distance), this.guiTop + 93, 0x0091FF);
 	}
 
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
@@ -132,93 +181,37 @@ public class GUIScreenDesignator extends GuiScreen {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		for(FolderButton b : buttons)
-			b.drawButton(b.isMouseOnButton(i, j));
+		if(xField.isFocused())
+			drawTexturedModalRect(guiLeft + 32, guiTop + 33, 0, 126, 125, 18);
+
+		if(zField.isFocused())
+			drawTexturedModalRect(guiLeft + 32, guiTop + 55, 0, 126, 125, 18);
+
+        if(hereButtonCoolDown > 0){
+            drawTexturedModalRect(guiLeft + 112, guiTop + 87, 176, 0, 18, 18);
+            hereButtonCoolDown--;
+        }
+
+        if(saveButtonCoolDown > 0){
+            drawTexturedModalRect(guiLeft + 139, guiTop + 87, 194, 0, 18, 18);
+            saveButtonCoolDown--;
+        }
 	}
 	
-    protected void keyTyped(char p_73869_1_, int p_73869_2_)
-    {
-        if (p_73869_2_ == 1 || p_73869_2_ == this.mc.gameSettings.keyBindInventory.getKeyCode())
-        {
+    protected void keyTyped(char p_73869_1_, int p_73869_2_) throws IOException {
+    	
+        if (!(this.xField.textboxKeyTyped(p_73869_1_, p_73869_2_) || this.zField.textboxKeyTyped(p_73869_1_, p_73869_2_))) {
+            super.keyTyped(p_73869_1_, p_73869_2_);
+        }
+    	
+        if (p_73869_2_ == 1 || p_73869_2_ == this.mc.gameSettings.keyBindInventory.getKeyCode()) {
             this.mc.player.closeScreen();
         }
         
-    }
-    
-    public void updateScreen() {
-    	if(player.getHeldItem(hand).getItem() != ModItems.designator_manual)
-    		player.closeScreen();
     }
     
     @Override
     public boolean doesGuiPauseGame() {
     	return false;
     }
-	
-	class FolderButton {
-		
-		int xPos;
-		int yPos;
-		int type;
-		int operator;
-		int value;
-		int reference;
-		String info;
-		
-		public FolderButton(int x, int y, int t, int o, int r, int v, String i) {
-			xPos = x;
-			yPos = y;
-			type = t;
-			operator = o;
-			value = v;
-			reference = r;
-			info = i;
-		}
-		
-		public void updateButton(int mouseX, int mouseY) {
-		}
-		
-		public boolean isMouseOnButton(int mouseX, int mouseY) {
-			return xPos <= mouseX && xPos + 18 > mouseX && yPos < mouseY && yPos + 18 >= mouseY;
-		}
-		
-		public void drawButton(boolean b) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-			drawTexturedModalRect(xPos, yPos, b ? 176 + 18 : 176, type * 18, 18, 18);
-		}
-		
-		public void drawString(int x, int y) {
-			if(info == null || info.isEmpty())
-				return;
-			
-			String s = info;
-			
-			drawHoveringText(Arrays.asList(new String[] { s }), x, y);
-		}
-		
-		public void executeAction() {
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-			PacketDispatcher.wrapper.sendToServer(new ItemDesignatorPacket(this.operator, this.value, this.reference, hand));
-			
-			int result = 0;
-
-			if(operator == 0)
-				result += value;
-			if(operator == 1)
-				result -= value;
-			if(operator == 2) {
-				if(reference == 0)
-					shownX = (int)Math.round(player.posX);
-				else
-					shownZ = (int)Math.round(player.posZ);
-				return;
-			}
-			
-			if(reference == 0)
-				shownX += result;
-			else
-				shownZ += result;
-		}
-		
-	}
 }

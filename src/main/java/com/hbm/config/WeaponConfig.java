@@ -29,7 +29,7 @@ public class WeaponConfig {
 		radarAltitude = propRadarAltitude.getInt();
 		Property propCiwsHitrate = config.get(CATEGORY_MISSILE, "7.03_ciwsAccuracy", 50);
 		propCiwsHitrate.setComment("Additional modifier for CIWS accuracy");
-		ciwsHitrate = propRadarAltitude.getInt();
+		ciwsHitrate = propCiwsHitrate.getInt();
 		
 		final String CATEGORY_DROPS = "10_dangerous_drops";
         dropCell = CommonConfig.createConfigBool(config, CATEGORY_DROPS, "10.00_dropCell", "Whether antimatter cells should explode when dropped", true);

@@ -496,7 +496,7 @@ public class RadiationSystemNT {
 						Block block = blocks.get(x, y, z).getBlock();
 						//If it's not a radiation resistant block and there isn't currently a pocket here,
 						//Do a flood fill pocket build
-						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant())){
 							pockets.add(buildPocket(subChunk, chunk.getWorld(), new BlockPos(x, y, z), subChunkPos, blocks, pocketsByBlock, pockets.size()));
 						}
 					}
@@ -517,7 +517,7 @@ public class RadiationSystemNT {
 								BlockPos outPos = newPos.add(subChunkPos);
 								Block block = chunk.getWorld().getBlockState(outPos).getBlock();
 								//If the block isn't radiation resistant...
-								if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+								if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant())){
 									if(!isSubChunkLoaded(chunk.getWorld(), outPos)){
 										//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 										//Chunk still needs to be loaded to propagate radiation into it
@@ -566,7 +566,7 @@ public class RadiationSystemNT {
 		BlockPos outPos = newPos.add(subChunkPos);
 		Block block = chunk.getWorld().getBlockState(outPos).getBlock();
 		//If the block isn't radiation resistant...
-		if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+		if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant())){
 			if(!isSubChunkLoaded(chunk.getWorld(), outPos)){
 				//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 				//Chunk still needs to be loaded to propagate radiation into it
@@ -609,7 +609,7 @@ public class RadiationSystemNT {
 		while(!stack.isEmpty()){
 			BlockPos pos = stack.poll();
 			Block block = chunk.get(pos.getX(), pos.getY(), pos.getZ()).getBlock();
-			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant())){
 				//If the block is radiation resistant or we've already flood filled here, continue
 				continue;
 			}
@@ -627,7 +627,7 @@ public class RadiationSystemNT {
 					//Will also attempt to load the chunk, which will cause neighbor data to be updated correctly if it's unloaded.
 					block = world.getBlockState(outPos).getBlock();
 					//If the block isn't radiation resistant...
-					if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).getResistance() == 1)){
+					if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant())){
 						if(!isSubChunkLoaded(world, outPos)){
 							//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 							//Chunk still needs to be loaded to propagate radiation into it

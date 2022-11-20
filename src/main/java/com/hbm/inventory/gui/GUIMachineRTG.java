@@ -21,7 +21,7 @@ public class GUIMachineRTG extends GuiInfoContainer {
 		rtg = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 166;
+		this.ySize = 176;
 	}
 	
 	@Override
@@ -29,11 +29,9 @@ public class GUIMachineRTG extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, f);
 
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 69 - 52, 16, 52, rtg.power, rtg.powerMax);
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, mouseX+8, mouseY-8, new String[] {"RTG Heat " + rtg.heat + "/" + rtg.heatMax, "RTG Power " + rtg.heat*100+"HE/s"});
 		
-		String[] text = new String[] { "Accepted Pellets:",
-				"  Regular Pellet (5 HE/t)",
-				"  Weak Pellet (3 HE/t)",
-				"  Polonium Pellet (25 HE/t)" };
+		String[] text = new String[] { "Heat to Power Conversion 1:5" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}

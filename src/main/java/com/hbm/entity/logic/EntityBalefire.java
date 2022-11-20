@@ -1,5 +1,15 @@
 package com.hbm.entity.logic;
 
+
+import java.util.ArrayList;
+import java.util.List;
+import com.hbm.entity.logic.IChunkLoader;
+import com.hbm.main.MainRegistry;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraft.util.math.ChunkPos;
+
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.GeneralConfig;
@@ -13,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class EntityBalefire extends Entity {
+public class EntityBalefire extends Entity implements IChunkLoader {
 
 	public int age = 0;
 	public int destructionRange = 0;
@@ -21,6 +31,7 @@ public class EntityBalefire extends Entity {
 	public int speed = 1;
 	public boolean did = false;
 	public boolean mute = false;
+	private Ticket loaderTicket;
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -95,7 +106,55 @@ public class EntityBalefire extends Entity {
     }
 
 	@Override
-	protected void entityInit() { }
+	protected void entityInit() {
+		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
+	}
+
+	@Override
+	public void init(Ticket ticket) {
+		if(!world.isRemote) {
+			
+            if(ticket != null) {
+            	
+                if(loaderTicket == null) {
+                	
+                	loaderTicket = ticket;
+                	loaderTicket.bindEntity(this);
+                	loaderTicket.getModData();
+                }
+
+                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
+            }
+        }
+	}
+
+	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
+	@Override
+	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
+		if(!world.isRemote && loaderTicket != null)
+        {
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+            }
+
+            loadedChunks.clear();
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
+
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.forceChunk(loaderTicket, chunk);
+            }
+        }
+	}
 	
 	public EntityBalefire mute() {
 		this.mute = true;

@@ -389,6 +389,11 @@ public class MachineRecipes {
 			list.add(new ItemStack(ModItems.powder_coal, 8));
 			list.add(new ItemStack(ModItems.oil_tar, 4));
 			break;
+		case DUCRETE:
+			list.add(new ItemStack(Blocks.SAND, 8));
+			list.add(new ItemStack(ModItems.billet_u238, 2));
+			list.add(new ItemStack(Items.CLAY_BALL, 4));
+			break;
         case CC_I:
 			list.add(new ItemStack(ModItems.powder_coal, 6));
 			list.add(new ItemStack(ModItems.oil_tar, 4));
@@ -555,6 +560,9 @@ public class MachineRecipes {
 		switch (ItemChemistryTemplate.EnumChemistryTemplate.getEnum(stack.getItemDamage())) {
 		case FP_HEAVYOIL:
 			input[0] = new FluidStack(ModForgeFluids.heavyoil, 1000);
+			break;
+		case DUCRETE:
+			input[0] = new FluidStack(FluidRegistry.WATER, 2000);
 			break;
 		case FP_SMEAR:
 			input[0] = new FluidStack(ModForgeFluids.smear, 1000);
@@ -815,6 +823,9 @@ public class MachineRecipes {
 			break;
 		case CIRCUIT_5:
 			output[0] = new ItemStack(ModItems.circuit_schrabidium, 1);
+			break;
+		case DUCRETE:
+			output[0] = new ItemStack(ModBlocks.ducrete_smooth, 8);
 			break;
 		case SF_OIL:
 			output[0] = new ItemStack(ModItems.solid_fuel, 1);

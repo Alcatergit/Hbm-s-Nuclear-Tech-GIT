@@ -2,6 +2,8 @@ package com.hbm.blocks.machine;
 
 import java.util.Random;
 
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IDummy;
@@ -26,7 +28,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb {
+public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb, IRadResistantBlock {
 
 	public static boolean safeBreak = false;
 	
@@ -54,6 +56,7 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
     		}
     	}
     	world.removeTileEntity(pos);
+    	RadiationSystemNT.markChunkForRebuild(world, pos);
 	}
 	
 	@Override
@@ -64,23 +67,21 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 		} else if(player.getHeldItemMainhand().getItem() instanceof ItemLock || player.getHeldItemMainhand().getItem() == ModItems.key_kit) {
 			return false;
 			
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
 			TileEntity til = world.getTileEntity(pos);
 			if(til != null && til instanceof TileEntityDummy) {
 						
 				TileEntitySiloHatch entity = (TileEntitySiloHatch) world.getTileEntity(((TileEntityDummy)til).target);
-				if(entity != null)
-				{
-					if(entity.canAccess(player))
+				if(entity != null) {
+					if(entity.canAccess(player)){
 						entity.tryToggle();
+						return true;
+					}	
 				}
 			}
-			
-			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -133,6 +134,17 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return new ItemStack(ModBlocks.silo_hatch);
+	}
+
+	@Override
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(world, pos);
+		super.onBlockAdded(world, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
 	}
 
 }

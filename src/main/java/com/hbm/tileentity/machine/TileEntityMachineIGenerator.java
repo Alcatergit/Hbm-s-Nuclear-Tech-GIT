@@ -67,9 +67,9 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	public TileEntityMachineIGenerator() {
 		super(13);
 		tanks = new FluidTank[3];
-		tanks[0] = new FluidTank(8000);
+		tanks[0] = new FluidTank(16000);
 		tanks[1] = new FluidTank(16000);
-		tanks[2] = new FluidTank(2000);
+		tanks[2] = new FluidTank(4000);
 		tankTypes = new Fluid[3];
 		tankTypes[0] = FluidRegistry.WATER;
 		tankTypes[1] = ModForgeFluids.heatingoil;
@@ -546,9 +546,13 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	private static HashBiMap<Item, IGenRTG> rtgPellets = HashBiMap.create();
 	
 	public static enum IGenRTG {
-		PLUTONIUM(ModItems.pellet_rtg, 0, 5),
-		URANIUM(ModItems.pellet_rtg_weak, 9, 3),
-		POLONIUM(ModItems.pellet_rtg_polonium, 18, 25);
+		RADIUM(ModItems.pellet_rtg_radium, 9, 3),
+		URANIUM(ModItems.pellet_rtg_weak, 9, 5),
+		PLUTONIUM(ModItems.pellet_rtg, 18, 10),
+		STRONTIUM(ModItems.pellet_rtg_strontium, 18, 12),
+		COBALT(ModItems.pellet_rtg_cobalt, 18, 16),
+		ACTINIUM(ModItems.pellet_rtg_actinium, 0, 20),
+		AMERICIUM(ModItems.pellet_rtg_americium, 0, 25);
 		
 		public int offset;
 		public int heat;

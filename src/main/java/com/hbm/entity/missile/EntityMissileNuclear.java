@@ -32,8 +32,7 @@ public class EntityMissileNuclear extends EntityMissileBaseAdvanced {
     	entity.coefficient = 10.0F;*/
     	
     	this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius, posX, posY, posZ));
-
-		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, 1000, BombConfig.missileRadius * 0.005F);
+		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, BombConfig.missileRadius);
     	entity2.posX = this.posX;
     	entity2.posY = this.posY/* - 9*/;
     	entity2.posZ = this.posZ;

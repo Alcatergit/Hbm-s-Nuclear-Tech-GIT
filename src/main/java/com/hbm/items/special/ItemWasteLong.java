@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWasteLong extends ItemHazard {
+public class ItemWasteLong extends ItemContaminating {
 
-	public ItemWasteLong(String s) {
-		super(s);
+	public ItemWasteLong(float radiation, String s) {
+		super(radiation, s);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(MainRegistry.controlTab);
@@ -44,10 +44,11 @@ public class ItemWasteLong extends ItemHazard {
 	public enum WasteClass {
 
 		//all decayed versions include lead-types and classic nuclear waste
-		URANIUM235("Uranium-235", 0, 0),	//plutonium 239 and 240, neptunium 237 / -
+		THORIUM("Thorium-232", 0, 0),		//uranium 233 and uranium 235 / -
 		URANIUM233("Uranium-233", 0, 50),	//uranium 235, plutonium 239, neptunium 237 / -
+		URANIUM235("Uranium-235", 0, 0),	//plutonium 239 and 240, neptunium 237 / -
 		NEPTUNIUM("Neptunium-237", 0, 100),	//plutonium 239 and uranium 238 / -
-		THORIUM("Thorium-232", 0, 0);		//uranium 233 and uranium 235 / -
+		SCHRABIDIUM("Schrabidium-326", 0, 250); //tantalum, neodymium, solinium, euphemium, ghiorsium-336 / -
 		
 		public String name;
 		public int liquid;

@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWasteShort extends ItemHazard {
+public class ItemWasteShort extends ItemContaminating {
 
-	public ItemWasteShort(String s){
-		super(s);
+	public ItemWasteShort(float radiation, String s){
+		super(radiation, s);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(MainRegistry.controlTab);
@@ -44,13 +44,14 @@ public class ItemWasteShort extends ItemHazard {
 	public enum WasteClass {
 
 		//all decayed versions include lead-types and classic nuclear waste
-		URANIUM235("Uranium-235", 0, 100), //fresh recycling makes iodine, caesium and technetium, depleted turns into neptunium
 		URANIUM233("Uranium-233", 50, 100), //fresh recycling makes iodine, caesium and technetium, depleted turns into u235
+		URANIUM235("Uranium-235", 0, 100), //fresh recycling makes iodine, caesium and technetium, depleted turns into neptunium
 		NEPTUNIUM("Neptunium-237", 150, 500), //funny fission fragments + polonium and pu238 and 239 / u235
 		PLUTONIUM239("Plutonium-239", 250, 1000), //funny fission fragments + pu240 and 241 / u238 (actually u236 but fuck you)
 		PLUTONIUM240("Plutonium-240", 350, 1000), //funny fission fragments + pu241 / u238  + lead
 		PLUTONIUM241("Plutonium-241", 500, 1000), //funny fission fragments + am241 / 242 / np237 + bismuth
-		AMERICIUM242("Americium-242", 750, 1000); //funny fission fragments + californium / np237 + pu241
+		AMERICIUM242("Americium-242", 750, 1000), //funny fission fragments + californium / np237 + pu241
+		SCHRABIDIUM("Schrabidium-326", 1000, 1000); //funniest fission fragments
 
 		public String name;
 		public int liquid;

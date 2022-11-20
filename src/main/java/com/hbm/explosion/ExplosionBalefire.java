@@ -94,9 +94,9 @@ public class ExplosionBalefire {
 			
 			int y  = worldObj.getHeight(pX, pZ);
 			int maxdepth = (int) (10 + radius * 0.25);
-			int depth = (int) ((maxdepth * dist / radius) + (Math.sin(dist * 0.15 + 2) * 2));//
+			int voidDepth = (int) ((maxdepth * dist / radius) + (Math.sin(dist * 0.15 + 2) * 2));//
 			
-			depth = Math.max(y - depth, 0);
+			int depth = Math.max(y - voidDepth, 0);
 			
 			while(y > depth) {
 
@@ -105,8 +105,13 @@ public class ExplosionBalefire {
 				if(b == ModBlocks.block_schrabidium_cluster) {
 					
 					if(worldObj.rand.nextInt(10) == 0) {
-						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.balefire.getDefaultState());
+						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.fire_balefire.getDefaultState());
 						worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
+					}
+					return;
+				} else if(b == ModBlocks.cmb_brick_reinforced){
+					if(worldObj.rand.nextInt(10) == 0) {
+						worldObj.setBlockState(new BlockPos(pX, y + 1, pZ), ModBlocks.fire_balefire.getDefaultState());
 					}
 					return;
 				}
@@ -117,66 +122,27 @@ public class ExplosionBalefire {
 			}
 			
 			if(worldObj.rand.nextInt(10) == 0) {
-				worldObj.setBlockState(new BlockPos(pX, depth + 1, pZ), ModBlocks.balefire.getDefaultState());
+				worldObj.setBlockState(new BlockPos(pX, depth + 1, pZ), ModBlocks.fire_balefire.getDefaultState());
 				
 				Block b = worldObj.getBlockState(new BlockPos(pX, y, pZ)).getBlock();
 				
 				if(b == ModBlocks.block_schrabidium_cluster)
 					worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
 			}
-
-			for(int i = depth; i > depth - 5; i--) {
-				if(worldObj.getBlockState(new BlockPos(pX, i, pZ)).getBlock() == Blocks.STONE)
-					worldObj.setBlockState(new BlockPos(pX, i, pZ), ModBlocks.sellafield_slaked.getDefaultState());
+			int startDepth = (int)(6 - 6 * dist / radius);
+			for(int i = 0; i <= startDepth; i++) {
+				if(worldObj.getBlockState(new BlockPos(pX, depth-i, pZ)).getBlock() == Blocks.STONE){
+					switch(startDepth-i){
+						case 6: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_core.getDefaultState()); break;
+						case 5: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_4.getDefaultState()); break;
+						case 4: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_3.getDefaultState()); break;
+						case 3: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_2.getDefaultState()); break;
+						case 2: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_1.getDefaultState()); break;
+						case 1: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_0.getDefaultState()); break;
+						case 0: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_slaked.getDefaultState()); break;
+					}
+				}
 			}
 		}
 	}
-	
-	/*private void breakColumn(int x, int z)
-	{
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int dist = this.radius2 - (x * x + z * z);
-		if (dist > 0)
-		{
-			int pX = posX + x;
-			int pZ = posZ + z;
-			
-			int y = worldObj.getHeight(pX, pZ);
-			float strength = (float)dist / (float) this.radius;
-			while(y > 0) {
-				
-				if(strength <= 10) {
-					if(worldObj.rand.nextInt(10) == 0){
-						worldObj.setBlockState(pos.setPos(pX, y + 1, pZ), ModBlocks.balefire.getDefaultState());
-						if(worldObj.getBlockState(pos.setPos(pX, y, pZ)).getBlock() == ModBlocks.block_schrabidium_cluster)
-							worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getDefaultState(), 3);
-					}
-
-					if(worldObj.getBlockState(pos.setPos(pX, y, pZ)).getBlock() == Blocks.STONE)
-						worldObj.setBlockState(pos.setPos(pX, y, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 1, pZ)).getBlock() == Blocks.STONE)
-						worldObj.setBlockState(pos.setPos(pX, y - 1, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 2, pZ)).getBlock() == Blocks.STONE)
-						worldObj.setBlockState(pos.setPos(pX, y - 2, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 3, pZ)).getBlock() == Blocks.STONE)
-						worldObj.setBlockState(pos.setPos(pX, y - 3, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-					if(worldObj.getBlockState(pos.setPos(pX, y - 4, pZ)).getBlock() == Blocks.STONE)
-						worldObj.setBlockState(pos.setPos(pX, y - 4, pZ), ModBlocks.sellafield_slaked.getDefaultState());
-						
-					return;
-				}
-				
-				float hardness = worldObj.getBlockState(pos.setPos(pX, y, pZ)).getBlockHardness(worldObj, pos.setPos(pX, y, pZ));
-				
-				if(worldObj.getBlockState(pos.setPos(pX, y, pZ)).getMaterial().isLiquid())
-					hardness = Blocks.AIR.getDefaultState().getBlockHardness(worldObj, pos.setPos(pX, y + 1, pZ));
-				
-				strength -= hardness;
-				
-				worldObj.setBlockToAir(pos.setPos(pX, y, pZ));
-				
-				y--;
-			}
-		}
-	}*/
 }

@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "hbm:blocks/ducrete_reinforced",
+        "top": "hbm:blocks/ducrete_reinforced",
+        "side": "hbm:blocks/ducrete_reinforced"
+    }
+}

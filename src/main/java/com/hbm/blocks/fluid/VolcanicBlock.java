@@ -4,10 +4,16 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.ModDamageSource;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumBlockRenderType;
@@ -62,6 +68,16 @@ public class VolcanicBlock extends BlockFluidClassic {
 			return Blocks.FIRE;
 		}
 		return null;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+		entity.setInWeb();
+		entity.setFire(3);
+		entity.attackEntityFrom(ModDamageSource.radiation, 2F);
+		
+		if(entity instanceof EntityLivingBase)
+			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.05F);
 	}
 	
 	@Override

@@ -16,38 +16,29 @@ public class ItemDesignatorPacket implements IMessage {
 	//0: Add
 	//1: Subtract
 	//2: Set
-	int operator;
-	int value;
-	int reference;
-	EnumHand hand;
+	int x;
+	int z;
 
-	public ItemDesignatorPacket()
-	{
-		
+	public ItemDesignatorPacket(){
 	}
 
-	public ItemDesignatorPacket(int operator, int value, int reference, EnumHand hand)
+	public ItemDesignatorPacket(int x, int z)
 	{
-		this.operator = operator;
-		this.value = value;
-		this.reference = reference;
-		this.hand = hand;
+		this.x = x;
+		this.z = z;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		operator = buf.readInt();
-		value = buf.readInt();
-		reference = buf.readInt();
-		hand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+		this.x = buf.readInt();
+		this.z = buf.readInt();
+
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(operator);
-		buf.writeInt(value);
-		buf.writeInt(reference);
-		buf.writeBoolean(hand == EnumHand.MAIN_HAND ? true : false);
+		buf.writeInt(x);
+		buf.writeInt(z);
 	}
 
 	public static class Handler implements IMessageHandler<ItemDesignatorPacket, IMessage> {
@@ -57,36 +48,19 @@ public class ItemDesignatorPacket implements IMessage {
 			ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
 				EntityPlayer p = ctx.getServerHandler().player;
 				
-				ItemStack stack = p.getHeldItem(m.hand);
+				ItemStack stack = p.getHeldItem(EnumHand.MAIN_HAND);
 				
-				if(stack != null && stack.getItem() == ModItems.designator_manual) {
-					if(!stack.hasTagCompound())
-						stack.setTagCompound(new NBTTagCompound());
-					int x = stack.getTagCompound().getInteger("xCoord");
-					int z = stack.getTagCompound().getInteger("zCoord");
-					
-					int result = 0;
-
-					if(m.operator == 0)
-						result += m.value;
-					if(m.operator == 1)
-						result -= m.value;
-					if(m.operator == 2) {
-						if(m.reference == 0)
-							stack.getTagCompound().setInteger("xCoord", (int)Math.round(p.posX));
-						else
-							stack.getTagCompound().setInteger("zCoord", (int)Math.round(p.posZ));
+				if(stack == null || stack.getItem() != ModItems.designator_manual) {
+					stack = p.getHeldItem(EnumHand.OFF_HAND);
+					if(stack == null || stack.getItem() != ModItems.designator_manual)
 						return;
-					}
-					
-					if(m.reference == 0)
-						stack.getTagCompound().setInteger("xCoord", x + result);
-					else
-						stack.getTagCompound().setInteger("zCoord", z + result);
 				}
+				if(!stack.hasTagCompound())
+					stack.setTagCompound(new NBTTagCompound());
+
+				stack.getTagCompound().setInteger("xCoord", m.x);
+				stack.getTagCompound().setInteger("zCoord", m.z);
 			});
-			
-			
 			return null;
 		}
 	}

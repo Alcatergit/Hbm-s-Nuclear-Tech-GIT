@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 //Drillgon200: Thank Bob for making me realize I could make a new tile entity for this and not be an idiot.
-public class TileEntityFFFluidSuccMk2 extends TileEntityFFDuctBaseMk2 implements ITickable {
+public class TileEntityFFFluidSuccMk2 extends TileEntityFFFluidDuctMk2 implements ITickable {
 
 	@Override
 	public void update() {

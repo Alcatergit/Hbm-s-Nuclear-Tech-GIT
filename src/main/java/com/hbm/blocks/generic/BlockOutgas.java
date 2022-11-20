@@ -60,7 +60,7 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 		}
 		
 		if(this == ModBlocks.block_corium_cobble)
-			return ModBlocks.gas_radon;
+			return ModBlocks.gas_radon_dense;
 		
 		if(this == ModBlocks.ancient_scrap)
 			return ModBlocks.gas_radon_tomb;

@@ -20,7 +20,7 @@ public class TileEntityNukeTsar extends TileEntity {
 	private String customName;
 	
 	public TileEntityNukeTsar() {
-		inventory = new ItemStackHandler(6){
+		inventory = new ItemStackHandler(9){
 			@Override
 			protected void onContentsChanged(int slot) {
 				markDirty();
@@ -62,33 +62,54 @@ public class TileEntityNukeTsar extends TileEntity {
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
-	
+
+	public boolean isCoreFilled(){
+		return inventory.getStackInSlot(0).getItem() == ModItems.man_core;
+	}
+
+	public boolean isTopLeftLenseFilled(){
+		return inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8;
+	}
+	public boolean isTopRightLenseFilled(){
+		return inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8;
+	}
+	public boolean isBottomLeftLenseFilled(){
+		return inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8;
+	}
+	public boolean isBottomRightLenseFilled(){
+		return inventory.getStackInSlot(4).getItem() == ModItems.man_explosive8;
+	}
+
+	public boolean isStage1UFilled(){
+		return inventory.getStackInSlot(5).getItem() == ModItems.mike_core;
+	}
+	public boolean isStage1DFilled(){
+		return inventory.getStackInSlot(6).getItem() == ModItems.mike_deut;
+	}
+
+	public boolean isStage2UFilled(){
+		return inventory.getStackInSlot(7).getItem() == ModItems.mike_core;
+	}
+	public boolean isStage2DFilled(){
+		return inventory.getStackInSlot(8).getItem() == ModItems.mike_deut;
+	}
+
 	public boolean isReady() {
-		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(4).getItem() == ModItems.man_core){
-			return true;
-		}
-		
-		return false;
+		return (isCoreFilled() && isTopLeftLenseFilled() && isTopRightLenseFilled() && isBottomLeftLenseFilled() && isBottomRightLenseFilled());
 	}
 	
-	public boolean isFilled() {
-		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 && 
-				inventory.getStackInSlot(4).getItem() == ModItems.man_core && 
-				inventory.getStackInSlot(5).getItem() == ModItems.tsar_core){
-			return true;
-		}
-		
-		return false;
+	public boolean isStage1Filled() {
+		return (isReady() && isStage1UFilled() && isStage1DFilled());
 	}
+
+	public boolean isStage2Filled() {
+		return (isReady() && isStage2UFilled() && isStage2DFilled());
+	}
+
+	public boolean isStage3Filled() {
+		return (isStage1Filled() && isStage2UFilled() && isStage2DFilled());
+	}
+
 	
 	public void clearSlots() {
 		for(int i = 0; i < inventory.getSlots(); i++)

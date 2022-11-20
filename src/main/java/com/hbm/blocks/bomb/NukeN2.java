@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -9,6 +11,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeN2;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -74,11 +77,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) worldIn.getTileEntity(pos);
 		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0 && !worldIn.isRemote) {
-			if(entity.isReady()) {
+			int charges = entity.countCharges();
+			if(charges > 0) {
 				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
-				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.n2Radius);
+				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
 			}
 		}
 	}
@@ -95,8 +99,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, r, x + 0.5, y + 0.5, z + 0.5));
-    		
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, r * 0.005F);
+			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, r);
 			entity2.posX = x;
 			entity2.posY = y;
 			entity2.posZ = z;
@@ -109,11 +112,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	@Override
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) world.getTileEntity(pos);
-		if(entity.isReady()) {
+		int charges = entity.countCharges();
+		if(charges > 0) {
 			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
 			entity.clearSlots();
 			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.n2Radius);
+			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
 		}
 	}
 	
@@ -180,6 +184,14 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§c[Extreme Bomb]§r");
+		tooltip.add(" §eRadius: "+BombConfig.n2Radius+"m§r");
+		tooltip.add("");
+		tooltip.add("§eEach Charge Adds: "+(int)(BombConfig.n2Radius/12)+"m§r");
 	}
 
 }

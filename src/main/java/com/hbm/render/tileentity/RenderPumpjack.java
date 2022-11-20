@@ -2,6 +2,7 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 
@@ -13,100 +14,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachinePumpjack> {
 	
-	int i;
+	float rotation;
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityMachinePumpjack te) {
 		return true;
 	}
-	
-	@Override
-	public void render(TileEntityMachinePumpjack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y, z + 0.5);
-		switch(te.getBlockMetadata())
-		{
-		case 2:
-			GL11.glRotatef(-90, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(0, 0F, 1F, 0F); break;
-		case 3:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 5:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		}
-		
-    	i= te.rotation;
-        GL11.glPushMatrix();
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-        
-		this.bindTexture(ResourceManager.pumpjack_base_tex);
-        ResourceManager.pumpjack_base.renderAll();
-
-        GL11.glPopMatrix();
-        
-        renderTileEntityAt2();
-        GlStateManager.enableCull();
-	}
-	
-	public void renderTileEntityAt2()
-    {
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, 1.5, 5.5);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-
-		this.bindTexture(ResourceManager.pumpjack_rotor_tex);
-		GL11.glRotated(i - 90, 1F, 0F, 0F);
-		
-        ResourceManager.pumpjack_rotor.renderAll();
-
-        GL11.glPopMatrix();
-        
-        renderTileEntityAt3();
-    }
-    
-	public void renderTileEntityAt3()
-    {
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, 1, 0);
-        GL11.glTranslated(0, 2.5, 2.5);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-
-		this.bindTexture(ResourceManager.pumpjack_head_tex);
-		float t = (float) Math.sin((i / (180 / Math.PI))) * 15;
-		GL11.glRotatef(t, 1F, 0F, 0F);
-        ResourceManager.pumpjack_head.renderAll();
-
-        GL11.glPopMatrix();
-
-        renderTileEntityAt4();
-    }
-    
-	public void renderTileEntityAt4()
-    {
-        GL11.glPushMatrix();
-        GL11.glTranslated(0, 1, 0);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-
-		float j = (float) Math.sin((i / (180 / Math.PI))) * 15;
-		float t = (float) Math.sin((i / (180 / Math.PI)));
-		float u = (float) Math.sin(((i + 90) / (180 / Math.PI)));
-		float v = (float) Math.sin((j / (180 / Math.PI))) * 3;
-		float w = (float) Math.sin(((j + 90) / (180 / Math.PI))) * 3;
-		drawConnection(0.55, 0.5 + t, -5.5 - u, 0.55, 2.5 + v, -2.5 - w);
-		drawConnection(-0.55, 0.5 + t, -5.5 - u, -0.55, 2.5 + v, -2.5 - w);
-
-        GL11.glPopMatrix();
-        GL11.glPopMatrix();
-    }
 	
 	public void drawConnection(double x, double y, double z, double a, double b, double c) {
         GlStateManager.disableTexture2D();
@@ -129,5 +42,112 @@ public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachineP
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
+	}
+
+		@Override
+	public void render(TileEntityMachinePumpjack pj, double x, double y, double z, float f, int destroyStage, float alpha) {
+		
+		GL11.glPushMatrix();
+		GL11.glTranslated(x + 0.5, y, z + 0.5);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		
+		switch(pj.getBlockMetadata()) {
+		case 2: GL11.glRotatef(90, 0F, 1F, 0F); break;
+		case 4: GL11.glRotatef(180, 0F, 1F, 0F); break;
+		case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
+		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
+		}
+		
+		float rotation = (pj.prevRotation + (pj.rotation - pj.prevRotation) * f);
+
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		
+		bindTexture(ResourceManager.pumpjack_tex);
+		ResourceManager.pumpjack.renderPart("Base");
+
+		GL11.glPushMatrix();
+		GL11.glTranslated(0, 1.5, -5.5);
+		GL11.glRotatef(rotation - 90, 1, 0, 0);
+		GL11.glTranslated(0, -1.5, 5.5);
+		ResourceManager.pumpjack.renderPart("Rotor");
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		GL11.glTranslated(0, 3.5, -3.5);
+		GL11.glRotated(Math.toDegrees(Math.sin(Math.toRadians(rotation))) * 0.25, 1, 0, 0);
+		GL11.glTranslated(0, -3.5, 3.5);
+		ResourceManager.pumpjack.renderPart("Head");
+		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		GL11.glTranslated(0, -Math.sin(Math.toRadians(rotation)), 0);
+		ResourceManager.pumpjack.renderPart("Carriage");
+		GL11.glPopMatrix();
+		
+		Vec3 backPos = Vec3.createVectorHelper(0, 0, -2);
+		backPos.rotateAroundX(-(float)Math.sin(Math.toRadians(rotation)) * 0.25F);
+		
+		Vec3 rot = Vec3.createVectorHelper(0, 0.5, 0);
+		rot.rotateAroundX(-(float)Math.toRadians(rotation - 90));
+		
+		for(int i = -1; i <= 1; i += 2) {
+
+			drawConnection(0.53125 * i, 1.5 + rot.yCoord, -5.5 + rot.zCoord + 0.0625D, 0.53125 * i, 3.5 + backPos.yCoord, -3.5 + backPos.zCoord + 0.0625D);
+			drawConnection(0.53125 * i, 1.5 + rot.yCoord, -5.5 + rot.zCoord - 0.0625D, 0.53125 * i, 3.5 + backPos.yCoord, -3.5 + backPos.zCoord - 0.0625D);
+		}
+		
+		double pd = 0.03125D;
+		double width = 0.25D;
+
+		double height = -Math.sin(Math.toRadians(rotation));
+		
+		for(int i = -1; i <= 1; i += 2) {
+
+			float pRot = -(float)(Math.sin(Math.toRadians(rotation)) * 0.25);
+			
+			Vec3 frontPos = Vec3.createVectorHelper(0, 0, 1);
+			frontPos.rotateAroundX(pRot);
+
+			double dist = 0.03125D;
+			Vec3 frontRad = Vec3.createVectorHelper(0, 0, 2.5 + dist);
+			double cutlet = 360D / 32D;
+			frontRad.rotateAroundX(pRot);
+			frontRad.rotateAroundX(-(float)Math.toRadians(cutlet * -3));
+			
+			for(int j = 0; j < 4; j++) {
+
+				double sumY1 = frontPos.yCoord + frontRad.yCoord;
+				double sumZ1 = frontPos.zCoord + frontRad.zCoord;
+				if(frontRad.yCoord < 0) sumZ1 = 3.5 + dist * 0.5;
+				
+				
+				frontRad.rotateAroundX(-(float)Math.toRadians(cutlet));
+
+				double sumY2 = frontPos.yCoord + frontRad.yCoord;
+				double sumZ2 = frontPos.zCoord + frontRad.zCoord;
+				if(frontRad.yCoord < 0) sumZ2 = 3.5 + dist * 0.5;
+				drawConnection((width + pd) * i, 3.5 + sumY1, -3.5 + sumZ1, (width + pd) * i, 3.5 + sumY2, -3.5 + sumZ2);
+				drawConnection((width - pd) * i, 3.5 + sumY1, -3.5 + sumZ1, (width - pd) * i, 3.5 + sumY2, -3.5 + sumZ2);
+			}
+
+			double sumY = frontPos.yCoord + frontRad.yCoord;
+			double sumZ = frontPos.zCoord + frontRad.zCoord;
+			if(frontRad.yCoord < 0) sumZ = 3.5 + dist * 0.5;
+			
+			drawConnection((width + pd) * i, 2 + height, 0, (width + pd) * i, 3.5 + sumY, -3.5 + sumZ);
+			drawConnection((width - pd) * i, 2 + height, 0, (width - pd) * i, 3.5 + sumY, -3.5 + sumZ);
+		}
+		
+		double p = 0.03125D;
+		drawConnection(-p, 0.75, -p, -p, height + 1.5, -p);
+		drawConnection(p, 0.75,  p, p, height + 1.5, p);
+		drawConnection(p, 0.75, -p, p, height + 1.5, -p);
+		drawConnection(-p, 0.75, p, -p, height + 1.5, p);
+
+
+		GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
+		GL11.glPopMatrix();
 	}
 }

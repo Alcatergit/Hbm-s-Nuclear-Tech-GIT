@@ -41,8 +41,8 @@ public class HbmLivingProps {
 		IEntityHbmProps data = getData(entity);
 		float radiation = getData(entity).getRads() + rad;
 
-		if(radiation > 2500)
-			radiation = 2500;
+		if(radiation > 2500000)
+			radiation = 2500000;
 		if(radiation < 0)
 			radiation = 0;
 
@@ -93,7 +93,7 @@ public class HbmLivingProps {
 
 		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {
 			entity.setAbsorptionAmount(0);
-			entity.attackEntityFrom(ModDamageSource.digamma, 500F);
+			entity.attackEntityFrom(ModDamageSource.digamma, 5000F);
 			entity.setHealth(0);
 			entity.onDeath(ModDamageSource.digamma);
 
@@ -138,7 +138,7 @@ public class HbmLivingProps {
 	public static void setAsbestos(EntityLivingBase entity, int asbestos){
 		getData(entity).setAsbestos(asbestos);
 
-		if(asbestos >= 30 * 60 * 20) {
+		if(asbestos >= EntityHbmProps.maxAsbestos) {
 			getData(entity).setAsbestos(0);
 			entity.attackEntityFrom(ModDamageSource.asbestos, 1000);
 		}
@@ -161,8 +161,8 @@ public class HbmLivingProps {
 		getData(entity).setBlacklung(blacklung);
 
 		if(blacklung >= EntityHbmProps.maxBlacklung) {
-			getData(entity).setAsbestos(0);
-			entity.attackEntityFrom(ModDamageSource.asbestos, 1000);
+			getData(entity).setBlacklung(0);
+			entity.attackEntityFrom(ModDamageSource.blacklung, 1000);
 		}
 	}
 

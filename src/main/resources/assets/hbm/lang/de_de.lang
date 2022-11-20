@@ -372,7 +372,7 @@ fluid.acid_fluid=Säure
 fluid.corium_fluid=Corium
 fluid.mud_fluid=Giftiger Schlamm
 fluid.schrabidic_fluid=Schrabidische Säure
-fluid.toxic_fluid=Stereotypischer grüner Schleim
+fluid.toxic_fluid=Sellalin
 fluid.volcanic_lava_fluid=Vulkanische Lava
 
 geiger.chunkRad=Chunk-Strahlung:

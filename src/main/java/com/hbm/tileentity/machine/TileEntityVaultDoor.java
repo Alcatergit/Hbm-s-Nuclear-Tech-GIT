@@ -27,7 +27,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	public long sysTime;
 	private int timer = 0;
 	public int type;
-	public static final int maxTypes = 7;
+	public static final int maxTypes = 32;
 	public boolean redstoned = false;
 	
 	@Override

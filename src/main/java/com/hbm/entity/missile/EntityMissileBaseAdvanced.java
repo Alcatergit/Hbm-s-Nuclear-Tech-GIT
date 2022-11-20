@@ -199,9 +199,9 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 
 		if (velocity < 1)
 			velocity = 1;
-		if (this.ticksExisted > 40)
+		if (this.ticksExisted > 80)
 			velocity = 3;
-		else if (this.ticksExisted > 20)
+		else if (this.ticksExisted > 40)
 			velocity = 2;
 
 		this.getDataManager().set(HEALTH, Integer.valueOf(this.health));

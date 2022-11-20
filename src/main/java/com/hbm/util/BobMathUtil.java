@@ -3,6 +3,7 @@ package com.hbm.util;
 import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
 import java.util.Random;
+import java.text.NumberFormat;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix3f;
@@ -29,7 +30,26 @@ public class BobMathUtil {
 
 	public static Field r_viewMat;
 	public static Random rand = new Random();
-	
+
+	public static String getShortNumber(long number){
+		if(number < 1000D){
+			return ""+number;
+		}else if(number < 1000D){
+			return String.format("%6.2fk", number/1000F);
+		}else if(number < 1000000D){
+			return String.format("%6.2fM", number/1000000F);
+		}else if(number < 1000000000D){
+			return String.format("%6.2fG", number/1000000000F);
+		}else if(number < 1000000000000D){
+			return String.format("%6.2fT", number/1000000000000F);
+		}else if(number < 1000000000000000D){
+			return String.format("%6.2fE", number/1000000000000000F);
+		}else if(number < 1000000000000000000D){
+			return String.format("%6.2fP", number/1000000000000000000F);
+		}
+		return "INFINTE";
+	}
+			
 	public static double getAngleFrom2DVecs(double x1, double z1, double x2, double z2) {
 
 		double upper = x1 * x2 + z1 * z2;
@@ -277,5 +297,32 @@ public class BobMathUtil {
 			return new Vec3d(x, y, z);
 		}
 		return vec;
+	}
+
+	public static String toPercentage(float amount, float total) {
+		return NumberFormat.getPercentInstance().format(amount / total);
+	}
+
+	public static double convertScale(double toScale, double oldMin, double oldMax, double newMin, double newMax) {
+		double prevRange = oldMax - oldMin;
+		double newRange = newMax - newMin;
+		return (((toScale - oldMin) * newRange) / prevRange) + newMin;
+	}
+
+	public static String[] ticksToDate(long ticks) {
+		
+		int tickDay = 24000;
+		int tickYear = tickDay * 365;
+		
+		final String[] dateOut = new String[4];
+		long year = Math.floorDiv(ticks, tickYear);
+		int day = (int) Math.floorDiv(ticks - tickYear * year, tickDay);
+		int h = (int) Math.floorDiv(ticks - tickYear * year-tickDay * day, 1000);
+		int min = (int) Math.floor((ticks - tickYear * year-tickDay * day-1000 * h)/ 16.66);
+		dateOut[0] = String.valueOf(year);
+		dateOut[1] = String.valueOf(day);
+		dateOut[2] = String.valueOf(h);
+		dateOut[3] = String.valueOf(min);
+		return dateOut;
 	}
 }

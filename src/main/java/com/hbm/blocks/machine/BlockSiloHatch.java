@@ -1,5 +1,9 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
@@ -7,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -25,7 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock {
+public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock, IRadResistantBlock {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -60,21 +65,17 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 			return true;
 		} else if(player.getHeldItemMainhand().getItem() instanceof ItemLock || player.getHeldItemMainhand().getItem() == ModItems.key_kit) {
 			return false;
-			
-		} if(!player.isSneaking()) {
+		} 
+		if(!player.isSneaking()) {
 			
 			TileEntitySiloHatch entity = (TileEntitySiloHatch) world.getTileEntity(pos);
-			if(entity != null)
-			{
-				if(entity.isLocked()) {
-					if(entity.canAccess(player))
-						entity.tryToggle();
-				} else {
+			if(entity != null) {
+				if(entity.canAccess(player)){
 					entity.tryToggle();
-				}
+					return true;
+				}	
 			}
-			
-			return true;
+			return false;
 		}
 		
 		return false;
@@ -154,4 +155,29 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 
+	@Override
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(world, pos);
+		super.onBlockAdded(world, pos, state);
+	}
+	
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		RadiationSystemNT.markChunkForRebuild(world, pos);
+		super.breakBlock(world, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return true;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[Radiation Shielding]§r");
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
+	}
 }

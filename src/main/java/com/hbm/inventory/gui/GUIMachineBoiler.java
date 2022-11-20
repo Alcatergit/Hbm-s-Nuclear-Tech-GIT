@@ -34,13 +34,18 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoiler)
 			dud = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 16, 52, dud.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, dud.tanks[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 69 - 52, 16, 52, dud.tanks[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 69 - 52, 16, 52, dud.tanks[1]);
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 102, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) dud.heat / 100D)) + "°C" });
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 97, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) dud.burnTime / 20D))) + "s" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 84, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) dud.heat / 100D)) + "°C" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) dud.burnTime / 20D))) + "s" });
 
-		String[] text = new String[] { "Heat produced:", "  0.5°C/t", "  or 10°C/s", "Heat consumed:", "  0.15°C/t", "  or 3.0°C/s (base)", "  0.25°C/t", "  or 5.0°C/t (once boiling point is reached)", "  0.4°C/t", "  or 8.0°C/t (for every subsequent multiple of boiling point)" };
+		String[] text = new String[] { "Heat produced:", 
+		"  0.5°C/t or 10°C/s", 
+		"Heat consumed:", 
+		"  0.15°C/t or 3.0°C/s (base)", 
+		"  0.25°C/t or 5.0°C/s (once boiling point is reached)", 
+		"  0.40°C/t or 8.0°C/s (for every subsequent multiple of boiling point)"};
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 
 		String[] text1 = new String[] { "Boiling rate:", "  Base rate * amount of full multiples", "  of boiling points reached" };
@@ -78,10 +83,10 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 			dud = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
 		if (dud.burnTime > 0)
-			drawTexturedModalRect(guiLeft + 97, guiTop + 34, 176, 0, 18, 18);
+			drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 0, 18, 18);
 
 		int j = (int) dud.getHeatScaled(17);
-		drawTexturedModalRect(guiLeft + 103, guiTop + 33 - j, 194, 16 - j, 6, j);
+		drawTexturedModalRect(guiLeft + 85, guiTop + 33 - j, 194, 16 - j, 6, j);
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
@@ -98,9 +103,9 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 
 		// sizeX and sizeY doesn't do anything, no need for it.
 		// ^ Out dated comment
-		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 62, 97);
+		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 44, 97);
 
-		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 134, 97);
+		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 116, 97);
 		// Minecraft.getMinecraft().getTextureManager().bindTexture(diFurnace.tanks[1].getSheet());
 		// diFurnace.tanks[1].renderTank(this, guiLeft + 134, guiTop + 69,
 		// diFurnace.tanks[1].getTankType().textureX() * FluidTank.x,

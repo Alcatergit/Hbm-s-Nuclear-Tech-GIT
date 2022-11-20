@@ -50,11 +50,11 @@ public class ItemLaserDetonator extends Item {
 	    		if(GeneralConfig.enableExtendedLogging)
 	    			MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + pos.getX() + " / " + pos.getY() + " / " + pos.getZ() + " by " + player.getDisplayName() + "!");
 	    		
-	    		player.sendMessage(new TextComponentTranslation("Detonated!"));
+	    		player.sendMessage(new TextComponentTranslation("§2[Detonated]§r"));
 	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
 	        	
 	    	} else {
-	    		player.sendMessage(new TextComponentTranslation("Target can not be detonated."));
+	    		player.sendMessage(new TextComponentTranslation("§cTarget can not be detonated.§r"));
 	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
 	    	}
 		}

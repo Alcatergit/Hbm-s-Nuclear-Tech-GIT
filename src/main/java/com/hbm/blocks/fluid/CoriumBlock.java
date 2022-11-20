@@ -62,10 +62,10 @@ public class CoriumBlock extends BlockFluidClassic {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		entity.setInWeb();
 		entity.setFire(3);
-		entity.attackEntityFrom(ModDamageSource.radiation, 2F);
+		entity.attackEntityFrom(ModDamageSource.radiation, 200F);
 		
 		if(entity instanceof EntityLivingBase)
-			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 1F);
+			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 500F);
 	}
 	
 	@Override

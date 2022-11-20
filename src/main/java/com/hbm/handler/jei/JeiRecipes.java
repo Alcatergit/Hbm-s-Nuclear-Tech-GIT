@@ -29,10 +29,12 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomObject;
+import com.hbm.util.I18nUtil;
 
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.ingredients.IIngredients;
@@ -48,6 +50,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.util.text.TextFormatting;
 
 public class JeiRecipes {
 
@@ -399,13 +402,15 @@ public class JeiRecipes {
 		List<Double> chances;
 		List<ItemStack> outputs;
 		double produced;
+		EnumWavelengths laserStrength;
 		
-		public SILEXRecipe(List<ItemStack> inputs, List<Double> chances, List<ItemStack> outputs, double produced){
+		public SILEXRecipe(List<ItemStack> inputs, List<Double> chances, List<ItemStack> outputs, double produced, EnumWavelengths laserStrength){
 			input = new ArrayList<>(1);
 			input.add(inputs);
 			this.chances = chances;
 			this.outputs = outputs;
 			this.produced = produced;
+			this.laserStrength = laserStrength;
 		}
 		
 		@Override
@@ -413,7 +418,28 @@ public class JeiRecipes {
 			ingredients.setInputLists(VanillaTypes.ITEM, input);
 			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
-		
+
+		@Override
+		public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY){
+			FontRenderer fontRenderer = minecraft.fontRenderer;
+
+			int output_size = this.outputs.size();
+			int sep = output_size > 4 ? 3 : 2;
+			for(int i = 0; i < output_size; i ++){
+				double chance = this.chances.get(i);
+				if(i < sep) {
+					fontRenderer.drawString(((int)(chance * 100D) / 100D)+"%", 90, 33 + i * 18 - 9 * ((Math.min(output_size, sep) + 1) / 2), 0x404040);
+				} else {
+					fontRenderer.drawString(((int)(chance * 100D) / 100D)+"%", 138, 33 + (i - sep) * 18 - 9 * ((Math.min(output_size - sep, sep) + 1)/2), 0x404040);
+				}
+			}
+			
+			String am = ((int)(this.produced * 10D) / 10D) + "x";
+			fontRenderer.drawString(am, 52 - fontRenderer.getStringWidth(am) / 2, 51, 0x404040);
+
+			String wavelength = (this.laserStrength == EnumWavelengths.NULL) ? TextFormatting.WHITE + "N/A" : this.laserStrength.textColor + I18nUtil.resolveKey(this.laserStrength.name);
+			fontRenderer.drawString(wavelength, (35 - fontRenderer.getStringWidth(wavelength) / 2), 17, 0x404040);
+		}
 	}
 	
 	public static class AnvilRecipe implements IRecipeWrapper {
@@ -907,7 +933,7 @@ public class JeiRecipes {
 				outputs.add(obj.asStack());
 				chances.add(100 * obj.itemWeight / weight);
 			}
-			silexRecipes.add(new SILEXRecipe(e.getKey(), chances, outputs, (double)out.fluidProduced/out.fluidConsumed));
+			silexRecipes.add(new SILEXRecipe(e.getKey(), chances, outputs, (double)out.fluidProduced/out.fluidConsumed, out.laserStrength));
 		}
 		return silexRecipes;
 	}

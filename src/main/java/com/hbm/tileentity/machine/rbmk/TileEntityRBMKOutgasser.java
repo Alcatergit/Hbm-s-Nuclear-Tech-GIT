@@ -8,6 +8,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.packet.FluidTankPacket;
@@ -30,12 +31,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IFluidHandler, ITankPacketAcceptor, IRBMKLoadable {
 
 	public FluidTank gas;
 	public Fluid gasType;
-	public double progress;
-	public static final int duration = 10000;
+	public double progress = 0;
+	public int duration = 10000;
 
 	public TileEntityRBMKOutgasser() {
 		super(2);
@@ -94,31 +95,19 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		}
 	}
 	
-	private static HashMap<Object, ItemStack> recipes = new HashMap<>();
 	
-	static {
-		recipes.put("blockLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 10000));
-		recipes.put("ingotLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
-		recipes.put("dustLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 1000));
-		recipes.put(new ComparableStack(ModItems.powder_lithium_tiny), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 100));
-		recipes.put("ingotGold", new ItemStack(ModItems.ingot_au198));
-		recipes.put("nuggetGold", new ItemStack(ModItems.nugget_au198));
-		recipes.put("dustGold", new ItemStack(ModItems.powder_au198));
-		recipes.put(new ComparableStack(Blocks.BROWN_MUSHROOM), new ItemStack(ModBlocks.mush));
-		recipes.put(new ComparableStack(Blocks.RED_MUSHROOM), new ItemStack(ModBlocks.mush));
-		recipes.put(new ComparableStack(Items.MUSHROOM_STEW), new ItemStack(ModItems.glowing_stew));
-	}
 	
 	private boolean canProcess() {
 		
 		if(inventory.getStackInSlot(0).isEmpty())
 			return false;
 		
-		ItemStack output = getOutput(inventory.getStackInSlot(0));
-		
-		if(output == null)
+		int requiredFlux = RBMKOutgasserRecipes.getRequiredFlux(inventory.getStackInSlot(0));
+		if (requiredFlux == -1)
 			return false;
-		
+		duration = requiredFlux;
+
+		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
 		if(output.getItem() == ModItems.fluid_icon) {
 			return ItemFluidIcon.getFluid(output) == gasType && gas.getFluidAmount() + ItemFluidIcon.getQuantity(output) <= gas.getCapacity();
 		}
@@ -128,31 +117,11 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		
 		return inventory.getStackInSlot(1).getItem() == output.getItem() && inventory.getStackInSlot(1).getItemDamage() == output.getItemDamage() && inventory.getStackInSlot(1).getCount() + output.getCount() <= inventory.getStackInSlot(1).getMaxStackSize();
 	}
-	
-	public static ItemStack getOutput(ItemStack stack) {
-		
-		if(stack == null || stack.getItem() == null)
-			return null;
-		
-		ComparableStack comp = new ComparableStack(stack);
-		
-		if(recipes.containsKey(comp))
-			return recipes.get(comp);
-		
-		String[] dictKeys = comp.getDictKeys();
-		
-		for(String key : dictKeys) {
-			
-			if(recipes.containsKey(key))
-				return recipes.get(key);
-		}
-		
-		return null;
-	}
+
 	
 	private void process() {
 		
-		ItemStack output = getOutput(inventory.getStackInSlot(0));
+		ItemStack output = RBMKOutgasserRecipes.getOutput(inventory.getStackInSlot(0));
 		inventory.getStackInSlot(0).shrink(1);
 		this.progress = 0;
 		
@@ -228,6 +197,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		super.readFromNBT(nbt);
 		
 		this.progress = nbt.getDouble("progress");
+		this.duration = nbt.getInteger("duration");
 		this.gas.readFromNBT(nbt.getCompoundTag("gas"));
 	}
 	
@@ -236,6 +206,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		super.writeToNBT(nbt);
 		
 		nbt.setDouble("progress", this.progress);
+		nbt.setInteger("duration", this.duration);
 		nbt.setTag("gas", gas.writeToNBT(new NBTTagCompound()));
 		
 		return nbt;
@@ -243,7 +214,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-		return getOutput(itemStack) != null && i == 0;
+		return RBMKOutgasserRecipes.getOutput(itemStack) != null && i == 0;
 	}
 
 	@Override
@@ -293,5 +264,32 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean canLoad(ItemStack toLoad) {
+		return toLoad != null && inventory.getStackInSlot(0).isEmpty();
+	}
+
+	@Override
+	public void load(ItemStack toLoad) {
+		inventory.setStackInSlot(0, toLoad.copy());
+		this.markDirty();
+	}
+
+	@Override
+	public boolean canUnload() {
+		return !inventory.getStackInSlot(1).isEmpty();
+	}
+
+	@Override
+	public ItemStack provideNext() {
+		return inventory.getStackInSlot(1);
+	}
+
+	@Override
+	public void unload() {
+		inventory.setStackInSlot(1, ItemStack.EMPTY);
+		this.markDirty();
 	}
 }

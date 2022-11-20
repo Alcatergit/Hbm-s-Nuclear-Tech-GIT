@@ -175,7 +175,7 @@ public class FFUtils {
 				if(fluid.getTemperature() == 300) {
 					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
 				} else {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + fluid.getTemperature() + "°C" }, mouseX, mouseY);
+					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + (fluid.getTemperature()-273) + "Â°C" }, mouseX, mouseY);
 				}
 			} else {
 				gui.drawFluidInfo(new String[] { net.minecraft.client.resources.I18n.format("None"), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
@@ -193,7 +193,7 @@ public class FFUtils {
 				if(fluid.getTemperature() == 300) {
 					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
 				} else {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + fluid.getTemperature() + "°C" }, mouseX, mouseY);
+					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + (fluid.getTemperature()-273) + "Â°C" }, mouseX, mouseY);
 				}
 
 			} else {

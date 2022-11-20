@@ -57,6 +57,8 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	 *  i drew a fuel rod yay
 	 */
 
+	// Lol had quite some freetime
+
 	public ItemRBMKRod(ItemRBMKPellet pellet, String s) {
 		this(pellet.fullName, s);
 		this.pellet = pellet;

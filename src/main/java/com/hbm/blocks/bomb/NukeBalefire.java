@@ -1,10 +1,14 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.machine.BlockMachineBase;
 import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.bomb.TileEntityNukeBalefire;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -76,4 +80,9 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
 		}
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§a[Balefire Bomb]§r");
+		tooltip.add(" §eRadius: 250m§r");
+	}
 }

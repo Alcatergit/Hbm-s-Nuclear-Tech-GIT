@@ -9,6 +9,7 @@ import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.items.tool.ItemSwordMeteorite;
@@ -294,7 +295,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		world.setBlockToAir(pos);
 		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 18.0F, true);
 		ExplosionNukeGeneric.waste(world, pos.getX(), pos.getY(), pos.getZ(), 35);
-		world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
+		world.setBlockState(pos, ModBlocks.corium_block.getDefaultState());
 
 		RadiationSavedData.incrementRad(world, pos, 1000F, 2000F);
 		if(MobConfig.enableElementals) {
@@ -311,10 +312,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 		Block b = world.getBlockState(pos).getBlock();
 
-		if(b == ModBlocks.block_lead || b == ModBlocks.block_desh || b == ModBlocks.brick_concrete)
-			return true;
-
-		if(b.getExplosionResistance(null) >= 100)
+		if(b instanceof IRadResistantBlock)
 			return true;
 
 		return false;
@@ -388,7 +386,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 		} else if(b == Blocks.WATER || b == Blocks.FLOWING_WATER) {
 			tanks[0].fill(new FluidStack(tankTypes[0], 25), true);
-		} else if(b == ModBlocks.block_niter) {
+		} else if(b == ModBlocks.block_niter || b == ModBlocks.block_niter_reinforced) {
 			if(tanks[0].getFluidAmount() >= 50 && tanks[1].getFluidAmount() + 5 <= tanks[1].getCapacity()) {
 				tanks[0].drain(50, true);
 				tanks[1].fill(new FluidStack(tankTypes[1], 5), true);
@@ -812,12 +810,20 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			markDirty();
 	}
 
-	public boolean isSubmerged() {
+	public boolean[] getSubmergedDirection() {
+		boolean[] sides = new boolean[4];
+		sides[0] = world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;//North
+		sides[1] = world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER;//South
+		sides[2] = world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER;//East
+		sides[3] = world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER;//West
+		return sides;
+	}
 
-		return world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER &&
-				world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER &&
-				world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER &&
-				world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER;
+	public boolean isSubmerged() {
+		return world.getBlockState(pos.add(0, 1, -1)).getMaterial() == Material.WATER || //North
+		world.getBlockState(pos.add(0, 1, 1)).getMaterial() == Material.WATER || //South
+		world.getBlockState(pos.add(1, 1, 0)).getMaterial() == Material.WATER || //East
+		world.getBlockState(pos.add(-1, 1, 0)).getMaterial() == Material.WATER;//West
 	}
 
 }

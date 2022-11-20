@@ -112,7 +112,7 @@ public class BlockOre extends Block {
 		}
 		if(this == ModBlocks.block_meteor_treasure)
 		{
-			switch(rand.nextInt(36)) {
+			switch(rand.nextInt(37)) {
 			case 0: return ModItems.coil_advanced_alloy;
 			case 1: return ModItems.plate_advanced_alloy;
 			case 2: return ModItems.powder_desh_mix;
@@ -149,6 +149,7 @@ public class BlockOre extends Block {
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
 			case 35: return ModItems.glitch;
+			case 36: return ModItems.nugget_radspice;
 			}
 		}
 		if(this == ModBlocks.ore_nether_fire)
@@ -255,27 +256,27 @@ public class BlockOre extends Block {
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_1)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 1));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 25 * 20, 1));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_2)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 3));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_3)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 3));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 7));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_4)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 4));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 10 * 20, 15));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_core)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 5));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 5 * 20, 79));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.block_waste)
     	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 49));
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_ooze)
     	{

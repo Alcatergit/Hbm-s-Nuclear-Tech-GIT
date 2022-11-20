@@ -8,11 +8,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.world.generator.DungeonToolbox;
 
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.util.EnumFacing;
 
 public class AncientTomb {
 

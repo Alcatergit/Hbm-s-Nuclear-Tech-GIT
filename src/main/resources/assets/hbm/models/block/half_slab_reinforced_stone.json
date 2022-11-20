@@ -1,0 +1,9 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": "hbm:blocks/reinforced_stone",
+        "top": "hbm:blocks/reinforced_stone",
+        "side": "hbm:blocks/reinforced_stone"
+    }
+}
+

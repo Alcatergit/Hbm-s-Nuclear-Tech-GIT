@@ -8,6 +8,7 @@
 	"block.shutdown": {"category": "block", "sounds": [{"name": "hbm:block/shutdown", "stream": false}]},
     "block.minerOperate": {"category": "block", "sounds": [{"name": "hbm:block/minerOperate", "stream": false}]},
     "block.assembleroperate": {"category": "block", "sounds": [{"name": "hbm:block/assemblerOperate", "stream": false}]},
+    "block.fel": {"category": "block", "sounds": [{"name": "hbm:block/fel", "stream": false}]},
     "block.chemplantOperate": {"category": "block", "sounds": [{"name": "hbm:block/chemplantOperate", "stream": false}]},
     "block.dieselOperate": {"category": "block", "sounds": [{"name": "hbm:block/dieselOperate", "stream": false}]},
     "block.igeneratorOperate": {"category": "block", "sounds": [{"name": "hbm:block/igeneratorOperate", "stream": false}]},
@@ -210,6 +211,8 @@
     "block.door.hatch_open": {"category": "player", "sounds": [{"name": "hbm:block/doors/hatch_open1", "stream": false}]},
     "block.door.sliding_seal_open": {"category": "player", "sounds": [{"name": "hbm:block/doors/doormove2", "stream": false}]},
     "block.door.sliding_seal_stop": {"category": "player", "sounds": [{"name": "hbm:block/doors/metal_stop1", "stream": false}]},
+    "block.door.siloopen": {"category": "block", "sounds": [{"name": "hbm:block/doors/siloopen", "stream": false}]},
+    "block.door.siloclose": {"category": "block", "sounds": [{"name": "hbm:block/doors/siloclose", "stream": false}]},
     
     "potatos.random": {"category": "player", "sounds": ["hbm:potatos/randResponse0", "hbm:potatos/randResponse1", "hbm:potatos/randResponse2", "hbm:potatos/randResponse3", "hbm:potatos/randResponse4", "hbm:potatos/randResponse5", "hbm:potatos/randResponse6", "hbm:potatos/randResponse7"]},
     

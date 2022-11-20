@@ -46,7 +46,7 @@ public class GeneralConfig {
 	public static boolean instancedParticles = true;
 	public static boolean callListModels = true;
 	public static boolean useShaders = false;
-	public static boolean useShaders2 = true;
+	public static boolean useShaders2 = false;
 	public static boolean bloom = true;
 	public static boolean heatDistortion = true;
 	public static boolean enableBabyMode = false;
@@ -132,7 +132,7 @@ public class GeneralConfig {
 		nonoredict = config.get(CATEGORY_GENERAL, "1.28_enableNonOreDict", true).getBoolean(true);
 		
 		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
-		useShaders2 = config.get(CATEGORY_GENERAL, "1.29_enableShaders2", true).getBoolean(true);
+		useShaders2 = config.get(CATEGORY_GENERAL, "1.29_enableShaders2", false).getBoolean(false);
 		bloom = config.get(CATEGORY_GENERAL, "1.30_enableBloom", true).getBoolean(true);
 		heatDistortion = config.get(CATEGORY_GENERAL, "1.30_enableHeatDistortion", true).getBoolean(true);
 		

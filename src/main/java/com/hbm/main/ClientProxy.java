@@ -80,6 +80,7 @@ import com.hbm.entity.grenade.EntityGrenadeSchrabidium;
 import com.hbm.entity.grenade.EntityGrenadeShrapnel;
 import com.hbm.entity.grenade.EntityGrenadeSmart;
 import com.hbm.entity.grenade.EntityGrenadeStrong;
+import com.hbm.entity.grenade.EntityGrenadeSolinium;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.item.EntityFireworks;
 import com.hbm.entity.item.EntityMovingItem;
@@ -473,8 +474,6 @@ import com.hbm.tileentity.deco.TileEntityDecoPoleTop;
 import com.hbm.tileentity.deco.TileEntityObjTester;
 import com.hbm.tileentity.deco.TileEntitySpinnyLight;
 import com.hbm.tileentity.deco.TileEntityTestRender;
-import com.hbm.tileentity.generic.TileEntityCloudResidue;
-import com.hbm.tileentity.generic.TileEntityTaint;
 import com.hbm.tileentity.machine.RenderBookCrafting;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
@@ -537,6 +536,7 @@ import com.hbm.tileentity.machine.TileEntityPylonRedWire;
 import com.hbm.tileentity.machine.TileEntityRadioRec;
 import com.hbm.tileentity.machine.TileEntityRadiobox;
 import com.hbm.tileentity.machine.TileEntitySILEX;
+import com.hbm.tileentity.machine.TileEntityFEL;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.tileentity.machine.TileEntitySolarBoiler;
@@ -555,6 +555,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKAbsorber;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBlank;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKCraneConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlAuto;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKModerator;
@@ -562,6 +563,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutgasser;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKReflector;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRodReaSim;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKStorage;
 import com.hbm.tileentity.turret.TileEntityTurretBrandon;
 import com.hbm.tileentity.turret.TileEntityTurretCIWS;
 import com.hbm.tileentity.turret.TileEntityTurretCheapo;
@@ -645,6 +647,12 @@ public class ClientProxy extends ServerProxy {
 	public static KeyBinding jetpackHover;
 	public static KeyBinding jetpackHud;
 	public static KeyBinding fsbFlashlight;
+
+	public static KeyBinding craneUpKey;
+	public static KeyBinding craneDownKey;
+	public static KeyBinding craneLeftKey;
+	public static KeyBinding craneRightKey;
+	public static KeyBinding craneLoadKey;
 	
 	public static final ModelResourceLocation IRRELEVANT_MRL = new ModelResourceLocation("hbm:placeholdermodel", "inventory");
 	
@@ -683,14 +691,13 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.registerKeyBinding(jetpackHud);
 		fsbFlashlight = new KeyBinding("key.fsb_flashlight", KeyConflictContext.IN_GAME, Keyboard.KEY_NUMPAD6, "key.categories.hbm");
 		ClientRegistry.registerKeyBinding(fsbFlashlight);
+
 		HbmKeybinds.register();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineAssembler.class, new RenderAssembler());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTaint.class, new RenderTaint());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTestRender.class, new RenderTestRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineChemplant.class, new RenderChemplant());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCloudResidue.class, new RenderCloudResidue());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeMan.class, new RenderNukeMan());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityNukeFleija.class, new RenderNukeFleija());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineReactorSmall.class, new RenderSmallReactor());
@@ -809,11 +816,13 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlManual.class, new RenderRBMKControlRod());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKControlAuto.class, new RenderRBMKControlRod());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKConsole.class, new RenderRBMKConsole());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKCraneConsole.class, new RenderRBMKCraneConsole());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKAbsorber.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKBlank.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKBoiler.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKModerator.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKOutgasser.class, new RenderRBMKLid());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKStorage.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKReflector.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKRod.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKRodReaSim.class, new RenderRBMKLid());
@@ -827,6 +836,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerSmall.class, new RenderSmallTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerLarge.class, new RenderLargeTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySILEX.class, new RenderSILEX());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFEL.class, new RenderFEL());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());
@@ -937,6 +947,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenadeMk2.class, RenderGrenade.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGrenadeASchrab.class, RenderGrenade.FACTORY);
 		registerGrenadeRenderer(EntityGrenadeZOMG.class, ModItems.grenade_zomg);
+		registerGrenadeRenderer(EntityGrenadeSolinium.class, ModItems.grenade_solinium);
 		registerGrenadeRenderer(EntityGrenadeShrapnel.class, ModItems.grenade_shrapnel);
 		registerGrenadeRenderer(EntityGrenadeBlackHole.class, ModItems.grenade_black_hole);
 		registerGrenadeRenderer(EntityGrenadeGascan.class, ModItems.grenade_gascan);
@@ -1004,6 +1015,7 @@ public class ClientProxy extends ServerProxy {
 	    RenderingRegistry.registerEntityRenderingHandler(EntityQuasar.class, RenderQuasar.FACTORY);
 		
 		ModelLoader.setCustomStateMapper(ModBlocks.toxic_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
+		ModelLoader.setCustomStateMapper(ModBlocks.radwater_block, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_bunker, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_metal, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
 		ModelLoader.setCustomStateMapper(ModBlocks.door_office, new StateMap.Builder().ignore(BlockModDoor.POWERED).build());
@@ -1112,7 +1124,7 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exKerosene".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.8F, 0.7F, 1F);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exSolid".equals(type)) {
@@ -1120,7 +1132,7 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exHydrogen".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.7F, 0.7F, 0.7F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.9F, 0.9F, 1F);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exBalefire".equals(type)) {
@@ -2152,12 +2164,17 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public boolean getIsKeyPressed(EnumKeybind key) {
 
-		if(key == EnumKeybind.JETPACK)
-			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
-		if(key == EnumKeybind.TOGGLE_JETPACK)
-			return HbmKeybinds.jetpackKey.isKeyDown();
-		if(key == EnumKeybind.TOGGLE_HEAD)
-			return HbmKeybinds.hudKey.isKeyDown();
+		switch(key){
+		case JETPACK:			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+		case TOGGLE_JETPACK:	return HbmKeybinds.jetpackKey.isKeyDown();
+		case TOGGLE_HEAD:		return HbmKeybinds.hudKey.isKeyDown();
+		case RELOAD:			return HbmKeybinds.reloadKey.isKeyDown();
+		case CRANE_UP:			return HbmKeybinds.craneUpKey.isKeyDown();
+		case CRANE_DOWN:		return HbmKeybinds.craneDownKey.isKeyDown();
+		case CRANE_LEFT:		return HbmKeybinds.craneLeftKey.isKeyDown();
+		case CRANE_RIGHT:		return HbmKeybinds.craneRightKey.isKeyDown();
+		case CRANE_LOAD:		return HbmKeybinds.craneLoadKey.isKeyDown();
+		}
 
 		return false;
 	}

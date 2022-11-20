@@ -383,7 +383,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 		WarheadType type = (WarheadType)template.warhead.attributes[0];
 		float strength = (Float)template.warhead.attributes[1];
-		
+		int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(strength, 3)/Math.pow(48, 3)));
 		switch(type) {
 		case HE:
 			ExplosionLarge.explode(world, posX, posY, posZ, strength, true, false, true);
@@ -401,11 +401,23 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		case NUCLEAR:
 		case TX:
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) strength, posX, posY, posZ));
-			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, 1000, strength * 0.005F);
+	    	
+			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, strength);
 			nuke.posX = posX;
 			nuke.posY = posY;
 			nuke.posZ = posZ;
 			world.spawnEntity(nuke);
+			break;
+		case VOLCANO:
+			ExplosionLarge.buster(world, posX, posY, posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), strength, strength * 2);
+			for(int x = -1; x <= 1; x++) {
+				for(int y = -1; y <= 1; y++) {
+					for(int z = -1; z <= 1; z++) {
+						world.setBlockState(new BlockPos((int)Math.floor(posX + x), (int)Math.floor(posY + y), (int)Math.floor(posZ + z)), ModBlocks.volcanic_lava_block.getDefaultState());
+					}
+				}
+			}
+			world.setBlockState(new BlockPos((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ)), ModBlocks.volcano_core.getDefaultState());
 			break;
 		case BALEFIRE:
 			EntityBalefire bf = new EntityBalefire(world);
@@ -414,11 +426,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			bf.posZ = this.posZ;
 			bf.destructionRange = (int) strength;
 			world.spawnEntity(bf);
-			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, posX, posY + 5, posZ, strength * 1.5F, 1000));
+			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, posX, posY + 5, posZ, strength));
 			break;
 		case N2:
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, (int) strength, posX, posY, posZ));
-			EntityNukeCloudSmall n2 = new EntityNukeCloudSmall(world, 1000, strength * 0.005F);
+
+			EntityNukeCloudSmall n2 = new EntityNukeCloudSmall(world, strength);
 			n2.posX = posX;
 			n2.posY = posY;
 			n2.posZ = posZ;

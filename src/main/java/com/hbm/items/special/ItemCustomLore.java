@@ -3,6 +3,7 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
@@ -230,13 +231,6 @@ public class ItemCustomLore extends Item {
 				list.add("RTG fuel pellet for infinite energy! (almost)");
 		}
 
-		if(this == ModItems.pellet_rtg_weak) {
-			if(MainRegistry.polaroidID == 11)
-				list.add("Meh.");
-			else
-				list.add("Cheaper and weaker pellet, now with more U238!");
-		}
-
 		if(this == ModItems.rod_lithium) {
 			list.add("Turns into Tritium Rod");
 		}
@@ -284,7 +278,7 @@ public class ItemCustomLore extends Item {
 			if(MainRegistry.polaroidID == 11)
 				list.add("Polonium 4 U and me.");
 			else
-				list.add("More powderful RTG pellet, made from finest polonium!");
+				list.add("Tastes nice in Tea");
 		}
 		if(this == ModItems.mech_key)
 		{
@@ -301,10 +295,38 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("'Lanthanum'");
 		}
+
+		if(this == ModItems.ingot_gh336 || this == ModItems.billet_gh336 || this == ModItems.nugget_gh336)
+		{
+			list.add("Seaborgium's colleague");
+		}
+
+		if(this == ModItems.billet_flashlead)
+		{
+			list.add("The lattice decays, causing antimatter-matter annihilation reactions, causing the release of pions, decaying into muons, catalyzing fusion of the nuclei, creating the new element. Please try to keep up.");
+		}
 		
 		if(this == ModItems.ingot_tantalium || this == ModItems.nugget_tantalium || this == ModItems.gem_tantalium || this == ModItems.powder_tantalium)
 		{
 			list.add("'Tantalum'");
+		}
+		if(this == ModItems.missile_nuclear)
+		{
+			list.add("§2[Nuclear Missile]§r");
+			list.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2[Fallout]§r");
+				list.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			}
+		}
+		if(this == ModItems.missile_nuclear_cluster)
+		{
+			list.add("§6[Thermonuclear Missile]§r");
+			list.add(" §eRadius: "+BombConfig.missileRadius*2+"m§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2[Fallout]§r");
+				list.add(" §aRadius: "+(int)BombConfig.missileRadius*2*(1+BombConfig.falloutRange/100)+"m§r");
+			}
 		}
 		if(this == ModItems.undefined && world != null) {
 			
@@ -333,26 +355,134 @@ public class ItemCustomLore extends Item {
 
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
-		if(this == ModItems.plate_euphemium || this == ModItems.ingot_euphemium || this == ModItems.powder_neptunium || this == ModItems.powder_euphemium || this == ModItems.powder_iodine || this == ModItems.powder_astatine || this == ModItems.powder_neodymium || this == ModItems.powder_caesium || this == ModItems.powder_strontium || this == ModItems.powder_cobalt || this == ModItems.powder_bromine || this == ModItems.powder_niobium || this == ModItems.powder_tennessine || this == ModItems.powder_cerium || this == ModItems.nugget_euphemium || this == ModItems.rod_quad_euphemium || 
-				this == ModItems.watch) {
+		if(this == ModItems.plate_euphemium || 
+			this == ModItems.ingot_euphemium || 
+			this == ModItems.ingot_iodine || 
+			this == ModItems.ingot_i131 || 
+			this == ModItems.ingot_strontium || 
+			this == ModItems.ingot_sr90 || 
+			this == ModItems.ingot_cobalt || 
+			this == ModItems.ingot_co60 || 
+			this == ModItems.ingot_bromine || 
+			this == ModItems.ingot_tennessine || 
+			this == ModItems.ingot_cerium || 
+			this == ModItems.ingot_caesium || 
+			this == ModItems.ingot_niobium || 
+			this == ModItems.ingot_neodymium || 
+
+			this == ModItems.nugget_euphemium || 
+			this == ModItems.nugget_strontium || 
+			this == ModItems.nugget_sr90 || 
+			this == ModItems.nugget_cobalt || 
+			this == ModItems.nugget_co60 || 
+			
+			this == ModItems.powder_neptunium ||
+			this == ModItems.powder_euphemium || 
+			this == ModItems.powder_iodine || 
+			this == ModItems.powder_i131 || 
+			this == ModItems.powder_strontium || 
+			this == ModItems.powder_sr90 || 
+			this == ModItems.powder_astatine || 
+			this == ModItems.powder_at209 || 
+			this == ModItems.powder_cobalt || 
+			this == ModItems.powder_co60 || 
+			this == ModItems.powder_bromine || 
+			this == ModItems.powder_niobium || 
+			this == ModItems.powder_cerium || 
+			this == ModItems.powder_neodymium || 
+			this == ModItems.powder_tennessine || 
+			this == ModItems.powder_xe135 || 
+			this == ModItems.powder_caesium || 
+			this == ModItems.powder_cs137 || 
+			this == ModItems.powder_cs137 || 
+			this == ModItems.powder_nitan_mix || 
+			this == ModItems.powder_spark_mix || 
+			this == ModItems.powder_magic || 
+
+
+			this == ModItems.powder_sr90_tiny || 
+			this == ModItems.powder_iodine_tiny || 
+			this == ModItems.powder_i131_tiny || 
+			this == ModItems.powder_co60_tiny || 
+			this == ModItems.powder_cobalt_tiny || 
+			this == ModItems.powder_niobium_tiny || 
+			this == ModItems.powder_cerium_tiny || 
+			this == ModItems.powder_neodymium_tiny || 
+			this == ModItems.powder_xe135_tiny || 
+			this == ModItems.powder_cs137_tiny || 
+			this == ModItems.nugget_daffergon || 
+			this == ModItems.powder_daffergon || 
+			this == ModItems.ingot_daffergon || 
+			
+			this == ModItems.bathwater_mk3 || 
+			this == ModItems.dynosphere_euphemium_charged ||  
+			this == ModItems.plate_euphemium ||  
+			this == ModItems.rod_euphemium ||  
+			this == ModItems.rod_quad_euphemium || 
+			this == ModItems.rod_daffergon || 
+			this == ModItems.watch || 
+			this == ModItems.undefined) {
 			return EnumRarity.EPIC;
 		}
 
-		if(this == ModItems.rod_schrabidium || this == ModItems.rod_dual_schrabidium || this == ModItems.rod_quad_schrabidium || this == ModItems.ingot_schrabidium || this == ModItems.nugget_schrabidium || this == ModItems.plate_schrabidium || ItemCell.hasFluid(stack, ModForgeFluids.sas3) || this == ModItems.powder_schrabidium || this == ModItems.wire_schrabidium || this == ModItems.ingot_saturnite || this == ModItems.plate_saturnite || this == ModItems.powder_thorium || this == ModItems.circuit_schrabidium || this == ModItems.gun_revolver_schrabidium_ammo || this == ModItems.plate_saturnite || this == ModItems.ingot_schrabidate || 
-    			this == ModItems.powder_schrabidate || this == ModItems.ingot_schraranium || 
-    			this == ModItems.crystal_schraranium) {
+		if(this == ModItems.ingot_schrabidium ||
+			this == ModItems.ingot_schraranium || 
+			this == ModItems.ingot_schrabidate || 
+			this == ModItems.ingot_saturnite ||  
+			this == ModItems.ingot_solinium || 
+			this == ModItems.nugget_schrabidium || 
+			this == ModItems.nugget_solinium || 
+			
+			this == ModItems.powder_schrabidate || 
+			this == ModItems.powder_schrabidium || 
+
+			this == ModItems.wire_schrabidium || 
+
+			this == ModItems.plate_schrabidium || 
+			this == ModItems.plate_saturnite || 
+			
+			this == ModItems.circuit_schrabidium || 
+			this == ModItems.gun_revolver_schrabidium_ammo || 
+			this == ModItems.powder_unobtainium || 
+			this == ModItems.nugget_unobtainium || 
+			this == ModItems.ingot_unobtainium || 
+			
+			this == ModItems.solinium_core ||
+			this == ModItems.crystal_schrabidium ||
+    		this == ModItems.crystal_schraranium ||
+    		this == ModItems.crystal_trixite ||
+    		ItemCell.hasFluid(stack, ModForgeFluids.sas3) || 
+    		this == ModItems.rod_unobtainium || 
+    		this == ModItems.rod_schrabidium || 
+			this == ModItems.rod_dual_schrabidium || 
+			this == ModItems.rod_quad_schrabidium ||
+			this == ModItems.rod_dual_solinium || 
+			this == ModItems.rod_quad_solinium) {
 			return EnumRarity.RARE;
 		}
 
-		if(this == ModItems.plate_paa || this == ModItems.ammo_566_gold || this == ModItems.gun_revolver_cursed_ammo || this == ModItems.powder_power || this == ModItems.ingot_australium || this == ModItems.ingot_weidanium || 
-    			this == ModItems.ingot_reiium || this == ModItems.ingot_unobtainium || 
-    			this == ModItems.ingot_daffergon || this == ModItems.ingot_verticium || 
-    			this == ModItems.nugget_australium || this == ModItems.nugget_weidanium || 
-    			this == ModItems.nugget_reiium || this == ModItems.nugget_unobtainium || 
-    			this == ModItems.nugget_daffergon || this == ModItems.nugget_verticium || 
-    			this == ModItems.powder_australium || this == ModItems.powder_weidanium || 
-    			this == ModItems.powder_reiium || this == ModItems.powder_unobtainium || 
-    			this == ModItems.powder_daffergon || this == ModItems.powder_verticium) {
+		if(this == ModItems.bathwater_mk2 || 
+			this == ModItems.plate_paa || 
+			this == ModItems.cladding_paa || 
+			this == ModItems.ammo_566_gold || 
+			this == ModItems.gun_revolver_cursed_ammo || 
+			this == ModItems.powder_power || 
+			this == ModItems.powder_yellowcake || 
+
+			this == ModItems.ingot_australium || 
+			this == ModItems.ingot_weidanium || 
+			this == ModItems.ingot_reiium || 
+			this == ModItems.ingot_verticium || 
+
+			this == ModItems.nugget_australium || 
+			this == ModItems.nugget_weidanium || 
+			this == ModItems.nugget_reiium || 
+			this == ModItems.nugget_verticium || 
+
+			this == ModItems.powder_australium || 
+			this == ModItems.powder_weidanium || 
+			this == ModItems.powder_reiium || 
+			this == ModItems.powder_verticium) {
 			return EnumRarity.UNCOMMON;
 		}
 

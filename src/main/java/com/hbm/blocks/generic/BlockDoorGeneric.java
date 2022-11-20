@@ -2,11 +2,15 @@ package com.hbm.blocks.generic;
 
 import java.util.List;
 
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -23,13 +27,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDoorGeneric extends BlockDummyable {
+public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBlock{
 
 	public DoorDecl type;
+	private boolean isRadResistant;
 	
-	public BlockDoorGeneric(Material materialIn, DoorDecl type, String s){
+	public BlockDoorGeneric(Material materialIn, DoorDecl type, boolean isRadResistant, String s){
 		super(materialIn, s);
 		this.type = type;
+		this.isRadResistant = isRadResistant;
 	}
 
 	@Override
@@ -137,4 +143,35 @@ public class BlockDoorGeneric extends BlockDummyable {
 		return FULL_BLOCK_AABB;
 	}
 
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		if(this.isRadResistant){
+			RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		}
+		super.onBlockAdded(worldIn, pos, state);
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if(this.isRadResistant){
+			RadiationSystemNT.markChunkForRebuild(worldIn, pos);
+		}
+		super.breakBlock(worldIn, pos, state);
+	}
+
+	@Override
+	public boolean isRadResistant(){
+		return this.isRadResistant;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		if(this.isRadResistant){
+			tooltip.add("§2[Radiation Shielding]§r");
+		}
+		if(hardness > 50){
+			tooltip.add("§6Blast Resistance: "+hardness+"§r");
+		}
+	}
 }

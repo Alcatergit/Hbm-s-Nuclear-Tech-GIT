@@ -1,9 +1,11 @@
 package com.hbm.inventory.gui;
 
 import java.io.IOException;
+import java.lang.Math;
 
 import com.hbm.inventory.container.ContainerMachineBattery;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
@@ -13,6 +15,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,6 +23,8 @@ public class GUIMachineBattery extends GuiInfoContainer {
 
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_battery.png");
 	private TileEntityMachineBattery battery;
+	private long prevDelta;
+	private long powerDelta;
 
 	public GUIMachineBattery(InventoryPlayer invPlayer, TileEntityMachineBattery tedf) {
 		super(new ContainerMachineBattery(invPlayer, tedf));
@@ -27,16 +32,35 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		this.xSize = 176;
 		this.ySize = 166;
+		this.prevDelta = battery.powerDelta;
+		this.powerDelta = battery.powerDelta;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, battery.power, battery.maxPower);
+		if(battery.powerDelta == 0 && prevDelta != 0)
+			powerDelta = prevDelta;
+		else
+			powerDelta = battery.powerDelta;
+
+		String deltaText = Library.getShortNumber(Math.abs(powerDelta)) + "HE/s";
+		if(powerDelta > 0) 
+			deltaText = TextFormatting.GREEN + "+" + deltaText;
+		else if(powerDelta < 0) 
+			deltaText = TextFormatting.RED + "-" + deltaText;
+		else 
+			deltaText = TextFormatting.YELLOW + "0HE/s";
+
+		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
+
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, mouseX, mouseY, info);
+
 
 		String[] text = new String[] { "Click the buttons on the right",
 				"to change battery behavior for",
 				"when redstone is or isn't applied." };
+		prevDelta = battery.powerDelta;
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

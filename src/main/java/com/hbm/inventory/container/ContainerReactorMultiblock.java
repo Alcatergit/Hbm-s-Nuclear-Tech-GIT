@@ -18,24 +18,24 @@ public class ContainerReactorMultiblock extends Container {
 	public ContainerReactorMultiblock(InventoryPlayer invPlayer, TileEntityMachineReactorLarge tedf) {
 		
 		diFurnace = tedf;
-		
+
 		//Water in
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 6, 60));
 		//Water out
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 8, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 6, 78));
 		//Coolant in
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 26, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 24, 60));
 		//Coolant out
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 26, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 24, 78));
 		
 		//Fuel in
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 80, 36));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 70, 59));
 		//Fuel out
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 80, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 70, 95));
 		//Waste in
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 36));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 59));
 		//Waste out
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 7, 152, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 7, 152, 95));
 		
 		for(int i = 0; i < 3; i++)
 		{

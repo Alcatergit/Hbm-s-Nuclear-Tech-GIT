@@ -1,5 +1,14 @@
 package com.hbm.entity.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+import com.hbm.entity.logic.IChunkLoader;
+import com.hbm.main.MainRegistry;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraft.util.math.ChunkPos;
+
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.BombConfig;
@@ -10,6 +19,7 @@ import com.hbm.explosion.ExplosionHurtUtil;
 import com.hbm.explosion.ExplosionNukeAdvanced;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionSolinium;
+import com.hbm.explosion.ExplosionDrying;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.main.MainRegistry;
 
@@ -20,7 +30,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 @Spaghetti("why???")
-public class EntityNukeExplosionMK3 extends Entity {
+public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 	
 	public int age = 0;
 	public int destructionRange = 0;
@@ -29,6 +39,7 @@ public class EntityNukeExplosionMK3 extends Entity {
 	public ExplosionNukeAdvanced vap;
 	public ExplosionFleija expl;
 	public ExplosionSolinium sol;
+	public ExplosionDrying dry;
 	public int speed = 1;
 	public float coefficient = 1;
 	public float coefficient2 = 1;
@@ -37,6 +48,7 @@ public class EntityNukeExplosionMK3 extends Entity {
 	public boolean waste = true;
 	//Extended Type
 	public int extType = 0;
+	private Ticket loaderTicket;
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -73,6 +85,10 @@ public class EntityNukeExplosionMK3 extends Entity {
     			sol = new ExplosionSolinium((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
     			sol.readFromNbt(nbt, "sol_");
     		}
+    		if(extType == 2) {
+    			dry = new ExplosionDrying((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
+    			dry.readFromNbt(nbt, "dry_");
+    		}
     	}
     	
     	this.did = true;
@@ -103,6 +119,8 @@ public class EntityNukeExplosionMK3 extends Entity {
 			expl.saveToNbt(nbt, "expl_");
 		if(sol != null)
 			sol.saveToNbt(nbt, "sol_");
+		if(dry != null)
+			dry.saveToNbt(nbt, "dry_");
 		
 	}
 
@@ -131,6 +149,8 @@ public class EntityNukeExplosionMK3 extends Entity {
         			expl = new ExplosionFleija((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
         		if(extType == 1)
         			sol = new ExplosionSolinium((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
+        		if(extType == 2)
+        			dry = new ExplosionDrying((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, this.coefficient2);
         	}
         	
         	this.did = true;
@@ -156,6 +176,9 @@ public class EntityNukeExplosionMK3 extends Entity {
         				this.setDead();
         		if(extType == 1)
         			if(sol.update())
+        				this.setDead();
+        		if(extType == 2)
+        			if(dry.update())
         				this.setDead();
         	}
         }
@@ -187,5 +210,53 @@ public class EntityNukeExplosionMK3 extends Entity {
     }
 
 	@Override
-	protected void entityInit() { }
+	protected void entityInit() {
+		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
+	}
+
+	@Override
+	public void init(Ticket ticket) {
+		if(!world.isRemote) {
+			
+            if(ticket != null) {
+            	
+                if(loaderTicket == null) {
+                	
+                	loaderTicket = ticket;
+                	loaderTicket.bindEntity(this);
+                	loaderTicket.getModData();
+                }
+
+                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
+            }
+        }
+	}
+
+	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
+	@Override
+	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
+		if(!world.isRemote && loaderTicket != null)
+        {
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+            }
+
+            loadedChunks.clear();
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
+            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
+            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
+
+            for(ChunkPos chunk : loadedChunks)
+            {
+                ForgeChunkManager.forceChunk(loaderTicket, chunk);
+            }
+        }
+	}
 }

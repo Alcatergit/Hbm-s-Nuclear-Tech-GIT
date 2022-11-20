@@ -38,11 +38,11 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 36, 16, 52, diFurnace.tanks[0], diFurnace.tankTypes[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 36, 16, 52, diFurnace.tanks[1], diFurnace.tankTypes[1]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 108, 88, 4, diFurnace.tanks[2], diFurnace.tankTypes[2]);
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 114, 88, 4, new String[] { "Hull Temperature:", "   " + Math.round((diFurnace.hullHeat) * 0.00001 * 980 + 20) + "°C" });
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 120, 88, 4, new String[] { "Core Temperature:", "   " + Math.round((diFurnace.coreHeat) * 0.00002 * 980 + 20) + "°C" });
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 6, guiTop + 5, 16, 52, diFurnace.tanks[0], diFurnace.tankTypes[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 24, guiTop + 5, 16, 52, diFurnace.tanks[1], diFurnace.tankTypes[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 22, guiTop + 107, 10, 16, diFurnace.tanks[2], diFurnace.tankTypes[2]);
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 42, guiTop + 5, 4, 88, new String[] { "Core Temperature:", "   " + Math.round((diFurnace.coreHeat) * 0.00002 * 980 + 20) + "°C" });
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 48, guiTop + 5, 4, 88, new String[] { "Hull Temperature:", "   " + Math.round((diFurnace.hullHeat) * 0.00001 * 980 + 20) + "°C" });
 		
 		String[] text = new String[] { "Coolant will move heat from the core to",
 				"the hull. Water will use that heat and",
@@ -86,10 +86,10 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 		
 		String[] text4 = new String[] { "Steam compression switch",
 				"Current compression level: " + s};
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 63, guiTop + 107, 14, 18, mouseX, mouseY, text4);
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 4, guiTop + 105, 16, 20, mouseX, mouseY, text4);
 		
 		String[] text5 = new String[] { diFurnace.retracting ? "Raise control rods" : "Lower control rods"};
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 52, guiTop + 53, 18, 18, mouseX, mouseY, text5);
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 35, guiTop + 106, 18, 18, mouseX, mouseY, text5);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -97,20 +97,20 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.diFurnace.hasCustomInventoryName() ? this.diFurnace.getInventoryName() : I18n.format(this.diFurnace.getInventoryName());
 		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(name, 121 - this.fontRenderer.getStringWidth(name) / 2, 6, 15066597);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), this.xSize-this.fontRenderer.getStringWidth(I18n.format("container.inventory"))-6, this.ySize - 96 + 2, 4210752);
 	}
 
 	protected void mouseClicked(int x, int y, int i) throws IOException {
     	super.mouseClicked(x, y, i);
 		
-    	if(guiLeft + 52 <= x && guiLeft + 52 + 16 > x && guiTop + 53 < y && guiTop + 53 + 16 >= y) {
+    	if(guiLeft + 35 <= x && guiLeft + 35 + 16 > x && guiTop + 107 < y && guiTop + 107 + 16 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(diFurnace.getPos().getX(), diFurnace.getPos().getY(), diFurnace.getPos().getZ(), diFurnace.retracting ? 0 : 1, 0));
     	}
 		
-    	if(guiLeft + 63 <= x && guiLeft + 63 + 14 > x && guiTop + 107 < y && guiTop + 107 + 18 >= y) {
+    	if(guiLeft + 5 <= x && guiLeft + 5 + 14 > x && guiTop + 107 < y && guiTop + 107 + 18 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			int c = 0;
@@ -141,65 +141,34 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-		
-		if(diFurnace.tanks[2].getFluidAmount() > 0) {
-			int i = diFurnace.getSteamScaled(88);
-			
-			//i = (int) Math.min(i, 160);
-			
-			int offset = 234;
-			
-			if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
-				offset += 4;
-			} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
-				offset += 8;
-			}
-			
-			drawTexturedModalRect(guiLeft + 80, guiTop + 108, 0, offset, i, 4);
-		}
-		
-		if(diFurnace.hasHullHeat()) {
-			int i = diFurnace.getHullHeatScaled(88);
-			
-			i = (int) Math.min(i, 160);
-			
-			drawTexturedModalRect(guiLeft + 80, guiTop + 114, 0, 226, i, 4);
+
+		if(diFurnace.tankTypes[2] == ModForgeFluids.steam){
+			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 176, 18, 14, 18);
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
+			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 190, 18, 14, 18);
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
+			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 204, 18, 14, 18);
 		}
 		
 		if(diFurnace.hasCoreHeat()) {
 			int i = diFurnace.getCoreHeatScaled(88);
 			
-			i = (int) Math.min(i, 160);
+			i = (int) Math.min(i, 88);
 			
-			drawTexturedModalRect(guiLeft + 80, guiTop + 120, 0, 230, i, 4);
+			drawTexturedModalRect(guiLeft + 42, guiTop + 94 - i, 176, 124-i, 4, i);
 		}
-		
+
+		if(diFurnace.hasHullHeat()) {
+			int i = diFurnace.getHullHeatScaled(88);
+			
+			i = (int) Math.min(i, 88);
+			
+			drawTexturedModalRect(guiLeft + 48, guiTop + 94 - i, 180, 124-i, 4, i);
+		}
+
 		if(!diFurnace.retracting)
-			drawTexturedModalRect(guiLeft + 52, guiTop + 53, 212, 0, 18, 18);
+			drawTexturedModalRect(guiLeft + 35, guiTop + 107, 176, 0, 18, 18);
 		
-		if(!toggleOverlay) {
-			if(diFurnace.rods >= diFurnace.rodsMax) {
-				
-				for(int x = 0; x < 3; x++)
-					for(int y = 0; y < 3; y++)
-						drawTexturedModalRect(guiLeft + 79 + 36 * x, guiTop + 17 + 36 * y, 176, 0, 18, 18);
-				
-			} else if(diFurnace.rods > 0) {
-	
-				for(int x = 0; x < 3; x++)
-					for(int y = 0; y < 3; y++)
-						drawTexturedModalRect(guiLeft + 79 + 36 * x, guiTop + 17 + 36 * y, 194, 0, 18, 18);
-				
-			}
-		}
-		
-		if(diFurnace.tankTypes[2] == ModForgeFluids.steam){
-			drawTexturedModalRect(guiLeft + 63, guiTop + 107, 176, 18, 14, 18);
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
-			drawTexturedModalRect(guiLeft + 63, guiTop + 107, 190, 18, 14, 18);
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
-			drawTexturedModalRect(guiLeft + 63, guiTop + 107, 204, 18, 14, 18);
-		}
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
@@ -210,8 +179,9 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 			this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 32 + 16, 16, 16, 7);
 
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 8, 116);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 26, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 6, 86);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 24, 86);
+		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 10, 16, 22, 152);
 	}
 	
 	@Override

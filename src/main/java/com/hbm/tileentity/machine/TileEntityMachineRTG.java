@@ -9,6 +9,8 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.util.RTGUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,9 +29,9 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 	public ItemStackHandler inventory;
 	
 	public int heat;
-	public final int heatMax = 75;
+	public final int heatMax = 6000;
 	public long power;
-	public final long powerMax = 90000;
+	public final long powerMax = 1000000;
 	public int age = 0;
 	public List<IConsumer> list = new ArrayList<IConsumer>();
 	
@@ -49,7 +51,7 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			
 			@Override
 			public boolean isItemValid(int slot, ItemStack itemStack) {
-				if(itemStack != null && (itemStack.getItem() == ModItems.pellet_rtg || itemStack.getItem() == ModItems.pellet_rtg_weak || itemStack.getItem() == ModItems.pellet_rtg_polonium))
+				if(itemStack != null && (itemStack.getItem() instanceof ItemRTGPellet))
 					return true;
 				return false;
 			}
@@ -75,23 +77,12 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			if(age == 9 || age == 19)
 				ffgeuaInit();
 			
-			heat = 0;
-			
-			for(int i = 0; i < inventory.getSlots(); i++) {
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY) {
-					if(inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg)
-						heat += 5;
-					if(inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_weak)
-						heat += 3;
-					if(inventory.getStackInSlot(i).getItem() == ModItems.pellet_rtg_polonium)
-						heat += 25;
-				}
-			}
+			heat = RTGUtil.updateRTGs(inventory);
 			
 			if(heat > heatMax)
 				heat = heatMax;
 			
-			power += heat;
+			power += heat*5;
 			if(power > powerMax)
 				power = powerMax;
 			

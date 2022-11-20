@@ -145,8 +145,7 @@ public class TileEntityNukeN45 extends TileEntity implements ITickable {
 				break;
 			case 4:
 				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.missileRadius * 0.75F), x + 0.5, y + 0.5, z + 0.5));
-	
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.missileRadius * 0.005F * 0.75F);
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, BombConfig.missileRadius * 0.75F);
 				entity2.posX = x;
 				entity2.posY = y;
 				entity2.posZ = z;

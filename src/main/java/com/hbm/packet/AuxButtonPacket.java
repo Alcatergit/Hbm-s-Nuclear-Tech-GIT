@@ -16,8 +16,10 @@ import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
+
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -291,6 +293,11 @@ public class AuxButtonPacket implements IMessage {
 						TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser)te;
 
 						laser.isOn = !laser.isOn;
+					}
+
+					if(te instanceof TileEntityMachineRadar) {
+						TileEntityMachineRadar radar = (TileEntityMachineRadar)te;
+						radar.handleButtonPacket(m.value, m.id);
 					}
 					/// yes ///
 					if(te instanceof TileEntityMachineBase) {

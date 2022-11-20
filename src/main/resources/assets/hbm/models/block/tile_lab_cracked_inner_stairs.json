@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "hbm:blocks/tile_lab_cracked",
+        "top": "hbm:blocks/tile_lab_cracked",
+        "side": "hbm:blocks/tile_lab_cracked"
+    }
+}

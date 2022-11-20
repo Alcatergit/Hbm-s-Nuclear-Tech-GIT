@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudSolinium;
@@ -9,6 +11,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -190,4 +193,12 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§3[Solinium Bomb]§r");
+		tooltip.add(" §eRadius: "+BombConfig.soliniumRadius+"m§r");
+		tooltip.add("");
+		tooltip.add("§dThis Neutron Bomb is the weaponized daughter of the G.E.C.K§r");
+		tooltip.add("§dIt emits so much neutron radiation that it transmutates all radioactive elements in range via alpha decay until only non-radioactive elements remain.§r");
+	}
 }

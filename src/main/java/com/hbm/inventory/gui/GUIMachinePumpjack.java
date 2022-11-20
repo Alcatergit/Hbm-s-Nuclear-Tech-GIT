@@ -55,15 +55,15 @@ public class GUIMachinePumpjack extends GuiInfoContainer {
 		
 		int k = derrick.warning;
 		if(k == 2)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 18, 176, 52, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 17, 176, 52, 18, 18);
 		if(k == 1)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 18, 192, 52, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 17, 194, 52, 18, 18);
 		
 		int l = derrick.warning2;
 		if(l == 1)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 90, 208, 52, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 89, 212, 52, 18, 18);
 		if(l == 2)
-			drawTexturedModalRect(guiLeft + 44, guiTop + 90, 224, 52, 16, 16);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 89, 230, 52, 18, 18);
 		
 		FFUtils.drawLiquid(derrick.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 80, 98);
 		FFUtils.drawLiquid(derrick.tanks[1], guiLeft, guiTop, zLevel, 34, 52, 80, 152);

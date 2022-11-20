@@ -21,7 +21,7 @@ public class GUIWasteDrum extends GuiInfoContainer {
 		diFurnace = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 186;
+		this.ySize = 194;
 	}
 	
 	@Override

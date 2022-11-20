@@ -25,8 +25,7 @@ public class EntityMissileMirv extends EntityMissileBaseAdvanced {
 	public void onImpact() {
 		
     	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius * 2, posX, posY, posZ));
-
-		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, 1000, BombConfig.missileRadius * 2 * 0.005F);
+		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, BombConfig.missileRadius * 2F);
     	entity2.posX = this.posX;
     	entity2.posY = this.posY - 9;
     	entity2.posZ = this.posZ;

@@ -58,7 +58,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 	public TileEntityMachineCyclotron() {
 		super(0);
-		inventory = new ItemStackHandler(16){
+		this.inventory = new ItemStackHandler(16){
 			@Override
 			protected void onContentsChanged(int slot) {
 				super.onContentsChanged(slot);
@@ -78,6 +78,20 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	@Override
 	public String getName() {
 		return "container.cyclotron";
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int side = e.getIndex();
+		if(side == 2) // North
+			return new int[] { 6, 7, 8 }; // C
+		if(side == 3) // South
+			return new int[] { 9, 10, 11, 12 }; // Fluids
+		if(side == 4) // West
+			return new int[] { 0, 1, 2 }; // A
+		if(side == 5) // East
+			return new int[] { 3, 4, 5 }; // B
+		return new int[] { };
 	}
 	
 	@Override

@@ -14,6 +14,9 @@ public final class HBMSoundHandler {
 	public static List<SoundEvent> ALL_SOUNDS = new ArrayList<SoundEvent>();
 	
 	public static SoundEvent assemblerOperate;
+	public static SoundEvent fel;
+	public static SoundEvent siloopen;
+	public static SoundEvent siloclose;
 	public static SoundEvent pressOperate;
 	public static SoundEvent laserBang;
 	public static SoundEvent blockDebris;
@@ -260,6 +263,7 @@ public final class HBMSoundHandler {
 		
 		
 		assemblerOperate = register("block.assembleroperate");
+		fel = register("block.fel");
 		pressOperate = register("block.pressoperate");
 		laserBang = register("weapon.laserBang");
 		blockDebris = register("block.debris");
@@ -448,6 +452,8 @@ public final class HBMSoundHandler {
 		ufoBeam = register("entity.ufoBeam");
 		ufoBlast = register("entity.ufoBlast");
 		transitionSealOpen = register("block.door.transitionseal");
+		siloopen = register("block.door.siloopen");
+		siloclose = register("block.door.siloclose");
 		garage = register("block.door.garage");
 		garage_stop = register("block.door.garagestop");
 		door_spinny = register("block.door.lever");

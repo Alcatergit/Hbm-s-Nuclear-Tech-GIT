@@ -43,7 +43,7 @@ public class ItemMultiDetonator extends Item {
 		
 		if(stack.getTagCompound() == null || getLocations(stack) == null)
 		{
-			list.add("No position set!");
+			list.add("No position set");
 		} else {
 			
 			int[][] locs = getLocations(stack);
@@ -69,7 +69,7 @@ public class ItemMultiDetonator extends Item {
 			
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation("Position added!"));
+				player.sendMessage(new TextComponentTranslation("§a[Position added]§r"));
 			}
 			
 	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.AMBIENT, 2.0F, 1.0F);
@@ -86,7 +86,7 @@ public class ItemMultiDetonator extends Item {
 		if(stack.getTagCompound() == null || getLocations(stack) == null)
 		{
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("Error: Position not set."));
+				player.sendMessage(new TextComponentTranslation("§c[Error]: Position not set.§r"));
 			
 		} else {
 			
@@ -115,7 +115,7 @@ public class ItemMultiDetonator extends Item {
 				}
 				
 				if (world.isRemote) {
-					player.sendMessage(new TextComponentTranslation("Detonated! (" + succ + "/" + locs[0].length + ")"));
+					player.sendMessage(new TextComponentTranslation("§2[Detonated] (" + succ + "/" + locs[0].length + ")§r"));
 				}
 			} else {
 
@@ -127,7 +127,7 @@ public class ItemMultiDetonator extends Item {
 				
 				if(world.isRemote)
 				{
-					player.sendMessage(new TextComponentTranslation("All positions removed."));
+					player.sendMessage(new TextComponentTranslation("§eAll positions removed.§r"));
 				}
 			}
 		}

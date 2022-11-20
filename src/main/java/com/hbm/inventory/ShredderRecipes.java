@@ -189,6 +189,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.crystal_iron, new ItemStack(ModItems.powder_iron, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_gold, new ItemStack(ModItems.powder_gold, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_redstone, new ItemStack(Items.REDSTONE, 8));
+		ShredderRecipes.setRecipe(ModItems.crystal_lapis, new ItemStack(ModItems.powder_lapis, 12));
 		ShredderRecipes.setRecipe(ModItems.crystal_diamond, new ItemStack(ModItems.powder_diamond, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_uranium, new ItemStack(ModItems.powder_uranium, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_plutonium, new ItemStack(ModItems.powder_plutonium, 3));
@@ -238,6 +239,23 @@ public class ShredderRecipes {
 		
 		ShredderRecipes.setRecipe(ModItems.ingot_schrabidate, new ItemStack(ModItems.powder_schrabidate, 1));
 		ShredderRecipes.setRecipe(ModBlocks.block_schrabidate, new ItemStack(ModItems.powder_schrabidate, 9));
+		ShredderRecipes.setRecipe(ModItems.ingot_ac227, new ItemStack(ModItems.powder_ac227, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_co60, new ItemStack(ModItems.powder_co60, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_ra226, new ItemStack(ModItems.powder_ra226, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_sr90, new ItemStack(ModItems.powder_sr90, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_ra226, new ItemStack(ModItems.powder_ra226, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_pb209, new ItemStack(ModItems.powder_pb209, 1));
+
+		ShredderRecipes.setRecipe(ModItems.ingot_tennessine, new ItemStack(ModItems.powder_tennessine, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_bromine, new ItemStack(ModItems.powder_bromine, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_caesium, new ItemStack(ModItems.powder_caesium, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_cerium, new ItemStack(ModItems.powder_cerium, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_co60, new ItemStack(ModItems.powder_co60, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_strontium, new ItemStack(ModItems.powder_strontium, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_sr90, new ItemStack(ModItems.powder_sr90, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_iodine, new ItemStack(ModItems.powder_iodine, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_i131, new ItemStack(ModItems.powder_i131, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_radspice, new ItemStack(ModItems.powder_radspice, 1));
 
 		ShredderRecipes.setRecipe(ModBlocks.turret_light, new ItemStack(ModItems.powder_steel, 16));
 		ShredderRecipes.setRecipe(ModBlocks.turret_heavy, new ItemStack(ModItems.powder_steel, 16));

@@ -82,7 +82,7 @@ public class BlockFallout extends Block implements IItemHazard {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity){
 		if(!world.isRemote && entity instanceof EntityLivingBase) {
-			PotionEffect effect = new PotionEffect(HbmPotion.radiation, 10 * 60 * 20, 0);
+			PotionEffect effect = new PotionEffect(HbmPotion.radiation, 2 * 60 * 20, 14);
 			effect.setCurativeItems(new ArrayList<>());
 			((EntityLivingBase) entity).addPotionEffect(effect);
 		}

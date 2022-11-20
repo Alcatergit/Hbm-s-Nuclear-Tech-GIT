@@ -33,6 +33,7 @@ import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.entity.mob.EntityTaintedCreeper;
+import com.hbm.entity.mob.EntityRADBeast;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
@@ -88,6 +89,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
@@ -635,6 +637,15 @@ public class ModEventHandler {
 									event.world.spawnEntity(creep);
 							entity.setDead();
 							continue;
+						} else if(entity instanceof EntityBlaze && eRad >= 700) {
+							EntityRADBeast creep = new EntityRADBeast(event.world);
+							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+
+							if(!entity.isDead)
+								if(!event.world.isRemote)
+									event.world.spawnEntity(creep);
+							entity.setDead();
+							continue;
 						} else if(entity.getClass().equals(EntityDuck.class) && eRad >= 200) {
 
 			        		EntityQuackos quacc = new EntityQuackos(event.world);
@@ -653,8 +664,8 @@ public class ModEventHandler {
 								entity instanceof EntitySkeleton ||
 								entity instanceof EntityQuackos)
 
-						if(eRad > 2500)
-							entRad.setRads(2500);
+						if(eRad > 2500000)
+							entRad.setRads(2500000);
 
 						if(eRad >= 1000) {
 							entity.attackEntityFrom(ModDamageSource.radiation, 1000F);
@@ -1229,15 +1240,16 @@ public class ModEventHandler {
 			PacketDispatcher.sendTo(new KeybindPacket(EnumKeybind.TOGGLE_JETPACK, props.getEnableBackpack()), playerMP);
 
 			if (GeneralConfig.enableWelcomeMessage) {
-				e.player.sendMessage(new TextComponentTranslation("Loaded world with Hbm's Nuclear Tech Mod " + RefStrings.VERSION + " for Minecraft 1.12.2!"));
+				e.player.sendMessage(new TextComponentTranslation("§3Welcome back§r"));
 			}
 
 			if(HTTPHandler.newVersion) {
-				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "New version " + HTTPHandler.versionNumber + " is available!"));
+				e.player.sendMessage(new TextComponentString("§ePOG - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
+				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
 			}
 			
 			if(HTTPHandler.optifine){
-				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Optifine detected, may cause compatibility issues. Check log for details."));
+				e.player.sendMessage(new TextComponentString("Optifine detected, may cause compatibility issues. Check log for details."));
 			}
 			
 			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))

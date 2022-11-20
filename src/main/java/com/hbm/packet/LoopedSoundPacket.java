@@ -7,6 +7,7 @@ import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
 import com.hbm.sound.SoundLoopMiner;
 import com.hbm.sound.SoundLoopTurbofan;
+import com.hbm.sound.SoundLoopFel;
 import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
@@ -14,6 +15,7 @@ import com.hbm.tileentity.machine.TileEntityMachineChemplant;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
+import com.hbm.tileentity.machine.TileEntityFEL;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -98,6 +100,18 @@ public class LoopedSoundPacket implements IMessage {
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineChemplant)te).isProgressing)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopChemplant(HBMSoundHandler.chemplantOperate, te));
+				}
+
+				if (te != null && te instanceof TileEntityFEL) {
+					
+					boolean flag = true;
+					for(int i = 0; i < SoundLoopFel.list.size(); i++)  {
+						if(SoundLoopFel.list.get(i).getTE() == te && !SoundLoopFel.list.get(i).isDonePlaying())
+							flag = false;
+					}
+					
+					if(flag && te.getWorld().isRemote && ((TileEntityFEL)te).isOn)
+						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopFel(HBMSoundHandler.fel, te));
 				}
 				
 				if (te != null && te instanceof TileEntityMachineAssembler) {

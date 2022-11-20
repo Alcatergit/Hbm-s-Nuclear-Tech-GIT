@@ -17,8 +17,8 @@ public class ContainerRBMKOutgasser extends Container {
 	public ContainerRBMKOutgasser(InventoryPlayer invPlayer, TileEntityRBMKOutgasser tedf) {
 		rbmk = tedf;
 
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 48, 45));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 112, 69));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 48, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 112, 53));
 
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 9; j++) {

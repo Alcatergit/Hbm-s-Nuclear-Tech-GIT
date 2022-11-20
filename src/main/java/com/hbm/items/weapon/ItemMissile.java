@@ -29,24 +29,6 @@ public class ItemMissile extends Item {
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(MainRegistry.missileTab);
-		/*File file = new File(MainRegistry.proxy.getDataDir().getPath() + "/hbmtesterjsons/" + s + ".json");
-		if (!file.exists())
-			try {
-				file.getParentFile().mkdirs();
-				FileWriter write = new FileWriter(file);
-				write.write("{\n"
-						  + "	\"parent\": \"item/generated\",\n"
-						  + "	\"textures\": {\n"
-						  + "		\"layer0\": \"hbm:items/code\"\n"
-						  + "	}\n"
-						  + "}");
-				write.close();
-				
-			} catch (IOException e) {
-				MainRegistry.logger.log(Level.ERROR, "ERROR: Could not create json file for item missile: " + file.getAbsolutePath());
-				e.printStackTrace();
-				return;
-			}*/
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
@@ -108,7 +90,8 @@ public class ItemMissile extends Item {
 		BALEFIRE,
 		SCHRAB,
 		TAINT,
-		CLOUD
+		CLOUD,
+		VOLCANO
 	}
 	
 	public enum FuelType {
@@ -289,6 +272,8 @@ public class ItemMissile extends Item {
 			return TextFormatting.DARK_PURPLE + "Taint";
 		case CLOUD:
 			return TextFormatting.LIGHT_PURPLE + "Cloud";
+		case VOLCANO:
+			return TextFormatting.DARK_RED + "Volcano";
 		default:
 			return TextFormatting.BOLD + "N/A";
 		}

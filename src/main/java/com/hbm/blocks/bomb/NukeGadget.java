@@ -1,5 +1,7 @@
 package com.hbm.blocks.bomb;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
@@ -11,6 +13,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeGadget;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -91,15 +94,14 @@ public class NukeGadget extends BlockContainer implements IBomb {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F); // x,y,z,sound,volume,pitch
 			
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.gadgetRadius, x + 0.5, y + 0.5, z + 0.5));
-
 			if (GeneralConfig.enableNukeClouds) {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 1000, BombConfig.gadgetRadius * 0.005F);
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, BombConfig.gadgetRadius);
 				entity2.posX = x;
 				entity2.posY = y;
 				entity2.posZ = z;
 				world.spawnEntity(entity2);
 			} else {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, 1000);
+				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, BombConfig.gadgetRadius);
 				entity2.posX = x;
 				entity2.posY = y - 15;
 				entity2.posZ = z;
@@ -194,4 +196,13 @@ public class NukeGadget extends BlockContainer implements IBomb {
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add("§2[Nuclear Bomb]§r");
+		tooltip.add(" §eRadius: "+BombConfig.gadgetRadius+"m§r");
+		if(!BombConfig.disableNuclear){
+			tooltip.add("§2[Fallout]§r");
+			tooltip.add(" §aRadius: "+(int)BombConfig.gadgetRadius*(1+BombConfig.falloutRange/100)+"m§r");
+		}
+	}
 }
