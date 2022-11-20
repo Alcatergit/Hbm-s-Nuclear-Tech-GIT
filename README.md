@@ -1,6 +1,9 @@
-# <u>**Alcaters HBM Nuclear Tech Mod 1.12.2 Fork**</u>
+# <u>**HBM Nuclear Tech Mod - 1.12.2 Alcater Edition**</u>
 
-This is my fork of the 1.12.2 fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT). 
+This is my 1.12.2 custom version of the mod
+which is forked from the fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT)
+which is forked from the fork made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)
+which is ported from the original mod made by [HBMTheBobcat](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT).
 
 
 The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-1-12-2-alcater-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
@@ -21,4 +24,9 @@ Press enter.
 Now just wait for the build to finish and the new Jar file will be in `Hbm-s-Nuclear-Tech-GIT\build\libs`.
 
 
-Discord: Alcater#2644
+####Discords:
+
+Alcater#2644
+Golem#9568
+Drillgon200#0288
+The Bobcat#8817
