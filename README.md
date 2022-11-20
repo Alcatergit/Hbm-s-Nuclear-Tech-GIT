@@ -1,8 +1,9 @@
 # <u>**HBM Nuclear Tech Mod - 1.12.2 Alcater Edition**</u>
 
 This is my 1.12.2 custom version of the mod
+
 which is forked from the fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT)
-which is forked from the fork made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)
+which is forked from the port made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)
 which is ported from the original mod made by [HBMTheBobcat](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT).
 
 
