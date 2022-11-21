@@ -44,7 +44,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public class EntityFalloutRain extends Entity implements IConstantRenderer, IChunkLoader {
+public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkLoader {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
 	public int revProgress;
 	public int radProgress;
@@ -52,12 +52,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	private Ticket loaderTicket;
 
-	private double s1;
-	private double s2;
-	private double s3;
-	private double s4;
-	private double s5;
-	private double s6;
 	private double fallingRadius;
 
 	private boolean firstTick = true;
@@ -67,7 +61,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	private static int tickDelayStatic = 20;
 	private int tickDelay = 0;
 
-	public EntityFalloutRain(World p_i1582_1_) {
+	public EntityRainDrop(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.ignoreFrustumCheck = false;
@@ -90,7 +84,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		return true;
 	}
 
-	public EntityFalloutRain(World p_i1582_1_, int maxage) {
+	public EntityRainDrop(World p_i1582_1_, int maxage) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.isImmuneToFire = true;
@@ -244,22 +238,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	private void stomp(MutableBlockPos pos, double dist) {
 		int stoneDepth = 0;
-		int maxStoneDepth = 0;		
-
-		if(dist > s1)
-			maxStoneDepth = 0;
-		else if(dist > s2)
-			maxStoneDepth = 1;
-		else if(dist > s3)
-			maxStoneDepth = 2;
-		else if(dist > s4)
-			maxStoneDepth = 3;
-		else if(dist > s5)
-			maxStoneDepth = 4;
-		else if(dist > s6)
-			maxStoneDepth = 5;
-		else if(dist <= s6)
-			maxStoneDepth = 6;
+		int maxStoneDepth = 6;
 
 		boolean lastReachedStone = false;
 		boolean reachedStone = false;
@@ -288,194 +267,9 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			if(bmaterial == Material.AIR || bmaterial.isLiquid()){
 				if(y < contactHeight && contactHeight < 420)
 					gapFound = true;
-				continue;
-			}
-
-			if(bblock == Blocks.BEDROCK){
-				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
-				break;
-			}
-
-			if(bblock.isFlammable(world, pos, EnumFacing.UP)) {
-				if(world.isAirBlock(pos.add(0, 1, 0)))
-					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
-			}
-
-			if(bblock instanceof BlockLeaves) {
-				world.setBlockToAir(pos);
-				continue;
-			}
-
-			// if(b.getBlock() == Blocks.WATER) {
-			// 	world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
-			// }
-
-			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s4){
-				world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
-				continue;
-			}
-
-			else if(bblock == Blocks.STONE) {
-				if(dist > s1 || stoneDepth==maxStoneDepth)
-					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
-				else if(dist > s2 || stoneDepth==maxStoneDepth-1)
-					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				else if(dist > s3 || stoneDepth==maxStoneDepth-2)
-					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				else if(dist > s4 || stoneDepth==maxStoneDepth-3)
-					world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-				else if(dist > s5 || stoneDepth==maxStoneDepth-4)
-					world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
-				else if(dist > s6 || stoneDepth==maxStoneDepth-5)
-					world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
-				else if(dist <= s6 || stoneDepth==maxStoneDepth-6)
-					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
-				else
-					break;
-				continue;
-
-			} else if(bblock == Blocks.GRASS) {
-				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-				continue;
-
-			} else if(bblock == Blocks.DIRT) {
-				BlockDirt.DirtType meta = b.getValue(BlockDirt.VARIANT);
-				if(meta == BlockDirt.DirtType.DIRT)
-					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
-				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
-					world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
-				else if(meta == BlockDirt.DirtType.PODZOL)
-					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
-				continue;
-
-			} else if(bblock == Blocks.SNOW_LAYER) {
-				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
-				continue;
-
-			} else if(bblock == Blocks.SNOW) {
-				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
-				continue;
-			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {
-				world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_earth.getDefaultState());
-				world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
-				continue;
-
-			} else if(bblock == Blocks.MYCELIUM) {
-				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
-				continue;
-			} else if(bblock == Blocks.SAND) {
-
-				if(rand.nextInt(60) == 0) {
-					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
-				}
-				continue;
-			}
-
-			else if(bblock == Blocks.CLAY) {
-				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
-				break;
-			}
-
-			else if(bblock == Blocks.MOSSY_COBBLESTONE) {
-				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
-				break;
-			}
-
-			else if(bblock == Blocks.COAL_ORE) {
-				if(dist < s5){
-					int ra = rand.nextInt(150);
-					if(ra < 7) {
-						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
-					} else if(ra < 10) {
-						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
-					}
-				}
-				continue;
-			}
-
-			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
-				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
-				if(meta == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
-				}
-				continue;
-			}
-
-			else if(bblock instanceof BlockLog) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-				continue;
-			}
-
-			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log) {
-				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_4) {
-				world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_3) {
-				world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_2) {
-				world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_1) {
-				world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_0) {
-				world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				continue;
-			}
-			else if(b.getBlock() == ModBlocks.sellafield_slaked) {
-				world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				continue;
-			}
-			else if(bblock == ModBlocks.ore_uranium) {
-				if(dist <= s6){
-					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-					else
-						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
-				}
-				break;
-			}
-
-			else if(bblock == ModBlocks.ore_nether_uranium) {
-				if(dist <= s5){
-					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-					else
-						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
-				}
-				break;
-
-			}
-
-			else if(bblock == ModBlocks.ore_gneiss_uranium) {
-				if(dist <= s4){
-					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-					else
-						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
-				}
-				break;
-				// this piece stops the "stomp" from reaching below ground
-			}
-			else if(bblock == ModBlocks.brick_concrete) {
-				if(rand.nextInt(80) == 0)
-					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
-				break;
-				// this piece stops the "stomp" from reaching below ground
 			}
 		}
-		if(dist < fallingRadius && gapFound)
+		if(gapFound)
 			letFall(world, pos, contactHeight-pos.getY());
 	}
 
@@ -497,15 +291,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	}
 
 	public void setScale(int i) {
-		this.dataManager.set(SCALE, Integer.valueOf(i));
-		s1 = 0.88 * i;
-		s2 = 0.48 * i;
-		s3 = 0.26 * i;
-		s4 = 0.15 * i;
-		s5 = 0.08 * i;
-		s6 = 0.05 * i;
-		fallingRadius = 0.55 * i + 16;
-
+		this.dataManager.set(SCALE, Integer.valueOf(i+16));
 	}
 
 	public int getScale() {

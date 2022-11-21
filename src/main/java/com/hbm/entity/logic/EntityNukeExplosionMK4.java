@@ -15,6 +15,7 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityRainDrop;
 import com.hbm.entity.effect.EntityDrying;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionNukeRay;
@@ -47,6 +48,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 	EntityFalloutUnderGround falloutBall;
 	EntityDrying dryingBomb;
 	EntityFalloutRain falloutRain;
+	EntityRainDrop rainDrop;
 	EntityDrying waterBomb;
 
 	public EntityNukeExplosionMK4(World p_i1582_1_) {
@@ -111,27 +113,66 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 					this.world.spawnEntity(falloutBall);
 				}
 				if(falloutBall.done){
-					if(!explosion.isContained){
-						if(floodPlease){
+					if(floodPlease){
+						if(waterBomb == null){
 							waterBomb = new EntityDrying(this.world);
 							waterBomb.posX = this.posX;
 							waterBomb.posY = this.posY;
 							waterBomb.posZ = this.posZ;
 							waterBomb.dryingmode = false;
-							waterBomb.setScale(this.radius+16);
+							waterBomb.setScale(this.radius+18);
 							this.world.spawnEntity(waterBomb);
+						} else if(waterBomb.done){
+							if(!explosion.isContained){
+								falloutRain = new EntityFalloutRain(this.world);
+								falloutRain.posX = this.posX;
+								falloutRain.posY = this.posY;
+								falloutRain.posZ = this.posZ;
+								falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100)) + falloutAdd));
+								this.world.spawnEntity(falloutRain);
+							}
+							this.setDead();
 						}
-						falloutRain = new EntityFalloutRain(this.world);
-						falloutRain.posX = this.posX;
-						falloutRain.posY = this.posY;
-						falloutRain.posZ = this.posZ;
-						falloutRain.setScale((int) (this.radius * (1+BombConfig.falloutRange / 100) + falloutAdd));
-						this.world.spawnEntity(falloutRain);
+					} else {
+						if(!explosion.isContained){
+							falloutRain = new EntityFalloutRain(this.world);
+							falloutRain.posX = this.posX;
+							falloutRain.posY = this.posY;
+							falloutRain.posZ = this.posZ;
+							falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100)) + falloutAdd));
+							this.world.spawnEntity(falloutRain);
+						}
+						this.setDead();
 					}
-					this.setDead();
 				}
 			} else {
-				this.setDead();
+				if(floodPlease){
+					if(waterBomb == null){
+						waterBomb = new EntityDrying(this.world);
+						waterBomb.posX = this.posX;
+						waterBomb.posY = this.posY;
+						waterBomb.posZ = this.posZ;
+						waterBomb.dryingmode = false;
+						waterBomb.setScale(this.radius+18);
+						this.world.spawnEntity(waterBomb);
+					} else if(waterBomb.done){
+						rainDrop = new EntityRainDrop(this.world);
+						rainDrop.posX = this.posX;
+						rainDrop.posY = this.posY;
+						rainDrop.posZ = this.posZ;
+						rainDrop.setScale((int)this.radius+16);
+						this.world.spawnEntity(rainDrop);
+						this.setDead();
+					}
+				}else {
+					rainDrop = new EntityRainDrop(this.world);
+					rainDrop.posX = this.posX;
+					rainDrop.posY = this.posY;
+					rainDrop.posZ = this.posZ;
+					rainDrop.setScale((int)this.radius+16);
+					this.world.spawnEntity(rainDrop);
+					this.setDead();
+				}
 			}
 		}
 	}

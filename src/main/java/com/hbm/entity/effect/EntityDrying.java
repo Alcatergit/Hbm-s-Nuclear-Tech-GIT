@@ -208,10 +208,8 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 		this.dataManager.set(SCALE, Integer.valueOf(i));
 		this.maxArea = i * i * 8;
 		this.xlast = -i;
-		if(i > 250)
-			this.speed = (int)(BombConfig.mk4*2F);
-		if(!dryingmode)
-			this.speed = (int)(this.speed * 0.25F);
+		if(i > 150)
+			this.speed = (int)(BombConfig.mk4);
 	}
 
 	public int getScale() {
