@@ -2933,6 +2933,7 @@ item.mp_warhead_15_nuclear_shark.name=Size 15 Nuclear Warhead
 item.mp_warhead_15_boxcar.name=Size 15 Boxcar?
 item.mp_warhead_15_n2.name=Size 15 N² Mine
 item.mp_warhead_15_balefire.name=Size 15 BF Warhead
+item.mp_warhead_15_mirv.name=Size 15 MIRV Warhead
 
 item.mp_fuselage_10_kerosene.name=Size 10 Kerosene Fuselage
 item.mp_fuselage_10_kerosene_camo.name=Size 10 Kerosene Fuselage

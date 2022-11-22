@@ -91,7 +91,8 @@ public class ItemMissile extends Item {
 		SCHRAB,
 		TAINT,
 		CLOUD,
-		VOLCANO
+		VOLCANO,
+		MIRV
 	}
 	
 	public enum FuelType {
@@ -274,6 +275,8 @@ public class ItemMissile extends Item {
 			return TextFormatting.LIGHT_PURPLE + "Cloud";
 		case VOLCANO:
 			return TextFormatting.DARK_RED + "Volcano";
+		case MIRV:
+			return TextFormatting.DARK_PURPLE + "MIRV";
 		default:
 			return TextFormatting.BOLD + "N/A";
 		}
