@@ -209,7 +209,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			j += 8;
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
 			
-			if (biome == Biomes.PLAINS || biome == Biomes.DESERT) {
+			if (biome.getDefaultTemperature() >= 1F ||  biome.getRainfall() < 2F) {
 				if (WorldConfig.radioStructure > 0 && rand.nextInt(WorldConfig.radioStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
@@ -220,7 +220,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (biome.getDefaultTemperature() >= 0.4F && biome.getRainfall() <= 0.6F) {
+			if (biome.getDefaultTemperature() <= 1F && biome.getRainfall() > 2F) {
 				if (WorldConfig.antennaStructure > 0 && rand.nextInt(WorldConfig.antennaStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
@@ -231,7 +231,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (!biome.canRain() && biome.getDefaultTemperature() >= 1.5F) {
+			if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
 				if (WorldConfig.atomStructure > 0 && rand.nextInt(WorldConfig.atomStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
@@ -249,7 +249,7 @@ public class HbmWorldGen implements IWorldGenerator {
 
 				new Bunker().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (biome.getDefaultTemperature() == 0.5F || biome.getDefaultTemperature() == 2.0F) {
+			if (biome.getDefaultTemperature() < 2F || biome.getDefaultTemperature() > 1.0F) {
 				if (WorldConfig.relayStructure > 0 && rand.nextInt(WorldConfig.relayStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
@@ -281,7 +281,7 @@ public class HbmWorldGen implements IWorldGenerator {
 
 				new Dud().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (WorldConfig.barrelStructure > 0 &&  biome == Biomes.DESERT && rand.nextInt(WorldConfig.barrelStructure) == 0) {
+			if (WorldConfig.barrelStructure > 0 && biome.getDefaultTemperature() > 3F && rand.nextInt(WorldConfig.barrelStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -304,7 +304,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-			if (biome.getDefaultTemperature() == 0.5F || biome.getDefaultTemperature() == 2.0F) {
+			if (biome.getDefaultTemperature() < 1F || biome.getDefaultTemperature() > 3F) {
 				if (WorldConfig.satelliteStructure > 0 && rand.nextInt(WorldConfig.satelliteStructure) == 0) {
 					for (int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
@@ -323,7 +323,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new Spaceship().generate(world, rand, new BlockPos(x, y, z));
 			}
 			
-			if (WorldConfig.radfreq > 0 && GeneralConfig.enableRad && rand.nextInt(WorldConfig.radfreq) == 0 && biome == Biomes.DESERT) {
+			if (WorldConfig.radfreq > 0 && GeneralConfig.enableRad && rand.nextInt(WorldConfig.radfreq) == 0 && biome.getDefaultTemperature() >= 4F) {
 
 				for (int a = 0; a < 1; a++) {
 					int x = i + rand.nextInt(16);
@@ -338,6 +338,38 @@ public class HbmWorldGen implements IWorldGenerator {
 
 					if (GeneralConfig.enableDebugMode)
 						MainRegistry.logger.info("[Debug] Successfully spawned raditation hotspot at " + x + " " + z);
+				}
+			}
+			if (WorldConfig.radfreq > 0 && GeneralConfig.enableRad && rand.nextInt((int)(WorldConfig.minefreq/2F)) == 0) {
+
+				int x = i + rand.nextInt(16);
+				int z = j + rand.nextInt(16);
+				int y = world.getHeight(x, z);
+
+
+				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)) {
+					int radi = rand.nextInt(128);
+					if(radi > 64){
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_0.getDefaultState());
+					}
+					else if(radi > 32){
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_1.getDefaultState());
+					}
+					else if(radi > 16){
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_2.getDefaultState());
+					}
+					else if(radi > 8){
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_3.getDefaultState());
+					}
+					else if(radi > 2){
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_4.getDefaultState());
+					}
+					else{
+						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_core.getDefaultState());
+					}
+
+					if (GeneralConfig.enableDebugMode)
+						MainRegistry.logger.info("[Debug] Successfully spawned small raditation hotspot at " + x + " " + y + " " + z);			
 				}
 			}
 			
@@ -372,7 +404,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new LibraryDungeon().generate(world, rand, new BlockPos(x, y, z));
 			}
 			
-			if (WorldConfig.geyserWater > 0 && biome == Biomes.PLAINS && rand.nextInt(WorldConfig.geyserWater) == 0) {
+			if (WorldConfig.geyserWater > 0 && biome.getRainfall() > 2F && rand.nextInt(WorldConfig.geyserWater) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -380,7 +412,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.GRASS)
 					new Geyser().generate(world, rand, new BlockPos(x, y, z));
 			}
-			if (WorldConfig.geyserChlorine > 0 && biome == Biomes.DESERT && rand.nextInt(WorldConfig.geyserChlorine) == 0) {
+			if (WorldConfig.geyserChlorine > 0 && biome.getDefaultTemperature() > 3F && biome.getRainfall() < 1F && rand.nextInt(WorldConfig.geyserChlorine) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -396,7 +428,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				if (world.getBlockState(new BlockPos(x, y - 1, z)).getBlock() == Blocks.STONE)
 					world.setBlockState(new BlockPos(x, y - 1, z), ModBlocks.geysir_vapor.getDefaultState());
 			}
-			if (WorldConfig.capsuleStructure > 0 && biome == Biomes.BEACH && rand.nextInt(WorldConfig.capsuleStructure) == 0) {
+			if (WorldConfig.capsuleStructure > 0 && biome.getDefaultTemperature() <= 1F && rand.nextInt(WorldConfig.capsuleStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z) - 4;
@@ -514,7 +546,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			
-			if((biome == Biomes.JUNGLE || biome == Biomes.JUNGLE_EDGE || biome == Biomes.JUNGLE_HILLS) &&
+			if((biome.isHighHumidity() || biome.getTempCategory() == Biome.TempCategory.WARM) &&
 					WorldConfig.jungleStructure > 0 && rand.nextInt(WorldConfig.jungleStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
@@ -533,14 +565,14 @@ public class HbmWorldGen implements IWorldGenerator {
 				world.setBlockState(new BlockPos(x, y + 3, z), Blocks.REDSTONE_BLOCK.getDefaultState());
 			}
 			
-			if (WorldConfig.arcticStructure > 0 && rand.nextInt(WorldConfig.arcticStructure) == 0) {
+			if (WorldConfig.arcticStructure > 0 && biome.getTempCategory() == Biome.TempCategory.COLD && rand.nextInt(WorldConfig.arcticStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = 16 + rand.nextInt(32);
 				new ArcticVault().trySpawn(world, x, y, z);
 			}
 			
-			if (WorldConfig.pyramidStructure > 0 && biome.getDefaultTemperature() >= 2.0F && !biome.canRain() && rand.nextInt(WorldConfig.pyramidStructure) == 0) {
+			if (WorldConfig.pyramidStructure > 0 && biome.getDefaultTemperature() >= 3.0F && rand.nextInt(WorldConfig.pyramidStructure) == 0) {
 				int x = i + rand.nextInt(16);
 				int z = j + rand.nextInt(16);
 				int y = world.getHeight(x, z);
@@ -548,7 +580,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				new AncientTomb().build(world, rand, x, y, z);
 			}
 			
-			if(!biome.canRain() && biome.getDefaultTemperature() >= 1.5F) {
+			if(!biome.canRain() && biome.getDefaultTemperature() >= 3F) {
 				if(rand.nextInt(200) == 0) {
 					for(int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);

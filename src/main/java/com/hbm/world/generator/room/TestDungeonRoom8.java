@@ -45,7 +45,7 @@ public class TestDungeonRoom8 extends CellularDungeonRoom {
 		case 2: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_starmetal.getDefaultState(), 3); break;
 		case 3: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.statue_elb_f.getDefaultState(), 3); break;
 		case 4: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.crate_red.getDefaultState(), 3); break;
-		case 5: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.fire_balefire.getDefaultState(), 3); break;
+		case 5: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.balefire.getDefaultState(), 3); break;
 		case 6: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_meteor.getDefaultState(), 3); break;
 		case 7:
 			world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.safe.getDefaultState(), 3);

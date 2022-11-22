@@ -213,7 +213,7 @@ public class ModBlocks {
 	public static final Block crystal_virus = new CrystalVirus(Material.IRON, "crystal_virus").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	public static final Block crystal_hardened = new BlockBase(Material.IRON, "crystal_hardened").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
 	public static final Block crystal_pulsar = new CrystalPulsar(Material.IRON, "crystal_pulsar").setHardness(15.0F).setResistance(Float.POSITIVE_INFINITY).setCreativeTab(null);
-	public static final Block fire_balefire = new Balefire("fire_balefire").setHardness(0.0F).setLightLevel(1.0F).setCreativeTab(null);
+	public static final Block balefire = new Balefire("balefire").setHardness(0.0F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block fire_digamma = new DigammaFlame("fire_digamma").setHardness(0.0F).setResistance(150F).setLightLevel(1.0F).setCreativeTab(null);
 	public static final Block digamma_matter = new DigammaMatter("digamma_matter").setBlockUnbreakable().setResistance(18000000).setCreativeTab(null);
 	
@@ -561,7 +561,7 @@ public class ModBlocks {
 	//Radiation blocks
 	public static final Block mush = new BlockMush(Material.PLANTS, "mush").setLightLevel(0.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block mush_block = new BlockMushHuge(Material.PLANTS, "mush_block").setLightLevel(1.0F).setHardness(0.2F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block mush_block_stem = new BlockMushHuge(Material.PLANTS, "mush_block_stem").setLightLevel(1.0F).setHardness(0.3F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block mush_block_stem = new BlockMushHuge(Material.PLANTS, "mush_block_stem").setLightLevel(0.25F).setHardness(0.3F).setCreativeTab(MainRegistry.blockTab);
 	
 	public static final Block block_waste = new BlockNuclearWaste("block_waste").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).addRadiation(ItemHazard.wst * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_waste_painted = new BlockNuclearWaste("block_waste_painted").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).addRadiation(ItemHazard.wst * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
@@ -569,7 +569,7 @@ public class ModBlocks {
 	public static final Block waste_earth = new WasteEarth(Material.GROUND, true, 0.25F, 7.5F, "waste_earth").setSoundType(SoundType.GROUND).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_dirt = new WasteEarth(Material.GROUND, false, 0.15F, 5F, "waste_dirt").setSoundType(SoundType.GROUND).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_grass_tall = new WasteGrassTall(Material.PLANTS, "waste_grass_tall").setCreativeTab(MainRegistry.blockTab);
-	public static final Block waste_mycelium = new WasteEarth(Material.GROUND, true, 1.0F, 25.0F, "waste_mycelium").setSoundType(SoundType.GROUND).setLightLevel(1.0F).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block waste_mycelium = new WasteEarth(Material.GROUND, true, 1.0F, 25.0F, "waste_mycelium").setSoundType(SoundType.GROUND).setLightLevel(0.25F).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_trinitite = new WasteEarth(Material.SAND, false, 0.15F, 5F, "waste_trinitite").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_trinitite_red = new WasteEarth(Material.SAND, false, 0.15F, 5F, "waste_trinitite_red").setSoundType(SoundType.SAND).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block waste_log = new WasteLog(Material.WOOD, "waste_log").setSoundType(SoundType.WOOD).setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.blockTab);
@@ -590,11 +590,11 @@ public class ModBlocks {
 	public static final Block block_smore = new BlockBase(Material.ROCK, "block_smore").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(900.0F);
 	
 	public static final Block sellafield_slaked = new BlockBase(Material.ROCK, "sellafield_slaked").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_0 = new BlockOre(Material.ROCK, 0.5F, 5.0F, "sellafield_0").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_1 = new BlockOre(Material.ROCK, 1.0F, 10.0F, "sellafield_1").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_2 = new BlockOre(Material.ROCK, 2.0F, 20.0F, "sellafield_2").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_3 = new BlockOre(Material.ROCK, 4.0F, 40.0F, "sellafield_3").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.blockTab);
-	public static final Block sellafield_4 = new BlockOre(Material.ROCK, 8.0F, 80.0F, "sellafield_4").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_0 = new BlockOre(Material.ROCK, 1.0F, 5.0F, "sellafield_0").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_1 = new BlockOre(Material.ROCK, 2.0F, 10.0F, "sellafield_1").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_2 = new BlockOre(Material.ROCK, 4.0F, 20.0F, "sellafield_2").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_3 = new BlockOre(Material.ROCK, 8.0F, 40.0F, "sellafield_3").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block sellafield_4 = new BlockOre(Material.ROCK, 16.0F, 80.0F, "sellafield_4").setSoundType(SoundType.STONE).setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block sellafield_core = new BlockOre(Material.ROCK, 40.0F, 4000.0F, "sellafield_core").setSoundType(SoundType.STONE).setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.blockTab);
 	
 	public static final Block geysir_water = new BlockGeysir(Material.ROCK, "geysir_water").setSoundType(SoundType.STONE).setHardness(5.0F);

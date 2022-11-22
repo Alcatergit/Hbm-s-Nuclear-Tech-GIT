@@ -42,7 +42,7 @@ public class WorldConfig {
 	public static int endTikiteSpawn = 8;
 	
 	public static int radioStructure = 500;
-	public static int antennaStructure = 250;
+	public static int antennaStructure = 750;
 	public static int atomStructure = 500;
 	public static int vertibirdStructure = 500;
 	public static int dungeonStructure = 64;
@@ -113,7 +113,7 @@ public class WorldConfig {
 		Property propRadio = config.get(CATEGORY_DUNGEON, "4.00_radioSpawn", 500);
 		propRadio.setComment("Spawn radio station on every nTH chunk");
 		radioStructure = propRadio.getInt();
-		Property propAntenna = config.get(CATEGORY_DUNGEON, "4.01_antennaSpawn", 250);
+		Property propAntenna = config.get(CATEGORY_DUNGEON, "4.01_antennaSpawn", 750);
 		propAntenna.setComment("Spawn antenna on every nTH chunk");
 		antennaStructure = propAntenna.getInt();
 		Property propAtom = config.get(CATEGORY_DUNGEON, "4.02_atomSpawn", 500);

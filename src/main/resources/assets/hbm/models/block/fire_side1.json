@@ -1,7 +1,7 @@
 {
     "parent": "hbm:block/fire_side",
     "textures": {
-        "particle": "hbm:blocks/fire_balefire",
-        "fire": "hbm:blocks/fire_balefire"
+        "particle": "hbm:blocks/balefire",
+        "fire": "hbm:blocks/balefire"
     }
 }

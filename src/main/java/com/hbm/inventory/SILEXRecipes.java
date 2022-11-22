@@ -74,7 +74,7 @@ public class SILEXRecipes {
 				);
 
 		itemTranslation.put(new ComparableStack(ModItems.powder_lapis), new ComparableStack(Items.DYE, 1, 4));
-		recipes.put(new ComparableStack(Items.DYE, 1, 4), new SILEXRecipe(100, 100, EnumWavelengths.MICRO)
+		recipes.put(new ComparableStack(Items.DYE, 1, 4), new SILEXRecipe(100, 100, EnumWavelengths.RADIO)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.sulfur), 4))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_aluminium), 3))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cobalt), 3))
@@ -736,7 +736,7 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 50))
 				.addOut(new WeightedRandomObject(new ItemStack(ModBlocks.mush), 35))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nuclear_waste_tiny), 15))
-				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_bismuth), 3))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_bismuth), 2))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_radspice), 1))
 				);
 		recipes.put(new ComparableStack(ModBlocks.mush_block, 1), new SILEXRecipe(100, 640, EnumWavelengths.DRX)
@@ -753,6 +753,144 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.ingot_electronium), 30))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.glitch), 1))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.singularity_spark), 2))
+				);
+		//Crystals metals
+		recipes.put(new ComparableStack(ModItems.crystal_iron), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_iron), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_titanium), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_gold), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_gold), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_copper), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_copper), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.sulfur), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_lead), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lead), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_gold), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_titanium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_titanium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_iron), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_tungsten), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_tungsten), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_iron), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_aluminium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_aluminium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_iron), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_thorium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_thorium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_uranium), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_uranium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_uranium), 9))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_polonium), 3))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_plutonium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_plutonium), 6))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_polonium), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_schrabidium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_schrabidium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_plutonium), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_cobalt), new SILEXRecipe(1100, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cobalt), 9))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_copper), 3))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_beryllium), new SILEXRecipe(900, 100, EnumWavelengths.MICRO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_beryllium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_emerald), 1))
+				);
+		//crystals minerals
+		recipes.put(new ComparableStack(ModItems.crystal_lapis), new SILEXRecipe(900, 30, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lapis), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cobalt_tiny), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_coal), new SILEXRecipe(900, 40, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_coal), 7))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lignite), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_redstone), new SILEXRecipe(1000, 50, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(Items.REDSTONE), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.bottle_mercury), 2))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_fluorite), new SILEXRecipe(900, 35, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.fluorite), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lithium_tiny), 2))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_niter), new SILEXRecipe(900, 35, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.niter), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lithium), 2))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_rare), new SILEXRecipe(400, 100, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_neodymium), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cobalt), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_niobium), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cerium), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lanthanium), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_actinium), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_trixite), new SILEXRecipe(900, 90, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_plutonium), 7))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_cobalt), 6))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_spark_mix), 1))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_nitan_mix), 3))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_lithium), new SILEXRecipe(900, 100, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_lithium), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_quartz), 2))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_starmetal), new SILEXRecipe(900, 80, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_astatine), 3))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_dura_steel), 4))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_cobalt), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 5))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_phosphorus), new SILEXRecipe(900, 80, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_fire), 10))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 4))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.ingot_phosphorus), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_diamond), new SILEXRecipe(900, 100, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_diamond), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_meteorite_tiny), 1))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_sulfur), new SILEXRecipe(900, 50, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.sulfur), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 2))
+				);
+		recipes.put(new ComparableStack(ModItems.crystal_cinnebar), new SILEXRecipe(900, 100, EnumWavelengths.RADIO)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.cinnebar), 5))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 2))
+				.addOut(new WeightedRandomObject(new ItemStack(Items.REDSTONE), 1))
 				);
 	}
 	

@@ -36,7 +36,7 @@ public class BlockCoalOil extends Block {
         	IBlockState nS = world.getBlockState(pos.offset(dir));
         	Block n = nS.getBlock();
 
-        	if(n == ModBlocks.ore_coal_oil_burning || n == ModBlocks.fire_balefire || n == Blocks.FIRE || nS.getMaterial() == Material.LAVA) {
+        	if(n == ModBlocks.ore_coal_oil_burning || n == ModBlocks.balefire || n == Blocks.FIRE || nS.getMaterial() == Material.LAVA) {
         		world.scheduleUpdate(pos, this, world.rand.nextInt(20) + 2);
         	}
         }
