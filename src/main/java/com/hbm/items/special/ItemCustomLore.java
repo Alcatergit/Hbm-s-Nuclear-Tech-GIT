@@ -310,6 +310,15 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("'Tantalum'");
 		}
+		if(this == ModItems.missile_micro)
+		{
+			list.add("§2[Nuclear Micro Missile]§r");
+			list.add(" §eRadius: "+BombConfig.fatmanRadius+"m§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2[Fallout]§r");
+				list.add(" §aRadius: "+(int)BombConfig.fatmanRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			}
+		}
 		if(this == ModItems.missile_nuclear)
 		{
 			list.add("§2[Nuclear Missile]§r");
