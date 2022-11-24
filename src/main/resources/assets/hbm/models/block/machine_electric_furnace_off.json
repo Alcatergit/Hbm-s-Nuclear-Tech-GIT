@@ -3,6 +3,7 @@
 	"textures": {
 		"top": "hbm:blocks/machine_electric_furnace",
 		"front": "hbm:blocks/machine_electric_furnace_front_off",
-		"side": "hbm:blocks/machine_electric_furnace"
+		"side": "hbm:blocks/machine_electric_furnace_side",
+		"bottom": "hbm:blocks/machine_electric_furnace_bottom"
 	}
 }
