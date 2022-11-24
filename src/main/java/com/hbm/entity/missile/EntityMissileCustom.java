@@ -383,15 +383,13 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 					           
 					double mod;
 					double mod2;
-					for(int i = 0; i < 8; i++) {
+					for(int i = 0; i < 6; i++) {
 						EntityMIRV nuke3 = new EntityMIRV(this.world);
 						nuke3.setPosition(posX,posY,posZ);      
 						mod = (i == 1 || i == 2) ? 1 : -1; 
 						mod2 = (i == 1 || i == 3) ? 1 : -1;
 						
-						if(i==5){ mod2 = 0; mod = 2;}
-						if(i==6){ mod2 = 0; mod = -2;}
-						if(i==7){ mod2 = 0; mod = 0;}
+						if(i==5){ mod2 = 0; mod = 0;}
 
 						nuke3.motionX = this.motionX+mod;
 						nuke3.motionY = this.motionY;
