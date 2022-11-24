@@ -78,10 +78,10 @@ public class MissileTab extends CreativeTabs {
 		
 		list.add(ItemCustomMissile.buildMissile(
 				ModItems.mp_chip_5,
-				ModItems.mp_warhead_15_boxcar,
-				ModItems.mp_fuselage_15_kerosene_blackjack,
-				ModItems.mp_stability_15_thin,
-				ModItems.mp_thruster_15_kerosene).setStackDisplayName(TextFormatting.RED + "Auntie Blackjack"));
+				ModItems.mp_warhead_15_mirv,
+				ModItems.mp_fuselage_15_kerosene_lambda,
+				ModItems.mp_stability_15_soyuz,
+				ModItems.mp_thruster_15_kerosene).setStackDisplayName(TextFormatting.BLUE + "7 For 1 Package Deal"));
 		
 		list.add(ItemCustomMissile.buildMissile(
 				ModItems.mp_chip_4,

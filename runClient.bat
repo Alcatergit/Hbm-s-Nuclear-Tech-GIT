@@ -1,0 +1,1 @@
+./gradlew runClient --no-daemon

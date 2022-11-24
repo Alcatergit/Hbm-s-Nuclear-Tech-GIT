@@ -291,7 +291,8 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		this.getDataManager().set(HEALTH, this.health);
 		if(world.isRemote)
 			template = this.getDataManager().get(TEMPLATE);
-        
+
+		WarheadType type1 = (WarheadType)template.warhead.attributes[0];;
 		this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, 0, 0);
 
 		this.rotation();
@@ -367,10 +368,40 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			for(int i = 0; i < velocity; i++)
 				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, null);
 		}
-
+		if(type1 == WarheadType.MIRV){
+			mirvSplit();   		
+		}
 		loadNeighboringChunks((int)(posX / 16), (int)(posZ / 16));
 	}
-	
+	  public void mirvSplit(){
+	    	if((motionY <= 0) && (posY <= 300)) {
+				
+				if(world.isRemote)
+					return;    
+				               
+					this.setDead();
+					           
+					double mod;
+					double mod2;
+					for(int i = 0; i < 6; i++) {
+						EntityMIRV nuke3 = new EntityMIRV(this.world);
+						nuke3.setPosition(posX,posY,posZ);      
+						mod = (i == 1 || i == 2) ? 1 : -1; 
+						mod2 = (i == 1 || i == 3) ? 1 : -1;
+						
+						if(i==5){ mod2 = 0; mod = 0;}
+
+						nuke3.motionX = this.motionX+mod;
+						nuke3.motionY = this.motionY;
+						nuke3.motionZ = this.motionZ+mod2;
+						this.world.spawnEntity(nuke3);
+						
+					}
+					
+					
+				}
+			}
+		
 	@Override
 	@SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
@@ -400,6 +431,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			break;
 		case NUCLEAR:
 		case TX:
+		case MIRV:
 	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) strength, posX, posY, posZ));
 	    	
 			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, strength);

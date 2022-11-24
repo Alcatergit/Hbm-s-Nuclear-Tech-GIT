@@ -264,7 +264,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 	private void mushWrapper(EntityNukeCloudSmall cloud, float interp) {
 
     	float size = cloud.getDataManager().get(EntityNukeCloudSmall.SCALE) * 5;
-    	float maxage = cloud.getDataManager().get(EntityNukeCloudSmall.MAXAGE);
+    	float maxage = (float) cloud.getDataManager().get(EntityNukeCloudSmall.MAXAGE);
 
     	
     	double height = Math.max(20 - 1000 / (cloud.age + interp - 13), 0);
