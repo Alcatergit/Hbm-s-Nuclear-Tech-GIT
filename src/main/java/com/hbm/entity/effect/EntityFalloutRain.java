@@ -231,12 +231,15 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	}
 
 	private void letFall(World world, MutableBlockPos pos, int maxDepth){
+		boolean fall = RadiationConfig.blocksFall;
+		int fallChance = RadiationConfig.blocksFallCh;
+		int chance = world.rand.nextInt(100);
 		for(int i = 0; i <= maxDepth; i++) {
 			if(!world.isAirBlock(pos.add(0, i, 0))){
 				float hardness = world.getBlockState(pos.add(0, i, 0)).getBlock().getExplosionResistance(null);
-				if(hardness > 0 && hardness < 10){
+				if(hardness > 0 && hardness < 10 && chance <= fallChance && fall){
 					EntityFallingBlock entityFallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY() + 0.5D + i, pos.getZ() + 0.5D, world.getBlockState(pos.add(0, i, 0)));
-					world.spawnEntity(entityFallingBlock);
+					world.spawnEntity(entityFallingBlock);		
 				}
 			}
 		}

@@ -13,6 +13,8 @@ public class RadiationConfig {
 	public static int worldRad = 10;
 	public static int worldRadThreshold = 20;
 	public static boolean worldRadEffects = true;
+	public static boolean blocksFall = false;
+	public static int blocksFallCh = 20;
 	
 	//Drillgon200: Not sure why I put these here, but oh well.
 	public static int railgunDamage = 100;
@@ -45,6 +47,8 @@ public class RadiationConfig {
 		worldRad = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.10_worldRadCount", "How many block operations radiation can perform per tick", 10);
 		worldRadThreshold = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.11_worldRadThreshold", "The least amount of RADs required for block modification to happen", 40);
 		worldRadEffects = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "6.12_worldRadEffects", "Whether high radiation levels should perform changes in the world", true);
+		blocksFall = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "6.13_blocksFall", "Whether Nukes should make blocks fall down, disabled by default due to lag issues", false);
+		blocksFallCh = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "6.14_blocksFallCh", "The chance (in percentage form) that a block with low blast resistance will fall down ", 20);
 		// railgun
 		Property railDamage = config.get(CATEGORY_NUKE, "6.11_railgunDamage", 1000);
 		railDamage.setComment("How much damage a railgun death blast does per tick");
