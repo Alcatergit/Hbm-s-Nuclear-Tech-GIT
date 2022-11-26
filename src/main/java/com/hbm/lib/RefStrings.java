@@ -3,7 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Alcater Edition";
-	public static final String VERSION = "hbm-1.12.2-1.8.1a";
+	public static final String VERSION = "hbm-1.12.2-1.8.1b";
+	public static final String CHANGELOG = "§2Added: -\n§3Changed: Dynosphere Recipes\n§6Fixed: Cyclotron Antimatter Recipe, RBMK Steam Water Pipe Connection, Nuke Fallout Drop Lagg";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version
