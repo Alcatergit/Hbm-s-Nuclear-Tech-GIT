@@ -4,7 +4,7 @@ public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Alcater Edition";
 	public static final String VERSION = "hbm-1.12.2-1.8.1b";
-	public static final String CHANGELOG = "§2Added: -\n§3Changed: Dynosphere Recipes\n§6Fixed: Cyclotron Antimatter Recipe, RBMK Steam Water Pipe Connection, Nuke Fallout Drop Lagg";
+	public static final String CHANGELOG = "§2Added: Cyclotron Automation, WasteLeafes, Recipe for hf_sword, hs_sword, Cobalt-60 billet$§3Changed: Turret Gui, Crystal Recipes$§6Fixed: Howard CWIS Range balance, Fusion Blanket Temp, AMS Limiter gui";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version
