@@ -78,8 +78,8 @@ public class ModForgeFluids {
 	public static Fluid watz = new Fluid("watz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid cryogel = new Fluid("cryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE).setTemperature(50);
 
-	public static Fluid hydrogen = new Fluid("hydrogen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_flowing"), null, Color.WHITE).setTemperature(20);
-	public static Fluid oxygen = new Fluid("oxygen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_flowing"), null, Color.WHITE).setTemperature(70);
+	public static Fluid hydrogen = new Fluid("hydrogen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hydrogen_flowing"), null, Color.WHITE).setTemperature(21);
+	public static Fluid oxygen = new Fluid("oxygen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oxygen_flowing"), null, Color.WHITE).setTemperature(90);
 	public static Fluid xenon = new Fluid("xenon", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/xenon_flowing"), null, Color.WHITE).setTemperature(163);
 	public static Fluid balefire = new Fluid("balefire", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/balefire_flowing"), null, Color.WHITE).setTemperature(15000 + 273);
 
@@ -97,7 +97,7 @@ public class ModForgeFluids {
 	public static Fluid gasoline = new Fluid("gasoline", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_flowing"), null, Color.WHITE);
 	
 	//Block fluids
-	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(2773);
+	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(220+273);
 	public static Fluid radwater_fluid = new RadWaterFluid("radwater_fluid").setDensity(1000);
 	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid schrabidic = new SchrabidicFluid("schrabidic").setDensity(31200).setViscosity(500).setTemperature(273);

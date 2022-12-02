@@ -7,6 +7,7 @@ import com.hbm.blocks.turret.TurretBase;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.missile.EntityMissileCustom;
+import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.lib.Library;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETurretCIWSPacket;
@@ -114,10 +115,10 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 	}
 
 	private boolean isInSight(Entity e) {
-		if (!(e instanceof EntityLivingBase) && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber) && !(e instanceof EntityMissileCustom))
+		if (!(e instanceof EntityLivingBase) && !(e instanceof EntityMissileBaseAdvanced) && !(e instanceof EntityBomber) && !(e instanceof EntityMIRV) && !(e instanceof EntityMissileCustom))
 			return false;
 
-		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom) && !(e instanceof EntityBomber))
+		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom || e instanceof EntityBomber || e instanceof EntityMIRV))
 			return false;
 		if (e instanceof EntityPlayer && players.contains((((EntityPlayer) e).getUniqueID().toString())))
 			return false;

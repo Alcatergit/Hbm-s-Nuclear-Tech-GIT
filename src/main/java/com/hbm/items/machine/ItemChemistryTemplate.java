@@ -85,8 +85,10 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		PUF6,
 		SAS3,
 		DYN_SCHRAB,
+		DYN_STR,
 		DYN_EUPH,
 		DYN_DNT,
+		DYN_EL,
 		CORDITE,
 		KEVLAR,
 		CONCRETE,
@@ -260,12 +262,16 @@ public static int getProcessTime(ItemStack stack) {
         	return 150;
         case SAS3:
         	return 200;
+ 	case DYN_STR:
+        	return 30*20;
         case DYN_SCHRAB:
         	return 1*60*20;
         case DYN_EUPH:
         	return 3*60*20;
         case DYN_DNT:
         	return 5*60*20;
+        case DYN_EL:
+        	return 10*60*20;
         case CORDITE:
         	return 40;
         case KEVLAR:

@@ -115,18 +115,21 @@ public class GunB93 extends Item {
 						exp.posX = entity.posX;
 						exp.posY = entity.posY;
 						exp.posZ = entity.posZ;
-						exp.destructionRange = 50;
-						exp.speed = 25;
-						exp.coefficient = 1.0F;
-						exp.waste = false;
+						if(!EntityNukeExplosionMK3.isJammed(world, exp)){
+							
+							exp.destructionRange = 50;
+							exp.speed = 25;
+							exp.coefficient = 1.0F;
+							exp.waste = false;
 
-						world.spawnEntity(exp);
-			    		
-			    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, 50);
-			    		cloud.posX = entity.posX;
-			    		cloud.posY = entity.posY;
-			    		cloud.posZ = entity.posZ;
-			    		world.spawnEntity(cloud);
+							world.spawnEntity(exp);
+				    		
+				    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, 50);
+				    		cloud.posX = entity.posX;
+				    		cloud.posY = entity.posY;
+				    		cloud.posZ = entity.posZ;
+				    		world.spawnEntity(cloud);
+				    	}
 			    	}
 				}
 			}

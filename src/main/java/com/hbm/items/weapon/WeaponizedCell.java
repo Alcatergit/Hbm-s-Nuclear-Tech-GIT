@@ -40,18 +40,20 @@ public class WeaponizedCell extends Item {
 				exp.posX = item.posX;
 				exp.posY = item.posY;
 				exp.posZ = item.posZ;
-				exp.destructionRange = 100;
-				exp.speed = 25;
-				exp.coefficient = 1.0F;
-				exp.waste = false;
+				if(!EntityNukeExplosionMK3.isJammed(world, exp)){
+					exp.destructionRange = 100;
+					exp.speed = 25;
+					exp.coefficient = 1.0F;
+					exp.waste = false;
 
-				world.spawnEntity(exp);
-	    		
-	    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, 100);
-	    		cloud.posX = item.posX;
-	    		cloud.posY = item.posY;
-	    		cloud.posZ = item.posZ;
-	    		world.spawnEntity(cloud);
+					world.spawnEntity(exp);
+		    		
+		    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, 100);
+		    		cloud.posX = item.posX;
+		    		cloud.posY = item.posY;
+		    		cloud.posZ = item.posZ;
+		    		world.spawnEntity(cloud);
+		    	}
 	    	}
 	    		
 	    	item.setDead();

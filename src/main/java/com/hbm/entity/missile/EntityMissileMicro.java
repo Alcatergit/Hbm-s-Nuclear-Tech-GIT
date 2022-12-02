@@ -27,13 +27,6 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
 	public void onImpact() {
         if (!this.world.isRemote)
         {
-    		/*EntityNukeExplosionMK3 entity0 = new EntityNukeExplosionMK3(this.worldObj);
-    	    entity0.posX = this.posX;
-    	    entity0.posY = this.posY;
-    	    entity0.posZ = this.posZ;
-    	    entity0.destructionRange = MainRegistry.fatmanRadius;
-    	    entity0.speed = MainRegistry.blastSpeed;
-    	    entity0.coefficient = 10.0F;*/
     	    	
     	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
     	    

@@ -81,9 +81,11 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 	}
 	
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if(i == 4 || i==5){
-			if(stack != null && stack.getItem() instanceof ItemRTGPellet)
-				return true;
+		if(i == 4 || i == 5){
+			return (stack != null && stack.getItem() instanceof ItemRTGPellet);
+		}
+		if(i == 2 || i == 6){
+			return (stack != null && !(stack.getItem() instanceof ItemRTGPellet));
 		}
 		return false;
 	}

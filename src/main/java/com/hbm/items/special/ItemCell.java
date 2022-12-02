@@ -68,19 +68,21 @@ public class ItemCell extends Item {
 					entity.posX = entityItem.posX;
 					entity.posY = entityItem.posY;
 					entity.posZ = entityItem.posZ;
-					entity.destructionRange = (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F));
+					if(!EntityNukeExplosionMK3.isJammed(entityItem.world, entity)){
+						entity.destructionRange = (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F));
 
-					entity.speed = 25;
-					entity.coefficient = 1.0F;
-					entity.waste = false;
+						entity.speed = 25;
+						entity.coefficient = 1.0F;
+						entity.waste = false;
 
-					entityItem.world.spawnEntity(entity);
+						entityItem.world.spawnEntity(entity);
 
-					EntityCloudFleija cloud = new EntityCloudFleija(entityItem.world, (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F)));
-					cloud.posX = entityItem.posX;
-					cloud.posY = entityItem.posY;
-					cloud.posZ = entityItem.posZ;
-					entityItem.world.spawnEntity(cloud);
+						EntityCloudFleija cloud = new EntityCloudFleija(entityItem.world, (int) (BombConfig.aSchrabRadius * (FluidUtil.getFluidContained(entityItem.getItem()).amount / 1000.0F)));
+						cloud.posX = entityItem.posX;
+						cloud.posY = entityItem.posY;
+						cloud.posZ = entityItem.posZ;
+						entityItem.world.spawnEntity(cloud);
+					}
 				}
 				return true;
 			}

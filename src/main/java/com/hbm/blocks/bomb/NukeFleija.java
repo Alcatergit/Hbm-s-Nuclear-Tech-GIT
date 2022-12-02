@@ -115,21 +115,23 @@ public class NukeFleija extends BlockContainer implements IBomb {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, world.rand.nextFloat() * 0.1F + 0.9F);
 			
 			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(world);
-    		entity.posX = x;
-    		entity.posY = y;
-    		entity.posZ = z;
-    		entity.destructionRange = r;
-    		entity.speed = BombConfig.blastSpeed;
-    		entity.coefficient = 1.0F;
-    		entity.waste = false;
-    	
-    		world.spawnEntity(entity);
-    		
-    		EntityCloudFleija cloud = new EntityCloudFleija(world, r);
-    		cloud.posX = x;
-    		cloud.posY = y;
-    		cloud.posZ = z;
-    		world.spawnEntity(cloud);
+			entity.posX = x;
+			entity.posY = y;
+			entity.posZ = z;
+			if(!EntityNukeExplosionMK3.isJammed(world, entity)){
+	    		entity.destructionRange = r;
+	    		entity.speed = BombConfig.blastSpeed;
+	    		entity.coefficient = 1.0F;
+	    		entity.waste = false;
+	    	
+	    		world.spawnEntity(entity);
+	    		
+	    		EntityCloudFleija cloud = new EntityCloudFleija(world, r);
+	    		cloud.posX = x;
+	    		cloud.posY = y;
+	    		cloud.posZ = z;
+	    		world.spawnEntity(cloud);
+	    	}
     	}
     	
 		return false;

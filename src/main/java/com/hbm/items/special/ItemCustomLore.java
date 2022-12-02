@@ -455,6 +455,9 @@ public class ItemCustomLore extends Item {
 			this == ModItems.powder_unobtainium || 
 			this == ModItems.nugget_unobtainium || 
 			this == ModItems.ingot_unobtainium || 
+			this == ModItems.nugget_unobtainium_greater || 
+			this == ModItems.nugget_unobtainium_lesser || 
+			this == ModItems.billet_unobtainium ||
 			
 			this == ModItems.solinium_core ||
 			this == ModItems.crystal_schrabidium ||
@@ -477,6 +480,9 @@ public class ItemCustomLore extends Item {
 			this == ModItems.gun_revolver_cursed_ammo || 
 			this == ModItems.powder_power || 
 			this == ModItems.powder_yellowcake || 
+			this == ModItems.billet_australium || 
+			this == ModItems.billet_australium_greater || 
+			this == ModItems.billet_australium_lesser || 
 
 			this == ModItems.ingot_australium || 
 			this == ModItems.ingot_weidanium || 
@@ -484,6 +490,8 @@ public class ItemCustomLore extends Item {
 			this == ModItems.ingot_verticium || 
 
 			this == ModItems.nugget_australium || 
+			this == ModItems.nugget_australium_greater || 
+			this == ModItems.nugget_australium_lesser || 
 			this == ModItems.nugget_weidanium || 
 			this == ModItems.nugget_reiium || 
 			this == ModItems.nugget_verticium || 

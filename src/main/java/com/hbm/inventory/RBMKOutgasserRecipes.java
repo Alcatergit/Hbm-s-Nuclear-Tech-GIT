@@ -37,8 +37,8 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(160000, "ingotGold", new ItemStack(ModItems.ingot_au198));
 		RBMKOutgasserRecipes.setRecipe(30000, "nuggetGold", new ItemStack(ModItems.nugget_au198));
 		RBMKOutgasserRecipes.setRecipe(150000, "dustGold", new ItemStack(ModItems.powder_au198));
-		RBMKOutgasserRecipes.setRecipe(6000, Blocks.BROWN_MUSHROOM, new ItemStack(ModBlocks.mush_block));
-		RBMKOutgasserRecipes.setRecipe(6000, Blocks.RED_MUSHROOM, new ItemStack(ModBlocks.mush_block));
+		RBMKOutgasserRecipes.setRecipe(6000, Blocks.BROWN_MUSHROOM, new ItemStack(ModBlocks.mush));
+		RBMKOutgasserRecipes.setRecipe(6000, Blocks.RED_MUSHROOM, new ItemStack(ModBlocks.mush));
 		RBMKOutgasserRecipes.setRecipe(18000, Items.MUSHROOM_STEW, new ItemStack(ModItems.glowing_stew));
 		RBMKOutgasserRecipes.setRecipe(9000, "ingotTh232", new ItemStack(ModItems.ingot_u233));
 		RBMKOutgasserRecipes.setRecipe(6000, "ingotU233", new ItemStack(ModItems.ingot_u235));
@@ -51,8 +51,6 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(60000000, "ingotPu241", new ItemStack(ModItems.ingot_am241));
 		RBMKOutgasserRecipes.setRecipe(750000, "ingotAm241", new ItemStack(ModItems.ingot_am242));
 		RBMKOutgasserRecipes.setRecipe(69000, "ingotSchrabidium", new ItemStack(ModItems.ingot_solinium));
-		RBMKOutgasserRecipes.setRecipe(690000, "ingotSolinium", new ItemStack(ModItems.nugget_euphemium));
-		RBMKOutgasserRecipes.setRecipe(6900000, "ingotEuphemium", new ItemStack(ModItems.nugget_dineutronium));
 		RBMKOutgasserRecipes.setRecipe(50000, ModItems.ingot_cobalt, new ItemStack(ModItems.ingot_co60));
 		RBMKOutgasserRecipes.setRecipe(90000, "dustCobalt", new ItemStack(ModItems.powder_co60));
 		RBMKOutgasserRecipes.setRecipe(55000, ModItems.ingot_strontium, new ItemStack(ModItems.ingot_sr90));
@@ -74,6 +72,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(160000, "nuggetAustralium", new ItemStack(ModItems.nugget_verticium));
 		RBMKOutgasserRecipes.setRecipe(160000, "nuggetVerticium", new ItemStack(ModItems.nugget_unobtainium));
 		RBMKOutgasserRecipes.setRecipe(160000, "nuggetUnobtainium", new ItemStack(ModItems.nugget_daffergon));
+		RBMKOutgasserRecipes.setRecipe(320000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
 		RBMKOutgasserRecipes.setRecipe(3000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
 		RBMKOutgasserRecipes.setRecipe(2000, Blocks.STONE, new ItemStack(ModBlocks.sellafield_slaked));
 		RBMKOutgasserRecipes.setRecipe(4000, ModBlocks.sellafield_slaked, new ItemStack(ModBlocks.sellafield_0));
@@ -83,8 +82,6 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(64000, ModBlocks.sellafield_3, new ItemStack(ModBlocks.sellafield_4));
 		RBMKOutgasserRecipes.setRecipe(128000, ModBlocks.sellafield_4, new ItemStack(ModBlocks.sellafield_core));
 		RBMKOutgasserRecipes.setRecipe(7800000, ModBlocks.block_corium_cobble, new ItemStack(ModBlocks.block_corium));
-		RBMKOutgasserRecipes.setRecipe(1000000000, ModItems.particle_muon, new ItemStack(ModItems.ingot_electronium));
-		RBMKOutgasserRecipes.setRecipe(2000000000, ModItems.particle_tachyon, new ItemStack(ModItems.nugget_u238m2));
 	}
 
 	public static void setRecipe(int requiredFlux, ItemStack in, ItemStack out) {

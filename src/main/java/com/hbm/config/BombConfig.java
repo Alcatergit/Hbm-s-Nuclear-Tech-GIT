@@ -15,7 +15,7 @@ public class BombConfig {
 	public static int soliniumRadius = 150;
 	public static int n2Radius = 200;
 	public static int missileRadius = 100;
-	public static int mirvRadius = 100;
+	public static int mirvRadius = 60;
 	public static int fatmanRadius = 35;
 	public static int nukaRadius = 25;
 	public static int aSchrabRadius = 20;
@@ -23,7 +23,8 @@ public class BombConfig {
 	public static int mk4 = 1024;
 	public static int blastSpeed = 1024;
 	public static int falloutRange = 100;
-	public static int fSpeed = 256;
+	public static int fChunkSpeed = 6;
+	public static int oceanHeight = 62;
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear;
 	
@@ -53,7 +54,7 @@ public class BombConfig {
 		Property propMissile = config.get(CATEGORY_NUKES, "3.07_missileRadius", 100);
 		propMissile.setComment("Radius of the nuclear missile");
 		missileRadius = propMissile.getInt();
-		Property propMirv = config.get(CATEGORY_NUKES, "3.08_mirvRadius", 100);
+		Property propMirv = config.get(CATEGORY_NUKES, "3.08_mirvRadius", 60);
 		propMirv.setComment("Radius of a MIRV");
 		mirvRadius = propMirv.getInt();
 		Property propFatman = config.get(CATEGORY_NUKES, "3.09_fatmanRadius", 35);
@@ -89,11 +90,15 @@ public class BombConfig {
 		falloutRangeProp.setComment("Radius of fallout area (base radius * value in percent)");
 		falloutRange = falloutRangeProp.getInt();
 		// new explosion speed
-		Property falloutSpeed = config.get(CATEGORY_NUKE, "6.04_falloutSpeed", 256);
-		falloutSpeed.setComment("Blocks processed per tick by the fallout rain");
-		fSpeed = falloutSpeed.getInt();
+		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 6);
+		falloutChunkSpeed.setComment("Process a Chunk every nth tick by the fallout rain");
+		fChunkSpeed = falloutChunkSpeed.getInt();
 		//Whether fallout and nuclear radiation is enabled at all
-		Property disableNuclearP = config.get(CATEGORY_NUKE, "6.05_disableNuclear", false);
+		Property waterHeight = config.get(CATEGORY_NUKE, "6.05_nukeWaterHeight", 62);
+		waterHeight.setComment("The water height that the nuke fills the crater with if in wet area. Should be ocean height.");
+		oceanHeight = waterHeight.getInt();
+		//Whether fallout and nuclear radiation is enabled at all
+		Property disableNuclearP = config.get(CATEGORY_NUKE, "6.06_disableNuclear", false);
 		disableNuclearP.setComment("Disable the nuclear part of nukes");
 		disableNuclear = disableNuclearP.getBoolean();
 	}

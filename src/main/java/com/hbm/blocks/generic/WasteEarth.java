@@ -7,6 +7,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;
@@ -97,6 +98,11 @@ public class WasteEarth extends Block {
 		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium){
 			worldIn.spawnParticle(EnumParticleTypes.TOWN_AURA, pos.getX() + rand.nextFloat(), pos.getY() + 1.1F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 		}
+	}
+
+	@Override
+	public boolean canEntitySpawn(IBlockState state, Entity entityIn){
+		return ContaminationUtil.isRadImmune(entityIn);
 	}
 	
 	@Override

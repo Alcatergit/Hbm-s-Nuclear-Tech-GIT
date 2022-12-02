@@ -19,6 +19,7 @@ public class HTTPHandler {
 	public static boolean newVersion = false;
 	public static boolean optifine = false;
 	public static String versionNumber = "";
+	public static String changes = "";
 
 	public static void loadStats() {
 
@@ -78,6 +79,16 @@ public class HTTPHandler {
             	newVersion = !RefStrings.VERSION.equals(sub);
             	versionNumber = sub;
     	        MainRegistry.logger.info("Found version " + sub);
+            }
+            if(line.contains("String CHANGELOG")) {
+
+            	int begin = line.indexOf('"');
+            	int end = line.lastIndexOf('"');
+
+            	String sub = line.substring(begin + 1, end);
+
+            	changes = sub.replaceAll("Â", "");
+    	        MainRegistry.logger.info("Found changelog " + sub);
     	        break;
             }
         }

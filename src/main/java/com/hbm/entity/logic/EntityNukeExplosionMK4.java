@@ -11,6 +11,7 @@ import net.minecraft.util.math.ChunkPos;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
@@ -21,7 +22,13 @@ import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionNukeRay;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.entity.Entity;
@@ -61,6 +68,38 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		this.speed = speed;
 	}
 
+	private void radiate(float rads, double range) {
+		
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
+		MutableBlockPos rayPos = new BlockPos.MutableBlockPos();
+		for(EntityLivingBase e : entities) {
+			
+			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
+			double len = vec.lengthVector();
+			vec = vec.normalize();
+			
+			float res = 0;
+			
+			for(int i = 1; i < len; i++) {
+
+				int ix = (int)Math.floor(posX + vec.xCoord * i);
+				int iy = (int)Math.floor(posY + vec.yCoord * i);
+				int iz = (int)Math.floor(posZ + vec.zCoord * i);
+				
+				res += world.getBlockState(rayPos.setPos(posX+vec.xCoord * i, posY+vec.yCoord * i, posZ+vec.zCoord * i)).getBlock().getExplosionResistance(null);
+			}
+			
+			if(res < 1)
+				res = 1;
+			
+			float eRads = rads;
+			eRads /= (float)res;
+			eRads /= (float)(len * len);
+			
+			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 		if(radius == 0) {
@@ -68,14 +107,15 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			return;
 		}
 
-		if(!world.isRemote && fallout && explosion != null && falloutRain == null) {
+		if(!world.isRemote && fallout && falloutRain == null) {
 			RadiationSavedData.getData(world);
 
 			// float radMax = (float) (length / 2F * Math.pow(length, 2) / 35F);
-			float radMax = Math.min((float) (radius * Math.pow(radius, 1.5) * 17.5F), 1500000);
+			float radMax = Math.min((float) (Math.pow(radius, 2.5) * 17.5F), 1500000);
 			// System.out.println(radMax);
-			float rad = radMax / 4F;
+			float rad = radMax / 10F;
 			RadiationSavedData.incrementRad(world, this.getPosition(), rad, radMax);
+			this.radiate(radMax * 0.1F, radius);
 		}
 
 		if(!mute) {
@@ -109,7 +149,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 					falloutBall.posX = this.posX;
 					falloutBall.posY = this.posY;
 					falloutBall.posZ = this.posZ;
-					falloutBall.setScale((int) (this.radius * (BombConfig.falloutRange / 100) + falloutAdd));
+					falloutBall.setScale((int) (this.radius * (BombConfig.falloutRange / 100F) + falloutAdd));
 					this.world.spawnEntity(falloutBall);
 				}
 				if(falloutBall.done){
@@ -128,7 +168,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 								falloutRain.posX = this.posX;
 								falloutRain.posY = this.posY;
 								falloutRain.posZ = this.posZ;
-								falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100)) + falloutAdd));
+								falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+32);
 								this.world.spawnEntity(falloutRain);
 							}
 							this.setDead();
@@ -139,7 +179,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 							falloutRain.posX = this.posX;
 							falloutRain.posY = this.posY;
 							falloutRain.posZ = this.posZ;
-							falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100)) + falloutAdd));
+							falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+32);
 							this.world.spawnEntity(falloutRain);
 						}
 						this.setDead();

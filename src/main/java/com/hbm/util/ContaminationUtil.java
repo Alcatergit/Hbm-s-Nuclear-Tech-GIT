@@ -93,11 +93,11 @@ public class ContaminationUtil {
 
 	public static void printGeigerData(EntityPlayer player) {
 
-		double eRad = ((int)(Library.getEntRadCap(player).getRads() * 1000)) / 1000D;
+		double eRad = ((long)(Library.getEntRadCap(player).getRads() * 1000)) / 1000D;
 
 		RadiationSavedData data = RadiationSavedData.getData(player.world);
-		double rads = ((int)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
-		double env = ((int)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
+		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
+		double env = ((long)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
 
 		double res = ((int)(10000D - ContaminationUtil.calculateRadiationMod(player) * 10000)) / 100D;
 		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;

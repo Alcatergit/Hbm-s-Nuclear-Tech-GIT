@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.blocks.machine.MachineBattery;
@@ -11,6 +12,7 @@ import com.hbm.interfaces.ISource;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import net.minecraft.item.Item;
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,15 +39,15 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public boolean conducts = false;
 	
 	private static final int[] slots_top = new int[] {0};
-	private static final int[] slots_bottom = new int[] {0, 1};
-	private static final int[] slots_side = new int[] {1};
+	private static final int[] slots_bottom = new int[] {1, 3};
+	private static final int[] slots_side = new int[] {2};
 	public int age = 0;
 	public List<IConsumer> list = new ArrayList<IConsumer>();
 	
 	private String customName;
 	
 	public TileEntityMachineBattery() {
-		super(2);
+		super(4);
 	}
 	
 	public TileEntityMachineBattery(long power) {
@@ -113,18 +115,10 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		switch(i)
-		{
-		case 0:
-			if(stack.getItem() instanceof IBatteryItem)
-				return true;
-			break;
-		case 1:
-			if(stack.getItem() instanceof IBatteryItem)
-				return true;
-			break;
-		}
-		
+		if(i == 0)
+			return (stack.getItem() instanceof IBatteryItem);
+		if(i == 2)
+			return (stack.getItem() instanceof IBatteryItem);
 		return true;
 	}
 	
@@ -135,18 +129,38 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-		
-		if(itemStack.getItem() instanceof IBatteryItem) {
-			IBatteryItem item = ((IBatteryItem)itemStack.getItem());
-			if(i == 0 && item.getCharge(itemStack) == 0) {
-				return true;
-			}
-			if(i == 1 && item.getCharge(itemStack) == item.getMaxCharge()) {
-				return true;
+		return (i == 1 || i == 3);
+	}
+
+	public void tryMoveItems() {
+		ItemStack itemStackDrain = inventory.getStackInSlot(0);
+		if(itemStackDrain.getItem() instanceof IBatteryItem) {
+			IBatteryItem itemDrain = ((IBatteryItem)itemStackDrain.getItem());
+			if(itemDrain.getCharge(itemStackDrain) == 0) {
+				if(inventory.getStackInSlot(1) == null || inventory.getStackInSlot(1).isEmpty()){
+					inventory.setStackInSlot(1, itemStackDrain);
+					inventory.setStackInSlot(0, ItemStack.EMPTY);
+				}
 			}
 		}
-			
-		return false;
+		ItemStack itemStackFill = inventory.getStackInSlot(2);
+		if(itemStackFill.getItem() instanceof IBatteryItem) {
+			IBatteryItem itemFill = ((IBatteryItem)itemStackFill.getItem());
+			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge()) {
+				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
+					inventory.setStackInSlot(3, itemStackFill);
+					inventory.setStackInSlot(2, ItemStack.EMPTY);
+				}
+			}
+		}else{
+			Item itemFillX = itemStackFill.getItem();
+			if(itemFillX == ModItems.dynosphere_desh_charged || itemFillX == ModItems.dynosphere_schrabidium_charged || itemFillX == ModItems.dynosphere_euphemium_charged || itemFillX == ModItems.dynosphere_dineutronium_charged){
+				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
+					inventory.setStackInSlot(3, itemStackFill);
+					inventory.setStackInSlot(2, ItemStack.EMPTY);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -170,8 +184,8 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			}
 			long prevPower = this.power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			power = Library.chargeItemsFromTE(inventory, 1, power, maxPower);
-
+			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
+			tryMoveItems();
 			long avg = (power + prevPower) / 2;
 			this.powerDelta = avg - this.log[0];
 
@@ -273,7 +287,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	private boolean detectConducts;
 	private long detectPower;
 	
-	private void detectAndSendChanges() {
+	public void detectAndSendChanges() {
 		boolean mark = false;
 		
 		if(detectConducts != conducts){

@@ -45,7 +45,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkLoader {
-	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityRainDrop.class, DataSerializers.VARINT);
 	public int revProgress;
 	public int radProgress;
 	public boolean done=false;
@@ -58,7 +58,7 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 	private final List<Long> chunksToProcess = new ArrayList<>();
 	private final List<Long> outerChunksToProcess = new ArrayList<>();
 
-	private static int tickDelayStatic = 20;
+	private static int tickDelayStatic = BombConfig.fChunkSpeed;
 	private int tickDelay = 0;
 
 	public EntityRainDrop(World p_i1582_1_) {
@@ -224,15 +224,32 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 		}
 	}
 
-	private void letFall(World world, MutableBlockPos pos, int maxDepth){
-		for(int i = 0; i <= maxDepth; i++) {
-			if(!world.isAirBlock(pos.add(0, i, 0))){
-				float hardness = world.getBlockState(pos.add(0, i, 0)).getBlock().getExplosionResistance(null);
-				if(hardness > 0 && hardness < 10){
-					EntityFallingBlock entityFallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY() + 0.5D + i, pos.getZ() + 0.5D, world.getBlockState(pos.add(0, i, 0)));
-					world.spawnEntity(entityFallingBlock);
+	private void letFall(World world, MutableBlockPos pos, int lastGapHeight, int contactHeight){
+		int fallChance = RadiationConfig.blocksFallCh;
+		if(fallChance < 1)
+			return;
+		if(fallChance < 100){
+			int chance = world.rand.nextInt(100);
+			if(chance < fallChance)
+				return;
+		}
+		
+		int bottomHeight = lastGapHeight;
+		MutableBlockPos gapPos = new MutableBlockPos(pos.getX(), 0, pos.getZ());
+		
+		for(int i = lastGapHeight; i <= contactHeight; i++) {
+			pos.setY(i);
+			Block b = world.getBlockState(pos).getBlock();
+			if(!b.isReplaceable(world, pos)){
+
+				float hardness = b.getExplosionResistance(null);
+				if(hardness > 0 && hardness < 10 && i!=bottomHeight){
+					gapPos.setY(bottomHeight);
+					world.setBlockState(gapPos, world.getBlockState(pos));
+					world.setBlockToAir(pos);
 				}
-			}
+				bottomHeight++;
+			}	
 		}
 	}
 
@@ -243,6 +260,7 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 		boolean lastReachedStone = false;
 		boolean reachedStone = false;
 		int contactHeight = 420;
+		int lastGapHeight = 420;
 		boolean gapFound = false;
 		for(int y = 255; y >= 0; y--) {
 			pos.setY(y);
@@ -251,7 +269,7 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 			Material bmaterial = b.getMaterial();
 			lastReachedStone = reachedStone;
 
-			if(bblock.isNormalCube(b) && contactHeight == 420)
+			if(bblock.isCollidable() && contactHeight == 420)
 				contactHeight = Math.min(y+1, 255);
 			
 			if(reachedStone && bmaterial != Material.AIR){
@@ -265,12 +283,14 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 			}
 			
 			if(bmaterial == Material.AIR || bmaterial.isLiquid()){
-				if(y < contactHeight && contactHeight < 420)
+				if(y < contactHeight){
 					gapFound = true;
+					lastGapHeight = y;
+				}
 			}
 		}
 		if(gapFound)
-			letFall(world, pos, contactHeight-pos.getY());
+			letFall(world, pos, lastGapHeight, contactHeight);
 	}
 
 	

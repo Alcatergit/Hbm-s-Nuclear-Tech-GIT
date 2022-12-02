@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineCyclotron;
+import com.hbm.blocks.BlockDummyable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,6 +19,13 @@ public class RenderCyclotron extends TileEntitySpecialRenderer<TileEntityMachine
 	public void render(TileEntityMachineCyclotron cyc, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
+
+        switch(cyc.getBlockMetadata()) {
+		case 14: GL11.glRotatef(0, 0F, 1F, 0F); break;
+		case 12: GL11.glRotatef(270, 0F, 1F, 0F); break;
+		case 15: GL11.glRotatef(180, 0F, 1F, 0F); break;
+		case 13: GL11.glRotatef(90, 0F, 1F, 0F); break;
+		}
         
         GlStateManager.enableLighting();
         GL11.glEnable(GL11.GL_LIGHTING);

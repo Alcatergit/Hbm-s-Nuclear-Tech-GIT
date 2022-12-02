@@ -58,13 +58,13 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	private double s4;
 	private double s5;
 	private double s6;
-	private double fallingRadius;
+	private int fallingRadius;
 
 	private boolean firstTick = true;
 	private final List<Long> chunksToProcess = new ArrayList<>();
 	private final List<Long> outerChunksToProcess = new ArrayList<>();
 
-	private static int tickDelayStatic = 20;
+	private static int tickDelayStatic = BombConfig.fChunkSpeed;
 	private int tickDelay = 0;
 
 	public EntityFalloutRain(World p_i1582_1_) {
@@ -192,7 +192,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					int chunkPosZ = (int) (chunkPos >> 32 & Integer.MAX_VALUE);
 					for(int x = chunkPosX << 4; x < (chunkPosX << 4) + 16; x++) {
 						for(int z = chunkPosZ << 4; z < (chunkPosZ << 4) + 16; z++) {
-							stomp(new MutableBlockPos(x, 0, z), Math.hypot(x - posX, z - posZ) * 100F / (float)getScale());
+							stomp(new MutableBlockPos(x, 0, z), Math.hypot(x - posX, z - posZ));
 						}
 					}
 					
@@ -204,7 +204,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 						for(int z = chunkPosZ << 4; z < (chunkPosZ << 4) + 16; z++) {
 							double distance = Math.hypot(x - posX, z - posZ);
 							if(distance <= getScale()) {
-								stomp(new MutableBlockPos(x, 0, z), distance * 100F / (float)getScale());
+								stomp(new MutableBlockPos(x, 0, z), distance);
 							}
 						}
 					}
@@ -230,20 +230,35 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		}
 	}
 
-	private void letFall(World world, MutableBlockPos pos, int maxDepth){
-		boolean fall = RadiationConfig.blocksFall;
+	private void letFall(World world, MutableBlockPos pos, int lastGapHeight, int contactHeight){
 		int fallChance = RadiationConfig.blocksFallCh;
-		int chance = world.rand.nextInt(100);
-		for(int i = 0; i <= maxDepth; i++) {
-			if(!world.isAirBlock(pos.add(0, i, 0))){
-				float hardness = world.getBlockState(pos.add(0, i, 0)).getBlock().getExplosionResistance(null);
-				if(hardness > 0 && hardness < 10 && chance <= fallChance && fall){
-					EntityFallingBlock entityFallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY() + 0.5D + i, pos.getZ() + 0.5D, world.getBlockState(pos.add(0, i, 0)));
-					world.spawnEntity(entityFallingBlock);		
+		if(fallChance < 1)
+			return;
+		if(fallChance < 100){
+			int chance = world.rand.nextInt(100);
+			if(chance < fallChance)
+				return;
+		}
+		
+		int bottomHeight = lastGapHeight;
+		MutableBlockPos gapPos = new MutableBlockPos(pos.getX(), 0, pos.getZ());
+		
+		for(int i = lastGapHeight; i <= contactHeight; i++) {
+			pos.setY(i);
+			Block b = world.getBlockState(pos).getBlock();
+			if(!b.isReplaceable(world, pos)){
+
+				float hardness = b.getExplosionResistance(null);
+				if(hardness > 0 && hardness < 20 && i!=bottomHeight){
+					gapPos.setY(bottomHeight);
+					world.setBlockState(gapPos, world.getBlockState(pos));
+					world.setBlockToAir(pos);
 				}
-			}
+				bottomHeight++;
+			}	
 		}
 	}
+
 
 	private void stomp(MutableBlockPos pos, double dist) {
 		int stoneDepth = 0;
@@ -267,6 +282,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		boolean lastReachedStone = false;
 		boolean reachedStone = false;
 		int contactHeight = 420;
+		int lastGapHeight = 420;
 		boolean gapFound = false;
 		for(int y = 255; y >= 0; y--) {
 			pos.setY(y);
@@ -275,7 +291,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			Material bmaterial = b.getMaterial();
 			lastReachedStone = reachedStone;
 
-			if(bblock.isNormalCube(b) && contactHeight == 420)
+			if(bblock.isCollidable() && contactHeight == 420)
 				contactHeight = Math.min(y+1, 255);
 			
 			if(reachedStone && bmaterial != Material.AIR){
@@ -289,8 +305,10 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 			
 			if(bmaterial == Material.AIR || bmaterial.isLiquid()){
-				if(y < contactHeight && contactHeight < 420)
+				if(y < contactHeight){
 					gapFound = true;
+					lastGapHeight = y;
+				}
 				continue;
 			}
 
@@ -299,13 +317,27 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				break;
 			}
 
-			if(bblock.isFlammable(world, pos, EnumFacing.UP)) {
+			if(dist < s1 && bblock.isFlammable(world, pos, EnumFacing.UP)) {
 				if(world.isAirBlock(pos.add(0, 1, 0)))
 					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
 			}
 
+			if(bblock == ModBlocks.waste_leaves){
+				if(dist <= s1)
+					world.setBlockToAir(pos);
+				continue;
+			}
+
 			if(bblock instanceof BlockLeaves) {
-				world.setBlockToAir(pos);
+				if(dist > s1)
+					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+				else
+					world.setBlockToAir(pos);
+				continue;
+			}
+
+			if(bblock == Blocks.BROWN_MUSHROOM || bblock == Blocks.RED_MUSHROOM){
+				world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				continue;
 			}
 
@@ -313,7 +345,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			// 	world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
 			// }
 
-			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s4){
+			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s1){
 				world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
 				continue;
 			}
@@ -358,9 +390,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			} else if(bblock == Blocks.SNOW) {
 				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
 				continue;
-			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {
-				world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_earth.getDefaultState());
-				world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
+			} else if(bblock instanceof BlockBush) {
+				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS){
+					world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_earth.getDefaultState());
+					world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
+				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.MYCELIUM){
+					world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_mycelium.getDefaultState());
+					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
+				}
 				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
@@ -377,12 +414,12 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			else if(bblock == Blocks.CLAY) {
 				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
-				break;
+				continue;
 			}
 
 			else if(bblock == Blocks.MOSSY_COBBLESTONE) {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
-				break;
+				continue;
 			}
 
 			else if(bblock == Blocks.COAL_ORE) {
@@ -476,17 +513,20 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
 				break;
 				// this piece stops the "stomp" from reaching below ground
+			} 
+			else if(bblock.getExplosionResistance(null) > 200){
+				break;
 			}
 		}
 		if(dist < fallingRadius && gapFound)
-			letFall(world, pos, contactHeight-pos.getY());
+			letFall(world, pos, lastGapHeight, contactHeight);
 	}
 
 	
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-		setScale(p_70037_1_.getInteger("scale"));
+		setScale(p_70037_1_.getInteger("scale"), p_70037_1_.getInteger("dropRadius"));
 		revProgress = p_70037_1_.getInteger("revProgress");
 		radProgress = p_70037_1_.getInteger("radProgress");
 	}
@@ -494,21 +534,21 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
 		p_70014_1_.setInteger("scale", getScale());
+		p_70014_1_.setInteger("dropRadius", fallingRadius);
 		p_70014_1_.setInteger("revProgress", revProgress);
 		p_70014_1_.setInteger("radProgress", radProgress);
 
 	}
 
-	public void setScale(int i) {
+	public void setScale(int i, int craterRadius) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
-		s1 = 0.88 * i;
-		s2 = 0.48 * i;
-		s3 = 0.26 * i;
-		s4 = 0.15 * i;
-		s5 = 0.08 * i;
-		s6 = 0.05 * i;
-		fallingRadius = 0.55 * i + 16;
-
+		this.s1 = 0.75D * i;
+		this.s2 = 0.50D * i;
+		this.s3 = 0.25D * i;
+		this.s4 = 0.15D * i;
+		this.s5 = 0.08D * i;
+		this.s6 = 0.05D * i;
+		this.fallingRadius = craterRadius;
 	}
 
 	public int getScale() {

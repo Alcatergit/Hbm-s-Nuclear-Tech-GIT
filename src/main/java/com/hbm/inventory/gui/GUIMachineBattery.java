@@ -54,7 +54,7 @@ public class GUIMachineBattery extends GuiInfoContainer {
 
 		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 52, 52, mouseX, mouseY, info);
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52, mouseX, mouseY, info);
 
 
 		String[] text = new String[] { "Click the buttons on the right",
@@ -69,13 +69,13 @@ public class GUIMachineBattery extends GuiInfoContainer {
 	protected void mouseClicked(int x, int y, int i) throws IOException {
     	super.mouseClicked(x, y, i);
 		
-    	if(guiLeft + 133 <= x && guiLeft + 133 + 18 > x && guiTop + 16 < y && guiTop + 16 + 18 >= y) {
+    	if(guiLeft + 7 <= x && guiLeft + 7 + 18 > x && guiTop + 34 < y && guiTop + 34 + 18 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(battery.getPos(), 0, 0));
     	}
 		
-    	if(guiLeft + 133 <= x && guiLeft + 133 + 18 > x && guiTop + 52 < y && guiTop + 52 + 18 >= y) {
+    	if(guiLeft + 151 <= x && guiLeft + 151 + 18 > x && guiTop + 34 < y && guiTop + 34 + 18 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(battery.getPos(), 0, 1));
@@ -100,14 +100,14 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		if(battery.power > 0) {
 			int i = (int)battery.getPowerRemainingScaled(52);
-			drawTexturedModalRect(guiLeft + 62, guiTop + 69 - i, 176, 52 - i, 52, i);
+			drawTexturedModalRect(guiLeft + 71, guiTop + 69 - i, 176, 52 - i, 34, i);
 		}
 		
 		int i = battery.redLow;
-		drawTexturedModalRect(guiLeft + 133, guiTop + 16, 176, 52 + i * 18, 18, 18);
+		drawTexturedModalRect(guiLeft + 7, guiTop + 34, 176, 52 + i * 18, 18, 18);
 		
 		int j = battery.redHigh;
-		drawTexturedModalRect(guiLeft + 133, guiTop + 52, 176, 52 + j * 18, 18, 18);
+		drawTexturedModalRect(guiLeft + 151, guiTop + 34, 176, 52 + j * 18, 18, 18);
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		

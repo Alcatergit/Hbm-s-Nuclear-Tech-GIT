@@ -182,7 +182,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	}
 
 	public boolean tryToggle(EntityPlayer player){
-		if(state == 0 && redstonePower > 0){
+		if(state == 0 && redstonePower > 0) {
 			//Redstone "power locks" doors, just like minecraft iron doors
 			return false;
 		}

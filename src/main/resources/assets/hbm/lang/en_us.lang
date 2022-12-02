@@ -8,7 +8,8 @@ itemGroup.tabTest=Nuclear Tech Mod Test Tab
 itemGroup.tabParts=NTM Resources and Parts
 itemGroup.tabControl=NTM Machine Items and Fuel
 itemGroup.tabTemplate=NTM Templates
-itemGroup.tabBlocks=NTM Ores and Blocks
+itemGroup.tabRessource=NTM Ressources
+itemGroup.tabBlocks=NTM Blocks
 itemGroup.tabMachine=NTM Machines
 itemGroup.tabNuke=NTM Bombs
 itemGroup.tabMissile=NTM Missiles and Satellites
@@ -36,7 +37,21 @@ armor.sprintBoost=Sprint Boost
 armor.electricJetpack=Electric Jetpack
 armor.glider=Glider
 
+key.categories.hbm.craneLoad=RBMK Crane Load
+key.categories.hbm.craneMoveDown=RBMK Crane Move Down
+key.categories.hbm.craneMoveLeft=RBMK Crane Move Left
+key.categories.hbm.craneMoveRight=RBMK Crane Move Right
+key.categories.hbm.craneMoveUp=RBMK Crane Move Up
+key.categories.hbm.reload=Reload
+key.categories.hbm.toggleBack=Toggle Back
+key.categories.hbm.toggleHUD=Toggel Hud
+
+item.nugget_unobtainium_greater.name=Unobtainium-440 Nugget
+item.nugget_unobtainium_lesser.name=Unobtainium-439 Nugget
+
+tile.waste_leaves.name=Waste Leaves
 tile.fluid_duct_solid.name=Sealed Fluid Duct
+tile.field_disturber.name=High Energy Field Jammer
 
 tile.reinforced_brick_slab.name=Reinforced Brick Slab
 tile.reinforced_brick_stairs.name=Reinforced Brick Stairs
@@ -714,9 +729,11 @@ chem.BP_BIOGAS=Biogas Production
 chem.BP_BIOFUEL=Biofuel Transesterification
 chem.SAS3=Schrabidium Trisulfide Production
 chem.NITAN=NITAN Super Fuel Mixing
+chem.DYN_STR=Neoveline Dynosynthesis
 chem.DYN_SCHRAB=Schrabidium Dynosynthesis
 chem.DYN_EUPH=Euphemium Dynosynthesis
 chem.DYN_DNT=Dineutronium Dynosynthesis
+chem.DYN_EL=Electronium Dynosynthesis
 chem.CORDITE=Cordite Production
 chem.KEVLAR=Kevlar Compound Production
 chem.SOLID_FUEL=Solid Rocket Fuel Production

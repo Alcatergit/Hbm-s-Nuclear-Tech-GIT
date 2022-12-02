@@ -67,7 +67,9 @@ public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 
 	@Override
 	public double getDecetorRange(){
-		return 250D;
+		if(this.targetPlayers)
+			return 48D;
+		return 300D;
 	}
 
 	@Override

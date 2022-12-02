@@ -374,33 +374,33 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		loadNeighboringChunks((int)(posX / 16), (int)(posZ / 16));
 	}
 	  public void mirvSplit(){
-	    	if((motionY <= 0) && (posY <= 300)) {
-				
-				if(world.isRemote)
-					return;    
-				               
-					this.setDead();
-					           
-					double mod;
-					double mod2;
-					for(int i = 0; i < 6; i++) {
-						EntityMIRV nuke3 = new EntityMIRV(this.world);
-						nuke3.setPosition(posX,posY,posZ);      
-						mod = (i == 1 || i == 2) ? 1 : -1; 
-						mod2 = (i == 1 || i == 3) ? 1 : -1;
-						
-						if(i==5){ mod2 = 0; mod = 0;}
+    	if((motionY <= 0) && (posY <= 300)) {
+			
+			if(world.isRemote)
+				return;    
+			               
+			this.setDead();
+			           
+			double modx = 0;
+			double modz = 0;
+			for(int i = 0; i < 7; i++) {
+				EntityMIRV nuke3 = new EntityMIRV(this.world);
+				nuke3.setPosition(posX,posY,posZ);
+				if(i==0){ modx = 0; modz = 0;}
+				if(i==1){ modx = 3; modz = 0;}
+				if(i==2){ modx = -3; modz = 0;}
+				if(i==3){ modx = 1; modz = 2;}
+				if(i==4){ modx = -1; modz = -2;}
+				if(i==5){ modx = 1; modz = -2;}
+				if(i==6){ modx = -1; modz = 2;}
 
-						nuke3.motionX = this.motionX+mod;
-						nuke3.motionY = this.motionY;
-						nuke3.motionZ = this.motionZ+mod2;
-						this.world.spawnEntity(nuke3);
-						
-					}
-					
-					
-				}
-			}
+				nuke3.motionX = this.motionX+modx;
+				nuke3.motionY = this.motionY;
+				nuke3.motionZ = this.motionZ+modz;
+				this.world.spawnEntity(nuke3);
+			}	
+		}
+	}
 		
 	@Override
 	@SideOnly(Side.CLIENT)

@@ -120,28 +120,30 @@ public class Meteorite {
 			case 11:
 				//Atomic meteorite
 	    		EntityNukeExplosionMK3 entity0 = new EntityNukeExplosionMK3(world);
-	    	    entity0.posX = x + 0.5D;
+	    		entity0.posX = x + 0.5D;
 	    	    entity0.posY = y + 0.5D;
 	    	    entity0.posZ = z + 0.5D;
-	    	    entity0.destructionRange = BombConfig.fatmanRadius;
-	    	    entity0.speed = BombConfig.blastSpeed;
-	    	    entity0.coefficient = 10.0F;
-	    	    	
-	    	    world.spawnEntity(entity0);
-	    	    if(MainRegistry.polaroidID == 11)
-	    	    	if(rand.nextInt(100) >= 0)
-	    	    	{
-	    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
-	    	    	} else {
-	    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
-	    	    	}
-	    	    else
-	    	    	if(rand.nextInt(100) == 0)
-	    	    	{
-	    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
-	    	    	} else {
-	    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
-	    	    	}
+	    		if(!EntityNukeExplosionMK3.isJammed(world, entity0)){
+		    	    entity0.destructionRange = BombConfig.fatmanRadius;
+		    	    entity0.speed = BombConfig.blastSpeed;
+		    	    entity0.coefficient = 10.0F;
+		    	    	
+		    	    world.spawnEntity(entity0);
+		    	    if(MainRegistry.polaroidID == 11)
+		    	    	if(rand.nextInt(100) >= 0)
+		    	    	{
+		    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
+		    	    	} else {
+		    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
+		    	    	}
+		    	    else
+		    	    	if(rand.nextInt(100) == 0)
+		    	    	{
+		    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
+		    	    	} else {
+		    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
+		    	    	}
+		    	}
 				return;
 			case 12:
 				//Star Blaster
