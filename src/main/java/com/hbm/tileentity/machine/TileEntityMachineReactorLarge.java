@@ -108,7 +108,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		tankTypes[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(64000);
 		tankTypes[1] = ModForgeFluids.coolant;
-		tanks[2] = new FluidTank(32000);
+		tanks[2] = new FluidTank(256000);
 		tankTypes[2] = ModForgeFluids.steam;
 		type = ReactorFuelType.URANIUM;
 		compression = 0;

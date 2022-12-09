@@ -5,6 +5,7 @@ import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartType;
+import com.hbm.lib.ItemStackHandlerWrapper;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
@@ -33,6 +34,9 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 	//private static final int[] access = new int[] { 0 };
 
 	private String customName;
+
+	public static int xCooldown = 20;
+	public int cooldown = 20;
 	
 	public TileEntityMachineMissileAssembly() {
 		inventory = new ItemStackHandler(6){
@@ -83,7 +87,12 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 		if(!world.isRemote) {
 			
 			MissileStruct multipart = new MissileStruct(inventory.getStackInSlot(1), inventory.getStackInSlot(2), inventory.getStackInSlot(3), inventory.getStackInSlot(4));
-			
+			if(cooldown == 0 && world.isBlockPowered(pos)){
+				construct();
+				cooldown = xCooldown;
+			}else{
+				cooldown = Math.max(0, cooldown-1);
+			}
 			PacketDispatcher.wrapper.sendToAllAround(new TEMissileMultipartPacket(pos, multipart), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
 	}
@@ -129,8 +138,7 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 			float weight = (Float)part.attributes[2];
 			float thrust = (Float)thruster.attributes[2];
 			
-			if(part.type == PartType.WARHEAD && fuselage.type == PartType.FUSELAGE &&
-					part.bottom == fuselage.top && weight <= thrust)
+			if(part.type == PartType.WARHEAD && fuselage.type == PartType.FUSELAGE && part.bottom == fuselage.top && weight <= thrust)
 				return 1;
 		}
 		
@@ -209,14 +217,68 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 	{
 		return 65536.0D;
 	}
+
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if(stack.getItem() instanceof ItemMissile){
+			ItemMissile missilePart = (ItemMissile) stack.getItem();
+			if(slot == 0){
+				return missilePart.type == PartType.CHIP;
+			}
+			if(slot == 1){
+				return missilePart.type == PartType.WARHEAD;
+			}
+			if(slot == 2){
+				return missilePart.type == PartType.FUSELAGE;
+			}
+			if(slot == 3){
+				return missilePart.type == PartType.FINS;
+			}
+			if(slot == 4){
+				return missilePart.type == PartType.THRUSTER;
+			}
+		}
+		return false;
+
+	}
+
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return new int[]{0, 1, 2, 3, 4, 5};
+	}
+	
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return (slot == 5);
+	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
+			if(facing == null)
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, getAccessibleSlotsFromSide(facing)){
+				@Override
+				public ItemStack extractItem(int slot, int amount, boolean simulate) {
+					if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
+						return super.extractItem(slot, amount, simulate);
+					return ItemStack.EMPTY;
+				}
+				
+				@Override
+				public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+					if(canInsertItem(slot, stack, stack.getCount()))
+						return super.insertItem(slot, stack, simulate);
+					return stack;
+				}
+			});
+		}
+		return super.getCapability(capability, facing);
 	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null) || super.hasCapability(capability, facing);
 	}
 }

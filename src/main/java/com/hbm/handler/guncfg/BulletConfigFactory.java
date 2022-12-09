@@ -11,6 +11,8 @@ import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -22,6 +24,7 @@ import com.hbm.util.BobMathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -330,22 +333,25 @@ public class BulletConfigFactory {
 					if(!Library.isObstructed(bullet.world, bullet.posX, bullet.posY, bullet.posZ, e.posX, e.posY + e.getEyeHeight(), e.posZ)) {
 						
 						if(e instanceof EntityLivingBase) {
+		
+							EntityLivingBase entityLiving = (EntityLivingBase) e;
 							
-							if(e instanceof EntityPlayer && ArmorUtil.checkForGasMask((EntityPlayer) e))
-								continue;
-
-							PotionEffect eff0 = new PotionEffect(MobEffects.POISON, duration, 2, true, false);
-							PotionEffect eff1 = new PotionEffect(MobEffects.MINING_FATIGUE, duration, 2, true, false);
-							PotionEffect eff2 = new PotionEffect(MobEffects.WEAKNESS, duration, 4, true, false);
-							PotionEffect eff3 = new PotionEffect(MobEffects.WITHER, (int)Math.ceil(duration * 0.1), 0, true, false);
-							eff0.getCurativeItems().clear();
-							eff1.getCurativeItems().clear();
-							eff2.getCurativeItems().clear();
-							eff3.getCurativeItems().clear();
-							((EntityLivingBase)e).addPotionEffect(eff0);
-							((EntityLivingBase)e).addPotionEffect(eff1);
-							((EntityLivingBase)e).addPotionEffect(eff2);
-							((EntityLivingBase)e).addPotionEffect(eff3);
+							if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.GAS_CHLORINE)) {
+								ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+							} else {
+								PotionEffect eff0 = new PotionEffect(MobEffects.POISON, duration, 2, true, false);
+								PotionEffect eff1 = new PotionEffect(MobEffects.MINING_FATIGUE, duration, 2, true, false);
+								PotionEffect eff2 = new PotionEffect(MobEffects.WEAKNESS, duration, 4, true, false);
+								PotionEffect eff3 = new PotionEffect(MobEffects.WITHER, (int)Math.ceil(duration * 0.1), 0, true, false);
+								eff0.getCurativeItems().clear();
+								eff1.getCurativeItems().clear();
+								eff2.getCurativeItems().clear();
+								eff3.getCurativeItems().clear();
+								entityLiving.addPotionEffect(eff0);
+								entityLiving.addPotionEffect(eff1);
+								entityLiving.addPotionEffect(eff2);
+								entityLiving.addPotionEffect(eff3);
+							}
 						}
 					}
 				}

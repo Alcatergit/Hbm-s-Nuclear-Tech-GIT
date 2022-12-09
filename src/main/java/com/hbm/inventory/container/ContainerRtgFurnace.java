@@ -20,11 +20,13 @@ public class ContainerRtgFurnace extends Container {
 		dualCookTime = 0;
 		
 		diFurnace = tedf;
-		
+		//Ore
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 56, 17));
+		//RTG
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 38, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 56, 53));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 74, 53));
+		//Output
 		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 116, 35));
 		
 		for(int i = 0; i < 3; i++)

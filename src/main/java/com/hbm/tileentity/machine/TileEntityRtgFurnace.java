@@ -1,6 +1,8 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineRtgFurnace;
+import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.items.ModItems;
 import com.hbm.util.RTGUtil;
 
@@ -8,35 +10,31 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityRtgFurnace extends TileEntity implements ITickable {
-
-	public ItemStackHandler inventory;
+public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITickable {
 
 	public int dualCookTime;
 	public int heat;
 	public static final int processingSpeed = 3000;
 
-	// private static final int[] slots_top = new int[] {0};
-	// private static final int[] slots_bottom = new int[] {4};
-	// private static final int[] slots_side = new int[] {1, 2, 3};
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {4};
+	private static final int[] slots_side = new int[] {1, 2, 3};
 
 	private String customName;
 
 	public TileEntityRtgFurnace() {
-		inventory = new ItemStackHandler(5) {
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(5);
+	}
+
+	@Override
+	public String getName() {
+		return this.hasCustomInventoryName() ? this.customName : "container.rtgFurnace";
 	}
 
 	public String getInventoryName() {
@@ -60,21 +58,21 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 	}
 
 	public boolean isLoaded() {
-		return RTGUtil.hasHeat(inventory);
+		return RTGUtil.hasHeat(this.inventory);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		dualCookTime = compound.getShort("CookTime");
 		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+			this.inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setShort("cookTime", (short) dualCookTime);
-		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setTag("inventory", this.inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
 	
@@ -83,54 +81,54 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 	}
 	
 	public boolean canProcess() {
-		if(inventory.getStackInSlot(0).isEmpty())
+		if(this.inventory.getStackInSlot(0).isEmpty())
 		{
 			return false;
 		}
-        ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
+        ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(this.inventory.getStackInSlot(0));
 		if(itemStack == null || itemStack.isEmpty())
 		{
 			return false;
 		}
 		
-		if(inventory.getStackInSlot(4).isEmpty())
+		if(this.inventory.getStackInSlot(4).isEmpty())
 		{
 			return true;
 		}
 		
-		if(!inventory.getStackInSlot(4).isItemEqual(itemStack)) {
+		if(!this.inventory.getStackInSlot(4).isItemEqual(itemStack)) {
 			return false;
 		}
 		
-		if(inventory.getStackInSlot(4).getCount() < inventory.getSlotLimit(4) && inventory.getStackInSlot(4).getCount() < inventory.getStackInSlot(4).getMaxStackSize()) {
+		if(this.inventory.getStackInSlot(4).getCount() < this.inventory.getSlotLimit(4) && this.inventory.getStackInSlot(4).getCount() < this.inventory.getStackInSlot(4).getMaxStackSize()) {
 			return true;
 		}else{
-			return inventory.getStackInSlot(4).getCount() < itemStack.getMaxStackSize();
+			return this.inventory.getStackInSlot(4).getCount() < itemStack.getMaxStackSize();
 		}
 	}
 	
 	private void processItem() {
 		if(canProcess()) {
-	        ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
+	        ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(this.inventory.getStackInSlot(0));
 			
-			if(inventory.getStackInSlot(4).isEmpty())
+			if(this.inventory.getStackInSlot(4).isEmpty())
 			{
-				inventory.setStackInSlot(4, itemStack.copy());
-			}else if(inventory.getStackInSlot(4).isItemEqual(itemStack)) {
-				inventory.getStackInSlot(4).grow(itemStack.getCount());
+				this.inventory.setStackInSlot(4, itemStack.copy());
+			}else if(this.inventory.getStackInSlot(4).isItemEqual(itemStack)) {
+				this.inventory.getStackInSlot(4).grow(itemStack.getCount());
 			}
 			
 			for(int i = 0; i < 1; i++)
 			{
-				if(inventory.getStackInSlot(i).isEmpty())
+				if(this.inventory.getStackInSlot(i).isEmpty())
 				{
-					inventory.setStackInSlot(i, new ItemStack(inventory.getStackInSlot(i).getItem()));
+					this.inventory.setStackInSlot(i, new ItemStack(this.inventory.getStackInSlot(i).getItem()));
 				}else{
-					inventory.getStackInSlot(i).shrink(1);
+					this.inventory.getStackInSlot(i).shrink(1);
 				}
-				if(inventory.getStackInSlot(i).isEmpty())
+				if(this.inventory.getStackInSlot(i).isEmpty())
 				{
-					inventory.setStackInSlot(i, ItemStack.EMPTY);
+					this.inventory.setStackInSlot(i, ItemStack.EMPTY);
 				}
 			}
 		}
@@ -150,7 +148,7 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 		
 		if(!world.isRemote)
 		{	
-			heat = RTGUtil.updateRTGs(inventory);
+			heat = RTGUtil.updateRTGs(this.inventory, new int[] {1, 2, 3});
 			if(hasPower() && canProcess())
 			{
 				dualCookTime+=heat;
@@ -183,15 +181,41 @@ public class TileEntityRtgFurnace extends TileEntity implements ITickable {
 			this.markDirty();
 		}
 	}
-	
+
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(slot < 4){
+			if(!(itemStack.getItem() instanceof ItemRTGPellet)){
+				return true;
+			}
+		}
+		if(slot == 4){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(0 < i && i < 4){
+			if(stack.getItem() instanceof ItemRTGPellet)
+				return true;
+		}
+		if(i == 0){
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return this.isItemValidForSlot(slot, itemStack);
 	}
 
 }

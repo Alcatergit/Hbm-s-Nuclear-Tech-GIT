@@ -15,7 +15,7 @@ public class BombConfig {
 	public static int soliniumRadius = 150;
 	public static int n2Radius = 200;
 	public static int missileRadius = 100;
-	public static int mirvRadius = 60;
+	public static int mirvRadius = 70;
 	public static int fatmanRadius = 35;
 	public static int nukaRadius = 25;
 	public static int aSchrabRadius = 20;
@@ -54,7 +54,7 @@ public class BombConfig {
 		Property propMissile = config.get(CATEGORY_NUKES, "3.07_missileRadius", 100);
 		propMissile.setComment("Radius of the nuclear missile");
 		missileRadius = propMissile.getInt();
-		Property propMirv = config.get(CATEGORY_NUKES, "3.08_mirvRadius", 60);
+		Property propMirv = config.get(CATEGORY_NUKES, "3.08_mirvRadius", 70);
 		propMirv.setComment("Radius of a MIRV");
 		mirvRadius = propMirv.getInt();
 		Property propFatman = config.get(CATEGORY_NUKES, "3.09_fatmanRadius", 35);

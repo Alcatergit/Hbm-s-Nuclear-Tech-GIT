@@ -10,6 +10,7 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -20,6 +21,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -99,7 +101,7 @@ public class ContaminationUtil {
 		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
 		double env = ((long)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
 
-		double res = ((int)(10000D - ContaminationUtil.calculateRadiationMod(player) * 10000)) / 100D;
+		double res = ((int)(100000000D - ContaminationUtil.calculateRadiationMod(player) * 100000000)) / 1000000D;
 		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;
 
 		double rec = ((int)(env* (100-res)/100D * 1000D))/ 1000D;
@@ -264,7 +266,9 @@ public class ContaminationUtil {
 			
 			EntityLivingBase entity = (EntityLivingBase)e;
 			
-			if(!(entity instanceof EntityPlayer && ArmorUtil.checkForGasMask((EntityPlayer) entity)))
+			if(ArmorRegistry.hasAllProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
+				ArmorUtil.damageGasMaskFilter(entity, i);
+			else
 				HbmLivingProps.incrementAsbestos(entity, i);
 		}
 		
@@ -272,6 +276,9 @@ public class ContaminationUtil {
 		public static void applyDigammaData(Entity e, float f) {
 
 			if(!(e instanceof EntityLivingBase))
+				return;
+
+			if(e instanceof EntityQuackos || e instanceof EntityOcelot)
 				return;
 			
 			if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
@@ -350,8 +357,6 @@ public class ContaminationUtil {
 			EntityPlayer player = (EntityPlayer)entity;
 			
 			switch(cont) {
-			case GAS:				if(ArmorUtil.checkForGasMask(player))	return false; break;
-			case GAS_NON_REACTIVE:	if(ArmorUtil.checkForMonoMask(player))	return false; break;
 			case GOGGLES:			if(ArmorUtil.checkForGoggles(player))	return false; break;
 			case FARADAY:			if(ArmorUtil.checkForFaraday(player))	return false; break;
 			case HAZMAT:			if(ArmorUtil.checkForHazmat(player))	return false; break;

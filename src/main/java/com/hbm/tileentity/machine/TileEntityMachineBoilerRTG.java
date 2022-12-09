@@ -148,7 +148,7 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 			if(heat > 2000) {
 				heat -= 40;
 			}
-			rtgPower = Math.min(RTGUtil.updateRTGs(inventory), maxRTGPower);
+			rtgPower = Math.min(RTGUtil.updateRTGs(inventory, new int[] {4, 5}), maxRTGPower);
 			if(rtgPower > 0) {
 				heat += rtgPower*5;
 			} else {

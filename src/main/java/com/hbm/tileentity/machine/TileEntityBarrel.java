@@ -33,6 +33,10 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	public short mode = 0;
 	public static final short modes = 4;
 	private int age = 0;
+
+	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_bottom = new int[] {1, 3};
+	private static final int[] slots_side = new int[] {2};
 	
 	public TileEntityBarrel() {
 		super(4);
@@ -181,6 +185,43 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	public void recievePacket(NBTTagCompound[] tags) {
 		if(tags.length == 1)
 			tank.readFromNBT(tags[0]);
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 0){
+			return true;
+		}
+		
+		if(i == 2){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(slot == 1){
+			return true;
+		}
+		
+		if(slot == 3){
+			return true;
+		}
+		
+		return false;
 	}
 
 }

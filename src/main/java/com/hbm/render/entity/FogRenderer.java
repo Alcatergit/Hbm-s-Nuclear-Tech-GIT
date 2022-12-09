@@ -43,11 +43,11 @@ public class FogRenderer extends Render<EntityFogFX> {
 		
 		float alpha = 0;
 		
-		alpha = (float) Math.sin(entity.particleAge * Math.PI / (400F)) * 0.25F;
+		alpha = (float) Math.sin(entity.particleAge * Math.PI / (400F)) * 0.2F;
 
 		GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(1.0F, 0.6F, 0.3F, alpha);
+        GL11.glColor4f(1.0F, 0.55F, 0.0F, alpha);
        
       //  GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(false);
@@ -59,7 +59,7 @@ public class FogRenderer extends Render<EntityFogFX> {
 			double dX = (rand.nextGaussian() - 1D) * 0.5D;
 			double dY = (rand.nextGaussian() - 1D) * 0.15D;
 			double dZ = (rand.nextGaussian() - 1D) * 0.5D;
-			double size = rand.nextDouble()      * 0.5D + 0.25D;
+			double size = rand.nextDouble() * 0.25D + 0.5D;
 	        
 			GL11.glTranslatef((float) dX, (float) dY, (float) dZ);
 	        GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);

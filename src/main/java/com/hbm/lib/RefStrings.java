@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Alcater Edition";
-	public static final String VERSION = "hbm-1.12.2-1.8.2b";
-	public static final String CHANGELOG = "§2Added: Translations in 70 languages, Battery Automation, Neoveline and Electronium Dynosynthesis, Unobtainium-440 and 439$§3Changed: Euphemium creation, Unobtainium Billet Recipe and Textures, Xe-135 Powder Chances in Silex, Radium creation, Nether Depth Texture $§6Fixed: FEnSU Charge Rate";
+	public static final String VERSION = "hbm-A-1.12.2-1.8.2c";
+	public static final String CHANGELOG = "§2Added: Custom Missile Automation, Barrel Item Automation$§3Changed: Radiation Fog Texture, Balefire RTG Halflife, Mirv Recipe/Radius $§6Fixed: Gas-Mask, RTG Furnace Automation, Niobium ingot smelting";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version

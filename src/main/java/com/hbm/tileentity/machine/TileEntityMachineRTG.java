@@ -61,6 +61,17 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 					return super.insertItem(slot, stack, simulate);
 				return ItemStack.EMPTY;
 			}
+
+			public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+				return !isItemValid(slot, itemStack);
+			}
+
+			@Override
+			public ItemStack extractItem(int slot, int amount, boolean simulate) {
+				if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
+					return super.extractItem(slot, amount, simulate);
+				return ItemStack.EMPTY;
+			}
 		};
 	}
 	
@@ -76,8 +87,11 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			
 			if(age == 9 || age == 19)
 				ffgeuaInit();
-			
-			heat = RTGUtil.updateRTGs(inventory);
+			int[] slots = new int[inventory.getSlots()];
+			for(int i = 0; i < inventory.getSlots();i++){
+				slots[i] = i;
+			}
+			heat = RTGUtil.updateRTGs(inventory, slots);
 			
 			if(heat > heatMax)
 				heat = heatMax;
