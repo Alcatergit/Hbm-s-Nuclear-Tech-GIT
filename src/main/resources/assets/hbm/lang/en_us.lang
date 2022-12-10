@@ -1169,6 +1169,9 @@ tile.solar_mirror.name=Heliostat Mirror
 container.machineSILEX=SILEX
 container.machineFEL=FEL
 
+tile.heater_firebox.name=Firebox
+container.heater_firebox=Firebox
+
 tile.barrel_plastic.name=Safe Barrel™
 tile.barrel_corroded.name=Corroded Barrel
 tile.barrel_iron.name=Iron Barrel
