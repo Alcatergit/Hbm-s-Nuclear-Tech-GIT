@@ -646,10 +646,6 @@ public class GuiHandler implements IGuiHandler {
 			if(entity instanceof TileEntityFEL) {
 				return new ContainerFEL(player.inventory, (TileEntityFEL) entity);
 			}
-		case ModBlocks.guiID_firebox:
-			if(entity instanceof TileEntityHeaterFirebox) {
-				return new ContainerFirebox(player.inventory, (TileEntityHeaterFirebox) entity);
-			}
 			return null;
 		case ModBlocks.guiID_anvil:
 			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof NTMAnvil) {

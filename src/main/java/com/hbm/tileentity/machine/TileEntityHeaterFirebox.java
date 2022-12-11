@@ -27,6 +27,7 @@ public class TileEntityHeaterFirebox extends TileEntityFireboxBase implements IC
 	public static int baseHeat = 100;
 	public static double timeMult = 1D;
 	public static int maxHeatEnergy = 100_000;
+	
 	public static ModuleBurnTime burnModule = new ModuleBurnTime()
 			.setLigniteTimeMod(1.25)
 			.setCoalTimeMod(1.25)
@@ -72,6 +73,7 @@ public class TileEntityHeaterFirebox extends TileEntityFireboxBase implements IC
 	}
     @Override
 	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    	playersUsing++;
 		return new ContainerFirebox(player.inventory, this);
 	}
 

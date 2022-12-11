@@ -30,7 +30,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 	public int burnTime;
 	public int burnHeat;
 	public boolean wasOn = false;
-	private int playersUsing = 0;
+	public int playersUsing = 0;
 	
 	public float doorAngle = 0;
 	public float prevDoorAngle = 0;
@@ -45,17 +45,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 		super(2);
 	    
 	}
-	
-	
-	public void openInventory() {
-		if(!world.isRemote) this.playersUsing++;
-	}
-	
-
-	public void closeInventory() {
-		if(!world.isRemote) this.playersUsing--;
-	}
-    
+	 
 	@Override
 	public void update() {
 		

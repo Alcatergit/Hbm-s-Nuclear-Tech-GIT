@@ -15,7 +15,7 @@ public class ContainerFirebox extends Container {
 	
 	public ContainerFirebox(InventoryPlayer invPlayer, TileEntityFireboxBase furnace) {
 		this.firebox = furnace;
-		this.firebox.openInventory();
+		this.firebox.playersUsing++;
 		
 		this.addSlotToContainer(new SlotItemHandler(furnace.inventory, 0, 44, 27));
 		this.addSlotToContainer(new SlotItemHandler(furnace.inventory, 1, 62, 27));
@@ -69,6 +69,6 @@ public class ContainerFirebox extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		this.firebox.closeInventory();
+		this.firebox.playersUsing--;
 	}
 }
