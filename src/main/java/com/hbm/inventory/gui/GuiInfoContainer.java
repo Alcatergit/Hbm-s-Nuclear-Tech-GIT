@@ -8,6 +8,7 @@ import com.hbm.lib.RefStrings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiInfoContainer extends GuiContainer {
@@ -21,7 +22,11 @@ public abstract class GuiInfoContainer extends GuiContainer {
 	public void drawFluidInfo(String[] text, int x, int y) {
 		this.drawHoveringText(Arrays.asList(text), x, y);
 	}
-	
+	//the mojang employee who made this private on the super can explode
+	public boolean isMouseOverSlot(Slot slotIn, int mouseX, int mouseY)
+    {
+        return this.isPointInRegion(slotIn.xPos, slotIn.yPos, 16, 16, mouseX, mouseY);
+    }
 	public void drawElectricityInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, long power, long maxPower) {
 		if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY)
 			gui.drawFluidInfo(new String[] { Library.getShortNumber(power) + "/" + Library.getShortNumber(maxPower) + "HE" }, mouseX, mouseY);

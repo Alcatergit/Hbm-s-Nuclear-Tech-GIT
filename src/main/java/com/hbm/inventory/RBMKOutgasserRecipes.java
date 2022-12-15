@@ -11,6 +11,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 
+import static com.hbm.inventory.OreDictManager.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -32,8 +33,8 @@ public class RBMKOutgasserRecipes {
 	public static void registerOverrides() {
 		RBMKOutgasserRecipes.setRecipe(9000, "blockLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 8000));
 		RBMKOutgasserRecipes.setRecipe(1500, "ingotLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
-		RBMKOutgasserRecipes.setRecipe(1200, "dustLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
-		RBMKOutgasserRecipes.setRecipe(240, "dustSmallLithium", ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 120));
+		RBMKOutgasserRecipes.setRecipe(1200, LI.dust(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
+		RBMKOutgasserRecipes.setRecipe(240,  LI.dustTiny(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 120));
 		RBMKOutgasserRecipes.setRecipe(160000, "ingotGold", new ItemStack(ModItems.ingot_au198));
 		RBMKOutgasserRecipes.setRecipe(30000, "nuggetGold", new ItemStack(ModItems.nugget_au198));
 		RBMKOutgasserRecipes.setRecipe(150000, "dustGold", new ItemStack(ModItems.powder_au198));
@@ -58,7 +59,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(45000, ModItems.ingot_iodine, new ItemStack(ModItems.ingot_i131));
 		RBMKOutgasserRecipes.setRecipe(35000, "dustIodine", new ItemStack(ModItems.powder_i131));
 		RBMKOutgasserRecipes.setRecipe(450000, ModItems.ingot_actinium, new ItemStack(ModItems.ingot_ac227));
-		RBMKOutgasserRecipes.setRecipe(350000, "dustActinium", new ItemStack(ModItems.powder_ac227));
+		RBMKOutgasserRecipes.setRecipe(350000,ModItems.powder_actinium, new ItemStack(ModItems.powder_ac227));
 		RBMKOutgasserRecipes.setRecipe(80000, "dustCaesium", new ItemStack(ModItems.powder_cs137));
 		RBMKOutgasserRecipes.setRecipe(120000, "dustAstatine", new ItemStack(ModItems.powder_at209));
 		RBMKOutgasserRecipes.setRecipe(6000000, "dustAt209", new ItemStack(ModItems.nugget_bismuth));

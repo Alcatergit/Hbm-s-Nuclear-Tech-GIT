@@ -7,6 +7,8 @@ import java.util.Random;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.InventoryHelper;
+import com.hbm.main.MainRegistry;
+
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -194,7 +196,22 @@ public abstract class BlockDummyable extends BlockContainer {
 
     	super.onBlockPlacedBy(world, pos, state, player, itemStack);
     }
-    
+    protected boolean standardOpenBehavior(World world, int x, int y, int z, EntityPlayer player, int id) {
+		
+		if(world.isRemote) {
+			return true;
+		} else if(!player.isSneaking()) {
+			int[] pos = this.findCore(world, x, y, z);
+
+			if(pos == null)
+				return false;
+
+			player.openGui(MainRegistry.instance, id, world, pos[0], pos[1], pos[2]);
+			return true;
+		} else {
+			return true;
+		}
+	}
     protected ForgeDirection getDirModified(ForgeDirection dir) {
 		return dir;
 	}
