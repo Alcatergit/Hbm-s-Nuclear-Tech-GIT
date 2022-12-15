@@ -48,7 +48,6 @@ import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityFusionMultiblock;
 import com.hbm.tileentity.machine.TileEntityHadron;
-import com.hbm.tileentity.machine.TileEntityHeaterFirebox;
 import com.hbm.tileentity.machine.TileEntityITER;
 import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -642,11 +641,6 @@ public class GuiHandler implements IGuiHandler {
 			if(entity instanceof TileEntityFEL) {
 				return new ContainerFEL(player.inventory, (TileEntityFEL) entity);
 			}
-		case ModBlocks.guiID_firebox:
-			if(entity instanceof TileEntityHeaterFirebox) {
-				return new ContainerFirebox(player.inventory, (TileEntityHeaterFirebox) entity);
-			}
-			return null;
 		case ModBlocks.guiID_anvil:
 			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof NTMAnvil) {
 				return new ContainerAnvil(player.inventory, ((NTMAnvil)world.getBlockState(new BlockPos(x, y, z)).getBlock()).tier);
