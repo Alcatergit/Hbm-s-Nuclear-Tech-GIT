@@ -397,12 +397,13 @@ public class ItemRenderLibrary {
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.heater_firebox), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, -4, 0);
 				GL11.glScaled(3, 3, 3);
+				GL11.glRotated(25, 1, 1, 1);
+                GL11.glTranslated(0, -1, 1);
 			}
 			public void renderCommon() {
 				GL11.glRotated(180, 0, 1, 0);
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(2.5, 2.5, 2.5);
 		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.heater_firebox_tex);  ResourceManager.heater_firebox.renderAll();
 		        GlStateManager.shadeModel(GL11.GL_FLAT);

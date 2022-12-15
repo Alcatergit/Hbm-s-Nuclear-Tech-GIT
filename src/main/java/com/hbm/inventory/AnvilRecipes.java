@@ -1,5 +1,8 @@
 package com.hbm.inventory;
 
+import static com.hbm.inventory.OreDictManager.CU;
+import static com.hbm.inventory.OreDictManager.STEEL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,7 +164,14 @@ public class AnvilRecipes {
 						new ComparableStack(ModItems.circuit_aluminium, 1 * ukModifier)
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_assembler))).setTier(2));
-
+		
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new ComparableStack(Blocks.FURNACE),
+						new OreDictStack(STEEL.plate(), 8),
+						new OreDictStack(CU.ingot(), 8)
+				}, new AnvilOutput(new ItemStack(ModBlocks.heater_firebox))).setTier(2));
+		
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new ComparableStack(ModBlocks.brick_concrete, 64),

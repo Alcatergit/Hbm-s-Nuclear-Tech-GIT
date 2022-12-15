@@ -8,6 +8,7 @@ import com.hbm.inventory.container.ContainerFirebox;
 import com.hbm.tileentity.machine.TileEntityFireboxBase;
 //import com.hbm.tileentity.machine.TileEntityHeaterOven;
 
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -31,18 +32,18 @@ public class GUIFirebox extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int x, int y, float interp) {
 		super.drawScreen(x, y, interp);
-
+       
 		if(this.mc.player.inventory.getItemStack() == null) {
 			
 			for(int i = 0; i < 2; ++i) {
 				Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
 				
-				if(this.isMouseOverSlot(slot, x, y) && !slot.getHasStack()) {
+				if(this.isMouseOverSlot(slot, slot.xPos, slot.yPos) && !slot.getHasStack()) {
 					
 					List<String> bonuses = this.firebox.getModule().getDesc();
 					
 					if(!bonuses.isEmpty()) {
-						this.drawHoveringText(bonuses, x, y);
+						this.drawCustomInfoStat(x, y, guiLeft + 10, guiTop + 30, 10, 10, x, y,(String[]) bonuses.toArray());
 					}
 				}
 			}
@@ -64,6 +65,7 @@ public class GUIFirebox extends GuiInfoContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		super.drawDefaultBackground();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);

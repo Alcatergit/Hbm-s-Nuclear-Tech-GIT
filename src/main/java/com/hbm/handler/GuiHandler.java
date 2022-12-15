@@ -141,8 +141,24 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		
 		TileEntity entity = world.getTileEntity(new BlockPos(x, y, z));
-
+		if(entity instanceof IGUIProvider) {
+			return ((IGUIProvider) entity).provideContainer(ID, player, world, x, y, z);
+		}
+		
+		IBlockState b = world.getBlockState(new BlockPos(x, y, z));
+		
+		if(b instanceof IGUIProvider) {
+			return ((IGUIProvider) b).provideContainer(ID, player, world, x, y, z);
+		}
+		
+		ItemStack item = player.getHeldItemMainhand();
+		
+		if(item != null && item.getItem() instanceof IGUIProvider) {
+			return ((IGUIProvider) item.getItem()).provideContainer(ID, player, world, x, y, z);
+		}
+		
 		switch(ID) {
 		case ModBlocks.guiID_machine_press: 
 			if(entity instanceof TileEntityMachinePress) {
@@ -662,7 +678,6 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity entity = world.getTileEntity(new BlockPos(x, y, z));
-
 		
 		if(entity instanceof IGUIProvider) {
 			return ((IGUIProvider) entity).provideGUI(ID, player, world, x, y, z);
@@ -679,6 +694,7 @@ public class GuiHandler implements IGuiHandler {
 		if(item != null && item.getItem() instanceof IGUIProvider) {
 			return ((IGUIProvider) item.getItem()).provideGUI(ID, player, world, x, y, z);
 		}
+		
 		switch(ID) {
 		case ModBlocks.guiID_machine_press:
 			if(entity instanceof TileEntityMachinePress) {
