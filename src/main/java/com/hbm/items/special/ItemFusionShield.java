@@ -51,7 +51,7 @@ public class ItemFusionShield extends Item {
 
 		tooltip.add("Durability: " + (maxDamage - damage) + "/" + maxDamage + " (" + percent + "%)");
 
-		tooltip.add("Melting point: " + TextFormatting.RED + "" + maxTemp + "°C");
+		tooltip.add("Maximum Plasma Heat: " + TextFormatting.RED + "" + maxTemp + "°C");
 	}
 	
 	@Override

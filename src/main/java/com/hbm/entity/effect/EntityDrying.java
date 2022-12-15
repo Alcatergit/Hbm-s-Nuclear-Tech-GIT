@@ -31,7 +31,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoader {
-	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityDrying.class, DataSerializers.VARINT);
 	public int revProgress;
 	public int radProgress;
 	public boolean done=false;
@@ -176,7 +176,7 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 				}
 			}
 		} else {
-			for(int y = 62; y > 1; y--) {
+			for(int y = BombConfig.oceanHeight; y > 1; y--) {
 				pos.setY(y);
 				if(world.isAirBlock(pos)){
 					world.setBlockState(pos, Blocks.WATER.getDefaultState());
@@ -208,10 +208,8 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 		this.dataManager.set(SCALE, Integer.valueOf(i));
 		this.maxArea = i * i * 8;
 		this.xlast = -i;
-		if(i > 250)
-			this.speed = (int)(BombConfig.mk4*2F);
-		if(!dryingmode)
-			this.speed = (int)(this.speed * 0.25F);
+		if(i > 150)
+			this.speed = (int)(BombConfig.mk4);
 	}
 
 	public int getScale() {

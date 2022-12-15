@@ -55,7 +55,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileEntityMachineChemplant extends TileEntityMachineBase implements IConsumer, ITankPacketAcceptor, ITickable {
 
 	public long power;
-	public static final long maxPower = 100000;
+	public static final long maxPower = 2000000;
 	public int progress;
 	public int maxProgress = 100;
 	public boolean isProgressing;
@@ -184,43 +184,47 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 		this.speed = 100;
 		
 		
-		for(int i = 1; i < 4; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			
-			if(stack != ItemStack.EMPTY) {
-				if(stack.getItem() == ModItems.upgrade_speed_1) {
-					this.speed -= 25;
-					this.consumption += 300;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_2) {
-					this.speed -= 50;
-					this.consumption += 600;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_3) {
-					this.speed -= 75;
-					this.consumption += 900;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_1) {
-					this.consumption -= 30;
-					this.speed += 5;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_2) {
-					this.consumption -= 60;
-					this.speed += 10;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_3) {
-					this.consumption -= 90;
-					this.speed += 15;
+		double c = 100;
+			double s = 100;
+
+			for(int i = 1; i < 4; i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
+
+				if(!stack.isEmpty()) {
+					if(stack.getItem() == ModItems.upgrade_speed_1) {
+						s *= 0.75;
+						c *= 3;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_2) {
+						s *= 0.5;
+						c *= 6;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_3) {
+						s *= 0.25;
+						c *= 9;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_1) {
+						c *= 0.8;
+						s *= 1.25;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_2) {
+						c *= 0.4;
+						s *= 1.5;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_3) {
+						c *= 0.2;
+						s *= 2;
+					}
 				}
 			}
-		}
-		
+		this.speed = (int) s;
+		this.consumption = (int) c;
 
 		
-		if(speed < 25)
-			speed = 25;
-		if(consumption < 10)
-			consumption = 10;
+		if(speed < 2)
+			speed = 2;
+		if(consumption < 1)
+			consumption = 1;
 		if(this.needsTankTypeUpdate)
 			setContainers();
 		

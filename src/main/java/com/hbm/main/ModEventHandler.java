@@ -1244,8 +1244,15 @@ public class ModEventHandler {
 			}
 
 			if(HTTPHandler.newVersion) {
-				e.player.sendMessage(new TextComponentString("§ePOG - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
+				e.player.sendMessage(new TextComponentString("§eNICE - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
 				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
+				if(HTTPHandler.changes != ""){
+					String[] lines = HTTPHandler.changes.split("\\$");
+					e.player.sendMessage(new TextComponentString("§e[New Features]§r"));//RefStrings.CHANGELOG
+					for(String w: lines){
+						e.player.sendMessage(new TextComponentString(w));//RefStrings.CHANGELOG
+					}
+				}
 			}
 			
 			if(HTTPHandler.optifine){

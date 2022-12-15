@@ -9,6 +9,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemBattery;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
@@ -477,21 +478,34 @@ public class MachineRecipes {
 			list.add(new ItemStack(ModBlocks.ore_oil_sand, 16));
 			break;
 		case DYN_SCHRAB:
-			list.add(new ItemStack(ModItems.dynosphere_desh_charged, 3));
-			list.add(new ItemStack(ModItems.ingot_uranium, 1));
+			list.add(new ItemStack(ModItems.particle_higgs, 1));
+			list.add(new ItemStack(ModItems.ingot_uranium, 8));
+			list.add(new ItemStack(ModItems.dynosphere_desh_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 8));
 			break;
-		case DYN_EUPH:
+		case DYN_STR:
+			list.add(new ItemStack(ModItems.particle_strange, 1));
+			list.add(new ItemStack(ModItems.egg_balefire_shard, 8));
 			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
-			list.add(new ItemStack(ModItems.ingot_plutonium, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 16));
-			list.add(new ItemStack(ModItems.ingot_euphemium, 1));
+			break;
+		case DYN_EUPH:
+			list.add(new ItemStack(ModItems.particle_dark, 1));
+			list.add(new ItemStack(ModItems.ingot_solinium, 8));
+			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
+			list.add(new ItemStack(ModItems.catalyst_clay, 16));
 			break;
 		case DYN_DNT:
-			list.add(new ItemStack(ModItems.dynosphere_euphemium_charged, 2));
-			list.add(new ItemStack(ModItems.powder_spark_mix, 1));
-			list.add(new ItemStack(ModItems.ingot_starmetal, 1));
+			list.add(new ItemStack(ModItems.particle_sparkticle, 1));
+			list.add(new ItemStack(ModItems.ingot_schrabidate, 8));
+			list.add(new ItemStack(ModItems.dynosphere_euphemium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 32));
+			break;
+		case DYN_EL:
+			list.add(new ItemStack(ModItems.particle_digamma, 1));
+			list.add(new ItemStack(ModItems.ingot_dineutronium, 16));
+			list.add(new ItemStack(ModItems.dynosphere_dineutronium_charged, 1));
+			list.add(new ItemStack(ModItems.catalyst_clay, 64));
 			break;
 		case CORDITE:
 			list.add(new ItemStack(ModItems.niter, 2));
@@ -634,6 +648,21 @@ public class MachineRecipes {
 			break;
 		case CRYOGEL:
 			input[0] = new FluidStack(ModForgeFluids.coolant, 1800);
+			break;
+		case DYN_SCHRAB:
+			input[0] = new FluidStack(ModForgeFluids.coolant, 1000);
+			break;
+		case DYN_STR:
+			input[0] = new FluidStack(ModForgeFluids.cryogel, 1000);
+			break;
+		case DYN_EUPH:
+			input[0] = new FluidStack(ModForgeFluids.cryogel, 2000);
+			break;
+		case DYN_DNT:
+			input[0] = new FluidStack(ModForgeFluids.cryogel, 4000);
+			break;
+		case DYN_EL:
+			input[0] = new FluidStack(ModForgeFluids.cryogel, 8000);
 			break;
 		case DESH:
 			if(GeneralConfig.enableBabyMode) {
@@ -894,19 +923,29 @@ public class MachineRecipes {
 			output[0] = new ItemStack(ModItems.powder_yellowcake, 1);
 			break;
 		case DYN_SCHRAB:
-			output[0] = new ItemStack(ModItems.ingot_schrabidium, 1);
-			output[1] = new ItemStack(ModItems.powder_desh, 12);
-			output[2] = new ItemStack(ModItems.powder_desh_mix, 12);
+			output[0] = new ItemStack(ModItems.particle_empty, 1);
+			output[1] = new ItemStack(ModItems.ingot_schrabidium, 8);
+			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_desh);
+			break;
+		case DYN_STR:
+			output[0] = new ItemStack(ModItems.particle_empty, 1);
+			output[1] = new ItemStack(ModItems.ingot_radspice, 8);
+			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_schrabidium);
 			break;
 		case DYN_EUPH:
-			output[0] = new ItemStack(ModItems.nugget_euphemium, 12);
-			output[1] = new ItemStack(ModItems.powder_schrabidium, 4);
-			output[2] = new ItemStack(ModItems.powder_power, 4);
+			output[0] = new ItemStack(ModItems.particle_empty, 1);
+			output[1] = new ItemStack(ModItems.ingot_euphemium, 8);
+			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_schrabidium);
 			break;
 		case DYN_DNT:
-			output[0] = new ItemStack(ModItems.ingot_dineutronium, 1);
-			output[1] = new ItemStack(ModItems.powder_euphemium, 8);
-			output[2] = new ItemStack(ModItems.powder_nitan_mix, 8);
+			output[0] = new ItemStack(ModItems.particle_empty, 1);
+			output[1] = new ItemStack(ModItems.ingot_dineutronium, 8);
+			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_euphemium);
+			break;
+		case DYN_EL:
+			output[0] = new ItemStack(ModItems.particle_empty, 1);
+			output[1] = new ItemStack(ModItems.ingot_electronium, 1);
+			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_dineutronium);
 			break;
 		case CORDITE:
 			output[0] = new ItemStack(ModItems.cordite, 4);
@@ -1049,11 +1088,17 @@ public class MachineRecipes {
 		case DYN_SCHRAB:
 			output[0] = new FluidStack(ModForgeFluids.watz, 50);
 			break;
+		case DYN_STR:
+			output[0] = new FluidStack(ModForgeFluids.watz, 100);
+			break;
 		case DYN_EUPH:
 			output[0] = new FluidStack(ModForgeFluids.watz, 100);
 			break;
 		case DYN_DNT:
 			output[0] = new FluidStack(ModForgeFluids.watz, 150);
+			break;
+		case DYN_EL:
+			output[0] = new FluidStack(ModForgeFluids.watz, 200);
 			break;
 		case ELECTROLYSIS:
 			output[0] = new FluidStack(ModForgeFluids.hydrogen, 400);

@@ -15,13 +15,13 @@ import net.minecraft.world.World;
 
 public class ExplosionNukeRay {
 	private int maxSamples;
-	private float phi;
+	private double phi;
 	public boolean isContained=true;
 	
 	World world;
-	int posX;
-	int posY;
-	int posZ;
+	float posX;
+	float posY;
+	float posZ;
 	int radius;
 	int processed;
 	int currentSample;
@@ -32,16 +32,16 @@ public class ExplosionNukeRay {
 	
 	public ExplosionNukeRay(World world, int x, int y, int z, int radius) {
 		this.world = world;
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
+		this.posX = x + 0.5F;
+		this.posY = y + 0.5F;
+		this.posZ = z + 0.5F;
 		this.radius = radius;
 		//Ausf3, must be double
 		//this.startY = strength;
 		//Mk 4.5, must be int32
 		this.currentSample = 0;
 		this.maxSamples = (int) (5 * Math.PI * Math.pow(radius, 2));
-		this.phi = (float)(Math.PI * (3 - Math.sqrt(5)));
+		this.phi = 2 * Math.PI * ((1 + Math.sqrt(5))/2);
 	}
 
 	//currently used by mk4
@@ -52,7 +52,7 @@ public class ExplosionNukeRay {
 		
 		FloatTriplet lastPos = new FloatTriplet(posX, posY, posZ);
 		for(int s = currentSample; s < this.maxSamples; s++) {
-			FloatTriplet direction = getNormalFibVec(s);
+			FloatTriplet direction = this.getNormalFibVec(s);
 			float rayEnergy = (float)radius * 0.7F;
 			for(int l = 0; l < this.radius+1; l++){
 				float x0 = (float) (posX + direction.xCoord * l);
@@ -73,7 +73,7 @@ public class ExplosionNukeRay {
 				}
 				
 				if(rayEnergy <= 0 || l == this.radius) {
-					if(isContained==true){
+					if(isContained){
 						if(l == this.radius){
 							isContained = false;
 						}
@@ -100,12 +100,22 @@ public class ExplosionNukeRay {
 			return world.getBlockState(pos).getBlock().getExplosionResistance(null)+0.1F;
 	}
 
-	private FloatTriplet getNormalFibVec(int sample){
-		double fy = (2D * sample / (this.maxSamples - 1D)) - 1D;  // y goes from 1 to -1
-        double fr = Math.sqrt(1D - fy * fy);  // radius at y
+	// private FloatTriplet getNormalFibVec(int sample){
+	// 	double fy = (2D * sample / (this.maxSamples - 1D)) - 1D;  // y goes from 1 to -1
+    //     double fr = Math.sqrt(1D - fy * fy);  // radius at y
 
-        double theta = phi * sample;  // golden angle increment
-        return new FloatTriplet((float)(Math.cos(theta) * fr), (float)fy, (float)(Math.sin(theta) * fr));
+    //     double theta = phi * sample;  // golden angle increment
+    //     return new FloatTriplet((float)(Math.cos(theta) * fr), (float)fy, (float)(Math.sin(theta) * fr));
+	// }
+
+	private FloatTriplet getNormalFibVec(int sample){
+        double angle1 = Math.acos((sample * 2D/ (double)this.maxSamples) - 1D);
+        double angle2 = phi * sample;
+        double x = Math.sin(angle1) * Math.cos(angle2);
+        double y = Math.cos(angle1);
+        double z = Math.sin(angle1) * Math.sin(angle2);
+
+        return new FloatTriplet((float)x, (float)y, (float)z);
 	}
 	
 	// //currently used by mk4

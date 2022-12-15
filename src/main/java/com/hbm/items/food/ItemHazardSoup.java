@@ -47,22 +47,25 @@ public class ItemHazardSoup extends ItemSoup implements IItemHazard {
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn){
-		this.module.addInformation(stack, list, flagIn);
-		super.addInformation(stack, world, list, flagIn);
-	}
-	
-	@Override
 	public boolean onEntityItemUpdate(EntityItem item){
 		super.onEntityItemUpdate(item);
 		return super.onEntityItemUpdate(item);
 	}
 
 	@Override
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn){
+		if(this == ModItems.glowing_stew) {
+            list.add("Removes 80 RAD");
+    	}
+    	this.module.addInformation(stack, list, flagIn);
+		super.addInformation(stack, world, list, flagIn);
+	}
+
+	@Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
 		if(stack.getItem() == ModItems.glowing_stew){
-			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
-			player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 10 * 20, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 2 * 20, 0));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 4 * 20, 0));
 		}
 		if(stack.getItem() == ModItems.balefire_scrambled){
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));

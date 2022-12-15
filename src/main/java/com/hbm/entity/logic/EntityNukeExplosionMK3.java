@@ -1,13 +1,23 @@
 package com.hbm.entity.logic;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.lib.HBMSoundHandler;
+
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.SoundCategory;
 
 import org.apache.logging.log4j.Level;
 
@@ -131,7 +141,7 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
     @Override
 	public void onUpdate() {
         super.onUpdate();
-        	
+       	
         if(world.isRemote)
         	return;
         if(!this.did)
@@ -197,7 +207,7 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 				fallout.posX = this.posX;
 				fallout.posY = this.posY;
 				fallout.posZ = this.posZ;
-				fallout.setScale((int)(this.destructionRange * 1.8));
+				fallout.setScale((int)(this.destructionRange * 1.8), this.destructionRange+16);
 
 				this.world.spawnEntity(fallout);
 				//this.world.getWorldInfo().setRaining(true);
@@ -205,7 +215,6 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 				did2 = true;
         	}
         }
-        
         age++;
     }
 
@@ -258,5 +267,95 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
                 ForgeChunkManager.forceChunk(loaderTicket, chunk);
             }
         }
+	}
+
+	public static HashMap<ATEntry, Long> at = new HashMap();
+
+	private static void createParticle(World world, int dim, double x, double y, double z, float r, float g, float b) {
+		world.playSound(null, x+0.5D, y+0.5D, z+0.5D, HBMSoundHandler.ufoBlast, SoundCategory.HOSTILE, 15.0F, 1.0F);
+						
+		NBTTagCompound data = new NBTTagCompound();
+		data.setString("type", "plasmablast");
+		data.setFloat("r", r);
+		data.setFloat("g", g);
+		data.setFloat("b", b);
+		data.setFloat("scale", 7.5F);
+		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, x+0.5D, y+0.5D, z+0.5D), new TargetPoint(dim, x, y, z, 150));
+	}
+
+	public static boolean isJammed(World world, Entity entity) {
+		
+		Iterator<Entry<ATEntry, Long>> it = at.entrySet().iterator();
+		
+		while(it.hasNext()) { // checking each jammer if it is in range
+			
+			Entry<ATEntry, Long> next = it.next();
+			if(next.getValue() < world.getTotalWorldTime()) {
+				it.remove();
+				continue;
+			}
+			
+			ATEntry jammer = next.getKey();
+			if(jammer.dim != world.provider.getDimension())
+				continue;
+			
+			double distance = Math.sqrt(Math.pow(entity.posX - jammer.x, 2) + Math.pow(entity.posY - jammer.y, 2) + Math.pow(entity.posZ - jammer.z, 2));
+			
+			if(distance < 300) {
+				
+				if(!world.isRemote) {
+					createParticle(world, jammer.dim, entity.posX, entity.posY, entity.posZ, 1.0F, 0.5F, 0.0F);
+					createParticle(world, jammer.dim, jammer.x, jammer.y, jammer.z, 0.0F, 0.75F, 1.0F);
+				}
+				entity.setDead();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static class ATEntry {
+		int dim;
+		int x;
+		int y;
+		int z;
+		
+		public ATEntry(int dim, int x, int y, int z) {
+			this.dim = dim;
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 27644437;
+			int result = 1;
+			result = prime * result + dim;
+			result = prime * result + x;
+			result = prime * result + y;
+			result = prime * result + z;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(this == obj)
+				return true;
+			if(obj == null)
+				return false;
+			if(getClass() != obj.getClass())
+				return false;
+			ATEntry other = (ATEntry) obj;
+			if(dim != other.dim)
+				return false;
+			if(x != other.x)
+				return false;
+			if(y != other.y)
+				return false;
+			if(z != other.z)
+				return false;
+			return true;
+		}
 	}
 }

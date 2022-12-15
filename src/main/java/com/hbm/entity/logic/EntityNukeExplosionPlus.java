@@ -80,7 +80,7 @@ public class EntityNukeExplosionPlus extends Entity {
 				fallout.posX = this.posX;
 				fallout.posY = this.posY;
 				fallout.posZ = this.posZ;
-				fallout.setScale((this.wasteRange));
+				fallout.setScale((this.wasteRange), 16);
 
 				this.world.spawnEntity(fallout);
 				

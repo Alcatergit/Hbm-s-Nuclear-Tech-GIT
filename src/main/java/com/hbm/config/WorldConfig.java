@@ -42,7 +42,7 @@ public class WorldConfig {
 	public static int endTikiteSpawn = 8;
 	
 	public static int radioStructure = 500;
-	public static int antennaStructure = 250;
+	public static int antennaStructure = 750;
 	public static int atomStructure = 500;
 	public static int vertibirdStructure = 500;
 	public static int dungeonStructure = 64;
@@ -61,6 +61,7 @@ public class WorldConfig {
 	public static int capsuleStructure = 100;
 	public static int broadcaster = 5000;
 	public static int minefreq = 64;
+	public static int radminefreq = 128;
 	public static int radfreq = 5000;
 	public static int vaultfreq = 2500;
 	public static int arcticStructure = 500;
@@ -113,7 +114,7 @@ public class WorldConfig {
 		Property propRadio = config.get(CATEGORY_DUNGEON, "4.00_radioSpawn", 500);
 		propRadio.setComment("Spawn radio station on every nTH chunk");
 		radioStructure = propRadio.getInt();
-		Property propAntenna = config.get(CATEGORY_DUNGEON, "4.01_antennaSpawn", 250);
+		Property propAntenna = config.get(CATEGORY_DUNGEON, "4.01_antennaSpawn", 750);
 		propAntenna.setComment("Spawn antenna on every nTH chunk");
 		antennaStructure = propAntenna.getInt();
 		Property propAtom = config.get(CATEGORY_DUNGEON, "4.02_atomSpawn", 500);
@@ -155,26 +156,29 @@ public class WorldConfig {
 		Property propMines = config.get(CATEGORY_DUNGEON, "4.14_landmineSpawn", 64);
 		propMines.setComment("Spawn AP landmine on every nTH chunk");
 		minefreq = propMines.getInt();
-		Property propRad = config.get(CATEGORY_DUNGEON, "4.15_radHotsoptSpawn", 5000);
+		Property propRadMines = config.get(CATEGORY_DUNGEON, "4.15_sellafiteChunkSpawn", 128);
+		propRadMines.setComment("Spawn Sellafite block on every nTH chunk");
+		minefreq = propRadMines.getInt();
+		Property propRad = config.get(CATEGORY_DUNGEON, "4.16_radHotsoptSpawn", 5000);
 		propRad.setComment("Spawn radiation hotspot on every nTH chunk");
 		radfreq = propRad.getInt();
-		Property propVault = config.get(CATEGORY_DUNGEON, "4.16_vaultSpawn", 2500);
+		Property propVault = config.get(CATEGORY_DUNGEON, "4.17_vaultSpawn", 2500);
 		propVault.setComment("Spawn locked safe on every nTH chunk");
 		vaultfreq = propVault.getInt();
-		Property pGW = config.get(CATEGORY_DUNGEON, "4.17_geyserWaterSpawn", 3000);
+		Property pGW = config.get(CATEGORY_DUNGEON, "4.18_geyserWaterSpawn", 3000);
 		pGW.setComment("Spawn water geyser on every nTH chunk");
 		geyserWater = pGW.getInt();
-		Property pGC = config.get(CATEGORY_DUNGEON, "4.18_geyserChlorineSpawn", 3000);
+		Property pGC = config.get(CATEGORY_DUNGEON, "4.19_geyserChlorineSpawn", 3000);
 		pGC.setComment("Spawn poison geyser on every nTH chunk");
 		geyserChlorine = pGC.getInt();
-		Property pGV = config.get(CATEGORY_DUNGEON, "4.19_geyserVaporSpawn", 500);
+		Property pGV = config.get(CATEGORY_DUNGEON, "4.20_geyserVaporSpawn", 500);
 		pGV.setComment("Spawn vapor geyser on every nTH chunk");
 		geyserVapor = pGV.getInt();
-		meteorStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "meteorStructure", "Spawn meteor dungeon on every nTH chunk", 15000);
-		capsuleStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.21_capsuleSpawn", "Spawn landing capsule on every nTH chunk", 100);
-		arcticStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.22_arcticVaultSpawn", "Spawn artic code vault on every nTH chunk", 500);
-		jungleStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.23_jungleDungeonSpawn", "Spawn jungle dungeon on every nTH chunk", 2000);
-		pyramidStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.24_pyramidSpawn", "Spawn pyramid on every nTH chunk", 4000);
+		meteorStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.21_meteorStructureSpan", "Spawn meteor dungeon on every nTH chunk", 15000);
+		capsuleStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.22_capsuleSpawn", "Spawn landing capsule on every nTH chunk", 100);
+		arcticStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.23_arcticVaultSpawn", "Spawn artic code vault on every nTH chunk", 500);
+		jungleStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.24_jungleDungeonSpawn", "Spawn jungle dungeon on every nTH chunk", 2000);
+		pyramidStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.25_pyramidSpawn", "Spawn pyramid on every nTH chunk", 4000);
 		
 		final String CATEGORY_METEOR = "05_meteors";
 		Property propMeteorStrikeChance = config.get(CATEGORY_METEOR, "5.00_meteorStrikeChance", 20 * 60 * 60 * 5);
@@ -205,6 +209,7 @@ public class WorldConfig {
 		geyserVapor = CommonConfig.setDefZero(geyserVapor, 1000);
 		broadcaster = CommonConfig.setDefZero(broadcaster, 1000);
 		minefreq = CommonConfig.setDefZero(minefreq, 1000);
+		radminefreq = CommonConfig.setDefZero(radminefreq, 1000);
 		radfreq = CommonConfig.setDefZero(radfreq, 1000);
 		vaultfreq = CommonConfig.setDefZero(vaultfreq, 1000);
 		meteorStructure = CommonConfig.setDefZero(meteorStructure, 15000);

@@ -209,7 +209,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 									if(b.getMaterial().isOpaque()){
 										if(hardness < 3000 && world.rand.nextInt(5) == 0){
 											world.playSound(null, x + 0.5, y + 0.5, z + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS,  1.0F, 1.0F);
-											world.setBlockState(new BlockPos(x, y, z), ModBlocks.fire_balefire.getDefaultState());
+											world.setBlockState(new BlockPos(x, y, z), ModBlocks.balefire.getDefaultState());
 										}else{
 											blocked = true;
 										}

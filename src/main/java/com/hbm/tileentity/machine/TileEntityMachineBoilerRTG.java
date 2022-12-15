@@ -81,9 +81,11 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 	}
 	
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if(i == 4 || i==5){
-			if(stack != null && stack.getItem() instanceof ItemRTGPellet)
-				return true;
+		if(i == 4 || i == 5){
+			return (stack != null && stack.getItem() instanceof ItemRTGPellet);
+		}
+		if(i == 2 || i == 6){
+			return (stack != null && !(stack.getItem() instanceof ItemRTGPellet));
 		}
 		return false;
 	}
@@ -146,7 +148,7 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 			if(heat > 2000) {
 				heat -= 40;
 			}
-			rtgPower = Math.min(RTGUtil.updateRTGs(inventory), maxRTGPower);
+			rtgPower = Math.min(RTGUtil.updateRTGs(inventory, new int[] {4, 5}), maxRTGPower);
 			if(rtgPower > 0) {
 				heat += rtgPower*5;
 			} else {

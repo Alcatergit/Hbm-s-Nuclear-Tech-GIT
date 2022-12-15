@@ -4,6 +4,8 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
@@ -12,6 +14,8 @@ import com.hbm.sound.AudioWrapper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -88,7 +92,24 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	public boolean canAccess(EntityPlayer player) {
 		if(keypadLocked && player != null)
 			return false;
-		return super.canAccess(player);
+		
+		if(!this.isLocked()) {
+			return true;
+		} else {
+			ItemStack stack = player.getHeldItemMainhand();
+			
+			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			if(stack.getItem() == ModItems.key_red) {
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return true;
+			}
+			
+			return this.tryPick(player);
+		}
 	}
 
 	private void placeDummy(int offset){

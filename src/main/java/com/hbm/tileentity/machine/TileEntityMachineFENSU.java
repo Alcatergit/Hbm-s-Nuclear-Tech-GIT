@@ -33,9 +33,19 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 				if(age == 9 || age == 19)
 					ffgeuaInit();
 			}
-
+			long prevPower = this.power;
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			power = Library.chargeItemsFromTE(inventory, 1, power, maxPower);
+			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
+
+			tryMoveItems();
+			long avg = (this.power + prevPower) / 2;
+			this.powerDelta = avg - this.log[0];
+
+			for(int i = 1; i < this.log.length; i++) {
+				this.log[i - 1] = this.log[i];
+			}
+			
+			this.log[this.log.length-1] = avg;
 
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setLong("power", power);
@@ -43,6 +53,8 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 			nbt.setShort("redLow", redLow);
 			nbt.setShort("redHigh", redHigh);
 			this.networkPack(nbt, 250);
+
+			this.detectAndSendChanges();
 		} else {
 			this.prevRotation = this.rotation;
 			this.rotation += this.getSpeed();

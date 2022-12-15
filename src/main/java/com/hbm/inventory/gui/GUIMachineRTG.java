@@ -54,12 +54,12 @@ public class GUIMachineRTG extends GuiInfoContainer {
 		if(rtg.hasHeat())
 		{
 			int i = rtg.getHeatScaled(52);
-			drawTexturedModalRect(guiLeft + 134, guiTop + 69 - i, 176, 52 - i, 16, i);
+			drawTexturedModalRect(guiLeft + 134, guiTop + 74 - i, 176, 52 - i, 16, i);
 		}
 		if(rtg.hasPower())
 		{
 			int i = (int)rtg.getPowerScaled(52);
-			drawTexturedModalRect(guiLeft + 152, guiTop + 69 - i, 192, 52 - i, 16, i);
+			drawTexturedModalRect(guiLeft + 152, guiTop + 74 - i, 192, 52 - i, 16, i);
 		}
 		
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);

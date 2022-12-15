@@ -17,6 +17,8 @@ import com.hbm.entity.projectile.EntityRainbow;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntitySchrab;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
@@ -33,6 +35,7 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -388,15 +391,18 @@ public class ExplosionChaos {
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
 				if(d9 < wat) {
-					if(entity instanceof EntityPlayer && ArmorUtil.checkForGasMask((EntityPlayer) entity)) {
-						ArmorUtil.damageSuit((EntityPlayer) entity, 3, rand.nextInt(2));
-
-					} else if(entity instanceof EntityLivingBase) {
-						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0));
-						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * 20, 2));
-						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.WITHER, 1 * 20, 1));
-						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30 * 20, 1));
-						((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30 * 20, 2));
+					if(!(entity instanceof EntityLivingBase))
+						continue;
+					
+					EntityLivingBase entityLiving = (EntityLivingBase) entity;
+					if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)) {
+						ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+					} else {
+						entityLiving.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0));
+						entityLiving.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * 20, 2));
+						entityLiving.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1 * 20, 1));
+						entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30 * 20, 1));
+						entityLiving.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30 * 20, 2));
 					}
 				}
 			}

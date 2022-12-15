@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.items.ItemBlockHazard;
@@ -400,13 +401,13 @@ public class ModItems {
 	public static final Item factory_core_titanium = new ItemBattery(7040000, 1000, 0, "factory_core_titanium").setMaxStackSize(1);
 	public static final Item factory_core_advanced = new ItemBattery(4160000, 1000, 0, "factory_core_advanced").setMaxStackSize(1);
 	public static final Item dynosphere_base = new ItemBase("dynosphere_base").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_desh = new ItemBattery(1000000L, 10000, 0, "dynosphere_desh").setMaxStackSize(1);
+	public static final Item dynosphere_desh = new ItemBattery(1000000L, 100000, 0, "dynosphere_desh").setMaxStackSize(1);
 	public static final Item dynosphere_desh_charged = new ItemBase("dynosphere_desh_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_schrabidium = new ItemBattery(100000000L, 100000, 0, "dynosphere_schrabidium").setMaxStackSize(1);
+	public static final Item dynosphere_schrabidium = new ItemBattery(100000000L, 1000000, 0, "dynosphere_schrabidium").setMaxStackSize(1);
 	public static final Item dynosphere_schrabidium_charged = new ItemBase("dynosphere_schrabidium_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_euphemium = new ItemBattery(10000000000L, 1000000, 0, "dynosphere_euphemium").setMaxStackSize(1);
+	public static final Item dynosphere_euphemium = new ItemBattery(10000000000L, 10000000, 0, "dynosphere_euphemium").setMaxStackSize(1);
 	public static final Item dynosphere_euphemium_charged = new ItemCustomLore("dynosphere_euphemium_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_dineutronium = new ItemBattery(1000000000000L, 10000000, 0, "dynosphere_dineutronium").setMaxStackSize(1);
+	public static final Item dynosphere_dineutronium = new ItemBattery(1000000000000L, 100000000, 0, "dynosphere_dineutronium").setMaxStackSize(1);
 	public static final Item dynosphere_dineutronium_charged = new ItemBase("dynosphere_dineutronium_charged").setCreativeTab(MainRegistry.controlTab);
 	public static final Item hev_battery = new ItemFusionCore(150000, "hev_battery").setMaxStackSize(4).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fusion_core = new ItemFusionCore(2500000, "fusion_core").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -1060,10 +1061,10 @@ public class ModItems {
 	public static final Item billet_po210be = new ItemHazard(ItemHazard.pobe, "billet_po210be").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_ra226be = new ItemHazard(ItemHazard.rabe, "billet_ra226be").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_pu238be = new ItemHazard(ItemHazard.pube, "billet_pu238be").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_australium = new ItemCustomLore("billet_australium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_australium_lesser = new ItemCustomLore("billet_australium_lesser").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_australium_greater = new ItemCustomLore("billet_australium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_unobtainium = new ItemHazard(ItemHazard.unof * ItemHazard.billet, "billet_unobtainium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_australium = new ItemBase("billet_australium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_australium_lesser = new ItemBase("billet_australium_lesser").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_australium_greater = new ItemBase("billet_australium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_yharonite = new ItemBase("billet_yharonite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_balefire_gold = new ItemHazard(ItemHazard.au198 * ItemHazard.billet, true, "billet_balefire_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_flashlead = new ItemHazard(ItemHazard.aupb * ItemHazard.billet, true, true, "billet_flashlead").setCreativeTab(MainRegistry.partsTab);
@@ -1130,6 +1131,8 @@ public class ModItems {
 	public static final Item nugget_australium_greater = new ItemCustomLore("nugget_australium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_verticium = new ItemCustomLore("nugget_verticium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_unobtainium = new ItemCustomLore("nugget_unobtainium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_unobtainium_lesser = new ItemCustomLore("nugget_unobtainium_lesser").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_unobtainium_greater = new ItemHazard(1000, "nugget_unobtainium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_daffergon = new ItemCustomLore("nugget_daffergon").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item nugget_mercury = new ItemCustomLore("nugget_mercury").setCreativeTab(MainRegistry.partsTab);
@@ -1294,7 +1297,7 @@ public class ModItems {
 	public static final Item pellet_rtg_polonium = new ItemRTGPellet(50, ItemHazard.po210 * ItemHazard.rtg, "pellet_rtg_polonium").setDecays(ModItems.pellet_rtg_depleted_lead, 3321024L, 3).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
 	public static final Item pellet_rtg_gold = new ItemRTGPellet(200, ItemHazard.au198 * ItemHazard.rtg, "pellet_rtg_gold").setDecays(ModItems.pellet_rtg_depleted_mercury, 64728L, 4).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
 	public static final Item pellet_rtg_lead = new ItemRTGPellet(600, ItemHazard.pb209 * ItemHazard.rtg, "pellet_rtg_lead").setDecays(ModItems.pellet_rtg_depleted_bismuth, 3253L, 6).addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, ItemHazard.bf * ItemHazard.rtg, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_bismuth, 500L, 10).addFire(150).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, ItemHazard.bf * ItemHazard.rtg, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_bismuth, 1000L, 12).addFire(150).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
 	
 	public static final Item tritium_deuterium_cake = new ItemCustomLore("tritium_deuterium_cake").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
@@ -2543,7 +2546,7 @@ public class ModItems {
 	public static final ItemRBMKPellet rbmk_pellet_hes = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Schrabidium-326", "rbmk_pellet_hes").addRadiation(ItemHazard.saf * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_leaus = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Australium (Tasmanite)", "rbmk_pellet_leaus");
 	public static final ItemRBMKPellet rbmk_pellet_heaus = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Australium (Ayerite)", "rbmk_pellet_heaus");
-	public static final ItemRBMKPellet rbmk_pellet_unobtainium = (ItemRBMKPellet) new ItemRBMKPellet("The Strongest Neutron Source known to man", "rbmk_pellet_unobtainium");
+	public static final ItemRBMKPellet rbmk_pellet_unobtainium = (ItemRBMKPellet) new ItemRBMKPellet("The Strongest Manmade Neutron Emitter", "rbmk_pellet_unobtainium");
 	public static final ItemRBMKPellet rbmk_pellet_po210be = (ItemRBMKPellet) new ItemRBMKPellet("Polonium-210 & Beryllium Neutron Source", "rbmk_pellet_po210be").addRadiation(ItemHazard.pobe * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_ra226be = (ItemRBMKPellet) new ItemRBMKPellet("Radium-226 & Beryllium Neutron Source", "rbmk_pellet_ra226be").addRadiation(ItemHazard.rabe * ItemHazard.billet).toItem();
 	public static final ItemRBMKPellet rbmk_pellet_pu238be = (ItemRBMKPellet) new ItemRBMKPellet("Plutonium-238 & Beryllium Neutron Source", "rbmk_pellet_pu238be").addRadiation(ItemHazard.pube * ItemHazard.billet).toItem();
@@ -2856,10 +2859,10 @@ public class ModItems {
 	public static final Item ams_core_thingy = new ItemAMSCore(5000000000L, 250, 5, "ams_core_thingy").setMaxStackSize(1).setCreativeTab(null);
 	
 	//Reactor Blanket
-	public static final Item fusion_shield_tungsten = new ItemFusionShield(60 * 60 * 60 * 5, 3500 + 273, "fusion_shield_tungsten").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 4500 + 273, "fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item fusion_shield_chlorophyte = new ItemFusionShield(60 * 60 * 60 * 15, 9000 + 273, "fusion_shield_chlorophyte").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 10, 1916169 + 273, "fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_tungsten = new ItemFusionShield(60 * 60 * 60 * 5, 35000, "fusion_shield_tungsten").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 45000, "fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_chlorophyte = new ItemFusionShield(60 * 60 * 60 * 15, 90000, "fusion_shield_chlorophyte").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 10, 1916169, "fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	//Special tools
 	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
@@ -2977,7 +2980,7 @@ public class ModItems {
 	public static final Item missile_exo = new ItemBase("missile_exo").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_doomsday = new ItemBase("missile_doomsday").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_taint = new ItemBase("missile_taint").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
-	public static final Item missile_micro = new ItemBase("missile_micro").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_micro = new ItemCustomLore("missile_micro").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_bhole = new ItemBase("missile_bhole").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_schrabidium = new ItemBase("missile_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_emp = new ItemBase("missile_emp").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
@@ -3001,7 +3004,7 @@ public class ModItems {
 	public static final Item warhead_cluster_large = new ItemBase("warhead_cluster_large").setCreativeTab(MainRegistry.partsTab);
 	public static final Item warhead_buster_large = new ItemBase("warhead_buster_large").setCreativeTab(MainRegistry.partsTab);
 	public static final Item warhead_nuclear = new ItemBase("warhead_nuclear").setCreativeTab(MainRegistry.partsTab);
-	public static final Item warhead_mirvlet = new ItemBase("warhead_mirvlet").setCreativeTab(null);
+	public static final Item warhead_mirvlet = new ItemBase("warhead_mirvlet").setCreativeTab(MainRegistry.partsTab);
 	public static final Item warhead_mirv = new ItemBase("warhead_mirv").setCreativeTab(MainRegistry.partsTab);
 	public static final Item warhead_volcano = new ItemBase("warhead_volcano").setCreativeTab(MainRegistry.partsTab);
 	public static final Item warhead_thermo_endo = new ItemBase("warhead_thermo_endo").setCreativeTab(MainRegistry.partsTab);
@@ -3172,7 +3175,7 @@ public class ModItems {
 	public static final Item mp_warhead_15_nuclear = new ItemMissile("mp_warhead_15_nuclear").makeWarhead(WarheadType.NUCLEAR, 125F, 5F, PartSize.SIZE_15).setTitle("Auntie Bertha").setHealth(15F).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_nuclear_shark = ((ItemMissile) mp_warhead_15_nuclear).copy("mp_warhead_15_nuclear_shark").setRarity(Rarity.UNCOMMON).setTitle("Discount Bullet Bill").setWittyText("Nose art on a cannon bullet? Who does that?");
 	public static final Item mp_warhead_15_thermo = new ItemMissile("mp_warhead_15_thermo").makeWarhead(WarheadType.TX, 250F, 6.5F, PartSize.SIZE_15).setHealth(25F).setRarity(Rarity.RARE).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
-	public static final Item mp_warhead_15_mirv  = new ItemMissile("mp_warhead_15_mirv").makeWarhead(WarheadType.MIRV, 75F, 7.5F, PartSize.SIZE_15).setRarity(Rarity.LEGENDARY).setAuthor("Seven").setHealth(20F).setWittyText("I wanna know, have you ever seen the rain?").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
+	public static final Item mp_warhead_15_mirv  = new ItemMissile("mp_warhead_15_mirv").makeWarhead(WarheadType.MIRV, (float) BombConfig.mirvRadius, 7.0F, PartSize.SIZE_15).setRarity(Rarity.LEGENDARY).setAuthor("Seven").setHealth(20F).setWittyText("I wanna know, have you ever seen the rain?").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_boxcar = new ItemMissile("mp_warhead_15_boxcar").makeWarhead(WarheadType.TX, 500F, 7.5F, PartSize.SIZE_15).setWittyText("?!?!").setHealth(35F).setRarity(Rarity.LEGENDARY).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_n2 = new ItemMissile("mp_warhead_15_n2").makeWarhead(WarheadType.N2, 100F, 5F, PartSize.SIZE_15).setWittyText("[screams geometrically]").setHealth(20F).setRarity(Rarity.RARE).setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item mp_warhead_15_balefire = new ItemMissile("mp_warhead_15_balefire").makeWarhead(WarheadType.BALEFIRE, 100F, 7.5F, PartSize.SIZE_15).setRarity(Rarity.LEGENDARY).setAuthor("VT-6/24").setHealth(15F).setWittyText("Hightower, never forgetti.").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);

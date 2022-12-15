@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.util.ArmorRegistry.HazardClass;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -52,22 +55,19 @@ public class BlockClorine extends Block {
 	
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (entity instanceof EntityPlayer && ArmorUtil.checkForGasMask((EntityPlayer) entity)) {
-			
-			if(world.rand.nextInt(25) == 0)
-				ArmorUtil.damageSuit((EntityPlayer)entity, 3, world.rand.nextInt(2));
-
-		} else if (entity instanceof EntityLivingBase) {
-			((EntityLivingBase) entity)
-					.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0));
-			((EntityLivingBase) entity)
-					.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * 20, 2));
-			((EntityLivingBase) entity)
-					.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1 * 20, 1));
-			((EntityLivingBase) entity)
-					.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30 * 20, 1));
-			((EntityLivingBase) entity)
-					.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30 * 20, 2));
+		if(!(entity instanceof EntityLivingBase))
+			return;
+		
+		EntityLivingBase entityLiving = (EntityLivingBase) entity;
+		
+		if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.GAS_CHLORINE)) {
+			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+		} else {
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.POISON, 20 * 20, 2));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1 * 20, 1));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30 * 20, 1));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 30 * 20, 2));
 		}
 	}
 	

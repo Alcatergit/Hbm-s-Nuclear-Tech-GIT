@@ -23,9 +23,9 @@ public class RTGUtil {
 		return false;
 	}
 	
-	public static int updateRTGs(ItemStackHandler inventory) {
+	public static int updateRTGs(ItemStackHandler inventory, int[] slots) {
 		int newHeat = 0;
-		for(int i = 0; i < inventory.getSlots(); i++){
+		for(int i: slots){
 			
 			if(inventory.getStackInSlot(i) == ItemStack.EMPTY)
 				continue;

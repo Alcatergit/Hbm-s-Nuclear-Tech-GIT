@@ -261,7 +261,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		if(inventory.getStackInSlot(3).isEmpty() || !(inventory.getStackInSlot(3).getItem() instanceof ItemFusionShield))
 			return 0;
 
-		return ((ItemFusionShield) inventory.getStackInSlot(3).getItem()).maxTemp;
+		return ((ItemFusionShield) inventory.getStackInSlot(3).getItem()).maxTemp + 273;
 	}
 
 	@Override

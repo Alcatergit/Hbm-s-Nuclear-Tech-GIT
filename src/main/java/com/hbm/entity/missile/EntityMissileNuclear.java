@@ -23,14 +23,7 @@ public class EntityMissileNuclear extends EntityMissileBaseAdvanced {
 
 	@Override
 	public void onImpact() {
-		/*EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(this.worldObj);
-    	entity.posX = this.posX;
-    	entity.posY = this.posY;
-    	entity.posZ = this.posZ;
-    	entity.destructionRange = MainRegistry.missileRadius;
-    	entity.speed = MainRegistry.blastSpeed;
-    	entity.coefficient = 10.0F;*/
-    	
+   	
     	this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius, posX, posY, posZ));
 		EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, BombConfig.missileRadius);
     	entity2.posX = this.posX;

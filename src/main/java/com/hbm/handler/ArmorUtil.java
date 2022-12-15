@@ -28,8 +28,8 @@ public class ArmorUtil {
 		//ArmorRegistry.registerHazard(ModItems.gas_mask_filter_rag, HazardClass.PARTICLE_COARSE);
 		//ArmorRegistry.registerHazard(ModItems.gas_mask_filter_piss, HazardClass.PARTICLE_COARSE, HazardClass.GAS_CHLORINE);
 
-		ArmorRegistry.registerHazard(ModItems.gas_mask, HazardClass.SAND, HazardClass.LIGHT);
-		ArmorRegistry.registerHazard(ModItems.gas_mask_m65, HazardClass.SAND);
+		ArmorRegistry.registerHazard(ModItems.gas_mask, HazardClass.SAND, HazardClass.LIGHT, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
+		ArmorRegistry.registerHazard(ModItems.gas_mask_m65, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
 		//ArmorRegistry.registerHazard(ModItems.mask_rag, HazardClass.PARTICLE_COARSE);
 		//ArmorRegistry.registerHazard(ModItems.mask_piss, HazardClass.PARTICLE_COARSE, HazardClass.GAS_CHLORINE);
 		
@@ -109,6 +109,7 @@ public class ArmorUtil {
 			"platinum",
 			"tin",
 			"lead",
+			"liquidator",
 			"schrabidium",
 			"euphemium",
 			"steel",
@@ -119,11 +120,13 @@ public class ArmorUtil {
 			"bronze",
 			"electrum",
 			"t45",
-			"rpa",
 			"bj",
 			"starmetal",
 			"hazmat", //also count because rubber is insulating
 			"rubber",
+			"hev",
+			"ajr",
+			"rpa",
 			"spacesuit"
 	};
 
@@ -296,47 +299,11 @@ public class ArmorUtil {
 		
 		return filter;
 	}
-
-	public static boolean checkForGasMask(EntityPlayer player) {
-	
-		if(checkArmorPiece(player, ModItems.hazmat_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_red, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_helmet_grey, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.hazmat_paa_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.gas_mask, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.gas_mask_m65, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.t45_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.schrabidium_helmet, 3)) {
-			return true;
-		}
-		if(checkArmorPiece(player, ModItems.euphemium_helmet, 3)) {
-			return true;
-		}
-	
-		if(player.isPotionActive(HbmPotion.mutation))
-			return true;
-	
-		return false;
-	}
 	
 	public static boolean checkForDigamma(EntityPlayer player) {
 		
-		//if(checkArmor(player, ModItems.fau_helmet, ModItems.fau_plate, ModItems.fau_legs, ModItems.fau_boots))
-		//	return true;
+		if(checkArmor(player, ModItems.fau_helmet, ModItems.fau_plate, ModItems.fau_legs, ModItems.fau_boots))
+			return true;
 		
 		if(player.isPotionActive(HbmPotion.stability))
 			return true; 
@@ -345,6 +312,13 @@ public class ArmorUtil {
 	}
 	
 	public static boolean checkForMonoMask(EntityPlayer player) {
+
+		if(checkArmorPiece(player, ModItems.gas_mask, 3)) {
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.gas_mask_m65, 3)) {
+			return true;
+		}
 
 		if(checkArmorPiece(player, ModItems.gas_mask_mono, 3))
 			return true;

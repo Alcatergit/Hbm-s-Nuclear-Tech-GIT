@@ -7,6 +7,9 @@ import com.hbm.config.VersatileConfig;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 //Chunkloading stuff
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraft.util.math.ChunkPos;
 
-
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockDirt;
@@ -41,7 +44,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public class EntityFalloutUnderGround extends Entity implements IConstantRenderer, IChunkLoader {
-	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutUnderGround.class, DataSerializers.VARINT);
 	public boolean done;
 	private int maxSamples;
 	private int currentSample;
@@ -149,12 +152,12 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 	public void onUpdate() {
 
 		if(!world.isRemote) {
-			
+			this.radiate((float)Math.pow(radius, 2), radius);
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			int rayCounter = 0;
 			for(int sample = currentSample; sample < this.maxSamples; sample++){
 				this.currentSample = sample;
-				if(rayCounter > BombConfig.fSpeed){
+				if(rayCounter > BombConfig.mk4){
 					break;
 				}
 				double fy = (2D * sample / (maxSamples - 1D)) - 1D;  // y goes from 1 to -1
@@ -169,6 +172,38 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				this.done=true;
 				this.setDead();
 			}
+		}
+	}
+
+	private void radiate(float rads, double range) {
+		
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
+		MutableBlockPos rayPos = new BlockPos.MutableBlockPos();
+		for(EntityLivingBase e : entities) {
+			
+			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
+			double len = vec.lengthVector();
+			vec = vec.normalize();
+			
+			float res = 0;
+			
+			for(int i = 1; i < len; i++) {
+
+				int ix = (int)Math.floor(posX + vec.xCoord * i);
+				int iy = (int)Math.floor(posY + vec.yCoord * i);
+				int iz = (int)Math.floor(posZ + vec.zCoord * i);
+				
+				res += world.getBlockState(rayPos.setPos(posX+vec.xCoord * i, posY+vec.yCoord * i, posZ+vec.zCoord * i)).getBlock().getExplosionResistance(null);
+			}
+			
+			if(res < 1)
+				res = 1;
+			
+			float eRads = rads;
+			eRads /= (float)res;
+			eRads /= (float)(len * len);
+			
+			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 		}
 	}
 
@@ -204,7 +239,10 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 			
 			} else if(bblock instanceof BlockLeaves) {
-				world.setBlockToAir(pos);
+				if(l > s1)
+					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+				else
+					world.setBlockToAir(pos);
 				continue;
 
 			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {

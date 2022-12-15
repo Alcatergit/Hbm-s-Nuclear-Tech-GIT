@@ -1,5 +1,6 @@
 package com.hbm.inventory.container;
 
+import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +19,10 @@ public class ContainerMachineBattery extends Container {
 		
 		diFurnace = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 26, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 53 - 18, 17));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 53 - 18, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 125, 17));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 125, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{

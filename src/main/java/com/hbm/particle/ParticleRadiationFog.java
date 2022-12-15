@@ -83,9 +83,9 @@ public class ParticleRadiationFog extends Particle {
 		
 		alpha = (float) Math.sin(particleAge * Math.PI / (400F)) * 0.25F;
 
-        this.particleRed = 0.85F;
-        this.particleGreen = 0.9F;
-        this.particleBlue = 0.5F;
+        this.particleRed = 1.0F;
+        this.particleGreen = 0.7F;
+        this.particleBlue = 0.3F;
         this.particleAlpha = MathHelper.clamp(alpha, 0, 1);
 		
 		Random rand = new Random(50);
@@ -95,7 +95,7 @@ public class ParticleRadiationFog extends Particle {
 			double dX = (rand.nextGaussian() - 1D) * 2.5D;
 			double dY = (rand.nextGaussian() - 1D) * 0.15D;
 			double dZ = (rand.nextGaussian() - 1D) * 2.5D;
-			double size = rand.nextDouble() * particleScale;
+			double size = (0.75D+rand.nextDouble() * 0.5D) * particleScale;
 			
 			int j = this.getBrightnessForRender(partialTicks);
 			int k = j >> 16 & 65535;

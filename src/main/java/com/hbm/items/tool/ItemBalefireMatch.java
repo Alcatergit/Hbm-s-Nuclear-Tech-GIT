@@ -43,7 +43,7 @@ public class ItemBalefireMatch extends Item {
             if (worldIn.isAirBlock(pos))
             {
                 worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-                worldIn.setBlockState(pos, ModBlocks.fire_balefire.getDefaultState(), 11);
+                worldIn.setBlockState(pos, ModBlocks.balefire.getDefaultState(), 11);
             }
 
             if (player instanceof EntityPlayerMP)

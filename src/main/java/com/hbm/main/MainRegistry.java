@@ -25,6 +25,7 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.ToolConfig;
 import com.hbm.config.WeaponConfig;
 import com.hbm.config.WorldConfig;
+import com.hbm.creativetabs.RessourceTab;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
 import com.hbm.creativetabs.ControlTab;
@@ -393,6 +394,8 @@ public class MainRegistry {
 	// templates, siren tracks
 	public static CreativeTabs templateTab = new TemplateTab(CreativeTabs.getNextID(), "tabTemplate");
 	// ore and mineral blocks
+	public static CreativeTabs ressourceTab = new RessourceTab(CreativeTabs.getNextID(), "tabRessource");
+	// construction blocks
 	public static CreativeTabs blockTab = new BlockTab(CreativeTabs.getNextID(), "tabBlocks");
 	// machines, structure parts
 	public static CreativeTabs machineTab = new MachineTab(CreativeTabs.getNextID(), "tabMachine");
@@ -505,8 +508,6 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
-		SchistStratum schist = new SchistStratum();
-		MinecraftForge.EVENT_BUS.register(schist); //DecorateBiomeEvent.Pre
 		
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds keyHandler = new HbmKeybinds();
@@ -801,7 +802,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk3"), EntityNukeExplosionMK3.class, "entity_nuke_mk3", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fleija_rainbow"), EntityCloudFleijaRainbow.class, "entity_fleija_rainbow", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_explosive_beam"), EntityExplosiveBeam.class, "entity_explosive_beam", i++, MainRegistry.instance, 1000, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tainted_creeper"), EntityTaintedCreeper.class, "entity_tainted_creeper", i++, MainRegistry.instance, 80, 3, true, 0x813b9b, 0xd71fdd);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tainted_creeper"), EntityTaintedCreeper.class, "entity_tainted_creeper", i++, MainRegistry.instance, 80, 3, true, 0x05D702, 0x002600);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_creeper"), EntityNuclearCreeper.class, "entity_nuclear_creeper", i++, MainRegistry.instance, 80, 3, true, 0x204131, 0x75CE00);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_cloud_no"), EntityNukeCloudNoShroom.class, "entity_nuke_cloud_no", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cloud_fleija"), EntityCloudFleija.class, "entity_cloud_fleija", i++, MainRegistry.instance, 1000, 1, true);
@@ -934,7 +935,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser_beam"), EntityLaserBeam.class, "entity_laser_beam", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mirvlet"), EntityMIRV.class, "entity_mirvlet", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_building"), EntityBuilding.class, "entity_building", i++, MainRegistry.instance, 1000, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_taint_crab"), EntityTaintCrab.class, "entity_taint_crab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0xFF00FF);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_taint_crab"), EntityTaintCrab.class, "entity_taint_crab", i++, MainRegistry.instance, 250, 1, true, 0x00B900, 0x404040);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tesla_crab"), EntityTeslaCrab.class, "entity_tesla_crab", i++, MainRegistry.instance, 250, 1, true, 0xAAAAAA, 0x440000);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tom_the_moonstone"), EntityTom.class, "entity_tom_the_moonstone", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tom_bust"), EntityTomBlast.class, "entity_tom_bust", i++, MainRegistry.instance, 1000, 1, true);
@@ -1035,6 +1036,7 @@ public class MainRegistry {
 		//Drillgon200: expand the max entity radius for the hunter chopper
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
+		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
 		proxy.postInit(event);
 	}
 

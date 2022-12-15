@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "hbm:blocks/fire_balefire"
+		"layer0": "hbm:items/chem_icon_dyn_el"
 	}
 }
