@@ -14,6 +14,11 @@ import net.minecraft.tileentity.TileEntity;
 public class RenderRBMKCraneConsole extends TileEntitySpecialRenderer<TileEntityRBMKCraneConsole> {
 
 	@Override
+	public boolean isGlobalRenderer(TileEntityRBMKCraneConsole te){
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntityRBMKCraneConsole console, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
 		GL11.glPushMatrix();

@@ -29,10 +29,10 @@ public class GUIFWatzCore extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 88 - 70, 16, 70, diFurnace.tanks[0], diFurnace.tankTypes[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 88 - 70, 16, 70, diFurnace.tanks[1], diFurnace.tankTypes[1]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 70, 16, 70, diFurnace.tanks[2], diFurnace.tankTypes[2]);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 106 - 88, 16, 88, diFurnace.power, TileEntityFWatzCore.maxPower);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 85, 70, 18, diFurnace.tanks[0], diFurnace.tankTypes[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 7, guiTop + 17, 18, 72, diFurnace.tanks[1], diFurnace.tankTypes[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 151, guiTop + 17, 18, 72, diFurnace.tanks[2], diFurnace.tankTypes[2]);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 29, guiTop + 107, 118, 18, diFurnace.power, TileEntityFWatzCore.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -51,17 +51,17 @@ public class GUIFWatzCore extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		int k = (int)diFurnace.getPowerScaled(88);
-		drawTexturedModalRect(guiLeft + 26, guiTop + 106 - k, 192, 88 - k, 16, k);
+		int k = (int)diFurnace.getPowerScaled(118);
+		drawTexturedModalRect(guiLeft + 30, guiTop + 108, 0, 222, k, 16);
 		
 		if(diFurnace.isRunning())
-			drawTexturedModalRect(guiLeft + 64, guiTop + 29, 176, 88, 48, 48);
+			drawTexturedModalRect(guiLeft + 64, guiTop + 29, 176, 24, 48, 48);
 		
 		int m = diFurnace.getSingularityType();
-		drawTexturedModalRect(guiLeft + 98, guiTop + 109, 240, 4 * m, 16, 4);
+		drawTexturedModalRect(guiLeft + 80, guiTop + 20, 176, 4 * m, 16, 4);
 		
-		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 16, 70, 8, 116);
-		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 134, 116);
+		FFUtils.drawLiquid(diFurnace.tanks[0], guiLeft, guiTop, zLevel, 68, 16, 54, 130);
+		FFUtils.drawLiquid(diFurnace.tanks[1], guiLeft, guiTop, zLevel, 16, 70, 8, 116);
 		FFUtils.drawLiquid(diFurnace.tanks[2], guiLeft, guiTop, zLevel, 16, 70, 152, 116);
 	}
 }

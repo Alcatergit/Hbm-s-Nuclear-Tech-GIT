@@ -20,7 +20,6 @@ import com.hbm.tileentity.machine.TileEntityMachineArcFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerRTG;
-import com.hbm.tileentity.machine.TileEntityMachineBattery;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
@@ -52,6 +51,7 @@ public class AuxGaugePacket implements IMessage {
 	int y;
 	int z;
 	int value;
+	long valueL;
 	int id;
 
 	public AuxGaugePacket() {
@@ -198,11 +198,6 @@ public class AuxGaugePacket implements IMessage {
 							rtgBoiler.heat = m.value;
 						if(m.id == 1)
 							rtgBoiler.rtgPower = m.value;
-					} else if(te instanceof TileEntityMachineBattery) {
-						TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
-
-						if(m.id == 0)
-							battery.powerDelta = m.value;
 					} else if(te instanceof TileEntityMachineCoal) {
 						TileEntityMachineCoal coalgen = (TileEntityMachineCoal) te;
 

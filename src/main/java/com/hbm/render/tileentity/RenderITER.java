@@ -94,15 +94,17 @@ public class RenderITER extends TileEntitySpecialRenderer<TileEntityITER> {
 	
 	private int getColor(Fluid type){
 		if(type == ModForgeFluids.plasma_dt){
-			return 0xF7AFDE;
+			return 0xFF3FC2;
 		} else if(type == ModForgeFluids.plasma_hd){
-			return 0xF0ADF4;
+			return 0xEB3FFF;
 		} else if(type == ModForgeFluids.plasma_ht){
-			return 0xD1ABF2;
+			return 0x9F3FFF;
+		} else if(type == ModForgeFluids.plasma_put){
+			return 0x3F99FF;
 		} else if(type == ModForgeFluids.plasma_xm){
-			return 0xC6A5FF;
+			return 0x3FFFFF;
 		} else if(type == ModForgeFluids.plasma_bf){
-			return 0xA7F1A3;
+			return 0xB8FF3F;
 		}
 		return 0;
 	}

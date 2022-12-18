@@ -20,15 +20,15 @@ public class ItemLeadBox extends Item {
 	}
 	
 	// Without this method, your inventory will NOT work!!!
-		@Override
-		public int getMaxItemUseDuration(ItemStack stack) {
-			return 1; // return any value greater than zero
-		}
-		
-		@Override
-		public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-			//if(world.isRemote)
-			//	player.openGui(MainRegistry.instance, ModItems.guiID_item_box, world, 0, 0, 0);
-			return super.onItemRightClick(worldIn, playerIn, handIn);
-		}
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 1; // return any value greater than zero
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+	// if(world.isRemote)
+	// 	player.openGui(MainRegistry.instance, ModItems.guiID_item_box, world, 0, 0, 0);
+		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
 }
