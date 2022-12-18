@@ -4067,5 +4067,6 @@ container.orbus=Heavy Antimatter Storage
 container.bat9000=Big-Ass Tank 9000
 container.anvil=Tier %s Anvil
 container.heaterFirebox=Firebox
+container.furnaceSteel=Steel Furnace
 item.charge_railgun.name=Deuterium Plasma Capsule
 item.ducc.name=ducc
