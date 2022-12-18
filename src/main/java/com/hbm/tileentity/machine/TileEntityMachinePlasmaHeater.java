@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IConsumer {
 
 	public long power;
-	public static final long maxPower = 100000000;
+	public static final long maxPower = 10000000000L;
 
 	public FluidTank[] tanks;
 	public Fluid[] types = new Fluid[]{ModForgeFluids.deuterium, ModForgeFluids.tritium};
@@ -65,7 +65,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
 			int maxConv = 50;
-			int powerReq = 10000;
+			int powerReq = 100000;
 
 			int convert = Math.min(tanks[0].getFluidAmount(), tanks[1].getFluidAmount());
 			convert = Math.min(convert, (plasma.getCapacity() - plasma.getFluidAmount()) * 2);
@@ -154,6 +154,10 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 		}
 		if(types.contains(ModForgeFluids.hydrogen) && types.contains(ModForgeFluids.tritium)) {
 			plasmaType = ModForgeFluids.plasma_ht;
+			return;
+		}
+		if(types.contains(ModForgeFluids.puf6) && types.contains(ModForgeFluids.tritium)) {
+			plasmaType = ModForgeFluids.plasma_put;
 			return;
 		}
 		if(types.contains(ModForgeFluids.xenon) && types.contains(ModForgeFluids.mercury)) {

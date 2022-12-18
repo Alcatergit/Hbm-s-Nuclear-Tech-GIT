@@ -52,8 +52,8 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 		
 		tanks = new FluidTank[2];
 		types = new Fluid[2];
-		tanks[0] = new FluidTank(1000000000);
-		tanks[1] = new FluidTank(1000000000);
+		tanks[0] = new FluidTank(2000000000);
+		tanks[1] = new FluidTank(2000000000);
 		types[0] = ModForgeFluids.steam;
 		types[1] = ModForgeFluids.spentsteam;
 	}

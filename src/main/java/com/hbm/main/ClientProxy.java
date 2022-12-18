@@ -1784,7 +1784,7 @@ public class ClientProxy extends ServerProxy {
 		}
 		
 		if("tower".equals(type)) {
-			ParticleCoolingTower fx = new ParticleCoolingTower(world, x, y, z);
+			ParticleCoolingTower fx = new ParticleCoolingTower(world, x, y, z, data.getFloat("base"));
 			fx.setLift(data.getFloat("lift"));
 			fx.setBaseScale(data.getFloat("base"));
 			fx.setMaxScale(data.getFloat("max"));

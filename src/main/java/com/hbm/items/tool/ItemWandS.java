@@ -59,7 +59,7 @@ public class ItemWandS extends Item {
 				tooltip.add("Structure: Watz Power Plant");
 				break;
 			case 5:
-				tooltip.add("Structure: Fusionary Watz Plant");
+				tooltip.add("Structure: Singularity-Anti-Fusion-Experiment Reactor");
 				break;
 			}
 		}
@@ -151,7 +151,7 @@ public class ItemWandS extends Item {
 						player.sendMessage(new TextComponentTranslation("Set Structure: Watz Power Plant"));
 						break;
 					case 5:
-						player.sendMessage(new TextComponentTranslation("Set Structure: Fusionary Watz Plant"));
+						player.sendMessage(new TextComponentTranslation("Set Structure: Singularity-Anti-Fusion-Experiment Reactor"));
 						break;
 					default:
 						player.sendMessage(new TextComponentTranslation("Set Structure: Titanium Factory"));

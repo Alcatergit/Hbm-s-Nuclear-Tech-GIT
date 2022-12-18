@@ -88,6 +88,7 @@ public class ModForgeFluids {
 	public static Fluid plasma_dt = new Fluid("plasma_dt", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_dt_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_dt_flowing"), null, Color.WHITE).setTemperature(32500 + 273);
 	public static Fluid plasma_hd = new Fluid("plasma_hd", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_hd_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_hd_flowing"), null, Color.WHITE).setTemperature(25000 + 273);
 	public static Fluid plasma_ht = new Fluid("plasma_ht", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_ht_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_ht_flowing"), null, Color.WHITE).setTemperature(30000 + 273);
+	public static Fluid plasma_put = new Fluid("plasma_put", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_flowing"), null, Color.WHITE).setTemperature(36000 + 273);
 	public static Fluid plasma_xm = new Fluid("plasma_xm", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"), null, Color.WHITE).setTemperature(42500 + 273);
 	public static Fluid plasma_bf = new Fluid("plasma_bf", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"), null, Color.WHITE).setTemperature(85000 + 273);
 
@@ -203,6 +204,8 @@ public class ModForgeFluids {
 			plasma_hd = FluidRegistry.getFluid("plasma_hd");
 		if(!FluidRegistry.registerFluid(plasma_ht))
 			plasma_ht = FluidRegistry.getFluid("plasma_ht");
+		if(!FluidRegistry.registerFluid(plasma_put))
+			plasma_ht = FluidRegistry.getFluid("plasma_put");
 		if(!FluidRegistry.registerFluid(plasma_xm))
 			plasma_xm = FluidRegistry.getFluid("plasma_xm");
 		if(!FluidRegistry.registerFluid(plasma_bf))
@@ -314,6 +317,7 @@ public class ModForgeFluids {
 		plasma_dt = FluidRegistry.getFluid("plasma_dt");
 		plasma_hd = FluidRegistry.getFluid("plasma_hd");
 		plasma_ht = FluidRegistry.getFluid("plasma_ht");
+		plasma_put = FluidRegistry.getFluid("plasma_put");
 		plasma_xm = FluidRegistry.getFluid("plasma_xm");
 		plasma_bf = FluidRegistry.getFluid("plasma_bf");
 		

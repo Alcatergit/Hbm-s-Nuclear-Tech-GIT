@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.hbm.inventory.OreDictManager.*;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -43,7 +45,7 @@ public class MagicRecipes {
 	public static void register() {
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.ingot_u238m2), new ComparableStack(ModItems.ingot_u238m2, 1, 1), new ComparableStack(ModItems.ingot_u238m2, 1, 2), new ComparableStack(ModItems.ingot_u238m2, 1, 3)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.rod_of_discord), new ComparableStack(Items.ENDER_PEARL), new ComparableStack(Items.BLAZE_ROD), new ComparableStack(ModItems.nugget_euphemium)));
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.balefire_and_steel), new OreDictStack("ingotSteel"), new ComparableStack(ModItems.egg_balefire_shard)));
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.balefire_and_steel), new OreDictStack(STEEL.ingot()), new ComparableStack(ModItems.egg_balefire_shard)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.mysteryshovel), new ComparableStack(Items.IRON_SHOVEL), new ComparableStack(Items.BONE), new ComparableStack(ModItems.ingot_starmetal), new ComparableStack(ModItems.ducttape)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.ingot_electronium), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged)));
 
@@ -81,12 +83,12 @@ public class MagicRecipes {
 				new ComparableStack(ModBlocks.hadron_coil_starmetal),
 				new ComparableStack(ModItems.powder_dineutronium),
 				new ComparableStack(ModItems.plate_desh),
-				new OreDictStack("dustGold")));
+				new OreDictStack(GOLD.ingot())));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.gun_darter),
-				new OreDictStack("plateSteel"),
-				new OreDictStack("plateSteel"),
+				new OreDictStack(STEEL.plate()),
+				new OreDictStack(STEEL.plate()),
 				new ComparableStack(ModItems.ingot_polymer),
-				new OreDictStack("plateGold")));
+				new OreDictStack(GOLD.plate())));
 	}
 
 	public static List<MagicRecipe> getRecipes() {

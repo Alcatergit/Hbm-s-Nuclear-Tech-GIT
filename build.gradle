@@ -24,9 +24,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.7.0'
+version = '1.8.3'
 group = 'com.hbm' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'hbm-1.12.2'
+archivesBaseName = 'hbm-A-1.12.2'
 
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) {

@@ -641,6 +641,7 @@ public class GuiHandler implements IGuiHandler {
 			if(entity instanceof TileEntityFEL) {
 				return new ContainerFEL(player.inventory, (TileEntityFEL) entity);
 			}
+			return null;
 		case ModBlocks.guiID_anvil:
 			if(world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof NTMAnvil) {
 				return new ContainerAnvil(player.inventory, ((NTMAnvil)world.getBlockState(new BlockPos(x, y, z)).getBlock()).tier);

@@ -94,7 +94,7 @@ public class HazmatRegistry {
 		double hazYellow = 0.3D; // 50%
 		double hazRed = 0.7D; // 80%
 		double hazGray = 1.3D; // 95%
-		double paa = 1.3D; // 95%
+		double paa = 1.5D; // 98%
 		double liquidator = 2D; // 99%
 
 		double t45 = 1D; // 90%
@@ -103,8 +103,8 @@ public class HazmatRegistry {
 		double bj = 1D; // 90%
 		double hev = 1.3D; // 95%
 		double fau = 4D; // 99.99%
-		double dns = 5D; // 99.999%
-		double security = 0.825D; // 85%
+		double dns = 6D; // 99.999%
+		double security = 0.01D; // 85%
 		double star = 1D; // 90%
 		double cmb = 1.3D; // 95%
 		double schrab = 2.3D; // 99.5%

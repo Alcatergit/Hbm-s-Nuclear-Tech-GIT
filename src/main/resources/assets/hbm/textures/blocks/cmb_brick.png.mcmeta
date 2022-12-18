@@ -1,0 +1,9 @@
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "CTM",
+		"textures": [
+			"hbm:blocks/cmb_brick_ctm"
+		]
+	}
+}

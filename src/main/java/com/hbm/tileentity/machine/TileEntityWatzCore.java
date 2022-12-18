@@ -46,7 +46,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityWatzCore extends TileEntity implements ITickable, IReactor, ISource, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public final static long maxPower = 100000000;
+	public final static long maxPower = 1000000000;
 	public int heat;
 	
 	public int heatMultiplier;

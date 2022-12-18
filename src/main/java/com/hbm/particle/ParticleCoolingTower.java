@@ -20,12 +20,14 @@ import net.minecraft.world.World;
 public class ParticleCoolingTower extends Particle {
 
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/particle_base.png");
-	private float baseScale = 1.0F;
+	private float baseScale = 0.1F;
 	private float maxScale = 1.0F;
 	private float lift = 0.3F;
 	
-	public ParticleCoolingTower(World worldIn, double posXIn, double posYIn, double posZIn){
+	public ParticleCoolingTower(World worldIn, double posXIn, double posYIn, double posZIn, float scale){
 		super(worldIn, posXIn, posYIn, posZIn);
+		this.particleScale = scale;
+		this.baseScale = scale;
 		this.particleRed = this.particleGreen = this.particleBlue = 0.9F + world.rand.nextFloat() * 0.05F;
 		this.canCollide = false;
 	}
@@ -55,7 +57,7 @@ public class ParticleCoolingTower extends Particle {
 		float ageScale = (float) this.particleAge / (float) this.particleMaxAge;
 		
 		this.particleAlpha = 0.25F - ageScale * 0.25F;
-		this.particleScale = baseScale + (float)Math.pow((maxScale * ageScale - baseScale), 2);
+		this.particleScale = this.baseScale + (float)Math.pow((this.maxScale * ageScale), 2);
 
 		this.particleAge++;
 		
@@ -67,7 +69,7 @@ public class ParticleCoolingTower extends Particle {
 		this.motionZ += rand.nextGaussian() * 0.075D * ageScale;
 
 		this.motionX += 0.02 * ageScale;
-		this.motionX -= 0.01 * ageScale;
+		this.motionY -= 0.01 * ageScale;
 
 		if(this.particleAge == this.particleMaxAge) {
 			this.setExpired();

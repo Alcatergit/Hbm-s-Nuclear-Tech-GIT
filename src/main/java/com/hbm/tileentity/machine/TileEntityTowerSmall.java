@@ -13,8 +13,8 @@ public class TileEntityTowerSmall extends TileEntityCondenser {
 	
 	public TileEntityTowerSmall() {
 		tanks = new FluidTank[2];
-		tanks[0] = new FluidTank(1000);
-		tanks[1] = new FluidTank(1000);
+		tanks[0] = new FluidTank(100000);
+		tanks[1] = new FluidTank(100000);
 	}
 	
 	@Override

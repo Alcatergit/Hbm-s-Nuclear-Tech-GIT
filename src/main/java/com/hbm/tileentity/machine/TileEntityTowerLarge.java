@@ -13,8 +13,8 @@ public class TileEntityTowerLarge extends TileEntityCondenser {
 	
 	public TileEntityTowerLarge() {
 		tanks = new FluidTank[2];
-		tanks[0] = new FluidTank(10000);
-		tanks[1] = new FluidTank(10000);
+		tanks[0] = new FluidTank(1000000);
+		tanks[1] = new FluidTank(1000000);
 	}
 	
 	@Override
@@ -29,10 +29,10 @@ public class TileEntityTowerLarge extends TileEntityCondenser {
 				data.setFloat("lift", 0.5F);
 				data.setFloat("base", 1F);
 				data.setFloat("max", 10F);
-				data.setInteger("life", 750 + world.rand.nextInt(250));
+				data.setInteger("life", 750 + world.rand.nextInt(750));
 	
-				data.setDouble("posX", pos.getX() + 0.5 + world.rand.nextDouble() * 3 - 1.5);
-				data.setDouble("posZ", pos.getZ() + 0.5 + world.rand.nextDouble() * 3 - 1.5);
+				data.setDouble("posX", pos.getX() + 0.5 + world.rand.nextDouble() * 2 - 1);
+				data.setDouble("posZ", pos.getZ() + 0.5 + world.rand.nextDouble() * 2 - 1);
 				data.setDouble("posY", pos.getY() + 1);
 				
 				MainRegistry.proxy.effectNT(data);

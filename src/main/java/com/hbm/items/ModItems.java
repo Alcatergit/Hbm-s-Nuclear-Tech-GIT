@@ -124,6 +124,7 @@ import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.items.machine.ItemLens;
+import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.machine.ItemMachineUpgrade;
@@ -401,13 +402,13 @@ public class ModItems {
 	public static final Item factory_core_titanium = new ItemBattery(7040000, 1000, 0, "factory_core_titanium").setMaxStackSize(1);
 	public static final Item factory_core_advanced = new ItemBattery(4160000, 1000, 0, "factory_core_advanced").setMaxStackSize(1);
 	public static final Item dynosphere_base = new ItemBase("dynosphere_base").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_desh = new ItemBattery(1000000L, 100000, 0, "dynosphere_desh").setMaxStackSize(1);
+	public static final Item dynosphere_desh = new ItemBattery(1000000L, 1000000, 0, "dynosphere_desh").setMaxStackSize(1);
 	public static final Item dynosphere_desh_charged = new ItemBase("dynosphere_desh_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_schrabidium = new ItemBattery(100000000L, 1000000, 0, "dynosphere_schrabidium").setMaxStackSize(1);
+	public static final Item dynosphere_schrabidium = new ItemBattery(100000000L, 10000000, 0, "dynosphere_schrabidium").setMaxStackSize(1);
 	public static final Item dynosphere_schrabidium_charged = new ItemBase("dynosphere_schrabidium_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_euphemium = new ItemBattery(10000000000L, 10000000, 0, "dynosphere_euphemium").setMaxStackSize(1);
+	public static final Item dynosphere_euphemium = new ItemBattery(10000000000L, 100000000, 0, "dynosphere_euphemium").setMaxStackSize(1);
 	public static final Item dynosphere_euphemium_charged = new ItemCustomLore("dynosphere_euphemium_charged").setCreativeTab(MainRegistry.controlTab);
-	public static final Item dynosphere_dineutronium = new ItemBattery(1000000000000L, 100000000, 0, "dynosphere_dineutronium").setMaxStackSize(1);
+	public static final Item dynosphere_dineutronium = new ItemBattery(1000000000000L, 1000000000, 0, "dynosphere_dineutronium").setMaxStackSize(1);
 	public static final Item dynosphere_dineutronium_charged = new ItemBase("dynosphere_dineutronium_charged").setCreativeTab(MainRegistry.controlTab);
 	public static final Item hev_battery = new ItemFusionCore(150000, "hev_battery").setMaxStackSize(4).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fusion_core = new ItemFusionCore(2500000, "fusion_core").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -445,11 +446,11 @@ public class ModItems {
 	public static final Item battery_schrabidium_cell_4 = new ItemBattery(3000000 * 4, 5000, 5000, "battery_schrabidium_cell_4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_6 = new ItemBattery(100000000 * 6, 2000000, 2000000, "battery_spark_cell_6").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_spark_cell_25 = new ItemBattery(100000000L * 25L, 2000000, 2000000, "battery_spark_cell_25").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_100 = new ItemBattery(100000000L * 100L, 2000000, 2000000, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_1000 = new ItemBattery(100000000L * 1000L, 20000000, 20000000, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_2500 = new ItemBattery(100000000L * 2500L, 20000000, 20000000, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_10000 = new ItemBattery(100000000L * 10000L, 200000000, 200000000, "battery_spark_cell_10000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item battery_spark_cell_power = new ItemBattery(100000000L * 1000000L, 200000000, 200000000, "battery_spark_cell_power").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_100 = new ItemBattery(1000000000L * 10L, 1000000L * 5L, 1000000L * 5L, "battery_spark_cell_100").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_1000 = new ItemBattery(1000000000L * 100L, 10000000L * 5L, 10000000L * 5L, "battery_spark_cell_1000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_2500 = new ItemBattery(1000000000L * 250L, 10000000L * 5L, 10000000L * 5L, "battery_spark_cell_2500").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_10000 = new ItemBattery(1000000000L * 1000L, 100000000L * 5L, 100000000L * 5L, "battery_spark_cell_10000").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item battery_spark_cell_power = new ItemBattery(1000000000L * 100000L, 100000000L * 500L, 100000000L * 500L, "battery_spark_cell_power").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
 	public static final Item battery_potato = new ItemBattery(100, 0, 100, "battery_potato").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item battery_potatos = new ItemPotatos(5000, 0, 100, "battery_potatos").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -483,11 +484,11 @@ public class ModItems {
 	public static final Item particle_sparkticle = new ItemBase("particle_sparkticle").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
 	public static final Item particle_digamma = new ItemDigamma(100F, 60, "particle_digamma").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
 	
-	public static final Item singularity = new ItemDrop("singularity").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
-	public static final Item singularity_counter_resonant = new ItemDrop("singularity_counter_resonant").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
-	public static final Item singularity_super_heated = new ItemDrop("singularity_super_heated").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
-	public static final Item black_hole = new ItemDrop("black_hole").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
-	public static final Item singularity_spark = new ItemDrop("singularity_spark").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
+	public static final Item singularity = new ItemFWatzCore("singularity", 50000000L, 50, 50, 200, 1600, 2).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
+	public static final Item singularity_counter_resonant = new ItemFWatzCore("singularity_counter_resonant", 25000000L, 50, 25, 100, 640, 1).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
+	public static final Item singularity_super_heated = new ItemFWatzCore("singularity_super_heated", 75000000L, 75, 150, 1600, 800, 3).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
+	public static final Item black_hole = new ItemFWatzCore("black_hole", 200000000L, 100, 100, 640, 640, 4).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
+	public static final Item singularity_spark = new ItemFWatzCore("singularity_spark", 2500000000L, 500, 500, 1280, 320, 5).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.nuclear_waste);
 	public static final Item pellet_antimatter = new ItemDrop("pellet_antimatter").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.cell);
 	public static final Item crystal_xen = new ItemDrop("crystal_xen").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item overfuse = new ItemCustomLore("overfuse").setMaxStackSize(1).setFull3D();
@@ -510,6 +511,8 @@ public class ModItems {
 	public static final Item ff_fluid_duct = new ItemFFFluidDuct("ff_fluid_duct").setCreativeTab(MainRegistry.templateTab);
 	public static final Item inf_water = new ItemFluidContainerInfinite(50, "inf_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item inf_water_mk2 = new ItemFluidContainerInfinite(500, "inf_water_mk2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item inf_water_mk3 = new ItemFluidContainerInfinite(5000, "inf_water_mk3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item inf_water_mk4 = new ItemFluidContainerInfinite(50000, "inf_water_mk4").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	public static final Item gas_canister = new ItemGasCanister("gas_empty", 4000).setCreativeTab(MainRegistry.controlTab);
 	
@@ -570,6 +573,70 @@ public class ModItems {
 	public static final Item asbestos_legs = new ArmorFSB(MainRegistry.enumArmorMaterialAsbestos, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/asbestos_2.png", "asbestos_legs").setFireproof(true).setMaxStackSize(1);
 	public static final Item asbestos_boots = new ArmorFSB(MainRegistry.enumArmorMaterialAsbestos, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/asbestos_1.png", "asbestos_boots").setFireproof(true).setMaxStackSize(1);
 	
+
+	public static final Item euphemium_helmet = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.HEAD, "euphemium_helmet").setMaxStackSize(1);
+	public static final Item euphemium_plate = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.CHEST, "euphemium_plate").setMaxStackSize(1);
+	public static final Item euphemium_legs = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.LEGS, "euphemium_legs").setMaxStackSize(1);
+	public static final Item euphemium_boots = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.FEET, "euphemium_boots").setMaxStackSize(1);
+	
+	public static final Item jackt = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt").setMaxStackSize(1);
+	public static final Item jackt2 = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt2").setMaxStackSize(1);
+	
+
+	
+
+	
+	public static final Item chainsaw = new ItemToolAbility(25, -2.8F, -0.05, MainRegistry.enumToolMaterialChainsaw, EnumToolType.AXE, "chainsaw")
+			.addBreakAbility(new ToolAbility.SilkAbility())
+			.addBreakAbility(new ToolAbility.RecursionAbility(5))
+			.addHitAbility(new WeaponAbility.ChainsawAbility(4))
+			.addHitAbility(new WeaponAbility.BeheaderAbility());
+	
+	
+	public static final Item steel_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_helmet").setMod(0.9F).setMaxStackSize(1);
+	public static final Item steel_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_plate").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
+	public static final Item steel_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/steel_2.png", "steel_legs").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
+	public static final Item steel_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_boots").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
+	
+	public static final Item titanium_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_helmet").setMod(0.85F).setMaxStackSize(1);
+	public static final Item titanium_plate = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_plate").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
+	public static final Item titanium_legs = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/titanium_2.png", "titanium_legs").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
+	public static final Item titanium_boots = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_boots").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
+	
+	public static final Item alloy_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_helmet").setMod(0.8F).setMaxStackSize(1);
+	public static final Item alloy_plate = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_plate").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
+	public static final Item alloy_legs = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/alloy_2.png", "alloy_legs").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
+	public static final Item alloy_boots = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_boots").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
+
+	public static final Item cobalt_helmet = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_helmet").setMod(0.75F);
+	public static final Item cobalt_plate = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_plate").cloneStats((ArmorFSB) cobalt_helmet);
+	public static final Item cobalt_legs = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/cobalt_2.png", "cobalt_legs").cloneStats((ArmorFSB) cobalt_helmet);
+	public static final Item cobalt_boots = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_boots").cloneStats((ArmorFSB) cobalt_helmet);
+	
+	public static final Item security_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/security_1.png", "security_helmet").setMod(0.65F).setMaxStackSize(1);
+	public static final Item security_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/security_1.png", "security_plate").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
+	public static final Item security_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/security_2.png", "security_legs").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
+	public static final Item security_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/security_1.png", "security_boots").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
+	
+	public static final Item starmetal_helmet = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_helmet").setMod(0.5F).setCap(15F)
+			.setFireproof(true);
+	public static final Item starmetal_plate = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_plate").cloneStats((ArmorFSB) starmetal_helmet);
+	public static final Item starmetal_legs = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", "starmetal_legs").cloneStats((ArmorFSB) starmetal_helmet);
+	public static final Item starmetal_boots = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_boots").cloneStats((ArmorFSB) starmetal_helmet);
+	
+	public static final Item cmb_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_helmet").setCap(10F).setMod(0.5F)
+			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 2))
+			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 0))
+			.setFireproof(true);
+	public static final Item cmb_plate = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_plate").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
+	public static final Item cmb_legs = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/cmb_2.png", "cmb_legs").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
+	public static final Item cmb_boots = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_boots").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
+
+	public static final Item paa_plate = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/paa_1.png", "paa_plate").setCap(6F).setMod(0.3F).setNoHelmet(true)
+			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 0)).setMaxStackSize(1);
+	public static final Item paa_legs = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/paa_2.png", "paa_legs").cloneStats((ArmorFSB) paa_plate).setMaxStackSize(1);
+	public static final Item paa_boots = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/paa_1.png", "paa_boots").cloneStats((ArmorFSB) paa_plate).setMaxStackSize(1);
+	
 	public static final Item schrabidium_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_helmet").setCap(4F).setMod(0.1F)
 			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 2))
 			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 2))
@@ -579,14 +646,34 @@ public class ModItems {
 	public static final Item schrabidium_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_plate").cloneStats((ArmorFSB) schrabidium_helmet).setMaxStackSize(1);
 	public static final Item schrabidium_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/schrabidium_2.png", "schrabidium_legs").cloneStats((ArmorFSB) schrabidium_helmet).setCap(4F).setMod(0.1F).setMaxStackSize(1);
 	public static final Item schrabidium_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_boots").cloneStats((ArmorFSB) schrabidium_helmet).setCap(4F).setMod(0.1F).setMaxStackSize(1);
+
+	//Drillgon200: Don't want to move the material here because I'm worried it'll cause issues with static items and stuff.
+	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, 1000000, 10000, 1000, 5, "t45_helmet").setCap(6.5F).setMod(0.25F)
+			.setFireproof(true)
+			.enableVATS(true)
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
+			.setBlastProtection(0.5F)
+			.addResistance("fall", 0).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, 1000000, 10000, 1000, 5, "t45_plate").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, 1000000, 10000, 1000, 5, "t45_legs").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, 1000000, 10000, 1000, 5, "t45_boots").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
 	
-	public static final Item euphemium_helmet = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.HEAD, "euphemium_helmet").setMaxStackSize(1);
-	public static final Item euphemium_plate = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.CHEST, "euphemium_plate").setMaxStackSize(1);
-	public static final Item euphemium_legs = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.LEGS, "euphemium_legs").setMaxStackSize(1);
-	public static final Item euphemium_boots = new ArmorEuphemium(MainRegistry.enumArmorMaterialEuphemium, -1, EntityEquipmentSlot.FEET, "euphemium_boots").setMaxStackSize(1);
-	
-	public static final Item jackt = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt").setMaxStackSize(1);
-	public static final Item jackt2 = new ModArmor(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, "jackt2").setMaxStackSize(1);
+	public static final Item ajr_helmet = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
+			.setFireproof(true)
+			.enableVATS(true)
+			.enableFlashlight(new Vec3d(-0.18, 0.2, 0.9))
+			.setHasGeigerSound(true)
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.setBlastProtection(0.25F)
+			.setStep(HBMSoundHandler.metalStep)
+			.setJump(HBMSoundHandler.ironJump)
+			.setFall(HBMSoundHandler.ironLand)
+			.addResistance("fall", 0);
+	public static final Item ajr_plate = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_plate").cloneStats((ArmorFSB) ajr_helmet);
+	public static final Item ajr_legs = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "ajr_legs").cloneStats((ArmorFSB) ajr_helmet);
+	public static final Item ajr_boots = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_boots").cloneStats((ArmorFSB) ajr_helmet);
 	
 	public static final Item ajro_helmet = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
 			.setFireproof(true)
@@ -605,136 +692,20 @@ public class ModItems {
 	public static final Item ajro_legs = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "ajro_legs").cloneStats((ArmorFSB) ajro_helmet);
 	public static final Item ajro_boots = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_boots").cloneStats((ArmorFSB) ajro_helmet);
 
-	public static final Item rpa_helmet = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
-			.setFireproof(true)
-			.enableVATS(true)
-			.setHasGeigerSound(true)
-			.setHasHardLanding(true)
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 3))
-			.setBlastProtection(0.25F)
-			.setMod(0.1F)
-			.setThreshold(20.0F)
-			.setStep(HBMSoundHandler.poweredStep)
-			.setJump(HBMSoundHandler.poweredStep)
-			.setFall(HBMSoundHandler.poweredStep)
-			.addResistance("monoxide", 0F)
-			.addResistance("fall", 0);
-	public static final Item rpa_plate = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_plate").cloneStats((ArmorFSB) rpa_helmet);
-	public static final Item rpa_legs = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "RPA_legs").cloneStats((ArmorFSB) rpa_helmet);
-	public static final Item rpa_boots = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "RPA_boots").cloneStats((ArmorFSB) rpa_helmet);
-	
-	public static final Item fau_helmet = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 2500, 0, "fau_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))
-			.setBlastProtection(0.05F)
-			.setMod(0.05F)
-			.setHasGeigerSound(true)
-			.enableThermalSight(true)
-			.setHasHardLanding(true)
-			.setStep(HBMSoundHandler.metalStep)
-			.setJump(HBMSoundHandler.ironJump)
-			.setFall(HBMSoundHandler.ironLand)
-			.addResistance("fall", 0F)
-			.addResistance("monoxide", 0F)
-			.setFireproof(true);
-	public static final Item fau_plate = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 2500, 0, "fau_plate").cloneStats((ArmorFSB) fau_helmet);
-	public static final Item fau_legs = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 10000000, 10000, 2500, 0, "fau_legs").cloneStats((ArmorFSB) fau_helmet);
-	public static final Item fau_boots = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 2500, 0, "fau_boots").cloneStats((ArmorFSB) fau_helmet);
-	
-	public static final Item dns_helmet = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 115, "dns_helmet")
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 9))
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 7))
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 2))
-			.setHasGeigerSound(true)
-			.enableVATS(true)
-			.enableThermalSight(true)
-			.setHasHardLanding(true)
-			.setStep(HBMSoundHandler.metalStep)
-			.setJump(HBMSoundHandler.ironJump)
-			.setFall(HBMSoundHandler.ironLand)
-			.setFireproof(true);
-	public static final Item dns_plate = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 115, "dns_plate").cloneStats((ArmorFSB) dns_helmet);
-	public static final Item dns_legs = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 1000000000, 1000000, 100000, 115, "dns_legs").cloneStats((ArmorFSB) dns_helmet);
-	public static final Item dns_boots = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 115, "dns_boots").cloneStats((ArmorFSB) dns_helmet);
-	
-	public static final Item chainsaw = new ItemToolAbility(25, -2.8F, -0.05, MainRegistry.enumToolMaterialChainsaw, EnumToolType.AXE, "chainsaw")
-			.addBreakAbility(new ToolAbility.SilkAbility())
-			.addBreakAbility(new ToolAbility.RecursionAbility(5))
-			.addHitAbility(new WeaponAbility.ChainsawAbility(4))
-			.addHitAbility(new WeaponAbility.BeheaderAbility());
-	
-	public static final Item alloy_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_helmet").setMod(0.75F).setMaxStackSize(1);
-	public static final Item alloy_plate = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_plate").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
-	public static final Item alloy_legs = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/alloy_2.png", "alloy_legs").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
-	public static final Item alloy_boots = new ArmorFSB(MainRegistry.enumArmorMaterialAlloy, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/alloy_1.png", "alloy_boots").cloneStats((ArmorFSB) alloy_helmet).setMaxStackSize(1);
-	
-	public static final Item cmb_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_helmet").setCap(10F).setMod(0.5F)
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 2))
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 0))
-			.setFireproof(true);
-	public static final Item cmb_plate = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_plate").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
-	public static final Item cmb_legs = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/cmb_2.png", "cmb_legs").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
-	public static final Item cmb_boots = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_boots").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
-	
-	public static final Item paa_plate = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/paa_1.png", "paa_plate").setCap(6F).setMod(0.3F).setNoHelmet(true)
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 0)).setMaxStackSize(1);
-	public static final Item paa_legs = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/paa_2.png", "paa_legs").cloneStats((ArmorFSB) paa_plate).setMaxStackSize(1);
-	public static final Item paa_boots = new ArmorFSB(MainRegistry.enumArmorMaterialPaa, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/paa_1.png", "paa_boots").cloneStats((ArmorFSB) paa_plate).setMaxStackSize(1);
-	
-	public static final Item security_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/security_1.png", "security_helmet").setMod(0.5F).setMaxStackSize(1);
-	public static final Item security_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/security_1.png", "security_plate").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
-	public static final Item security_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/security_2.png", "security_legs").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
-	public static final Item security_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSecurity, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/security_1.png", "security_boots").cloneStats((ArmorFSB) security_helmet).setMaxStackSize(1);
-	
-	public static final Item steel_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_helmet").setMod(0.9F).setMaxStackSize(1);
-	public static final Item steel_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_plate").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
-	public static final Item steel_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/steel_2.png", "steel_legs").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
-	public static final Item steel_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/steel_1.png", "steel_boots").cloneStats((ArmorFSB) steel_helmet).setMaxStackSize(1);
-	
-	public static final Item titanium_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_helmet").setMod(0.85F).setMaxStackSize(1);
-	public static final Item titanium_plate = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_plate").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
-	public static final Item titanium_legs = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/titanium_2.png", "titanium_legs").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
-	public static final Item titanium_boots = new ArmorFSB(MainRegistry.enumArmorMaterialTitanium, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/titanium_1.png", "titanium_boots").cloneStats((ArmorFSB) titanium_helmet).setMaxStackSize(1);
-	
-	//Drillgon200: Don't want to move the material here because I'm worried it'll cause issues with static items and stuff.
-	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, 1000000, 10000, 1000, 5, "t45_helmet").setCap(6.5F).setMod(0.25F)
-			.setFireproof(true)
-			.enableVATS(true)
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
-			.setBlastProtection(0.5F)
-			.addResistance("fall", 0).setCreativeTab(CreativeTabs.COMBAT);
-	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, 1000000, 10000, 1000, 5, "t45_plate").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
-	public static final Item t45_legs = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.LEGS, 1000000, 10000, 1000, 5, "t45_legs").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
-	public static final Item t45_boots = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.FEET, 1000000, 10000, 1000, 5, "t45_boots").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
-	
-	public static final Item cobalt_helmet = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_helmet").setMod(0.75F);
-	public static final Item cobalt_plate = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_plate").cloneStats((ArmorFSB) cobalt_helmet);
-	public static final Item cobalt_legs = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/cobalt_2.png", "cobalt_legs").cloneStats((ArmorFSB) cobalt_helmet);
-	public static final Item cobalt_boots = new ArmorFSB(MainRegistry.aMatCobalt, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/cobalt_1.png", "cobalt_boots").cloneStats((ArmorFSB) cobalt_helmet);
-	
-	public static final Item starmetal_helmet = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_helmet").setMod(0.5F).setCap(15F)
-			.setFireproof(true);
-	public static final Item starmetal_plate = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_plate").cloneStats((ArmorFSB) starmetal_helmet);
-	public static final Item starmetal_legs = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", "starmetal_legs").cloneStats((ArmorFSB) starmetal_helmet);
-	public static final Item starmetal_boots = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_boots").cloneStats((ArmorFSB) starmetal_helmet);
-	
-	
-	public static final Item ajr_helmet = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
-			.setFireproof(true)
-			.enableVATS(true)
-			.enableFlashlight(new Vec3d(-0.18, 0.2, 0.9))
-			.setHasGeigerSound(true)
+	public static final Item hev_helmet = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 5000000, 10000, 2500, 100, "hev_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
 			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
+			.enableFlashlight(new Vec3d(0, -0.1, 0.8))
 			.setBlastProtection(0.25F)
-			.setStep(HBMSoundHandler.metalStep)
-			.setJump(HBMSoundHandler.ironJump)
-			.setFall(HBMSoundHandler.ironLand)
-			.addResistance("fall", 0);
-	public static final Item ajr_plate = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_plate").cloneStats((ArmorFSB) ajr_helmet);
-	public static final Item ajr_legs = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 2500000, 10000, 2000, 25, "ajr_legs").cloneStats((ArmorFSB) ajr_helmet);
-	public static final Item ajr_boots = new ArmorAJR(MainRegistry.aMatAJR, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajr_boots").cloneStats((ArmorFSB) ajr_helmet);
-	
+			.setMod(0.2F)
+			.setFireproof(true)
+			.setHasGeigerSound(true)
+			.setHasCustomGeiger(true)
+			.addResistance("fall", 0.5F);
+	public static final Item hev_plate = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 5000000, 10000, 2500, 100, "hev_plate").cloneStats((ArmorFSB) hev_helmet);
+	public static final Item hev_legs = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 5000000, 10000, 2500, 100, "hev_legs").cloneStats((ArmorFSB) hev_helmet);
+	public static final Item hev_boots = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 5000000, 10000, 2500, 100, "hev_boots").cloneStats((ArmorFSB) hev_helmet);
+
 	public static final Item bj_helmet = new ArmorBJ(MainRegistry.aMatBJ, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 1000, 100, "bj_helmet").setMod(0.25F).setCap(4.0F).setThreshold(4F)
 			.setFireproof(true)
 			.enableVATS(true)
@@ -754,20 +725,58 @@ public class ModItems {
 	public static final Item bj_plate_jetpack = new ArmorBJJetpack(MainRegistry.aMatBJ, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 1000, 100, "bj_plate_jetpack").cloneStats((ArmorFSB) bj_helmet);
 	public static final Item bj_legs = new ArmorBJ(MainRegistry.aMatBJ, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 10000000, 10000, 1000, 100, "bj_legs").cloneStats((ArmorFSB) bj_helmet);
 	public static final Item bj_boots = new ArmorBJ(MainRegistry.aMatBJ, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 10000000, 10000, 1000, 100, "bj_boots").cloneStats((ArmorFSB) bj_helmet);
-	
-	public static final Item hev_helmet = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.enableFlashlight(new Vec3d(0, -0.1, 0.8))
-			.setBlastProtection(0.25F)
-			.setMod(0.2F)
+
+	public static final Item rpa_helmet = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 50000000, 100000, 20000, 500, "RPA_helmet").setMod(0.25F).setCap(6.0F).setThreshold(4F)
 			.setFireproof(true)
+			.enableVATS(true)
 			.setHasGeigerSound(true)
-			.setHasCustomGeiger(true)
-			.addResistance("fall", 0.5F);
-	public static final Item hev_plate = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_plate").cloneStats((ArmorFSB) hev_helmet);
-	public static final Item hev_legs = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 1000000, 10000, 2500, 0, "hev_legs").cloneStats((ArmorFSB) hev_helmet);
-	public static final Item hev_boots = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000, 10000, 2500, 0, "hev_boots").cloneStats((ArmorFSB) hev_helmet);
+			.setHasHardLanding(true)
+			.addEffect(new PotionEffect(HbmPotion.radx, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 3))
+			.setBlastProtection(0.25F)
+			.setMod(0.1F)
+			.setThreshold(20.0F)
+			.setStep(HBMSoundHandler.poweredStep)
+			.setJump(HBMSoundHandler.poweredStep)
+			.setFall(HBMSoundHandler.poweredStep)
+			.addResistance("monoxide", 0F)
+			.addResistance("fall", 0);
+	public static final Item rpa_plate = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 50000000, 100000, 20000, 500, "RPA_plate").cloneStats((ArmorFSB) rpa_helmet);
+	public static final Item rpa_legs = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 50000000, 100000, 20000, 500, "RPA_legs").cloneStats((ArmorFSB) rpa_helmet);
+	public static final Item rpa_boots = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 50000000, 100000, 20000, 500, "RPA_boots").cloneStats((ArmorFSB) rpa_helmet);
+
+	public static final Item fau_helmet = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 100000000, 100000, 25000, 1000, "fau_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))
+			.setBlastProtection(0.05F)
+			.setMod(0.05F)
+			.setHasGeigerSound(true)
+			.enableThermalSight(true)
+			.setHasHardLanding(true)
+			.setStep(HBMSoundHandler.metalStep)
+			.setJump(HBMSoundHandler.ironJump)
+			.setFall(HBMSoundHandler.ironLand)
+			.addResistance("fall", 0F)
+			.addResistance("monoxide", 0F)
+			.setFireproof(true);
+	public static final Item fau_plate = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 100000000, 100000, 25000, 1000, "fau_plate").cloneStats((ArmorFSB) fau_helmet);
+	public static final Item fau_legs = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 100000000, 100000, 25000, 1000, "fau_legs").cloneStats((ArmorFSB) fau_helmet);
+	public static final Item fau_boots = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 100000000, 100000, 25000, 1000, "fau_boots").cloneStats((ArmorFSB) fau_helmet);
+	
+	public static final Item dns_helmet = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 10000, "dns_helmet")
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 9))
+			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 7))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 2))
+			.setHasGeigerSound(true)
+			.enableVATS(true)
+			.enableThermalSight(true)
+			.setHasHardLanding(true)
+			.setStep(HBMSoundHandler.metalStep)
+			.setJump(HBMSoundHandler.ironJump)
+			.setFall(HBMSoundHandler.ironLand)
+			.setFireproof(true);
+	public static final Item dns_plate = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 10000, "dns_plate").cloneStats((ArmorFSB) dns_helmet);
+	public static final Item dns_legs = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/starmetal_2.png", 1000000000, 1000000, 100000, 10000, "dns_legs").cloneStats((ArmorFSB) dns_helmet);
+	public static final Item dns_boots = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 10000, "dns_boots").cloneStats((ArmorFSB) dns_helmet);
 	
 	public static final Item goggles = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "goggles").setMaxStackSize(1);
 	public static final Item ashglasses = new ArmorAshGlasses(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "ashglasses").setMaxStackSize(1);
@@ -1455,13 +1464,12 @@ public class ModItems {
 	public static final Item rod_quad_euphemium = new ItemCustomLore("rod_quad_euphemium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1).setContainerItem(ModItems.rod_quad_empty);
 	public static final Item rod_euphemium = new ItemCustomLore("rod_euphemium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	
-	public static final Item rod_australium = new ItemCustomLore("rod_australium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_weidanium = new ItemCustomLore("rod_weidanium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_reiium = new ItemCustomLore("rod_reiium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_weidanium = new ItemCustomLore("rod_weidanium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_australium = new ItemCustomLore("rod_australium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_verticium = new ItemCustomLore("rod_verticium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_unobtainium = new ItemCustomLore("rod_unobtainium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_daffergon = new ItemCustomLore("rod_daffergon").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_verticium = new ItemCustomLore("rod_verticium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-
 
 	
 	public static final Item pile_rod_uranium = new ItemPileRod("pile_rod_uranium").setCreativeTab(MainRegistry.controlTab);
@@ -1469,12 +1477,12 @@ public class ModItems {
 	public static final Item pile_rod_source = new ItemPileRod("pile_rod_source").setCreativeTab(MainRegistry.controlTab);
 	public static final Item pile_rod_boron = new ItemPileRod("pile_rod_boron").setCreativeTab(MainRegistry.controlTab);
 
-	public static final Item pellet_schrabidium = new WatzFuel(ItemHazard.sa326 * 5F, true, 50000, 140000, 0.975F, 200, 1.05F, 1.05F, "pellet_schrabidium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_hes = new WatzFuel(ItemHazard.hes * 5F, true, 108000, 65000, 1F, 85, 1, 1.025F, "pellet_hes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_mes = new WatzFuel(ItemHazard.mes * 5F, true, 216000, 23000, 1.025F, 50, 1, 1F, "pellet_mes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_les = new WatzFuel(ItemHazard.les * 5F, true, 432000, 7000, 1.05F, 15, 1, 0.975F, "pellet_les").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_beryllium = new WatzFuel(0F, false, 864000, 50, 1.05F, 0, 0.95F, 1.025F, "pellet_beryllium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_neptunium = new WatzFuel(ItemHazard.np237 * 5F, false, 216000, 3000, 1.1F, 25, 1.1F, 1.005F, "pellet_neptunium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_schrabidium = new WatzFuel(ItemHazard.sa326 * 5F, true, 50000, 1400000, 0.975F, 200, 1.05F, 1.05F, "pellet_schrabidium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_hes = new WatzFuel(ItemHazard.hes * 5F, true, 108000, 650000, 1F, 85, 1, 1.025F, "pellet_hes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_mes = new WatzFuel(ItemHazard.mes * 5F, true, 216000, 230000, 1.025F, 50, 1, 1F, "pellet_mes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_les = new WatzFuel(ItemHazard.les * 5F, true, 432000, 70000, 1.05F, 15, 1, 0.975F, "pellet_les").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_beryllium = new WatzFuel(0F, false, 864000, 500, 1.05F, 0, 0.95F, 1.025F, "pellet_beryllium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_neptunium = new WatzFuel(ItemHazard.np237 * 5F, false, 216000, 30000, 1.1F, 25, 1.1F, 1.005F, "pellet_neptunium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	public static final Item pellet_lead = new WatzFuel(0F, false, 1728000, 0, 0.95F, 0, 0.95F, 0.95F, "pellet_lead").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	public static final Item pellet_advanced = new WatzFuel(0F, false, 216000, 1000, 1.1F, 0, 0.995F, 0.99F, "pellet_advanced").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
