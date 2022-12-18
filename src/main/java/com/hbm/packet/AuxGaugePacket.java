@@ -51,7 +51,6 @@ public class AuxGaugePacket implements IMessage {
 	int y;
 	int z;
 	int value;
-	long valueL;
 	int id;
 
 	public AuxGaugePacket() {
