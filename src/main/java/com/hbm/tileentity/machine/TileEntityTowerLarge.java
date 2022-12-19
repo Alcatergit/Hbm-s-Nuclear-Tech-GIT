@@ -26,7 +26,7 @@ public class TileEntityTowerLarge extends TileEntityCondenser {
 			if(this.waterTimer > 0) {
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "tower");
-				data.setFloat("lift", 0.5F);
+				data.setFloat("lift", 1F);
 				data.setFloat("base", 1F);
 				data.setFloat("max", 10F);
 				data.setInteger("life", 750 + world.rand.nextInt(750));

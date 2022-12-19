@@ -206,7 +206,7 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.powder_yellowcake, 9), new Object[] { "#", '#', Item.getItemFromBlock(ModBlocks.block_yellowcake) });
 		addShapedRecipe(new ItemStack(ModItems.ingot_starmetal, 9), new Object[] { "#", '#', ModBlocks.block_starmetal });
 
-		addShapedOreRecipe(new ItemStack(ModItems.ingot_plutonium, 1), new Object[] { "###", "###", "###", '#', PU.ingot() });
+		addShapedOreRecipe(new ItemStack(ModItems.ingot_plutonium, 1), new Object[] { "###", "###", "###", '#', PU.nugget() });
 		addShapedOreRecipe(new ItemStack(ModItems.nugget_plutonium, 9), new Object[] { "#", '#', PU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ingot_pu238, 1), new Object[] { "###", "###", "###", '#', PU238.nugget() });
 		addShapedOreRecipe(new ItemStack(ModItems.nugget_pu238, 9), new Object[] { "#", '#', PU238.ingot() });
@@ -1834,18 +1834,12 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.ingot_thorium_fuel, 9), new Object[] { "#", '#', ModBlocks.block_thorium_fuel });
 		addShapedOreRecipe(new ItemStack(ModItems.ingot_solinium, 9), new Object[] { "#", '#', SA327.block() });
 		addShapedRecipe(new ItemStack(ModItems.ingot_schrabidium_fuel, 9), new Object[] { "#", '#', ModBlocks.block_schrabidium_fuel });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_buckshot, 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_buckshot, 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_slug, 12), new Object[] { " I ", "GCL", " P ", 'I', PB.ingot(), 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_slug, 12), new Object[] { " I ", "GCL", " P ", 'I', PB.ingot(), 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_flechette, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_flechette, 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_flechette, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_flechette, 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 4), new Object[] { " I ", "GCL", " P ", 'I', Blocks.TNT, 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 4), new Object[] { " I ", "GCL", " P ", 'I', Blocks.TNT, 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 6), new Object[] { " I ", "GCL", " P ", 'I', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 6), new Object[] { " I ", "GCL", " P ", 'I', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_semtex, 4), new Object[] { " I ", "GCL", " P ", 'I', ModBlocks.det_miner, 'G', ModItems.cordite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_semtex, 4), new Object[] { " I ", "GCL", " P ", 'I', ModBlocks.det_miner, 'G', ModItems.ballistite, 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_buckshot, 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_slug, 12), new Object[] { " I ", "GCL", " P ", 'I', PB.ingot(), 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_flechette, 12), new Object[] { " I ", "GCL", " P ", 'I', ModItems.pellet_flechette, 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 4), new Object[] { " I ", "GCL", " P ", 'I', Blocks.TNT, 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_explosive, 6), new Object[] { " I ", "GCL", " P ", 'I', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_4gauge_semtex, 4), new Object[] { " I ", "GCL", " P ", 'I', ModBlocks.det_miner, 'G', ANY_SMOKELESS.dust(), 'C', ModItems.casing_50, 'P', ModItems.primer_50, 'L', POLYMER.plate() });
 
 		addShapedRecipe(new ItemStack(ModBlocks.block_mox_fuel, 1), new Object[] { "###", "###", "###", '#', ModItems.ingot_mox_fuel });
 		addShapedOreRecipe(new ItemStack(ModBlocks.block_lithium, 1), new Object[] { "###", "###", "###", '#', LI.ingot() });
@@ -1980,16 +1974,16 @@ public class CraftingManager {
 		addShapedRecipe(new ItemStack(ModItems.dns_boots, 1), new Object[] { "PCP", "PBP", "PSP", 'P', ModItems.plate_armor_dnt, 'S', ModItems.ingot_chainsteel, 'B', ModItems.bj_boots, 'C', ModItems.demon_core_closed });
 
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell, 4), new Object[] { " T ", "GHG", "CCC", 'T', Blocks.TNT, 'G', Items.GUNPOWDER, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell, 4), new Object[] { " T ", "GHG", "CCC", 'T', Blocks.TNT, 'G', ModItems.ballistite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell, 5), new Object[] { " T ", "GHG", "CCC", 'T', Blocks.TNT, 'G', ModItems.ballistite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell, 6), new Object[] { " T ", "GHG", "CCC", 'T', Blocks.TNT, 'G', ModItems.cordite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_explosive, 4), new Object[] { " T ", "GHG", "CCC", 'T', ANY_PLASTICEXPLOSIVE.ingot(), 'G', Items.GUNPOWDER, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_explosive, 4), new Object[] { " T ", "GHG", "CCC", 'T', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ModItems.ballistite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_explosive, 5), new Object[] { " T ", "GHG", "CCC", 'T', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ModItems.ballistite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_explosive, 6), new Object[] { " T ", "GHG", "CCC", 'T', ANY_PLASTICEXPLOSIVE.ingot(), 'G', ModItems.cordite, 'H', ModItems.hull_small_steel, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_t, 4), new Object[] { " I ", "GIG", "CCC", 'I', W.ingot(), 'G', Items.GUNPOWDER, 'C', CU.ingot() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_t, 4), new Object[] { " I ", "GIG", "CCC", 'I', W.ingot(), 'G', ModItems.ballistite, 'C', CU.ingot() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_t, 5), new Object[] { " I ", "GIG", "CCC", 'I', W.ingot(), 'G', ModItems.ballistite, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_t, 6), new Object[] { " I ", "GIG", "CCC", 'I', W.ingot(), 'G', ModItems.cordite, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_du, 4), new Object[] { " I ", "GIG", "CCC", 'I', U238.ingot(), 'G', Items.GUNPOWDER, 'C', CU.ingot() });
-		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_du, 4), new Object[] { " I ", "GIG", "CCC", 'I', U238.ingot(), 'G', ModItems.ballistite, 'C', CU.ingot() });
+		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_du, 5), new Object[] { " I ", "GIG", "CCC", 'I', U238.ingot(), 'G', ModItems.ballistite, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_apfsds_du, 6), new Object[] { " I ", "GIG", "CCC", 'I', U238.ingot(), 'G', ModItems.cordite, 'C', CU.ingot() });
 		addShapedOreRecipe(new ItemStack(ModItems.ammo_shell_w9, 1), new Object[] { " P ", "NSN", " P ", 'P', PU239.nugget(), 'N', OreDictManager.getReflector(), 'S', ModItems.ammo_shell_explosive });
 
@@ -2074,7 +2068,7 @@ public class CraftingManager {
 
 		addShapedOreRecipe(new ItemStack(ModItems.flywheel_beryllium, 1), new Object[] { "BBB", "BTB", "BBB", 'B', BE.block(), 'T', ModItems.bolt_compound });
 
-		addShapelessOreRecipe(new ItemStack(ModItems.siox, 8), new Object[] { COAL.dust(), "dustAsbestos", ANY_BISMOID.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.siox, 8), new Object[] { COAL.dust(), ASBESTOS.dust(), ANY_BISMOID.nugget() });
 		addShapelessOreRecipe(new ItemStack(ModItems.xanax, 1), new Object[] { COAL.dust(), KNO.dust(), BR.dust() });
 		addShapelessOreRecipe(new ItemStack(ModItems.fmn, 1), new Object[] { COAL.dust(), PO210.dust(), ST.dust() });
 		addShapelessOreRecipe(new ItemStack(ModItems.five_htp, 1), new Object[] { COAL.dust(), EUPH.dust(), ModItems.canteen_fab });
@@ -2476,29 +2470,29 @@ public class CraftingManager {
 		addBilletByIngot(ModItems.billet_nuclear_waste, ModItems.nuclear_waste);
 
 
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_thorium_fuel, 3), new Object[] { TH232.nugget(), TH232.nugget(), U233.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_thorium_fuel, 3), new Object[] { TH232.ingot(), TH232.ingot(), U233.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_thorium_fuel, 1), new Object[] { TH232.nugget(), TH232.nugget(), TH232.nugget(), TH232.nugget(), U233.nugget(), U233.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_uranium_fuel, 3), new Object[] { U238.nugget(), U238.nugget(), U235.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_uranium_fuel, 3), new Object[] { U238.ingot(), U238.ingot(), U235.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_uranium_fuel, 1), new Object[] { U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U235.nugget(), U235.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_plutonium_fuel, 3), new Object[] { U238.nugget(), PURG.nugget(), PURG.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_plutonium_fuel, 3), new Object[] { U238.ingot(), PURG.ingot(), PURG.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_plutonium_fuel, 1), new Object[] { PURG.nugget(), PURG.nugget(), PURG.nugget(), PURG.nugget(), U238.nugget(), U238.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_pu_mix, 3), new Object[] { PU239.nugget(), PU239.nugget(), PU240.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_pu_mix, 3), new Object[] { PU239.ingot(), PU239.ingot(), PU240.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_pu_mix, 1), new Object[] { PU239.nugget(), PU239.nugget(), PU239.nugget(), PU239.nugget(), PU240.nugget(), PU240.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_americium_fuel, 3), new Object[] { U238.nugget(), U238.nugget(), AMRG.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_americium_fuel, 3), new Object[] { U238.ingot(), U238.ingot(), AMRG.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_americium_fuel, 1), new Object[] { AMRG.nugget(), AMRG.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_am_mix, 3), new Object[] { AM241.nugget(), AM242.nugget(), AM242.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_am_mix, 3), new Object[] { AM241.ingot(), AM242.ingot(), AM242.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_am_mix, 1), new Object[] { AM241.nugget(), AM241.nugget(), AM242.nugget(), AM242.nugget(), AM242.nugget(), AM242.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_neptunium_fuel, 3), new Object[] { U238.nugget(), U238.nugget(), NP237.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_neptunium_fuel, 3), new Object[] { U238.ingot(), U238.ingot(), NP237.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_neptunium_fuel, 1), new Object[] { NP237.nugget(), NP237.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_mox_fuel, 3), new Object[] { U238.nugget(), U235.nugget(), PURG.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_mox_fuel, 3), new Object[] { U238.ingot(), U235.ingot(), PURG.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_mox_fuel, 1), new Object[] { PURG.nugget(), PURG.nugget(), U238.nugget(), U238.nugget(), U235.nugget(), U235.nugget() });
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_schrabidium_fuel, 3), new Object[] { SA326.nugget(), NP237.nugget(), BE.nugget(), BE.nugget(), BE.nugget(), BE.nugget(), BE.nugget(), BE.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_schrabidium_fuel, 3), new Object[] { SA326.ingot(), NP237.ingot(), BE.ingot(), BE.ingot(), BE.ingot(), BE.ingot(), BE.ingot(), BE.ingot() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_schrabidium_fuel, 1), new Object[] { SA326.nugget(), SA326.nugget(), NP237.nugget(), NP237.nugget(), BE.nugget(), BE.nugget() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_po210be, 1), new Object[] { PO210.nugget(), PO210.nugget(), PO210.nugget(), BE.nugget(), BE.nugget(), BE.nugget() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_pu238be, 1), new Object[] { PU238.nugget(), PU238.nugget(), PU238.nugget(), BE.nugget(), BE.nugget(), BE.nugget() });
 		addShapelessOreRecipe(new ItemStack(ModItems.billet_ra226be, 1), new Object[] { RA226.nugget(), RA226.nugget(), RA226.nugget(), BE.nugget(), BE.nugget(), BE.nugget() });
 
-		addShapelessOreRecipe(new ItemStack(ModItems.billet_uranium, 9), new Object[] { U235.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget(), U238.nugget() });
+		addShapelessOreRecipe(new ItemStack(ModItems.billet_uranium_fuel, 9), new Object[] { U235.ingot(), U238.ingot(), U238.ingot(), U238.ingot(), U238.ingot(), U238.ingot(), U238.ingot(), U238.ingot(), U238.ingot() });
 
 		addShapelessOreRecipe(new ItemStack(ModItems.ingot_uranium, 2), new Object[] { U.billet(), U.billet(), U.billet() });
 		addShapelessOreRecipe(new ItemStack(ModItems.ingot_u233, 2), new Object[] { U233.billet(), U233.billet(), U233.billet() });

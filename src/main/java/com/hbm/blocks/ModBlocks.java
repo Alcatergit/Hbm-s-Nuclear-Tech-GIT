@@ -375,9 +375,9 @@ public class ModBlocks {
 	public static final Block ore_coal_oil = new BlockCoalOil(Material.ROCK, "ore_coal_oil").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(15.0F);
 	public static final Block ore_coal_oil_burning = new BlockCoalBurning(Material.ROCK, "ore_coal_oil_burning").setCreativeTab(MainRegistry.ressourceTab).setLightLevel(10F/15F).setHardness(5.0F).setResistance(15.0F);
 	
-	public static final Block cluster_iron = new BlockCluster(Material.ROCK, "cluster_iron").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(15.0F);
-	public static final Block cluster_titanium = new BlockCluster(Material.ROCK, "cluster_titanium").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(15.0F);
-	public static final Block cluster_aluminium = new BlockCluster(Material.ROCK, "cluster_aluminium").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(15.0F);
+	public static final Block cluster_iron = new BlockCluster(Material.ROCK, "cluster_iron").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(35.0F);
+	public static final Block cluster_titanium = new BlockCluster(Material.ROCK, "cluster_titanium").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(35.0F);
+	public static final Block cluster_aluminium = new BlockCluster(Material.ROCK, "cluster_aluminium").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(35.0F);
 	
 	public static final Block ore_cobalt = new BlockOre(Material.ROCK, "ore_cobalt").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_cinnebar = new BlockOre(Material.ROCK, "ore_cinnebar").setCreativeTab(MainRegistry.ressourceTab).setHardness(5.0F).setResistance(10.0F);

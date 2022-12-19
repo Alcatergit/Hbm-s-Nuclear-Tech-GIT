@@ -297,13 +297,14 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		
 		if(normal && b instanceof IDrillInteraction) {
 			IDrillInteraction in = (IDrillInteraction) b;
-			ItemStack drop = in.extractResource(world, targetX, targetY, targetZ, state, this);
-			
-			if(drop != null) {
-				world.spawnEntity(new EntityItem(world, targetX + 0.5, targetY + 0.5, targetZ + 0.5, drop.copy()));
-			}
-			
 			doesBreak = in.canBreak(world, targetX, targetY, targetZ, state, this);
+			if(doesBreak){
+				ItemStack drop = in.extractResource(world, targetX, targetY, targetZ, state, this);
+				
+				if(drop != null) {
+					world.spawnEntity(new EntityItem(world, targetX + 0.5, targetY + 0.5, targetZ + 0.5, drop.copy()));
+				}
+			}
 		}
 
 		if(doesBreak){
