@@ -16,7 +16,7 @@ public class SchistStratum {
 
 	@SubscribeEvent
 	public void onDecorate(DecorateBiomeEvent.Pre event) {
-		
+
 		if(this.noise == null) {
 			this.noise = new NoiseGeneratorPerlin(event.getRand(), 4);
 		}
@@ -31,13 +31,12 @@ public class SchistStratum {
 		
 		double scale = 0.01D;
 		int threshold = 5;
-		
+
 		for(int x = cX; x < cX + 16; x++) {
 			
 			for(int z = cZ; z < cZ + 16; z++) {
 				
 				double n = noise.getValue(x * scale, z * scale);
-				
 				if(n > threshold) {
 					int range = (int)((n - threshold) * 3);
 					

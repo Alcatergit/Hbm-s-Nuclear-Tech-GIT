@@ -55,7 +55,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(50000, CO.ingot(), new ItemStack(ModItems.ingot_co60));
 		RBMKOutgasserRecipes.setRecipe(90000, CO.dust(), new ItemStack(ModItems.powder_co60));
 		RBMKOutgasserRecipes.setRecipe(55000, ModItems.ingot_strontium, new ItemStack(ModItems.ingot_sr90));
-		RBMKOutgasserRecipes.setRecipe(59000, ST.dust(), new ItemStack(ModItems.powder_sr90));
+		RBMKOutgasserRecipes.setRecipe(59000, SR.dust(), new ItemStack(ModItems.powder_sr90));
 		RBMKOutgasserRecipes.setRecipe(45000, I.ingot(), new ItemStack(ModItems.ingot_i131));
 		RBMKOutgasserRecipes.setRecipe(35000, I.dust(), new ItemStack(ModItems.powder_i131));
 		RBMKOutgasserRecipes.setRecipe(450000, AC.ingot(), new ItemStack(ModItems.ingot_ac227));

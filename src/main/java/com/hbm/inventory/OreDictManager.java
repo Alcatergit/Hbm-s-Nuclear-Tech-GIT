@@ -237,7 +237,7 @@ public class OreDictManager {
 	/** CAESIUM */ 
 	public static final DictFrame CS = new DictFrame("Caesium");
 	/** STRONTIUM */ 
-	public static final DictFrame ST = new DictFrame("Strontium");
+	public static final DictFrame SR = new DictFrame("Strontium");
 	/** BROMINE */ 
 	public static final DictFrame BR = new DictFrame("Bromine");
 	/** TENNESSINE */ 
@@ -270,164 +270,135 @@ public class OreDictManager {
 	/** Any special psot-RBMK gating material, namely bismuth and arsenic */
 	public static final DictFrame ANY_BISMOID = new DictFrame("AnyBismoid");
 	
+
+	// order: nugget billet ingot dust dustTiny block crystal plate gem ore oreNether
 	public static void registerOres() {
 
-		/*
-		 * VANILLA
-		 */
-		COAL.gem(Items.COAL).dustSmall(powder_coal_tiny).dust(powder_coal).crystal(crystal_coal);
-		IRON.plate(plate_iron).dust(powder_iron).ore(ore_gneiss_iron).crystal(crystal_iron);
-		GOLD.plate(plate_gold).dust(powder_gold).ore(ore_gneiss_gold).crystal(crystal_gold);
-		LAPIS.dust(powder_lapis).crystal(crystal_lapis);
-		NETHERQUARTZ.gem(Items.QUARTZ).dust(powder_quartz);
-		DIAMOND.dust(powder_diamond).ore(gravel_diamond).crystal(crystal_diamond);
-		EMERALD.dust(powder_emerald);
+		//VANILLA - Fixed
+		COAL 																																			.dust(powder_coal)		.dustSmall(powder_coal_tiny)								.gem(Items.COAL)	.crystal(crystal_coal);
+		IRON 																																			.dust(powder_iron)																						.crystal(crystal_iron)		.plate(plate_iron)			.ore(ore_gneiss_iron);
+		GOLD 																																			.dust(powder_gold)																						.crystal(crystal_gold)		.plate(plate_gold)			.ore(ore_gneiss_gold, cluster_iron, cluster_depth_iron);
+		LAPIS																																			.dust(powder_lapis)																						.crystal(crystal_lapis);
+		REDSTONE																																																												.crystal(crystal_redstone);
+		NETHERQUARTZ																																	.dust(powder_quartz)																.gem(Items.QUARTZ);
+		DIAMOND																																			.dust(powder_diamond)																					.crystal(crystal_diamond)								.ore(gravel_diamond);
+		EMERALD																																			.dust(powder_emerald);
 		
-		/*
-		 * RADIOACTIVE
-		 */
-		U		.rad(HazardRegistry.u)								.nugget(nugget_uranium)		.billet(billet_uranium)		.ingot(ingot_uranium)		.dust(powder_uranium)									.block(block_uranium)		.ore(ore_uranium, ore_uranium_scorched, ore_gneiss_uranium, ore_gneiss_uranium_scorched, ore_nether_uranium, ore_nether_uranium_scorched, ore_meteor_uranium)	.oreNether(ore_nether_uranium, ore_nether_uranium_scorched) .crystal(crystal_uranium);
+		//Raw Elements
+		TI																													.ingot(ingot_titanium)		.dust(powder_titanium)									.block(block_titanium)							.crystal(crystal_titanium)		.plate(plate_titanium)	.ore(ore_titanium, cluster_titanium, cluster_depth_titanium, ore_meteor_titanium);
+		CU																													.ingot(ingot_copper)		.dust(powder_copper)									.block(block_copper)							.crystal(crystal_copper)		.plate(plate_copper)	.ore(ore_copper, ore_gneiss_copper, ore_meteor_copper);
+		W																													.ingot(ingot_tungsten)		.dust(powder_tungsten)									.block(block_tungsten)							.crystal(crystal_tungsten)								.ore(ore_tungsten, cluster_depth_tungsten, ore_nether_tungsten, ore_meteor_tungsten)	.oreNether(ore_nether_tungsten);
+		AL																													.ingot(ingot_aluminium)		.dust(powder_aluminium)									.block(block_aluminium)							.crystal(crystal_aluminium)		.plate(plate_aluminium)	.ore(ore_aluminium, cluster_aluminium, ore_meteor_aluminium);
+		PB															.nugget(nugget_lead)									.ingot(ingot_lead)			.dust(powder_lead)										.block(block_lead)								.crystal(crystal_lead)			.plate(plate_lead)		.ore(ore_lead, ore_meteor_lead);
+		//AS														.nugget(nugget_arsenic)									.ingot(ingot_arsenic);
+		TA															.nugget(nugget_tantalium)								.ingot(ingot_tantalium)		.dust(powder_tantalium)									.block(block_tantalium)		.gem(gem_tantalium);
+		COLTAN																												.ingot(fragment_coltan)		.dust(powder_coltan_ore)								.block(block_coltan)																					.ore(ore_coltan);
+		NB															.nugget(fragment_niobium)								.ingot(ingot_niobium)		.dust(powder_niobium)	.dustSmall(powder_niobium_tiny)	.block(block_niobium);
+		BE															.nugget(nugget_beryllium)	.billet(billet_beryllium)	.ingot(ingot_beryllium)		.dust(powder_beryllium)									.block(block_beryllium)							.crystal(crystal_beryllium)								.ore(ore_beryllium);
+		B															.nugget(fragment_boron)									.ingot(ingot_boron)			.dust(powder_boron)		.dustSmall(powder_boron_tiny)	.block(block_boron);
+		ANY_BISMOID													.nugget(nugget_bismuth)									.ingot(ingot_bismuth)																.block(block_bismuth);
+		LA															.nugget(fragment_lanthanium)							.ingot(ingot_lanthanium)	.dust(powder_lanthanium).dustSmall(powder_lanthanium_tiny).block(block_lanthanium);
+		AC															.nugget(nugget_actinium)								.ingot(ingot_actinium)		.dust(powder_actinium)	.dustSmall(powder_actinium_tiny).block(block_actinium);
+		ZR															.nugget(nugget_zirconium)	.billet(billet_zirconium)	.ingot(ingot_zirconium)		.dust(powder_zirconium)									.block(block_zirconium)																					.ore(ore_depth_zirconium);
+		ND															.nugget(fragment_neodymium)								.ingot(ingot_neodymium)		.dust(powder_neodymium)	.dustSmall(powder_neodymium_tiny)																										.ore(ore_depth_nether_neodymium)	.oreNether(ore_depth_nether_neodymium);
+		CE															.nugget(fragment_cerium)								.ingot(ingot_cerium)		.dust(powder_cerium)	.dustSmall(powder_cerium_tiny);
+		BR																													.ingot(ingot_bromine)		.dust(powder_bromine);
+		LI	.hydro(1F)																										.ingot(lithium)				.dust(powder_lithium)	.dustSmall(powder_lithium_tiny)	.block(block_lithium)							.crystal(crystal_lithium)								.ore(ore_gneiss_lithium, ore_meteor_lithium);
+		P_WHITE	.hot(5)																										.ingot(ingot_phosphorus)															.block(block_white_phosphorus)					.crystal(crystal_phosphorus);
+		P_RED	.hot(2)																																	.dust(powder_fire)										.block(block_red_phosphorus);
+		S																																				.dust(sulfur)											.block(block_sulfur)							.crystal(crystal_sulfur)								.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur);
+		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
+		F																																				.dust(fluorite)											.block(block_fluorite)		.gem(lignite)		.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
+	
+		//Compounds
+		MINGRADE																											.ingot(ingot_red_copper)	.dust(powder_red_copper)								.block(block_red_copper);
+		ALLOY																												.ingot(ingot_advanced_alloy).dust(powder_advanced_alloy)							.block(block_advanced_alloy)													.plate(plate_advanced_alloy);
+		STEEL																												.ingot(ingot_steel)			.dust(powder_steel)		.dustSmall(powder_steel_tiny)	.block(block_steel)																.plate(plate_steel);
+		TCALLOY																												.ingot(ingot_tcalloy)		.dust(powder_tcalloy);
+		GRAPHITE																											.ingot(ingot_graphite)																.block(block_graphite);
+		DURA																												.ingot(ingot_dura_steel)	.dust(powder_dura_steel)								.block(block_dura_steel);
+		POLYMER																												.ingot(ingot_polymer)		.dust(powder_polymer)									.block(block_polymer)															.plate(plate_polymer);
+		//BAKELITE																											.ingot(ingot_bakelite)		.dust(powder_bakelite)									.block(block_bakelite);
+		//RUBBER																											.ingot(ingot_rubber)																.block(block_rubber);
+		MAGTUNG																												.ingot(ingot_magnetized_tungsten).dust(powder_magnetized_tungsten)					.block(block_magnetized_tungsten);
+		CMB																													.ingot(ingot_combine_steel)	.dust(powder_combine_steel)								.block(block_combine_steel)														.plate(plate_combine_steel);
+		DESH														.nugget(nugget_desh)									.ingot(ingot_desh)			.dust(powder_desh)										.block(block_desh)																.plate(plate_desh);
+		STAR																												.ingot(ingot_starmetal)																.block(block_starmetal)							.crystal(crystal_starmetal)								.ore(ore_meteor_starmetal);
+		BIGMT																												.ingot(ingot_saturnite)																																				.plate(plate_saturnite);
+		//FERRO																												.ingot(ingot_ferrouranium);
+		EUPH														.nugget(nugget_euphemium)								.ingot(ingot_euphemium)		.dust(powder_euphemium)									.block(block_euphemium)															.plate(plate_euphemium);
+		DNT															.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)	.dust(powder_dineutronium)								.block(block_dineutronium)														.plate(plate_dineutronium);
+		FIBER																												.ingot(ingot_fiberglass)															.block(block_fiberglass);
+		ASBESTOS	.asbestos(1F)																							.ingot(ingot_asbestos)		.dust(powder_asbestos)									.block(block_asbestos)																					.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos);
+		//OSMIRIDIUM												.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium);
+		
+		//RADIOACTIVE Fuels
+		U		.rad(HazardRegistry.u)								.nugget(nugget_uranium)		.billet(billet_uranium)		.ingot(ingot_uranium)		.dust(powder_uranium)									.block(block_uranium)							.crystal(crystal_uranium)								.ore(ore_uranium, ore_uranium_scorched, ore_gneiss_uranium, ore_gneiss_uranium_scorched, ore_nether_uranium, ore_nether_uranium_scorched, ore_meteor_uranium)	.oreNether(ore_nether_uranium, ore_nether_uranium_scorched);
 		U233	.rad(HazardRegistry.u233)							.nugget(nugget_u233)		.billet(billet_u233)		.ingot(ingot_u233)																	.block(block_u233);
 		U235	.rad(HazardRegistry.u235)							.nugget(nugget_u235)		.billet(billet_u235)		.ingot(ingot_u235)																	.block(block_u235);
 		U238	.rad(HazardRegistry.u238)							.nugget(nugget_u238)		.billet(billet_u238)		.ingot(ingot_u238)																	.block(block_u238);
-		TH232	.rad(HazardRegistry.th232)							.nugget(nugget_th232)		.billet(billet_th232)		.ingot(ingot_th232)			.dust(powder_thorium)									.block(block_thorium)		.ore(ore_thorium, ore_meteor_thorium).crystal(crystal_thorium);
-		PU		.rad(HazardRegistry.pu)								.nugget(nugget_plutonium)	.billet(billet_plutonium)	.ingot(ingot_plutonium)		.dust(powder_plutonium)									.block(block_plutonium)		.ore(ore_nether_plutonium)	.oreNether(ore_nether_plutonium).crystal(crystal_plutonium);
+		TH232	.rad(HazardRegistry.th232)							.nugget(nugget_th232)		.billet(billet_th232)		.ingot(ingot_th232)			.dust(powder_thorium)									.block(block_thorium)							.crystal(crystal_thorium)								.ore(ore_thorium, ore_meteor_thorium);
+		PU		.rad(HazardRegistry.pu)								.nugget(nugget_plutonium)	.billet(billet_plutonium)	.ingot(ingot_plutonium)		.dust(powder_plutonium)									.block(block_plutonium)							.crystal(crystal_plutonium)								.ore(ore_nether_plutonium)	.oreNether(ore_nether_plutonium);
 		PURG	.rad(HazardRegistry.purg)							.nugget(nugget_pu_mix)		.billet(billet_pu_mix)		.ingot(ingot_pu_mix)																.block(block_pu_mix);
-		PU238	.rad(HazardRegistry.pu238)	.hot(3F)				.nugget(nugget_pu238)		.billet(billet_pu238)		.ingot(ingot_pu238)																	.block(block_pu238);
+		PU238	.rad(HazardRegistry.pu238)					.hot(3) .nugget(nugget_pu238)		.billet(billet_pu238)		.ingot(ingot_pu238)																	.block(block_pu238);
 		PU239	.rad(HazardRegistry.pu239)							.nugget(nugget_pu239)		.billet(billet_pu239)		.ingot(ingot_pu239)																	.block(block_pu239);
 		PU240	.rad(HazardRegistry.pu240)							.nugget(nugget_pu240)		.billet(billet_pu240)		.ingot(ingot_pu240)																	.block(block_pu240);
 		PU241	.rad(HazardRegistry.pu241)							.nugget(nugget_pu241)		.billet(billet_pu241)		.ingot(ingot_pu241);																//.block(block_pu241);
 		AM241	.rad(HazardRegistry.am241)							.nugget(nugget_am241)		.billet(billet_am241)		.ingot(ingot_am241);
 		AM242	.rad(HazardRegistry.am242)							.nugget(nugget_am242)		.billet(billet_am242)		.ingot(ingot_am242);
 		AMRG	.rad(HazardRegistry.amrg)							.nugget(nugget_am_mix)		.billet(billet_am_mix)		.ingot(ingot_am_mix);
+		SA326	.rad(HazardRegistry.sa326)	.blinding(50F)			.nugget(nugget_schrabidium)	.billet(billet_schrabidium)	.ingot(ingot_schrabidium)	.dust(powder_schrabidium)								.block(block_schrabidium)						.crystal(crystal_schrabidium)	.plate(plate_schrabidium).ore(ore_schrabidium, ore_gneiss_schrabidium, ore_nether_schrabidium)	.oreNether(ore_nether_schrabidium);
+		SA327	.rad(HazardRegistry.sa327)	.blinding(50F)			.nugget(nugget_solinium)	.billet(billet_solinium)	.ingot(ingot_solinium)																.block(block_solinium);
+		SBD		.rad(HazardRegistry.sb)		.blinding(50F)																	.ingot(ingot_schrabidate)	.dust(powder_schrabidate)								.block(block_schrabidate);
+		SRN		.rad(HazardRegistry.sr)		.blinding(50F)																	.ingot(ingot_schraranium)															.block(block_schraranium)						.crystal(crystal_schraranium);
+		
+		//Rads
+		CO															.nugget(fragment_cobalt, nugget_cobalt)				    .ingot(ingot_cobalt)		.dust(powder_cobalt)	.dustSmall(powder_cobalt_tiny)	.block(block_cobalt)							.crystal(crystal_cobalt)								.ore(ore_cobalt, ore_nether_cobalt);
+		CO60	.rad(HazardRegistry.co60)					.hot(1) .nugget(nugget_co60)		.billet(billet_co60)		.ingot(ingot_co60)			.dust(powder_co60) 		.dustSmall(powder_co60_tiny);
+		SR															.nugget(nugget_strontium)								.ingot(ingot_strontium)		.dust(powder_strontium);
+		SR90	.rad(HazardRegistry.sr90)	.hot(1F)	.hydro(1F)	.nugget(nugget_sr90)		.billet(billet_sr90)		.ingot(ingot_sr90)			.dust(powder_sr90)		.dustSmall(powder_sr90_tiny);
+		I																													.ingot(ingot_iodine)		.dust(powder_iodine) 	.dustSmall(powder_iodine_tiny);
+		I131	.rad(HazardRegistry.i131)	.hot(1F)																		.ingot(ingot_i131)			.dust(powder_i131)  	.dustSmall(powder_i131_tiny);
+		CS																													.ingot(ingot_caesium)		.dust(powder_caesium);
+		CS137	.rad(HazardRegistry.cs137)	.hot(3F)	.hydro(3F)																						.dust(powder_cs137)		.dustSmall(powder_cs137_tiny);
+		AT																																				.dust(powder_astatine);
+		AT209	.rad(HazardRegistry.at209)	.hot(20F)																									.dust(powder_at209);
+		XE135	.rad(HazardRegistry.xe135)	.hot(10F)																									.dust(powder_xe135)		.dustSmall(powder_xe135_tiny);
+		TS																													.ingot(ingot_tennessine)	.dust(powder_tennessine);
 		NP237	.rad(HazardRegistry.np237)							.nugget(nugget_neptunium)	.billet(billet_neptunium)	.ingot(ingot_neptunium)		.dust(powder_neptunium)									.block(block_neptunium);
-		PO210	.rad(HazardRegistry.po210)	.hot(3)					.nugget(nugget_polonium)	.billet(billet_polonium)	.ingot(ingot_polonium)		.dust(powder_polonium)									.block(block_polonium);
+		PO210	.rad(HazardRegistry.po210)					.hot(3) .nugget(nugget_polonium)	.billet(billet_polonium)	.ingot(ingot_polonium)		.dust(powder_polonium)									.block(block_polonium);
 		TC99	.rad(HazardRegistry.tc99)							.nugget(nugget_technetium)	.billet(billet_technetium)	.ingot(ingot_technetium);
 		RA226	.rad(HazardRegistry.ra226)							.nugget(nugget_ra226)		.billet(billet_ra226)		.ingot(ingot_ra226)			.dust(powder_ra226)										.block(block_ra226);
 		AC227	.rad(HazardRegistry.ac227)							.nugget(nugget_ac227)		.billet(billet_ac227)		.ingot(ingot_ac227)			.dust(powder_ac227);
-		CO60	.rad(HazardRegistry.co60)	.hot(1)					.nugget(nugget_co60)		.billet(billet_co60)		.ingot(ingot_co60)			.dust(powder_co60) .dustSmall(powder_co60_tiny);
-		AU198	.rad(HazardRegistry.au198)	.hot(5)					.nugget(nugget_au198)		.billet(billet_au198)		.ingot(ingot_au198)			.dust(powder_au198);
+		AU198	.rad(HazardRegistry.au198)					.hot(5)	.nugget(nugget_au198)		.billet(billet_au198)		.ingot(ingot_au198)			.dust(powder_au198);
 		PB209	.rad(HazardRegistry.pb209)	.blinding(50F)	.hot(7)	.nugget(nugget_pb209)		.billet(billet_pb209)		.ingot(ingot_pb209)			.dust(powder_pb209);
-		SA326	.rad(HazardRegistry.sa326)	.blinding(50F)			.nugget(nugget_schrabidium)	.billet(billet_schrabidium)	.ingot(ingot_schrabidium)	.dust(powder_schrabidium)	.plate(plate_schrabidium)	.block(block_schrabidium)	.ore(ore_schrabidium, ore_gneiss_schrabidium, ore_nether_schrabidium)	.oreNether(ore_nether_schrabidium).crystal(crystal_schrabidium);
-		SA327	.rad(HazardRegistry.sa327)	.blinding(50F)			.nugget(nugget_solinium)	.billet(billet_solinium)	.ingot(ingot_solinium)																.block(block_solinium);
-		SBD		.rad(HazardRegistry.sb)		.blinding(50F)																	.ingot(ingot_schrabidate)	.dust(powder_schrabidate)								.block(block_schrabidate);
-		SRN		.rad(HazardRegistry.sr)		.blinding(50F)																	.ingot(ingot_schraranium)															.block(block_schraranium).crystal(crystal_schraranium);
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
 		
-		/*
-		 * STABLE
-		 */
-		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.ore(ore_titanium, ore_meteor_titanium).crystal(crystal_titanium);
-		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_copper, ore_gneiss_copper, ore_meteor_copper).crystal(crystal_copper);
-		MINGRADE															.ingot(ingot_red_copper)											.dust(powder_red_copper)										.block(block_red_copper);
-		ALLOY																.ingot(ingot_advanced_alloy)										.dust(powder_advanced_alloy)	.plate(plate_advanced_alloy)	.block(block_advanced_alloy);
-		W																	.ingot(ingot_tungsten)												.dust(powder_tungsten)											.block(block_tungsten)		.ore(ore_tungsten, ore_nether_tungsten, ore_meteor_tungsten)	.oreNether(ore_nether_tungsten).crystal(crystal_tungsten);
-		AL																	.ingot(ingot_aluminium)												.dust(powder_aluminium)			.plate(plate_aluminium)			.block(block_aluminium)		.ore(ore_aluminium, ore_meteor_aluminium).crystal(crystal_aluminium);
-		STEEL																.ingot(ingot_steel)				.dustSmall(powder_steel_tiny)		.dust(powder_steel)				.plate(plate_steel)				.block(block_steel);
-		TCALLOY																.ingot(ingot_tcalloy)												.dust(powder_tcalloy);
-		PB			.nugget(nugget_lead)									.ingot(ingot_lead)													.dust(powder_lead)				.plate(plate_lead)				.block(block_lead)			.ore(ore_lead, ore_meteor_lead).crystal(crystal_lead);
-		//BI		.nugget(nugget_bismuth)									.ingot(ingot_bismuth); THAT'S WHAT YOU THOUGHT!
-		//Soon :tm: AS			.nugget(nugget_arsenic)									.ingot(ingot_arsenic);
-		TA			.nugget(nugget_tantalium)	.gem(gem_tantalium)			.ingot(ingot_tantalium)												.dust(powder_tantalium)											.block(block_tantalium);
-		COLTAN																.ingot(fragment_coltan)												.dust(powder_coltan_ore)										.block(block_coltan)		.ore(ore_coltan);
-		NB			.nugget(fragment_niobium)								.ingot(ingot_niobium)			.dustSmall(powder_niobium_tiny)		.dust(powder_niobium)											.block(block_niobium);
-		BE			.nugget(nugget_beryllium)	.billet(billet_beryllium)	.ingot(ingot_beryllium)												.dust(powder_beryllium)											.block(block_beryllium)		.ore(ore_beryllium).crystal(crystal_beryllium);
-		CO			.nugget(fragment_cobalt)	.nugget(nugget_cobalt)	    .ingot(ingot_cobalt)				.dust(powder_cobalt)			.dustSmall(powder_cobalt_tiny)	.block(block_cobalt)		.ore(ore_cobalt, ore_nether_cobalt).crystal(crystal_cobalt);
-		B			.nugget(fragment_boron)									.ingot(ingot_boron)				.dustSmall(powder_boron_tiny)		.dust(powder_boron)												.block(block_boron);
-		GRAPHITE															.ingot(ingot_graphite)																												.block(block_graphite);
-		DURA																.ingot(ingot_dura_steel)											.dust(powder_dura_steel)										.block(block_dura_steel);
-		POLYMER																.ingot(ingot_polymer)												.dust(powder_polymer)			.plate(plate_polymer)			.block(block_polymer);
-		//BAKELITE															.ingot(ingot_bakelite)												.dust(powder_bakelite)											.block(block_bakelite);
-		//RUBBER																.ingot(ingot_rubber)																												.block(block_rubber);
-		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
-		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
-		DESH		.nugget(nugget_desh)									.ingot(ingot_desh)													.dust(powder_desh)				.plate(plate_desh)				.block(block_desh);
-		STAR																.ingot(ingot_starmetal)																												.block(block_starmetal)		.ore(ore_meteor_starmetal).crystal(crystal_starmetal);
-		BIGMT																.ingot(ingot_saturnite)																				.plate(plate_saturnite);
-		//FERRO																.ingot(ingot_ferrouranium);
-		EUPH		.nugget(nugget_euphemium)								.ingot(ingot_euphemium)												.dust(powder_euphemium)			.plate(plate_euphemium)			.block(block_euphemium);
-		DNT			.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)											.dust(powder_dineutronium)		.plate(plate_dineutronium)		.block(block_dineutronium);
-		FIBER																.ingot(ingot_fiberglass)																											.block(block_fiberglass);
-		ASBESTOS	.asbestos(1F)											.ingot(ingot_asbestos)												.dust(powder_asbestos)											.block(block_asbestos)		.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos)/* DictFrame.fromOne(stone_resource, EnumStoneType.ASBESTOS))*/;
-		//OSMIRIDIUM	.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium);
+		AUSTRALIUM													.nugget(nugget_australium)	.billet(billet_australium)	.ingot(ingot_australium)	.dust(powder_australium)								.block(block_australium)																				.ore(ore_australium);
+		REIIUM														.nugget(nugget_reiium)									.ingot(ingot_reiium)		.dust(powder_reiium)									.block(block_reiium)																					.ore(ore_reiium);
+		WEIDANIUM													.nugget(nugget_weidanium)								.ingot(ingot_weidanium)		.dust(powder_weidanium)									.block(block_weidanium)																					.ore(ore_weidanium);
+		UNOBTAINIUM													.nugget(nugget_unobtainium)	.billet(billet_unobtainium)	.ingot(ingot_unobtainium)	.dust(powder_unobtainium)								.block(block_unobtainium)																				.ore(ore_unobtainium);
+		VERTICIUM													.nugget(nugget_verticium)								.ingot(ingot_verticium)		.dust(powder_verticium)									.block(block_verticium)																					.ore(ore_verticium);
+		DAFFERGON													.nugget(nugget_daffergon)								.ingot(ingot_daffergon)		.dust(powder_daffergon)									.block(block_daffergon)																					.ore(ore_daffergon);
 
-		/*
-		 * DUST AND GEM ORES
-		 */
-		S																				.dust(sulfur)			.block(block_sulfur)	.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur) .crystal(crystal_sulfur);
-		KNO																				.dust(niter)			.block(block_niter)		.ore(ore_niter).crystal(crystal_niter);
-		F																				.dust(fluorite)			.block(block_fluorite)	.ore(ore_fluorite, basalt_fluorite).crystal(crystal_fluorite);
-		LIGNITE							.gem(lignite)									.dust(powder_lignite)							.ore(ore_lignite);
-		//COALCOKE						.gem(fromOne(coke, EnumCokeType.COAL));
-		//PETCOKE							.gem(fromOne(coke, EnumCokeType.PETROLEUM));
-		LIGCOKE							.gem(fromOne(coke, EnumCokeType.LIGNITE));
-		CINNABAR						.gem(cinnebar)																					.ore(ore_cinnebar, ore_depth_cinnebar).crystal(crystal_cinnebar);
-		//BORAX																			.dust(powder_borax)								.ore(ore_depth_borax);
-		VOLCANIC						.gem(gem_volcanic)																				.ore(basalt_gem);
-		//HEMATITE																														.ore(fromOne(stone_resource, EnumStoneType.HEMATITE));
-		//MALACHITE																														.ore(fromOne(stone_resource, EnumStoneType.MALACHITE));
-		//SLAG																									.block(block_slag);
-		
-		/*
-		 * HAZARDS, MISC
-		 */
-		LI	.hydro(1F)	.ingot(lithium)	.dustSmall(powder_lithium_tiny)	.dust(powder_lithium)	.block(block_lithium)	.ore(ore_gneiss_lithium, ore_meteor_lithium).crystal(crystal_lithium);
-
-		/*
-		 * PHOSPHORUS
-		 */
-		P_WHITE	.hot(5)	.ingot(ingot_phosphorus)	.block(block_white_phosphorus)	.crystal(crystal_phosphorus);
-		P_RED	.hot(2)	.dust(powder_fire)			.block(block_red_phosphorus);
-		
-		/*
-		 * RARE METALS
-		 */
-		AUSTRALIUM	.nugget(nugget_australium)	.billet(billet_australium)	.ingot(ingot_australium)	.dust(powder_australium)	.block(block_australium)	.ore(ore_australium);
-		REIIUM		.nugget(nugget_reiium)									.ingot(ingot_reiium)		.dust(powder_reiium)		.block(block_reiium)		.ore(ore_reiium);
-		WEIDANIUM	.nugget(nugget_weidanium)								.ingot(ingot_weidanium)		.dust(powder_weidanium)		.block(block_weidanium)		.ore(ore_weidanium);
-		UNOBTAINIUM	.nugget(nugget_unobtainium)	.billet(billet_unobtainium)	.ingot(ingot_unobtainium)	.dust(powder_unobtainium)	.block(block_unobtainium)	.ore(ore_unobtainium);
-		VERTICIUM	.nugget(nugget_verticium)								.ingot(ingot_verticium)		.dust(powder_verticium)		.block(block_verticium)		.ore(ore_verticium);
-		DAFFERGON	.nugget(nugget_daffergon)								.ingot(ingot_daffergon)		.dust(powder_daffergon)		.block(block_daffergon)		.ore(ore_daffergon);
-
-		/*
-		 * RARE EARTHS
-		 */
-		LA	.nugget(fragment_lanthanium)	.ingot(ingot_lanthanium)										.dustSmall(powder_lanthanium_tiny)	.dust(powder_lanthanium)	.block(block_lanthanium);
-		AC	.nugget(nugget_actinium) 		.ingot(ingot_actinium)											.dustSmall(powder_actinium_tiny)	.dust(powder_actinium)		.block(block_actinium);
-		ZR	.nugget(nugget_zirconium)		.ingot(ingot_zirconium)		.billet(billet_zirconium)												.dust(powder_zirconium)		.block(block_zirconium)		.ore(ore_depth_zirconium);
-		ND	.nugget(fragment_neodymium)		.ingot(ingot_neodymium)											.dustSmall(powder_neodymium_tiny)	.dust(powder_neodymium)									.ore(ore_depth_nether_neodymium)	.oreNether(ore_depth_nether_neodymium);
-		CE	.nugget(fragment_cerium)		.ingot(ingot_cerium)											.dustSmall(powder_cerium_tiny)		.dust(powder_cerium);
-		
-		/*
-		 * NITAN
-		 */
-		I	.dust(powder_iodine)			.ingot(ingot_iodine) .dustSmall(powder_iodine_tiny);
-		AT	.dust(powder_astatine);
-		CS	.dust(powder_caesium)			.ingot(ingot_caesium);
-		ST	.dust(powder_strontium)			.ingot(ingot_strontium) .nugget(nugget_strontium);
-		BR	.dust(powder_bromine)			.ingot(ingot_bromine);
-		TS	.dust(powder_tennessine)		.ingot(ingot_tennessine);
-
-		/*
-		 * FISSION FRAGMENTS
-		 */
-		SR90	.rad(HazardRegistry.sr90)	.hot(1F)	.hydro(1F)	.dustSmall(powder_sr90_tiny)	.dust(powder_sr90)	.ingot(ingot_sr90)	.billet(billet_sr90)	.nugget(nugget_sr90);
-		I131	.rad(HazardRegistry.i131)	.hot(1F)				.dustSmall(powder_i131_tiny)	.dust(powder_i131)  .ingot(ingot_i131);
-		XE135	.rad(HazardRegistry.xe135)	.hot(10F)				.dustSmall(powder_xe135_tiny)	.dust(powder_xe135);
-		CS137	.rad(HazardRegistry.cs137)	.hot(3F)	.hydro(3F)	.dustSmall(powder_cs137_tiny)	.dust(powder_cs137);
-		AT209	.rad(HazardRegistry.at209)	.hot(20F)												.dust(powder_at209);
-		
-		/*
-		 * COLLECTIONS
-		 */
-		ANY_GUNPOWDER			.dust(Items.GUNPOWDER, ballistite, cordite);
-		ANY_SMOKELESS			.dust(ballistite, cordite);
-		ANY_PLASTICEXPLOSIVE	.ingot(ingot_semtex);
-		//ANY_HIGHEXPLOSIVE		.ingot(ball_tnt);
+		//COLLECTIONS
+		ANY_GUNPOWDER																																	.dust(Items.GUNPOWDER, ballistite, cordite);
+		ANY_SMOKELESS																																	.dust(ballistite, cordite);
+		ANY_PLASTICEXPLOSIVE																								.ingot(ingot_semtex);
+		//ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt);
 		ANY_CONCRETE			.any(concrete, concrete_smooth, concrete_asbestos, ducrete, ducrete_smooth);
 
-		ANY_COKE				.gem(fromAll(coke, EnumCokeType.class));
-		ANY_BISMOID				.ingot(ingot_bismuth).nugget(nugget_bismuth).block(block_bismuth);
+		ANY_COKE																																																							.gem(fromAll(coke, EnumCokeType.class));
+		LIGNITE																																			.dust(powder_lignite)																																			.ore(ore_lignite);
+		//COALCOKE																																																							.gem(fromOne(coke, EnumCokeType.COAL));
+		//PETCOKE																																																							.gem(fromOne(coke, EnumCokeType.PETROLEUM));
+		LIGCOKE																																																								.gem(fromOne(coke, EnumCokeType.LIGNITE));
+		CINNABAR																																																							.gem(cinnebar)		.crystal(crystal_cinnebar)								.ore(ore_cinnebar, ore_depth_cinnebar);
+		//BORAX																																			.dust(powder_borax)																																				.ore(ore_depth_borax);
+		VOLCANIC																																																							.gem(gem_volcanic)															.ore(basalt_gem);
+		//HEMATITE																																																																										.ore(fromOne(stone_resource, EnumStoneType.HEMATITE));
+		//MALACHITE																																																																										.ore(fromOne(stone_resource, EnumStoneType.MALACHITE));
+		//SLAG																																																	.block(block_slag);
 
 		OreDictionary.registerOre(KEY_OIL_TAR, fromOne(oil_tar, EnumTarType.CRUDE));
 		OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));

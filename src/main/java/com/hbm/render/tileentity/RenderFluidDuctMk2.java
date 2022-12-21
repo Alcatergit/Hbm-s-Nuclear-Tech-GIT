@@ -152,36 +152,35 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 		} else {
 			GlStateManager.enableTexture2D();
 			TextureAtlasSprite icon = FFUtils.getTextureFromFluid(type);
-			float iconMaxU = icon.getInterpolatedU(10);
-			float iconMinU = icon.getInterpolatedU(7);
-			float iconMaxV = icon.getInterpolatedV(13);
-			float iconMinV = icon.getInterpolatedV(12);
+			float iconMaxU = icon.getInterpolatedU(9);
+			float iconMinU = icon.getInterpolatedU(8);
+			float iconMaxV = icon.getInterpolatedV(16);
+			float iconMinV = icon.getInterpolatedV(11);
 			RenderHelper.bindBlockTexture();
 			
 			FFUtils.setColorFromFluid(type);
 
 			RenderHelper.startDrawingTexturedQuads();
 			
+				RenderHelper.addVertexWithUV(7.5*pixel, 1, 5.5*pixel, iconMaxU, iconMinV);
+				RenderHelper.addVertexWithUV(8.5*pixel, 1, 5.5*pixel, iconMinU, iconMinV);
+				RenderHelper.addVertexWithUV(8.5*pixel, 10.5*pixel, 5.5*pixel, iconMinU, iconMaxV);
+				RenderHelper.addVertexWithUV(7.5*pixel, 10.5*pixel, 5.5*pixel, iconMaxU, iconMaxV);
 				
-				RenderHelper.addVertexWithUV(7*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+5*pixel+1*pixel/2, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(10*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+5*pixel+1*pixel/2, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(10*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+5*pixel+1*pixel/2, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(7*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+5*pixel+1*pixel/2, iconMaxU, iconMaxV);
+				RenderHelper.addVertexWithUV(7.5*pixel, 1, 10.5*pixel, iconMaxU, iconMinV);
+				RenderHelper.addVertexWithUV(8.5*pixel, 1, 10.5*pixel, iconMinU, iconMinV);
+				RenderHelper.addVertexWithUV(8.5*pixel, 10.5*pixel, 10.5*pixel, iconMinU, iconMaxV);
+				RenderHelper.addVertexWithUV(7.5*pixel, 10.5*pixel, 10.5*pixel, iconMaxU, iconMaxV);
 				
-				RenderHelper.addVertexWithUV(7*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+5*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(10*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+5*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(10*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+5*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(7*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+5*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMaxV);
+				RenderHelper.addVertexWithUV(10.5*pixel, 1, 7.5*pixel, iconMaxU, iconMinV);
+				RenderHelper.addVertexWithUV(10.5*pixel, 1, 8.5*pixel, iconMinU, iconMinV);
+				RenderHelper.addVertexWithUV(10.5*pixel, 10.5*pixel, 8.5*pixel, iconMinU, iconMaxV);
+				RenderHelper.addVertexWithUV(10.5*pixel, 10.5*pixel, 7.5*pixel, iconMaxU, iconMaxV);
 				
-				RenderHelper.addVertexWithUV(11*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+1*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(11*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+4*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(11*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+4*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(11*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+1*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMaxV);
-				
-				RenderHelper.addVertexWithUV(6*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+1*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(6*pixel-1*pixel/2,13*pixel-1*pixel/2+0.013, 0+4*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(6*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+4*pixel+1*pixel/2 + 5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(6*pixel-1*pixel/2,12*pixel-1*pixel/2+0.006, 0+1*pixel+1*pixel/2 + 5*pixel, iconMaxU, iconMaxV);
+				RenderHelper.addVertexWithUV(5.5*pixel, 1, 7.5*pixel, iconMaxU, iconMinV);
+				RenderHelper.addVertexWithUV(5.5*pixel, 1, 8.5*pixel, iconMinU, iconMinV);
+				RenderHelper.addVertexWithUV(5.5*pixel, 10.5*pixel, 8.5*pixel, iconMinU, iconMaxV);
+				RenderHelper.addVertexWithUV(5.5*pixel, 10.5*pixel, 7.5*pixel, iconMaxU, iconMaxV);
 
 			RenderHelper.draw();
 			

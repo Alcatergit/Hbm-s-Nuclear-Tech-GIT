@@ -21,6 +21,7 @@ import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -106,6 +107,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 				vec.rotateAroundY(world.rand.nextFloat() * (float) Math.PI * 2F);
 
 				world.newExplosion(null, pos.getX() + 0.5 + vec.xCoord, pos.getY() + 0.5 + world.rand.nextGaussian() * 1.5D, pos.getZ() + 0.5 + vec.zCoord, 2.5F, true, true);
+				RadiationSavedData.incrementRad(world, pos, 2000F, 10000F);
 			}
 
 			if(isOn && power >= powerReq) {
