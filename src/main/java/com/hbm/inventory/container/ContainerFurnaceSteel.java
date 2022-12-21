@@ -48,17 +48,17 @@ public class ContainerFurnaceSteel extends Container {
 
 			if(index <= 5) {
 				if(!this.mergeItemStack(originalStack, 6, this.inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 				
 				slot.onSlotChange(originalStack, stack);
 				
 			} else if(!this.mergeItemStack(originalStack, 0, 3, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if(originalStack.getCount() == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
