@@ -15,6 +15,8 @@ public class FusionRecipes {
 			return 1200;
 		} else if(plasma == ModForgeFluids.plasma_ht){
 			return 1200;
+		} else if(plasma == ModForgeFluids.plasma_put){
+			return 1600;
 		} else if(plasma == ModForgeFluids.plasma_xm){
 			return 2400;
 		} else if(plasma == ModForgeFluids.plasma_bf){
@@ -30,6 +32,8 @@ public class FusionRecipes {
 			return new ItemStack(ModItems.pellet_charged);
 		} else if(plasma == ModForgeFluids.plasma_ht){
 			return new ItemStack(ModItems.pellet_charged);
+		} else if(plasma == ModForgeFluids.plasma_put){
+			return new ItemStack(ModItems.powder_xe135_tiny);
 		} else if(plasma == ModForgeFluids.plasma_xm){
 			return new ItemStack(ModItems.powder_chlorophyte);
 		} else if(plasma == ModForgeFluids.plasma_bf){
@@ -40,11 +44,13 @@ public class FusionRecipes {
 	
 	public static int getBreedingLevel(Fluid plasma) {
 		if(plasma == ModForgeFluids.plasma_dt){
-			return 1;
+			return 2;
 		} else if(plasma == ModForgeFluids.plasma_hd){
 			return 1;
 		} else if(plasma == ModForgeFluids.plasma_ht){
 			return 1;
+		} else if(plasma == ModForgeFluids.plasma_put){
+			return 2;
 		} else if(plasma == ModForgeFluids.plasma_xm){
 			return 3;
 		} else if(plasma == ModForgeFluids.plasma_bf){
@@ -55,15 +61,17 @@ public class FusionRecipes {
 	
 	public static int getSteamProduction(Fluid plasma) {
 		if(plasma == ModForgeFluids.plasma_dt){
-			return 30;
+			return 150;
 		} else if(plasma == ModForgeFluids.plasma_hd){
-			return 20;
+			return 100;
 		} else if(plasma == ModForgeFluids.plasma_ht){
-			return 25;
+			return 125;
+		} else if(plasma == ModForgeFluids.plasma_put){
+			return 175;
 		} else if(plasma == ModForgeFluids.plasma_xm){
-			return 60;
+			return 300;
 		} else if(plasma == ModForgeFluids.plasma_bf){
-			return 160;
+			return 800;
 		}
 		return 0;
 	}

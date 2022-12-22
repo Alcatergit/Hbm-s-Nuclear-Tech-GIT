@@ -67,7 +67,7 @@ public class BlockMarker extends BlockContainer {
 			if(i == 5)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Watz Power Plant"));
 			if(i == 6)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Fusionary Watz Plant"));
+		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Singularity-Anti-Fusion-Experiment"));
 			return true;
 		} else if(!player.isSneaking())
 		{

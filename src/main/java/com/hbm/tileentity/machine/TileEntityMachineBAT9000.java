@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
 
@@ -26,6 +27,10 @@ public class TileEntityMachineBAT9000 extends TileEntityBarrel {
 			world.destroyBlock(pos, false);
 			world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, true, true);
 		}
+	}
+
+	public void fillFluid(BlockPos pos1, FluidTank tank) {
+		FFUtils.fillFluid(this, tank, world, pos1, 512000);
 	}
 
 	@Override

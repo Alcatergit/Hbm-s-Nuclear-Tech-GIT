@@ -451,7 +451,7 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
 
-		return hardness < 70 && hardness >= 0;
+		return hardness < 70 && hardness >= 0 || b instanceof IDrillInteraction;
 	}
 
 	//TODO Drillgon200: Fix this absolute mess
@@ -660,15 +660,16 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 
 		if(b.getBlock() instanceof IDrillInteraction) {
 			IDrillInteraction in = (IDrillInteraction) b.getBlock();
-			
-			ItemStack sta = in.extractResource(world, x, y, z, b, this);
-
-			if(sta != null && hasSpace(sta)) {
-				this.addItemToInventory(sta);
-			}
-			
-			if(!in.canBreak(world, x, y, z, b, this))
+			if(!in.canBreak(world, x, y, z, b, this)){
 				return true; //true because the block is still there and mining should continue
+			}
+			else{
+				ItemStack sta = in.extractResource(world, x, y, z, b, this);
+
+				if(sta != null && hasSpace(sta)) {
+					this.addItemToInventory(sta);
+				}
+			}
 		}
 		
 		// yup that worked

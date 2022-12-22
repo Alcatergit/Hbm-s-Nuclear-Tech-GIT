@@ -983,6 +983,16 @@ public class ModEventHandler {
 			event.getEntity().dropItem(ModItems.book_of_, 1);
 		}
 
+		if(event.getEntity().getUniqueID().toString().equals(Library.Malpon)) {
+			if(event.getSource() instanceof EntityDamageSource){
+				if(((EntityDamageSource)event.getSource()).getImmediateSource() instanceof EntityLivingBase){
+					EntityLivingBase attacker = (EntityLivingBase) ((EntityDamageSource)event.getSource()).getImmediateSource();
+					HbmLivingProps.incrementRadiation(attacker, 2000F);
+				}
+			}
+			event.getEntity().dropItem(ModItems.pellet_rtg_balefire, 1);
+		}
+
 		if(event.getEntity() instanceof EntityTaintedCreeper && event.getSource() == ModDamageSource.boxcar) {
 
 			for(EntityPlayer player : event.getEntity().getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, event.getEntity().getEntityBoundingBox().grow(50, 50, 50))) {

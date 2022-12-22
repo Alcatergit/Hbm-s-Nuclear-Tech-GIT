@@ -126,6 +126,7 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.plasma_dt.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_hd.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_ht.getName(), new FluidProperties(0, 4, 0, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
+		fluidProperties.put(ModForgeFluids.plasma_put.getName(), new FluidProperties(2, 3, 1, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_xm.getName(), new FluidProperties(0, 4, 1, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_bf.getName(), new FluidProperties(4, 5, 4, EnumSymbol.ANTIMATTER, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 	}

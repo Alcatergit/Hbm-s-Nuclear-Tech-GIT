@@ -33,7 +33,7 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable {
 	public static final PropertyBool EXTRACTS = PropertyBool.create("extracts");
 	
 	private static final float p = 1F / 16F;
-	private static final AxisAlignedBB DUCT_BB = new AxisAlignedBB(11 * p / 2, 11 * p / 2, 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2, 1 - 11 * p / 2);
+	private static final AxisAlignedBB DUCT_BB = new AxisAlignedBB(1, 1, 1, -1, -1, -1);
 	
 	public BlockFluidPipeMk2(Material materialIn, String s) {
 		super(materialIn);
@@ -99,12 +99,12 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable {
 
 			if (cable != null) {
 				float p = 1F / 16F;
-				float minX = 11 * p / 2 - (cable.connections[5] != null ? (11 * p / 2) : 0);
-				float minY = 11 * p / 2 - (cable.connections[1] != null ? (11 * p / 2) : 0);
-				float minZ = 11 * p / 2 - (cable.connections[2] != null ? (11 * p / 2) : 0);
-				float maxX = 1 - 11 * p / 2 + (cable.connections[3] != null ? (11 * p / 2) : 0);
-				float maxY = 1 - 11 * p / 2 + (cable.connections[0] != null ? (11 * p / 2) : 0);
-				float maxZ = 1 - 11 * p / 2 + (cable.connections[4] != null ? (11 * p / 2) : 0);
+				float minX = (cable.connections[5] != null ? 0 : (4 * p));
+				float minY = (cable.connections[1] != null ? 0 : (4 * p));
+				float minZ = (cable.connections[2] != null ? 0 : (4 * p));
+				float maxX = 1 - (cable.connections[3] != null ? 0 : (4 * p));
+				float maxY = 1 - (cable.connections[0] != null ? 0 : (4 * p));
+				float maxZ = 1 - (cable.connections[4] != null ? 0 : (4 * p));
 
 				return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 			}

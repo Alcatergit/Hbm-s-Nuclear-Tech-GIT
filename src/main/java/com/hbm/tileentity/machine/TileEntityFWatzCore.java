@@ -11,6 +11,7 @@ import com.hbm.interfaces.IReactor;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
@@ -39,7 +40,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntityFWatzCore extends TileEntity implements ITickable, IReactor, ISource, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public final static long maxPower = 10000000000L;
+	public final static long maxPower = 1000000000000L;
 	public boolean cooldown = false;
 
 	public FluidTank tanks[];
@@ -93,6 +94,14 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 		}
 	}
 
+	public int getSingularityType(){
+		Item item = inventory.getStackInSlot(2).getItem();
+		if(item instanceof ItemFWatzCore){
+			return ((ItemFWatzCore)item).type;
+		}
+		return 0;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("power");
@@ -125,63 +134,25 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 			if(age == 9 || age == 19)
 				ffgeuaInit();
-			if(hasFuse() && getSingularityType() > 0) {
+
+			if(hasFuse() && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore) {
+				ItemFWatzCore itemCore = (ItemFWatzCore)inventory.getStackInSlot(2).getItem();
 				if(cooldown) {
-
-					int i = getSingularityType();
-
-					if(i == 1)
-						tanks[0].fill(new FluidStack(tankTypes[0], 1500), true);
-					if(i == 2)
-						tanks[0].fill(new FluidStack(tankTypes[0], 3000), true);
-					if(i == 3)
-						tanks[0].fill(new FluidStack(tankTypes[0], 750), true);
-					if(i == 4)
-						tanks[0].fill(new FluidStack(tankTypes[0], 500), true);
-					if(i == 5)
-						tanks[0].fill(new FluidStack(tankTypes[0], 15000), true);
+					
+					tanks[0].fill(new FluidStack(tankTypes[0], itemCore.coolantRefill), true);
 
 					if(tanks[0].getFluidAmount() >= tanks[0].getCapacity()) {
 						cooldown = false;
 					}
 
 				} else {
-					int i = getSingularityType();
 
-					if(i == 1 && tanks[1].getFluidAmount() - 75 >= 0 && tanks[2].getFluidAmount() - 75 >= 0) {
-						tanks[0].drain(150, true);
-						tanks[1].drain(75, true);
-						tanks[2].drain(75, true);
+					if(tanks[1].getFluidAmount() > itemCore.amatDrain && tanks[2].getFluidAmount() > itemCore.aschrabDrain) {
+						tanks[0].drain(itemCore.coolantDrain, true);
+						tanks[1].drain(itemCore.amatDrain, true);
+						tanks[2].drain(itemCore.aschrabDrain, true);
 						needsUpdate = true;
-						power += 5000000;
-					}
-					if(i == 2 && tanks[1].getFluidAmount() - 75 >= 0 && tanks[2].getFluidAmount() - 35 >= 0) {
-						tanks[0].drain(75, true);
-						tanks[1].drain(35, true);
-						tanks[2].drain(30, true);
-						needsUpdate = true;
-						power += 2500000;
-					}
-					if(i == 3 && tanks[1].getFluidAmount() - 75 >= 0 && tanks[2].getFluidAmount() - 140 >= 0) {
-						tanks[0].drain(300, true);
-						tanks[1].drain(75, true);
-						tanks[2].drain(140, true);
-						needsUpdate = true;
-						power += 10000000;
-					}
-					if(i == 4 && tanks[1].getFluidAmount() - 100 >= 0 && tanks[2].getFluidAmount() - 100 >= 0) {
-						tanks[0].drain(100, true);
-						tanks[1].drain(100, true);
-						tanks[2].drain(100, true);
-						needsUpdate = true;
-						power += 10000000;
-					}
-					if(i == 5 && tanks[1].getFluidAmount() - 15 >= 0 && tanks[2].getFluidAmount() - 15 >= 0) {
-						tanks[0].drain(150, true);
-						tanks[1].drain(15, true);
-						tanks[2].drain(15, true);
-						needsUpdate = true;
-						power += 100000000;
+						power += itemCore.powerOutput;
 					}
 
 					if(power > maxPower)
@@ -208,10 +179,10 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 				needsUpdate = false;
 			}
 
-			if(this.isRunning() && (tanks[1].getFluidAmount() <= 0 || tanks[2].getFluidAmount() <= 0 || !hasFuse() || getSingularityType() == 0) || cooldown || !this.isStructureValid(world))
+			if(this.isRunning() && (tanks[1].getFluidAmount() <= 0 || tanks[2].getFluidAmount() <= 0 || !hasFuse() || !(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore)) || cooldown || !this.isStructureValid(world))
 				this.emptyPlasma();
 
-			if(!this.isRunning() && tanks[1].getFluidAmount() >= 100 && tanks[2].getFluidAmount() >= 100 && hasFuse() && getSingularityType() > 0 && !cooldown && this.isStructureValid(world))
+			if(!this.isRunning() && tanks[1].getFluidAmount() >= 100 && tanks[2].getFluidAmount() >= 100 && hasFuse() && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore && !cooldown && this.isStructureValid(world))
 				this.fillPlasma();
 
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1], tanks[2] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 25));
@@ -256,26 +227,6 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 		return 0;
 	}
 
-	public int getSingularityType() {
-
-		if(!inventory.getStackInSlot(2).isEmpty()) {
-			Item item = inventory.getStackInSlot(2).getItem();
-
-			if(item == ModItems.singularity)
-				return 1;
-			if(item == ModItems.singularity_counter_resonant)
-				return 2;
-			if(item == ModItems.singularity_super_heated)
-				return 3;
-			if(item == ModItems.black_hole)
-				return 4;
-			if(item == ModItems.overfuse)
-				return 5;
-		}
-
-		return 0;
-	}
-
 	public void fillPlasma() {
 		if(!this.world.isRemote)
 			FWatz.fillPlasma(world, pos);
@@ -313,10 +264,10 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 	@Override
 	public void ffgeuaInit() {
-		ffgeua(pos.add(10, -11, 0), getTact());
-		ffgeua(pos.add(-10, -11, 0), getTact());
-		ffgeua(pos.add(0, -11, 10), getTact());
-		ffgeua(pos.add(0, -11, -10), getTact());
+		ffgeua(pos.add(7, -1, 0), getTact());
+		ffgeua(pos.add(-7, -1, 0), getTact());
+		ffgeua(pos.add(0, -1, 7), getTact());
+		ffgeua(pos.add(0, -1, -7), getTact());
 	}
 
 	@Override

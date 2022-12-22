@@ -3,6 +3,7 @@ package com.hbm.packet;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreReceiver;
 import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
+import com.hbm.tileentity.machine.TileEntityMachineBattery;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -72,6 +73,11 @@ public class AuxLongPacket implements IMessage {
 							((TileEntityCoreReceiver)te).joules = m.value;
 					} else if(te instanceof TileEntityMachineTeleporter){
 						((TileEntityMachineTeleporter) te).target = m.value == 0 ? null : BlockPos.fromLong(m.value);
+					} else if(te instanceof TileEntityMachineBattery) {
+						TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
+
+						if(m.id == 0)
+							battery.powerDelta = m.value;
 					}
 				} catch(Exception x) {
 				}

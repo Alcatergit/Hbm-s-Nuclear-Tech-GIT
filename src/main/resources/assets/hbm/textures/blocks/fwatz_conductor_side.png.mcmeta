@@ -1,0 +1,9 @@
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "CTM",
+		"textures": [
+			"hbm:blocks/fwatz_conductor_side_ctm"
+		]
+	}
+}

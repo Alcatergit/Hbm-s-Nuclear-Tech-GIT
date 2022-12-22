@@ -3,6 +3,7 @@ package com.hbm.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hbm.inventory.OreDictManager.*;
 import com.google.common.collect.Lists;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
@@ -96,17 +97,17 @@ public class MachineRecipes {
 
 		if (stamps_flat.contains(stamp.getItem())) {
 
-			if (mODE(input, "dustCoal"))
+			if (mODE(input, COAL.dust()))
 				return new ItemStack(Items.COAL);
 			if (mODE(input, "dustQuartz"))
 				return new ItemStack(Items.QUARTZ);
-			if (mODE(input, "dustNetherQuartz"))
+			if (mODE(input, NETHERQUARTZ.dust()))
 				return new ItemStack(Items.QUARTZ);
-			if (mODE(input, "dustLapis"))
+			if (mODE(input, LAPIS.dust()))
 				return new ItemStack(Items.DYE, 1, 4);
-			if (mODE(input, "dustDiamond"))
+			if (mODE(input, DIAMOND.dust()))
 				return new ItemStack(Items.DIAMOND);
-			if (mODE(input, "dustEmerald"))
+			if (mODE(input, EMERALD.dust()))
 				return new ItemStack(Items.EMERALD);
 			if (input.getItem() == ModItems.pellet_coal)
 				return new ItemStack(Items.DIAMOND);
@@ -122,54 +123,52 @@ public class MachineRecipes {
 
 		if (stamps_plate.contains(stamp.getItem())) {
 
-			if (mODE(input, "ingotIron"))
+			if (mODE(input, IRON.ingot()))
 				return new ItemStack(ModItems.plate_iron);
-			if (mODE(input, "ingotGold"))
+			if (mODE(input, GOLD.ingot()))
 				return new ItemStack(ModItems.plate_gold);
-			if (mODE(input, "ingotTitanium"))
+			if (mODE(input, TI.ingot()))
 				return new ItemStack(ModItems.plate_titanium);
-			if (mODE(input, "ingotAluminum"))
+			if (mODE(input, AL.ingot()))
 				return new ItemStack(ModItems.plate_aluminium);
-			if (mODE(input, "ingotSteel"))
+			if (mODE(input, STEEL.ingot()))
 				return new ItemStack(ModItems.plate_steel);
-			if (mODE(input, "ingotLead"))
+			if (mODE(input, PB.ingot()))
 				return new ItemStack(ModItems.plate_lead);
-			if (mODE(input, "ingotCopper"))
+			if (mODE(input, CU.ingot()))
 				return new ItemStack(ModItems.plate_copper);
 			if (mODE(input, "ingotAdvanced"))
 				return new ItemStack(ModItems.plate_advanced_alloy);
-			if (mODE(input, "ingotAdvancedAlloy"))
+			if (mODE(input, ALLOY.ingot()))
 				return new ItemStack(ModItems.plate_advanced_alloy);
-			if (mODE(input, "ingotSchrabidium"))
+			if (mODE(input, SA326.ingot()))
 				return new ItemStack(ModItems.plate_schrabidium);
-			if (mODE(input, "ingotCMBSteel"))
+			if (mODE(input, CMB.ingot()))
 				return new ItemStack(ModItems.plate_combine_steel);
-			if (mODE(input, "ingotSaturnite"))
+			if (mODE(input, BIGMT.ingot()))
 				return new ItemStack(ModItems.plate_saturnite);
 
 		}
 
 		if (stamps_wire.contains(stamp.getItem())) {
 
-			if (mODE(input, "ingotAluminum"))
+			if (mODE(input, AL.ingot()))
 				return new ItemStack(ModItems.wire_aluminium, 8);
-			if (mODE(input, "ingotCopper"))
+			if (mODE(input, CU.ingot()))
 				return new ItemStack(ModItems.wire_copper, 8);
-			if (mODE(input, "ingotTungsten"))
+			if (mODE(input, W.ingot()))
 				return new ItemStack(ModItems.wire_tungsten, 8);
-			if (mODE(input, "ingotMingrade"))
+			if (mODE(input, MINGRADE.ingot()))
 				return new ItemStack(ModItems.wire_red_copper, 8);
-			if (mODE(input, "ingotMingrade"))
-				return new ItemStack(ModItems.wire_red_copper, 8);
-			if (mODE(input, "ingotGold"))
+			if (mODE(input, GOLD.ingot()))
 				return new ItemStack(ModItems.wire_gold, 8);
-			if (mODE(input, "ingotSchrabidium"))
+			if (mODE(input, SA326.ingot()))
 				return new ItemStack(ModItems.wire_schrabidium, 8);
 			if (mODE(input, "ingotAdvanced"))
 				return new ItemStack(ModItems.wire_advanced_alloy, 8);
-			if (mODE(input, "ingotAdvancedAlloy"))
+			if (mODE(input, ALLOY.ingot()))
 				return new ItemStack(ModItems.wire_advanced_alloy, 8);
-			if (mODE(input, "ingotMagnetizedTungsten"))
+			if (mODE(input, MAGTUNG.ingot()))
 				return new ItemStack(ModItems.wire_magnetized_tungsten, 8);
 		}
 
@@ -200,7 +199,7 @@ public class MachineRecipes {
 			if (input.getItem() == ModItems.assembly_desh)
 				return new ItemStack(ModItems.ammo_357_desh);
 
-			if (mODE(input, "ingotSteel"))
+			if (mODE(input, STEEL.ingot()))
 				return new ItemStack(ModItems.gun_revolver_cursed_ammo);
 		}
 
@@ -216,7 +215,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.ammo_9mm);
 			if (input.getItem() == ModItems.assembly_uzi)
 				return new ItemStack(ModItems.ammo_22lr);
-			if (mODE(input, "ingotGold"))
+			if (mODE(input, GOLD.ingot()))
 				return new ItemStack(ModItems.ammo_566_gold);
 			if (input.getItem() == ModItems.assembly_lacunae)
 				return new ItemStack(ModItems.ammo_5mm);
@@ -251,28 +250,28 @@ public class MachineRecipes {
 			}
 		}
 
-		if (mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) && mODE(item2, "gemCoal")
-				|| mODE(item, "gemCoal") && mODE(item2, new String[] {"ingotTungsten", "dustTungsten"})) {
+		if (mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, COAL.gem())
+				|| mODE(item, COAL.gem()) && mODE(item2, new String[] {W.ingot(), W.dust()})) {
 			return new ItemStack(ModItems.neutron_reflector, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotLead", "dustLead"}) && mODE(item2, new String[] {"ingotCopper", "dustCopper"})
-				|| mODE(item, new String[] {"ingotCopper", "dustCopper"}) && mODE(item2, new String[] {"ingotLead", "dustLead"})) {
+		if (mODE(item, new String[] {PB.ingot(), PB.dust()}) && mODE(item2, new String[] {CU.ingot(), CU.dust()})
+				|| mODE(item, new String[] {CU.ingot(), CU.dust()}) && mODE(item2, new String[] {PB.ingot(), PB.dust()})) {
 			return new ItemStack(ModItems.neutron_reflector, 4);
 		}
 
-		if (mODE(item, "plateLead") && mODE(item2, "plateCopper")
-				|| mODE(item, "plateCopper") && mODE(item2, "plateLead")) {
+		if (mODE(item, PB.plate()) && mODE(item2, CU.plate())
+				|| mODE(item, CU.plate()) && mODE(item2, PB.plate())) {
 			return new ItemStack(ModItems.neutron_reflector, 1);
 		}
 
-		if (mODE(item, new String[] {"ingotIron", "dustIron"}) && mODE(item2, new String[] {"gemCoal", "dustCoal"})
-				|| mODE(item, new String[] {"gemCoal", "dustCoal"}) && mODE(item2, new String[] {"ingotIron", "dustIron"})) {
+		if (mODE(item, new String[] {IRON.ingot(), IRON.dust()}) && mODE(item2, new String[] {COAL.gem(), COAL.dust()})
+				|| mODE(item, new String[] {COAL.gem(), COAL.dust()}) && mODE(item2, new String[] {IRON.ingot(), IRON.dust()})) {
 			return new ItemStack(ModItems.ingot_steel, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotCopper", "dustCopper"}) && item2.getItem() == Items.REDSTONE
-				|| item.getItem() == Items.REDSTONE && mODE(item2, new String[] {"ingotCopper", "dustCopper"})) {
+		if (mODE(item, new String[] {CU.ingot(), CU.dust()}) && item2.getItem() == Items.REDSTONE
+				|| item.getItem() == Items.REDSTONE && mODE(item2, new String[] {CU.ingot(), CU.dust()})) {
 			return new ItemStack(ModItems.ingot_red_copper, 2);
 		}
 
@@ -281,54 +280,54 @@ public class MachineRecipes {
 			return new ItemStack(ModItems.canister_napalm, 1);
 		}
 
-		if (mODE(item, new String[] {"ingotMingrade", "dustMingrade"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})
-				|| mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"ingotMingrade", "dustMingrade"})) {
+		if (mODE(item, new String[] {MINGRADE.ingot(), MINGRADE.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})
+				|| mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {MINGRADE.ingot(), MINGRADE.dust()})) {
 			return new ItemStack(ModItems.ingot_advanced_alloy, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) && mODE(item2, "nuggetSchrabidium")
-				|| mODE(item, "nuggetSchrabidium") && mODE(item2, new String[] {"ingotTungsten", "dustTungsten"})) {
+		if (mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, SA326.nugget())
+				|| mODE(item, SA326.nugget()) && mODE(item2, new String[] {W.ingot(), W.dust()})) {
 			return new ItemStack(ModItems.ingot_magnetized_tungsten, 1);
 		}
 
-		if (item.getItem() == ModItems.plate_mixed && mODE(item2, "plateGold")
-				|| mODE(item, "plateGold") && item2.getItem() == ModItems.plate_mixed) {
+		if (item.getItem() == ModItems.plate_mixed && mODE(item2, GOLD.plate())
+				|| mODE(item, GOLD.plate()) && item2.getItem() == ModItems.plate_mixed) {
 			return new ItemStack(ModItems.plate_paa, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"ingotTungsten", "dustTungsten"})
-				|| mODE(item, new String[] {"ingotTungsten", "dustTungsten"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})) {
+		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {W.ingot(), W.dust()})
+				|| mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
 			return new ItemStack(ModItems.ingot_dura_steel, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"ingotCobalt", "dustCobalt"})
-				|| mODE(item, new String[] {"ingotCobalt", "dustCobalt"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})) {
+		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {CO.ingot(), CO.dust()})
+				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
 			return new ItemStack(ModItems.ingot_dura_steel, 2);
 		}
 
-		if (mODE(item, new String[] {"ingotSaturnite", "dustSaturnite"}) && item2.getItem() == ModItems.powder_meteorite
-				|| item.getItem() == ModItems.powder_meteorite && mODE(item2, new String[] {"ingotSaturnite", "dustSaturnite"})) {
+		if (mODE(item, new String[] {BIGMT.ingot(), BIGMT.dust()}) && item2.getItem() == ModItems.powder_meteorite
+				|| item.getItem() == ModItems.powder_meteorite && mODE(item2, new String[] {BIGMT.ingot(), BIGMT.dust()})) {
 			return new ItemStack(ModItems.ingot_starmetal, 2);
 		}
-		if (mODE(item, new String[] {"ingotSteel", "dustSteel"}) && mODE(item2, new String[] {"nuggetTechnetium99", "tinyTc99"})
-				|| mODE(item, new String[] {"nuggetTechnetium99", "tinyTc99"}) && mODE(item2, new String[] {"ingotSteel", "dustSteel"})) {
+		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {TC99.nugget(), "tinyTc99"})
+				|| mODE(item, new String[] {TC99.nugget(), "tinyTc99"}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
 			return new ItemStack(ModItems.ingot_tcalloy, 1);
 		}
 		
 		if(GeneralConfig.enableBabyMode) {
-			if(mODE(item, new String[] { "gemCoal", "dustCoal" }) && ItemFluidCanister.isEmptyCanister(item2)
-					|| ItemFluidCanister.isEmptyCanister(item) && mODE(item2, new String[] { "gemCoal", "dustCoal" })) {
+			if(mODE(item, new String[] { COAL.gem(), COAL.dust() }) && ItemFluidCanister.isEmptyCanister(item2)
+					|| ItemFluidCanister.isEmptyCanister(item) && mODE(item2, new String[] { COAL.gem(), COAL.dust() })) {
 				return ItemFluidCanister.getFullCanister(ModForgeFluids.oil);
 			}
 		}
 		
-		if (item.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor) && mODE(item2, new String[] {"ingotCobalt", "dustCobalt"})
-				|| mODE(item, new String[] {"ingotCobalt", "dustCobalt"}) && item2.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor)) {
+		if (item.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor) && mODE(item2, new String[] {CO.ingot(), CO.dust()})
+				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && item2.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor)) {
 			return new ItemStack(ModItems.ingot_meteorite);
 		}
 		
-		if (item.getItem() == ModItems.meteorite_sword_hardened && mODE(item2, new String[] {"ingotCobalt", "dustCobalt"})
-				|| mODE(item, new String[] {"ingotCobalt", "dustCobalt"}) && item2.getItem() == ModItems.meteorite_sword_hardened) {
+		if (item.getItem() == ModItems.meteorite_sword_hardened && mODE(item2, new String[] {CO.ingot(), CO.dust()})
+				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && item2.getItem() == ModItems.meteorite_sword_hardened) {
 			return new ItemStack(ModItems.meteorite_sword_alloyed, 1);
 		}
 		
@@ -485,7 +484,7 @@ public class MachineRecipes {
 			break;
 		case DYN_STR:
 			list.add(new ItemStack(ModItems.particle_strange, 1));
-			list.add(new ItemStack(ModItems.egg_balefire_shard, 8));
+			list.add(new ItemStack(ModItems.ingot_radspice, 8));
 			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 16));
 			break;
@@ -929,7 +928,7 @@ public class MachineRecipes {
 			break;
 		case DYN_STR:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
-			output[1] = new ItemStack(ModItems.ingot_radspice, 8);
+			output[1] = new ItemStack(ModItems.egg_balefire, 8);
 			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_schrabidium);
 			break;
 		case DYN_EUPH:
@@ -1264,17 +1263,17 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.fluorite, 1);
 			if(item.getItem() == ModItems.powder_coal)
 				return new ItemStack(ModItems.fluorite, 1);
-			if(mODE(item, "dustIron"))
+			if(mODE(item, IRON.dust()))
 				return new ItemStack(ModItems.powder_cobalt, 1);
-			if(mODE(item, "dustGold"))
+			if(mODE(item, GOLD.dust()))
 				return new ItemStack(ModItems.powder_lead, 1);
-			if(mODE(item, "dustNetherQuartz"))
+			if(mODE(item, NETHERQUARTZ.dust()))
 				return new ItemStack(ModItems.sulfur, 1);
-			if(mODE(item, "dustUranium"))
+			if(mODE(item, U.dust()))
 				return new ItemStack(ModItems.powder_plutonium, 1);
-			if(mODE(item, "dustAluminum"))
+			if(mODE(item, AL.dust()))
 				return new ItemStack(ModItems.powder_quartz, 1);
-			if(mODE(item, "dustBeryllium"))
+			if(mODE(item, BE.dust()))
 				return new ItemStack(ModItems.powder_coal, 1);
 			if(item.getItem() == ModItems.powder_schrabidium)
 				return new ItemStack(ModItems.powder_reiium, 1);
@@ -1288,7 +1287,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.powder_lanthanium, 1);
 			if(item.getItem() == ModItems.powder_reiium)
 				return new ItemStack(ModItems.powder_weidanium, 1);
-			if(mODE(item, "dustCobalt"))
+			if(mODE(item, CO.dust()))
 				return new ItemStack(ModItems.powder_copper, 1);
 			if(item.getItem() == ModItems.powder_cerium)
 				return new ItemStack(ModItems.powder_neodymium, 1);
@@ -1300,27 +1299,27 @@ public class MachineRecipes {
 		
 		//BERYLLIUM
 		if (part.getItem() == ModItems.part_beryllium) {
-			if(mODE(item, "dustSulfur"))
+			if(mODE(item, S.dust()))
 				return new ItemStack(ModItems.powder_titanium, 1);
 			if(item.getItem() == ModItems.fluorite)
 				return new ItemStack(ModItems.powder_aluminium, 1);
-			if(mODE(item, "dustIron"))
+			if(mODE(item, IRON.dust()))
 				return new ItemStack(ModItems.powder_copper, 1);
-			if(mODE(item, "dustNetherQuartz"))
+			if(mODE(item, NETHERQUARTZ.dust()))
 				return new ItemStack(ModItems.powder_titanium, 1);
-			if(mODE(item, "dustTitanium"))
+			if(mODE(item, TI.dust()))
 				return new ItemStack(ModItems.powder_iron, 1);
-			if(mODE(item, "dustCopper"))
+			if(mODE(item, CU.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustTungsten"))
+			if(mODE(item, W.dust()))
 				return new ItemStack(ModItems.powder_gold, 1);
-			if(mODE(item, "dustAluminum"))
+			if(mODE(item, AL.dust()))
 				return new ItemStack(ModItems.sulfur, 1);
-			if(mODE(item, "dustLead"))
+			if(mODE(item, PB.dust()))
 				return new ItemStack(ModItems.powder_astatine, 1);
-			if(mODE(item, "dustBeryllium"))
+			if(mODE(item, BE.dust()))
 				return new ItemStack(ModItems.niter, 1);
-			if(mODE(item, "dustLithium"))
+			if(mODE(item, LI.dust()))
 				return new ItemStack(ModItems.niter, 1);
 			if(item.getItem() == ModItems.powder_iodine)
 				return new ItemStack(ModItems.powder_cerium, 1);
@@ -1344,37 +1343,37 @@ public class MachineRecipes {
 		
 		//CARBON
 		if (part.getItem() == ModItems.part_carbon) {
-			if(mODE(item, "dustSulfur"))
+			if(mODE(item, S.dust()))
 				return new ItemStack(ModItems.powder_iron, 1);
 			if(item.getItem() == ModItems.niter)
 				return new ItemStack(ModItems.powder_aluminium, 1);
 			if(item.getItem() == ModItems.fluorite)
 				return new ItemStack(ModItems.sulfur, 1);
-			if(mODE(item, "dustCoal"))
+			if(mODE(item, COAL.dust()))
 				return new ItemStack(ModItems.powder_aluminium, 1);
-			if(mODE(item, "dustIron"))
+			if(mODE(item, IRON.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustGold"))
+			if(mODE(item, GOLD.dust()))
 				return new ItemStack(ModItems.powder_astatine, 1);
-			if(mODE(item, "dustNetherQuartz"))
+			if(mODE(item, NETHERQUARTZ.dust()))
 				return new ItemStack(ModItems.powder_iron, 1);
 			if(item.getItem() == ModItems.powder_plutonium)
 				return new ItemStack(ModItems.powder_tennessine, 1);
 			if(item.getItem() == ModItems.powder_neptunium)
 				return new ItemStack(ModItems.powder_tennessine, 1);
-			if(mODE(item, "dustTitanium"))
+			if(mODE(item, TI.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustCopper"))
+			if(mODE(item, CU.dust()))
 				return new ItemStack(ModItems.powder_strontium, 1);
-			if(mODE(item, "dustTungsten"))
+			if(mODE(item, W.dust()))
 				return new ItemStack(ModItems.powder_lead, 1);
-			if(mODE(item, "dustAluminum"))
+			if(mODE(item, AL.dust()))
 				return new ItemStack(ModItems.powder_titanium, 1);
-			if(mODE(item, "dustLead"))
+			if(mODE(item, PB.dust()))
 				return new ItemStack(ModItems.powder_thorium, 1);
-			if(mODE(item, "dustBeryllium"))
+			if(mODE(item, BE.dust()))
 				return new ItemStack(ModItems.fluorite, 1);
-			if(mODE(item, "dustLithium"))
+			if(mODE(item, LI.dust()))
 				return new ItemStack(ModItems.fluorite, 1);
 			if(item.getItem() == ModItems.powder_iodine)
 				return new ItemStack(ModItems.powder_tungsten, 1);
@@ -1384,7 +1383,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.powder_verticium, 1);
 			if(item.getItem() == ModItems.powder_strontium)
 				return new ItemStack(ModItems.powder_iodine, 1);
-			if(mODE(item, "dustCobalt"))
+			if(mODE(item, CO.dust()))
 				return new ItemStack(ModItems.powder_strontium, 1);
 			if(item.getItem() == ModItems.powder_bromine)
 				return new ItemStack(ModItems.powder_niobium, 1);
@@ -1398,35 +1397,35 @@ public class MachineRecipes {
 		
 		//COPPER
 		if (part.getItem() == ModItems.part_copper) {
-			if(mODE(item, "dustSulfur"))
+			if(mODE(item, S.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
 			if(item.getItem() == ModItems.niter)
 				return new ItemStack(ModItems.powder_cobalt, 1);
 			if(item.getItem() == ModItems.fluorite)
 				return new ItemStack(ModItems.powder_iron, 1);
-			if(mODE(item, "dustCoal"))
+			if(mODE(item, COAL.dust()))
 				return new ItemStack(ModItems.powder_iron, 1);
-			if(mODE(item, "dustIron"))
+			if(mODE(item, IRON.dust()))
 				return new ItemStack(ModItems.powder_niobium, 1);
-			if(mODE(item, "dustGold"))
+			if(mODE(item, GOLD.dust()))
 				return new ItemStack(ModItems.powder_lanthanium, 1);
-			if(mODE(item, "dustNetherQuartz"))
+			if(mODE(item, NETHERQUARTZ.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustUranium"))
+			if(mODE(item, U.dust()))
 				return new ItemStack(ModItems.powder_tennessine, 1);
-			if(mODE(item, "dustTitanium"))
+			if(mODE(item, TI.dust()))
 				return new ItemStack(ModItems.powder_strontium, 1);
-			if(mODE(item, "dustCopper"))
+			if(mODE(item, CU.dust()))
 				return new ItemStack(ModItems.powder_niobium, 1);
-			if(mODE(item, "dustTungsten"))
+			if(mODE(item, W.dust()))
 				return new ItemStack(ModItems.powder_actinium, 1);
-			if(mODE(item, "dustAluminum"))
+			if(mODE(item, AL.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustLead"))
+			if(mODE(item, PB.dust()))
 				return new ItemStack(ModItems.powder_tennessine, 1);
-			if(mODE(item, "dustBeryllium"))
+			if(mODE(item, BE.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
-			if(mODE(item, "dustLithium"))
+			if(mODE(item, LI.dust()))
 				return new ItemStack(ModItems.powder_bromine, 1);
 			if(item.getItem() == ModItems.powder_iodine)
 				return new ItemStack(ModItems.powder_astatine, 1);
@@ -1440,7 +1439,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.powder_tungsten, 1);
 			if(item.getItem() == ModItems.powder_verticium)
 				return new ItemStack(ModItems.powder_unobtainium, 1);
-			if(mODE(item, "dustCobalt"))
+			if(mODE(item, CO.dust()))
 				return new ItemStack(ModItems.powder_iodine, 1);
 			if(item.getItem() == ModItems.powder_bromine)
 				return new ItemStack(ModItems.powder_caesium, 1);
@@ -1458,7 +1457,7 @@ public class MachineRecipes {
 		
 		//PLUTONIUM
 		if (part.getItem() == ModItems.part_plutonium) {
-			if(mODE(item, "dustUranium"))
+			if(mODE(item, U.dust()))
 				return new ItemStack(ModItems.powder_schrabidium, 1);
 			if(item.getItem() == ModItems.powder_plutonium)
 				return new ItemStack(ModItems.powder_schrabidium, 1);

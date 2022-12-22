@@ -292,6 +292,9 @@ public class ResourceManager {
 	public static final IModelCustom bat9000 = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/bat9000.obj"));
 	public static final IModelCustom orbus = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/orbus.obj"));
 	
+	//Pipe
+	public static final IModelCustom pipe_neo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/pipe_neo.obj"));
+	
 	//Turbofan
 	public static final IModelCustom turbofan_body = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turbofan_body.obj"));
 	public static final IModelCustom turbofan_blades = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turbofan_blades.obj"));
@@ -306,13 +309,7 @@ public class ResourceManager {
 	
 	//IGen
 	public static final IModelCustom igen = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/igen.obj"));
-	
-	//Firebox, and the lot
-	public static final IModelCustom heater_firebox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/firebox.obj"));
-	
-	
-	//Heat-Based Machines
-	
+
 	//Bombs
 	public static final IModelCustom bomb_solinium = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/ufp.obj"));
 	public static final IModelCustom n2 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/n2.obj"));
@@ -564,6 +561,10 @@ public class ResourceManager {
 	public static final ResourceLocation bat9000_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/bat9000.png");
 	public static final ResourceLocation orbus_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/orbus.png");
 	
+	//Pipe
+	public static final ResourceLocation pipe_neo_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/pipe_neo.png");
+	public static final ResourceLocation pipe_neo_succ_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/pipe_neo_succ.png");
+	
 	//Turbofan
 	public static final ResourceLocation turbofan_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turbofan_body.png");
 	public static final ResourceLocation turbofan_blades_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turbofan_blades.png");
@@ -582,10 +583,7 @@ public class ResourceManager {
 	public static final ResourceLocation igen_cog = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_cog.png");
 	public static final ResourceLocation igen_arm = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_arm.png");
 	public static final ResourceLocation igen_pistons = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_pistons.png");
-    
-    //Firebox and the lot
-	public static final ResourceLocation heater_firebox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/firebox.png");
-	
+
 	//Selenium Engine
 	public static final ResourceLocation selenium_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/selenium_engine_body.png");
 	public static final ResourceLocation selenium_piston_tex = new ResourceLocation(RefStrings.MODID, "textures/models/selenium_engine_piston.png");

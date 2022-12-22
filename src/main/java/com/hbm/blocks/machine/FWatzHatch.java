@@ -57,11 +57,11 @@ public class FWatzHatch extends BlockContainer {
 			EnumFacing e = state.getValue(FACING);
 			if(e == EnumFacing.NORTH)
 			{
-				if(world.getTileEntity(pos.add(0, 11, 9)) instanceof TileEntityFWatzCore)
+				if(world.getTileEntity(pos.add(0, 1, 6)) instanceof TileEntityFWatzCore)
 				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 11, 9))).isStructureValid(world))
+					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 1, 6))).isStructureValid(world))
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 11, pos.getZ() + 9);
+						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() + 6);
 					} else {
 						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
 					}
@@ -71,11 +71,11 @@ public class FWatzHatch extends BlockContainer {
 			}
 			if(e == EnumFacing.SOUTH)
 			{
-				if(world.getTileEntity(pos.add(0, 11, -9)) instanceof TileEntityFWatzCore)
+				if(world.getTileEntity(pos.add(0, 1, -6)) instanceof TileEntityFWatzCore)
 				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 11, -9))).isStructureValid(world))
+					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 1, -6))).isStructureValid(world))
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 11, pos.getZ() - 9);
+						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() - 6);
 					} else {
 						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
 					}
@@ -85,11 +85,11 @@ public class FWatzHatch extends BlockContainer {
 			}
 			if(e == EnumFacing.WEST)
 			{
-				if(world.getTileEntity(pos.add(9, 11, 0)) instanceof TileEntityFWatzCore)
+				if(world.getTileEntity(pos.add(6, 1, 0)) instanceof TileEntityFWatzCore)
 				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(9, 11, 0))).isStructureValid(world))
+					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(6, 1, 0))).isStructureValid(world))
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() + 9, pos.getY() + 11, pos.getZ());
+						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() + 6, pos.getY() + 1, pos.getZ());
 					} else {
 						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
 					}
@@ -99,11 +99,11 @@ public class FWatzHatch extends BlockContainer {
 			}
 			if(e == EnumFacing.EAST)
 			{
-				if(world.getTileEntity(pos.add(-9, 11, 0)) instanceof TileEntityFWatzCore)
+				if(world.getTileEntity(pos.add(-6, 1, 0)) instanceof TileEntityFWatzCore)
 				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(-9, 11, 0))).isStructureValid(world))
+					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(-6, 1, 0))).isStructureValid(world))
 					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() - 9, pos.getY() + 11, pos.getZ());
+						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() - 6, pos.getY() + 1, pos.getZ());
 					} else {
 						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
 					}

@@ -27,7 +27,7 @@ public class HbmFluidHandlerItemStackInf implements IFluidHandlerItem, ICapabili
 	
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[]{new FluidTankProperties(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2 ? new FluidStack(FluidRegistry.WATER, maxDrainAmount) : null, maxDrainAmount)};
+		return new IFluidTankProperties[]{new FluidTankProperties((container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2 || container.getItem() == ModItems.inf_water_mk3 || container.getItem() == ModItems.inf_water_mk4) ? new FluidStack(FluidRegistry.WATER, maxDrainAmount) : null, maxDrainAmount)};
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class HbmFluidHandlerItemStackInf implements IFluidHandlerItem, ICapabili
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2)
+		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2 || container.getItem() == ModItems.inf_water_mk3 || container.getItem() == ModItems.inf_water_mk4)
 			return new FluidStack(FluidRegistry.WATER, maxDrainAmount);
 		if(resource == null)
 			return null;
@@ -46,7 +46,7 @@ public class HbmFluidHandlerItemStackInf implements IFluidHandlerItem, ICapabili
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2)
+		if(container.getItem() == ModItems.inf_water || container.getItem() == ModItems.inf_water_mk2 || container.getItem() == ModItems.inf_water_mk3 || container.getItem() == ModItems.inf_water_mk4)
 			return new FluidStack(FluidRegistry.WATER, maxDrainAmount);
 		return null;
 	}

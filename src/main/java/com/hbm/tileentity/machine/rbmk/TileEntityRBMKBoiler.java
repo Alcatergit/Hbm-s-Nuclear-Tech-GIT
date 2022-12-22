@@ -61,8 +61,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			if(heatProvided > 0) {
 				int waterUsed = (int)Math.floor(heatProvided / RBMKDials.getBoilerHeatConsumption(world));
 				waterUsed = Math.min(waterUsed, feed.getFluidAmount());
+				int steamProduced = (int)Math.round((waterUsed * 100F) / getFactorFromSteam(steamType));
+
 				feed.drain(waterUsed, true);
-				int steamProduced = (int)Math.floor((waterUsed * 100) / getFactorFromSteam(steamType));
 				steam.fill(new FluidStack(steamType, steamProduced), true); 
 				
 				this.heat -= waterUsed * RBMKDials.getBoilerHeatConsumption(world);

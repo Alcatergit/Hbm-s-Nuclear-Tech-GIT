@@ -17,7 +17,7 @@ public class TileEntityStructureMarker extends TileEntity implements ITickable {
 	// 3: Fusion Reactor
 	// 4: Fusion Reactor with Coat
 	// 5: Watz Power Plant
-	// 6: Fusionary Watz Plant
+	// 6: Singularity-Anti-Fusion-Experiment
 	public int type = 0;
 
 	@Override

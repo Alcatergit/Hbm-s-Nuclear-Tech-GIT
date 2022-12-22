@@ -5,7 +5,9 @@ import java.util.List;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.Library;
 
+import com.hbm.blocks.machine.ItemSelfcharger;
 import api.hbm.energy.IBatteryItem;
+import net.minecraft.util.EnumHand;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -47,10 +49,10 @@ public class ArmorFSBPowered extends ArmorFSB implements IBatteryItem {
     public void chargeBattery(ItemStack stack, long i) {
     	if(stack.getItem() instanceof ArmorFSBPowered) {
     		if(stack.hasTagCompound()) {
-    			stack.getTagCompound().setLong("charge", stack.getTagCompound().getLong("charge") + i);
+    			stack.getTagCompound().setLong("charge", Math.min(this.maxPower, Math.max(0, stack.getTagCompound().getLong("charge") + i)));
     		} else {
     			stack.setTagCompound(new NBTTagCompound());
-    			stack.getTagCompound().setLong("charge", i);
+    			stack.getTagCompound().setLong("charge", Math.min(this.maxPower, Math.max(0, i)));
     		}
     	}
     }
@@ -71,21 +73,33 @@ public class ArmorFSBPowered extends ArmorFSB implements IBatteryItem {
     public void dischargeBattery(ItemStack stack, long i) {
     	if(stack.getItem() instanceof ArmorFSBPowered) {
     		if(stack.hasTagCompound()) {
-    			stack.getTagCompound().setLong("charge", stack.getTagCompound().getLong("charge") - i);
+    			stack.getTagCompound().setLong("charge", Math.min(this.maxPower, Math.max(0, stack.getTagCompound().getLong("charge") - i)));
     		} else {
     			stack.setTagCompound(new NBTTagCompound());
-    			stack.getTagCompound().setLong("charge", this.maxPower - i);
+    			stack.getTagCompound().setLong("charge", Math.min(this.maxPower, Math.max(0, this.maxPower - i)));
     		}
-
-    		if(stack.getTagCompound().getLong("charge") < 0)
-    			stack.getTagCompound().setLong("charge", 0);
     	}
+    }
+
+    private ItemSelfcharger getHeldSCBattery(EntityPlayer player){
+    	if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemSelfcharger){
+    		return (ItemSelfcharger) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
+    	}
+    	if(player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemSelfcharger){
+    		return (ItemSelfcharger) player.getHeldItem(EnumHand.OFF_HAND).getItem();
+    	}
+    	return null;
     }
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
     	if(this.drain > 0 && ArmorFSB.hasFSBArmor(player)) {
-    		this.dischargeBattery(itemStack, drain);
+    		long netto_drain = drain;
+    		ItemSelfcharger sc_battery = this.getHeldSCBattery(player);
+    		if(sc_battery != null){
+    			netto_drain = netto_drain - (sc_battery.getDischargeRate()/4L);
+    		}
+    		this.dischargeBattery(itemStack, netto_drain);
     	}
     }
 	

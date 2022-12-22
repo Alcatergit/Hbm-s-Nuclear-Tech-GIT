@@ -9,6 +9,8 @@ public class WeaponConfig {
 	public static int radarBuffer = 30;
 	public static int radarAltitude = 55;
 	public static int ciwsHitrate = 50;
+
+	public static boolean dropMissileParts = true;
 	
 	public static boolean dropCell = true;
 	public static boolean dropSing = true;
@@ -30,6 +32,8 @@ public class WeaponConfig {
 		Property propCiwsHitrate = config.get(CATEGORY_MISSILE, "7.03_ciwsAccuracy", 50);
 		propCiwsHitrate.setComment("Additional modifier for CIWS accuracy");
 		ciwsHitrate = propCiwsHitrate.getInt();
+
+		dropMissileParts = CommonConfig.createConfigBool(config, CATEGORY_MISSILE, "7.03_dropMissileParts", "Whether shot-down missiles drop items", true);
 		
 		final String CATEGORY_DROPS = "10_dangerous_drops";
         dropCell = CommonConfig.createConfigBool(config, CATEGORY_DROPS, "10.00_dropCell", "Whether antimatter cells should explode when dropped", true);

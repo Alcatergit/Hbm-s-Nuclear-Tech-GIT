@@ -378,7 +378,7 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 			
 			GL11.glTranslatef(-9 + offsetX, 0, -9 + offsetZ);
 			for(int a = 0; a < 19; a++) {
-				for(int b = 0; b < 	19; b++) {
+				for(int b = 0; b < 13; b++) {
 					for(int c = 0; c < 19; c++) {
 				
 						int texture = -1;

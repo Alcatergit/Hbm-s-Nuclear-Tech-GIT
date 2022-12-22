@@ -395,18 +395,7 @@ public class ItemRenderLibrary {
 		        bindTexture(ResourceManager.iter_microwave); ResourceManager.iter.renderPart("Microwave");
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
-		renderers.put(Item.getItemFromBlock(ModBlocks.heater_firebox), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(3, 3, 3);
-			}
-			public void renderCommon() {
-				GL11.glRotated(180, 0, 1, 0);
-				GL11.glScaled(3, 3, 3);
-		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.heater_firebox_tex);  ResourceManager.heater_firebox.renderAll();
-		        GlStateManager.shadeModel(GL11.GL_FLAT);
-			}});
+
 		renderers.put(Item.getItemFromBlock(ModBlocks.tesla), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3, 0);
@@ -1188,7 +1177,16 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.waste_drum_tex);
 				ResourceManager.waste_drum.renderAll();
 			}});
-		
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_silex), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3.25, 3.25, 3.25);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.silex_tex); ResourceManager.silex.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_chungus), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0.5, 0, 0);
@@ -1202,16 +1200,6 @@ public class ItemRenderLibrary {
 				ResourceManager.chungus.renderPart("Body");
 				ResourceManager.chungus.renderPart("Lever");
 				ResourceManager.chungus.renderPart("Blades");
-				GlStateManager.shadeModel(GL11.GL_FLAT);
-			}});
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_silex), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -2.5, 0);
-				GL11.glScaled(3.25, 3.25, 3.25);
-			}
-			public void renderCommon() {
-				GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.silex_tex); ResourceManager.silex.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fel), new ItemRenderBase() {

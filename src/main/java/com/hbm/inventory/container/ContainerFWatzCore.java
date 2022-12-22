@@ -1,5 +1,6 @@
 package com.hbm.inventory.container;
 
+import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,16 +20,19 @@ public class ContainerFWatzCore extends Container {
 	public ContainerFWatzCore(InventoryPlayer invPlayer, TileEntityFWatzCore tedf) {
 		
 		diFurnace = tedf;
+		//battery input
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 130, 90));
+		// fuse
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 30, 90));
+		//S.A.F.E. Core
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 45));
+		//Fluid Input Slots
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 8, 90)); //Amat
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 152, 90)); //Aschrab
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 108));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 62, 90));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 98, 90));
-		//Inputs
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 134, 108 - 18));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 4, 152, 108 - 18));
-		//Outputs
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 134, 108));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 108));
+		//Fluid Output Slots
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 8, 108)); //Amat
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 152, 108)); //Aschrab
 		
 		for(int i = 0; i < 3; i++)
 		{

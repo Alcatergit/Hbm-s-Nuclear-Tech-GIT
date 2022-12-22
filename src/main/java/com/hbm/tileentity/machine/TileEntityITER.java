@@ -21,6 +21,7 @@ import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,8 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityITER extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public static final long maxPower = 10000000;
-	public static final int powerReq = 100000;
+	public static final long maxPower = 1000000000;
+	public static final int powerReq = 500000;
 	public int age = 0;
 	public FluidTank[] tanks;
 	public Fluid[] types;
@@ -67,9 +68,9 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		super(5);
 		tanks = new FluidTank[2];
 		types = new Fluid[2];
-		tanks[0] = new FluidTank(1280000);
+		tanks[0] = new FluidTank(12800000);
 		types[0] = FluidRegistry.WATER;
-		tanks[1] = new FluidTank(128000);
+		tanks[1] = new FluidTank(1280000);
 		types[1] = ModForgeFluids.ultrahotsteam;
 		plasma = new FluidTank(16000);
 	}
@@ -106,6 +107,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 				vec.rotateAroundY(world.rand.nextFloat() * (float) Math.PI * 2F);
 
 				world.newExplosion(null, pos.getX() + 0.5 + vec.xCoord, pos.getY() + 0.5 + world.rand.nextGaussian() * 1.5D, pos.getZ() + 0.5 + vec.zCoord, 2.5F, true, true);
+				RadiationSavedData.incrementRad(world, pos, 2000F, 10000F);
 			}
 
 			if(isOn && power >= powerReq) {
@@ -317,7 +319,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	}
 
 	public void fillFluid(int x, int y, int z, FluidTank type) {
-		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 32000);
+		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 1280000);
 	}
 
 	public void disassemble() {

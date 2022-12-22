@@ -700,6 +700,8 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_hd_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_ht_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_ht_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"));

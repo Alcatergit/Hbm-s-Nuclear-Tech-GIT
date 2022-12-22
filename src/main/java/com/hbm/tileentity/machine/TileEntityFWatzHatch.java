@@ -47,13 +47,10 @@ public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
 	
 	private TileEntityFWatzCore getReactorTE(World world, BlockPos pos) {
 		EnumFacing e = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
-		if(e == EnumFacing.NORTH)
-		{
-			TileEntity te = world.getTileEntity(pos.add(0, 11, 9));
-			if(te instanceof TileEntityFWatzCore)
-			{
-				if(((TileEntityFWatzCore)te).isStructureValid(world))
-				{
+		if(e == EnumFacing.NORTH) {
+			TileEntity te = world.getTileEntity(pos.add(0, 1, 6));
+			if(te instanceof TileEntityFWatzCore) {
+				if(((TileEntityFWatzCore)te).isStructureValid(world)) {
 					return (TileEntityFWatzCore)te;
 				} else {
 					return null;
@@ -62,13 +59,10 @@ public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
 				return null;
 			}
 		}
-		if(e == EnumFacing.SOUTH)
-		{
-			TileEntity te = world.getTileEntity(pos.add(0, 11, -9));
-			if(te instanceof TileEntityFWatzCore)
-			{
-				if(((TileEntityFWatzCore)te).isStructureValid(world))
-				{
+		if(e == EnumFacing.SOUTH) {
+			TileEntity te = world.getTileEntity(pos.add(0, 1, -6));
+			if(te instanceof TileEntityFWatzCore) {
+				if(((TileEntityFWatzCore)te).isStructureValid(world)) {
 					return (TileEntityFWatzCore)te;
 				} else {
 					return null;
@@ -77,13 +71,10 @@ public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
 				return null;
 			}
 		}
-		if(e == EnumFacing.WEST)
-		{
-			TileEntity te = world.getTileEntity(pos.add(9, 11, 0));
-			if(te instanceof TileEntityFWatzCore)
-			{
-				if(((TileEntityFWatzCore)te).isStructureValid(world))
-				{
+		if(e == EnumFacing.WEST) {
+			TileEntity te = world.getTileEntity(pos.add(6, 1, 0));
+			if(te instanceof TileEntityFWatzCore) {
+				if(((TileEntityFWatzCore)te).isStructureValid(world)) {
 					return (TileEntityFWatzCore)te;
 				} else {
 					return null;
@@ -92,13 +83,10 @@ public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
 				return null;
 			}
 		}
-		if(e == EnumFacing.EAST)
-		{
-			TileEntity te = world.getTileEntity(pos.add(-9, 11, 0));
-			if(te instanceof TileEntityFWatzCore)
-			{
-				if(((TileEntityFWatzCore)te).isStructureValid(world))
-				{
+		if(e == EnumFacing.EAST) {
+			TileEntity te = world.getTileEntity(pos.add(-6, 1, 0));
+			if(te instanceof TileEntityFWatzCore) {
+				if(((TileEntityFWatzCore)te).isStructureValid(world)) {
 					return (TileEntityFWatzCore)te;
 				} else {
 					return null;
