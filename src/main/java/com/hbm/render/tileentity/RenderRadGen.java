@@ -45,7 +45,11 @@ public class RenderRadGen extends TileEntitySpecialRenderer<TileEntityMachineRad
         bindTexture(ResourceManager.radgen_body_tex);
         
         ResourceManager.radgen_body.renderPart("Base");
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor3f(0F, 1F, 0F);
         ResourceManager.radgen_body.renderPart("Light");
+        GL11.glColor3f(1F, 1F, 1F);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         GL11.glPushMatrix();
 	        if(te.fuel > 0){

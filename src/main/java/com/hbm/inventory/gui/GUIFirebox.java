@@ -30,27 +30,12 @@ public class GUIFirebox extends GuiInfoContainer {
 	}
 	
 	@Override
-	public void drawScreen(int x, int y, float interp) {
-		super.drawScreen(x, y, interp);
-       
-		if(this.mc.player.inventory.getItemStack() == null) {
-			
-			for(int i = 0; i < 2; ++i) {
-				Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
-				
-				if(this.isMouseOverSlot(slot, slot.xPos, slot.yPos) && !slot.getHasStack()) {
-					
-					List<String> bonuses = this.firebox.getModule().getDesc();
-					
-					if(!bonuses.isEmpty()) {
-						this.drawCustomInfoStat(x, y, guiLeft + 10, guiTop + 30, 10, 10, x, y,(String[]) bonuses.toArray());
-					}
-				}
-			}
-		}
+	public void drawScreen(int mouseX, int mouseY, float interp) {
+		super.drawScreen(mouseX, mouseY, interp);
 
-		this.drawCustomInfoStat(x, y, guiLeft + 80, guiTop + 27, 71, 7, x, y, new String[] { String.format("%,d", firebox.heatEnergy) + " / " + String.format("%,d", firebox.getMaxHeat()) + "TU" });
-		this.drawCustomInfoStat(x, y, guiLeft + 80, guiTop + 36, 71, 7, x, y, new String[] { firebox.burnHeat + "TU/t", (firebox.burnTime / 20) + "s" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 80, guiTop + 27, 71, 7, mouseX, mouseY, new String[] { String.format("%,d", firebox.heatEnergy) + " / " + String.format("%,d", firebox.getMaxHeat()) + "TU" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 80, guiTop + 36, 71, 7, mouseX, mouseY, new String[] { firebox.burnHeat + "TU/t", (firebox.burnTime / 20) + "s" });
+		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override

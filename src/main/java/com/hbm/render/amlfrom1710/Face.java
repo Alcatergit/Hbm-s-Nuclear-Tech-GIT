@@ -64,7 +64,7 @@ public class Face
             }
             else
             {
-                tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
+                tessellator.addVertexWithUV(vertices[i].x, vertices[i].y, vertices[i].z, 0, 0);
             }
         }
     }

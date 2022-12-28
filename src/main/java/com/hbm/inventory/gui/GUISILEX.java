@@ -1,7 +1,6 @@
 package com.hbm.inventory.gui;
 
 import java.awt.Color;
-
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
@@ -14,11 +13,14 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntitySILEX;
-import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
@@ -106,36 +108,28 @@ public class GUISILEX extends GuiInfoContainer {
 	}
 
 	private void drawWave(int x, int y, int height, int width, float resolution, float freq, int color, float thickness, float mult) {
-		float samples = ((float)width) / resolution;
-		float scale = ((float)height)/2F;
-		float offset = (float)((float)silex.getWorld().getTotalWorldTime() % (4*Math.PI/freq));
-		for(int i = 1; i < samples; i++) {
-			double currentX = offset + x + i*resolution;
-			double nextX = offset + x + (i+1)*resolution;
-			double currentY = y + scale*Math.sin(currentX*freq);
-			double nextY = y + scale*Math.sin(nextX*freq);
-			drawLine(thickness, color, currentX-offset, currentY, nextX-offset, nextY);
-			
-			
-		}
-	}
-
-	private void drawLine(float width, int color, double x1, double y1, double x2, double y2) {
-		
-		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glLineWidth(width);
-		
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawing(1);
-		tessellator.setColorOpaque_I(color);
-		
-		tessellator.addVertex(guiLeft + x1, guiTop + y1, this.zLevel);
-		tessellator.addVertex(guiLeft + x2, guiTop + y2, this.zLevel);
-		tessellator.draw();
-		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glPopMatrix();
-	}
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.color(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F, (color & 0xFF) / 255.0F, 1.0F);
+        GlStateManager.glLineWidth(thickness);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        buf.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
+        
+        float samples = ((float)width) / resolution;
+        float scale = ((float)height)/2F;
+        float offset = (float)((float)silex.getWorld().getTotalWorldTime() % (4*Math.PI/freq));
+        double currentX = x;
+        double currentY = y + scale * Math.sin((currentX  + offset) * freq);
+        buf.pos(guiLeft + currentX, guiTop + currentY, this.zLevel).endVertex();
+        for(int i = 1; i <= samples; i++) {
+            currentX = x + i*resolution;
+            currentY = y + scale*Math.sin((currentX + offset) * freq);
+            buf.pos(guiLeft + currentX, guiTop + currentY, this.zLevel).endVertex();
+        }
+        
+        Tessellator.getInstance().draw();
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.enableTexture2D();
+    }
 }

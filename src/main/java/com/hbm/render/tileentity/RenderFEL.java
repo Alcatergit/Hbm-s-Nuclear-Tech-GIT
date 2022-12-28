@@ -7,14 +7,15 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.util.BeamPronter;
-import com.hbm.render.util.BeamPronter.EnumBeamType;
-import com.hbm.render.util.BeamPronter.EnumWaveType;
 import com.hbm.tileentity.machine.TileEntityFEL;
-import net.minecraft.client.renderer.GlStateManager;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.render.misc.BeamPronter;
+import com.hbm.render.misc.BeamPronter.EnumBeamType;
+import com.hbm.render.misc.BeamPronter.EnumWaveType;
 
 public class RenderFEL extends TileEntitySpecialRenderer<TileEntityFEL> {
 
@@ -48,8 +49,8 @@ public class RenderFEL extends TileEntitySpecialRenderer<TileEntityFEL> {
 		int length = fel.distance - 3;
 		GL11.glTranslated(0, 1.5, -1.5);
 		if(fel.power > fel.powerReq * Math.pow(4, fel.mode.ordinal()) && fel.isOn && !(fel.mode == EnumWavelengths.NULL) && length > 0) {
-			BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, -length - 1), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.0625F);
-			BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, -length - 1), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(fel.getWorld().getTotalWorldTime() % 1000 / 2), (length / 2) + 1, 0.0625F, 2, 0.0625F);
+			BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, -length - 1), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.0625F);
+			BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, -length - 1), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(fel.getWorld().getTotalWorldTime() % 1000 / 2), (length / 2) + 1, 0.0625F, 2, 0.0625F);
 		}
 		
 		GL11.glPopMatrix();

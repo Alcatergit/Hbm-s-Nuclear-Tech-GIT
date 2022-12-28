@@ -24,7 +24,7 @@ import com.hbm.config.PotionConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.ToolConfig;
 import com.hbm.config.WeaponConfig;
-import com.hbm.config.WorldConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.creativetabs.RessourceTab;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
@@ -981,7 +981,6 @@ public class MainRegistry {
 		Configuration config = new Configuration(new File(proxy.getDataDir().getPath() + "/config/hbm/hbm.cfg"));
 		config.load();
 		GeneralConfig.loadFromConfig(config);
-		WorldConfig.loadFromConfig(config);
 		MachineConfig.loadFromConfig(config);
 		BombConfig.loadFromConfig(config);
 		RadiationConfig.loadFromConfig(config);
@@ -989,6 +988,14 @@ public class MainRegistry {
 		ToolConfig.loadFromConfig(config);
 		WeaponConfig.loadFromConfig(config);
 		MobConfig.loadFromConfig(config);
+		config.save();
+		reloadCompatConfig();
+	}
+
+	public static void reloadCompatConfig() {
+		Configuration config = new Configuration(new File(proxy.getDataDir().getPath() + "/config/hbm/hbm_dimensions.cfg"));
+		config.load();
+		CompatibilityConfig.loadFromConfig(config);
 		config.save();
 	}
 

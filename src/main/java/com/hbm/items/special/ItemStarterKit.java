@@ -230,7 +230,7 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_deut, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_cooling_unit, 1));
 			
-			giveHaz(world, player, 0);
+			giveHaz(world, player, 1);
 		}
 		
 		if(this == ModItems.tsar_kit)
@@ -241,9 +241,12 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_core, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.tsar_core, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_core, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_deut, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_core, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.mike_deut, 1));
 			
-			giveHaz(world, player, 0);
+			giveHaz(world, player, 2);
 		}
 		
 		if(this == ModItems.multi_kit)

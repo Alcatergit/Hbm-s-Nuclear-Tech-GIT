@@ -75,7 +75,7 @@ public class S_Face {
 				
 				tessellator.pos(this.vertices[i].x, this.vertices[i].y, this.vertices[i].z).tex(this.textureCoordinates[i].u + offsetU, this.textureCoordinates[i].v + offsetV).normal(normalX, normalY, normalZ).endVertex();
 			} else {
-				tessellator.pos(this.vertices[i].x, this.vertices[i].y, this.vertices[i].z).normal(normalX, normalY, normalZ).endVertex();
+				tessellator.pos(this.vertices[i].x, this.vertices[i].y, this.vertices[i].z).tex(0, 0).normal(normalX, normalY, normalZ).endVertex();
 			}
 		}
 	}

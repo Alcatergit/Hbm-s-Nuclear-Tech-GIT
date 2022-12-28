@@ -124,7 +124,7 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 			}
 			
 			if(!(e instanceof EntityPlayer && ArmorUtil.checkForFaraday((EntityPlayer)e)))
-				if(e.attackEntityFrom(ModDamageSource.electricity, MathHelper.clamp(e.getMaxHealth() * 0.5F, 3, 20) / (float)targets.size()))
+				if(e.attackEntityFrom(ModDamageSource.electricity, MathHelper.clamp(0.5F * e.getMaxHealth() / (float)targets.size(), 3, 20)))
 					worldObj.playSound(null, e.posX, e.posY, e.posZ, HBMSoundHandler.tesla, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			
 			if(e instanceof EntityCreeper) {

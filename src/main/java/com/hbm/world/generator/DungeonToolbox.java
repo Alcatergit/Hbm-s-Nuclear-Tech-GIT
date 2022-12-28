@@ -75,14 +75,15 @@ public class DungeonToolbox {
 	}
 
 	public static void generateOre(World world, Random rand, int chunkX, int chunkZ, int veinCount, int amount, int minHeight, int variance, IBlockState ore, Block target) {
+		if(veinCount > 1){
+			for(int i = 0; i < veinCount; i++) {
 
-		for(int i = 0; i < veinCount; i++) {
+				int x = chunkX + rand.nextInt(16);
+				int y = minHeight + (variance > 0 ? rand.nextInt(variance) : 0);
+				int z = chunkZ + rand.nextInt(16);
 
-			int x = chunkX + rand.nextInt(16);
-			int y = minHeight + (variance > 0 ? rand.nextInt(variance) : 0);
-			int z = chunkZ + rand.nextInt(16);
-
-			(new WorldGenMinable(ore, amount, state -> state.getBlock() == target)).generate(world, rand, new BlockPos(x, y, z));
+				(new WorldGenMinable(ore, amount, state -> state.getBlock() == target)).generate(world, rand, new BlockPos(x, y, z));
+			}
 		}
 	}
 	

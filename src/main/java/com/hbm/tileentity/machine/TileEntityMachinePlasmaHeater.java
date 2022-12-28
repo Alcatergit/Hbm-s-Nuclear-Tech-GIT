@@ -156,12 +156,12 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 			plasmaType = ModForgeFluids.plasma_ht;
 			return;
 		}
-		if(types.contains(ModForgeFluids.puf6) && types.contains(ModForgeFluids.tritium)) {
-			plasmaType = ModForgeFluids.plasma_put;
-			return;
-		}
 		if(types.contains(ModForgeFluids.xenon) && types.contains(ModForgeFluids.mercury)) {
 			plasmaType = ModForgeFluids.plasma_xm;
+			return;
+		}
+		if(types.contains(ModForgeFluids.puf6) && types.contains(ModForgeFluids.tritium)) {
+			plasmaType = ModForgeFluids.plasma_put;
 			return;
 		}
 		if(types.contains(ModForgeFluids.balefire) && types.contains(ModForgeFluids.amat)) {

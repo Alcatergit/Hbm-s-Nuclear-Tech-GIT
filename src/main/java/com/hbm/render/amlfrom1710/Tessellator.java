@@ -98,13 +98,13 @@ public class Tessellator
      */
     public int draw()
     {
-    	hasColor = false;
-    	hasNormals = false;
-    	this.xOffset = 0;
-    	this.yOffset = 0;
-    	this.zOffset = 0;
-    	net.minecraft.client.renderer.Tessellator.getInstance().draw();
-    	return 1;
+        hasColor = false;
+        hasNormals = false;
+        this.xOffset = 0;
+        this.yOffset = 0;
+        this.zOffset = 0;
+        net.minecraft.client.renderer.Tessellator.getInstance().draw();
+        return 1;
        /* if (!this.isDrawing)
         {
             throw new IllegalStateException("Not tesselating!");
@@ -112,7 +112,6 @@ public class Tessellator
         else
         {
             this.isDrawing = false;
-
             int offs = 0;
             while (offs < vertexCount)
             {
@@ -122,14 +121,12 @@ public class Tessellator
                 this.byteBuffer.position(0);
                 this.byteBuffer.limit(vtc * 32);
                 offs += vtc;
-
                 if (this.hasTexture)
                 {
                     this.floatBuffer.position(3);
                     GL11.glTexCoordPointer(2, 32, this.floatBuffer);
                     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
                 }
-
                 if (this.hasBrightness)
                 {
                     OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
@@ -138,56 +135,47 @@ public class Tessellator
                     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
                     OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
                 }
-
                 if (this.hasColor)
                 {
                     this.byteBuffer.position(20);
                     GL11.glColorPointer(4, true, 32, this.byteBuffer);
                     GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
                 }
-
                 if (this.hasNormals)
                 {
                     this.byteBuffer.position(24);
                     GL11.glNormalPointer(32, this.byteBuffer);
                     GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
                 }
-
                 this.floatBuffer.position(0);
                 GL11.glVertexPointer(3, 32, this.floatBuffer);
                 GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
                 GL11.glDrawArrays(this.drawMode, 0, vtc);
                 GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-
                 if (this.hasTexture)
                 {
                     GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
                 }
-
                 if (this.hasBrightness)
                 {
                     OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
                     GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
                     OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
                 }
-
                 if (this.hasColor)
                 {
                     GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
                 }
-
                 if (this.hasNormals)
                 {
                     GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
                 }
             }
-
             if (rawBufferSize > 0x20000 && rawBufferIndex < (rawBufferSize << 3))
             {
                 rawBufferSize = 0x10000;
                 rawBuffer = new int[rawBufferSize];
             }
-
             int i = this.rawBufferIndex * 4;
             this.reset();
             return i;
@@ -259,11 +247,11 @@ public class Tessellator
     }
 
     public void startDrawingQuadsColor(){
-    	startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
     }
     
     public void startDrawing(int mode){
-    	startDrawing(mode, DefaultVertexFormats.POSITION_TEX_NORMAL);
+        startDrawing(mode, DefaultVertexFormats.POSITION_TEX_NORMAL);
     }
     
     /**
@@ -286,7 +274,7 @@ public class Tessellator
             this.hasBrightness = false;
         }*/
         this.isColorDisabled = false;
-    	net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, format);
+        net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(glMode, format);
     }
 
     /**
@@ -406,13 +394,13 @@ public class Tessellator
      */
     public void addVertexWithUV(double x, double y, double z, double u, double v)
     {
-    	BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
-    	buf.pos(x+xOffset, y+yOffset, z+zOffset).tex(u, v);
-    	if(hasColor)
-    		buf.color(r, g, b, a);
-    	if(hasNormals)
-    		buf.normal(normalTestX, normalTestY, normalTestZ);
-    	buf.endVertex();
+        BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+        buf.pos(x+xOffset, y+yOffset, z+zOffset).tex(u, v);
+        if(hasColor)
+            buf.color(r, g, b, a);
+        if(hasNormals)
+            buf.normal(normalTestX, normalTestY, normalTestZ);
+        buf.endVertex();
         /*this.setTextureUV(p_78374_7_, p_78374_9_);
         this.addVertex(p_78374_1_, p_78374_3_, p_78374_5_);*/
     }
@@ -423,16 +411,16 @@ public class Tessellator
      */
     public void addVertex(double x, double y, double z)
     {
-    	if(hasColor){
-            GL11.glPushMatrix();
-            GlStateManager.color(r, g, b, a);
-    		net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();//
-    		//System.out.println(r + " " + g + " " + b + " " + a);
-            GL11.glPopMatrix();
-    	}
-        else{
-            net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().pos(x+xOffset, y+yOffset, z+zOffset).endVertex();
-        }
+      BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+      buf.pos(x+xOffset, y+yOffset, z+zOffset);
+       if(hasColor)
+               buf.color(r, g, b, a);
+  
+       if(hasNormals)
+           buf.normal(normalTestX, normalTestY, normalTestZ);
+           
+          buf.endVertex();
+       
        /* if (rawBufferIndex >= rawBufferSize - 32) 
         {
             if (rawBufferSize == 0)
@@ -447,28 +435,23 @@ public class Tessellator
             }
         }
         ++this.addedVertices;
-
         if (this.hasTexture)
         {
             this.rawBuffer[this.rawBufferIndex + 3] = Float.floatToRawIntBits((float)this.textureU);
             this.rawBuffer[this.rawBufferIndex + 4] = Float.floatToRawIntBits((float)this.textureV);
         }
-
         if (this.hasBrightness)
         {
             this.rawBuffer[this.rawBufferIndex + 7] = this.brightness;
         }
-
         if (this.hasColor)
         {
             this.rawBuffer[this.rawBufferIndex + 5] = this.color;
         }
-
         if (this.hasNormals)
         {
             this.rawBuffer[this.rawBufferIndex + 6] = this.normal;
         }
-
         this.rawBuffer[this.rawBufferIndex + 0] = Float.floatToRawIntBits((float)(p_78377_1_ + this.xOffset));
         this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(p_78377_3_ + this.yOffset));
         this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(p_78377_5_ + this.zOffset));

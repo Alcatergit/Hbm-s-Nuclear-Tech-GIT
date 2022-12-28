@@ -206,7 +206,7 @@ public class ItemRenderLibrary {
 				GL11.glScaled(4.5, 4.5, 4.5);
 			}
 			public void renderCommon() {
-								GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glScaled(0.5, 0.5, 0.5);
 				GL11.glTranslated(0.5, 0, 0);
 				GL11.glShadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.radgen_body_tex);
@@ -397,7 +397,7 @@ public class ItemRenderLibrary {
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.heater_firebox), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(2, 2, 2);
 				GL11.glRotated(25, 1, 1, 1);
                 GL11.glTranslated(0, 0, 1);
 			}
@@ -410,7 +410,7 @@ public class ItemRenderLibrary {
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_steel), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(2, 2, 2);
 				GL11.glRotated(25, 1, 1, 1);
                 GL11.glTranslated(0, -2, 1);
 			}

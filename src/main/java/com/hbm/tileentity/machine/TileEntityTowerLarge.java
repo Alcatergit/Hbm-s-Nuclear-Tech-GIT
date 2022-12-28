@@ -28,7 +28,7 @@ public class TileEntityTowerLarge extends TileEntityCondenser {
 				data.setString("type", "tower");
 				data.setFloat("lift", 1F);
 				data.setFloat("base", 1F);
-				data.setFloat("max", 10F);
+				data.setFloat("max", 5F);
 				data.setInteger("life", 750 + world.rand.nextInt(750));
 	
 				data.setDouble("posX", pos.getX() + 0.5 + world.rand.nextDouble() * 2 - 1);

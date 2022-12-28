@@ -3,6 +3,7 @@ package com.hbm.util;
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.handler.ArmorUtil;
@@ -15,6 +16,7 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -22,6 +24,7 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -43,7 +46,7 @@ public class ContaminationUtil {
 			mult = entity.getEntityData().getFloat("hbmradmultiplier");
 
 		float koeff = 5.0F;
-		return (float) Math.pow(koeff, -HazmatRegistry.getResistance(entity)) * mult;
+		return (float) Math.pow(koeff, -(getConfigEntityRadResistance(entity) + HazmatRegistry.getResistance(entity))) * mult;
 	}
 
 	private static void applyRadData(Entity e, float f) {
@@ -237,9 +240,36 @@ public class ContaminationUtil {
 			return 0.0F;
 		return Library.getEntRadCap(e).getRads();
 	}
+
+	public static float getConfigEntityRadResistance(Entity e){
+		float totalResistanceValue = 0.0F;
+		if(!(e instanceof EntityPlayer)){
+			ResourceLocation entity_path = EntityList.getKey(e);
+			Object resistanceMod = CompatibilityConfig.mobModRadresistance.get(entity_path.getResourceDomain());
+			Object resistanceMob = CompatibilityConfig.mobRadresistance.get(entity_path.toString());
+			if(resistanceMod != null){
+				totalResistanceValue = totalResistanceValue + (float)resistanceMod;
+			}
+			if(resistanceMob != null){
+				totalResistanceValue = totalResistanceValue + (float)resistanceMob;
+			}	
+		}
+		return totalResistanceValue;
+	}
+
+	public static boolean checkConfigEntityImmunity(Entity e){
+		if(!(e instanceof EntityPlayer)){
+			ResourceLocation entity_path = EntityList.getKey(e);
+			if(CompatibilityConfig.mobModRadimmune.contains(entity_path.getResourceDomain())){
+				return true;
+			}else{
+				return CompatibilityConfig.mobRadimmune.contains(entity_path.toString());
+			}
+		}
+		return false;
+	}
 	
 	public static boolean isRadImmune(Entity e) {
-
 		if(e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
 			return true;
 		
@@ -249,7 +279,7 @@ public class ContaminationUtil {
 				e instanceof EntitySkeleton ||
 				e instanceof EntityQuackos ||
 				e instanceof EntityOcelot ||
-				e instanceof IRadiationImmune;
+				e instanceof IRadiationImmune || checkConfigEntityImmunity(e);
 	}
 	
 	/// ASBESTOS ///

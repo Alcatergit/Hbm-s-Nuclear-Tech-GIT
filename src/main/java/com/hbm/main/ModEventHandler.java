@@ -26,7 +26,7 @@ import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.WorldConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
@@ -531,7 +531,8 @@ public class ModEventHandler {
 		}
 
 		if(event.world != null && !event.world.isRemote && event.world.provider.isSurfaceWorld() && GeneralConfig.enableMeteorStrikes) {
-			if(event.world.rand.nextInt(meteorShower > 0 ? WorldConfig.meteorShowerChance : WorldConfig.meteorStrikeChance) == 0) {
+			int dimID = event.world.provider.getDimension();
+			if(event.world.rand.nextInt(meteorShower > 0 ? (int)CompatibilityConfig.meteorShowerChance.get(dimID) : (int)CompatibilityConfig.meteorStrikeChance.get(dimID)) == 0) {
 				if(!event.world.playerEntities.isEmpty()) {
 					EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
 					if(p != null && p.dimension == 0) {
@@ -553,8 +554,8 @@ public class ModEventHandler {
 					MainRegistry.logger.info("Ended meteor shower.");
 			}
 
-			if(event.world.rand.nextInt(WorldConfig.meteorStrikeChance * 100) == 0 && GeneralConfig.enableMeteorShowers) {
-				meteorShower = (int) (WorldConfig.meteorShowerDuration * 0.75 + WorldConfig.meteorShowerDuration * 0.25 * event.world.rand.nextFloat());
+			if(event.world.rand.nextInt((int)CompatibilityConfig.meteorStrikeChance.get(dimID) * 100) == 0 && GeneralConfig.enableMeteorShowers) {
+				meteorShower = (int) ((int)CompatibilityConfig.meteorShowerDuration.get(dimID) * (0.75 + 0.25 * event.world.rand.nextFloat()));
 
 				if(GeneralConfig.enableDebugMode)
 					MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);

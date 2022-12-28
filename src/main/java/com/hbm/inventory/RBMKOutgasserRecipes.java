@@ -54,7 +54,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(69000, SA326.ingot(), new ItemStack(ModItems.ingot_solinium));
 		RBMKOutgasserRecipes.setRecipe(50000, CO.ingot(), new ItemStack(ModItems.ingot_co60));
 		RBMKOutgasserRecipes.setRecipe(90000, CO.dust(), new ItemStack(ModItems.powder_co60));
-		RBMKOutgasserRecipes.setRecipe(55000, ModItems.ingot_strontium, new ItemStack(ModItems.ingot_sr90));
+		RBMKOutgasserRecipes.setRecipe(55000, SR.ingot(), new ItemStack(ModItems.ingot_sr90));
 		RBMKOutgasserRecipes.setRecipe(59000, SR.dust(), new ItemStack(ModItems.powder_sr90));
 		RBMKOutgasserRecipes.setRecipe(45000, I.ingot(), new ItemStack(ModItems.ingot_i131));
 		RBMKOutgasserRecipes.setRecipe(35000, I.dust(), new ItemStack(ModItems.powder_i131));
@@ -67,13 +67,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(900000, PB.dust(), new ItemStack(ModItems.powder_pb209));
 		RBMKOutgasserRecipes.setRecipe(180000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));
 		RBMKOutgasserRecipes.setRecipe(50000, U238.ingot(), new ItemStack(ModItems.ingot_ra226));
-		RBMKOutgasserRecipes.setRecipe(20000000, ModItems.powder_spark_mix, new ItemStack(ModItems.pellet_charged));
-		RBMKOutgasserRecipes.setRecipe(160000, REIIUM.nugget(), new ItemStack(ModItems.nugget_weidanium));
-		RBMKOutgasserRecipes.setRecipe(160000, WEIDANIUM.nugget(), new ItemStack(ModItems.nugget_australium));
-		RBMKOutgasserRecipes.setRecipe(160000, AUSTRALIUM.nugget(), new ItemStack(ModItems.nugget_verticium));
-		RBMKOutgasserRecipes.setRecipe(160000, VERTICIUM.nugget(), new ItemStack(ModItems.nugget_unobtainium));
-		RBMKOutgasserRecipes.setRecipe(160000, UNOBTAINIUM.nugget(), new ItemStack(ModItems.nugget_daffergon));
-		RBMKOutgasserRecipes.setRecipe(320000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
+		RBMKOutgasserRecipes.setRecipe(32000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
 		RBMKOutgasserRecipes.setRecipe(3000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
 		RBMKOutgasserRecipes.setRecipe(2000, Blocks.STONE, new ItemStack(ModBlocks.sellafield_slaked));
 		RBMKOutgasserRecipes.setRecipe(4000, ModBlocks.sellafield_slaked, new ItemStack(ModBlocks.sellafield_0));

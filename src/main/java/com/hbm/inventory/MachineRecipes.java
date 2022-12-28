@@ -484,7 +484,7 @@ public class MachineRecipes {
 			break;
 		case DYN_STR:
 			list.add(new ItemStack(ModItems.particle_strange, 1));
-			list.add(new ItemStack(ModItems.ingot_radspice, 8));
+			list.add(new ItemStack(ModItems.nugget_radspice, 8));
 			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 16));
 			break;
