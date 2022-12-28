@@ -395,7 +395,32 @@ public class ItemRenderLibrary {
 		        bindTexture(ResourceManager.iter_microwave); ResourceManager.iter.renderPart("Microwave");
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
-
+		renderers.put(Item.getItemFromBlock(ModBlocks.heater_firebox), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glScaled(3, 3, 3);
+				GL11.glRotated(25, 1, 1, 1);
+                GL11.glTranslated(0, 0, 1);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(2.3, 2.3, 2.3);
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.heater_firebox_tex);  ResourceManager.heater_firebox.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_steel), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glScaled(3, 3, 3);
+				GL11.glRotated(25, 1, 1, 1);
+                GL11.glTranslated(0, -2, 1);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(2, 2, 2);
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.furnace_steel_tex);  ResourceManager.furnace_steel.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.tesla), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3, 0);

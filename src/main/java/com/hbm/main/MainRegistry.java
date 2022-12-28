@@ -783,6 +783,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityTowerLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_tower_large"));
 		GameRegistry.registerTileEntity(TileEntitySILEX.class, new ResourceLocation(RefStrings.MODID, "tileentity_silex"));
 		GameRegistry.registerTileEntity(TileEntityFEL.class, new ResourceLocation(RefStrings.MODID, "tileentity_fel"));
+		GameRegistry.registerTileEntity(TileEntityHeaterFirebox.class, new ResourceLocation(RefStrings.MODID, "tileentity_heater_firebox"));
+		GameRegistry.registerTileEntity(TileEntityFurnaceSteel.class, new ResourceLocation(RefStrings.MODID, "tileentity_furnace_steel"));
 		GameRegistry.registerTileEntity(TileEntityDoorGeneric.class, new ResourceLocation(RefStrings.MODID, "tileentity_door_generic"));
 		GameRegistry.registerTileEntity(TileEntityBMPowerBox.class, new ResourceLocation(RefStrings.MODID, "tileentity_bm_power_box"));
 		

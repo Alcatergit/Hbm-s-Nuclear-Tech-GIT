@@ -492,7 +492,9 @@ import com.hbm.tileentity.machine.TileEntityCoreReceiver;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityDemonLamp;
 import com.hbm.tileentity.machine.TileEntityForceField;
+import com.hbm.tileentity.machine.TileEntityFurnaceSteel;
 import com.hbm.tileentity.machine.TileEntityGeiger;
+import com.hbm.tileentity.machine.TileEntityHeaterFirebox;
 import com.hbm.tileentity.machine.TileEntityITER;
 import com.hbm.tileentity.machine.TileEntityITERStruct;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
@@ -837,6 +839,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTowerLarge.class, new RenderLargeTower());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySILEX.class, new RenderSILEX());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFEL.class, new RenderFEL());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterFirebox.class, new RenderFirebox());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFurnaceSteel.class, new RenderFurnaceSteel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFogFX.class, new RenderFogRenderFactory());

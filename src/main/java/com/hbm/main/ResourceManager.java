@@ -309,7 +309,13 @@ public class ResourceManager {
 	
 	//IGen
 	public static final IModelCustom igen = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/igen.obj"));
-
+	
+	//Firebox, and the lot
+	public static final IModelCustom heater_firebox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/firebox.obj"));
+	public static final IModelCustom furnace_steel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/furnace_steel.obj"));
+	
+	//Heat-Based Machines
+	
 	//Bombs
 	public static final IModelCustom bomb_solinium = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/ufp.obj"));
 	public static final IModelCustom n2 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/bombs/n2.obj"));
@@ -583,7 +589,10 @@ public class ResourceManager {
 	public static final ResourceLocation igen_cog = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_cog.png");
 	public static final ResourceLocation igen_arm = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_arm.png");
 	public static final ResourceLocation igen_pistons = new ResourceLocation(RefStrings.MODID, "textures/models/machines/igen_pistons.png");
-
+    
+    //Firebox and the lot
+	public static final ResourceLocation heater_firebox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/firebox.png");
+	public static final ResourceLocation furnace_steel_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/furnace_steel.png");
 	//Selenium Engine
 	public static final ResourceLocation selenium_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/selenium_engine_body.png");
 	public static final ResourceLocation selenium_piston_tex = new ResourceLocation(RefStrings.MODID, "textures/models/selenium_engine_piston.png");

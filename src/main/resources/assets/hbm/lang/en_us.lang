@@ -1169,6 +1169,10 @@ tile.solar_mirror.name=Heliostat Mirror
 container.machineSILEX=SILEX
 container.machineFEL=FEL
 
+tile.heater_firebox.name=Firebox
+tile.furnace_steel.name=Steel Furnace
+container.heater_firebox=Firebox
+
 tile.barrel_plastic.name=Safe Barrel™
 tile.barrel_corroded.name=Corroded Barrel
 tile.barrel_iron.name=Iron Barrel
@@ -4063,6 +4067,7 @@ container.storageDrum=Nuclear Waste Disposal Drum
 container.orbus=Heavy Antimatter Storage
 container.bat9000=Big-Ass Tank 9000
 container.anvil=Tier %s Anvil
-
+container.heaterFirebox=Firebox
+container.furnaceSteel=Steel Furnace
 item.charge_railgun.name=Deuterium Plasma Capsule
 item.ducc.name=ducc
