@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class RadWaterFluid extends Fluid {
 
 	public RadWaterFluid(String name){
-		super(name, new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radwater_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radwater_flowing"), Color.white);
+		super(name, new ResourceLocation("blocks/water_still"), new ResourceLocation("blocks/water_flow"), Color.white);
 	}
 	
 }

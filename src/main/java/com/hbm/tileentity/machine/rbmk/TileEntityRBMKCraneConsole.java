@@ -363,7 +363,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-
+		super.writeToNBT(nbt);
 		nbt.setBoolean("crane", setUpCrane);
 		nbt.setInteger("centerX", centerX);
 		nbt.setInteger("centerY", centerY);

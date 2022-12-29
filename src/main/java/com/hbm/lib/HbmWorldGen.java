@@ -141,6 +141,13 @@ public class HbmWorldGen implements IWorldGenerator {
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 5, 50, ModBlocks.cluster_iron);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 5, 30, ModBlocks.cluster_titanium);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.aluminiumClusterSpawn.get(dimID)), 6, 5, 40, ModBlocks.cluster_aluminium);
+		//Special ores
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.reiiumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_reiium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.weidaniumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_weidanium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.australiumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_australium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.verticiumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_verticium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.unobtainiumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_unobtainium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.daffergonSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_daffergon);
 		//Nether ores
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.netherUraniumSpawn.get(dimID)), 6, 0, 127, ModBlocks.ore_nether_uranium, Blocks.NETHERRACK);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.netherTungstenSpawn.get(dimID)), 10, 0, 127, ModBlocks.ore_nether_tungsten, Blocks.NETHERRACK);

@@ -2868,7 +2868,7 @@ public class ModItems {
 	
 	//Reactor Blanket
 	public static final Item fusion_shield_tungsten = new ItemFusionShield(60 * 60 * 60 * 5, 35000, "fusion_shield_tungsten").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 45000, "fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fusion_shield_desh = new ItemFusionShield(60 * 60 * 60 * 10, 60000, "fusion_shield_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fusion_shield_chlorophyte = new ItemFusionShield(60 * 60 * 60 * 15, 90000, "fusion_shield_chlorophyte").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fusion_shield_vaporwave = new ItemFusionShield(60 * 60 * 60 * 10, 1916169, "fusion_shield_vaporwave").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	

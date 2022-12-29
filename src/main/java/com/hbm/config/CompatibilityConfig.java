@@ -35,6 +35,13 @@ public class CompatibilityConfig {
 	public static HashMap ironClusterSpawn;
 	public static HashMap titaniumClusterSpawn;
 	public static HashMap aluminiumClusterSpawn;
+
+	public static HashMap reiiumSpawn;
+	public static HashMap weidaniumSpawn;
+	public static HashMap australiumSpawn;
+	public static HashMap verticiumSpawn;
+	public static HashMap unobtainiumSpawn;
+	public static HashMap daffergonSpawn;
 	
 	public static HashMap netherUraniumSpawn;
 	public static HashMap netherTungstenSpawn;
@@ -84,6 +91,10 @@ public class CompatibilityConfig {
 	public static HashMap mobRadresistance;
 	public static HashSet mobRadimmune;
 
+	public static boolean mobGear = true;
+
+	public static boolean modLoot = true;
+
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_DIMRAD = "01_dimension_radiation";
@@ -94,7 +105,7 @@ public class CompatibilityConfig {
 		final String CATEGORY_MOB = "06_mobs";
 
 		String dimRadComment = "Amount of background radiation in the dimension in Rad/s - <dimID:Rad> (Int:Float)";
-		dimensionRad = CommonConfig.createConfigHashMap(config, CATEGORY_DIMRAD, "01.01_dimensionRadiation", dimRadComment, "Int", "Float", new String[]{ "0:0.0", "-1:0.666", "1:0.001", "-28:0.245", "-27:0.0288", "-26:0.0288", "-29:0.0212", "-30:0.5", "-31:0.1" }, ":");
+		dimensionRad = CommonConfig.createConfigHashMap(config, CATEGORY_DIMRAD, "01.01_dimensionRadiation", dimRadComment, "Int", "Float", new String[]{ "0:0.0", "-1:0.666", "1:0.001", "-28:0.245", "-27:0.0288", "-26:0.0288", "-29:0.0212", "-30:10", "-31:0.1" }, ":");
 
 		//Ores
 		uraniumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.01_uraniumSpawnrate", "Amount of uranium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:7" }, ":");
@@ -122,6 +133,13 @@ public class CompatibilityConfig {
 		ironClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.22_ironClusterSpawn", "Amount of iron cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:4" }, ":");
 		titaniumClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.23_titaniumClusterSpawn", "Amount of titanium cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:2" }, ":");
 		aluminiumClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.24_aluminiumClusterSpawn", "Amount of aluminium cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:3" }, ":");
+		
+		reiiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.25_reiiumSpawnRate", "Amount of reiium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-29:1" }, ":");
+		weidaniumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.26_weidaniumSpawnRate", "Amount of weidanium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-31:1" }, ":");
+		australiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.27_australiumSpawnRate", "Amount of australium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-31:1" }, ":");
+		verticiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.28_verticiumSpawnRate", "Amount of verticium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-30:1" }, ":");
+		unobtainiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.29_unobtainiumSpawnRate", "Amount of unobtainium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-28:1" }, ":");
+		daffergonSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.30_daffergonSpawnRate", "Amount of daffergon ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-30:1" }, ":");
 		
 		netherUraniumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "02.N00_uraniumSpawnrate", "Amount of nether uranium per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-1:8" }, ":");
 		netherTungstenSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "02.N01_tungstenSpawnrate", "Amount of nether tungsten per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-1:10" }, ":");
@@ -177,5 +195,8 @@ public class CompatibilityConfig {
 		String mobRadComment = "Amount of radiation resistance the mob gets. Radresistance s is calculated as s=(1-0.2^r). So a resistance value of 3.0 means that 99.2%=(1-0.2^3.0) of the radiation gets blocked. - <mod:mob=radresistance> (String:Float)";
 		mobRadresistance = CommonConfig.createConfigHashMap(config, CATEGORY_MOB, "06.03_mobRadresistance", mobRadComment, "String", "Float", new String[]{ "biomesoplenty:entity.wasp=2.0" }, "=");
 		mobRadimmune = CommonConfig.createConfigHashSet(config, CATEGORY_MOB, "06.04_mobRadimmune", "List of mobs that are immune to radiation. - <mob> (String)", "String", new String[]{ "minecraft:entity.Slime", "minecraft:entity.Vex" });
+	
+		mobGear = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.05_mobGear", "If true then mobs will be given gear (armor/weapons/gasmasks) from this mod when spawned", true);
+		modLoot = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.06_modLoot", "If true then this mod will generarte loot for chests", true);
 	}
 }
