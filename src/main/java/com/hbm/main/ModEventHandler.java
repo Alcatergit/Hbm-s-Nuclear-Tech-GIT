@@ -516,6 +516,12 @@ public class ModEventHandler {
 		}
 	}
 
+	private int parseOInt(Object o){
+		if(o == null)
+			return 0;
+		return (int)o;
+	}
+
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		if(!MainRegistry.allPipeNetworks.isEmpty() && !event.world.isRemote) {
@@ -534,35 +540,40 @@ public class ModEventHandler {
 			}
 		}
 
-		if(event.world != null && !event.world.isRemote && event.world.provider.isSurfaceWorld() && GeneralConfig.enableMeteorStrikes) {
+		if(event.world != null && !event.world.isRemote && GeneralConfig.enableMeteorStrikes) {
 			int dimID = event.world.provider.getDimension();
-			if(event.world.rand.nextInt(meteorShower > 0 ? (int)CompatibilityConfig.meteorShowerChance.get(dimID) : (int)CompatibilityConfig.meteorStrikeChance.get(dimID)) == 0) {
-				if(!event.world.playerEntities.isEmpty()) {
-					EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
-					if(p != null && p.dimension == 0) {
-						EntityMeteor meteor = new EntityMeteor(event.world);
-						meteor.posX = p.posX + event.world.rand.nextInt(201) - 100;
-						meteor.posY = 384;
-						meteor.posZ = p.posZ + event.world.rand.nextInt(201) - 100;
-						meteor.motionX = event.world.rand.nextDouble() - 0.5;
-						meteor.motionY = -2.5;
-						meteor.motionZ = event.world.rand.nextDouble() - 0.5;
-						event.world.spawnEntity(meteor);
+			int dimMeteorShowerChance = parseOInt(CompatibilityConfig.meteorShowerChance.get(dimID));
+			int dimMeteorStrikeChance = parseOInt(CompatibilityConfig.meteorStrikeChance.get(dimID));
+			if(dimMeteorShowerChance > 0 && dimMeteorStrikeChance > 0){
+				if(event.world.rand.nextInt(meteorShower > 0 ? dimMeteorShowerChance : dimMeteorStrikeChance) == 0) {
+					if(!event.world.playerEntities.isEmpty()) {
+						EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
+						if(p != null && p.dimension == 0) {
+							EntityMeteor meteor = new EntityMeteor(event.world);
+							meteor.posX = p.posX + event.world.rand.nextInt(201) - 100;
+							meteor.posY = 384;
+							meteor.posZ = p.posZ + event.world.rand.nextInt(201) - 100;
+							meteor.motionX = event.world.rand.nextDouble() - 0.5;
+							meteor.motionY = -2.5;
+							meteor.motionZ = event.world.rand.nextDouble() - 0.5;
+							event.world.spawnEntity(meteor);
+						}
 					}
 				}
-			}
 
-			if(meteorShower > 0) {
-				meteorShower--;
-				if(meteorShower == 0 && GeneralConfig.enableDebugMode)
-					MainRegistry.logger.info("Ended meteor shower.");
-			}
+				if(meteorShower > 0) {
+					meteorShower--;
+					if(meteorShower == 0 && GeneralConfig.enableDebugMode)
+						MainRegistry.logger.info("Ended meteor shower.");
+				}
 
-			if(event.world.rand.nextInt((int)CompatibilityConfig.meteorStrikeChance.get(dimID) * 100) == 0 && GeneralConfig.enableMeteorShowers) {
-				meteorShower = (int) ((int)CompatibilityConfig.meteorShowerDuration.get(dimID) * (0.75 + 0.25 * event.world.rand.nextFloat()));
+				if(event.world.rand.nextInt(dimMeteorStrikeChance * 100) == 0 && GeneralConfig.enableMeteorShowers) {
+					int dimMeteorShowerDuration = parseOInt(CompatibilityConfig.meteorShowerDuration.get(dimID));
+					meteorShower = (int) (dimMeteorShowerDuration * (0.75 + 0.25 * event.world.rand.nextFloat()));
 
-				if(GeneralConfig.enableDebugMode)
-					MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);
+					if(GeneralConfig.enableDebugMode)
+						MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);
+				}
 			}
 		}
 		
@@ -992,7 +1003,7 @@ public class ModEventHandler {
 			if(event.getSource() instanceof EntityDamageSource){
 				if(((EntityDamageSource)event.getSource()).getImmediateSource() instanceof EntityLivingBase){
 					EntityLivingBase attacker = (EntityLivingBase) ((EntityDamageSource)event.getSource()).getImmediateSource();
-					HbmLivingProps.incrementRadiation(attacker, 2000F);
+					HbmLivingProps.incrementRadiation(attacker, 999.999F);
 				}
 			}
 			event.getEntity().dropItem(ModItems.pellet_rtg_balefire, 1);

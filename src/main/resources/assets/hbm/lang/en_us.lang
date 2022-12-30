@@ -8,7 +8,7 @@ itemGroup.tabTest=Nuclear Tech Mod Test Tab
 itemGroup.tabParts=NTM Resources and Parts
 itemGroup.tabControl=NTM Machine Items and Fuel
 itemGroup.tabTemplate=NTM Templates
-itemGroup.tabRessource=NTM Ressources
+itemGroup.tabResource=NTM Resources
 itemGroup.tabBlocks=NTM Blocks
 itemGroup.tabMachine=NTM Machines
 itemGroup.tabNuke=NTM Bombs
@@ -17,6 +17,49 @@ itemGroup.tabWeapon=NTM Weapons and Turrets
 itemGroup.tabConsumable=NTM Consumables and Gear
 
 fluid.plasma_put=Plutonium-Tritium Plasma
+
+book.msword.cover=Guide$on how get the$Meteorite Sword
+book.msword.title0=Description
+book.msword.page0=Page 1-7: How to get the Meteorite Sword. Page 8-22: How to upgrade your Meteorite Sword
+book.msword.title1=The Meteorite Block
+book.msword.page1=Meteorite Shards can be obtained by mining Meteorites which will rain down from time to time.
+book.msword.title2=The Meteorite Ingot
+book.msword.page2=§lMachine = Blast Furnace§r
+book.msword.title3=The Hot Ingot
+book.msword.page3=§lMachine = Furnace§r
+book.msword.title4=The Forged Ingot
+book.msword.page4=§lMachine = Anvil§r Tier 3: They can only craft while hot so be quick.
+book.msword.title5=The Hot Forged Ingot
+book.msword.page5=§lMachine = Furnace§r
+book.msword.title6=The Meteorite Blade
+book.msword.page6=§lMachine = Anvil§r: Good you made it! Now craft a second one and you will have your own Meteorite Sword.
+book.msword.title7=The Meteorite Sword
+book.msword.page7=§lMachine = Crafting Bench§r
+book.msword.title8=Upgrade 1: Seared
+book.msword.page8=§lMachine = Furnace§r
+book.msword.title9=Upgrade 2: Reforged
+book.msword.page9=§lMachine = Anvil§r
+book.msword.title10=Upgrade 3: Hardened
+book.msword.page10=§lMachine = Press§r with flat stamp
+book.msword.title11=Upgrade 4: Alloyed
+book.msword.page11=§lMachine = Blast Furnace§r
+book.msword.title12=Upgrade 5: Machined
+book.msword.page12=§lMachine = Assembler§r
+book.msword.page13=Craft something inside the Assembler while the sword is inside the battery slot.
+book.msword.title14=Upgrade 6: Treated
+book.msword.page14=§lMachine = Chemplant§r
+book.msword.page15=Craft something inside the Chemplant while the sword is inside the battery slot.
+book.msword.title16=Upgrade 7: Etched
+book.msword.page16=§lMachine = Ore Acidizer§r
+book.msword.title17=Upgrade 8: Bred
+book.msword.page17=§lMachine = Breeding Reactor§r with heat 4
+book.msword.title18=Upgrade 9: Irradiated
+book.msword.page18=§lMachine = Small Nuclear Reactor§r
+book.msword.page19=Activate the reactor while fuelrods and sword are inside.
+book.msword.title20=Upgrade 10: Fused
+book.msword.page20=§lMachine = Fusion Reactor§r with any plasma
+book.msword.title21=Upgrade 11: Baleful
+book.msword.page21=§lMachine = Fusion Reactor§r with Balefire Plasma
 
 armor.blastProtection=Damage modifier of %s against explosions
 armor.cap=Hard damage cap of %s
@@ -997,7 +1040,7 @@ tile.marker_structure.name=Multiblock Structure Marker
 
 tile.struct_iter_core.name=Fusion Reactor Core Component
 
-tile.balefire.name=Balfire
+tile.balefire.name=Balefire
 
 tile.struct_launcher.name=Launch Pad Component Block
 tile.struct_scaffold.name=Launch Pad Scaffold Block

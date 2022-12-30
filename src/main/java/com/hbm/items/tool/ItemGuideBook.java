@@ -57,7 +57,8 @@ public class ItemGuideBook extends Item {
 	public enum BookType {
 
 		TEST("book.test.cover", 2F, statFacTest()),
-		RBMK("book.rbmk.cover", 1.5F, statFacRBMK());
+		RBMK("book.rbmk.cover", 1.5F, statFacRBMK()),
+		MSWORD("book.msword.cover", 1.5F, statFacMSword());
 		
 		public List<GuidePage> pages;
 		public float titleScale;
@@ -121,6 +122,56 @@ public class ItemGuideBook extends Item {
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk15.png"), 100, 48, 48));
 		pages.add(new GuidePage("book.rbmk.page16").setScale(2F).addTitle("book.rbmk.title16", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk16.png"), 50, 70, 100));
+		return pages;
+	}
+
+
+	public static List<GuidePage> statFacMSword() {
+		int widthX = 100;
+		List<GuidePage> pages = new ArrayList<>();
+		pages.add(new GuidePage("book.msword.page0").setScale(2F).addTitle("book.msword.title0", 0x800000, 1F));
+		pages.add(new GuidePage("book.msword.page1").setScale(2F).addTitle("book.msword.title1", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/01.png"), 95, widthX, (int)(widthX * (64F/164F))));
+		pages.add(new GuidePage("book.msword.page2").setScale(2F).addTitle("book.msword.title2", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/02.png"), 90, widthX, (int)(widthX * (64F/158F))));
+		pages.add(new GuidePage("book.msword.page3").setScale(2F).addTitle("book.msword.title3", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/03.png"), 75, widthX, (int)(widthX * (62F/90F))));
+		pages.add(new GuidePage("book.msword.page4").setScale(2F).addTitle("book.msword.title4", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/04.png"), 100, widthX, (int)(widthX * (26F/98F))));
+		pages.add(new GuidePage("book.msword.page5").setScale(2F).addTitle("book.msword.title5", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/05.png"), 75, widthX, (int)(widthX * (62F/90F))));
+		pages.add(new GuidePage("book.msword.page6").setScale(2F).addTitle("book.msword.title6", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/06.png"), 100, widthX, (int)(widthX * (26F/98F))));
+		pages.add(new GuidePage("book.msword.page7").setScale(2F).addTitle("book.msword.title7", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/07.png"), 80, widthX, (int)(widthX * (62F/124F))));
+		pages.add(new GuidePage("book.msword.page8").setScale(2F).addTitle("book.msword.title8", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/08.png"), 75, widthX, (int)(widthX * (62F/90F))));
+		pages.add(new GuidePage("book.msword.page9").setScale(2F).addTitle("book.msword.title9", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/09.png"), 100, widthX, (int)(widthX * (26F/98F))));
+		pages.add(new GuidePage("book.msword.page10").setScale(2F).addTitle("book.msword.title10", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/10.png"), 75, widthX, (int)(widthX * (64F/92F))));
+		pages.add(new GuidePage("book.msword.page11").setScale(2F).addTitle("book.msword.title11", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/11.png"), 90, widthX, (int)(widthX * (64F/158F))));
+		pages.add(new GuidePage("book.msword.page12").setScale(2F).addTitle("book.msword.title12", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/12.png"), 70, widthX, (int)(widthX * (118F/172F))));
+		pages.add(new GuidePage("book.msword.page13").setScale(2F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/13.png"), 70, widthX, (int)(widthX * (118F/172F))));
+		pages.add(new GuidePage("book.msword.page14").setScale(2F).addTitle("book.msword.title14", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/14.png"), 70, widthX, (int)(widthX * (118F/172F))));
+		pages.add(new GuidePage("book.msword.page15").setScale(2F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/15.png"), 70, widthX, (int)(widthX * (118F/172F))));
+		pages.add(new GuidePage("book.msword.page16").setScale(2F).addTitle("book.msword.title16", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/16.png"), 90, widthX, (int)(widthX * (63F/163F))));
+		pages.add(new GuidePage("book.msword.page17").setScale(2F).addTitle("book.msword.title17", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/17.png"), 75, widthX, (int)(widthX * (63F/98F))));
+		pages.add(new GuidePage("book.msword.page18").setScale(2F).addTitle("book.msword.title18", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/18.png"), 70, (int)(widthX * 0.7F), (int)(widthX * 0.7F * (119F/110F))));
+		pages.add(new GuidePage("book.msword.page19").setScale(2F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/19.png"), 70, (int)(widthX * 0.7F), (int)(widthX * 0.7F * (119F/110F))));
+		pages.add(new GuidePage("book.msword.page20").setScale(2F).addTitle("book.msword.title20", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/20.png"), 60, widthX, (int)(widthX * (118F/136F))));
+		pages.add(new GuidePage("book.msword.page21").setScale(2F).addTitle("book.msword.title21", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/21.png"), 60, widthX, (int)(widthX * (118F/136F))));
 		return pages;
 	}
 	

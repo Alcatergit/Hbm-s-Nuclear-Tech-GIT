@@ -1257,6 +1257,8 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModBlocks.sat_dock, 1), new Object[] { "SSS", "PCP", 'S', STEEL.ingot(), 'P', POLYMER.ingot(), 'C', ModBlocks.crate_iron });
 		addShapedRecipe(new ItemStack(Item.getItemFromBlock(ModBlocks.book_guide), 1), new Object[] { "IBI", "LBL", "IBI", 'B', Items.BOOK, 'I', new ItemStack(Items.DYE, 1, 0), 'L', new ItemStack(Items.DYE, 1, 4) });
 
+		addShapelessRecipe(new ItemStack(ModItems.book_guide, 1, 2), new Object[] { Items.BOOK, ModItems.powder_meteorite });
+
 		addShapedOreRecipe(new ItemStack(ModBlocks.rail_highspeed, 16), new Object[] { "S S", "SIS", "S S", 'S', STEEL.ingot(), 'I', IRON.plate() });
 		addShapedOreRecipe(new ItemStack(ModBlocks.rail_booster, 6), new Object[] { "S S", "CIC", "SRS", 'S', STEEL.ingot(), 'I', IRON.plate(), 'R', MINGRADE.ingot(), 'C', ModItems.coil_copper });
 
@@ -2066,13 +2068,15 @@ public class CraftingManager {
 		addShapedOreRecipe(new ItemStack(ModItems.battery_sc_americium), new Object[] { "NBN", "PCP", "NBN", 'N',TA.nugget(), 'B', AM241.billet(), 'P', POLYMER.ingot(), 'C', ModItems.battery_sc_lead });
 		addShapedOreRecipe(new ItemStack(ModItems.battery_sc_balefire), new Object[] { "NBN", "PCP", "NBN", 'N', ModItems.nugget_radspice, 'B', ModItems.pellet_rtg_balefire, 'P', POLYMER.ingot(), 'C', ModItems.battery_sc_americium });
 
-
-		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_chlorophyte, 1), new Object[] { "TCT", "CSC", "TCT", 'T', W.dust(), 'C', ModItems.powder_chlorophyte, 'S', ModBlocks.hadron_coil_starmetal });
+		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_alloy, 1), new Object[] { "WWW", "WCW", "WWW", 'W', ModItems.wire_advanced_alloy, 'C', ModBlocks.fusion_conductor });
+		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_gold, 1), new Object[] { "PGP", "PCP", "PGP", 'G', GOLD.dust(), 'C', ModBlocks.hadron_coil_alloy, 'P', IRON.plate() });
+		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_neodymium, 1), new Object[] { "G", "C", "G", 'G', ND.dust(), 'C', ModBlocks.hadron_coil_gold });
 		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_magtung, 1), new Object[] { "WWW", "WCW", "WWW", 'W', ModItems.wire_magnetized_tungsten, 'C', ModBlocks.fwatz_conductor });
-		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_gold, 1), new Object[] { "GGG", "GCG", "GGG", 'G', ModItems.coil_gold, 'C', ModBlocks.hadron_coil_alloy });
-		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_neodymium, 1), new Object[] { " G ", "GCG", " G ", 'G', ND.dust(), 'C', ModBlocks.hadron_coil_gold });
-		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_schrabidate, 1), new Object[] { "WSW", "SCS", "WSW", 'W', ModItems.wire_schrabidium, 'S', SBD.dust(), 'C', ModBlocks.hadron_coil_schrabidium });
-
+		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_schrabidium, 1), new Object[] { "WWW", "WCW", "WWW", 'W', ModItems.wire_schrabidium, 'C', ModBlocks.hadron_coil_magtung });
+		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_schrabidate, 1), new Object[] { " S ", "SCS", " S ", 'S', SBD.dust(), 'C', ModBlocks.hadron_coil_schrabidium });
+		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_coil_starmetal, 1), new Object[] { "SNS", "SCS", "SNS", 'S', STAR.ingot(), 'N', ModBlocks.hadron_coil_neodymium, 'C', ModBlocks.hadron_coil_schrabidate });
+		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_chlorophyte, 1), new Object[] { "TCT", "TST", "TCT", 'T', ModItems.coil_tungsten, 'C', ModItems.powder_chlorophyte, 'S', ModBlocks.hadron_coil_starmetal });
+		
 		addShapedOreRecipe(new ItemStack(ModItems.flywheel_beryllium, 1), new Object[] { "BBB", "BTB", "BBB", 'B', BE.block(), 'T', ModItems.bolt_compound });
 
 		addShapelessOreRecipe(new ItemStack(ModItems.siox, 8), new Object[] { COAL.dust(), ASBESTOS.dust(), ANY_BISMOID.nugget() });
@@ -2276,9 +2280,6 @@ public class CraftingManager {
 		EnchantmentUtil.addEnchantment(thorns, Enchantments.THORNS, 3);
 		addShapedRecipe(thorns, new Object[] { "SBS", "BDB", "SBS", 'S', ModBlocks.barbed_wire, 'B', ModBlocks.spikes, 'D', ModItems.powder_magic });
 
-		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_alloy, 1), new Object[] { "WWW", "WCW", "WWW", 'W', ModItems.wire_advanced_alloy, 'C', ModBlocks.fusion_conductor });
-		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_schrabidium, 1), new Object[] { "SCS", "CSC", "SCS", 'S', ModItems.powder_schrabidium, 'C', ModBlocks.hadron_coil_alloy });
-		addShapedRecipe(new ItemStack(ModBlocks.hadron_coil_starmetal, 1), new Object[] { "SCS", "CSC", "SCS", 'S', ModItems.ring_starmetal, 'C', ModBlocks.hadron_coil_schrabidium });
 		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_diode, 1), new Object[] { "CIC", "ISI", "CIC", 'C', ModBlocks.hadron_coil_alloy, 'I', STEEL.ingot(), 'S', ModItems.circuit_gold });
 		addShapedOreRecipe(new ItemStack(ModBlocks.hadron_plating, 1), new Object[] { "IPI", "P P", "IPI", 'I', STEEL.ingot(), 'P', STEEL.plate() });
 		addShapelessOreRecipe(new ItemStack(ModBlocks.hadron_plating_blue, 1), new Object[] { ModBlocks.hadron_plating, "dyeBlue" });

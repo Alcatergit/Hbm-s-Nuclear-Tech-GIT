@@ -25,7 +25,7 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.ToolConfig;
 import com.hbm.config.WeaponConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.creativetabs.RessourceTab;
+import com.hbm.creativetabs.ResourceTab;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
 import com.hbm.creativetabs.ControlTab;
@@ -394,7 +394,7 @@ public class MainRegistry {
 	// templates, siren tracks
 	public static CreativeTabs templateTab = new TemplateTab(CreativeTabs.getNextID(), "tabTemplate");
 	// ore and mineral blocks
-	public static CreativeTabs ressourceTab = new RessourceTab(CreativeTabs.getNextID(), "tabRessource");
+	public static CreativeTabs resourceTab = new ResourceTab(CreativeTabs.getNextID(), "tabResource");
 	// construction blocks
 	public static CreativeTabs blockTab = new BlockTab(CreativeTabs.getNextID(), "tabBlocks");
 	// machines, structure parts
