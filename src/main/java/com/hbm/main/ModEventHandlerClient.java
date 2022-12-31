@@ -543,6 +543,8 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.meteorite_sword_irradiated, reg);
 		swapModels(ModItems.meteorite_sword_fused, reg);
 		swapModels(ModItems.meteorite_sword_baleful, reg);
+		swapModels(ModItems.meteorite_sword_warped, reg);
+		swapModels(ModItems.meteorite_sword_demonic, reg);
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			swapModels(entry.getKey(), reg);

@@ -2366,6 +2366,8 @@ public class ClientProxy extends ServerProxy {
 		ModItems.meteorite_sword_irradiated.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.75F, 1.0F, 0.0F));
 		ModItems.meteorite_sword_fused.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.0F, 0.5F));
 		ModItems.meteorite_sword_baleful.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.0F, 1.0F, 0.0F));
+		ModItems.meteorite_sword_warped.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 1.0F, 1.0F));
+		ModItems.meteorite_sword_demonic.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.0F, 0.0F));
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			entry.getKey().setTileEntityItemStackRenderer(entry.getValue());

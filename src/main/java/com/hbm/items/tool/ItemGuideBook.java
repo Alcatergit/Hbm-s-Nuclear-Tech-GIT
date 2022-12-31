@@ -165,13 +165,18 @@ public class ItemGuideBook extends Item {
 		pages.add(new GuidePage("book.msword.page17").setScale(2F).addTitle("book.msword.title17", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/17.png"), 75, widthX, (int)(widthX * (63F/98F))));
 		pages.add(new GuidePage("book.msword.page18").setScale(2F).addTitle("book.msword.title18", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/18.png"), 70, (int)(widthX * 0.7F), (int)(widthX * 0.7F * (119F/110F))));
-		pages.add(new GuidePage("book.msword.page19").setScale(2F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/19.png"), 70, (int)(widthX * 0.7F), (int)(widthX * 0.7F * (119F/110F))));
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/18.png"), 70, widthX, (int)(widthX * (80F/160F))));
+		pages.add(new GuidePage("book.msword.page19").setScale(2F));
 		pages.add(new GuidePage("book.msword.page20").setScale(2F).addTitle("book.msword.title20", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/20.png"), 60, widthX, (int)(widthX * (118F/136F))));
 		pages.add(new GuidePage("book.msword.page21").setScale(2F).addTitle("book.msword.title21", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/21.png"), 60, widthX, (int)(widthX * (118F/136F))));
+		pages.add(new GuidePage("book.msword.page22").setScale(2F).addTitle("book.msword.title22", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/22.png"), 70, widthX, (int)(widthX * (122F/176F))));
+		pages.add(new GuidePage("book.msword.page23").setScale(2F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/23.png"), 70, widthX, (int)(widthX * (122F/176F))));
+		pages.add(new GuidePage("book.msword.page24").setScale(2F).addTitle("book.msword.title24", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/guide_meteor_sword/24.png"), 80, widthX, (int)(widthX * (60F/142F))));
 		return pages;
 	}
 	

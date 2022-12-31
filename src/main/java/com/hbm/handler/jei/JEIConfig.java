@@ -6,6 +6,7 @@ import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
+import com.hbm.inventory.DFCRecipes;
 import com.hbm.inventory.gui.GUIAnvil;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
@@ -67,6 +68,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
+	public static final String DFC = "hbm.dfc";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -96,6 +98,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.rbmk_outgasser), RBMKOUTGASSER);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.crate_tungsten), DFC);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.crate_desh), DFC);
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
@@ -118,6 +122,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
 		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
 		registry.addRecipes(RBMKOutgasserRecipes.getRBMKOutgasserRecipes(), RBMKOUTGASSER);
+		registry.addRecipes(DFCRecipes.getDFCRecipes(), DFC);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
@@ -235,7 +240,8 @@ public class JEIConfig implements IModPlugin {
 				new SILEXRecipeHandler(help),
 				new SmithingRecipeHandler(help),
 				new AnvilRecipeHandler(help),
-				new RBMKOutgasserRecipeHandler(help));
+				new RBMKOutgasserRecipeHandler(help),
+				new DFCRecipeHandler(help));
 	}
 
 	@Override

@@ -959,7 +959,7 @@ public class ModItems {
 	public static final Item ingot_u238 = new ItemHazard(ItemHazard.u238, "ingot_u238").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_u238m2 = new ItemUnstable(350, 200, "ingot_u238m2").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_plutonium = new ItemHazard(ItemHazard.pu, "ingot_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu238 = new ItemHazard(ItemHazard.pu238, "ingot_pu238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu238 = new ItemHazard(ItemHazard.pu238, true, false, "ingot_pu238").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_pu239 = new ItemHazard(ItemHazard.pu239, "ingot_pu239").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_pu240 = new ItemHazard(ItemHazard.pu240, "ingot_pu240").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_pu241 = new ItemHazard("ingot_pu241").addRadiation(ItemHazard.pu241 * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
@@ -1998,18 +1998,20 @@ public class ModItems {
 	public static final Item mask_of_infamy = new MaskOfInfamy(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "mask_of_infamy").setMaxStackSize(1);
 	
 	
-	public static final Item meteorite_sword = new ItemSwordMeteorite(10F, 0, MainRegistry.matMeteorite, "meteorite_sword");
-	public static final Item meteorite_sword_seared = new ItemSwordMeteorite(15F, 0, MainRegistry.matMeteorite, "meteorite_sword_seared");
-	public static final Item meteorite_sword_reforged = new ItemSwordMeteorite(25F, 0, MainRegistry.matMeteorite, "meteorite_sword_reforged");
-	public static final Item meteorite_sword_hardened = new ItemSwordMeteorite(35F, 0, MainRegistry.matMeteorite, "meteorite_sword_hardened");
-	public static final Item meteorite_sword_alloyed = new ItemSwordMeteorite(50F, 0, MainRegistry.matMeteorite, "meteorite_sword_alloyed");
-	public static final Item meteorite_sword_machined = new ItemSwordMeteorite(65F, 0, MainRegistry.matMeteorite, "meteorite_sword_machined");
-	public static final Item meteorite_sword_treated = new ItemSwordMeteorite(80F, 0, MainRegistry.matMeteorite, "meteorite_sword_treated");
-	public static final Item meteorite_sword_etched = new ItemSwordMeteorite(100F, 0, MainRegistry.matMeteorite, "meteorite_sword_etched");
-	public static final Item meteorite_sword_bred = new ItemSwordMeteorite(125F, 0, MainRegistry.matMeteorite, "meteorite_sword_bred");
-	public static final Item meteorite_sword_irradiated = new ItemSwordMeteorite(175F, 0, MainRegistry.matMeteorite, "meteorite_sword_irradiated");
-	public static final Item meteorite_sword_fused = new ItemSwordMeteorite(250F, 0, MainRegistry.matMeteorite, "meteorite_sword_fused");
-	public static final Item meteorite_sword_baleful = new ItemSwordMeteorite(500F, 0, MainRegistry.matMeteorite, "meteorite_sword_baleful");
+	public static final Item meteorite_sword = new ItemSwordMeteorite(9F, 0, MainRegistry.matMeteorite, "meteorite_sword");
+	public static final Item meteorite_sword_seared = new ItemSwordMeteorite(14F, 0, MainRegistry.matMeteorite, "meteorite_sword_seared");
+	public static final Item meteorite_sword_reforged = new ItemSwordMeteorite(24F, 0, MainRegistry.matMeteorite, "meteorite_sword_reforged");
+	public static final Item meteorite_sword_hardened = new ItemSwordMeteorite(34F, 0, MainRegistry.matMeteorite, "meteorite_sword_hardened");
+	public static final Item meteorite_sword_alloyed = new ItemSwordMeteorite(49F, 0, MainRegistry.matMeteorite, "meteorite_sword_alloyed");
+	public static final Item meteorite_sword_machined = new ItemSwordMeteorite(64F, 0, MainRegistry.matMeteorite, "meteorite_sword_machined");
+	public static final Item meteorite_sword_treated = new ItemSwordMeteorite(79F, 0, MainRegistry.matMeteorite, "meteorite_sword_treated");
+	public static final Item meteorite_sword_etched = new ItemSwordMeteorite(99F, 0, MainRegistry.matMeteorite, "meteorite_sword_etched");
+	public static final Item meteorite_sword_bred = new ItemSwordMeteorite(124F, 0, MainRegistry.matMeteorite, "meteorite_sword_bred");
+	public static final Item meteorite_sword_irradiated = new ItemSwordMeteorite(174F, 0, MainRegistry.matMeteorite, "meteorite_sword_irradiated");
+	public static final Item meteorite_sword_fused = new ItemSwordMeteorite(249F, 0, MainRegistry.matMeteorite, "meteorite_sword_fused");
+	public static final Item meteorite_sword_baleful = new ItemSwordMeteorite(499F, 0, MainRegistry.matMeteorite, "meteorite_sword_baleful");
+	public static final Item meteorite_sword_warped = new ItemSwordMeteorite(2999F, 0, MainRegistry.matMeteorite, "meteorite_sword_warped");
+	public static final Item meteorite_sword_demonic = new ItemSwordMeteorite(13665F, 0, MainRegistry.matMeteorite, "meteorite_sword_demonic");
 	
 	//Templates
 	public static final Item template_folder = new ItemTemplateFolder("template_folder").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
@@ -2725,11 +2727,11 @@ public class ModItems {
 			.setHeat(2D)
 			.setMeltingPoint(5211);
 	public static final ItemRBMKRod rbmk_fuel_unobtainium = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_unobtainium, "rbmk_fuel_unobtainium")
-			.setYield(25000000D)
-			.setStats(100)
-			.setFunction(EnumBurnFunc.LINEAR)
+			.setYield(250000000D)
+			.setStats(1000, 100)
+			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(0.01D)
-			.setDiffusion(0.5D)
+			.setDiffusion(0.2D)
 			.setMeltingPoint(6000)
 			.addRadiation(ItemHazard.unof * ItemHazard.rod_rbmk);
 	public static final ItemRBMKRod rbmk_fuel_po210be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_po210be, "rbmk_fuel_po210be")

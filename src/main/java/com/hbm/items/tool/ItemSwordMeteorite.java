@@ -78,6 +78,19 @@ public class ItemSwordMeteorite extends ItemSwordAbility {
     		list.add(TextFormatting.ITALIC + "This sword has met temperatures");
     		list.add(TextFormatting.ITALIC + "Far beyond what normal material can endure");
     	}
+
+    	if(this == ModItems.meteorite_sword_warped) {
+    		list.add(TextFormatting.ITALIC + "This sword experienced warping of reality");
+    		list.add(TextFormatting.ITALIC + "It was stretched to a length of 10^10^187 ly");
+    		list.add(TextFormatting.ITALIC + "and is now older than this universe");
+    	}
+
+    	if(this == ModItems.meteorite_sword_demonic) {
+    		list.add(TextFormatting.ITALIC + "This sword has met §fgod§7§o and the §4devil§r");
+    		list.add(TextFormatting.ITALIC + "It was transported to §4§kdemoniclove§7");
+    		list.add(TextFormatting.ITALIC + "and came in contact with §4§ktheevilandthegood§r");
+    		list.add("§0[Infohazard]§r");
+    	}
 	}
 
 }

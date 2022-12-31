@@ -54,12 +54,17 @@ book.msword.page16=§lMachine = Ore Acidizer§r
 book.msword.title17=Upgrade 8: Bred
 book.msword.page17=§lMachine = Breeding Reactor§r with heat 4
 book.msword.title18=Upgrade 9: Irradiated
-book.msword.page18=§lMachine = Small Nuclear Reactor§r
-book.msword.page19=Activate the reactor while fuelrods and sword are inside.
+book.msword.page18=§lMachine = RBMK Irradiation Channel§r
+book.msword.page19=Bombard the sword with immense amounts of radiation.
 book.msword.title20=Upgrade 10: Fused
-book.msword.page20=§lMachine = Fusion Reactor§r with any plasma
+book.msword.page20=§lMachine = Fusion Reactor§r with any plasma: Place the irradiated sword in the breeding slot.
 book.msword.title21=Upgrade 11: Baleful
-book.msword.page21=§lMachine = Fusion Reactor§r with Balefire Plasma
+book.msword.page21=§lMachine = Fusion Reactor§r with Balefire Plasma: Place the fused sword in the breeding slot.
+book.msword.title22=Upgrade 12: Warped
+book.msword.page22=§lMachine = S.A.F.E Reactor§r: Throwing a sword into a singularity reactor
+book.msword.page23=Once power generation has started and plasma is visible replace the core of the reactor with the baleful sword.
+book.msword.title24=Upgrade 13: Demonic
+book.msword.page24=§lMachine = DFC§r: §4REDACTED
 
 armor.blastProtection=Damage modifier of %s against explosions
 armor.cap=Hard damage cap of %s
@@ -3381,9 +3386,11 @@ item.meteorite_sword_machined.name=Meteorite Sword (Machined)
 item.meteorite_sword_treated.name=Meteorite Sword (Treated)
 item.meteorite_sword_etched.name=Meteorite Sword (Etched)
 item.meteorite_sword_bred.name=Meteorite Sword (Bred)
-item.meteorite_sword_irradiated.name=Meteorite Sword (Irradiated)
-item.meteorite_sword_fused.name=Meteorite Sword (Fused)
-item.meteorite_sword_baleful.name=Meteorite Sword (Baleful)
+item.meteorite_sword_irradiated.name=§eMeteorite Sword (Irradiated)
+item.meteorite_sword_fused.name=§dMeteorite Sword (Fused)
+item.meteorite_sword_baleful.name=§aMeteorite Sword (Baleful)
+item.meteorite_sword_warped.name=§fMeteorite Sword (Warped)
+item.meteorite_sword_demonic.name=§cMeteorite Sword (Demonic)
 
 item.pellet_mercury.name=Mercury Rounds
 item.pellet_meteorite.name=Meteorite Rounds

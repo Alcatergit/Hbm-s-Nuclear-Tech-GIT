@@ -89,7 +89,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			@Override
 			public boolean isItemValid(int i, ItemStack itemStack) {
 				if(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11)
-					if(itemStack.getItem() instanceof ItemFuelRod || itemStack.getItem() instanceof ItemSwordMeteorite)
+					if(itemStack.getItem() instanceof ItemFuelRod)
 						return true;
 				if(i == 12)
 					if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
@@ -237,8 +237,6 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 				for(int i = 0; i < 12; i++) {
 					if(inventory.getStackInSlot(i).getItem() instanceof ItemFuelRod)
 						decay(i);
-					else if(inventory.getStackInSlot(i).getItem() == ModItems.meteorite_sword_bred)
-						inventory.setStackInSlot(i, new ItemStack(ModItems.meteorite_sword_irradiated));
 				}
 
 			coreHeatMod = 1.0;

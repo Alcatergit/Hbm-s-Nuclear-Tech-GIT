@@ -262,13 +262,13 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		
 		switch(this.function) {
 		case PASSIVE: return TextFormatting.RED + "" + selfRate;
-		case LOG_TEN: return "log10(x + 1" + (selfRate > 0 ? (TextFormatting.RED + " + " + selfRate) : "") + TextFormatting.WHITE + ") * 0.5 * " + reactivity;
+		case LOG_TEN: return "log10(x + 1" + (selfRate > 0 ? (TextFormatting.RED + " + " + selfRate) : "") + TextFormatting.WHITE + ") * "+ 0.5F * reactivity;
 		case PLATEU: return "(1 - e^-" + x + " / 25)) * " + reactivity;
 		case ARCH: return "(" + x + " - " + x + "² / 100000) / 100 * " + reactivity + " [0;∞]";
 		case SIGMOID: return reactivity + " / (1 + e^(-(" + x + " - 50) / 10)";
-		case SQUARE_ROOT: return "sqrt(" + x + ") * " + reactivity + " / 10";
-		case LINEAR: return x + " / 100 * " + reactivity;
-		case QUADRATIC: return x + "² / 10000 * " + reactivity;
+		case SQUARE_ROOT: return "sqrt(" + x + ") * " + reactivity/10F;
+		case LINEAR: return x + " * " + reactivity/100F;
+		case QUADRATIC: return x + "² * " + reactivity/10000F;
 		}
 		
 		return "ERROR";

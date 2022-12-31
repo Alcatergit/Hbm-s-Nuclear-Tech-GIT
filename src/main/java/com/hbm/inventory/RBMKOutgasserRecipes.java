@@ -77,6 +77,7 @@ public class RBMKOutgasserRecipes {
 		RBMKOutgasserRecipes.setRecipe(64000, ModBlocks.sellafield_3, new ItemStack(ModBlocks.sellafield_4));
 		RBMKOutgasserRecipes.setRecipe(128000, ModBlocks.sellafield_4, new ItemStack(ModBlocks.sellafield_core));
 		RBMKOutgasserRecipes.setRecipe(7800000, ModBlocks.block_corium_cobble, new ItemStack(ModBlocks.block_corium));
+		RBMKOutgasserRecipes.setRecipe(1000000, ModItems.meteorite_sword_bred, new ItemStack(ModItems.meteorite_sword_irradiated));
 	}
 
 	public static void setRecipe(int requiredFlux, ItemStack in, ItemStack out) {

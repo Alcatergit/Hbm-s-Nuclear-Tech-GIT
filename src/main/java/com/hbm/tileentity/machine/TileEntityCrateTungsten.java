@@ -8,6 +8,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.inventory.DFCRecipes;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -89,9 +90,11 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 				continue;
 			
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
-			
-			if(inventory.getStackInSlot(i).getItem() == ModItems.billet_polonium && energy > 10000000)
-				result = new ItemStack(ModItems.billet_yharonite);
+
+			int requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
+			if(requiredEnergy > -1 && energy > requiredEnergy){
+				result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
+			}
 			
 			if(inventory.getStackInSlot(i).getItem() == ModItems.crucible && ItemCrucible.getCharges(inventory.getStackInSlot(i)) < 3 && energy > 10000000)
 				ItemCrucible.charge(inventory.getStackInSlot(i));

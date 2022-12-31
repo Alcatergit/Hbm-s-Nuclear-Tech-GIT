@@ -20,6 +20,7 @@ import com.hbm.world.FWatz;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -134,6 +135,10 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 			if(age == 9 || age == 19)
 				ffgeuaInit();
+
+			if(inventory.getStackInSlot(2).getItem() == ModItems.meteorite_sword_baleful && this.isRunning()){
+				inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
+			}
 
 			if(hasFuse() && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore) {
 				ItemFWatzCore itemCore = (ItemFWatzCore)inventory.getStackInSlot(2).getItem();
