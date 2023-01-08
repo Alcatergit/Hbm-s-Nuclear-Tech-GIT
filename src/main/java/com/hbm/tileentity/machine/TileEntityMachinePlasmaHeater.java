@@ -44,7 +44,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 	public Fluid plasmaType = ModForgeFluids.plasma_dt;
 	
 	public TileEntityMachinePlasmaHeater() {
-		super(5);
+		super(1);
 		tanks = new FluidTank[2];
 		tanks[0] = new FluidTank(16000);
 		tanks[1] = new FluidTank(16000);

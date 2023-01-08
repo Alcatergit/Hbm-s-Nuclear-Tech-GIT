@@ -91,7 +91,7 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
 
-			int requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
+			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
 			if(requiredEnergy > -1 && energy > requiredEnergy){
 				result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
 			}

@@ -23,9 +23,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
-	public static final long maxPower = 2500000000L;
+	public static final long maxPower = 5000000000L;
 	public int watts;
 	public int beam;
+	public boolean isOn;
 	
 	public static final int range = 15;
 	
@@ -40,11 +41,17 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 			
 			watts = MathHelper.clamp(watts, 1, 100);
 			int demand = (int) Math.pow(watts, 4);
+			isOn = false;
 
 			beam = 0;
-			
-			if(power >= demand && inventory.getStackInSlot(0).getItem() == ModItems.ams_lens && ItemLens.getLensDamage(inventory.getStackInSlot(0)) < ((ItemLens)ModItems.ams_lens).maxDamage) {
-				
+
+			ItemLens lens = null;
+			if(inventory.getStackInSlot(0).getItem() instanceof ItemLens){
+				lens = (ItemLens) inventory.getStackInSlot(0).getItem();
+			}
+
+			if(power >= demand && lens != null) {
+				isOn = true;
 				EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
 				for(int i = 1; i <= range; i++) {
 	
@@ -58,31 +65,28 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 					if(te instanceof TileEntityCore) {
 						
 						TileEntityCore core = (TileEntityCore)te;
-						core.field = watts;
-						this.power -= demand;
+						core.field = core.field + (int)(watts * lens.fieldMod);
+						this.power -= (int)(demand * lens.drainMod);
 						beam = i;
 						
 						long dmg = ItemLens.getLensDamage(inventory.getStackInSlot(0));
 						dmg += watts;
 						
-						if(dmg >= ((ItemLens)ModItems.ams_lens).maxDamage)
+						if(dmg >= lens.maxDamage)
 							inventory.setStackInSlot(0, ItemStack.EMPTY);
 						else
 							ItemLens.setLensDamage(inventory.getStackInSlot(0), dmg);
 						
 						break;
 					}
+
+					if(te instanceof TileEntityCoreStabilizer)
+						continue;
 					
 					if(world.getBlockState(pos1).getBlock() != Blocks.AIR)
 						break;
 				}
 			}
-
-			/*NBTTagCompound data = new NBTTagCompound();
-			data.setLong("power", power);
-			data.setInteger("watts", watts);
-			data.setInteger("beam", beam);
-			this.networkPack(data, 250);*/
 			
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, beam, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
 		}
@@ -92,6 +96,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 	public void networkUnpack(NBTTagCompound data) {
 		power = data.getLong("power");
 		watts = data.getInteger("watts");
+		isOn = data.getBoolean("isOn");
 	}
 	
 	@Override
@@ -138,6 +143,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("power");
 		watts = compound.getInteger("watts");
+		isOn = compound.getBoolean("isOn");
 		super.readFromNBT(compound);
 	}
 	
@@ -145,6 +151,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", power);
 		compound.setInteger("watts", watts);
+		compound.setBoolean("isOn", isOn);
 		return super.writeToNBT(compound);
 	}
 }

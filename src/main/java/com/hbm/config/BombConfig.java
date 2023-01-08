@@ -24,7 +24,9 @@ public class BombConfig {
 	public static int blastSpeed = 1024;
 	public static int falloutRange = 100;
 	public static int fChunkSpeed = 6;
-	public static int oceanHeight = 62;
+	public static boolean evaporateWater = true;
+	public static boolean fillCraterWithWater = true;
+	public static int oceanHeight = 0;
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear;
 	
@@ -93,10 +95,6 @@ public class BombConfig {
 		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 6);
 		falloutChunkSpeed.setComment("Process a Chunk every nth tick by the fallout rain");
 		fChunkSpeed = falloutChunkSpeed.getInt();
-		//Whether fallout and nuclear radiation is enabled at all
-		Property waterHeight = config.get(CATEGORY_NUKE, "6.05_nukeWaterHeight", 62);
-		waterHeight.setComment("The water height that the nuke fills the crater with if in wet area. Should be ocean height.");
-		oceanHeight = waterHeight.getInt();
 		//Whether fallout and nuclear radiation is enabled at all
 		Property disableNuclearP = config.get(CATEGORY_NUKE, "6.06_disableNuclear", false);
 		disableNuclearP.setComment("Disable the nuclear part of nukes");

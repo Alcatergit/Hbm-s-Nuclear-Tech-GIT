@@ -245,6 +245,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.ingot_sr90, new ItemStack(ModItems.powder_sr90, 1));
 		ShredderRecipes.setRecipe(ModItems.ingot_ra226, new ItemStack(ModItems.powder_ra226, 1));
 		ShredderRecipes.setRecipe(ModItems.ingot_pb209, new ItemStack(ModItems.powder_pb209, 1));
+		ShredderRecipes.setRecipe(ModItems.ingot_astatine, new ItemStack(ModItems.powder_astatine, 1));
 
 		ShredderRecipes.setRecipe(ModItems.ingot_tennessine, new ItemStack(ModItems.powder_tennessine, 1));
 		ShredderRecipes.setRecipe(ModItems.ingot_bromine, new ItemStack(ModItems.powder_bromine, 1));

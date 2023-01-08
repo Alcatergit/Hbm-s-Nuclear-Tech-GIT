@@ -21,20 +21,20 @@ public class GUICore extends GuiInfoContainer {
 		core = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 166;
+		this.ySize = 204;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 17, 16, 52, core.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 17, 16, 52, core.tanks[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 7, 16, 78, core.tanks[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 7, 16, 78, core.tanks[1]);
 
-		String[] text = new String[] { "Restriction Field: " + core.field + "%" };
-		String[] text1 = new String[] { "Heat Saturation: " + core.heat + "%" };
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 8, guiTop + 17, 16, 52, mouseX, mouseY, text);
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 152, guiTop + 17, 16, 52, mouseX, mouseY, text1);
+		String[] heat = new String[] { "Heat Saturation: " + core.heat + "%" };
+		String[] field = new String[] { "Restriction Field: " + core.field + "%" };
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 53, guiTop + 97, 70, 4, mouseX, mouseY, heat);
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 53, guiTop + 101, 70, 4, mouseX, mouseY, field);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -42,7 +42,7 @@ public class GUICore extends GuiInfoContainer {
 	protected void drawGuiContainerForegroundLayer( int i, int j) {
 		
 		String name = this.core.hasCustomInventoryName() ? this.core.getInventoryName() : I18n.format(this.core.getInventoryName()).trim();
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+		this.fontRenderer.drawString(name, this.xSize - 8 - this.fontRenderer.getStringWidth(name), this.ySize - 96 + 2, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 	
@@ -53,13 +53,20 @@ public class GUICore extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		int i = core.getFieldScaled(52);
-		drawTexturedModalRect(guiLeft + 8, guiTop + 69 - i, 176, 52 - i, 16, i);
+		int i = core.getHeatScaled(70);
+		if(i > 70)
+			i = 70;
+		drawTexturedModalRect(guiLeft + 53, guiTop + 98, 0, 204, i, 4);
 		
-		int j = core.getHeatScaled(52);
-		drawTexturedModalRect(guiLeft + 152, guiTop + 69 - j, 192, 52 - j, 16, j);
+		int j = core.getFieldScaled(70);
+		if(j > 70)
+			j = 70;
+		drawTexturedModalRect(guiLeft + 53, guiTop + 102, 0, 208, j, 4);
 
-		FFUtils.drawLiquid(core.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 26, 97);
-		FFUtils.drawLiquid(core.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 134, 97);
+		if(core.hasCore)
+			drawTexturedModalRect(guiLeft + 70, guiTop + 29, 220, 0, 36, 36);
+
+		FFUtils.drawLiquid(core.tanks[0], guiLeft, guiTop, zLevel, 16, 78, 8, 114);
+		FFUtils.drawLiquid(core.tanks[1], guiLeft, guiTop, zLevel, 16, 78, 152, 114);
 	}
 }

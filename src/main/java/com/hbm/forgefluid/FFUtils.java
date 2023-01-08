@@ -742,6 +742,7 @@ public class FFUtils {
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
 	}
 
+
 	public static void setColorFromFluid(Fluid f){
 		if(f == null)
 			return;

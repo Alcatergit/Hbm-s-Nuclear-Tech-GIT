@@ -28,8 +28,8 @@ public class GUICoreInjector extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 17, 16, 52, injector.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 17, 16, 52, injector.tanks[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 16, 16, 52, injector.tanks[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 125, guiTop + 16, 16, 52, injector.tanks[1]);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -48,7 +48,7 @@ public class GUICoreInjector extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		FFUtils.drawLiquid(injector.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 44, 97);
-		FFUtils.drawLiquid(injector.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 116, 97);
+		FFUtils.drawLiquid(injector.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 35, 97);
+		FFUtils.drawLiquid(injector.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 125, 97);
 	}
 }

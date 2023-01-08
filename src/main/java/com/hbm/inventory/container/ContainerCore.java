@@ -17,18 +17,18 @@ public class ContainerCore extends Container {
 
 		nukeBoy = tedf;
 
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 62, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 98, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 7));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 39));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 71));
 
 		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 9; j++) {
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 122 + i * 18));
 			}
 		}
 
 		for(int i = 0; i < 9; i++) {
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 180));
 		}
 	}
 

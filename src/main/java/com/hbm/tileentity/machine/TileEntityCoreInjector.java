@@ -33,8 +33,8 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 	public TileEntityCoreInjector() {
 		super(0);
 		tanks = new FluidTank[2];
-		tanks[0] = new FluidTank(128000);
-		tanks[1] = new FluidTank(128000);
+		tanks[0] = new FluidTank(2560000);
+		tanks[1] = new FluidTank(2560000);
 	}
 
 	@Override

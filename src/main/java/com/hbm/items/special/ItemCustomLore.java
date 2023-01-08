@@ -366,6 +366,7 @@ public class ItemCustomLore extends Item {
 	public EnumRarity getRarity(ItemStack stack) {
 		if(this == ModItems.plate_euphemium || 
 			this == ModItems.ingot_euphemium || 
+			this == ModItems.ingot_astatine || 
 			this == ModItems.ingot_iodine || 
 			this == ModItems.ingot_i131 || 
 			this == ModItems.ingot_strontium || 

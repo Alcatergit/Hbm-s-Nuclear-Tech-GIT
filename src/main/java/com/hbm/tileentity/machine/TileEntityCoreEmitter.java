@@ -37,7 +37,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 
 	public long power;
 	public static final long maxPower = 1000000000L;
-	public int watts;
+	public int watts = 1;
 	public int beam;
 	public long joules;
 	public boolean isOn;
@@ -153,15 +153,6 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 			}
 			
 			this.markDirty();
-
-			//PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			//Drillgon200: I'm handling this in the container because efficiency.
-			/*NBTTagCompound data = new NBTTagCompound();
-			data.setLong("power", power);
-			data.setInteger("watts", watts);
-			data.setLong("prev", prev);
-			data.setInteger("beam", beam);
-			data.setBoolean("isOn", isOn);*/
 			
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, beam, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
 			

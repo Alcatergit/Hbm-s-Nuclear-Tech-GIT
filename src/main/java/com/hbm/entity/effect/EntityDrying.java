@@ -2,8 +2,9 @@ package com.hbm.entity.effect;
 
 import java.util.*;
 
-import com.hbm.config.RadiationConfig;
 import com.hbm.config.BombConfig;
+import com.hbm.config.RadiationConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
@@ -164,6 +165,12 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 		}
 	}
 
+	private static int getInt(Object e){
+		if(e == null)
+			return 0;
+		return (int)e;
+	}
+
 	private void dry(MutableBlockPos pos) {
 		if(dryingmode){
 			for(int y = 255; y > 1; y--) {
@@ -176,13 +183,16 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 				}
 			}
 		} else {
-			for(int y = BombConfig.oceanHeight; y > 1; y--) {
-				pos.setY(y);
-				if(world.isAirBlock(pos)){
-					world.setBlockState(pos, Blocks.WATER.getDefaultState());
-				} else if(world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER){
-					world.setBlockState(pos, Blocks.WATER.getDefaultState());
-				} 
+			int waterLevel = getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
+			if(CompatibilityConfig.doFillCraterWithWater && waterLevel > 0){
+				for(int y = waterLevel; y > 1; y--) {
+					pos.setY(y);
+					if(world.isAirBlock(pos)){
+						world.setBlockState(pos, Blocks.WATER.getDefaultState());
+					} else if(world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER){
+						world.setBlockState(pos, Blocks.WATER.getDefaultState());
+					} 
+				}
 			}
 		}
 	}

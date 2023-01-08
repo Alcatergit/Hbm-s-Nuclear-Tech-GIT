@@ -27,19 +27,19 @@ public class ContainerCoreStabilizer extends Container {
 			this.player = (EntityPlayerMP) player;
 		nukeBoy = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 47, 26));
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 88 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 146));
 		}
 	}
 	
@@ -54,6 +54,7 @@ public class ContainerCoreStabilizer extends Container {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setLong("power", nukeBoy.power);
 		data.setInteger("watts", nukeBoy.watts);
+		data.setBoolean("isOn", nukeBoy.isOn);
 		PacketDispatcher.sendTo(new NBTPacket(data, nukeBoy.getPos()), player);
 		super.detectAndSendChanges();
 	}

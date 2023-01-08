@@ -95,6 +95,11 @@ public class CompatibilityConfig {
 
 	public static boolean modLoot = true;
 
+	public static boolean doEvaporateWater = true;
+	public static HashSet evaporateWater;
+	public static boolean doFillCraterWithWater = true;
+	public static HashMap fillCraterWithWater;
+
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_DIMRAD = "01_dimension_radiation";
@@ -103,6 +108,7 @@ public class CompatibilityConfig {
 		final String CATEGORY_DUNGEON = "04_dimension_dungeons";
 		final String CATEGORY_METEOR = "05_dimension_meteors";
 		final String CATEGORY_MOB = "06_mobs";
+		final String CATEGORY_NUKES = "07_nukes";
 
 		String dimRadComment = "Amount of background radiation in the dimension in Rad/s - <dimID:Rad> (Int:Float)";
 		dimensionRad = CommonConfig.createConfigHashMap(config, CATEGORY_DIMRAD, "01.01_dimensionRadiation", dimRadComment, "Int", "Float", new String[]{ "0:0.0", "-1:0.666", "1:0.001", "-28:0.245", "-27:0.0288", "-26:0.0288", "-29:0.0212", "-30:10", "-31:0.1" }, ":");
@@ -198,5 +204,11 @@ public class CompatibilityConfig {
 	
 		mobGear = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.05_mobGear", "If true then mobs will be given gear (armor/weapons/gasmasks) from this mod when spawned", true);
 		modLoot = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.06_modLoot", "If true then this mod will generarte loot for chests", true);
+	
+
+		doEvaporateWater =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.01_doEvaporateWater", "If true then nukes will evaporate water in range if it is in a wet place. It creates a short lagg spike instead of long medium lagg.", true);
+		evaporateWater = CommonConfig.createConfigHashSet(config, CATEGORY_NUKES, "07.02_evaporateWater", "List of dimIDs where nukes evaporate water in range. - <dimID> (Int)", "Int", new String[]{ "0" });
+		doFillCraterWithWater =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.04_doFillCraterWithWater", "If true then nukes will fill the crater with water if it is in a wet place. It creates a bit of lagg but looks better than without it.", true);
+		fillCraterWithWater = CommonConfig.createConfigHashMap(config, CATEGORY_NUKES, "07.04_fillCraterWithWater", "Waterlevel per dimension which the nuke uses to fill the crater", "Int", "Int", new String[]{ "0:62" }, ":");
 	}
 }

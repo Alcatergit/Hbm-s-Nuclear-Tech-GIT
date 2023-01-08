@@ -51,7 +51,6 @@ public class ToxicBlock extends BlockFluidClassic {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.setInWeb();
-		entityIn.setFire(2);
 		
 		if(entityIn instanceof EntityLivingBase)
 			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 50.0F);

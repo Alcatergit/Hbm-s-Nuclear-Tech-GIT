@@ -40,6 +40,7 @@ public class MachineRecipes {
 			add(ModItems.stamp_titanium_flat);
 			add(ModItems.stamp_obsidian_flat);
 			add(ModItems.stamp_schrabidium_flat);
+			add(ModItems.stamp_desh_flat);
 		}
 	};
 
@@ -56,6 +57,7 @@ public class MachineRecipes {
 			add(ModItems.stamp_titanium_plate);
 			add(ModItems.stamp_obsidian_plate);
 			add(ModItems.stamp_schrabidium_plate);
+			add(ModItems.stamp_desh_plate);
 		}
 	};
 
@@ -72,6 +74,7 @@ public class MachineRecipes {
 			add(ModItems.stamp_titanium_wire);
 			add(ModItems.stamp_obsidian_wire);
 			add(ModItems.stamp_schrabidium_wire);
+			add(ModItems.stamp_desh_wire);
 		}
 	};
 
@@ -88,6 +91,7 @@ public class MachineRecipes {
 			add(ModItems.stamp_titanium_circuit);
 			add(ModItems.stamp_obsidian_circuit);
 			add(ModItems.stamp_schrabidium_circuit);
+			add(ModItems.stamp_desh_circuit);
 		}
 	};
 	
@@ -182,7 +186,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.circuit_tantalium);
 		}
 
-		if (stamp.getItem() == ModItems.stamp_357) {
+		if (stamp.getItem() == ModItems.stamp_357 || stamp.getItem() == ModItems.stamp_desh_357) {
 
 			if (input.getItem() == ModItems.assembly_iron)
 				return new ItemStack(ModItems.gun_revolver_iron_ammo);
@@ -203,13 +207,13 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.gun_revolver_cursed_ammo);
 		}
 
-		if (stamp.getItem() == ModItems.stamp_44) {
+		if (stamp.getItem() == ModItems.stamp_44 || stamp.getItem() == ModItems.stamp_desh_44) {
 
 			if (input.getItem() == ModItems.assembly_nopip)
 				return new ItemStack(ModItems.ammo_44);
 		}
 
-		if (stamp.getItem() == ModItems.stamp_9) {
+		if (stamp.getItem() == ModItems.stamp_9 || stamp.getItem() == ModItems.stamp_desh_9) {
 
 			if (input.getItem() == ModItems.assembly_smg)
 				return new ItemStack(ModItems.ammo_9mm);
@@ -223,7 +227,7 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.ammo_556);
 		}
 
-		if (stamp.getItem() == ModItems.stamp_50) {
+		if (stamp.getItem() == ModItems.stamp_50 || stamp.getItem() == ModItems.stamp_desh_50) {
 
 			if (input.getItem() == ModItems.assembly_calamity)
 				return new ItemStack(ModItems.ammo_50bmg);

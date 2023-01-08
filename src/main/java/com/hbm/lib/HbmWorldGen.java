@@ -342,7 +342,8 @@ public class HbmWorldGen implements IWorldGenerator {
 			generateAStructure(world, rand, i, j, new Silo(), parseInt(CompatibilityConfig.siloStructure.get(dimID)));
 			generateAStructure(world, rand, i, j, new Factory(), parseInt(CompatibilityConfig.factoryStructure.get(dimID)));
 			generateAStructure(world, rand, i, j, new Dud(), parseInt(CompatibilityConfig.dudStructure.get(dimID)));
-			generateSellafieldPool(world, rand, i, j, dimID);
+			if(biome.getTempCategory() == Biome.TempCategory.WARM)
+				generateSellafieldPool(world, rand, i, j, dimID);
 			generateSellafieldBlocks(world, rand, i, j, dimID);
 			
 			if (GeneralConfig.enableMines){
@@ -551,7 +552,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			
-			if(biome.isHighHumidity() || biome.getTempCategory() == Biome.TempCategory.WARM){
+			if(biome.isHighHumidity() && biome.getTempCategory() == Biome.TempCategory.WARM){
 				int dimJungleStructure = parseInt(CompatibilityConfig.jungleStructure.get(dimID));
 				if(dimJungleStructure > 0 && rand.nextInt(dimJungleStructure) == 0) {
 					int x = i + rand.nextInt(16);

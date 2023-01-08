@@ -29,13 +29,15 @@ public class GUICoreEmitter extends GuiInfoContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/dfc/gui_emitter.png");
 	private TileEntityCoreEmitter emitter;
     private GuiTextField field;
+
+    protected short saveButtonCoolDown = 0;
 	
 	public GUICoreEmitter(EntityPlayer invPlayer, TileEntityCoreEmitter tedf) {
 		super(new ContainerCoreEmitter(invPlayer, tedf));
 		emitter = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 166;
+		this.ySize = 170;
 	}
 	
 	public void initGui() {
@@ -43,9 +45,9 @@ public class GUICoreEmitter extends GuiInfoContainer {
 		super.initGui();
 
         Keyboard.enableRepeatEvents(true);
-        this.field = new GuiTextField(0, this.fontRenderer, guiLeft + 57, guiTop + 57, 29, 12);
-        this.field.setTextColor(-1);
-        this.field.setDisabledTextColour(-1);
+        this.field = new GuiTextField(0, this.fontRenderer, guiLeft + 88, guiTop + 62, 24, 10);
+        this.field.setTextColor(0x5BBC00);
+        this.field.setDisabledTextColour(0x499500);
         this.field.setEnableBackgroundDrawing(false);
         this.field.setMaxStringLength(3);
         this.field.setText(String.valueOf(emitter.watts));
@@ -59,8 +61,11 @@ public class GUICoreEmitter extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 17, 16, 52, emitter.tank, ModForgeFluids.cryogel);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 17, 16, 52, emitter.power, TileEntityCoreEmitter.maxPower);
+		String[] output = new String[] { "Output: " + Library.getShortNumber(emitter.prev) + "SPK/t" };
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 14, 8, 39, mouseX, mouseY, output);
+
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 13, guiTop + 20, 16, 52, emitter.tank, ModForgeFluids.cryogel);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 49, guiTop + 20, 16, 52, emitter.power, TileEntityCoreEmitter.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -68,17 +73,18 @@ public class GUICoreEmitter extends GuiInfoContainer {
     	super.mouseClicked(x, y, i);
         this.field.mouseClicked(x, y, i);
 
-    	if(guiLeft + 97 <= x && guiLeft + 97 + 18 > x && guiTop + 52 < y && guiTop + 52 + 18 >= y) {
+    	if(guiLeft + 124 <= x && guiLeft + 124 + 18 > x && guiTop + 56 < y && guiTop + 56 + 18 >= y) {
     		
-    		if(NumberUtils.isCreatable(field.getText())) {
+    		if(saveButtonCoolDown == 0 && NumberUtils.isCreatable(field.getText())) {
     			int j = MathHelper.clamp(Integer.parseInt(field.getText()), 1, 100);
     			field.setText(j + "");
 				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 	    		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(emitter.getPos(), j, 0));
+	    		saveButtonCoolDown = 20;
     		}
     	}
 
-    	if(guiLeft + 133 <= x && guiLeft + 133 + 18 > x && guiTop + 52 < y && guiTop + 52 + 18 >= y) {
+    	if(guiLeft + 151 <= x && guiLeft + 151 + 18 > x && guiTop + 56 < y && guiTop + 56 + 18 >= y) {
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(emitter.getPos(), 0, 1));
     	}
@@ -89,9 +95,8 @@ public class GUICoreEmitter extends GuiInfoContainer {
 		String name = I18n.format(this.emitter.getInventoryName());
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		
-		this.fontRenderer.drawString("Output: " + Library.getShortNumber(emitter.prev) + "Spk", 50, 30, 0xFF7F7F);
-		
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		String inventory = I18n.format("container.inventory");
+		this.fontRenderer.drawString(inventory, this.xSize - 8 - this.fontRenderer.getStringWidth(inventory), this.ySize - 96 + 2, 4210752);
 	}
 	
 	@Override
@@ -102,19 +107,29 @@ public class GUICoreEmitter extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		if(field.isFocused())
-			drawTexturedModalRect(guiLeft + 53, guiTop + 53, 210, 4, 34, 16);
+			drawTexturedModalRect(guiLeft + 81, guiTop + 58, 210, 0, 32, 14);
 
-		if(emitter.isOn)
-			drawTexturedModalRect(guiLeft + 133, guiTop + 52, 192, 0, 18, 18);
+		if(emitter.isOn){
+			drawTexturedModalRect(guiLeft + 151, guiTop + 56, 192, 0, 18, 18);
+		}
 
-		drawTexturedModalRect(guiLeft + 53, guiTop + 45, 210, 0, emitter.watts * 34 / 100, 4);
+		int emitterWatts = emitter.getWattsScaled(35);
+		drawTexturedModalRect(guiLeft + 81, guiTop + 52 - emitterWatts, 176, 87 - emitterWatts, 4, emitterWatts);
 		
 		int i = (int) emitter.getPowerScaled(52);
-		drawTexturedModalRect(guiLeft + 26, guiTop + 69 - i, 176, 52 - i, 16, i);
+		drawTexturedModalRect(guiLeft + 49, guiTop + 73 - i, 176, 52 - i, 16, i);
+
+		if(emitter.isOn && emitter.power > 500000)
+			drawTexturedModalRect(guiLeft + 149, guiTop + 33, 176, 87, 80, 3);
+
+		if(saveButtonCoolDown > 0){
+            drawTexturedModalRect(guiLeft + 124, guiTop + 56, 192, 18, 18, 18);
+            saveButtonCoolDown--;
+        }
 		
         this.field.drawTextBox();
 
-        FFUtils.drawLiquid(emitter.tank, guiLeft, guiTop, zLevel, 16, 52, 8, 97);
+        FFUtils.drawLiquid(emitter.tank, guiLeft, guiTop, zLevel, 16, 52, 13, 101);
 	}
 	
     protected void keyTyped(char p_73869_1_, int p_73869_2_) throws IOException
