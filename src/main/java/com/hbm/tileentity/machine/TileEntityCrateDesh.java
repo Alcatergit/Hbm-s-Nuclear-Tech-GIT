@@ -104,7 +104,7 @@ public class TileEntityCrateDesh extends TileEntityLockableBase implements ITick
 			
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
 			
-			int requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
+			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
 			if(requiredEnergy > -1 && energy > requiredEnergy){
 				result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
 			}

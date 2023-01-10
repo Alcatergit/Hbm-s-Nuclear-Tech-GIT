@@ -19,10 +19,6 @@ public class ContainerPlasmaHeater extends Container {
 		microwave = tedf;
 
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 44, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 44, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 152, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 152, 53));
 
 		for(int i = 0; i < 3; i++)
 		{

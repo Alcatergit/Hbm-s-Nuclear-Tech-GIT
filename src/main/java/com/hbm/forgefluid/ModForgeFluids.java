@@ -27,12 +27,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class ModForgeFluids {
-
+	
+	public static Fluid spentsteam = new Fluid("spentsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"), null, Color.WHITE).setTemperature(40 + 273);
 	public static Fluid steam = new Fluid("steam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"), null, Color.WHITE).setTemperature(100 + 273);
 	public static Fluid hotsteam = new Fluid("hotsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotsteam_flowing"), null, Color.WHITE).setTemperature(300 + 273);
 	public static Fluid superhotsteam = new Fluid("superhotsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/superhotsteam_flowing"), null, Color.WHITE).setTemperature(450 + 273);
 	public static Fluid ultrahotsteam = new Fluid("ultrahotsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ultrahotsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ultrahotsteam_flowing"), Color.WHITE).setTemperature(600 + 273);
-	public static Fluid spentsteam = new Fluid("spentsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"), null, Color.WHITE).setTemperature(40 + 273);
 	public static Fluid coolant = new Fluid("coolant", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_flowing"), null, Color.WHITE).setTemperature(203);
 
 	public static Fluid deuterium = new Fluid("deuterium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_flowing"), null, Color.WHITE);
@@ -106,6 +106,8 @@ public class ModForgeFluids {
 	public static Fluid volcanic_lava_fluid = new VolcanicFluid().setLuminosity(15).setDensity(3000).setViscosity(3000).setTemperature(1300);
 	
 	public static void init() {
+		if(!FluidRegistry.registerFluid(spentsteam))
+			spentsteam = FluidRegistry.getFluid("spentsteam");
 		if(!FluidRegistry.registerFluid(steam))
 			steam = FluidRegistry.getFluid("steam");
 		if(!FluidRegistry.registerFluid(hotsteam))
@@ -219,13 +221,11 @@ public class ModForgeFluids {
 			wastegas = FluidRegistry.getFluid("wastegas");
 		if(!FluidRegistry.registerFluid(gasoline))
 			gasoline = FluidRegistry.getFluid("gasoline");
-		if(!FluidRegistry.registerFluid(spentsteam))
-			spentsteam = FluidRegistry.getFluid("spentsteam");
-
+		
 		if(!FluidRegistry.registerFluid(toxic_fluid))
 			toxic_fluid = FluidRegistry.getFluid("toxic_fluid");
 		if(!FluidRegistry.registerFluid(radwater_fluid))
-			toxic_fluid = FluidRegistry.getFluid("radwater_fluid");
+			radwater_fluid = FluidRegistry.getFluid("radwater_fluid");
 		if(!FluidRegistry.registerFluid(mud_fluid))
 			mud_fluid = FluidRegistry.getFluid("mud_fluid");
 		if(!FluidRegistry.registerFluid(schrabidic))
@@ -260,6 +260,7 @@ public class ModForgeFluids {
 	//been searching for an hour now and I have found no way to make your own custom mod container.
 	//Would it have killed them to add a simple event there?!?
 	public static void setFromRegistry() {
+		spentsteam = FluidRegistry.getFluid("spentsteam");
 		steam = FluidRegistry.getFluid("steam");
 		hotsteam = FluidRegistry.getFluid("hotsteam");
 		superhotsteam = FluidRegistry.getFluid("superhotsteam");
@@ -325,7 +326,7 @@ public class ModForgeFluids {
 		wastefluid = FluidRegistry.getFluid("wastefluid");
 		wastegas = FluidRegistry.getFluid("wastegas");
 		gasoline = FluidRegistry.getFluid("gasoline");
-		spentsteam = FluidRegistry.getFluid("spentsteam");
+		
 
 		toxic_fluid = FluidRegistry.getFluid("toxic_fluid");
 		radwater_fluid = FluidRegistry.getFluid("radwater_fluid");

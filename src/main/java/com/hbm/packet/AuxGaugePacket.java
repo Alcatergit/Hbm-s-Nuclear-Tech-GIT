@@ -256,6 +256,8 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityCoreEmitter) {
 						if(m.id == 0)
 							((TileEntityCoreEmitter) te).beam = m.value;
+						if(m.id == 1)
+							((TileEntityCoreEmitter) te).watts = m.value;
 					} else if(te instanceof TileEntityCoreInjector) {
 						if(m.id == 0)
 							((TileEntityCoreInjector) te).beam = m.value;
@@ -268,9 +270,6 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityConverterHeRf){
 						if(m.id == 0)
 							((TileEntityConverterHeRf) te).storage.setEnergyStored(m.value);
-					} else if(te instanceof TileEntityCoreEmitter){
-						if(m.id == 0)
-							((TileEntityCoreEmitter) te).watts = m.value;
 					} else if(te instanceof TileEntityMachineGenerator){
 						if(m.id == 0)
 							((TileEntityMachineGenerator) te).heat = m.value;

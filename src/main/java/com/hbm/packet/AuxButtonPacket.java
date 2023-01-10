@@ -261,13 +261,7 @@ public class AuxButtonPacket implements IMessage {
 							core.watts = m.value;
 						}
 					}
-					if (te instanceof TileEntityCoreStabilizer) {
-						TileEntityCoreStabilizer core = (TileEntityCoreStabilizer)te;
-
-						if(m.id == 0) {
-							core.watts = m.value;
-						}
-					}
+					
 					if (te instanceof TileEntitySoyuzLauncher) {
 						TileEntitySoyuzLauncher launcher = (TileEntitySoyuzLauncher)te;
 

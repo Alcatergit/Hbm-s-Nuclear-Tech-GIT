@@ -20,7 +20,7 @@ fluid.plasma_put=Plutonium-Tritium Plasma
 
 book.msword.cover=Guide$on how get the$Meteorite Sword
 book.msword.title0=Description
-book.msword.page0=Page 1-7: How to get the Meteorite Sword. Page 8-22: How to upgrade your Meteorite Sword
+book.msword.page0=Page 1-8: How to get the Meteorite Sword. Page 9-25: How to upgrade your Meteorite Sword
 book.msword.title1=The Meteorite Block
 book.msword.page1=Meteorite Shards can be obtained by mining Meteorites which will rain down from time to time.
 book.msword.title2=The Meteorite Ingot
@@ -200,6 +200,8 @@ tile.block_niter_reinforced.name=Reinforced Niter
 
 tile.deco_rbmk.name=RBMK Deco
 tile.deco_rbmk_smooth=RBMK Smooth Deco
+
+item.ingot_astatine.name=Astatine Ingot
 
 item.ingot_radspice.name=Neoveline Ingot
 item.nugget_radspice.name=Neoveline Nugget
@@ -580,7 +582,7 @@ hbmfluid.naphtha=Naphtha
 hbmfluid.lightoil=Light Oil
 hbmfluid.petroleum=Petroleum Gas
 hbmfluid.acid=Hydrogen Peroxide
-hbmfluid.watz=Poisonous Mud
+hbmfluid.watz=Watz Fluid
 hbmfluid.biogas=Biogas
 hbmfluid.biofuel=Biofuel
 hbmfluid.sas3=Schrabidium Trisulfide
@@ -631,7 +633,7 @@ fluid.naphtha=Naphtha
 fluid.lightoil=Light Oil
 fluid.petroleum=Petroleum Gas
 fluid.acid=Hydrogen Peroxide
-fluid.watz=Poisonous Mud
+fluid.watz=Watz Fluid
 fluid.biogas=Biogas
 fluid.biofuel=Biofuel
 fluid.sas3=Schrabidium Trisulfide
@@ -3551,6 +3553,15 @@ item.stamp_44.name=.44 Magnum Stamp
 item.stamp_9.name=Small Caliber Stamp
 item.stamp_50.name=Large Caliber Stamp
 
+item.stamp_desh_flat.name=Flat Stamp (Desh)
+item.stamp_desh_plate.name=Plate Stamp (Desh)
+item.stamp_desh_wire.name=Wire Stamp (Desh)
+item.stamp_desh_circuit.name=Circuit Stamp (Desh)
+item.stamp_desh_357.name=.357 Magnum Stamp (Desh)
+item.stamp_desh_44.name=.44 Magnum Stamp (Desh)
+item.stamp_desh_9.name=Small Caliber Stamp (Desh)
+item.stamp_desh_50.name=Large Caliber Stamp (Desh)
+
 item.part_lithium.name=Box of Lithium Dust
 item.part_beryllium.name=Box of Beryllium Dust
 item.part_carbon.name=Box of Carbon Dust
@@ -3609,9 +3620,9 @@ item.ams_catalyst_tungsten.name=Tungsten Reaction Catalyst
 item.ams_catalyst_schrabidium.name=Schrabidium Reaction Catalyst
 item.ams_catalyst_dineutronium.name=Dineutronium Reaction Catalyst
 
-item.ams_focus_blank.name=Blank Stabilizer Focus
-item.ams_focus_limiter.name=Limiting Stabilizer Focus
-item.ams_focus_booster.name=Boosting Stabilizer Focus
+item.ams_focus_blank.name=Blank Stabilizer Lens
+item.ams_focus_limiter.name=Limiting Stabilizer Lens
+item.ams_focus_booster.name=Boosting Stabilizer Lens
 
 item.ams_muzzle.name=Ray-Emission Muzzle
 item.ams_lens.name=Stabilizer Lens

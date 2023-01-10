@@ -31,7 +31,7 @@ public class GUICoreReceiver extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 17, 16, 52, receiver.tank, ModForgeFluids.cryogel);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 16, 16, 52, receiver.tank, ModForgeFluids.cryogel);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -40,12 +40,15 @@ public class GUICoreReceiver extends GuiInfoContainer {
 		String name = this.receiver.hasCustomInventoryName() ? this.receiver.getInventoryName() : I18n.format(this.receiver.getInventoryName());
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 
-		this.fontRenderer.drawString("Input:", 40, 25, 0xFF7F7F);
-		this.fontRenderer.drawString(Library.getShortNumber(receiver.joules) + "Spk", 50, 35, 0xFF7F7F);
-		this.fontRenderer.drawString("Output:", 40, 45, 0xFF7F7F);
-		this.fontRenderer.drawString(Library.getShortNumber(receiver.joules * 5000) + "HE", 50, 55, 0xFF7F7F);
+		this.fontRenderer.drawString("Input:", 54, 22, 4210752);
+		String sparks = Library.getShortNumber(receiver.joules) + "SPK/t";
+		this.fontRenderer.drawString(sparks, 161-this.fontRenderer.getStringWidth(sparks), 22, 0x4EB3DB);
+		this.fontRenderer.drawString("Output:", 54, 58, 4210752);
+		String power = Library.getShortNumber(receiver.joules * 5000) + "HE/t";
+		this.fontRenderer.drawString(power, 161-this.fontRenderer.getStringWidth(power), 58, 0x4EB3DB);
 		
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		String inventory = I18n.format("container.inventory");
+		this.fontRenderer.drawString(inventory, this.xSize - 8 - this.fontRenderer.getStringWidth(inventory), this.ySize - 96 + 2, 4210752);
 	}
 	
 	@Override
@@ -55,6 +58,6 @@ public class GUICoreReceiver extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		FFUtils.drawLiquid(receiver.tank, guiLeft, guiTop, zLevel, 16, 52, 8, 97);
+		FFUtils.drawLiquid(receiver.tank, guiLeft, guiTop, zLevel, 16, 52, 17, 97);
 	}
 }

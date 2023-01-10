@@ -33,6 +33,9 @@ public class ItemStamp extends Item {
 				this == ModItems.stamp_schrabidium_circuit ||
 				this == ModItems.stamp_schrabidium_plate ||
 				this == ModItems.stamp_schrabidium_wire ||
+				this == ModItems.stamp_desh_circuit ||
+				this == ModItems.stamp_desh_plate ||
+				this == ModItems.stamp_desh_wire ||
 				this == ModItems.stamp_steel_circuit ||
 				this == ModItems.stamp_steel_plate ||
 				this == ModItems.stamp_steel_wire ||

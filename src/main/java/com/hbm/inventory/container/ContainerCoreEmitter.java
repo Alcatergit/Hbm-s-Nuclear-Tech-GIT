@@ -34,13 +34,13 @@ public class ContainerCoreEmitter extends Container {
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 88 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 146));
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class ContainerCoreEmitter extends Container {
 			power = (int) nukeBoy.power;
 		}
 		if(nukeBoy.watts != watts){
-			PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+			PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 1), player);
 			watts = nukeBoy.watts;
 		}
 		if(nukeBoy.prev != prev){

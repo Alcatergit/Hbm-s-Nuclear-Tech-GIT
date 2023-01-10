@@ -62,19 +62,19 @@ public class ItemCatalyst extends Item {
 	
 	public static float getPowerMod(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemCatalyst))
-			return 0;
+			return 1F;
 		return ((ItemCatalyst)stack.getItem()).powerMod;
 	}
 	
 	public static float getHeatMod(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemCatalyst))
-			return 0;
+			return 1F;
 		return ((ItemCatalyst)stack.getItem()).heatMod;
 	}
 	
 	public static float getFuelMod(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemCatalyst))
-			return 0;
+			return 1F;
 		return ((ItemCatalyst)stack.getItem()).fuelMod;
 	}
 }

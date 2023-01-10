@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Level;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityRainDrop;
@@ -125,7 +126,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		}
 		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.radius * 2);
 
-		if(dryingBomb == null){
+		if(CompatibilityConfig.doEvaporateWater && dryingBomb == null){
 			dryingBomb = new EntityDrying(this.world);
 			dryingBomb.posX = this.posX;
 			dryingBomb.posY = this.posY;
@@ -133,7 +134,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			dryingBomb.setScale(this.radius+16);
 			this.world.spawnEntity(dryingBomb);
 		}
-		if(dryingBomb.done){
+		if(!CompatibilityConfig.doEvaporateWater || (CompatibilityConfig.doEvaporateWater && dryingBomb.done)){
 
 			if(explosion == null) {
 
@@ -153,7 +154,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 					this.world.spawnEntity(falloutBall);
 				}
 				if(falloutBall.done){
-					if(floodPlease){
+					if(CompatibilityConfig.doFillCraterWithWater && floodPlease){
 						if(waterBomb == null){
 							waterBomb = new EntityDrying(this.world);
 							waterBomb.posX = this.posX;
@@ -186,7 +187,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 					}
 				}
 			} else {
-				if(floodPlease){
+				if(CompatibilityConfig.doFillCraterWithWater && floodPlease){
 					if(waterBomb == null){
 						waterBomb = new EntityDrying(this.world);
 						waterBomb.posX = this.posX;

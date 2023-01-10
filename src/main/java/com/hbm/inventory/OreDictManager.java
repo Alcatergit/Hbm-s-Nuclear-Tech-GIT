@@ -308,7 +308,7 @@ public class OreDictManager {
 		P_RED	.hot(2)																																	.dust(powder_fire)										.block(block_red_phosphorus);
 		S																																				.dust(sulfur)											.block(block_sulfur)							.crystal(crystal_sulfur)								.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur);
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
-		F																																				.dust(fluorite)											.block(block_fluorite)		.gem(lignite)		.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
+		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
 	
 		//Compounds
 		MINGRADE																											.ingot(ingot_red_copper)	.dust(powder_red_copper)								.block(block_red_copper);
@@ -361,7 +361,7 @@ public class OreDictManager {
 		I131	.rad(HazardRegistry.i131)	.hot(1F)																		.ingot(ingot_i131)			.dust(powder_i131)  	.dustSmall(powder_i131_tiny);
 		CS																													.ingot(ingot_caesium)		.dust(powder_caesium);
 		CS137	.rad(HazardRegistry.cs137)	.hot(3F)	.hydro(3F)																						.dust(powder_cs137)		.dustSmall(powder_cs137_tiny);
-		AT																																				.dust(powder_astatine);
+		AT																													.ingot(ingot_astatine)		.dust(powder_astatine);
 		AT209	.rad(HazardRegistry.at209)	.hot(20F)																									.dust(powder_at209);
 		XE135	.rad(HazardRegistry.xe135)	.hot(10F)																									.dust(powder_xe135)		.dustSmall(powder_xe135_tiny);
 		TS																													.ingot(ingot_tennessine)	.dust(powder_tennessine);
@@ -389,7 +389,7 @@ public class OreDictManager {
 		ANY_CONCRETE			.any(concrete, concrete_smooth, concrete_asbestos, ducrete, ducrete_smooth);
 
 		ANY_COKE																																																							.gem(fromAll(coke, EnumCokeType.class));
-		LIGNITE																																			.dust(powder_lignite)																																			.ore(ore_lignite);
+		LIGNITE																																			.dust(powder_lignite)																.gem(lignite)																.ore(ore_lignite);
 		//COALCOKE																																																							.gem(fromOne(coke, EnumCokeType.COAL));
 		//PETCOKE																																																							.gem(fromOne(coke, EnumCokeType.PETROLEUM));
 		LIGCOKE																																																								.gem(fromOne(coke, EnumCokeType.LIGNITE));

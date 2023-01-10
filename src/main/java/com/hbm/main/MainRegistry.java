@@ -25,6 +25,7 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.ToolConfig;
 import com.hbm.config.WeaponConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.WorldConfig;
 import com.hbm.creativetabs.ResourceTab;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
@@ -991,6 +992,7 @@ public class MainRegistry {
 		MobConfig.loadFromConfig(config);
 		config.save();
 		reloadCompatConfig();
+		WorldConfig.loadFromCompatibilityConfig();
 	}
 
 	public static void reloadCompatConfig() {

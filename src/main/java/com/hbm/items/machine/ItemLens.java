@@ -3,6 +3,7 @@ package com.hbm.items.machine;
 import java.util.List;
 
 import com.hbm.items.ModItems;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -13,11 +14,15 @@ import net.minecraft.world.World;
 public class ItemLens extends Item {
 
 	public long maxDamage;
+	public float drainMod;
+	public float fieldMod;
 	
-	public ItemLens(long maxDamage, String s) {
+	public ItemLens(long maxDamage, float fieldMod, float drainMod, String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.maxDamage = maxDamage;
+		this.fieldMod = fieldMod;
+		this.drainMod = drainMod;
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
@@ -25,9 +30,14 @@ public class ItemLens extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		long damage = getLensDamage(stack);
-		int percent = (int) ((maxDamage - damage) * 100 / maxDamage);
-		
-		tooltip.add("Durability: " + (maxDamage - damage) + "/" + maxDamage + " (" + percent + "%)");
+		double percent = (int)((maxDamage - damage) * 100000000D / maxDamage) / 1000000D;
+
+
+		tooltip.add("§3Durability in ticks: " + (maxDamage - damage) + " / " + maxDamage);
+		tooltip.add("§3Durability in Percent: " + percent + "%");
+
+		tooltip.add("§eForce Field Modifier: " + (fieldMod >= 1 ? "§a+" : "§c") + (Math.round(fieldMod * 1000) * .10 - 100) + "%");
+		tooltip.add("§ePower Drain Modifier: " + (drainMod >= 1 ? "§c+" : "§a") + (Math.round(drainMod * 1000) * .10 - 100) + "%");
 	}
 	
 	@Override

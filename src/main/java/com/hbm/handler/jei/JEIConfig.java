@@ -30,6 +30,7 @@ import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIRBMKOutgasser;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
+import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.main.MainRegistry;
 
 import mezz.jei.api.IGuiHelper;
@@ -65,6 +66,14 @@ public class JEIConfig implements IModPlugin {
 	public static final String FUSION_BYPRODUCT = "hbm.fusionbyproduct";
 	public static final String HADRON = "hbm.hadron";
 	public static final String SILEX = "hbm.silex";
+	public static final String SILEX_RADIO = "hbm.silexradio";
+	public static final String SILEX_MICRO = "hbm.silexmicro";
+	public static final String SILEX_IR = "hbm.silexir";
+	public static final String SILEX_VISIBLE = "hbm.silexvisible";
+	public static final String SILEX_UV = "hbm.silexuv";
+	public static final String SILEX_XRAY = "hbm.silexray";
+	public static final String SILEX_GAMMA = "hbm.silexgamma";
+	public static final String SILEX_DIGAMMA = "hbm.silexdigamma";
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
@@ -95,6 +104,14 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.iter), FUSION_BYPRODUCT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.hadron_core), HADRON);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_silex), SILEX);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_nano), SILEX_RADIO);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_pentacene), SILEX_MICRO);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_co2), SILEX_IR);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_bismuth), SILEX_VISIBLE);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_cmb), SILEX_UV);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_dem), SILEX_XRAY);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_bale), SILEX_GAMMA);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.laser_crystal_digamma), SILEX_DIGAMMA);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.rbmk_outgasser), RBMKOUTGASSER);
@@ -119,6 +136,14 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getFusionByproducts(), FUSION_BYPRODUCT);
 		registry.addRecipes(JeiRecipes.getHadronRecipes(), HADRON);
 		registry.addRecipes(JeiRecipes.getSILEXRecipes(), SILEX);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.RADIO), SILEX_RADIO);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.MICRO), SILEX_MICRO);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.IR), SILEX_IR);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.VISIBLE), SILEX_VISIBLE);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.UV), SILEX_UV);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.XRAY), SILEX_XRAY);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.GAMMA), SILEX_GAMMA);
+		registry.addRecipes(JeiRecipes.getSILEXRecipes(EnumWavelengths.DRX), SILEX_DIGAMMA);
 		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
 		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
 		registry.addRecipes(RBMKOutgasserRecipes.getRBMKOutgasserRecipes(), RBMKOUTGASSER);
@@ -180,7 +205,6 @@ public class JEIConfig implements IModPlugin {
 		if(MainRegistry.polaroidID != 11) {
 			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.book_secret));
 			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.book_of_));
-			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.burnt_bark));
 			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
 		}
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_assembler));
@@ -220,28 +244,36 @@ public class JEIConfig implements IModPlugin {
 		if(!GeneralConfig.jei)
 			return;
 		IGuiHelper help = registry.getJeiHelpers().getGuiHelper();
-		registry.addRecipeCategories(new AssemblerRecipeHandler(help),
-				new ChemplantRecipeHandler(help),
-				new CyclotronRecipeHandler(help),
+		registry.addRecipeCategories(new AnvilRecipeHandler(help),
+				new SmithingRecipeHandler(help),
 				new PressRecipeHandler(help),
 				new AlloyFurnaceRecipeHandler(help),
-				new BoilerRecipeHandler(help),
-				new CentrifugeRecipeHandler(help),
-				new CMBFurnaceRecipeHandler(help),
-				new GasCentrifugeRecipeHandler(help),
-				new ReactorRecipeHandler(help),
-				new RefineryRecipeHandler(help),
 				new ShredderRecipeHandler(help),
-				new FluidRecipeHandler(help),
+				new AssemblerRecipeHandler(help),
+				new ChemplantRecipeHandler(help),
+				new BoilerRecipeHandler(help),
+				new RefineryRecipeHandler(help),
 				new CrystallizerRecipeHandler(help),
-				new BookRecipeHandler(help),
+				new CentrifugeRecipeHandler(help),
+				new GasCentrifugeRecipeHandler(help),
+				new CyclotronRecipeHandler(help),
+				new CMBFurnaceRecipeHandler(help),
+				new ReactorRecipeHandler(help),
+				new FluidRecipeHandler(help),
+				new SILEXRecipeHandler(help),
+				new SILEXRadioRecipeHandler(help),
+				new SILEXMicroRecipeHandler(help),
+				new SILEXIrRecipeHandler(help),
+				new SILEXVisibleRecipeHandler(help),
+				new SILEXUVRecipeHandler(help),
+				new SILEXXRayRecipeHandler(help),
+				new SILEXGammaRecipeHandler(help),
+				new SILEXDigammaRecipeHandler(help),
+				new RBMKOutgasserRecipeHandler(help),
 				new FusionRecipeHandler(help),
 				new HadronRecipeHandler(help),
-				new SILEXRecipeHandler(help),
-				new SmithingRecipeHandler(help),
-				new AnvilRecipeHandler(help),
-				new RBMKOutgasserRecipeHandler(help),
-				new DFCRecipeHandler(help));
+				new DFCRecipeHandler(help),
+				new BookRecipeHandler(help));
 	}
 
 	@Override

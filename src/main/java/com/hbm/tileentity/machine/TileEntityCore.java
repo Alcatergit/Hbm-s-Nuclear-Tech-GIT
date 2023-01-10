@@ -30,6 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 
+	public boolean hasCore = false;
 	public int field;
 	public int heat;
 	public int color;
@@ -80,13 +81,16 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	    		world.spawnEntity(cloud);
 			}
 			
-			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst)
+			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst){
 				color = calcAvgHex(
 						((ItemCatalyst)inventory.getStackInSlot(0).getItem()).getColor(),
 						((ItemCatalyst)inventory.getStackInSlot(2).getItem()).getColor()
 				);
-			else
+				hasCore = true;
+			}else{
 				color = 0;
+				hasCore = false;
+			}
 			
 			if(heat > 0)
 				radiation();
@@ -99,6 +103,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			data.setInteger("field", field);
 			data.setInteger("heat", heat);
 			data.setInteger("color", color);
+			data.setBoolean("hasCore", hasCore);
 			networkPack(data, 250);
 			
 			//PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
@@ -129,6 +134,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		field = data.getInteger("field");
 		heat = data.getInteger("heat");
 		color = data.getInteger("color");
+		hasCore = data.getBoolean("hasCore");
 	}
 	
 	private void radiation() {
@@ -186,12 +192,19 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			return joules;
 		
 		int demand = (int)Math.ceil((double)joules / 1000D);
+
+		long powerAbs = ItemCatalyst.getPowerAbs(inventory.getStackInSlot(0)) + ItemCatalyst.getPowerAbs(inventory.getStackInSlot(2));
+		float powerMod = ItemCatalyst.getPowerMod(inventory.getStackInSlot(0)) + ItemCatalyst.getPowerMod(inventory.getStackInSlot(2)) - 1F;
+		float heatMod = ItemCatalyst.getHeatMod(inventory.getStackInSlot(0)) + ItemCatalyst.getHeatMod(inventory.getStackInSlot(2)) - 1F;
+		float fuelMod = ItemCatalyst.getFuelMod(inventory.getStackInSlot(0)) + ItemCatalyst.getFuelMod(inventory.getStackInSlot(2)) - 1F;	
+
+		demand = (int)(demand * fuelMod);
 		
 		//check if the reaction has enough valid fuel
 		if(tanks[0].getFluidAmount() < demand || tanks[1].getFluidAmount() < demand)
 			return joules;
 		
-		heat += (int)Math.ceil((double)joules / 10000D);
+		heat += (int)(heatMod * Math.ceil((double)joules / 10000D));
 		
 		Fluid f1 = tanks[0].getFluid().getFluid();
 		Fluid f2 = tanks[1].getFluid().getFluid();
@@ -199,7 +212,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		tanks[0].drain(demand, true);
 		tanks[1].drain(demand, true);
 		
-		return (long) (joules * getCore() * getFuelEfficiency(f1) * getFuelEfficiency(f2));
+		return (long) (powerMod * joules * getCore() * getFuelEfficiency(f1) * getFuelEfficiency(f2)) + powerAbs;
 	}
 	
 	public float getFuelEfficiency(Fluid type) {

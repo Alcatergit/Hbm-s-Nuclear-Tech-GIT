@@ -26,8 +26,8 @@ public class SchistStratum {
 		if(world.provider.getDimension() != 0)
 			return;
 		
-		int cX = event.getChunkPos().x;
-		int cZ = event.getChunkPos().z;
+		int cX = event.getChunkPos().x * 16;
+		int cZ = event.getChunkPos().z * 16;
 		
 		double scale = 0.01D;
 		int threshold = 5;

@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.forgefluid.FFUtils;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
 
@@ -22,6 +23,10 @@ public class TileEntityMachineOrbus extends TileEntityBarrel {
 	
 	@Override
 	public void checkFluidInteraction() { } //NO!
+
+	public void fillFluid(BlockPos pos1, FluidTank tank) {
+		FFUtils.fillFluid(this, tank, world, pos1, 64000);
+	}
 
 	@Override
 	public void fillFluidInit(FluidTank type) {

@@ -126,10 +126,12 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 							inventory.getStackInSlot(2).shrink(1);;
 							if(inventory.getStackInSlot(2).isEmpty())
 								inventory.setStackInSlot(2, ItemStack.EMPTY);
-							
-							inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
-							if(inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1).getMaxDamage())
-								inventory.setStackInSlot(1, ItemStack.EMPTY);
+
+							if(inventory.getStackInSlot(1).getMaxDamage() > 0){
+								inventory.getStackInSlot(1).setItemDamage(inventory.getStackInSlot(1).getItemDamage() + 1);
+								if(inventory.getStackInSlot(1).getItemDamage() >= inventory.getStackInSlot(1).getMaxDamage())
+									inventory.setStackInSlot(1, ItemStack.EMPTY);
+							}
 
 					        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
 						}

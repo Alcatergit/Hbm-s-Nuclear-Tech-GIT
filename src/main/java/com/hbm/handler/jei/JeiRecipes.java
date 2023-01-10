@@ -68,6 +68,7 @@ public class JeiRecipes {
 	private static List<FusionRecipe> fusionByproducts = null;
 	private static List<HadronRecipe> hadronRecipes = null;
 	private static List<SILEXRecipe> silexRecipes = null;
+	private static Map<EnumWavelengths, List<SILEXRecipe>> waveSilexRecipes = new HashMap<EnumWavelengths, List<SILEXRecipe>>();
 	private static List<SmithingRecipe> smithingRecipes = null;
 	private static List<AnvilRecipe> anvilRecipes = null;
 	
@@ -578,12 +579,16 @@ public class JeiRecipes {
 
 		List<ItemStack> i_stamps_357 = new ArrayList<ItemStack>();
 		i_stamps_357.add(new ItemStack(ModItems.stamp_357));
+		i_stamps_357.add(new ItemStack(ModItems.stamp_desh_357));
 		List<ItemStack> i_stamps_44 = new ArrayList<ItemStack>();
 		i_stamps_44.add(new ItemStack(ModItems.stamp_44));
+		i_stamps_44.add(new ItemStack(ModItems.stamp_desh_44));
 		List<ItemStack> i_stamps_9 = new ArrayList<ItemStack>();
 		i_stamps_9.add(new ItemStack(ModItems.stamp_9));
+		i_stamps_9.add(new ItemStack(ModItems.stamp_desh_9));
 		List<ItemStack> i_stamps_50 = new ArrayList<ItemStack>();
 		i_stamps_50.add(new ItemStack(ModItems.stamp_50));
+		i_stamps_50.add(new ItemStack(ModItems.stamp_desh_50));
 		
 		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.powder_coal) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.powder_coal));
 		recipes.put(new Object[] { i_stamps_flat, new ItemStack(ModItems.powder_quartz) }, getPressResultNN(MachineRecipes.stamps_flat.get(0), ModItems.powder_quartz));
@@ -917,6 +922,33 @@ public class JeiRecipes {
 		return hadronRecipes;
 	}
 	
+
+	public static List<SILEXRecipe> getSILEXRecipes(EnumWavelengths wavelength){
+		if(waveSilexRecipes.containsKey(wavelength))
+			return waveSilexRecipes.get(wavelength);
+		ArrayList wSilexRecipes = new ArrayList<>();
+		for(Entry<List<ItemStack>, com.hbm.inventory.SILEXRecipes.SILEXRecipe> e : com.hbm.inventory.SILEXRecipes.getRecipes().entrySet()){
+			com.hbm.inventory.SILEXRecipes.SILEXRecipe out = e.getValue();
+			if(out.laserStrength == wavelength){
+				double weight = 0;
+				for(WeightedRandomObject obj : out.outputs) {
+					weight += obj.itemWeight;
+				}
+				List<Double> chances = new ArrayList<>(out.outputs.size());
+				List<ItemStack> outputs = new ArrayList<>(chances.size());
+				for(int i = 0; i < out.outputs.size(); i++) {
+					WeightedRandomObject obj = out.outputs.get(i);
+					outputs.add(obj.asStack());
+					chances.add(100 * obj.itemWeight / weight);
+				}
+				wSilexRecipes.add(new SILEXRecipe(e.getKey(), chances, outputs, (double)out.fluidProduced/out.fluidConsumed, out.laserStrength));
+			}
+		}
+		waveSilexRecipes.put(wavelength, wSilexRecipes);
+		return wSilexRecipes;
+	}
+
+
 	public static List<SILEXRecipe> getSILEXRecipes(){
 		if(silexRecipes != null)
 			return silexRecipes;

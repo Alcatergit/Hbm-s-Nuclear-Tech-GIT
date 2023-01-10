@@ -56,17 +56,9 @@ public class RenderCoreComponent extends TileEntitySpecialRenderer<TileEntityMac
         if(tileEntity instanceof TileEntityCoreEmitter) {
 	        bindTexture(ResourceManager.dfc_emitter_tex);
 	        ResourceManager.dfc_emitter.renderAll();
-	        GL11.glTranslated(0, 0.5, 0);
-	        int range = ((TileEntityCoreEmitter)tileEntity).beam;
-	        
-	        if(range > 0) {
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x404000, 0x404000, 0, 1, 0F, 2, 0.0625F);
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x401500, (int)tileEntity.getWorld().getTotalWorldTime() % 1000, range * 2, 0.125F, 4, 0.0625F);
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x401500, (int)tileEntity.getWorld().getTotalWorldTime() % 1000 + 1, range * 2, 0.125F, 4, 0.0625F);
-	        }
-        }
+	    }
 
-        if(tileEntity instanceof TileEntityCoreReceiver) {
+	    if(tileEntity instanceof TileEntityCoreReceiver) {
 	        bindTexture(ResourceManager.dfc_receiver_tex);
 	        ResourceManager.dfc_receiver.renderAll();
         }
@@ -74,7 +66,37 @@ public class RenderCoreComponent extends TileEntitySpecialRenderer<TileEntityMac
         if(tileEntity instanceof TileEntityCoreInjector) {
 	        bindTexture(ResourceManager.dfc_injector_tex);
 	        ResourceManager.dfc_injector.renderAll();
+	    }
+
+	    if(tileEntity instanceof TileEntityCoreStabilizer) {
+	        bindTexture(ResourceManager.dfc_stabilizer_tex);
+	        ResourceManager.dfc_injector.renderAll();
+	    }
+	    
+        if(tileEntity instanceof TileEntityCoreStabilizer) {
+	        GL11.glTranslated(0, 0.5, 0);
+	        TileEntityCoreStabilizer stabilizer = (TileEntityCoreStabilizer)tileEntity;
+	        int range = stabilizer.beam;
+
+	        if(range > 0) {
+	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x002333, 0x00B6FF, 0, 1, 0F, 2, 0.0625F);
+	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x002333, 0x003C56, (int)tileEntity.getWorld().getTotalWorldTime() * -10 % 360 + 180, range * 3, 0.125F, 2, 0.04F);
+	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x002333, 0x003C56, (int)tileEntity.getWorld().getTotalWorldTime() * -5 % 360 + 180, range * 3, 0.125F, 2, 0.04F);
+	        }
+        }
+
+        if(tileEntity instanceof TileEntityCoreEmitter) {
+	        GL11.glTranslated(0, 0.5, 0);
+	        int range = ((TileEntityCoreEmitter)tileEntity).beam;
 	        
+	        if(range > 0) {
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x401500, 0x5B1D00, 0, 1, 0F, 2, 0.0625F);
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x401500, (int)tileEntity.getWorld().getTotalWorldTime() % 1000, range * 2, 0.125F, 4, 0.0625F);
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x401500, (int)tileEntity.getWorld().getTotalWorldTime() % 1000 + 1, range * 2, 0.125F, 4, 0.0625F);
+	        }
+        }
+
+        if(tileEntity instanceof TileEntityCoreInjector) {      
 	        GL11.glTranslated(0, 0.5, 0);
 	        TileEntityCoreInjector injector = (TileEntityCoreInjector)tileEntity;
 	        int range = injector.beam;
@@ -82,25 +104,9 @@ public class RenderCoreComponent extends TileEntitySpecialRenderer<TileEntityMac
 	        if(range > 0) {
 	        	RenderHelper.bindBlockTexture();
 	        	if(injector.tanks[0].getFluidAmount() > 0)
-	        		BeamPronter.prontBeamWithIcon(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.LINE, FFUtils.getTextureFromFluid(injector.tanks[0].getFluid().getFluid()), 0x808080, (int)tileEntity.getWorld().getTotalWorldTime() % 1000, range, 0.0625F, 0, 0);
+	        		BeamPronter.prontBeamWithIcon(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, FFUtils.getTextureFromFluid(injector.tanks[0].getFluid().getFluid()), 0x808080, (int)tileEntity.getWorld().getTotalWorldTime() * -2 % 360, range, 0.08F, 3, 0.0625F);
 	        	if(injector.tanks[1].getFluidAmount() > 0)
-	        		BeamPronter.prontBeamWithIcon(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.LINE, FFUtils.getTextureFromFluid(injector.tanks[1].getFluid().getFluid()), 0x808080, (int)tileEntity.getWorld().getTotalWorldTime() % 1000 + 1, range, 0.0625F, 0, 0);
-	        }
-        }
-
-        if(tileEntity instanceof TileEntityCoreStabilizer) {
-	        bindTexture(ResourceManager.dfc_stabilizer_tex);
-	        ResourceManager.dfc_injector.renderAll();
-
-	        
-	        GL11.glTranslated(0, 0.5, 0);
-	        TileEntityCoreStabilizer stabilizer = (TileEntityCoreStabilizer)tileEntity;
-	        int range = stabilizer.beam;
-
-	        if(range > 0) {
-	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.LINE, 0xffa200, 0xffd000, (int)tileEntity.getWorld().getTotalWorldTime() * -25 % 360, range * 3, 0.125F, 0, 0);
-	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.LINE, 0xffa200, 0xffd000, (int)tileEntity.getWorld().getTotalWorldTime() * -15 % 360 + 180, range * 3, 0.125F, 0, 0);
-	    		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.LINE, 0xffa200, 0xffd000, (int)tileEntity.getWorld().getTotalWorldTime() * -5 % 360 + 180, range * 3, 0.125F, 0, 0);
+	        		BeamPronter.prontBeamWithIcon(Vec3.createVectorHelper(0, 0, range), EnumWaveType.SPIRAL, EnumBeamType.SOLID, FFUtils.getTextureFromFluid(injector.tanks[1].getFluid().getFluid()), 0x808080, (int)tileEntity.getWorld().getTotalWorldTime() * -2 % 360 + 180, range, 0.08F, 3, 0.0625F);
 	        }
         }
         
