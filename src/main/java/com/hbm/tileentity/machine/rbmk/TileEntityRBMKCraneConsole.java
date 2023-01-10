@@ -28,12 +28,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
 import li.cil.oc.api.machine.Arguments;
 import li.cil.oc.api.machine.Callback;
 import li.cil.oc.api.machine.Context;
 import li.cil.oc.api.network.SimpleComponent;
 
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
 public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements ITickable, INBTPacketReceiver, SimpleComponent {
 	
 	public int centerX;
