@@ -28,7 +28,12 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements IFluidHandler, ITankPacketAcceptor, IControlReceiver {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements IFluidHandler, ITankPacketAcceptor, IControlReceiver, SimpleComponent {
 	
 	public FluidTank feed;
 	public FluidTank steam;
@@ -273,5 +278,32 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		return super.getCapability(capability, facing);
+	}
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "rbmk_boiler";
+	}
+	
+	@Callback(doc = "func(): double - returns hull temp")
+	public Object[] getHullTemp(Context context, Arguments args) {
+		return new Object[] {heat};
+	}
+
+	@Callback(doc = "func(): double - returns feed water quantity")
+	public Object[] getFeed(Context context, Arguments args) {
+		return new Object[] {feed.getFluidAmount()};
+	}
+		
+	@Callback(doc = "func(): double - returns steam type")
+	public Object[] getSteamType(Context context, Arguments args) {
+		return new Object[] {steamType.getName()};
+	}
+
+	@Callback(doc = "func(): double - returns steam quantity")
+	public Object[] getSteam(Context context, Arguments args) {
+		return new Object[] {steam.getFluidAmount()};
 	}
 }

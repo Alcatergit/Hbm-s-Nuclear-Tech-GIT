@@ -20,7 +20,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IRBMKLoadable {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBMKFluxReceiver, IRBMKLoadable, SimpleComponent {
 	
 	//amount of "neutron energy" buffered for the next tick to use for the reaction
 	public double fluxFast;
@@ -348,5 +353,88 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] {0};
+	}
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "rbmk_fuel_rod";
+	}
+	
+	@Callback(doc = "func(): double - returns hull temp")
+	public Object[] getHullTemp(Context context, Arguments args) {
+		return new Object[] {heat};
+	}
+
+	@Callback(doc = "func(): double - returns steam quantity")
+	public Object[] getSteam(Context context, Arguments args) {
+		return new Object[] {steam};
+	}
+
+	@Callback(doc = "func(): double - returns water quantity")
+	public Object[] getWater(Context context, Arguments args) {
+		return new Object[] {water};
+	}
+
+	@Callback(doc = "func(): bool - returns true if moderated")
+	public Object[] isModerated(Context context, Arguments args) {
+		return new Object[] { isModerated() };
+	}
+
+	@Callback(doc = "func(): double - returns fuel enrichment")
+	public Object[] getFuelEnrichment(Context context, Arguments args) {
+		if(inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			return new Object[] {ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0))}; 
+		}
+		return new Object[] {"N/A"};
+	}
+
+	@Callback(doc = "func(): double - returns fuel xenon poison %")
+	public Object[] getFuelXenonPoison(Context context, Arguments args) {
+		if(inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			return new Object[] {ItemRBMKRod.getPoison(inventory.getStackInSlot(0))};
+		}
+		return new Object[] {"N/A"};
+	}
+
+	@Callback(doc = "func(): double - returns fuel core temp")
+	public Object[] getFuelCoreTemp(Context context, Arguments args) {
+		if(inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			return new Object[] {ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0))};
+		}
+		return new Object[] {"N/A"};
+	}
+
+	@Callback(doc = "func(): double - returns fuel skin temp")
+	public Object[] getFuelSkinTemp(Context context, Arguments args) {
+		if(inventory.getStackInSlot(0) != null && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			return new Object[] {ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0))};
+		}
+		return new Object[] {"N/A"};
+	}
+
+	@Callback(doc = "func(): double - returns core heat tolerance")
+	public Object[] getMeltingPoint(Context context, Arguments args) {
+		if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
+			return new Object[] { rod.meltingPoint };
+		}
+		return new Object[] {"N/A"};
+	}
+
+	@Callback(doc = "func(): double - returns slow neutron flux")
+	public Object[] getFluxSlow(Context context, Arguments args) {
+		return new Object[] {fluxSlow};
+	}
+
+	@Callback(doc = "func(): double - returns fast neutron flux")
+	public Object[] getFluxFast(Context context, Arguments args) {
+		return new Object[] {fluxFast};
+	}
+	
+	@Callback(doc = "func(): bool - returns true upon presence of fuel")
+	public Object[] hasFuelRod(Context context, Arguments args) {
+		return new Object[] {hasRod};
 	}
 }
