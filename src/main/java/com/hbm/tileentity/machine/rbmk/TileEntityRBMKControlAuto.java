@@ -9,12 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-
-public class TileEntityRBMKControlAuto extends TileEntityRBMKControl implements IControlReceiver, SimpleComponent {
+public class TileEntityRBMKControlAuto extends TileEntityRBMKControl implements IControlReceiver {
 	
 	public RBMKFunction function = RBMKFunction.LINEAR;
 	public double levelLower;
@@ -132,28 +127,5 @@ public class TileEntityRBMKControlAuto extends TileEntityRBMKControl implements 
 	@Override
 	public ColumnType getConsoleType() {
 		return ColumnType.CONTROL_AUTO;
-	}
-
-	// opencomputers interface
-	// why?
-
-	@Override
-	public String getComponentName() {
-		return "rbmk_control_rod_auto";
-	}
-	
-	@Callback(doc = "func(): double - returns hull temp")
-	public Object[] getHullTemp(Context context, Arguments args) {
-		return new Object[] {heat};
-	}
-
-	@Callback(doc = "func(): double - returns steam quantity")
-	public Object[] getSteam(Context context, Arguments args) {
-		return new Object[] {steam};
-	}
-
-	@Callback(doc = "func(): double - returns water quantity")
-	public Object[] getWater(Context context, Arguments args) {
-		return new Object[] {water};
 	}
 }

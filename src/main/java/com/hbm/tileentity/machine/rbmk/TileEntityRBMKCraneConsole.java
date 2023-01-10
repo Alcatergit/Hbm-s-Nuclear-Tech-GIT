@@ -29,12 +29,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-
-public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements ITickable, INBTPacketReceiver, SimpleComponent {
+public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements ITickable, INBTPacketReceiver {
 	
 	public int centerX;
 	public int centerY;
@@ -400,52 +395,5 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	@Override
 	public String getName() {
 		return "rbmk_crane";
-	}
-
-	// opencomputers interface
-
-	@Override
-	public String getComponentName() {
-		return "rbmk_crane";
-	}
-
-	@Callback(doc = "func(x:str): move crane up,down,left,right")
-	public Object[] move(Context context, Arguments args) {
-
-		if (setUpCrane == true) {
-			String textbruh = args.checkString(0);
-
-			switch (textbruh) {
-				case "up":
-					tiltFront = 30;
-					if(!world.isRemote) posFront += speed;
-				case "down":
-					tiltFront = -30;
-					if(!world.isRemote) posFront -= speed;
-				case "left":
-					tiltLeft = 30;
-					if(!world.isRemote) posLeft += speed;				
-				case "right":
-					tiltLeft = -30;
-					if(!world.isRemote) posLeft -= speed;
-			}
-
-			return new Object[] {};
-		}
-		return new Object[] {"No crane"};
-	}
-
-	@Callback(doc = "func(): crane load/unload")
-	public Object[] load(Context context, Arguments args) {
-		if (setUpCrane == true) {
-			goesDown = true;
-			return new Object[] {};
-		}
-		return new Object[] {"No crane"};
-	}
-
-	@Callback(doc = "func(): get crane position")
-	public Object[] getPos(Context context, Arguments args) {
-		return new Object[] {posFront, posLeft};
 	}
 }

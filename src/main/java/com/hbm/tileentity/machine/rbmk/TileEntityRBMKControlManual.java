@@ -8,23 +8,13 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-
-public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver, SimpleComponent {
+public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver {
 
 	public RBMKColor color;
 	public double startingLevel;
 	
 	public TileEntityRBMKControlManual() {
 		super();
-	}
-
-	public void setColor(int color) {
-		RBMKColor new_color = RBMKColor.values()[color];
-		this.color = new_color;
 	}
 
 	@Override
@@ -42,7 +32,7 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		this.targetLevel = target;
 		this.startingLevel = this.level;
 	}
-
+	
 	@Override
 	public double getMult() {
 		
@@ -131,64 +121,5 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 			data.setShort("color", (short)-1);
 		
 		return data;
-	}
-
-	// opencomputers interface
-
-	@Override
-	public String getComponentName() {
-		return "rbmk_control_rod_manual";
-	}
-	
-	@Callback(doc = "func(): double - returns hull temp")
-	public Object[] getHullTemp(Context context, Arguments args) {
-		return new Object[] {heat};
-	}
-
-	@Callback(doc = "func(): double - returns steam quantity")
-	public Object[] getSteam(Context context, Arguments args) {
-		return new Object[] {steam};
-	}
-
-	@Callback(doc = "func(): double - returns water quantity")
-	public Object[] getWater(Context context, Arguments args) {
-		return new Object[] {water};
-	}
-
-	@Callback(doc= "func(): bool - returns true if moderated")
-	public Object[] isModerated(Context context, Arguments args) {
-		return new Object[] {isModerated()};
-	}
-
-	@Callback(doc = "func(): double - returns insertion level")
-	public Object[] getLevel(Context context, Arguments args) {
-		return new Object[] {getMult()};
-	}
-
-	@Callback(doc = "func(): double - returns target insersion level")
-	public Object[] getTargetLevel(Context context, Arguments args) {
-		return new Object[] {targetLevel};
-	}
-
-	@Callback(doc = "func(): int - returns ordinal of color value")
-	public Object[] getColor(Context context, Arguments args) {
-		return new Object[] {color.ordinal()};
-	}
-
-	@Callback(doc = "func(x:str): null - sets the color given its ordinal number x[0:4]")
-	public Object[] setColor(Context context, Arguments args) {
-		RBMKColor new_color = RBMKColor.values()[Integer.parseInt(args.checkString(0))];
-		color = new_color;
-		return new Object[] {};
-	}
-
-	@Callback(doc = "func(n:str): null - sets target insertion level where 0<=n<=100")
-	public Object[] setLevel(Context context, Arguments args) {
-		double newLevel = Double.parseDouble(args.checkString(0))/100.0;
-		if (newLevel > 1) { // check if its above 100 so the control rod wont do funny things
-			newLevel = 1;
-		}
-		targetLevel = newLevel;
-		return new Object[] {};
 	}
 }
