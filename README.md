@@ -7,7 +7,7 @@ which is forked from the port made by [Drillgon200](https://github.com/Drillgon2
 which is ported from the original mod made by [HBMTheBobcat](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT).
 
 
-The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-1-12-2-extended-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
+The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-extended-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
 
 ### **Want to contribute?**
 
