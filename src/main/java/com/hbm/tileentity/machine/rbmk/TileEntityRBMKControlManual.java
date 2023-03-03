@@ -17,6 +17,11 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		super();
 	}
 
+	public void setColor(int color) {
+		RBMKColor new_color = RBMKColor.values()[color];
+		this.color = new_color;
+	}
+
 	@Override
 	public String getName() {
 		return "container.rbmkControl";

@@ -21,8 +21,15 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.Optional;
 
-public class TileEntityRBMKConsole extends TileEntityMachineBase implements IControlReceiver, ITickable {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityRBMKConsole extends TileEntityMachineBase implements IControlReceiver, ITickable, SimpleComponent {
 	
 	private int targetX;
 	private int targetY;
@@ -71,6 +78,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 					columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
 					columns[index].data.setDouble("heat", rbmk.heat);
 					columns[index].data.setDouble("maxHeat", rbmk.maxHeat());
+					columns[index].data.setDouble("water", rbmk.water);
+					columns[index].data.setDouble("steam", rbmk.steam);
 					if(rbmk.isModerated()) columns[index].data.setBoolean("moderated", true); //false is the default anyway and not setting it when we don't need to reduces cruft
 					
 					if(te instanceof TileEntityRBMKRod) {
@@ -282,5 +291,77 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		private ColumnType(int offset) {
 			this.offset = offset;
 		}
+	}
+
+	// opencomputers interface 
+
+	@Override
+	public String getComponentName() {
+		return "rbmk_console";
+	}
+
+	@Callback(doc = "func(i:str): retrieves all column data for given index i")
+	public Object[] getColumnData(Context context, Arguments args) {
+		int i = Integer.parseInt(args.checkString(0));
+
+		int x = i % 15 - 7;
+		int z = i / 15 - 7;
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+		TileEntityRBMKBase column = (TileEntityRBMKBase) te;
+
+		ArrayList<String> column_data = new ArrayList<String>();
+		column_data.add(column.getConsoleType().name());
+		column_data.add(Double.toString(columns[i].data.getDouble("heat")));
+		column_data.add(Double.toString(columns[i].data.getDouble("water")));
+		column_data.add(Double.toString(columns[i].data.getDouble("steam")));
+		column_data.add(Boolean.toString(columns[i].data.getBoolean("moderated")));
+		column_data.add(Double.toString(columns[i].data.getDouble("level")));
+		column_data.add(Short.toString(columns[i].data.getShort("color")));
+		column_data.add(Double.toString(columns[i].data.getDouble("enrichment")));
+		column_data.add(Double.toString(columns[i].data.getDouble("xenon")));
+		column_data.add(Double.toString(columns[i].data.getDouble("c_heat")));
+		column_data.add(Double.toString(columns[i].data.getDouble("c_coreHeat")));
+		column_data.add(Double.toString(columns[i].data.getDouble("c_maxHeat")));
+
+		return new Object[] {column_data}; 
+	}
+
+	@Callback(doc = "func(x:str, i:str): sets column at index i to level x given 100>=x>=0")
+	public Object[] setLevel(Context context, Arguments args) {
+		double new_level = Double.parseDouble(args.checkString(0))/100.0;
+		int x = Integer.parseInt(args.checkString(1)) % 15 - 7;
+		int z = Integer.parseInt(args.checkString(1)) / 15 - 7;
+		
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+		
+		if (te instanceof TileEntityRBMKControlManual) {
+			TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+			rod.startingLevel = rod.level;
+			if (new_level > 1) { 
+				new_level = 1;
+			}
+			rod.setTarget(new_level);
+			te.markDirty();
+		}	
+
+		return new Object[] {};
+	}
+
+	@Callback(doc = "func(c:str, i:str): set color c of column at index i")
+	public Object[] setColor(Context context, Arguments args) {
+		int new_color = Integer.parseInt(args.checkString(0));
+
+		int x = Integer.parseInt(args.checkString(1)) % 15 - 7;
+		int z = Integer.parseInt(args.checkString(1)) / 15 - 7;
+		
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+
+		if (te instanceof TileEntityRBMKControlManual) {
+			TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+			rod.setColor(new_color);
+			te.markDirty();
+		}	
+
+		return new Object[] {};
 	}
 }
