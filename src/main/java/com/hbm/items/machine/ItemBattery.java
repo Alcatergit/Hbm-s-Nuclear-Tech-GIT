@@ -43,11 +43,7 @@ public class ItemBattery extends Item implements IBatteryItem {
 		if(stack.getItem() != ModItems.fusion_core && 
 				stack.getItem() != ModItems.factory_core_titanium && 
 				stack.getItem() != ModItems.factory_core_advanced && 
-				stack.getItem() != ModItems.energy_core && 
-				stack.getItem() != ModItems.dynosphere_desh && 
-				stack.getItem() != ModItems.dynosphere_schrabidium && 
-				stack.getItem() != ModItems.dynosphere_euphemium && 
-				stack.getItem() != ModItems.dynosphere_dineutronium)
+				stack.getItem() != ModItems.energy_core)
 				
 		{
 			list.add("§6Energy stored: " + Library.getShortNumber(charge) + "/" + Library.getShortNumber(maxCharge) + "HE§r");
@@ -71,11 +67,7 @@ public class ItemBattery extends Item implements IBatteryItem {
     	if(this == ModItems.fusion_core || 
     			this == ModItems.factory_core_titanium || 
     			this == ModItems.factory_core_advanced || 
-    			this == ModItems.energy_core || 
-    			this == ModItems.dynosphere_desh || 
-    			this == ModItems.dynosphere_schrabidium || 
-    			this == ModItems.dynosphere_euphemium || 
-    			this == ModItems.dynosphere_dineutronium)
+    			this == ModItems.energy_core) 
     			
     	{
         	return EnumRarity.UNCOMMON;

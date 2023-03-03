@@ -527,6 +527,7 @@ public class OreDictManager {
 		public String gem() {			return GEM		+ mats[0]; }
 		public String crystal() {		return CRYSTAL	+ mats[0]; }
 		public String plate() {			return PLATE	+ mats[0]; }
+		public String wire() {			return WIRE 	+ mats[0]; }
 		public String billet() {		return BILLET	+ mats[0]; }
 		public String block() {			return BLOCK	+ mats[0]; }
 		public String ore() {			return ORE		+ mats[0]; }
@@ -540,6 +541,7 @@ public class OreDictManager {
 		public String[] gems() {		return appendToAll(GEM); }
 		public String[] crystals() {	return appendToAll(CRYSTAL); }
 		public String[] plates() {		return appendToAll(PLATE); }
+		public String[] wires() {		return appendToAll(WIRE); }
 		public String[] billets() {		return appendToAll(BILLET); }
 		public String[] blocks() {		return appendToAll(BLOCK); }
 		public String[] ores() {		return appendToAll(ORE); }
@@ -621,6 +623,10 @@ public class OreDictManager {
 		public DictFrame plate(Object... plate) {
 			hazMult = HazardRegistry.plate;
 			return makeObject(PLATE, plate);
+		}
+		public DictFrame wire(Object... wire) {
+			hazMult = HazardRegistry.wire;
+			return makeObject(WIRE, wire);
 		}
 		public DictFrame billet(Object... billet) {
 			hazMult = HazardRegistry.billet;
@@ -756,6 +762,7 @@ public class OreDictManager {
 		public String gem() {			return GEM		+ groupName; }
 		public String crystal() {		return CRYSTAL	+ groupName; }
 		public String plate() {			return PLATE	+ groupName; }
+		public String wire() {			return WIRE 	+ groupName; }
 		public String billet() {		return BILLET	+ groupName; }
 		public String block() {			return BLOCK	+ groupName; }
 		public String ore() {			return ORE		+ groupName; }

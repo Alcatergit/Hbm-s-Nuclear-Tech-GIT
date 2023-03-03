@@ -425,7 +425,6 @@ public class ItemCustomLore extends Item {
 			this == ModItems.ingot_daffergon || 
 			
 			this == ModItems.bathwater_mk3 || 
-			this == ModItems.dynosphere_euphemium_charged ||  
 			this == ModItems.plate_euphemium ||  
 			this == ModItems.rod_euphemium ||  
 			this == ModItems.rod_quad_euphemium || 

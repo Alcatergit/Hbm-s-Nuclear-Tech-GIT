@@ -25,9 +25,10 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	
 	public ItemRBMKPellet pellet;
 	public String fullName = "";			//full name of the fuel rod
-	public double reactivity;					//endpoint of the function
+	public double reactivity;				//endpoint of the function
 	public double selfRate;					//self-inflicted flux from self-igniting fuels
 	public EnumBurnFunc function = EnumBurnFunc.LOG_TEN;
+	public EnumDepleteFunc depFunc = EnumDepleteFunc.GENTLE_SLOPE;
 	public double xGen = 0.5D;				//multiplier for xenon production
 	public double xBurn = 50D;				//divider for xenon burnup
 	public double heat = 1D;				//heat produced per outFlux
@@ -36,6 +37,13 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	public double diffusion = 0.02D;		//the speed at which the core heats the hull
 	public NType nType = NType.SLOW;		//neutronType, the most efficient neutron type for fission
 	public NType rType = NType.FAST;		//releaseType, the type of neutrons released by this fuel
+
+	public float fuelR = 0.105F;
+	public float fuelG = 0.247F;
+	public float fuelB = 0.015F;
+	public float cherenkovR = 0.4F;
+	public float cherenkovG = 0.9F;
+	public float cherenkovB = 1F;
 	
 	/*   _____
 	 * ,I I I I,
@@ -98,6 +106,17 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		return this;
 	}
 
+	public ItemRBMKRod setDepletionFunction(EnumDepleteFunc func) {
+		this.depFunc = func;
+		return this;
+	}
+
+	public ItemRBMKRod setXenon(double gen, double burn) {
+		this.xGen = gen;
+		this.xBurn = burn;
+		return this;
+	}
+
 	public ItemRBMKRod setHeat(double heat) {
 		this.heat = heat;
 		return this;
@@ -116,6 +135,20 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	public ItemRBMKRod setNeutronTypes(NType nType, NType rType) {
 		this.nType = nType;
 		this.rType = rType;
+		return this;
+	}
+
+	public ItemRBMKRod setFuelColor(float R, float G, float B) {
+		this.fuelR = R;
+		this.fuelG = G;
+		this.fuelB = B;
+		return this;
+	}
+
+	public ItemRBMKRod setCherenkovColor(float R, float G, float B) {
+		this.cherenkovR = R;
+		this.cherenkovG = G;
+		this.cherenkovB = B;
 		return this;
 	}
 	
@@ -216,13 +249,14 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	
 	public static enum EnumBurnFunc {
 		PASSIVE(TextFormatting.DARK_GREEN + "SAFE / PASSIVE"),			//const, no reactivity
-		LOG_TEN(TextFormatting.YELLOW + "MEDIUM / LOGARITHMIC"),		//log10(x + 1) * reactivity * 50
 		PLATEU(TextFormatting.GREEN + "SAFE / EULER"),					//(1 - e^(-x/25)) * reactivity * 100
-		ARCH(TextFormatting.YELLOW + "MEDIUM / NEGATIVE-QUADRATIC"),	//x-(x²/1000) * reactivity
 		SIGMOID(TextFormatting.GREEN + "SAFE / SIGMOID"),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
+		LOG_TEN(TextFormatting.YELLOW + "MEDIUM / LOGARITHMIC"),		//log10(x + 1) * reactivity * 50
+		ARCH(TextFormatting.YELLOW + "MEDIUM / NEGATIVE-QUADRATIC"),	//x-(x²/1000) * reactivity
 		SQUARE_ROOT(TextFormatting.YELLOW + "MEDIUM / SQUARE ROOT"),	//sqrt(x) * 10 * reactivity
 		LINEAR(TextFormatting.RED + "DANGEROUS / LINEAR"),				//x * reactivity
-		QUADRATIC(TextFormatting.RED + "DANGEROUS / QUADRATIC");		//x^2 / 100 * reactivity
+		QUADRATIC(TextFormatting.RED + "DANGEROUS / QUADRATIC"),		//x^2 / 100 * reactivity
+		EXPERIMENTAL(TextFormatting.RED + "EXPERIMENTAL / SINE SLOPE");		//x * (sin(x) + 1)
 		
 		public String title = "";
 		
@@ -237,7 +271,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	 */
 	public double reactivityFunc(double in, double enrichment) {
 		
-		double flux = in * enrichment;
+		double flux = in * reactivityModByEnrichment(enrichment);
 		
 		switch(this.function) {
 		case PASSIVE: return selfRate * enrichment;
@@ -248,30 +282,69 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		case SQUARE_ROOT: return Math.sqrt(flux) * reactivity / 10D;
 		case LINEAR: return flux / 100D * reactivity;
 		case QUADRATIC: return flux * flux / 10000D * reactivity;
+		case EXPERIMENTAL: return flux * (Math.sin(flux) + 1) * reactivity;
 		}
 		
 		return 0;
 	}
 	
-	public String getFuncDescription() {
-		
-		String x = "x";
-		
-		if(selfRate > 0)
-			x = "(x" + TextFormatting.RED + " + " + selfRate + "" + TextFormatting.WHITE + ")";
+	public String getFuncDescription(ItemStack stack) {
+
+		String function;
 		
 		switch(this.function) {
-		case PASSIVE: return TextFormatting.RED + "" + selfRate;
-		case LOG_TEN: return "log10(x + 1" + (selfRate > 0 ? (TextFormatting.RED + " + " + selfRate) : "") + TextFormatting.WHITE + ") * "+ 0.5F * reactivity;
-		case PLATEU: return "(1 - e^-" + x + " / 25)) * " + reactivity;
-		case ARCH: return "(" + x + " - " + x + "² / 100000) / 100 * " + reactivity + " [0;∞]";
-		case SIGMOID: return reactivity + " / (1 + e^(-(" + x + " - 50) / 10)";
-		case SQUARE_ROOT: return "sqrt(" + x + ") * " + reactivity/10F;
-		case LINEAR: return x + " * " + reactivity/100F;
-		case QUADRATIC: return x + "² * " + reactivity/10000F;
+		case PASSIVE: function = TextFormatting.RED + "" + selfRate;
+			break;
+		case LOG_TEN: function = "log10(%1$s + 1) * 0.5 * %2$s";
+			break;
+		case PLATEU: function = "(1 - e^-%1$s / 25)) * %2$s";
+			break;
+		case ARCH: function = "(%1$s - %1$s² / 10000) / 100 * %2$s [0;∞]";
+			break;
+		case SIGMOID: function = "%2$s / (1 + e^(-(%1$s - 50) / 10)";
+			break;
+		case SQUARE_ROOT: function = "sqrt(%1$s) * %2$s / 10";
+			break;
+		case LINEAR: function = "%1$s / 100 * %2$s";
+			break;
+		case QUADRATIC: function = "%1$s² / 10000 * %2$s";
+			break;
+		case EXPERIMENTAL: function = "%1$s * (sin(%1$s) + 1) * %2$s";
+			break;
+		default: function = "ERROR";
 		}
 		
-		return "ERROR";
+		double enrichment = getEnrichment(stack);
+		
+		if(enrichment < 1) {
+			enrichment = reactivityModByEnrichment(enrichment);
+			String reactivity = TextFormatting.YELLOW + "" + ((int)(this.reactivity * enrichment * 1000D) / 1000D) + TextFormatting.WHITE;
+			String enrichmentPer = TextFormatting.GOLD + " (" + ((int)(enrichment * 1000D) / 10D) + "%)";
+			
+			return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + "" + TextFormatting.WHITE + ")" : "x", reactivity).concat(enrichmentPer);
+		}
+		
+		return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + "" + TextFormatting.WHITE + ")" : "x", reactivity);
+	}
+
+	public static enum EnumDepleteFunc {
+		LINEAR,			//old function
+		RAISING_SLOPE,	//for breeding fuels such as MEU, maximum of 110% at 28% depletion
+		BOOSTED_SLOPE,	//for strong breeding fuels such Th232, maximum of 132% at 64% depletion
+		GENTLE_SLOPE,	//recommended for most fuels, maximum barely over the start, near the beginning
+		STATIC;			//for arcade-style neutron sources
+	}
+
+	public double reactivityModByEnrichment(double enrichment) {
+		
+		switch(this.depFunc) {
+		default:
+		case LINEAR: return enrichment;
+		case STATIC: return 1D;
+		case BOOSTED_SLOPE: return enrichment + Math.sin((enrichment - 1) * (enrichment - 1) * Math.PI); //x + sin([x - 1]^2 * pi) works
+		case RAISING_SLOPE: return enrichment + (Math.sin(enrichment * Math.PI) / 2D); //x + (sin(x * pi) / 2) actually works
+		case GENTLE_SLOPE: return enrichment + (Math.sin(enrichment * Math.PI) / 3D); //x + (sin(x * pi) / 3) also works
+		}
 	}
 	
 	/**
@@ -323,7 +396,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("trait.rbmx.xenon", ((int)(getPoison(stack) * 1000D) / 1000D) + "%"));
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmx.splitsWith", I18nUtil.resolveKey(nType.unlocalized + ".x")));
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmx.splitsInto", I18nUtil.resolveKey(rType.unlocalized + ".x")));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.fluxFunc", TextFormatting.WHITE + getFuncDescription()));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.funcType", this.function.title));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonGen", TextFormatting.WHITE + "x * " + xGen));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² * " + xBurn));
@@ -343,7 +416,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("trait.rbmk.xenon", ((int)(getPoison(stack) * 1000D) / 1000D) + "%"));
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmk.splitsWith", I18nUtil.resolveKey(nType.unlocalized)));
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmk.splitsInto", I18nUtil.resolveKey(rType.unlocalized)));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.fluxFunc", TextFormatting.WHITE + getFuncDescription()));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.funcType", this.function.title));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.xenonGen", TextFormatting.WHITE + "x * " + xGen));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.xenonBurn", TextFormatting.WHITE + "x² * " + xBurn));

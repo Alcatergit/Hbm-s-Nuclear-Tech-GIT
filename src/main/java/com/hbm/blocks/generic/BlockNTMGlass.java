@@ -98,6 +98,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
 		float hardness = this.getExplosionResistance(null);
 		if(this.isRadResistant){
 			tooltip.add("§2[Radiation Shielding]§r");

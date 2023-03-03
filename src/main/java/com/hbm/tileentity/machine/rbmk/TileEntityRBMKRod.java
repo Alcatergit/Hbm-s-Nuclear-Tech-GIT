@@ -27,6 +27,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public double fluxSlow;
 	public boolean hasRod;
 
+	public float fuelR;
+	public float fuelG;
+	public float fuelB;
+	public float cherenkovR;
+	public float cherenkovG;
+	public float cherenkovB;
+
+
 	public TileEntityRBMKRod() {
 		super(1);
 	}
@@ -58,6 +66,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 			
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
 				ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
+				this.fuelR = rod.fuelR;
+				this.fuelG = rod.fuelG;
+				this.fuelB = rod.fuelB;
+				this.cherenkovR = rod.cherenkovR;
+				this.cherenkovG = rod.cherenkovG;
+				this.cherenkovB = rod.cherenkovB;
 				
 				double fluxIn = fluxFromType(rod.nType);
 				//System.out.println(fluxIn + " - " + this.fluxFast + " - " + this.fluxSlow);
@@ -194,7 +208,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		
 		//return the neutrons back to this with no further action required
 		if(te instanceof TileEntityRBMKReflector) {
-			this.receiveFlux(stream, flux);
+			this.receiveFlux(this.isModerated() ? NType.SLOW : stream, flux);
 			return 0;
 		}
 		
@@ -228,6 +242,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		this.fluxFast = nbt.getDouble("fluxFast");
 		this.fluxSlow = nbt.getDouble("fluxSlow");
 		this.hasRod = nbt.getBoolean("hasRod");
+		this.fuelR = nbt.getFloat("fuelR");
+		this.fuelG = nbt.getFloat("fuelG");
+		this.fuelB = nbt.getFloat("fuelB");
+		this.cherenkovR = nbt.getFloat("cherenkovR");
+		this.cherenkovG = nbt.getFloat("cherenkovG");
+		this.cherenkovB = nbt.getFloat("cherenkovB");
 	}
 	
 	@Override
@@ -237,6 +257,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		nbt.setDouble("fluxFast", this.fluxFast);
 		nbt.setDouble("fluxSlow", this.fluxSlow);
 		nbt.setBoolean("hasRod", this.hasRod);
+		nbt.setFloat("fuelR", this.fuelR);
+		nbt.setFloat("fuelG", this.fuelG);
+		nbt.setFloat("fuelB", this.fuelB);
+		nbt.setFloat("cherenkovR", this.cherenkovR);
+		nbt.setFloat("cherenkovG", this.cherenkovG);
+		nbt.setFloat("cherenkovB", this.cherenkovB);
 		return nbt;
 	}
 	
@@ -251,6 +277,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 			nbt.setString("f_xenon", ItemRBMKRod.getPoison(inventory.getStackInSlot(0)) + "%");
 			nbt.setString("f_heat", ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0)) + " / " + ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0))  + " / " + rod.meltingPoint);
 		}
+		nbt.removeTag("fuelR");
+		nbt.removeTag("fuelG");
+		nbt.removeTag("fuelB");
+		nbt.removeTag("cherenkovR");
+		nbt.removeTag("cherenkovG");
+		nbt.removeTag("cherenkovB");
+		nbt.removeTag("steam");
+		nbt.removeTag("water");
 	}
 	
 	@Override

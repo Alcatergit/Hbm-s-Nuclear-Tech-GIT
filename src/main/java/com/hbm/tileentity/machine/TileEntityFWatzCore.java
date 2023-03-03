@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -47,8 +46,6 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 	public FluidTank tanks[];
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
-
-	Random rand = new Random();
 
 	public ItemStackHandler inventory;
 	public int age = 0;

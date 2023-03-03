@@ -6,6 +6,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
+import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
@@ -28,7 +29,7 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 
 	private ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_blank.png");
 	private ResourceLocation texture_glass = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_blank_glass.png");
-	private static final ResourceLocation texture_rods = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_element.png");
+	private static final ResourceLocation texture_rods = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_element_colorable.png");
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityRBMKBase te){
@@ -39,16 +40,33 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 	public void render(TileEntityRBMKBase control, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
 		boolean hasRod = false;
 		boolean cherenkov = false;
+		float fuelR = 0F;
+		float fuelG = 0F;
+		float fuelB = 0F;
+
+		float cherenkovR = 0F;
+		float cherenkovG = 0F;
+		float cherenkovB = 0F;
+		float cherenkovA = 0.1F;
 		
 		if(control instanceof TileEntityRBMKRod) {
 			
 			TileEntityRBMKRod rod = (TileEntityRBMKRod) control;
 			
-			if(rod.hasRod)
+			if(rod.hasRod){
 				hasRod = true;
-			
-			if(rod.fluxFast + rod.fluxSlow > 5)
+				fuelR = rod.fuelR;
+				fuelG = rod.fuelG;
+				fuelB = rod.fuelB;
+				cherenkovR = rod.cherenkovR;
+				cherenkovG = rod.cherenkovG;
+				cherenkovB = rod.cherenkovB;
+			}
+
+			if(rod.fluxFast + rod.fluxSlow > 5){
 				cherenkov = true;
+				cherenkovA = (float)Math.max(0.25F, Math.log(rod.fluxFast + rod.fluxSlow)*0.01);
+			}
 		}
 
 		GL11.glPushMatrix();
@@ -117,8 +135,8 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		}
 		
 		if(hasRod) {
-
 			GL11.glPushMatrix();
+			GlStateManager.color(fuelR, fuelG, fuelB, 1);
 			bindTexture(texture_rods);
 			
 			for(int j = 0; j <= offset; j++) {
@@ -126,6 +144,7 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 				ResourceManager.rbmk_element.renderPart("Rods");
 				GL11.glTranslated(0, 1, 0);
 			}
+			GlStateManager.color(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
 		
@@ -143,10 +162,10 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 			
 			for(double j = 0; j <= offset; j += 0.25) {
-				buf.pos(-0.5, j, -0.5).color(0.4F, 0.9F, 1.0F, 0.1F).endVertex();
-				buf.pos(-0.5, j, 0.5).color(0.4F, 0.9F, 1.0F, 0.1F).endVertex();
-				buf.pos(0.5, j, 0.5).color(0.4F, 0.9F, 1.0F, 0.1F).endVertex();
-				buf.pos(0.5, j, -0.5).color(0.4F, 0.9F, 1.0F, 0.1F).endVertex();
+				buf.pos(-0.5, j, -0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
+				buf.pos(-0.5, j, 0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
+				buf.pos(0.5, j, 0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
+				buf.pos(0.5, j, -0.5).color(cherenkovR, cherenkovG, cherenkovB, cherenkovA).endVertex();
 			}
 			tess.draw();
 

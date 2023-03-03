@@ -180,7 +180,7 @@ public class AuxGaugePacket implements IMessage {
 						TileEntityMachineCentrifuge cent = (TileEntityMachineCentrifuge) te;
 
 						if(m.id == 0)
-							cent.dualCookTime = m.value;
+							cent.progress = m.value;
 						if(m.id == 1)
 							cent.isProgressing = m.value == 1;
 					} else if(te instanceof TileEntityMachineBoiler) {

@@ -458,6 +458,11 @@ public class MachineRecipes {
 		case BP_BIOGAS:
 			list.add(new ItemStack(ModItems.biomass, 16));
 			break;
+		case ALGE:
+			list.add(new ItemStack(ModItems.biomass, 4));
+			list.add(new ItemStack(ModItems.niter, 1));
+			list.add(new ItemStack(ModItems.powder_coal_tiny, 2));
+			break;
 		case YELLOWCAKE:
 			list.add(new ItemStack(ModItems.powder_uranium, 1));
 			list.add(new ItemStack(ModItems.sulfur, 2));
@@ -483,31 +488,26 @@ public class MachineRecipes {
 		case DYN_SCHRAB:
 			list.add(new ItemStack(ModItems.particle_higgs, 1));
 			list.add(new ItemStack(ModItems.ingot_uranium, 8));
-			list.add(new ItemStack(ModItems.dynosphere_desh_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 8));
 			break;
 		case DYN_STR:
 			list.add(new ItemStack(ModItems.particle_strange, 1));
 			list.add(new ItemStack(ModItems.nugget_radspice, 8));
-			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 16));
 			break;
 		case DYN_EUPH:
 			list.add(new ItemStack(ModItems.particle_dark, 1));
 			list.add(new ItemStack(ModItems.ingot_solinium, 8));
-			list.add(new ItemStack(ModItems.dynosphere_schrabidium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 16));
 			break;
 		case DYN_DNT:
 			list.add(new ItemStack(ModItems.particle_sparkticle, 1));
 			list.add(new ItemStack(ModItems.ingot_schrabidate, 8));
-			list.add(new ItemStack(ModItems.dynosphere_euphemium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 32));
 			break;
 		case DYN_EL:
 			list.add(new ItemStack(ModItems.particle_digamma, 1));
 			list.add(new ItemStack(ModItems.ingot_dineutronium, 16));
-			list.add(new ItemStack(ModItems.dynosphere_dineutronium_charged, 1));
 			list.add(new ItemStack(ModItems.catalyst_clay, 64));
 			break;
 		case CORDITE:
@@ -648,6 +648,9 @@ public class MachineRecipes {
 			break;
 		case COOLANT:
 			input[0] = new FluidStack(FluidRegistry.WATER, 1800);
+			break;
+		case ALGE:
+			input[0] = new FluidStack(FluidRegistry.WATER, 8000);
 			break;
 		case CRYOGEL:
 			input[0] = new FluidStack(ModForgeFluids.coolant, 1800);
@@ -922,33 +925,31 @@ public class MachineRecipes {
 		case POLYMER:
 			output[0] = new ItemStack(ModItems.ingot_polymer, 1);
 			break;
+		case ALGE:
+			output[0] = new ItemStack(ModItems.biomass, 36);
+			break;
 		case YELLOWCAKE:
 			output[0] = new ItemStack(ModItems.powder_yellowcake, 1);
 			break;
 		case DYN_SCHRAB:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
 			output[1] = new ItemStack(ModItems.ingot_schrabidium, 8);
-			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_desh);
 			break;
 		case DYN_STR:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
 			output[1] = new ItemStack(ModItems.egg_balefire, 8);
-			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_schrabidium);
 			break;
 		case DYN_EUPH:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
 			output[1] = new ItemStack(ModItems.ingot_euphemium, 8);
-			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_schrabidium);
 			break;
 		case DYN_DNT:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
 			output[1] = new ItemStack(ModItems.ingot_dineutronium, 8);
-			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_euphemium);
 			break;
 		case DYN_EL:
 			output[0] = new ItemStack(ModItems.particle_empty, 1);
 			output[1] = new ItemStack(ModItems.ingot_electronium, 1);
-			output[2] = ItemBattery.getEmptyBattery(ModItems.dynosphere_dineutronium);
 			break;
 		case CORDITE:
 			output[0] = new ItemStack(ModItems.cordite, 4);
@@ -1092,16 +1093,16 @@ public class MachineRecipes {
 			output[0] = new FluidStack(ModForgeFluids.watz, 50);
 			break;
 		case DYN_STR:
-			output[0] = new FluidStack(ModForgeFluids.watz, 100);
+			output[0] = new FluidStack(ModForgeFluids.watz, 200);
 			break;
 		case DYN_EUPH:
-			output[0] = new FluidStack(ModForgeFluids.watz, 100);
+			output[0] = new FluidStack(ModForgeFluids.watz, 200);
 			break;
 		case DYN_DNT:
-			output[0] = new FluidStack(ModForgeFluids.watz, 150);
+			output[0] = new FluidStack(ModForgeFluids.watz, 400);
 			break;
 		case DYN_EL:
-			output[0] = new FluidStack(ModForgeFluids.watz, 200);
+			output[0] = new FluidStack(ModForgeFluids.watz, 800);
 			break;
 		case ELECTROLYSIS:
 			output[0] = new FluidStack(ModForgeFluids.hydrogen, 400);
@@ -1127,6 +1128,9 @@ public class MachineRecipes {
         	break;
         case GASOLINE:
 			output[0] = new FluidStack(ModForgeFluids.gasoline, 12000);
+        	break;
+        case ALGE:
+			output[0] = new FluidStack(FluidRegistry.WATER, 1000);
         	break;
 		default:
 			break;

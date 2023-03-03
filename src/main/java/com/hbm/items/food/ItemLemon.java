@@ -198,6 +198,14 @@ public class ItemLemon extends ItemFood {
 			list.add("Performant explosive for many applications.");
 			list.add("Edible");
 		}
+
+		if(this == ModItems.marshmallow) {
+			list.add("Gets grilled in the heat of burning nuclear failure");
+		}
+
+		if(this == ModItems.marshmallow_roasted) {
+			list.add("Hmmm... tastes a bit metallic");
+		}
 	}
 	
 	

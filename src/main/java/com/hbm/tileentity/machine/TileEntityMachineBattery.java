@@ -73,8 +73,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	}
 	
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this)
-		{
+		if(world.getTileEntity(pos) != this){
 			return false;
 		}else{
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
@@ -87,24 +86,43 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setBoolean("conducts", conducts);
-		compound.setLong("power", power);
-		compound.setLong("powerDelta", powerDelta);
-		compound.setShort("redLow", redLow);
-		compound.setShort("redHigh", redHigh);
-		detectPower = power + 1;
+		compound.setBoolean("conducts", this.conducts);
+		compound.setLong("power", this.power);
+		compound.setLong("powerDelta", this.powerDelta);
+		compound.setShort("redLow", this.redLow);
+		compound.setShort("redHigh", this.redHigh);
+		detectPower = this.power + 1;
 		
 		return super.writeToNBT(compound);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		power = compound.getLong("power");
-		powerDelta = compound.getLong("powerDelta");
 		this.conducts = compound.getBoolean("conducts");
+		this.power = compound.getLong("power");
+		this.powerDelta = compound.getLong("powerDelta");
 		this.redLow = compound.getShort("redLow");
 		this.redHigh = compound.getShort("redHigh");
 		super.readFromNBT(compound);
+	}
+
+
+	public void writeNBT(NBTTagCompound nbt) {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setLong("power", this.power);
+		data.setLong("powerDelta", this.powerDelta);
+		data.setShort("redLow", this.redLow);
+		data.setShort("redHigh", this.redHigh);
+		nbt.setTag("NBT_PERSISTENT_KEY", data);
+	}
+
+
+	public void readNBT(NBTTagCompound nbt) {
+		NBTTagCompound data = nbt.getCompoundTag("NBT_PERSISTENT_KEY");
+		this.power = data.getLong("power");
+		this.powerDelta = data.getLong("powerDelta");
+		this.redLow = data.getShort("redLow");
+		this.redHigh = data.getShort("redHigh");
 	}
 
 	@Override
@@ -147,14 +165,6 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(itemStackFill.getItem() instanceof IBatteryItem) {
 			IBatteryItem itemFill = ((IBatteryItem)itemStackFill.getItem());
 			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge()) {
-				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
-					inventory.setStackInSlot(3, itemStackFill);
-					inventory.setStackInSlot(2, ItemStack.EMPTY);
-				}
-			}
-		}else{
-			Item itemFillX = itemStackFill.getItem();
-			if(itemFillX == ModItems.dynosphere_desh_charged || itemFillX == ModItems.dynosphere_schrabidium_charged || itemFillX == ModItems.dynosphere_euphemium_charged || itemFillX == ModItems.dynosphere_dineutronium_charged){
 				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
 					inventory.setStackInSlot(3, itemStackFill);
 					inventory.setStackInSlot(2, ItemStack.EMPTY);

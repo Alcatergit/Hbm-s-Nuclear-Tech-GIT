@@ -66,21 +66,21 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
             list.add("§c[STRENGTH X]§r");
     	}
     	if(this == ModItems.apple_lead) {
-            list.add("Lead shields radiation right? So lets eat some it");
+            list.add("Lead shields radiation right? So lets eat some of it!");
             list.add("Might have some minor side effects");
-            list.add("§a[RAD-X (0.5)]§r");
+            list.add("§a[RAD-X (0.5) for 8min]§r");
     	}
     	if(this == ModItems.apple_lead1) {
-            list.add("Lead shields radiation right? So lets eat a lot it");
+            list.add("Lead shields radiation right? So lets eat a lot it!");
             list.add("Are you sure about that?");
-            list.add("§a[RAD-X (1)]§r");
+            list.add("§a[RAD-X (1) for 4min]§r");
     	}
     	if(this == ModItems.apple_lead2) {
-            list.add("Lead shields radiation right? So lets eat tons of it");
+            list.add("Lead shields radiation right? So lets eat tons of it!");
             list.add("I will survive it right?");
             list.add("...");
             list.add("right?");
-            list.add("§a[RAD-X (4)]§r");
+            list.add("§a[RAD-X (4) for 1min]§r");
     	}
 
 		this.module.addInformation(stack, list, flagIn);
@@ -164,7 +164,7 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 			player.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 2147483647, 99));
 		}
 		if(stack.getItem() == ModItems.apple_lead){
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 5 * 60 * 20, 5));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 8 * 60 * 20, 5));
 			player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5 * 60 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 30 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
@@ -172,7 +172,7 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 			player.attackEntityFrom(ModDamageSource.lead, 1F);
 		}
 		if(stack.getItem() == ModItems.apple_lead1){
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 10 * 60 * 20, 10));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 4 * 60 * 20, 10));
 			player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10 * 60 * 20, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 60 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 15 * 20, 0));
@@ -180,7 +180,7 @@ public class ItemFoodHazard extends ItemFood implements IItemHazard {
 			player.attackEntityFrom(ModDamageSource.lead, 10F);
 		}
 		if(stack.getItem() == ModItems.apple_lead2){
-			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 15 * 60 * 20, 40));
+			player.addPotionEffect(new PotionEffect(HbmPotion.radx, 1 * 60 * 20, 40));
 			player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 15 * 60 * 20, 2));
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 2 * 60 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 30 * 20, 0));

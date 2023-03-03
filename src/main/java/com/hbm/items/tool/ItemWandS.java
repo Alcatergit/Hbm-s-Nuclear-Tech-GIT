@@ -7,7 +7,7 @@ import com.hbm.items.ModItems;
 import com.hbm.world.FWatz;
 import com.hbm.world.FactoryAdvanced;
 import com.hbm.world.FactoryTitanium;
-import com.hbm.world.FusionReactor;
+import com.hbm.world.ParticleAccelerator;
 import com.hbm.world.NuclearReactor;
 import com.hbm.world.Watz;
 
@@ -53,7 +53,7 @@ public class ItemWandS extends Item {
 				tooltip.add("Structure: Nuclear Reactor");
 				break;
 			case 3:
-				tooltip.add("Structure: Fusion Reactor");
+				tooltip.add("Structure: Particle Accelerator");
 				break;
 			case 4:
 				tooltip.add("Structure: Watz Power Plant");
@@ -97,7 +97,7 @@ public class ItemWandS extends Item {
 				new NuclearReactor().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 4 : pos.getY(), pos.getZ()));
 				break;
 			case 3:
-				new FusionReactor().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 4 : pos.getY(), pos.getZ()));
+				new ParticleAccelerator().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY()-5 : pos.getY(), pos.getZ()));
 				break;
 			case 4:
 				new Watz().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 12 : pos.getY(), pos.getZ()));
@@ -145,7 +145,7 @@ public class ItemWandS extends Item {
 						player.sendMessage(new TextComponentTranslation("Set Structure: Nuclear Reactor"));
 						break;
 					case 3:
-						player.sendMessage(new TextComponentTranslation("Set Structure: Fusion Reactor"));
+						player.sendMessage(new TextComponentTranslation("Set Structure: Particle Accelerator"));
 						break;
 					case 4:
 						player.sendMessage(new TextComponentTranslation("Set Structure: Watz Power Plant"));

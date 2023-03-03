@@ -58,7 +58,7 @@ public class MultiblockHandler {
 	public static final int[] iGenDimensionEast  = new int[] { 2, 3, 2, 0, 1, 1 };
 	public static final int[] iGenDimensionSouth = new int[] { 1, 1, 2, 0, 2, 3 };
 	public static final int[] iGenDimensionWest  = new int[] { 3, 2, 2, 0, 1, 1 };
-	public static final int[] centDimension  = new int[] { 0, 0, 2, 0, 0, 0 };
+	public static final int[] centDimension  = new int[] { 0, 0, 3, 0, 0, 0 };
 	public static final int[] cyclDimension  = new int[] { 1, 1, 5, 0, 1, 1 };
 	public static final int[] wellDimension  = new int[] { 1, 1, 5, 0, 1, 1 };
 	public static final int[] flareDimension  = new int[] { 1, 1, 9, 0, 1, 1 };

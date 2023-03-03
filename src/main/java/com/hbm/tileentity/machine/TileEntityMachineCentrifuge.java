@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.items.ModItems;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.lib.Library;
@@ -23,10 +24,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IConsumer {
 
-	public int dualCookTime;
+	public int progress;
 	public long power;
 	public boolean isProgressing;
-	public static final int maxPower = 100000;
+	public static final int maxPower = 1000000;
 	public static final int processingSpeed = 200;
 	
 	private static final int[] slots_top = new int[] {0};
@@ -34,7 +35,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	private static final int[] slots_side = new int[] {0, 1};
 	
 	public TileEntityMachineCentrifuge() {
-		super(6);
+		super(8);
 	}
 	
 	@Override
@@ -52,7 +53,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	}
 	
 	public int getCentrifugeProgressScaled(int i) {
-		return (dualCookTime * i) / processingSpeed;
+		return (progress * i) / processingSpeed;
 	}
 	
 	public long getPowerRemainingScaled(int i) {
@@ -92,7 +93,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
-		compound.setShort("cookTime", (short) dualCookTime);
+		compound.setShort("progressTime", (short) progress);
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
@@ -100,7 +101,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("powerTime");
-		dualCookTime = compound.getShort("CookTime");
+		progress = compound.getShort("progressTime");
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
@@ -189,7 +190,49 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	}
 	
 	public boolean isProcessing() {
-		return this.dualCookTime > 0;
+		return this.progress > 0;
+	}
+
+	public int getSpeedLvl() {
+		int level = 0;
+		for(int i = 6; i <= 7; i++) {
+
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
+				level += 1;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
+				level += 2;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
+				level +=3;
+		}
+		return Math.min(level, 3);
+	}
+
+	public int getPowerLvl() {
+		int level = 0;
+		for(int i = 6; i <= 7; i++) {
+
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_1)
+				level += 1;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_2)
+				level += 2;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_3)
+				level +=3;
+		}
+		return Math.min(level, 3);
+	}
+
+	public int getOverdriveLvl() {
+		int level = 0;
+		for(int i = 6; i <= 7; i++) {
+
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_1)
+				level += 1;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_2)
+				level += 2;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_3)
+				level +=3;
+		}
+		return Math.min(level, 3);
 	}
 	
 	@Override
@@ -198,41 +241,49 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		if(!world.isRemote) {
 			
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
+
+			int speed = 1;
+			int consumption = 200;
 			
-			if(hasPower() && isProcessing())
-			{
-				this.power -= 200;
+			int speedLvl = getSpeedLvl();
+			int powerLvl = getPowerLvl();
+			int overdriveLvl = getOverdriveLvl();
+
+			speed += speedLvl;
+			consumption += speedLvl * 200;
+			
+			speed *= (1 + overdriveLvl * 2);
+			consumption += overdriveLvl * 10000;
+			
+			consumption /= (1 + powerLvl);
+			
+			if(hasPower() && isProcessing()){
+				this.power -= consumption;
 				
-				if(this.power < 0)
-				{
+				if(this.power < 0){
 					this.power = 0;
 				}
 			}
 			
-			if(hasPower() && canProcess())
-			{
+			if(hasPower() && canProcess()){
 				isProgressing = true;
 			} else {
 				isProgressing = false;
 			}
 			
-			
+			if(isProgressing){
+				progress += speed;
+				
+				if(this.progress >= TileEntityMachineCentrifuge.processingSpeed){
+					this.progress = 0;
+					this.processItem();
+				}
+			} else {
+				this.progress = 0;
+			}
+
 			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			detectAndSendChanges();
-			
-		}
-		
-		if(hasPower() && canProcess())
-		{
-			dualCookTime++;
-			
-			if(this.dualCookTime >= TileEntityMachineCentrifuge.processingSpeed)
-			{
-				this.dualCookTime = 0;
-				this.processItem();
-			}
-		} else {
-			dualCookTime = 0;
 		}
 	}
 	
@@ -246,16 +297,16 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 			mark = true;
 			detectPower = power;
 		}
-		if(detectCookTime != dualCookTime){
+		if(detectCookTime != progress){
 			mark = true;
-			detectCookTime = dualCookTime;
+			detectCookTime = progress;
 		}
 		if(detectIsProgressing != isProgressing){
 			mark = true;
 			detectIsProgressing = isProgressing;
 		}
 		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), dualCookTime, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), progress, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), isProgressing ? 1 : 0, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 		if(mark)
 			markDirty();

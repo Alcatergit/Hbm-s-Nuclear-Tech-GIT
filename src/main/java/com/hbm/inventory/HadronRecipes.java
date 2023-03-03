@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.machine.TileEntityHadron.EnumHadronState;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,7 +33,7 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_copper),
-				80,
+				900,
 				new ItemStack(ModItems.particle_aproton),
 				new ItemStack(ModItems.particle_aelectron),
 				true
@@ -40,41 +41,49 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_amat),
 				new ItemStack(ModItems.particle_amat),
-				80,
+				900,
 				new ItemStack(ModItems.particle_aschrab),
 				new ItemStack(ModItems.particle_empty),
 				false
 				));
 		recipes.add(new HadronRecipe(
-				new ItemStack(ModItems.particle_aschrab),
-				new ItemStack(ModItems.powder_euphemium),
-				500,
-				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity),
-				true
-				));
-		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_amat),
-				1000,
+				2000,
 				new ItemStack(ModItems.particle_muon),
 				new ItemStack(ModItems.particle_empty),
 				true
 				));
 		recipes.add(new HadronRecipe(
-				new ItemStack(ModItems.particle_muon),
-				new ItemStack(ModItems.singularity),
-				2000,
+				new ItemStack(ModItems.particle_aschrab),
+				new ItemStack(ModItems.powder_euphemium),
+				4000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity_counter_resonant),
+				new ItemStack(ModItems.singularity),
 				true
 				));
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_hydrogen),
 				new ItemStack(ModItems.particle_lead),
-				4000,
+				5000,
 				new ItemStack(ModItems.particle_higgs),
 				new ItemStack(ModItems.particle_empty),
+				false
+				));
+		recipes.add(new HadronRecipe(
+				new ItemStack(ModItems.particle_muon),
+				new ItemStack(ModItems.singularity),
+				8000,
+				new ItemStack(ModItems.particle_empty),
+				new ItemStack(ModItems.singularity_counter_resonant),
+				true
+				));
+		recipes.add(new HadronRecipe(
+				new ItemStack(ModItems.particle_higgs),
+				new ItemStack(ModItems.ingot_australium),
+				10000,
+				new ItemStack(ModItems.particle_empty),
+				new ItemStack(ModItems.ingot_verticium),
 				false
 				));
 		recipes.add(new HadronRecipe(
@@ -84,6 +93,14 @@ public class HadronRecipes {
 				new ItemStack(ModItems.particle_tachyon),
 				new ItemStack(ModItems.particle_empty),
 				true
+				));
+		recipes.add(new HadronRecipe(
+				new ItemStack(ModItems.particle_tachyon),
+				new ItemStack(ModItems.ingot_verticium),
+				40000,
+				new ItemStack(ModItems.particle_empty),
+				new ItemStack(ModItems.ingot_unobtainium),
+				false
 				));
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_tachyon),
@@ -102,14 +119,6 @@ public class HadronRecipes {
 				false
 				));
 		recipes.add(new HadronRecipe(
-				new ItemStack(ModItems.particle_muon),
-				new ItemStack(ModItems.particle_dark),
-				200000,
-				new ItemStack(ModItems.particle_strange),
-				new ItemStack(ModItems.particle_empty),
-				false
-				));
-		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_dark),
 				new ItemStack(ModItems.singularity_super_heated),
 				100000,
@@ -118,11 +127,27 @@ public class HadronRecipes {
 				true
 				));
 		recipes.add(new HadronRecipe(
+				new ItemStack(ModItems.particle_muon),
+				new ItemStack(ModItems.particle_dark),
+				200000,
+				new ItemStack(ModItems.particle_strange),
+				new ItemStack(ModItems.particle_empty),
+				false
+				));
+		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_strange),
 				new ItemStack(ModItems.powder_magic),
 				500000,
 				new ItemStack(ModItems.particle_sparkticle),
 				new ItemStack(ModItems.dust),
+				false
+				));
+		recipes.add(new HadronRecipe(
+				new ItemStack(ModItems.particle_sparkticle),
+				new ItemStack(ModItems.ingot_unobtainium),
+				600000,
+				new ItemStack(ModItems.particle_empty),
+				new ItemStack(ModItems.ingot_daffergon),
 				false
 				));
 		recipes.add(new HadronRecipe(
@@ -144,12 +169,14 @@ public class HadronRecipes {
 		recipes.add(new HadronRecipe(
 				new ItemStack(Items.CHICKEN),
 				new ItemStack(Items.CHICKEN),
-				40000,
+				100,
 				new ItemStack(ModItems.nugget),
 				new ItemStack(ModItems.nugget),
 				false
 				));
 	}
+
+	public static EnumHadronState returnCode = EnumHadronState.NORESULT;
 
 	/**
 	 * Resolves recipes, simple enough.
@@ -161,10 +188,15 @@ public class HadronRecipes {
 	 */
 	public static ItemStack[] getOutput(ItemStack in1, ItemStack in2, int momentum, boolean analysisOnly) {
 
+		returnCode = EnumHadronState.NORESULT_WRONG_INGREDIENT;
+
 		for(HadronRecipe r : recipes) {
 
 			if((r.in1.isApplicable(in1) && r.in2.isApplicable(in2)) ||
 					(r.in1.isApplicable(in2) && r.in2.isApplicable(in1))) {
+
+				if(analysisOnly && !r.analysisOnly)	returnCode = EnumHadronState.NORESULT_WRONG_MODE;
+				if(momentum < r.momentum)			returnCode = EnumHadronState.NORESULT_TOO_SLOW;
 
 				if(momentum >= r.momentum && analysisOnly == r.analysisOnly)
 					return new ItemStack[] {r.out1, r.out2};

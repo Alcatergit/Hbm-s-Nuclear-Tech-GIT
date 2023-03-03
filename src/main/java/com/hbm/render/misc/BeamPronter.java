@@ -50,12 +50,13 @@ public class BeamPronter {
 		GL11.glPushMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
+        GlStateManager.depthMask(true);
 
         
 		if(beam == EnumBeamType.SOLID) {
 			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
-			GlStateManager.depthMask(false);
+			//GlStateManager.depthMask(false);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		}
         

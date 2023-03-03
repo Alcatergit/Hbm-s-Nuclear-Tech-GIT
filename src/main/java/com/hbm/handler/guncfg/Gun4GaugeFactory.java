@@ -462,7 +462,6 @@ public class Gun4GaugeFactory {
 					EntityPlayer player = (EntityPlayer) hit;
 
 					player.inventory.dropAllItems();
-					player.world.newExplosion(bullet.shooter, player.posX, player.posY, player.posZ, 5.0F, true, true);
 				}
 			}
 		};

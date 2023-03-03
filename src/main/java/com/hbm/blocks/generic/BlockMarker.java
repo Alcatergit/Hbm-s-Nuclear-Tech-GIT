@@ -60,10 +60,6 @@ public class BlockMarker extends BlockContainer {
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor"));
 			if(i == 2)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor with Concrete Casing"));
-			if(i == 3)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Fusion Reactor"));
-			if(i == 4)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Fusion Reactor with Internal Coating"));
 			if(i == 5)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Watz Power Plant"));
 			if(i == 6)

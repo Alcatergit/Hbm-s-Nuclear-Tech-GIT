@@ -9,6 +9,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCatalyst;
+import com.hbm.items.special.ItemAMSCore;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -71,14 +72,15 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 				exp.speed = 25;
 				exp.coefficient = 1.0F;
 				exp.waste = false;
-
-				world.spawnEntity(exp);
-	    		
-	    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, size);
-	    		cloud.posX = pos.getX();
-	    		cloud.posY = pos.getY();
-	    		cloud.posZ = pos.getZ();
-	    		world.spawnEntity(cloud);
+				if(!EntityNukeExplosionMK3.isJammed(this.world, exp)){
+					world.spawnEntity(exp);
+		    		
+		    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, size);
+		    		cloud.posX = pos.getX();
+		    		cloud.posY = pos.getY();
+		    		cloud.posZ = pos.getZ();
+		    		world.spawnEntity(cloud);
+		    	}
 			}
 			
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst){
@@ -144,18 +146,20 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - 10 + 0.5, pos.getY() - 10 + 0.5 + 6, pos.getZ() - 10 + 0.5, pos.getX() + 10 + 0.5, pos.getY() + 10 + 0.5 + 6, pos.getZ() + 10 + 0.5));
 		
 		for(Entity e : list) {
-			if(!(e instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer)e)))
-				if(!Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ)) {
-					e.attackEntityFrom(ModDamageSource.ams, 1000);
+			if(!(e instanceof EntityPlayer && (ArmorUtil.checkForHazmat((EntityPlayer)e) || ((EntityPlayer)e).capabilities.isCreativeMode))){
+				if(!(Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ))){
+					e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
 					e.setFire(3);
 				}
+			}
 		}
 
 		List<Entity> list2 = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - scale + 0.5, pos.getY() - scale + 0.5 + 6, pos.getZ() - scale + 0.5, pos.getX() + scale + 0.5, pos.getY() + scale + 0.5 + 6, pos.getZ() + scale + 0.5));
 		
 		for(Entity e : list2) {
-			if(!(e instanceof EntityPlayer && ArmorUtil.checkForHaz2((EntityPlayer)e)))
-				e.attackEntityFrom(ModDamageSource.amsCore, 10000);
+			if(!(e instanceof EntityPlayer && (ArmorUtil.checkForHaz2((EntityPlayer)e) || ((EntityPlayer)e).capabilities.isCreativeMode))){
+				e.attackEntityFrom(ModDamageSource.amsCore, this.heat * 1000);
+			}
 		}
 	}
 	
@@ -169,7 +173,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	
 	public boolean isReady() {
 		
-		if(getCore() == 0)
+		if(getCorePower() == 0)
 			return false;
 		
 		if(color == 0)
@@ -194,17 +198,17 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		int demand = (int)Math.ceil((double)joules / 1000D);
 
 		long powerAbs = ItemCatalyst.getPowerAbs(inventory.getStackInSlot(0)) + ItemCatalyst.getPowerAbs(inventory.getStackInSlot(2));
-		float powerMod = ItemCatalyst.getPowerMod(inventory.getStackInSlot(0)) + ItemCatalyst.getPowerMod(inventory.getStackInSlot(2)) - 1F;
-		float heatMod = ItemCatalyst.getHeatMod(inventory.getStackInSlot(0)) + ItemCatalyst.getHeatMod(inventory.getStackInSlot(2)) - 1F;
-		float fuelMod = ItemCatalyst.getFuelMod(inventory.getStackInSlot(0)) + ItemCatalyst.getFuelMod(inventory.getStackInSlot(2)) - 1F;	
+		float powerMod = ItemCatalyst.getPowerMod(inventory.getStackInSlot(0)) * ItemCatalyst.getPowerMod(inventory.getStackInSlot(2));
+		float heatMod = ItemCatalyst.getHeatMod(inventory.getStackInSlot(0)) * ItemCatalyst.getHeatMod(inventory.getStackInSlot(2));
+		float fuelMod = ItemCatalyst.getFuelMod(inventory.getStackInSlot(0)) * ItemCatalyst.getFuelMod(inventory.getStackInSlot(2));	
 
-		demand = (int)(demand * fuelMod);
+		demand = (int)(getCoreFuel() * demand * fuelMod);
 		
 		//check if the reaction has enough valid fuel
 		if(tanks[0].getFluidAmount() < demand || tanks[1].getFluidAmount() < demand)
 			return joules;
 		
-		heat += (int)(heatMod * Math.ceil((double)joules / 10000D));
+		heat += (int)(getCoreHeat() * heatMod * Math.ceil((double)joules / 10000D));
 		
 		Fluid f1 = tanks[0].getFluid().getFluid();
 		Fluid f2 = tanks[1].getFluid().getFluid();
@@ -212,7 +216,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		tanks[0].drain(demand, true);
 		tanks[1].drain(demand, true);
 		
-		return (long) (powerMod * joules * getCore() * getFuelEfficiency(f1) * getFuelEfficiency(f2)) + powerAbs;
+		return (long) Math.abs((powerMod * joules * getCorePower() * getFuelEfficiency(f1) * getFuelEfficiency(f2)) + powerAbs);
 	}
 	
 	public float getFuelEfficiency(Fluid type) {
@@ -243,25 +247,17 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	}
 	
 	//TODO: move stats to the AMSCORE class
-	public int getCore() {
-		
-		if(inventory.getStackInSlot(1).isEmpty()) {
-			return 0;
-		}
-		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.ams_core_sing)
-			return 500;
-		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.ams_core_wormhole)
-			return 650;
-		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.ams_core_eyeofharmony)
-			return 800;
-		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.ams_core_thingy)
-			return 2500;
-		
-		return 0;
+	//Alcater: ok did that
+	public int getCorePower() {
+		return ItemAMSCore.getPowerBase(inventory.getStackInSlot(1));
+	}
+
+	public float getCoreHeat() {
+		return ItemAMSCore.getHeatBase(inventory.getStackInSlot(1));
+	}
+
+	public float getCoreFuel() {
+		return ItemAMSCore.getFuelBase(inventory.getStackInSlot(1));
 	}
 	
 	private int calcAvgHex(int h1, int h2) {

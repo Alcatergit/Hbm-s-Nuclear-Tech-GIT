@@ -1,5 +1,7 @@
 package com.hbm.inventory.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 
 import com.hbm.inventory.container.ContainerHadron;
@@ -46,6 +48,17 @@ public class GUIHadron extends GuiInfoContainer {
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 142, guiTop + 107, 18, 18, mouseX, mouseY, I18nUtil.resolveKeyArray("hadron.modeLine"));
 		else
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 142, guiTop + 107, 18, 18, mouseX, mouseY, I18nUtil.resolveKeyArray("hadron.modeCircular"));
+
+		List<String> stats = new ArrayList();
+		stats.add("§e" + I18nUtil.resolveKey("hadron.stats"));
+		stats.add((hadron.stat_success ? "§a" : "§c") + I18n.format("hadron." + this.hadron.stat_state.name().toLowerCase()));
+		if(this.hadron.state.showCoord){
+			stats.add("§c" + I18nUtil.resolveKey("hadron.stats_coord", hadron.stat_x, hadron.stat_y, hadron.stat_z));
+		}
+		stats.add("§7" + I18nUtil.resolveKey("hadron.stats_momentum", String.format("%,d", hadron.stat_charge)));
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 41, guiTop + 92, 25, 11, mouseX, mouseY, stats.toArray(new String[0]));
+
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 4, guiTop + 36, 16, 16, guiLeft + 4, guiTop + 36 + 16, new String[] {"Initial particle momentum: 750"});
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -103,7 +116,7 @@ public class GUIHadron extends GuiInfoContainer {
 		if(hadron.state == EnumHadronState.NORESULT) {
 			drawTexturedModalRect(guiLeft + 73, guiTop + 29, 176, 30, 30, 30);
 		}
-		if(hadron.state == EnumHadronState.ERROR) {
+		if(hadron.state == EnumHadronState.ERROR_GENERIC) {
 			drawTexturedModalRect(guiLeft + 73, guiTop + 29, 176, 106, 30, 30);
 		}
 		

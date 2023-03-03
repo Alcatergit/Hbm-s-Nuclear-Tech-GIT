@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import java.util.Random;
+
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
@@ -27,6 +29,8 @@ public class TileEntityCrateDesh extends TileEntityLockableBase implements ITick
 
 	public ItemStackHandler inventory;
 	private String customName;
+
+	private Random rand = new Random();
 
 	public int heatTimer;
 
@@ -103,20 +107,24 @@ public class TileEntityCrateDesh extends TileEntityLockableBase implements ITick
 				continue;
 			
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
-			
+
 			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
 			if(requiredEnergy > -1 && energy > requiredEnergy){
-				result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
+				if(0.0001D > rand.nextDouble()*((double)requiredEnergy/(double)energy)){
+					result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
+				}
 			}
 			
 			if(inventory.getStackInSlot(i).getItem() == ModItems.crucible && ItemCrucible.getCharges(inventory.getStackInSlot(i)) < 3 && energy > 10000000)
 				ItemCrucible.charge(inventory.getStackInSlot(i));
 			
-			int size = inventory.getStackInSlot(i).getCount();
+			if(result != null && !result.isEmpty()){
+				int size = inventory.getStackInSlot(i).getCount();
 			
-			if(!result.isEmpty() && result.getCount() * size <= result.getMaxStackSize()) {
-				inventory.setStackInSlot(i, result.copy());
-				inventory.getStackInSlot(i).setCount(inventory.getStackInSlot(i).getCount()*size);
+				if(result.getCount() * size <= result.getMaxStackSize()) {
+					inventory.setStackInSlot(i, result.copy());
+					inventory.getStackInSlot(i).setCount(inventory.getStackInSlot(i).getCount()*size);
+				}
 			}
 		}
 	}

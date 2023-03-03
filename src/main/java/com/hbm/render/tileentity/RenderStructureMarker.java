@@ -7,7 +7,6 @@ import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
 import com.hbm.world.FWatz;
 import com.hbm.world.FactoryTitanium;
-import com.hbm.world.FusionReactor;
 import com.hbm.world.NuclearReactor;
 import com.hbm.world.Watz;
 
@@ -215,96 +214,6 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 							texture = 5;
 						if(texture >= 0) {
 							renderSmolBlockAt(reactor[texture][0], reactor[texture][1], a, b, c);
-						}
-					}
-				}
-			}
-		}
-		if(type == 3) {
-			//System.out.println(meta);
-			if(meta == 1) {
-				offsetZ = 0;
-				offsetX = 25;
-			}
-			if(meta == 2) {
-				offsetZ = 0;
-				offsetX = 7;
-			}
-			if(meta == 3) {
-				offsetX = 16;
-				offsetZ = -9;
-			}
-			if(meta == 4) {
-				offsetZ = 9;
-				offsetX = 16;
-			}
-
-			GL11.glTranslatef(-8 + offsetX, 0, -8 + offsetZ);
-			for(int a = 0; a < 17; a++) {
-				for(int b = 0; b < 5; b++) {
-					for(int c = 0; c < 17; c++) {
-				
-						int texture = -1;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("M"))
-							texture = 0;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("H"))
-							texture = 1;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("A"))
-							texture = 2;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("R"))
-							texture = 3;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("C"))
-							texture = 4;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("#"))
-							texture = 5;
-						if(texture >= 0) {
-							renderSmolBlockAt(fusion[texture][0], fusion[texture][1], a, b, c);
-						}
-					}
-				}
-			}
-		}
-		if(type == 4) {
-
-			if(meta == 1) {
-				offsetZ = 0;
-				offsetX = 25;
-			}
-			if(meta == 2) {
-				offsetZ = 0;
-				offsetX = 7;
-			}
-			if(meta == 3) {
-				offsetX = 16;
-				offsetZ = -9;
-			}
-			if(meta == 4) {
-				offsetZ = 9;
-				offsetX = 16;
-			}
-
-			GL11.glTranslatef(-8 + offsetX, 0, -8 + offsetZ);
-			for(int a = 0; a < 17; a++) {
-				for(int b = 0; b < 5; b++) {
-					for(int c = 0; c < 17; c++) {
-				
-						int texture = -1;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("M"))
-							texture = 0;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("H"))
-							texture = 1;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("A"))
-							texture = 2;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("R"))
-							texture = 3;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("C"))
-							texture = 4;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("#"))
-							texture = 5;
-						if(FusionReactor.array[b][a].substring(c, c + 1).equals("T"))
-							texture = 6;
-						if(texture >= 0) {
-							renderSmolBlockAt(fusion[texture][0], fusion[texture][1], a, b, c);
 						}
 					}
 				}

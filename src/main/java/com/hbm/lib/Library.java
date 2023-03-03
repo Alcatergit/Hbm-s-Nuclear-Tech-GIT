@@ -139,38 +139,46 @@ public class Library {
 	}
 
 	public static String getShortNumber(long l) {
+		boolean negative = l < 0;
+		if(negative){
+			l = l * -1;
+		}
+		String result = "";
+
 		if(l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "E";
-		}
-		if(l >= Math.pow(10, 15)) {
+			result = res + "E";
+		}else if(l >= Math.pow(10, 15)) {
 			double res = l / Math.pow(10, 15);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "P";
-		}
-		if(l >= Math.pow(10, 12)) {
+			result = res + "P";
+		}else if(l >= Math.pow(10, 12)) {
 			double res = l / Math.pow(10, 12);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "T";
-		}
-		if(l >= Math.pow(10, 9)) {
+			result = res + "T";
+		}else if(l >= Math.pow(10, 9)) {
 			double res = l / Math.pow(10, 9);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "G";
-		}
-		if(l >= Math.pow(10, 6)) {
+			result = res + "G";
+		}else if(l >= Math.pow(10, 6)) {
 			double res = l / Math.pow(10, 6);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "M";
-		}
-		if(l >= Math.pow(10, 3)) {
+			result = res + "M";
+		}else if(l >= Math.pow(10, 3)) {
 			double res = l / Math.pow(10, 3);
 			res = Math.round(res * 100.0) / 100.0;
-			return res + "k";
+			result = res + "k";
+		}
+		else{
+			result = Long.toString(l);
 		}
 
-		return Long.toString(l);
+		if (negative){
+			result = "-"+result;
+		}
+
+		return result;
 	}
 
 	// Drillgon200: Just realized I copied the wrong method. God dang it.
@@ -219,15 +227,6 @@ public class Library {
 			power -= toCharge;
 			
 			battery.chargeBattery(stack, toCharge);
-
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_desh && battery.getCharge(stack) >= battery.getMaxCharge())
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_desh_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_schrabidium && battery.getCharge(stack) >= battery.getMaxCharge())
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_schrabidium_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_euphemium && battery.getCharge(stack) >= battery.getMaxCharge())
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_euphemium_charged));
-			if(inventory.getStackInSlot(index) != null && inventory.getStackInSlot(index).getItem() == ModItems.dynosphere_dineutronium && battery.getCharge(stack) >= battery.getMaxCharge())
-				inventory.setStackInSlot(index, new ItemStack(ModItems.dynosphere_dineutronium_charged));
 		}
 		
 		return power;

@@ -19,20 +19,18 @@ public class ContainerSILEX extends Container {
 
 		//Input
 		this.addSlotToContainer(new SlotItemHandler(te.inventory, 0, 80, 12));
-		//Fluid ID
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 1, 8, 24));
 		//Fluid Container
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 2, 26, 24));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 3, 44, 24));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 1, 8, 24));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 2, 44, 24));
 		//Output
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 4, 116, 90));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 3, 116, 90));
 		//Output Queue
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 5, 134, 72));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 6, 152, 72));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 7, 134, 90));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 8, 152, 90));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 9, 134, 108));
-		this.addSlotToContainer(new SlotItemHandler(te.inventory, 10, 152, 108));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 4, 134, 72));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 5, 152, 72));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 6, 134, 90));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 7, 152, 90));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 8, 134, 108));
+		this.addSlotToContainer(new SlotItemHandler(te.inventory, 9, 152, 108));
 		
 		for(int i = 0; i < 3; i++)
 		{

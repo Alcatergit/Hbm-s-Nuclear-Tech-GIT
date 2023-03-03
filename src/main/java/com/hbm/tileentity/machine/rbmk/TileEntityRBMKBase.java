@@ -261,6 +261,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public void getDiagData(NBTTagCompound nbt) {
 		diag = true;
 		this.writeToNBT(nbt);
+		nbt.removeTag("steam");
+		nbt.removeTag("water");
 		diag = false;
 	}
 	

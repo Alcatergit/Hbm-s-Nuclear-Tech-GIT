@@ -1212,40 +1212,14 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void effectNT(NBTTagCompound data) {
 		World world = Minecraft.getMinecraft().world;
+		if(world == null)
+			return;
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		Random rand = world.rand;
 		String type = data.getString("type");
 		double x = data.getDouble("posX");
 		double y = data.getDouble("posY");
 		double z = data.getDouble("posZ");
-		/*if("lightning".equals(type)){
-			String mode = data.getString("mode");
-			if("beam".equals(mode)){
-				double hitX = data.getDouble("hitX");
-				double hitY = data.getDouble("hitY");
-				double hitZ = data.getDouble("hitZ");
-				int hitType = data.getInteger("hitType");
-				double length = new Vec3d(x, y, z).subtract(new Vec3d(hitX, hitY, hitZ)).lengthVector();
-				//Left/right, up/down, forward/backward
-				LightningGenInfo i = new LightningGenInfo();
-				i.forkChance = 0;
-				i.randAmount = 1F;
-				i.randAmountSubdivMultiplier = 0.2F;
-				i.subdivMult = 2;
-				i.subdivisions = Math.max((int)(length*0.1), 1);
-				i.subdivRecurse = 2;
-				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleLightningFade(player.world, x, y, z, hitX, hitY, hitZ, 0.075F, i));
-				if(hitType == 0 || hitType == 1){
-					Vec3d normal = new Vec3d(data.getDouble("normX"), data.getDouble("normY"), data.getDouble("normZ")).scale(0.25F);
-					for(int j = 0; j < 3; j ++){
-						ParticleFakeBrightness b = new ParticleFakeBrightness(player.world, hitX+normal.x+(rand.nextFloat()-0.5F)*0.1F, hitY+normal.y+(rand.nextFloat()-0.5F)*0.1F, hitZ+normal.z+(rand.nextFloat()-0.5F)*0.1F, 60, 15)
-								.color(0.4F, 0.8F, 1, 2);
-						b.fadeInKoeff = 10;
-						Minecraft.getMinecraft().effectRenderer.addEffect(b);
-					}
-				}
-			}
-		}*/
 		
 		if("smoke".equals(type)) {
 			

@@ -1,6 +1,10 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+import java.util.Random;
+
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.Library;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
@@ -14,8 +18,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -113,14 +120,51 @@ public class MachineBattery extends BlockContainer {
 	}
 
 	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return null;
+	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest){
+		if(!player.capabilities.isCreativeMode && !world.isRemote && willHarvest) {
+			
+			ItemStack drop = new ItemStack(this);
+			TileEntity te = world.getTileEntity(pos);
+			if (te instanceof TileEntityMachineBattery) {
+				TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
+			
+				NBTTagCompound nbt = new NBTTagCompound();
+				battery.writeNBT(nbt);
+
+				if(!nbt.hasNoTags()) {
+					drop.setTagCompound(nbt);
+				}
+			}
+
+			InventoryHelper.spawnItemStack(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+		}
+		return world.setBlockToAir(pos);
+	}
+
+	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-		if (stack.hasDisplayName()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-
-			if (tileentity instanceof TileEntityMachineBattery) {
-				((TileEntityMachineBattery) tileentity).setCustomName(stack.getDisplayName());
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(stack.hasTagCompound()){
+			if (te instanceof TileEntityMachineBattery) {
+				TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
+				if(stack.hasDisplayName()) {
+					battery.setCustomName(stack.getDisplayName());
+				}
+				try {
+					NBTTagCompound stackNBT = stack.getTagCompound();
+					if(stackNBT.hasKey("NBT_PERSISTENT_KEY")){
+						battery.readNBT(stackNBT);
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
@@ -146,7 +190,6 @@ public class MachineBattery extends BlockContainer {
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
-
 		if (tileentity instanceof TileEntityMachineBattery) {
 			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineBattery) tileentity);
 			worldIn.updateComparatorOutputLevel(pos, this);
@@ -160,4 +203,48 @@ public class MachineBattery extends BlockContainer {
 		return EnumBlockRenderType.MODEL;
 	}
 
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state){
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos){
+		
+		TileEntity te = worldIn.getTileEntity(pos);
+		
+		if(!(te instanceof TileEntityMachineBattery))
+			return 0;
+		
+		TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
+		return (int)battery.getPowerRemainingScaled(15L);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, list, flagIn);
+		long charge = 0L;
+		if(stack.hasTagCompound()){
+			NBTTagCompound nbt = stack.getTagCompound();
+			if(nbt.hasKey("NBT_PERSISTENT_KEY")){
+				charge = nbt.getCompoundTag("NBT_PERSISTENT_KEY").getLong("power");
+			}
+		}
+
+		if(charge == 0L){
+			list.add("§c0§4/" + Library.getShortNumber(this.maxPower) + "HE §c(0.0%)§r");
+		}else {
+			double percent = Math.round(charge*1000L/this.maxPower)*0.1D;
+			String color = "§e";
+			String color2 = "§6"; 
+			if(percent < 25){
+				color = "§c";
+				color2 = "§4";
+			}else if(percent >= 75){
+				color = "§a";
+				color2 = "§2";
+			}
+			list.add(color+Library.getShortNumber(charge)+color2+"/"+Library.getShortNumber(this.maxPower)+"HE "+color+"("+percent+"%)§r");
+		}
+	}
 }

@@ -18,7 +18,7 @@ public class RenderRBMKDebris extends Render<EntityRBMKDebris> {
 	
 	//for fallback only
 	private static final ResourceLocation tex_base = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_side.png");
-	private static final ResourceLocation tex_element = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_element.png");
+	private static final ResourceLocation tex_element = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_element_fuelchunk.png");
 	private static final ResourceLocation tex_control = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_control.png");
 	private static final ResourceLocation tex_blank = new ResourceLocation(RefStrings.MODID + ":textures/blocks/rbmk/rbmk_blank.png");
 	private static final ResourceLocation tex_graphite = new ResourceLocation(RefStrings.MODID + ":textures/blocks/block_graphite.png");

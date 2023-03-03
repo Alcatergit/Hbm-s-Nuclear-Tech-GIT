@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
@@ -15,11 +16,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemAMSCore extends Item {
 
-	long powerBase;
-	int heatBase;
-	int fuelBase;
+	int powerBase;
+	float heatBase;
+	float fuelBase;
 	
-	public ItemAMSCore(long powerBase, int heatBase, int fuelBase, String s) {
+	public ItemAMSCore(int powerBase, float heatBase, float fuelBase, String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.powerBase = powerBase;
@@ -79,6 +80,10 @@ public class ItemAMSCore extends Item {
 				list.add("it belongs. In the trash.");
 			}
 		}
+		list.add("§3[DFC Core]§r");
+		list.add(" §bPower: "+Library.getShortNumber(this.powerBase));
+		list.add(" §bHeat: " + (this.heatBase > 1 ? "§c+" : "§a") + (Math.round(this.heatBase * 1000) * .10 - 100) + "%");
+		list.add(" §bFuel: " + (this.fuelBase > 1 ? "§c+" : "§a") + (Math.round(this.fuelBase * 1000) * .10 - 100) + "%");
 	}
 	
 	@Override
@@ -102,21 +107,21 @@ public class ItemAMSCore extends Item {
     	return false;
 	}
 	
-	public static long getPowerBase(ItemStack stack) {
+	public static int getPowerBase(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemAMSCore))
 			return 0;
 		return ((ItemAMSCore)stack.getItem()).powerBase;
     }
     
-    public static int getHeatBase(ItemStack stack) {
+    public static float getHeatBase(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemAMSCore))
-			return 0;
+			return 1F;
 		return ((ItemAMSCore)stack.getItem()).heatBase;
     }
     
-    public static int getFuelBase(ItemStack stack) {
+    public static float getFuelBase(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemAMSCore))
-			return 0;
+			return 1F;
 		return ((ItemAMSCore)stack.getItem()).fuelBase;
     }
 }

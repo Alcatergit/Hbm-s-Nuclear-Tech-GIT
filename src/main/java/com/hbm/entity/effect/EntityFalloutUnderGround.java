@@ -242,7 +242,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				if(l > s1)
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
 				else
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				continue;
 
 			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {

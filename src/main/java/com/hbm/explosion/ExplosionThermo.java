@@ -150,6 +150,14 @@ public class ExplosionThermo {
 		if (block == Blocks.ICE) {
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
+
+		if (block == Blocks.SNOW) {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		}
+
+		if (block == Blocks.SNOW_LAYER) {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		}
 	}
 
 	public static void freezeDest(World world, BlockPos pos) {

@@ -206,7 +206,8 @@ public class ResourceManager {
 	public static final IModelCustom armor_wings = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/armor/murk.obj"));
 	
 	//Centrifuge
-	public static final IModelCustom centrifuge_new = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/centrifuge_new.obj"));
+	public static final IModelCustom centrifuge = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/centrifuge.obj"));
+	public static final IModelCustom centrifuge_gas = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/centrifuge_gas.obj"));
 	public static final IModelCustom silex = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/silex.obj"));
 	public static final IModelCustom fel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fel.obj"));
 	

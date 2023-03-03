@@ -48,10 +48,10 @@ public class ItemCatalyst extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Absolute Energy Bonus: §a" + Library.getShortNumber(powerAbs) + "HE");
+		tooltip.add("Absolute Energy Bonus: " + (powerAbs >= 0 ? "§a+" : "§c") + Library.getShortNumber(powerAbs) + "HE");
 		tooltip.add("Energy Modifier:           " + (powerMod >= 1 ? "§a+" : "§c") + (Math.round(powerMod * 1000) * .10 - 100) + "%");
-		tooltip.add("Heat Modifier:               " + (heatMod >= 1 ? "§c+" : "§a") + (Math.round(heatMod * 1000) * .10 - 100) + "%");
-		tooltip.add("Fuel Modifier:               " + (fuelMod >= 1 ? "§c+" : "§a") + (Math.round(fuelMod * 1000) * .10 - 100) + "%");
+		tooltip.add("Heat Modifier:               " + (heatMod > 1 ? "§c+" : "§a") + (Math.round(heatMod * 1000) * .10 - 100) + "%");
+		tooltip.add("Fuel Modifier:               " + (fuelMod > 1 ? "§c+" : "§a") + (Math.round(fuelMod * 1000) * .10 - 100) + "%");
 	}
 	
 	public static long getPowerAbs(ItemStack stack) {

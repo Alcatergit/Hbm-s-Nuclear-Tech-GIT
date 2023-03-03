@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.inventory.SlotUpgrade;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,24 +19,26 @@ public class ContainerCentrifuge extends Container {
 		
 		diFurnace = tedf;
 		
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 26, 17));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 26, 53));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 134, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 152, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 134, 53));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 152, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 36, 50));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 9, 50));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 63, 50));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 83, 50));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 103, 50));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 123, 50));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 6, 149, 22));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 7, 149, 40));
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 104 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 162));
 		}
 	}
 	

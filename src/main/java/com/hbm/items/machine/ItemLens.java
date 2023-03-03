@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 public class ItemLens extends Item {
 
 	public long maxDamage;
-	public float drainMod;
 	public float fieldMod;
+	public float drainMod;
 	
 	public ItemLens(long maxDamage, float fieldMod, float drainMod, String s) {
 		this.setUnlocalizedName(s);

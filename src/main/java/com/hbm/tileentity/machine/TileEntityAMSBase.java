@@ -251,9 +251,9 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 						fuelMod *= ItemCatalyst.getFuelMod(inventory.getStackInSlot(i));
 					}
 
-					powerBase = ItemAMSCore.getPowerBase(inventory.getStackInSlot(12));
-					heatBase = ItemAMSCore.getHeatBase(inventory.getStackInSlot(12));
-					fuelBase = ItemAMSCore.getFuelBase(inventory.getStackInSlot(12));
+					powerBase = (int)ItemAMSCore.getPowerBase(inventory.getStackInSlot(12));
+					heatBase = (int)ItemAMSCore.getHeatBase(inventory.getStackInSlot(12));
+					fuelBase = (int)ItemAMSCore.getFuelBase(inventory.getStackInSlot(12));
 					
 					powerBase *= this.efficiency;
 					powerBase *= Math.pow(1.25F, booster);

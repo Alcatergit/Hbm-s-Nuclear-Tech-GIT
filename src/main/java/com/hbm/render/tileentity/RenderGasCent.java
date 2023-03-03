@@ -34,7 +34,7 @@ public class RenderGasCent extends TileEntitySpecialRenderer<TileEntityMachineGa
 		}
 
 		bindTexture(ResourceManager.centrifuge_gas_tex);
-        ResourceManager.centrifuge_new.renderAll();
+        ResourceManager.centrifuge_gas.renderAll();
 
         GL11.glPopMatrix();
 	}

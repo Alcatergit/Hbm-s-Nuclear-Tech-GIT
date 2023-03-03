@@ -332,7 +332,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				if(dist > s1)
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
 				else
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				continue;
 			}
 

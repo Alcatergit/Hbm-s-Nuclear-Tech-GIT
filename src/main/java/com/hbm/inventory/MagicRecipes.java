@@ -47,7 +47,7 @@ public class MagicRecipes {
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.rod_of_discord), new ComparableStack(Items.ENDER_PEARL), new ComparableStack(ModItems.nugget_euphemium), new ComparableStack(Items.BLAZE_ROD)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.balefire_and_steel), new OreDictStack(STEEL.ingot()), new ComparableStack(ModItems.egg_balefire_shard)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.mysteryshovel), new ComparableStack(Items.IRON_SHOVEL), new ComparableStack(Items.BONE), new ComparableStack(ModItems.ingot_starmetal), new ComparableStack(ModItems.ducttape)));
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.ingot_electronium), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged), new ComparableStack(ModItems.dynosphere_dineutronium_charged)));
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.ingot_electronium), new ComparableStack(ModItems.pellet_charged), new ComparableStack(ModItems.pellet_charged), new OreDictStack(DNT.ingot()), new OreDictStack(DNT.ingot())));
 
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_44_pip),
 				new ComparableStack(ModItems.ammo_44),

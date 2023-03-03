@@ -47,13 +47,12 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	public final int processTime = 80;
 	
 	//0: Input
-	//1: Fluid ID
 	//2-3: Fluid Containers
 	//4: Output
 	//5-10: Queue
 
 	public TileEntitySILEX() {
-		super(11);
+		super(10);
 		//acid
 		tank = new FluidTank(16000);
 	}
@@ -72,7 +71,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		
 		if(!world.isRemote) {
 
-			FFUtils.fillFromFluidContainer(inventory, tank, 2, 3);
+			FFUtils.fillFromFluidContainer(inventory, tank, 1, 2);
 			
 			loadFluid();
 			
@@ -194,23 +193,23 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		if(recipe == null)
 			return false;
 
-		if(!(recipe.laserStrength.ordinal() == this.mode.ordinal()))
+		if(!(recipe.laserStrength.ordinal() <= this.mode.ordinal()))
 			return false;
 		
 		if(currentFill < recipe.fluidConsumed)
 			return false;
 		
-		if(!inventory.getStackInSlot(4).isEmpty())
+		if(!inventory.getStackInSlot(3).isEmpty())
 			return false;
 
-		progress ++;
+		progress += Math.pow(1.5, this.mode.ordinal()-recipe.laserStrength.ordinal());
 		
 		if(progress >= processTime) {
 			
 			currentFill -= recipe.fluidConsumed;
 			
 			ItemStack out = ((WeightedRandomObject)WeightedRandom.getRandomItem(world.rand, recipe.outputs)).asStack();
-			inventory.setStackInSlot(4, out.copy());
+			inventory.setStackInSlot(3, out.copy());
 			progress = 0;
 			this.markDirty();
 		}
@@ -220,22 +219,22 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	
 	private void dequeue() {
 		
-		if(!inventory.getStackInSlot(4).isEmpty()) {
+		if(!inventory.getStackInSlot(3).isEmpty()) {
 			
-			for(int i = 5; i < 11; i++) {
+			for(int i = 4; i < 10; i++) {
 				
-				if(!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize() && InventoryUtil.doesStackDataMatch(inventory.getStackInSlot(4), inventory.getStackInSlot(i))) {
+				if(!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize() && InventoryUtil.doesStackDataMatch(inventory.getStackInSlot(3), inventory.getStackInSlot(i))) {
 					inventory.getStackInSlot(i).grow(1);
-					inventory.getStackInSlot(4).shrink(1);
+					inventory.getStackInSlot(3).shrink(1);
 					return;
 				}
 			}
 			
-			for(int i = 5; i < 11; i++) {
+			for(int i = 4; i < 10; i++) {
 				
 				if(inventory.getStackInSlot(i).isEmpty()) {
-					inventory.setStackInSlot(i, inventory.getStackInSlot(4).copy());
-					inventory.setStackInSlot(4, ItemStack.EMPTY);
+					inventory.setStackInSlot(i, inventory.getStackInSlot(3).copy());
+					inventory.setStackInSlot(3, ItemStack.EMPTY);
 					return;
 				}
 			}
@@ -244,7 +243,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_) {
-		return new int[] { 0, 5, 6, 7, 8, 9, 10 };
+		return new int[] { 0, 4, 5, 6, 7, 8, 9 };
 	}
 
 	@Override
@@ -257,7 +256,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-		return slot >= 5;
+		return slot >= 4;
 	}
 	
 	@Override

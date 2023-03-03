@@ -1,5 +1,7 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.machine.TileEntityRadSensor;
@@ -12,6 +14,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -96,5 +100,11 @@ public class RadSensor extends BlockContainer {
 	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos){
 		TileEntityRadSensor entity = (TileEntityRadSensor) worldIn.getTileEntity(pos);
         return entity.comparatorOutput;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
+		tooltip.add("Power with redstone from below to reset dose counter");
 	}
 }

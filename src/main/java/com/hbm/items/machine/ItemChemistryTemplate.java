@@ -80,6 +80,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 		POLYMER,
 		DEUTERIUM,
 		STEAM,
+		ALGE,
 		YELLOWCAKE,
 		UF6,
 		PUF6,
@@ -254,6 +255,8 @@ public static int getProcessTime(ItemStack stack) {
         	return 200;
         case BP_BIOFUEL:
         	return 100;
+       	case ALGE:
+        	return 60*20;
         case YELLOWCAKE:
         	return 250;
         case UF6:

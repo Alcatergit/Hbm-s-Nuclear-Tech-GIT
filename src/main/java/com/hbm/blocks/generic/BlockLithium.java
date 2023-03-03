@@ -57,6 +57,7 @@ public class BlockLithium extends Block {
 	
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
 		tooltip.add("It's not my fault you didn't pay");
 		tooltip.add("attention in chemistry class.");
 	}

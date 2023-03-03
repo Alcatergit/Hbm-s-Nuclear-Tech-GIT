@@ -41,6 +41,12 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		steamType = ModForgeFluids.steam;
 	}
 
+	public void getDiagData(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+		nbt.setInteger("water", super.water);
+		nbt.setInteger("steam", super.steam);
+	}
+
 	@Override
 	public String getName() {
 		return "container.rbmkBoiler";
@@ -60,6 +66,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			
 			if(heatProvided > 0) {
 				int waterUsed = (int)Math.floor(heatProvided / RBMKDials.getBoilerHeatConsumption(world));
+				super.water = waterUsed;
 				waterUsed = Math.min(waterUsed, feed.getFluidAmount());
 				int steamProduced = (int)Math.round((waterUsed * 100F) / getFactorFromSteam(steamType));
 

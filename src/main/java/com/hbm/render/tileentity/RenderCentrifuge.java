@@ -34,7 +34,7 @@ public class RenderCentrifuge extends TileEntitySpecialRenderer<TileEntityMachin
 		}
 
 		bindTexture(ResourceManager.centrifuge_new_tex);
-        ResourceManager.centrifuge_new.renderAll();
+        ResourceManager.centrifuge.renderAll();
 
         GL11.glPopMatrix();
 	}

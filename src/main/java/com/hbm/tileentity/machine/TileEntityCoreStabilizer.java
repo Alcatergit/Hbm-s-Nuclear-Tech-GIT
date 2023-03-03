@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IConsumer {
 
 	public long power;
-	public static final long maxPower = 5000000000L;
+	public static final long maxPower = 500000000000L;
 	public int watts;
 	public int beam;
 	public boolean isOn;
@@ -40,7 +40,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 		if(!world.isRemote) {
 			
 			watts = MathHelper.clamp(watts, 1, 100);
-			int demand = (int) Math.pow(watts, 4);
+			int demand = (int) Math.pow(watts, 5);
 			isOn = false;
 
 			beam = 0;
@@ -50,7 +50,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 				lens = (ItemLens) inventory.getStackInSlot(0).getItem();
 			}
 
-			if(power >= demand && lens != null) {
+			if(lens != null && power >= demand * lens.drainMod) {
 				isOn = true;
 				EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
 				for(int i = 1; i <= range; i++) {
@@ -66,7 +66,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 						
 						TileEntityCore core = (TileEntityCore)te;
 						core.field = core.field + (int)(watts * lens.fieldMod);
-						this.power -= (int)(demand * lens.drainMod);
+						this.power -= (long)(demand * lens.drainMod);
 						beam = i;
 						
 						long dmg = ItemLens.getLensDamage(inventory.getStackInSlot(0));

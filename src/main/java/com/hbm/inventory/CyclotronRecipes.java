@@ -74,7 +74,6 @@ public class CyclotronRecipes {
 		makeRecipe(carbon, caAmat, new ComparableStack(ModItems.nugget_mercury), new ItemStack(ModItems.powder_polonium), caA);
 		makeRecipe(carbon, caAmat, PB.dust(), new ItemStack(ModItems.powder_ra226), caA);
 		makeRecipe(carbon, caAmat, AT.dust(), new ItemStack(ModItems.powder_actinium), caA);
-		makeRecipe(carbon, caAmat, AUSTRALIUM.dust(), new ItemStack(ModItems.powder_verticium), 200);
 		/// CARBON END ///
 
 		/// COPPER START ///
@@ -90,7 +89,6 @@ public class CyclotronRecipes {
 		makeRecipe(copper, coAmat, I.dust(), new ItemStack(ModItems.powder_polonium), coA);
 		makeRecipe(copper, coAmat, CS.dust(), new ItemStack(ModItems.powder_actinium), coA);
 		makeRecipe(copper, coAmat, GOLD.dust(), new ItemStack(ModItems.powder_uranium), coA);
-		makeRecipe(copper, coAmat, VERTICIUM.dust(), new ItemStack(ModItems.powder_unobtainium), 300);
 		/// COPPER END ///
 
 		/// PLUTONIUM START ///
@@ -99,7 +97,6 @@ public class CyclotronRecipes {
 		makeRecipe(plutonium, plAmat, PU.dust(), new ItemStack(ModItems.powder_tennessine), plA);
 		makeRecipe(plutonium, plAmat, new ComparableStack(ModItems.powder_tennessine), new ItemStack(ModItems.powder_reiium), plA);
 		makeRecipe(plutonium, plAmat, new ComparableStack(ModItems.pellet_charged), new ItemStack(ModItems.nugget_schrabidium), 200);
-		makeRecipe(plutonium, plAmat, UNOBTAINIUM.dust(), new ItemStack(ModItems.powder_daffergon), 400);
 		makeRecipe(plutonium, plAmat, new NbtComparableStack(ItemCell.getFullCell(ModForgeFluids.amat)), ItemCell.getFullCell(ModForgeFluids.aschrab), 0);
 		/// PLUTONIUM END ///
 
