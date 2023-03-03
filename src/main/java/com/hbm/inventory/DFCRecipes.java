@@ -89,8 +89,8 @@ public class DFCRecipes {
 		DFCRecipes.setRecipe(1000000000000L, ModItems.missile_kit, new ItemStack(ModItems.nuke_starter_kit));
 		DFCRecipes.setRecipe(1000000000000L, ModItems.nuke_starter_kit, new ItemStack(ModItems.nuke_advanced_kit));
 		DFCRecipes.setRecipe(1000000000000L, ModItems.nuke_advanced_kit, new ItemStack(ModItems.grenade_kit));
-		DFCRecipes.setRecipe(2000000000000L, ModItems.battery_spark_cell_power, new ItemStack(ModItems.battery_creative));
-		DFCRecipes.setRecipe(3000000000000L, ModItems.rod_of_discord, new ItemStack(ModItems.wand));
+		DFCRecipes.setRecipe(10000000000000L, ModItems.rod_of_discord, new ItemStack(ModItems.wand));
+		DFCRecipes.setRecipe(12000000000000L, ModItems.battery_spark_cell_power, new ItemStack(ModItems.battery_creative));
 	}
 
 	public static void setRecipe(long requiredFlux, ItemStack in, ItemStack out) {
