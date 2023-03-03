@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
@@ -313,8 +311,10 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				te2 = world.getTileEntity(pos.add(1, 0, 3));
 			}
 		
-			
-			tryExchangeTemplates(te1, te2);
+			if(!isProgressing){
+				tryExchangeTemplates(te1, te2);
+			}
+
 			
 			
 			if(te1 != null && te1.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
@@ -749,6 +749,19 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			return false;
 		else {
 			List<ItemStack> recipeIngredients = MachineRecipes.getChemInputFromTempate(inventory.getStackInSlot(4)); //Loading Ingredients
+			Map<Integer,ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
+
+			for(int slot : allowedSlots) {
+				container.getStackInSlot(slot);
+				if (container.getStackInSlot(slot).isEmpty()) { // check next slot in chest if it is empty
+					continue;
+				} else { // found an item in chest
+					itemStackMap.put(slot, container.getStackInSlot(slot).copy());
+				}
+			}
+			if(itemStackMap.size() == 0){
+				return true;
+			}
 
 			for(int ig = 0; ig < recipeIngredients.size(); ig++) {
 
@@ -767,39 +780,36 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 					continue;
 				}
 				// Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
+				for (Map.Entry<Integer,ItemStack> set :
+						itemStackMap.entrySet()) {
+					ItemStack stack = set.getValue();
+					int slot = set.getKey();
+					ItemStack compareStack = stack.copy();
+					compareStack.setCount(1);
 
-				for(int slot : allowedSlots) {
-					if(container.getStackInSlot(slot) == null || container.getStackInSlot(slot).isEmpty()){ // check next slot in chest if it is empty
-						continue;
-					}else{ // found an item in chest
-						ItemStack stack = container.getStackInSlot(slot).copy();
-						ItemStack compareStack = stack.copy();
-						compareStack.setCount(1);
+					if(nextIngredient.isApplicable(compareStack)){ // bingo found something
 
-						if(nextIngredient.isApplicable(compareStack)){ // bingo found something
+						int foundCount = Math.min(stack.getCount(), possibleAmount);
+						if(te != null && !te.canExtractItem(slot, stack, foundCount))
+							continue;
+						if(foundCount > 0){
+							possibleAmount -= foundCount;
+							container.extractItem(slot, foundCount, false);
+							inventory.getStackInSlot(ingredientSlot);
+							if(inventory.getStackInSlot(ingredientSlot).isEmpty()){
 
-							int foundCount = Math.min(stack.getCount(), possibleAmount);
-							if(te != null && !te.canExtractItem(slot, stack, foundCount))
-								break;
-							if(foundCount > 0){
+								stack.setCount(foundCount);
+								inventory.setStackInSlot(ingredientSlot, stack);
 
-								possibleAmount -= foundCount;
-								container.extractItem(slot, foundCount, false);
-
-								if(inventory.getStackInSlot(ingredientSlot) == null || inventory.getStackInSlot(ingredientSlot).isEmpty()){
-
-									stack.setCount(foundCount);
-									inventory.setStackInSlot(ingredientSlot, stack);
-
-								}else{
-									inventory.getStackInSlot(ingredientSlot).grow(foundCount); // transfer complete
-								}
 							}else{
-								break; // ingredientSlot filled
+								inventory.getStackInSlot(ingredientSlot).grow(foundCount); // transfer complete
 							}
+						}else{
+							break; // ingredientSlot filled
 						}
-					}	
+					}
 				}
+
 			}
 			return true;
 		}

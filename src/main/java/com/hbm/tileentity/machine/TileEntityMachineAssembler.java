@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
@@ -187,7 +185,9 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 				te = world.getTileEntity(pos.add(1, 0, 3));
 			}
 
-			tryExchangeTemplates(te, te2);
+			if(!isProgressing){
+				tryExchangeTemplates(te, te2);
+			}
 
 			if(te != null && te instanceof ICapabilityProvider) {
 				ICapabilityProvider capte = (ICapabilityProvider) te;
@@ -286,6 +286,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			for(int i = 0; i < iTe1.getSlots(); i++) {
 				if(iTe1.getStackInSlot(i).isEmpty()) {
 					openSlot = true;
+					break;
 				}
 
 			}
@@ -302,6 +303,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 						ItemStack copy = iTe2.getStackInSlot(i).copy();
 						iTe2.setStackInSlot(i, ItemStack.EMPTY);
 						this.inventory.setStackInSlot(4, copy);
+						return false;
 					}
 				}
 
@@ -444,7 +446,8 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 
 	private int getValidSlot(AStack nextIngredient){
 		int firstFreeSlot = -1;
-		int stackCount = (int)Math.ceil(nextIngredient.count() / 64F);
+		float maxStackSize = nextIngredient.getStack().getMaxStackSize();
+		int stackCount = (int)Math.ceil(nextIngredient.count() / maxStackSize);
 		int stacksFound = 0;
 
 		nextIngredient = nextIngredient.singulize();
@@ -453,16 +456,17 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			if(stacksFound < stackCount){
 				ItemStack assStack = inventory.getStackInSlot(k).copy();
 				if(assStack.isEmpty()){
-					if(firstFreeSlot < 6)
+					if(firstFreeSlot < 6){
 						firstFreeSlot = k;
-					continue;
+					}
 				} else { // check if there are already enough filled stacks is full
 				
 					assStack.setCount(1);
 					if(nextIngredient.isApplicable(assStack)){ // check if it is the right item
-
-						if(inventory.getStackInSlot(k).getCount() < assStack.getMaxStackSize()) // is that stack full?
+						if(inventory.getStackInSlot(k).getCount() < assStack.getMaxStackSize()) {
+							// is that stack full?
 							return k; // found a not full slot where we already have that ingredient
+						}
 						else
 							stacksFound++;
 					}
@@ -486,6 +490,19 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			return false;
 		else {
 			List<AStack> recipeIngredients = new ArrayList<>(AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4))); //Loading Ingredients
+			Map<Integer,ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
+
+			for(int slot : allowedSlots) {
+				container.getStackInSlot(slot);
+				if (container.getStackInSlot(slot).isEmpty()) { // check next slot in chest if it is empty
+					continue;
+				} else { // found an item in chest
+					itemStackMap.put(slot, container.getStackInSlot(slot).copy());
+				}
+			}
+			if(itemStackMap.size() == 0){
+				return true;
+			}
 
 			for(int ig = 0; ig < recipeIngredients.size(); ig++) {
 
@@ -496,7 +513,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 
 				if(ingredientSlot < 6)
 					continue; // Ingredient filled or Assembler is full
-				
+
 				int possibleAmount = inventory.getStackInSlot(ingredientSlot).getMaxStackSize() - inventory.getStackInSlot(ingredientSlot).getCount(); // how many items do we need to fill the stack?
 				
 				if(possibleAmount == 0){ // full
@@ -504,12 +521,10 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 					continue;
 				}
 				// Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
-
-				for(int slot : allowedSlots) {
-					if(container.getStackInSlot(slot) == null || container.getStackInSlot(slot).isEmpty()){ // check next slot in chest if it is empty
-						continue;
-					}else{ // found an item in chest
-						ItemStack stack = container.getStackInSlot(slot).copy();
+				for (Map.Entry<Integer,ItemStack> set :
+						itemStackMap.entrySet()) {
+					    ItemStack stack = set.getValue();
+						int slot = set.getKey();
 						ItemStack compareStack = stack.copy();
 						compareStack.setCount(1);
 
@@ -517,13 +532,12 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 
 							int foundCount = Math.min(stack.getCount(), possibleAmount);
 							if(te != null && !te.canExtractItem(slot, stack, foundCount))
-								break;
+								continue;
 							if(foundCount > 0){
-
 								possibleAmount -= foundCount;
 								container.extractItem(slot, foundCount, false);
-
-								if(inventory.getStackInSlot(ingredientSlot) == null || inventory.getStackInSlot(ingredientSlot).isEmpty()){
+								inventory.getStackInSlot(ingredientSlot);
+								if(inventory.getStackInSlot(ingredientSlot).isEmpty()){
 
 									stack.setCount(foundCount);
 									inventory.setStackInSlot(ingredientSlot, stack);
@@ -535,11 +549,10 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 								break; // ingredientSlot filled
 							}
 						}
-					}	
+					}
 				}
 			}
 			return true;
-		}
 	}
 
 	//boolean true: remove items, boolean false: simulation mode
