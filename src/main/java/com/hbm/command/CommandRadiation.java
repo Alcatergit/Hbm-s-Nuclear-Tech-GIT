@@ -26,7 +26,7 @@ public class CommandRadiation extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "Usage: /hbmrad <block x> <block z> <new rad> \n /hbmrad <clearall/reset> \n or /hbmrad player <player> <newRad>";
+		return "Usage: /hbmrad <block x> <block y>  <block z> <new rad> \n /hbmrad <clearall/reset> \n or /hbmrad player <player> <newRad>";
 	}
 
 	@Override
@@ -47,10 +47,13 @@ public class CommandRadiation extends CommandBase {
 		} else if (args.length == 2 && args[0].equals("set")){
 			list.add(String.valueOf(sender.getPosition().getX()));
 		} else if (args.length == 3 && args[0].equals("set")){
-			list.add(String.valueOf(sender.getPosition().getZ()));
+			list.add(String.valueOf(sender.getPosition().getY()));
 		} else if (args.length == 4 && args[0].equals("set")){
+			list.add(String.valueOf(sender.getPosition().getZ()));
+		} else if (args.length == 5 && args[0].equals("set")){
 			list.add(String.valueOf(0));
-		} else if(args.length == 3 && getPlayer(server, args[1]) != null){
+		}
+		else if(args.length == 3 && getPlayer(server, args[1]) != null){
 			list.add(String.valueOf(0));
 		}
 		return list;
@@ -63,7 +66,7 @@ public class CommandRadiation extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (args.length == 4 && args[0].equals("set") && isInteger(args[1]) && isInteger(args[2]) && isInteger(args[3])) {
+		if (args.length == 5 && args[0].equals("set") && isInteger(args[1]) && isInteger(args[2]) && isInteger(args[3])) {
 			int blockX;
 			int blockY;
 			int blockZ;
@@ -80,7 +83,7 @@ public class CommandRadiation extends CommandBase {
 				blockZ = sender.getPosition().getZ();
 			else
 				blockZ = Integer.parseInt(args[3]);
-			amount = Integer.parseInt(args[3]);
+			amount = Integer.parseInt(args[4]);
 			RadiationSavedData.getData(sender.getEntityWorld()).setRadForCoord(new BlockPos(blockX, blockY, blockZ), amount);
 			sender.sendMessage(new TextComponentTranslation(
 					"Set radiation at coords (" + blockX + ", " + blockY + ", " + blockZ + ") to " + amount + "."));
@@ -91,16 +94,16 @@ public class CommandRadiation extends CommandBase {
 				if (e instanceof EntityFogFX)
 					e.setDead();
 			}
-			sender.sendMessage(new TextComponentTranslation(
-					"Removed all loaded radiation for dimension " + sender.getEntityWorld().provider.getDimension() + "."));
+			sender.sendMessage(new TextComponentTranslation("commands.hbmrad.removeall",
+					sender.getEntityWorld().provider.getDimension()));
 			return;
 		} else if(args.length == 3 && args[0].equals("player")){
 			EntityPlayerMP player = getPlayer(server, args[1]);
 			if(player == null){
-				throw new CommandException("Cannot find player '" + args[1] + "'!", new Object[0]);
+				throw new CommandException("commands.hbmrad.not_found_player", args[1]);
 			}
 			if(!isFloat(args[2]))
-				throw new CommandException("New rad value is not a number!");
+				throw new CommandException("commands.hbmrad.rad_not_int");
 			float newRads = Float.parseFloat(args[2]);
 			if(newRads < 0.0F)
 				newRads = 0.0F;
@@ -109,7 +112,7 @@ public class CommandRadiation extends CommandBase {
 			sender.sendMessage(new TextComponentTranslation("Set radiation for player " + player.getName() + " to " + newRads + "."));
 			return;
 		} else if(args.length == 2 && args[0].equals("player")){
-			throw new CommandException("Please enter new rad value!");
+			throw new CommandException("commands.hbmrad.not_rad");
 		} else if(args.length == 1 && args[0].equals("resetplayers")){
 			for(String s : server.getOnlinePlayerNames()){
 				EntityPlayerMP player = getPlayer(server, s);
@@ -118,10 +121,10 @@ public class CommandRadiation extends CommandBase {
 						player.getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).setRads(0.0F);
 				}
 			}
-			sender.sendMessage(new TextComponentTranslation("Successfully cleared radiation for all online players!"));
+			sender.sendMessage(new TextComponentTranslation("commands.hbmrad.player_success"));
 			return;
 		}
-		throw new CommandException(this.getUsage(sender), new Object[0]);
+		throw new CommandException(this.getUsage(sender));
 	}
 
 	public boolean isInteger(String s) {
