@@ -103,9 +103,9 @@ tile.waste_leaves.name=Waste Leaves
 tile.fluid_duct_solid.name=Sealed Fluid Duct
 tile.field_disturber.name=High Energy Field Jammer
 
-tile.radio_torch_sender.name=Redstone-over-Radio Transmitter
+tile.radio_torch_sender.name=Redstone-over-Radio Sender
 tile.radio_torch_receiver.name=Redstone-over-Radio Receiver
-container.rttySender=Redstone-over-Radio Transmitter
+container.rttySender=Redstone-over-Radio Sender
 container.rttyReceiver=Redstone-over-Radio Receiver
 
 tile.reinforced_brick_slab.name=Reinforced Brick Slab
