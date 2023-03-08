@@ -376,13 +376,9 @@ public class GUIAnvil extends GuiContainer {
 	@Override
 	protected void keyTyped(char c, int key) throws IOException {
 		
-		if(!this.search.textboxKeyTyped(c, key)) {
-			
-			if(key == 28) {
-				this.search.setFocused(false);
-				search(this.search.getText());
-			}
-			
+		if(this.search.textboxKeyTyped(c, key)) {
+			search(this.search.getText());
+		} else {
 			super.keyTyped(c, key);
 		}
 	}

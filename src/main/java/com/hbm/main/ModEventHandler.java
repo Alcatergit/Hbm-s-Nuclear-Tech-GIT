@@ -73,6 +73,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
+import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.util.EnchantmentUtil;
 import com.hbm.util.EntityDamageUtil;
 import com.hbm.world.generator.TimedGenerator;
@@ -758,6 +759,7 @@ public class ModEventHandler {
 	public void serverTick(ServerTickEvent e){
 		if(e.phase == Phase.START){
 			JetpackHandler.serverTick();
+			RTTYSystem.updateBroadcastQueue();
 		} else {
 			EntityHitDataHandler.updateSystem();
 		}

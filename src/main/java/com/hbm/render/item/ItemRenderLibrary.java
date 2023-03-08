@@ -1343,6 +1343,7 @@ public class ItemRenderLibrary {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
 				GL11.glScaled(2.4, 2.4, 2.4);
+				GL11.glRotated(90, 0, -1, 0);
 			}
 			public void renderCommon() {
 				bindTexture(ResourceManager.secure_access_door_tex);

@@ -150,6 +150,8 @@ import com.hbm.blocks.network.BlockFluidDuct;
 import com.hbm.blocks.network.BlockFluidPipeMk2;
 import com.hbm.blocks.network.BlockFluidPipeSolid;
 import com.hbm.blocks.network.CableSwitch;
+import com.hbm.blocks.network.RadioTorchSender;
+import com.hbm.blocks.network.RadioTorchReceiver;
 import com.hbm.blocks.test.KeypadTest;
 import com.hbm.blocks.test.TestObjTester;
 import com.hbm.blocks.test.TestRender;
@@ -966,6 +968,9 @@ public class ModBlocks {
 	
 	public static final Block machine_reactor_small = new MachineReactorSmall(Material.IRON, "machine_reactor_small").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_reactor_small = 65;
+
+	public static final int guiID_radio_torch_sender = 130;
+	public static final int guiID_radio_torch_receiver = 131;
 	
 	//RBMK rods and things and somethings
 	public static final int guiID_rbmk_rod = 117;
@@ -1331,6 +1336,9 @@ public class ModBlocks {
 	public static final Block red_wire_coated = new WireCoated(Material.IRON, "red_wire_coated").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block cable_switch = new CableSwitch(Material.IRON, "cable_switch").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_detector = new PowerDetector(Material.IRON, "machine_detector").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block radio_torch_sender = new RadioTorchSender("radio_torch_sender").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block radio_torch_receiver = new RadioTorchReceiver("radio_torch_receiver").setHardness(0.1F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+		
 	//Drillgon200: Removed, by order of lord Bob.
 	//public static final Block oil_duct_solid = new OilDuctSolid(Material.IRON, "oil_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	//public static final Block oil_duct = new BlockOilDuct(Material.IRON, "oil_duct").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

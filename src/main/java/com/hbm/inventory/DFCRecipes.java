@@ -84,11 +84,7 @@ public class DFCRecipes {
 
 		DFCRecipes.setRecipe(690000000000L, Items.WRITABLE_BOOK, new ItemStack(ModItems.book_of_));
 
-		DFCRecipes.setRecipe(1000000000000L, ModItems.undefined, new ItemStack(ModItems.grenade_kit));
-		DFCRecipes.setRecipe(1000000000000L, ModItems.grenade_kit, new ItemStack(ModItems.missile_kit));
-		DFCRecipes.setRecipe(1000000000000L, ModItems.missile_kit, new ItemStack(ModItems.nuke_starter_kit));
-		DFCRecipes.setRecipe(1000000000000L, ModItems.nuke_starter_kit, new ItemStack(ModItems.nuke_advanced_kit));
-		DFCRecipes.setRecipe(1000000000000L, ModItems.nuke_advanced_kit, new ItemStack(ModItems.grenade_kit));
+		DFCRecipes.setRecipe(1000000000000L, ModItems.undefined, new ItemStack(ModItems.glitch));
 		DFCRecipes.setRecipe(10000000000000L, ModItems.rod_of_discord, new ItemStack(ModItems.wand));
 		DFCRecipes.setRecipe(12000000000000L, ModItems.battery_spark_cell_power, new ItemStack(ModItems.battery_creative));
 	}

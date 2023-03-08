@@ -103,6 +103,11 @@ tile.waste_leaves.name=Waste Leaves
 tile.fluid_duct_solid.name=Sealed Fluid Duct
 tile.field_disturber.name=High Energy Field Jammer
 
+tile.radio_torch_sender.name=Redstone-over-Radio Transmitter
+tile.radio_torch_receiver.name=Redstone-over-Radio Receiver
+container.rttySender=Redstone-over-Radio Transmitter
+container.rttyReceiver=Redstone-over-Radio Receiver
+
 tile.reinforced_brick_slab.name=Reinforced Brick Slab
 tile.reinforced_brick_stairs.name=Reinforced Brick Stairs
 tile.reinforced_sand_slab.name=Reinforced Sand Slab
@@ -195,7 +200,7 @@ chem.DUCRETE=Ducretisation
 tile.ducrete.name=Ducrete
 tile.ducrete_smooth.name=Smooth Ducrete
 tile.ducrete_brick.name=Ducrete Brick
-tile.ducrete_reinforced.name=Reinforced Durcete
+tile.ducrete_reinforced.name=Reinforced Ducrete
 tile.block_niter_reinforced.name=Reinforced Niter
 
 tile.deco_rbmk.name=RBMK Deco
