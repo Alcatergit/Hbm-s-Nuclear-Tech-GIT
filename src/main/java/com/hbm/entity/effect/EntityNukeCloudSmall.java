@@ -31,6 +31,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	public int maxAge;
 	public int age;
 	public static int cloudletLife = 50;
+	public float sizeFactor = 1;
 	public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
 
 	public EntityNukeCloudSmall(World p_i1582_1_) {
@@ -53,6 +54,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 
 		this.isImmuneToFire = true;
 		this.maxAge = maxLifetime;
+		this.sizeFactor = (float)(Math.pow(this.dataManager.get(SCALE), 2) / 15129);
 		this.dataManager.set(AGE, 0);
 		this.dataManager.set(SCALE, radius * 0.005F);
 		this.dataManager.set(MAXAGE, maxLifetime);
@@ -62,7 +64,10 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 	@Override
 	public void onUpdate() {
 		this.age++;
-		world.setLastLightningBolt(2);
+
+		if(this.age < 460F * this.sizeFactor){
+			world.setLastLightningBolt(2);
+		}
 
 		if (this.age >= maxAge) {
 			this.age = 0;
@@ -132,6 +137,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		cloud.age = 0;
 		cloud.dataManager.set(AGE, 0);
 		cloud.dataManager.set(TYPE, (byte) 0);
+		cloud.sizeFactor = (float)(Math.pow(radius, 2) / 15129);
 
 		return cloud;
 	}
@@ -144,6 +150,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		cloud.age = 0;
 		cloud.dataManager.set(AGE, 0);
 		cloud.dataManager.set(TYPE, (byte) 1);
+		cloud.sizeFactor = (float)(Math.pow(radius, 2) / 15129);
 
 		return cloud;
 	}

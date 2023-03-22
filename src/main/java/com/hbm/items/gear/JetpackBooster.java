@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,8 +34,8 @@ public class JetpackBooster extends JetpackBase {
 	private ModelJetPack model;
 	public static int maxFuel = 750;
 
-	public JetpackBooster(ArmorMaterial p_i45325_1_, int p_i45325_2_, EntityEquipmentSlot p_i45325_3_, String s) {
-		super(p_i45325_1_, p_i45325_2_, p_i45325_3_, ModForgeFluids.balefire, 32000, s);
+	public JetpackBooster(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, Fluid fuel, int maxFuel, String s) {
+		super(materialIn, renderIndexIn, equipmentSlotIn, fuel, maxFuel, s);
 	}
 	
 	@Override
