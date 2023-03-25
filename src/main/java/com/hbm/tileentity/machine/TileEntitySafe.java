@@ -98,4 +98,11 @@ public class TileEntitySafe extends TileEntityLockableBase {
 		}
 		return super.getCapability(capability, facing);
 	}
+
+	public <T> T getPackingCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		}
+		return super.getCapability(capability, facing);
+	}
 }

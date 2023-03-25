@@ -98,7 +98,15 @@ public class BlockStorageCrate extends BlockContainer {
 			NBTTagCompound nbt = new NBTTagCompound();
 			
 			if(te != null) {
-				IItemHandler inventory = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				IItemHandler inventory;
+				if(te instanceof TileEntitySafe){
+
+					inventory = ((TileEntitySafe)te).getPackingCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				}
+				else{
+					inventory = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				}
+
 				for(int i = 0; i < inventory.getSlots(); i++) {
 					
 					ItemStack stack = inventory.getStackInSlot(i);
