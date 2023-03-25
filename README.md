@@ -9,6 +9,8 @@ which is ported from the original mod made by [HBMTheBobcat](https://github.com/
 
 The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-extended-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
 
+If you have question or suggestions you can post them on our [NTM Extended Discord](https://discord.gg/Auq95eCEtD)
+
 ### **Want to contribute?**
 
 If you want to contribute make a pull request and I'll review it as soon as possible.
