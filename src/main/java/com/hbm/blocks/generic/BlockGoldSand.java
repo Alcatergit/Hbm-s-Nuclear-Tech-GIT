@@ -2,6 +2,8 @@ package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockFallingBase;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.capability.HbmLivingProps.ContaminationEffect;
 
@@ -13,10 +15,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockGoldSand extends BlockFallingBase {
+public class BlockGoldSand extends BlockFallingBase implements IItemHazard {
+
+	ItemHazardModule module;
 
 	public BlockGoldSand(Material m, String s, SoundType type){
 		super(m, s, type);
+		this.module = new ItemHazardModule();
 	}
 	
 	@Override
@@ -30,4 +35,8 @@ public class BlockGoldSand extends BlockFallingBase {
 		}
 	}
 
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
+	}
 }

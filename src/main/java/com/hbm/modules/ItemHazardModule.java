@@ -151,26 +151,36 @@ public class ItemHazardModule {
 		}
 	}
 
-	private String formatRads(float radiation){
-		String rads = "";
+	private float getNewValue(float radiation){
 		if(radiation < 1000000){
-			rads = ((int)(radiation*1000F))/1000F+"";
+			return radiation;
 		} else if(radiation < 1000000000){
-			rads = ((int)(radiation/1000F))/1000F+"M";
-		} else
-			rads = ((int)(radiation/1000000F))/1000F+"G";
-		return rads;
+			return radiation * 0.000001F;
+		} else{
+			return radiation * 0.000000001F;
+		}
+	}
+
+	private String getSuffix(float radiation){
+		if(radiation < 1000000){
+			return "";
+		} else if(radiation < 1000000000){
+			return "M";
+		} else{
+			return "G";
+		}
 	}
 	
 	public void addInformation(ItemStack stack, List<String> list, ITooltipFlag flagIn) {
 		
 		if(this.radiation * tempMod > 0) {
 			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
-			String rad = formatRads(radiation * tempMod);
-			list.add(TextFormatting.YELLOW + (rad + "RAD/s"));
+			float itemRad = radiation * tempMod;
+			list.add(TextFormatting.YELLOW + (Library.roundFloat(getNewValue(itemRad), 3)+ getSuffix(itemRad) + "RAD/s"));
 			
 			if(stack.getCount() > 1) {
-				list.add(TextFormatting.YELLOW + "Stack: " + ((Math.floor(radiation * tempMod * 1000 * stack.getCount()) / 1000) + "RAD/s"));
+				float stackRad = radiation * tempMod * stack.getCount();
+				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + "RAD/s"));
 			}
 		}
 		

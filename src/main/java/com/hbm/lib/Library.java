@@ -110,6 +110,9 @@ public class Library {
 			"5bf069bc-5b46-4179-aafe-35c0a07dee8b", //JMF781
 			});
 
+
+	public static final int[] powersOfTen = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+
 	//the old list that allowed superuser mode for the ZOMG
 	//currently unused
 	public static List<String> superuser = new ArrayList<String>();
@@ -147,28 +150,22 @@ public class Library {
 
 		if(l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "E";
+			result = roundFloat(res, 2) + "E";
 		}else if(l >= Math.pow(10, 15)) {
 			double res = l / Math.pow(10, 15);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "P";
+			result = roundFloat(res, 2) + "P";
 		}else if(l >= Math.pow(10, 12)) {
 			double res = l / Math.pow(10, 12);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "T";
+			result = roundFloat(res, 2) + "T";
 		}else if(l >= Math.pow(10, 9)) {
 			double res = l / Math.pow(10, 9);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "G";
+			result = roundFloat(res, 2) + "G";
 		}else if(l >= Math.pow(10, 6)) {
 			double res = l / Math.pow(10, 6);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "M";
+			result = roundFloat(res, 2) + "M";
 		}else if(l >= Math.pow(10, 3)) {
 			double res = l / Math.pow(10, 3);
-			res = Math.round(res * 100.0) / 100.0;
-			result = res + "k";
+			result = roundFloat(res, 2) + "k";
 		}
 		else{
 			result = Long.toString(l);
@@ -179,6 +176,14 @@ public class Library {
 		}
 
 		return result;
+	}
+
+	public static float roundFloat(float number, int decimal){
+		return (float) (((int) (number * powersOfTen[decimal])) / (float)powersOfTen[decimal]);  
+	}
+
+	public static float roundFloat(double number, int decimal){
+		return (float) (((int) (number * powersOfTen[decimal])) / (float)powersOfTen[decimal]);  
 	}
 
 	// Drillgon200: Just realized I copied the wrong method. God dang it.

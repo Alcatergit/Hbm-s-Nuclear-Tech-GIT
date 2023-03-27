@@ -7,6 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.lib.InventoryHelper;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
@@ -283,7 +284,7 @@ public class BlockStorageCrate extends BlockContainer {
 					slotCount++;
 				}
 			}
-			double percent = Math.round(Math.round(slotCount*1000L/totalSlots))*0.1D;
+			float percent = Library.roundFloat(slotCount * 100F/totalSlots, 1);
 			String color = "§e";
 			String color2 = "§6"; 
 			if(percent >= 75){

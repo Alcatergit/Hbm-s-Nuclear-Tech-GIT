@@ -54,7 +54,7 @@ public class RenderSmallReactor extends TileEntitySpecialRenderer<TileEntityMach
 	        for(double d = 0.285; d < 0.7; d += 0.025) {
 
 		        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		        float intensity = 0.03F + (0.125F * reactor.coreHeat / 1000F);
+		        float intensity = 0.002F + (0.003F * reactor.coreHeat / 1000F);
 		        double top = 1.375;
 		        double bottom = 1.375;
 

@@ -7,6 +7,8 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
@@ -30,42 +32,41 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockOre extends Block {
-	
-	private float radIn = 0.0F;
-	private float radMax = 0.0F;
+public class BlockOre extends Block implements IItemHazard {
+
+	ItemHazardModule module;
 
 	public BlockOre(Material materialIn, String name) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);
+		this.setTickRandomly(false);
+		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
-	public BlockOre(Material mat, boolean tick, String name){
+	public BlockOre(Material mat, SoundType sound, String name){
 		this(mat, name);
-		this.setTickRandomly(tick);
+		super.setSoundType(sound);
 	}
-	
-	public BlockOre(Material mat, float rad, float max, String name){
-		this(mat, name);
-		this.setTickRandomly(true);
-		this.radIn = rad;
-		this.radMax = max;
+
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
 	}
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		if(this == ModBlocks.waste_planks) {
+			return Items.COAL;
+		}
 		if(this == ModBlocks.ore_asbestos || this == ModBlocks.ore_gneiss_asbestos || this == ModBlocks.basalt_asbestos)
 		{
 			return ModItems.ingot_asbestos;
 		}
-		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
-			return ModItems.trinitite;
-		}
-		if(this == ModBlocks.waste_planks) {
-			return Items.COAL;
+		if(this == ModBlocks.ore_nether_fire){
+			return rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
 		}
 		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur || this == ModBlocks.basalt_sulfur){
 			return ModItems.sulfur;
@@ -89,14 +90,6 @@ public class BlockOre extends Block {
 			case 4: return ModItems.fragment_neodymium;
 			case 5: return ModItems.fragment_niobium;
 			}
-		}
-		if(this == ModBlocks.frozen_planks)
-		{
-			return Items.SNOWBALL;
-		}
-		if(this == ModBlocks.frozen_dirt)
-		{
-			return Items.SNOWBALL;
 		}
 		if(this == ModBlocks.block_meteor)
 		{
@@ -151,10 +144,6 @@ public class BlockOre extends Block {
 			case 35: return ModItems.glitch;
 			case 36: return ModItems.nugget_radspice;
 			}
-		}
-		if(this == ModBlocks.ore_nether_fire)
-		{
-			return rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
 		}
 		if(this == ModBlocks.deco_aluminium)
 		{
@@ -236,105 +225,12 @@ public class BlockOre extends Block {
 		return this == ModBlocks.waste_planks ? 1 : 0;
 	}
 	
-	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
-		if (entity instanceof EntityLivingBase && this == ModBlocks.frozen_dirt)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 2 * 60 * 20, 2));
-    	}
-		if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red))
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));
-    	}
-		if (entity instanceof EntityLivingBase && this == ModBlocks.block_trinitite)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
-    	}
-		if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_0)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_1)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 25 * 20, 1));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_2)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 3));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_3)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 7));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_4)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 10 * 20, 15));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_core)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 5 * 20, 79));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.block_waste)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 49));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_ooze)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 9));
-    	}
-    	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic)
-    	{
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
-    	}
-    	if(this == ModBlocks.block_meteor_molten)
-        	entity.setFire(5);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		super.randomDisplayTick(stateIn, worldIn, pos, rand);
-		if (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red || this == ModBlocks.block_waste || this == ModBlocks.block_trinitite)
-        {
-            worldIn.spawnParticle(EnumParticleTypes.TOWN_AURA, pos.getX() + rand.nextFloat(), pos.getY() + 1.1F, pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
-        }
-	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty)
-        {
+		if (world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty) {
         	world.setBlockState(pos, ModBlocks.ore_oil_empty.getDefaultState());
         	world.setBlockState(pos.down(), ModBlocks.ore_oil.getDefaultState());
-        }
-	}
-	
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(this == ModBlocks.block_meteor_molten) {
-        	if(!worldIn.isRemote)
-        		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
-        	worldIn.playSound(null, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
-        	return;
-        }
-		if(this.radIn > 0){
-			RadiationSavedData.incrementRad(worldIn, pos, radIn, radMax);
-			worldIn.scheduleUpdate(pos, state.getBlock(), this.tickRate(worldIn));
-		}
-	}
-	
-	@Override
-	public int tickRate(World world) {
-		if(this.radIn > 0)
-			return 20;
-		return 100;
-	}
-	
-	@Override
-	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
-		if(this == ModBlocks.block_meteor_molten) {
-        	if(!world.isRemote)
-        		world.setBlockState(pos, Blocks.LAVA.getDefaultState());
         }
 	}
 	

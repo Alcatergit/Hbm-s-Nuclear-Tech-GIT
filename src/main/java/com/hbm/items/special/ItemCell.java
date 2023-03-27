@@ -111,8 +111,12 @@ public class ItemCell extends Item {
 		if(hasFluid(stack, ModForgeFluids.tritium)){
 			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F / 20F);
 		} else if(hasFluid(stack, ModForgeFluids.sas3)){
-			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 10F / 20F);
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 20F / 20F);
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
+		} else if(hasFluid(stack, ModForgeFluids.uf6)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 2F / 20F);
+		} else if(hasFluid(stack, ModForgeFluids.puf6)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 10F / 20F);
 		}
 	}
 	
@@ -170,10 +174,22 @@ public class ItemCell extends Item {
 		if(ItemCell.hasFluid(stack, ModForgeFluids.amat)){
 			tooltip.add("§eExposure to matter will lead to violent annihilation!§r");
 			tooltip.add("§c[Dangerous Drop]§r");
-		}
-		if(ItemCell.hasFluid(stack, ModForgeFluids.aschrab)){
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.aschrab)){
 			tooltip.add("§eExposure to matter will create a fólkvangr field!§r");
 			tooltip.add("§c[Dangerous Drop]§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.tritium)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e0.5RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.uf6)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e2.0RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.puf6)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e10.0RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.sas3)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e20.0RAD/s§r");
+			tooltip.add("§3[Blinding]§r");
 		}
 	}
 

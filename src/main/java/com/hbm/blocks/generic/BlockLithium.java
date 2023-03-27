@@ -3,6 +3,8 @@ package com.hbm.blocks.generic;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
@@ -16,14 +18,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockLithium extends Block {
+public class BlockLithium extends Block implements IItemHazard {
+
+	ItemHazardModule module;
 
 	public BlockLithium(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.module = new ItemHazardModule();
+		this.addHydroReactivity();
 
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
 	}
 
 	private boolean touchesWater(World world, int x, int y, int z) {

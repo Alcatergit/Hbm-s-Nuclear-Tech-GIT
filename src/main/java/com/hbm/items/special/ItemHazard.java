@@ -84,7 +84,7 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 	public static final float pobe = po210 * radsource_mult;
 	public static final float rabe = ra226 * radsource_mult;
 	public static final float pube = pu238 * radsource_mult;
-	public static final float aupb = (au198 + pb209) * 0.5F;
+	public static final float aupb = au198 + pb209 + 2000F;
 	public static final float zfb_bi = u235 * 0.35F;
 	public static final float zfb_pu241 = pu241 * 0.5F;
 	public static final float zfb_am_mix = amrg * 0.5F;
@@ -93,7 +93,7 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 	public static final float sr = sa326 * 0.1F; //Scharanium
 	public static final float sb = sa326 * 0.2F; //Schrabidate
 	public static final float trx = 25.0F;
-	public static final float trn = 0.1F;
+	public static final float trn = 0.1F; //Trinitite
 	public static final float wst = 150.0F; //Nuclear Waste
 	public static final float wstv = 75F; //Nuclear Waste Vitrified
 	public static final float yc = u * 1.2F; //Yellowcake

@@ -6,8 +6,11 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
+import com.hbm.items.ModItems;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;
@@ -28,10 +31,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WasteEarth extends Block {
-	
-	private float radIn = 0.0F;
-	private float radMax = 0.0F;
+public class WasteEarth extends Block implements IItemHazard {
+
+	ItemHazardModule module;
 	
 	public WasteEarth(Material materialIn, boolean tick, String s) {
 		super(materialIn);
@@ -39,13 +41,19 @@ public class WasteEarth extends Block {
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(tick);
+		this.module = new ItemHazardModule();
+		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-	
-	public WasteEarth(Material mat, boolean tick, float rad, float max, String s){
-		this(mat, tick, s);
-		this.radIn = rad;
-		this.radMax = max;
+	public WasteEarth(Material materialIn, SoundType type, boolean tick, String s) {
+		this(materialIn, tick, s);
+		setSoundType(type);
+	}
+
+
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
 	}
 	
 	@Override
@@ -55,6 +63,9 @@ public class WasteEarth extends Block {
 		}
 		if(this == ModBlocks.frozen_grass){
 			return Items.SNOWBALL;
+		}
+		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
+			return ModItems.trinitite;
 		}
 		return Item.getItemFromBlock(this);
 	}
