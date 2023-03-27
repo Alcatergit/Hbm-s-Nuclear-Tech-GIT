@@ -16,6 +16,7 @@ import com.hbm.inventory.AnvilRecipes.AnvilOutput;
 import com.hbm.inventory.AnvilRecipes.OverlayType;
 import com.hbm.inventory.AnvilSmithingRecipe;
 import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.CyclotronRecipes;
@@ -25,9 +26,12 @@ import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.tool.ItemFluidCanister;
@@ -79,17 +83,21 @@ public class JeiRecipes {
 	
 	public static class ChemRecipe implements IRecipeWrapper {
 		
-		private final List<ItemStack> inputs;
+		private final List<List<ItemStack>> inputs;
 		private final List<ItemStack> outputs;
 		
-		public ChemRecipe(List<ItemStack> inputs, List<ItemStack> outputs) {
-			this.inputs = inputs;
+		public ChemRecipe(List<AStack> inputs, List<ItemStack> outputs) {
+			List<List<ItemStack>> list = new ArrayList<>(inputs.size());
+			for(AStack s : inputs)
+				list.add(s.getStackList());
+			this.inputs = list;
 			this.outputs = outputs; 
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			List<List<ItemStack>> in = Library.copyItemStackListList(inputs); // list of inputs and their list of possible items
+			ingredients.setInputLists(VanillaTypes.ITEM, in);
 			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
 		
@@ -307,13 +315,13 @@ public class JeiRecipes {
 			while(in.size() < 12)
 				in.add(Arrays.asList(new ItemStack(ModItems.nothing)));
 			int index = -1;
-			for(int i = 0; i < AssemblerRecipes.recipeList.size(); i++){
+			for(int i = 0; i < AssemblerRecipes.recipeList.size(); i++){ // finding the template item
 				if(AssemblerRecipes.recipeList.get(i).isApplicable(output)){
 					index = i;
 					break;
 				}
 			}
-			if(index >= 0)
+			if(index >= 0) // adding the template item
 				in.add(Arrays.asList(ItemAssemblyTemplate.getTemplate(index)));
 			else {
 				in.add(Arrays.asList(new ItemStack(ModItems.nothing)));
@@ -491,53 +499,50 @@ public class JeiRecipes {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static List<ChemRecipe> getChemistryRecipes() {
 		if(chemRecipes != null)
 			return chemRecipes;
 		chemRecipes = new ArrayList<ChemRecipe>();
 		
-        for (int i = 0; i < ItemChemistryTemplate.EnumChemistryTemplate.values().length; ++i)
-        {
-        	List<ItemStack> inputs = new ArrayList<ItemStack>(7);
+        for (int i = 0; i < EnumChemistryTemplate.values().length; ++i) {
+
+        	List<AStack> inputs = new ArrayList<AStack>(7);
         	for(int j = 0; j < 7; j ++)
-        		inputs.add(j, new ItemStack(ModItems.nothing));
+        		inputs.add(j, new ComparableStack(ModItems.nothing));
+
         	List<ItemStack> outputs = new ArrayList<ItemStack>(6);
         	for(int j = 0; j < 6; j ++)
         		outputs.add(j, new ItemStack(ModItems.nothing));
         	
-        	inputs.set(6, new ItemStack(ModItems.chemistry_template, 1, i));
-        	
-        	List<ItemStack> listIn = MachineRecipes.getChemInputFromTempate(inputs.get(6));
+        	//Adding template item
+        	ItemStack template = new ItemStack(ModItems.chemistry_template, 1, i);
+
+        	List<AStack> listIn = ChemplantRecipes.getChemInputFromTempate(template);
+        	FluidStack[] fluidIn = ChemplantRecipes.getFluidInputFromTempate(template);
+        	ItemStack[] listOut = ChemplantRecipes.getChemOutputFromTempate(template);
+        	FluidStack[] fluidOut = ChemplantRecipes.getFluidOutputFromTempate(template);
+
+        	inputs.set(6, new ComparableStack(template));
+
         	if(listIn != null)
         		for(int j = 0; j < listIn.size(); j++)
         			if(listIn.get(j) != null)
         				inputs.set(j + 2, listIn.get(j).copy());
-        	FluidStack[] fluidIn = MachineRecipes.getFluidInputFromTempate(inputs.get(6));
-        	for(int j = 0; j < fluidIn.length; j++)
-        		if(fluidIn[j] != null)
-        			inputs.set(j, ItemFluidIcon.getStackWithQuantity(fluidIn[j].getFluid(), fluidIn[j].amount));
+
+        	if(fluidIn != null)
+	        	for(int j = 0; j < fluidIn.length; j++)
+	        		if(fluidIn[j] != null)
+	        			inputs.set(j, new NbtComparableStack(ItemFluidIcon.getStackWithQuantity(fluidIn[j].getFluid(), fluidIn[j].amount)));
         	
-        	ItemStack[] listOut = MachineRecipes.getChemOutputFromTempate(inputs.get(6));
-        	for(int j = 0; j < listOut.length; j++)
-        		if(listOut[j] != null)
-        			outputs.set(j + 2, listOut[j].copy());
+        	if(listOut != null)
+	        	for(int j = 0; j < listOut.length; j++)
+	        		if(listOut[j] != null)
+	        			outputs.set(j + 2, listOut[j].copy());
         	
-        	FluidStack[] fluidOut = MachineRecipes.getFluidOutputFromTempate(inputs.get(6));
-        	for(int j = 0; j < fluidOut.length; j++)
-        		if(fluidOut[j] != null)
-        			outputs.set(j, ItemFluidIcon.getStackWithQuantity(fluidOut[j].getFluid(), fluidOut[j].amount));
+        	if(fluidOut != null)
+	        	for(int j = 0; j < fluidOut.length; j++)
+	        		if(fluidOut[j] != null)
+	        			outputs.set(j, ItemFluidIcon.getStackWithQuantity(fluidOut[j].getFluid(), fluidOut[j].amount));
         	
         	chemRecipes.add(new ChemRecipe(inputs, outputs));
         }

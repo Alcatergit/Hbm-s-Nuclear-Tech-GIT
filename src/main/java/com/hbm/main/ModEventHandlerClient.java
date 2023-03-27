@@ -54,7 +54,7 @@ import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
+import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemRBMKPellet;

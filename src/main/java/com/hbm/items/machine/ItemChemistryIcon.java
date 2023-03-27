@@ -1,7 +1,7 @@
 package com.hbm.items.machine;
 
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemChemistryTemplate.EnumChemistryTemplate;
+import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;

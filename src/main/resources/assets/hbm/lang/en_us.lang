@@ -812,6 +812,7 @@ chem.KEVLAR=Kevlar Compound Production
 chem.SOLID_FUEL=Solid Rocket Fuel Production
 chem.ELECTROLYSIS=Cryo-Electrolysis
 chem.XENON=Linde Xenon Cycle
+chem.XENON_OXY=Boosted Linde Xenon Cycle
 chem.SATURN=Saturnite Production
 chem.BALEFIRE=Balefire Rocket Fuel Mixing
 chem.SCHRABIDATE=Ferric Schrabidate Production
@@ -822,6 +823,8 @@ chem.COLTAN_PAIN=Pandemonium(III)tantalite Production
 chem.VIT_GAS=Gaseous Nuclear Waste Vitrification
 chem.VIT_LIQUID=Liquid Nuclear Waste Vitrification
 chem.TEL=TEL Mixing
+chem.GNEISS_GAS=Gas Shale Lab Fracking
+chem.GASOLINE=Gasoline Production
 
 item.record.lc.desc=Valve - Diabolic Adrenaline Guitar/Lambda Core
 item.record.ss.desc=Valve - Sector Sweep
