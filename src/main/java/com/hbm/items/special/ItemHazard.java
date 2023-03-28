@@ -109,7 +109,7 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 	public static final float powder = ingot * powder_mult;
 	public static final float powder_tiny = nugget * powder_mult;
 	public static final float block = 10.0F;
-	public static final float crystal = block;
+	public static final float crystal = 5.0F;
 	public static final float billet = 0.5F;
 	public static final float rtg = billet * 3;
 	public static final float rod = 0.5F;

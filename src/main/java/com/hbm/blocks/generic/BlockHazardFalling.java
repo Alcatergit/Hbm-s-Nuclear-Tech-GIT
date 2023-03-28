@@ -23,8 +23,13 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 
 	private boolean beaconable = false;
 
-	public BlockHazardFalling(SoundType type, String s) {
-		this(Material.SAND);
+	public BlockHazardFalling(Material mat) {
+		super(mat);
+		this.module = new ItemHazardModule();
+	}
+
+	public BlockHazardFalling(Material mat, String s, SoundType type) {
+		this(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setSoundType(type);
@@ -32,9 +37,8 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
-	public BlockHazardFalling(Material mat) {
-		super(mat);
-		this.module = new ItemHazardModule();
+	public BlockHazardFalling(SoundType type, String s) {
+		this(Material.SAND, s, type);
 	}
 
 	public BlockHazardFalling makeBeaconable() {
@@ -62,7 +66,7 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(this.rad > 0) {
-			RadiationSavedData.incrementRad(world, pos, rad, Float.MAX_VALUE);
+			RadiationSavedData.incrementRad(world, pos, rad*0.01F, rad);
 			world.scheduleUpdate(pos, this, this.tickRate(world));
 		}
 		super.updateTick(world, pos, state, rand);

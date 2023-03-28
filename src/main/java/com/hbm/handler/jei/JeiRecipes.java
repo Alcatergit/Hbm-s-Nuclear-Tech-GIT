@@ -629,6 +629,7 @@ public class JeiRecipes {
 
 		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_raw));
 		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_bismuth_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_bismuth_raw));
+		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_arsenic_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_arsenic_raw));
 		recipes.put(new Object[] { i_stamps_circuit, new ItemStack(ModItems.circuit_tantalium_raw) }, getPressResultNN(MachineRecipes.stamps_circuit.get(0), ModItems.circuit_tantalium_raw));
 
 		recipes.put(new Object[] { i_stamps_357, new ItemStack(ModItems.assembly_iron) }, getPressResultNN(i_stamps_357.get(0).getItem(), ModItems.assembly_iron));

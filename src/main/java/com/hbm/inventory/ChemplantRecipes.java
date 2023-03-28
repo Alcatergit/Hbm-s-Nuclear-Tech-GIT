@@ -125,6 +125,8 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.PEROXIDE, null, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 800) }, 50);
 		
+		makeRecipe(EnumChemistryTemplate.SULFURIC_ACID, new AStack[] { new OreDictStack(S.dust()) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 800) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 500) }, 50);
+		
 		makeRecipe(EnumChemistryTemplate.CIRCUIT_4, new AStack[] { new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.wire_gold, 4), new OreDictStack(LAPIS.dust(), 1), new OreDictStack(POLYMER.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1) }, null, 200);
 		
 		makeRecipe(EnumChemistryTemplate.CIRCUIT_5, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1), new ComparableStack(ModItems.wire_schrabidium, 4), new OreDictStack(DIAMOND.dust(), 1), new OreDictStack(DESH.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 800), new FluidStack(ModForgeFluids.petroleum, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_schrabidium, 1) }, null, 250);
@@ -187,6 +189,8 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.COLTAN_CRYSTAL, null, new FluidStack[]{ new FluidStack(ModForgeFluids.pain, 1000), new FluidStack(ModForgeFluids.acid, 500) }, new AStack[] { new ComparableStack(ModItems.gem_tantalium, 1), new ComparableStack(ModItems.dust, 3) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 250) }, 80);
 		
+		makeRecipe(EnumChemistryTemplate.ARSENIC, new AStack[] { new ComparableStack(ModItems.scrap_oil, 64), new ComparableStack(ModItems.scrap_oil, 64), new ComparableStack(ModItems.scrap_oil, 64), new ComparableStack(ModItems.scrap_oil, 64) }, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 1000) }, new AStack[] { new ComparableStack(ModItems.nugget_arsenic, 1), new ComparableStack(ModItems.sulfur, 2) }, new FluidStack[]{ new FluidStack(ModForgeFluids.heavyoil, 1500) }, 1200);
+
 		makeRecipe(EnumChemistryTemplate.VIT_LIQUID, new AStack[] {new ComparableStack(ModBlocks.sand_lead, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.wastefluid, 1000) }, new AStack[] {new ComparableStack(ModItems.nuclear_waste_vitrified, 1) }, null, 100);
 		
 		makeRecipe(EnumChemistryTemplate.VIT_GAS, new AStack[] {new ComparableStack(ModBlocks.sand_lead, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.wastegas, 1000) }, new AStack[] {new ComparableStack(ModItems.nuclear_waste_vitrified, 1) }, null, 100);
@@ -251,6 +255,7 @@ public class ChemplantRecipes {
 		DESH,
 		NITAN,
 		PEROXIDE,
+		SULFURIC_ACID,
 		CIRCUIT_4,
 		CIRCUIT_5,
 		POLYMER,
@@ -282,6 +287,7 @@ public class ChemplantRecipes {
 		COLTAN_CLEANING,
 		COLTAN_PAIN,
 		COLTAN_CRYSTAL,
+		ARSENIC,
 		VIT_LIQUID,
 		VIT_GAS,
 		TEL,

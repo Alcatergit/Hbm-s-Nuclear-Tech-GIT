@@ -108,6 +108,9 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.aschrab.getName(), new FluidProperties(5, 0, 5, EnumSymbol.ANTIMATTER, FluidTrait.AMAT));
 		
 		fluidProperties.put(ModForgeFluids.acid.getName(), new FluidProperties(3, 0, 3, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.sulfuric_acid.getName(),	new FluidProperties(3, 0, 2, EnumSymbol.ACID, FluidTrait.CORROSIVE));
+		
+
 		fluidProperties.put(ModForgeFluids.watz.getName(), new FluidProperties(4, 0, 3, EnumSymbol.ACID, FluidTrait.CORROSIVE_2));
 		fluidProperties.put(ModForgeFluids.cryogel.getName(), new FluidProperties(2, 0, 0, EnumSymbol.CROYGENIC));
 		

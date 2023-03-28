@@ -76,6 +76,7 @@ public class ModForgeFluids {
 	public static Fluid aschrab = new Fluid("aschrab", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aschrab_flowing"), null, Color.WHITE);
 
 	public static Fluid acid = new Fluid("acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_flowing"), null, Color.WHITE);
+	public static Fluid sulfuric_acid = new Fluid("sulfuric_acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_flowing"), null, Color.WHITE);
 	public static Fluid watz = new Fluid("watz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid cryogel = new Fluid("cryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE).setTemperature(50);
 
@@ -187,6 +188,8 @@ public class ModForgeFluids {
 
 		if(!FluidRegistry.registerFluid(acid))
 			acid = FluidRegistry.getFluid("acid");
+		if(!FluidRegistry.registerFluid(sulfuric_acid))
+			sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
 		if(!FluidRegistry.registerFluid(watz))
 			watz = FluidRegistry.getFluid("watz");
 		if(!FluidRegistry.registerFluid(cryogel))
@@ -285,6 +288,7 @@ public class ModForgeFluids {
 		reclaimed = FluidRegistry.getFluid("reclaimed");
 		petroil = FluidRegistry.getFluid("petroil");
 
+		fracksol = FluidRegistry.getFluid("fracksol");
 		lubricant = FluidRegistry.getFluid("lubricant");
 
 		naphtha = FluidRegistry.getFluid("naphtha");
@@ -309,6 +313,7 @@ public class ModForgeFluids {
 		aschrab = FluidRegistry.getFluid("aschrab");
 
 		acid = FluidRegistry.getFluid("acid");
+		sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
 		watz = FluidRegistry.getFluid("watz");
 		cryogel = FluidRegistry.getFluid("cryogel");
 

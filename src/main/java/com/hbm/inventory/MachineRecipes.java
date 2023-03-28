@@ -181,6 +181,8 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.circuit_aluminium);
 			if(input.getItem() == ModItems.circuit_bismuth_raw)
 				return new ItemStack(ModItems.circuit_bismuth);
+			if(input.getItem() == ModItems.circuit_arsenic_raw)
+				return new ItemStack(ModItems.circuit_arsenic);
 			if(input.getItem() == ModItems.circuit_tantalium_raw)
 				return new ItemStack(ModItems.circuit_tantalium);
 		}
