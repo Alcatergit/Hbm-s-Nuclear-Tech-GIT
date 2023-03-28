@@ -80,6 +80,8 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.reclaimed.getName(), new FluidProperties(2, 2, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.petroil.getName(), new FluidProperties(1, 3, 0, EnumSymbol.NONE));
+
+		fluidProperties.put(ModForgeFluids.fracksol.getName(), new FluidProperties(1, 3, 3, EnumSymbol.ACID, FluidTrait.CORROSIVE));
 		
 		fluidProperties.put(ModForgeFluids.lubricant.getName(), new FluidProperties(2, 1, 0, EnumSymbol.NONE));
 		

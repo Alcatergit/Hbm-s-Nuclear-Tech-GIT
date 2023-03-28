@@ -84,6 +84,7 @@ import com.hbm.blocks.generic.BlockMetalFence;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.generic.BlockMush;
 import com.hbm.blocks.generic.BlockMushHuge;
+import com.hbm.blocks.generic.BlockDeadPlant;
 import com.hbm.blocks.generic.BlockNTMDirt;
 import com.hbm.blocks.generic.BlockNTMGlass;
 import com.hbm.blocks.generic.BlockNTMLadder;
@@ -400,8 +401,9 @@ public class ModBlocks {
 	public static final Block cluster_depth_titanium = new BlockDepthOre("cluster_depth_titanium").setCreativeTab(MainRegistry.resourceTab);
 	public static final Block cluster_depth_tungsten = new BlockDepthOre("cluster_depth_tungsten").setCreativeTab(MainRegistry.resourceTab);
 
-	public static final Block ore_bedrock_coltan = new BlockBedrockOre("ore_bedrock_coltan").setCreativeTab(MainRegistry.resourceTab).setBlockUnbreakable().setResistance(1000000);
-	
+	public static final Block ore_bedrock_coltan = new BlockBedrockOre("ore_bedrock_coltan").setCreativeTab(MainRegistry.resourceTab).setBlockUnbreakable().setResistance(3_600_000);
+	public static final Block ore_bedrock_oil = new BlockBase(Material.ROCK, "ore_bedrock_oil").setCreativeTab(MainRegistry.resourceTab).setBlockUnbreakable().setResistance(3_600_000);
+
 	public static final Block ore_oil = new BlockOre(Material.ROCK, "ore_oil").setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_oil_empty = new BlockBase(Material.ROCK, "ore_oil_empty").setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_oil_sand = new BlockFallingBase(Material.SAND, "ore_oil_sand", SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(1.0F);
@@ -597,6 +599,20 @@ public class ModBlocks {
 	public static final Block waste_planks = new BlockOre(Material.WOOD, "waste_planks").setSoundType(SoundType.WOOD).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_leaves = new WasteEarth(Material.PLANTS, SoundType.PLANT, false, "waste_leaves").addRadiation(0.5F).toBlock().setHardness(0.3F).setResistance(0.3F).setCreativeTab(MainRegistry.resourceTab);
 	
+	//PollutedBecauseOilThings
+	public static final Block plant_dead_generic = new BlockDeadPlant(Material.PLANTS, "plant_dead_generic").setSoundType(SoundType.PLANT).setHardness(0).setResistance(0).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block plant_dead_grass = new BlockDeadPlant(Material.PLANTS, "plant_dead_grass").setSoundType(SoundType.PLANT).setHardness(0).setResistance(0).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block plant_dead_flower = new BlockDeadPlant(Material.PLANTS, "plant_dead_flower").setSoundType(SoundType.PLANT).setHardness(0).setResistance(0).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block plant_dead_big_flower = new BlockDeadPlant(Material.PLANTS, "plant_dead_big_flower").setSoundType(SoundType.PLANT).setHardness(0).setResistance(0).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block plant_dead_fern = new BlockDeadPlant(Material.PLANTS, "plant_dead_fern").setSoundType(SoundType.PLANT).setHardness(0).setResistance(0).setCreativeTab(MainRegistry.resourceTab);
+
+	public static final Block dirt_dead = new BlockFallingBase(Material.GROUND, "dirt_dead", SoundType.GROUND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block dirt_oily = new BlockFallingBase(Material.GROUND, "dirt_oily", SoundType.GROUND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
+
+	public static final Block sand_dirty = new BlockFallingBase(Material.SAND, "sand_dirty", SoundType.SAND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block sand_dirty_red = new BlockFallingBase(Material.SAND, "sand_dirty_red", SoundType.SAND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
+
+	public static final Block stone_cracked = new BlockFallingBase(Material.ROCK, "stone_cracked", SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
 
 	public static final Block frozen_grass = new WasteEarth(Material.GROUND, SoundType.GLASS, false, "frozen_grass").setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block frozen_log = new WasteLog(Material.WOOD, "frozen_log").setSoundType(SoundType.GLASS).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
@@ -1085,9 +1101,11 @@ public class ModBlocks {
 	
 	public static final Block machine_well = new MachineOilWell(Material.IRON, "machine_well").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_pumpjack = new MachinePumpjack(Material.IRON, "machine_pumpjack").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block machine_fracking_tower = new MachineFrackingTower(Material.IRON, "machine_fracking_tower").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block oil_pipe = new BlockNoDrop(Material.IRON, "oil_pipe").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final int guiID_machine_well = 40;
 	public static final int guiID_machine_pumpjack = 51;
+	public static final int guiID_machine_fracking_tower = 62;
 	
 	public static final Block machine_flare = new MachineGasFlare(Material.IRON, "machine_flare").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_machine_flare = 44;

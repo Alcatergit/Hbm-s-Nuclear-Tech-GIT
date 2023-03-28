@@ -35,6 +35,7 @@ import com.hbm.world.Vertibird;
 import com.hbm.world.dungeon.AncientTomb;
 import com.hbm.world.dungeon.ArcticVault;
 import com.hbm.world.feature.DepthDeposit;
+import com.hbm.world.feature.OilSpot;
 import com.hbm.world.generator.CellularDungeonFactory;
 import com.hbm.world.generator.DungeonToolbox;
 
@@ -247,6 +248,27 @@ public class HbmWorldGen implements IWorldGenerator {
 		}
 	}
 
+	private void generateBedrockOil(World world, Random rand, int i, int j, int dimID){
+		int dimBedrockOilFreq = parseInt(CompatibilityConfig.bedrockOilSpawn.get(dimID));
+		if (dimBedrockOilFreq > 0 && rand.nextInt(dimBedrockOilFreq) == 0) {
+			int randPosX = i + rand.nextInt(16);
+			int randPosZ = j + rand.nextInt(16);
+
+			for (int v = 5; v >= -5; v--) {
+				for (int w = 5; w >= -5; w--) {
+					for (int y = 6; y >= 0; y--) {
+						if (world.getBlockState(new BlockPos(randPosX + w, y, randPosZ + v)).getBlock().isReplaceableOreGen(world.getBlockState(new BlockPos(randPosX + w, y, randPosZ + v)), world, new BlockPos(randPosX + w, y, randPosZ + v), BlockMatcher.forBlock(Blocks.BEDROCK))) {
+							world.setBlockState(new BlockPos(randPosX + w, y, randPosZ + v), ModBlocks.ore_bedrock_oil.getDefaultState());
+						}
+					}
+				}
+			}
+
+			DungeonToolbox.generateOre(world, rand, i, j, 16, 8, 10, 50, ModBlocks.stone_porous);
+			OilSpot.generateOilSpot(world, randPosX, randPosZ, 5, 50);
+		}
+	}
+
 	private void generateSellafieldPool(World world, Random rand, int i, int j, int dimID){
 		int dimRadFreq = parseInt(CompatibilityConfig.radfreq.get(dimID));
 		if (dimRadFreq > 0 && rand.nextInt(dimRadFreq) == 0) {
@@ -342,8 +364,9 @@ public class HbmWorldGen implements IWorldGenerator {
 			generateAStructure(world, rand, i, j, new Silo(), parseInt(CompatibilityConfig.siloStructure.get(dimID)));
 			generateAStructure(world, rand, i, j, new Factory(), parseInt(CompatibilityConfig.factoryStructure.get(dimID)));
 			generateAStructure(world, rand, i, j, new Dud(), parseInt(CompatibilityConfig.dudStructure.get(dimID)));
-			if(biome.getTempCategory() == Biome.TempCategory.WARM)
+			if(biome.getTempCategory() == Biome.TempCategory.WARM && biome.getTempCategory() != Biome.TempCategory.OCEAN)
 				generateSellafieldPool(world, rand, i, j, dimID);
+			generateBedrockOil(world, rand, i, j, dimID);
 			generateSellafieldBlocks(world, rand, i, j, dimID);
 			
 			if (GeneralConfig.enableMines){

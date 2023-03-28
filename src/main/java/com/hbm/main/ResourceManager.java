@@ -279,6 +279,7 @@ public class ResourceManager {
 
 	//Pumpjack
 	public static final IModelCustom pumpjack = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/pumpjack.obj"));
+	public static final IModelCustom fracking_tower = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/fracking_tower.obj"));
 
 	//Refinery
 	public static final IModelCustom refinery = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/refinery.obj"));
@@ -553,6 +554,7 @@ public class ResourceManager {
 	
 	//Pumpjack
 	public static final ResourceLocation pumpjack_tex = new ResourceLocation(RefStrings.MODID, "textures/models/pumpjack.png");
+	public static final ResourceLocation fracking_tower_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fracking_tower.png");
 
 	//Refinery
 	public static final ResourceLocation refinery_tex = new ResourceLocation(RefStrings.MODID, "textures/models/refinery.png");

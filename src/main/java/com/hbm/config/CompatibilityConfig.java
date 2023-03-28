@@ -52,6 +52,8 @@ public class CompatibilityConfig {
 	public static HashMap netherCobaltSpawn;
 
 	public static HashMap endTixiteSpawn;
+
+	public static HashMap bedrockOilSpawn;
 	
 	public static HashMap radioStructure;
 	public static HashMap antennaStructure;
@@ -146,6 +148,8 @@ public class CompatibilityConfig {
 		verticiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.28_verticiumSpawnRate", "Amount of verticium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-30:1" }, ":");
 		unobtainiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.29_unobtainiumSpawnRate", "Amount of unobtainium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-28:1" }, ":");
 		daffergonSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.30_daffergonSpawnRate", "Amount of daffergon ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-30:1" }, ":");
+		
+		bedrockOilSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.31_bedrockOilSpawnRate", "Amount of end bedrock oil spawns per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:200" }, ":");
 		
 		netherUraniumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "02.N00_uraniumSpawnrate", "Amount of nether uranium per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-1:8" }, ":");
 		netherTungstenSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "02.N01_tungstenSpawnrate", "Amount of nether tungsten per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-1:10" }, ":");

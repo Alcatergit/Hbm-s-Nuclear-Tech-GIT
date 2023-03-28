@@ -195,6 +195,8 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.GASOLINE, new AStack[] {new ComparableStack(ModItems.antiknock, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.petroil, 10000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.gasoline, 12000) }, 40);
 		
+		makeRecipe(EnumChemistryTemplate.FRACKSOL, new AStack[] { new OreDictStack(S.dust()) }, new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 100), new FluidStack(FluidRegistry.WATER, 1000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.fracksol, 1000) }, 20);
+		
 		// makeRecipe(EnumChemistryTemplate.FP_SMEAR, new AStack[] { new ComparableStack() }, new FluidStack[]{ new FluidStack() }, null, null, 100);
 		
 	}
@@ -283,7 +285,8 @@ public class ChemplantRecipes {
 		VIT_LIQUID,
 		VIT_GAS,
 		TEL,
-		GASOLINE;
+		GASOLINE,
+		FRACKSOL;
 		
 		public static EnumChemistryTemplate getEnum(int i) {
 			if(i < EnumChemistryTemplate.values().length)

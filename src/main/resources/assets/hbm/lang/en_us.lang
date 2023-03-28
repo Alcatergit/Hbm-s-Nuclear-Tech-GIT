@@ -825,6 +825,28 @@ chem.VIT_LIQUID=Liquid Nuclear Waste Vitrification
 chem.TEL=TEL Mixing
 chem.GNEISS_GAS=Gas Shale Lab Fracking
 chem.GASOLINE=Gasoline Production
+chem.FRACKSOL=Fracking Solution Production
+
+hbmfluid.fracksol=Fracking Solution
+fluid.fracksol=Fracking Solution
+container.frackingTower=Hydraulic Fracking Tower
+item.canister_fracksol.name=Fracking Solution Canister
+item.scrap_oil.name=Oily Scraps
+
+tile.sand_dirty.name=Oily Sand
+tile.sand_dirty_red.name=Red Oily Sand
+tile.plant_dead_generic.name=Dead Plant
+tile.plant_dead_grass.name=Dead Plant
+tile.plant_dead_flower.name=Dead Plant
+tile.plant_dead_big_flower.name=Dead Plant
+tile.plant_dead_fern.name=Dead Plant
+tile.ore_bedrock_oil.name=Bedrock Oil Deposit
+tile.machine_fracking_tower.name=Hydraulic Fracking Tower
+
+tile.dirt_dead.name=Dead Dirt
+tile.dirt_oily.name=Oily Dirt
+
+tile.stone_cracked.name=Cracked Stone
 
 item.record.lc.desc=Valve - Diabolic Adrenaline Guitar/Lambda Core
 item.record.ss.desc=Valve - Sector Sweep

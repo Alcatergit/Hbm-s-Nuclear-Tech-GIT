@@ -17,6 +17,7 @@ public class SpecialContainerFillLists {
 		DIESEL(ModForgeFluids.diesel, new ModelResourceLocation(RefStrings.MODID + ":canister_fuel", "inventory")),
 		OIL(ModForgeFluids.oil, new ModelResourceLocation(RefStrings.MODID + ":canister_oil", "inventory")),
 		PETROIL(ModForgeFluids.petroil, new ModelResourceLocation(RefStrings.MODID + ":canister_petroil", "inventory")),
+		FRACKSOL(ModForgeFluids.fracksol, new ModelResourceLocation(RefStrings.MODID + ":canister_fracksol", "inventory")),
 		KEROSENE(ModForgeFluids.kerosene, new ModelResourceLocation(RefStrings.MODID + ":canister_kerosene", "inventory")),
 		NITAN(ModForgeFluids.nitan, new ModelResourceLocation(RefStrings.MODID + ":canister_superfuel", "inventory")),
 		BIOFUEL(ModForgeFluids.biofuel, new ModelResourceLocation(RefStrings.MODID + ":canister_biofuel", "inventory")),

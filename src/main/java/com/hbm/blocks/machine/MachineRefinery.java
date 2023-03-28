@@ -9,7 +9,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
-import com.hbm.tileentity.machine.TileEntityMachineRefinery;
+import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

@@ -5,7 +5,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
-import com.hbm.tileentity.machine.TileEntityMachineFractionTower;
+import com.hbm.tileentity.machine.oil.TileEntityMachineFractionTower;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

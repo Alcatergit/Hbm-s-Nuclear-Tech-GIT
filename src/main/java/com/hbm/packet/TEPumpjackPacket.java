@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
+import com.hbm.tileentity.machine.oil.TileEntityMachinePumpjack;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

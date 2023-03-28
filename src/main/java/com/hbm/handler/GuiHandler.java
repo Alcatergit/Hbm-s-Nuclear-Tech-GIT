@@ -68,7 +68,7 @@ import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
-import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
+import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineIGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineKeyForge;
@@ -76,18 +76,15 @@ import com.hbm.tileentity.machine.TileEntityMachineLargeTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineMiningDrill;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
-import com.hbm.tileentity.machine.TileEntityMachineOilWell;
 import com.hbm.tileentity.machine.TileEntityMachinePlasmaHeater;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
 import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
-import com.hbm.tileentity.machine.TileEntityMachinePumpjack;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityMachineReactor;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
-import com.hbm.tileentity.machine.TileEntityMachineRefinery;
 import com.hbm.tileentity.machine.TileEntityMachineSatDock;
 import com.hbm.tileentity.machine.TileEntityMachineSatLinker;
 import com.hbm.tileentity.machine.TileEntityMachineSchrabidiumTransmutator;
@@ -390,6 +387,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_machine_pumpjack:
 			if(entity instanceof TileEntityMachinePumpjack) {
 				return new ContainerMachinePumpjack(player.inventory, (TileEntityMachinePumpjack) entity);
+			}
+			return null;
+		case ModBlocks.guiID_machine_fracking_tower:
+			if(entity instanceof TileEntityMachineFrackingTower) {
+				return new ContainerMachineFrackingTower(player.inventory, (TileEntityMachineFrackingTower) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_flare:
@@ -1014,6 +1016,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_machine_pumpjack:
 			if(entity instanceof TileEntityMachinePumpjack) {
 				return new GUIMachinePumpjack(player.inventory, (TileEntityMachinePumpjack) entity);
+			}
+			return null;
+		case ModBlocks.guiID_machine_fracking_tower:
+			if (entity instanceof TileEntityMachineFrackingTower) {
+				return new GUIMachineFrackingTower(player.inventory, (TileEntityMachineFrackingTower) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_flare:

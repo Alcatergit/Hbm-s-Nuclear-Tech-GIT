@@ -8,7 +8,7 @@ import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntityMachineGasFlare;
+import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

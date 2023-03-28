@@ -49,6 +49,7 @@ public class ModForgeFluids {
 	public static Fluid reclaimed = new Fluid("reclaimed", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/reclaimed_flowing"), null, Color.WHITE);
 	public static Fluid petroil = new Fluid("petroil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroil_flowing"), null, Color.WHITE);
 
+	public static Fluid fracksol = new Fluid("fracksol", new ResourceLocation(RefStrings.MODID,  "blocks/forgefluid/fracksol_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/fracksol_flowing"), null, Color.WHITE);
 	//Drillgon200: Bruh I spelled this wrong, too.
 	public static Fluid lubricant = new Fluid("lubricant", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/lubricant_flowing"), null, Color.WHITE);
 
@@ -142,6 +143,9 @@ public class ModForgeFluids {
 			reclaimed = FluidRegistry.getFluid("reclaimed");
 		if(!FluidRegistry.registerFluid(petroil))
 			petroil = FluidRegistry.getFluid("petroil");
+
+		if (!FluidRegistry.registerFluid(fracksol))
+			fracksol = FluidRegistry.getFluid("fracksol");
 
 		if(!FluidRegistry.registerFluid(lubricant))
 			lubricant = FluidRegistry.getFluid("lubricant");

@@ -7,7 +7,7 @@ import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
-import com.hbm.tileentity.machine.TileEntityMachineRefinery;
+import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

@@ -1,4 +1,4 @@
-package com.hbm.tileentity.machine;
+package com.hbm.tileentity.machine.oil;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
