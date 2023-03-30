@@ -22,7 +22,7 @@ public class HazardTypeHot extends HazardTypeBase {
 		boolean reacher = false;
 		
 		if(target instanceof EntityPlayer && !GeneralConfig.enable528)
-			reacher = Library.hasInventoryItem(((EntityPlayer) target).inventory, ModItems.reacher);
+			reacher = Library.checkForHeld((EntityPlayer) target, ModItems.reacher);
 		
 		if(!reacher && !target.isWet())
 			target.setFire((int) Math.ceil(level));

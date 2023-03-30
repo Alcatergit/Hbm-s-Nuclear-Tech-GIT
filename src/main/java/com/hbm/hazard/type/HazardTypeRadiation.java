@@ -27,7 +27,7 @@ public class HazardTypeRadiation extends HazardTypeBase {
 		boolean reacher = false;
 		
 		if(target instanceof EntityPlayer && !GeneralConfig.enable528)
-			reacher = Library.hasInventoryItem(((EntityPlayer) target).inventory, ModItems.reacher);
+			reacher = Library.checkForHeld((EntityPlayer) target, ModItems.reacher);
 			
 		if(level > 0) {
 			float rad = level / 20F;

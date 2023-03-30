@@ -1,5 +1,11 @@
 package com.hbm.blocks.machine;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hbm.util.I18nUtil;
+import com.hbm.lib.Library;
+import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MultiblockHandlerXR;
@@ -12,14 +18,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
-public class MachineChungus extends BlockDummyable {
+public class MachineChungus extends BlockDummyable implements ILookOverlay {
 
 	public MachineChungus(Material mat, String s) {
 		super(mat, s);
@@ -129,5 +137,29 @@ public class MachineChungus extends BlockDummyable {
 		if(!world.getBlockState(new BlockPos(x + dir.offsetX, y + 2, z + dir.offsetZ)).getBlock().canPlaceBlockAt(world, new BlockPos(x + dir.offsetX, y + 2, z + dir.offsetZ))) return false;
 		
 		return true;
+	}
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+		int[] pos = this.findCore(world, x, y, z);
+		
+		if(pos == null)
+			return;
+		
+		TileEntity te = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+		
+		if(!(te instanceof TileEntityChungus))
+			return;
+		
+		TileEntityChungus chungus = (TileEntityChungus) te;
+		
+		List<String> text = new ArrayList();
+		if(chungus.types[0] != null)
+			text.add("§a-> §r" + chungus.types[0].getLocalizedName(new FluidStack(chungus.types[0], 1)) + ": " + chungus.tanks[0].getFluidAmount() + "/" + chungus.tanks[0].getCapacity() + "mB");
+		if(chungus.types[1] != null)
+			text.add("§c<- §r" + chungus.types[1].getLocalizedName(new FluidStack(chungus.types[1], 1)) + ": " + chungus.tanks[1].getFluidAmount() + "/" + chungus.tanks[1].getCapacity() + "mB");
+		text.add("§6<> §rStored Energy: " + Library.getShortNumber(chungus.power)+ "/" + Library.getShortNumber(chungus.maxPower) + "HE");
+
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 }

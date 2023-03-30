@@ -46,10 +46,10 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 	public List<IConsumer> list1 = new ArrayList<>();
 	
 	public FluidTank[] tanks;
-	public Fluid[] types;
+	public Fluid[] types = new Fluid[]{ ModForgeFluids.steam, ModForgeFluids.spentsteam };
 	
 	public TileEntityChungus() {
-		
+		super();
 		tanks = new FluidTank[2];
 		types = new Fluid[2];
 		tanks[0] = new FluidTank(2000000000);
@@ -86,14 +86,9 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 			if(cycles > 0)
 				turnTimer = 25;
 			
+			networkPack();
 			this.fillFluidInit(tanks[1]);
 			this.ffgeuaInit();
-			
-			NBTTagCompound data = new NBTTagCompound();
-			data.setLong("power", power);
-			data.setString("type", types[0].getName());
-			data.setInteger("operational", turnTimer);
-			this.networkPack(data, 150);
 			
 		} else {
 			
@@ -123,15 +118,26 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 		}
 	}
 	
-	public void networkPack(NBTTagCompound nbt, int range) {
-		PacketDispatcher.wrapper.sendToAllAround(new NBTPacket(nbt, pos), new TargetPoint(this.world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range));
+	public void networkPack() {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setLong("power", power);
+		data.setString("type", types[0].getName());
+		data.setInteger("operational", turnTimer);
+		data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		data.setString("types0", types[0].getName());
+		data.setString("types1", types[1].getName());
+		INBTPacketReceiver.networkPack(this, data, 150);
 	}
 
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
+		FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
 		this.power = data.getLong("power");
 		this.turnTimer = data.getInteger("operational");
-		this.types[0] = FluidRegistry.getFluid(data.getString("type"));
+		if(data.hasKey("types0"))
+			this.types[0] = FluidRegistry.getFluid(data.getString("types0"));
+		if(data.hasKey("types1"))
+			this.types[1] = FluidRegistry.getFluid(data.getString("types1"));
 	}
 	
 	@Override

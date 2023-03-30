@@ -318,8 +318,8 @@ public class OreDictManager {
 		GRAPHITE																											.ingot(ingot_graphite)																.block(block_graphite);
 		DURA																												.ingot(ingot_dura_steel)	.dust(powder_dura_steel)								.block(block_dura_steel);
 		POLYMER																												.ingot(ingot_polymer)		.dust(powder_polymer)									.block(block_polymer)															.plate(plate_polymer);
-		//BAKELITE																											.ingot(ingot_bakelite)		.dust(powder_bakelite)									.block(block_bakelite);
-		//RUBBER																											.ingot(ingot_rubber)																.block(block_rubber);
+		BAKELITE																											.ingot(ingot_bakelite)		.dust(powder_bakelite)									.block(block_bakelite);
+		RUBBER																												.ingot(ingot_rubber)																.block(block_rubber);
 		MAGTUNG																												.ingot(ingot_magnetized_tungsten).dust(powder_magnetized_tungsten)					.block(block_magnetized_tungsten);
 		CMB																													.ingot(ingot_combine_steel)	.dust(powder_combine_steel)								.block(block_combine_steel)														.plate(plate_combine_steel);
 		DESH														.nugget(nugget_desh)									.ingot(ingot_desh)			.dust(powder_desh)										.block(block_desh)																.plate(plate_desh);
@@ -420,7 +420,7 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_CIRCUIT_BISMUTH, circuit_bismuth);
 		OreDictionary.registerOre(KEY_CIRCUIT_BISMUTH, circuit_arsenic);
         //if this isn't implemented when fracking tower becomes real, yell at me
-		//OreDictionary.registerOre("itemRubber", ingot_rubber);
+		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
 		OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
 		
@@ -472,6 +472,7 @@ public class OreDictManager {
 		OreDictionary.registerOre("blockGlassRed", glass_polonium);
 		OreDictionary.registerOre("blockGlassBlack", glass_ash);
 		
+		registerGroups();
 		//MaterialShapes.registerCompatShapes();
 	}
 	

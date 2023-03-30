@@ -105,7 +105,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 								ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 					    		list.add(" §c"+ input.count() + "x " + inStack.getDisplayName());
 							} else {
-					    		list.add("I AM ERROR - No OrdDict match found");
+					    		list.add("I AM ERROR - No OrdDict match found for "+o.toString());
 							}
 						}
 					}

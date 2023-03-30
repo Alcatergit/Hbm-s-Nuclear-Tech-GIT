@@ -89,7 +89,7 @@ public class ItemHazardModule {
 		boolean reacher = false;
 		
 		if(entity instanceof EntityPlayer && !GeneralConfig.enable528)
-			reacher = Library.hasInventoryItem(((EntityPlayer) entity).inventory, ModItems.reacher);
+			reacher = Library.checkForHeld((EntityPlayer) entity, ModItems.reacher);
 			
 		if(this.radiation * tempMod > 0) {
 			float rad = this.radiation * tempMod * mod / 20F;

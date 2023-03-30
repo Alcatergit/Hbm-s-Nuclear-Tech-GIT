@@ -86,11 +86,6 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				OnContentsChanged(slot);
 				super.onContentsChanged(slot);
 			}
-
-			@Override
-			public int getSlotLimit(int slot) {
-				return 21;
-			}
 		};
 		tanks = new FluidTank[4];
 		tanks[0] = new FluidTank(24000);

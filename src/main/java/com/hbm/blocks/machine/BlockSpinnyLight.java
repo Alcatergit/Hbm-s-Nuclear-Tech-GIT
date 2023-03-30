@@ -88,6 +88,7 @@ public class BlockSpinnyLight extends BlockContainer {
 	
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
 		tooltip.add("Change color by right clicking with dye");
 	}
 	

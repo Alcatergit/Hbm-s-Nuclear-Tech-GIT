@@ -72,6 +72,8 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.oil.getName(), new FluidProperties(2, 1, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.hotoil.getName(), new FluidProperties(2, 3, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.crackoil.getName(), new FluidProperties(2, 1, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.hotcrackoil.getName(), new FluidProperties(2, 3, 0, EnumSymbol.NONE));
 		
 		fluidProperties.put(ModForgeFluids.heavyoil.getName(), new FluidProperties(2, 1, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.bitumen.getName(), new FluidProperties(2, 0, 0, EnumSymbol.NONE));
@@ -93,6 +95,9 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.gas.getName(), new FluidProperties(1, 4, 1, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.petroleum.getName(), new FluidProperties(1, 4, 1, EnumSymbol.NONE));
+		
+		fluidProperties.put(ModForgeFluids.aromatics.getName(), new FluidProperties(1, 4, 1, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.unsaturateds.getName(), new FluidProperties(1, 4, 1, EnumSymbol.NONE));
 		
 		fluidProperties.put(ModForgeFluids.biogas.getName(), new FluidProperties(1, 4, 1, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.biofuel.getName(), new FluidProperties(1, 2, 0, EnumSymbol.NONE));

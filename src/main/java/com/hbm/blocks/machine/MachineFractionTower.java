@@ -1,11 +1,17 @@
 package com.hbm.blocks.machine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ILookOverlay;
+import com.hbm.inventory.RefineryRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.oil.TileEntityMachineFractionTower;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,8 +26,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
-public class MachineFractionTower extends BlockDummyable {
+public class MachineFractionTower extends BlockDummyable implements ILookOverlay {
 
 	public MachineFractionTower(Material mat, String s) {
 		super(mat, s);
@@ -77,9 +85,14 @@ public class MachineFractionTower extends BlockDummyable {
 						player.sendMessage(new TextComponentString(TextFormatting.RED + "You can only change the type in the bottom segment!"));
 					} else {
 						Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
+						if(RefineryRecipes.getFractions(type) == null){
+							player.sendMessage(new TextComponentString("§cNo recipe found for §e"+type.getLocalizedName(new FluidStack(type, 1))));
+							return false;
+						}
+						
 						frac.setTankType(0, type);
 						frac.markDirty();
-						player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Changed type to " + I18n.format(type.getUnlocalizedName()) + "!"));
+						player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Changed type to §a" + I18n.format(type.getUnlocalizedName())));
 					}
 				}
 				
@@ -103,5 +116,27 @@ public class MachineFractionTower extends BlockDummyable {
 		this.makeExtra(world, x - 1, y, z);
 		this.makeExtra(world, x, y, z + 1);
 		this.makeExtra(world, x, y, z - 1);
+	}
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+		int[] pos = this.findCore(world, x, y, z);
+			
+		if(pos == null)
+			return;
+		
+		TileEntity te = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+		
+		if(!(te instanceof TileEntityMachineFractionTower))
+			return;
+		
+		TileEntityMachineFractionTower frac = (TileEntityMachineFractionTower) te;
+		
+		List<String> text = new ArrayList();
+
+		for(int i = 0; i < frac.types.length; i++)
+			text.add((i < 1 ? ("§a" + "-> ") : ("§c" + "<- ")) + "§r" + frac.types[i].getLocalizedName(new FluidStack(frac.types[i], 1)) + ": " + frac.tanks[i].getFluidAmount() + "/" + frac.tanks[i].getCapacity() + "mB");
+
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 }

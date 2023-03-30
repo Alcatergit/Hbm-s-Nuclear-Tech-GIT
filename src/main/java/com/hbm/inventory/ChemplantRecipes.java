@@ -133,6 +133,10 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.POLYMER, new AStack[] { new OreDictStack(COAL.gem(), 2), new OreDictStack(F.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 600) }, new AStack[] { new ComparableStack(ModItems.ingot_polymer, 1) }, null, 100);
 		
+		makeRecipe(EnumChemistryTemplate.BAKELITE, null, new FluidStack[]{ new FluidStack(ModForgeFluids.aromatics, 500), new FluidStack(ModForgeFluids.petroleum, 500) }, new AStack[] { new ComparableStack(ModItems.ingot_bakelite, 1) }, null, 100);
+		
+		makeRecipe(EnumChemistryTemplate.RUBBER, new AStack[] { new OreDictStack(S.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.unsaturateds, 500) }, new AStack[] { new ComparableStack(ModItems.ingot_rubber, 1) }, null, 100);
+		
 		makeRecipe(EnumChemistryTemplate.DEUTERIUM, new AStack[] { new OreDictStack(S.dust(), 2) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 4000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.deuterium, 500) }, 200);
 		
 		makeRecipe(EnumChemistryTemplate.STEAM, null, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.steam, 1000) }, 20);
@@ -259,6 +263,8 @@ public class ChemplantRecipes {
 		CIRCUIT_4,
 		CIRCUIT_5,
 		POLYMER,
+		BAKELITE,
+		RUBBER,
 		DEUTERIUM,
 		STEAM,
 		ALGE,

@@ -6,6 +6,7 @@ import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.INBTPacketReceiver;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityCondenser extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityCondenser extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, INBTPacketReceiver {
 
 	public int age = 0;
 	public FluidTank[] tanks;
@@ -45,6 +46,12 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 			if(age >= 2) {
 				age = 0;
 			}
+
+			if(tanks[0].getFluidAmount() > 0) {
+				this.waterTimer = 20;
+			} else if(this.waterTimer > 0){
+				this.waterTimer--;
+			}
 			
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			
@@ -52,16 +59,20 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 			tanks[0].drain(convert, true);
 			tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
 			
+			networkPack();
 			fillFluidInit(tanks[1]);
-			
-		} else {
-			
-			if(tanks[0].getFluidAmount() > 0) {
-				this.waterTimer = 20;
-			} else if(this.waterTimer > 0){
-				this.waterTimer--;
-			}
 		}
+	}
+
+	public void networkPack() {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		INBTPacketReceiver.networkPack(this, data, 150);
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
 	}
 	
 	@Override

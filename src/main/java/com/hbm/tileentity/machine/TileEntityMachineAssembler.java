@@ -65,11 +65,6 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 				OnContentsChanged(slot);
 				super.onContentsChanged(slot);
 			}
-
-			@Override
-			public int getSlotLimit(int slot) {
-				return 18;
-			}
 		};
 	}
 

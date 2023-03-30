@@ -78,6 +78,11 @@ public class ItemCustomLore extends Item {
 			list.add("and some shards are missing.");
 			list.add("It stopped ticking at 2:34.");
 		}
+		if(this == ModItems.reacher)
+		{
+			list.add("Holding this in main hand or off hand reduces radiation coming from items to its square-root.");
+			list.add("It also stops hot items from setting you on fire.");
+		}
 		if(this == ModItems.crystal_horn)
 		{
 			if(MainRegistry.polaroidID == 11)

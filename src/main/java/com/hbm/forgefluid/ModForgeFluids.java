@@ -40,6 +40,8 @@ public class ModForgeFluids {
 
 	public static Fluid oil = new Fluid("oil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_flowing"), null, Color.WHITE);
 	public static Fluid hotoil = new Fluid("hotoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_flowing"), null, Color.WHITE);
+	public static Fluid crackoil = new Fluid("crackoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_flowing"), null, Color.WHITE);
+	public static Fluid hotcrackoil = new Fluid("hotcrackoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcrackoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcrackoil_flowing"), null, Color.WHITE);
 
 	public static Fluid heavyoil = new Fluid("heavyoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_flowing"), null, Color.WHITE);
 	public static Fluid bitumen = new Fluid("bitumen", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/bitumen_flowing"), null, Color.WHITE);
@@ -63,6 +65,9 @@ public class ModForgeFluids {
 	public static Fluid gas = new Fluid("gas", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gas_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gas_flowing"), null, Color.WHITE).setTemperature(111);
 	public static Fluid petroleum = new Fluid("petroleum", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroleum_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/petroleum_flowing"), null, Color.WHITE);
 
+	public static Fluid aromatics = new Fluid("aromatics", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aromatics_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/aromatics_flowing"), null, Color.WHITE);
+	public static Fluid unsaturateds = new Fluid("unsaturateds", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/unsaturateds_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/unsaturateds_flowing"), null, Color.WHITE);
+	
 	public static Fluid biogas = new Fluid("biogas", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_flowing"), null, Color.WHITE);
 	public static Fluid biofuel = new Fluid("biofuel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_flowing"), null, Color.WHITE);
 
@@ -130,6 +135,10 @@ public class ModForgeFluids {
 			oil = FluidRegistry.getFluid("oil");
 		if(!FluidRegistry.registerFluid(hotoil))
 			hotoil = FluidRegistry.getFluid("hotoil");
+		if(!FluidRegistry.registerFluid(crackoil))
+			crackoil = FluidRegistry.getFluid("crackoil");
+		if(!FluidRegistry.registerFluid(hotcrackoil))
+			hotcrackoil = FluidRegistry.getFluid("hotcrackoil");
 
 		if(!FluidRegistry.registerFluid(heavyoil))
 			heavyoil = FluidRegistry.getFluid("heavyoil");
@@ -165,6 +174,11 @@ public class ModForgeFluids {
 			gas = FluidRegistry.getFluid("gas");
 		if(!FluidRegistry.registerFluid(petroleum))
 			petroleum = FluidRegistry.getFluid("petroleum");
+
+		if(!FluidRegistry.registerFluid(aromatics))
+			aromatics = FluidRegistry.getFluid("aromatics");
+		if(!FluidRegistry.registerFluid(unsaturateds))
+			unsaturateds = FluidRegistry.getFluid("unsaturateds");
 
 		if(!FluidRegistry.registerFluid(biogas))
 			biogas = FluidRegistry.getFluid("biogas");
@@ -279,6 +293,8 @@ public class ModForgeFluids {
 
 		oil = FluidRegistry.getFluid("oil");
 		hotoil = FluidRegistry.getFluid("hotoil");
+		crackoil = FluidRegistry.getFluid("crackoil");
+		hotcrackoil = FluidRegistry.getFluid("hotcrackoil");
 
 		heavyoil = FluidRegistry.getFluid("heavyoil");
 		bitumen = FluidRegistry.getFluid("bitumen");
@@ -299,6 +315,9 @@ public class ModForgeFluids {
 
 		gas = FluidRegistry.getFluid("gas");
 		petroleum = FluidRegistry.getFluid("petroleum");
+
+		aromatics = FluidRegistry.getFluid("aromatics");
+		unsaturateds = FluidRegistry.getFluid("unsaturateds");
 
 		biogas = FluidRegistry.getFluid("biogas");
 		biofuel = FluidRegistry.getFluid("biofuel");
