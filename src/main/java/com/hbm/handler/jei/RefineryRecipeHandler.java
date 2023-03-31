@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RefineryRecipeHandler implements IRecipeCategory<RefineryRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_refinery.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_refinery.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic progressStatic;

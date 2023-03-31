@@ -409,6 +409,8 @@ public class MachineRecipes {
 			return new Object[] { ModForgeFluids.superhotsteam, 5, 50, 45000 };
 		} else if (type == ModForgeFluids.oil) {
 			return new Object[] { ModForgeFluids.hotoil, 5, 5, 35000 };
+		} else if (type == ModForgeFluids.crackoil) {
+			return new Object[] { ModForgeFluids.hotcrackoil, 5, 5, 35000 };
 		} else {
 			return null;
 		}

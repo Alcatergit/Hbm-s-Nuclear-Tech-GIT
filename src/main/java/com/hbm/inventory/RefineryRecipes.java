@@ -2,6 +2,7 @@ package com.hbm.inventory;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.hbm.util.Tuple.Pair;
 
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
@@ -10,14 +11,9 @@ import com.hbm.util.Tuple.Quartet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class RefineryRecipes {
-
-	/// fractions in percent ///
-	public static final int oil_frac_heavy = 50;
-	public static final int oil_frac_naph = 25;
-	public static final int oil_frac_light = 15;
-	public static final int oil_frac_petro = 10;
 
 	public static final int heavy_frac_bitu = 30;
 	public static final int heavy_frac_smear = 70;
@@ -28,21 +24,30 @@ public class RefineryRecipes {
 	public static final int light_frac_diesel = 40;
 	public static final int light_frac_kero = 60;
 	
-	private static Map<Fluid, Quartet<Fluid, Fluid, Integer, Integer>> fractions = new HashMap<>();
-	
-	public static Map<Object, Object[]> getRefineryRecipe() {
+	public static Map<Fluid, Quartet<Fluid, Fluid, Integer, Integer>> fractions = new HashMap<>();
 
-		Map<Object, Object[]> recipes = new HashMap<Object, Object[]>();
+	public static HashMap<Fluid, Pair<FluidStack[], ItemStack>> refineryRecipesMap = new HashMap<>();
+	
+	public static void registerRefineryRecipes() {
+		refineryRecipesMap.put(ModForgeFluids.hotoil, new Pair(new FluidStack[]{ 
+			new FluidStack(ModForgeFluids.heavyoil, 50), 
+			new FluidStack(ModForgeFluids.naphtha, 25),
+			new FluidStack(ModForgeFluids.lightoil, 15),
+			new FluidStack(ModForgeFluids.petroleum, 10) }, 
+			new ItemStack(ModItems.sulfur, 1)));
 		
-		recipes.put(ItemFluidIcon.getStackWithQuantity(ModForgeFluids.hotoil, 1000),
-				new ItemStack[] {
-						ItemFluidIcon.getStackWithQuantity(ModForgeFluids.heavyoil, oil_frac_heavy * 10),
-						ItemFluidIcon.getStackWithQuantity(ModForgeFluids.heavyoil, oil_frac_naph * 10),
-						ItemFluidIcon.getStackWithQuantity(ModForgeFluids.heavyoil, oil_frac_light * 10),
-						ItemFluidIcon.getStackWithQuantity(ModForgeFluids.heavyoil, oil_frac_petro * 10),
-						new ItemStack(ModItems.sulfur, 1) });
-		
-		return recipes;
+		refineryRecipesMap.put(ModForgeFluids.hotcrackoil, new Pair(new FluidStack[]{ 
+			new FluidStack(ModForgeFluids.naphtha, 40), 
+			new FluidStack(ModForgeFluids.lightoil, 30),
+			new FluidStack(ModForgeFluids.aromatics, 15),
+			new FluidStack(ModForgeFluids.unsaturateds, 15)	}, 
+			new ItemStack(ModItems.oil_tar, 1)));
+	}
+
+	public static Pair<FluidStack[], ItemStack> getRecipe(Fluid f){
+		if(f != null)
+			return refineryRecipesMap.get(f);
+		return null;
 	}
 	
 	public static void registerFractions() {

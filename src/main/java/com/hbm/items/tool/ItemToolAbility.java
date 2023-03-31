@@ -13,6 +13,8 @@ import com.hbm.handler.ToolAbility;
 import com.hbm.handler.ToolAbility.SilkAbility;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockBedrockOre;
 
 import api.hbm.item.IDepthRockTool;
 import net.minecraft.block.Block;
@@ -60,6 +62,9 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 		private static final long serialVersionUID = 153867601249309418L;
 	{ add(null); }};
     private List<WeaponAbility> hitAbility = new ArrayList<WeaponAbility>();
+
+    private boolean rockBreaker = false;
+    
 	
 	public static enum EnumToolType {
 		
@@ -168,11 +173,17 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 		if(!canOperate(stack)) return false;
+
+		if(isForbiddenBlock(state.getBlock())) return false;
     	
 		if(this.getCurrentAbility(stack) instanceof SilkAbility)
     		return true;
 		
     	return getDestroySpeed(stack, state) > 1;
+	}
+
+	public static boolean isForbiddenBlock(Block b){
+		return (b == Blocks.BARRIER || b == Blocks.BEDROCK || b == Blocks.COMMAND_BLOCK || b == Blocks.CHAIN_COMMAND_BLOCK || b == Blocks.REPEATING_COMMAND_BLOCK || b == ModBlocks.ore_bedrock_oil || b instanceof BlockBedrockOre );
 	}
 	
 	@Override
@@ -297,6 +308,10 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 				list.add("  " + TextFormatting.RED + ability.getFullName());
     		}
     	}
+
+    	if(this.rockBreaker){
+    		list.add("§d[Unmineable]§5 can be mined");
+    	}
     }
     
     @Override
@@ -389,8 +404,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 		return this;
 	}
 	
-	private boolean rockBreaker = false;
-    
+	
 	@Override
 	public boolean canBreakRock(World world, EntityPlayer player, ItemStack tool, IBlockState block, BlockPos pos){
 		return canOperate(tool) && this.rockBreaker;

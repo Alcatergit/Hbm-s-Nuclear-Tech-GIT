@@ -260,10 +260,12 @@ public class ContaminationUtil {
 	public static boolean checkConfigEntityImmunity(Entity e){
 		if(!(e instanceof EntityPlayer)){
 			ResourceLocation entity_path = EntityList.getKey(e);
-			if(CompatibilityConfig.mobModRadimmune.contains(entity_path.getResourceDomain())){
-				return true;
-			}else{
-				return CompatibilityConfig.mobRadimmune.contains(entity_path.toString());
+			if(entity_path != null){
+				if(CompatibilityConfig.mobModRadimmune.contains(entity_path.getResourceDomain())){
+					return true;
+				}else{
+					return CompatibilityConfig.mobRadimmune.contains(entity_path.toString());
+				}
 			}
 		}
 		return false;

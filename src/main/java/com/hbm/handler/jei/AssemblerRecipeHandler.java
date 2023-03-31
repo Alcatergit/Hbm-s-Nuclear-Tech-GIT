@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AssemblerRecipeHandler implements IRecipeCategory<AssemblerRecipeWrapper> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_assembler.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_assembler.png");
 	
 	public static final int[] inputSlots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 	public static final int outputSlot = 13;

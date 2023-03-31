@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
+import com.hbm.inventory.WasteDrumRecipes;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.block.Block;
@@ -44,11 +45,7 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 		if(item instanceof ItemRBMKRod)
 			return true;
 		
-		return item == ModItems.waste_mox_hot || 
-				item == ModItems.waste_plutonium_hot || 
-				item == ModItems.waste_schrabidium_hot || 
-				item == ModItems.waste_thorium_hot || 
-				item == ModItems.waste_uranium_hot;
+		return WasteDrumRecipes.hasRecipe(item);
 	}
 	
 	@Override
@@ -69,11 +66,7 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 			return ItemRBMKRod.getCoreHeat(itemStack) < 50 && ItemRBMKRod.getHullHeat(itemStack) < 50;
 		}
 		
-		return item == ModItems.waste_mox || 
-				item == ModItems.waste_plutonium || 
-				item == ModItems.waste_schrabidium || 
-				item == ModItems.waste_thorium || 
-				item == ModItems.waste_uranium;
+		return WasteDrumRecipes.isCold(item);
 	}
 	
 	@Override
@@ -135,21 +128,15 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 						
 						if(!inventory.getStackInSlot(i).isEmpty()) {
 							
-							if(inventory.getStackInSlot(i).getItem() == ModItems.waste_uranium_hot)
-								inventory.setStackInSlot(i, new ItemStack(ModItems.waste_uranium));
-							else if(inventory.getStackInSlot(i).getItem() == ModItems.waste_plutonium_hot)
-								inventory.setStackInSlot(i, new ItemStack(ModItems.waste_plutonium));
-							else if(inventory.getStackInSlot(i).getItem() == ModItems.waste_thorium_hot)
-								inventory.setStackInSlot(i, new ItemStack(ModItems.waste_thorium));
-							else if(inventory.getStackInSlot(i).getItem() == ModItems.waste_mox_hot)
-								inventory.setStackInSlot(i, new ItemStack(ModItems.waste_mox));
-							else if(inventory.getStackInSlot(i).getItem() == ModItems.waste_schrabidium_hot)
-								inventory.setStackInSlot(i, new ItemStack(ModItems.waste_schrabidium));
+							Item waste_hot = inventory.getStackInSlot(i).getItem();
+							ItemStack waste_cold = WasteDrumRecipes.getOutput(waste_hot);
+							if(waste_cold != null){
+								inventory.setStackInSlot(i, waste_cold.copy());
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	
 }

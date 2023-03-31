@@ -7,6 +7,7 @@ import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.inventory.DFCRecipes;
+import com.hbm.inventory.CrackRecipes;
 import com.hbm.inventory.gui.GUIAnvil;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
@@ -59,6 +60,8 @@ public class JEIConfig implements IModPlugin {
 	public static final String GAS_CENT = "hbm.gas_centrifuge";
 	public static final String REACTOR = "hbm.reactor";
 	public static final String REFINERY = "hbm.refinery";
+	public static final String CRACKING = "hbm.cracking";
+	public static final String FRACTIONING = "hbm.fracturing";
 	public static final String SHREDDER = "hbm.shredder";
 	public static final String FLUIDS = "hbm.fluids";
 	public static final String CRYSTALLIZER = "hbm.crystallizer";
@@ -74,6 +77,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String SILEX_XRAY = "hbm.silexray";
 	public static final String SILEX_GAMMA = "hbm.silexgamma";
 	public static final String SILEX_DIGAMMA = "hbm.silexdigamma";
+	public static final String WASTEDRUM = "hbm.waste_drum";
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
@@ -95,7 +99,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_combine_factory), CMB);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_gascent), GAS_CENT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_reactor), REACTOR);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_waste_drum), WASTEDRUM);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_refinery), REFINERY);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_catalytic_cracker), CRACKING);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fraction_tower), FRACTIONING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_shredder), SHREDDER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fluidtank), FLUIDS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crystallizer), CRYSTALLIZER);
@@ -128,7 +135,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getCMBRecipes(), CMB);
 		registry.addRecipes(JeiRecipes.getGasCentrifugeRecipes(), GAS_CENT);
 		registry.addRecipes(JeiRecipes.getReactorRecipes(), REACTOR);
+		registry.addRecipes(JeiRecipes.getWasteDrumRecipes(), WASTEDRUM);
 		registry.addRecipes(JeiRecipes.getRefineryRecipe(), REFINERY);
+		registry.addRecipes(JeiRecipes.getCrackingRecipe(), CRACKING);
+		registry.addRecipes(JeiRecipes.getFractioningRecipe(), FRACTIONING);
 		registry.addRecipes(ShredderRecipes.getShredderRecipes(), SHREDDER);
 		registry.addRecipes(JeiRecipes.getFluidEquivalences(), FLUIDS);
 		registry.addRecipes(CrystallizerRecipes.getRecipes(), CRYSTALLIZER);
@@ -173,7 +183,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 64, 53, 48, 16, RBMKOUTGASSER);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
-		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
+
 		// Some things are even beyond my control...or are they?
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.memory));
 
@@ -253,12 +263,15 @@ public class JEIConfig implements IModPlugin {
 				new ChemplantRecipeHandler(help),
 				new BoilerRecipeHandler(help),
 				new RefineryRecipeHandler(help),
+				new CrackingRecipeHandler(help),
+				new FractioningRecipeHandler(help),
 				new CrystallizerRecipeHandler(help),
 				new CentrifugeRecipeHandler(help),
 				new GasCentrifugeRecipeHandler(help),
 				new CyclotronRecipeHandler(help),
 				new CMBFurnaceRecipeHandler(help),
 				new ReactorRecipeHandler(help),
+				new WasteDrumRecipeHandler(help),
 				new FluidRecipeHandler(help),
 				new SILEXRecipeHandler(help),
 				new SILEXRadioRecipeHandler(help),

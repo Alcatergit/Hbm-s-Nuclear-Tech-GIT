@@ -4,11 +4,13 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.RefineryRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.util.Tuple.Pair;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,8 +38,8 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	public ItemStackHandler inventory;
 
 	public long power = 0;
-	public int sulfur = 0;
-	public static final int maxSulfur = 100;
+	public int itemOutputTimer = 0;
+	public static final int totalItemTime = 100;
 	public static final long maxPower = 1000;
 	public int age = 0;
 	public boolean needsUpdate = false;
@@ -90,14 +92,9 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		tankTypes[0] = ModForgeFluids.hotoil;
-		tankTypes[1] = ModForgeFluids.heavyoil;
-		tankTypes[2] = ModForgeFluids.naphtha;
-		tankTypes[3] = ModForgeFluids.lightoil;
-		tankTypes[4] = ModForgeFluids.petroleum;
 		
 		power = nbt.getLong("power");
-		sulfur = nbt.getInteger("sulfur");
+		itemOutputTimer = nbt.getInteger("itemOutputTimer");
 		if(nbt.hasKey("inventory"))
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		if(nbt.hasKey("tanks"))
@@ -108,7 +105,7 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("power", power);
-		nbt.setInteger("sulfur", sulfur);
+		nbt.setInteger("itemOutputTimer", itemOutputTimer);
 		nbt.setTag("inventory", inventory.serializeNBT());
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		return super.writeToNBT(nbt);
@@ -141,46 +138,70 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 			if(age == 4 || age == 14){
 				fillFluidInit(tanks[4]);
 			}
-			if(this.inputValidForTank(0, 1))
+			if(this.inputValidForTank(0, 1)) //checking if the containers fluid has a recipe
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 1, 2);
 			
-			int ho = 50;
-			int nt = 25;
-			int lo = 15;
-			int pe = 10;
-			
-			if(power >= 5 && tanks[0].getFluidAmount() >= 100 &&
-					tanks[1].getFluidAmount() + ho <= tanks[1].getCapacity() && 
-					tanks[2].getFluidAmount() + nt <= tanks[2].getCapacity() && 
-					tanks[3].getFluidAmount() + lo <= tanks[3].getCapacity() && 
-					tanks[4].getFluidAmount() + pe <= tanks[4].getCapacity()) {
-
-				tanks[0].drain(100, true);
-				tanks[1].fill(new FluidStack(ModForgeFluids.heavyoil, ho), true);
-				tanks[2].fill(new FluidStack(ModForgeFluids.naphtha, nt), true);
-				tanks[3].fill(new FluidStack(ModForgeFluids.lightoil, lo), true);
-				tanks[4].fill(new FluidStack(ModForgeFluids.petroleum, pe), true);
-				sulfur += 1;
-				power -= 5;
-				needsUpdate = true;
-			}
+			refine();
 			
 			FFUtils.fillFluidContainer(inventory, tanks[1], 3, 4);
 			FFUtils.fillFluidContainer(inventory, tanks[2], 5, 6);
 			FFUtils.fillFluidContainer(inventory, tanks[3], 7, 8);
 			FFUtils.fillFluidContainer(inventory, tanks[4], 9, 10);
-			
-			if(sulfur >= maxSulfur) {
-				if(inventory.getStackInSlot(11).isEmpty()) {
-					inventory.setStackInSlot(11, new ItemStack(ModItems.sulfur));
-					sulfur -= maxSulfur;
-				} else if(!inventory.getStackInSlot(11).isEmpty() && inventory.getStackInSlot(11).getItem() == ModItems.sulfur && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize()) {
-					inventory.getStackInSlot(11).grow(1);
-					sulfur -= maxSulfur;
-				}
-			}
 
 			detectAndSendChanges();
+		}
+	}
+
+	private void setupTanks(FluidStack[] fluids){
+		if(fluids != null){
+			setTankType(1, fluids[0].getFluid());
+			setTankType(2, fluids[1].getFluid());
+			setTankType(3, fluids[2].getFluid());
+			setTankType(4, fluids[3].getFluid());
+		}
+	}
+
+	public void setTankType(int idx, Fluid type){
+		if(tankTypes[idx] != type){
+			tankTypes[idx] = type;
+			if(type != null){
+				tanks[idx].setFluid(new FluidStack(type, 0));
+			}else {
+				tanks[idx].setFluid(null);
+			}
+		}
+	}
+
+	private void refine(){
+		Pair<FluidStack[], ItemStack> recipe = RefineryRecipes.getRecipe(tankTypes[0]);
+		FluidStack[] outputFluids = recipe.getKey();
+		ItemStack outputItem = recipe.getValue();
+		setupTanks(outputFluids);
+		
+		if(power >= 5 && tanks[0].getFluidAmount() >= 100 &&
+				tanks[1].getFluidAmount() + outputFluids[0].amount <= tanks[1].getCapacity() && 
+				tanks[2].getFluidAmount() + outputFluids[1].amount <= tanks[2].getCapacity() && 
+				tanks[3].getFluidAmount() + outputFluids[2].amount <= tanks[3].getCapacity() && 
+				tanks[4].getFluidAmount() + outputFluids[3].amount <= tanks[4].getCapacity()) {
+
+			tanks[0].drain(100, true);
+			tanks[1].fill(outputFluids[0].copy(), true);
+			tanks[2].fill(outputFluids[1].copy(), true);
+			tanks[3].fill(outputFluids[2].copy(), true);
+			tanks[4].fill(outputFluids[3].copy(), true);
+			itemOutputTimer += 1;
+			power -= 5;
+			needsUpdate = true;
+		}
+
+		if(itemOutputTimer >= totalItemTime) {
+			if(inventory.getStackInSlot(11).isEmpty()) {
+				inventory.setStackInSlot(11, outputItem.copy());
+				itemOutputTimer = 0;
+			} else if(!inventory.getStackInSlot(11).isEmpty() && inventory.getStackInSlot(11).getItem() == outputItem.getItem() && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize()) {
+				inventory.getStackInSlot(11).grow(1);
+				itemOutputTimer = 0;
+			}
 		}
 	}
 	
@@ -225,9 +246,13 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 
 	protected boolean inputValidForTank(int tank, int slot){
 		
-		if(!inventory.getStackInSlot(slot).isEmpty() && tankTypes[tank] != null){
-			if(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
-				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];
+		if(!inventory.getStackInSlot(slot).isEmpty()){
+			FluidStack containerFluid = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
+			if(containerFluid != null){
+				if(RefineryRecipes.getRecipe(containerFluid.getFluid()) != null){
+					setTankType(tank, containerFluid.getFluid());
+					return true;
+				}
 			}
 		}
 		return false;

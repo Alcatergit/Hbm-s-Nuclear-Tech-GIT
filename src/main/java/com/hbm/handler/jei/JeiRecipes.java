@@ -19,11 +19,14 @@ import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
+import com.hbm.inventory.WasteDrumRecipes;
 import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.inventory.FusionRecipes;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.inventory.MagicRecipes;
+import com.hbm.inventory.RefineryRecipes;
+import com.hbm.inventory.CrackRecipes;
 import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -38,6 +41,7 @@ import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomObject;
+import com.hbm.util.Tuple.Quartet;
 import com.hbm.util.I18nUtil;
 
 import mezz.jei.api.gui.IDrawableStatic;
@@ -66,7 +70,10 @@ public class JeiRecipes {
 	private static List<CMBFurnaceRecipe> cmbRecipes = null;
 	private static List<GasCentRecipe> gasCentRecipes = null;
 	private static List<ReactorRecipe> reactorRecipes = null;
+	private static List<WasteDrumRecipe> wasteDrumRecipes = null;
 	private static List<RefineryRecipe> refineryRecipes = null;
+	private static List<CrackingRecipe> crackingRecipes = null;
+	private static List<FractioningRecipe> fractioningRecipes = null;
 	private static List<FluidRecipe> fluidEquivalences = null;
 	private static List<BookRecipe> bookRecipes = null;
 	private static List<FusionRecipe> fusionByproducts = null;
@@ -243,6 +250,24 @@ public class JeiRecipes {
 		}
 		
 	}
+
+	public static class WasteDrumRecipe implements IRecipeWrapper {
+		
+		private final ItemStack input;
+		private final ItemStack output;
+		
+		public WasteDrumRecipe(ItemStack input, ItemStack output) {
+			this.input = input;
+			this.output = output; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+		
+	}
 	
 	public static class RefineryRecipe implements IRecipeWrapper {
 		
@@ -250,6 +275,42 @@ public class JeiRecipes {
 		private final List<ItemStack> outputs;
 		
 		public RefineryRecipe(ItemStack input, List<ItemStack> outputs) {
+			this.input = input;
+			this.outputs = outputs; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+		
+	}
+
+	public static class CrackingRecipe implements IRecipeWrapper {
+		
+		private final ItemStack input;
+		public final List<ItemStack> outputs;
+		
+		public CrackingRecipe(ItemStack input, List<ItemStack> outputs) {
+			this.input = input;
+			this.outputs = outputs; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+		
+	}
+
+	public static class FractioningRecipe implements IRecipeWrapper {
+		
+		private final ItemStack input;
+		private final List<ItemStack> outputs;
+		
+		public FractioningRecipe(ItemStack input, List<ItemStack> outputs) {
 			this.input = input;
 			this.outputs = outputs; 
 		}
@@ -851,6 +912,18 @@ public class JeiRecipes {
 		
 		return reactorRecipes;
 	}
+
+	public static List<WasteDrumRecipe> getWasteDrumRecipes(){
+		if(wasteDrumRecipes != null)
+			return wasteDrumRecipes;
+		wasteDrumRecipes = new ArrayList<WasteDrumRecipe>();
+		
+		for(Map.Entry<Item, ItemStack> entry : WasteDrumRecipes.recipes.entrySet()){
+			wasteDrumRecipes.add(new WasteDrumRecipe(new ItemStack(entry.getKey()), entry.getValue()));
+		}
+		
+		return wasteDrumRecipes;
+	}
 	
 	public static List<ItemStack> getReactorFuels(int heat){
 		if(reactorFuelMap.containsKey(heat))
@@ -859,21 +932,68 @@ public class JeiRecipes {
 		return reactorFuelMap.get(heat);
 	}
 	
+
 	public static List<RefineryRecipe> getRefineryRecipe() {
 		if(refineryRecipes != null)
 			return refineryRecipes;
-		refineryRecipes = new ArrayList<RefineryRecipe>(1);
-        
-        refineryRecipes.add(new RefineryRecipe(ItemFluidIcon.getStackWithQuantity(ModForgeFluids.hotoil, 1000), 
-        		Arrays.asList(
-        				ItemFluidIcon.getStackWithQuantity(ModForgeFluids.heavyoil, 500),
-        				ItemFluidIcon.getStackWithQuantity(ModForgeFluids.naphtha, 250),
-        				ItemFluidIcon.getStackWithQuantity(ModForgeFluids.lightoil, 150),
-        				ItemFluidIcon.getStackWithQuantity(ModForgeFluids.petroleum, 100),
-        				new ItemStack(ModItems.sulfur)
-        				)));
+		refineryRecipes = new ArrayList<RefineryRecipe>();
 		
+		for(Fluid fluid : RefineryRecipes.refineryRecipesMap.keySet()){
+			FluidStack[] outputFluids = RefineryRecipes.getRecipe(fluid).getKey();
+			ItemStack outputItem = RefineryRecipes.getRecipe(fluid).getValue();
+			refineryRecipes.add(new RefineryRecipe(
+					ItemFluidIcon.getStackWithQuantity(fluid, 1000),
+					Arrays.asList(
+						ItemFluidIcon.getStackWithQuantity(outputFluids[0].getFluid(), outputFluids[0].amount * 10),
+						ItemFluidIcon.getStackWithQuantity(outputFluids[1].getFluid(), outputFluids[1].amount * 10),
+						ItemFluidIcon.getStackWithQuantity(outputFluids[2].getFluid(), outputFluids[2].amount * 10),
+						ItemFluidIcon.getStackWithQuantity(outputFluids[3].getFluid(), outputFluids[3].amount * 10),
+						outputItem.copy()
+					)
+				)
+			);
+		}
 		return refineryRecipes;
+	}
+
+	public static List<CrackingRecipe> getCrackingRecipe() {
+		if(crackingRecipes != null)
+			return crackingRecipes;
+		crackingRecipes = new ArrayList<CrackingRecipe>();
+
+		for(Fluid fluid : CrackRecipes.recipeFluids.keySet()){
+			FluidStack[] outputFluids = CrackRecipes.getOutputsFromFluid(fluid);
+			List<ItemStack> outputIcons = new ArrayList<ItemStack>();
+			for(FluidStack fluidStacks : outputFluids){
+				outputIcons.add(ItemFluidIcon.getStackWithQuantity(fluidStacks.getFluid(), fluidStacks.amount * 10));
+			}
+			crackingRecipes.add(new CrackingRecipe(
+					ItemFluidIcon.getStackWithQuantity(fluid, 1000),
+					outputIcons
+				)
+			);
+		}
+		return crackingRecipes;
+	}
+
+	public static List<FractioningRecipe> getFractioningRecipe() {
+		if(fractioningRecipes != null)
+			return fractioningRecipes;
+		fractioningRecipes = new ArrayList<FractioningRecipe>();
+
+		for(Fluid fluid : RefineryRecipes.fractions.keySet()){
+			Quartet<Fluid, Fluid, Integer, Integer> recipe = RefineryRecipes.getFractions(fluid);
+			
+			fractioningRecipes.add(new FractioningRecipe(
+					ItemFluidIcon.getStackWithQuantity(fluid, 1000),
+					Arrays.asList(
+						ItemFluidIcon.getStackWithQuantity(recipe.getW(), recipe.getY() * 10),
+						ItemFluidIcon.getStackWithQuantity(recipe.getX(), recipe.getZ() * 10)
+					)
+				)
+			);
+		}
+		return fractioningRecipes;
 	}
 	
 	public static List<ItemStack> getBlades() {

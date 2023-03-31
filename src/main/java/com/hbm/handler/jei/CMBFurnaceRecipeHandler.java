@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class CMBFurnaceRecipeHandler implements IRecipeCategory<CMBFurnaceRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_cmb.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_cmb.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic progressStatic;

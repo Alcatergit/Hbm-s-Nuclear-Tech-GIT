@@ -42,8 +42,8 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 		tanks[2] = new FluidTank(ModForgeFluids.oil, 0, 4000);
 		types[2] = ModForgeFluids.oil;
 
-		tanks[3] = new FluidTank(ModForgeFluids.petroleum, 0, 4000);
-		types[3] = ModForgeFluids.petroleum;
+		tanks[3] = new FluidTank(ModForgeFluids.aromatics, 0, 4000);
+		types[3] = ModForgeFluids.aromatics;
 
 		tanks[4] = new FluidTank(ModForgeFluids.spentsteam, 0, 4000);
 		types[4] = ModForgeFluids.spentsteam;

@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class PressRecipeHandler implements IRecipeCategory<PressRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_press.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_press.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic progressStatic;

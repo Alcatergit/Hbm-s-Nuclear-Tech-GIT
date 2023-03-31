@@ -229,6 +229,7 @@ import com.hbm.inventory.HadronRecipes;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RefineryRecipes;
+import com.hbm.inventory.WasteDrumRecipes;
 import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
@@ -1041,7 +1042,9 @@ public class MainRegistry {
 		MagicRecipes.register();
 		SILEXRecipes.register();
 		AnvilRecipes.register();
+		WasteDrumRecipes.registerRecipes();
 		RefineryRecipes.registerFractions();
+		RefineryRecipes.registerRefineryRecipes();
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
 		RBMKOutgasserRecipes.registerOverrides();

@@ -310,10 +310,6 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.nuclear_waste, 1), new Object[] { "###", "###", "###", '#', ModItems.nuclear_waste_tiny });
 		addRecipeAuto(new ItemStack(ModItems.nuclear_waste_tiny, 9), new Object[] { "#", '#', ModItems.nuclear_waste });
 
-		addShapelessAuto(new ItemStack(ModItems.nuclear_waste, 1), new Object[] { ModItems.rod_waste });
-		addShapelessAuto(new ItemStack(ModItems.nuclear_waste, 2), new Object[] { ModItems.rod_dual_waste });
-		addShapelessAuto(new ItemStack(ModItems.nuclear_waste, 4), new Object[] { ModItems.rod_quad_waste });
-
 		addRecipeAuto(new ItemStack(ModItems.rod_empty, 16), new Object[] { "SSS", "L L", "SSS", 'S', STEEL.plate(), 'L', PB.plate() });
 		addShapelessAuto(new ItemStack(ModItems.rod_th232, 1), new Object[] { ModItems.rod_empty, TH232.nugget(), TH232.nugget(), TH232.nugget(), TH232.nugget(), TH232.nugget(), TH232.nugget() });
 		addShapelessAuto(new ItemStack(ModItems.rod_uranium, 1), new Object[] { ModItems.rod_empty, U.nugget(), U.nugget(), U.nugget(), U.nugget(), U.nugget(), U.nugget() });
@@ -363,11 +359,13 @@ public class CraftingManager {
 		addRodBilletUnload(ModItems.billet_polonium, ModItems.rod_polonium);
 		addRodBilletUnload(ModItems.billet_schrabidium, ModItems.rod_schrabidium);
 		addRodBilletUnload(ModItems.billet_solinium, ModItems.rod_solinium);
-		addRodBillet(ModItems.billet_uranium_fuel, ModItems.rod_uranium_fuel);
-		addRodBillet(ModItems.billet_thorium_fuel, ModItems.rod_thorium_fuel);
-		addRodBillet(ModItems.billet_plutonium_fuel, ModItems.rod_plutonium_fuel);
-		addRodBillet(ModItems.billet_mox_fuel, ModItems.rod_mox_fuel);
-		addRodBillet(ModItems.billet_schrabidium_fuel, ModItems.rod_schrabidium_fuel);
+		addRodBilletUnload(ModItems.billet_uranium_fuel, ModItems.rod_uranium_fuel);
+		addRodBilletUnload(ModItems.billet_thorium_fuel, ModItems.rod_thorium_fuel);
+		addRodBilletUnload(ModItems.billet_plutonium_fuel, ModItems.rod_plutonium_fuel);
+		addRodBilletUnload(ModItems.billet_mox_fuel, ModItems.rod_mox_fuel);
+		addRodBilletUnload(ModItems.billet_schrabidium_fuel, ModItems.rod_schrabidium_fuel);
+		addRodBilletUnload(ModItems.billet_nuclear_waste, ModItems.rod_waste );
+
 
 		addRodBilletUnload(ModItems.billet_ac227, ModItems.rod_ac227);
 		addRodBilletUnload(ModItems.billet_ra226, ModItems.rod_ra226);
@@ -418,11 +416,12 @@ public class CraftingManager {
 		addDualRodBilletUnload(ModItems.billet_polonium, ModItems.rod_dual_polonium);
 		addDualRodBilletUnload(ModItems.billet_schrabidium, ModItems.rod_dual_schrabidium);
 		addDualRodBilletUnload(ModItems.billet_solinium, ModItems.rod_dual_solinium);
-		addDualRodBillet(ModItems.billet_uranium_fuel, ModItems.rod_dual_uranium_fuel);
-		addDualRodBillet(ModItems.billet_thorium_fuel, ModItems.rod_dual_thorium_fuel);
-		addDualRodBillet(ModItems.billet_plutonium_fuel, ModItems.rod_dual_plutonium_fuel);
-		addDualRodBillet(ModItems.billet_mox_fuel, ModItems.rod_dual_mox_fuel);
-		addDualRodBillet(ModItems.billet_schrabidium_fuel, ModItems.rod_dual_schrabidium_fuel);
+		addDualRodBilletUnload(ModItems.billet_uranium_fuel, ModItems.rod_dual_uranium_fuel);
+		addDualRodBilletUnload(ModItems.billet_thorium_fuel, ModItems.rod_dual_thorium_fuel);
+		addDualRodBilletUnload(ModItems.billet_plutonium_fuel, ModItems.rod_dual_plutonium_fuel);
+		addDualRodBilletUnload(ModItems.billet_mox_fuel, ModItems.rod_dual_mox_fuel);
+		addDualRodBilletUnload(ModItems.billet_schrabidium_fuel, ModItems.rod_dual_schrabidium_fuel);
+		addDualRodBilletUnload(ModItems.billet_nuclear_waste, ModItems.rod_dual_waste);
 
 		addDualRodBilletUnload(ModItems.billet_ac227, ModItems.rod_dual_ac227);
 		addDualRodBilletUnload(ModItems.billet_ra226, ModItems.rod_dual_ra226);
@@ -483,11 +482,12 @@ public class CraftingManager {
 		addQuadRodBilletUnload(ModItems.billet_polonium, ModItems.rod_quad_polonium);
 		addQuadRodBilletUnload(ModItems.billet_schrabidium, ModItems.rod_quad_schrabidium);
 		addQuadRodBilletUnload(ModItems.billet_solinium, ModItems.rod_quad_solinium);
-		addQuadRodBillet(ModItems.billet_uranium_fuel, ModItems.rod_quad_uranium_fuel);
-		addQuadRodBillet(ModItems.billet_thorium_fuel, ModItems.rod_quad_thorium_fuel);
-		addQuadRodBillet(ModItems.billet_plutonium_fuel, ModItems.rod_quad_plutonium_fuel);
-		addQuadRodBillet(ModItems.billet_mox_fuel, ModItems.rod_quad_mox_fuel);
-		addQuadRodBillet(ModItems.billet_schrabidium_fuel, ModItems.rod_quad_schrabidium_fuel);
+		addQuadRodBilletUnload(ModItems.billet_uranium_fuel, ModItems.rod_quad_uranium_fuel);
+		addQuadRodBilletUnload(ModItems.billet_thorium_fuel, ModItems.rod_quad_thorium_fuel);
+		addQuadRodBilletUnload(ModItems.billet_plutonium_fuel, ModItems.rod_quad_plutonium_fuel);
+		addQuadRodBilletUnload(ModItems.billet_mox_fuel, ModItems.rod_quad_mox_fuel);
+		addQuadRodBilletUnload(ModItems.billet_schrabidium_fuel, ModItems.rod_quad_schrabidium_fuel);
+		addQuadRodBilletUnload(ModItems.billet_nuclear_waste, ModItems.rod_quad_waste);
 
 		addQuadRodBilletUnload(ModItems.billet_ac227, ModItems.rod_quad_ac227);
 		addQuadRodBilletUnload(ModItems.billet_ra226, ModItems.rod_quad_ra226);
@@ -508,24 +508,9 @@ public class CraftingManager {
 		addShapelessAuto(new ItemStack(ModItems.rod_dual_water, 1), new Object[] { ModItems.rod_dual_empty, Items.WATER_BUCKET, Items.WATER_BUCKET });
 		addShapelessAuto(new ItemStack(ModItems.rod_quad_water, 1), new Object[] { ModItems.rod_quad_empty, Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET });
 
-		addShapelessAuto(new ItemStack(ModItems.nugget_th232, 6), new Object[] { ModItems.rod_th232 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium, 6), new Object[] { ModItems.rod_uranium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u233, 6), new Object[] { ModItems.rod_u233 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u235, 6), new Object[] { ModItems.rod_u235 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u238, 6), new Object[] { ModItems.rod_u238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium, 6), new Object[] { ModItems.rod_plutonium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu238, 6), new Object[] { ModItems.rod_pu238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu239, 6), new Object[] { ModItems.rod_pu239 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu240, 6), new Object[] { ModItems.rod_pu240 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_neptunium, 6), new Object[] { ModItems.rod_neptunium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_polonium, 6), new Object[] { ModItems.rod_polonium });
 		addShapelessAuto(new ItemStack(ModItems.nugget_lead, 6), new Object[] { ModItems.rod_lead });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium, 6), new Object[] { ModItems.rod_schrabidium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_solinium, 6), new Object[] { ModItems.rod_solinium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium_fuel, 6), new Object[] { ModItems.rod_uranium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium_fuel, 6), new Object[] { ModItems.rod_plutonium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_mox_fuel, 6), new Object[] { ModItems.rod_mox_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium_fuel, 6), new Object[] { ModItems.rod_schrabidium_fuel });
+		addShapelessAuto(new ItemStack(ModItems.lithium, 1), new Object[] { ModItems.rod_lithium });
+		addShapelessAuto(new ItemStack(ModItems.nugget_cobalt, 6), new Object[] { ModItems.rod_cobalt });
 		addShapelessAuto(new ItemStack(ModItems.nugget_australium, 6), new Object[] { ModItems.rod_australium });
 		addShapelessAuto(new ItemStack(ModItems.nugget_weidanium, 6), new Object[] { ModItems.rod_weidanium });
 		addShapelessAuto(new ItemStack(ModItems.nugget_reiium, 6), new Object[] { ModItems.rod_reiium });
@@ -535,44 +520,14 @@ public class CraftingManager {
 		addShapelessAuto(new ItemStack(ModItems.nugget_euphemium, 6), new Object[] { ModItems.rod_euphemium });
 		addShapelessAuto(new ItemStack(ModItems.egg_balefire_shard, 1), new Object[] { ModItems.rod_balefire });
 
-		addShapelessAuto(new ItemStack(ModItems.nugget_th232, 12), new Object[] { ModItems.rod_dual_th232 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium, 12), new Object[] { ModItems.rod_dual_uranium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u233, 12), new Object[] { ModItems.rod_dual_u233 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u235, 12), new Object[] { ModItems.rod_dual_u235 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u238, 12), new Object[] { ModItems.rod_dual_u238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium, 12), new Object[] { ModItems.rod_dual_plutonium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu238, 12), new Object[] { ModItems.rod_dual_pu238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu239, 12), new Object[] { ModItems.rod_dual_pu239 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu240, 12), new Object[] { ModItems.rod_dual_pu240 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_neptunium, 12), new Object[] { ModItems.rod_dual_neptunium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_polonium, 12), new Object[] { ModItems.rod_dual_polonium });
 		addShapelessAuto(new ItemStack(ModItems.nugget_lead, 12), new Object[] { ModItems.rod_dual_lead });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium, 12), new Object[] { ModItems.rod_dual_schrabidium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_solinium, 12), new Object[] { ModItems.rod_dual_solinium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium_fuel, 12), new Object[] { ModItems.rod_dual_uranium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium_fuel, 12), new Object[] { ModItems.rod_dual_plutonium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_mox_fuel, 12), new Object[] { ModItems.rod_dual_mox_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium_fuel, 12), new Object[] { ModItems.rod_dual_schrabidium_fuel });
+		addShapelessAuto(new ItemStack(ModItems.lithium, 2), new Object[] { ModItems.rod_dual_lithium });
+		addShapelessAuto(new ItemStack(ModItems.nugget_cobalt, 12), new Object[] { ModItems.rod_dual_cobalt });
 		addShapelessAuto(new ItemStack(ModItems.egg_balefire_shard, 2), new Object[] { ModItems.rod_dual_balefire });
 
-		addShapelessAuto(new ItemStack(ModItems.nugget_th232, 24), new Object[] { ModItems.rod_quad_th232 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium, 24), new Object[] { ModItems.rod_quad_uranium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u233, 24), new Object[] { ModItems.rod_quad_u233 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u235, 24), new Object[] { ModItems.rod_quad_u235 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_u238, 24), new Object[] { ModItems.rod_quad_u238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium, 24), new Object[] { ModItems.rod_quad_plutonium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu238, 24), new Object[] { ModItems.rod_quad_pu238 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu239, 24), new Object[] { ModItems.rod_quad_pu239 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_pu240, 24), new Object[] { ModItems.rod_quad_pu240 });
-		addShapelessAuto(new ItemStack(ModItems.nugget_neptunium, 24), new Object[] { ModItems.rod_quad_neptunium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_polonium, 24), new Object[] { ModItems.rod_quad_polonium });
 		addShapelessAuto(new ItemStack(ModItems.nugget_lead, 24), new Object[] { ModItems.rod_quad_lead });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium, 24), new Object[] { ModItems.rod_quad_schrabidium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_solinium, 24), new Object[] { ModItems.rod_quad_solinium });
-		addShapelessAuto(new ItemStack(ModItems.nugget_uranium_fuel, 24), new Object[] { ModItems.rod_quad_uranium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_plutonium_fuel, 24), new Object[] { ModItems.rod_quad_plutonium_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_mox_fuel, 24), new Object[] { ModItems.rod_quad_mox_fuel });
-		addShapelessAuto(new ItemStack(ModItems.nugget_schrabidium_fuel, 24), new Object[] { ModItems.rod_quad_schrabidium_fuel });
+		addShapelessAuto(new ItemStack(ModItems.lithium, 4), new Object[] { ModItems.rod_quad_lithium });
+		addShapelessAuto(new ItemStack(ModItems.nugget_cobalt, 24), new Object[] { ModItems.rod_quad_cobalt });
 		addShapelessAuto(new ItemStack(ModItems.egg_balefire_shard, 4), new Object[] { ModItems.rod_quad_balefire });
 
 		addShapelessAuto(new ItemStack(ModItems.waste_uranium_hot, 1), new Object[] { ModItems.rod_uranium_fuel_depleted });

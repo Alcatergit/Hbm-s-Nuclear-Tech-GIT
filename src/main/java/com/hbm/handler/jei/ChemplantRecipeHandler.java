@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ChemplantRecipeHandler implements IRecipeCategory<ChemRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_chemplant.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_chemplant.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic powerStatic;

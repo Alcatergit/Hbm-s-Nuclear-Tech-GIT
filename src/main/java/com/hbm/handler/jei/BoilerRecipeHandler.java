@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class BoilerRecipeHandler implements IRecipeCategory<BoilerRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/gui_nei_boiler.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/gui_nei_boiler.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic tempStatic;
