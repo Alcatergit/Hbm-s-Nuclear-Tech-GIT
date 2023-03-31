@@ -109,6 +109,10 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 					if(item == ModItems.nugget_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 100) == 0) {
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 1, meta));
 					}
+
+					if(item == ModItems.ingot_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 1000) == 0) {
+						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 9, meta));
+					}
 				}
 			}
 

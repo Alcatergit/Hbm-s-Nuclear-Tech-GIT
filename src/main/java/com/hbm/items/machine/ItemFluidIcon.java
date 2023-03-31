@@ -74,6 +74,14 @@ public class ItemFluidIcon extends Item {
 		stack.getTagCompound().setInteger("fill", amount);
 		return stack;
 	}
+
+	public static ItemStack getStackWithQuantity(FluidStack f){
+		ItemStack stack = new ItemStack(ModItems.fluid_icon, 1, 0);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setString("type", f.getFluid().getName());
+		stack.getTagCompound().setInteger("fill", f.amount);
+		return stack;
+	}
 	
 	public static int getQuantity(ItemStack stack){
 		if(stack.hasTagCompound()){

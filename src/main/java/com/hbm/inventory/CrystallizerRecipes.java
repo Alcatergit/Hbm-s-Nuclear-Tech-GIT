@@ -3,14 +3,16 @@ package com.hbm.inventory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
 import static com.hbm.inventory.OreDictManager.*;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemFluidIcon;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -19,138 +21,186 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidRegistry;
 
 //This time we're doing this right
 //...right?
+
+//yes this time i will
 public class CrystallizerRecipes {
 
-	//'Object' is either a ComparableStack or the key for the ore dict
-	private static HashMap<Object, ItemStack> recipes = new HashMap<Object, ItemStack>();
-	private static List<IRecipeWrapper> jeiRecipes = null;
+	//'Object' is either a ComparableStack or the String for the ore dict
+	private static HashMap<Object, ItemStack> itemOutputRecipes = new HashMap<Object, ItemStack>();
+	private static HashMap<Object, FluidStack> fluidInputRecipes = new HashMap<Object, FluidStack>();
+	private static HashSet<Fluid> allowedFluids = new HashSet<Fluid>();
+	private static List<CrystallizerRecipe> jeiCrystalRecipes = null;
 
 	public static void register() {
-		recipes.put(COAL.ore(), new ItemStack(ModItems.crystal_coal));
-		recipes.put(IRON.ore(), new ItemStack(ModItems.crystal_iron));
-		recipes.put(GOLD.ore(), new ItemStack(ModItems.crystal_gold));
-		recipes.put(REDSTONE.ore(), new ItemStack(ModItems.crystal_redstone));
-		recipes.put(LAPIS.ore(), new ItemStack(ModItems.crystal_lapis));
-		recipes.put(DIAMOND.ore(), new ItemStack(ModItems.crystal_diamond));
-		recipes.put(U.ore(), new ItemStack(ModItems.crystal_uranium));
-		recipes.put(TH232.ore(), new ItemStack(ModItems.crystal_thorium));
-		recipes.put(PU.ore(), new ItemStack(ModItems.crystal_plutonium));
-		recipes.put(TI.ore(), new ItemStack(ModItems.crystal_titanium));
-		recipes.put(S.ore(), new ItemStack(ModItems.crystal_sulfur));
-		recipes.put(KNO.ore(), new ItemStack(ModItems.crystal_niter));
-		recipes.put(CU.ore(), new ItemStack(ModItems.crystal_copper));
-		recipes.put(W.ore(), new ItemStack(ModItems.crystal_tungsten));
-		recipes.put(AL.ore(), new ItemStack(ModItems.crystal_aluminium));
-		recipes.put(F.ore(), new ItemStack(ModItems.crystal_fluorite));
-		recipes.put(BE.ore(), new ItemStack(ModItems.crystal_beryllium));
-		recipes.put(PB.ore(), new ItemStack(ModItems.crystal_lead));
-		recipes.put(SA326.ore(), new ItemStack(ModItems.crystal_schrabidium));
-		recipes.put(LI.ore(), new ItemStack(ModItems.crystal_lithium));
-		recipes.put(STAR.ore(), new ItemStack(ModItems.crystal_starmetal));
-		recipes.put("oreRareEarth", new ItemStack(ModItems.crystal_rare));
-		recipes.put(CO.ore(), new ItemStack(ModItems.crystal_cobalt));
-		recipes.put(CINNABAR.ore(), new ItemStack(ModItems.crystal_cinnebar));
+		addRecipe(COAL.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_coal));
+		addRecipe(IRON.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_iron));
+		addRecipe(GOLD.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_gold));
+		addRecipe(REDSTONE.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_redstone));
+		addRecipe(LAPIS.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_lapis));
+		addRecipe(DIAMOND.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_diamond));
+		addRecipe(U.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_uranium));
+		addRecipe(TH232.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_thorium));
+		addRecipe(PU.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_plutonium));
+		addRecipe(TI.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_titanium));
+		addRecipe(S.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_sulfur));
+		addRecipe(KNO.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_niter));
+		addRecipe(CU.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_copper));
+		addRecipe(W.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_tungsten));
+		addRecipe(AL.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_aluminium));
+		addRecipe(F.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_fluorite));
+		addRecipe(BE.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_beryllium));
+		addRecipe(PB.ore(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_lead));
+		addRecipe(SA326.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_schrabidium));
+		addRecipe(LI.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_lithium));
+		addRecipe(STAR.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_starmetal));
+		addRecipe("oreRareEarth", new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_rare));
+		addRecipe(CO.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_cobalt));
+		addRecipe(CINNABAR.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_cinnebar));
 		
-		recipes.put(new ComparableStack(ModBlocks.ore_nether_fire), new ItemStack(ModItems.crystal_phosphorus));
-		recipes.put(new ComparableStack(ModBlocks.ore_tikite), new ItemStack(ModItems.crystal_trixite));
-		recipes.put(SRN.ingot(), new ItemStack(ModItems.crystal_schraranium));
+		addRecipe(new ComparableStack(ModBlocks.ore_nether_fire), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_phosphorus));
+		addRecipe(new ComparableStack(ModBlocks.ore_tikite), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_trixite));
+		addRecipe(SRN.ingot(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_schraranium));
 		
-		recipes.put("sand", new ItemStack(ModItems.ingot_fiberglass));
-		recipes.put(new ComparableStack(Blocks.COBBLESTONE), new ItemStack(ModBlocks.reinforced_stone));
-		recipes.put(new ComparableStack(ModBlocks.gravel_obsidian), new ItemStack(ModBlocks.brick_obsidian));
-		recipes.put(REDSTONE.block(), new ItemStack(ModItems.nugget_mercury));
+		addRecipe("sand", new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_fiberglass));
+		addRecipe(new ComparableStack(Blocks.COBBLESTONE), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModBlocks.reinforced_stone));
+		addRecipe(new ComparableStack(ModBlocks.gravel_obsidian), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModBlocks.brick_obsidian));
+		addRecipe(REDSTONE.block(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.nugget_mercury));
 		
-		recipes.put(CINNABAR.gem(), new ItemStack(ModItems.nugget_mercury, 3));
-		recipes.put(COAL.block(), new ItemStack(ModBlocks.block_graphite));
-		recipes.put(new ComparableStack(ModBlocks.stone_gneiss), new ItemStack(ModItems.powder_lithium));
+		addRecipe(CINNABAR.gem(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.nugget_mercury, 3));
+		addRecipe(COAL.block(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModBlocks.block_graphite));
+		addRecipe(new ComparableStack(ModBlocks.stone_gneiss), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.powder_lithium));
 		
-		recipes.put(new ComparableStack(ModItems.powder_diamond), new ItemStack(Items.DIAMOND));
-		recipes.put(new ComparableStack(ModItems.powder_emerald), new ItemStack(Items.EMERALD));
-		recipes.put(new ComparableStack(ModItems.powder_lapis), new ItemStack(Items.DYE, 1, 4));
-		recipes.put(new ComparableStack(ModItems.powder_semtex_mix), new ItemStack(ModItems.ingot_semtex));
-		recipes.put(new ComparableStack(ModItems.powder_desh_ready), new ItemStack(ModItems.ingot_desh));
-		recipes.put(new ComparableStack(ModItems.powder_meteorite), new ItemStack(ModItems.fragment_meteorite, 1));
-		recipes.put(new ComparableStack(ModItems.meteorite_sword_treated), new ItemStack(ModItems.meteorite_sword_etched, 1));
+		addRecipe(DIAMOND.dust(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.DIAMOND));
+		addRecipe(EMERALD.dust(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.EMERALD));
+		addRecipe(LAPIS.dust(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.DYE, 1, 4));
+		addRecipe(new ComparableStack(ModItems.powder_semtex_mix), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_semtex));
+		addRecipe(new ComparableStack(ModItems.powder_desh_ready), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_desh));
+		addRecipe(new ComparableStack(ModItems.powder_meteorite), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.fragment_meteorite, 1));
+		addRecipe(new ComparableStack(ModItems.meteorite_sword_treated), new FluidStack(ModForgeFluids.sulfuric_acid, 8000), new ItemStack(ModItems.meteorite_sword_etched, 1));
 		
-		recipes.put(new ComparableStack(Items.ROTTEN_FLESH), new ItemStack(Items.LEATHER));
-		recipes.put(new ComparableStack(ModItems.coal_infernal), new ItemStack(ModItems.solid_fuel));
+		addRecipe(new ComparableStack(Items.SNOWBALL), new FluidStack(FluidRegistry.WATER, 8000), new ItemStack(Blocks.ICE, 1));
+		addRecipe(new ComparableStack(Blocks.ICE), new FluidStack(ModForgeFluids.coolant, 500), new ItemStack(Blocks.PACKED_ICE, 1));
+		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.LEATHER));
+		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.sulfuric_acid, 1000), new ItemStack(Items.SLIME_BALL, 16));
+		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.sulfuric_acid, 250), new ItemStack(Items.SLIME_BALL, 4));
+		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.solid_fuel));
 		
 		List<ItemStack> quartz = OreDictionary.getOres("crystalCertusQuartz");
 		
 		if(quartz != null && !quartz.isEmpty()) {
 			ItemStack qItem = quartz.get(0).copy();
 			qItem.setCount(6);
-			recipes.put("oreCertusQuartz", qItem);
+			addRecipe("oreCertusQuartz", new FluidStack(ModForgeFluids.acid, 500), qItem);
 		}
 	}
 
-	public static ItemStack getOutput(ItemStack stack) {
+	public static void addRecipe(Object itemInput, FluidStack fluidInput, ItemStack itemOutput){
+		itemOutputRecipes.put(itemInput, itemOutput);
+		fluidInputRecipes.put(itemInput, fluidInput);
+		allowedFluids.add(fluidInput.getFluid());
+	}
+
+
+	public static ItemStack getOutputItem(ItemStack stack) {
 
 		if(stack == null || stack.getItem() == null || stack.isEmpty())
 			return null;
 
 		ComparableStack comp = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
 
-		if(recipes.containsKey(comp))
-			return recipes.get(comp).copy();
+		if(itemOutputRecipes.containsKey(comp))
+			return itemOutputRecipes.get(comp).copy();
 
 		String[] dictKeys = comp.getDictKeys();
 
 		for(String key : dictKeys) {
 
-			if(recipes.containsKey(key))
-				return recipes.get(key).copy();
+			if(itemOutputRecipes.containsKey(key))
+				return itemOutputRecipes.get(key).copy();
 		}
 
 		return null;
 	}
 
-	public static List<IRecipeWrapper> getRecipes() {
-		if(jeiRecipes != null)
-			return jeiRecipes;
-		jeiRecipes = new ArrayList<IRecipeWrapper>();
+	public static FluidStack getOutputFluid(ItemStack stack) {
 
-		for(Entry<Object, ItemStack> entry : CrystallizerRecipes.recipes.entrySet()) {
+		if(stack == null || stack.getItem() == null || stack.isEmpty())
+			return null;
 
-			if(entry.getKey() instanceof String) {
-				List<ItemStack> ingredients = OreDictionary.getOres((String)entry.getKey());
-				jeiRecipes.add(new CrystallizerRecipe(ingredients, entry.getValue()));
-			} else {
-				jeiRecipes.add(new CrystallizerRecipe(((ComparableStack)entry.getKey()).toStack(), entry.getValue()));
-			}
+		ComparableStack comp = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
+
+		if(fluidInputRecipes.containsKey(comp))
+			return fluidInputRecipes.get(comp).copy();
+
+		String[] dictKeys = comp.getDictKeys();
+
+		for(String key : dictKeys) {
+
+			if(fluidInputRecipes.containsKey(key))
+				return fluidInputRecipes.get(key).copy();
 		}
 
-		return jeiRecipes;
+		return null;
+	}
+
+	public static boolean isAllowedFluid(Fluid f){
+		if(f != null){
+			return allowedFluids.contains(f);
+		}
+		return false;
+	}
+
+	public static List<CrystallizerRecipe> getRecipes() {
+		if(jeiCrystalRecipes != null)
+			return jeiCrystalRecipes;
+		jeiCrystalRecipes = new ArrayList<CrystallizerRecipe>();
+
+		for(Entry<Object, ItemStack> entry : CrystallizerRecipes.itemOutputRecipes.entrySet()) {
+			List<ItemStack> ingredients;
+			if(entry.getKey() instanceof String) {
+				String oreKey = (String)entry.getKey();
+				ingredients = OreDictionary.getOres(oreKey);
+			}else{
+				ItemStack stack = ((ComparableStack)entry.getKey()).toStack();
+				ingredients = new ArrayList<ItemStack>();
+				ingredients.add(stack);
+			}
+			ItemStack inputFluid = ItemFluidIcon.getStackWithQuantity(fluidInputRecipes.get(entry.getKey()));
+			ItemStack outputItem = entry.getValue();
+
+			List<List<ItemStack>> totalInput = new ArrayList<List<ItemStack>>();
+			totalInput.add(ingredients);
+			totalInput.add(Arrays.asList(inputFluid));
+
+
+			jeiCrystalRecipes.add(new CrystallizerRecipe(totalInput, outputItem));
+
+		}
+
+		return jeiCrystalRecipes;
 	}
 	
 	public static class CrystallizerRecipe implements IRecipeWrapper {
 		
-		private final ItemStack input;
+		
+		public final List<List<ItemStack>> inputs;
 		private final ItemStack output;
-		public final List<ItemStack> inputs;
 		
-		public CrystallizerRecipe(ItemStack input, ItemStack output) {
-			this.input = input;
-			this.inputs = null;
-			this.output = output; 
-		}
 		
-		public CrystallizerRecipe(List<ItemStack> inputs, ItemStack output) {
-			this.input = ItemStack.EMPTY;
+		public CrystallizerRecipe(List<List<ItemStack>> inputs, ItemStack output) {
 			this.inputs = inputs;
 			this.output = output; 
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			if(inputs != null){
-				ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(inputs));
-			} else {
-				ingredients.setInput(VanillaTypes.ITEM, input);
-			}
+			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		

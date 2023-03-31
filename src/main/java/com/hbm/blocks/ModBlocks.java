@@ -618,7 +618,7 @@ public class ModBlocks {
 	public static final Block frozen_log = new WasteLog(Material.WOOD, "frozen_log").setSoundType(SoundType.GLASS).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block frozen_planks = new BlockHazard(Material.WOOD, SoundType.GLASS, "frozen_planks").setTickRandomly(false).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(2.5F);
 	public static final Block frozen_dirt = new BlockHazard(Material.GROUND, SoundType.GLASS, "frozen_dirt").setTickRandomly(false).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(2.5F);
-	public static final Block fallout = new BlockFallout(Material.SNOW, SoundType.GROUND, "fallout").addRadiation(ItemHazard.fo * ItemHazard.powder * 2).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.1F).setLightOpacity(0);
+	public static final Block fallout = new BlockFallout(Material.SNOW, SoundType.GROUND, "fallout").addRadiation(ItemHazard.fo * 2).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.1F).setLightOpacity(0);
 	
 	public static final Block block_boron = new BlockBeaconable(Material.IRON, "block_boron").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_lanthanium = new BlockBeaconable(Material.IRON, "block_lanthanium").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);

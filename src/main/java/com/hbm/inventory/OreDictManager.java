@@ -29,6 +29,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 //the more i optimize this, the more it starts looking like gregtech
 public class OreDictManager {
@@ -472,7 +473,6 @@ public class OreDictManager {
 		OreDictionary.registerOre("blockGlassRed", glass_polonium);
 		OreDictionary.registerOre("blockGlassBlack", glass_ash);
 		
-		registerGroups();
 		//MaterialShapes.registerCompatShapes();
 	}
 	
@@ -487,9 +487,9 @@ public class OreDictManager {
 	
 	private static boolean recursionBrake = false;
 	
-	@net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+	@SubscribeEvent
 	public void onRegisterOre(OreRegisterEvent event) {
-		
+		System.out.println("OREDICT REGISTER EVENT "+event);
 		if(recursionBrake)
 			return;
 		

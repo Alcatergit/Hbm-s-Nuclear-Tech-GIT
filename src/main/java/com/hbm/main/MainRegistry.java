@@ -513,6 +513,11 @@ public class MainRegistry {
 		proxy.checkGLCaps();
 		reloadConfig();
 		
+		OreDictManager.registerGroups();
+		OreDictManager oreMan = new OreDictManager();
+
+		MinecraftForge.EVENT_BUS.register(oreMan); //OreRegisterEvent
+
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
@@ -531,7 +536,6 @@ public class MainRegistry {
 		ModForgeFluids.init();
 		ModItems.preInit();
 		ModBlocks.preInit();
-		OreDictManager.registerOres();
 		BulletConfigSyncingUtil.loadConfigsForSync();
 		CellularDungeonFactory.init();
 		Satellite.register();
@@ -541,6 +545,7 @@ public class MainRegistry {
 		ControlEvent.init();
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
+		
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();
@@ -1019,6 +1024,7 @@ public class MainRegistry {
 		HazmatRegistry.registerHazmats();
 		registerReactorFuels();
 		ControlRegistry.init();
+		OreDictManager.registerOres();
 	}
 
 	@EventHandler

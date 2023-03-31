@@ -186,7 +186,7 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 	}
 
 	public int getProgressScaled(int i) {
-		return (progress * i) / maxProgress;
+		return (progress * i) / Math.max(10, maxProgress);
 	}
 
 	@Override
@@ -209,11 +209,11 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 					c *= 3;
 				}
 				if(stack.getItem() == ModItems.upgrade_speed_2) {
-					s *= 0.5;
+					s *= 0.65;
 					c *= 6;
 				}
 				if(stack.getItem() == ModItems.upgrade_speed_3) {
-					s *= 0.25;
+					s *= 0.5;
 					c *= 9;
 				}
 				if(stack.getItem() == ModItems.upgrade_power_1) {

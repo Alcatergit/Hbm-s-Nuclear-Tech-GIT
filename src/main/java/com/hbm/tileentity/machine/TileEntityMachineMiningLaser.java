@@ -258,7 +258,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		if(stack != null && stack.getItem() != null) {
 			if(hasCrystallizer()) {
 
-				ItemStack result = CrystallizerRecipes.getOutput(stack);
+				ItemStack result = CrystallizerRecipes.getOutputItem(stack);
 				if(result != null && result.getItem() != ModItems.scrap) {
 					world.spawnEntity(new EntityItem(world, targetX + 0.5, targetY + 0.5, targetZ + 0.5, result.copy()));
 					normal = false;

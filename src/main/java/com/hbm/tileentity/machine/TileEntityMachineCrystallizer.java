@@ -21,8 +21,10 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -36,7 +38,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	public long power;
 	public static final long maxPower = 1000000;
 	public static final int demand = 1000;
-	public static final int acidRequired = 500;
+	public int acidRequired = 500;
 	public short progress;
 	public static final short duration = 600;
 
@@ -60,7 +62,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		};
-		tank = new FluidTank(8000);
+		tank = new FluidTank(ModForgeFluids.acid, 0, 16000);
 	}
 
 	@Override
@@ -72,7 +74,9 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	public void update() {
 		if(!world.isRemote) {
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
-			FFUtils.fillFromFluidContainer(inventory, tank, 3, 4);
+			if(inputValidForTank(3) && tank.getFluidAmount() < tank.getCapacity()){
+				FFUtils.fillFromFluidContainer(inventory, tank, 3, 4);
+			}
 
 			for(int i = 0; i < getCycleCount(); i++) {
 
@@ -105,13 +109,33 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			prevAngle = angle;
 
 			if(progress > 0) {
-				angle += 5F;
+				angle += 5F * this.getCycleCount();
 
 				if(angle >= 360) {
 					angle -= 360;
 					prevAngle -= 360;
 				}
 			}
+		}
+	}
+
+	protected boolean inputValidForTank(int slot){
+		
+		if(!inventory.getStackInSlot(slot).isEmpty()){
+			FluidStack containerFluid = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
+			if(containerFluid != null){
+				if(CrystallizerRecipes.isAllowedFluid(containerFluid.getFluid())){
+					setTankType(containerFluid.getFluid());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void setTankType(Fluid f){
+		if(f != null && tank.getFluid() != null && tank.getFluid().getFluid() != f){
+			tank.setFluid(new FluidStack(f, 0));
 		}
 	}
 
@@ -123,15 +147,15 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	private void processItem() {
 
-		ItemStack result = CrystallizerRecipes.getOutput(inventory.getStackInSlot(0));
+		ItemStack result = CrystallizerRecipes.getOutputItem(inventory.getStackInSlot(0));
 
 		if(result == null) //never happens but you can't be sure enough
 			return;
 
 		if(inventory.getStackInSlot(2).isEmpty())
 			inventory.setStackInSlot(2, result);
-		else if(inventory.getStackInSlot(2).getCount() < inventory.getStackInSlot(2).getMaxStackSize())
-			inventory.getStackInSlot(2).grow(1);
+		else if(inventory.getStackInSlot(2).getCount() + result.getCount() <= inventory.getStackInSlot(2).getMaxStackSize())
+			inventory.getStackInSlot(2).grow(result.getCount());
 
 		//Drillgon200: I think this does the same thing as decrStackSize?
 		float freeChance = this.getFreeChance();
@@ -150,10 +174,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		if(power < getPowerRequired())
 			return false;
 
-		if(tank.getFluidAmount() < getRequiredAcid())
-			return false;
-
-		ItemStack result = CrystallizerRecipes.getOutput(inventory.getStackInSlot(0));
+		ItemStack result = CrystallizerRecipes.getOutputItem(inventory.getStackInSlot(0));
 
 		//Or output?
 		if(result == null)
@@ -163,6 +184,18 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			return false;
 		//Or is the output slot already full?
 		if(inventory.getStackInSlot(2).getCount() >= inventory.getStackInSlot(2).getMaxStackSize())
+			return false;
+
+		FluidStack acidFluid = CrystallizerRecipes.getOutputFluid(inventory.getStackInSlot(0));
+		if(acidFluid == null)
+			return false;
+		if(tank.getFluid() == null)
+			return false;
+		if(acidFluid.getFluid() != tank.getFluid().getFluid())
+			return false;
+		acidRequired = acidFluid.amount;
+
+		if(tank.getFluidAmount() < getRequiredAcid())
 			return false;
 
 		return true;
@@ -175,14 +208,14 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		for(int i = 5; i <= 6; i++) {
 
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_1)
-				extra += 1000;
+				extra += acidRequired * 3;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_2)
-				extra += 2000;
+				extra += acidRequired * 4;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_3)
-				extra += 3000;
+				extra += acidRequired * 5;
 		}
 
-		return acidRequired + Math.min(extra, 3000);
+		return acidRequired + Math.min(extra, 500);
 	}
 
 	public float getFreeChance() {
@@ -209,11 +242,11 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		for(int i = 5; i <= 6; i++) {
 
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
-				durationMod -= 0.1F;
+				durationMod -= 0.25F;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
-				durationMod -= 0.2F;
+				durationMod -= 0.5F;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
-				durationMod -= 0.3F;
+				durationMod -= 0.75F;
 		}
 
 		return (int) (duration * Math.max(durationMod, 0.7F));
@@ -243,11 +276,11 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		for(int i = 5; i <= 6; i++) {
 
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_1)
-				cycles += 1;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_2)
 				cycles += 2;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_2)
+				cycles += 4;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_3)
-				cycles += 3;
+				cycles += 6;
 		}
 
 		return Math.min(cycles, 4);
@@ -300,7 +333,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	}
 
 	public int getProgressScaled(int i) {
-		return (progress * i) / duration;
+		return (progress * i) / this.getDuration();
 	}
 
 	@Override
@@ -325,7 +358,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(resource.getFluid() == ModForgeFluids.acid) {
+		if(CrystallizerRecipes.isAllowedFluid(resource.getFluid())) {
 			return tank.fill(resource, doFill);
 		}
 		return 0;

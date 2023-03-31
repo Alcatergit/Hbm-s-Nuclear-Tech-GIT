@@ -47,15 +47,15 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 				age = 0;
 			}
 
-			if(tanks[0].getFluidAmount() > 0) {
-				this.waterTimer = 20;
-			} else if(this.waterTimer > 0){
+			if(this.waterTimer > 0)
 				this.waterTimer--;
-			}
-			
+
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			
 			int convert = Math.min(tanks[0].getFluidAmount(), tanks[1].getCapacity() - tanks[1].getFluidAmount());
+			if(convert > 0)
+				this.waterTimer = 20;
+
 			tanks[0].drain(convert, true);
 			tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
 			
@@ -67,12 +67,14 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 	public void networkPack() {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		data.setByte("timer", (byte) this.waterTimer);
 		INBTPacketReceiver.networkPack(this, data, 150);
 	}
 
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
+		this.waterTimer = data.getByte("timer");
 	}
 	
 	@Override

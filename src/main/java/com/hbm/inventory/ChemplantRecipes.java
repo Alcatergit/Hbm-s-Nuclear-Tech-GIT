@@ -127,7 +127,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.SULFURIC_ACID, new AStack[] { new OreDictStack(S.dust()) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 800) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 500) }, 50);
 		
-		makeRecipe(EnumChemistryTemplate.CIRCUIT_4, new AStack[] { new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.wire_gold, 4), new OreDictStack(LAPIS.dust(), 1), new OreDictStack(POLYMER.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1) }, null, 200);
+		makeRecipe(EnumChemistryTemplate.CIRCUIT_4, new AStack[] { new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.wire_gold, 4), new OreDictStack(LAPIS.dust(), 1), new OreDictStack(ANY_PLASTIC.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1) }, null, 200);
 		
 		makeRecipe(EnumChemistryTemplate.CIRCUIT_5, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1), new ComparableStack(ModItems.wire_schrabidium, 4), new OreDictStack(DIAMOND.dust(), 1), new OreDictStack(DESH.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.acid, 800), new FluidStack(ModForgeFluids.petroleum, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_schrabidium, 1) }, null, 250);
 		

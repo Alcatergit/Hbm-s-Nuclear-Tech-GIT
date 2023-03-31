@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
+import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
 import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AnvilRecipes.AnvilConstructionRecipe;
 import com.hbm.inventory.AnvilRecipes.AnvilOutput;
@@ -31,13 +34,16 @@ import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
+import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
+import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
+import com.hbm.items.tool.ItemGasCanister;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomObject;
@@ -325,17 +331,17 @@ public class JeiRecipes {
 	
 	public static class FluidRecipe implements IRecipeWrapper {
 		
-		protected final FluidStack input;
+		protected final ItemStack input;
 		protected final ItemStack output;
 		
-		public FluidRecipe(FluidStack input, ItemStack output) {
+		public FluidRecipe(ItemStack input, ItemStack output) {
 			this.input = input;
 			this.output = output; 
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.FLUID, input);
+			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		
@@ -343,14 +349,14 @@ public class JeiRecipes {
 	
 	public static class FluidRecipeInverse extends FluidRecipe implements IRecipeWrapper {
 		
-		public FluidRecipeInverse(FluidStack input, ItemStack output) {
+		public FluidRecipeInverse(ItemStack input, ItemStack output) {
 			super(input, output);
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInput(VanillaTypes.ITEM, output);
-			ingredients.setOutput(VanillaTypes.FLUID, input);
+			ingredients.setOutput(VanillaTypes.ITEM, input);
 		}
 		
 	}
@@ -1018,8 +1024,24 @@ public class JeiRecipes {
 		fluidEquivalences = new ArrayList<FluidRecipe>();
 		
 		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
-			fluidEquivalences.add(new FluidRecipe(new FluidStack(f, 1000), ItemFluidIcon.getStack(f)));
-			fluidEquivalences.add(new FluidRecipeInverse(new FluidStack(f, 1000), ItemFluidIcon.getStack(f)));
+			fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTank(f)));
+			fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTank(f)));
+
+			fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidTank.getFullBarrel(f)));
+			fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidTank.getFullBarrel(f)));
+
+			if(EnumCanister.contains(f)){
+				fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidCanister.getFullCanister(f)));
+				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidCanister.getFullCanister(f)));
+			}
+			if(EnumGasCanister.contains(f)){
+				fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemGasCanister.getFullCanister(f)));
+				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemGasCanister.getFullCanister(f)));
+			}
+			if(EnumCell.contains(f)){
+				fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemCell.getFullCell(f)));
+				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemCell.getFullCell(f)));
+			}
 		}
 		
 		return fluidEquivalences;

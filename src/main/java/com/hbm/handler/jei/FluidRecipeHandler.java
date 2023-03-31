@@ -46,15 +46,12 @@ public class FluidRecipeHandler implements IRecipeCategory<FluidRecipe> {
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, FluidRecipe recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		
 		boolean inverse = recipeWrapper instanceof FluidRecipeInverse;
 		
 		guiItemStacks.init(0, inverse, 5, 5);
+		guiItemStacks.init(1, !inverse, 78, 6);
 		guiItemStacks.set(ingredients);
-		
-		guiFluidStacks.init(0, !inverse, 78, 6);
-		guiFluidStacks.set(ingredients);
 	}
 
 }

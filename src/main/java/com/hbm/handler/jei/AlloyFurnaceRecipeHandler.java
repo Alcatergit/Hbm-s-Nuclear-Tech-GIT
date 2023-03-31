@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AlloyFurnaceRecipeHandler implements IRecipeCategory<AlloyFurnaceRecipe> {
 
-	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/jei/guidifurnace.png");
+	public static final ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID, "textures/gui/guidifurnace.png");
 	
 	protected final IDrawable background;
 	protected final IDrawableStatic powerStatic;

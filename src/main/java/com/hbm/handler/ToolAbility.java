@@ -414,7 +414,7 @@ public abstract class ToolAbility {
 				block = Blocks.REDSTONE_ORE.getDefaultState();
 
 			ItemStack stack = new ItemStack(block.getBlock(), 1, block.getBlock().getMetaFromState(block));
-			ItemStack result = CrystallizerRecipes.getOutput(stack);
+			ItemStack result = CrystallizerRecipes.getOutputItem(stack);
 
 			if(result != null) {
 				world.setBlockToAir(new BlockPos(x, y, z));
