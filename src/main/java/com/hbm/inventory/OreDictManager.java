@@ -277,8 +277,8 @@ public class OreDictManager {
 
 		//VANILLA - Fixed
 		COAL 																																			.dust(powder_coal)		.dustSmall(powder_coal_tiny)								.gem(Items.COAL)	.crystal(crystal_coal);
-		IRON 																																			.dust(powder_iron)																						.crystal(crystal_iron)		.plate(plate_iron)			.ore(ore_gneiss_iron);
-		GOLD 																																			.dust(powder_gold)																						.crystal(crystal_gold)		.plate(plate_gold)			.ore(ore_gneiss_gold, cluster_iron, cluster_depth_iron);
+		IRON 																																			.dust(powder_iron)																						.crystal(crystal_iron)		.plate(plate_iron)			.ore(ore_gneiss_iron, cluster_iron, cluster_depth_iron);
+		GOLD 																																			.dust(powder_gold)																						.crystal(crystal_gold)		.plate(plate_gold)			.ore(ore_gneiss_gold);
 		LAPIS																																			.dust(powder_lapis)																						.crystal(crystal_lapis);
 		REDSTONE																																																												.crystal(crystal_redstone);
 		NETHERQUARTZ																																	.dust(powder_quartz)																.gem(Items.QUARTZ);

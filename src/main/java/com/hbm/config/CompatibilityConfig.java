@@ -163,7 +163,7 @@ public class CompatibilityConfig {
 		
 
 		//Structures
-		radioStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.01_radioSpawn", "Spawn radio station on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");
+		radioStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.01_radioSpawn", "Spawn radio station on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:1000" }, ":");
 		antennaStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.02_antennaSpawn", "Spawn antenna on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:750" }, ":");
 		atomStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.03_atomSpawn", "Spawn power plant on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");
 		vertibirdStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.04_vertibirdSpawn", "Spawn vertibird on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");

@@ -333,10 +333,10 @@ public class HbmWorldGen implements IWorldGenerator {
 			j += 8;
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
 			
-			if (biome.getDefaultTemperature() >= 1F || biome.getRainfall() < 2F) {
+			if (biome.getDefaultTemperature() >= 1F && biome.getRainfall() > 1F) {
 				generateAStructure(world, rand, i, j, new Radio01(), parseInt(CompatibilityConfig.radioStructure.get(dimID)));
 			}
-			if (biome.getDefaultTemperature() <= 1F || biome.getRainfall() > 2F) {
+			if (biome.getDefaultTemperature() <= 1F) {
 				generateAStructure(world, rand, i, j, new Antenna(), parseInt(CompatibilityConfig.antennaStructure.get(dimID)));
 			}
 			if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
@@ -616,7 +616,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			}
 			
 			if(!biome.canRain() && biome.getDefaultTemperature() >= 1.8F) {
-				if(rand.nextInt(200) == 0) {
+				if(rand.nextInt(600) == 0) {
 					for(int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);
 						int z = j + rand.nextInt(16);
