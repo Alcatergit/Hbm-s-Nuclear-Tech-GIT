@@ -82,6 +82,7 @@ public class ModForgeFluids {
 
 	public static Fluid acid = new Fluid("acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_flowing"), null, Color.WHITE);
 	public static Fluid sulfuric_acid = new Fluid("sulfuric_acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_flowing"), null, Color.WHITE);
+	public static Fluid liquid_osmiridium = new Fluid("liquid_osmiridium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_flowing"), null, Color.WHITE).setTemperature(573);
 	public static Fluid watz = new Fluid("watz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid cryogel = new Fluid("cryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE).setTemperature(50);
 
@@ -108,7 +109,7 @@ public class ModForgeFluids {
 	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(220+273);
 	public static Fluid radwater_fluid = new RadWaterFluid("radwater_fluid").setDensity(1000);
 	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
-	public static Fluid schrabidic = new SchrabidicFluid("schrabidic").setDensity(31200).setViscosity(500).setTemperature(273);
+	public static Fluid schrabidic = new SchrabidicFluid("schrabidic").setDensity(31200).setViscosity(500);
 	public static Fluid corium_fluid = new CoriumFluid().setDensity(31200).setViscosity(2000).setTemperature(3000);
 	public static Fluid volcanic_lava_fluid = new VolcanicFluid().setLuminosity(15).setDensity(3000).setViscosity(3000).setTemperature(1300);
 	
@@ -204,6 +205,8 @@ public class ModForgeFluids {
 			acid = FluidRegistry.getFluid("acid");
 		if(!FluidRegistry.registerFluid(sulfuric_acid))
 			sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
+		if(!FluidRegistry.registerFluid(liquid_osmiridium))
+			liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		if(!FluidRegistry.registerFluid(watz))
 			watz = FluidRegistry.getFluid("watz");
 		if(!FluidRegistry.registerFluid(cryogel))
@@ -333,6 +336,7 @@ public class ModForgeFluids {
 
 		acid = FluidRegistry.getFluid("acid");
 		sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
+		liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		watz = FluidRegistry.getFluid("watz");
 		cryogel = FluidRegistry.getFluid("cryogel");
 
@@ -367,5 +371,4 @@ public class ModForgeFluids {
 	public static void worldLoad(WorldEvent.Load evt) {
 		setFromRegistry();
 	}
-
 }

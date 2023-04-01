@@ -105,7 +105,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 						case RADIO: break;
 						case MICRO: entity.setFire(2); break;
 						case IR: entity.setFire(4); break;
-						case VISIBLE: entity.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60 * 60 * 65536, 0));
+						case VISIBLE: entity.addPotionEffect(new PotionEffect(Potion.getPotionById(15), 60 * 60 * 65536, 0)); break;
 						case UV: entity.setFire(10); ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.025F); break;
 						case XRAY: ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 1F); break;
 						case GAMMA: 

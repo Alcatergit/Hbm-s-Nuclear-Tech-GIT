@@ -59,6 +59,6 @@ public class GUIMachineGasCent extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft + 98, guiTop + 63 - j, 192, 32 - j, 6, j);
 		
 
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 53, 96);
+		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 53, 97);
 	}
 }

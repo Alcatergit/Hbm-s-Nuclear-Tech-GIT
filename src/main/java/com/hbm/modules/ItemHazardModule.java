@@ -209,9 +209,11 @@ public class ItemHazardModule {
 		}
 		
 		if(this.digamma * tempMod > 0) {
-			float d = ((int) (digamma * tempMod * 10000F)) / 10F;
 			list.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.digamma") + "]");
-			list.add(TextFormatting.DARK_RED + "" + d + "mDRX/s");
+			list.add(TextFormatting.DARK_RED + "" + Library.roundFloat(digamma * tempMod * 1000F, 2) + "mDRX/s");
+			if(stack.getCount() > 1) {
+				list.add(TextFormatting.DARK_RED + ("Stack: " + Library.roundFloat(digamma * tempMod * stack.getCount() * 1000F, 2) + "mDRX/s"));
+			}
 		}
 		
 		int[] breeder = BreederRecipes.getFuelValue(stack);
@@ -227,7 +229,7 @@ public class ItemHazardModule {
 		
 		if(!item.world.isRemote) {
 			
-			if(this.hydro && item.world.getBlockState(new BlockPos((int)Math.floor(item.posX), (int)Math.floor(item.posY), (int)Math.floor(item.posZ))).getMaterial() == Material.WATER) {
+			if(this.hydro && (item.isInWater() || item.world.getBlockState(new BlockPos((int)Math.floor(item.posX), (int)Math.floor(item.posY), (int)Math.floor(item.posZ))).getMaterial() == Material.WATER)) {
 
 				item.setDead();
 				item.world.newExplosion(item, item.posX, item.posY, item.posZ, 2F, true, true);

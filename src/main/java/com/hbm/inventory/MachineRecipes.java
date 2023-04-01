@@ -464,6 +464,12 @@ public class MachineRecipes {
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 3));
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_nitan_mix), 4));
 			return list;
+		} else if(fluid == ModForgeFluids.liquid_osmiridium){
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_impure_osmiridium), 1));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_meteorite), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_meteorite_tiny), 2));
+			list.add(new GasCentOutput(1, new ItemStack(ModItems.powder_paleogenite_tiny), 1));
+			return list;
 		}
 		
 		return null;
@@ -501,8 +507,10 @@ public class MachineRecipes {
 			return 1000;
 		else if(fluid == ModForgeFluids.nitan)
 			return 500;
+		else if(fluid == ModForgeFluids.liquid_osmiridium)
+			return 2000;
 		else
-			return 100;
+			return 0;
 	}
 	
 	public static ItemStack getCyclotronOutput(ItemStack part, ItemStack item) {

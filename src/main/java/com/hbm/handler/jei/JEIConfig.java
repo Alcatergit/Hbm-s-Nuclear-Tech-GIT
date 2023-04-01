@@ -107,7 +107,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fluidtank), FLUIDS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crystallizer), CRYSTALLIZER);
 		//This recipe catalyst doesn't work, since the book of is blacklisted.
-		//registry.addRecipeCatalyst(new ItemStack(ModItems.book_of_), BOOK);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.book_of_), BOOK);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.iter), FUSION_BYPRODUCT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.hadron_core), HADRON);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_silex), SILEX);
@@ -214,7 +214,7 @@ public class JEIConfig implements IModPlugin {
 		blacklist.addIngredientToBlacklist(new ItemStack(ModItems.bobmazon_hidden));
 		if(MainRegistry.polaroidID != 11) {
 			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.book_secret));
-			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.book_of_));
+			// blacklist.addIngredientToBlacklist(new ItemStack(ModItems.book_of_));
 			blacklist.addIngredientToBlacklist(new ItemStack(ModItems.ams_core_thingy));
 		}
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_assembler));

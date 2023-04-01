@@ -270,8 +270,7 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == FluidRegistry.LAVA || stack.getFluid() == ModForgeFluids.uf6
-				|| stack.getFluid() == ModForgeFluids.puf6 || stack.getFluid() == ModForgeFluids.watz || stack.getFluid() == ModForgeFluids.sas3 || stack.getFluid() == ModForgeFluids.coolant || stack.getFluid() == ModForgeFluids.cryogel || stack.getFluid() == ModForgeFluids.nitan;
+		return MachineRecipes.getFluidConsumedGasCent(stack.getFluid()) != 0;
 	}
 	
 	@Override

@@ -40,6 +40,7 @@ public class BlockDepth extends Block {
 		super.addInformation(stack, player, tooltip, advanced);
 		float hardness = this.getExplosionResistance(null);
 		tooltip.add("§d[Unmineable]§r");
+		tooltip.add("§eCan only be destroyed by explosions§r");
 		if(hardness > 50){
 			tooltip.add("§6Blast Resistance: "+hardness+"§r");
 		}

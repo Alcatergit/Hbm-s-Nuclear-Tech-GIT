@@ -942,7 +942,11 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 12))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 32))
 				);
-		
+		recipes.put(OSMIRIDIUM.crystal(), new SILEXRecipe(900, 100, EnumWavelengths.GAMMA)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_osmiridium), 90))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_schrabidium), 8))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_bismuth), 2))
+				);
 		
 		//crystals minerals
 		

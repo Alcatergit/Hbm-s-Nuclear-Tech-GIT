@@ -39,11 +39,11 @@ public class ArmorUtil {
 		ArmorRegistry.registerHazard(ModItems.attachment_mask, HazardClass.SAND);
 
 		ArmorRegistry.registerHazard(ModItems.asbestos_helmet, HazardClass.SAND, HazardClass.LIGHT);
-		ArmorRegistry.registerHazard(ModItems.hazmat_helmet, HazardClass.SAND);
-		ArmorRegistry.registerHazard(ModItems.hazmat_helmet_red, HazardClass.SAND);
-		ArmorRegistry.registerHazard(ModItems.hazmat_helmet_grey, HazardClass.SAND);
-		ArmorRegistry.registerHazard(ModItems.hazmat_paa_helmet, HazardClass.LIGHT, HazardClass.SAND);
-		ArmorRegistry.registerHazard(ModItems.liquidator_helmet, HazardClass.LIGHT, HazardClass.SAND);
+		ArmorRegistry.registerHazard(ModItems.hazmat_helmet, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
+		ArmorRegistry.registerHazard(ModItems.hazmat_helmet_red, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
+		ArmorRegistry.registerHazard(ModItems.hazmat_helmet_grey, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
+		ArmorRegistry.registerHazard(ModItems.hazmat_paa_helmet, HazardClass.LIGHT, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
+		ArmorRegistry.registerHazard(ModItems.liquidator_helmet, HazardClass.LIGHT, HazardClass.SAND, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE);
 		ArmorRegistry.registerHazard(ModItems.t45_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_CHLORINE, HazardClass.BACTERIA, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
 		ArmorRegistry.registerHazard(ModItems.ajr_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_CHLORINE, HazardClass.BACTERIA, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);
 		ArmorRegistry.registerHazard(ModItems.ajro_helmet, HazardClass.PARTICLE_COARSE, HazardClass.PARTICLE_FINE, HazardClass.GAS_CHLORINE, HazardClass.BACTERIA, HazardClass.GAS_MONOXIDE, HazardClass.LIGHT, HazardClass.SAND);

@@ -1058,6 +1058,7 @@ public class ModBlocks {
 	public static final Block anvil_bismuth = new NTMAnvil(Material.IRON, 5, "anvil_bismuth").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_schrabidate = new NTMAnvil(Material.IRON, 6, "anvil_schrabidate").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_dnt = new NTMAnvil(Material.IRON, 7, "anvil_dnt").setCreativeTab(MainRegistry.machineTab);
+	public static final Block anvil_osmiridium = new NTMAnvil(Material.IRON, 8, "anvil_osmiridium").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_murky = new NTMAnvil(Material.IRON, 1916169, "anvil_murky").setCreativeTab(MainRegistry.machineTab);
 	
 	//The usual machines

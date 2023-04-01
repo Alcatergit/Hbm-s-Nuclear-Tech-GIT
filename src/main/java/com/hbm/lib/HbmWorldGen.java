@@ -333,10 +333,10 @@ public class HbmWorldGen implements IWorldGenerator {
 			j += 8;
 			Biome biome = world.getBiome(new BlockPos(i, 0, j));
 			
-			if (biome.getDefaultTemperature() >= 1F ||  biome.getRainfall() < 2F) {
+			if (biome.getDefaultTemperature() >= 1F || biome.getRainfall() < 2F) {
 				generateAStructure(world, rand, i, j, new Radio01(), parseInt(CompatibilityConfig.radioStructure.get(dimID)));
 			}
-			if (biome.getDefaultTemperature() <= 1F && biome.getRainfall() > 2F) {
+			if (biome.getDefaultTemperature() <= 1F || biome.getRainfall() > 2F) {
 				generateAStructure(world, rand, i, j, new Antenna(), parseInt(CompatibilityConfig.antennaStructure.get(dimID)));
 			}
 			if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
@@ -346,7 +346,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			if (biome.getDefaultTemperature() < 2F || biome.getDefaultTemperature() > 1.0F) {
 				generateAStructure(world, rand, i, j, new Relay(), parseInt(CompatibilityConfig.relayStructure.get(dimID)));
 			}
-			if (biome.getDefaultTemperature() > 3F) {
+			if (biome.getDefaultTemperature() > 1.8F) {
 				generateAStructure(world, rand, i, j, new Barrel(), parseInt(CompatibilityConfig.barrelStructure.get(dimID)));
 			}
 			if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
@@ -356,7 +356,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					generateAStructure(world, rand, i, j, new CrashedVertibird(), parseInt(CompatibilityConfig.vertibirdStructure.get(dimID)));
 				}
 			}
-			if (biome.getDefaultTemperature() < 1F || biome.getDefaultTemperature() > 3F) {
+			if (biome.getDefaultTemperature() < 1F || biome.getDefaultTemperature() > 1.8F) {
 				generateAStructure(world, rand, i, j, new Satellite(), parseInt(CompatibilityConfig.satelliteStructure.get(dimID)));
 			}
 			generateAStructure(world, rand, i, j, new Spaceship(), parseInt(CompatibilityConfig.spaceshipStructure.get(dimID)));
@@ -419,7 +419,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 
-			if(biome.getDefaultTemperature() > 3F && biome.getRainfall() < 1F){
+			if(biome.getDefaultTemperature() > 1.8F && biome.getRainfall() < 1F){
 				int dimGeyserChlorine = parseInt(CompatibilityConfig.geyserChlorine.get(dimID));
 				if (dimGeyserChlorine > 0 && rand.nextInt(dimGeyserChlorine) == 0) {
 					int x = i + rand.nextInt(16);
@@ -604,7 +604,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					new ArcticVault().trySpawn(world, x, y, z);
 				}
 			}
-			if(biome.getDefaultTemperature() >= 3.0F){
+			if(biome.getDefaultTemperature() >= 1.8F){
 				int dimPyramidStructure = parseInt(CompatibilityConfig.pyramidStructure.get(dimID));
 				if (dimPyramidStructure > 0 && rand.nextInt(dimPyramidStructure) == 0) {
 					int x = i + rand.nextInt(16);
@@ -615,7 +615,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			
-			if(!biome.canRain() && biome.getDefaultTemperature() >= 3F) {
+			if(!biome.canRain() && biome.getDefaultTemperature() >= 1.8F) {
 				if(rand.nextInt(200) == 0) {
 					for(int a = 0; a < 1; a++) {
 						int x = i + rand.nextInt(16);

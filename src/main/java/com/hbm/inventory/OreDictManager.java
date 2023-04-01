@@ -331,7 +331,7 @@ public class OreDictManager {
 		DNT															.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)	.dust(powder_dineutronium)								.block(block_dineutronium)														.plate(plate_dineutronium);
 		FIBER																												.ingot(ingot_fiberglass)															.block(block_fiberglass);
 		ASBESTOS	.asbestos(1F)																							.ingot(ingot_asbestos)		.dust(powder_asbestos)									.block(block_asbestos)																					.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos);
-		//OSMIRIDIUM												.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium);
+		OSMIRIDIUM													.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium)	.dust(powder_osmiridium)																				.crystal(crystal_osmiridium);
 		
 		//RADIOACTIVE Fuels
 		U		.rad(HazardRegistry.u)								.nugget(nugget_uranium)		.billet(billet_uranium)		.ingot(ingot_uranium)		.dust(powder_uranium)									.block(block_uranium)							.crystal(crystal_uranium)								.ore(ore_uranium, ore_uranium_scorched, ore_gneiss_uranium, ore_gneiss_uranium_scorched, ore_nether_uranium, ore_nether_uranium_scorched, ore_meteor_uranium)	.oreNether(ore_nether_uranium, ore_nether_uranium_scorched);
@@ -385,8 +385,8 @@ public class OreDictManager {
 		//COLLECTIONS
 		ANY_GUNPOWDER																																	.dust(Items.GUNPOWDER, ballistite, cordite);
 		ANY_SMOKELESS																																	.dust(ballistite, cordite);
-		ANY_PLASTICEXPLOSIVE																								.ingot(ingot_semtex);
-		//ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt);
+		ANY_PLASTICEXPLOSIVE																								.ingot(ingot_semtex, ingot_c4);
+		ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt, ball_dynamite);
 		ANY_CONCRETE			.any(concrete, concrete_smooth, concrete_asbestos, ducrete, ducrete_smooth);
 
 		ANY_COKE																																																							.gem(fromAll(coke, EnumCokeType.class));

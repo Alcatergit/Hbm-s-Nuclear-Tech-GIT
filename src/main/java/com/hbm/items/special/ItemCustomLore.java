@@ -371,6 +371,7 @@ public class ItemCustomLore extends Item {
 	public EnumRarity getRarity(ItemStack stack) {
 		if(this == ModItems.plate_euphemium || 
 			this == ModItems.ingot_euphemium || 
+			this == ModItems.ingot_osmiridium || 
 			this == ModItems.ingot_astatine || 
 			this == ModItems.ingot_iodine || 
 			this == ModItems.ingot_i131 || 
@@ -386,6 +387,7 @@ public class ItemCustomLore extends Item {
 			this == ModItems.ingot_neodymium || 
 
 			this == ModItems.nugget_euphemium || 
+			this == ModItems.nugget_osmiridium || 
 			this == ModItems.nugget_strontium || 
 			this == ModItems.nugget_sr90 || 
 			this == ModItems.nugget_cobalt || 
@@ -393,6 +395,7 @@ public class ItemCustomLore extends Item {
 			
 			this == ModItems.powder_neptunium ||
 			this == ModItems.powder_euphemium || 
+			this == ModItems.powder_osmiridium || 
 			this == ModItems.powder_iodine || 
 			this == ModItems.powder_i131 || 
 			this == ModItems.powder_strontium || 
@@ -446,6 +449,9 @@ public class ItemCustomLore extends Item {
 			this == ModItems.ingot_solinium || 
 			this == ModItems.nugget_schrabidium || 
 			this == ModItems.nugget_solinium || 
+			this == ModItems.ingot_electronium || 
+			this == ModItems.nugget_gh336 || 
+			this == ModItems.ingot_gh336 || 
 			
 			this == ModItems.powder_schrabidate || 
 			this == ModItems.powder_schrabidium || 
@@ -465,6 +471,8 @@ public class ItemCustomLore extends Item {
 			this == ModItems.billet_unobtainium ||
 			
 			this == ModItems.solinium_core ||
+			this == ModItems.powder_impure_osmiridium ||
+			this == ModItems.crystal_osmiridium ||
 			this == ModItems.crystal_schrabidium ||
     		this == ModItems.crystal_schraranium ||
     		this == ModItems.crystal_trixite ||
@@ -493,6 +501,8 @@ public class ItemCustomLore extends Item {
 			this == ModItems.ingot_weidanium || 
 			this == ModItems.ingot_reiium || 
 			this == ModItems.ingot_verticium || 
+			this == ModItems.powder_paleogenite || 
+			this == ModItems.powder_paleogenite_tiny || 
 
 			this == ModItems.nugget_australium || 
 			this == ModItems.nugget_australium_greater || 

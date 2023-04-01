@@ -114,6 +114,7 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.acid.getName(), new FluidProperties(3, 0, 3, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE));
 		fluidProperties.put(ModForgeFluids.sulfuric_acid.getName(),	new FluidProperties(3, 0, 2, EnumSymbol.ACID, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.liquid_osmiridium.getName(),	new FluidProperties(5, 0, 5, EnumSymbol.ACID, FluidTrait.CORROSIVE));
 		
 
 		fluidProperties.put(ModForgeFluids.watz.getName(), new FluidProperties(4, 0, 3, EnumSymbol.ACID, FluidTrait.CORROSIVE_2));

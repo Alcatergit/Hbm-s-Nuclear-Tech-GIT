@@ -196,6 +196,12 @@ container.rbmkStorage=RBMK Storage
 tile.rbmk_storage.name=RBMK Storage Column
 
 chem.DUCRETE=Ducretisation
+chem.TNT=TNT Synthesis
+chem.C4=C-4 Synthesis
+chem.DYNAMITE=Dynamite Synthesis
+item.ball_tnt.name=TNT
+item.ball_dynamite.name=Dynamite
+item.ingot_c4.name=Bar of Composition C-4
 
 tile.ducrete.name=Ducrete
 tile.ducrete_smooth.name=Smooth Ducrete
@@ -366,6 +372,7 @@ trait.radioactive=Radioactive
 trait.radResistance=Radiation resistance: %s
 trait.asbestos=Asbestos
 trait.hydro=Hydroexplosive
+trait.explosive=Explosive
 trait.unstable=Unstable
 trait.coal=Coal Dust
 
@@ -629,6 +636,7 @@ hbmfluid.wastefluid=Liquid Nuclear Waste
 hbmfluid.wastegas=Gaseous Nuclear Waste
 hbmfluid.gasoline=Leaded Gasoline
 hbmfluid.sulfuric_acid=Sulfuric Acid
+hbmfluid.liquid_osmiridium=Osmiridic Solution
 
 fluid.sulfuric_acid=Sulfuric Acid
 fluid.steam=Steam
@@ -687,6 +695,18 @@ fluid.spentsteam=Low-Pressure Steam
 fluid.wastefluid=Liquid Nuclear Waste
 fluid.wastegas=Gaseous Nuclear Waste
 fluid.gasoline=Leaded Gasoline
+fluid.liquid_osmiridium=Osmiridic Solution
+
+item.crystal_osmiridium.name=Osmiridium Crystals
+item.ingot_osmiridium.name=Osmiridium Ingot
+item.nugget_osmiridium.name=Osmiridium Nugget
+item.powder_impure_osmiridium.name=Impure Osmiridium Powder
+item.powder_osmiridium.name=Osmiridium Powder
+item.powder_tektite.name=Tektite Powder
+item.powder_paleogenite.name=Paleogenite Powder
+item.powder_paleogenite_tiny.name=Tiny Pile of Paleogenite Powder
+
+tile.anvil_osmiridium.name=Osmiridium Anvil
 
 tile.volcanic_lava_block.name=Volcanic Lava
 tile.corium_block.name=Liquid Corium
@@ -762,6 +782,7 @@ book.rbmk.page16=§4§lAVOID.
 chem.TEST=Test
 chem.ARSENIC=Arsenic Extraction
 chem.SULFURIC_ACID=Sulfuric Acid Production
+chem.OSMIRIDIUM_DEATH=Osmiridic Solution Production
 chem.FP_HEAVYOIL=Heavy Oil Processing
 chem.FP_SMEAR=Industrial Oil Processing
 chem.FP_NAPHTHA=Naphtha Processing

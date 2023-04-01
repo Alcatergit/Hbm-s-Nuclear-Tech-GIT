@@ -194,6 +194,12 @@ public class CentrifugeRecipes {
 				new ItemStack(ModItems.powder_astatine, 1),
 				new ItemStack(ModItems.powder_cobalt, 2),
 				new ItemStack(Blocks.GRAVEL, 1) });
+
+		recipes.put(new ComparableStack(ModItems.powder_tektite), new ItemStack[] {
+				new ItemStack(ModItems.powder_paleogenite_tiny, 1),
+				new ItemStack(ModItems.powder_meteorite_tiny, 1),
+				new ItemStack(ModItems.powder_meteorite_tiny, 1),
+				new ItemStack(ModItems.dust, 6) });
 		
 		recipes.put(new ComparableStack(ModBlocks.block_euphemium_cluster), new ItemStack[] {
 				new ItemStack(ModItems.nugget_euphemium, 7),

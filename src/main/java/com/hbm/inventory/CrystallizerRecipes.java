@@ -82,10 +82,12 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(ModItems.powder_semtex_mix), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_semtex));
 		addRecipe(new ComparableStack(ModItems.powder_desh_ready), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_desh));
 		addRecipe(new ComparableStack(ModItems.powder_meteorite), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.fragment_meteorite, 1));
+		addRecipe(new ComparableStack(ModItems.powder_impure_osmiridium), new FluidStack(ModForgeFluids.schrabidic, 1000), new ItemStack(ModItems.crystal_osmiridium, 1));
 		addRecipe(new ComparableStack(ModItems.meteorite_sword_treated), new FluidStack(ModForgeFluids.sulfuric_acid, 8000), new ItemStack(ModItems.meteorite_sword_etched, 1));
 		
 		addRecipe(new ComparableStack(Items.SNOWBALL), new FluidStack(FluidRegistry.WATER, 8000), new ItemStack(Blocks.ICE, 1));
 		addRecipe(new ComparableStack(Blocks.ICE), new FluidStack(ModForgeFluids.coolant, 500), new ItemStack(Blocks.PACKED_ICE, 1));
+		addRecipe(new ComparableStack(Blocks.GRAVEL), new FluidStack(FluidRegistry.LAVA, 1000), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.sulfuric_acid, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.sulfuric_acid, 250), new ItemStack(Items.SLIME_BALL, 4));

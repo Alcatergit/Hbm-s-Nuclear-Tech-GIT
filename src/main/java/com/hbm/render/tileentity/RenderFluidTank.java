@@ -81,13 +81,13 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 			}
 		}
 		
-		ResourceLocation rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank_" + s + ".png");
+		ResourceLocation rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank/tank_" + s + ".png");
 		
 		try {
 			Minecraft.getMinecraft().getResourceManager().getResource(rotTexture);
 		} catch (IOException e) {
 			//Drillgon200: Set to my really ugly unknown texture
-			rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank_UNKNOWN.png");
+			rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank/tank_UNKNOWN.png");
 		}
 
         bindTexture(rotTexture);
