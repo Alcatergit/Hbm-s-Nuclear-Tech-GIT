@@ -134,8 +134,11 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 		
 		List<String> text = new ArrayList();
 
-		for(int i = 0; i < frac.types.length; i++)
-			text.add((i < 1 ? ("§a" + "-> ") : ("§c" + "<- ")) + "§r" + frac.types[i].getLocalizedName(new FluidStack(frac.types[i], 1)) + ": " + frac.tanks[i].getFluidAmount() + "/" + frac.tanks[i].getCapacity() + "mB");
+		for(int i = 0; i < frac.types.length; i++){
+			if(frac.types[i] != null){
+				text.add((i < 1 ? ("§a" + "-> ") : ("§c" + "<- ")) + "§r" + frac.types[i].getLocalizedName(new FluidStack(frac.types[i], 1)) + ": " + frac.tanks[i].getFluidAmount() + "/" + frac.tanks[i].getCapacity() + "mB");
+			}
+		}
 
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
