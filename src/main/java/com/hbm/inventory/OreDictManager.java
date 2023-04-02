@@ -402,8 +402,8 @@ public class OreDictManager {
 		//SLAG																																																	.block(block_slag);
 
 		OreDictionary.registerOre(KEY_OIL_TAR, fromOne(oil_tar, EnumTarType.CRUDE));
-		OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));
-		OreDictionary.registerOre(KEY_COAL_TAR, fromOne(oil_tar, EnumTarType.COAL));
+		// OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));
+		// OreDictionary.registerOre(KEY_COAL_TAR, fromOne(oil_tar, EnumTarType.COAL));
 
 		OreDictionary.registerOre(KEY_UNIVERSAL_TANK, new ItemStack(fluid_tank_full, 1, OreDictionary.WILDCARD_VALUE));
 		/* yell at me if these bastard was ever used for anything
@@ -459,7 +459,7 @@ public class OreDictManager {
 		OreDictionary.registerOre("dyeBlue", powder_lapis);
 		OreDictionary.registerOre("dye", powder_lapis);
 		OreDictionary.registerOre("dyeBlack", fromOne(oil_tar, EnumTarType.CRUDE));
-		OreDictionary.registerOre("dyeBlack", fromOne(oil_tar, EnumTarType.CRACK));
+		// OreDictionary.registerOre("dyeBlack", fromOne(oil_tar, EnumTarType.CRACK));
 		OreDictionary.registerOre("dye", oil_tar);
 
 		OreDictionary.registerOre("blockGlass", glass_boron);

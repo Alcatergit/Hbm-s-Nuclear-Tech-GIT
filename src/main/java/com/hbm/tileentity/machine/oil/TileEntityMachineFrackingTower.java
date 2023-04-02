@@ -25,23 +25,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
-    public static final long maxPower = 5000000;
+    public static long maxPower = 5000000;
 
-    protected static final int consumption = 5000;
-    private static final int solutionRequired = 10;
+    protected static int consumption = 5000;
+    private static int solutionRequired = 10;
 
-    protected static final int delay = 20;
-    protected static final int oilPerDeposit = 1000;
+    protected static int delay = 20;
+    protected static int oilPerDeposit = 1000;
 
-    protected static final int oilPerBedrockDeposit = 100;
-    protected static final int gasPerBedrockDepositMin = 10;
-    protected static final int extraGasPerBedrockDepositMax = 50;
+    protected static int oilPerBedrockDeposit = 100;
+    protected static int gasPerBedrockDepositMin = 10;
+    protected static int extraGasPerBedrockDepositMax = 50;
 
-    protected static final int destructionRange = 32;
+    protected static int destructionRange = 32;
 
 
-    public TileEntityMachineFrackingTower()
-    {
+    public TileEntityMachineFrackingTower() {
+        super();
+        super.maxPower = this.maxPower;
+        super.consumption = this.consumption;
+        super.delay = this.delay;
         tanks[2] = new FluidTank(64000);
         tankTypes[2] = ModForgeFluids.fracksol;
     }

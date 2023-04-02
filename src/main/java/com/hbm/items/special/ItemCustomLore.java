@@ -145,6 +145,10 @@ public class ItemCustomLore extends Item {
 			list.add("Used in multi purpose bombs:");
 			list.add("*cough cough* Halp pls!");
 		}
+		if(this == ModItems.powder_tektite)
+		{
+			list.add("Collected via Miningship from §3outer space");
+		}
 		if(this == ModItems.igniter)
 		{
 			list.add("(Used by right-clicking the Prototype)");

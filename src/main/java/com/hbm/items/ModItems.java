@@ -1313,7 +1313,7 @@ public class ModItems {
 	public static final Item powder_meteorite_tiny = new ItemBase("powder_meteorite_tiny").setCreativeTab(MainRegistry.partsTab);
 
 	//Osmiridium
-	public static final Item powder_tektite = new ItemBase("powder_tektite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_tektite = new ItemCustomLore("powder_tektite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_paleogenite_tiny = new ItemHazard("powder_paleogenite_tiny").addDigamma(0.0005F).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_paleogenite = new ItemHazard("powder_paleogenite").addDigamma(0.005F).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_impure_osmiridium = new ItemHazard("powder_impure_osmiridium").addDigamma(0.010F).toItem().setCreativeTab(MainRegistry.partsTab);

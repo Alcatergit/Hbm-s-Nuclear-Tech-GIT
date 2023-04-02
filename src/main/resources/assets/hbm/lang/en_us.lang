@@ -201,7 +201,7 @@ chem.C4=C-4 Synthesis
 chem.DYNAMITE=Dynamite Synthesis
 item.ball_tnt.name=TNT
 item.ball_dynamite.name=Dynamite
-item.ingot_c4.name=Bar of Composition C-4
+item.ingot_c4.name=Bar of C-4
 
 tile.ducrete.name=Ducrete
 tile.ducrete_smooth.name=Smooth Ducrete

@@ -36,12 +36,12 @@ public abstract class TileEntityOilDrillBase extends TileEntity implements ITick
     public Fluid[] tankTypes;
     public boolean needsUpdate;
 
-    public static final int maxPower = 100000;
-    protected static final int consumption = 100;
-    protected static final int delay = 50;
-    protected static final int oilPerDeposit = 500;
-    protected static final int gasPerDepositMin = 100;
-    protected static final int extraGasPerDepositMax = 401;
+    public static long maxPower = 100000;
+    protected static int consumption = 100;
+    protected static int delay = 50;
+    protected static int oilPerDeposit = 500;
+    protected static int gasPerDepositMin = 100;
+    protected static int extraGasPerDepositMax = 401;
 
 
 

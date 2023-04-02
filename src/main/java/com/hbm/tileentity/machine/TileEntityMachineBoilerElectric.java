@@ -208,7 +208,7 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == ModForgeFluids.oil || stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam;
+		return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == ModForgeFluids.oil || stack.getFluid() == ModForgeFluids.crackoil || stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam;
 	}
 
 	protected boolean inputValidForTank(int tank, int slot) {
