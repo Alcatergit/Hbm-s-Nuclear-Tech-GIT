@@ -67,7 +67,7 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(ModBlocks.ore_tikite), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_trixite));
 		addRecipe(SRN.ingot(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.crystal_schraranium));
 		
-		addRecipe("sand", new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_fiberglass));
+		addRecipe(KEY_SAND, new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_fiberglass));
 		addRecipe(new ComparableStack(Blocks.COBBLESTONE), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModBlocks.reinforced_stone));
 		addRecipe(new ComparableStack(ModBlocks.gravel_obsidian), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModBlocks.brick_obsidian));
 		addRecipe(REDSTONE.block(), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.nugget_mercury));
@@ -87,7 +87,7 @@ public class CrystallizerRecipes {
 		
 		addRecipe(new ComparableStack(Items.SNOWBALL), new FluidStack(FluidRegistry.WATER, 8000), new ItemStack(Blocks.ICE, 1));
 		addRecipe(new ComparableStack(Blocks.ICE), new FluidStack(ModForgeFluids.coolant, 500), new ItemStack(Blocks.PACKED_ICE, 1));
-		addRecipe(new ComparableStack(Blocks.GRAVEL), new FluidStack(FluidRegistry.LAVA, 1000), new ItemStack(ModBlocks.gravel_obsidian, 1));
+		addRecipe(KEY_GRAVEL, new FluidStack(FluidRegistry.LAVA, 1000), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.sulfuric_acid, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.sulfuric_acid, 250), new ItemStack(Items.SLIME_BALL, 4));

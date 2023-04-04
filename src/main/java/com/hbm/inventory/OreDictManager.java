@@ -24,6 +24,7 @@ import com.hbm.main.MainRegistry;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -54,6 +55,7 @@ public class OreDictManager {
 	public static final String KEY_LEAVES = "treeLeaves";
 	public static final String KEY_SAPLING = "treeSapling";
 	public static final String KEY_SAND = "sand";
+	public static final String KEY_GRAVEL = "gravel";
 	
 	public static final String KEY_BLACK = "dyeBlack";
 	public static final String KEY_RED = "dyeRed";
@@ -443,6 +445,9 @@ public class OreDictManager {
 		OreDictionary.registerOre("slabWoodPink", pink_slab);
 		OreDictionary.registerOre("stairWood", pink_stairs);
 		OreDictionary.registerOre("stairWoodPink", pink_stairs);
+
+		OreDictionary.registerOre(KEY_SAND, new ItemStack(Blocks.SAND, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre(KEY_GRAVEL, new ItemStack(Blocks.GRAVEL, 1, OreDictionary.WILDCARD_VALUE));
 
 		OreDictionary.registerOre("dyeRed", cinnebar);
 		OreDictionary.registerOre("dye", cinnebar);
