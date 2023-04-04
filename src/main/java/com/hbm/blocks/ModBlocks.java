@@ -438,7 +438,7 @@ public class ModBlocks {
 	public static final Block block_meteor = new BlockOre(Material.ROCK, "block_meteor").setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_cobble = new BlockOre(Material.ROCK, "block_meteor_cobble").setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_broken = new BlockOre(Material.ROCK, "block_meteor_broken").setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
-	public static final Block block_meteor_molten = new BlockHazard(Material.ROCK, "block_meteor_molten").addFire(3).toBlock().setTickRandomly(false).setLightLevel(0.75F).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
+	public static final Block block_meteor_molten = new BlockHazard(Material.ROCK, "block_meteor_molten").addFire(3).toBlock().setTickRandomly(true).setLightLevel(0.75F).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_treasure = new BlockOre(Material.ROCK, "block_meteor_treasure").setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block ore_meteor_uranium = new BlockOre(Material.ROCK, "ore_meteor_uranium").addRadiation(0.25F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block ore_meteor_thorium = new BlockOre(Material.ROCK, "ore_meteor_thorium").addRadiation(ItemHazard.th232).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
@@ -678,7 +678,7 @@ public class ModBlocks {
 	public static final Block depth_dnt = new BlockDepth("depth_dnt").setCreativeTab(MainRegistry.blockTab).setResistance(60000.0F);
 	
 	
-	public static final Block stone_porous = new BlockPorous("stone_porous").setCreativeTab(null);
+	public static final Block stone_porous = new BlockPorous("stone_porous").setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block basalt = new BlockBase(Material.ROCK, "basalt").setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block basalt_sulfur = new BlockOre(Material.ROCK, "basalt_sulfur").setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);

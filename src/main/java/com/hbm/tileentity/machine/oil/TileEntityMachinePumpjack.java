@@ -6,17 +6,15 @@ import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-import com.hbm.explosion.ExplosionLarge;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.TEPumpjackPacket;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -28,14 +26,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 
-	protected static final int delay = 25;
-	protected static final int consumption = 200;
+	protected static int delay = 25;
+	protected static int consumption = 200;
 
-	protected static final int oilPerDeposit = 650;
+	protected static int oilPerDeposit = 650;
 
 	public boolean isProgressing;
 	public float rotation;
 	public float prevRotation;
+
+	public TileEntityMachinePumpjack() {
+		super();
+		super.delay = this.delay;
+		super.consumption = this.consumption;
+		super.oilPerDeposit = this.oilPerDeposit;
+	}
 
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.getCustomName() : "container.pumpjack";
@@ -43,15 +48,14 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
 		this.rotation = compound.getFloat("rotation");
+		super.readFromNBT(compound);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound = super.writeToNBT(compound);
 		compound.setFloat("rotation", rotation);
-		return compound;
+		return super.writeToNBT(compound);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -122,9 +126,6 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + rand.nextInt(extraGasPerDepositMax))), true);
 								needsUpdate = true;
 
-								ExplosionLarge.spawnOilSpills(world, pos.getX() + 0.5F, pos.getY() + 5.5F, pos.getZ() + 0.5F, 3);
-								world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_SWIM, SoundCategory.BLOCKS, 2.0F, 0.5F);
-
 								break;
 							} else {
 								world.setBlockState(new BlockPos(pos.getX(), i, pos.getZ()), ModBlocks.oil_pipe.getDefaultState());
@@ -157,7 +158,10 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 					warning2 = 1;
 				}
 			}
+			isProgressing = warning == 0;
+			rotation += (warning == 0 ? 5 : 0);
 
+			PacketDispatcher.wrapper.sendToAllAround(new TEPumpjackPacket(pos.getX(), pos.getY(), pos.getZ(), rotation, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			if(tank0Amount != tanks[0].getFluidAmount() || tank1Amount != tanks[1].getFluidAmount()){

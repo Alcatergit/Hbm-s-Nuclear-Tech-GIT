@@ -7,7 +7,8 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.Untested;
 import com.hbm.saveddata.RadiationSavedData;
 
-import net.minecraft.block.BlockStone;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -16,10 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockPorous extends BlockStone {
+public class BlockPorous extends Block {
 
 	public BlockPorous(String s) {
-		super();
+		super(Material.ROCK);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setHardness(1.5F); //stone tier

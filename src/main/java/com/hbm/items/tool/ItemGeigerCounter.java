@@ -59,27 +59,34 @@ public class ItemGeigerCounter extends Item {
 			if(x > 0) {
 				List<Integer> list = new ArrayList<Integer>();
 
-				if(x < 1)
+				if(x < 1){
 					list.add(0);
-				if(x < 5)
+				} else if(x < 5){
 					list.add(0);
-				if(x < 10)
+				} else if(x < 10){
 					list.add(1);
-				if(x > 5 && x < 20)
+				} else if(x > 5 && x < 20){
 					list.add(2);
-				if(x > 15 && x < 40)
+				} else if(x > 15 && x < 40){
 					list.add(3);
-				if(x > 30 && x < 80)
+				} else if(x > 30 && x < 80){
 					list.add(4);
-				if(x > 60 && x < 160)
+				} else if(x > 60 && x < 160){
 					list.add(5);
-				if(x > 160)
+				} else if(x > 120 && x < 320){
 					list.add(6);
-			
-				int r = list.get(rand.nextInt(list.size()));
+				} else if(x > 240 && x < 640){
+					list.add(7);
+				} else {
+					list.add(8);
+				}
 				
-				if(r > 0)
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
+				if(list.size() > 0){
+					int r = list.get(rand.nextInt(list.size()));
+					
+					if(r > 0)
+						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
+				}
 			} else if(rand.nextInt(50) == 0) {
 				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}

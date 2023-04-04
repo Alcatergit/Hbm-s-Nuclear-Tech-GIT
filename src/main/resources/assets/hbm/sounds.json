@@ -40,6 +40,8 @@
     "item.geiger4": {"category": "player", "sounds": [{"name": "hbm:tool/geiger4", "stream": false}]},
     "item.geiger5": {"category": "player", "sounds": [{"name": "hbm:tool/geiger5", "stream": false}]},
     "item.geiger6": {"category": "player", "sounds": [{"name": "hbm:tool/geiger6", "stream": false}]},
+    "item.geiger7": {"category": "player", "sounds": [{"name": "hbm:tool/geiger7", "stream": false}]},
+    "item.geiger8": {"category": "player", "sounds": [{"name": "hbm:tool/geiger5", "stream": false}]},
     "item.pinUnlock": {"category": "player", "sounds": [{"name": "hbm:tool/pinUnlock", "stream": false}]},
     "item.pinBreak": {"category": "player", "sounds": [{"name": "hbm:tool/pinBreak", "stream": false}]},
     "item.gasmaskScrew": {"category": "player", "sounds": [{"name": "hbm:tool/gasmaskScrew", "stream": false}]},

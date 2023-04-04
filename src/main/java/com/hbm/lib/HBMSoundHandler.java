@@ -111,6 +111,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent geiger4;
 	public static SoundEvent geiger5;
 	public static SoundEvent geiger6;
+	public static SoundEvent geiger7;
+	public static SoundEvent geiger8;
 	public static SoundEvent lockOpen;
 	public static SoundEvent pinBreak;
 	public static SoundEvent pinUnlock;
@@ -359,6 +361,8 @@ public final class HBMSoundHandler {
 		geiger4 = register("item.geiger4");
 		geiger5 = register("item.geiger5");
 		geiger6 = register("item.geiger6");
+		geiger7 = register("item.geiger7");
+		geiger8 = register("item.geiger8");
 		lockOpen = register("block.lockOpen");
 		pinBreak = register("item.pinBreak");
 		pinUnlock = register("item.pinUnlock");
@@ -469,7 +473,7 @@ public final class HBMSoundHandler {
 		sliding_seal_open = register("block.door.sliding_seal_open");
 		sliding_seal_stop = register("block.door.sliding_seal_stop");
 		
-		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6};
+		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6, geiger7, geiger8};
 	}
 	
 	public static SoundEvent register(String name) {
