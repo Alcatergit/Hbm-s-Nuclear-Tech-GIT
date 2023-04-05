@@ -8,8 +8,7 @@
 		},
 		"description": {
 			"translate": "hbm.achievement.bossMaskman.desc"
-		},
-		"frame": "challenge"
+		}
 	},
 	"parent": "hbm:bosscreeper",
 	"criteria": {

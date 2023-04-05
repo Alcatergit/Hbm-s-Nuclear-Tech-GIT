@@ -1,0 +1,27 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_am241"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_am241"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_am241.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_silex",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:nugget_am241"
+                    }
+                ]
+            }
+        }
+    }
+}

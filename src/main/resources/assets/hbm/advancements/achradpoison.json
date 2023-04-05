@@ -1,15 +1,14 @@
 {
 	"display": {
 		"icon": {
-			"item": "hbm:geiger_counter"
+			"item": "hbm:pellet_charged"
 		},
 		"title": {
 			"translate": "hbm.achievement.radPoison"
 		},
 		"description": {
 			"translate": "hbm.achievement.radPoison.desc"
-		},
-		"frame": "challenge"
+		}
 	},
 	"parent": "hbm:root",
 	"criteria": {

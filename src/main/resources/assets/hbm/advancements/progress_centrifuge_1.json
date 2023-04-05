@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_centrifuge"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_centrifuge_1"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_centrifuge_1.desc"
+		}
+	},
+	"parent": "hbm:progress_polymer",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_centrifuge"
+                    }
+                ]
+            }
+        }
+    }
+}

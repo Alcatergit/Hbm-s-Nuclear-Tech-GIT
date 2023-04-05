@@ -36,7 +36,7 @@ public class ItemModBathwater extends ItemArmorMod {
 		}
 		if(this == ModItems.bathwater_mk3){
 			color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.RED : TextFormatting.DARK_RED);
-			list.add(color + "Inflicts Radiation 100RAD/s on the attacker");
+			list.add(color + "Inflicts Radiation 100 RAD/s on the attacker");
 		}
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);

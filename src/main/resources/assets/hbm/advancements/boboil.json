@@ -4,10 +4,10 @@
 			"item": "hbm:bob_oil"
 		},
 		"title": {
-			"translate": "hbm.achievement.oil"
+			"translate": "hbm.achievement.boboil"
 		},
 		"description": {
-			"translate": "hbm.achievement.oil.desc"
+			"translate": "hbm.achievement.boboil.desc"
 		}
 	},
 	"parent": "hbm:bobchemistry",

@@ -8,10 +8,9 @@
 		},
 		"description": {
 			"translate": "hbm.achievement.digammaSee.desc"
-		},
-		"frame": "challenge"
+		}
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:achomega12",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

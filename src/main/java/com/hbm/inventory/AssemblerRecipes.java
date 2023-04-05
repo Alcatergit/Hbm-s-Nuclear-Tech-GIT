@@ -310,13 +310,13 @@ public class AssemblerRecipes {
 			new OreDictStack(DURA.dust(), 12), 
 			new OreDictStack(ZR.dust(), 12), 
 			new OreDictStack(PU238.ingot(), 4), 
-			new OreDictStack(PO210.nugget(), 4), }, 400);
+			new OreDictStack(TC99.nugget(), 2), }, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_desh_battery, 1), new AStack[] { 
 			new OreDictStack(DESH.ingot(), 12), 
 			new OreDictStack(BAKELITE.dust(), 12), 
 			new OreDictStack(P_RED.dust(), 12), 
 			new OreDictStack(GRAPHITE.ingot(), 6), 
-			new OreDictStack(ANY_BISMOID.nugget(), 4), }, 600);
+			new OreDictStack(ANY_BISMOID.nugget(), 2), }, 600);
 		makeRecipe(new ComparableStack(ModBlocks.machine_schrabidium_battery, 1), new AStack[] { 
 			new OreDictStack(SA326.ingot(), 16), 
 			new OreDictStack(SA326.dust(), 12), 
@@ -761,7 +761,7 @@ public class AssemblerRecipes {
 
 		makeRecipe(new ComparableStack(ModBlocks.machine_fel, 1), new AStack[] {
 				new ComparableStack(ModBlocks.fusion_conductor, 16),
-				new ComparableStack(ModBlocks.machine_desh_battery, 2),
+				new ComparableStack(ModBlocks.machine_saturnite_battery, 2),
 				new OreDictStack(STEEL.ingot(), 16),
 				new OreDictStack(STEEL.plate(), 24),
 				new OreDictStack(DESH.ingot(), 8),

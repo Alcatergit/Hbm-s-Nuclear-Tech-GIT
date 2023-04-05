@@ -472,8 +472,147 @@ weapon.ability.chainsaw=Painsaw
 weapon.ability.fire=Flaming
 # Should rhyme with the translation for "chainsaw"
 
-hbm.advancement.root=NTM Advancements
-hbm.advancement.root.desc=Advancements for Hbm's Nuclear Tech.
+hbm.advancement.root=NTM Extended
+hbm.advancement.root.desc=And so the nuclear Adventure starts
+
+hbm.achievement.progress_dosimeter=Dosimeter
+hbm.achievement.progress_dosimeter.desc=Your new best Friend
+
+hbm.achievement.progress_geiger=Geiger Counter
+hbm.achievement.progress_geiger.desc=Your upgraded best Friend
+
+hbm.achievement.progress_modtable=Modification Table
+hbm.achievement.progress_modtable.desc=Upgrades people Upgrades
+
+hbm.achievement.progress_anvil=Anvil
+hbm.achievement.progress_anvil.desc=Manual but efficient
+
+hbm.achievement.aa_progress_burnerpress=Under Pressure
+hbm.achievement.aa_progress_burnerpress.desc=Pressure pushing down on me, on you
+
+hbm.achievement.progress_folder=It has good Wisdom
+hbm.achievement.progress_folder.desc=How can a folder contain all machines of mankind??
+
+hbm.achievement.progress_assembler=The Factory Grows
+hbm.achievement.progress_assembler.desc=Wait, it's already 1 am?
+
+hbm.achievement.progress_difurnace=Coal and Iron
+hbm.achievement.progress_difurnace.desc=They salvaged a sunken dreadnought for Explorer 1.
+
+hbm.achievement.progress_steel=Steel
+hbm.achievement.progress_steel.desc=The foundation to our empire
+
+hbm.achievement.progress_adv=Advanced Alloy
+hbm.achievement.progress_adv.desc=The alloy enabling our empire
+
+hbm.achievement.progress_starmetal=XVIII The Moon
+hbm.achievement.progress_starmetal.desc=Yeah.
+
+hbm.achievement.progress_book=The Book of §kboxcars
+hbm.achievement.progress_book.desc=§kThe most secret secret
+
+hbm.achievement.progress_chemplant=The Factory Grows Pt. 2
+hbm.achievement.progress_chemplant.desc=Now you're thinking with chemicals!
+
+hbm.achievement.progress_polymer=Teflon
+hbm.achievement.progress_polymer.desc=Delicious, delicious microplastics.
+
+hbm.achievement.progress_concrete=Old Reliable
+hbm.achievement.progress_concrete.desc=A Bolshevik's favorite.
+
+hbm.achievement.progress_rbmk=3.6 Roentegen?
+hbm.achievement.progress_rbmk.desc=He's delusional, get him to the infirmary.
+
+hbm.achievement.progress_rbmk_boom=It is 15,000.
+hbm.achievement.progress_rbmk_boom.desc=What is the cost of lies?
+
+hbm.achievement.progress_centrifuge_1=Centripetal Force
+hbm.achievement.progress_centrifuge_1.desc=Centrifugal force is fake don't @ me
+
+hbm.achievement.progress_centrifuge_2=Industrial Nuclear Gas Tornado
+hbm.achievement.progress_centrifuge_2.desc=Hide it from the FBI
+
+hbm.achievement.progress_u235=Weaponsgrade Uranium
+hbm.achievement.progress_u235.desc=Your chioce: Peace or War
+
+hbm.achievement.progress_pu239=Weaponsgrade Plutonium
+hbm.achievement.progress_pu239.desc=Haha funny ball go boom
+
+hbm.achievement.progress_au198=Hottest Gold
+hbm.achievement.progress_au198.desc=Lets make some Jewelry
+
+hbm.achievement.progress_radspice=The Chernobyl Ingot
+hbm.achievement.progress_radspice.desc=Awwww thats hot
+
+hbm.achievement.progress_osmiridium=Osmium-Iridium Alloy
+hbm.achievement.progress_osmiridium.desc=Mined from an asteroide originating from the Digamma-Star system
+
+hbm.achievement.progress_dfc=Turning on a Sun
+hbm.achievement.progress_dfc.desc=A stellar campfire
+
+hbm.achievement.progress_creative=Certified DFC Professional
+hbm.achievement.progress_creative.desc=You are now kompetent in DFC
+
+hbm.achievement.progress_schrabidium=Island of Stability
+hbm.achievement.progress_schrabidium.desc=Regardless, I wouldn't look at it for too long.
+
+hbm.achievement.progress_hadron=Large Hadron Collider
+hbm.achievement.progress_hadron.desc=You reached the frontear of mankind
+
+hbm.achievement.progress_radium=First Nuclear Power
+hbm.achievement.progress_radium.desc=Throw it into water
+
+hbm.achievement.progress_pile=The navigator landed in the New World
+hbm.achievement.progress_pile.desc="How were the natives?" / "Very friendly."
+
+hbm.achievement.progress_desh=Le Verrier
+hbm.achievement.progress_desh.desc="Come on then, you lot. Places to go!"
+
+hbm.achievement.progress_crystalizer=Acidic
+hbm.achievement.progress_crystalizer.desc=Oof ow my skin
+
+hbm.achievement.progress_silex=Separation of Isotopes
+hbm.achievement.progress_silex.desc=It's cooler then it sounds, I promise.
+
+hbm.achievement.progress_bismuth=Bismuth
+hbm.achievement.progress_bismuth.desc=Remember when people complained about this for a month? I do.
+
+hbm.achievement.progress_am241=Americium
+hbm.achievement.progress_am241.desc=Murricaa fuck yeahh
+
+hbm.achievement.progress_cyclotron=Cyclotronic
+hbm.achievement.progress_cyclotron.desc=We can make new elements now
+
+hbm.achievement.progress_fusion=Fusion
+hbm.achievement.progress_fusion.desc=A dance of deuterons, tritons, and energy.
+
+hbm.achievement.progress_oil_1=We hit Oil
+hbm.achievement.progress_oil_1.desc=First Step towards poluting earth
+
+hbm.achievement.progress_oil_2=We need More! MORE!!
+hbm.achievement.progress_oil_2.desc=Next level oil pumping
+
+hbm.achievement.progress_oil_3=Frack this Bedrock
+hbm.achievement.progress_oil_3.desc=Infinite OIL!
+
+hbm.achievement.progress_refinery=We processed Oil
+hbm.achievement.progress_refinery.desc=Second Step towards poluting earth
+
+hbm.achievement.progress_fraction=Fractioning
+hbm.achievement.progress_fraction.desc=Next level oil processing
+
+hbm.achievement.progress_crack=Lets do Crack
+hbm.achievement.progress_crack.desc=Cracking oil for more stuff
+
+hbm.achievement.progress_dineutronium=OMG DNT
+hbm.achievement.progress_dineutronium.desc=Holy moly we did it
+
+hbm.achievement.progress_fensu=Inner Peace
+hbm.achievement.progress_fensu.desc=Nothing more to say
+
+hbm.achievement.progress_cladding_electronium=Best Cladding
+hbm.achievement.progress_cladding_electronium.desc=Radiation Ingot against Radiation
+
 hbm.achievement.sacrifice=Sororicide
 hbm.achievement.sacrifice.desc=Face the fire and live.
 hbm.achievement.impossible=Literally impossible
@@ -491,43 +630,50 @@ hbm.achievement.c44.desc=Galvanized! I mean, zinc!
 hbm.achievement.c20_5=Chapter [TWENTY POINT FIVE]
 hbm.achievement.c20_5.desc=???
 hbm.achievement.space=The Final Front-ah forget it
-hbm.achievement.space.desc=Fail in every way possible and waste funds worth 90 million dollars.
+hbm.achievement.space.desc=Fail in every way possible and waste funds worth 90 million dollars by sending a pony to space.
 hbm.achievement.foeq=Pegasi and Missile Silos
 hbm.achievement.foeq.desc=Send a relay into martian...I mean dunaian orbit.
 hbm.achievement.fiend=Delinquent
 hbm.achievement.fiend.desc=Be mean.
 hbm.achievement.fiend2=Delinquent 2: Delinquent Harder
 hbm.achievement.fiend2.desc=Be meaner.
-hbm.achievement.metalworks=Metalworks
-hbm.achievement.metalworks.desc=Vault-tec Support Level 1 (Blast Furnace)
-hbm.achievement.assembly=Fabrication
-hbm.achievement.assembly.desc=Vault-tec Support Level 2 (Assembly Machine)
-hbm.achievement.chemistry=Chemistry
-hbm.achievement.chemistry.desc=Vault-tec Support Level 3 (Concrete Bricks)
-hbm.achievement.oil=Petroleum
-hbm.achievement.oil.desc=Vault-tec Support Level 4 (Electric Boiler)
-hbm.achievement.nuclear=Atomic Science
-hbm.achievement.nuclear.desc=Vault-tec Support Level 5 (Uranium Fuel)
-hbm.achievement.hidden=Hidden Catalog
-hbm.achievement.hidden.desc=Kill a tainted creeper with a falling boxcar.
+
+hbm.achievement.bobmetalworks=Metalworks
+hbm.achievement.bobmetalworks.desc=Vault-tec Support Level 1 (Blast Furnace via Anvil)
+hbm.achievement.bobassembly=Fabrication
+hbm.achievement.bobassembly.desc=Vault-tec Support Level 2 (Assembly Machine via Anvil)
+hbm.achievement.bobchemistry=Chemistry
+hbm.achievement.bobchemistry.desc=Vault-tec Support Level 3 (Craft Concrete Bricks)
+hbm.achievement.boboil=Petroleum
+hbm.achievement.boboil.desc=Vault-tec Support Level 4 (Craft Electric Boiler)
+hbm.achievement.bobnuclear=Atomic Science
+hbm.achievement.bobnuclear.desc=Vault-tec Support Level 5 (Craft Uranium Fuel)
+hbm.achievement.bobhidden=Hidden Catalog
+hbm.achievement.bobhidden.desc=Kill a tainted creeper with a falling boxcar.
+
 hbm.achievement.horizonsStart=Apogee
 hbm.achievement.horizonsStart.desc=Send a lad to the moon.
 hbm.achievement.horizonsEnd=The Horizons
 hbm.achievement.horizonsEnd.desc=Send Tom home.
 hbm.achievement.horizonsBonus=Slam Dunk Diarrhea
 hbm.achievement.horizonsBonus.desc=honest to god what the hell is wrong with you
+
 hbm.achievement.soyuz=Baked Potato
-hbm.achievement.soyuz.desc=Become crunchy.
+hbm.achievement.soyuz.desc=Let the Soyuz roast you
+
 hbm.achievement.radPoison=Yay, Radiation!
 hbm.achievement.radPoison.desc=Suffer the effects of radiation poisoning.
 hbm.achievement.radDeath=Ouch, Radiation!
 hbm.achievement.radDeath.desc=Marie Curie invented the theory of radioactivity, the treatment of radioactivity, and dying of radioactivity.
+
 hbm.achievement.stratum.desc=Hit the brakes, Mitts.
 hbm.achievement.stratum=Stratum
+
 hbm.achievement.meltdown.desc=You got this far, how could you mess this up?
 hbm.achievement.meltdown=Rapid Unscheduled Disassembly
 hbm.achievement.omega12.desc=Solve the problem of continued life on this wretched planet.
 hbm.achievement.omega12=Omega-12 Particle Accelerator
+
 hbm.achievement.bossCreeper.desc='There is nuclear creepers? Those are a thing?!'
 hbm.achievement.bossCreeper=Bomb On Four Legs
 hbm.achievement.bossMaskman.desc=Bonk the big boy.
@@ -536,8 +682,9 @@ hbm.achievement.bossMeltdown.desc=More terrible than great, but I take what I ca
 hbm.achievement.bossMeltdown=3.6 Roentgen
 hbm.achievement.bossWorm.desc=The Fabstaff. My ass. You do the math.
 hbm.achievement.bossWorm=Disassembling Balls-O-Tron
-achievement.bossUFO.desc=Yo, what do we have here? A huge spacecraft pulling up to the bloockship?
-achievement.bossUFO=Ayy Lmao
+hbm.achievement.bossUFO.desc=Yo, what do we have here? A huge spacecraft pulling up to the bloockship?
+hbm.achievement.bossUFO=Ayy Lmao
+
 hbm.achievement.digammaFeel.desc=the hollow within.
 hbm.achievement.digammaFeel=The Terror of Feeling
 hbm.achievement.digammaKauaiMoho.desc=Everything is awful, here's some hot choccy.
@@ -548,6 +695,7 @@ hbm.achievement.digammaSee.desc=into the abyss.
 hbm.achievement.digammaSee=The Terror of Seeing
 hbm.achievement.digammaUpOnTop.desc=I do what I want, but irresponsibly.
 hbm.achievement.digammaUpOnTop=Admire Me, Admire my Home
+
 hbm.achievement.someWounds.desc=Get ready
 hbm.achievement.someWounds=Some Wounds Never Heal
 

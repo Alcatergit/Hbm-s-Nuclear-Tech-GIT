@@ -8,8 +8,7 @@
 		},
 		"description": {
 			"translate": "hbm.achievement.bossCreeper.desc"
-		},
-		"frame": "challenge"
+		}
 	},
 	"parent": "hbm:root",
 	"criteria": {

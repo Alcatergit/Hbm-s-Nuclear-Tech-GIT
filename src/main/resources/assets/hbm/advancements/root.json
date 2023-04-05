@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "hbm:motor"
+            "item": "hbm:decontamination_module"
         },
         "title": {
             "translate": "hbm.advancement.root"
@@ -9,10 +9,10 @@
         "description": {
             "translate": "hbm.advancement.root.desc"
         },
-        "background": "minecraft:textures/blocks/stone.png",
-        "show_toast": false,
+        "background": "hbm:textures/blocks/brick_concrete.png",
+        "show_toast": true,
         "announce_to_chat": false,
-	"hidden": true
+    "hidden": false
     },
     "criteria": {
         "crafting_table": {

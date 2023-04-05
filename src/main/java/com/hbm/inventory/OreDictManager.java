@@ -446,8 +446,9 @@ public class OreDictManager {
 		OreDictionary.registerOre("stairWood", pink_stairs);
 		OreDictionary.registerOre("stairWoodPink", pink_stairs);
 
-		OreDictionary.registerOre(KEY_SAND, new ItemStack(Blocks.SAND, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre(KEY_GRAVEL, new ItemStack(Blocks.GRAVEL, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre(KEY_SAND, Blocks.SAND);
+		OreDictionary.registerOre(KEY_SAND, new ItemStack(Blocks.SAND, 1, 1));
+		OreDictionary.registerOre(KEY_GRAVEL, Blocks.GRAVEL);
 
 		OreDictionary.registerOre("dyeRed", cinnebar);
 		OreDictionary.registerOre("dye", cinnebar);
@@ -494,7 +495,6 @@ public class OreDictManager {
 	
 	@SubscribeEvent
 	public void onRegisterOre(OreRegisterEvent event) {
-		System.out.println("OREDICT REGISTER EVENT "+event);
 		if(recursionBrake)
 			return;
 		
@@ -505,7 +505,7 @@ public class OreDictManager {
 		if(strings != null) {
 			for(String name : strings) {
 				OreDictionary.registerOre(name, event.getOre());
-				MainRegistry.logger.info("Re-registration for " + event.getName() + " to " + name);
+				MainRegistry.logger.info("OreDict: Re-registration for " + event.getName() + " to " + name);
 			}
 		}
 		

@@ -4,10 +4,10 @@
 			"item": "hbm:bob_chemistry"
 		},
 		"title": {
-			"translate": "hbm.achievement.chemistry"
+			"translate": "hbm.achievement.bobchemistry"
 		},
 		"description": {
-			"translate": "hbm.achievement.chemistry.desc"
+			"translate": "hbm.achievement.bobchemistry.desc"
 		}
 	},
 	"parent": "hbm:bobassembly",

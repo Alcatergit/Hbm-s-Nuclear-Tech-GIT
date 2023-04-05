@@ -32,7 +32,7 @@ public class ItemFuelRod extends ItemHazard {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.GREEN + "[Radioactive]");
-		tooltip.add(TextFormatting.YELLOW + "" + this.irad + "RAD/s");
+		tooltip.add(TextFormatting.YELLOW + "" + this.irad + " RAD/s");
 		if(this.iblind){
 			tooltip.add(TextFormatting.DARK_AQUA + "[Blinding]");
 		}

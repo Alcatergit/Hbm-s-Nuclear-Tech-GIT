@@ -12,6 +12,7 @@ import com.hbm.items.machine.ItemCatalyst;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.AdvancementManager;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.Entity;
@@ -94,8 +95,9 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 				hasCore = false;
 			}
 			
-			if(heat > 0)
+			if(heat > 0){
 				radiation();
+			}
 			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("tank0", tanks[0].getFluid() == null ? "HBM_EMPTY" : tanks[0].getFluid().getFluid().getName());
@@ -151,6 +153,9 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 					e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
 					e.setFire(3);
 				}
+			}
+			if(e instanceof EntityPlayer){
+				AdvancementManager.grantAchievement(((EntityPlayer) e), AdvancementManager.progress_dfc);
 			}
 		}
 

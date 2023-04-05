@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:progress_desh",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

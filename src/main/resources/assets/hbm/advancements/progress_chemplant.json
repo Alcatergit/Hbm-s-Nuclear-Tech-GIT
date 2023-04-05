@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_chemplant"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_chemplant"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_chemplant.desc"
+		}
+	},
+	"parent": "hbm:progress_assembler",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_chemplant"
+                    }
+                ]
+            }
+        }
+    }
+}

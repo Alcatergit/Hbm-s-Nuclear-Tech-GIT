@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:space",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

@@ -1,0 +1,27 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_schrabidium"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_schrabidium"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_schrabidium.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_pu239",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_schrabidium"
+                    }
+                ]
+            }
+        }
+    }
+}

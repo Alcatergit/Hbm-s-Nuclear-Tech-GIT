@@ -8,8 +8,7 @@
 		},
 		"description": {
 			"translate": "hbm.achievement.horizonsEnd.desc"
-		},
-		"frame": "challenge"
+		}
 	},
 	"parent": "hbm:horizonsstart",
 	"criteria": {

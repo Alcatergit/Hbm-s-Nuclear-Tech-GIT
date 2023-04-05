@@ -98,9 +98,10 @@ public class ItemGlitch extends Item {
 				break;
 			case 13:
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_revolver_pip));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.bottle_sparkle));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.bottle_rad));
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.geiger_counter));
 				player.sendMessage(new TextComponentTranslation("Have some free stuff. You'll need it for that one cryptic achievement."));
+				player.sendMessage(new TextComponentTranslation("§4Sororicide"));
 				break;
 			case 14:
 				player.inventory.dropAllItems();

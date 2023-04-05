@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:dosimeter"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_dosimeter"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_dosimeter.desc"
+		}
+	},
+	"parent": "hbm:root",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:dosimeter"
+                    }
+                ]
+            }
+        }
+    }
+}

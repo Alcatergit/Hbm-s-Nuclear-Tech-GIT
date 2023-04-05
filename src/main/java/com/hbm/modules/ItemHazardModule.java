@@ -176,11 +176,11 @@ public class ItemHazardModule {
 		if(this.radiation * tempMod > 0) {
 			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
 			float itemRad = radiation * tempMod;
-			list.add(TextFormatting.YELLOW + (Library.roundFloat(getNewValue(itemRad), 3)+ getSuffix(itemRad) + "RAD/s"));
+			list.add(TextFormatting.YELLOW + (Library.roundFloat(getNewValue(itemRad), 3)+ getSuffix(itemRad) + " RAD/s"));
 			
 			if(stack.getCount() > 1) {
 				float stackRad = radiation * tempMod * stack.getCount();
-				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + "RAD/s"));
+				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + " RAD/s"));
 			}
 		}
 		
@@ -210,9 +210,9 @@ public class ItemHazardModule {
 		
 		if(this.digamma * tempMod > 0) {
 			list.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.digamma") + "]");
-			list.add(TextFormatting.DARK_RED + "" + Library.roundFloat(digamma * tempMod * 1000F, 2) + "mDRX/s");
+			list.add(TextFormatting.DARK_RED + "" + Library.roundFloat(digamma * tempMod * 1000F, 2) + " mDRX/s");
 			if(stack.getCount() > 1) {
-				list.add(TextFormatting.DARK_RED + ("Stack: " + Library.roundFloat(digamma * tempMod * stack.getCount() * 1000F, 2) + "mDRX/s"));
+				list.add(TextFormatting.DARK_RED + ("Stack: " + Library.roundFloat(digamma * tempMod * stack.getCount() * 1000F, 2) + " mDRX/s"));
 			}
 		}
 		

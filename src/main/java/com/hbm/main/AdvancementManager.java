@@ -14,66 +14,15 @@ public class AdvancementManager {
 
 	public static Advancement root;
 	
-	public static Advancement achCircuit0;
-	public static Advancement achCircuit1;
-	public static Advancement achCircuit2;
-	public static Advancement achCircuit3;
-	public static Advancement achCircuit4;
-	public static Advancement achCircuit5;
-	public static Advancement achJack;
-	public static Advancement achDalekanium;
-	public static Advancement achRefinery;
-	public static Advancement achBattery;
-	public static Advancement achOil;
-	public static Advancement achCatapult1;
-	public static Advancement achCatapult2;
-	public static Advancement achCatapult3;
-	public static Advancement achU235;
-	public static Advancement achPu238;
-	public static Advancement achPu239;
-	public static Advancement achNeptunium;
-	public static Advancement achDesh;
-	public static Advancement achMeteor;
-	public static Advancement achGeiger;
-	public static Advancement achDesignator;
-	public static Advancement achRemote;
-	public static Advancement achOverpowered;
-	public static Advancement achShimSham;
-	public static Advancement achMatchstick;
-	public static Advancement achRails;
-	public static Advancement achFolder;
-	public static Advancement achPress;
-	public static Advancement achFWatz;
-	public static Advancement achTurbofan;
-	public static Advancement achGadget;
-	public static Advancement achBoy;
-	public static Advancement achMan;
-	public static Advancement achMike;
-	public static Advancement achTsar;
-	public static Advancement achFLEIJA;
-	public static Advancement achPrototype;
-	public static Advancement achCustom;
-	public static Advancement achTurret;
-	public static Advancement achMeteorDeath;
-	public static Advancement achXenium;
-	public static Advancement achRadiation;
-	public static Advancement achSchrabidium;
-	public static Advancement achEuphemium;
 	public static Advancement horizonsStart;
 	public static Advancement horizonsEnd;
 	public static Advancement horizonsBonus;
 	public static Advancement soyuz;
 	public static Advancement achRadPoison;
 	public static Advancement achRadDeath;
-	
+
 	public static Advancement achSacrifice;
-	public static Advancement achImpossible;
-	public static Advancement achTOB;
-	public static Advancement achFreytag;
-	public static Advancement achSelenium;
 	public static Advancement achPotato;
-	public static Advancement achC44;
-	public static Advancement achC20_5;
 	public static Advancement achSpace;
 	public static Advancement achFOEQ;
 	public static Advancement achFiend;
@@ -93,6 +42,9 @@ public class AdvancementManager {
 	public static Advancement digammaKauaiMoho;
 	public static Advancement digammaUpOnTop;
 	public static Advancement achSomeWounds;
+	public static Advancement progress_dfc;
+	public static Advancement progress_rbmk_boom;
+	
 	
 	public static Advancement bossCreeper;
 	public static Advancement bossMeltdown;
@@ -130,6 +82,8 @@ public class AdvancementManager {
 		digammaKauaiMoho = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammakauaimoho"));
 		digammaUpOnTop = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammaupontop"));
 		achSomeWounds = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsomewounds"));
+		progress_dfc = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_dfc"));
+		progress_rbmk_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_rbmk_boom"));
 		
 		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));

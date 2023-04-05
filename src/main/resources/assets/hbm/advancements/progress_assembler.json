@@ -1,0 +1,26 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_assembler"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_assembler"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_assembler.desc"
+		}
+	},
+	"parent": "hbm:aa_progress_burnerpress",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_assembler"
+                    }
+                ]
+            }
+        }
+    }
+}

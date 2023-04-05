@@ -45,7 +45,7 @@ public class WatzFuel extends ItemHazard {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		if(this.irad > 0F){
 			list.add("§a[Radioactive]§r");
-			list.add("§e" + this.irad + "RAD/s§r");
+			list.add("§e" + this.irad + " RAD/s§r");
 		}
 		if(this.iblind){
 			list.add("§3[Blinding]§r");

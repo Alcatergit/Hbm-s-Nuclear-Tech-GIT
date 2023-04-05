@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:progress_hadron",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

@@ -179,16 +179,16 @@ public class ItemCell extends Item {
 			tooltip.add("§c[Dangerous Drop]§r");
 		} else if(ItemCell.hasFluid(stack, ModForgeFluids.tritium)){
 			tooltip.add("§a[Radioactive]§r");
-			tooltip.add("§e0.5RAD/s§r");
+			tooltip.add("§e0.5 RAD/s§r");
 		} else if(ItemCell.hasFluid(stack, ModForgeFluids.uf6)){
 			tooltip.add("§a[Radioactive]§r");
-			tooltip.add("§e2.0RAD/s§r");
+			tooltip.add("§e2.0 RAD/s§r");
 		} else if(ItemCell.hasFluid(stack, ModForgeFluids.puf6)){
 			tooltip.add("§a[Radioactive]§r");
-			tooltip.add("§e10.0RAD/s§r");
+			tooltip.add("§e10.0 RAD/s§r");
 		} else if(ItemCell.hasFluid(stack, ModForgeFluids.sas3)){
 			tooltip.add("§a[Radioactive]§r");
-			tooltip.add("§e20.0RAD/s§r");
+			tooltip.add("§e20.0 RAD/s§r");
 			tooltip.add("§3[Blinding]§r");
 		}
 	}

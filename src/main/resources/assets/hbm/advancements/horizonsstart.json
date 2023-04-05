@@ -8,10 +8,9 @@
 		},
 		"description": {
 			"translate": "hbm.achievement.horizonsStart.desc"
-		},
-		"frame": "challenge"
+		}
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:bossworm",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

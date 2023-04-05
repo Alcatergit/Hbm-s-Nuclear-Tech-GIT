@@ -4,10 +4,10 @@
 			"item": "hbm:bob_assembly"
 		},
 		"title": {
-			"translate": "hbm.achievement.assembly"
+			"translate": "hbm.achievement.bobassembly"
 		},
 		"description": {
-			"translate": "hbm.achievement.assembly.desc"
+			"translate": "hbm.achievement.bobassembly.desc"
 		}
 	},
 	"parent": "hbm:bobmetalworks",

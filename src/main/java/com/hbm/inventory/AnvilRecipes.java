@@ -481,7 +481,7 @@ public class AnvilRecipes {
 				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.billet_uranium, 3)), new AnvilOutput(new ItemStack(ModItems.plate_iron, 2))}).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModItems.pile_rod_plutonium),
-				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.billet_pu_mix, 3)), new AnvilOutput(new ItemStack(ModItems.plate_iron, 2))}).setTier(3));
+				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.billet_plutonium, 3)), new AnvilOutput(new ItemStack(ModItems.plate_iron, 2))}).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModItems.pile_rod_source),
 				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.billet_ra226be, 3)), new AnvilOutput(new ItemStack(ModItems.plate_iron, 2))}).setTier(3));

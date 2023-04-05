@@ -4,10 +4,10 @@
 			"item": "hbm:bob_nuclear"
 		},
 		"title": {
-			"translate": "hbm.achievement.nuclear"
+			"translate": "hbm.achievement.bobnuclear"
 		},
 		"description": {
-			"translate": "hbm.achievement.nuclear.desc"
+			"translate": "hbm.achievement.bobnuclear.desc"
 		}
 	},
 	"parent": "hbm:boboil",

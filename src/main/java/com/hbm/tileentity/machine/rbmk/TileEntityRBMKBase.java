@@ -20,6 +20,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.main.AdvancementManager;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.util.I18nUtil;
@@ -30,6 +31,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -458,6 +460,12 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		
 		world.playSound(null, avgX + 0.5, pos.getY() + 1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
 		
+		List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - 50 + 0.5, pos.getY() - 50 + 0.5, pos.getZ() - 50 + 0.5, pos.getX() + 50 + 0.5, pos.getY() + 50 + 0.5, pos.getZ() + 50 + 0.5));
+		
+		for(EntityPlayer e : list) {
+			AdvancementManager.grantAchievement(e, AdvancementManager.progress_rbmk_boom);
+		}
+
 		if(RBMKBase.digamma) {
 			EntitySpear spear = new EntitySpear(world);
 			spear.posX = avgX + 0.5;

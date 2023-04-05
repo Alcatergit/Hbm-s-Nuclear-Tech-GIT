@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:progress_chemplant",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

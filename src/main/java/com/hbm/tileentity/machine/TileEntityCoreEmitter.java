@@ -84,7 +84,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 				
 				if(joules > 0) {
 					
-					long out = joules * 98 / 100;
+					long out = joules * 99 / 100;
 					
 					EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
 					for(int i = 1; i <= range; i++) {
@@ -101,7 +101,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 						
 						if(te instanceof ILaserable) {
 							
-							((ILaserable)te).addEnergy(out * 98 / 100, dir);
+							((ILaserable)te).addEnergy(out * 99 * watts / 10000, dir);
 							break;
 						}
 						

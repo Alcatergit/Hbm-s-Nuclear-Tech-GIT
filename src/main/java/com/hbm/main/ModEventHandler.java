@@ -1237,11 +1237,6 @@ public class ModEventHandler {
 
 		Block block = event.getState().getBlock();
 		
-		if(block == ModBlocks.stone_gneiss && !AdvancementManager.hasAdvancement(event.getPlayer(), AdvancementManager.achStratum)) {
-			AdvancementManager.grantAchievement(event.getPlayer(), AdvancementManager.achStratum);
-			event.setExpToDrop(500);
-		}
-		
 		if(block == Blocks.COAL_ORE || block == Blocks.COAL_BLOCK || block == ModBlocks.ore_lignite) {
 			
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
