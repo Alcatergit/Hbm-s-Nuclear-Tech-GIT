@@ -449,6 +449,12 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_SAND, Blocks.SAND);
 		OreDictionary.registerOre(KEY_SAND, new ItemStack(Blocks.SAND, 1, 1));
 		OreDictionary.registerOre(KEY_GRAVEL, Blocks.GRAVEL);
+		OreDictionary.registerOre(KEY_PLANKS, Blocks.PLANKS);
+		OreDictionary.registerOre(KEY_PLANKS, new ItemStack(Blocks.PLANKS, 1, 1));
+		OreDictionary.registerOre(KEY_PLANKS, new ItemStack(Blocks.PLANKS, 1, 2));
+		OreDictionary.registerOre(KEY_PLANKS, new ItemStack(Blocks.PLANKS, 1, 3));
+		OreDictionary.registerOre(KEY_PLANKS, new ItemStack(Blocks.PLANKS, 1, 4));
+		OreDictionary.registerOre(KEY_PLANKS, new ItemStack(Blocks.PLANKS, 1, 5));
 
 		OreDictionary.registerOre("dyeRed", cinnebar);
 		OreDictionary.registerOre("dye", cinnebar);
