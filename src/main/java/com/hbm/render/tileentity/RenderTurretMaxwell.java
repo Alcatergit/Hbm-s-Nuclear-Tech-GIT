@@ -51,8 +51,9 @@ public class RenderTurretMaxwell extends RenderTurretBase<TileEntityTurretMaxwel
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 			GL11.glTranslated(turret.getBarrelLength(), 2D, 0);
 			
+			long worldTime = turret.getWorld().getTotalWorldTime();
 			for(int i = 0; i < 8; i++)
-				BeamPronter.prontBeam(Vec3.createVectorHelper(length, 0, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x2020ff, 0x2020ff, (int)((turret.getWorld().getTotalWorldTime() + partialTicks) * -50 + i * 45) % 360, (int)((turret.lastDist + 1)), 0.375F, 2, 0.05F);
+				BeamPronter.prontBeam(Vec3.createVectorHelper(length, 0, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x2020ff, 0x2020ff, (int)((worldTime + partialTicks) * -50 + i * 45) % 360, (int)((turret.lastDist + 1)), 0.375F, 2, 0.05F);
 			
 			GL11.glPopMatrix();
 		}

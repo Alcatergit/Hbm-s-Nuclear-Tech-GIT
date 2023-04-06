@@ -1,6 +1,7 @@
 package com.hbm.modules;
 
 import java.util.List;
+import java.util.Random;
 
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
@@ -40,6 +41,8 @@ public class ItemHazardModule {
 	public float radiation;
 	public float digamma;
 	public int fire;
+	public int cryogenic;
+	public int toxic;
 	public boolean blinding;
 	public int asbestos;
 	public int coal;
@@ -62,6 +65,14 @@ public class ItemHazardModule {
 	
 	public void addFire(int fire) {
 		this.fire = fire;
+	}
+
+	public void addCryogenic(int cryogenicLvl) {
+		this.cryogenic = cryogenicLvl;
+	}
+
+	public void addToxic(int toxicLvl) {
+		this.toxic = toxicLvl;
 	}
 	
 	public void addCoal(int coal) {
@@ -103,8 +114,46 @@ public class ItemHazardModule {
 		if(this.digamma * tempMod > 0)
 			ContaminationUtil.applyDigammaData(entity, this.digamma * tempMod * mod / 20F);
 
-		if(this.fire > 0 && !reacher)
+		
+
+		if(this.cryogenic > 0 && !reacher && entity instanceof EntityPlayer && !ArmorUtil.checkForHazmat((EntityPlayer)entity)){
+			if(entity instanceof EntityLivingBase){
+				EntityLivingBase livingCEntity = (EntityLivingBase) entity;
+				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.cryogenic-1));
+				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.cryogenic-1)));
+				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.cryogenic-1));
+				if(this.cryogenic > 4){
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, this.cryogenic-3));
+					entity.extinguish();
+				}
+			}
+		}
+
+		if(this.fire > 0 && !reacher){
 			entity.setFire(this.fire);
+		}
+
+		if(this.toxic > 0 && entity instanceof EntityPlayer && !ArmorUtil.checkForHazmat((EntityPlayer)entity)){
+			if(entity instanceof EntityLivingBase){
+				EntityLivingBase livingTEntity = (EntityLivingBase) entity;
+				
+				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
+				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, 1));
+				if(this.toxic > 2){
+					Random rand = new Random();
+					int i = rand.nextInt(100);
+					if(i == 0){
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-1));
+					}
+				}
+				if(this.toxic > 4)
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.toxic-4)));
+				if(this.toxic > 8)
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
+				if(this.toxic > 16)
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 100, this.toxic-16));
+			}
+		}
 
 		if(this.asbestos > 0) {
 			if(!ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
@@ -186,6 +235,23 @@ public class ItemHazardModule {
 		
 		if(this.fire > 0) {
 			list.add(TextFormatting.GOLD + "[" + I18nUtil.resolveKey("trait.hot") + "]");
+		}
+
+		if(this.cryogenic > 0) {
+			list.add(TextFormatting.AQUA + "[" + I18nUtil.resolveKey("trait.cryogenic") + "]");
+		}
+
+		if(this.toxic > 0) {
+			if(this.toxic > 16)
+				list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("adjective.extreme") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
+			else if(this.toxic > 8)
+				list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("adjective.veryhigh") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
+			else if(this.toxic > 4)
+				list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("adjective.high") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
+			else if(this.toxic > 2)
+				list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("adjective.medium") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
+			else
+				list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("adjective.little") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
 		}
 		
 		if(this.blinding) {

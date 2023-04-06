@@ -23,6 +23,16 @@ public interface IItemHazard {
 		this.getModule().addFire(fire);
 		return this;
 	}
+
+	public default IItemHazard addCryogenic(int fire) {
+		this.getModule().addCryogenic(fire);
+		return this;
+	}
+
+	public default IItemHazard addToxic(int fire) {
+		this.getModule().addToxic(fire);
+		return this;
+	}
 	
 	public default IItemHazard addAsbestos(int asbestos) {
 		this.getModule().addAsbestos(asbestos);

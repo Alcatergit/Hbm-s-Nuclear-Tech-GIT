@@ -18,6 +18,12 @@ itemGroup.tabConsumable=NTM Consumables and Gear
 
 fluid.plasma_put=Plutonium-Tritium Plasma
 
+adjective.little=Low
+adjective.medium=Medium
+adjective.high=High
+adjective.veryhigh=Very High
+adjective.extreme=Extreme
+
 book.msword.cover=Guide$on how get the$Meteorite Sword
 book.msword.title0=Description
 book.msword.page0=Page 1-8: How to get the Meteorite Sword. Page 9-25: How to upgrade your Meteorite Sword
@@ -368,6 +374,8 @@ trait.heat=Provides %s HEAT
 trait.hlParticle=Particle Half-Life: %s
 trait.hlPlayer=Player Half-Life: %s
 trait.hot=Pyrophoric / Hot
+trait.cryogenic=Cryogenic / Cold
+trait.toxic=Toxicity
 trait.radioactive=Radioactive
 trait.radResistance=Radiation resistance: %s
 trait.asbestos=Asbestos
@@ -516,6 +524,9 @@ hbm.achievement.progress_chemplant.desc=Now you're thinking with chemicals!
 
 hbm.achievement.progress_polymer=Teflon
 hbm.achievement.progress_polymer.desc=Delicious, delicious microplastics.
+
+hbm.achievement.progress_potatos=Rogue AI
+hbm.achievement.progress_potatos.desc=You stabbed me! What is WRONG with yo-WOOOAAH
 
 hbm.achievement.progress_concrete=Old Reliable
 hbm.achievement.progress_concrete.desc=A Bolshevik's favorite.

@@ -25,5 +25,8 @@
                 ]
             }
         }
+    },
+    "rewards": {
+        "experience": 7
     }
 }

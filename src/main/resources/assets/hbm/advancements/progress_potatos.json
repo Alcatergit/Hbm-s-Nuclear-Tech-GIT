@@ -1,29 +1,30 @@
 {
 	"display": {
 		"icon": {
-			"item": "hbm:machine_press"
+			"item": "hbm:battery_potatos"
 		},
 		"title": {
-			"translate": "hbm.achievement.aa_progress_burnerpress"
+			"translate": "hbm.achievement.progress_potatos"
 		},
 		"description": {
-			"translate": "hbm.achievement.aa_progress_burnerpress.desc"
-		}
+			"translate": "hbm.achievement.progress_potatos.desc"
+		},
+		"frame": "challenge"
 	},
-	"parent": "hbm:root",
+	"parent": "hbm:progress_polymer",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:machine_press"
+                        "item": "hbm:battery_potatos"
                     }
                 ]
             }
         }
     },
     "rewards": {
-        "experience": 16
+        "experience": 47
     }
 }

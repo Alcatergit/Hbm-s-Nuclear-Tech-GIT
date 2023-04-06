@@ -81,7 +81,7 @@ public class ItemCustomLore extends Item {
 		if(this == ModItems.reacher)
 		{
 			list.add("Holding this in main hand or off hand reduces radiation coming from items to its square-root.");
-			list.add("It also stops hot items from setting you on fire.");
+			list.add("It also is useful to handle very hot or cold items.");
 		}
 		if(this == ModItems.crystal_horn)
 		{

@@ -15,5 +15,8 @@
 		"impossible": {
 			"trigger": "minecraft:impossible"
 		}
-	}
+	},
+    "rewards": {
+        "experience": 17
+    }
 }
