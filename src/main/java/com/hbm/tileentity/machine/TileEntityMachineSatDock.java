@@ -102,7 +102,7 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 
 				Satellite sat = data.getSatFromFreq(freq);
 
-				int delay = 10 * 60 * 1000;
+				int delay = 10 * 60 * 1000; //10min
 
 				if(sat != null && sat instanceof SatelliteMiner) {
 

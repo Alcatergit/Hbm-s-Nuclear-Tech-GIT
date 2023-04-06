@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-1.9.3-a";
-	public static final String CHANGELOG = "§8§lBIG OIL UPDATE$§2Added Bedrock Oil$§2Added Frackturing Tower$§2Added Catalytic Cracker$§2Added Osmiridium$§2Added Bakelite, Rubber, Selenium$§2Added C4, TNT, Dynamite$§2Added 5 new Batteries$§2Added uranium crafting$§2Added Info overlays$§2Added alot more JEI support$§2Added more Crystalizer recipes$§3Changed Hazmat suits to have filters$§3Changed recipes to use new items$§6Fixed AoE breaking Bedrock$§6Fixed Fraction Tower reset$§6Fixed tons of bugs$§6Fixed tool models";
+	public static final String VERSION = "NTM-Extended-1.12.2-1.9.3-b";
+	public static final String CHANGELOG = "§8§lAdvancement update$§2Added an entire NTM Tech Tree for Advancements$§2Added Toxic/Cryogenic hazards$§2Added 2 more Geiger sounds$§2Added useful tooltips to fallout conversions$§3Changed Upgrade textures$§3Changed DFC Emitter to have a filter$§3Changed Mining ship tektite yield$§6Fixed Concrete Chemplant recipe$§6Fixed Pumpjack animation and stats$§6Fixed Geiger crash$§6Fixed molten Meteor cooling$§6Fixed BlockPorous missing textures$§6Fixed Crackoil not being boiled$§6Fixed Fracking tower energy$§6Fixed Thorium fuel rod textures$§6Fixed Chemplant Concrete crafting";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version

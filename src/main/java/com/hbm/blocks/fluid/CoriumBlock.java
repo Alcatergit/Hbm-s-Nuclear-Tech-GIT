@@ -41,7 +41,7 @@ public class CoriumBlock extends BlockFluidClassic {
 	public boolean canDisplace(IBlockAccess world, BlockPos pos){
 		IBlockState b = world.getBlockState(pos);
 		@SuppressWarnings("deprecation")
-		float res = (float) (Math.sqrt(b.getBlock().getExplosionResistance(null)) * 3);
+		float res = (float) (Math.sqrt(b.getBlock().getExplosionResistance(null)) * 2);
 		
 		if(res < 1)
 			return true;
