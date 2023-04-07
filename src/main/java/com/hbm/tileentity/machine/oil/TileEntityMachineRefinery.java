@@ -39,7 +39,7 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 
 	public long power = 0;
 	public int itemOutputTimer = 0;
-	public static final int totalItemTime = 100;
+	public static final int totalItemTime = 50;
 	public static final long maxPower = 1000;
 	public int age = 0;
 	public boolean needsUpdate = false;
@@ -63,10 +63,10 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 		tanks = new FluidTank[5];
 		tankTypes = new Fluid[] {ModForgeFluids.hotoil, ModForgeFluids.heavyoil, ModForgeFluids.naphtha, ModForgeFluids.lightoil, ModForgeFluids.petroleum};
 		tanks[0] = new FluidTank(64000);
-		tanks[1] = new FluidTank(16000);
-		tanks[2] = new FluidTank(16000);
-		tanks[3] = new FluidTank(16000);
-		tanks[4] = new FluidTank(16000);
+		tanks[1] = new FluidTank(24000);
+		tanks[2] = new FluidTank(24000);
+		tanks[3] = new FluidTank(24000);
+		tanks[4] = new FluidTank(24000);
 	}
 	
 	public String getInventoryName() {

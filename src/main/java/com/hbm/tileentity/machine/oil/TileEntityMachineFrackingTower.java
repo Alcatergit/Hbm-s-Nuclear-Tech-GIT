@@ -124,6 +124,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
                                 }
                                 needsUpdate = true;
 
+                                tanks[2].drain(solutionRequired, true);
                                 OilSpot.generateOilSpot(world, pos.getX(), pos.getZ(), destructionRange, 10);
 
                                 break;
@@ -143,7 +144,6 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
                 // operation end
 
                 power -= consumption;
-                tanks[2].drain(solutionRequired, true);
             } else {
                 warning = 1;
             }
