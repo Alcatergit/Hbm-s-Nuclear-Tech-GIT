@@ -125,7 +125,7 @@ public class EntityMIRV extends EntityThrowable implements IChunkLoader, IConsta
 	@SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
     {
-        return distance < 500000;
+        return distance < 5000;
     }
 	
 	@Override

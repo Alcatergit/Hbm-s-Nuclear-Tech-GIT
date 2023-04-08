@@ -6,25 +6,28 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.INBTPacketReceiver;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityMachineTeleporter extends TileEntity implements ITickable, IConsumer {
+public class TileEntityMachineTeleporter extends TileEntity implements ITickable, IConsumer, INBTPacketReceiver {
 
 	public long power = 0;
 	public BlockPos target = null;
 	public boolean linked = false;
-	// true: send; false: receive
-	public boolean mode = false;
-	public static final int maxPower = 100000;
+	public boolean prevLinked = false;
+	public static final int consumption = 100000000;
+	public static final int maxPower = 1000000000;
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -36,7 +39,6 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 			target = new BlockPos(x, y, z);
 		}
 		linked = compound.getBoolean("linked");
-		mode = compound.getBoolean("mode");
 		super.readFromNBT(compound);
 	}
 
@@ -52,7 +54,6 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 			compound.setBoolean("hastarget", false);
 		}
 		compound.setBoolean("linked", linked);
-		compound.setBoolean("mode", mode);
 		return super.writeToNBT(compound);
 	}
 
@@ -61,7 +62,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 		boolean b0 = false;
 
 		if(!this.world.isRemote) {
-			List<Entity> entities = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - 0.25, pos.getY(), pos.getZ() - 0.25, pos.getX() + 1.5, pos.getY() + 2, pos.getZ() + 1.5));
+			List<Entity> entities = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - 0.25, pos.getY(), pos.getZ() - 0.25, pos.getX() + 0.75, pos.getY() + 2, pos.getZ() + 0.75));
 			if(!entities.isEmpty())
 				for(Entity e : entities) {
 					if(e.ticksExisted >= 10) {
@@ -71,32 +72,55 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 				}
 
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+			networkPack();
+			prevLinked = linked;
 		}
 
 		if(b0)
-			world.spawnParticle(EnumParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0.0D, 0.1D, 0.0D);
+			world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0.0D, 0.1D, 0.5D);
+	}
+
+	public void networkPack() {
+		if(linked != prevLinked){
+			NBTTagCompound data = new NBTTagCompound();
+			if(this.target != null){
+				data.setInteger("targetX", this.target.getX());
+				data.setInteger("targetY", this.target.getY());
+				data.setInteger("targetZ", this.target.getZ());
+			}
+			data.setBoolean("linked", this.linked);
+			INBTPacketReceiver.networkPack(this, data, 150);
+		}
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound data) {
+		if(data.hasKey("targetX")){
+			this.target = new BlockPos(data.getInteger("targetX"), data.getInteger("targetY"), data.getInteger("targetZ"));
+		}
+		if(data.hasKey("targetX")){
+			this.linked = data.getBoolean("linked");
+		}
 	}
 	
 	public void teleport(Entity entity) {
 
-		if (!this.linked || !this.mode || this.power < 50000 || target == null)
+		if (this.power < consumption)
 			return;
 
-		TileEntity te = this.world.getTileEntity(target);
-
-		if (te == null || !(te instanceof TileEntityMachineTeleporter) || ((TileEntityMachineTeleporter) te).mode) {
+		world.playSound(null, entity.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS,  1.0F, 1.0F);
+		if (target == null && !this.linked) {
 			entity.attackEntityFrom(ModDamageSource.teleporter, 10000);
 		} else {
 			if ((entity instanceof EntityPlayerMP)) {
-				((EntityPlayerMP) entity).setPositionAndUpdate(target.getX() + 0.5D,
-						target.getY() + 1.5D + entity.getYOffset(), target.getZ() + 0.5D);
+				((EntityPlayerMP) entity).setPositionAndUpdate(target.getX() + 0.5D, target.getY() + 1.5D + entity.getYOffset(), target.getZ() + 0.5D);
 			} else {
-				entity.setPositionAndRotation(target.getX() + 0.5D, target.getY() + 1.5D + entity.getYOffset(),
-						target.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				entity.setPositionAndRotation(target.getX() + 0.5D, target.getY() + 1.5D + entity.getYOffset(), target.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 			}
+			world.playSound(null, target, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS,  1.0F, 1.0F);
 		}
 		
-		this.power -= 50000;
+		this.power -= consumption;
 	}
 
 	@Override

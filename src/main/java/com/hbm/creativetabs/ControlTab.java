@@ -19,8 +19,8 @@ public class ControlTab extends CreativeTabs {
 
 	@Override
 	public ItemStack getTabIconItem() {
-		if(ModItems.rod_balefire_blazing != null){
-			return new ItemStack(ModItems.rod_balefire_blazing);
+		if(ModItems.pellet_rtg != null){
+			return new ItemStack(ModItems.pellet_rtg);
 		}
 		return new ItemStack(Items.IRON_PICKAXE, 1);
 	}

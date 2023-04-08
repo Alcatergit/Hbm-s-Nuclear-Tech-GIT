@@ -414,11 +414,6 @@ public class GuiHandler implements IGuiHandler {
 				return new ContainerMachineCMBFactory(player.inventory, (TileEntityMachineCMBFactory) entity);
 			}
 			return null;
-		case ModBlocks.guiID_machine_teleporter:
-			if(entity instanceof TileEntityMachineTeleporter) {
-				return new ContainerMachineTeleporter(player, (TileEntityMachineTeleporter) entity);
-			}
-			return null;
 		case ModBlocks.guiID_factory_titanium:
 			if(entity instanceof TileEntityCoreTitanium) {
 				return new ContainerCoreTitanium(player, (TileEntityCoreTitanium) entity);
@@ -1041,11 +1036,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_combine_factory:
 			if(entity instanceof TileEntityMachineCMBFactory) {
 				return new GUIMachineCMBFactory(player.inventory, (TileEntityMachineCMBFactory) entity);
-			}
-			return null;
-		case ModBlocks.guiID_machine_teleporter:
-			if(entity instanceof TileEntityMachineTeleporter) {
-				return new GUIMachineTeleporter(player, (TileEntityMachineTeleporter) entity);
 			}
 			return null;
 		case ModBlocks.guiID_factory_titanium:
