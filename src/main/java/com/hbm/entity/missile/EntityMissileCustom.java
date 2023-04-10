@@ -374,7 +374,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		loadNeighboringChunks((int)(posX / 16), (int)(posZ / 16));
 	}
 	  public void mirvSplit(){
-    	if((motionY <= 0) && (posY <= 300)) {
+    	if(motionY <= 0) {
 			
 			if(world.isRemote)
 				return;    
@@ -387,12 +387,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				EntityMIRV nuke3 = new EntityMIRV(this.world);
 				nuke3.setPosition(posX,posY,posZ);
 				if(i==0){ modx = 0; modz = 0;}
-				if(i==1){ modx = 3; modz = 0;}
-				if(i==2){ modx = -3; modz = 0;}
-				if(i==3){ modx = 1; modz = 2;}
-				if(i==4){ modx = -1; modz = -2;}
-				if(i==5){ modx = 1; modz = -2;}
-				if(i==6){ modx = -1; modz = 2;}
+				if(i==1){ modx = 0.45; modz = 0;}
+				if(i==2){ modx = -0.45; modz = 0;}
+				if(i==3){ modx = 0.15; modz = 0.3;}
+				if(i==4){ modx = -0.15; modz = -0.3;}
+				if(i==5){ modx = 0.15; modz = -0.3;}
+				if(i==6){ modx = -0.15; modz = 0.3;}
 
 				nuke3.motionX = this.motionX+modx;
 				nuke3.motionY = this.motionY;
