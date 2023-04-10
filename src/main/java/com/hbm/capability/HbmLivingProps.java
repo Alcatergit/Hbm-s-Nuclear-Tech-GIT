@@ -3,6 +3,7 @@ package com.hbm.capability;
 import java.util.List;
 import java.util.UUID;
 
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
 import com.hbm.lib.ModDamageSource;
@@ -38,16 +39,26 @@ public class HbmLivingProps {
 	}
 
 	public static void incrementRadiation(EntityLivingBase entity, float rad){
-		IEntityHbmProps data = getData(entity);
-		float radiation = getData(entity).getRads() + rad;
+		float radiation = getRadiation(entity) + rad;
 
-		if(radiation > 2500000)
-			radiation = 2500000;
+		if(radiation > 25000000)
+			radiation = 25000000;
 		if(radiation < 0)
 			radiation = 0;
 
-		data.setRads(radiation);
+		setRadiation(entity, radiation);
 	}
+
+	// Neutron Radiation
+
+	public static float getNeutron(EntityLivingBase entity){
+		return getData(entity).getNeutrons();
+	}
+
+	public static void setNeutron(EntityLivingBase entity, float rad){
+		getData(entity).setNeutrons(rad);
+	}
+
 
 	/// RAD ENV ///
 	public static float getRadEnv(EntityLivingBase entity){

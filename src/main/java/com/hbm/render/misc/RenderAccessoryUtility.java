@@ -34,7 +34,7 @@ public class RenderAccessoryUtility {
 	private static ResourceLocation wiki = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeWiki.png");
 	private static ResourceLocation leftnugget = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeLeftNugget.png");
 	private static ResourceLocation rightnugget = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/CapeRightNugget.png");
-	private static ResourceLocation malpon = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/capemalpon.png");
+	private static ResourceLocation alcater = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/capealcater.png");
 	private static ResourceLocation golem = new ResourceLocation(RefStrings.MODID + ":textures/models/capes/capegolem.png");
 	
 	public static ResourceLocation getCloakFromPlayer(EntityPlayer player) {
@@ -101,8 +101,8 @@ public class RenderAccessoryUtility {
 		if(name.startsWith("Player")) {
 			return test;
 		}
-		if(uuid.equals(Library.Malpon)) {
-			return malpon;
+		if(uuid.equals(Library.Alcater)) {
+			return alcater;
 		}
 		if(uuid.equals(Library.Golem)) {
 			return golem;

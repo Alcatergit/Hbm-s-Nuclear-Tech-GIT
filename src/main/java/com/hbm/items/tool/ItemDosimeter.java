@@ -42,7 +42,7 @@ public class ItemDosimeter extends Item {
 			if(ArmorFSB.hasFSBArmor((EntityPlayer)entity) && ((ArmorFSB)((EntityPlayer)entity).inventory.armorInventory.get(2).getItem()).geigerSound)
 				return;
 			
-			double x = ContaminationUtil.getPlayerRads((EntityPlayer)entity);
+			double x = ContaminationUtil.getActualPlayerRads((EntityPlayer)entity);
 			
 			if(world.getTotalWorldTime() % 5 == 0) {
 				

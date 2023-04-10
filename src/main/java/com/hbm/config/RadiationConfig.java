@@ -19,9 +19,11 @@ public class RadiationConfig {
 	public static int railgunBuffer = 500000000;
 	public static int railgunUse = 250000000;
 	public static int fireDuration = 4 * 20;
+	public static boolean neutronActivation = true;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKE = "06_explosions";
+		final String CATEGORY_RAD = "07_radiation";
 		// afterrain duration
 		Property radRain = config.get(CATEGORY_NUKE, "6.06_falloutRainDuration", 2000);
 		radRain.setComment("Duration of the thunderstorm after fallout in ticks (only large explosions)");
@@ -57,6 +59,9 @@ public class RadiationConfig {
 		fireDuration = fireDurationP.getInt();
 		
 		fogCh = CommonConfig.setDef(RadiationConfig.fogCh, 20);
+
+		neutronActivation = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.01_itemContamination", "Whether high radiation levels should radiate items in inventory", true);
+		
 	}
 
 }

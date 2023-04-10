@@ -7,7 +7,6 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.weapon.ItemGunEgon;
@@ -52,7 +51,7 @@ public class ItemGeigerCounter extends Item {
 				return;
 		}
 		
-		float x = HbmLivingProps.getRadBuf((EntityLivingBase)entity);
+		float x = (float)ContaminationUtil.getPlayerRads((EntityLivingBase)entity);
 		x *= ContaminationUtil.calculateRadiationMod((EntityLivingBase)entity);
 		
 		if(world.getTotalWorldTime() % 5 == 0) {
@@ -61,21 +60,29 @@ public class ItemGeigerCounter extends Item {
 
 				if(x < 1){
 					list.add(0);
-				} else if(x < 5){
+				}
+				if(x < 5){
 					list.add(0);
-				} else if(x < 10){
+				}
+				if(x < 10){
 					list.add(1);
-				} else if(x > 5 && x < 20){
+				}
+				if(x > 5 && x < 20){
 					list.add(2);
-				} else if(x > 15 && x < 40){
+				}
+				if(x > 15 && x < 40){
 					list.add(3);
-				} else if(x > 30 && x < 80){
+				}
+				if(x > 30 && x < 80){
 					list.add(4);
-				} else if(x > 60 && x < 160){
+				}
+				if(x > 60 && x < 160){
 					list.add(5);
-				} else if(x > 120 && x < 320){
+				}
+				if(x > 120 && x < 320){
 					list.add(6);
-				} else if(x > 240 && x < 640){
+				}
+				if(x > 240 && x < 640){
 					list.add(7);
 				} else {
 					list.add(8);

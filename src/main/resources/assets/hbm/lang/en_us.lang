@@ -544,7 +544,7 @@ hbm.achievement.progress_centrifuge_2=Industrial Nuclear Gas Tornado
 hbm.achievement.progress_centrifuge_2.desc=Hide it from the FBI
 
 hbm.achievement.progress_u235=Weaponsgrade Uranium
-hbm.achievement.progress_u235.desc=Your chioce: Peace or War
+hbm.achievement.progress_u235.desc=Your choice: Peace or War
 
 hbm.achievement.progress_pu239=Weaponsgrade Plutonium
 hbm.achievement.progress_pu239.desc=Haha funny ball go boom
@@ -1234,7 +1234,7 @@ tile.turret_light.name=Light Machine Gun Turret
 tile.turret_maxwell.name=High-Energy MASER Turret "Maxwell"
 tile.turret_rocket.name=Rocket Turret
 tile.turret_richard.name=Rocket Launcher Turret "Richard"
-tile.turret_spitfire.name=Heavy Artilery Turret
+tile.turret_spitfire.name=Heavy Artillery Turret
 tile.turret_tau.name=Tauon Turret
 tile.turret_tauon.name=XVL1456 Prototype Turret "Tauon"
 tile.machine_radar.name=Radar

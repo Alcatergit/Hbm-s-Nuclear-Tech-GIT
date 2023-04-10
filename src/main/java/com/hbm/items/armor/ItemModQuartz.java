@@ -20,6 +20,7 @@ public class ItemModQuartz extends ItemArmorMod {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.DARK_GRAY + "Taking damage removes 10 RAD");
+		list.add("Dropped by 1:64 Smelted Uranium Ingots");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}
@@ -33,9 +34,7 @@ public class ItemModQuartz extends ItemArmorMod {
 	public void modDamage(LivingHurtEvent event, ItemStack armor) {
 		
 		if(!event.getEntityLiving().world.isRemote) {
-			float rad = HbmLivingProps.getRadiation(event.getEntityLiving());
-			rad = Math.max(rad - 10, 0);
-			HbmLivingProps.setRadiation(event.getEntityLiving(), rad);
+			HbmLivingProps.incrementRadiation(event.getEntityLiving(), -10);
 		}
 	}
 }

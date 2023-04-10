@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
 import com.hbm.capability.HbmLivingProps;
-import net.minecraft.entity.EntityLivingBase;
+import com.hbm.util.ContaminationUtil;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -15,6 +17,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 public class TileEntityDeconRad extends TileEntity implements ITickable {
 
 	private static float radRemove;
+	private static final float decayRate = 0.9994225441F; //1m halflife
+
 	public TileEntityDeconRad(float rad) {
 		super();
 		this.radRemove = rad;
@@ -31,6 +35,10 @@ public class TileEntityDeconRad extends TileEntity implements ITickable {
 						if(this.radRemove > 0.0F){
 							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(this.radRemove);
 						}
+					}
+					if(e instanceof EntityPlayer){
+						ContaminationUtil.neutronActivateInventory((EntityPlayer)e, 0.0F, decayRate);
+						((EntityPlayer)e).inventoryContainer.detectAndSendChanges();
 					}
 				}
 			}

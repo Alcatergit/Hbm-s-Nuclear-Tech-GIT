@@ -24,6 +24,7 @@ public class ItemModMilk extends ItemArmorMod {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.WHITE + "Removes bad potion effects");
+		list.add("Dropped by 1:500 Spiders");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}

@@ -42,6 +42,8 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 	private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
 	public int age = 0;
 
+	private static final float decayRate = 0.9988454217F; //30s Halflife
+
 	public TileEntityStorageDrum() {
 		super(24, 1);
 		tanks = new FluidTank[2];
@@ -83,36 +85,35 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 						liquid += wasteClass.liquid;
 						gas += wasteClass.gas;
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_long_depleted, 1, meta));
-					}
 					
-					if(item == ModItems.nuclear_waste_long_tiny && world.rand.nextInt(VersatileConfig.getLongDecayChance() / 10) == 0) {
+					} else if(item == ModItems.nuclear_waste_long_tiny && world.rand.nextInt(VersatileConfig.getLongDecayChance() / 10) == 0) {
 						ItemWasteLong.WasteClass wasteClass = ItemWasteLong.WasteClass.values()[ItemWasteLong.rectify(meta)];
 						liquid += wasteClass.liquid / 10;
 						gas += wasteClass.gas / 10;
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_long_depleted_tiny, 1, meta));
-					}
 					
-					if(item == ModItems.nuclear_waste_short && world.rand.nextInt(VersatileConfig.getShortDecayChance()) == 0) {
+					} else if(item == ModItems.nuclear_waste_short && world.rand.nextInt(VersatileConfig.getShortDecayChance()) == 0) {
 						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
 						liquid += wasteClass.liquid;
 						gas += wasteClass.gas;
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_short_depleted, 1, meta));
-					}
 					
-					if(item == ModItems.nuclear_waste_short_tiny && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 10) == 0) {
+					} else if(item == ModItems.nuclear_waste_short_tiny && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 10) == 0) {
 						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
 						liquid += wasteClass.liquid / 10;
 						gas += wasteClass.gas / 10;
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_short_depleted_tiny, 1, meta));
-					}
 					
-					if(item == ModItems.nugget_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 100) == 0) {
+					} else if(item == ModItems.nugget_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 100) == 0) {
 						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 1, meta));
+					
+					} else if(item == ModItems.ingot_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 1000) == 0) {
+						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 9, meta));
+					
+					} else {
+						ContaminationUtil.neutronActivateItem(inventory.getStackInSlot(i), 0.0F, decayRate);
 					}
 
-					if(item == ModItems.ingot_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 1000) == 0) {
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 9, meta));
-					}
 				}
 			}
 

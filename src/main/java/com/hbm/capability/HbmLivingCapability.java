@@ -22,6 +22,9 @@ public class HbmLivingCapability {
 		public void setRads(float rads);
 		public void increaseRads(float rads);
 		public void decreaseRads(float rads);
+
+		public float getNeutrons();
+		public void setNeutrons(float rads);
 		
 		public float getRadsEnv();
 		public void setRadsEnv(float rads);
@@ -57,6 +60,7 @@ public class HbmLivingCapability {
 		public static final Callable<IEntityHbmProps> FACTORY = () -> {return new EntityHbmProps();};
 		
 		private float rads = 0;
+		private float neutrons = 0;
 		private float envRads = 0;
 		private float radBuf = 0;
 		private float digamma = 0;
@@ -76,6 +80,16 @@ public class HbmLivingCapability {
 		@Override
 		public void setRads(float rads) {
 			this.rads = MathHelper.clamp(rads, 0, 2500);
+		}
+
+		@Override
+		public float getNeutrons() {
+			return neutrons;
+		}
+
+		@Override
+		public void setNeutrons(float neutrons) {
+			this.neutrons = MathHelper.clamp(neutrons, 0, 2500);
 		}
 		
 		@Override
@@ -176,6 +190,7 @@ public class HbmLivingCapability {
 		@Override
 		public void saveNBTData(NBTTagCompound tag){
 			tag.setFloat("rads", getRads());
+			tag.setFloat("neutrons", getNeutrons());
 			tag.setFloat("envRads", getRadsEnv());
 			tag.setFloat("radBuf", getRadBuf());
 			tag.setFloat("digamma", getDigamma());
@@ -192,6 +207,7 @@ public class HbmLivingCapability {
 		@Override
 		public void loadNBTData(NBTTagCompound tag){
 			setRads(tag.getFloat("rads"));
+			setNeutrons(tag.getFloat("neutrons"));
 			setRadsEnv(tag.getFloat("envRads"));
 			setRadBuf(tag.getFloat("radBuf"));
 			setDigamma(tag.getFloat("digamma"));
@@ -234,6 +250,13 @@ public class HbmLivingCapability {
 			}
 			@Override
 			public void setRads(float rads) {
+			}
+			@Override
+			public float getNeutrons() {
+				return 0;
+			}
+			@Override
+			public void setNeutrons(float neutrons) {
 			}
 			@Override
 			public void increaseRads(float rads) {

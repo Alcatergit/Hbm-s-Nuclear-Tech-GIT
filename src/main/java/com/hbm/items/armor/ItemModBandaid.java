@@ -19,6 +19,7 @@ public class ItemModBandaid extends ItemArmorMod {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.RED + "3% chance for full heal when damaged");
+		list.add("Dropped by 1:500 Animals");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}

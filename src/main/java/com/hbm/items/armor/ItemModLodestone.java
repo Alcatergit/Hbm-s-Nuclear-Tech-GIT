@@ -2,6 +2,7 @@ package com.hbm.items.armor;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.render.amlfrom1710.Vec3;
 
@@ -25,6 +26,8 @@ public class ItemModLodestone extends ItemArmorMod {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.DARK_GRAY + "Attracts nearby items");
 		list.add(TextFormatting.DARK_GRAY + "Item attraction range: " + range);
+		if(this == ModItems.lodestone)
+			list.add("Dropped by 1:64 Smelted Iron Ingots");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}

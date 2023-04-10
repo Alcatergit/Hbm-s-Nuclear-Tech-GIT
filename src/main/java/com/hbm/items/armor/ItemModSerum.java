@@ -20,6 +20,7 @@ public class ItemModSerum extends ItemArmorMod {
 	
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.GREEN + "Cures poison and gives strength");
+		list.add("Dropped by 1:100 Cave Spiders");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}

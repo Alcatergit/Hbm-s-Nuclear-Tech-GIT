@@ -50,9 +50,13 @@ public class ItemHazardModule {
 	public float explosive;
 	
 	public float tempMod = 1F;
-	
+
 	public void setMod(float tempMod) {
 		this.tempMod = tempMod;
+	}
+	
+	public boolean isRadioactive() {
+		return this.radiation > 0;
 	}
 	
 	public void addRadiation(float radiation) {
@@ -200,7 +204,7 @@ public class ItemHazardModule {
 		}
 	}
 
-	private float getNewValue(float radiation){
+	public static float getNewValue(float radiation){
 		if(radiation < 1000000){
 			return radiation;
 		} else if(radiation < 1000000000){
@@ -210,7 +214,7 @@ public class ItemHazardModule {
 		}
 	}
 
-	private String getSuffix(float radiation){
+	public static String getSuffix(float radiation){
 		if(radiation < 1000000){
 			return "";
 		} else if(radiation < 1000000000){

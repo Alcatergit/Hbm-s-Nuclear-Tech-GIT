@@ -28,6 +28,7 @@ public class ItemModWD40 extends ItemArmorMod {
 		String color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.BLUE : TextFormatting.YELLOW);
 
 		list.add(color + "Highly reduces damage taken by armor, +2 HP");
+		list.add("Dropped by 1:500 Cyber Crab");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}

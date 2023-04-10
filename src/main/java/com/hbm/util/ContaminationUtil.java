@@ -9,6 +9,7 @@ import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.interfaces.IRadiationImmune;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ArmorRegistry.HazardClass;
@@ -24,6 +25,8 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -98,16 +101,16 @@ public class ContaminationUtil {
 
 	public static void printGeigerData(EntityPlayer player) {
 
-		double eRad = ((long)(Library.getEntRadCap(player).getRads() * 1000)) / 1000D;
+		double eRad = ((long)(HbmLivingProps.getRadiation(player) * 1000)) / 1000D;
 
 		RadiationSavedData data = RadiationSavedData.getData(player.world);
-		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000)) / 1000D;
-		double env = ((long)(HbmLivingProps.getRadBuf(player) * 1000D)) / 1000D;
+		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000D)) / 1000D;
+		double env = ((long)(getPlayerRads(player) * 1000D)) / 1000D;
 
-		double res = ((int)(100000000D - ContaminationUtil.calculateRadiationMod(player) * 100000000)) / 1000000D;
-		double resKoeff = ((int)(HazmatRegistry.getResistance(player) * 100)) / 100D;
+		double res = ((long)(100000000D - ContaminationUtil.calculateRadiationMod(player) * 100000000D)) / 1000000D;
+		double resKoeff = ((long)(HazmatRegistry.getResistance(player) * 100D)) / 100D;
 
-		double rec = ((int)(env* (100-res)/100D * 1000D))/ 1000D;
+		double rec = ((long)(env* (100-res)/100D * 1000D))/ 1000D;
 
 		String chunkPrefix = getPreffixFromRad(rads);
 		String envPrefix = getPreffixFromRad(env);
@@ -143,7 +146,7 @@ public class ContaminationUtil {
 
 	public static void printDosimeterData(EntityPlayer player) {
 
-		double rads = (double)(ContaminationUtil.getPlayerRads(player));
+		double rads = ContaminationUtil.getActualPlayerRads(player);
 		boolean limit = false;
 		
 		if(rads > 3.6D) {
@@ -211,8 +214,80 @@ public class ContaminationUtil {
 	
 	}
 
-	public static double getPlayerRads(EntityPlayer player) {
-		return (double)(HbmLivingProps.getRadBuf(player)) * (double)(ContaminationUtil.calculateRadiationMod(player));
+	public static double getActualPlayerRads(EntityLivingBase entity) {
+		return getPlayerRads(entity) * (double)(ContaminationUtil.calculateRadiationMod(entity));
+	}
+
+	public static double getPlayerRads(EntityLivingBase entity) {
+		float rads = HbmLivingProps.getRadBuf(entity);
+		if(entity instanceof EntityPlayer)
+			 rads = rads + HbmLivingProps.getNeutron((EntityPlayer)entity)*20F;
+		return (double)rads;
+	}
+
+	public static double getNoNeutronPlayerRads(EntityLivingBase entity) {
+		return (double)(HbmLivingProps.getRadBuf(entity)) * (double)(ContaminationUtil.calculateRadiationMod(entity));
+	}
+
+	public static float getPlayerNeutronRads(EntityPlayer player){
+		float radBuffer = 0F;
+		for(ItemStack slotI : player.inventory.mainInventory){
+			radBuffer = radBuffer + getNeutronRads(slotI);
+		}
+		for(ItemStack slotA : player.inventory.armorInventory){
+			radBuffer = radBuffer + getNeutronRads(slotA);
+		}
+		radBuffer = radBuffer + getNeutronRads(player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+		return radBuffer;
+	}
+
+	public static float getNeutronRads(ItemStack stack){
+		if(stack != null && !(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive())){
+			if(stack.hasTagCompound()){
+				NBTTagCompound nbt = stack.getTagCompound();
+				if(nbt.hasKey("ntmNeutron")){
+					return nbt.getFloat("ntmNeutron") * stack.getCount();
+				}
+			}
+		}
+		return 0F;
+	}
+
+	public static void neutronActivateInventory(EntityPlayer player, float rad, float decay){
+		for(ItemStack slotI : player.inventory.mainInventory){
+			neutronActivateItem(slotI, rad, decay);
+		}
+		for(ItemStack slotA : player.inventory.armorInventory){
+			neutronActivateItem(slotA, rad, decay);
+		}
+		neutronActivateItem(player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND), rad, decay);
+	}
+
+	public static void neutronActivateItem(ItemStack stack, float rad, float decay){
+		if(stack != null && !(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive())){
+			NBTTagCompound nbt;
+			if(stack.hasTagCompound()){
+				nbt = stack.getTagCompound();
+			} else{
+				nbt = new NBTTagCompound();
+			}
+			float prevActivation = 0;
+			if(nbt.hasKey("ntmNeutron")){
+				prevActivation = nbt.getFloat("ntmNeutron");
+			}
+
+			float newActivation = prevActivation * decay + (rad / stack.getCount());
+			if(prevActivation * decay + rad < 0.0001F){
+				nbt.removeTag("ntmNeutron");
+			} else {
+				nbt.setFloat("ntmNeutron", newActivation);
+			}
+			if(nbt.hasNoTags()){
+				stack.setTagCompound(null);
+			} else {
+				stack.setTagCompound(nbt);
+			}
+		}
 	}
 	
 	public static String getPreffixFromRad(double rads) {
@@ -238,7 +313,9 @@ public class ContaminationUtil {
 	public static float getRads(Entity e) {
 		if(e instanceof IRadiationImmune)
 			return 0.0F;
-		return Library.getEntRadCap(e).getRads();
+		if(e instanceof EntityLivingBase)
+			HbmLivingProps.getRadiation((EntityLivingBase)e);
+		return 0.0F;
 	}
 
 	public static float getConfigEntityRadResistance(Entity e){
@@ -355,6 +432,7 @@ public class ContaminationUtil {
 	public static enum HazardType {
 		MONOXIDE,
 		RADIATION,
+		NEUTRON,
 		ASBESTOS,
 		DIGAMMA
 	}
@@ -397,19 +475,24 @@ public class ContaminationUtil {
 			case DIGAMMA2: break;
 			}
 			
-			if(player.capabilities.isCreativeMode && cont != ContaminationType.NONE)
+			if(player.capabilities.isCreativeMode && cont != ContaminationType.NONE){
+				if(hazard == HazardType.NEUTRON)
+					HbmLivingProps.setNeutron(entity, amount);
 				return false;
+			}
 			
 			if(player.ticksExisted < 200)
 				return false;
 		}
 		
-		if(hazard == HazardType.RADIATION && isRadImmune(entity))
+		if((hazard == HazardType.RADIATION || hazard == HazardType.NEUTRON) && isRadImmune(entity)){
 			return false;
+		}
 		
 		switch(hazard) {
 		case MONOXIDE: entity.attackEntityFrom(ModDamageSource.monoxide, amount); break;
 		case RADIATION: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); break;
+		case NEUTRON: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); HbmLivingProps.setNeutron(entity, amount); break;
 		case ASBESTOS: HbmLivingProps.incrementAsbestos(entity, (int)amount); break;
 		case DIGAMMA: HbmLivingProps.incrementDigamma(entity, amount); break;
 		}

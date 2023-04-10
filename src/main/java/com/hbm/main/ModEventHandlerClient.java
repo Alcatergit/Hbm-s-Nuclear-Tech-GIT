@@ -70,6 +70,7 @@ import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.items.weapon.ItemGunShotty;
 import com.hbm.items.weapon.ItemSwordCutter;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.RecoilHandler;
@@ -135,6 +136,7 @@ import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
@@ -1618,10 +1620,7 @@ public class ModEventHandlerClient {
 			if(!(ArmorFSB.hasFSBArmorHelmet(player) && ((ArmorFSB)player.inventory.armorInventory.get(3).getItem()).customGeiger)) {
 				if(Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
 	
-					float rads = 0;
-	
-					if(player.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
-						rads = player.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).getRads();
+					float rads = (float)Library.getEntRadCap(player).getRads();
 	
 					RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
 				}
@@ -1968,6 +1967,16 @@ public class ModEventHandlerClient {
 						((ItemArmorMod)mods[i].getItem()).addDesc(list, mods[i], stack);
 					}
 				}
+			}
+		}
+		float activationRads = ContaminationUtil.getNeutronRads(stack);
+		if(activationRads > 0) {
+			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
+			float stackRad = activationRads / stack.getCount();
+			list.add(TextFormatting.YELLOW + (Library.roundFloat(ItemHazardModule.getNewValue(stackRad), 3) + ItemHazardModule.getSuffix(stackRad) + " RAD/s"));
+			
+			if(stack.getCount() > 1) {
+				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(ItemHazardModule.getNewValue(activationRads), 3) + ItemHazardModule.getSuffix(activationRads) + " RAD/s"));
 			}
 		}
 	}

@@ -29,6 +29,8 @@ public class ItemModHealth extends ItemArmorMod {
 		String color = "" + (System.currentTimeMillis() % 1000 < 500 ? TextFormatting.RED : TextFormatting.LIGHT_PURPLE);
 
 		list.add(color + "+" + (Math.round(health * 10 / 2) * 0.1) + " health");
+		if(this == ModItems.heart_piece)
+			list.add("Dropped by 1:1000 Mobs");
 		list.add("");
 		
 		if(this == ModItems.black_diamond) {

@@ -27,6 +27,7 @@ import com.hbm.capability.HbmLivingProps;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.RadiationConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
@@ -76,6 +77,9 @@ import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.util.EnchantmentUtil;
 import com.hbm.util.EntityDamageUtil;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.generator.TimedGenerator;
 
 import net.minecraft.block.Block;
@@ -171,6 +175,9 @@ public class ModEventHandler {
 	public static boolean showMessage = true;
 	public static int meteorShower = 0;
 	public static Random rand = new Random();
+
+	public static float decayRate = 0.999990373F; //1h halflife
+	public static float minRadRate = 0.000005F;
 
 	@SubscribeEvent
 	public void soundRegistering(RegistryEvent.Register<SoundEvent> evt) {
@@ -362,7 +369,7 @@ public class ModEventHandler {
 		}
 	}
 
-	private static final String hash = "41eb77f138ce350932e33b6b26b233df9aad0c0c80c6a49cb9a54ddd8fae3f83";
+	private static final String hash = "cce6b36fbaa6ec2327c1af5cbcadc4e2d340738ab9328c459365838e79d12e5e";
 
 
 	@SubscribeEvent
@@ -606,19 +613,26 @@ public class ModEventHandler {
 
 				for(Object e : oList) {
 					if(e instanceof EntityLivingBase) {
-						HbmLivingCapability.IEntityHbmProps entRad = null;
-						if(((EntityLivingBase) e).hasCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null)) {
-							entRad = ((EntityLivingBase) e).getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null);
-						} else {
-							continue;
-						}
+
 						// effect for radiation
 						EntityLivingBase entity = (EntityLivingBase) e;
 						
+						if(entity instanceof EntityPlayer && RadiationConfig.neutronActivation){
+							EntityPlayer player = (EntityPlayer) entity;
+							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00001D;
+							ContaminationUtil.neutronActivateInventory(player, recievedRadiation > minRadRate ? (float)recievedRadiation : 0.0F, decayRate);
+							player.inventoryContainer.detectAndSendChanges();
+							float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
+							if(neutronRads > 0)
+								ContaminationUtil.contaminate(player, HazardType.NEUTRON, ContaminationType.CREATIVE, neutronRads * 0.05F);
+							else
+								HbmLivingProps.setNeutron(entity, 0);
+						}
+
 						if(entity instanceof EntityPlayer && (((EntityPlayer) entity).capabilities.isCreativeMode || ((EntityPlayer) entity).isSpectator()))
 							continue;
 
-						float eRad = entRad.getRads();
+						float eRad = (float)HbmLivingProps.getRadiation(entity);
 
 						if(entity instanceof EntityCreeper && eRad >= 200 && entity.getHealth() > 0) {
 
@@ -675,18 +689,12 @@ public class ModEventHandler {
 							continue;
 						}
 
-						if(eRad < 200 || entity instanceof EntityNuclearCreeper ||
-								entity instanceof EntityMooshroom ||
-								entity instanceof EntityZombie ||
-								entity instanceof EntitySkeleton ||
-								entity instanceof EntityQuackos)
-
 						if(eRad > 2500000)
-							entRad.setRads(2500000);
+							HbmLivingProps.setRadiation(entity, 2500000);
 
 						if(eRad >= 1000) {
 							entity.attackEntityFrom(ModDamageSource.radiation, 1000F);
-							entRad.setRads(0);
+							HbmLivingProps.setRadiation(entity, 0);
 							
 							if(entity.getHealth() > 0) {
 					        	entity.setHealth(0);
@@ -708,6 +716,8 @@ public class ModEventHandler {
 								entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 3 * 20, 1));
 							if(event.world.rand.nextInt(300) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 5 * 20, 3));
+							if(event.world.rand.nextInt(300) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 5 * 20, 3));
 
 						} else if(eRad >= 600) {
 							if(event.world.rand.nextInt(300) == 0)
@@ -720,6 +730,8 @@ public class ModEventHandler {
 								entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 3 * 20, 1));
 							if(event.world.rand.nextInt(300) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 3 * 20, 3));
+							if(event.world.rand.nextInt(400) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 6 * 20, 2));
 
 						} else if(eRad >= 400) {
 							if(event.world.rand.nextInt(300) == 0)
@@ -730,6 +742,8 @@ public class ModEventHandler {
 								entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 5 * 20, 1));
 							if(event.world.rand.nextInt(500) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 3 * 20, 2));
+							if(event.world.rand.nextInt(600) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 4 * 20, 1));
 
 						} else if(eRad >= 200) {
 							if(event.world.rand.nextInt(300) == 0)
@@ -738,6 +752,13 @@ public class ModEventHandler {
 								entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 5 * 20, 0));
 							if(event.world.rand.nextInt(700) == 0)
 								entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 3 * 20, 2));
+							if(event.world.rand.nextInt(800) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 4 * 20, 0));
+						} else if(eRad >= 100) {
+							if(event.world.rand.nextInt(800) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 2 * 20, 0));
+							if(event.world.rand.nextInt(1000) == 0)
+								entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 1 * 20, 0));
 
 							if(entity instanceof EntityPlayerMP)
 								AdvancementManager.grantAchievement((EntityPlayerMP) entity, AdvancementManager.achRadPoison);
@@ -839,100 +860,6 @@ public class ModEventHandler {
 		ArmorFSB.handleTick(event);
 
 		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
-			/*NBTTagCompound perDat = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-			int lightning = perDat.getInteger("lightningCharge");
-			if(lightning > 0){
-				lightning ++;
-				if(lightning == 60){
-					RayTraceResult r = Library.rayTraceIncludeEntities(player, 100, 1);
-					if(r != null && r.typeOfHit != Type.MISS){
-						NBTTagCompound tag = new NBTTagCompound();
-						tag.setString("type", "lightning");
-						tag.setString("mode", "beam");
-						tag.setDouble("hitX", r.hitVec.x);
-						tag.setDouble("hitY", r.hitVec.y);
-						tag.setDouble("hitZ", r.hitVec.z);
-						Vec3d normal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
-						tag.setDouble("normX", normal.x);
-						tag.setDouble("normY", normal.y);
-						tag.setDouble("normZ", normal.z);
-						if(r.typeOfHit == Type.ENTITY){
-							r.entityHit.attackEntityFrom(ModDamageSource.electricity, 20);
-							if(r.entityHit instanceof EntityLiving && ((EntityLiving)r.entityHit).getHealth() <= 0){
-								r.entityHit.setDead();
-								PacketDispatcher.wrapper.sendToAllTracking(new PacketSpecialDeath(r.entityHit, 2, (float)player.getLookVec().x, (float)player.getLookVec().y, (float)player.getLookVec().z), new TargetPoint(player.world.provider.getDimension(), r.entityHit.posX, r.entityHit.posY, r.entityHit.posZ, 0));
-							}
-							tag.setInteger("hitType", 1);
-						} else if(r.typeOfHit == Type.BLOCK){
-							tag.setInteger("hitType", 0);
-						}
-						
-						Vec3d direction = player.getLookVec().scale(0.75);
-						switch(r.sideHit.getAxis()){
-						case X:
-							direction = new Vec3d(-direction.x, direction.y, direction.z);
-							break;
-						case Y:
-							direction = new Vec3d(direction.x, -direction.y, direction.z);
-							break;
-						case Z:
-							direction = new Vec3d(direction.x, direction.y, -direction.z);
-							break;
-						}
-						
-						NBTTagCompound tag2 = new NBTTagCompound();
-						tag2.setString("type", "spark");
-						tag2.setString("mode", "coneBurst");
-						tag2.setDouble("posX", r.hitVec.x);
-						tag2.setDouble("posY", r.hitVec.y);
-						tag2.setDouble("posZ", r.hitVec.z);
-						tag2.setDouble("dirX", direction.x);
-						tag2.setDouble("dirY", direction.y);
-						tag2.setDouble("dirZ", direction.z);
-						tag2.setFloat("r", 0.4F);
-						tag2.setFloat("g", 0.8F);
-						tag2.setFloat("b", 0.9F);
-						tag2.setFloat("a", 2F);
-						tag2.setInteger("lifetime", 5);
-						tag2.setInteger("randLifetime", 20);
-						tag2.setFloat("width", 0.04F);
-						tag2.setFloat("length", 0.7F);
-						tag2.setFloat("randLength", 1.5F);
-						tag2.setFloat("gravity", 0.1F);
-						tag2.setFloat("angle", 80F);
-						tag2.setInteger("count", 60+player.world.rand.nextInt(20));
-						tag2.setFloat("randomVelocity", 0.4F);
-						PacketDispatcher.wrapper.sendToAllTracking(new AuxParticlePacketNT(tag2, r.hitVec.x, r.hitVec.y, r.hitVec.z), new TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 0));
-						
-						Vec3d ssgChainPos = new Vec3d(-0.18, -0.1, 0.35);
-						ssgChainPos = ssgChainPos.rotatePitch((float) Math.toRadians(-player.rotationPitch));
-						ssgChainPos = ssgChainPos.rotateYaw((float) Math.toRadians(-player.rotationYaw));
-
-						ssgChainPos = ssgChainPos.addVector(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-						PacketDispatcher.wrapper.sendToAllTracking(new AuxParticlePacketNT(tag, ssgChainPos.x, ssgChainPos.y, ssgChainPos.z), new TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 0));
-					} else {
-						NBTTagCompound tag = new NBTTagCompound();
-						tag.setString("type", "lightning");
-						tag.setString("mode", "beam");
-						Vec3d hit = player.getPositionEyes(1).add(player.getLookVec().scale(100));
-						tag.setDouble("hitX", hit.x);
-						tag.setDouble("hitY", hit.y);
-						tag.setDouble("hitZ", hit.z);
-						tag.setInteger("hitType", -1);
-						
-						Vec3d ssgChainPos = new Vec3d(-0.18, -0.1, 0.35);
-						ssgChainPos = ssgChainPos.rotatePitch((float) Math.toRadians(-player.rotationPitch));
-						ssgChainPos = ssgChainPos.rotateYaw((float) Math.toRadians(-player.rotationYaw));
-						ssgChainPos = ssgChainPos.addVector(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-						
-						PacketDispatcher.wrapper.sendToAllTracking(new AuxParticlePacketNT(tag, ssgChainPos.x, ssgChainPos.y, ssgChainPos.z), new TargetPoint(player.world.provider.getDimension(), player.posX, player.posY, player.posZ, 0));
-					}
-				}
-				if(lightning == 84){
-					lightning = 0;
-				}
-			}
-			perDat.setInteger("lightningCharge", lightning);*/
 
 			/// GHOST FIX START ///
 
@@ -1001,14 +928,14 @@ public class ModEventHandler {
 			event.getEntity().dropItem(ModItems.book_of_, 1);
 		}
 
-		if(event.getEntity().getUniqueID().toString().equals(Library.Malpon)) {
+		if(event.getEntity().getUniqueID().toString().equals(Library.Alcater)) {
 			if(event.getSource() instanceof EntityDamageSource){
 				if(((EntityDamageSource)event.getSource()).getImmediateSource() instanceof EntityLivingBase){
 					EntityLivingBase attacker = (EntityLivingBase) ((EntityDamageSource)event.getSource()).getImmediateSource();
-					HbmLivingProps.incrementRadiation(attacker, 999.999F);
+					ContaminationUtil.contaminate(attacker, HazardType.RADIATION, ContaminationType.CREATIVE, 690F);
 				}
 			}
-			event.getEntity().dropItem(ModItems.pellet_rtg_balefire, 1);
+			event.getEntity().dropItem(ModItems.bottle_rad, 1);
 		}
 
 		if(event.getEntity() instanceof EntityTaintedCreeper && event.getSource() == ModDamageSource.boxcar) {

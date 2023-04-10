@@ -58,6 +58,10 @@ public interface IItemHazard {
 		this.getModule().addExplosive(bang);
 		return this;
 	}
+
+	public default boolean isRadioactive(){
+		return this.getModule().isRadioactive();
+	}
 	
 	//the only ugly part of this entire system is the manual casting so that the rest of the daisychained setters work
 	public default Item toItem() {
