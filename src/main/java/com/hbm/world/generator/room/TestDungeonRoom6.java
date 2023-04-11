@@ -5,6 +5,7 @@ import com.hbm.world.generator.CellularDungeon;
 import com.hbm.world.generator.CellularDungeonRoom;
 import com.hbm.world.generator.DungeonToolbox;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,6 +28,7 @@ public class TestDungeonRoom6 extends CellularDungeonRoom {
 		
 		world.setBlockState(new BlockPos(x + parent.width - 2, y, z + parent.width / 2), ModBlocks.meteor_polished.getDefaultState());
 		world.setBlockState(new BlockPos(x + parent.width / 2, y, z + parent.width - 2), ModBlocks.meteor_polished.getDefaultState());
+		DungeonToolbox.generateBox(world, x, y-1, z, parent.width, 1, parent.width, Blocks.CONCRETE.getStateFromMeta(1));
 	}
 	
 	public void generateWall(World world, int x, int y, int z, EnumFacing wall, boolean door) {

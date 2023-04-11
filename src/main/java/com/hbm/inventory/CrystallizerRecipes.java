@@ -92,6 +92,7 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.sulfuric_acid, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.sulfuric_acid, 250), new ItemStack(Items.SLIME_BALL, 4));
+		addRecipe(new ComparableStack(ModItems.powder_lithium, 1), new FluidStack(ModForgeFluids.heatingoil, 4000), new ItemStack(ModItems.crystal_redstone, 1));
 		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.solid_fuel));
 		
 		List<ItemStack> quartz = OreDictionary.getOres("crystalCertusQuartz");

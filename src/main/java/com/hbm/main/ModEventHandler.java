@@ -619,7 +619,7 @@ public class ModEventHandler {
 						
 						if(entity instanceof EntityPlayer && RadiationConfig.neutronActivation){
 							EntityPlayer player = (EntityPlayer) entity;
-							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00001D;
+							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D;
 							ContaminationUtil.neutronActivateInventory(player, recievedRadiation > minRadRate ? (float)recievedRadiation : 0.0F, decayRate);
 							player.inventoryContainer.detectAndSendChanges();
 							float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);

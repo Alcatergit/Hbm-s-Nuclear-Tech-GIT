@@ -1424,13 +1424,16 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.asbestos_plate, 1), new Object[] { "E E", "EEE", "EEE", 'E', ModItems.asbestos_cloth });
 		addRecipeAuto(new ItemStack(ModItems.asbestos_legs, 1), new Object[] { "EEE", "E E", "E E", 'E', ModItems.asbestos_cloth });
 		addRecipeAuto(new ItemStack(ModItems.asbestos_boots, 1), new Object[] { "E E", "E E", 'E', ModItems.asbestos_cloth });
-		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_helmet, 1), new Object[] { "EEE", "IEI", "FPF", 'E', ModItems.plate_paa, 'I', KEY_ANYPANE, 'P', STEEL.plate(), 'F', ModItems.filter_coal });
-		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_plate, 1), new Object[] { "E E", "EEE", "EEE", 'E', ModItems.plate_paa });
-		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_legs, 1), new Object[] { "EEE", "E E", "E E", 'E', ModItems.plate_paa });
-		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_boots, 1), new Object[] { "E E", "E E", 'E', ModItems.plate_paa });
-		addRecipeAuto(new ItemStack(ModItems.paa_plate, 1), new Object[] { "E E", "NEN", "ENE", 'E', ModItems.plate_paa, 'N', OreDictManager.getReflector() });
-		addRecipeAuto(new ItemStack(ModItems.paa_legs, 1), new Object[] { "EEE", "N N", "E E", 'E', ModItems.plate_paa, 'N', OreDictManager.getReflector() });
-		addRecipeAuto(new ItemStack(ModItems.paa_boots, 1), new Object[] { "E E", "N N", 'E', ModItems.plate_paa, 'N', OreDictManager.getReflector() });
+		
+		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_helmet, 1), new Object[] { "EEE", "EIE", "FPF", 'E', ModItems.plate_paa, 'I', ModItems.liquidator_helmet, 'P', STEEL.plate(), 'F', ModItems.filter_coal });
+		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_plate, 1), new Object[] { "E E", "EIE", "EEE", 'E', ModItems.plate_paa, 'I', ModItems.liquidator_plate });
+		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_legs, 1), new Object[] { "EEE", "EIE", "E E", 'E', ModItems.plate_paa, 'I', ModItems.liquidator_legs });
+		addRecipeAuto(new ItemStack(ModItems.hazmat_paa_boots, 1), new Object[] { "E E", "EIE", 'E', ModItems.plate_paa, 'I', ModItems.liquidator_boots });
+		
+		addRecipeAuto(new ItemStack(ModItems.paa_helmet, 1), new Object[] { "XGX", "NEN", 'E', ModItems.hazmat_paa_helmet, 'N', OreDictManager.getReflector(), 'G', ModItems.billet_gh336, 'X', ModItems.powder_verticium });
+		addRecipeAuto(new ItemStack(ModItems.paa_plate, 1), new Object[] { "XGX", "NEN", 'E', ModItems.hazmat_paa_plate, 'N', OreDictManager.getReflector(), 'G', ModItems.billet_gh336, 'X', ModItems.powder_verticium });
+		addRecipeAuto(new ItemStack(ModItems.paa_legs, 1), new Object[] { "XGX", "NEN", 'E', ModItems.plate_paa, 'N', OreDictManager.getReflector(), 'G', ModItems.billet_gh336, 'X', ModItems.powder_verticium });
+		addRecipeAuto(new ItemStack(ModItems.paa_boots, 1), new Object[] { "XGX", "NEN", 'E', ModItems.plate_paa, 'N', OreDictManager.getReflector(), 'G', ModItems.billet_gh336, 'X', ModItems.powder_verticium });
 
 		addRecipeAuto(new ItemStack(ModItems.goggles, 1), new Object[] { "P P", "GPG", 'G', KEY_ANYPANE, 'P', STEEL.plate() });
 		addRecipeAuto(new ItemStack(ModItems.gas_mask, 1), new Object[] { "PPP", "GPG", " F ", 'G', KEY_ANYPANE, 'P', STEEL.plate(), 'F', ModItems.gas_mask_filter });

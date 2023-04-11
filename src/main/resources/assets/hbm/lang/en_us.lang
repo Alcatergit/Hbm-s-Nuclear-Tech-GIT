@@ -3435,6 +3435,7 @@ item.asbestos_plate.name=Fire Proximity Chestplate
 item.asbestos_legs.name=Fire Proximity Leggings
 item.asbestos_boots.name=Fire Proximity Boots
 
+item.paa_helmet.name=PaA Helmet Protection
 item.paa_plate.name=PaA Chest Protection Plate
 item.paa_legs.name=PaA Leg Reinforcements
 item.paa_boots.name=PaA "good ol' shoes"

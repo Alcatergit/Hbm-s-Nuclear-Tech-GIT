@@ -27,6 +27,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -48,7 +50,7 @@ public class ContaminationUtil {
 		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
 			mult = entity.getEntityData().getFloat("hbmradmultiplier");
 
-		float koeff = 5.0F;
+		float koeff = 10.0F;
 		return (float) Math.pow(koeff, -(getConfigEntityRadResistance(entity) + HazmatRegistry.getResistance(entity))) * mult;
 	}
 
@@ -237,12 +239,21 @@ public class ContaminationUtil {
 		for(ItemStack slotA : player.inventory.armorInventory){
 			radBuffer = radBuffer + getNeutronRads(slotA);
 		}
-		radBuffer = radBuffer + getNeutronRads(player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
 		return radBuffer;
 	}
 
+	public static boolean isRadItem(ItemStack stack){
+		if(stack == null)
+			return false;
+
+		if(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive()){
+			return true;
+		}
+		return false;
+	}
+
 	public static float getNeutronRads(ItemStack stack){
-		if(stack != null && !(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive())){
+		if(stack != null && !isRadItem(stack)){
 			if(stack.hasTagCompound()){
 				NBTTagCompound nbt = stack.getTagCompound();
 				if(nbt.hasKey("ntmNeutron")){
@@ -254,17 +265,18 @@ public class ContaminationUtil {
 	}
 
 	public static void neutronActivateInventory(EntityPlayer player, float rad, float decay){
+		ItemStack mainHandItem = player.getHeldItemMainhand().copy();
 		for(ItemStack slotI : player.inventory.mainInventory){
 			neutronActivateItem(slotI, rad, decay);
 		}
 		for(ItemStack slotA : player.inventory.armorInventory){
 			neutronActivateItem(slotA, rad, decay);
 		}
-		neutronActivateItem(player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND), rad, decay);
+		player.setHeldItem(EnumHand.MAIN_HAND , mainHandItem);
 	}
 
 	public static void neutronActivateItem(ItemStack stack, float rad, float decay){
-		if(stack != null && !(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive())){
+		if(stack != null && !isRadItem(stack)){
 			NBTTagCompound nbt;
 			if(stack.hasTagCompound()){
 				nbt = stack.getTagCompound();

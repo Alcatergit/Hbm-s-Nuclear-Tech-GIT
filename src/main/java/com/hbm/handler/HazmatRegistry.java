@@ -91,24 +91,25 @@ public class HazmatRegistry {
 		double alloy = 0.07D; // 15%
 		double cobalt = 0.125D; // 25%
 
-		double hazYellow = 0.3D; // 50%
-		double hazRed = 0.7D; // 80%
-		double hazGray = 1.3D; // 95%
-		double paa = 1.5D; // 98%
-		double liquidator = 2D; // 99%
+		double hazYellow = 0.6D; // 75%
+		double hazRed = 1.0D; // 90%
+		double hazGray = 2D; // 99%
+		double liquidator = 2.4D; // 99.6%
+		double paa = 3.0D; // 99.9%
+		
 
 		double t45 = 1D; // 90%
 		double ajr = 1.3D; // 95%
-		double rpa = 2D;
+		double hev = 1.6D; // 97.5%
 		double bj = 1D; // 90%
-		double hev = 1.3D; // 95%
+		double rpa = 2D; // 99%
 		double fau = 4D; // 99.99%
-		double dns = 6D; // 99.999%
-		double security = 0.01D; // 85%
-		double star = 1D; // 90%
-		double cmb = 1.3D; // 95%
-		double schrab = 2.3D; // 99.5%
-		double euph = 10D; // <100%
+		double dns = 6D; // 99.9999%
+		double security = 0.01D; // 2.3%
+		double star = 0.25D; // 44%
+		double cmb = 0.5D; // 68%
+		double schrab = 1D; // 90.0%
+		double euph = 10D; // 99.99999999%
 
 		HazmatRegistry.registerHazmat(ModItems.hazmat_helmet, hazYellow * helmet);
 		HazmatRegistry.registerHazmat(ModItems.hazmat_plate, hazYellow * chest);

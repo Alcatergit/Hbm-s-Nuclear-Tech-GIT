@@ -46,7 +46,7 @@ public class ItemDosimeter extends Item {
 			
 			if(world.getTotalWorldTime() % 5 == 0) {
 				
-				if(x > 1E-4) {
+				if(x > 0.001) {
 					List<Integer> list = new ArrayList<Integer>();
 
 					if(x < 0.5)

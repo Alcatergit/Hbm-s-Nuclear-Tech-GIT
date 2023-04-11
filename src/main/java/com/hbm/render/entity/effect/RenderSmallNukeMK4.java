@@ -46,7 +46,7 @@ public class RenderSmallNukeMK4 extends Render<EntityNukeCloudSmall> {
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         int cloudAge = cloud.getDataManager().get(EntityNukeCloudSmall.AGE);
-        if(cloud.age < cloudAge-2){
+        if(cloud.age < cloudAge){
 	        cloud.age = cloudAge;
 	    }
 
