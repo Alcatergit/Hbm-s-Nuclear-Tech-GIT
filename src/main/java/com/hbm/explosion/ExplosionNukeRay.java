@@ -241,6 +241,7 @@ public class ExplosionNukeRay {
 				pos.setPos(x0, y0, z0);
 				if(!world.isAirBlock(pos)) {
 					world.setBlockToAir(pos);
+					world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
 					processedBlocks++;
 				}
 				

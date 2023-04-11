@@ -9,6 +9,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.modules.ItemHazardModule;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.potion.PotionEffect;
@@ -38,6 +39,7 @@ public class BlockHazard extends Block implements IItemHazard {
 	
 	private float radIn = 0.0F;
 	private float radMax = 0.0F;
+	private float rad3d = 0.0F;
 	private ExtDisplayEffect extEffect = null;
 	
 	private boolean beaconable = false;
@@ -156,6 +158,11 @@ public class BlockHazard extends Block implements IItemHazard {
 		return this;
 	}
 
+	public BlockHazard addRad3d(int rad3d) {
+		this.rad3d = rad3d;
+		return this;
+	}
+
 	@Override
 	public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon){
 		return beaconable;
@@ -163,6 +170,10 @@ public class BlockHazard extends Block implements IItemHazard {
 	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
+
+		if(this.rad3d > 0)
+			ContaminationUtil.radiate(worldIn, pos.getX(), pos.getY(), pos.getZ(), 32, this.rad3d, this.module.fire * 5000);
+
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!worldIn.isRemote)
         		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
@@ -174,6 +185,7 @@ public class BlockHazard extends Block implements IItemHazard {
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 	}
+
 	
 	@Override
 	public int tickRate(World world) {

@@ -1,18 +1,13 @@
 package com.hbm.blocks.machine.rbmk;
 
-import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -23,10 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -50,7 +43,7 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 		
 		if(!world.isRemote) {
 			
-			radiate(world, pos.getX(), pos.getY(), pos.getZ());
+			ContaminationUtil.radiate(world, pos.getX(), pos.getY(), pos.getZ(), 32, 100000F, 40000F);
 			
 			if(rand.nextInt(5) == 0) {
 				NBTTagCompound data = new NBTTagCompound();
@@ -75,57 +68,6 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 				
 			} else {
 				world.scheduleUpdate(pos, this, this.tickRate(world));
-			}
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void radiate(World world, int x, int y, int z) {
-		
-		float rads = 1000000F;
-		double range = 100D;
-		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).grow(range, range, range));
-		
-		for(EntityLivingBase e : entities) {
-			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - (x + 0.5), (e.posY + e.getEyeHeight()) - (y + 0.5), e.posZ - (z + 0.5));
-			double len = vec.lengthVector();
-			vec = vec.normalize();
-			
-			float res = 0;
-			
-			for(int i = 1; i < len; i++) {
-
-				int ix = (int)Math.floor(x + 0.5 + vec.xCoord * i);
-				int iy = (int)Math.floor(y + 0.5 + vec.yCoord * i);
-				int iz = (int)Math.floor(z + 0.5 + vec.zCoord * i);
-				
-				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
-			}
-			
-			if(res < 1)
-				res = 1;
-			
-			float eRads = rads;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
-			
-			if(len < 15) {
-				int fireDmg = 40000;
-				fireDmg /= (float)Math.sqrt(res);
-				fireDmg /= (float)(len * len);
-				e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
-			}
-			
-			if(e instanceof EntityPlayer && len < 10) {
-				EntityPlayer p = (EntityPlayer) e;
-				
-				if(p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt(100) == 0) {
-					p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
-				}
 			}
 		}
 	}

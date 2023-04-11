@@ -152,7 +152,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 	public void onUpdate() {
 
 		if(!world.isRemote) {
-			this.radiate((float)Math.pow(radius, 2), radius);
+			ContaminationUtil.radiate(world, (int)posX, (int)posY, (int)posZ, radius, (float)Math.pow(radius, 2), 0);
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			int rayCounter = 0;
 			for(int sample = currentSample; sample < this.maxSamples; sample++){
@@ -172,38 +172,6 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				this.done=true;
 				this.setDead();
 			}
-		}
-	}
-
-	private void radiate(float rads, double range) {
-		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
-		MutableBlockPos rayPos = new BlockPos.MutableBlockPos();
-		for(EntityLivingBase e : entities) {
-			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
-			double len = vec.lengthVector();
-			vec = vec.normalize();
-			
-			float res = 0;
-			
-			for(int i = 1; i < len; i++) {
-
-				int ix = (int)Math.floor(posX + vec.xCoord * i);
-				int iy = (int)Math.floor(posY + vec.yCoord * i);
-				int iz = (int)Math.floor(posZ + vec.zCoord * i);
-				
-				res += world.getBlockState(rayPos.setPos(posX+vec.xCoord * i, posY+vec.yCoord * i, posZ+vec.zCoord * i)).getBlock().getExplosionResistance(null);
-			}
-			
-			if(res < 1)
-				res = 1;
-			
-			float eRads = rads;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 		}
 	}
 
@@ -239,10 +207,13 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 			
 			} else if(bblock instanceof BlockLeaves) {
-				if(l > s1)
+				if(l > s1){
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
-				else
-					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				}
+				else{
+					world.setBlockToAir(pos);
+					world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
+				}
 				continue;
 
 			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {
@@ -259,7 +230,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				if(meta == BlockDirt.DirtType.DIRT)
 					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
-					world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 				else if(meta == BlockDirt.DirtType.PODZOL)
 					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 				return;
@@ -277,9 +248,11 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.SAND) {
+				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 				if(rand.nextInt(60) == 0) {
-					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+				} else {
+					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
 				}
 				return;
 

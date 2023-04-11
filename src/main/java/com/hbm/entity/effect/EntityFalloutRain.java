@@ -329,10 +329,13 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			if(bblock instanceof BlockLeaves) {
-				if(dist > s1)
+				if(dist > s1){
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
-				else
-					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				}
+				else{
+					world.setBlockToAir(pos);
+					world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
+				}
 				continue;
 			}
 
@@ -378,7 +381,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				if(meta == BlockDirt.DirtType.DIRT)
 					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
-					world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 				else if(meta == BlockDirt.DirtType.PODZOL)
 					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 				continue;
@@ -404,10 +407,11 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 				continue;
 			} else if(bblock == Blocks.SAND) {
-
+				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 				if(rand.nextInt(60) == 0) {
-					BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+				} else {
+					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
 				}
 				continue;
 			}

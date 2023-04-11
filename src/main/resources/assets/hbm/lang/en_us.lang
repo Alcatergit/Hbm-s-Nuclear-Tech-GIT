@@ -231,6 +231,9 @@ lung_scanner.player_coal_health=Lung Health [Coal]:
 lung_scanner.player_total_health=Lung Health Total:
 
 tile.waste_dirt.name=Contaminated Dirt
+tile.waste_sand.name=Contaminated Sand
+tile.waste_sand_red.name=Contaminated Red Sand
+tile.waste_gravel.name=Contaminated Gravel
 item.rod_cobalt.name=Cobalt Rod
 item.rod_co60.name=Cobalt-60 Rod
 item.rod_rgp.name=Reactor-Grade Plutonium Rod

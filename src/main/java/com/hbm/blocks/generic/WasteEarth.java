@@ -58,9 +58,6 @@ public class WasteEarth extends Block implements IItemHazard {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium){
-			return Item.getItemFromBlock(Blocks.DIRT);
-		}
 		if(this == ModBlocks.frozen_grass){
 			return Items.SNOWBALL;
 		}

@@ -79,4 +79,9 @@ public class RBMKDebrisDigamma extends RBMKDebris {
 		worldIn.scheduleUpdate(pos, this, 2);
 	}
 	
+	@Override
+	public int tickRate(World world) {
+
+		return 20 + world.rand.nextInt(20);
+	}
 }

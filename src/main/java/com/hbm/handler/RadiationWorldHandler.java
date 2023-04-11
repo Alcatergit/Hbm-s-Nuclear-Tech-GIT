@@ -11,8 +11,11 @@ import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -22,12 +25,13 @@ import net.minecraft.world.gen.ChunkProviderServer;
 public class RadiationWorldHandler {
 
 	public static void handleWorldDestruction(World world) {
+
 		//TODO fix this up for new radiation system
 		if(!(world instanceof WorldServer))
 			return;
 		if(!RadiationConfig.worldRadEffects || !GeneralConfig.enableRads)
 			return;
-		
+
 		int count = 50;//MainRegistry.worldRad;
 		int threshold = 5;//MainRegistry.worldRadThreshold;
 		
@@ -52,15 +56,43 @@ public class RadiationWorldHandler {
 									continue;
 								}
 								BlockPos pos = startPos.add(i, j, k);
+								IBlockState b = world.getBlockState(pos);
+								Block bblock = b.getBlock();
+
 								if(!world.isAirBlock(pos)){
-									if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
+									if(bblock == Blocks.GRASS) {
 										world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-									} else if(world.getBlockState(pos).getBlock() == Blocks.DIRT) {
+									
+									} else if(bblock == Blocks.DIRT) {
 										world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
-									} else if(world.getBlockState(pos).getBlock() instanceof BlockBush) {
+
+									} else if(bblock == Blocks.SAND) {
+										BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
+										if(world.rand.nextInt(60) == 0) {
+											world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+										} else {
+											world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
+										}
+									} else if(bblock == Blocks.GRAVEL) {
+										world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+
+									} else if(bblock == Blocks.MYCELIUM) {
+										world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+
+									} else if(bblock == Blocks.SNOW_LAYER) {
+										world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+
+									} else if(bblock == Blocks.SNOW) {
+										world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+
+									} else if(bblock instanceof BlockBush) {
 										world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
-									} else if(world.getBlockState(pos).getBlock() instanceof BlockLeaves) {
-										world.setBlockState(pos, Blocks.AIR.getDefaultState());
+									
+									} else if(bblock instanceof BlockLeaves) {
+										world.setBlockToAir(pos);
+										world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
+									} else if(bblock == Blocks.BEDROCK){
+										world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 									}
 								}
 							}
@@ -105,15 +137,43 @@ public class RadiationWorldHandler {
 						int z = coords.getZStart() + b;
 						int y = world.getHeight(x, z) - world.rand.nextInt(2);
 						BlockPos pos = new BlockPos(x, y, z);
+						IBlockState c = world.getBlockState(pos);
+						Block bblock = c.getBlock();
+
 						if(!world.isAirBlock(pos)){
-							if(world.getBlockState(pos).getBlock() == Blocks.GRASS) {
+							if(bblock == Blocks.GRASS) {
 								world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
-							} else if(world.getBlockState(pos).getBlock() == Blocks.DIRT) {
+							
+							} else if(bblock == Blocks.DIRT) {
 								world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
-							} else if(world.getBlockState(pos).getBlock() instanceof BlockBush) {
+
+							} else if(bblock == Blocks.SAND) {
+								BlockSand.EnumType meta = c.getValue(BlockSand.VARIANT);
+								if(world.rand.nextInt(60) == 0) {
+									world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+								} else {
+									world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
+								}
+							} else if(bblock == Blocks.GRAVEL) {
+								world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+
+							} else if(bblock == Blocks.MYCELIUM) {
+								world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+
+							} else if(bblock == Blocks.SNOW_LAYER) {
+								world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+
+							} else if(bblock == Blocks.SNOW) {
+								world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+
+							} else if(bblock instanceof BlockBush) {
 								world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
-							} else if(world.getBlockState(pos).getBlock() instanceof BlockLeaves) {
-								world.setBlockState(pos, Blocks.AIR.getDefaultState());
+							
+							} else if(bblock instanceof BlockLeaves) {
+								world.setBlockToAir(pos);
+								world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
+							} else if(bblock == Blocks.BEDROCK){
+								world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 							}
 						}
 					}
