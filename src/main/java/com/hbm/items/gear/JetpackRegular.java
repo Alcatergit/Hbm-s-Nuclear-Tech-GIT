@@ -45,7 +45,7 @@ public class JetpackRegular extends JetpackBase {
 		IHBMData props = HbmCapability.getData(player);
 		if(world.isRemote) {
 
-			if(player == MainRegistry.proxy.me()) {
+			if(player == MainRegistry.proxy.me() && props.isJetpackActive()) {
 
 				boolean last = props.getKeyPressed(EnumKeybind.JETPACK);
 				boolean current = MainRegistry.proxy.getIsKeyPressed(EnumKeybind.JETPACK);
@@ -58,7 +58,7 @@ public class JetpackRegular extends JetpackBase {
 
 		} else {
 
-			if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK)) {
+			if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "jetpack");
@@ -66,7 +66,7 @@ public class JetpackRegular extends JetpackBase {
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 100));
 			}
 		}
-		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK)) {
+		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 			player.fallDistance = 0;
 
 			if(player.motionY < 0.4D)

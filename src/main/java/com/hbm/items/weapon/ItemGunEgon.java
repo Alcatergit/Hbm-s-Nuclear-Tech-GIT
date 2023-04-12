@@ -46,6 +46,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGunEgon extends ItemGunBase {
 
+	public float charge = 0.25F;
+	public static float chargeScaling = 1.011619F; //double dmg every 2 sec
 	public static int activeTicks = 0;
 	public static Map<EntityPlayer, ParticleGluonBurnTrail> activeTrailParticles = new HashMap<>();
 	public static Map<EntityPlayer, GunEgonSoundHandler> soundsByPlayer = new HashMap<>();
@@ -138,7 +140,8 @@ public class ItemGunEgon extends ItemGunBase {
 				if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
 					return;
 				}
-				float damage = Math.min(ent.getHealth(), 2);
+				this.charge = this.charge * this.chargeScaling;
+				float damage = Math.min(ent.getHealth(), this.charge);
 				ent.getCombatTracker().trackDamage(ModDamageSource.gluon, ent.getHealth(), damage);
 				ent.setHealth(ent.getHealth()-damage);
 				
@@ -158,7 +161,9 @@ public class ItemGunEgon extends ItemGunBase {
 						PacketDispatcher.wrapper.sendTo(new PacketSpecialDeath(ent, 0), (EntityPlayerMP) ent);
 					}
 				}
-			}
+			} else {
+				this.charge = 1F;
+			}	
 		} else {
 			setIsFiring(stack, false);
 		}

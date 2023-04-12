@@ -47,7 +47,7 @@ public class JetpackBreak extends JetpackBase {
 		IHBMData props = HbmCapability.getData(player);
 		if(world.isRemote) {
 
-			if(player == MainRegistry.proxy.me()) {
+			if(player == MainRegistry.proxy.me() && props.isJetpackActive()) {
 
 				boolean last = props.getKeyPressed(EnumKeybind.JETPACK);
 				boolean current = MainRegistry.proxy.getIsKeyPressed(EnumKeybind.JETPACK);
@@ -60,7 +60,7 @@ public class JetpackBreak extends JetpackBase {
 
 		} else {
 
-			if(getFuel(stack) > 0 && (props.getKeyPressed(EnumKeybind.JETPACK) || (!player.onGround && !player.isSneaking()))) {
+			if(getFuel(stack) > 0 && (props.getKeyPressed(EnumKeybind.JETPACK) || (!player.onGround && !player.isSneaking())) && props.isJetpackActive()) {
 
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "jetpack");
@@ -70,7 +70,7 @@ public class JetpackBreak extends JetpackBase {
 		}
 		if(getFuel(stack) > 0) {
 
-			if(props.getKeyPressed(EnumKeybind.JETPACK)) {
+			if(props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 				player.fallDistance = 0;
 
 				if(player.motionY < 0.4D)

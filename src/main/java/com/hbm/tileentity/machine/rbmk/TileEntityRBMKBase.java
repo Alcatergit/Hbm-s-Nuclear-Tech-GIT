@@ -448,14 +448,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			}
 		}
 		
-		int smallDim = Math.min(maxX - minX, maxZ - minZ);
+		int smallDim = Math.max(maxX - minX, maxZ - minZ) * 2;
 		int avgX = minX + (maxX - minX) / 2;
 		int avgZ = minZ + (maxZ - minZ) / 2;
 		
 		NBTTagCompound data = new NBTTagCompound();
 		data.setString("type", "rbmkmush");
 		data.setFloat("scale", smallDim);
-		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + 1, avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + 1, avgZ + 0.5, 250));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + 3, avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + 3, avgZ + 0.5, 250));
 		MainRegistry.proxy.effectNT(data);
 		
 		world.playSound(null, avgX + 0.5, pos.getY() + 1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);

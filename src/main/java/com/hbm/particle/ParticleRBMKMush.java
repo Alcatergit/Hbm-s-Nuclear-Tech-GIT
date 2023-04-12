@@ -20,7 +20,7 @@ public class ParticleRBMKMush extends Particle {
 	
 	public ParticleRBMKMush(World worldIn, double posXIn, double posYIn, double posZIn, float scale){
 		super(worldIn, posXIn, posYIn, posZIn);
-		particleMaxAge = 50;
+		particleMaxAge = 80;
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		

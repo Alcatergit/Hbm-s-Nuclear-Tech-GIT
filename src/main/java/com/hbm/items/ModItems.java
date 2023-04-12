@@ -975,7 +975,7 @@ public class ModItems {
 	public static final Item gun_skystinger = new GunStinger("gun_skystinger").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_mp = new ItemGunBase(Gun556mmFactory.getEuphieConfig(), "gun_mp").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_bolter = new ItemGunBase(Gun75BoltFactory.getBolterConfig(), "gun_bolter").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_brimstone = new GunBrimstone("gun_brimstone").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_brimstone = new GunBrimstone("gun_brimstone").setCreativeTab(null);
 	public static final Item gun_cryolator = new GunCryolator("gun_cryolator").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_jack = new GunJack("gun_jack").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_immolator = new GunImmolator("gun_immolator").setCreativeTab(MainRegistry.weaponTab);
@@ -2404,11 +2404,11 @@ public class ModItems {
 	public static final Item gun_b92_ammo = new GunB92Cell("gun_b92_ammo").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_mirv_ammo = new ItemBase("gun_mirv_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_bf_ammo = new ItemBase("gun_bf_ammo").setCreativeTab(null);
+	public static final Item gun_bf_ammo = new ItemBase("gun_bf_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_xvl1456_ammo = new ItemBase("gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_hp_ammo = new ItemBase("gun_hp_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_dash_ammo = new ItemBase("gun_dash_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_dash_ammo = new ItemBase("gun_dash_ammo").setCreativeTab(null);
 	public static final Item gun_defabricator_ammo = new ItemBase("gun_defabricator_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_cryolator_ammo = new ItemBase("gun_cryolator_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_jack_ammo = new ItemBase("gun_jack_ammo").setCreativeTab(MainRegistry.weaponTab);

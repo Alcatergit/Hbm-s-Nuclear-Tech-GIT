@@ -264,6 +264,7 @@ public class GunEnergyFactory {
 		config.name = "Gluon Gun";
 		config.manufacturer = "Black Mesa Research Facility";
 
+		config.comment.add("Damage starts at 5/s and gets doubled every 2s while on target");
 		config.comment.add("Working to make a better tomorrow for all mankind.");
 
 		config.config = new ArrayList<Integer>();

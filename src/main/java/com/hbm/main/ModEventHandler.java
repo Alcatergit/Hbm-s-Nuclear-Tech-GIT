@@ -562,7 +562,7 @@ public class ModEventHandler {
 							meteor.posY = 384;
 							meteor.posZ = p.posZ + event.world.rand.nextInt(201) - 100;
 							meteor.motionX = event.world.rand.nextDouble() - 0.5;
-							meteor.motionY = -2.5;
+							meteor.motionY = -10;
 							meteor.motionZ = event.world.rand.nextDouble() - 0.5;
 							event.world.spawnEntity(meteor);
 						}
@@ -620,13 +620,17 @@ public class ModEventHandler {
 						if(entity instanceof EntityPlayer && RadiationConfig.neutronActivation){
 							EntityPlayer player = (EntityPlayer) entity;
 							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D;
-							ContaminationUtil.neutronActivateInventory(player, recievedRadiation > minRadRate ? (float)recievedRadiation : 0.0F, decayRate);
-							player.inventoryContainer.detectAndSendChanges();
 							float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
-							if(neutronRads > 0)
+							if(neutronRads > 0){
 								ContaminationUtil.contaminate(player, HazardType.NEUTRON, ContaminationType.CREATIVE, neutronRads * 0.05F);
-							else
+							}
+							else{
 								HbmLivingProps.setNeutron(entity, 0);
+							}
+							if(recievedRadiation > 0 || neutronRads > 0){
+								ContaminationUtil.neutronActivateInventory(player, recievedRadiation > minRadRate ? (float)recievedRadiation : 0.0F, decayRate);
+								player.inventoryContainer.detectAndSendChanges();
+							}
 						}
 
 						if(entity instanceof EntityPlayer && (((EntityPlayer) entity).capabilities.isCreativeMode || ((EntityPlayer) entity).isSpectator()))

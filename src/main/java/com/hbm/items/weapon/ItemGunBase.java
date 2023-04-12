@@ -447,15 +447,27 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		}
 	}
 
+	public static String getColor(int a, int b){
+		float fraction = 100F * a/b;
+		if(fraction > 75)
+			return "§a";
+		if(fraction > 25)
+			return "§e";
+		return "§c";
+	}
+
 	// item mouseover text
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		Item ammo = BulletConfigSyncingUtil.pullConfig(mainConfig.config.get(getMagType(stack))).ammo;
 
-		if(mainConfig.ammoCap > 0)
-			list.add("Ammo: " + getMag(stack) + " / " + mainConfig.ammoCap);
-		else
+		if(mainConfig.ammoCap > 0){
+			int mag = getMag(stack);
+			list.add("Ammo: "+ getColor(mag, mainConfig.ammoCap) + mag + " §2/ " + mainConfig.ammoCap);
+		}
+		else{
 			list.add("Ammo: Belt");
+		}
 
 		list.add("Ammo Type: " + I18n.format(ammo.getUnlocalizedName() + ".name"));
 
@@ -464,7 +476,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		if(dura < 0)
 			dura = 0;
 
-		list.add("Durability: " + dura + " / " + mainConfig.durability);
+		list.add("Durability: " + getColor(dura, mainConfig.durability) + dura + " §2/ " + mainConfig.durability);
 
 		// if(MainRegistry.enableDebugMode) {
 		list.add("");

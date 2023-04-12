@@ -234,6 +234,7 @@ import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.inventory.DFCRecipes;
+import com.hbm.inventory.PotionRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -545,7 +546,7 @@ public class MainRegistry {
 		ControlEvent.init();
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
-		
+		PotionRecipes.registerPotionRecipes();
 
 		proxy.registerRenderInfo();
 		HbmWorld.mainRegistry();

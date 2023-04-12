@@ -50,37 +50,17 @@ public class HbmPotion extends Potion {
 		taint = registerPotion(true, 8388736, "potion.hbm_taint", 0, 0);
 		radiation = registerPotion(true, 8700200, "potion.hbm_radiation", 1, 0);
 		bang = registerPotion(true, 1118481, "potion.hbm_bang", 3, 0);
-		mutation = registerPotion(false, 8388736, "potion.hbm_mutation", 2, 0);
-		radx = registerPotion(false, 0xBB4B00, "potion.hbm_radx", 5, 0);
+		mutation = registerPotion(false, 0xFF8132, "potion.hbm_mutation", 2, 0);
+		radx = registerPotion(false, 0x225900, "potion.hbm_radx", 5, 0);
 		lead = registerPotion(false, 0x767682, "potion.hbm_lead", 6, 0);
-		radaway = registerPotion(false, 0xBB4B00, "potion.hbm_radaway", 7, 0);
+		radaway = registerPotion(false, 0xFFE400, "potion.hbm_radaway", 7, 0);
 		telekinesis = registerPotion(true, 0x00F3FF, "potion.hbm_telekinesis", 0, 1);
-		phosphorus = registerPotion(true, 0xFFFF00, "potion.hbm_phosphorus", 1, 1);
+		phosphorus = registerPotion(true, 0xFF3A00, "potion.hbm_phosphorus", 1, 1);
 		stability = registerPotion(false, 0xD0D0D0, "potion.hbm_stability", 2, 1);
-		potionsickness = registerPotion(false, 0xff8080, "potion.hbm_potionsickness", 3, 1);
+		potionsickness = registerPotion(false, 0xFF8080, "potion.hbm_potionsickness", 3, 1);
 	}
 
 	public static HbmPotion registerPotion(boolean isBad, int color, String name, int x, int y) {
-
-	/*	if (id >= Potion.potionTypes.length) {
-
-			Potion[] newArray = new Potion[Math.max(256, id)];
-			System.arraycopy(Potion.potionTypes, 0, newArray, 0, Potion.potionTypes.length);
-			
-			Field field = ReflectionHelper.findField(Potion.class, new String[] { "field_76425_a", "potionTypes" });
-			field.setAccessible(true);
-			
-			try {
-				
-				Field modfield = Field.class.getDeclaredField("modifiers");
-				modfield.setAccessible(true);
-				modfield.setInt(field, field.getModifiers() & 0xFFFFFFEF);
-				field.set(null, newArray);
-				
-			} catch (Exception e) {
-				
-			}
-		}*/
 		
 		HbmPotion effect = new HbmPotion(isBad, color, name, x, y);
 		ForgeRegistries.POTIONS.register(effect);
@@ -126,8 +106,7 @@ public class HbmPotion extends Potion {
 		}
 		if(this == bang) {
 			
-			entity.attackEntityFrom(ModDamageSource.bang, 1000);
-			entity.setHealth(0.0F);
+			entity.attackEntityFrom(ModDamageSource.bang, 1000*(level+1));
 
 			if (!(entity instanceof EntityPlayer))
 				entity.setDead();
@@ -144,15 +123,14 @@ public class HbmPotion extends Potion {
 			int remaining = entity.getActivePotionEffect(this).getDuration();
 			
 			if(remaining > 1) {
-				entity.motionY = 0.5;
-			} else {
-				entity.motionY = -2;
-				entity.fallDistance = 50;
+				entity.motionX = entity.motionX+(entity.getRNG().nextFloat()-0.5)*(level+1);
+				entity.motionY = entity.motionY+(entity.getRNG().nextFloat()-0.5)*(level+1);
+				entity.motionZ = entity.motionZ+(entity.getRNG().nextFloat()-0.5)*(level+1);
 			}
 		}
 		if(this == phosphorus && !entity.world.isRemote) {
 			
-			entity.setFire(1);
+			entity.setFire(level+1);
 		}
 	}
 

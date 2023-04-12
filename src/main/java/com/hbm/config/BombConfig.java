@@ -23,7 +23,7 @@ public class BombConfig {
 	public static int mk4 = 1024;
 	public static int blastSpeed = 1024;
 	public static int falloutRange = 100;
-	public static int fChunkSpeed = 6;
+	public static int fChunkSpeed = 10;
 	public static boolean evaporateWater = true;
 	public static boolean fillCraterWithWater = true;
 	public static int oceanHeight = 0;

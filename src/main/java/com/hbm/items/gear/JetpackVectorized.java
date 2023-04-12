@@ -49,7 +49,7 @@ public class JetpackVectorized extends JetpackBase {
 
 		if(world.isRemote) {
 
-			if(player == MainRegistry.proxy.me()) {
+			if(player == MainRegistry.proxy.me() && props.isJetpackActive()) {
 
 				boolean last = props.getKeyPressed(EnumKeybind.JETPACK);
 				boolean current = MainRegistry.proxy.getIsKeyPressed(EnumKeybind.JETPACK);
@@ -62,7 +62,7 @@ public class JetpackVectorized extends JetpackBase {
 
 		} else {
 
-			if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK)) {
+			if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "jetpack");
@@ -72,7 +72,7 @@ public class JetpackVectorized extends JetpackBase {
 			}
 		}
 
-		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK)) {
+		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 
 			if(player.motionY < 0.4D)
 				player.motionY += 0.1D;

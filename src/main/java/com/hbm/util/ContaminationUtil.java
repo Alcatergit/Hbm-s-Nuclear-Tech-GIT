@@ -13,6 +13,7 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.ModItems;
+import com.hbm.blocks.items.ItemBlockHazard;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -257,11 +258,16 @@ public class ContaminationUtil {
 		if(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive()){
 			return true;
 		}
+
+		if(stack.getItem() instanceof ItemBlockHazard && ((ItemBlockHazard)stack.getItem()).getModule().radiation > 0){
+			return true;
+		}
+
 		return false;
 	}
 
 	public static float getNeutronRads(ItemStack stack){
-		if(stack != null && !isRadItem(stack)){
+		if(stack != null && !stack.isEmpty() && !isRadItem(stack)){
 			if(stack.hasTagCompound()){
 				NBTTagCompound nbt = stack.getTagCompound();
 				if(nbt.hasKey("ntmNeutron")){
@@ -273,18 +279,20 @@ public class ContaminationUtil {
 	}
 
 	public static void neutronActivateInventory(EntityPlayer player, float rad, float decay){
-		ItemStack mainHandItem = player.getHeldItemMainhand().copy();
-		for(ItemStack slotI : player.inventory.mainInventory){
-			neutronActivateItem(slotI, rad, decay);
+		for(int slotI = 0; slotI < player.inventory.getSizeInventory()-1; slotI++){
+			if(slotI != player.inventory.currentItem)
+				neutronActivateItem(player.inventory.getStackInSlot(slotI), rad, decay);
 		}
 		for(ItemStack slotA : player.inventory.armorInventory){
 			neutronActivateItem(slotA, rad, decay);
 		}
-		player.setHeldItem(EnumHand.MAIN_HAND , mainHandItem);
 	}
 
 	public static void neutronActivateItem(ItemStack stack, float rad, float decay){
-		if(stack != null && !isRadItem(stack)){
+		if(stack != null && !stack.isEmpty() && !isRadItem(stack)){
+			if(stack.getCount() > 1)
+				return;
+
 			NBTTagCompound nbt;
 			if(stack.hasTagCompound()){
 				nbt = stack.getTagCompound();

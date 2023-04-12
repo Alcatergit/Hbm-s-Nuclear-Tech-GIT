@@ -80,13 +80,13 @@ public class DFCRecipes {
 		DFCRecipes.setRecipe(200000000000L, SBD.ingot(), new ItemStack(ModItems.ingot_dineutronium));
 		
 		DFCRecipes.setRecipe(400000000000L, U238.ingot(), new ItemStack(ModItems.ingot_u238m2));
-		DFCRecipes.setRecipe(450000000000L, U238.nugget(), new ItemStack(ModItems.nugget_u238m2));
-
-		DFCRecipes.setRecipe(690000000000L, Items.WRITABLE_BOOK, new ItemStack(ModItems.book_of_));
-
+		DFCRecipes.setRecipe(420000000000L, U238.nugget(), new ItemStack(ModItems.nugget_u238m2));
+		DFCRecipes.setRecipe(690000000000L, ModItems.gun_uboinik, new ItemStack(ModItems.gun_supershotgun));
+		
 		DFCRecipes.setRecipe(1000000000000L, ModItems.undefined, new ItemStack(ModItems.glitch));
 		DFCRecipes.setRecipe(10000000000000L, ModItems.rod_of_discord, new ItemStack(ModItems.wand));
 		DFCRecipes.setRecipe(12000000000000L, ModItems.battery_spark_cell_power, new ItemStack(ModItems.battery_creative));
+		DFCRecipes.setRecipe(69000000000000L, Items.WRITABLE_BOOK, new ItemStack(ModItems.book_of_));
 	}
 
 	public static void setRecipe(long requiredFlux, ItemStack in, ItemStack out) {

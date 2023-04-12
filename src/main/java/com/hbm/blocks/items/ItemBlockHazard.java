@@ -16,6 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemBlockHazard extends ItemBlock {
+
 	ItemHazardModule module;
 
 	public ItemBlockHazard(Block block) {
@@ -24,6 +25,10 @@ public class ItemBlockHazard extends ItemBlock {
 		if(block instanceof IItemHazard) {
 			this.module = ((IItemHazard)block).getModule();
 		}
+	}
+
+	public ItemHazardModule getModule() {
+		return module;
 	}
 	
 	@Override

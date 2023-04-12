@@ -100,11 +100,14 @@ public abstract class BlockGasBase extends Block {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
 			
-			HbmWorldUtility.setImmediateScheduledUpdates(world, false); //prevent recursive loop when some dumbass forgets to clean up immediate updating
+			if(world.rand.nextInt(20) == 0){
 
-			if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
-				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ())))
-					world.scheduleUpdate(pos, this, getDelay(world));
+				HbmWorldUtility.setImmediateScheduledUpdates(world, false); //prevent recursive loop when some dumbass forgets to clean up immediate updating
+
+				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
+					if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ())))
+						world.scheduleUpdate(pos, this, getDelay(world));
+			}
 		}
 	}
 	
@@ -130,7 +133,7 @@ public abstract class BlockGasBase extends Block {
 	}
 
 	public int getDelay(World world) {
-		return 2;
+		return 20;
 	}
 
 	public ForgeDirection randomHorizontal(World world) {

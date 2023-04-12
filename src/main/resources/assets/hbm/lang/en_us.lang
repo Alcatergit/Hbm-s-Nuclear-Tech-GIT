@@ -714,16 +714,59 @@ hbm.achievement.someWounds.desc=Get ready
 hbm.achievement.someWounds=Some Wounds Never Heal
 
 potion.hbm_taint=Tainted
-potion.hbm_mutation=Tainted Heart
+potion.hbm_mutation=Ghoulified
 potion.hbm_radiation=Contaminated
 potion.hbm_bang=! ! !
 potion.hbm_radx=Rad-X
 potion.hbm_lead=Lead Poisoning
 potion.hbm_radaway=Radaway
-potion.hbm_telekinesis=! ! !
+potion.hbm_telekinesis=Telekinesis
 potion.hbm_phosphorus=Phosphorus Burns
 potion.hbm_stability=Stability
 
+potion.effect.potion.hbm_taint=Potion of Taint
+potion.effect.potion.hbm_mutation=Potion of Ghoulification
+potion.effect.potion.hbm_radiation=Potion of Contamination
+potion.effect.potion.hbm_bang=Potion of ! ! !
+potion.effect.potion.hbm_radx=Potion of Rad-X
+potion.effect.potion.hbm_lead=Potion of Lead Poisoning
+potion.effect.potion.hbm_radaway=Potion of Radaway
+potion.effect.potion.hbm_telekinesis=Potion of Telekinesis
+potion.effect.potion.hbm_phosphorus=Potion of Phosphorus Burns
+potion.effect.potion.hbm_stability=Potion of Stability
+
+splash_potion.effect.potion.hbm_taint=Splash Potion of Taint
+splash_potion.effect.potion.hbm_mutation=Splash Potion of Ghoulification
+splash_potion.effect.potion.hbm_radiation=Splash Potion of Contamination
+splash_potion.effect.potion.hbm_bang=Splash Potion of ! ! !
+splash_potion.effect.potion.hbm_radx=Splash Potion of Rad-X
+splash_potion.effect.potion.hbm_lead=Splash Potion of Lead Poisoning
+splash_potion.effect.potion.hbm_radaway=Splash Potion of Radaway
+splash_potion.effect.potion.hbm_telekinesis=Splash Potion of Telekinesis
+splash_potion.effect.potion.hbm_phosphorus=Splash Potion of Phosphorus Burns
+splash_potion.effect.potion.hbm_stability=Splash Potion of Stability
+
+lingering_potion.effect.potion.hbm_taint=Lingering Potion of Taint
+lingering_potion.effect.potion.hbm_mutation=Lingering Potion of Ghoulification
+lingering_potion.effect.potion.hbm_radiation=Lingering Potion of Contamination
+lingering_potion.effect.potion.hbm_bang=Lingering Potion of ! ! !
+lingering_potion.effect.potion.hbm_radx=Lingering Potion of Rad-X
+lingering_potion.effect.potion.hbm_lead=Lingering Potion of Lead Poisoning
+lingering_potion.effect.potion.hbm_radaway=Lingering Potion of Radaway
+lingering_potion.effect.potion.hbm_telekinesis=Lingering Potion of Telekinesis
+lingering_potion.effect.potion.hbm_phosphorus=Lingering Potion of Phosphorus Burns
+lingering_potion.effect.potion.hbm_stability=Lingering Potion of Stability
+
+tipped_arrow.effect.potion.hbm_taint=Arrow of Taint
+tipped_arrow.effect.potion.hbm_mutation=Arrow of Ghoulification
+tipped_arrow.effect.potion.hbm_radiation=Arrow of Contamination
+tipped_arrow.effect.potion.hbm_bang=Arrow of ! ! !
+tipped_arrow.effect.potion.hbm_radx=Arrow of Rad-X
+tipped_arrow.effect.potion.hbm_lead=Arrow of Lead Poisoning
+tipped_arrow.effect.potion.hbm_radaway=Arrow of Radaway
+tipped_arrow.effect.potion.hbm_telekinesis=Arrow of Telekinesis
+tipped_arrow.effect.potion.hbm_phosphorus=Arrow of Phosphorus Burns
+tipped_arrow.effect.potion.hbm_stability=Arrow of Stability
 
 rbmk.heat=Column temperature: %s
 rbmk.boiler.water=Feedwater: %s / %s
@@ -2554,6 +2597,9 @@ item.gun_skystinger.name=The One Sky Stinger
 item.gun_stinger_ammo.name=Stinger Rocket
 item.gun_hk69.name=Grenade Pistol
 item.gun_quadro.name=Quattro Formaggi
+item.gun_supershotgun.name=Super Shotgun
+item.gun_brimstone.name=Brimstone Lasergun
+item.gun_dash_ammo.name=Brimstone Ammo
 
 item.flame_pony.name=Painting of a Cartoon Pony
 item.flame_conspiracy.name=Conspiracy Theory

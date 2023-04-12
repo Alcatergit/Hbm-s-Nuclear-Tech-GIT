@@ -627,7 +627,7 @@ public class ItemSyringe extends Item {
 		if(this == ModItems.syringe_taint) {
 			tooltip.add("Tainted I for 60 seconds");
 			tooltip.add("Nausea I for 5 seconds");
-			tooltip.add("Cloud damage + taint = tainted heart effect");
+			tooltip.add("Cloud damage + taint = ghoulified effect");
 		}
 		if(this == ModItems.med_bag) {
 			tooltip.add("Full heal, regardless of max health");
