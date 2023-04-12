@@ -123,9 +123,9 @@ public class HbmPotion extends Potion {
 			int remaining = entity.getActivePotionEffect(this).getDuration();
 			
 			if(remaining > 1) {
-				entity.motionX = entity.motionX+(entity.getRNG().nextFloat()-0.5)*(level+1);
-				entity.motionY = entity.motionY+(entity.getRNG().nextFloat()-0.5)*(level+1);
-				entity.motionZ = entity.motionZ+(entity.getRNG().nextFloat()-0.5)*(level+1);
+				entity.motionX = entity.motionX+(entity.getRNG().nextFloat()-0.5)*(level+1)*0.5;
+				entity.motionY = entity.motionY+(entity.getRNG().nextFloat()-0.5)*(level+1)*0.5;
+				entity.motionZ = entity.motionZ+(entity.getRNG().nextFloat()-0.5)*(level+1)*0.5;
 			}
 		}
 		if(this == phosphorus && !entity.world.isRemote) {
