@@ -1625,6 +1625,12 @@ public class ModEventHandlerClient {
 					RenderScreenOverlay.renderRadCounter(event.getResolution(), rads, Minecraft.getMinecraft().ingameGUI);
 				}
 			}
+			if(Library.hasInventoryItem(player.inventory, ModItems.digamma_diagnostic)) {
+	
+				float digamma = (float)Library.getEntRadCap(player).getDigamma();
+
+				RenderScreenOverlay.renderDigCounter(event.getResolution(), digamma, Minecraft.getMinecraft().ingameGUI);
+			}
 			if(JetpackHandler.hasJetpack(player)){
 				JetpackHandler.renderHUD(player, event.getResolution());
 			}

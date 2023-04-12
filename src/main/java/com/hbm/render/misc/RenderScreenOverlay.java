@@ -24,9 +24,13 @@ public class RenderScreenOverlay {
 	private static final ResourceLocation misc = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_misc.png");
 	private static final RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	
-	private static long lastSurvey;
-	private static float prevResult;
-	private static float lastResult;
+	private static long lastRadSurvey;
+	private static float prevRadResult;
+	private static float lastRadResult;
+
+	private static long lastDigSurvey;
+	private static float prevDigResult;
+	private static float lastDigResult;
 	
 	public static void renderRadCounter(ScaledResolution resolution, float in, Gui gui) {
 		GL11.glPushMatrix();
@@ -40,12 +44,12 @@ public class RenderScreenOverlay {
         
         float radiation = 0;
         
-        radiation = lastResult - prevResult;
+        radiation = lastRadResult - prevRadResult;
         
-        if(System.currentTimeMillis() >= lastSurvey + 1000) {
-        	lastSurvey = System.currentTimeMillis();
-        	prevResult = lastResult;
-        	lastResult = in;
+        if(System.currentTimeMillis() >= lastRadSurvey + 1000) {
+        	lastRadSurvey = System.currentTimeMillis();
+        	prevRadResult = lastRadResult;
+        	lastRadResult = in;
         }
 		
 		int length = 74;
@@ -64,22 +68,83 @@ public class RenderScreenOverlay {
         gui.drawTexturedModalRect(posX + 1, posY + 1, 1, 19, bar, 16);
         
         if(radiation >= 25) {
-            gui.drawTexturedModalRect(posX + length + 2, posY - 18, 36, 36, 18, 18);
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 36, 36, 18, 18);
         	
         } else if(radiation >= 10) {
-            gui.drawTexturedModalRect(posX + length + 2, posY - 18, 18, 36, 18, 18);
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 18, 36, 18, 18);
         	
         } else if(radiation >= 2.5) {
-            gui.drawTexturedModalRect(posX + length + 2, posY - 18, 0, 36, 18, 18);
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 0, 36, 18, 18);
         	
         }
 		
 		if(radiation > 1000) {
-			Minecraft.getMinecraft().fontRenderer.drawString(">1000 RAD/s", posX, posY - 8, 0xFF0000);
+			Minecraft.getMinecraft().fontRenderer.drawString(">1000 RAD/s", posX, posY - 8, 0x00FF00);
 		} else if(radiation >= 1) {
 			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(radiation)) + " RAD/s", posX, posY - 8, 0xFF0000);
 		} else if(radiation > 0) {
-			Minecraft.getMinecraft().fontRenderer.drawString("<1 RAD/s", posX, posY - 8, 0xFF0000);
+			Minecraft.getMinecraft().fontRenderer.drawString("<1 RAD/s", posX, posY - 8, 0x00FF00);
+		}
+
+        GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
+        GL11.glPopMatrix();
+		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
+	}
+
+
+	public static void renderDigCounter(ScaledResolution resolution, float in, Gui gui) {
+		GL11.glPushMatrix();
+
+		GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableAlpha();
+        
+        float digamma = 0;
+        
+        digamma = lastDigResult - prevDigResult;
+        
+        if(System.currentTimeMillis() >= lastDigSurvey + 1000) {
+        	lastDigSurvey = System.currentTimeMillis();
+        	prevDigResult = lastDigResult;
+        	lastDigResult = in;
+        }
+		
+		int length = 74;
+		int maxDig = 10;
+		
+		int bar = getScaled(in, maxDig, 74);
+		
+		//if(radiation >= 1 && radiation <= 999)
+		//	bar -= (1 + Minecraft.getMinecraft().theWorld.rand.nextInt(3));
+		
+		int posX = 16;
+		int posY = resolution.getScaledHeight() - 36 - 2;
+
+		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
+        gui.drawTexturedModalRect(posX, posY, 0, 218, 94, 18);
+        gui.drawTexturedModalRect(posX + 1, posY + 1, 1, 237, bar, 16);
+        
+        if(digamma >= 0.25) {
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 108, 72, 18, 18);
+        	
+        } else if(digamma >= 0.1) {
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 90, 72, 18, 18);
+        	
+        } else if(digamma >= 0.025) {
+            gui.drawTexturedModalRect(posX + length + 2 + 18, posY, 72, 72, 18, 18);
+        	
+        }
+		
+		if(digamma > 0.1) {
+			Minecraft.getMinecraft().fontRenderer.drawString(">100 mDRX/s", posX, posY - 8, 0xFF0000);
+		} else if(digamma >= 0.01) {
+			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(digamma*1000D)) + " mDRX/s", posX, posY - 8, 0xFF0000);
+		} else if(digamma > 0) {
+			Minecraft.getMinecraft().fontRenderer.drawString("<10 mDRX/s", posX, posY - 8, 0xFF0000);
 		}
 
         GlStateManager.enableDepth();

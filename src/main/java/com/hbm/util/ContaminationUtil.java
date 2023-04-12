@@ -459,9 +459,12 @@ public class ContaminationUtil {
 		EntityLivingBase entity = (EntityLivingBase)e;
 		return HbmLivingProps.getDigamma(entity);
 	}
-
-
 	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float fire3d) {
+		radiate(world, x, y, z, range, rad3d, 0, fire3d);
+	}
+
+
+	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float dig3d, float fire3d) {
 		
 		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).grow(range, range, range));
 		
@@ -484,12 +487,20 @@ public class ContaminationUtil {
 			
 			if(res < 1)
 				res = 1;
-			
-			float eRads = rad3d;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-			
-			contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
+			if(rad3d > 0){
+				float eRads = rad3d;
+				eRads /= (float)res;
+				eRads /= (float)(len * len);
+				
+				contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
+			}
+			if(dig3d > 0){
+				float eDig = dig3d;
+				eDig /= (float)res;
+				eDig /= (float)(len * len);
+				
+				contaminate(e, HazardType.DIGAMMA, ContaminationType.DIGAMMA, eDig);
+			}
 			
 			if(len < 15 && fire3d > 0) {
 				float fireDmg = fire3d;

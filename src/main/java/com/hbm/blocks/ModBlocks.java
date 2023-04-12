@@ -51,7 +51,6 @@ import com.hbm.blocks.generic.BMPowerBox;
 import com.hbm.blocks.generic.BarbedWire;
 import com.hbm.blocks.generic.BlockAbsorber;
 import com.hbm.blocks.generic.BlockAmmoCrate;
-import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.blocks.generic.BlockBallsSpawner;
 import com.hbm.blocks.generic.BlockBeaconable;
 import com.hbm.blocks.generic.BlockBedrockOre;
@@ -837,7 +836,7 @@ public class ModBlocks {
 	
 
 	// A lot of stuff with uses no one knows
-	public static final Block ash_digamma = new BlockAshes(Material.SAND, "ash_digamma").setSoundType(SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(150.0F);
+	public static final Block ash_digamma = new BlockHazardFalling(Material.SAND, "ash_digamma", SoundType.SAND).addDigamma(0.001F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(150.0F);
 	public static final Block sand_boron = new BlockFallingBase(Material.SAND, "sand_boron", SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
 	public static final Block sand_lead = new BlockFallingBase(Material.SAND, "sand_lead", SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
 	public static final Block sand_uranium = new BlockHazardFalling(Material.SAND, "sand_uranium", SoundType.SAND).addRadiation(ItemHazard.u * ItemHazard.nugget).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
