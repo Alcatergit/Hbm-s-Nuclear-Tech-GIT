@@ -17,12 +17,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 public class MachineFENSU extends BlockDummyableMBB {
@@ -92,9 +94,32 @@ public class MachineFENSU extends BlockDummyableMBB {
 			if(pos == null)
 				return false;
 
-			TileEntityMachineFENSU entity = (TileEntityMachineFENSU) world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
-			if(entity != null)
-			{
+			BlockPos corePos = new BlockPos(pos[0], pos[1], pos[2]);
+			TileEntityMachineFENSU entity = (TileEntityMachineFENSU) world.getTileEntity(corePos);
+			if(entity != null) {
+				if(!player.getHeldItem(hand).isEmpty()){
+
+					int[] ores = OreDictionary.getOreIDs(player.getHeldItem(hand));
+					for(int ore : ores){
+						String name = OreDictionary.getOreName(ore);
+						//Why are these ones named differently
+						if(name.equals("dyeLightBlue"))
+							name = "dyeLight_Blue";
+						if(name.equals("dyeLightGray"))
+							name = "dyeSilver";
+						if(name.length() > 3 && name.startsWith("dye")){
+							try {
+								EnumDyeColor color = EnumDyeColor.valueOf(name.substring(3, name.length()).toUpperCase());
+								entity.color = color;
+								entity.markDirty();
+								world.notifyBlockUpdate(corePos, state, state, 2 | 4);
+								if(!player.isCreative())
+									player.getHeldItem(hand).shrink(1);
+								return true;
+							} catch(IllegalArgumentException e){}
+						}
+					}
+				}
 				FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_machine_battery, world, pos[0], pos[1], pos[2]);
 			}
 			return true;
@@ -163,6 +188,7 @@ public class MachineFENSU extends BlockDummyableMBB {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, list, flagIn);
+		list.add("Change color using dyes");
 		long charge = 0L;
 		if(stack.hasTagCompound()){
 			NBTTagCompound nbt = stack.getTagCompound();

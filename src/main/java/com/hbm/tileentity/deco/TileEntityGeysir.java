@@ -28,7 +28,7 @@ public class TileEntityGeysir extends TileEntity implements ITickable {
 	
 	@Override
 	public void update() {
-		if (!this.world.isRemote && world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
+		if (!this.world.isRemote && world.isAirBlock(pos.up())) {
 			timer--;
 			
 			IBlockState state = world.getBlockState(pos);

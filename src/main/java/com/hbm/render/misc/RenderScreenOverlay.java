@@ -81,7 +81,7 @@ public class RenderScreenOverlay {
 		if(radiation > 1000) {
 			Minecraft.getMinecraft().fontRenderer.drawString(">1000 RAD/s", posX, posY - 8, 0x00FF00);
 		} else if(radiation >= 1) {
-			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(radiation)) + " RAD/s", posX, posY - 8, 0xFF0000);
+			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(radiation)) + " RAD/s", posX, posY - 8, 0xFFFF00);
 		} else if(radiation > 0) {
 			Minecraft.getMinecraft().fontRenderer.drawString("<1 RAD/s", posX, posY - 8, 0x00FF00);
 		}
@@ -140,11 +140,11 @@ public class RenderScreenOverlay {
         }
 		
 		if(digamma > 0.1) {
-			Minecraft.getMinecraft().fontRenderer.drawString(">100 mDRX/s", posX, posY - 8, 0xFF0000);
+			Minecraft.getMinecraft().fontRenderer.drawString(">100 mDRX/s", posX, posY - 8, 0xCC0000);
 		} else if(digamma >= 0.01) {
 			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(digamma*1000D)) + " mDRX/s", posX, posY - 8, 0xFF0000);
 		} else if(digamma > 0) {
-			Minecraft.getMinecraft().fontRenderer.drawString("<10 mDRX/s", posX, posY - 8, 0xFF0000);
+			Minecraft.getMinecraft().fontRenderer.drawString("<10 mDRX/s", posX, posY - 8, 0xFF3232);
 		}
 
         GlStateManager.enableDepth();

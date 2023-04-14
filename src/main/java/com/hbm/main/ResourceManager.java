@@ -473,7 +473,24 @@ public class ResourceManager {
 	public static final ResourceLocation iter_torus_vaporwave = new ResourceLocation(RefStrings.MODID, "textures/models/iter/torus_vaporwave.png");
 
 	//FENSU
-	public static final ResourceLocation fensu_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu.png");
+	public static final ResourceLocation[] fensu_tex = new ResourceLocation[] { 
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_white.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_orange.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_magenta.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_light_blue.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_yellow.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_lime.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_pink.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_gray.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_light_gray.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_cyan.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_purple.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_blue.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_brown.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_green.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_red.png"),
+		new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensus/fensu_black.png")
+	};
 
 	public static final ResourceLocation jshotgun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/jade_shotgun.png");
 	public static final ResourceLocation jshotgun_lmap = new ResourceLocation(RefStrings.MODID, "textures/models/jade_shotgun_lmap.png");

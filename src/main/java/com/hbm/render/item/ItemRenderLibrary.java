@@ -228,7 +228,9 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon() {
 		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		        bindTexture(ResourceManager.fensu_tex); ResourceManager.fensu.renderPart("Base"); ResourceManager.fensu.renderPart("Disc");
+		        bindTexture(ResourceManager.fensu_tex[3]); 
+		        ResourceManager.fensu.renderPart("Base"); 
+		        ResourceManager.fensu.renderPart("Disc");
 		        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		        GL11.glDisable(GL11.GL_LIGHTING);
 		        GlStateManager.disableCull();

@@ -116,23 +116,23 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 			vertices[(i+1)*3+2] = (float) vertex.zCoord+oZ;
 		}
 		
-        Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buf = tes.getBuffer();
-        buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        float alpha = 0.65F;
-        for(int m = -1; m <= 1; m += 2){
-        	for(int i = 2; i <= sides; i ++){
-            	buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
-                buf.pos(vertices[(i-1)*3]*m, vertices[(i-1)*3+1], vertices[(i-1)*3+2]).color(r, g, b, 0).endVertex();
-                buf.pos(vertices[i*3]*m, vertices[i*3+1], vertices[i*3+2]).color(r, g, b, 0).endVertex();
-            }
-            buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
-            buf.pos(vertices[sides*3]*m, vertices[sides*3+1], vertices[sides*3+2]).color(r, g, b, 0).endVertex();
-            buf.pos(vertices[1*3]*m, vertices[1*3+1], vertices[1*3+2]).color(r, g, b, 0).endVertex();
-        }
-        tes.draw();
-        
-        GL11.glEndList();
-        return list;
+	        Tessellator tes = Tessellator.getInstance();
+	        BufferBuilder buf = tes.getBuffer();
+	        buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+	        float alpha = 0.65F;
+	        for(int m = -1; m <= 1; m += 2){
+	        	for(int i = 2; i <= sides; i ++){
+	            	buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
+	                buf.pos(vertices[(i-1)*3]*m, vertices[(i-1)*3+1], vertices[(i-1)*3+2]).color(r, g, b, 0).endVertex();
+	                buf.pos(vertices[i*3]*m, vertices[i*3+1], vertices[i*3+2]).color(r, g, b, 0).endVertex();
+	            }
+	            buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
+	            buf.pos(vertices[sides*3]*m, vertices[sides*3+1], vertices[sides*3+2]).color(r, g, b, 0).endVertex();
+	            buf.pos(vertices[1*3]*m, vertices[1*3+1], vertices[1*3+2]).color(r, g, b, 0).endVertex();
+	        }
+	        tes.draw();
+	        
+	        GL11.glEndList();
+	        return list;
 	}
 }

@@ -29,10 +29,11 @@ public class RenderFENSU extends TileEntitySpecialRenderer<TileEntityMachineFENS
 		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(ResourceManager.fensu_tex);
-        ResourceManager.fensu.renderPart("Base");
+        
 
         TileEntityMachineFENSU fensu = (TileEntityMachineFENSU)te;
+        bindTexture(ResourceManager.fensu_tex[fensu.color.getMetadata()]);
+        ResourceManager.fensu.renderPart("Base");
         float rot = fensu.prevRotation + (fensu.rotation - fensu.prevRotation) * partialTicks;
 
         GL11.glTranslated(0, 2.5, 0);

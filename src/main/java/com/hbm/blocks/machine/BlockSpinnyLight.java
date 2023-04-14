@@ -76,7 +76,7 @@ public class BlockSpinnyLight extends BlockContainer {
 						ent.color = color;
 						ent.markDirty();
 						worldIn.notifyBlockUpdate(pos, state, state, 2 | 4);
-						//if(!playerIn.isCreative())
+						if(!playerIn.isCreative())
 							playerIn.getHeldItem(hand).shrink(1);
 						return true;
 					} catch(IllegalArgumentException e){}

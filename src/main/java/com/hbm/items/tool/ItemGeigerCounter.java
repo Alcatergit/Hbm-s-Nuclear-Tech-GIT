@@ -54,7 +54,7 @@ public class ItemGeigerCounter extends Item {
 			double x = ContaminationUtil.getActualPlayerRads((EntityPlayer)entity);
 			
 			if(world.getTotalWorldTime() % 5 == 0) {
-				
+
 				if(x > 0.001) {
 					List<Integer> list = new ArrayList<Integer>();
 
@@ -84,17 +84,18 @@ public class ItemGeigerCounter extends Item {
 					}
 					if(240 < x && x < 640){
 						list.add(7);
-					} else {
+					}
+					if(480 < x){
 						list.add(8);
 					}
-					
 					if(list.size() > 0){
 						int r = list.get(rand.nextInt(list.size()));
 						
-						if(r > 0)
+						if(r > 0){
 							world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
+						}
 					}
-				} else if(rand.nextInt(50) == 0) {
+				} else if(rand.nextInt(100) == 0) {
 					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
 				}
 			}

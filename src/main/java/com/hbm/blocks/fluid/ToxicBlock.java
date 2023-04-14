@@ -1,7 +1,5 @@
 package com.hbm.blocks.fluid;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
@@ -89,11 +87,5 @@ public class ToxicBlock extends BlockFluidClassic {
 	@Override
 	public int tickRate(World world) {
 		return 15;
-	}
-	
-	@Override
-	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos){
-		Random rand = new Random();
-		return rand.nextInt(64) == 0;
 	}
 }

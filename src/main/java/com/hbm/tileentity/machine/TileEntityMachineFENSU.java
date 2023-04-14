@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.lib.Library;
 
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -10,12 +11,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 
+	public EnumDyeColor color = EnumDyeColor.LIGHT_BLUE;
+
 	public float prevRotation = 0F;
 	public float rotation = 0F;
 
 	@Override
 	public void update() {
-
+		
 		this.maxPower = Long.MAX_VALUE;
 
 		if(!world.isRemote) {
@@ -52,6 +55,7 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 			nbt.setLong("maxPower", maxPower);
 			nbt.setShort("redLow", redLow);
 			nbt.setShort("redHigh", redHigh);
+			nbt.setByte("color", (byte) this.color.getMetadata());
 			this.networkPack(nbt, 250);
 
 			this.detectAndSendChanges();
@@ -85,8 +89,25 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public double getMaxRenderDistanceSquared()
-	{
+	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) { 
+		this.color = EnumDyeColor.byMetadata(nbt.getByte("color"));
+		super.networkUnpack(nbt);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		this.color = EnumDyeColor.byMetadata(compound.getByte("color"));
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setByte("color", (byte) this.color.getMetadata());
+		return super.writeToNBT(compound);
 	}
 }
