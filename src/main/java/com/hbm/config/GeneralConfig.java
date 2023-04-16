@@ -56,6 +56,8 @@ public class GeneralConfig {
 	public static boolean shaped = true;
 	public static boolean nonoredict = true;
 	public static boolean jei = true;
+	public static boolean changelog = true;
+	public static boolean duckButton = true;
 	public static boolean depthEffects = true;
 	public static boolean flashlight = true;
 	public static boolean flashlightVolumetric = true;
@@ -132,6 +134,8 @@ public class GeneralConfig {
 		nonoredict = config.get(CATEGORY_GENERAL, "1.28_enableNonOreDict", true).getBoolean(true);
 		
 		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
+		changelog = config.get(CATEGORY_GENERAL, "1.28_enableChangelog", true).getBoolean(true);
+		duckButton = config.get(CATEGORY_GENERAL, "1.28_enableDuckButton", true).getBoolean(true);
 		useShaders2 = config.get(CATEGORY_GENERAL, "1.29_enableShaders2", false).getBoolean(false);
 		bloom = config.get(CATEGORY_GENERAL, "1.30_enableBloom", true).getBoolean(true);
 		heatDistortion = config.get(CATEGORY_GENERAL, "1.30_enableHeatDistortion", true).getBoolean(true);

@@ -283,6 +283,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		nbt.removeTag("cherenkovR");
 		nbt.removeTag("cherenkovG");
 		nbt.removeTag("cherenkovB");
+		nbt.removeTag("jumpheight");
 		nbt.removeTag("steam");
 		nbt.removeTag("water");
 	}

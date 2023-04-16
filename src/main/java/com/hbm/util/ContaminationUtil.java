@@ -308,7 +308,7 @@ public class ContaminationUtil {
 				return;
 
 			float newActivation = prevActivation * decay + (rad / stack.getCount());
-			if(prevActivation * decay + rad < 0.0001F){
+			if(prevActivation * decay + rad < 0.0001F || (rad <= 0 && newActivation < 0.001F )){
 				nbt.removeTag("ntmNeutron");
 			} else {
 				nbt.setFloat("ntmNeutron", newActivation);

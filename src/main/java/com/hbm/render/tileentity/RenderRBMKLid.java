@@ -73,7 +73,9 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder buf = tess.getBuffer();
-		
+		if(!(control.getBlockType() instanceof RBMKBase))
+			return;
+
 		RBMKBase block = (RBMKBase)control.getBlockType();
 		IModelCustom columnModel = ResourceManager.rbmk_reflector;
 		if(block == ModBlocks.rbmk_boiler)
@@ -83,7 +85,11 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		bindTexture(block.columnTexture);
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
+		boolean doJump = control.jumpheight > 0;
 		for(int i = 0; i < TileEntityRBMKBase.rbmkHeight+1; i ++){
+			if(doJump && i == TileEntityRBMKBase.rbmkHeight){
+				tes.addTranslation(0, (float)control.jumpheight, 0);
+			}
 			columnModel.tessellatePart(tes, "Column");
 			tes.addTranslation(0, 1, 0);
 		}
@@ -127,6 +133,10 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 				}
 				cherenkov = false;
 			}
+
+			if(doJump){
+				GL11.glTranslated(0, control.jumpheight, 0);
+			}
 			
 			if(control instanceof TileEntityRBMKBoiler && meta != RBMKBase.DIR_GLASS_LID.ordinal())
 				ResourceManager.rbmk_rods.renderPart("Lid");
@@ -140,7 +150,6 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			bindTexture(texture_rods);
 			
 			for(int j = 0; j <= offset; j++) {
-
 				ResourceManager.rbmk_element.renderPart("Rods");
 				GL11.glTranslated(0, 1, 0);
 			}

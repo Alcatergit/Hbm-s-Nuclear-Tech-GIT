@@ -20,6 +20,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent pressOperate;
 	public static SoundEvent laserBang;
 	public static SoundEvent blockDebris;
+	public static SoundEvent rbmkLid;
 	public static SoundEvent syringeUse;
 	public static SoundEvent sparkShoot;
 	public static SoundEvent b92Reload;
@@ -269,6 +270,7 @@ public final class HBMSoundHandler {
 		pressOperate = register("block.pressoperate");
 		laserBang = register("weapon.laserBang");
 		blockDebris = register("block.debris");
+		rbmkLid = register("block.rbmkLid");
 		syringeUse = register("item.syringe");
 		sparkShoot = register("weapon.sparkShoot");
 		b92Reload = register("weapon.b92Reload");

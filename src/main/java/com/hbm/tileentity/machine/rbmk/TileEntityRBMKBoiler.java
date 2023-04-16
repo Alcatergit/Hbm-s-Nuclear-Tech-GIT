@@ -43,6 +43,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
+		nbt.removeTag("jumpheight");
 		nbt.setInteger("water", super.water);
 		nbt.setInteger("steam", super.steam);
 	}

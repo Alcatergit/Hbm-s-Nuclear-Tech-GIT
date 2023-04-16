@@ -17,7 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 public class TileEntityDeconRad extends TileEntity implements ITickable {
 
 	private static float radRemove;
-	private static final float decayRate = 0.9994225441F; //1m halflife
+	private static final float decayRate = 0.9998074776F; //30m halflife
 
 	public TileEntityDeconRad(float rad) {
 		super();
@@ -37,7 +37,7 @@ public class TileEntityDeconRad extends TileEntity implements ITickable {
 						}
 					}
 					if(e instanceof EntityPlayer){
-						ContaminationUtil.neutronActivateInventory((EntityPlayer)e, 0.0F, decayRate);
+						ContaminationUtil.neutronActivateInventory((EntityPlayer)e, -0.005F, decayRate);
 						((EntityPlayer)e).inventoryContainer.detectAndSendChanges();
 					}
 				}

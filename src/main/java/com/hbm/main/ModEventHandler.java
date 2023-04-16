@@ -619,7 +619,7 @@ public class ModEventHandler {
 						
 						if(entity instanceof EntityPlayer && RadiationConfig.neutronActivation){
 							EntityPlayer player = (EntityPlayer) entity;
-							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D;
+							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-0.0004D;
 							float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
 							if(neutronRads > 0){
 								ContaminationUtil.contaminate(player, HazardType.NEUTRON, ContaminationType.CREATIVE, neutronRads * 0.05F);
@@ -1197,7 +1197,7 @@ public class ModEventHandler {
 				e.player.sendMessage(new TextComponentTranslation("§3Welcome back§r"));
 			}
 
-			if(HTTPHandler.newVersion) {
+			if(HTTPHandler.newVersion && GeneralConfig.changelog) {
 				e.player.sendMessage(new TextComponentString("§eNICE - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
 				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
 				if(HTTPHandler.changes != ""){
@@ -1212,9 +1212,11 @@ public class ModEventHandler {
 			if(HTTPHandler.optifine){
 				e.player.sendMessage(new TextComponentString("Optifine detected, may cause compatibility issues. Check log for details."));
 			}
-			
-			if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked"))
-        		PacketDispatcher.sendTo(new PlayerInformPacket("Press O to Duck!"), (EntityPlayerMP)e.player);
+			if(GeneralConfig.duckButton){
+				if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked")){
+	        		PacketDispatcher.sendTo(new PlayerInformPacket("Press O to Duck!"), (EntityPlayerMP)e.player);
+				}
+	        }
 		}
 	}
 	

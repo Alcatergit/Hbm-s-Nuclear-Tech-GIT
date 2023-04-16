@@ -52,7 +52,11 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 	public static int rbmkHeight = 4;
 	
-	public double heat;
+	public double heat = 20.0D;
+	public double jumpheight = 0.0D;
+	public float downwardSpeed = 0.0F;
+	public boolean falling = false;
+	public static final byte gravity = 10;
 	
 	public int water;
 	public static final int maxWater = 16000;
@@ -103,8 +107,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		
 		if(!world.isRemote) {
 			moveHeat();
-			if(RBMKDials.getReasimBoilers(world)) boilWater();
+			if(RBMKDials.getReasimBoilers(world)) 
+				boilWater();
 			coolPassively();
+			jump();
 			
 			NBTTagCompound data = new NBTTagCompound();
 			this.writeToNBT(data);
@@ -112,6 +118,40 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			
 		}
 	}
+
+	private void jump(){
+		if(this.heat <= 1000 && !falling)
+			return;
+
+		if(!falling){
+			if(this.heat > 1000){
+				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-800))) == 0){
+					double change = (this.heat-1000D)*0.0002D;
+					double heightLimit = (this.heat-1000D)*0.002D;
+
+					this.jumpheight = this.jumpheight + change;
+					
+					if(this.jumpheight > heightLimit){
+						this.jumpheight = heightLimit;
+						this.falling = true;
+					}
+				}
+			} else {
+				this.falling = true;
+			}
+		} else{ 
+			if(this.jumpheight > 0){
+				this.downwardSpeed = this.downwardSpeed + this.gravity * 0.05F;
+				this.jumpheight = this.jumpheight - this.downwardSpeed;
+			} else {
+				this.jumpheight = 0;
+				this.downwardSpeed = 0;
+				this.falling = false;
+				world.playSound(null, pos.getX(),  pos.getY()+rbmkHeight+1,  pos.getZ(), HBMSoundHandler.rbmkLid, SoundCategory.BLOCKS, 2.0F, 1.0F);
+			}
+		}
+	}
+
 	
 	/**
 	 * The ReaSim boiler dial causes all RBMK parts to behave like boilers
@@ -228,6 +268,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		}
 
 		this.heat = nbt.getDouble("heat");
+		this.jumpheight = nbt.getDouble("jumpheight");
 		this.water = nbt.getInteger("water");
 		this.steam = nbt.getInteger("steam");
 	}
@@ -240,6 +281,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		}
 		
 		nbt.setDouble("heat", this.heat);
+		nbt.setDouble("jumpheight", this.jumpheight);
 		nbt.setInteger("water", this.water);
 		nbt.setInteger("steam", this.steam);
 		return nbt;
@@ -263,9 +305,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public void getDiagData(NBTTagCompound nbt) {
 		diag = true;
 		this.writeToNBT(nbt);
+		diag = false;
+		nbt.removeTag("jumpheight");
 		nbt.removeTag("steam");
 		nbt.removeTag("water");
-		diag = false;
 	}
 	
 	@SideOnly(Side.CLIENT)

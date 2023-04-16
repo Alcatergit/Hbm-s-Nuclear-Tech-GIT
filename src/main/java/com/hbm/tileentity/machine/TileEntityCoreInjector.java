@@ -56,28 +56,10 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 					
 					TileEntityCore core = (TileEntityCore)te;
 					
-					for(int t = 0; t < 2; t++) {
-						//Drillgon200: I'm hoping this code will do exactly the same thing as the commented out code below it
-						if(tanks[t].drain(core.tanks[t].fill(tanks[t].getFluid(), true), true) != null)
-							core.markDirty();
-						
-						/*if(core.tanks[t].getTankType() == tanks[t].getTankType()) {
-							
-							int f = Math.min(tanks[t].getFill(), core.tanks[t].getMaxFill() - core.tanks[t].getFill());
-
-							tanks[t].setFill(tanks[t].getFill() - f);
-							core.tanks[t].setFill(core.tanks[t].getFill() + f);
-							core.markDirty();
-							
-						} else if(core.tanks[t].getFluidAmount() == 0) {
-							
-							int f = Math.min(tanks[t].getFill(), core.tanks[t].getMaxFill() - core.tanks[t].getFill());
-
-							tanks[t].setFill(tanks[t].getFill() - f);
-							core.tanks[t].setFill(core.tanks[t].getFill() + f);
-							core.markDirty();
-						}*/
-					}
+					if(tanks[0].drain(core.tanks[0].fill(tanks[0].getFluid(), true), true) != null)
+						core.markDirty();
+					if(tanks[1].drain(core.tanks[1].fill(tanks[1].getFluid(), true), true) != null)
+						core.markDirty();
 					beam = i;
 					break;
 				}

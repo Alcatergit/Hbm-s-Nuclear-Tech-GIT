@@ -5,6 +5,7 @@ import java.util.Random;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.ContaminationUtil;
@@ -42,8 +43,13 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		
 		if(!world.isRemote) {
+
+			ForgeDirection dir = ForgeDirection.getOrientation(world.rand.nextInt(6));
+
+			//Boron sand helps stop the fission reaction; 0.66% chance every 20-40 ticks for one side
+			int chance = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock() == ModBlocks.sand_boron ? 25 : 1000;
 			
-			ContaminationUtil.radiate(world, pos.getX(), pos.getY(), pos.getZ(), 32, 100000F, 40000F);
+			ContaminationUtil.radiate(world, pos.getX(), pos.getY(), pos.getZ(), 32, 100F * chance, 40F * chance);
 			
 			if(rand.nextInt(5) == 0) {
 				NBTTagCompound data = new NBTTagCompound();
@@ -54,8 +60,8 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 				world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F);
 
 			}
-			
-			if(rand.nextInt(1000) == 0) {
+
+			if(rand.nextInt(chance) == 0) {
 				
 				int meta = state.getValue(META);
 				

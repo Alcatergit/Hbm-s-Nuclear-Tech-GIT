@@ -42,7 +42,7 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 	private static final int[] slots_arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
 	public int age = 0;
 
-	private static final float decayRate = 0.9988454217F; //30s Halflife
+	private static final float decayRate = 0.9965402628F; //10s Halflife
 
 	public TileEntityStorageDrum() {
 		super(24, 1);

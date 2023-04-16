@@ -140,6 +140,14 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
         }
 	}
 
+	private void unloadAllChunks() {
+		if(loaderTicket != null){
+			for(ChunkPos chunk : loadedChunks) {
+		        ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+		    }
+		}
+	}
+
 	private void gatherChunks() {
 		Set<Long> chunks = new LinkedHashSet<>(); // LinkedHashSet preserves insertion order
 		Set<Long> outerChunks = new LinkedHashSet<>();
@@ -210,6 +218,7 @@ public class EntityRainDrop extends Entity implements IConstantRenderer, IChunkL
 
 
 			if(this.isDead) {
+				unloadAllChunks();
 				this.done = true;
 				if(RadiationConfig.rain > 0 && getScale() > 150) {
 					world.getWorldInfo().setRaining(true);

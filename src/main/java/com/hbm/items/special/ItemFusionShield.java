@@ -28,7 +28,6 @@ public class ItemFusionShield extends Item {
 	public static long getShieldDamage(ItemStack stack) {
 
 		if(!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 

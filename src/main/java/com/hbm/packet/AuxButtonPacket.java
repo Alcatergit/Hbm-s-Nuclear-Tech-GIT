@@ -3,6 +3,7 @@ package com.hbm.packet;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.items.weapon.ItemCrucible;
+import com.hbm.config.GeneralConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
@@ -86,23 +87,24 @@ public class AuxButtonPacket implements IMessage {
 				
 				//why make new packets when you can just abuse and uglify the existing ones?
 				if(m.value == 999) {
+					if(GeneralConfig.duckButton){
+						NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+						if(!perDat.getBoolean("hasDucked")) {
+							EntityDuck ducc = new EntityDuck(p.world);
+							ducc.setPosition(p.posX, p.posY + p.eyeHeight, p.posZ);
 
-					NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-					if(!perDat.getBoolean("hasDucked")) {
-						EntityDuck ducc = new EntityDuck(p.world);
-						ducc.setPosition(p.posX, p.posY + p.eyeHeight, p.posZ);
+							Vec3d vec = p.getLookVec();
+							ducc.motionX = vec.x;
+							ducc.motionY = vec.y;
+							ducc.motionZ = vec.z;
 
-						Vec3d vec = p.getLookVec();
-						ducc.motionX = vec.x;
-						ducc.motionY = vec.y;
-						ducc.motionZ = vec.z;
+							p.world.spawnEntity(ducc);
+							p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-						p.world.spawnEntity(ducc);
-						p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
+							perDat.setBoolean("hasDucked", true);
 
-						perDat.setBoolean("hasDucked", true);
-
-						p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
+							p.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, perDat);
+						}
 					}
 					return;
 				}

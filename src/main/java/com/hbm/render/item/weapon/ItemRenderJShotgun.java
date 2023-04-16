@@ -47,7 +47,7 @@ public class ItemRenderJShotgun extends TEISRBase {
 			AnimationWrapper reload = HbmAnimations.getRelevantBlenderAnim(hand);
 			float time = HbmAnimations.getTimeDifference("JS_RECOIL", hand);
 			float timeMax = 0.0375F;
-			if(time > 0 && time < timeMax && GeneralConfig.useShaders2){
+			if(time > 0 && time < timeMax){
 				ResourceManager.flash_lmap.use();
 				GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0+3);
 				Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.jshotgun_lmap);
@@ -108,10 +108,8 @@ public class ItemRenderJShotgun extends TEISRBase {
 								GlStateManager.depthMask(true);
 								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevLx, prevLy);
 								GlStateManager.disableBlend();
-								if(GeneralConfig.useShaders2){
-									ResourceManager.flash_lmap.use();
-									ResourceManager.flash_lmap.uniform1i("flash_map", 3);
-								}
+								ResourceManager.flash_lmap.use();
+								ResourceManager.flash_lmap.uniform1i("flash_map", 3);
 							}
 						}
 						return true;

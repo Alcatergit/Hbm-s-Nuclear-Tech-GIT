@@ -173,6 +173,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		Collections.reverse(outerChunksToProcess);
 	}
 
+	private void unloadAllChunks() {
+		if(loaderTicket != null){
+			for(ChunkPos chunk : loadedChunks) {
+		        ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+		    }
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 
@@ -218,6 +226,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 
 			if(this.isDead) {
+				unloadAllChunks();
 				this.done = true;
 				if(RadiationConfig.rain > 0 && getScale() > 150) {
 					world.getWorldInfo().setRaining(true);
@@ -249,7 +258,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			if(!b.isReplaceable(world, pos)){
 
 				float hardness = b.getExplosionResistance(null);
-				if(hardness > 0 && hardness < 20 && i!=bottomHeight){
+				if(hardness >= 0 && hardness < 50 && i!=bottomHeight){
 					gapPos.setY(bottomHeight);
 					world.setBlockState(gapPos, world.getBlockState(pos));
 					world.setBlockToAir(pos);
@@ -374,6 +383,10 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			} else if(bblock == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+				continue;
+
+			} else if(bblock == Blocks.GRAVEL) {
+				world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 				continue;
 
 			} else if(bblock == Blocks.DIRT) {

@@ -247,6 +247,10 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 				return;
 
+			} else if(bblock == Blocks.GRAVEL) {
+				world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+				return;
+
 			} else if(bblock == Blocks.SAND) {
 				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 				if(rand.nextInt(60) == 0) {
