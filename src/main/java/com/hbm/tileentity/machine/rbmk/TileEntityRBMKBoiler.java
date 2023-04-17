@@ -33,6 +33,10 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public FluidTank feed;
 	public FluidTank steam;
 	public Fluid steamType;
+
+	public double gameruleBoilerHeatConsumption = 0.1D;
+	public byte timer = 0;
+	public static final byte gamerulePollTime = 100;
 	
 	public TileEntityRBMKBoiler() {
 		super(0);
@@ -57,7 +61,16 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public void update() {
 		
 		if(!world.isRemote) {
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
+
+			if(timer < gamerulePollTime){
+				timer++;
+			} else {
+				timer = 0;
+				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
+			}
+			
+			if(feed.getFluidAmount() < 10000 || steam.getFluidAmount() > 0)
+				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			NBTTagCompound type = new NBTTagCompound();
 			type.setString("steamType2", steamType.getName());
 			networkPack(type, 50);
@@ -65,8 +78,8 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			double heatCap = this.getHeatFromSteam(steamType);
 			double heatProvided = this.heat - heatCap;
 			
-			if(heatProvided > 0) {
-				int waterUsed = (int)Math.floor(heatProvided / RBMKDials.getBoilerHeatConsumption(world));
+			if(heatProvided > 0 && feed.getFluidAmount() > 0) {
+				int waterUsed = (int)Math.floor(heatProvided / gameruleBoilerHeatConsumption);
 				super.water = waterUsed;
 				waterUsed = Math.min(waterUsed, feed.getFluidAmount());
 				int steamProduced = (int)Math.round((waterUsed * 100F) / getFactorFromSteam(steamType));
@@ -74,10 +87,10 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				feed.drain(waterUsed, true);
 				steam.fill(new FluidStack(steamType, steamProduced), true); 
 				
-				this.heat -= waterUsed * RBMKDials.getBoilerHeatConsumption(world);
+				this.heat -= waterUsed * gameruleBoilerHeatConsumption;
 			}
-			
-			fillFluidInit(steam);
+			if(steam.getFluidAmount() > 0)
+				fillFluidInit(steam);
 		}
 		
 		super.update();

@@ -627,8 +627,8 @@ public class ModEventHandler {
 							else{
 								HbmLivingProps.setNeutron(entity, 0);
 							}
-							if(recievedRadiation > 0 || neutronRads > 0){
-								ContaminationUtil.neutronActivateInventory(player, recievedRadiation > minRadRate ? (float)recievedRadiation : 0.0F, decayRate);
+							if(recievedRadiation > minRadRate){
+								ContaminationUtil.neutronActivateInventory(player, (float)recievedRadiation, 1.0F);
 								player.inventoryContainer.detectAndSendChanges();
 							}
 						}

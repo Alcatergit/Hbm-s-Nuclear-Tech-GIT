@@ -12,7 +12,11 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 	public double lastLevel;
 	public double level;
 	public static final double speed = 0.00277D; // it takes around 18 seconds for the thing to fully extend
+	public double levelChange = 0.00277D;
 	public double targetLevel;
+
+	public byte timer = 0;
+	public static final byte gamerulePollTime = 100;
 
 	public TileEntityRBMKControl() {
 		super(0);
@@ -31,18 +35,23 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 			this.lastLevel = this.level;
 		
 		} else {
+			if(timer < gamerulePollTime){
+				timer++;
+			} else {
+				timer = 0;
+				levelChange = speed * RBMKDials.getControlSpeed(world);
+			}
 			
 			if(level < targetLevel) {
 				
-				level += speed * RBMKDials.getControlSpeed(world);
+				level += levelChange;
 				
 				if(level > targetLevel)
 					level = targetLevel;
-			}
 			
-			if(level > targetLevel) {
+			} else if(level > targetLevel) {
 				
-				level -= speed * RBMKDials.getControlSpeed(world);
+				level -= levelChange;
 				
 				if(level < targetLevel)
 					level = targetLevel;

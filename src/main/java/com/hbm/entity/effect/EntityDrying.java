@@ -49,12 +49,22 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 
 	private int xlast;
 
+	private int waterLevel = 63;
+
 	public EntityDrying(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
 		this.ignoreFrustumCheck = false;
 		this.isImmuneToFire = true;
 
+		this.waterLevel = getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
+		 if(this.waterLevel == 0){
+			this.waterLevel = world.getSeaLevel();
+		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
+			this.waterLevel = world.getSeaLevel() - this.waterLevel;
+		} else {
+			this.waterLevel = 1;
+		}
 	}
 
 	@Override
@@ -183,7 +193,6 @@ public class EntityDrying extends Entity implements IConstantRenderer, IChunkLoa
 				}
 			}
 		} else {
-			int waterLevel = getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
 			if(CompatibilityConfig.doFillCraterWithWater && waterLevel > 0){
 				for(int y = waterLevel; y > 1; y--) {
 					pos.setY(y);

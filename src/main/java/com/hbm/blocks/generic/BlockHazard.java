@@ -177,11 +177,11 @@ public class BlockHazard extends Block implements IItemHazard {
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!worldIn.isRemote)
         		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
-        	worldIn.playSound(null, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
+        	worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
         	return;
         }
 		if(this.radIn > 0) {
-			RadiationSavedData.incrementRad(worldIn, pos, radIn, Float.MAX_VALUE);
+			RadiationSavedData.incrementRad(worldIn, pos, radIn, radIn*10F);
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 	}
@@ -190,7 +190,7 @@ public class BlockHazard extends Block implements IItemHazard {
 	@Override
 	public int tickRate(World world) {
 		if(this.radIn > 0)
-			return 20;
+			return 60+world.rand.nextInt(500);
 		return super.tickRate(world);
 	}
 

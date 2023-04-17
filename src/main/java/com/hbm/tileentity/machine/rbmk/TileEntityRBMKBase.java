@@ -56,7 +56,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public double jumpheight = 0.0D;
 	public float downwardSpeed = 0.0F;
 	public boolean falling = false;
-	public static final byte gravity = 10;
+	public static final int jumpTemp = 1000;
+	public static final byte gravity = 5; //in blocks per s^2
 	
 	public int water;
 	public static final int maxWater = 16000;
@@ -120,14 +121,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 
 	private void jump(){
-		if(this.heat <= 1000 && !falling)
+		if(this.heat <= jumpTemp && !falling)
 			return;
 
-		if(!falling){
-			if(this.heat > 1000){
-				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-800))) == 0){
-					double change = (this.heat-1000D)*0.0002D;
-					double heightLimit = (this.heat-1000D)*0.002D;
+		if(!falling){ // linear rise
+			if(this.heat > jumpTemp){
+				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-jumpTemp+200D))) == 0){
+					double change = (this.heat-jumpTemp)*0.0002D;
+					double heightLimit = (this.heat-jumpTemp)*0.002D;
 
 					this.jumpheight = this.jumpheight + change;
 					
@@ -139,7 +140,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			} else {
 				this.falling = true;
 			}
-		} else{ 
+		} else{ // gravity fall
 			if(this.jumpheight > 0){
 				this.downwardSpeed = this.downwardSpeed + this.gravity * 0.05F;
 				this.jumpheight = this.jumpheight - this.downwardSpeed;

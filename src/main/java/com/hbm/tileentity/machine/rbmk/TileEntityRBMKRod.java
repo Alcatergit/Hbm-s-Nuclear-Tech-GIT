@@ -74,7 +74,6 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.cherenkovB = rod.cherenkovB;
 				
 				double fluxIn = fluxFromType(rod.nType);
-				//System.out.println(fluxIn + " - " + this.fluxFast + " - " + this.fluxSlow);
 				double fluxOut = rod.burn(world, inventory.getStackInSlot(0), fluxIn);
 				NType rType = rod.rType;
 				
@@ -96,7 +95,8 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.fluxFast = 0;
 				this.fluxSlow = 0;
 				
-				spreadFlux(rType, fluxOut);
+				if(fluxOut > 0)
+					spreadFlux(rType, fluxOut);
 				
 				hasRod = true;
 			} else {
