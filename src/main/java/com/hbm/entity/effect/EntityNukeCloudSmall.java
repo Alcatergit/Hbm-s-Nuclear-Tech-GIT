@@ -50,7 +50,7 @@ public class EntityNukeCloudSmall extends Entity implements IConstantRenderer {
 		this.isImmuneToFire = true;
 		this.age = 0;
 
-		int maxLifetime = (int)Math.max(300, 0.55F * Math.pow(radius+16F, 2));
+		int maxLifetime = (int)Math.max(600, 0.25F * Math.pow(radius+16F, 2));
 
 		this.isImmuneToFire = true;
 		this.maxAge = maxLifetime;

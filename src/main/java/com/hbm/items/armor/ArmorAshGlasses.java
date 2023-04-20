@@ -1,13 +1,17 @@
 package com.hbm.items.armor;
 
+import java.util.List;
+
 import com.hbm.items.ModItems;
 import com.hbm.render.model.ModelGlasses;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,5 +38,11 @@ public class ArmorAshGlasses extends ItemArmor {
 			model = new ModelGlasses(0);
 		}
 		return model;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, list, flagIn);
+		list.add("Shows nearby Gasses");
 	}
 }

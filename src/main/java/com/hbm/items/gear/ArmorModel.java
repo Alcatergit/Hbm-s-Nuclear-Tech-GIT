@@ -324,6 +324,17 @@ public class ArmorModel extends ItemArmor {
 		if(this == ModItems.gas_mask_mono) {
 			list.add("Protects against carbon monoxide");
 		}
+		if (stack.getItem() == ModItems.goggles) {
+			list.add("§3[Blinding] §7protection");
+		}
+		if (stack.getItem() == ModItems.gas_mask_m65) {
+			list.add("§f[Asbestos] §7protection");
+			list.add("§8[Coal Dust] §7protection");
+		}
+		if (stack.getItem() == ModItems.gas_mask) {
+			list.add("§f[Asbestos] §7protection");
+			list.add("§8[Coal Dust] §7protection");
+		}
 	}
 	
 }

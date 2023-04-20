@@ -75,7 +75,7 @@ public class DungeonToolbox {
 	}
 
 	public static void generateOre(World world, Random rand, int chunkX, int chunkZ, int veinCount, int amount, int minHeight, int variance, IBlockState ore, Block target) {
-		if(veinCount > 1){
+		if(veinCount > 0){
 			for(int i = 0; i < veinCount; i++) {
 
 				int x = chunkX + rand.nextInt(16);

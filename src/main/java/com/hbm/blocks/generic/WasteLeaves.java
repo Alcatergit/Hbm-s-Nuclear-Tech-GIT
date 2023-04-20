@@ -75,7 +75,7 @@ public class WasteLeaves extends BlockLeaves implements IItemHazard {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune){
-		if(rand.nextInt(16) == 0)
+		if(rand.nextInt(4) == 0)
 			return Item.getItemFromBlock(Blocks.DEADBUSH);
 		return null;
 	}
@@ -86,7 +86,7 @@ public class WasteLeaves extends BlockLeaves implements IItemHazard {
 
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune){
 		List<ItemStack> output = new ArrayList<ItemStack>();
-		output.add(new ItemStack(ModBlocks.waste_leaves, fortune));
+		output.add(new ItemStack(ModBlocks.waste_leaves, fortune+1));
 		return output;
 	}
 

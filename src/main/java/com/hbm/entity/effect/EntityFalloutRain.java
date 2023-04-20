@@ -334,20 +334,20 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				break;
 			}
 
-			if(dist < s1 && bblock.isFlammable(world, pos, EnumFacing.UP)) {
+			if(dist < s2 && bblock.isFlammable(world, pos, EnumFacing.UP)) {
 				if(world.isAirBlock(pos.add(0, 1, 0)))
 					world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
 			}
 
 			if(bblock == ModBlocks.waste_leaves){
-				if(!(dist > s1 || (dist > s2 && (world.rand.nextFloat() < (-5F*(s2/dist)+5F))))){
+				if(!(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F))))){
 					world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
 				}
 				continue;
 			}
 
 			if(bblock instanceof BlockLeaves) {
-				if(dist > s1 || (dist > s2 && (world.rand.nextFloat() < (-5F*(s2/dist)+5F)))){
+				if(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F)))){
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
 				}
 				else {

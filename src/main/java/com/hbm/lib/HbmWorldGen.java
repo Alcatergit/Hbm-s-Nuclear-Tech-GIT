@@ -78,16 +78,19 @@ public class HbmWorldGen implements IWorldGenerator {
 		int dimID = world.provider.getDimension();
 
 		int dimOilcoalSpawn = parseInt(CompatibilityConfig.oilcoalSpawn.get(dimID));
-		if(dimOilcoalSpawn > 0 && rand.nextInt(dimOilcoalSpawn) == 0)
+		if(dimOilcoalSpawn > 0 && rand.nextInt(dimOilcoalSpawn) == 0){
 			DungeonToolbox.generateOre(world, rand, i, j, 1, 64, 32, 32, ModBlocks.ore_coal_oil);
+		}
 
 		int dimGasbubbleSpawn = parseInt(CompatibilityConfig.gasbubbleSpawn.get(dimID));
-		if(dimGasbubbleSpawn > 0 && rand.nextInt(dimGasbubbleSpawn) == 0)
-			DungeonToolbox.generateOre(world, rand, i, j, 1, 32, 30, 10, ModBlocks.gas_flammable);
+		if(dimGasbubbleSpawn > 0 && rand.nextInt(dimGasbubbleSpawn) == 0){
+			DungeonToolbox.generateOre(world, rand, i, j, 4, 64, 20, 10, ModBlocks.gas_flammable, Blocks.AIR);
+		}
 
 		int dimExplosivebubbleSpawn = parseInt(CompatibilityConfig.explosivebubbleSpawn.get(dimID));
-		if(dimExplosivebubbleSpawn > 0 && rand.nextInt(dimExplosivebubbleSpawn) == 0)
-			DungeonToolbox.generateOre(world, rand, i, j, 1, 32, 30, 10, ModBlocks.gas_explosive);
+		if(dimExplosivebubbleSpawn > 0 && rand.nextInt(dimExplosivebubbleSpawn) == 0){
+			DungeonToolbox.generateOre(world, rand, i, j, 4, 64, 20, 10, ModBlocks.gas_explosive, Blocks.AIR);
+		}
 		
 		//Depth ore
 		if(dimID == 0){
