@@ -158,6 +158,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(Item.getItemFromBlock(ModBlocks.block_meteor_cobble), 1), new Object[] { "##", "##", '#', ModItems.fragment_meteorite });
 		addRecipeAuto(new ItemStack(Item.getItemFromBlock(ModBlocks.block_meteor_broken), 1), new Object[] { "###", "###", "###", '#', ModItems.fragment_meteorite });
 		addRecipeAuto(new ItemStack(Item.getItemFromBlock(ModBlocks.block_yellowcake), 1), new Object[] { "###", "###", "###", '#', ModItems.powder_yellowcake });
+		addRecipeAuto(new ItemStack(Item.getItemFromBlock(ModBlocks.block_au198), 1), new Object[] { "###", "###", "###", '#', AU198.ingot() });
 		addRecipeAuto(new ItemStack(ModBlocks.block_starmetal, 1), new Object[] { "###", "###", "###", '#', STAR.ingot() });
 		addRecipeAuto(new ItemStack(ModBlocks.block_niter_reinforced, 1), new Object[] { "TCT", "CNC", "TCT", 'T', TCALLOY.ingot(), 'C', ModBlocks.concrete, 'N', KNO.block() });
 
@@ -208,6 +209,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.ingot_bakelite, 9), new Object[] { "#", '#', Item.getItemFromBlock(ModBlocks.block_bakelite) });
 		addRecipeAuto(new ItemStack(ModItems.ingot_rubber, 9), new Object[] { "#", '#', Item.getItemFromBlock(ModBlocks.block_rubber) });
 		addRecipeAuto(new ItemStack(ModItems.powder_yellowcake, 9), new Object[] { "#", '#', Item.getItemFromBlock(ModBlocks.block_yellowcake) });
+		addRecipeAuto(new ItemStack(ModItems.ingot_au198, 9), new Object[] { "#", '#', Item.getItemFromBlock(ModBlocks.block_au198) });
 		addRecipeAuto(new ItemStack(ModItems.ingot_starmetal, 9), new Object[] { "#", '#', ModBlocks.block_starmetal });
 
 		addRecipeAuto(new ItemStack(ModItems.ingot_plutonium, 1), new Object[] { "###", "###", "###", '#', PU.nugget() });

@@ -67,7 +67,6 @@ import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.generic.BlockDepth;
 import com.hbm.blocks.generic.BlockDepthOre;
 import com.hbm.blocks.generic.BlockDoorGeneric;
-import com.hbm.blocks.generic.BlockFallingRad;
 import com.hbm.blocks.generic.BlockFallout;
 import com.hbm.blocks.generic.BlockGeysir;
 import com.hbm.blocks.generic.BlockGlyph;
@@ -117,6 +116,7 @@ import com.hbm.blocks.generic.ReinforcedLamp;
 import com.hbm.blocks.generic.Spikes;
 import com.hbm.blocks.generic.TrappedBrick;
 import com.hbm.blocks.generic.WasteGrassTall;
+import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.blocks.generic.WasteEarth;
 import com.hbm.blocks.generic.WasteSand;
 import com.hbm.blocks.generic.WasteLog;
@@ -514,6 +514,7 @@ public class ModBlocks {
 	public static final Block block_schrabidate = new BlockHazard(Material.IRON, SoundType.METAL, "block_schrabidate").addRadiation(ItemHazard.sb * ItemHazard.block).addBlinding().toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
 	public static final Block block_solinium = new BlockHazard(Material.IRON, SoundType.METAL, "block_solinium").addRadiation(ItemHazard.sa327 * ItemHazard.block).addBlinding().toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
 	public static final Block block_schrabidium_fuel = new BlockHazard(Material.IRON, SoundType.METAL, "block_schrabidium_fuel").addRadiation(ItemHazard.saf * ItemHazard.block).addBlinding().toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
+	public static final Block block_au198 = new BlockHazard(Material.IRON, SoundType.METAL, "block_au198").addRadiation(ItemHazard.au198 * ItemHazard.block).addFire(5).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(600.0F);
 	public static final Block block_euphemium = new BlockBase(Material.IRON, "block_euphemium").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(60000.0F);
 	public static final Block block_dineutronium = new BlockBase(Material.IRON, "block_dineutronium").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(60000.0F);
 	public static final Block block_schrabidium_cluster = new BlockRotatablePillar(Material.ROCK, "block_schrabidium_cluster").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(60000.0F);
@@ -599,7 +600,7 @@ public class ModBlocks {
 	public static final Block waste_trinitite_red = new WasteEarth(Material.SAND, SoundType.SAND, false, "waste_trinitite_red").addRadiation(ItemHazard.trx).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_log = new WasteLog(Material.WOOD, "waste_log").setSoundType(SoundType.WOOD).setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_planks = new BlockOre(Material.WOOD, "waste_planks").setSoundType(SoundType.WOOD).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block waste_leaves = new WasteEarth(Material.PLANTS, SoundType.PLANT, false, "waste_leaves").addRadiation(0.5F).toBlock().setHardness(0.3F).setResistance(0.3F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_leaves = new WasteLeaves("waste_leaves").addRadiation(0.5F).toBlock().setHardness(0.3F).setResistance(0.3F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_grass_tall = new WasteGrassTall(Material.PLANTS, "waste_grass_tall").setCreativeTab(MainRegistry.resourceTab);
 	
 	//PollutedBecauseOilThings
@@ -637,7 +638,7 @@ public class ModBlocks {
 	public static final Block sellafield_2 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_2").addRadiation(20.0F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block sellafield_3 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_3").addRadiation(40.0F).addFire(2).toBlock().setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block sellafield_4 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_4").addRadiation(80.0F).addFire(10).toBlock().setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block sellafield_core = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_core").addRadiation(4000.0F).toBlock().setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block sellafield_core = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_core").addRadiation(4000.0F).addFire(15).toBlock().setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block geysir_water = new BlockGeysir(Material.ROCK, "geysir_water").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block geysir_chlorine = new BlockGeysir(Material.ROCK, "geysir_chlorine").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
@@ -845,7 +846,7 @@ public class ModBlocks {
 
 	//Drillgon200: hee hoo ultrakill
 	public static final Block sand_gold = new BlockGoldSand(Material.SAND, "sand_gold", SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
-	public static final Block sand_gold198 = new BlockGoldSand(Material.SAND, "sand_gold198", SoundType.SAND).addRadiation(ItemHazard.au198 * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
+	public static final Block sand_gold198 = new BlockGoldSand(Material.SAND, "sand_gold198", SoundType.SAND).addRadiation(ItemHazard.au198 * ItemHazard.block * ItemHazard.powder).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
 	public static final Block glass_uranium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_uranium").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
 	public static final Block glass_trinitite = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_trinitite").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
 	public static final Block glass_polonium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_polonium").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);

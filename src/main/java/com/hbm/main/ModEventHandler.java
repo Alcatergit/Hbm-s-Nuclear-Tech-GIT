@@ -585,7 +585,7 @@ public class ModEventHandler {
 			}
 		}
 		
-		if(event.world != null && !event.world.isRemote && event.world.getTotalWorldTime() % 40 == 37){
+		if(event.world != null && !event.world.isRemote && event.world.getTotalWorldTime() % 100 == 97){
 			//Drillgon200: Retarded hack because I'm not convinced game rules are client sync'd
 			PacketDispatcher.wrapper.sendToAll(new SurveyPacket(RBMKDials.getColumnHeight(event.world)));
 		}
@@ -604,7 +604,7 @@ public class ModEventHandler {
 					data.worldObj = event.world;
 				}
 
-				if(event.world.getTotalWorldTime() % 20 == 0 && event.phase == Phase.START) {
+				if(event.world.getTotalWorldTime() % 20 == 15 && event.phase == Phase.START) { // lets not make a lag spike at tick 0
 					data.updateSystem();
 				}
 
@@ -617,28 +617,30 @@ public class ModEventHandler {
 						// effect for radiation
 						EntityLivingBase entity = (EntityLivingBase) e;
 						
-						if(entity instanceof EntityPlayer && RadiationConfig.neutronActivation){
+						if(entity instanceof EntityPlayer){
 							EntityPlayer player = (EntityPlayer) entity;
-							double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-0.0004D;
-							float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
-							if(neutronRads > 0){
-								ContaminationUtil.contaminate(player, HazardType.NEUTRON, ContaminationType.CREATIVE, neutronRads * 0.05F);
+							if(RadiationConfig.neutronActivation){
+								double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-0.0004D;
+								float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
+								if(neutronRads > 0){
+									ContaminationUtil.contaminate(player, HazardType.NEUTRON, ContaminationType.CREATIVE, neutronRads * 0.05F);
+								}
+								else{
+									HbmLivingProps.setNeutron(entity, 0);
+								}
+								if(recievedRadiation > minRadRate){
+									ContaminationUtil.neutronActivateInventory(player, (float)recievedRadiation, 1.0F);
+									player.inventoryContainer.detectAndSendChanges();
+								}
 							}
-							else{
-								HbmLivingProps.setNeutron(entity, 0);
-							}
-							if(recievedRadiation > minRadRate){
-								ContaminationUtil.neutronActivateInventory(player, (float)recievedRadiation, 1.0F);
-								player.inventoryContainer.detectAndSendChanges();
+							if(player.capabilities.isCreativeMode || player.isSpectator()){
+								continue;
 							}
 						}
 
-						if(entity instanceof EntityPlayer && (((EntityPlayer) entity).capabilities.isCreativeMode || ((EntityPlayer) entity).isSpectator()))
-							continue;
-
 						float eRad = (float)HbmLivingProps.getRadiation(entity);
 
-						if(entity instanceof EntityCreeper && eRad >= 200 && entity.getHealth() > 0) {
+						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper) {
 
 							if(event.world.rand.nextInt(3) == 0) {
 								EntityNuclearCreeper creep = new EntityNuclearCreeper(event.world);
@@ -653,7 +655,7 @@ public class ModEventHandler {
 							}
 							continue;
 
-						} else if(entity instanceof EntityCow && !(entity instanceof EntityMooshroom) && eRad >= 50) {
+						} else if(eRad >= 50 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(event.world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -663,7 +665,7 @@ public class ModEventHandler {
 							entity.setDead();
 							continue;
 
-						} else if(entity instanceof EntityVillager && eRad >= 500) {
+						} else if(eRad >= 500 && entity instanceof EntityVillager) {
 							EntityZombie creep = new EntityZombie(event.world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -672,7 +674,7 @@ public class ModEventHandler {
 									event.world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(entity instanceof EntityBlaze && eRad >= 700) {
+						} else if(eRad >= 700 && entity instanceof EntityBlaze) {
 							EntityRADBeast creep = new EntityRADBeast(event.world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -681,7 +683,7 @@ public class ModEventHandler {
 									event.world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(entity.getClass().equals(EntityDuck.class) && eRad >= 200) {
+						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
 
 			        		EntityQuackos quacc = new EntityQuackos(event.world);
 			        		quacc.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);

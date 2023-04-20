@@ -1,5 +1,8 @@
 package com.hbm.tileentity.machine.rbmk;
 
+import java.util.List;
+
+import com.hbm.config.MobConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
@@ -13,10 +16,12 @@ import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -329,6 +334,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		
 		if(this.getBlockMetadata() == RBMKBase.DIR_NORMAL_LID.ordinal() + RBMKBase.offset)
 			spawnDebris(DebrisType.LID);
+
+		if(MobConfig.enableElementals) {
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(100, 100, 100));
+
+			for(EntityPlayer player : players) {
+				player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setBoolean("radMark", true);
+			}
+		}
 	}
 
 	@Override

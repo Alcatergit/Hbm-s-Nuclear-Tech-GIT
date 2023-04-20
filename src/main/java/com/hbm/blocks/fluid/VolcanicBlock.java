@@ -10,6 +10,8 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -58,13 +60,13 @@ public class VolcanicBlock extends BlockFluidClassic {
 		if(state.getMaterial() == Material.WATER) {
 			return Blocks.STONE;
 		}
-		if(b == Blocks.LOG || b == Blocks.LOG2) {
+		if(b instanceof BlockLog) {
 			return ModBlocks.waste_log;
 		}
 		if(b == Blocks.PLANKS) {
 			return ModBlocks.waste_planks;
 		}
-		if(b == Blocks.LEAVES || b == Blocks.LEAVES2) {
+		if(b instanceof BlockLeaves) {
 			return Blocks.FIRE;
 		}
 		return null;

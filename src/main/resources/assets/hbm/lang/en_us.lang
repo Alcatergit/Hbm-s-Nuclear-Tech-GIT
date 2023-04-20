@@ -1799,6 +1799,7 @@ item.powder_bakelite.name=Bakelite Powder
 tile.block_bakelite.name=Block of Bakelite
 tile.block_rubber.name=Block of Rubber
 item.ingot_rubber.name=Rubber Bar
+tile.block_au198.name=Block of Gold-198
 item.bolt_dura_steel.name=High-Speed Steel Bolt
 item.pipes_steel.name=Steel Pipes
 item.drill_titanium.name=Titanium Drill

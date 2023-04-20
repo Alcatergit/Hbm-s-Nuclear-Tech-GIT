@@ -394,7 +394,7 @@ public class JeiRecipes {
 				in.add(Arrays.asList(new ItemStack(ModItems.nothing)));
 			}
 			ingredients.setInputLists(VanillaTypes.ITEM, in);
-			ingredients.setOutput(VanillaTypes.ITEM, output.copy());
+			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		
 	}

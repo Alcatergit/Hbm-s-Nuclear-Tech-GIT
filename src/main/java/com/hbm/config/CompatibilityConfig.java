@@ -213,6 +213,6 @@ public class CompatibilityConfig {
 		doEvaporateWater =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.01_doEvaporateWater", "If true then nukes will evaporate water in range if it is in a wet place. It creates a short lagg spike instead of long medium lagg.", true);
 		evaporateWater = CommonConfig.createConfigHashSet(config, CATEGORY_NUKES, "07.02_evaporateWater", "List of dimIDs where nukes evaporate water in range. - <dimID> (Int)", "Int", new String[]{ "0" });
 		doFillCraterWithWater =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.04_doFillCraterWithWater", "If true then nukes will fill the crater with water if it is in a wet place. It creates a bit of lagg but looks better than without it.", true);
-		fillCraterWithWater = CommonConfig.createConfigHashMap(config, CATEGORY_NUKES, "07.04_fillCraterWithWater", "Waterlevel per dimension which the nuke uses to fill the crater. {+n=>waterlevel height, 0=>dimension waterlevel, -n=> n blocks below dimension waterlevel } - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:62" }, ":");
+		fillCraterWithWater = CommonConfig.createConfigHashMap(config, CATEGORY_NUKES, "07.04_fillCraterWithWater", "Waterlevel per dimension which the nuke uses to fill the crater. {+n=>waterlevel height, 0=>dimension waterlevel, -n=> n blocks below dimension waterlevel } - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:0" }, ":");
 	}
 }

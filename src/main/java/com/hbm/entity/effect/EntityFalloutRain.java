@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
+import com.hbm.blocks.generic.WasteLog;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -52,6 +53,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	private Ticket loaderTicket;
 
+	private double s0;
 	private double s1;
 	private double s2;
 	private double s3;
@@ -270,8 +272,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 
 	private void stomp(MutableBlockPos pos, double dist) {
+		if(dist > s0){
+			if(world.rand.nextFloat() > 0.05F+(5F*(s0/dist)-4F)){
+				return;
+			}
+		}
+
 		int stoneDepth = 0;
-		int maxStoneDepth = 0;		
+		int maxStoneDepth = 0;
 
 		if(dist > s1)
 			maxStoneDepth = 0;
@@ -332,24 +340,25 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			if(bblock == ModBlocks.waste_leaves){
-				if(dist <= s1)
-					world.setBlockToAir(pos);
+				if(!(dist > s1 || (dist > s2 && (world.rand.nextFloat() < (-5F*(s2/dist)+5F))))){
+					world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
+				}
 				continue;
 			}
 
 			if(bblock instanceof BlockLeaves) {
-				if(dist > s1){
-					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+				if(dist > s1 || (dist > s2 && (world.rand.nextFloat() < (-5F*(s2/dist)+5F)))){
+					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
 				}
-				else{
-					world.setBlockToAir(pos);
-					world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
+				else {
+					world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
 				}
 				continue;
 			}
 
 			if(bblock == Blocks.BROWN_MUSHROOM || bblock == Blocks.RED_MUSHROOM){
-				world.setBlockState(pos, ModBlocks.mush.getDefaultState());
+				if(dist < s0)
+					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				continue;
 			}
 
@@ -452,22 +461,26 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
-				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
-				if(meta == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
+				if(dist < s0){
+					BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
+					if(meta == BlockHugeMushroom.EnumType.STEM) {
+						world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
+					} else {
+						world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
+					}
 				}
 				continue;
 			}
 
 			else if(bblock instanceof BlockLog) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+				if(dist < s0)
+					world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(b));
 				continue;
 			}
 
 			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log) {
-				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				if(dist < s0)
+					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				continue;
 			}
 			else if(b.getBlock() == ModBlocks.sellafield_4) {
@@ -559,8 +572,9 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	public void setScale(int i, int craterRadius) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
+		this.s0 = 0.80D * i;
 		this.s1 = 0.75D * i;
-		this.s2 = 0.50D * i;
+		this.s2 = 0.55D * i;
 		this.s3 = 0.25D * i;
 		this.s4 = 0.15D * i;
 		this.s5 = 0.08D * i;

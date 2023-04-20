@@ -171,9 +171,10 @@ public class BlockHazard extends Block implements IItemHazard {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
 
-		if(this.rad3d > 0)
+		if(this.rad3d > 0){
 			ContaminationUtil.radiate(worldIn, pos.getX(), pos.getY(), pos.getZ(), 32, this.rad3d, this.module.fire * 5000);
-
+			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		}
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!worldIn.isRemote)
         		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
@@ -182,13 +183,14 @@ public class BlockHazard extends Block implements IItemHazard {
         }
 		if(this.radIn > 0) {
 			RadiationSavedData.incrementRad(worldIn, pos, radIn, radIn*10F);
-			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 	}
 
 	
 	@Override
 	public int tickRate(World world) {
+		if(this.rad3d > 0)
+			return 20;
 		if(this.radIn > 0)
 			return 60+world.rand.nextInt(500);
 		return super.tickRate(world);
@@ -197,8 +199,10 @@ public class BlockHazard extends Block implements IItemHazard {
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state){
 		super.onBlockAdded(worldIn, pos, state);
-		if(this.radIn > 0)
+		if(this.radIn > 0 || this.rad3d > 0){
+			this.setTickRandomly(true);
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		}
 	}
 
 	@Override
@@ -263,7 +267,7 @@ public class BlockHazard extends Block implements IItemHazard {
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
     	}
-    	if(this == ModBlocks.block_meteor_molten)
+    	if(this == ModBlocks.block_meteor_molten || this == ModBlocks.block_au198)
         	entity.setFire(5);
         if(this == ModBlocks.brick_jungle_lava)
         	entity.setFire(10);

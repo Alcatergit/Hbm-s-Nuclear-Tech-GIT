@@ -88,7 +88,7 @@ public class BlockGasRadonTomb extends BlockGasBase {
 				}
 				
 				if((state2.getMaterial() == Material.GRASS || state2.getMaterial() == Material.LEAVES || state2.getMaterial() == Material.PLANTS || state2.getMaterial() == Material.VINE) && !state2.isNormalCube())
-					world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
+					world.setBlockToAir(pos.down());
 			}
 	
 			if(rand.nextInt(600) == 0) {

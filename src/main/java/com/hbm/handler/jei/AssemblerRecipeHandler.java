@@ -73,8 +73,6 @@ public class AssemblerRecipeHandler implements IRecipeCategory<AssemblerRecipeWr
 	public void setRecipe(IRecipeLayout recipeLayout, AssemblerRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(outputSlot, false, 136, 19);
-		
 		guiItemStacks.init(inputSlots[0], true, 28, 1);
 		guiItemStacks.init(inputSlots[1], true, 46, 1);
 		guiItemStacks.init(inputSlots[2], true, 64, 1);
@@ -89,6 +87,9 @@ public class AssemblerRecipeHandler implements IRecipeCategory<AssemblerRecipeWr
 		guiItemStacks.init(inputSlots[11], true, 82, 37);
 		
 		guiItemStacks.init(templateSlot, true, 109, 1);
+
+		guiItemStacks.init(outputSlot, false, 136, 19);
+		
 		guiItemStacks.set(ingredients);
 	}
 

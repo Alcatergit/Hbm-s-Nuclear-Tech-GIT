@@ -9,7 +9,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.jei.JeiRecipes.AssemblerRecipeWrapper;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.lib.Library;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
 
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocus.Mode;
@@ -48,7 +48,7 @@ public class HbmJeiRegistryPlugin implements IRecipeRegistryPlugin {
 					}).map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 					return list;
 				} else if(focus.getMode() == Mode.OUTPUT) {
-					return (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> Library.areItemStacksCompatible(recipe.getKey().toStack(), stack, false)).map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
+					return (List<T>) AssemblerRecipes.recipes.entrySet().stream().filter(recipe -> (new ComparableStack(recipe.getKey().toStack()).matchesRecipe(stack, true))).map(recipe -> new AssemblerRecipeWrapper(recipe.getKey().toStack(), recipe.getValue(), AssemblerRecipes.time.get(recipe.getKey()))).collect(Collectors.toList());
 				}
 			}
 		}

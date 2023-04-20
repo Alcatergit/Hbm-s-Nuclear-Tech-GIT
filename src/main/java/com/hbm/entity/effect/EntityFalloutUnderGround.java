@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
+import com.hbm.blocks.generic.WasteLog;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -52,6 +53,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 	private Ticket loaderTicket;
 
+	private double s0;
 	private double s1;
 	private double s2;
 	private double s3;
@@ -280,21 +282,24 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
-				BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
-				if(meta == BlockHugeMushroom.EnumType.STEM) {
-					world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
+				if(l < s0){
+					BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
+					if(meta == BlockHugeMushroom.EnumType.STEM) {
+						world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
+					} else {
+						world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
+					}
 				}
 				return;
 
-
 			} else if(bblock instanceof BlockLog) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+				if(l < s0)
+					world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(b));
 				return;
 
 			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log) {
-				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				if(l < s0)
+					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				return;
 
 			} else if(bblock == ModBlocks.ore_uranium) {
@@ -350,7 +355,8 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 	public void setScale(int i) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
-		s1 = 0.8 * i;
+		s0 = 0.9 * i;
+		s1 = 0.75 * i;
 		s2 = 0.6 * i;
 		s3 = 0.4 * i;
 		s4 = 0.3 * i;

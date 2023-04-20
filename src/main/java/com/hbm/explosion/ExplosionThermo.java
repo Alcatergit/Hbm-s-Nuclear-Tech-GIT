@@ -3,9 +3,12 @@ package com.hbm.explosion;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.WasteLog;
 import com.hbm.handler.ArmorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -73,90 +76,63 @@ public class ExplosionThermo {
 
 		if (block == Blocks.GRASS) {
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
-
-		if (block == ModBlocks.frozen_grass) {
+		
+		} else if (block == ModBlocks.frozen_grass) {
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
-
-		if (block == Blocks.DIRT) {
+		
+		} else if (block == Blocks.DIRT) {
 			world.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
-		}
-
-		if (block == ModBlocks.frozen_dirt) {
+		
+		} else if (block == ModBlocks.frozen_dirt) {
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
-
-		if (block == Blocks.NETHERRACK) {
+		
+		} else if (block == Blocks.NETHERRACK) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-		}
-
-		if (block == Blocks.LOG) {
+		
+		} else if(block instanceof BlockLog) {
+			world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(world.getBlockState(pos)));
+		
+		} else if (block == ModBlocks.frozen_log) {
 			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
-
-		if (block == Blocks.LOG2) {
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
-
-		if (block == ModBlocks.frozen_log) {
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
-
-		if (block == ModBlocks.frozen_planks) {
+		
+		} else if (block == ModBlocks.frozen_planks) {
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-		}
-
-		if (block == Blocks.PLANKS) {
+		
+		} else if (block == Blocks.PLANKS) {
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-		}
-
-		if (block == Blocks.STONE) {
+		
+		} else if (block == Blocks.STONE) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-		}
-
-		if (block == Blocks.COBBLESTONE) {
+		
+		} else if (block == Blocks.COBBLESTONE) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-		}
-
-		if (block == Blocks.STONEBRICK) {
+		
+		} else if (block == Blocks.STONEBRICK) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-		}
-
-		if (block == Blocks.OBSIDIAN) {
+		
+		} else if (block == Blocks.OBSIDIAN) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
-		}
-
-		if (block == Blocks.LEAVES) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.LEAVES2) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.WATER) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.FLOWING_WATER) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.PACKED_ICE) {
+		
+		} else if (block instanceof BlockLeaves) {
+			world.setBlockToAir(pos);
+		
+		} else if (block == Blocks.WATER) {
+			world.setBlockToAir(pos);
+		
+		} else if (block == Blocks.FLOWING_WATER) {
+			world.setBlockToAir(pos);
+		
+		} else if (block == Blocks.PACKED_ICE) {
 			world.setBlockState(pos, Blocks.FLOWING_WATER.getDefaultState());
-		}
-
-		if (block == Blocks.ICE) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.SNOW) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
-		}
-
-		if (block == Blocks.SNOW_LAYER) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		
+		} else if (block == Blocks.ICE) {
+			world.setBlockToAir(pos);
+		
+		} else if (block == Blocks.SNOW) {
+			world.setBlockToAir(pos);
+		
+		} else if (block == Blocks.SNOW_LAYER) {
+			world.setBlockToAir(pos);
 		}
 	}
 
@@ -165,65 +141,47 @@ public class ExplosionThermo {
 
 		if (block == Blocks.GRASS) {
 			world.setBlockState(pos, ModBlocks.frozen_grass.getDefaultState());
-		}
-
-		if (block == Blocks.DIRT) {
+		
+		} else if (block == Blocks.DIRT) {
 			world.setBlockState(pos, ModBlocks.frozen_dirt.getDefaultState());
-		}
-
-		if (block == Blocks.LOG) {
+		
+		} else if (block == Blocks.LOG) {
 			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
-		}
-
-		if (block == Blocks.LOG2) {
+		
+		} else if (block == Blocks.LOG2) {
 			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
-		}
-
-		if (block == Blocks.PLANKS) {
+		
+		} else if (block == Blocks.PLANKS) {
 			world.setBlockState(pos, ModBlocks.frozen_planks.getDefaultState());
-		}
-
-		if (block == ModBlocks.waste_log) {
+		
+		} else if (block == ModBlocks.waste_log) {
 			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
-		}
-
-		if (block == ModBlocks.waste_planks) {
+		
+		} else if (block == ModBlocks.waste_planks) {
 			world.setBlockState(pos, ModBlocks.frozen_planks.getDefaultState());
-		}
-
-		if (block == Blocks.STONE) {
+		
+		} else if (block == Blocks.STONE) {
 			world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState());
-		}
-
-		if (block == Blocks.COBBLESTONE) {
+		
+		} else if (block == Blocks.COBBLESTONE) {
 			world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState());
-		}
-
-		if (block == Blocks.STONEBRICK) {
+		
+		} else if (block == Blocks.STONEBRICK) {
 			world.setBlockState(pos, Blocks.PACKED_ICE.getDefaultState());
-		}
-
-		if (block == Blocks.LEAVES) {
+		
+		} else if (block instanceof BlockLeaves) {
 			world.setBlockState(pos, Blocks.SNOW.getDefaultState());
-		}
-
-		if (block == Blocks.LEAVES2) {
-			world.setBlockState(pos, Blocks.SNOW.getDefaultState());
-		}
-
-		if (block == Blocks.LAVA) {
+		
+		} else if (block == Blocks.LAVA) {
 			world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-		}
-
-		if (block == Blocks.FLOWING_LAVA) {
+		
+		} else if (block == Blocks.FLOWING_LAVA) {
 			world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-		}
-
-		if (block == Blocks.WATER) {
+		
+		} else if (block == Blocks.WATER) {
 			world.setBlockState(pos, Blocks.ICE.getDefaultState());
-		}
-
-		if (block == Blocks.FLOWING_WATER) {
+		
+		} else if (block == Blocks.FLOWING_WATER) {
 			world.setBlockState(pos, Blocks.ICE.getDefaultState());
 		}
 	}
@@ -325,98 +283,58 @@ public class ExplosionThermo {
 		IBlockState blockstate = world.getBlockState(pos);
 		Block block = blockstate.getBlock();
 		
-		if(block == Blocks.GRASS)
-		{
+		if(block == Blocks.GRASS){
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
 		
-		if(block == ModBlocks.frozen_grass)
-		{
+		} else if(block == ModBlocks.frozen_grass){
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
 		
-		if(block == Blocks.DIRT)
-		{
+		} else if(block == Blocks.DIRT) {
 			world.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
-		}
 		
-		if(block == ModBlocks.frozen_dirt)
-		{
+		} else if(block == ModBlocks.frozen_dirt){
 			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-		}
 		
-		if(block == ModBlocks.waste_earth)
-		{
+		} else if(block == ModBlocks.waste_earth){
 			world.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
-		}
 		
-		if(block == Blocks.LOG)
-		{
+		} else if(block == Blocks.LOG){
 			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
 		
-		if(block == Blocks.LOG2)
-		{
+		} else if(block == Blocks.LOG2){
 			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
 		
-		if(block == ModBlocks.frozen_log)
-		{
+		} else if(block == ModBlocks.frozen_log){
 			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		}
 		
-		if(block == ModBlocks.frozen_planks)
-		{
+		} else if(block == ModBlocks.frozen_planks){
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-		}
 		
-		if(block == Blocks.PLANKS)
-		{
+		} else if(block == Blocks.PLANKS){
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-		}
 		
-		if(block == Blocks.OBSIDIAN)
-		{
+		} else if(block == Blocks.OBSIDIAN){
 			world.setBlockState(pos, ModBlocks.gravel_obsidian.getDefaultState());
-		}
 		
-		if(block == Blocks.LEAVES)
-		{
+		} else if(block instanceof BlockLeaves){
 			world.setBlockToAir(pos);
-		}
 		
-		if(block == Blocks.LEAVES2)
-		{
+		} else if(block == Blocks.WATER){
 			world.setBlockToAir(pos);
-		}
 		
-		if(block == Blocks.WATER)
-		{
+		} else if(block == Blocks.FLOWING_WATER){
 			world.setBlockToAir(pos);
-		}
 		
-		if(block == Blocks.FLOWING_WATER)
-		{
-			world.setBlockToAir(pos);
-		}
-		
-		if(block == Blocks.PACKED_ICE)
-		{
+		} else if(block == Blocks.PACKED_ICE){
 			world.setBlockState(pos, Blocks.FLOWING_WATER.getDefaultState());
-		}
 		
-		if(block == Blocks.ICE)
-		{
+		} else if(block == Blocks.ICE){
 			world.setBlockToAir(pos);
-		}
 		
-		if(block == Blocks.SAND)
-		{
+		} else if(block == Blocks.SAND){
 			world.setBlockState(pos, Blocks.GLASS.getDefaultState());
-		}
 		
-		if(block == Blocks.CLAY)
-		{
+		} else if(block == Blocks.CLAY){
 			world.setBlockState(pos, Blocks.STAINED_HARDENED_CLAY.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.values()[world.rand.nextInt(16)]));
 		}
 	}

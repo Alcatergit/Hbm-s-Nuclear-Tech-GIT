@@ -25,6 +25,7 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -940,8 +941,32 @@ public class ExplosionChaos {
 			world.setBlockState(pos, Blocks.GRASS.getDefaultState());
 		}
 
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_dirt && random.nextInt(3) != 0) {
+			world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_sand && random.nextInt(3) != 0) {
+			world.setBlockState(pos, Blocks.SAND.getDefaultState());
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_sand_red && random.nextInt(3) != 0) {
+			world.setBlockState(pos, Blocks.SAND.getStateFromMeta(1));
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_grass_tall && random.nextInt(3) != 0) {
+			world.setBlockState(pos, Blocks.TALLGRASS.getDefaultState());
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_gravel && random.nextInt(3) != 0) {
+			world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+		}
+
 		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_mycelium && random.nextInt(5) == 0) {
 			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_leaves && random.nextInt(5) != 0) {
+			world.setBlockState(pos, Blocks.LEAVES.getDefaultState());
 		}
 
 		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_trinitite && random.nextInt(3) == 0) {
@@ -953,7 +978,7 @@ public class ExplosionChaos {
 		}
 
 		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_log && random.nextInt(3) != 0) {
-			world.setBlockState(pos, Blocks.LOG.getDefaultState());
+			world.setBlockState(pos, Blocks.LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(world.getBlockState(pos).getValue(BlockLog.AXIS))));
 		}
 
 		else if(world.getBlockState(pos).getBlock() == ModBlocks.waste_planks && random.nextInt(3) != 0) {
@@ -990,6 +1015,10 @@ public class ExplosionChaos {
 
 		else if(world.getBlockState(pos).getBlock() == ModBlocks.sellafield_0 && random.nextInt(5) == 0) {
 			world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+		}
+
+		else if(world.getBlockState(pos).getBlock() == ModBlocks.sellafield_slaked && random.nextInt(5) == 0) {
+			world.setBlockState(pos, Blocks.STONE.getDefaultState());
 		}
 
 	}

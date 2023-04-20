@@ -169,7 +169,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 								falloutRain.posX = this.posX;
 								falloutRain.posY = this.posY;
 								falloutRain.posZ = this.posZ;
-								falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+32);
+								falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+4);
 								this.world.spawnEntity(falloutRain);
 							}
 							this.setDead();
@@ -180,7 +180,7 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 							falloutRain.posX = this.posX;
 							falloutRain.posY = this.posY;
 							falloutRain.posZ = this.posZ;
-							falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+32);
+							falloutRain.setScale((int) (this.radius * (1F+(BombConfig.falloutRange / 100F)) + falloutAdd), this.radius+4);
 							this.world.spawnEntity(falloutRain);
 						}
 						this.setDead();

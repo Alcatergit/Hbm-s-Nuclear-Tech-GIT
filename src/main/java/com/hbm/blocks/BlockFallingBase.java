@@ -43,6 +43,9 @@ public class BlockFallingBase extends BlockFalling {
 			tooltip.add("i added an item for a joke that isn't even here, what am i, stupid? can't even tell the difference between gravel and a gavel, how did i not forget how to breathe yet?");
 		}
 
+		if(this == ModBlocks.sand_boron){
+			tooltip.add("Used to reduce reactivity and increase cooldown in destroyed RBMK cores.");
+		}
 	}
 	
 }

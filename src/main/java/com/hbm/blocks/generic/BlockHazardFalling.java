@@ -67,7 +67,6 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(this.rad > 0) {
 			RadiationSavedData.incrementRad(world, pos, rad*0.01F, rad);
-			world.scheduleUpdate(pos, this, this.tickRate(world));
 		}
 		super.updateTick(world, pos, state, rand);
 	}
@@ -84,8 +83,10 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
 		super.onBlockAdded(world, pos, state);
-		if(this.rad > 0)
+		if(this.rad > 0){
+			this.setTickRandomly(true);
 			world.scheduleUpdate(pos, this, this.tickRate(world));
+		}
 	}
 	
 }

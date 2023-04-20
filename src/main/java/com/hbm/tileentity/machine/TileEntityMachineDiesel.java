@@ -153,11 +153,11 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 		if (hasAcceptableFuel()) {
 			if (tank.getFluidAmount() > 0) {
 				if (soundCycle == 0) {
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.BLOCKS, 1.0F, 0.5F);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.BLOCKS, 0.5F, -100.0F);
 				}
 				soundCycle++;
 
-				if (soundCycle >= 3)
+				if (soundCycle >= 5)
 					soundCycle = 0;
 
 				tank.drain(10, true);

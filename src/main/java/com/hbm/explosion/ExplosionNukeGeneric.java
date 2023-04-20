@@ -14,6 +14,7 @@ import java.util.Random;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.WasteLog;
 import com.hbm.config.VersatileConfig;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
@@ -36,6 +37,7 @@ import com.hbm.tileentity.turret.TileEntityTurretBase;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSand;
@@ -467,8 +469,8 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if (b == Blocks.LOG || b == Blocks.LOG2) {
-				world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+			else if(b instanceof BlockLog) {
+				world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(bs));
 			}
 
 			else if (b == Blocks.BROWN_MUSHROOM_BLOCK) {

@@ -37,6 +37,7 @@ public abstract class BlockGasBase extends Block {
 		this.setRegistryName(s);
 		this.setHardness(0.0F);
 		this.setResistance(0.0F);
+		this.setTickRandomly(true);
 		this.lightOpacity = 0;
 		this.red = r;
 		this.green = g;
@@ -91,23 +92,10 @@ public abstract class BlockGasBase extends Block {
 	}
 
 	@Override
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state){
-		if(!world.isRemote)
-			world.scheduleUpdate(pos, this, 10);
-	}
-
-	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
-			
-			if(world.rand.nextInt(20) == 0){
-
-				HbmWorldUtility.setImmediateScheduledUpdates(world, false); //prevent recursive loop when some dumbass forgets to clean up immediate updating
-
-				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
-					if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ())))
-						world.scheduleUpdate(pos, this, getDelay(world));
-			}
+			if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
+				tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ()));
 		}
 	}
 	
@@ -122,10 +110,9 @@ public abstract class BlockGasBase extends Block {
 
 		if (!world.isBlockLoaded(newPos)) {
 			return false;
-		} else if (world.getBlockState(newPos).getBlock() == Blocks.AIR) {
+		} else if (world.isAirBlock(newPos)) {
 			world.setBlockToAir(new BlockPos(x, y, z));
 			world.setBlockState(newPos, this.getDefaultState());
-			world.scheduleUpdate(newPos, this, this.getDelay(world));
 			return true;
 		}
 
