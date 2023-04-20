@@ -200,7 +200,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		if(!isReady())
 			return joules;
 		
-		int demand = (int)Math.ceil((double)joules / 1000D);
+		int demand = (int)Math.sqrt((double)joules);
 
 		long powerAbs = ItemCatalyst.getPowerAbs(inventory.getStackInSlot(0)) + ItemCatalyst.getPowerAbs(inventory.getStackInSlot(2));
 		float powerMod = ItemCatalyst.getPowerMod(inventory.getStackInSlot(0)) * ItemCatalyst.getPowerMod(inventory.getStackInSlot(2));

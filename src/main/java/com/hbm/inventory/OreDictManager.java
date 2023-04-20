@@ -307,8 +307,8 @@ public class OreDictManager {
 		CE															.nugget(fragment_cerium)								.ingot(ingot_cerium)		.dust(powder_cerium)	.dustSmall(powder_cerium_tiny);
 		BR																													.ingot(ingot_bromine)		.dust(powder_bromine);
 		LI	.hydro(1F)																										.ingot(lithium)				.dust(powder_lithium)	.dustSmall(powder_lithium_tiny)	.block(block_lithium)							.crystal(crystal_lithium)								.ore(ore_gneiss_lithium, ore_meteor_lithium);
-		P_WHITE	.hot(5)																										.ingot(ingot_phosphorus)															.block(block_white_phosphorus)					.crystal(crystal_phosphorus);
-		P_RED	.hot(2)																																	.dust(powder_fire)										.block(block_red_phosphorus);
+		P_WHITE	.hot(5)																										.ingot(ingot_phosphorus)															.block(block_white_phosphorus);
+		P_RED	.hot(2)																																	.dust(powder_fire)										.block(block_red_phosphorus)					.crystal(crystal_phosphorus)							.ore(ore_nether_fire);
 		S																																				.dust(sulfur)											.block(block_sulfur)							.crystal(crystal_sulfur)								.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur);
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
