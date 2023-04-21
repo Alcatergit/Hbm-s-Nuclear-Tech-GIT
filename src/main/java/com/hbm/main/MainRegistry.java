@@ -216,6 +216,7 @@ import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.MultiblockBBHandler;
+import com.hbm.handler.crt.NTMCraftTweaker;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AssemblerRecipes;
@@ -1071,6 +1072,7 @@ public class MainRegistry {
 			World.MAX_ENTITY_RADIUS = 5;
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
 		proxy.postInit(event);
+		NTMCraftTweaker.applyPostInitActions();
 	}
 
 	@EventHandler

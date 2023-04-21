@@ -74,16 +74,20 @@ minecraft {
 }
 
 repositories {
-  maven {
-    // location of the maven that hosts JEI files
-    name = "Progwml6 maven"
-    url = "https://dvs1.progwml6.com/files/maven/"
-  }
-  maven {
-    // location of a maven mirror for JEI files, as a fallback
-    name = "ModMaven"
-    url = "https://modmaven.k-4u.nl"
-  }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven { // CraftTweaker
+        name = "jared maven"
+        url = "http://maven.blamejared.com/"
+    }
 }
 
 dependencies {
@@ -109,13 +113,14 @@ dependencies {
     // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei_1.12.2:${jei_version}:api")
+    compileOnly fg.deobf("mezz.jei:jei_1.12.2:${version_jei}:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:${version_jei}")
 	
 	//compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${version_crafttweaker}"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

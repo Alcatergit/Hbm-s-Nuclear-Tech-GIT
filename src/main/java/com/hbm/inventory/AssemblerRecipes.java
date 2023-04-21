@@ -937,6 +937,15 @@ public class AssemblerRecipes {
 		time.put(out, duration);
 	}
 
+	public static void removeRecipe(ComparableStack out){
+		if(out == null || Item.REGISTRY.getNameForObject(out.item) == null) {
+			MainRegistry.logger.error("Canceling assembler recipe removal, item was null!");
+			return;
+		}
+		recipes.remove(out);
+		time.remove(out);
+	}
+
 	public static void loadRecipesFromConfig() {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
 		blockRegistry = GameRegistry.findRegistry(Block.class);

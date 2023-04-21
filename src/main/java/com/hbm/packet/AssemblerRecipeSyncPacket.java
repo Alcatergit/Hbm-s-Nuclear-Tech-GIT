@@ -39,7 +39,8 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 		this.recipes = new ArrayList<>(recipes.size());
 		for(int i = 0; i < recipes.size(); i ++){
 			ComparableStack c = recipes.get(i);
-			this.recipes.add(new AssemblerRecipe(AssemblerRecipes.recipes.get(c), c, AssemblerRecipes.time.get(c)));
+			if(AssemblerRecipes.recipes.get(c) != null)
+				this.recipes.add(new AssemblerRecipe(AssemblerRecipes.recipes.get(c), c, AssemblerRecipes.time.get(c)));
 		}
 		this.hidden = hidden;
 	}

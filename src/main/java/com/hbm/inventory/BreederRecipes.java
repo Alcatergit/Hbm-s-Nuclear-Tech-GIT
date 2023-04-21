@@ -23,120 +23,139 @@ public class BreederRecipes {
 	public static void registerRecipes() {
 
 		//lithium and impure rods
-		recipes.put(new ComparableStack(ModItems.rod_lithium), new BreederRecipe(ModItems.rod_tritium, 1));
-		recipes.put(new ComparableStack(ModItems.rod_dual_lithium), new BreederRecipe(ModItems.rod_dual_tritium, 1));
-		recipes.put(new ComparableStack(ModItems.rod_quad_lithium), new BreederRecipe(ModItems.rod_quad_tritium, 1));
-		recipes.put(new ComparableStack(ModItems.rod_uranium), new BreederRecipe(ModItems.rod_plutonium, 4));
-		recipes.put(new ComparableStack(ModItems.rod_dual_uranium), new BreederRecipe(ModItems.rod_dual_plutonium, 4));
-		recipes.put(new ComparableStack(ModItems.rod_quad_uranium), new BreederRecipe(ModItems.rod_quad_plutonium, 4));
-		recipes.put(new ComparableStack(ModItems.rod_plutonium), new BreederRecipe(ModItems.rod_waste, 4));
-		recipes.put(new ComparableStack(ModItems.rod_dual_plutonium), new BreederRecipe(ModItems.rod_dual_waste, 4));
-		recipes.put(new ComparableStack(ModItems.rod_quad_plutonium), new BreederRecipe(ModItems.rod_quad_waste, 4));
+		addRecipe(new ComparableStack(ModItems.rod_lithium), ModItems.rod_tritium, 1);
+		addRecipe(new ComparableStack(ModItems.rod_dual_lithium), ModItems.rod_dual_tritium, 1);
+		addRecipe(new ComparableStack(ModItems.rod_quad_lithium), ModItems.rod_quad_tritium, 1);
+		addRecipe(new ComparableStack(ModItems.rod_uranium), ModItems.rod_plutonium, 4);
+		addRecipe(new ComparableStack(ModItems.rod_dual_uranium), ModItems.rod_dual_plutonium, 4);
+		addRecipe(new ComparableStack(ModItems.rod_quad_uranium), ModItems.rod_quad_plutonium, 4);
+		addRecipe(new ComparableStack(ModItems.rod_plutonium), ModItems.rod_waste, 4);
+		addRecipe(new ComparableStack(ModItems.rod_dual_plutonium), ModItems.rod_dual_waste, 4);
+		addRecipe(new ComparableStack(ModItems.rod_quad_plutonium), ModItems.rod_quad_waste, 4);
 		
 		//isotopes
-		recipes.put(new ComparableStack(ModItems.rod_th232), new BreederRecipe(ModItems.rod_thorium_fuel, 2));
-		recipes.put(new ComparableStack(ModItems.rod_dual_th232), new BreederRecipe(ModItems.rod_dual_thorium_fuel, 2));
-		recipes.put(new ComparableStack(ModItems.rod_quad_th232), new BreederRecipe(ModItems.rod_quad_thorium_fuel, 2));
-		recipes.put(new ComparableStack(ModItems.rod_u233), new BreederRecipe(ModItems.rod_u235, 2));
-		recipes.put(new ComparableStack(ModItems.rod_dual_u233), new BreederRecipe(ModItems.rod_dual_u235, 2));
-		recipes.put(new ComparableStack(ModItems.rod_quad_u233), new BreederRecipe(ModItems.rod_quad_u235, 2));
-		recipes.put(new ComparableStack(ModItems.rod_u235), new BreederRecipe(ModItems.rod_neptunium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_dual_u235), new BreederRecipe(ModItems.rod_dual_neptunium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_quad_u235), new BreederRecipe(ModItems.rod_quad_neptunium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_u238), new BreederRecipe(ModItems.rod_pu239, 3));
-		recipes.put(new ComparableStack(ModItems.rod_dual_u238), new BreederRecipe(ModItems.rod_dual_pu239, 3));
-		recipes.put(new ComparableStack(ModItems.rod_quad_u238), new BreederRecipe(ModItems.rod_quad_pu239, 3));
-		recipes.put(new ComparableStack(ModItems.rod_neptunium), new BreederRecipe(ModItems.rod_pu238, 3));
-		recipes.put(new ComparableStack(ModItems.rod_dual_neptunium), new BreederRecipe(ModItems.rod_dual_pu238, 3));
-		recipes.put(new ComparableStack(ModItems.rod_quad_neptunium), new BreederRecipe(ModItems.rod_quad_pu238, 3));
-		recipes.put(new ComparableStack(ModItems.rod_pu238), new BreederRecipe(ModItems.rod_pu239, 2));
-		recipes.put(new ComparableStack(ModItems.rod_dual_pu238), new BreederRecipe(ModItems.rod_dual_pu239, 2));
-		recipes.put(new ComparableStack(ModItems.rod_quad_pu238), new BreederRecipe(ModItems.rod_quad_pu239, 2));
-		recipes.put(new ComparableStack(ModItems.rod_pu239), new BreederRecipe(ModItems.rod_pu240, 2));
-		recipes.put(new ComparableStack(ModItems.rod_dual_pu239), new BreederRecipe(ModItems.rod_dual_pu240, 2));
-		recipes.put(new ComparableStack(ModItems.rod_quad_pu239), new BreederRecipe(ModItems.rod_quad_pu240, 2));
-		recipes.put(new ComparableStack(ModItems.rod_pu240), new BreederRecipe(ModItems.rod_waste, 3));
-		recipes.put(new ComparableStack(ModItems.rod_dual_pu240), new BreederRecipe(ModItems.rod_dual_waste, 3));
-		recipes.put(new ComparableStack(ModItems.rod_quad_pu240), new BreederRecipe(ModItems.rod_quad_waste, 3));
+		addRecipe(new ComparableStack(ModItems.rod_th232), ModItems.rod_thorium_fuel, 2);
+		addRecipe(new ComparableStack(ModItems.rod_dual_th232), ModItems.rod_dual_thorium_fuel, 2);
+		addRecipe(new ComparableStack(ModItems.rod_quad_th232), ModItems.rod_quad_thorium_fuel, 2);
+		addRecipe(new ComparableStack(ModItems.rod_u233), ModItems.rod_u235, 2);
+		addRecipe(new ComparableStack(ModItems.rod_dual_u233), ModItems.rod_dual_u235, 2);
+		addRecipe(new ComparableStack(ModItems.rod_quad_u233), ModItems.rod_quad_u235, 2);
+		addRecipe(new ComparableStack(ModItems.rod_u235), ModItems.rod_neptunium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_dual_u235), ModItems.rod_dual_neptunium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_quad_u235), ModItems.rod_quad_neptunium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_u238), ModItems.rod_pu239, 3);
+		addRecipe(new ComparableStack(ModItems.rod_dual_u238), ModItems.rod_dual_pu239, 3);
+		addRecipe(new ComparableStack(ModItems.rod_quad_u238), ModItems.rod_quad_pu239, 3);
+		addRecipe(new ComparableStack(ModItems.rod_neptunium), ModItems.rod_pu238, 3);
+		addRecipe(new ComparableStack(ModItems.rod_dual_neptunium), ModItems.rod_dual_pu238, 3);
+		addRecipe(new ComparableStack(ModItems.rod_quad_neptunium), ModItems.rod_quad_pu238, 3);
+		addRecipe(new ComparableStack(ModItems.rod_pu238), ModItems.rod_pu239, 2);
+		addRecipe(new ComparableStack(ModItems.rod_dual_pu238), ModItems.rod_dual_pu239, 2);
+		addRecipe(new ComparableStack(ModItems.rod_quad_pu238), ModItems.rod_quad_pu239, 2);
+		addRecipe(new ComparableStack(ModItems.rod_pu239), ModItems.rod_pu240, 2);
+		addRecipe(new ComparableStack(ModItems.rod_dual_pu239), ModItems.rod_dual_pu240, 2);
+		addRecipe(new ComparableStack(ModItems.rod_quad_pu239), ModItems.rod_quad_pu240, 2);
+		addRecipe(new ComparableStack(ModItems.rod_pu240), ModItems.rod_waste, 3);
+		addRecipe(new ComparableStack(ModItems.rod_dual_pu240), ModItems.rod_dual_waste, 3);
+		addRecipe(new ComparableStack(ModItems.rod_quad_pu240), ModItems.rod_quad_waste, 3);
 
 		//NEW
-		recipes.put(new ComparableStack(ModItems.rod_cobalt), new BreederRecipe(ModItems.rod_co60, 2));
-		recipes.put(new ComparableStack(ModItems.rod_dual_cobalt), new BreederRecipe(ModItems.rod_dual_co60, 2));
-		recipes.put(new ComparableStack(ModItems.rod_quad_cobalt), new BreederRecipe(ModItems.rod_quad_co60, 2));
-		recipes.put(new ComparableStack(ModItems.rod_ra226), new BreederRecipe(ModItems.rod_ac227, 4));
-		recipes.put(new ComparableStack(ModItems.rod_dual_ra226), new BreederRecipe(ModItems.rod_dual_ac227, 4));
-		recipes.put(new ComparableStack(ModItems.rod_quad_ra226), new BreederRecipe(ModItems.rod_quad_ac227, 4));
+		addRecipe(new ComparableStack(ModItems.rod_cobalt), ModItems.rod_co60, 2);
+		addRecipe(new ComparableStack(ModItems.rod_dual_cobalt), ModItems.rod_dual_co60, 2);
+		addRecipe(new ComparableStack(ModItems.rod_quad_cobalt), ModItems.rod_quad_co60, 2);
+		addRecipe(new ComparableStack(ModItems.rod_ra226), ModItems.rod_ac227, 4);
+		addRecipe(new ComparableStack(ModItems.rod_dual_ra226), ModItems.rod_dual_ac227, 4);
+		addRecipe(new ComparableStack(ModItems.rod_quad_ra226), ModItems.rod_quad_ac227, 4);
 
 		//advanced
-		recipes.put(new ComparableStack(ModItems.rod_schrabidium), new BreederRecipe(ModItems.rod_solinium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_dual_schrabidium), new BreederRecipe(ModItems.rod_dual_solinium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_quad_schrabidium), new BreederRecipe(ModItems.rod_quad_solinium, 3));
-		recipes.put(new ComparableStack(ModItems.rod_balefire), new BreederRecipe(ModItems.rod_balefire_blazing, 4));
-		recipes.put(new ComparableStack(ModItems.rod_dual_balefire), new BreederRecipe(ModItems.rod_dual_balefire_blazing, 4));
-		recipes.put(new ComparableStack(ModItems.rod_quad_balefire), new BreederRecipe(ModItems.rod_quad_balefire_blazing, 4));
+		addRecipe(new ComparableStack(ModItems.rod_schrabidium), ModItems.rod_solinium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_dual_schrabidium), ModItems.rod_dual_solinium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_quad_schrabidium), ModItems.rod_quad_solinium, 3);
+		addRecipe(new ComparableStack(ModItems.rod_balefire), ModItems.rod_balefire_blazing, 4);
+		addRecipe(new ComparableStack(ModItems.rod_dual_balefire), ModItems.rod_dual_balefire_blazing, 4);
+		addRecipe(new ComparableStack(ModItems.rod_quad_balefire), ModItems.rod_quad_balefire_blazing, 4);
 
 		//rocks
-		recipes.put(new ComparableStack(Blocks.STONE), new BreederRecipe(new ItemStack(ModBlocks.sellafield_slaked), 1));
-		recipes.put(new ComparableStack(ModBlocks.sellafield_slaked), new BreederRecipe(new ItemStack(ModBlocks.sellafield_0), 2));
-		recipes.put(new ComparableStack(ModBlocks.sellafield_0), new BreederRecipe(new ItemStack(ModBlocks.sellafield_1), 2));
-		recipes.put(new ComparableStack(ModBlocks.sellafield_1), new BreederRecipe(new ItemStack(ModBlocks.sellafield_2), 3));
-		recipes.put(new ComparableStack(ModBlocks.sellafield_2), new BreederRecipe(new ItemStack(ModBlocks.sellafield_3), 3));
+		addRecipe(new ComparableStack(Blocks.STONE), new ItemStack(ModBlocks.sellafield_slaked), 1);
+		addRecipe(new ComparableStack(ModBlocks.sellafield_slaked), new ItemStack(ModBlocks.sellafield_0), 2);
+		addRecipe(new ComparableStack(ModBlocks.sellafield_0), new ItemStack(ModBlocks.sellafield_1), 2);
+		addRecipe(new ComparableStack(ModBlocks.sellafield_1), new ItemStack(ModBlocks.sellafield_2), 3);
+		addRecipe(new ComparableStack(ModBlocks.sellafield_2), new ItemStack(ModBlocks.sellafield_3), 3);
 		
-		recipes.put(new ComparableStack(ModItems.meteorite_sword_etched), new BreederRecipe(new ItemStack(ModItems.meteorite_sword_bred), 4));
+		addRecipe(new ComparableStack(ModItems.meteorite_sword_etched), new ItemStack(ModItems.meteorite_sword_bred), 4);
 	}
 	
 	public static void registerFuels() {
-		fuels.put(new ComparableStack(ModItems.rod_u233), new int[] {2, 2});
-		fuels.put(new ComparableStack(ModItems.rod_dual_u233), new int[] {2, 4});
-		fuels.put(new ComparableStack(ModItems.rod_quad_u233), new int[] {2, 8});
+		addFuel(new ComparableStack(ModItems.rod_u233), 2, 2);
+		addFuel(new ComparableStack(ModItems.rod_dual_u233), 2, 4);
+		addFuel(new ComparableStack(ModItems.rod_quad_u233), 2, 8);
 		
-		fuels.put(new ComparableStack(ModItems.rod_u235), new int[] {2, 3});
-		fuels.put(new ComparableStack(ModItems.rod_dual_u235), new int[] {2, 6});
-		fuels.put(new ComparableStack(ModItems.rod_quad_u235), new int[] {2, 12});
+		addFuel(new ComparableStack(ModItems.rod_u235), 2, 3);
+		addFuel(new ComparableStack(ModItems.rod_dual_u235), 2, 6);
+		addFuel(new ComparableStack(ModItems.rod_quad_u235), 2, 12);
 		
-		fuels.put(new ComparableStack(ModItems.rod_u238), new int[] {1, 1});
-		fuels.put(new ComparableStack(ModItems.rod_dual_u238), new int[] {1, 2});
-		fuels.put(new ComparableStack(ModItems.rod_quad_u238), new int[] {1, 4});
+		addFuel(new ComparableStack(ModItems.rod_u238), 1, 1);
+		addFuel(new ComparableStack(ModItems.rod_dual_u238), 1, 2);
+		addFuel(new ComparableStack(ModItems.rod_quad_u238), 1, 4);
 		
-		fuels.put(new ComparableStack(ModItems.rod_neptunium), new int[] {2, 3});
-		fuels.put(new ComparableStack(ModItems.rod_dual_neptunium), new int[] {2, 6});
-		fuels.put(new ComparableStack(ModItems.rod_quad_neptunium), new int[] {2, 12});
+		addFuel(new ComparableStack(ModItems.rod_neptunium), 2, 3);
+		addFuel(new ComparableStack(ModItems.rod_dual_neptunium), 2, 6);
+		addFuel(new ComparableStack(ModItems.rod_quad_neptunium), 2, 12);
 		
-		fuels.put(new ComparableStack(ModItems.rod_pu238), new int[] {1, 2});
-		fuels.put(new ComparableStack(ModItems.rod_dual_pu238), new int[] {1, 4});
-		fuels.put(new ComparableStack(ModItems.rod_quad_pu238), new int[] {1, 8});
+		addFuel(new ComparableStack(ModItems.rod_pu238), 1, 2);
+		addFuel(new ComparableStack(ModItems.rod_dual_pu238), 1, 4);
+		addFuel(new ComparableStack(ModItems.rod_quad_pu238), 1, 8);
 		
-		fuels.put(new ComparableStack(ModItems.rod_pu239), new int[] {3, 5});
-		fuels.put(new ComparableStack(ModItems.rod_dual_pu239), new int[] {3, 10});
-		fuels.put(new ComparableStack(ModItems.rod_quad_pu239), new int[] {3, 20});
+		addFuel(new ComparableStack(ModItems.rod_pu239), 3, 5);
+		addFuel(new ComparableStack(ModItems.rod_dual_pu239), 3, 10);
+		addFuel(new ComparableStack(ModItems.rod_quad_pu239), 3, 20);
 		
-		fuels.put(new ComparableStack(ModItems.rod_pu240), new int[] {1, 2});
-		fuels.put(new ComparableStack(ModItems.rod_dual_pu240), new int[] {1, 4});
-		fuels.put(new ComparableStack(ModItems.rod_quad_pu240), new int[] {1, 8});
+		addFuel(new ComparableStack(ModItems.rod_pu240), 1, 2);
+		addFuel(new ComparableStack(ModItems.rod_dual_pu240), 1, 4);
+		addFuel(new ComparableStack(ModItems.rod_quad_pu240), 1, 8);
 		
-		fuels.put(new ComparableStack(ModItems.rod_schrabidium), new int[] {3, 10});
-		fuels.put(new ComparableStack(ModItems.rod_dual_schrabidium), new int[] {3, 20});
-		fuels.put(new ComparableStack(ModItems.rod_quad_schrabidium), new int[] {3, 40});
+		addFuel(new ComparableStack(ModItems.rod_schrabidium), 3, 10);
+		addFuel(new ComparableStack(ModItems.rod_dual_schrabidium), 3, 20);
+		addFuel(new ComparableStack(ModItems.rod_quad_schrabidium), 3, 40);
 		
-		fuels.put(new ComparableStack(ModItems.rod_solinium), new int[] {3, 15});
-		fuels.put(new ComparableStack(ModItems.rod_dual_solinium), new int[] {3, 30});
-		fuels.put(new ComparableStack(ModItems.rod_quad_solinium), new int[] {3, 60});
+		addFuel(new ComparableStack(ModItems.rod_solinium), 3, 15);
+		addFuel(new ComparableStack(ModItems.rod_dual_solinium), 3, 30);
+		addFuel(new ComparableStack(ModItems.rod_quad_solinium), 3, 60);
 		
-		fuels.put(new ComparableStack(ModItems.rod_polonium), new int[] {4, 2});
-		fuels.put(new ComparableStack(ModItems.rod_dual_polonium), new int[] {4, 4});
-		fuels.put(new ComparableStack(ModItems.rod_quad_polonium), new int[] {4, 8});
+		addFuel(new ComparableStack(ModItems.rod_polonium), 4, 2);
+		addFuel(new ComparableStack(ModItems.rod_dual_polonium), 4, 4);
+		addFuel(new ComparableStack(ModItems.rod_quad_polonium), 4, 8);
 		
-		fuels.put(new ComparableStack(ModItems.rod_tritium), new int[] {1, 1});
-		fuels.put(new ComparableStack(ModItems.rod_dual_tritium), new int[] {1, 2});
-		fuels.put(new ComparableStack(ModItems.rod_quad_tritium), new int[] {1, 4});
+		addFuel(new ComparableStack(ModItems.rod_tritium), 1, 1);
+		addFuel(new ComparableStack(ModItems.rod_dual_tritium), 1, 2);
+		addFuel(new ComparableStack(ModItems.rod_quad_tritium), 1, 4);
 		
-		fuels.put(new ComparableStack(ModItems.rod_balefire), new int[] {2, 150});
-		fuels.put(new ComparableStack(ModItems.rod_dual_balefire), new int[] {2, 300});
-		fuels.put(new ComparableStack(ModItems.rod_quad_balefire), new int[] {2, 600});
+		addFuel(new ComparableStack(ModItems.rod_balefire), 2, 150);
+		addFuel(new ComparableStack(ModItems.rod_dual_balefire), 2, 300);
+		addFuel(new ComparableStack(ModItems.rod_quad_balefire), 2, 600);
 		
-		fuels.put(new ComparableStack(ModItems.rod_balefire_blazing), new int[] {4, 75});
-		fuels.put(new ComparableStack(ModItems.rod_dual_balefire_blazing), new int[] {4, 150});
-		fuels.put(new ComparableStack(ModItems.rod_quad_balefire_blazing), new int[] {4, 300});
+		addFuel(new ComparableStack(ModItems.rod_balefire_blazing), 4, 75);
+		addFuel(new ComparableStack(ModItems.rod_dual_balefire_blazing), 4, 150);
+		addFuel(new ComparableStack(ModItems.rod_quad_balefire_blazing), 4, 300);
+	}
+
+	public static void addRecipe(ComparableStack input, Item output, int heatLvl){
+		addRecipe(input, new ItemStack(output), heatLvl);
+	}
+	public static void addRecipe(ComparableStack input, ItemStack output, int heatLvl){
+		recipes.put(input, new BreederRecipe(output, heatLvl));
+	}
+
+	public static void removeRecipe(ComparableStack input){
+		recipes.remove(input);
+	}
+
+	public static void addFuel(ComparableStack input, int heatLvl, int usesInNuclearFurnace){
+		fuels.put(input, new int[] {heatLvl, usesInNuclearFurnace});
+	}
+
+	public static void removeFuel(ComparableStack input){
+		fuels.remove(input);
 	}
 	
 	public static HashMap<ItemStack, BreederRecipe> getAllRecipes() {

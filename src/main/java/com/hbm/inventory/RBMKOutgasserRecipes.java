@@ -31,68 +31,72 @@ public class RBMKOutgasserRecipes {
 	public static List<RBMKOutgasserRecipe> jeiRBMKOutgasserRecipes = null;
 	
 	public static void registerOverrides() {
-		RBMKOutgasserRecipes.setRecipe(10000, LI.block(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 8000));
-		RBMKOutgasserRecipes.setRecipe(1500, LI.ingot(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
-		RBMKOutgasserRecipes.setRecipe(1200, LI.dust(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
-		RBMKOutgasserRecipes.setRecipe(240,  LI.dustTiny(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 120));
-		RBMKOutgasserRecipes.setRecipe(360000, GOLD.ingot(), new ItemStack(ModItems.ingot_au198));
-		RBMKOutgasserRecipes.setRecipe(80000, GOLD.nugget(), new ItemStack(ModItems.nugget_au198));
-		RBMKOutgasserRecipes.setRecipe(350000, GOLD.dust(), new ItemStack(ModItems.powder_au198));
-		RBMKOutgasserRecipes.setRecipe(6000, Blocks.BROWN_MUSHROOM, new ItemStack(ModBlocks.mush));
-		RBMKOutgasserRecipes.setRecipe(6000, Blocks.RED_MUSHROOM, new ItemStack(ModBlocks.mush));
-		RBMKOutgasserRecipes.setRecipe(18000, Items.MUSHROOM_STEW, new ItemStack(ModItems.glowing_stew));
-		RBMKOutgasserRecipes.setRecipe(90000, TH232.ingot(), new ItemStack(ModItems.ingot_u233));
-		RBMKOutgasserRecipes.setRecipe(60000, U233.ingot(), new ItemStack(ModItems.ingot_u235));
-		RBMKOutgasserRecipes.setRecipe(100000, U235.ingot(), new ItemStack(ModItems.ingot_neptunium));
-		RBMKOutgasserRecipes.setRecipe(170000, NP237.ingot(), new ItemStack(ModItems.ingot_pu238));
-		RBMKOutgasserRecipes.setRecipe(120000, U238.ingot(), new ItemStack(ModItems.ingot_pu239));
-		RBMKOutgasserRecipes.setRecipe(150000, PU238.ingot(), new ItemStack(ModItems.ingot_pu239));
-		RBMKOutgasserRecipes.setRecipe(210000, PU239.ingot(), new ItemStack(ModItems.ingot_pu240));
-		RBMKOutgasserRecipes.setRecipe(2000000, PU240.ingot(), new ItemStack(ModItems.ingot_pu241));
-		RBMKOutgasserRecipes.setRecipe(6000000, PU241.ingot(), new ItemStack(ModItems.ingot_am241));
-		RBMKOutgasserRecipes.setRecipe(750000, AM241.ingot(), new ItemStack(ModItems.ingot_am242));
-		RBMKOutgasserRecipes.setRecipe(69000, SA326.ingot(), new ItemStack(ModItems.ingot_solinium));
-		RBMKOutgasserRecipes.setRecipe(50000, CO.ingot(), new ItemStack(ModItems.ingot_co60));
-		RBMKOutgasserRecipes.setRecipe(90000, CO.dust(), new ItemStack(ModItems.powder_co60));
-		RBMKOutgasserRecipes.setRecipe(55000, SR.ingot(), new ItemStack(ModItems.ingot_sr90));
-		RBMKOutgasserRecipes.setRecipe(59000, SR.dust(), new ItemStack(ModItems.powder_sr90));
-		RBMKOutgasserRecipes.setRecipe(45000, I.ingot(), new ItemStack(ModItems.ingot_i131));
-		RBMKOutgasserRecipes.setRecipe(35000, I.dust(), new ItemStack(ModItems.powder_i131));
-		RBMKOutgasserRecipes.setRecipe(450000, AC.ingot(), new ItemStack(ModItems.ingot_ac227));
-		RBMKOutgasserRecipes.setRecipe(350000, AC.dust(), new ItemStack(ModItems.powder_ac227));
-		RBMKOutgasserRecipes.setRecipe(80000, CS.dust(), new ItemStack(ModItems.powder_cs137));
-		RBMKOutgasserRecipes.setRecipe(120000, AT.dust(), new ItemStack(ModItems.powder_at209));
-		RBMKOutgasserRecipes.setRecipe(14000000, PB.ingot(), new ItemStack(ModItems.ingot_pb209));
-		RBMKOutgasserRecipes.setRecipe(12000000, PB.dust(), new ItemStack(ModItems.powder_pb209));
-		RBMKOutgasserRecipes.setRecipe(1800000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));
-		RBMKOutgasserRecipes.setRecipe(50000, U238.ingot(), new ItemStack(ModItems.ingot_ra226));
-		RBMKOutgasserRecipes.setRecipe(32000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
-		RBMKOutgasserRecipes.setRecipe(3000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
-		RBMKOutgasserRecipes.setRecipe(2000, Blocks.STONE, new ItemStack(ModBlocks.sellafield_slaked));
-		RBMKOutgasserRecipes.setRecipe(4000, ModBlocks.sellafield_slaked, new ItemStack(ModBlocks.sellafield_0));
-		RBMKOutgasserRecipes.setRecipe(8000, ModBlocks.sellafield_0, new ItemStack(ModBlocks.sellafield_1));
-		RBMKOutgasserRecipes.setRecipe(16000, ModBlocks.sellafield_1, new ItemStack(ModBlocks.sellafield_2));
-		RBMKOutgasserRecipes.setRecipe(32000, ModBlocks.sellafield_2, new ItemStack(ModBlocks.sellafield_3));
-		RBMKOutgasserRecipes.setRecipe(64000, ModBlocks.sellafield_3, new ItemStack(ModBlocks.sellafield_4));
-		RBMKOutgasserRecipes.setRecipe(128000, ModBlocks.sellafield_4, new ItemStack(ModBlocks.sellafield_core));
-		RBMKOutgasserRecipes.setRecipe(500000, ModBlocks.block_corium_cobble, new ItemStack(ModBlocks.block_corium));
-		RBMKOutgasserRecipes.setRecipe(1000000, ModItems.meteorite_sword_bred, new ItemStack(ModItems.meteorite_sword_irradiated));
+		addRecipe(10000, LI.block(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 8000));
+		addRecipe(1500, LI.ingot(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
+		addRecipe(1200, LI.dust(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 800));
+		addRecipe(240,  LI.dustTiny(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.tritium, 120));
+		addRecipe(360000, GOLD.ingot(), new ItemStack(ModItems.ingot_au198));
+		addRecipe(80000, GOLD.nugget(), new ItemStack(ModItems.nugget_au198));
+		addRecipe(350000, GOLD.dust(), new ItemStack(ModItems.powder_au198));
+		addRecipe(6000, Blocks.BROWN_MUSHROOM, new ItemStack(ModBlocks.mush));
+		addRecipe(6000, Blocks.RED_MUSHROOM, new ItemStack(ModBlocks.mush));
+		addRecipe(18000, Items.MUSHROOM_STEW, new ItemStack(ModItems.glowing_stew));
+		addRecipe(90000, TH232.ingot(), new ItemStack(ModItems.ingot_u233));
+		addRecipe(60000, U233.ingot(), new ItemStack(ModItems.ingot_u235));
+		addRecipe(100000, U235.ingot(), new ItemStack(ModItems.ingot_neptunium));
+		addRecipe(170000, NP237.ingot(), new ItemStack(ModItems.ingot_pu238));
+		addRecipe(120000, U238.ingot(), new ItemStack(ModItems.ingot_pu239));
+		addRecipe(150000, PU238.ingot(), new ItemStack(ModItems.ingot_pu239));
+		addRecipe(210000, PU239.ingot(), new ItemStack(ModItems.ingot_pu240));
+		addRecipe(2000000, PU240.ingot(), new ItemStack(ModItems.ingot_pu241));
+		addRecipe(6000000, PU241.ingot(), new ItemStack(ModItems.ingot_am241));
+		addRecipe(750000, AM241.ingot(), new ItemStack(ModItems.ingot_am242));
+		addRecipe(69000, SA326.ingot(), new ItemStack(ModItems.ingot_solinium));
+		addRecipe(50000, CO.ingot(), new ItemStack(ModItems.ingot_co60));
+		addRecipe(90000, CO.dust(), new ItemStack(ModItems.powder_co60));
+		addRecipe(55000, SR.ingot(), new ItemStack(ModItems.ingot_sr90));
+		addRecipe(59000, SR.dust(), new ItemStack(ModItems.powder_sr90));
+		addRecipe(45000, I.ingot(), new ItemStack(ModItems.ingot_i131));
+		addRecipe(35000, I.dust(), new ItemStack(ModItems.powder_i131));
+		addRecipe(450000, AC.ingot(), new ItemStack(ModItems.ingot_ac227));
+		addRecipe(350000, AC.dust(), new ItemStack(ModItems.powder_ac227));
+		addRecipe(80000, CS.dust(), new ItemStack(ModItems.powder_cs137));
+		addRecipe(120000, AT.dust(), new ItemStack(ModItems.powder_at209));
+		addRecipe(14000000, PB.ingot(), new ItemStack(ModItems.ingot_pb209));
+		addRecipe(12000000, PB.dust(), new ItemStack(ModItems.powder_pb209));
+		addRecipe(1800000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));
+		addRecipe(50000, U238.ingot(), new ItemStack(ModItems.ingot_ra226));
+		addRecipe(32000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
+		addRecipe(3000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
+		addRecipe(2000, Blocks.STONE, new ItemStack(ModBlocks.sellafield_slaked));
+		addRecipe(4000, ModBlocks.sellafield_slaked, new ItemStack(ModBlocks.sellafield_0));
+		addRecipe(8000, ModBlocks.sellafield_0, new ItemStack(ModBlocks.sellafield_1));
+		addRecipe(16000, ModBlocks.sellafield_1, new ItemStack(ModBlocks.sellafield_2));
+		addRecipe(32000, ModBlocks.sellafield_2, new ItemStack(ModBlocks.sellafield_3));
+		addRecipe(64000, ModBlocks.sellafield_3, new ItemStack(ModBlocks.sellafield_4));
+		addRecipe(128000, ModBlocks.sellafield_4, new ItemStack(ModBlocks.sellafield_core));
+		addRecipe(500000, ModBlocks.block_corium_cobble, new ItemStack(ModBlocks.block_corium));
+		addRecipe(1000000, ModItems.meteorite_sword_bred, new ItemStack(ModItems.meteorite_sword_irradiated));
 	}
 
-	public static void setRecipe(int requiredFlux, ItemStack in, ItemStack out) {
+	public static void addRecipe(int requiredFlux, ItemStack in, ItemStack out) {
 		rbmkOutgasserRecipes.put(new ComparableStack(in), new Object[] {requiredFlux, out});
 	}
 
-	public static void setRecipe(int requiredFlux, Item in, ItemStack out) {
+	public static void addRecipe(int requiredFlux, Item in, ItemStack out) {
 		rbmkOutgasserRecipes.put(new ComparableStack(in), new Object[] {requiredFlux, out});
 	}
 	
-	public static void setRecipe(int requiredFlux, Block in, ItemStack out) {
+	public static void addRecipe(int requiredFlux, Block in, ItemStack out) {
 		rbmkOutgasserRecipes.put(new ComparableStack(in), new Object[] {requiredFlux, out});
 	}
 
-	public static void setRecipe(int requiredFlux, String in, ItemStack out) {
+	public static void addRecipe(int requiredFlux, String in, ItemStack out) {
 		rbmkOutgasserRecipes.put(new ComparableStack(OreDictionary.getOres(in).get(0)), new Object[] {requiredFlux, out});
+	}
+	
+	public static void removeRecipe(ItemStack in) {
+		rbmkOutgasserRecipes.remove(new ComparableStack(in));
 	}
 
 	public static int getRequiredFlux(ItemStack stack) {
