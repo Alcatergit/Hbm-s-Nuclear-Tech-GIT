@@ -5,7 +5,6 @@ CraftTweaker Integration
 ### **Assembler**
 
 mods.ntm.Assembler.addRecipe(IItemStack output, IItemStack[] inputs, int duration);
-
 mods.ntm.Assembler.removeRecipe(IItemStack output);
 
 mods.ntm.Assembler.addRecipe(<minecraft:beef>, [<minecraft:cooked_beef>*4, <minecraft:egg>*6], 30);
