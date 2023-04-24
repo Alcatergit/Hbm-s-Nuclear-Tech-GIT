@@ -12,7 +12,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GUITestDiFurnace extends GuiContainer {
+public class GUITestDiFurnace extends GuiInfoContainer {
 	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/GUIDiFurnace.png");
 	private TileEntityDiFurnace diFurnace;
 
@@ -30,7 +30,6 @@ public class GUITestDiFurnace extends GuiContainer {
 		
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
-		
 	}
 
 	@Override
@@ -60,6 +59,7 @@ public class GUITestDiFurnace extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
+		drawCustomInfoStat(mouseX, mouseY, guiLeft + 43, guiTop + 17, 18, 54, mouseX, mouseY, new String[] {String.valueOf(diFurnace.getPowerRemainingScaled(100)) + "%"});
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

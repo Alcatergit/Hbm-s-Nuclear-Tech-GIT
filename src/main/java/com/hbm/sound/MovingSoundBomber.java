@@ -27,7 +27,6 @@ public class MovingSoundBomber extends MovingSound {
 
 	@Override
 	public void update() {
-		float iVolume = 150;
 		
 		if(this.bomber == null || this.bomber.isDead || this.bomber.health <= 0) {
 			this.stop();
@@ -38,7 +37,7 @@ public class MovingSoundBomber extends MovingSound {
 			
 			EntityPlayerSP player = Minecraft.getMinecraft().player;
 			float f = 0;
-			
+			float iVolume = 150;
 			if(player != null) {
 				f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
 				volume = (f / iVolume) * -2 + 2;
@@ -50,9 +49,6 @@ public class MovingSoundBomber extends MovingSound {
 		if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this)) {
 			stop();
 		}
-		
-		
-		
 	}
 	
 	public void stop() {
@@ -73,5 +69,4 @@ public class MovingSoundBomber extends MovingSound {
 	public void setDone(boolean b) {
 		this.donePlaying = b;
 	}
-
 }

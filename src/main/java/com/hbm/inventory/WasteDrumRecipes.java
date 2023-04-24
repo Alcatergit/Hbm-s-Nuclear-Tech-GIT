@@ -24,6 +24,11 @@ public class WasteDrumRecipes {
 		addRecipe(ModItems.waste_schrabidium_hot, new ItemStack(ModItems.waste_schrabidium, 1));
 	}
 
+	public static void addRecipe(ItemStack input, ItemStack output){
+		recipes.put(input.getItem(), output);
+		outputs.add(output.getItem());
+	}
+
 	public static void addRecipe(Item input, ItemStack output){
 		recipes.put(input, output);
 		outputs.add(output.getItem());

@@ -1,7 +1,10 @@
 package com.hbm.packet;
 
 import com.hbm.entity.logic.EntityBomber;
+import com.hbm.entity.missile.EntityMissileCustom;
+import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.sound.MovingSoundRocket;
 import com.hbm.sound.MovingSoundBomber;
 
 import io.netty.buffer.ByteBuf;
@@ -18,13 +21,11 @@ public class LoopedEntitySoundPacket implements IMessage {
 
 	int entityID;
 
-	public LoopedEntitySoundPacket()
-	{
+	public LoopedEntitySoundPacket(){
 		
 	}
 
-	public LoopedEntitySoundPacket(int entityID)
-	{
+	public LoopedEntitySoundPacket(int entityID){
 		this.entityID = entityID;
 	}
 
@@ -46,7 +47,20 @@ public class LoopedEntitySoundPacket implements IMessage {
 		public IMessage onMessage(LoopedEntitySoundPacket m, MessageContext ctx) {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				Entity e = Minecraft.getMinecraft().world.getEntityByID(m.entityID);
-				
+
+				if(e instanceof EntityMissileCustom || e instanceof EntityMissileBaseAdvanced){
+					boolean startNew = true;
+					for(int i = 0; i < MovingSoundRocket.globalSoundList.size(); i++)  {
+						if(MovingSoundRocket.globalSoundList.get(i).rocket == e && !MovingSoundRocket.globalSoundList.get(i).isDonePlaying()){
+							startNew = false;
+							break;
+						}
+					}
+					if(startNew){
+						Minecraft.getMinecraft().getSoundHandler().playSound(new MovingSoundRocket(HBMSoundHandler.rocketEngine, e));
+					}
+				}
+						
 				if(e instanceof EntityBomber) {
 
 					int n = 1;
@@ -67,8 +81,10 @@ public class LoopedEntitySoundPacket implements IMessage {
 			        
 					boolean flag = true;
 					for(int i = 0; i < MovingSoundBomber.globalSoundList.size(); i++)  {
-						if(MovingSoundBomber.globalSoundList.get(i).bomber == e && !MovingSoundBomber.globalSoundList.get(i).isDonePlaying())
+						if(MovingSoundBomber.globalSoundList.get(i).bomber == e && !MovingSoundBomber.globalSoundList.get(i).isDonePlaying()){
 							flag = false;
+							break;
+						}
 					}
 					
 					if(flag) {

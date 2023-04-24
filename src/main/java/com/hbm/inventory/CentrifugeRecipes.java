@@ -244,6 +244,14 @@ public class CentrifugeRecipes {
 		recipes.put(STAR.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_dura_steel, 3), new ItemStack(ModItems.powder_cobalt, 3), new ItemStack(ModItems.powder_astatine, 2), new ItemStack(ModItems.nugget_mercury, 5) });
 		recipes.put(CO.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_cobalt, 2), new ItemStack(ModItems.powder_iron, 3), new ItemStack(ModItems.powder_copper, 3), new ItemStack(ModItems.powder_lithium_tiny, 1) });
 	}
+
+	public static void addRecipe(ItemStack in, ItemStack[] outputs){
+		recipes.put(new ComparableStack(in), outputs);
+	}
+
+	public static void removeRecipe(ItemStack in){
+		recipes.remove(new ComparableStack(in));
+	}
 	
 	public static ItemStack[] getOutput(ItemStack stack) {
 		

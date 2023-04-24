@@ -174,6 +174,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent chainsaw;
 	public static SoundEvent battery;
 	public static SoundEvent rocketFlame;
+	public static SoundEvent rocketEngine;
 	public static SoundEvent ballsLaser;
 	public static SoundEvent dartShoot;
 	public static SoundEvent gluonStart;
@@ -424,6 +425,7 @@ public final class HBMSoundHandler {
 		chainsaw = register("weapon.chainsaw");
 		battery = register("item.battery");
 		rocketFlame = register("weapon.rocketFlame");
+		rocketEngine = register("entity.rocketEngine");
 		ballsLaser = register("weapon.ballsLaser");
 		dartShoot = register("weapon.dartShoot");
 		gluonStart = register("weapon.gluonstart");

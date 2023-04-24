@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 //TODO: clean this shit up
+//Alcater: on it
 @Spaghetti("everything")
 public class MachineRecipes {
 	public static List<Item> stamps_flat = new ArrayList<Item>() {
@@ -236,106 +237,6 @@ public class MachineRecipes {
 				return new ItemStack(ModItems.ammo_50ae);
 		}
 
-		return null;
-	}
-
-	public static ItemStack getFurnaceProcessingResult(ItemStack item, ItemStack item2) {
-		return getFurnaceOutput(item, item2);
-	}
-
-	public static ItemStack getFurnaceOutput(ItemStack item, ItemStack item2) {
-
-		if (item == null || item2 == null)
-			return null;
-
-		if (GeneralConfig.enableDebugMode) {
-			if (item.getItem() == Items.IRON_INGOT && item2.getItem() == Items.QUARTZ
-					|| item.getItem() == Items.QUARTZ && item2.getItem() == Items.IRON_INGOT) {
-				return new ItemStack(ModBlocks.test_render, 1);
-			}
-		}
-
-		if (mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, COAL.gem())
-				|| mODE(item, COAL.gem()) && mODE(item2, new String[] {W.ingot(), W.dust()})) {
-			return new ItemStack(ModItems.neutron_reflector, 2);
-		}
-
-		if (mODE(item, new String[] {PB.ingot(), PB.dust()}) && mODE(item2, new String[] {CU.ingot(), CU.dust()})
-				|| mODE(item, new String[] {CU.ingot(), CU.dust()}) && mODE(item2, new String[] {PB.ingot(), PB.dust()})) {
-			return new ItemStack(ModItems.neutron_reflector, 4);
-		}
-
-		if (mODE(item, PB.plate()) && mODE(item2, CU.plate())
-				|| mODE(item, CU.plate()) && mODE(item2, PB.plate())) {
-			return new ItemStack(ModItems.neutron_reflector, 1);
-		}
-
-		if (mODE(item, new String[] {IRON.ingot(), IRON.dust()}) && mODE(item2, new String[] {COAL.gem(), COAL.dust()})
-				|| mODE(item, new String[] {COAL.gem(), COAL.dust()}) && mODE(item2, new String[] {IRON.ingot(), IRON.dust()})) {
-			return new ItemStack(ModItems.ingot_steel, 2);
-		}
-
-		if (mODE(item, new String[] {CU.ingot(), CU.dust()}) && item2.getItem() == Items.REDSTONE
-				|| item.getItem() == Items.REDSTONE && mODE(item2, new String[] {CU.ingot(), CU.dust()})) {
-			return new ItemStack(ModItems.ingot_red_copper, 2);
-		}
-
-		if (ItemFluidCanister.isFullCanister(item, ModForgeFluids.diesel) && item2.getItem() == Items.SLIME_BALL
-				|| item.getItem() == Items.SLIME_BALL && ItemFluidCanister.isFullCanister(item2, ModForgeFluids.diesel)) {
-			return new ItemStack(ModItems.canister_napalm, 1);
-		}
-
-		if (mODE(item, new String[] {MINGRADE.ingot(), MINGRADE.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})
-				|| mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {MINGRADE.ingot(), MINGRADE.dust()})) {
-			return new ItemStack(ModItems.ingot_advanced_alloy, 2);
-		}
-
-		if (mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, SA326.nugget())
-				|| mODE(item, SA326.nugget()) && mODE(item2, new String[] {W.ingot(), W.dust()})) {
-			return new ItemStack(ModItems.ingot_magnetized_tungsten, 1);
-		}
-
-		if (item.getItem() == ModItems.plate_mixed && mODE(item2, GOLD.plate())
-				|| mODE(item, GOLD.plate()) && item2.getItem() == ModItems.plate_mixed) {
-			return new ItemStack(ModItems.plate_paa, 2);
-		}
-
-		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {W.ingot(), W.dust()})
-				|| mODE(item, new String[] {W.ingot(), W.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
-			return new ItemStack(ModItems.ingot_dura_steel, 2);
-		}
-
-		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {CO.ingot(), CO.dust()})
-				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
-			return new ItemStack(ModItems.ingot_dura_steel, 2);
-		}
-
-		if (mODE(item, new String[] {BIGMT.ingot(), BIGMT.dust()}) && item2.getItem() == ModItems.powder_meteorite
-				|| item.getItem() == ModItems.powder_meteorite && mODE(item2, new String[] {BIGMT.ingot(), BIGMT.dust()})) {
-			return new ItemStack(ModItems.ingot_starmetal, 2);
-		}
-		if (mODE(item, new String[] {STEEL.ingot(), STEEL.dust()}) && mODE(item2, new String[] {TC99.nugget(), "tinyTc99"})
-				|| mODE(item, new String[] {TC99.nugget(), "tinyTc99"}) && mODE(item2, new String[] {STEEL.ingot(), STEEL.dust()})) {
-			return new ItemStack(ModItems.ingot_tcalloy, 1);
-		}
-		
-		if(GeneralConfig.enableBabyMode) {
-			if(mODE(item, new String[] { COAL.gem(), COAL.dust() }) && ItemFluidCanister.isEmptyCanister(item2)
-					|| ItemFluidCanister.isEmptyCanister(item) && mODE(item2, new String[] { COAL.gem(), COAL.dust() })) {
-				return ItemFluidCanister.getFullCanister(ModForgeFluids.oil);
-			}
-		}
-		
-		if (item.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor) && mODE(item2, new String[] {CO.ingot(), CO.dust()})
-				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && item2.getItem() == Item.getItemFromBlock(ModBlocks.block_meteor)) {
-			return new ItemStack(ModItems.ingot_meteorite);
-		}
-		
-		if (item.getItem() == ModItems.meteorite_sword_hardened && mODE(item2, new String[] {CO.ingot(), CO.dust()})
-				|| mODE(item, new String[] {CO.ingot(), CO.dust()}) && item2.getItem() == ModItems.meteorite_sword_hardened) {
-			return new ItemStack(ModItems.meteorite_sword_alloyed, 1);
-		}
-		
 		return null;
 	}
 

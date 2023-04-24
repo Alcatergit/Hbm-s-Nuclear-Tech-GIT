@@ -1,7 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineDiFurnace;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityMachineBase;
 
@@ -62,9 +62,10 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 				this.dualPower = 0;
 			}
 		}
+		int itemPower = DiFurnaceRecipes.getItemPower(inventory.getStackInSlot(2));
 		if (this.hasItemPower(inventory.getStackInSlot(2))
-				&& this.dualPower <= (TileEntityDiFurnace.maxPower - TileEntityDiFurnace.getItemPower(inventory.getStackInSlot(2)))) {
-			this.dualPower += getItemPower(inventory.getStackInSlot(2));
+				&& this.dualPower <= (TileEntityDiFurnace.maxPower - itemPower)) {
+			this.dualPower += itemPower;
 			if (!inventory.getStackInSlot(2).isEmpty()) {
 				ItemStack copy = inventory.getStackInSlot(2).copy();
 				inventory.getStackInSlot(2).shrink(1);
@@ -108,30 +109,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	public boolean hasItemPower(ItemStack itemStack) {
-		return getItemPower(itemStack) > 0;
-	}
-	
-	private static int getItemPower(ItemStack itemStack) {
-		if(itemStack == null)
-		{
-			return 0;
-		}else{
-			Item item = itemStack.getItem();
-			
-			if(item == Items.COAL) return 200;
-			if(item == Item.getItemFromBlock(Blocks.COAL_BLOCK)) return 2000;
-			if(item == Items.LAVA_BUCKET) return 12800;
-			if(item == Items.BLAZE_ROD) return 1000;
-			if(item == Items.BLAZE_POWDER) return 300;
-			if(item == ModItems.lignite) return 150;
-			if(item == ModItems.powder_lignite) return 150;
-			if(item == ModItems.powder_coal) return 200;
-			if(item == ModItems.briquette_lignite) return 200;
-			if(MachineRecipes.mODE(itemStack, "fuelCoke")) return 400;
-			if(item == ModItems.solid_fuel) return 400;
-			
-			return 0;
-		}
+		return DiFurnaceRecipes.getItemPower(itemStack) > 0;
 	}
 	
 	@Override
@@ -185,7 +163,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 		{
 			return false;
 		}
-		ItemStack itemStack = MachineRecipes.getFurnaceProcessingResult(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
+		ItemStack itemStack = DiFurnaceRecipes.getFurnaceProcessingResult(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
 		if(itemStack == null)
 		{	
 			return false;
@@ -209,7 +187,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	private void processItem() {
 		if(canProcess()) {
-			ItemStack itemStack = MachineRecipes.getFurnaceProcessingResult(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
+			ItemStack itemStack = DiFurnaceRecipes.getFurnaceProcessingResult(inventory.getStackInSlot(0), inventory.getStackInSlot(1));
 			
 			if(inventory.getStackInSlot(3).isEmpty())
 			{

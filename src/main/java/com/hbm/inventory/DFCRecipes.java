@@ -105,6 +105,10 @@ public class DFCRecipes {
 		dfcRecipes.put(new ComparableStack(OreDictionary.getOres(in).get(0)), new Object[] {requiredFlux, out});
 	}
 
+	public static void removeRecipe(ItemStack in) {
+		dfcRecipes.remove(new ComparableStack(in));
+	}
+
 	public static long getRequiredFlux(ItemStack stack) {
 		
 		if(stack == null || stack.isEmpty())

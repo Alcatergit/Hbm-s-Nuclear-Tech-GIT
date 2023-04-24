@@ -210,7 +210,7 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 
 		target.rotateAroundY(world.rand.nextFloat() * 360);
 
-		EntityMissileCustom missile = new EntityMissileCustom(world, pos.getX() + 0.5F, pos.getY() + 2.5F, pos.getZ() + 0.5F, tX + (int) target.xCoord, tZ + (int) target.zCoord, getStruct(inventory.getStackInSlot(0)));
+		EntityMissileCustom missile = new EntityMissileCustom(world, pos.getX() + 0.5F, pos.getY() + 1.5F, pos.getZ() + 0.5F, tX + (int) target.xCoord, tZ + (int) target.zCoord, getStruct(inventory.getStackInSlot(0)));
 		world.spawnEntity(missile);
 
 		subtractFuel();

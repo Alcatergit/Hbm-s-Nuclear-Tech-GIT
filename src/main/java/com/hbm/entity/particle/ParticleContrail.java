@@ -16,6 +16,13 @@ import net.minecraft.world.World;
 public class ParticleContrail extends Particle {
 
 	private TextureManager theRenderEngine;
+	private boolean doFlames = false;
+	private static float flameRed;
+	private static float flameGreen;
+	private static float flameBlue;
+	private static float lowRed;
+	private static float lowGreen;
+	private static float lowBlue;
 	private int age = 0;
 	private int maxAge;
 
@@ -28,42 +35,82 @@ public class ParticleContrail extends Particle {
 		this.particleScale = 1F;
 	}
 
-	public ParticleContrail(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
-		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
-		theRenderEngine = p_i1213_1_;
+	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn, float red, float green, float blue, float scale) {
+		super(worldIn, posXIn, posYIn, posZIn);
+		theRenderEngine = manage;
 		maxAge = 600 + rand.nextInt(50);
 
-		this.particleRed = red;
-		this.particleGreen = green;
-		this.particleBlue = blue;
+		this.lowRed = red;
+		this.lowGreen = green;
+		this.lowBlue = blue;
 
 		this.particleScale = scale;
 	}
 
+	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn, float flameRed, float flameGreen, float flameBlue, float red, float green, float blue, float scale) {
+		this(manage, worldIn, posXIn, posYIn, posZIn, red, green, blue, scale);
+		this.flameRed = flameRed;
+		this.flameGreen = flameGreen;
+		this.flameBlue = flameBlue;
+		this.doFlames = true;
+	}
+
+	public void setMotion(double x, double y, double z){
+		this.motionX = x;
+		this.motionY = y;
+		this.motionZ = z;
+	}
 
 	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
+		this.particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
 
 		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
-			;
+		}
+		this.motionX *= 0.8D;
+		this.motionY *= 0.8D;
+		this.motionZ *= 0.8D;
+		
+        this.move(this.motionX, this.motionY, this.motionZ);
+	}
+
+	private float clampGood(float b, float a, float c){
+		if(c < a){
+			return (float)MathHelper.clamp(b, c, a);
+		}
+		else{
+			return (float)MathHelper.clamp(b, a, c);
 		}
 	}
 
-	@Override
-	public int getFXLayer() {
-		return 1;
-	}
-	
-	@Override
-	public boolean shouldDisableDepth() {
-		return true;
+	private float getColor(int index){
+		float pColor = 0;
+		if(index == 0){
+			if(doFlames){
+				pColor = clampGood(this.flameRed - (this.flameRed-this.lowRed)*(1-particleAlpha)*50F, this.flameRed, this.lowRed);
+			} else {
+				pColor = this.lowRed;
+			}
+		} else if(index == 1){
+			if(doFlames){
+				pColor = clampGood(this.flameGreen - (this.flameGreen-this.lowGreen)*(1-particleAlpha)*50F, this.flameGreen, this.lowGreen);
+			} else {
+				pColor = this.lowGreen;
+			}
+		} else if(index == 2){
+			if(doFlames){
+				pColor = clampGood(this.flameBlue - (this.flameBlue-this.lowBlue)*(1-particleAlpha)*50F, this.flameBlue, this.lowBlue);
+			} else {
+				pColor = this.lowBlue;
+			}
+		}
+		return (float)MathHelper.clamp(pColor, 0, 1);
 	}
 
 	@Override
@@ -75,7 +122,7 @@ public class ParticleContrail extends Particle {
 		float f1 = f + 0.0624375F;
 		float f2 = (float) this.particleTextureIndexY / 16.0F;
 		float f3 = f2 + 0.0624375F;
-		float f4 = (1-particleAlpha)*3F + 1F + 0.5F * this.particleScale;
+		float f4 = (1-particleAlpha)*3F + 0.5F * this.particleScale;
 
 		if (this.particleTexture != null) {
 			f = this.particleTexture.getMinU();
@@ -83,14 +130,15 @@ public class ParticleContrail extends Particle {
 			f2 = this.particleTexture.getMinV();
 			f3 = this.particleTexture.getMaxV();
 		}
-
-		float mod = particleAlpha * 0.1F;
+		this.particleRed = getColor(0);
+		this.particleGreen = getColor(1);
+		this.particleBlue = getColor(2);
 		Random urandom = new Random(this.hashCode());
 		for (int ii = 0; ii < 6; ii++) {
 			
-			float f5 = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX) + urandom.nextGaussian() * 0.5);
-			float f6 = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY) + urandom.nextGaussian() * 0.5);
-			float f7 = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ) + urandom.nextGaussian() * 0.5);
+			float f5 = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX) + urandom.nextGaussian() * (0.2 + (1-particleAlpha)));
+			float f6 = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY) + urandom.nextGaussian() * (0.2 + (1-particleAlpha)));
+			float f7 = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ) + urandom.nextGaussian() * (0.2 + (1-particleAlpha)));
 			
 			int i = this.getBrightnessForRender(partialTicks);
 			int j = i >> 16 & 65535;
@@ -111,10 +159,10 @@ public class ParticleContrail extends Particle {
 				}
 			}
 			
-			buffer.pos((double) f5 + avec3d[0].x, (double) f6 + avec3d[0].y, (double) f7 + avec3d[0].z).tex((double) f1, (double) f3).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k).endVertex();
-			buffer.pos((double) f5 + avec3d[1].x, (double) f6 + avec3d[1].y, (double) f7 + avec3d[1].z).tex((double) f1, (double) f2).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k).endVertex();
-			buffer.pos((double) f5 + avec3d[2].x, (double) f6 + avec3d[2].y, (double) f7 + avec3d[2].z).tex((double) f, (double) f2).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k).endVertex();
-			buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed + mod, this.particleGreen + mod, this.particleBlue + mod, this.particleAlpha).lightmap(j, k).endVertex();
+			buffer.pos((double) f5 + avec3d[0].x, (double) f6 + avec3d[0].y, (double) f7 + avec3d[0].z).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+			buffer.pos((double) f5 + avec3d[1].x, (double) f6 + avec3d[1].y, (double) f7 + avec3d[1].z).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+			buffer.pos((double) f5 + avec3d[2].x, (double) f6 + avec3d[2].y, (double) f7 + avec3d[2].z).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+			buffer.pos((double) f5 + avec3d[3].x, (double) f6 + avec3d[3].y, (double) f7 + avec3d[3].z).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 		}
 	}
 

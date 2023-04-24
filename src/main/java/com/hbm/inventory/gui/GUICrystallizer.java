@@ -38,7 +38,7 @@ public class GUICrystallizer extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 51 - 34, 16, 34, acidomatic.power, TileEntityMachineCrystallizer.maxPower);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 17, 16, 52, acidomatic.tank, ModForgeFluids.acid);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 17, 16, 52, acidomatic.tank);
 		String[] text = new String[] { "Acceptable upgrades:",
 				" -Speed (stacks to level 3)",
 				" -Effectiveness (stacks to level 3)",

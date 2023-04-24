@@ -10,6 +10,7 @@ import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.packet.AuxGaugePacket;
@@ -339,10 +340,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		
 		Block b = world.getBlockState(pos).getBlock();
 		
-		if(b == ModBlocks.block_lead || b == ModBlocks.block_desh || b == ModBlocks.brick_concrete)
-			return true;
-		
-		if(b.getExplosionResistance(null) >= 100)
+		if(b instanceof IRadResistantBlock)
 			return true;
 		
 		return false;
@@ -841,18 +839,12 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		
 		int rand = world.rand.nextInt(20);
 		
-		if(rand < 7)
-			world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
+		if(rand < 3)
+			world.setBlockState(pos, ModBlocks.corium_block.getDefaultState());
 		else if(rand < 10)
-			world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-		else if(rand < 14)
-			world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-		else if(rand < 17)
-			world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-		else if(rand < 19)
-			world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
+			world.setBlockState(pos, ModBlocks.block_corium.getDefaultState());
 		else
-			world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
+			world.setBlockState(pos, ModBlocks.block_corium_cobble.getDefaultState());
 	}
 	
 	public void fillFluidInit(FluidTank tank) {

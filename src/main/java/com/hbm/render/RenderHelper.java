@@ -22,6 +22,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.entity.missile.EntityCarrier;
+import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.entity.missile.EntityMissileAntiBallistic;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.handler.HbmShaderManager2;
@@ -270,18 +271,9 @@ public class RenderHelper {
 	 * @return A three element double array, containing the render pos x at index 0, y at index 1, and z at index 2
 	 */
 	public static double[] getRenderPosFromMissile(EntityMissileBaseAdvanced missile, float partialTicks){
-		if(missile.prevPosX2 == 0){
-			missile.prevPosX2 = missile.posX;
-		}
-		if(missile.prevPosY2 == 0){
-			missile.prevPosY2 = missile.posY;
-		}
-		if(missile.prevPosZ2 == 0){
-			missile.prevPosZ2 = missile.posZ;
-		}
-		double d0 = missile.prevPosX2 + (missile.posX - missile.prevPosX2) * (double) partialTicks;
-		double d1 = missile.prevPosY2 + (missile.posY - missile.prevPosY2) * (double) partialTicks;
-		double d2 = missile.prevPosZ2 + (missile.posZ - missile.prevPosZ2) * (double) partialTicks;
+		double d0 = missile.prevPosX + (missile.posX - missile.prevPosX) * (double) partialTicks;
+		double d1 = missile.prevPosY + (missile.posY - missile.prevPosY) * (double) partialTicks;
+		double d2 = missile.prevPosZ + (missile.posZ - missile.prevPosZ) * (double) partialTicks;
 		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
 		double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
 		double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
@@ -289,26 +281,11 @@ public class RenderHelper {
 		
 		return new double[]{d0 - d3, d1 - d4, d2 - d5};
 	}
-	
-	/**
-	 * Helper method for getting the real render position from a missile, which updates its position more than once per game tick.
-	 * @param missile - the missile to get the actual render pos from
-	 * @param partialTicks - render partial ticks
-	 * @return A three element double array, containing the render pos x at index 0, y at index 1, and z at index 2
-	 */
-	public static double[] getRenderPosFromMissile(EntityMissileAntiBallistic missile, float partialTicks){
-		if(missile.prevPosX2 == 0){
-			missile.prevPosX2 = missile.posX;
-		}
-		if(missile.prevPosY2 == 0){
-			missile.prevPosY2 = missile.posY;
-		}
-		if(missile.prevPosZ2 == 0){
-			missile.prevPosZ2 = missile.posZ;
-		}
-		double d0 = missile.prevPosX2 + (missile.posX - missile.prevPosX2) * (double) partialTicks;
-		double d1 = missile.prevPosY2 + (missile.posY - missile.prevPosY2) * (double) partialTicks;
-		double d2 = missile.prevPosZ2 + (missile.posZ - missile.prevPosZ2) * (double) partialTicks;
+
+	public static double[] getRenderPosFromMissile(EntityMissileCustom missile, float partialTicks){
+		double d0 = missile.prevPosX + (missile.posX - missile.prevPosX) * (double) partialTicks;
+		double d1 = missile.prevPosY + (missile.posY - missile.prevPosY) * (double) partialTicks;
+		double d2 = missile.prevPosZ + (missile.posZ - missile.prevPosZ) * (double) partialTicks;
 		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
 		double d3 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
 		double d4 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;

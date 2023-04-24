@@ -309,6 +309,11 @@ public class ShredderRecipes {
 		
 		shredderRecipes.put(new ComparableStack(in), out);
 	}
+
+	public static void removeRecipe(ItemStack in) {
+		
+		shredderRecipes.remove(new ComparableStack(in));
+	}
 	
 	public static List<ShredderRecipe> getShredderRecipes() {
 		

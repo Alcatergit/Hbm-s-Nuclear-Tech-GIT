@@ -192,13 +192,16 @@ public class BlockOre extends Block implements IItemHazard {
 	@Override
 	public int quantityDropped(IBlockState state, int fortune, Random rand) {
 		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur || this == ModBlocks.basalt_sulfur){
-			return 2 + rand.nextInt(3);
+			return 2 + rand.nextInt(3) * fortune;
 		}
 		if(this == ModBlocks.block_niter){
-			return 2 + rand.nextInt(3);
+			return 4 + rand.nextInt(3);
+		}
+		if(this == ModBlocks.ore_niter){
+			return 1 + rand.nextInt(2) * fortune;
 		}
 		if(this == ModBlocks.ore_fluorite){
-			return 2 + rand.nextInt(3);
+			return 2 + rand.nextInt(3) * fortune;
 		}
 		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare){
 			return 4 + rand.nextInt(8);

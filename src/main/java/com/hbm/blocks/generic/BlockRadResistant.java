@@ -6,6 +6,7 @@ import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadResistantBlock;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -38,6 +39,11 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	@Override
 	public boolean isRadResistant(){
 		return true;
+	}
+
+	@Override
+	public Block setSoundType(SoundType sound) {
+		return super.setSoundType(sound);
 	}
 
 	@Override

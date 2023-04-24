@@ -14,6 +14,13 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	private int maxAge;
 	private float scale;
 	private float[] vals = new float[4*6];
+	private boolean doFlames = false;
+	private static float flameRed;
+	private static float flameGreen;
+	private static float flameBlue;
+	private static float lowRed;
+	private static float lowGreen;
+	private static float lowBlue;
 
 	
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn) {
@@ -22,21 +29,30 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		maxAge = 400 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
-		this.scale = 4F;
+		this.scale = 1F;
 		initVals();
 	}
 	
-	public ParticleContrailInstanced(World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
-		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
+	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn, float red, float green, float blue, float scale) {
+		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleTexture = ModEventHandlerClient.contrail;
 		maxAge = 600 + rand.nextInt(50);
 
-		this.particleRed = red;
-		this.particleGreen = green;
-		this.particleBlue = blue;
+		this.lowRed = red;
+		this.lowGreen = green;
+		this.lowBlue = blue;
 
-		this.scale = scale*4;
+		this.scale = scale;
 		initVals();
+	}
+
+	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn, float flameRed, float flameGreen, float flameBlue, float red, float green, float blue, float scale) {
+		this(worldIn, posXIn, posYIn, posZIn, red, green, blue, scale);
+		this.flameRed = flameRed;
+		this.flameGreen = flameGreen;
+		this.flameBlue = flameBlue;
+
+		this.doFlames = true;
 	}
 	
 	public void initVals(){
@@ -48,20 +64,56 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 			vals[i*4+2] = (float) (urandom.nextGaussian()*0.5F);
 		}
 	}
+	public void setMotion(double x, double y, double z){
+		this.motionX = x;
+		this.motionY = y;
+		this.motionZ = z;
+	}
 	
 	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
+		this.particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
 
 		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
-			;
 		}
+		this.motionX *= 0.91D;
+		this.motionY *= 0.91D;
+		this.motionZ *= 0.91D;
+		
+        this.move(this.motionX, this.motionY, this.motionZ);
+	}
+
+	private byte getColor(int index){
+		float pColor = 0;
+		if(index == 0){
+			if(doFlames){
+				pColor = this.lowRed + (this.flameRed-this.lowRed)*particleAlpha*0.1F;
+			} else {
+				pColor = this.lowRed;
+			}
+			this.particleRed = pColor;
+		} else if(index == 1){
+			if(doFlames){
+				pColor = this.lowGreen + (this.flameGreen-this.lowGreen)*particleAlpha*0.1F;
+			} else {
+				pColor = this.lowGreen;
+			}
+			this.particleGreen = pColor;
+		} else if(index == 2){
+			if(doFlames){
+				pColor = this.lowBlue + (this.flameBlue-this.lowBlue)*particleAlpha*0.1F;
+			} else {
+				pColor = this.lowBlue;
+			}
+			this.particleBlue = pColor;
+		}
+		return (byte)(MathHelper.clamp(pColor, 0, 1)*255);
 	}
 	
 	@Override
@@ -69,8 +121,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		float x = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX));
 		float y = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY));
 		float z = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ));
-		this.particleScale = (1-particleAlpha)*3F + 1F + 0.5F * this.scale;
-		float mod = particleAlpha * 0.1F;
+		this.particleScale = (1-particleAlpha)*3F + 0.5F * this.scale;
 		for(int ii = 0; ii < 6; ii++){
 			
 			buf.putFloat(x+vals[ii*4]);
@@ -84,9 +135,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 			buf.putFloat(this.particleTexture.getMaxU()-this.particleTexture.getMinU());
 			buf.putFloat(this.particleTexture.getMaxV()-this.particleTexture.getMinV());
 			
-			byte r = (byte) (MathHelper.clamp(this.particleRed+mod, 0, 1)*255);
-			byte g = (byte) (MathHelper.clamp(this.particleGreen+mod, 0, 1)*255);
-			byte b = (byte) (MathHelper.clamp(this.particleBlue+mod, 0, 1)*255);
+			byte r = getColor(0);
+			byte g = getColor(1);
+			byte b = getColor(2);
 			byte a = (byte) (this.particleAlpha*255);
 			buf.put(r);
 			buf.put(g);
@@ -111,5 +162,4 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public int getBrightnessForRender(float p_189214_1_) {
 		return 240;
 	}
-
 }

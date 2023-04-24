@@ -1,8 +1,11 @@
 package com.hbm.blocks.network;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ILookOverlay;
+import com.hbm.util.I18nUtil;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2Solid;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2Solid;
@@ -26,8 +29,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
-public class BlockFluidPipeSolid extends BlockContainer implements IToolable {
+public class BlockFluidPipeSolid extends BlockContainer implements IToolable, ILookOverlay {
 
 	public static final PropertyBool EXTRACTS = PropertyBool.create("extracts");
 	
@@ -134,5 +139,24 @@ public class BlockFluidPipeSolid extends BlockContainer implements IToolable {
 		}
 		return false;
 	}
-	
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+			
+		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+		
+		if(!(te instanceof TileEntityFFDuctBaseMk2))
+			return;
+		
+		Fluid ductFluid = ((TileEntityFFDuctBaseMk2) te).getType();
+		
+		List<String> text = new ArrayList();
+		if(ductFluid == null){
+			text.add("§7None");
+		} else{
+			text.add(""+ductFluid.getLocalizedName(new FluidStack(ductFluid, 1)));
+		}
+		
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+	}
 }

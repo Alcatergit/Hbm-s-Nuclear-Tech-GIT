@@ -62,7 +62,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		};
-		tank = new FluidTank(ModForgeFluids.acid, 0, 16000);
+		tank = new FluidTank(16000);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	}
 
 	public void setTankType(Fluid f){
-		if(f != null && tank.getFluid() != null && tank.getFluid().getFluid() != f){
+		if(f != null && (tank.getFluid() == null || (tank.getFluid() != null && tank.getFluid().getFluid() != f))){
 			tank.setFluid(new FluidStack(f, 0));
 		}
 	}

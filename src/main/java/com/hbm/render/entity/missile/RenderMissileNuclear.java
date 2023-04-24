@@ -33,7 +33,8 @@ public class RenderMissileNuclear extends Render<EntityMissileBaseAdvanced> {
         GL11.glTranslated(x, y, z);
         GL11.glRotatef(missile.prevRotationYaw + (missile.rotationYaw - missile.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(missile.prevRotationPitch + (missile.rotationPitch - missile.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
-        
+        GL11.glScalef(1.5F, 1.5F, 1.5F);
+
         if(missile instanceof EntityMissileVolcano)
 			bindTexture(ResourceManager.missileVolcano_tex);
 		else

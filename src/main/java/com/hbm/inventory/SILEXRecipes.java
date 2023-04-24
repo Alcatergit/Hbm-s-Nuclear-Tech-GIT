@@ -949,13 +949,18 @@ public class SILEXRecipes {
 				);
 		
 		//crystals minerals
-		
-		
-		
-		
-		
-		
-		
+	}
+
+	public static void addRecipe(int wavelength, int solution, int consumption, ItemStack input, ItemStack[] outputItems, int[] outputWeights){
+		SILEXRecipe newRecipe = new SILEXRecipe(solution, consumption, EnumWavelengths.values()[wavelength]);
+		for(int i = 0; i < outputItems.length; i++){
+			newRecipe = newRecipe.addOut(new WeightedRandomObject(outputItems[i], outputWeights[i]));
+		}
+		recipes.put(new ComparableStack(input), newRecipe);
+	}
+
+	public static void removeRecipe(ItemStack input){
+		recipes.remove(new ComparableStack(input));
 	}
 	
 	public static SILEXRecipe getOutput(ItemStack stack) {

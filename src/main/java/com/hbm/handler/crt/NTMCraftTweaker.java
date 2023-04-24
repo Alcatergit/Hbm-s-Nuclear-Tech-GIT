@@ -11,7 +11,11 @@ public class NTMCraftTweaker {
 	public static final List<IAction> postInitActions = new ArrayList<>();
 
 	public static void applyPostInitActions(){
-		postInitActions.forEach( CraftTweakerAPI::apply );
+		try{
+			postInitActions.forEach( CraftTweakerAPI::apply );
+		} catch( final Throwable t ){
+			System.out.println("CraftTweakerAPI not found");
+		}
 	}
 }
 //NTMCraftTweaker.postInitActions.add(IAction);

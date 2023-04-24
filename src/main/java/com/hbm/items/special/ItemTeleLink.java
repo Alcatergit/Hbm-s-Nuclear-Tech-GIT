@@ -74,12 +74,11 @@ public class ItemTeleLink extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
-			tooltip.add("Teleporter Exit x: " + stack.getTagCompound().getInteger("x"));
-			tooltip.add("Teleporter Exit y: " + stack.getTagCompound().getInteger("y"));
-			tooltip.add("Teleporter Exit z: " + stack.getTagCompound().getInteger("z"));
+			tooltip.add("§aPos set to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z")+"§r");
 		} else {
-			tooltip.add("Select target position first!");
-			tooltip.add("Then Right-click teleporter while sneaking.");
+			tooltip.add("Right-Click to select target position.");
+			tooltip.add("Then Shift-Right-Click a teleporter.");
+			tooltip.add("§eNo position set§r");
 		}
 	}
 }

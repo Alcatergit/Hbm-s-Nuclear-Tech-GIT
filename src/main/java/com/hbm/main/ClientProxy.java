@@ -1132,19 +1132,33 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exKerosene".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.8F, 0.7F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.5F, 0.9F, 1F, 0.9F, 0.8F, 0.7F, 1F);
+			if(args != null && args.length == 3)
+				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exSolid".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.3F, 0.2F, 0.05F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 1F, 0.5F, 0F, 0.98F, 0.8F, 0.47F, 1F);
+			if(args != null && args.length == 3)
+				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exHydrogen".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.9F, 0.9F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.6F, 1F, 0.9F, 0.9F, 0.9F, 1F);
+			if(args != null && args.length == 3)
+				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("exBalefire".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.2F, 0.7F, 0.2F, 1F);
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.6F, 1F, 0.2F, 0.15F, 0.2F, 0.1F, 1F);
+			if(args != null && args.length == 3)
+				contrail.setMotion(args[0], args[1], args[2]);
+			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+		}
+		if("exDark".equals(type)) {
+			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 1F, 0.75F, 0F, 0.4F, 0.4F, 0.4F, 1F);
+			if(args != null && args.length == 3)
+				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
 		}
 		if("bfg_fire".equals(type)){

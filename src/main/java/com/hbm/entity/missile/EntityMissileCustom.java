@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
@@ -17,11 +18,14 @@ import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.items.weapon.ItemMissile.WarheadType;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import api.hbm.entity.IRadarDetectable;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -40,11 +44,14 @@ import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectable {
+public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectable, IConstantRenderer {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileCustom.class, DataSerializers.VARINT);
 	public static final DataParameter<MissileStruct> TEMPLATE = EntityDataManager.createKey(EntityMissileCustom.class, MissileStruct.SERIALIZER);
 	
+	int chunkX = 0;
+	int chunkZ = 0;
+
 	int startX;
 	int startZ;
 	int targetX;
@@ -105,25 +112,20 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (this.isEntityInvulnerable(source))
-        {
-            return false;
-        }
-        else
-        {
-            if (!this.isDead && !this.world.isRemote)
-            {
-            	health -= amount;
-            	
-                if (this.health <= 0)
-                {
-                    this.setDead();
-                    this.killMissile();
-                }
-            }
+		if (this.isEntityInvulnerable(source)) {
+			return false;
+		} else {
+			if (!this.isDead && !this.world.isRemote) {
+				health -= amount;
 
-            return true;
-        }
+				if (this.health <= 0) {
+					this.setDead();
+					this.killMissile();
+				}
+			}
+
+			return true;
+		}
 	}
 	
 	private void killMissile() {
@@ -153,8 +155,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 	@Override
 	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
+		if(!world.isRemote && loaderTicket != null) {
             for(ChunkPos chunk : loadedChunks)
             {
                 ForgeChunkManager.unforceChunk(loaderTicket, chunk);
@@ -171,8 +172,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
             loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
             loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
 
-            for(ChunkPos chunk : loadedChunks)
-            {
+            for(ChunkPos chunk : loadedChunks) {
                 ForgeChunkManager.forceChunk(loaderTicket, chunk);
             }
         }
@@ -182,26 +182,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	protected void entityInit() {
 		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
         this.getDataManager().register(HEALTH, this.health);
-
         this.getDataManager().register(TEMPLATE, template);
-       /* if(template != null) {
-	        //System.out.println("yeah");
-        	//Drillgon200: What ^
-	        this.dataWatcher.addObject(9, Integer.valueOf(Item.getIdFromItem(template.warhead)));
-	        this.dataWatcher.addObject(10, Integer.valueOf(Item.getIdFromItem(template.fuselage)));
-	        
-	        if(template.fins != null)
-	        	this.dataWatcher.addObject(11, Integer.valueOf(Item.getIdFromItem(template.fins)));
-	        else
-	        	this.dataWatcher.addObject(11, Integer.valueOf(0));
-	        
-	        this.dataWatcher.addObject(12, Integer.valueOf(Item.getIdFromItem(template.thruster)));
-        } else {
-	        this.dataWatcher.addObject(9, Integer.valueOf(0));
-	        this.dataWatcher.addObject(10, Integer.valueOf(0));
-	        this.dataWatcher.addObject(11, Integer.valueOf(0));
-	        this.dataWatcher.addObject(12, Integer.valueOf(0));
-        }*/
 	}
 
 	@Override
@@ -218,7 +199,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		targetZ = nbt.getInteger("tZ");
 		startX = nbt.getInteger("sX");
 		startZ = nbt.getInteger("sZ");
-		velocity = nbt.getInteger("veloc");
+		velocity = nbt.getDouble("veloc");
 		fuel = nbt.getFloat("fuel");
 		consumption = nbt.getFloat("consumption");
 		int i = nbt.getInteger("fins");
@@ -269,30 +250,35 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
             ;
         }
 
-        while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
-        {
+        while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
             this.prevRotationPitch += 360.0F;
         }
 
-        while (this.rotationYaw - this.prevRotationYaw < -180.0F)
-        {
+        while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
             this.prevRotationYaw -= 360.0F;
         }
 
-        while (this.rotationYaw - this.prevRotationYaw >= 180.0F)
-        {
+        while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
             this.prevRotationYaw += 360.0F;
         }
 	}
 	
 	@Override
 	public void onUpdate() {
+		if(this.ticksExisted < 10){
+			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
+			return;
+		}
 		
 		this.getDataManager().set(HEALTH, this.health);
 		if(world.isRemote)
 			template = this.getDataManager().get(TEMPLATE);
 
-		WarheadType type1 = (WarheadType)template.warhead.attributes[0];;
+		WarheadType type1 = (WarheadType)template.warhead.attributes[0];
+		
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 		this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, 0, 0);
 
 		this.rotation();
@@ -318,8 +304,8 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				motionZ -= vector.zCoord;
 			}
 			
-			if(velocity < 5)
-				velocity += 0.01;
+			if(velocity < 6)
+				velocity += 0.005 * consumption;
 		} else {
 
 			motionX *= 0.99;
@@ -329,12 +315,15 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				motionY -= 0.05;
 		}
 
-		if (this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock() != Blocks.AIR
-				&& this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock() != Blocks.WATER
-				&& this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock() != Blocks.FLOWING_WATER) {
 
+		Block b = this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock();
+		if((b != Blocks.AIR && b != Blocks.WATER && b != Blocks.FLOWING_WATER) || posY < 1) {
+			if(posY < 1){
+				this.setLocationAndAngles((int)this.posX, world.getHeight((int)this.posX, (int)this.posZ), (int)this.posZ, 0, 0);
+			}
 			if (!this.world.isRemote) {
-				onImpact();
+				if(this.ticksExisted > 60)
+					onImpact();
 			}
 			this.setDead();
 			return;
@@ -366,12 +355,17 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			}
 			
 			for(int i = 0; i < velocity; i++)
-				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, null);
+				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+		}
+		PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
+		if((int) (posX / 16) != chunkX || (int) (posZ / 16) != chunkZ){
+			chunkX = (int) (posX / 16);
+			chunkZ = (int) (posZ / 16);
+			loadNeighboringChunks(chunkX, chunkZ);
 		}
 		if(type1 == WarheadType.MIRV){
 			mirvSplit();   		
 		}
-		loadNeighboringChunks((int)(posX / 16), (int)(posZ / 16));
 	}
 	  public void mirvSplit(){
     	if(motionY <= 0) {
@@ -406,7 +400,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	@SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
     {
-        return distance < 2500000;
+        return distance < 5000;
     }
 
 	public void onImpact() {

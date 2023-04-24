@@ -193,7 +193,7 @@ public class TileEntityLaunchTable extends TileEntity implements ITickable, ICon
 		int tX = inventory.getStackInSlot(1).getTagCompound().getInteger("xCoord");
 		int tZ = inventory.getStackInSlot(1).getTagCompound().getInteger("zCoord");
 		
-		EntityMissileCustom missile = new EntityMissileCustom(world, pos.getX() + 0.5F, pos.getY() + 2.5F, pos.getZ() + 0.5F, tX, tZ, getStruct(inventory.getStackInSlot(0)));
+		EntityMissileCustom missile = new EntityMissileCustom(world, pos.getX() + 0.5F, pos.getY() + 1.5F, pos.getZ() + 0.5F, tX, tZ, getStruct(inventory.getStackInSlot(0)));
 		world.spawnEntity(missile);
 		
 		subtractFuel();

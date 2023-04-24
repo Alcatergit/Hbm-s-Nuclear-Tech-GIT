@@ -177,6 +177,7 @@
     "entity.oldExplosion": {"category": "ambient", "sounds": [{"name": "hbm:entity/oldExplosion", "stream": false}]},
     "entity.soyuzTakeoff": {"category": "player", "sounds": [{"name": "hbm:entity/soyuzTakeoff", "stream": false}]},
     "entity.rocketTakeoff": {"category": "player", "sounds": [{"name": "hbm:entity/rocketTakeoff", "stream": false}]},
+    "entity.rocketEngine": {"category": "player", "sounds": [{"name": "hbm:entity/rocketEngine", "stream": false}]},
     "entity.bombDet": {"category": "player", "sounds": ["hbm:entity/bombdet1", "hbm:entity/bombdet2", "hbm:entity/bombdet3"]},
     "entity.bombWhistle": {"category": "player", "sounds": [{"name": "hbm:entity/bombWhistle", "stream": false}]},
     "entity.bomberLoop": {"category": "player", "sounds": [{"name": "hbm:entity/bomber1", "stream": false}]},

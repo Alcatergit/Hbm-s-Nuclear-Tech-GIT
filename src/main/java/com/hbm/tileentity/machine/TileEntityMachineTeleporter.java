@@ -26,6 +26,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 	public BlockPos target = null;
 	public boolean linked = false;
 	public boolean prevLinked = false;
+	public byte packageTimer = 0;
 	public static final int consumption = 100000000;
 	public static final int maxPower = 1000000000;
 
@@ -60,7 +61,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 	@Override
 	public void update() {
 		boolean b0 = false;
-
+		packageTimer++;
 		if(!this.world.isRemote) {
 			List<Entity> entities = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - 0.25, pos.getY(), pos.getZ() - 0.25, pos.getX() + 0.75, pos.getY() + 2, pos.getZ() + 0.75));
 			if(!entities.isEmpty())
@@ -81,7 +82,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 	}
 
 	public void networkPack() {
-		if(linked != prevLinked){
+		if(linked != prevLinked || packageTimer == 0){
 			NBTTagCompound data = new NBTTagCompound();
 			if(this.target != null){
 				data.setInteger("targetX", this.target.getX());
@@ -90,6 +91,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 			}
 			data.setBoolean("linked", this.linked);
 			INBTPacketReceiver.networkPack(this, data, 150);
+			packageTimer = 40;
 		}
 	}
 
@@ -98,7 +100,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 		if(data.hasKey("targetX")){
 			this.target = new BlockPos(data.getInteger("targetX"), data.getInteger("targetY"), data.getInteger("targetZ"));
 		}
-		if(data.hasKey("targetX")){
+		if(data.hasKey("linked")){
 			this.linked = data.getBoolean("linked");
 		}
 	}
@@ -113,9 +115,9 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 			entity.attackEntityFrom(ModDamageSource.teleporter, 10000);
 		} else {
 			if ((entity instanceof EntityPlayerMP)) {
-				((EntityPlayerMP) entity).setPositionAndUpdate(target.getX() + 0.5D, target.getY() + 1.5D + entity.getYOffset(), target.getZ() + 0.5D);
+				((EntityPlayerMP) entity).setPositionAndUpdate(target.getX() + 0.5D, target.getY() + 1.6D + entity.getYOffset(), target.getZ() + 0.5D);
 			} else {
-				entity.setPositionAndRotation(target.getX() + 0.5D, target.getY() + 1.5D + entity.getYOffset(), target.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				entity.setPositionAndRotation(target.getX() + 0.5D, target.getY() + 1.6D + entity.getYOffset(), target.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 			}
 			world.playSound(null, target, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS,  1.0F, 1.0F);
 		}

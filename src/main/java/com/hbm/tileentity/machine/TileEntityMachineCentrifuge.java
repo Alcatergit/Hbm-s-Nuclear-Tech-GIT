@@ -124,10 +124,10 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 			return true;
 		}
 		
-		if((inventory.getStackInSlot(2).isEmpty() || (itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) && 
-				(inventory.getStackInSlot(3).isEmpty() || (itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) && 
-				(inventory.getStackInSlot(4).isEmpty() || (itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) && 
-				(inventory.getStackInSlot(5).isEmpty() || (itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize())))
+		if((inventory.getStackInSlot(2).isEmpty() || (itemStack.length > 0 && itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) && 
+				(inventory.getStackInSlot(3).isEmpty() || itemStack.length < 2 || (itemStack.length > 1 && itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) && 
+				(inventory.getStackInSlot(4).isEmpty() || itemStack.length < 3 || (itemStack.length > 2 && itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) && 
+				(inventory.getStackInSlot(5).isEmpty() || itemStack.length < 4 || (itemStack.length > 3 && itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize())))
 		{
 			return true;
 		}
@@ -146,41 +146,44 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 			{
 				inventory.getStackInSlot(2).grow(itemStack[0].getCount());
 			}
-			
-			if(inventory.getStackInSlot(3).isEmpty() && itemStack[1] != null)
-			{
-				inventory.setStackInSlot(3, itemStack[1].copy());
-			}else if(itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]))
-			{
-				inventory.getStackInSlot(3).grow(itemStack[1].getCount());
+			if(itemStack.length > 1){
+				if(inventory.getStackInSlot(3).isEmpty() && itemStack[1] != null)
+				{
+					inventory.setStackInSlot(3, itemStack[1].copy());
+				}else if(itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]))
+				{
+					inventory.getStackInSlot(3).grow(itemStack[1].getCount());
+				}
 			}
 			
-			if(inventory.getStackInSlot(4).isEmpty() && itemStack[2] != null)
-			{
-				inventory.setStackInSlot(4, itemStack[2].copy());
-			}else if(itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]))
-			{
-				inventory.getStackInSlot(4).grow(itemStack[2].getCount());
+			if(itemStack.length > 2){
+				if(inventory.getStackInSlot(4).isEmpty() && itemStack[2] != null)
+				{
+					inventory.setStackInSlot(4, itemStack[2].copy());
+				}else if(itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]))
+				{
+					inventory.getStackInSlot(4).grow(itemStack[2].getCount());
+				}
 			}
 			
-			if(inventory.getStackInSlot(5).isEmpty() && itemStack[3] != null)
-			{
-				inventory.setStackInSlot(5, itemStack[3].copy());
-			}else if(itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]))
-			{
-				inventory.getStackInSlot(5).grow(itemStack[3].getCount());
+			if(itemStack.length > 3){
+				if(inventory.getStackInSlot(5).isEmpty() && itemStack[3] != null)
+				{
+					inventory.setStackInSlot(5, itemStack[3].copy());
+				}else if(itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]))
+				{
+					inventory.getStackInSlot(5).grow(itemStack[3].getCount());
+				}
 			}
 			
 			//Drillgon200: What was the setFull3D about? And why is this in a for loop?
-			for(int i = 0; i < 1; i++)
+			//Alcater: No idea - "for(int i = 0; i < 1; i++)" should be a illegal
+			if(inventory.getStackInSlot(0).isEmpty())
 			{
-				if(inventory.getStackInSlot(i).isEmpty())
-				{
-					//inventory.setStackInSlot(i, new ItemStack(inventory.getStackInSlot(i).getItem().setFull3D()));
-					inventory.setStackInSlot(i, ItemStack.EMPTY);
-				}else{
-					inventory.getStackInSlot(i).shrink(1);
-				}
+				//inventory.setStackInSlot(0, new ItemStack(inventory.getStackInSlot(i).getItem().setFull3D()));
+				inventory.setStackInSlot(0, ItemStack.EMPTY);
+			}else{
+				inventory.getStackInSlot(0).shrink(1);
 			}
 		}
 	}

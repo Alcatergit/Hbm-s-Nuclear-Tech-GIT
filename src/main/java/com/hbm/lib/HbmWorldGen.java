@@ -70,8 +70,13 @@ public class HbmWorldGen implements IWorldGenerator {
 
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		generateOres(world, rand, chunkX * 16, chunkZ * 16);
-		generateStructures(world, rand, chunkX * 16, chunkZ * 16);
+		try{
+			generateOres(world, rand, chunkX * 16, chunkZ * 16);
+			generateStructures(world, rand, chunkX * 16, chunkZ * 16);
+		} catch(final Throwable t){
+			System.out.println("NTM Worldgen Error "+t);
+			t.printStackTrace();
+		}
 	}
 
 	public void generateOres(World world, Random rand, int i, int j){

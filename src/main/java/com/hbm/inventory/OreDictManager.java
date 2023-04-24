@@ -395,7 +395,7 @@ public class OreDictManager {
 		LIGNITE																																			.dust(powder_lignite)																.gem(lignite)																.ore(ore_lignite);
 		//COALCOKE																																																							.gem(fromOne(coke, EnumCokeType.COAL));
 		//PETCOKE																																																							.gem(fromOne(coke, EnumCokeType.PETROLEUM));
-		LIGCOKE																																																								.gem(fromOne(coke, EnumCokeType.LIGNITE));
+		//LIGCOKE																																																								.gem(fromOne(coke, EnumCokeType.LIGNITE));
 		CINNABAR																																																							.gem(cinnebar)		.crystal(crystal_cinnebar)								.ore(ore_cinnebar, ore_depth_cinnebar);
 		//BORAX																																			.dust(powder_borax)																																				.ore(ore_depth_borax);
 		VOLCANIC																																																							.gem(gem_volcanic)															.ore(basalt_gem);
@@ -425,13 +425,13 @@ public class OreDictManager {
         //if this isn't implemented when fracking tower becomes real, yell at me
 		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
-		OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
+		// OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
 		
-		for(String name : new String[] {"fuelCoke", "coke"}) {
-			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
-			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.LIGNITE));
-			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.PETROLEUM));
-		}
+		// for(String name : new String[] {"fuelCoke", "coke"}) {
+		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
+		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.LIGNITE));
+		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.PETROLEUM));
+		// }
 		
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
 		OreDictionary.registerOre("oreRareEarth", ore_rare);

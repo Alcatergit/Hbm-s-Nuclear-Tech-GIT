@@ -544,7 +544,6 @@ public class ModItems {
 	
 
 	//Upgrade
-	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
 	public static final Item upgrade_speed_1 = new ItemMachineUpgrade("upgrade_speed_1").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_speed_2 = new ItemMachineUpgrade("upgrade_speed_2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_speed_3 = new ItemMachineUpgrade("upgrade_speed_3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -582,8 +581,6 @@ public class ModItems {
 	public static final Item fluid_tank_full = new ItemFluidTank("fluid_tank_full", 1000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_barrel_full = new ItemFluidTank("fluid_barrel_full", 16000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_barrel_infinite = new ItemFluidContainerInfinite(50, "fluid_barrel_infinite").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item siren_track = new ItemCassette("siren_track").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
-	public static final Item ff_fluid_duct = new ItemFFFluidDuct("ff_fluid_duct").setCreativeTab(MainRegistry.templateTab);
 	public static final Item inf_water = new ItemFluidContainerInfinite(50, "inf_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item inf_water_mk2 = new ItemFluidContainerInfinite(500, "inf_water_mk2").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item inf_water_mk3 = new ItemFluidContainerInfinite(5000, "inf_water_mk3").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -2094,15 +2091,19 @@ public class ModItems {
 	
 	//Templates
 	public static final Item template_folder = new ItemTemplateFolder("template_folder").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
-	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
-	public static final Item chemistry_template = new ItemChemistryTemplate("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
-	public static final Item chemistry_icon = new ItemChemistryIcon("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
 	
 	public static final Item bobmazon_materials = new ItemCatalog("bobmazon_materials").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item bobmazon_machines = new ItemCatalog("bobmazon_machines").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item bobmazon_weapons = new ItemCatalog("bobmazon_weapons").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item bobmazon_tools = new ItemCatalog("bobmazon_tools").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
-	public static final Item bobmazon_hidden = new ItemCatalog("bobmazon_hidden").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item bobmazon_hidden = new ItemCatalog("bobmazon_hidden").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	
+	public static final Item siren_track = new ItemCassette("siren_track").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item chemistry_template = new ItemChemistryTemplate("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item chemistry_icon = new ItemChemistryIcon("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item ff_fluid_duct = new ItemFFFluidDuct("ff_fluid_duct").setCreativeTab(MainRegistry.templateTab);
 	
 	//Plates
 	public static final Item plate_iron = new ItemBase("plate_iron").setCreativeTab(MainRegistry.partsTab);
@@ -2165,6 +2166,7 @@ public class ModItems {
 	public static final Item gem_volcanic = new ItemCustomLore("gem_volcanic").setRarity(EnumRarity.UNCOMMON).setCreativeTab(MainRegistry.partsTab);
 	
 	//Circuits
+	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_raw = new ItemBase("circuit_raw").setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_aluminium = new ItemBase("circuit_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_copper = new ItemBase("circuit_copper").setCreativeTab(MainRegistry.partsTab);
@@ -2513,9 +2515,9 @@ public class ModItems {
 	public static final Item grenade_if_concussion = new ItemGrenade(4, "grenade_if_concussion").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_if_brimstone = new ItemGrenade(5, "grenade_if_brimstone").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_if_mystery = new ItemGrenade(5, "grenade_if_mystery").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item grenade_if_hopwire = new ItemGrenade(6, "grenade_if_hopwire").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_if_spark = new ItemGrenade(7, "grenade_if_spark").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item grenade_if_hopwire = new ItemGrenade(7, "grenade_if_hopwire").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item grenade_if_null = new ItemGrenade(7, "grenade_if_null").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item grenade_if_null = new ItemGrenade(8, "grenade_if_null").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item weaponized_starblaster_cell = new WeaponizedCell("weaponized_starblaster_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	
@@ -2987,7 +2989,6 @@ public class ModItems {
 	
 	
 	//Special tools
-	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item fluid_icon = new ItemFluidIcon("fluid_icon").setCreativeTab(null);
 	
 	//Nuke parts

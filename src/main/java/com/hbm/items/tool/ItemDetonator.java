@@ -41,7 +41,7 @@ public class ItemDetonator extends Item {
 		{
 			list.add("§eNo position set§r");
 		} else {
-			list.add("§aSet pos to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z")+"§r");
+			list.add("§aPos set to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z")+"§r");
 		}
 	}
 	

@@ -38,19 +38,18 @@ public class ItemMultiDetonator extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add("Shift right-click block to add position,");
-		list.add("right-click to detonate!");
+		list.add("Right-click to detonate!");
 		list.add("Shift right-click in the air to clear postitions.");
 		
 		if(stack.getTagCompound() == null || getLocations(stack) == null)
 		{
-			list.add("No position set");
+			list.add("§eNo positions set§r");
 		} else {
 			
 			int[][] locs = getLocations(stack);
 			
 			for(int i = 0; i < locs[0].length; i++) {
-
-				list.add(locs[0][i] + " / " + locs[1][i] + " / " + locs[2][i]);
+				list.add("§aPos "+(i+1)+" set to " + locs[0][i] + ", " + locs[1][i] + ", " + locs[2][i]);
 			}
 		}
 	}
