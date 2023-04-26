@@ -356,13 +356,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
 			
 			ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
+			data.setString("rod_name", rod.getUnlocalizedName());
 			data.setDouble("enrichment", ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0)));
 			data.setDouble("xenon", ItemRBMKRod.getPoison(inventory.getStackInSlot(0)));
 			data.setDouble("c_heat", ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0)));
 			data.setDouble("c_coreHeat", ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0)));
 			data.setDouble("c_maxHeat", rod.meltingPoint);
 		}
-		
+		data.setDouble("flux", this.fluxFast+this.fluxSlow);
 		return data;
 	}
 

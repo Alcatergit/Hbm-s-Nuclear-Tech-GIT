@@ -156,6 +156,11 @@ import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.entity.particle.ParticleContrail;
+import com.hbm.entity.particle.ParticleContrailKerosene;
+import com.hbm.entity.particle.ParticleContrailSolid;
+import com.hbm.entity.particle.ParticleContrailHydrogen;
+import com.hbm.entity.particle.ParticleContrailBalefire;
+import com.hbm.entity.particle.ParticleContrailDark;
 import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
 import com.hbm.entity.projectile.EntityBeamVortex;
@@ -1130,36 +1135,42 @@ public class ClientProxy extends ServerProxy {
 		if("launchsmoke".equals(type)) {
 			ParticleSmokePlume contrail = new ParticleSmokePlume(man, world, x, y, z);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("exKerosene".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.5F, 0.9F, 1F, 0.9F, 0.8F, 0.7F, 1F);
+			ParticleContrail contrail = new ParticleContrailKerosene(man, world, x, y, z);
 			if(args != null && args.length == 3)
 				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("exSolid".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 1F, 0.5F, 0F, 0.98F, 0.8F, 0.47F, 1F);
+			ParticleContrail contrail = new ParticleContrailSolid(man, world, x, y, z);
 			if(args != null && args.length == 3)
 				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("exHydrogen".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.9F, 0.6F, 1F, 0.9F, 0.9F, 0.9F, 1F);
+			ParticleContrail contrail = new ParticleContrailHydrogen(man, world, x, y, z);
 			if(args != null && args.length == 3)
 				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("exBalefire".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0.6F, 1F, 0.2F, 0.15F, 0.2F, 0.1F, 1F);
+			ParticleContrail contrail = new ParticleContrailBalefire(man, world, x, y, z);
 			if(args != null && args.length == 3)
 				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("exDark".equals(type)) {
-			ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 1F, 0.75F, 0F, 0.4F, 0.4F, 0.4F, 1F);
+			ParticleContrail contrail = new ParticleContrailDark(man, world, x, y, z);
 			if(args != null && args.length == 3)
 				contrail.setMotion(args[0], args[1], args[2]);
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);
+			return;
 		}
 		if("bfg_fire".equals(type)){
 			BlockPos pos = new BlockPos(x, y, z);
@@ -1475,23 +1486,27 @@ public class ClientProxy extends ServerProxy {
 		if("ufo".equals(type)) {
 			ParticleMukeCloud cloud = new ParticleMukeCloud(world, x, y, z, 0, 0, 0);
 			Minecraft.getMinecraft().effectRenderer.addEffect(cloud);
+			return;
 		}
 		
 		if("haze".equals(type)) {
 			ParticleHaze fog = new ParticleHaze(world, x, y, z);
 			Minecraft.getMinecraft().effectRenderer.addEffect(fog);
+			return;
 		}
 		
 		if("plasmablast".equals(type)) {
 			ParticlePlasmaBlast cloud = new ParticlePlasmaBlast(world, x, y, z, data.getFloat("r"), data.getFloat("g"), data.getFloat("b"), data.getFloat("pitch"), data.getFloat("yaw"));
 			cloud.setScale(data.getFloat("scale"));
 			Minecraft.getMinecraft().effectRenderer.addEffect(cloud);
+			return;
 		}
 		
 		if("justTilt".equals(type)) {
 			
 			player.hurtTime = player.maxHurtTime = data.getInteger("time");
 			player.attackedAtYaw = 0F;
+			return;
 		}
 		
 		if("properJolt".equals(type)) {
@@ -1499,6 +1514,7 @@ public class ClientProxy extends ServerProxy {
 			player.hurtTime = data.getInteger("time");
 			player.maxHurtTime = data.getInteger("maxTime");
 			player.attackedAtYaw = 0F;
+			return;
 		}
 		
 		if("fireworks".equals(type)) {
@@ -1516,6 +1532,7 @@ public class ClientProxy extends ServerProxy {
 				blast.setColor(color);
 				Minecraft.getMinecraft().effectRenderer.addEffect(blast);
 			}
+			return;
 		}
 
 		if("vomit".equals(type)) {
@@ -1554,6 +1571,7 @@ public class ClientProxy extends ServerProxy {
 					}
 				}
 			}
+			return;
 		}
 		
 		if("sweat".equals(type)) {
@@ -1577,6 +1595,7 @@ public class ClientProxy extends ServerProxy {
 					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 				}
 			}
+			return;
 		}
 		
 		if("radiation".equals(type)) {
@@ -1593,6 +1612,7 @@ public class ClientProxy extends ServerProxy {
 				HbmParticleUtility.setMotion(flash, rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian());
 				Minecraft.getMinecraft().effectRenderer.addEffect(flash);
 			}
+			return;
 		}
 		
 		if("vanillaburst".equals(type)) {
@@ -1634,6 +1654,7 @@ public class ClientProxy extends ServerProxy {
 				if(fx != null)
 					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 			}
+			return;
 		}
 		
 		if("vanillaExt".equals(type)) {
@@ -1710,6 +1731,7 @@ public class ClientProxy extends ServerProxy {
 
 			if(fx != null)
 				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			return;
 		}
 		
 		if("spark".equals(type)){
@@ -1751,10 +1773,12 @@ public class ClientProxy extends ServerProxy {
 					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 				}
 			}
+			return;
 		}
 		
 		if("hadron".equals(type)) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleHadron(world, x, y, z));
+			return;
 		}
 		
 		if("schrabfog".equals(type)) {
@@ -1762,21 +1786,25 @@ public class ClientProxy extends ServerProxy {
 			ParticleSuspendedTown flash = (ParticleSuspendedTown)new ParticleSuspendedTown.Factory().createParticle(-1, world, x, y, z, 0, 0, 0);
 			flash.setRBGColorF(0F, 1F, 1F);
 			Minecraft.getMinecraft().effectRenderer.addEffect(flash);
+			return;
 		}
 		
 		if("rift".equals(type)) {
 			
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleRift(world, x, y, z));
+			return;
 		}
 		
 		if("rbmkflame".equals(type)) {
 			int maxAge = data.getInteger("maxAge");
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleRBMKFlame(world, x, y, z, maxAge));
+			return;
 		}
 		
 		if("rbmkmush".equals(type)) {
 			float scale = data.getFloat("scale");
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleRBMKMush(world, x, y, z, scale));
+			return;
 		}
 		
 		if("tower".equals(type)) {
@@ -1786,6 +1814,7 @@ public class ClientProxy extends ServerProxy {
 			fx.setMaxScale(data.getFloat("max"));
 			fx.setLife(data.getInteger("life"));
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			return;
 		}
 		
 		if("jetpack".equals(type)) {
@@ -1832,6 +1861,7 @@ public class ClientProxy extends ServerProxy {
 				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSmokeNormal.Factory().createParticle(-1, world, ix + ox, iy, iz + oz, p.motionX + moX * 3, p.motionY + moY * 3, p.motionZ + moZ * 3));
 				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSmokeNormal.Factory().createParticle(-1, world, ix - ox, iy, iz - oz, p.motionX + moX * 3, p.motionY + moY * 3, p.motionZ + moZ * 3));
 			}
+			return;
 		}
 
 		if("muke".equals(type)) {
@@ -1841,6 +1871,7 @@ public class ClientProxy extends ServerProxy {
 
 			Minecraft.getMinecraft().effectRenderer.addEffect(wave);
 			Minecraft.getMinecraft().effectRenderer.addEffect(flash);
+			return;
 		}
 		
 		if("bimpact".equals(type)){
@@ -1984,6 +2015,7 @@ public class ClientProxy extends ServerProxy {
 				}
 				
 			}
+			return;
 		}
 		
 		if("vanilla".equals(type)) {
@@ -1992,6 +2024,7 @@ public class ClientProxy extends ServerProxy {
 			double mY = data.getDouble("mY");
 			double mZ = data.getDouble("mZ");
 			world.spawnParticle(EnumParticleTypes.getByName(data.getString("mode")), x, y, z, mX, mY, mZ);
+			return;
 		}
 		
 		if("anim".equals(type)) {
@@ -2085,7 +2118,7 @@ public class ClientProxy extends ServerProxy {
 					}
 				}
 			}
-			
+			return;
 		}
 		
 		if("tau".equals(type)) {
@@ -2093,11 +2126,13 @@ public class ClientProxy extends ServerProxy {
 			for(int i = 0; i < data.getByte("count"); i++)
 				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleHbmSpark(world, x, y, z, rand.nextGaussian() * 0.05, 0.05, rand.nextGaussian() * 0.05));
 			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleHadron(world, x, y, z));
+			return;
 		}
 		
 		if("vanish".equals(type)) {
 			int ent = data.getInteger("ent");
 			this.vanish(ent);
+			return;
 		}
 		
 		if("giblets".equals(type)) {
@@ -2124,6 +2159,7 @@ public class ClientProxy extends ServerProxy {
 					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleGiblet(world, x, y, z, rand.nextGaussian() * 0.25 * mult, rand.nextDouble() * mult, rand.nextGaussian() * 0.25 * mult));
 				}
 			}
+			return;
 		}
 		
 		if("sound".equals(type)){
@@ -2135,6 +2171,7 @@ public class ClientProxy extends ServerProxy {
 					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
 				}
 			}
+			return;
 		}
 		
 	}

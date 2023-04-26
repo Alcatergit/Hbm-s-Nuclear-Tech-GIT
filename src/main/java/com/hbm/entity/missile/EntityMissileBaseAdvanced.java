@@ -138,6 +138,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 
 	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
 
+	@Override
 	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
 		if (!world.isRemote && loaderTicket != null) {
 			for (ChunkPos chunk : loadedChunks) {

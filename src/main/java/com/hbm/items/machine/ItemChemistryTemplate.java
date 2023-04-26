@@ -44,13 +44,13 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
-	        String s1 = ("" + I18n.format("chem." + EnumChemistryTemplate.getEnum(stack.getItemDamage()).name())).trim();
+        String s1 = ("" + I18n.format("chem." + EnumChemistryTemplate.getEnum(stack.getItemDamage()).name())).trim();
 
-	        if (s1 != null) {
-	            s = s + " " + s1;
-	        }
+        if (s1 != null) {
+            s = s + " " + s1;
+        }
 
-	        return s;
+        return s;
 	}
 	
 	@Override

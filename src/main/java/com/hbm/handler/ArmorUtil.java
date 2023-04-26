@@ -347,7 +347,7 @@ public class ArmorUtil {
 		{
 			return true;
 		}
-		if(checkArmorPiece(player, ModItems.gas_mask, 3))
+		if(checkArmorPiece(player, ModItems.ashglasses, 3))
 		{
 			return true;
 		}
@@ -371,7 +371,14 @@ public class ArmorUtil {
 		{
 			return true;
 		}
-		
+		if(checkArmorPiece(player, ModItems.hazmat_paa_helmet, 3))
+		{
+			return true;
+		}
+		if(checkArmorPiece(player, ModItems.paa_helmet, 3))
+		{
+			return true;
+		}
 		return false;
 	}
 }

@@ -162,4 +162,8 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public int getBrightnessForRender(float p_189214_1_) {
 		return 240;
 	}
+
+	public int getFXLayer() {
+        return 1;
+    }
 }

@@ -156,8 +156,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	@Override
 	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
 		if(!world.isRemote && loaderTicket != null) {
-            for(ChunkPos chunk : loadedChunks)
-            {
+            for(ChunkPos chunk : loadedChunks) {
                 ForgeChunkManager.unforceChunk(loaderTicket, chunk);
             }
 
@@ -271,10 +270,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		}
 		
 		this.getDataManager().set(HEALTH, this.health);
-		if(world.isRemote)
-			template = this.getDataManager().get(TEMPLATE);
-
-		WarheadType type1 = (WarheadType)template.warhead.attributes[0];
 		
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -304,8 +299,8 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				motionZ -= vector.zCoord;
 			}
 			
-			if(velocity < 6)
-				velocity += 0.005 * consumption;
+			if(this.velocity < 6)
+				this.velocity += 0.005 * consumption;
 		} else {
 
 			motionX *= 0.99;
@@ -314,7 +309,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			if(motionY > -1.5)
 				motionY -= 0.05;
 		}
-
 
 		Block b = this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock();
 		if((b != Blocks.AIR && b != Blocks.WATER && b != Blocks.FLOWING_WATER) || posY < 1) {
@@ -328,42 +322,21 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			this.setDead();
 			return;
 		}
-
-		if (this.world.isRemote) {
-			Vec3 v = Vec3.createVectorHelper(motionX, motionY, motionZ);
-			v = v.normalize();
-			
-			String smoke = "";
-			
-			FuelType type = (FuelType)template.fuselage.attributes[0];
-			
-			switch(type) {
-			case BALEFIRE:
-				smoke = "exBalefire";
-				break;
-			case HYDROGEN:
-				smoke = "exHydrogen";
-				break;
-			case KEROSENE:
-				smoke = "exKerosene";
-				break;
-			case SOLID:
-				smoke = "exSolid";
-				break;
-			case XENON:
-				break;
-			}
-			
-			for(int i = 0; i < velocity; i++)
-				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
-		}
 		PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
 		if((int) (posX / 16) != chunkX || (int) (posZ / 16) != chunkZ){
 			chunkX = (int) (posX / 16);
 			chunkZ = (int) (posZ / 16);
 			loadNeighboringChunks(chunkX, chunkZ);
 		}
-		if(type1 == WarheadType.MIRV){
+
+		if(world.isRemote){
+			template = this.getDataManager().get(TEMPLATE);
+			spawnRocketExhaust();
+		}
+
+		WarheadType wType = (WarheadType)template.warhead.attributes[0];
+
+		if(wType == WarheadType.MIRV){
 			mirvSplit();   		
 		}
 	}
@@ -395,17 +368,44 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			}	
 		}
 	}
+
+	private void spawnRocketExhaust(){
+		Vec3 v = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
+		v = v.normalize();
+		
+		String smoke = "exDark";
+		
+		FuelType type = (FuelType)template.fuselage.attributes[0];
+		
+		switch(type) {
+		case BALEFIRE:
+			smoke = "exBalefire";
+			break;
+		case HYDROGEN:
+			smoke = "exHydrogen";
+			break;
+		case KEROSENE:
+			smoke = "exKerosene";
+			break;
+		case SOLID:
+			smoke = "exSolid";
+			break;
+		case XENON:
+			break;
+		}
+		for(int i = 0; i < 2; i++){
+			MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+		}
+	}
 		
 	@Override
 	@SideOnly(Side.CLIENT)
-    public boolean isInRangeToRenderDist(double distance)
-    {
+    public boolean isInRangeToRenderDist(double distance) {
         return distance < 5000;
     }
 
 	public void onImpact() {
 		
-
 		WarheadType type = (WarheadType)template.warhead.attributes[0];
 		float strength = (Float)template.warhead.attributes[1];
 		int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(strength, 3)/Math.pow(48, 3)));

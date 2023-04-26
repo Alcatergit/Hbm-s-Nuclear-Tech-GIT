@@ -16,20 +16,20 @@ import net.minecraft.world.World;
 public class ParticleContrail extends Particle {
 
 	private TextureManager theRenderEngine;
-	private boolean doFlames = false;
-	private static float flameRed;
-	private static float flameGreen;
-	private static float flameBlue;
-	private static float lowRed;
-	private static float lowGreen;
-	private static float lowBlue;
+	public boolean doFlames = false;
+	protected static float flameRed;
+	protected static float flameGreen;
+	protected static float flameBlue;
+	protected static float lowRed;
+	protected static float lowGreen;
+	protected static float lowBlue;
 	private int age = 0;
 	private int maxAge;
 
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 400 + rand.nextInt(50);
+		maxAge = 300 + rand.nextInt(50);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.particleScale = 1F;
@@ -38,7 +38,7 @@ public class ParticleContrail extends Particle {
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn, float red, float green, float blue, float scale) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 600 + rand.nextInt(50);
+		maxAge = 300 + rand.nextInt(50);
 
 		this.lowRed = red;
 		this.lowGreen = green;
@@ -66,16 +66,16 @@ public class ParticleContrail extends Particle {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
+		this.setAlphaF(1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2));
 
 		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
 		}
-		this.motionX *= 0.8D;
-		this.motionY *= 0.8D;
-		this.motionZ *= 0.8D;
+		this.motionX *= 0.8;
+		this.motionY *= 0.8;
+		this.motionZ *= 0.8;
 		
         this.move(this.motionX, this.motionY, this.motionZ);
 	}
@@ -130,9 +130,7 @@ public class ParticleContrail extends Particle {
 			f2 = this.particleTexture.getMinV();
 			f3 = this.particleTexture.getMaxV();
 		}
-		this.particleRed = getColor(0);
-		this.particleGreen = getColor(1);
-		this.particleBlue = getColor(2);
+		this.setRBGColorF(getColor(0), getColor(1), getColor(2));
 		Random urandom = new Random(this.hashCode());
 		for (int ii = 0; ii < 6; ii++) {
 			
@@ -170,4 +168,8 @@ public class ParticleContrail extends Particle {
 	public int getBrightnessForRender(float p_189214_1_) {
 		return 240;
 	}
+
+	public int getFXLayer() {
+        return 1;
+    }
 }

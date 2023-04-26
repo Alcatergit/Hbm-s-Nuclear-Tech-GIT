@@ -34,7 +34,7 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 
 	public EntityMissileAntiBallistic(World p_i1582_1_) {
 		super(p_i1582_1_);
-		this.motionY = 2;
+		this.motionY = 0.5;
 
 		this.velocity = 0.0;
 	}
@@ -43,6 +43,13 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
     public void onUpdate() {
 		if(this.ticksExisted < 10){
 			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
+			return;
+		} else if(this.ticksExisted < 60){
+			this.setLocationAndAngles(posX + this.motionX, posY + this.motionY, posZ + this.motionZ, 0, 0);
+			this.rotation();
+			if(this.world.isRemote) {
+				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exHydrogen", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+			}
 			return;
 		}
 
@@ -56,9 +63,11 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 
 		for(int i = 0; i < steps; i++) {
 			double[] targetVec = targetMissile();
-			this.motionX = targetVec[0] * velocity;
-			this.motionY = targetVec[1] * velocity;
-			this.motionZ = targetVec[2] * velocity;
+			if(targetVec != null){
+				this.motionX = targetVec[0] * velocity;
+				this.motionY = targetVec[1] * velocity;
+				this.motionZ = targetVec[2] * velocity;
+			}
 			this.setLocationAndAngles(posX + this.motionX, posY + this.motionY, posZ + this.motionZ, 0, 0);
 			this.rotation();
 
@@ -111,9 +120,8 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 			vec = vec.normalize();
 			
 			return new double[]{vec.xCoord/steps, vec.yCoord/steps, vec.zCoord/steps};
-		} else {
-			return new double[]{0, 1D/steps, 0};
 		}
+		return null;
     }
 
     private void explodeIfNearTarget(){

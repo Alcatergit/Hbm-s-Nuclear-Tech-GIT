@@ -21,7 +21,9 @@ public class ParticleRadiationFog extends Particle {
 		super(worldIn, posXIn, posYIn, posZIn);
 		maxAge = 100 + rand.nextInt(40);
 		
-        this.particleRed = this.particleGreen = this.particleBlue = 0;
+        this.particleRed = 1F;
+        this.particleGreen = 0.87F;
+        this.particleBlue = 0.59F;
         this.particleScale = 7.5F;
         this.particleTexture = ModEventHandlerClient.fog;
 	}
@@ -83,9 +85,6 @@ public class ParticleRadiationFog extends Particle {
 		
 		alpha = (float) Math.sin(particleAge * Math.PI / (400F)) * 0.25F;
 
-        this.particleRed = 1.0F;
-        this.particleGreen = 0.7F;
-        this.particleBlue = 0.3F;
         this.particleAlpha = MathHelper.clamp(alpha, 0, 1);
 		
 		Random rand = new Random(50);

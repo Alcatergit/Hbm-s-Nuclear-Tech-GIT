@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine.rbmk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,14 +36,22 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	private int targetX;
 	private int targetY;
 	private int targetZ;
-	
-	public int[] fluxBuffer = new int[20];
+
+	protected static int lookbackLength = 40;
 	
 	//made this one-dimensional because it's a lot easier to serialize
 	public RBMKColumn[] columns = new RBMKColumn[15 * 15];
 
+	public RBMKScreen[] screens = new RBMKScreen[6];
+
+	public RBMKGraph graph;
+
 	public TileEntityRBMKConsole() {
 		super(0);
+		graph = new RBMKGraph();
+		for(int i = 0; i < screens.length; i++) {
+			screens[i] = new RBMKScreen();
+		}
 	}
 
 	@Override
@@ -56,14 +66,14 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			
 			if(this.world.getTotalWorldTime() % 10 == 0) {
 				rescan();
-				prepareNetworkPack();
+				prepareScreenInfo();
+				prepareGraphInfo();
 			}
+			prepareNetworkPack();
 		}
 	}
 	
 	private void rescan() {
-		
-		double flux = 0;
 		
 		for(int i = -7; i <= 7; i++) {
 			for(int j = -7; j <= 7; j++) {
@@ -82,37 +92,182 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 					columns[index].data.setDouble("steam", rbmk.steam);
 					if(rbmk.isModerated()) columns[index].data.setBoolean("moderated", true); //false is the default anyway and not setting it when we don't need to reduces cruft
 					
-					if(te instanceof TileEntityRBMKRod) {
-						TileEntityRBMKRod fuel = (TileEntityRBMKRod) te;
-						flux += fuel.fluxFast + fuel.fluxSlow;
-					}
-					
 				} else {
 					columns[index] = null;
 				}
 			}
 		}
 		
-		for(int i = 0; i < this.fluxBuffer.length - 1; i++) {
-			this.fluxBuffer[i] = this.fluxBuffer[i + 1];
+		
+	}
+
+	private void prepareGraphInfo() {
+		if(graph.type == ScreenType.NONE) {
+			graph.dataBuffer = new int[lookbackLength];
+			return;
 		}
 		
-		this.fluxBuffer[19] = (int) flux;
+		double value = 0;
+		int count = 0;
+		
+		for(Integer i : graph.columns) {
+			
+			RBMKColumn col = this.columns[i];
+			
+			if(col == null)
+				continue;
+			
+			switch(graph.type) {
+			case COL_TEMP:
+				count++;
+				value += col.data.getDouble("heat");
+				break;
+			case FUEL_DEPLETION:
+				if(col.data.hasKey("enrichment")) {
+					count++;
+					value += (100D - (col.data.getDouble("enrichment") * 100D));
+				}
+				break;
+			case FUEL_POISON:
+				if(col.data.hasKey("xenon")) {
+					count++;
+					value += col.data.getDouble("xenon");
+				}
+				break;
+			case FUEL_TEMP:
+				if(col.data.hasKey("c_heat")) {
+					count++;
+					value += col.data.getDouble("c_heat");
+				}
+				break;
+			case FLUX:
+				if(col.data.hasKey("flux")) {
+					count++;
+					value += col.data.getDouble("flux");
+				}
+				break;
+			case ROD_EXTRACTION:
+				if(col.data.hasKey("level")) {
+					count++;
+					value += col.data.getDouble("level") * 100;
+				}
+				break;
+			}
+		}
+		
+		double result = value / (double) count;
+		for(int i = 0; i < graph.dataBuffer.length - 1; i++) {
+			graph.dataBuffer[i] = graph.dataBuffer[i + 1];
+		}
+		
+		graph.dataBuffer[graph.dataBuffer.length - 1] = (int) result;
+	}
+
+	private void prepareScreenInfo() {
+		
+		for(RBMKScreen screen : this.screens) {
+			
+			if(screen.type == ScreenType.NONE) {
+				screen.display = null;
+				continue;
+			}
+			
+			double value = 0;
+			int count = 0;
+			
+			for(Integer i : screen.columns) {
+				
+				RBMKColumn col = this.columns[i];
+				
+				if(col == null)
+					continue;
+				
+				switch(screen.type) {
+				case COL_TEMP:
+					count++;
+					value += col.data.getDouble("heat");
+					break;
+				case FUEL_DEPLETION:
+					if(col.data.hasKey("enrichment")) {
+						count++;
+						value += (100D - (col.data.getDouble("enrichment") * 100D));
+					}
+					break;
+				case FUEL_POISON:
+					if(col.data.hasKey("xenon")) {
+						count++;
+						value += col.data.getDouble("xenon");
+					}
+					break;
+				case FUEL_TEMP:
+					if(col.data.hasKey("c_heat")) {
+						count++;
+						value += col.data.getDouble("c_heat");
+					}
+					break;
+				case FLUX:
+					if(col.data.hasKey("flux")) {
+						count++;
+						value += col.data.getDouble("flux");
+					}
+					break;
+				case ROD_EXTRACTION:
+					if(col.data.hasKey("level")) {
+						count++;
+						value += col.data.getDouble("level") * 100;
+					}
+					break;
+				}
+			}
+			
+			double result = value / (double) count;
+			String text = ((int)(result * 10)) / 10D + "";
+			
+			switch(screen.type) {
+			case COL_TEMP: text = "rbmk.screen.temp=" + text + "°C"; break;
+			case FUEL_DEPLETION: text = "rbmk.screen.depletion=" + text + "%"; break;
+			case FUEL_POISON: text = "rbmk.screen.xenon=" + text + "%"; break;
+			case FUEL_TEMP: text = "rbmk.screen.core=" + text + "°C"; break;
+			case FLUX: text = "rbmk.screen.flux=" + text ; break;
+			case ROD_EXTRACTION: text = "rbmk.screen.rod=" + text + "%"; break;
+			}
+			
+			screen.display = text;
+		}
 	}
 	
 	private void prepareNetworkPack() {
 		
 		NBTTagCompound data = new NBTTagCompound();
+
 		
-		for(int i = 0; i < columns.length; i++) {
+		if(this.world.getTotalWorldTime() % 10 == 0) {
 			
-			if(this.columns[i] != null) {
-				data.setTag("column_" + i, this.columns[i].data);
-				data.setShort("type_" + i, (short)this.columns[i].type.ordinal());
+			data.setBoolean("full", true);
+			
+			for(int i = 0; i < columns.length; i++) {
+				
+				if(this.columns[i] != null) {
+					data.setTag("column_" + i, this.columns[i].data);
+					data.setShort("type_" + i, (short)this.columns[i].type.ordinal());
+				}
+			}
+			
+			data.setIntArray("buffer", this.graph.dataBuffer);
+
+			for(int i = 0; i < this.screens.length; i++) {
+				RBMKScreen screen = screens[i];
+				if(screen.display != null) {
+					data.setString("t" + i, screen.display);
+				}
 			}
 		}
 		
-		data.setIntArray("flux", this.fluxBuffer);
+		for(int i = 0; i < this.screens.length; i++) {
+			RBMKScreen screen = screens[i];
+			data.setByte("s" + i, (byte) screen.type.ordinal());
+		}
+		data.setByte("g", (byte) graph.type.ordinal());
 		
 		this.networkPack(data, 50);
 	}
@@ -120,16 +275,29 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		
-		this.columns = new RBMKColumn[15 * 15];
-		
-		for(int i = 0; i < columns.length; i++) {
+		if(data.getBoolean("full")) {
+			this.columns = new RBMKColumn[15 * 15];
 			
-			if(data.hasKey("type_" + i)) {
-				this.columns[i] = new RBMKColumn(ColumnType.values()[data.getShort("type_" + i)], (NBTTagCompound)data.getTag("column_" + i));
+			for(int i = 0; i < columns.length; i++) {
+				
+				if(data.hasKey("type_" + i)) {
+					this.columns[i] = new RBMKColumn(ColumnType.values()[data.getShort("type_" + i)], (NBTTagCompound)data.getTag("column_" + i));
+				}
+			}
+			
+			this.graph.dataBuffer = data.getIntArray("buffer");
+			
+			for(int i = 0; i < this.screens.length; i++) {
+				RBMKScreen screen = screens[i];
+				screen.display = data.getString("t" + i);
 			}
 		}
 		
-		this.fluxBuffer = data.getIntArray("flux");
+		for(int i = 0; i < this.screens.length; i++) {
+			RBMKScreen screen = screens[i];
+			screen.type = ScreenType.values()[data.getByte("s" + i)];
+		}
+		graph.type = ScreenType.values()[data.getByte("g")];
 	}
 
 	@Override
@@ -162,6 +330,39 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				}
 			}
 		}
+
+		if(data.hasKey("toggle")) {
+			int slot = data.getByte("toggle");
+			if(slot == 99){
+				int next = this.graph.type.ordinal() + 1;
+				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
+				this.graph.type = type;
+				this.graph.dataBuffer = new int[lookbackLength];
+				Arrays.fill(this.graph.dataBuffer, 0);
+			} else {
+				int next = this.screens[slot].type.ordinal() + 1;
+				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
+				this.screens[slot].type = type;
+			}
+		}
+		
+		if(data.hasKey("id")) {
+			int slot = data.getByte("id");
+			List<Integer> list = new ArrayList();
+			
+			for(int i = 0; i < 15 * 15; i++) {
+				if(data.getBoolean("s" + i)) {
+					list.add(i);
+				}
+			}
+
+			Integer[] cols = list.toArray(new Integer[0]);
+			if(slot == 99){
+				this.graph.columns = cols;
+			} else {
+				this.screens[slot].columns = cols;
+			}
+		}
 	}
 	
 	@Override
@@ -189,6 +390,13 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		this.targetX = nbt.getInteger("tX");
 		this.targetY = nbt.getInteger("tY");
 		this.targetZ = nbt.getInteger("tZ");
+
+		for(int i = 0; i < this.screens.length; i++) {
+			this.screens[i].type = ScreenType.values()[nbt.getByte("t" + i)];
+			this.screens[i].columns = Arrays.stream(nbt.getIntArray("s" + i)).boxed().toArray(Integer[]::new);
+		}
+		this.graph.type = ScreenType.values()[nbt.getByte("g")];
+		this.graph.columns = Arrays.stream(nbt.getIntArray("gc")).boxed().toArray(Integer[]::new);
 	}
 	
 	@Override
@@ -198,6 +406,14 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		nbt.setInteger("tX", this.targetX);
 		nbt.setInteger("tY", this.targetY);
 		nbt.setInteger("tZ", this.targetZ);
+
+		for(int i = 0; i < this.screens.length; i++) {
+			nbt.setByte("t" + i, (byte) this.screens[i].type.ordinal());
+			nbt.setIntArray("s" + i, Arrays.stream(this.screens[i].columns).mapToInt(Integer::intValue).toArray());
+		}
+		nbt.setByte("g", (byte) this.graph.type.ordinal());
+		nbt.setIntArray("gc", Arrays.stream(this.graph.columns).mapToInt(Integer::intValue).toArray());
+		
 		return nbt;
 	}
 	
@@ -240,7 +456,12 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 
 			case FUEL:
 			case FUEL_SIM:
-				stats.add(TextFormatting.GREEN + I18nUtil.resolveKey("rbmk.rod.depletion", ((int)(((1D - this.data.getDouble("enrichment")) * 100000)) / 1000D) + "%"));
+				if(this.data.hasKey("rod_name"))
+					stats.add("§3" + I18n.format("rbmk.rod.name") + " " + I18n.format(this.data.getString("rod_name")+".name"));
+				else
+					stats.add("§3" + I18n.format("rbmk.rod.name"));
+				stats.add(TextFormatting.GREEN + I18nUtil.resolveKey("rbmk.rod.flux", (int)this.data.getDouble("flux")));
+				stats.add(TextFormatting.DARK_GREEN + I18nUtil.resolveKey("rbmk.rod.depletion", ((int)(((1D - this.data.getDouble("enrichment")) * 100000)) / 1000D) + "%"));
 				stats.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("rbmk.rod.xenon", ((int)(((this.data.getDouble("xenon")) * 1000D)) / 1000D) + "%"));
 				stats.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("rbmk.rod.coreTemp", ((int)((this.data.getDouble("c_coreHeat") * 10D)) / 10D) + "°C"));
 				stats.add(TextFormatting.RED + I18nUtil.resolveKey("rbmk.rod.skinTemp", ((int)((this.data.getDouble("c_heat") * 10D)) / 10D) + "°C", ((int)((this.data.getDouble("c_maxHeat") * 10D)) / 10D) + "°C"));
@@ -284,11 +505,57 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		REFLECTOR(70),
 		OUTGASSER(80),
 		BREEDER(100),
-		STORAGE(110);
+		STORAGE(110),
+		COOLER(120),
+		HEATEX(130);
 		
 		public int offset;
 		
 		private ColumnType(int offset) {
+			this.offset = offset;
+		}
+	}
+
+	public class RBMKScreen {
+		public ScreenType type = ScreenType.NONE;
+		public Integer[] columns = new Integer[0];
+		public String display = null;
+		
+		public RBMKScreen() { }
+		public RBMKScreen(ScreenType type, Integer[] columns, String display) {
+			this.type = type;
+			this.columns = columns;
+			this.display = display;
+		}
+	}
+
+	public class RBMKGraph {
+		public ScreenType type = ScreenType.NONE;
+		public Integer[] columns = new Integer[0];
+		public int[] dataBuffer = new int[lookbackLength];
+		
+		public RBMKGraph() {
+			Arrays.fill(this.dataBuffer, 0); 
+		}
+		public RBMKGraph(ScreenType type, Integer[] columns, int[] dataBuffer) {
+			this.type = type;
+			this.columns = columns;
+			this.dataBuffer = dataBuffer;
+		}
+	}
+	
+	public static enum ScreenType {
+		NONE(0 * 18),
+		COL_TEMP(1 * 18),
+		ROD_EXTRACTION(2 * 18),
+		FUEL_DEPLETION(3 * 18),
+		FUEL_POISON(4 * 18),
+		FUEL_TEMP(5 * 18),
+		FLUX(6 * 18);
+		
+		public int offset;
+		
+		private ScreenType(int offset) {
 			this.offset = offset;
 		}
 	}
