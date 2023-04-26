@@ -123,7 +123,7 @@ public class RenderScreenOverlay {
 		//	bar -= (1 + Minecraft.getMinecraft().theWorld.rand.nextInt(3));
 		
 		int posX = RadiationConfig.digammaX;
-		int posY = resolution.getScaledHeight() - 36 - RadiationConfig.digammaY;
+		int posY = resolution.getScaledHeight() - 18 - RadiationConfig.digammaY;
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
         gui.drawTexturedModalRect(posX, posY, 0, 218, 94, 18);

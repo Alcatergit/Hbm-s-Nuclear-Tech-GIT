@@ -62,9 +62,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			}
 		}
 
-		if(world.isRemote) {
-
-		} else {
+		if(!world.isRemote) {
 			int[][] ranges = doorType.getDoorOpenRanges();
 			ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata() - BlockDummyable.offset);
 			if(state == 3) {
@@ -144,10 +142,10 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state, (byte)(shouldUseBB ? 1 : 0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 			
-			if(redstonePower == -1 && state == 0){
-				tryToggle(-1);
-			} else if(redstonePower > 0 && state == 1){
-				tryToggle(-1);
+			if(redstonePower > 0){
+				tryOpen(-1);
+			} else {
+				tryClose(-1);
 			}
 			if(redstonePower == -1){
 				redstonePower = 0;
@@ -202,6 +200,19 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		return false;
 	}
 	
+	public boolean tryOpen(int passcode){
+		if(this.isLocked() && passcode != this.lock)
+			return false;
+		if(this.state == 0) {
+			if(!world.isRemote) {
+				this.state = 3;
+				broadcastControlEvt();
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public boolean tryToggle(int passcode){
 		if(this.isLocked() && passcode != this.lock)
 			return false;
@@ -212,6 +223,19 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			}
 			return true;
 		} else if(this.state == 1) {
+			if(!world.isRemote) {
+				this.state = 2;
+				broadcastControlEvt();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public boolean tryClose(int passcode){
+		if(this.isLocked() && passcode != this.lock)
+			return false;
+		if(this.state == 1) {
 			if(!world.isRemote) {
 				this.state = 2;
 				broadcastControlEvt();

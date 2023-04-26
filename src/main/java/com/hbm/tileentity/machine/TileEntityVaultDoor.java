@@ -28,7 +28,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	private int timer = 0;
 	public int type;
 	public static final int maxTypes = 32;
-	public boolean redstoned = false;
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -68,30 +67,16 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 						}
 
 				if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z) {
-					if(flagX) {
-						
-						if(!redstoned) {
-							this.tryToggle();
-						}
-						
-						redstoned = true;
-					} else {
-						
-						redstoned = false;
-					}
-				}
-				if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X) {
-					if(flagZ) {
-						
-						if(!redstoned) {
-							this.tryToggle();
-						}
-						
-						redstoned = true;
-					} else {
-						
-						redstoned = false;
-					}
+					if(flagX)
+						this.tryOpen();
+					else
+						this.tryClose();
+				
+				} else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X) {
+					if(flagZ)
+						this.tryOpen();
+					else
+						this.tryClose();
 				}
 			}
 
@@ -138,7 +123,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	    		if(timer == 80)
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	    	}	
-	    			
+	    	
 	    	if(state != 1) {
 	    		timer = 0;
 	    	} else {
@@ -152,7 +137,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	    				finishClose();
 	    		}
 	    	}
-	    	
 	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 		}
 	}
@@ -162,7 +146,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			isOpening = true;
 			state = 1;
-			
+			timer = 0;
 			openHatch();
 		}
 	}
@@ -176,7 +160,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			isOpening = false;
 			state = 1;
-			
+			timer = 0;
 			closeHatch();
 		}
 	}
@@ -192,12 +176,24 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	public boolean canClose() {
 		return state == 2 && isHatchFree();
 	}
-	
+
+	public void tryOpen() {
+
+		if(canOpen())
+			open();
+	}
+
 	public void tryToggle() {
 
 		if(canOpen())
 			open();
 		else if(canClose())
+			close();
+	}
+	
+	public void tryClose() {
+
+		if(canClose())
 			close();
 	}
 	
@@ -337,7 +333,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		sysTime = compound.getLong("sysTime");
 		timer = compound.getInteger("timer");
 		type = compound.getInteger("type");
-		redstoned = compound.getBoolean("redstoned");
 		super.readFromNBT(compound);
 	}
 	
@@ -348,7 +343,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		compound.setLong("sysTime", sysTime);
 		compound.setInteger("timer", timer);
 		compound.setInteger("type", type);
-		compound.setBoolean("redstoned", redstoned);
 		return super.writeToNBT(compound);
 	}
 }

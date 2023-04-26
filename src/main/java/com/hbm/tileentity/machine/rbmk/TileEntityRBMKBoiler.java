@@ -40,8 +40,8 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	
 	public TileEntityRBMKBoiler() {
 		super(0);
-		feed = new FluidTank(10000);
-		steam = new FluidTank(1000000);
+		feed = new FluidTank(10000*20);
+		steam = new FluidTank(1000000*20);
 		steamType = ModForgeFluids.steam;
 	}
 
@@ -69,7 +69,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
 			}
 			
-			if(feed.getFluidAmount() < 10000 || steam.getFluidAmount() > 0)
+			if(feed.getFluidAmount() < 10000*20 || steam.getFluidAmount() > 0)
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			NBTTagCompound type = new NBTTagCompound();
 			type.setString("steamType2", steamType.getName());

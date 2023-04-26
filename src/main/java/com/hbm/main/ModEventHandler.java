@@ -1200,7 +1200,7 @@ public class ModEventHandler {
 			}
 
 			if(HTTPHandler.newVersion && GeneralConfig.changelog) {
-				e.player.sendMessage(new TextComponentString("§eNICE - §aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
+				e.player.sendMessage(new TextComponentString("§aNew§e version §3" + HTTPHandler.versionNumber + "§e is available§r"));
 				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
 				if(HTTPHandler.changes != ""){
 					String[] lines = HTTPHandler.changes.split("\\$");

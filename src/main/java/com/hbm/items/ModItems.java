@@ -448,7 +448,7 @@ public class ModItems {
 	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 250);
 	public static final Item blades_desh = new ItemBlades("blades_desh", 0).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
-	public static final Item fuse = new ItemCustomLore("fuse").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fuse = new ItemCustomLore("fuse").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	public static final Item screwdriver = new ItemTooling(ToolType.SCREWDRIVER, 100, "screwdriver");
 	public static final Item hand_drill = new ItemTooling(ToolType.HAND_DRILL, 100, "hand_drill");
 	public static final Item redcoil_capacitor = new ItemCapacitor(10, "redcoil_capacitor").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -460,7 +460,7 @@ public class ModItems {
 	public static final Item bismuth_tool = new ItemAmatExtractor("bismuth_tool").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.controlTab);
 	public static final Item overfuse = new ItemCustomLore("overfuse").setMaxStackSize(1).setFull3D();
 	public static final Item piston_selenium = new ItemBase("piston_selenium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item thermo_element = new ItemBase("thermo_element").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item thermo_element = new ItemBase("thermo_element").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	public static final Item antiknock = new ItemBase("antiknock").setCreativeTab(MainRegistry.controlTab);
 	public static final Item part_lithium = new ItemBase("part_lithium").setCreativeTab(MainRegistry.controlTab);
 	public static final Item part_beryllium = new ItemBase("part_beryllium").setCreativeTab(MainRegistry.controlTab);
