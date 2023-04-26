@@ -34,3 +34,18 @@ mods.ntm.BreedingReactor.removeRecipe(IItemStack fuel);
 
 mods.ntm.BreedingReactor.addFuel(<minecraft:dirt>, 4, 100);
 mods.ntm.BreedingReactor.removeFuel(<hbm:rod_polonium>);
+
+
+### **Blast Furnace**
+
+mods.ntm.BlastFurnace.addRecipe(IItemStack input1, IItemStack input2, IItemStack output);
+mods.ntm.BlastFurnace.removeRecipe(IItemStack input1, IItemStack input2);
+
+mods.ntm.BlastFurnace.addRecipe(<minecraft:beef>, <minecraft:stick>, <minecraft:cooked_beef>);
+mods.ntm.BlastFurnace.removeRecipe(<minecraft:beef>, <minecraft:stick>);
+
+mods.ntm.BlastFurnace.addFuel(IItemStack fuel, int fuelAmount);
+mods.ntm.BlastFurnace.removeFuel(IItemStack fuel);
+
+mods.ntm.BlastFurnace.addFuel(<minecraft:stick>, 4000);
+mods.ntm.BlastFurnace.removeFuel(<hbm:solid_fuel>);

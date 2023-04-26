@@ -71,20 +71,20 @@ public class ItemModServos extends ItemArmorMod {
 		if(item.armorType == EntityEquipmentSlot.CHEST) {
 
 			if(this == ModItems.servo_set) {
-				entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 60, 0));
+				entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 65, 0, false, false));
 			}
 			if(this == ModItems.servo_set_desh) {
-				entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 60, 2));
+				entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 65, 2, false, false));
 			}
 		}
 		
 		if(item.armorType == EntityEquipmentSlot.LEGS) {
 
 			if(this == ModItems.servo_set) {
-				entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 60, 1));
+				entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 65, 1, false, false));
 			}
 			if(this == ModItems.servo_set_desh) {
-				entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 60, 2));
+				entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 65, 2, false, false));
 			}
 		}
 	}
