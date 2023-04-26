@@ -20,6 +20,11 @@ public class RadiationConfig {
 	public static int railgunUse = 250000000;
 	public static int fireDuration = 4 * 20;
 	public static boolean neutronActivation = true;
+
+	public static int geigerX = 16;
+	public static int geigerY = 2;
+	public static int digammaX = 16;
+	public static int digammaY = 18;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKE = "06_explosions";
@@ -62,6 +67,10 @@ public class RadiationConfig {
 
 		neutronActivation = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.01_itemContamination", "Whether high radiation levels should radiate items in inventory", true);
 		
+		geigerX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.02_geigerX", "X Coordinate of the geiger counter gui (x=0 is on the right)", 16);
+		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
+		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
+		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic counter gui (y=0 is on the bottom)", 18);
 	}
 
 }

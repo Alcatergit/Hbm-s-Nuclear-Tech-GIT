@@ -2,6 +2,7 @@ package com.hbm.render.misc;
 
 import org.lwjgl.opengl.GL11;
 import com.hbm.lib.RefStrings;
+import com.hbm.config.RadiationConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -60,8 +61,8 @@ public class RenderScreenOverlay {
 		//if(radiation >= 1 && radiation <= 999)
 		//	bar -= (1 + Minecraft.getMinecraft().theWorld.rand.nextInt(3));
 		
-		int posX = 16;
-		int posY = resolution.getScaledHeight() - 18 - 2;
+		int posX = RadiationConfig.geigerX;
+		int posY = resolution.getScaledHeight() - 18 - RadiationConfig.geigerY;
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
         gui.drawTexturedModalRect(posX, posY, 0, 0, 94, 18);
@@ -121,8 +122,8 @@ public class RenderScreenOverlay {
 		//if(radiation >= 1 && radiation <= 999)
 		//	bar -= (1 + Minecraft.getMinecraft().theWorld.rand.nextInt(3));
 		
-		int posX = 16;
-		int posY = resolution.getScaledHeight() - 36 - 2;
+		int posX = RadiationConfig.digammaX;
+		int posY = resolution.getScaledHeight() - 36 - RadiationConfig.digammaY;
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
         gui.drawTexturedModalRect(posX, posY, 0, 218, 94, 18);
