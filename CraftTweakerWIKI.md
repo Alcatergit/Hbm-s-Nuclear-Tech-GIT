@@ -43,7 +43,7 @@ mods.ntm.BreedingReactor.removeRecipe(IItemStack input);<br>
 ``mods.ntm.BreedingReactor.removeRecipe(<hbm:rod_pu239>);``
 
 
-> **heat** must be > 0 and <= 4
+> **heat** must be > 0 and <= 4<br>
 >  **usesInNuclearFurnace** must be > 0
 
 mods.ntm.BreedingReactor.addRecipe(IItemStack fuel, int heat, int usesInNuclearFurnace);<br>
