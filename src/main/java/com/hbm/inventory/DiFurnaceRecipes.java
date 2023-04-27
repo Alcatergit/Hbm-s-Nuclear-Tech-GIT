@@ -8,6 +8,7 @@ import java.util.HashMap;
 import static com.hbm.inventory.OreDictManager.*;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
+import com.hbm.util.Tuple.Pair;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -28,7 +29,7 @@ import net.minecraftforge.oredict.OreDictionary;
 @Spaghetti("everything")
 public class DiFurnaceRecipes {
 
-	public static HashMap<AStack[], ItemStack> diRecipes = new HashMap<AStack[], ItemStack>();
+	public static HashMap<Pair<AStack, AStack>, ItemStack> diRecipes = new HashMap<Pair<AStack, AStack>, ItemStack>();
 	public static HashMap<AStack, Integer> diFuels = new HashMap<AStack, Integer>();
 
 	public static void registerRecipes(){
@@ -108,13 +109,13 @@ public class DiFurnaceRecipes {
 	}
 
 	public static void addRecipe(AStack inputTop, AStack inputBottom, ItemStack output){
-		diRecipes.put(new AStack[]{ inputTop, inputBottom}, output);
-		diRecipes.put(new AStack[]{ inputBottom, inputTop}, output);
+		diRecipes.put(new Pair(inputTop, inputBottom), output);
+		diRecipes.put(new Pair(inputBottom, inputTop), output);
 	}
 
 	public static void removeRecipe(AStack inputTop, AStack inputBottom){
-		diRecipes.remove(new AStack[]{ inputTop, inputBottom});
-		diRecipes.remove(new AStack[]{ inputBottom, inputTop});
+		diRecipes.remove(new Pair(inputTop, inputBottom));
+		diRecipes.remove(new Pair(inputBottom, inputTop));
 	}
 
 	public static void addFuel(AStack fuel, int power){
@@ -132,25 +133,18 @@ public class DiFurnaceRecipes {
 		ItemStack item2 = stack2.copy();
 		item1.setCount(1);
 		item2.setCount(1);
-		boolean hasTag1 = item1.hasTagCompound();
-		boolean hasTag2 = item2.hasTagCompound();
-		AStack input1;
-		AStack input2;
 		ItemStack outputItem;
 
-		if(hasTag1){
-			input1 = new NbtComparableStack(item1);
-		}else{
-			input1 = new ComparableStack(item1);
-		}
-
-		if(hasTag2){
-			input2 = new NbtComparableStack(item2);
-		}else{
-			input2 = new ComparableStack(item2);
-		}
-
-		outputItem = diRecipes.get(new AStack[]{ input1, input2 });
+		outputItem = diRecipes.get(new Pair(new ComparableStack(item1), new ComparableStack(item2)));
+		if(outputItem != null)
+			return outputItem;
+		outputItem = diRecipes.get(new Pair(new NbtComparableStack(item1), new ComparableStack(item2)));
+		if(outputItem != null)
+			return outputItem;
+		outputItem = diRecipes.get(new Pair(new ComparableStack(item1), new NbtComparableStack(item2)));
+		if(outputItem != null)
+			return outputItem;
+		outputItem = diRecipes.get(new Pair(new NbtComparableStack(item1), new NbtComparableStack(item2)));
 		if(outputItem != null)
 			return outputItem;
 
@@ -160,29 +154,28 @@ public class DiFurnaceRecipes {
 		
 		for(int id1 = 0; id1 < ids1.length; id1++) {
 
-			OreDictStack oreTag1 = new OreDictStack(OreDictionary.getOreName(ids1[id1]));
-			if(hasTag1){
-				outputItem = diRecipes.get(new AStack[]{ oreTag1, new NbtComparableStack(item2) });
-			} else {
-				outputItem = diRecipes.get(new AStack[]{ oreTag1, new ComparableStack(item2) });
-			}
+			OreDictStack oreStack1 = new OreDictStack(OreDictionary.getOreName(ids1[id1]));
+			outputItem = diRecipes.get(new Pair(oreStack1, new ComparableStack(item2)));
+			if(outputItem != null)
+				return outputItem;
+			outputItem = diRecipes.get(new Pair(oreStack1, new NbtComparableStack(item2)));
 			if(outputItem != null)
 				return outputItem;
 
 			for(int id2 = 0; id2 < ids2.length; id2++) {
-				OreDictStack oreTag2 = new OreDictStack(OreDictionary.getOreName(ids2[id2]));
+				OreDictStack oreStack2 = new OreDictStack(OreDictionary.getOreName(ids2[id2]));
 				if(!haveTriedAllID2){
-					if(hasTag1){
-						outputItem = diRecipes.get(new AStack[]{ new NbtComparableStack(item1), oreTag2 });
-					} else {
-						outputItem = diRecipes.get(new AStack[]{ new ComparableStack(item1), oreTag2 });
-					}
+					outputItem = diRecipes.get(new Pair(new ComparableStack(item1), oreStack2));
+					if(outputItem != null)
+						return outputItem;
+					outputItem = diRecipes.get(new Pair(new NbtComparableStack(item1), oreStack2));
 					if(outputItem != null)
 						return outputItem;
 				}
-				outputItem = diRecipes.get(new AStack[]{ oreTag1, oreTag2 });
+				outputItem = diRecipes.get(new Pair(oreStack1, oreStack2));
 				if(outputItem != null)
 					return outputItem;
+				
 			}
 			haveTriedAllID2 = true;
 		}

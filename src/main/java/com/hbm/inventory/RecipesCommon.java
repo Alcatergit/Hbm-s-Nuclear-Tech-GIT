@@ -398,6 +398,11 @@ public class RecipesCommon {
 			}
 			return list;
 		}
+
+		@Override
+		public int hashCode() {
+			return (""+name+this.stacksize).hashCode();
+		}
 		
 		@Override
 		public AStack singulize() {
@@ -441,6 +446,25 @@ public class RecipesCommon {
 			}
 			
 			return false;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (!(obj instanceof OreDictStack))
+				return false;
+			OreDictStack other = (OreDictStack) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			if (stacksize != other.stacksize)
+				return false;
+			return true;
 		}
 
 		@Override

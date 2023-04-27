@@ -49,6 +49,7 @@ import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomObject;
 import com.hbm.util.Tuple.Quartet;
+import com.hbm.util.Tuple.Pair;
 import com.hbm.util.I18nUtil;
 
 import mezz.jei.api.gui.IDrawableStatic;
@@ -165,10 +166,10 @@ public class JeiRecipes {
 		private final List<List<ItemStack>> inputs;
 		private final ItemStack output;
 		
-		public AlloyFurnaceRecipe(AStack[] inputs, ItemStack output) {
-			List<List<ItemStack>> list = new ArrayList<>(inputs.length);
-			for(AStack s : inputs)
-				list.add(s.getStackList());
+		public AlloyFurnaceRecipe(AStack input1, AStack input2, ItemStack output) {
+			List<List<ItemStack>> list = new ArrayList<>(2);
+			list.add(input1.getStackList());
+			list.add(input2.getStackList());
 			this.inputs = list;
 			this.output = output; 
 		}
@@ -746,8 +747,8 @@ public class JeiRecipes {
 			return alloyFurnaceRecipes;
 		alloyFurnaceRecipes = new ArrayList<AlloyFurnaceRecipe>();
 
-		for(Map.Entry<AStack[], ItemStack> entry : DiFurnaceRecipes.diRecipes.entrySet()){
-			alloyFurnaceRecipes.add(new AlloyFurnaceRecipe(entry.getKey(), entry.getValue()));
+		for(Map.Entry<Pair<AStack, AStack>, ItemStack> pairEntry : DiFurnaceRecipes.diRecipes.entrySet()){
+			alloyFurnaceRecipes.add(new AlloyFurnaceRecipe(pairEntry.getKey().getKey(), pairEntry.getKey().getValue(), pairEntry.getValue()));
 		}
 		return alloyFurnaceRecipes;
 	}
