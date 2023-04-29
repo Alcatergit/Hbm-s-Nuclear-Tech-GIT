@@ -860,6 +860,17 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.solar_tex); ResourceManager.solar_boiler.renderPart("Base");
 	            GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.heat_boiler), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3.25, 3.25, 3.25);
+			}
+			public void renderCommon() {
+				GL11.glScaled(1, 1, 1);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.solar_tex); ResourceManager.solar_boiler.renderPart("Base");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.solar_mirror), new ItemRenderBase() {
 			public void renderInventory() {

@@ -1537,6 +1537,7 @@ container.machineFEL=FEL
 
 tile.heater_firebox.name=Firebox
 tile.furnace_steel.name=Steel Furnace
+tile.heat_boiler.name=Large Boiler
 container.heater_firebox=Firebox
 
 tile.barrel_plastic.name=Safe Barrel™

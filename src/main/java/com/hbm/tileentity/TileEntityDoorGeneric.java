@@ -47,7 +47,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 
 	private AudioWrapper audio;
 	private AudioWrapper audio2;
-	
+
 	@Override
 	public void update(){
 		if(state == 3) {
@@ -62,7 +62,9 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			}
 		}
 
-		if(!world.isRemote) {
+		if(world.isRemote) {
+
+		} else {
 			int[][] ranges = doorType.getDoorOpenRanges();
 			ForgeDirection dir = ForgeDirection.getOrientation(getBlockMetadata() - BlockDummyable.offset);
 			if(state == 3) {
@@ -76,15 +78,15 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 						for(int k = 0; k < range[4]; k++) {
 							BlockPos add = new BlockPos(0, 0, 0);
 							switch(EnumFacing.Axis.values()[range[5]]){
-							case X:
-								add = new BlockPos(0, k, Math.signum(range[3])*j);
-								break;
-							case Y:
-								add = new BlockPos(k, Math.signum(range[3])*j, 0);
-								break;
-							case Z:
-								add = new BlockPos(Math.signum(range[3])*j, k, 0);
-								break;
+								case X:
+									add = new BlockPos(0, k, Math.signum(range[3])*j);
+									break;
+								case Y:
+									add = new BlockPos(k, Math.signum(range[3])*j, 0);
+									break;
+								case Z:
+									add = new BlockPos(Math.signum(range[3])*j, k, 0);
+									break;
 							}
 							Rotation r = dir.getBlockRotation();
 							if(dir.toEnumFacing().getAxis() == EnumFacing.Axis.X)
@@ -109,15 +111,15 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 						for(int k = 0; k < range[4]; k++) {
 							BlockPos add = new BlockPos(0, 0, 0);
 							switch(EnumFacing.Axis.values()[range[5]]){
-							case X:
-								add = new BlockPos(0, k, Math.signum(range[3])*j);
-								break;
-							case Y:
-								add = new BlockPos(k, Math.signum(range[3])*j, 0);
-								break;
-							case Z:
-								add = new BlockPos(Math.signum(range[3])*j, k, 0);
-								break;
+								case X:
+									add = new BlockPos(0, k, Math.signum(range[3])*j);
+									break;
+								case Y:
+									add = new BlockPos(k, Math.signum(range[3])*j, 0);
+									break;
+								case Z:
+									add = new BlockPos(Math.signum(range[3])*j, k, 0);
+									break;
 							}
 							Rotation r = dir.getBlockRotation();
 							if(dir.toEnumFacing().getAxis() == EnumFacing.Axis.X)
@@ -141,11 +143,11 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 				broadcastControlEvt();
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state, (byte)(shouldUseBB ? 1 : 0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
-			
-			if(redstonePower > 0){
-				tryOpen(-1);
-			} else {
-				tryClose(-1);
+
+			if(redstonePower == -1 && state == 0){
+				tryToggle(-1);
+			} else if(redstonePower > 0 && state == 1){
+				tryToggle(-1);
 			}
 			if(redstonePower == -1){
 				redstonePower = 0;
@@ -158,13 +160,13 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		if(audio != null) {
 			audio.stopSound();
 			audio = null;
-    	}
+		}
 		if(audio2 != null) {
 			audio2.stopSound();
 			audio2 = null;
-    	}
+		}
 	}
-	
+
 	@Override
 	public void onLoad(){
 		doorType = ((BlockDoorGeneric)this.getBlockType()).type;
@@ -199,19 +201,6 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		}
 		return false;
 	}
-	
-	public boolean tryOpen(int passcode){
-		if(this.isLocked() && passcode != this.lock)
-			return false;
-		if(this.state == 0) {
-			if(!world.isRemote) {
-				this.state = 3;
-				broadcastControlEvt();
-			}
-			return true;
-		}
-		return false;
-	}
 
 	public boolean tryToggle(int passcode){
 		if(this.isLocked() && passcode != this.lock)
@@ -223,19 +212,6 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			}
 			return true;
 		} else if(this.state == 1) {
-			if(!world.isRemote) {
-				this.state = 2;
-				broadcastControlEvt();
-			}
-			return true;
-		}
-		return false;
-	}
-
-	public boolean tryClose(int passcode){
-		if(this.isLocked() && passcode != this.lock)
-			return false;
-		if(this.state == 1) {
 			if(!world.isRemote) {
 				this.state = 2;
 				broadcastControlEvt();
@@ -305,8 +281,8 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 					audio2 = null;
 				}
 			}
-			
-			
+
+
 			this.state = state;
 			if(state > 1)
 				animStartTime = System.currentTimeMillis();
@@ -369,41 +345,41 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	public void broadcastControlEvt(){
 		ControlEventSystem.get(world).broadcastToSubscribed(this, ControlEvent.newEvent("door_open_state").setVar("state", new DataValueFloat(state)));
 	}
-	
+
 	@Override
 	public void receiveEvent(BlockPos from, ControlEvent e){
 		if(e.name.equals("door_toggle")){
 			tryToggle((int)e.vars.get("passcode").getNumber());
 		}
 	}
-	
+
 	@Override
 	public List<String> getInEvents(){
 		return Arrays.asList("door_toggle");
 	}
-	
+
 	@Override
 	public List<String> getOutEvents(){
 		return Arrays.asList("door_open_state");
 	}
-	
+
 	@Override
 	public void validate(){
 		super.validate();
 		ControlEventSystem.get(world).addControllable(this);
 	}
-	
+
 	@Override
 	public void invalidate(){
 		super.invalidate();
 		if(audio != null) {
 			audio.stopSound();
 			audio = null;
-    	}
+		}
 		if(audio2 != null) {
 			audio2.stopSound();
 			audio2 = null;
-    	}
+		}
 		ControlEventSystem.get(world).removeControllable(this);
 	}
 
