@@ -868,7 +868,7 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GL11.glScaled(1, 1, 1);
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.solar_tex); ResourceManager.solar_boiler.renderPart("Base");
+				bindTexture(ResourceManager.solar_tex); ResourceManager.heat_boiler.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
