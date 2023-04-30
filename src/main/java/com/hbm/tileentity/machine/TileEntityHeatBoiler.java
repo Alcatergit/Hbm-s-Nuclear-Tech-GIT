@@ -6,6 +6,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import api.hbm.tile.IHeatSource;
 import com.hbm.inventory.BoilerRecipes;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.INBTPacketReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -60,29 +61,31 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
 
         if(!world.isRemote) {
             setupTanks();
-            fillFluidInit(tanks[0]);
-            fillFluidInit(tanks[1]);
             tryPullHeat();
             tryConvert();
             networkPack();
 
+            fillFluidInit(tanks[0]);
+            fillFluidInit(tanks[1]);
 
             this.heat -= (heat - TileEntityHeatBoiler.maxHeat / 3) / 10;
         }
     }
 
-    public void fillFluidInit(FluidTank tank) {
+    public void fillFluidInit(FluidTank type) {
 
         ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
         dir = dir.getRotation(ForgeDirection.UP);
-
-        fillFluid(pos.getX() + dir.offsetX * 2, pos.getY(), pos.getZ() + dir.offsetZ * 2, tank);
-        fillFluid(pos.getX() - dir.offsetX * 2, pos.getY(), pos.getZ() - dir.offsetZ * 2, tank);
-        fillFluid(pos.getX(), pos.getY() + 4, pos.getZ(), tank);
+        this.fillFluid(pos.getX(), pos.getY() + 4, pos.getZ(), type);
+        this. fillFluid(pos.getX() + dir.offsetX, pos.getY(), pos.getZ() + dir.offsetZ * 2, type);
+        this.fillFluid(pos.getX() - dir.offsetX * 2, pos.getY(), pos.getZ() - dir.offsetZ * 2, type);
+        System.out.print((pos.getX() + dir.offsetX * 2) + " and " + (pos.getZ() + dir.offsetZ * 2 ) + " ");
+        System.out.print((pos.getX() - dir.offsetX * 2) + " and " + (pos.getZ() - dir.offsetZ * 2 ) + " ");
+        System.out.print(pos.getY());
     }
 
-    public void fillFluid(int x, int y, int z, FluidTank tank) {
-        FFUtils.fillFluid(this, tank, world, new BlockPos(x, y, z), tank.getCapacity());
+    public void fillFluid(int x, int y, int z, FluidTank type) {
+        FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 64000);
     }
 
     @Override
@@ -99,13 +102,13 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new IFluidTankProperties[]{tanks[0].getTankProperties()[0], tanks[1].getTankProperties()[0]};
+        return new IFluidTankProperties[] {tanks[0].getTankProperties()[0], tanks[1].getTankProperties()[0]};
     }
 
     @Override
     public int fill(FluidStack resource, boolean doFill){
         if(resource != null && resource.getFluid() == types[0]){
-                return tanks[0].fill(resource, doFill);
+            return tanks[0].fill(resource, doFill);
         }
         return 0;
     }
@@ -114,7 +117,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     public FluidStack drain(FluidStack resource, boolean doDrain){
         FluidStack drain = null;
         if(resource.getFluid() == types[1]){
-            return tanks[1].drain(resource, doDrain);
+            drain = tanks[1].drain(resource, doDrain);
         }
         return drain;
     }
@@ -183,11 +186,11 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
         if (fluids != null) {
             setTankType(0, types[0]);
             setTankType(1, fluids[0].getFluid());
-            } else {
-                setTankType(0, null);
-                setTankType(1, null);
-            }
+        } else {
+            setTankType(0, null);
+            setTankType(1, null);
         }
+    }
 
     private void tryConvert() {
         FluidStack[] outputFluids = BoilerRecipes.getOutputsFromFluid(types[0]);
