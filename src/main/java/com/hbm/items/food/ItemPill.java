@@ -56,7 +56,7 @@ public class ItemPill extends ItemFood {
         	}
 
         	if(this == ModItems.radx) {
-        		player.addPotionEffect(new PotionEffect(HbmPotion.radx, 3 * 60 * 20, 0));
+        		player.addPotionEffect(new PotionEffect(HbmPotion.radx, 3 * 60 * 20, 3));
         	}
         	if(this == ModItems.siox) {
 				HbmLivingProps.setAsbestos(player, 0);

@@ -45,8 +45,8 @@ public class RefineryRecipes {
 
 		refineryRecipesMap.put(ModForgeFluids.toxic_fluid, new Pair(new FluidStack[]{ 
 			new FluidStack(ModForgeFluids.wastefluid, 50),
-			new FluidStack(ModForgeFluids.corium_fluid, 15), 
-			new FluidStack(ModForgeFluids.watz, 5),
+			new FluidStack(ModForgeFluids.corium_fluid, 5), 
+			new FluidStack(ModForgeFluids.watz, 1),
 			new FluidStack(ModForgeFluids.wastegas, 30)	}, 
 			new ItemStack(ModItems.nuclear_waste_tiny, 1)));
 	}

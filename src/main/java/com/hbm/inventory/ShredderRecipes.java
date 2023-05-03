@@ -129,6 +129,8 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(Blocks.CLAY, new ItemStack(Items.CLAY_BALL, 4));
 		ShredderRecipes.setRecipe(Blocks.HARDENED_CLAY, new ItemStack(Items.CLAY_BALL, 4));
 		ShredderRecipes.setRecipe(Blocks.TNT, new ItemStack(Items.GUNPOWDER, 5));
+		ShredderRecipes.setRecipe(Items.BONE, new ItemStack(Items.DYE, 5, 15));
+		ShredderRecipes.setRecipe(Blocks.CACTUS, new ItemStack(Items.DYE, 2, 2));
 		ShredderRecipes.setRecipe(ModBlocks.stone_gneiss, new ItemStack(ModItems.powder_lithium_tiny, 1));
 		ShredderRecipes.setRecipe(ModItems.powder_lapis, new ItemStack(ModItems.powder_cobalt_tiny, 1));
 		ShredderRecipes.setRecipe(ModItems.fragment_neodymium, new ItemStack(ModItems.powder_neodymium_tiny, 1));

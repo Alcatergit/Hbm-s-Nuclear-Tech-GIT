@@ -48,8 +48,8 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
 		nbt.removeTag("jumpheight");
-		nbt.setInteger("water", super.water);
-		nbt.setInteger("steam", super.steam);
+		nbt.setInteger("water", feed.getFluidAmount());
+		nbt.setInteger("steam", steam.getFluidAmount());
 	}
 
 	@Override
@@ -68,19 +68,18 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				timer = 0;
 				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
 			}
-			
+
 			if(feed.getFluidAmount() < 10000*20 || steam.getFluidAmount() > 0)
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
-			NBTTagCompound type = new NBTTagCompound();
-			type.setString("steamType2", steamType.getName());
-			networkPack(type, 50);
+			NBTTagCompound data = new NBTTagCompound();
+			data.setString("steamType2", steamType.getName());
+			networkPack(data, 50);
 			
 			double heatCap = this.getHeatFromSteam(steamType);
 			double heatProvided = this.heat - heatCap;
 			
 			if(heatProvided > 0 && feed.getFluidAmount() > 0) {
 				int waterUsed = (int)Math.floor(heatProvided / gameruleBoilerHeatConsumption);
-				super.water = waterUsed;
 				waterUsed = Math.min(waterUsed, feed.getFluidAmount());
 				int steamProduced = (int)Math.round((waterUsed * 100F) / getFactorFromSteam(steamType));
 

@@ -68,7 +68,7 @@ public class HazmatRegistry {
 		}
 		PotionEffect radx = player.getActivePotionEffect(HbmPotion.radx);
 		if(radx != null)
-			res += 0.1F * radx.getAmplifier();
+			res += 0.1F * (1+radx.getAmplifier());
 
 		return res;
 

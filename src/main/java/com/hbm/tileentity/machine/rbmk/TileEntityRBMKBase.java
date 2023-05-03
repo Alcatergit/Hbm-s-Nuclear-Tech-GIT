@@ -60,9 +60,9 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public static final byte gravity = 5; //in blocks per s^2
 	
 	public int water;
-	public static final int maxWater = 16000;
+	public static final int maxWater = 16000*20;
 	public int steam;
-	public static final int maxSteam = 16000;
+	public static final int maxSteam = 16000*20;
 	
 
 	public boolean hasLid() {
@@ -270,8 +270,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 		this.heat = nbt.getDouble("heat");
 		this.jumpheight = nbt.getDouble("jumpheight");
-		this.water = nbt.getInteger("water");
-		this.steam = nbt.getInteger("steam");
+		this.water = nbt.getInteger("realSimWater");
+		this.steam = nbt.getInteger("realSimSteam");
 	}
 	
 	@Override
@@ -283,8 +283,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		
 		nbt.setDouble("heat", this.heat);
 		nbt.setDouble("jumpheight", this.jumpheight);
-		nbt.setInteger("water", this.water);
-		nbt.setInteger("steam", this.steam);
+		nbt.setInteger("realSimWater", this.water);
+		nbt.setInteger("realSimSteam", this.steam);
 		return nbt;
 	}
 	
@@ -308,8 +308,6 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		this.writeToNBT(nbt);
 		diag = false;
 		nbt.removeTag("jumpheight");
-		nbt.removeTag("steam");
-		nbt.removeTag("water");
 	}
 	
 	@SideOnly(Side.CLIENT)

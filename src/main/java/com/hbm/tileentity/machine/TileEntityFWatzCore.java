@@ -9,6 +9,7 @@ import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IReactor;
 import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.SAFERecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
@@ -163,6 +164,9 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 					if(tanks[0].getFluidAmount() <= 0) {
 						cooldown = true;
 					}
+
+					if(world.rand.nextInt(4096) == 0)
+						tryGrowCore();
 				}
 			}
 
@@ -192,6 +196,13 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 		}
 
+	}
+
+	private void tryGrowCore(){
+		ItemStack output = SAFERecipes.getOutput(inventory.getStackInSlot(2));
+		if(output != null){
+			inventory.setStackInSlot(2, output.copy());
+		}
 	}
 
 	@Override

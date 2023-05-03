@@ -102,7 +102,7 @@ public class HbmPotion extends Potion {
 		}
 		if(this == radaway) {
 			if(entity.hasCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null))
-				entity.getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(level+1);
+				entity.getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads((level+1)*0.05F);
 		}
 		if(this == bang) {
 			

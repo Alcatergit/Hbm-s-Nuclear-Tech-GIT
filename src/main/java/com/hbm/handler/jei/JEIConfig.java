@@ -29,6 +29,7 @@ import com.hbm.inventory.gui.GUIMachineShredder;
 import com.hbm.inventory.gui.GUISILEX;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIRBMKOutgasser;
+import com.hbm.inventory.gui.GUIFWatzCore;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
@@ -81,6 +82,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
+	public static final String SAFE_REACTOR = "hbm.safe_reactor";
 	public static final String DFC = "hbm.dfc";
 
 	@Override
@@ -122,6 +124,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.rbmk_outgasser), RBMKOUTGASSER);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.fwatz_core), SAFE_REACTOR);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.crate_tungsten), DFC);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.crate_desh), DFC);
 
@@ -157,6 +160,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
 		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
 		registry.addRecipes(RBMKOutgasserRecipes.getRBMKOutgasserRecipes(), RBMKOUTGASSER);
+		registry.addRecipes(JeiRecipes.getSAFERecipes(), SAFE_REACTOR);
 		registry.addRecipes(DFCRecipes.getDFCRecipes(), DFC);
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
@@ -180,6 +184,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUISILEX.class, 45, 82, 113-45, 125-82, SILEX);
 		registry.addRecipeClickArea(GUIAnvil.class, 34, 26, 52-34, 44-26, SMITHING);
 		registry.addRecipeClickArea(GUIAnvil.class, 12, 50, 48-12, 66-50, ANVIL);
+		registry.addRecipeClickArea(GUIFWatzCore.class, 52, 64, 72, 19, SAFE_REACTOR);
 		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 64, 53, 48, 16, RBMKOUTGASSER);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
@@ -285,6 +290,7 @@ public class JEIConfig implements IModPlugin {
 				new RBMKOutgasserRecipeHandler(help),
 				new FusionRecipeHandler(help),
 				new HadronRecipeHandler(help),
+				new SAFERecipeHandler(help),
 				new DFCRecipeHandler(help),
 				new BookRecipeHandler(help));
 	}

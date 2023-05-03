@@ -425,13 +425,13 @@ public class OreDictManager {
         //if this isn't implemented when fracking tower becomes real, yell at me
 		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
-		// OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
+		OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
 		
-		// for(String name : new String[] {"fuelCoke", "coke"}) {
-		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
+		for(String name : new String[] {"fuelCoke", "coke"}) {
+			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
 		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.LIGNITE));
 		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.PETROLEUM));
-		// }
+		}
 		
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
 		OreDictionary.registerOre("oreRareEarth", ore_rare);

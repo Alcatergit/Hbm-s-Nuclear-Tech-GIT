@@ -1,7 +1,7 @@
 {
 	"display": {
 		"icon": {
-			"item": "hbm:ingot_dineutronium"
+			"item": "hbm:dineutronium"
 		},
 		"title": {
 			"translate": "hbm.achievement.progress_dineutronium"
@@ -18,13 +18,13 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:ingot_dineutronium"
+                        "item": "hbm:dineutronium"
                     }
                 ]
             }
         }
     },
     "rewards": {
-        "experience": 700
+        "experience": 3000
     }
 }

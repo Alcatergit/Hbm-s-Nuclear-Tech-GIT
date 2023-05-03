@@ -104,6 +104,7 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 				TileEntityFFFluidDuctMk2 duct = (TileEntityFFFluidDuctMk2) te;
 				if(duct.getType() == pipe){
 					duct.setType(hand);
+					duct.markDirty();
 					spreadType(worldIn, pos.add(1, 0, 0), hand, pipe, x-1);
 					spreadType(worldIn, pos.add(0, 1, 0), hand, pipe, x-1);
 					spreadType(worldIn, pos.add(0, 0, 1), hand, pipe, x-1);
@@ -117,12 +118,22 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(player.isSneaking()){
-			spreadType(worldIn, pos, null, getType(player.getHeldItem(hand)), 8);
-		}else{
-			spreadType(worldIn, pos, getType(player.getHeldItem(hand)), null, 8);
+		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntityFFFluidDuctMk2 duct = null;
+		if(te != null && te instanceof TileEntityFFFluidDuctMk2){
+			duct = (TileEntityFFFluidDuctMk2) te;
 		}
-
+		if(duct != null){
+			if(player.isSneaking()){
+				if(null != duct.getType()){
+					spreadType(worldIn, pos, null, duct.getType(), 256);
+				}
+			}else{
+				if(getType(player.getHeldItem(hand)) != duct.getType()){
+					spreadType(worldIn, pos, getType(player.getHeldItem(hand)), duct.getType(), 256);
+				}
+			}
+		}
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 

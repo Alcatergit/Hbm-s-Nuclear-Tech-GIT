@@ -216,7 +216,7 @@ tile.ducrete_reinforced.name=Reinforced Ducrete
 tile.block_niter_reinforced.name=Reinforced Niter
 
 tile.deco_rbmk.name=RBMK Deco
-tile.deco_rbmk_smooth=RBMK Smooth Deco
+tile.deco_rbmk_smooth.name=RBMK Smooth Deco
 
 item.ingot_astatine.name=Astatine Ingot
 
@@ -621,6 +621,9 @@ hbm.achievement.progress_crack.desc=Cracking oil for more stuff
 hbm.achievement.progress_dineutronium=OMG DNT
 hbm.achievement.progress_dineutronium.desc=Holy moly we did it
 
+hbm.achievement.progress_singularity_spark=Master of the Universe
+hbm.achievement.progress_singularity_spark.desc=Make a pocket Quasar
+
 hbm.achievement.progress_fensu=Inner Peace
 hbm.achievement.progress_fensu.desc=Nothing more to say
 
@@ -769,8 +772,8 @@ tipped_arrow.effect.potion.hbm_phosphorus=Arrow of Phosphorus Burns
 tipped_arrow.effect.potion.hbm_stability=Arrow of Stability
 
 rbmk.heat=Column temperature: %s
-rbmk.boiler.water=Feedwater: %s / %s
-rbmk.boiler.steam=Steam: %s / %s
+rbmk.boiler.water=Feedwater: %s / %smB
+rbmk.boiler.steam=Steam: %s / %smB
 rbmk.boiler.type=Compressor: %s
 rbmk.console.assign=Assign selected columns to screen #%s
 rbmk.console.assignG=Assign selected columns to graph
@@ -781,7 +784,7 @@ rbmk.console.fuel_depletion=Monitor average fuel depletion
 rbmk.console.fuel_poison=Monitor average xenon poisoning
 rbmk.console.fuel_temp=Monitor average fuel temperature
 rbmk.console.flux=Monitor average incoming flux
-rbmk.control.level=%s
+rbmk.control.level=Extension: %s
 rbmk.control.red=§cRed Group
 rbmk.control.yellow=§eYellow Group
 rbmk.control.green=§aGreen Group
@@ -842,7 +845,7 @@ hbmfluid.naphtha=Naphtha
 hbmfluid.lightoil=Light Oil
 hbmfluid.petroleum=Petroleum Gas
 hbmfluid.acid=Hydrogen Peroxide
-hbmfluid.watz=Watz Fluid
+hbmfluid.watz=Watz Mud
 hbmfluid.biogas=Biogas
 hbmfluid.biofuel=Biofuel
 hbmfluid.sas3=Schrabidium Trisulfide
@@ -900,7 +903,7 @@ fluid.naphtha=Naphtha
 fluid.lightoil=Light Oil
 fluid.petroleum=Petroleum Gas
 fluid.acid=Hydrogen Peroxide
-fluid.watz=Watz Fluid
+fluid.watz=Watz Mud
 fluid.biogas=Biogas
 fluid.biofuel=Biofuel
 fluid.sas3=Schrabidium Trisulfide
@@ -2484,11 +2487,22 @@ item.cell_deuterium.name=Deuterium Cell
 item.cell_tritium.name=Tritium Cell
 item.cell_sas3.name=Schrabidium Trisulfide Cell
 item.cell_anti_schrabidium.name=Antischrabidium Cell
-item.singularity.name=Singularity
-item.singularity_counter_resonant.name=Contained Counter-Resonant Singularity
-item.singularity_super_heated.name=Superheated Resonating Singularity
-item.singularity_spark.name=Quasar
-item.black_hole.name=Miniature Black Hole
+
+item.capsule_empty.name=Empty Capsule
+item.capsule_xen.name=Xen Capsule
+
+item.capsule_sing_tiny.name=Tiny Singularity Capsule
+item.capsule_sing_counter_tiny.name=Tiny Contained Counter-Resonant Singularity Capsule
+item.capsule_sing_super_tiny.name=Tiny Superheated Resonating Singularity Capsule
+item.capsule_sing_spark_tiny.name=Tiny Quasar Capsule
+item.capsule_hole_tiny.name=Tiny Black Hole Capsule
+
+item.singularity.name=Singularity Capsule
+item.singularity_counter_resonant.name=Contained Counter-Resonant Singularity Capsule
+item.singularity_super_heated.name=Superheated Resonating Singularity Capsule
+item.singularity_spark.name=Quasar Capsule
+item.black_hole.name=Black Hole Capsule
+
 item.blade_meteorite.name=Meteorite Blade
 item.crystal_xen.name=Artificial Xen Crystal
 item.pellet_antimatter.name=Antimatter Cluster
@@ -3176,6 +3190,7 @@ entity.entity_balls_o_tron.name=Balls-O-Tron Prime
 entity.entity_balls_o_tron_seg.name=Balls-O-Tron Segment
 entity.entity_mask_man.name=Mask Man
 entity.entity_fucc_a_ducc.name=Duck
+entity.entity_glowing_one.name=Glowing One
 entity.entity_elder_one.name=Quackos The Elder One
 entity.entity_ntm_fbi.name=FBI Agent
 entity.entity_ntm_radiation_blaze.name=Meltdown Elemental
@@ -3757,9 +3772,9 @@ item.pellet_advanced.name=Advanced Watz Performance Improver
 
 item.titanium_filter.name=Titanium Filter
 
-tile.mud_block.name=Poisonous Mud
-fluid.mud_fluid=Poisonous Mud
-item.bucket_mud.name=Bucket of Poisonous Mud
+tile.mud_block.name=Oxidized Watz Mud
+fluid.mud_fluid=Oxidized Watz Mud
+item.bucket_mud.name=Bucket of Oxidized Watz Mud
 tile.acid_block.name=Acid
 fluid.acid_fluid=Acid
 item.bucket_acid.name=Bucket of Acid

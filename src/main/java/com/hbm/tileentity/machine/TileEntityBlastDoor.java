@@ -32,6 +32,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public int state = 0;
 	public long sysTime;
 	private int timer = 0;
+	public boolean redstoned = false;
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -49,13 +50,15 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public void update() {
 		if(!world.isRemote) {
 			
-			if(!isLocked()) {
+			if(!isLocked() && world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
 				
-				if(world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
-					this.tryOpen();
-				} else {
-					this.tryClose();
+				if(!redstoned) {
+					this.tryToggle();
 				}
+				redstoned = true;
+				
+			} else {
+				redstoned = false;
 			}
 	    			
 	    	if(state != 1) {
@@ -115,7 +118,6 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	    	PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			isOpening = true;
 			state = 1;
-			timer = 0;
 			broadcastControlEvt();
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 0.5F, 0.75F);
 		}
@@ -134,7 +136,6 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 			
 	    	isOpening = false;
 			state = 1;
-			timer = 0;
 			broadcastControlEvt();
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 0.5F, 0.75F);
 		}
@@ -288,25 +289,11 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		return state == 2;
 	}
 	
-	public void tryOpen() {
-		if(canOpen()) {
-			open();
-			openNeigh();
-		}
-	}
-
 	public void tryToggle() {
 		if(canOpen()) {
 			open();
 			openNeigh();
 		} else if(canClose()) {
-			close();
-			closeNeigh();
-		}
-	}
-
-	public void tryClose() {
-		if(canClose()) {
 			close();
 			closeNeigh();
 		}
@@ -344,6 +331,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		state = compound.getInteger("state");
 		sysTime = compound.getLong("sysTime");
 		timer = compound.getInteger("timer");
+		redstoned = compound.getBoolean("redstoned");
 		super.readFromNBT(compound);
 	}
 	
@@ -353,6 +341,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		compound.setInteger("state", state);
 		compound.setLong("sysTime", sysTime);
 		compound.setInteger("timer", timer);
+		compound.setBoolean("redstoned", redstoned);
 		return super.writeToNBT(compound);
 	}
 
@@ -394,4 +383,5 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public World getControlWorld(){
 		return getWorld();
 	}
+	
 }

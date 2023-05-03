@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.Library;
-
 import com.hbm.blocks.machine.ItemSelfcharger;
 import api.hbm.energy.IBatteryItem;
-import net.minecraft.util.EnumHand;
-import net.minecraft.client.util.ITooltipFlag;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -81,21 +81,21 @@ public class ArmorFSBPowered extends ArmorFSB implements IBatteryItem {
     	}
     }
 
-    private ItemSelfcharger getHeldSCBattery(EntityPlayer player){
-    	if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemSelfcharger){
-    		return (ItemSelfcharger) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
+    private ItemSelfcharger getHeldSCBattery(EntityLivingBase entity){
+    	if(entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemSelfcharger){
+    		return (ItemSelfcharger) entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem();
     	}
-    	if(player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemSelfcharger){
-    		return (ItemSelfcharger) player.getHeldItem(EnumHand.OFF_HAND).getItem();
+    	if(entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemSelfcharger){
+    		return (ItemSelfcharger) entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem();
     	}
     	return null;
     }
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-    	if(this.drain > 0 && ArmorFSB.hasFSBArmor(player)) {
+	public void onArmorTick(World world, EntityPlayer entity, ItemStack itemStack) {
+    	if(this.drain > 0 && ArmorFSB.hasFSBArmor(entity)) {
     		long netto_drain = drain;
-    		ItemSelfcharger sc_battery = this.getHeldSCBattery(player);
+    		ItemSelfcharger sc_battery = this.getHeldSCBattery(entity);
     		if(sc_battery != null){
     			netto_drain = netto_drain - (sc_battery.getDischargeRate()/4L);
     		}

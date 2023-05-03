@@ -56,10 +56,10 @@ public class HadronRecipes {
 				));
 		recipes.add(new HadronRecipe(
 				new ItemStack(ModItems.particle_aschrab),
-				new ItemStack(ModItems.powder_euphemium),
+				new ItemStack(ModItems.capsule_xen),
 				4000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity),
+				new ItemStack(ModItems.tiny_singularity),
 				true
 				));
 		recipes.add(new HadronRecipe(
@@ -75,7 +75,7 @@ public class HadronRecipes {
 				new ItemStack(ModItems.singularity),
 				8000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity_counter_resonant),
+				new ItemStack(ModItems.tiny_singularity_counter_resonant),
 				true
 				));
 		recipes.add(new HadronRecipe(
@@ -107,7 +107,7 @@ public class HadronRecipes {
 				new ItemStack(ModItems.singularity_counter_resonant),
 				20000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity_super_heated),
+				new ItemStack(ModItems.tiny_singularity_super_heated),
 				true
 				));
 		recipes.add(new HadronRecipe(
@@ -123,7 +123,7 @@ public class HadronRecipes {
 				new ItemStack(ModItems.singularity_super_heated),
 				100000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.black_hole),
+				new ItemStack(ModItems.tiny_black_hole),
 				true
 				));
 		recipes.add(new HadronRecipe(
@@ -155,7 +155,7 @@ public class HadronRecipes {
 				new ItemStack(ModItems.black_hole),
 				750000,
 				new ItemStack(ModItems.particle_empty),
-				new ItemStack(ModItems.singularity_spark),
+				new ItemStack(ModItems.tiny_singularity_spark),
 				true
 				));
 		recipes.add(new HadronRecipe(

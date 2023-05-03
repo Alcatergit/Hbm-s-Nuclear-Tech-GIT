@@ -45,6 +45,7 @@ import net.minecraft.block.BlockSkull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -563,7 +564,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				int y = world.getHeight(x, z);
 				
 				for(int f = 0; f < 3; f++)
-					world.setBlockState(new BlockPos(x, y + f, z), ModBlocks.meteor_pillar.getDefaultState());
+					world.setBlockState(new BlockPos(x, y + f, z), ModBlocks.meteor_pillar.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
 				world.setBlockState(new BlockPos(x, y + 3, z), ModBlocks.meteor_brick_chiseled.getDefaultState());
 				
 				for(int f = 0; f < 10; f++) {

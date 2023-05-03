@@ -7,6 +7,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.entity.Entity;
@@ -165,6 +166,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 			this.world.spawnParticle(EnumParticleTypes.LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height * 0.75, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
         }
 
+        ContaminationUtil.radiate(world, posX, posY, posZ, 32, 500);
         super.onLivingUpdate();
     }
     

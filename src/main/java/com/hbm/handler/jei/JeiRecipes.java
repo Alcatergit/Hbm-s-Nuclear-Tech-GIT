@@ -85,6 +85,7 @@ public class JeiRecipes {
 	private static List<FluidRecipe> fluidEquivalences = null;
 	private static List<BookRecipe> bookRecipes = null;
 	private static List<FusionRecipe> fusionByproducts = null;
+	private static List<SAFERecipe> safeRecipes = null;
 	private static List<HadronRecipe> hadronRecipes = null;
 	private static List<SILEXRecipe> silexRecipes = null;
 	private static Map<EnumWavelengths, List<SILEXRecipe>> waveSilexRecipes = new HashMap<EnumWavelengths, List<SILEXRecipe>>();
@@ -442,7 +443,22 @@ public class JeiRecipes {
 			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
+	}
+
+	public static class SAFERecipe implements IRecipeWrapper {
+		ItemStack input;
+		ItemStack output;
 		
+		public SAFERecipe(ItemStack input, ItemStack output) {
+			this.input = input;
+			this.output = output;
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
 	}
 	
 	public static class HadronRecipe implements IRecipeWrapper {
@@ -1015,6 +1031,16 @@ public class JeiRecipes {
 		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_put, FusionRecipes.getByproduct(ModForgeFluids.plasma_put)));
 		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_bf, FusionRecipes.getByproduct(ModForgeFluids.plasma_bf)));
 		return fusionByproducts;
+	}
+
+	public static List<SAFERecipe> getSAFERecipes(){
+		if(safeRecipes != null)
+			return safeRecipes;
+		safeRecipes = new ArrayList<>();
+		for(Entry<ItemStack, ItemStack> recipe : com.hbm.inventory.SAFERecipes.getAllRecipes().entrySet()){
+			safeRecipes.add(new SAFERecipe(recipe.getKey(), recipe.getValue()));
+		}
+		return safeRecipes;
 	}
 	
 	public static List<HadronRecipe> getHadronRecipes(){

@@ -383,8 +383,7 @@ public class ContaminationUtil {
 		if(e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
 			return true;
 		
-		return e instanceof EntityNuclearCreeper ||
-				e instanceof EntityMooshroom ||
+		return 	e instanceof EntityMooshroom ||
 				e instanceof EntityZombie ||
 				e instanceof EntitySkeleton ||
 				e instanceof EntityQuackos ||
@@ -459,18 +458,22 @@ public class ContaminationUtil {
 		EntityLivingBase entity = (EntityLivingBase)e;
 		return HbmLivingProps.getDigamma(entity);
 	}
-	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float fire3d) {
+
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d) {
+		radiate(world, x, y, z, range, rad3d, 0, 0);
+	}
+
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d, float fire3d) {
 		radiate(world, x, y, z, range, rad3d, 0, fire3d);
 	}
 
-
-	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float dig3d, float fire3d) {
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d, float dig3d, float fire3d) {
 		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).grow(range, range, range));
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x, y, z, x, y, z).grow(range, range, range));
 		
 		for(EntityLivingBase e : entities) {
 			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - (x + 0.5), (e.posY + e.getEyeHeight()) - (y + 0.5), e.posZ - (z + 0.5));
+			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
 			double len = vec.lengthVector();
 			vec = vec.normalize();
 			
@@ -478,9 +481,9 @@ public class ContaminationUtil {
 			
 			for(int i = 1; i < len; i++) {
 
-				int ix = (int)Math.floor(x + 0.5 + vec.xCoord * i);
-				int iy = (int)Math.floor(y + 0.5 + vec.yCoord * i);
-				int iz = (int)Math.floor(z + 0.5 + vec.zCoord * i);
+				int ix = (int)Math.floor(x + vec.xCoord * i);
+				int iy = (int)Math.floor(y + vec.yCoord * i);
+				int iz = (int)Math.floor(z + vec.zCoord * i);
 				
 				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
 			}

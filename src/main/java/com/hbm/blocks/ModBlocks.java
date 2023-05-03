@@ -583,9 +583,9 @@ public class ModBlocks {
 	public static final Block deco_pipe_quad_marked = new BlockPipe(Material.IRON, "deco_pipe_quad_marked").setSoundType(soundTypeGrate).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(5.0F);
 	
 	//Radiation blocks
-	public static final Block mush = new BlockMush(Material.PLANTS, "mush").setLightLevel(0.5F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block mush_block = new BlockMushHuge(Material.PLANTS, "mush_block").setLightLevel(1.0F).setHardness(0.2F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block mush_block_stem = new BlockMushHuge(Material.PLANTS, "mush_block_stem").setLightLevel(0.25F).setHardness(0.3F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block mush = new BlockMush(Material.PLANTS, "mush").addRadiation(1).toBlock().setLightLevel(0.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block mush_block = new BlockMushHuge(Material.PLANTS, "mush_block").addRadiation(4).toBlock().setLightLevel(1.0F).setHardness(0.2F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block mush_block_stem = new BlockMushHuge(Material.PLANTS, "mush_block_stem").addRadiation(4).toBlock().setLightLevel(0.25F).setHardness(0.3F).setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block block_waste = new BlockNuclearWaste("block_waste").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).addRadiation(ItemHazard.wst * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_waste_painted = new BlockNuclearWaste("block_waste_painted").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).addRadiation(ItemHazard.wst * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);

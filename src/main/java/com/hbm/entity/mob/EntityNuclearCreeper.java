@@ -2,6 +2,7 @@ package com.hbm.entity.mob;
 
 import java.util.List;
 
+import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.entity.mob.ai.EntityAINuclearCreeperSwell;
 import com.hbm.explosion.ExplosionNukeGeneric;
@@ -13,11 +14,8 @@ import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -45,14 +43,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityNuclearCreeper extends EntityMob {
+public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune {
 	private static final DataParameter<Integer> STATE = EntityDataManager.<Integer> createKey(EntityNuclearCreeper.class, DataSerializers.VARINT);
 	public static final DataParameter<Boolean> POWERED = EntityDataManager.<Boolean> createKey(EntityNuclearCreeper.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IGNITED = EntityDataManager.<Boolean> createKey(EntityNuclearCreeper.class, DataSerializers.BOOLEAN);
@@ -209,44 +205,8 @@ public class EntityNuclearCreeper extends EntityMob {
 				this.explode();
 			}
 		}
-		int strength = 1;
-		float f = strength;
-		int i;
-		int j;
-		int k;
-		double d5;
-		double d6;
-		double d7;
-		double wat = f * 2;
-
-		strength *= 2.0F;
-		i = MathHelper.floor(this.posX - wat - 1.0D);
-		j = MathHelper.floor(this.posX + wat + 1.0D);
-		k = MathHelper.floor(this.posY - wat - 1.0D);
-		int i2 = MathHelper.floor(this.posY + wat + 1.0D);
-		int l = MathHelper.floor(this.posZ - wat - 1.0D);
-		int j2 = MathHelper.floor(this.posZ + wat + 1.0D);
-		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-
-		for(int i1 = 0; i1 < list.size(); ++i1) {
-			Entity entity = (Entity)list.get(i1);
-			double d4 = entity.getDistance(this.posX, this.posY, this.posZ) / 4;
-
-			if(d4 <= 1.0D) {
-				d5 = entity.posX - this.posX;
-				d6 = entity.posY + entity.getEyeHeight() - this.posY;
-				d7 = entity.posZ - this.posZ;
-				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if(d9 < wat) {
-					if(entity instanceof EntityLivingBase && !(entity instanceof EntityNuclearCreeper)) {
-						ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.25F);
-					}
-				}
-			}
-		}
-
-		strength = (int)f;
-
+		ContaminationUtil.radiate(world, posX, posY, posZ, 32, this.timeSinceIgnited+25);
+		
 		super.onUpdate();
 
 		if(this.getHealth() < this.getMaxHealth() && this.ticksExisted % 10 == 0) {
