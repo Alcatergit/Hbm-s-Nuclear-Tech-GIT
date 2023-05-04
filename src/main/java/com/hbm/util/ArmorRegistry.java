@@ -27,7 +27,7 @@ public class ArmorRegistry {
 		if(ArmorUtil.checkArmorNull(entity, slot))
 			return false;
 		
-		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot), entity);
+		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot));
 		return list.containsAll(Arrays.asList(clazz));
 	}
 	
@@ -36,7 +36,7 @@ public class ArmorRegistry {
 		if(ArmorUtil.checkArmorNull(entity, slot))
 			return false;
 		
-		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot), entity);
+		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot));
 		
 		if(list == null)
 			return false;
@@ -53,7 +53,7 @@ public class ArmorRegistry {
 		if(ArmorUtil.checkArmorNull(entity, slot))
 			return false;
 		
-		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot), entity);
+		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot));
 		
 		if(list == null)
 			return false;
@@ -61,7 +61,7 @@ public class ArmorRegistry {
 		return list.contains(clazz);
 	}
 	
-	public static List<HazardClass> getProtectionFromItem(ItemStack stack, EntityLivingBase entity) {
+	public static List<HazardClass> getProtectionFromItem(ItemStack stack) {
 
 		List<HazardClass> prot = new ArrayList<>();
 		
@@ -73,13 +73,13 @@ public class ArmorRegistry {
 		
 		if(item instanceof IGasMask) {
 			IGasMask mask = (IGasMask) item;
-			ItemStack filter = mask.getFilter(stack, entity);
+			ItemStack filter = mask.getFilter(stack);
 
-			if(filter != null) {
+			if(filter != null && !filter.isEmpty()) {
 				//add the HazardClasses from the filter, then remove the ones blacklisted by the mask
 				List<HazardClass> filProt = hazardClasses.get(filter.getItem());
 				
-				for(HazardClass c : mask.getBlacklist(stack, entity))
+				for(HazardClass c : mask.getBlacklist(stack))
 					filProt.remove(c);
 				
 				prot.addAll(filProt);
@@ -94,7 +94,7 @@ public class ArmorRegistry {
 				
 				//recursion! run the exact same procedure on every mod, in case future mods will have filter support
 				if(mod != null)
-					prot.addAll(getProtectionFromItem(mod, entity));
+					prot.addAll(getProtectionFromItem(mod));
 			}
 		}
 		

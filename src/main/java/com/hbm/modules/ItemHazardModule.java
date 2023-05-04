@@ -116,7 +116,7 @@ public class ItemHazardModule {
 		}
 
 		if(this.digamma * tempMod > 0)
-			ContaminationUtil.applyDigammaData(entity, this.digamma * tempMod * mod / 20F);
+			ContaminationUtil.contaminate(entity, HazardType.DIGAMMA, ContaminationType.DIGAMMA, this.digamma * tempMod * mod / 20F);
 
 		
 
@@ -160,17 +160,11 @@ public class ItemHazardModule {
 		}
 
 		if(this.asbestos > 0) {
-			if(!ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-				HbmLivingProps.incrementAsbestos(entity, (int) (this.asbestos * Math.min(mod, 10)));
-			else
-				ArmorUtil.damageGasMaskFilter(entity, (int) (this.asbestos));
+			ContaminationUtil.applyAsbestos(entity, (int) (this.asbestos * mod), this.asbestos); 
 		}
 
 		if(this.coal > 0) {
-			if(!ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE))
-				HbmLivingProps.incrementBlackLung(entity, (int) (this.coal * Math.min(mod, 10)));
-			else
-				ArmorUtil.damageGasMaskFilter(entity, (int) (this.coal));
+			ContaminationUtil.applyCoal(entity, (int) (this.coal * mod), this.coal); 
 		}
 
 		if(this.hydro && currentItem) {

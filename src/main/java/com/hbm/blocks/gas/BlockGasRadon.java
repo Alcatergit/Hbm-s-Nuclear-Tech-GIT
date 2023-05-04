@@ -3,13 +3,18 @@ package com.hbm.blocks.gas;
 import java.util.Random;
 
 import com.hbm.lib.ForgeDirection;
+import com.hbm.capability.HbmLivingProps;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -20,9 +25,17 @@ public class BlockGasRadon extends BlockGasBase {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn){
-		if(entityIn instanceof EntityLivingBase) {
-			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.05F);
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+		if(!(entity instanceof EntityLivingBase))
+			return;
+		
+		EntityLivingBase entityLiving = (EntityLivingBase) entity;
+		
+		if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)) {
+			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+		} else {
+			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.05F);
+			HbmLivingProps.incrementAsbestos(entityLiving, 1); 
 		}
 	}
 	

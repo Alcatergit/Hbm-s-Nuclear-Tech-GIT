@@ -136,6 +136,8 @@ import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
@@ -1929,29 +1931,32 @@ public class ModEventHandlerClient {
 		ItemStack stack = event.getItemStack();
 		List<String> list = event.getToolTip();
 
+		/// HAZMAT INFO ///
+		List<HazardClass> hazInfo = ArmorRegistry.hazardClasses.get(stack.getItem());
+		
+		if(hazInfo != null) {
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+				list.add(TextFormatting.GOLD + I18nUtil.resolveKey("hazard.prot"));
+				for(HazardClass clazz : hazInfo) {
+					list.add(TextFormatting.YELLOW + "  " + I18nUtil.resolveKey(clazz.lang));
+				}
+			} else {
+				
+				list.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
+						TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
+						TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display protection info");
+			}
+		}
+
+		/// CLADDING ///
 		double rad = HazmatRegistry.getResistance(stack);
-
 		rad = ((int) (rad * 100)) / 100D;
-
 		if(rad > 0)
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.radResistance", rad));
 		
-		ComparableStack comp = new NbtComparableStack(stack).makeSingular();
 
-		CustomNukeEntry entry = TileEntityNukeCustom.entries.get(comp);
-
-		if(entry != null) {
-
-			if(!list.isEmpty())
-				list.add("");
-
-			if(entry.entry == EnumEntryType.ADD)
-				list.add(TextFormatting.GOLD + "Adds " + entry.value + " to the custom nuke stage " + entry.type);
-
-			if(entry.entry == EnumEntryType.MULT)
-				list.add(TextFormatting.GOLD + "Adds multiplier " + entry.value + " to the custom nuke stage " + entry.type);
-		}
-		
+		/// ARMOR MODS ///
 		if(stack.getItem() instanceof ItemArmor && ArmorModHandler.hasMods(stack)) {
 			
 			if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !(Minecraft.getMinecraft().currentScreen instanceof GUIArmorTable)) {
@@ -1975,6 +1980,24 @@ public class ModEventHandlerClient {
 				}
 			}
 		}
+
+		/// CUSTOM NUKE ///
+		ComparableStack comp = new NbtComparableStack(stack).makeSingular();
+		CustomNukeEntry entry = TileEntityNukeCustom.entries.get(comp);
+
+		if(entry != null) {
+
+			if(!list.isEmpty())
+				list.add("");
+
+			if(entry.entry == EnumEntryType.ADD)
+				list.add(TextFormatting.GOLD + "Adds " + entry.value + " to the custom nuke stage " + entry.type);
+
+			if(entry.entry == EnumEntryType.MULT)
+				list.add(TextFormatting.GOLD + "Adds multiplier " + entry.value + " to the custom nuke stage " + entry.type);
+		}
+
+		/// NEUTRON RADS ///
 		float activationRads = ContaminationUtil.getNeutronRads(stack);
 		if(activationRads > 0) {
 			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");

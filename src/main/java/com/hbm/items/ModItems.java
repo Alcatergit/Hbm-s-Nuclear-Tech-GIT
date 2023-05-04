@@ -96,6 +96,7 @@ import com.hbm.items.gear.ArmorEuphemium;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.gear.ArmorHazmat;
 import com.hbm.items.gear.ArmorModel;
+import com.hbm.items.gear.ArmorGasMask;
 import com.hbm.items.gear.ArmorT45;
 import com.hbm.items.gear.BigSword;
 import com.hbm.items.gear.HoeSchrabidium;
@@ -156,6 +157,7 @@ import com.hbm.items.special.ItemFusionShield;
 import com.hbm.items.special.ItemGlitch;
 import com.hbm.items.special.ItemHazard;
 import com.hbm.items.special.ItemContaminating;
+import com.hbm.items.special.ItemRag;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.special.ItemHotDusted;
 import com.hbm.items.special.ItemLootCrate;
@@ -188,6 +190,7 @@ import com.hbm.items.tool.ItemDyatlov;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemFluidContainerInfinite;
 import com.hbm.items.tool.ItemFusionCore;
+import com.hbm.items.tool.ItemFilter;
 import com.hbm.items.tool.ItemGasCanister;
 import com.hbm.items.tool.ItemDosimeter;
 import com.hbm.items.tool.ItemGeigerCounter;
@@ -332,15 +335,19 @@ public class ModItems {
 	public static final Item pill_iodine = new ItemPill(0, "pill_iodine").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item plan_c = new ItemPill(0, "plan_c").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item stealth_boy = new ItemStarterKit("stealth_boy").setCreativeTab(MainRegistry.consumableTab);
-	public static final Item gas_mask_filter = new ItemSyringe("gas_mask_filter").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item jetpack_tank = new ItemSyringe("jetpack_tank").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gun_kit_1 = new ItemSyringe("gun_kit_1").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gun_kit_2 = new ItemSyringe("gun_kit_2").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item euphemium_kit = new ItemStarterKit("euphemium_kit").setMaxStackSize(1).setCreativeTab(null);
 	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(null);
-	
+	public static final Item gas_mask_filter_rag = new ItemFilter("gas_mask_filter_rag", 40000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_piss = new ItemFilter("gas_mask_filter_piss", 40000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_mono = new ItemFilter("gas_mask_filter_mono", 80000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter = new ItemFilter("gas_mask_filter", 120000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_combo = new ItemFilter("gas_mask_filter_combo", 160000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item attachment_mask = new ItemModGasmask("attachment_mask").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item attachment_mask_mono = new ItemModGasmask("attachment_mask_mono").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	
 	public static final Item back_tesla = new ItemModTesla("back_tesla").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item pads_rubber = new ItemModPads(0.5F, "pads_rubber").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item pads_slime = new ItemModPads(0.25F, "pads_slime").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -607,17 +614,17 @@ public class ModItems {
 	public static final Item oil_detector = new ItemOilDetector("oil_detector").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
 	//Armor
-	public static final Item hazmat_helmet = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet").setMaxStackSize(1);
+	public static final Item hazmat_helmet = new ArmorGasMask(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet").setMaxStackSize(1);
 	public static final Item hazmat_plate = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.CHEST, "hazmat_plate").setMaxStackSize(1);
 	public static final Item hazmat_legs = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.LEGS, "hazmat_legs").setMaxStackSize(1);
 	public static final Item hazmat_boots = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat, -1, EntityEquipmentSlot.FEET, "hazmat_boots").setMaxStackSize(1);
 	
-	public static final Item hazmat_helmet_red = new ArmorModel(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_red").setMaxStackSize(1);
+	public static final Item hazmat_helmet_red = new ArmorGasMask(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_red").setMaxStackSize(1);
 	public static final Item hazmat_plate_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.CHEST, "hazmat_plate_red").setMaxStackSize(1);
 	public static final Item hazmat_legs_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.LEGS, "hazmat_legs_red").setMaxStackSize(1);
 	public static final Item hazmat_boots_red = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat2, -1, EntityEquipmentSlot.FEET, "hazmat_boots_red").setMaxStackSize(1);
 	
-	public static final Item hazmat_helmet_grey = new ArmorModel(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_grey").setMaxStackSize(1);
+	public static final Item hazmat_helmet_grey = new ArmorGasMask(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.HEAD, "hazmat_helmet_grey").setMaxStackSize(1);
 	public static final Item hazmat_plate_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.CHEST, "hazmat_plate_grey").setMaxStackSize(1);
 	public static final Item hazmat_legs_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.LEGS, "hazmat_legs_grey").setMaxStackSize(1);
 	public static final Item hazmat_boots_grey = new ArmorHazmat(MainRegistry.enumArmorMaterialHazmat3, -1, EntityEquipmentSlot.FEET, "hazmat_boots_grey").setMaxStackSize(1);
@@ -857,9 +864,12 @@ public class ModItems {
 	
 	public static final Item goggles = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "goggles").setMaxStackSize(1);
 	public static final Item ashglasses = new ArmorAshGlasses(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "ashglasses").setMaxStackSize(1);
-	public static final Item gas_mask = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask").setMaxStackSize(1);
-	public static final Item gas_mask_m65 = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_m65").setMaxStackSize(1);
-	public static final Item gas_mask_mono = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_mono").setMaxStackSize(1);
+	public static final Item mask_rag = new ItemRag("mask_rag").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item mask_damp = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "mask_damp").setMaxStackSize(1);
+	public static final Item mask_piss = new ArmorModel(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "mask_piss").setMaxStackSize(1);
+	public static final Item gas_mask = new ArmorGasMask(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask").setMaxStackSize(1);
+	public static final Item gas_mask_m65 = new ArmorGasMask(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_m65").setMaxStackSize(1);
+	public static final Item gas_mask_mono = new ArmorGasMask(ArmorMaterial.IRON, -1, EntityEquipmentSlot.HEAD, "gas_mask_mono").setMaxStackSize(1);
 	public static final Item hat = new ArmorHat(ArmorMaterial.IRON, 7, EntityEquipmentSlot.HEAD, "nossy_hat").setMaxStackSize(1);
 	public static final Item beta = new ItemDrop("beta").setMaxStackSize(1);
 	
@@ -1228,7 +1238,7 @@ public class ModItems {
 	public static final Item nugget_unobtainium_greater = new ItemHazard(1000, "nugget_unobtainium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_daffergon = new ItemCustomLore("nugget_daffergon").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item nugget_mercury = new ItemHazard("nugget_mercury").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_mercury = new ItemHazard("nugget_mercury").addToxic(2).toItem().setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
 	public static final Item bottle_mercury = new ItemHazard("bottle_mercury").addToxic(6).toItem().setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
 
 	
@@ -1632,6 +1642,9 @@ public class ModItems {
 	public static final Item hazmat_cloth_red = new ItemBase("hazmat_cloth_red").setCreativeTab(MainRegistry.partsTab);
 	public static final Item hazmat_cloth_grey = new ItemBase("hazmat_cloth_grey").setCreativeTab(MainRegistry.partsTab);
 	public static final Item asbestos_cloth = new ItemBase("asbestos_cloth").setCreativeTab(MainRegistry.partsTab);
+	public static final Item rag = new ItemRag("rag").setCreativeTab(MainRegistry.partsTab);
+	public static final Item rag_damp = new ItemBase("rag_damp").setCreativeTab(MainRegistry.partsTab);
+	public static final Item rag_piss = new ItemBase("rag_piss").setCreativeTab(MainRegistry.partsTab);
 	public static final Item filter_coal = new ItemBase("filter_coal").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item magnet_dee = new ItemBase("magnet_dee").setCreativeTab(null);
@@ -2151,6 +2164,7 @@ public class ModItems {
 	public static final Item crystal_fluorite = new ItemBase("crystal_fluorite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_beryllium = new ItemBase("crystal_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_lead = new ItemHazard("crystal_lead").addToxic(12).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_asbestos = new ItemHazard("crystal_asbestos").addAsbestos(18).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_schraranium = new ItemHazard(ItemHazard.sr * ItemHazard.crystal, false, true, "crystal_schraranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.crystal, false, true, "crystal_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_rare = new ItemBase("crystal_rare").setCreativeTab(MainRegistry.partsTab);
@@ -3084,7 +3098,6 @@ public class ModItems {
 	public static final Item sat_interface = new ItemSatInterface("sat_interface").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	public static final Item sat_coord = new ItemSatInterface("sat_coord").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);
 	
-	public static final Item gas_mask_filter_mono = new ItemSyringe("gas_mask_filter_mono").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
 	//Missiles
 	public static final Item designator = new ItemDesignator("designator").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);

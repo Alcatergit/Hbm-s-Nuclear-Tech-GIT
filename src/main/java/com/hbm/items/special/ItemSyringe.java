@@ -66,17 +66,6 @@ public class ItemSyringe extends Item {
 				}
             }
 		}
-		if(this == ModItems.gas_mask_filter_mono && player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask_mono) {
-			if(!world.isRemote) {
-				if(player.inventory.armorInventory.get(3).getItemDamage() == 0)
-					return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
-
-				player.inventory.armorInventory.get(3).setItemDamage(0);
-
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.gasmaskScrew, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				player.getHeldItem(hand).shrink(1);
-			}
-		}
 		if (this == ModItems.syringe_awesome) {
 			if (!world.isRemote) {
 				player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 50 * 20, 9));
@@ -307,22 +296,6 @@ public class ItemSyringe extends Item {
         	{
         		player.dropItem(new ItemStack(ModItems.bottle2_empty, 1, 0), false);
         	}
-		}
-		
-		if(this == ModItems.gas_mask_filter &&
-				(player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask || player.inventory.armorInventory.get(3).getItem() == ModItems.gas_mask_m65))
-		{
-            if (!world.isRemote)
-            {
-            	if(player.inventory.armorInventory.get(3).getItemDamage() == 0)
-            		return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
-            	
-            	player.inventory.armorInventory.get(3).setItemDamage(0);
-
-		        world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.gasmaskScrew, SoundCategory.PLAYERS, 1.0F, 1.0F);
-		        player.getHeldItem(hand).shrink(1);
-            	return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-            }
 		}
 		
 		if(this == ModItems.jetpack_tank && player.inventory.armorInventory.get(2) != null && player.inventory.armorInventory.get(2).getItem() instanceof JetpackBase) {

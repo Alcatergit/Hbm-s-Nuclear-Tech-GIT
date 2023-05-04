@@ -3,6 +3,7 @@ package com.hbm.blocks.gas;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.HbmLivingProps;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.potion.HbmPotion;
@@ -40,8 +41,9 @@ public class BlockGasRadonDense extends BlockGasBase {
 		if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)) {
 			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
 		} else {
-			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F);
+			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F);
 			entityLiving.addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 0));
+			HbmLivingProps.incrementAsbestos(entityLiving, 5);
 		}
 	}
 	

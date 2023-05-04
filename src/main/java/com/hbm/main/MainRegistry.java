@@ -827,8 +827,8 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_explosive_beam"), EntityExplosiveBeam.class, "entity_explosive_beam", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_tainted_creeper"), EntityTaintedCreeper.class, "entity_tainted_creeper", i++, MainRegistry.instance, 80, 3, true, 0x009CCA, 0x00F761);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuclear_creeper"), EntityNuclearCreeper.class, "entity_nuclear_creeper", i++, MainRegistry.instance, 80, 3, true, 0x3D3D3D, 0xCECECE);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_glowing_one"), EntityGlowingOne.class, "entity_glowing_one", i++, MainRegistry.instance, 1000, 1, true, 0x35442E, 0x4CFF00);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_radiation_blaze"), EntityRADBeast.class, "entity_ntm_radiation_blaze", i++, MainRegistry.instance, 1000, 1, true, 0x303030, 0x008000);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_glowing_one"), EntityGlowingOne.class, "entity_glowing_one", i++, MainRegistry.instance, 1000, 1, true, 0x357C2E, 0x4CFF00);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_radiation_blaze"), EntityRADBeast.class, "entity_ntm_radiation_blaze", i++, MainRegistry.instance, 1000, 1, true, 0x303030, 0x27F000);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_cloud_no"), EntityNukeCloudNoShroom.class, "entity_nuke_cloud_no", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_cloud_fleija"), EntityCloudFleija.class, "entity_cloud_fleija", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_bullet"), EntityBullet.class, "entity_bullet", i++, MainRegistry.instance, 250, 1, true);
@@ -976,7 +976,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fucc_a_ducc"), EntityDuck.class, "entity_fucc_a_ducc", i++, MainRegistry.instance, 1000, 1, true, 0xd0d0d0, 0xEED900);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_vortex_beam"), EntityBeamVortex.class, "entity_vortex_beam", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_elder_one"), EntityQuackos.class, "entity_elder_one", i++, MainRegistry.instance, 1000, 1, true, 0xFFFFFF, 0xFFBF00);
-		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_fbi"), EntityFBI.class, "entity_ntm_fbi", i++, MainRegistry.instance, 1000, 1, true, 0x1F3849, 0xE79255);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_ntm_fbi"), EntityFBI.class, "entity_ntm_fbi", i++, MainRegistry.instance, 1000, 1, true, 0xE79255, 0x1F3849);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_firework_ball"), EntityFireworks.class, "entity_firework_ball", i++, MainRegistry.instance, 1000, 1, true);
 		
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_rbmk_debris"), EntityRBMKDebris.class, "entity_rbmk_debris", i++, MainRegistry.instance, 1000, 1, true);
@@ -1069,6 +1069,7 @@ public class MainRegistry {
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.red_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.diesel, 10000));
+		FluidContainerRegistry.registerContainer(ModItems.nugget_mercury, Items.GLASS_BOTTLE, new FluidStack(ModForgeFluids.mercury, 100));
 		FluidContainerRegistry.registerContainer(ModItems.bottle_mercury, Items.GLASS_BOTTLE, new FluidStack(ModForgeFluids.mercury, 1000));
 		FluidContainerRegistry.registerContainer(ModItems.particle_hydrogen, ModItems.particle_empty, new FluidStack(ModForgeFluids.hydrogen, 1000));
 		FluidContainerRegistry.registerContainer(ModItems.particle_amat, ModItems.particle_empty, new FluidStack(ModForgeFluids.amat, 1000));

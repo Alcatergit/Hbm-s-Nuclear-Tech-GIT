@@ -897,6 +897,11 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 14))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_polonium), 21))
 				);
+		recipes.put(ASBESTOS.crystal(), new SILEXRecipe(900, 100, EnumWavelengths.VISIBLE)
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_asbestos), 64))
+				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 24))
+				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_boron_tiny), 12))
+				);
 
 
 		recipes.put(TH232.crystal(), new SILEXRecipe(900, 100, EnumWavelengths.UV)
