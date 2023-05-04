@@ -3,6 +3,7 @@ package com.hbm.blocks.gas;
 import java.util.Random;
 
 import com.hbm.lib.ForgeDirection;
+import com.hbm.config.GeneralConfig;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +50,7 @@ public class BlockGasCoal extends BlockGasBase {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
-		if(!world.isRemote && rand.nextInt(20) == 0) {
+		if(!world.isRemote && (!GeneralConfig.enableCoal || rand.nextInt(20) == 0)) {
 			world.setBlockToAir(pos);
 			return;
 		}

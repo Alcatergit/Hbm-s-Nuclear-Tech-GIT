@@ -159,11 +159,11 @@ public class ItemHazardModule {
 			}
 		}
 
-		if(this.asbestos > 0) {
+		if(this.asbestos > 0 && GeneralConfig.enableAsbestos) {
 			ContaminationUtil.applyAsbestos(entity, (int) (this.asbestos * mod), this.asbestos); 
 		}
 
-		if(this.coal > 0) {
+		if(this.coal > 0 && GeneralConfig.enableCoal) {
 			ContaminationUtil.applyCoal(entity, (int) (this.coal * mod), this.coal); 
 		}
 
@@ -256,11 +256,11 @@ public class ItemHazardModule {
 			list.add(TextFormatting.DARK_AQUA + "[" + I18nUtil.resolveKey("trait.blinding") + "]");
 		}
 		
-		if(this.asbestos > 0) {
+		if(this.asbestos > 0 && GeneralConfig.enableAsbestos) {
 			list.add(TextFormatting.WHITE + "[" + I18nUtil.resolveKey("trait.asbestos") + "]");
 		}
 		
-		if(this.coal > 0) {
+		if(this.coal > 0 && GeneralConfig.enableCoal) {
 			list.add(TextFormatting.DARK_GRAY + "[" + I18nUtil.resolveKey("trait.coal") + "]");
 		}
 		

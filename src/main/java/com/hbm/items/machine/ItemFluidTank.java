@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.interfaces.IHasCustomModel;
+import com.hbm.config.GeneralConfig;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -55,16 +56,18 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
-			ItemStack empty = new ItemStack(this, 1, 0);
-			empty.setTagCompound(new NBTTagCompound());
-			items.add(empty);
-			for (Entry<String, Fluid> entry : FluidRegistry.getRegisteredFluids().entrySet()) {
-				ItemStack stack = new ItemStack(this, 1, 0);
-				stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,
-						new FluidStack(entry.getValue(), cap).writeToNBT(new NBTTagCompound()));
-				items.add(stack);
+		if(GeneralConfig.registerTanks){
+			if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+				ItemStack empty = new ItemStack(this, 1, 0);
+				empty.setTagCompound(new NBTTagCompound());
+				items.add(empty);
+				for (Entry<String, Fluid> entry : FluidRegistry.getRegisteredFluids().entrySet()) {
+					ItemStack stack = new ItemStack(this, 1, 0);
+					stack.setTagCompound(new NBTTagCompound());
+					stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,
+							new FluidStack(entry.getValue(), cap).writeToNBT(new NBTTagCompound()));
+					items.add(stack);
+				}
 			}
 		}
 	}

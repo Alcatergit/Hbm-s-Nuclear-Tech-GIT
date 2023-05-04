@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.config.GeneralConfig;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 
 import net.minecraft.client.resources.I18n;
@@ -39,8 +40,10 @@ public class ItemFFFluidDuct extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-			FluidRegistry.getRegisteredFluids().values().forEach(f -> {items.add(getStackFromFluid(f));});
+		if(GeneralConfig.registerTanks){
+			if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
+				FluidRegistry.getRegisteredFluids().values().forEach(f -> {items.add(getStackFromFluid(f));});
+			}
 		}
 	}
 	

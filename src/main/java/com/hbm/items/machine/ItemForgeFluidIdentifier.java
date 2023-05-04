@@ -7,6 +7,7 @@ import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.config.GeneralConfig;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.util.I18nUtil;
@@ -54,13 +55,15 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
-			for (Entry<String, Fluid> set : FluidRegistry.getRegisteredFluids().entrySet()) {
-				ItemStack stack = new ItemStack(this, 1, 0);
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setString("fluidtype", set.getKey());
-				stack.setTagCompound(tag);
-				items.add(stack);
+		if(GeneralConfig.registerTanks){
+			if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+				for (Entry<String, Fluid> set : FluidRegistry.getRegisteredFluids().entrySet()) {
+					ItemStack stack = new ItemStack(this, 1, 0);
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setString("fluidtype", set.getKey());
+					stack.setTagCompound(tag);
+					items.add(stack);
+				}
 			}
 		}
 	}

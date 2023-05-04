@@ -39,29 +39,6 @@ public class ItemRBMKPellet extends Item implements IItemHazard {
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
-	
-	public static void generateJsons(String name){
-		//Yeah I'm not making 10 json files per pellet manually
-		String directory = "E:\\Chicken\\Workspace5\\itemmodels\\";
-		String baseJson = "{\n\t\"parent\": \"item/generated\",\n\t\"textures\": {\n\t\t\"layer0\": \"hbm:items/NAME_REPLACE\",\n\t\t\"layer1\": \"hbm:items/ENRICHMENT_REPLACE\"\n\t}\n}";
-		String baseXenon = "{\n\t\"parent\": \"item/generated\",\n\t\"textures\": {\n\t\t\"layer0\": \"hbm:items/NAME_REPLACE\",\n\t\t\"layer1\": \"hbm:items/ENRICHMENT_REPLACE\",\n\t\t\"layer2\": \"hbm:items/rbmk_pellet_overlay_xenon\"\n\t}\n}";
-		baseJson = baseJson.replace("NAME_REPLACE", name);
-		baseXenon = baseXenon.replace("NAME_REPLACE", name);
-		for(int xenon = 0; xenon < 2; xenon ++){
-			String base = xenon == 0 ? baseJson : baseXenon;
-			for(int enrichment = 0; enrichment < 5; enrichment ++){
-				File file = new File(directory + name + "_e" + enrichment + (xenon > 0 ? "_xe" : "") + ".json");
-				try {
-					file.createNewFile();
-					BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-					writer.write(base.replace("ENRICHMENT_REPLACE", "rbmk_pellet_overlay_e" + enrichment));
-					writer.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items){
@@ -71,37 +48,6 @@ public class ItemRBMKPellet extends Item implements IItemHazard {
 			}
 		}
 	}
-	
-	/*@SideOnly(Side.CLIENT)
-	private IIcon[] enrichmentOverlays;
-	
-	@SideOnly(Side.CLIENT)
-	private IIcon xenonOverlay;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister p_94581_1_) {
-		super.registerIcons(p_94581_1_);
-		
-		this.enrichmentOverlays = new IIcon[5];
-		
-		for(int i = 0; i < enrichmentOverlays.length; i++) {
-			enrichmentOverlays[i] = p_94581_1_.registerIcon("hbm:rbmk_pellet_overlay_e" + i);
-		}
-		
-		xenonOverlay = p_94581_1_.registerIcon("hbm:rbmk_pellet_overlay_xenon");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int meta) {
-		return hasXenon(meta) ? 3 : 2;
-	}*/
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -126,19 +72,6 @@ public class ItemRBMKPellet extends Item implements IItemHazard {
 		updateModule(stack);
 		this.module.addInformation(stack, tooltip, flagIn);
 	}
-
-	/*@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int meta, int pass) {
-		
-		if(pass == 0)
-			return this.itemIcon;
-		
-		if(pass == 2)
-			return this.xenonOverlay;
-		
-		return this.enrichmentOverlays[rectify(meta) % 5];
-	}*/
 	
 	private boolean hasXenon(int meta) {
 		return rectify(meta) >= 5;

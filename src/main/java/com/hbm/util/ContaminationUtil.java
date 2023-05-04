@@ -6,6 +6,7 @@ import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.handler.ArmorUtil;
@@ -394,6 +395,9 @@ public class ContaminationUtil {
 	/// ASBESTOS ///
 	public static void applyAsbestos(Entity e, int i, int dmg) {
 
+		if(!GeneralConfig.enableAsbestos)
+			return;
+
 		if(!(e instanceof EntityLivingBase))
 			return;
 		
@@ -413,6 +417,9 @@ public class ContaminationUtil {
 
 	/// COAL ///
 	public static void applyCoal(Entity e, int i, int dmg) {
+
+		if(!GeneralConfig.enableCoal)
+			return;
 
 		if(!(e instanceof EntityLivingBase))
 			return;
