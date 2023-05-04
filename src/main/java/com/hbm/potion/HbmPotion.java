@@ -17,7 +17,9 @@ import com.hbm.util.ContaminationUtil.HazardType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -132,11 +134,18 @@ public class HbmPotion extends Potion {
 			
 			entity.setFire(level+1);
 		}
+
+		if(this == potionsickness && !entity.world.isRemote) {
+			
+			if(entity.world.rand.nextInt(128) == 0){
+				entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 8*20, 0));
+			}
+		}
 	}
 
 	public boolean isReady(int par1, int par2) {
 
-		if(this == taint) {
+		if(this == taint || this == potionsickness) {
 
 	        return par1 % 2 == 0;
 		}

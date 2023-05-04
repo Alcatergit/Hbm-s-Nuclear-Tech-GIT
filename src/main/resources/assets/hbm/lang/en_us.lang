@@ -740,6 +740,7 @@ potion.hbm_radaway=Radaway
 potion.hbm_telekinesis=Telekinesis
 potion.hbm_phosphorus=Phosphorus Burns
 potion.hbm_stability=Stability
+potion.hbm_potionsickness=Potion Sickness
 
 potion.effect.potion.hbm_taint=Potion of Taint
 potion.effect.potion.hbm_mutation=Potion of Ghoulification
@@ -3171,6 +3172,7 @@ item.radaway_strong.name=Strong RadAway
 item.radaway_flush.name=Elite RadAway
 item.radx.name=Rad-X
 item.pill_iodine.name=Iodine Pill
+item.pill_herbal.name=Herbal Paste
 item.plan_c.name=Plan C
 item.med_ipecac.name=Ipecac Syrup
 item.med_ptsd.name=PTSD Medication

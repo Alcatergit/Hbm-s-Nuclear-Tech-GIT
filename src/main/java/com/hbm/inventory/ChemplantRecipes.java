@@ -167,7 +167,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.DYN_EL, new AStack[] {new ComparableStack(ModItems.particle_digamma, 1), new OreDictStack(DNT.ingot(), 16), new ComparableStack(ModItems.catalyst_clay, 64) }, new FluidStack[]{ new FluidStack(ModForgeFluids.cryogel, 8000) }, new AStack[] { new ComparableStack(ModItems.particle_empty, 1), new ComparableStack(ModItems.ingot_electronium, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.watz, 800) }, 20*60*10);
 		
-		makeRecipe(EnumChemistryTemplate.CORDITE, new AStack[] {new OreDictStack(KNO.dust(), 2), new OreDictStack(KEY_PLANKS, 1), new ComparableStack(Items.SUGAR, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.gas, 200) }, new AStack[] { new ComparableStack(ModItems.cordite, 4) }, null, 40);
+		makeRecipe(EnumChemistryTemplate.CORDITE, new AStack[] {new OreDictStack(KNO.dust(), 2), new OreDictStack(KEY_PLANKS, 1), new ComparableStack(Items.SUGAR, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.heatingoil, 200) }, new AStack[] { new ComparableStack(ModItems.cordite, 4) }, null, 40);
 		
 		makeRecipe(EnumChemistryTemplate.KEVLAR, new AStack[] {new OreDictStack(KNO.dust(), 2), new OreDictStack(KEY_BRICK, 1), new OreDictStack(COAL.gem(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 100) }, new AStack[] { new ComparableStack(ModItems.plate_kevlar, 4) }, null, 40);
 		

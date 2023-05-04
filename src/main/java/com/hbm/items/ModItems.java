@@ -329,6 +329,7 @@ public class ModItems {
 	public static final Item radaway_flush = new ItemSyringe("radaway_flush").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item radx = new ItemPill(0, "radx").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item siox = new ItemPill(0, "siox").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item pill_herbal = new ItemPill(0, "pill_herbal").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item xanax = new ItemPill(0, "xanax").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item fmn = new ItemPill(0, "fmn").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item five_htp = new ItemPill(0, "five_htp").setCreativeTab(MainRegistry.consumableTab);

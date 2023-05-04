@@ -1236,6 +1236,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(Item.getItemFromBlock(ModBlocks.bomb_multi), 1), new Object[] { "AAD", "CHF", "AAD", 'A', ModItems.wire_aluminium, 'C', ModItems.circuit_aluminium, 'H', ModItems.hull_small_aluminium, 'F', ModItems.fins_quad_titanium, 'D', new ItemStack(Items.DYE, 1, 15) });
 		addShapelessAuto(new ItemStack(ModItems.powder_ice, 4), new Object[] { Items.SNOWBALL, KNO.dust(), REDSTONE.dust() });
 		addShapelessAuto(new ItemStack(ModItems.powder_poison, 4), new Object[] { Items.SPIDER_EYE, REDSTONE.dust(), "gemQuartz" });
+		addShapelessAuto(new ItemStack(ModItems.pill_herbal), new Object[] { COAL.dust(), Items.POISONOUS_POTATO, Items.NETHER_WART, Items.BEETROOT });
 		addShapelessAuto(new ItemStack(ModItems.pellet_gas, 2), new Object[] { Items.WATER_BUCKET, "dustGlowstone", STEEL.plate() , ModItems.ingot_iodine});
 
 		addRecipeAuto(new ItemStack(ModItems.flame_pony, 1), new Object[] { " O ", "DPD", " O ", 'D', new ItemStack(Items.DYE, 1, 11), 'O', new ItemStack(Items.DYE, 1, 9), 'P', Items.PAPER });
