@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.LinkedHashMap;
 
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -564,46 +565,49 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		return "rbmk_console";
 	}
 
-	@Callback(doc = "func(i:str): retrieves all column data for given index i")
+	@Callback(direct = true, doc = "getColumnData(x:int, y:int); retrieves data for column @(x,y)")
 	public Object[] getColumnData(Context context, Arguments args) {
-		int i = Integer.parseInt(args.checkString(0));
+		int x = args.checkInteger(0) - 7;
+		int y = (14-args.checkInteger(1)) - 7;
 
-		int x = i % 15 - 7;
-		int z = i / 15 - 7;
-		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+		int i = (y + 7) * 15 + (x + 7);
+
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 		TileEntityRBMKBase column = (TileEntityRBMKBase) te;
 
-		ArrayList<String> column_data = new ArrayList<String>();
-		column_data.add(column.getConsoleType().name());
-		column_data.add(Double.toString(columns[i].data.getDouble("heat")));
-		column_data.add(Double.toString(columns[i].data.getDouble("water")));
-		column_data.add(Double.toString(columns[i].data.getDouble("steam")));
-		column_data.add(Boolean.toString(columns[i].data.getBoolean("moderated")));
-		column_data.add(Double.toString(columns[i].data.getDouble("level")));
-		column_data.add(Short.toString(columns[i].data.getShort("color")));
-		column_data.add(Double.toString(columns[i].data.getDouble("enrichment")));
-		column_data.add(Double.toString(columns[i].data.getDouble("xenon")));
-		column_data.add(Double.toString(columns[i].data.getDouble("c_heat")));
-		column_data.add(Double.toString(columns[i].data.getDouble("c_coreHeat")));
-		column_data.add(Double.toString(columns[i].data.getDouble("c_maxHeat")));
+		NBTTagCompound column_data = columns[i].data;
+		LinkedHashMap<String, String> data_table = new LinkedHashMap<>();
+		data_table.put("type", column.getConsoleType().name());
+		data_table.put("hullTemp", String.valueOf(column_data.getDouble("heat")));
+		data_table.put("water", String.valueOf(column_data.getDouble("water")));
+		data_table.put("steam", String.valueOf(column_data.getDouble("steam")));
+		data_table.put("moderated", String.valueOf(column_data.getBoolean("moderated")));
+		data_table.put("level", String.valueOf(column_data.getDouble("level")));
+		data_table.put("color", String.valueOf(column_data.getShort("color")));
+		data_table.put("enrichment", String.valueOf(column_data.getDouble("enrichment")));
+		data_table.put("xenon", String.valueOf(column_data.getDouble("xenon")));
+		data_table.put("coreSkinTemp", String.valueOf(column_data.getDouble("c_heat")));
+		data_table.put("coreTemp", String.valueOf(column_data.getDouble("c_coreHeat")));
+		data_table.put("coreMaxTemp", String.valueOf(column_data.getDouble("c_maxHeat")));
 
-		return new Object[] {column_data}; 
+		return new Object[] {data_table};
 	}
 
-	@Callback(doc = "func(x:str, i:str): sets column at index i to level x given 100>=x>=0")
+	@Callback(doc = "setLevel(x:int, y:int, level:int); set retraction of control rod @(x,y) given 0≤level≤1")
 	public Object[] setLevel(Context context, Arguments args) {
-		double new_level = Double.parseDouble(args.checkString(0))/100.0;
-		int x = Integer.parseInt(args.checkString(1)) % 15 - 7;
-		int z = Integer.parseInt(args.checkString(1)) / 15 - 7;
-		
-		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+		int x = args.checkInteger(0) - 7;
+		int y = (14-args.checkInteger(1)) - 7;
+		double new_level = args.checkDouble(2);
+
+		int i = (y + 7) * 15 + (x + 7);
+
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 		
 		if (te instanceof TileEntityRBMKControlManual) {
 			TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
 			rod.startingLevel = rod.level;
-			if (new_level > 1) { 
-				new_level = 1;
-			}
+			new_level = Math.min(1, Math.max(0, new_level));
+
 			rod.setTarget(new_level);
 			te.markDirty();
 		}	
@@ -611,14 +615,13 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		return new Object[] {};
 	}
 
-	@Callback(doc = "func(c:str, i:str): set color c of column at index i")
+	@Callback(doc = "setColor(x:int, y:int, color:int); set color of control rod @(x,y) where color is an ordinal number")
 	public Object[] setColor(Context context, Arguments args) {
-		int new_color = Integer.parseInt(args.checkString(0));
+		int x = args.checkInteger(0) - 7;
+		int y = (14-args.checkInteger(1)) - 7;
+		int new_color = args.checkInteger(2);
 
-		int x = Integer.parseInt(args.checkString(1)) % 15 - 7;
-		int z = Integer.parseInt(args.checkString(1)) / 15 - 7;
-		
-		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 
 		if (te instanceof TileEntityRBMKControlManual) {
 			TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
