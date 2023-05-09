@@ -1591,6 +1591,9 @@ container.heater_firebox=Firebox
 container.heaterOven=Heating Oven
 container.heaterOilburner=Fluid Burner
 
+tile.heater_heatex.name=Heat Exchanging Heater
+tile.heater_heatex.desc=Produces heat from hot fluids.
+
 tile.barrel_plastic.name=Safe Barrel™
 tile.barrel_corroded.name=Corroded Barrel
 tile.barrel_iron.name=Iron Barrel
@@ -4561,6 +4564,7 @@ container.orbus=Heavy Antimatter Storage
 container.bat9000=Big-Ass Tank 9000
 container.anvil=Tier %s Anvil
 container.heaterFirebox=Firebox
+container.heaterHeatex=Heat Exchanger
 container.furnaceSteel=Steel Furnace
 item.charge_railgun.name=Deuterium Plasma Capsule
 item.ducc.name=ducc

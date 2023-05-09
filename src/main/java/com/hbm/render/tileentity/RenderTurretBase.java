@@ -45,7 +45,7 @@ public abstract class RenderTurretBase<T extends TileEntityTurretBaseNT> extends
 	private void checkPlug(World world, int x, int y, int z, boolean power, boolean fluid, Fluid type, int ox, int oz, int rot, ForgeDirection dir) {
 		
 		if( (power && Library.canConnect(world, new BlockPos(x, y, z), dir)) ||
-			(fluid && FFUtils.checkFluidConnectablesMk2(world, new BlockPos(x, y, z), type)) ) {
+			(fluid && FFUtils.checkFluidConnectablesMk2(world, new BlockPos(x, y, z), type, dir.toEnumFacing())) ) {
 			
 			GL11.glPushMatrix();
 			GL11.glRotated(rot, 0, 1, 0);

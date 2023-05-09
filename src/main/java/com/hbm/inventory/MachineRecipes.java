@@ -693,4 +693,19 @@ public class MachineRecipes {
 		}
 		return 0;
 	}
+
+	/// return: Fluid, amount required, amount produced, heat produced
+	public static Object[] getHeatexOutput(Fluid type) {
+		if (type == ModForgeFluids.steam) {
+			return new Object[] {ModForgeFluids.spentsteam, 100, 1, 200};
+		} else if (type == ModForgeFluids.hotsteam) {
+			return new Object[]{ModForgeFluids.steam, 1, 10, 2};
+		} else if (type == ModForgeFluids.superhotsteam) {
+			return new Object[]{ModForgeFluids.hotsteam, 1, 10, 18};
+		} else if (type == ModForgeFluids.ultrahotsteam) {
+			return new Object[]{ModForgeFluids.superhotsteam, 1, 10, 120};
+		}
+
+		return null;
+	}
 }
