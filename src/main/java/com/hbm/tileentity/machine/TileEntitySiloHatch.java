@@ -26,19 +26,18 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	public byte state = 0;
 	public long sysTime;
 	public int timer = -1;
+	public boolean redstoned = false;
 	public EnumFacing facing = null;
 	public AxisAlignedBB renderBox = null;
-	
+
 	@Override
 	public void update() {
 		if(!world.isRemote){
 			if(!this.isLocked()){
 				boolean rs = world.isBlockIndirectlyGettingPowered(pos) > 0;
-				if(rs){
-					tryOpen();
-				} else {
-					tryClose();
-				}
+				if(rs && !redstoned)
+					tryToggle();
+				redstoned = rs;
 			}
 			int oldState = state;
 			if(timer < 0)
@@ -87,7 +86,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 				PacketDispatcher.wrapper.sendToAllTracking(new TEDoorAnimationPacket(pos, state), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
-	
+
 	public void tryToggle() {
 		if(this.state == 0) {
 			if(!world.isRemote) {
@@ -102,41 +101,23 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 		}
 	}
 
-	public void tryOpen() {
-		if(this.state == 0) {
-			if(!world.isRemote) {
-				this.state = 3;
-				timer = -1;
-			}
-		}
-	}
-
-	public void tryClose() {
-		if(this.state == 1) {
-			if(!world.isRemote) {
-				this.state = 2;
-				timer = -1;
-			}
-		}
-	}
-
 	public boolean placeDummy(BlockPos pos) {
-		
+
 		if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
 			return false;
-		
+
 		world.setBlockState(pos, ModBlocks.dummy_block_silo_hatch.getDefaultState());
-		
+
 		TileEntity te = world.getTileEntity(pos);
-		
+
 		if(te instanceof TileEntityDummy) {
 			TileEntityDummy dummy = (TileEntityDummy)te;
 			dummy.target = this.pos;
 		}
-		
+
 		return true;
 	}
-	
+
 	public void removeDummy(BlockPos pos) {
 		if(world.getBlockState(pos).getBlock() == ModBlocks.dummy_block_silo_hatch) {
 			DummyBlockSiloHatch.safeBreak = true;
@@ -144,19 +125,21 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 			DummyBlockSiloHatch.safeBreak = false;
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		state = compound.getByte("state");
+		redstoned = compound.getBoolean("redstoned");
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setByte("state", state);
+		compound.setBoolean("redstoned", redstoned);
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		if(facing == null)
@@ -165,7 +148,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 			renderBox = new AxisAlignedBB(-3.3, 0, -3.3, 4.3, 2, 4.3).offset(pos.offset(facing, 3));
 		return renderBox;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared()
@@ -204,5 +187,5 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 			this.state = state;
 		}
 	}
-	
+
 }
