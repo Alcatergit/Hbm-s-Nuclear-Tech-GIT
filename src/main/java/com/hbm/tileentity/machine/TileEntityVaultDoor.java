@@ -28,13 +28,12 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	private int timer = 0;
 	public int type;
 	public static final int maxTypes = 32;
-	public boolean redstoned = false;
-
+	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared()
@@ -45,7 +44,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-
+			
 			if(!isLocked()) {
 				boolean flagX = false;
 				boolean flagZ = false;
@@ -59,7 +58,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 							flagX = true;
 							break;
 						}
-
+				
 				for(int z = zCoord - 2; z <= zCoord + 2; z++)
 					for(int y = yCoord; y <= yCoord + 5; y++)
 						if(world.isBlockIndirectlyGettingPowered(new BlockPos(xCoord, y, z)) > 0) {
@@ -68,129 +67,120 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 						}
 
 				if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z) {
-					if(flagX) {
-
-						if(!redstoned) {
-							this.tryToggle();
-						}
-
-						redstoned = true;
-					} else {
-
-						redstoned = false;
-					}
-				}
-				if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X) {
-					if(flagZ) {
-
-						if(!redstoned) {
-							this.tryToggle();
-						}
-
-						redstoned = true;
-					} else {
-
-						redstoned = false;
-					}
-				}
-			}
-
-			if(isOpening && state == 1) {
-
-				if(timer == 0)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 45)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 55)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 65)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 75)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 85)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 95)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 105)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 115)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			}
-			if(!isOpening && state == 1) {
-
-				if(timer == 0)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 10)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 20)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 30)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 40)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 50)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 60)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				if(timer == 70)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-				if(timer == 80)
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
-			}
-
-			if(state != 1) {
-				timer = 0;
-			} else {
-				timer++;
-
-				if(timer >= 120) {
-
-					if(isOpening)
-						finishOpen();
+					if(flagX)
+						this.tryOpen();
 					else
-						finishClose();
+						this.tryClose();
+				
+				} else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X) {
+					if(flagZ)
+						this.tryOpen();
+					else
+						this.tryClose();
 				}
 			}
 
-			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+	    	if(isOpening && state == 1) {
+				
+	    		if(timer == 0)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 45)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 55)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 65)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 75)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 85)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 95)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 105)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 115)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    	}
+	    	if(!isOpening && state == 1) {
+
+	    		if(timer == 0)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 10)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 20)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 30)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 40)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 50)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 60)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		if(timer == 70)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    		
+	    		if(timer == 80)
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    	}	
+	    	
+	    	if(state != 1) {
+	    		timer = 0;
+	    	} else {
+	    		timer++;
+	    		
+	    		if(timer >= 120) {
+	    			
+	    			if(isOpening)
+	    				finishOpen();
+	    			else
+	    				finishClose();
+	    		}
+	    	}
+	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 		}
 	}
-
+	
 	public void open() {
 		if(state == 0) {
-			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			isOpening = true;
 			state = 1;
-
+			timer = 0;
 			openHatch();
 		}
 	}
-
+	
 	public void finishOpen() {
 		state = 2;
 	}
-
+	
 	public void close() {
 		if(state == 2) {
-			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 			isOpening = false;
 			state = 1;
-
+			timer = 0;
 			closeHatch();
 		}
 	}
-
+	
 	public void finishClose() {
 		state = 0;
 	}
-
+	
 	public boolean canOpen() {
 		return state == 0;
 	}
-
+	
 	public boolean canClose() {
 		return state == 2 && isHatchFree();
+	}
+
+	public void tryOpen() {
+
+		if(canOpen())
+			open();
 	}
 
 	public void tryToggle() {
@@ -200,27 +190,33 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		else if(canClose())
 			close();
 	}
+	
+	public void tryClose() {
 
+		if(canClose())
+			close();
+	}
+	
 	public boolean placeDummy(int x, int y, int z){
 		return placeDummy(new BlockPos(x, y, z));
 	}
-
+	
 	public boolean placeDummy(BlockPos dummyPos) {
 		if(!world.getBlockState(dummyPos).getBlock().isReplaceable(world, dummyPos))
 			return false;
-
+		
 		world.setBlockState(dummyPos, ModBlocks.dummy_block_vault.getDefaultState());
-
+		
 		TileEntity te = world.getTileEntity(dummyPos);
-
+		
 		if(te instanceof TileEntityDummy) {
 			TileEntityDummy dummy = (TileEntityDummy)te;
 			dummy.target = pos;
 		}
-
+		
 		return true;
 	}
-
+	
 	public void removeDummy(BlockPos dummyPos) {
 		if(world.getBlockState(dummyPos).getBlock() == ModBlocks.dummy_block_vault) {
 			DummyBlockVault.safeBreak = true;
@@ -228,7 +224,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 			DummyBlockVault.safeBreak = false;
 		}
 	}
-
+	
 	private boolean isHatchFree() {
 
 		if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z)
@@ -238,7 +234,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		else
 			return true;
 	}
-
+	
 	private void closeHatch() {
 
 		if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z)
@@ -246,14 +242,14 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X)
 			fillEW();
 	}
-
+	
 	private void openHatch() {
 		if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z)
 			removeNS();
 		else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X)
 			removeEW();
 	}
-
+	
 	private boolean checkNS() {
 		return world.getBlockState(pos.add(-1, 1, 0)).getBlock().isReplaceable(world, pos.add(-1, 1, 0)) &&
 				world.getBlockState(pos.add(0, 1, 0)).getBlock().isReplaceable(world, pos.add(0, 1, 0)) &&
@@ -265,7 +261,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 				world.getBlockState(pos.add(0, 3, 0)).getBlock().isReplaceable(world, pos.add(0, 3, 0)) &&
 				world.getBlockState(pos.add(1, 3, 0)).getBlock().isReplaceable(world, pos.add(1, 3, 0));
 	}
-
+	
 	private boolean checkEW() {
 		return world.getBlockState(pos.add(0, 1, -1)).getBlock().isReplaceable(world, pos.add(0, 1, -1)) &&
 				world.getBlockState(pos.add(0, 1, 0)).getBlock().isReplaceable(world, pos.add(0, 1, 0)) &&
@@ -277,7 +273,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 				world.getBlockState(pos.add(0, 3, 0)).getBlock().isReplaceable(world, pos.add(0, 3, 0)) &&
 				world.getBlockState(pos.add(0, 3, 1)).getBlock().isReplaceable(world, pos.add(0, 3, 1));
 	}
-
+	
 	private void fillNS() {
 
 		placeDummy(pos.add(-1, 1, 0));
@@ -290,7 +286,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		placeDummy(pos.add(1, 2, 0));
 		placeDummy(pos.add(1, 3, 0));
 	}
-
+	
 	private void fillEW() {
 
 		placeDummy(pos.add(0, 1, -1));
@@ -303,7 +299,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		placeDummy(pos.add(0, 2, 1));
 		placeDummy(pos.add(0, 3, 1));
 	}
-
+	
 	private void removeNS() {
 
 		removeDummy(pos.add(-1, 1, 0));
@@ -316,7 +312,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		removeDummy(pos.add(1, 2, 0));
 		removeDummy(pos.add(1, 3, 0));
 	}
-
+	
 	private void removeEW() {
 
 		removeDummy(pos.add(0, 1, -1));
@@ -329,7 +325,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		removeDummy(pos.add(0, 2, 1));
 		removeDummy(pos.add(0, 3, 1));
 	}
-
+	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		isOpening = compound.getBoolean("isOpening");
@@ -337,10 +333,9 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		sysTime = compound.getLong("sysTime");
 		timer = compound.getInteger("timer");
 		type = compound.getInteger("type");
-		redstoned = compound.getBoolean("redstoned");
 		super.readFromNBT(compound);
 	}
-
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("isOpening", isOpening);
@@ -348,7 +343,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 		compound.setLong("sysTime", sysTime);
 		compound.setInteger("timer", timer);
 		compound.setInteger("type", type);
-		compound.setBoolean("redstoned", redstoned);
 		return super.writeToNBT(compound);
 	}
 }
