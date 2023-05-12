@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.machine.ItemStamp;
 import com.hbm.lib.HBMSoundHandler;
@@ -11,6 +10,7 @@ import com.hbm.packet.TEPressPacket;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineEPress extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineEPress extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public int progress = 0;
 	public long power = 0;
@@ -99,6 +99,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 	public void update() {
 		if(!world.isRemote)
 		{
+			this.updateStandardConnections(world, pos);
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
 			if(power >= 100 && !(world.isBlockIndirectlyGettingPowered(pos) > 0)) {

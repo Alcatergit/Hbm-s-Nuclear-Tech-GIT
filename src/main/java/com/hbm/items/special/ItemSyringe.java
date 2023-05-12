@@ -212,70 +212,6 @@ public class ItemSyringe extends Item {
             }
 		}
 		
-		if(this == ModItems.radaway)
-		{
-            if (!world.isRemote) {
-            	int duration = 200;
-            	int level = 24; //Removes 1.25 RAD/t and 25 RAD/s for 10s for a total of 250 RAD
-            	
-            	if(!player.isPotionActive(HbmPotion.radaway)) {
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	} else {
-            		int plevel = player.getActivePotionEffect(HbmPotion.radaway).getAmplifier();
-            		if(level == plevel)
-            			duration += player.getActivePotionEffect(HbmPotion.radaway).getDuration();
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	}
-
-				player.getHeldItem(hand).shrink(1);
-				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-            }
-		}
-		
-		if(this == ModItems.radaway_strong)
-		{
-            if (!world.isRemote) {
-            	int duration = 100;
-            	int level = 99; //Removes 5 RAD/t and 100 RAD/s for 5s for a total of 500 RAD
-            	
-            	if(!player.isPotionActive(HbmPotion.radaway)) {
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	} else {
-            		int plevel = player.getActivePotionEffect(HbmPotion.radaway).getAmplifier();
-            		if(level == plevel)
-            			duration += player.getActivePotionEffect(HbmPotion.radaway).getDuration();
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	}
-            
-				player.getHeldItem(hand).shrink(1);
-				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-            }
-		}
-		
-		if(this == ModItems.radaway_flush)
-		{
-            if (!world.isRemote)
-            {
-            	int duration = 50;
-            	int level = 399; //Removes 20 RAD/t and 400 RAD/s for 2.5s for a total of 1000 RAD
-            	
-            	if(!player.isPotionActive(HbmPotion.radaway)) {
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	} else {
-            		int plevel = player.getActivePotionEffect(HbmPotion.radaway).getAmplifier();
-            		if(level == plevel)
-            			duration += player.getActivePotionEffect(HbmPotion.radaway).getDuration();
-            		player.addPotionEffect(new PotionEffect(HbmPotion.radaway, duration, level));
-            	}
-
-				player.getHeldItem(hand).shrink(1);
-				world.playSound(null,  player.posX,  player.posY,  player.posZ, HBMSoundHandler.radawayUse, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-            }
-		}
-		
 		if(this == ModItems.syringe_taint)
 		{
             if (!world.isRemote)
@@ -624,21 +560,6 @@ public class ItemSyringe extends Item {
 		if(this == ModItems.med_bag) {
 			tooltip.add("Full heal, regardless of max health");
 			tooltip.add("Removes negative effects");
-		}
-		if(this == ModItems.radaway) {
-			tooltip.add("Amount: -250 RAD");
-			tooltip.add("Speed: -25 RAD/s");
-			tooltip.add("Duration: 10s");
-		}
-		if(this == ModItems.radaway_strong) {
-			tooltip.add("Amount: -500 RAD");
-			tooltip.add("Speed: -100 RAD/s");
-			tooltip.add("Duration: 5s");
-		}
-		if(this == ModItems.radaway_flush) {
-			tooltip.add("Amount: -1000 RAD");
-			tooltip.add("Speed: -400 RAD/s");
-			tooltip.add("Duration: 2.5s");
 		}
 		if(this == ModItems.gas_mask_filter_mono) {
 			tooltip.add("Repairs worn monoxide mask");

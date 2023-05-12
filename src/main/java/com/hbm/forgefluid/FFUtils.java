@@ -1,5 +1,8 @@
 package com.hbm.forgefluid;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+
 import com.google.common.base.Predicate;
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
@@ -29,6 +32,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -742,18 +746,45 @@ public class FFUtils {
 		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(f.getStill().toString());
 	}
 
+	public static int getColorFromFluid(Fluid f){
+		if(f == null) {
+			return 0;
+		}
+		try{
+			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(f.getStill().getResourceDomain(), "textures/"+f.getStill().getResourcePath()+".png")).getInputStream());
+			return getRGBfromARGB(image.getRGB(image.getWidth()>>1, image.getHeight()>>1));
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return 0xFFFFFF;
+		}
+	}
+
+	public static int getRGBfromARGB(int pixel){
+		return pixel & 0x00ffffff;
+	}
 
 	public static void setColorFromFluid(Fluid f){
 		if(f == null)
 			return;
 
-		int color = f.getColor();
+		setRGBAFromHex(f.getColor());
+	}
+
+	public static void setRGBAFromHex(int color){
 		float r = (color >> 16 & 0xFF) / 255F;
 		float g = (color >> 8 & 0xFF) / 255F;
 		float b = (color & 0xFF) / 255F;
 		float a = (color >> 24 & 0xFF) / 255F;
 
 		GlStateManager.color(r, g, b, a);
+	}
+
+	public static void setRGBFromHex(int color){
+		float r = (color >> 16 & 0xFF) / 255F;
+		float g = (color >> 8 & 0xFF) / 255F;
+		float b = (color & 0xFF) / 255F;
+
+		GlStateManager.color(r, g, b, 1);
 	}
 
 	public static boolean containsFluid(ItemStack stack, Fluid fluid){
@@ -841,5 +872,4 @@ public class FFUtils {
 			return ((IFluidVisualConnectable)block).shouldConnect(type);
 		return false;
 	}
-
 }

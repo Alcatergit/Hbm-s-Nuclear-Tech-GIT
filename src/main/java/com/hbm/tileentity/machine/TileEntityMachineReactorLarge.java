@@ -342,6 +342,9 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		
 		if(b instanceof IRadResistantBlock)
 			return true;
+
+		if(b == ModBlocks.reactor_hatch || b == ModBlocks.reactor_ejector || b == ModBlocks.reactor_inserter)
+			return true;
 		
 		return false;
 	}

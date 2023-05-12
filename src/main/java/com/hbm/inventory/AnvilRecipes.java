@@ -199,6 +199,26 @@ public class AnvilRecipes {
 		
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new OreDictStack(ANY_CONCRETE.any(), 2),
+						new ComparableStack(ModBlocks.steel_scaffold, 8),
+						new ComparableStack(ModItems.plate_polymer, 8),
+						new ComparableStack(ModItems.coil_copper, 4)
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.red_pylon_large))).setTier(2));
+		
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new OreDictStack(ANY_CONCRETE.any(), 6),
+						new OreDictStack(STEEL.ingot(), 4),
+						new ComparableStack(ModBlocks.steel_scaffold, 2),
+						new ComparableStack(ModItems.plate_polymer, 8),
+						new ComparableStack(ModItems.coil_copper, 2),
+						new ComparableStack(ModItems.coil_copper_torus, 2)
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.substation))).setTier(2));
+		
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new ComparableStack(Items.BONE, 16),
 						new ComparableStack(Items.LEATHER, 4),
 						new ComparableStack(Items.FEATHER, 24)
@@ -209,7 +229,7 @@ public class AnvilRecipes {
 				new AStack[] {new OreDictStack(DESH.ingot(), 4), new OreDictStack(POLYMER.dust(), 2), new OreDictStack(DURA.ingot(), 1)},
 				new AnvilOutput(new ItemStack(ModItems.plate_desh, 4))).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(
-				new AStack[] {new OreDictStack(EUPH.ingot(), 4), new OreDictStack(AT.ingot(), 2), new OreDictStack(VOLCANIC.gem(), 1)},
+				new AStack[] {new OreDictStack(EUPH.ingot(), 4), new OreDictStack(AT.dust(), 3), new OreDictStack(ANY_BISMOID.dust(), 1), new OreDictStack(VOLCANIC.gem(), 1), new ComparableStack(ModItems.ingot_osmiridium)},
 				new AnvilOutput(new ItemStack(ModItems.plate_euphemium, 4))).setTier(6));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {new OreDictStack(DNT.ingot(), 4), new ComparableStack(ModItems.powder_spark_mix, 2), new OreDictStack(DESH.ingot(), 1)},

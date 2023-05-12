@@ -1,6 +1,7 @@
 package com.hbm.forgefluid;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.fluid.CoriumBlock;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class ModForgeFluids {
+
+	public static HashMap<Fluid, Integer> fluidColors = new HashMap<Fluid, Integer>();
 	
 	public static Fluid spentsteam = new Fluid("spentsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"), null, Color.WHITE).setTemperature(40 + 273);
 	public static Fluid steam = new Fluid("steam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"), null, Color.WHITE).setTemperature(100 + 273);
@@ -370,5 +373,11 @@ public class ModForgeFluids {
 	@SubscribeEvent
 	public static void worldLoad(WorldEvent.Load evt) {
 		setFromRegistry();
+	}
+
+	public static void registerFluidColors(){
+		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
+			fluidColors.put(f, FFUtils.getColorFromFluid(f));
+		}
 	}
 }

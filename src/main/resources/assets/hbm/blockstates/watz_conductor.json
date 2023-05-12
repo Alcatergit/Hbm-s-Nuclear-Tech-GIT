@@ -1,6 +1,5 @@
 {
 	"variants": {
-		"activated=true": { "model": "hbm:watz_conductor" },
-     	   	"activated=false": { "model": "hbm:watz_conductor" }
+		"normal": { "model": "hbm:watz_conductor" }
 	}
 }

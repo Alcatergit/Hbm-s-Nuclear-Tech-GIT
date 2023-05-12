@@ -1,24 +1,21 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -36,7 +33,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineSeleniumEngine extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineSeleniumEngine extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -44,8 +41,6 @@ public class TileEntityMachineSeleniumEngine extends TileEntity implements ITick
 	public int soundCycle = 0;
 	public static final long maxPower = 250000;
 	public long powerCap = 250000;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	public FluidTank tank;
 	public Fluid tankType;
 	public boolean needsUpdate = true;
@@ -116,22 +111,16 @@ public class TileEntityMachineSeleniumEngine extends TileEntity implements ITick
 	
 	@Override
 	public void update() {
-		if(tank.getFluid() != null){
-			tankType = tank.getFluid().getFluid();
-		}
+		
 		if (!world.isRemote) {
-			
-			age++;
-			if (age >= 20) {
-				age = 0;
-			}
-
-			if (age == 9 || age == 19)
-				ffgeuaInit();
+			this.sendPower(world, pos.add(0, -1, 0), ForgeDirection.DOWN);
 			
 			pistonCount = countPistons();
 
 			//Tank Management
+			if(tank.getFluid() != null){
+				tankType = tank.getFluid().getFluid();
+			}
 			if(inputValidForTank(-1, 9))
 				if(FFUtils.fillFromFluidContainer(inventory, tank, 9, 10))
 					needsUpdate = true;
@@ -234,46 +223,6 @@ public class TileEntityMachineSeleniumEngine extends TileEntity implements ITick
 	}
 
 	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.down(), getTact());
-	}
-
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
-	}
-
-	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if(isValidFluidForTank(-1, resource)){
 			needsUpdate = true;
@@ -329,4 +278,18 @@ public class TileEntityMachineSeleniumEngine extends TileEntity implements ITick
 		}
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

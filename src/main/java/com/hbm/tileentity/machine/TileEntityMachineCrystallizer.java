@@ -1,18 +1,20 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCrystallizer extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineCrystallizer extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000;
@@ -70,9 +72,25 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		return "container.crystallizer";
 	}
 
+	private void updateConnections() {
+
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+
+		if(dir == ForgeDirection.NORTH || dir == ForgeDirection.SOUTH) {
+			this.trySubscribe(world, pos.add(2, 5, 0), ForgeDirection.EAST);
+			this.trySubscribe(world, pos.add(-2, 5, 0), ForgeDirection.WEST);
+		} else if(dir == ForgeDirection.EAST || dir == ForgeDirection.WEST) {
+			this.trySubscribe(world, pos.add(0, 5, 2), ForgeDirection.SOUTH);
+			this.trySubscribe(world, pos.add(0, 5, -2), ForgeDirection.NORTH);
+		}
+	}
+
 	@Override
 	public void update() {
 		if(!world.isRemote) {
+
+			this.updateConnections();
+
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
 			if(inputValidForTank(3) && tank.getFluidAmount() < tank.getCapacity()){
 				FFUtils.fillFromFluidContainer(inventory, tank, 3, 4);

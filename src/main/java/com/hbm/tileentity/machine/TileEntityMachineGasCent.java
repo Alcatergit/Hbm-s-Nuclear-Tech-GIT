@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
@@ -16,11 +15,12 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineGasCent extends TileEntity implements ITickable, IConsumer, ITankPacketAcceptor, IFluidHandler {
+public class TileEntityMachineGasCent extends TileEntityLoadedBase implements ITickable, IEnergyUser, ITankPacketAcceptor, IFluidHandler {
 
 	public ItemStackHandler inventory;
 	
@@ -190,6 +190,7 @@ public class TileEntityMachineGasCent extends TileEntity implements ITickable, I
 			if (needsUpdate) {
 				needsUpdate = false;
 			}
+			this.updateConnectionsExcept(world, pos, Library.POS_Y);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);

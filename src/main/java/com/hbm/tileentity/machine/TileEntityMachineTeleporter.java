@@ -2,12 +2,13 @@ package com.hbm.tileentity.machine;
 
 import java.util.List;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.INBTPacketReceiver;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +21,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityMachineTeleporter extends TileEntity implements ITickable, IConsumer, INBTPacketReceiver {
+public class TileEntityMachineTeleporter extends TileEntityLoadedBase implements ITickable, IEnergyUser, INBTPacketReceiver {
 
 	public long power = 0;
 	public BlockPos target = null;
@@ -63,6 +64,7 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 		boolean b0 = false;
 		packageTimer++;
 		if(!this.world.isRemote) {
+			this.updateStandardConnections(world, pos);
 			List<Entity> entities = this.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - 0.25, pos.getY(), pos.getZ() - 0.25, pos.getX() + 0.75, pos.getY() + 2, pos.getZ() + 0.75));
 			if(!entities.isEmpty())
 				for(Entity e : entities) {
@@ -139,5 +141,4 @@ public class TileEntityMachineTeleporter extends TileEntity implements ITickable
 	public long getMaxPower() {
 		return maxPower;
 	}
-
 }

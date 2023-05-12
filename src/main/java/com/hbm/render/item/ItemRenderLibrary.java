@@ -329,9 +329,9 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon() {
 				GL11.glScaled(0.25, 0.25, 0.25);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.fracking_tower_tex); ResourceManager.fracking_tower.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_catalytic_cracker), new ItemRenderBase() {
@@ -341,10 +341,32 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon() {
 				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.cracking_tower_tex); ResourceManager.cracking_tower.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.red_pylon_large), new ItemRenderBase( ) {
+		public void renderInventory() {
+			GL11.glTranslated(0, -5, 0);
+			GL11.glScaled(2.25, 2.25, 2.25);
+		}
+		public void renderCommon() {
+			GL11.glScaled(0.5, 0.5, 0.5);
+			bindTexture(ResourceManager.pylon_large_tex); ResourceManager.pylon_large.renderAll();
+		}});
+		
+		renderers.put(Item.getItemFromBlock(ModBlocks.substation), new ItemRenderBase( ) {
+		public void renderInventory() {
+			GL11.glTranslated(0, -2.5, 0);
+			GL11.glScaled(4.5, 4.5, 4.5);
+		}
+		public void renderCommon() {
+			GL11.glScaled(0.5, 0.5, 0.5);
+			GlStateManager.shadeModel(GL11.GL_SMOOTH);
+			bindTexture(ResourceManager.substation_tex); ResourceManager.substation.renderAll();
+			GlStateManager.shadeModel(GL11.GL_FLAT);
+		}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_flare), new ItemRenderBase() {
 			public void renderInventory() {
@@ -403,9 +425,13 @@ public class ItemRenderLibrary {
 				GL11.glScaled(2, 2, 2);
 			}
 			public void renderCommon() {
-		        bindTexture(ResourceManager.turbofan_body_tex); ResourceManager.turbofan_body.renderAll();
-				GL11.glTranslated(0, 1.5, 0);
-		        bindTexture(ResourceManager.turbofan_blades_tex); ResourceManager.turbofan_blades.renderAll();
+		        GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.turbofan_tex);
+				ResourceManager.turbofan.renderPart("Body");
+				ResourceManager.turbofan.renderPart("Blades");
+				bindTexture(ResourceManager.turbofan_back_tex);
+				ResourceManager.turbofan.renderPart("Afterburner");
+				GL11.glShadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.plasma_heater), new ItemRenderBase() {

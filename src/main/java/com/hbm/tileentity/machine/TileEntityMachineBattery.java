@@ -1,48 +1,59 @@
 package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hbm.items.ModItems;
 import com.hbm.packet.AuxLongPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.blocks.machine.MachineBattery;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import net.minecraft.item.Item;
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyConductor;
+import api.hbm.energy.IEnergyConnector;
+import api.hbm.energy.IEnergyUser;
+import api.hbm.energy.IPowerNet;
+import api.hbm.energy.PowerNet;
+import api.hbm.energy.IBatteryItem;
+import net.minecraft.item.Item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IConsumer, ISource {
+public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long[] log = new long[20];
 	public long power = 0;
 	public long powerDelta = 0;
-	public long maxPower = 1000000;
 
 	//0: input only
 	//1: buffer
 	//2: output only
 	//3: nothing
+	public static final int mode_input = 0;
+	public static final int mode_buffer = 1;
+	public static final int mode_output = 2;
+	public static final int mode_none = 3;
 	public short redLow = 0;
 	public short redHigh = 2;
-	
-	public boolean conducts = false;
-	
+	public ConnectionPriority priority = ConnectionPriority.NORMAL;
+
+	public byte lastRedstone = 0;
+
 	private static final int[] slots_top = new int[] {0};
 	private static final int[] slots_bottom = new int[] {1, 3};
 	private static final int[] slots_side = new int[] {2};
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	
 	private String customName;
 	
@@ -52,7 +63,6 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	
 	public TileEntityMachineBattery(long power) {
 		this();
-		maxPower = power;
 	}
 	
 	public String getInventoryName() {
@@ -81,28 +91,32 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	}
 	
 	public long getPowerRemainingScaled(long i) {
-		return (power * i) / maxPower;
+		return (power * i) / this.getMaxPower();
+	}
+
+	public byte getComparatorPower() {
+		if(power == 0) return 0;
+		double frac = (double) this.power / (double) this.getMaxPower() * 15D;
+		return (byte) (MathHelper.clamp((int) frac + 1, 0, 15)); //to combat eventual rounding errors with the FEnSU's stupid maxPower
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setBoolean("conducts", this.conducts);
 		compound.setLong("power", this.power);
 		compound.setLong("powerDelta", this.powerDelta);
 		compound.setShort("redLow", this.redLow);
 		compound.setShort("redHigh", this.redHigh);
-		detectPower = this.power + 1;
-		
+		compound.setByte("priority", (byte)this.priority.ordinal());
 		return super.writeToNBT(compound);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		this.conducts = compound.getBoolean("conducts");
 		this.power = compound.getLong("power");
 		this.powerDelta = compound.getLong("powerDelta");
 		this.redLow = compound.getShort("redLow");
 		this.redHigh = compound.getShort("redHigh");
+		this.priority = ConnectionPriority.values()[compound.getByte("priority")];
 		super.readFromNBT(compound);
 	}
 
@@ -113,6 +127,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		data.setLong("powerDelta", this.powerDelta);
 		data.setShort("redLow", this.redLow);
 		data.setShort("redHigh", this.redHigh);
+		data.setByte("priority", (byte)this.priority.ordinal());
 		nbt.setTag("NBT_PERSISTENT_KEY", data);
 	}
 
@@ -123,6 +138,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		this.powerDelta = data.getLong("powerDelta");
 		this.redLow = data.getShort("redLow");
 		this.redHigh = data.getShort("redHigh");
+		this.priority = ConnectionPriority.values()[data.getByte("priority")];
 	}
 
 	@Override
@@ -175,28 +191,25 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	
 	@Override
 	public void update() {
-		if(world.getBlockState(pos).getBlock() instanceof MachineBattery && !world.isRemote) {
-			
-			this.maxPower = ((MachineBattery)world.getBlockState(pos).getBlock()).getMaxPower();
-		
-			short mode = (short) this.getRelevantMode();
-			
-			if(mode == 1 || mode == 2)
-			{
-				age++;
-				if(age >= 20)
-				{
-					age = 0;
-				}
-				
-				if(age == 9 || age == 19)
-					ffgeuaInit();
-			}
+		if(!world.isRemote) {
+
 			long prevPower = this.power;
-			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
+			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
+			
+			//////////////////////////////////////////////////////////////////////
+			this.transmitPowerFairly();
+			//////////////////////////////////////////////////////////////////////
+			
+			power = Library.chargeItemsFromTE(inventory, 2, power, getMaxPower());
+			
+			byte comp = this.getComparatorPower();
+			if(comp != this.lastRedstone)
+				this.markDirty();
+			this.lastRedstone = comp;
+
 			tryMoveItems();
-			long avg = (power + prevPower) / 2;
+			long avg = (power >> 1) + (prevPower >> 1); //had issue with getting avg of extreme long values
+			
 			this.powerDelta = avg - this.log[0];
 
 			for(int i = 1; i < this.log.length; i++) {
@@ -205,19 +218,114 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			
 			this.log[this.log.length-1] = avg;
 
-			detectAndSendChanges();
+			this.networkPack(packNBT(avg), 20);
+		}
+	}
+
+	public NBTTagCompound packNBT(long power){
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setLong("power", power);
+		nbt.setLong("powerDelta", powerDelta);
+		nbt.setShort("redLow", redLow);
+		nbt.setShort("redHigh", redHigh);
+		nbt.setByte("priority", (byte) this.priority.ordinal());
+		return nbt;
+	}
+
+	protected void transmitPowerFairly() {
+		
+		short mode = (short) this.getRelevantMode();
+		
+		//HasSets to we don't have any duplicates
+		Set<IPowerNet> nets = new HashSet();
+		Set<IEnergyConnector> consumers = new HashSet();
+		
+		//iterate over all sides
+		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+			
+			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+			
+			//if it's a cable, buffer both the network and all subscribers of the net
+			if(te instanceof IEnergyConductor) {
+				IEnergyConductor con = (IEnergyConductor) te;
+				if(con.canConnect(dir.getOpposite()) && con.getPowerNet() != null) {
+					nets.add(con.getPowerNet());
+					con.getPowerNet().unsubscribe(this);
+					consumers.addAll(con.getPowerNet().getSubscribers());
+				}
+				
+			//if it's just a consumer, buffer it as a subscriber
+			} else if(te instanceof IEnergyConnector) {
+				IEnergyConnector con = (IEnergyConnector) te;
+				if(con.canConnect(dir.getOpposite())) {
+					consumers.add((IEnergyConnector) te);
+				}
+			}
+		}
+
+		//send power to buffered consumers, independent of nets
+		if(this.power > 0 && (mode == mode_buffer || mode == mode_output)) {
+			List<IEnergyConnector> con = new ArrayList();
+			con.addAll(consumers);
+			this.power = PowerNet.fairTransfer(con, this.power);
 		}
 		
+		//resubscribe to buffered nets, if necessary
+		if(mode == mode_buffer || mode == mode_input) {
+			nets.forEach(x -> x.subscribe(this));
+		}
+	}
+	
+	protected void transmitPower() {
+		
+		short mode = (short) this.getRelevantMode();
+		
+		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+			
+			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
+			
+			// first we make sure we're not subscribed to the network that we'll be supplying
+			if(te instanceof IEnergyConductor) {
+				IEnergyConductor con = (IEnergyConductor) te;
+				
+				if(con.getPowerNet() != null && con.getPowerNet().isSubscribed(this))
+					con.getPowerNet().unsubscribe(this);
+			}
+			
+			//then we add energy
+			if(mode == mode_buffer || mode == mode_output) {
+				if(te instanceof IEnergyConnector) {
+					IEnergyConnector con = (IEnergyConnector) te;
+					long oldPower = this.power;
+					long transfer = this.power - con.transferPower(this.power);
+					this.power = oldPower - transfer;
+				}
+			}
+			
+			//then we subscribe if possible
+			if(te instanceof IEnergyConductor) {
+				IEnergyConductor con = (IEnergyConductor) te;
+				
+				if(con.getPowerNet() != null) {
+					if(mode == mode_output || mode == mode_none) {
+						if(con.getPowerNet().isSubscribed(this)) {
+							con.getPowerNet().unsubscribe(this);
+						}
+					} else if(!con.getPowerNet().isSubscribed(this)) {
+						con.getPowerNet().subscribe(this);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
 	public void networkUnpack(NBTTagCompound nbt) { 
-
 		this.power = nbt.getLong("power");
 		this.powerDelta = nbt.getLong("powerDelta");
-		this.maxPower = nbt.getLong("maxPower");
 		this.redLow = nbt.getShort("redLow");
 		this.redHigh = nbt.getShort("redHigh");
+		this.priority = ConnectionPriority.values()[nbt.getByte("priority")];
 	}
 	
 	public short getRelevantMode() {
@@ -241,76 +349,57 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		
 	}
 
+	private long bufferedMax = 0;
+
 	@Override
 	public long getMaxPower() {
-		if(!world.isRemote && getRelevantMode() >= 2)
+		
+		if(bufferedMax == 0) {
+			bufferedMax = ((MachineBattery)world.getBlockState(pos).getBlock()).getMaxPower();
+		}
+		
+		return bufferedMax;
+	}
+
+	@Override
+	public long transferPower(long powerInput) {
+
+		int mode = this.getRelevantMode();
+		
+		if(mode == mode_output || mode == mode_none) {
+			return powerInput;
+		}
+		this.markDirty();
+		long ownMaxPower = this.getMaxPower();
+		if(powerInput > ownMaxPower-this.power) {
+			
+			long overshoot = powerInput-(ownMaxPower-this.power);
+			this.power = ownMaxPower;
+			return overshoot;
+		}
+		this.power += powerInput;
+		return 0;
+	}
+
+	@Override
+	public long getTransferWeight() {
+
+		int mode = this.getRelevantMode();
+		
+		if(mode == mode_output || mode == mode_none) {
 			return 0;
-		return maxPower;
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-		
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
 		}
 		
-		return false;
+		return Math.max(getMaxPower() - getPower(), 0);
 	}
 
 	@Override
-	public long getSPower() {
-		return power;
+	public boolean canConnect(ForgeDirection dir) {
+		return true;
 	}
 
 	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		list.clear();
-	}
-	
-	private boolean detectConducts;
-	private long detectPower;
-	
-	public void detectAndSendChanges() {
-		boolean mark = false;
-		
-		if(detectConducts != conducts){
-			mark = true;
-			detectConducts = conducts;
-		}
-		if(detectPower != power){
-			mark = true;
-			detectPower = power;
-		}
-		PacketDispatcher.wrapper.sendToAllAround(new AuxLongPacket(pos.getX(), pos.getY(), pos.getZ(), powerDelta, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		
-		if(mark)
-			markDirty();
+	public ConnectionPriority getPriority() {
+		return this.priority;
 	}
 }

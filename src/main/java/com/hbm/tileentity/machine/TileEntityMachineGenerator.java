@@ -8,8 +8,6 @@ import com.hbm.blocks.machine.MachineGenerator;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
@@ -17,14 +15,15 @@ import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -40,17 +39,15 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineGenerator extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineGenerator extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 	
 	public int heat;
 	public final int heatMax = 100000;
 	public long power;
-	public final long powerMax = 100000;
+	public final long maxPower = 100000;
 	public boolean isLoaded = false;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
@@ -70,15 +67,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 			}
 			@Override
 			public boolean isItemValid(int i, ItemStack itemStack) {
-				if(i == 0 || 
-						i == 1 || 
-						i == 2 || 
-						i == 3 || 
-						i == 4 || 
-						i == 5 || 
-						i == 6 || 
-						i == 7 || 
-						i == 8)
+				if(i >= 0 && i <= 8)
 					if(itemStack.getItem() instanceof ItemFuelRod)
 						return true;
 				if(i == 9)
@@ -112,15 +101,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 	
 	@Override
 	public void update() {
-		age++;
-		if(age >= 20)
-		{
-			age = 0;
-		}
-		
-		if(age == 9 || age == 19)
-			ffgeuaInit();
-		
 		if(!world.isRemote)
 		{
 			
@@ -128,6 +108,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 				needsUpdate = false;
 			}
+			this.sendPower(world, pos);
 			
 			if(this.inputValidForTank(0, 9))
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 9, 12);
@@ -135,7 +116,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 10, 13);
 			
 			//Batteries
-			power = Library.chargeItemsFromTE(inventory, 11, power, powerMax);
+			power = Library.chargeItemsFromTE(inventory, 11, power, maxPower);
 			
 			for(int i = 0; i < 9; i++)
 			{
@@ -285,9 +266,9 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 				}
 			}
 			
-			if(this.power > powerMax)
+			if(this.power > maxPower)
 			{
-				this.power = powerMax;
+				this.power = maxPower;
 			}
 			
 			if(this.heat > heatMax)
@@ -431,7 +412,7 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 	}
 	
 	public long getPowerScaled(long i) {
-		return (power * i) / powerMax;
+		return (power * i) / maxPower;
 	}
 	
 	public int getHeatScaled(int i) {
@@ -444,52 +425,6 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 	
 	public boolean hasHeat() {
 		return heat > 0;
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-	}
-	
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
 	}
 
 	@Override
@@ -573,4 +508,18 @@ public class TileEntityMachineGenerator extends TileEntity implements ITickable,
 			markDirty();
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

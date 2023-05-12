@@ -2,9 +2,11 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityFWatzHatch;
 
+import api.hbm.energy.IEnergyConnectorBlock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -23,9 +25,10 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class FWatzHatch extends BlockContainer {
+public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -35,6 +38,10 @@ public class FWatzHatch extends BlockContainer {
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	public boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirection dir){
+		return true;
 	}
 
 	@Override

@@ -1,25 +1,24 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETurbofanPacket;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +27,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -41,20 +41,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineTurbofan extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
 	public long power;
 	public int soundCycle = 0;
-	public static final long maxPower = 150000;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
+	public static final long maxPower = 1_000_000;
 	public FluidTank tank;
-	Random rand = new Random();
 	public int afterburner;
 	public boolean isRunning;
-	public int spin;
+	public float spin;
+	public float lastSpin;
+	public int momentum = 0;
+	
 	public boolean needsUpdate = false;
 
 	//private static final int[] slots_top = new int[] { 0 };
@@ -64,7 +64,7 @@ public class TileEntityMachineTurbofan extends TileEntity implements ITickable, 
 	private String customName;
 	
 	public TileEntityMachineTurbofan() {
-		inventory = new ItemStackHandler(3){
+		inventory = new ItemStackHandler(4){
 			@Override
 			protected void onContentsChanged(int slot) {
 				markDirty();
@@ -117,42 +117,38 @@ public class TileEntityMachineTurbofan extends TileEntity implements ITickable, 
 	
 	@Override
 	public void update() {
-		int nrg = 1250;
-		int cnsp = 1;
-		
-		afterburner = 0;
-		if(!inventory.getStackInSlot(2).isEmpty()) {
-			if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_1) {
-				nrg *= 2;
-				cnsp *= 2.5;
-				afterburner = 1;
+		if(!world.isRemote) {
+			int nrg = 1250;
+			int cnsp = 1;
+			
+			afterburner = 0;
+			if(!inventory.getStackInSlot(2).isEmpty()) {
+				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_1) {
+					nrg *= 2;
+					cnsp *= 2.5;
+					afterburner = 1;
+				}
+				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_2) {
+					nrg *= 3;
+					cnsp *= 5;
+					afterburner = 2;
+				}
+				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_3) {
+					nrg *= 4;
+					cnsp *= 7.5;
+					afterburner = 3;
+				}
 			}
-			if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_2) {
-				nrg *= 3;
-				cnsp *= 5;
-				afterburner = 2;
-			}
-			if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_3) {
-				nrg *= 4;
-				cnsp *= 7.5;
-				afterburner = 3;
-			}
-		}
-		
-		if (!world.isRemote) {
+
 			int prevFluidAmount = tank.getFluidAmount();
 			long prevPower = power;
 			if (needsUpdate) {
 				needsUpdate = false;
 			}
-			age++;
-			if (age >= 20) {
-				age = 0;
-			}
+			this.sendTurboPower();
 
-			if (age == 9 || age == 19)
-				ffgeuaInit();
-
+			power = Library.chargeItemsFromTE(inventory, 3, power, maxPower);
+			
 			//Tank Management
 			//Drillgon200: tank number doesn't matter, only one tank.
 			if(this.inputValidForTank(-1, 0))
@@ -168,234 +164,99 @@ public class TileEntityMachineTurbofan extends TileEntity implements ITickable, 
 
 				isRunning = true;
 				
-				spin += 3;
-				spin = spin % 360;
-				
 				if(power > maxPower)
 					power = maxPower;
 				
-				int meta = getBlockMetadata();
-
-				double posX = pos.getX() + 0.5;
-				double posY = pos.getY();
-				double posZ = pos.getZ() + 0.5;
-
-				if(meta == 4) {
-					if(afterburner == 0 && rand.nextInt(3) == 0) {
-						EntityTSmokeFX smoke = new EntityTSmokeFX(world);
-						smoke.posX = pos.getX() + 0.5 + (rand.nextGaussian() * 0.5);
-						smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-						smoke.posZ = pos.getZ() + 4.25;
-						smoke.motionX = rand.nextGaussian() * 0.3;
-						smoke.motionY = rand.nextGaussian() * 0.3;
-						smoke.motionZ = 2.5 + (rand.nextFloat() * 3.5);
-						if(!world.isRemote)
-							world.spawnEntity(smoke);
-					}
-					
-					for(int i = 0; i < afterburner * 5; i++)
-						if(afterburner > 0 && rand.nextInt(2) == 0) {
+				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
+				ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+				
+				if(this.afterburner > 0){
+					for(int i = 0; i < afterburner * 2; i++){
+						if(afterburner > 0 && world.rand.nextInt(2) == 0) {
+							double speed = 2 + world.rand.nextDouble() * 3;
+							double deviation = world.rand.nextGaussian() * 0.2;
 							EntitySSmokeFX smoke = new EntitySSmokeFX(world);
-							smoke.posX = pos.getX() + 0.5 + (rand.nextGaussian() * 0.5);
-							smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-							smoke.posZ = pos.getZ() + 4.25;
-							smoke.motionX = rand.nextGaussian() * 0.3;
-							smoke.motionY = rand.nextGaussian() * 0.3;
-							smoke.motionZ = 2.5 + (rand.nextFloat() * 3.5);
+							smoke.posX = pos.getX() + 0.5;
+							smoke.posY = pos.getY() + 1.25;
+							smoke.posZ = pos.getZ() + 0.5;
+							smoke.motionX = -dir.offsetX * speed + deviation;
+							smoke.motionY = 0;
+							smoke.motionZ = -dir.offsetZ * speed + deviation;
 							if(!world.isRemote)
 								world.spawnEntity(smoke);
 						}
-					
-					//Exhaust push
-					List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ + 4.5, posX + 1.5, posY + 3, posZ + 12));
-					
-					for(Entity e : list) {
-						e.motionZ += 0.5;
-						if(afterburner > 0)
-							e.setFire(3 * afterburner);
-					}
-					
-					//Intake pull
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ - 12, posX + 1.5, posY + 3, posZ - 4.5));
-					
-					for(Entity e : list) {
-						e.motionZ += 0.5;
-					}
-					
-					//Intake kill
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ - 5.5, posX + 1.5, posY + 3, posZ - 4.5));
-					
-					for(Entity e : list) {
-						e.attackEntityFrom(ModDamageSource.turbofan, 1000);
 					}
 				}
-				if(meta == 5) {
-					if(afterburner == 0 && rand.nextInt(3) == 0) {
-						EntityTSmokeFX smoke = new EntityTSmokeFX(world);
-						smoke.posX = pos.getX() + 0.5 + (rand.nextGaussian() * 0.5);
-						smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-						smoke.posZ = pos.getZ() - 4.25;
-						smoke.motionX = rand.nextGaussian() * 0.3;
-						smoke.motionY = rand.nextGaussian() * 0.3;
-						smoke.motionZ = -2.5 - (rand.nextFloat() * 3.5);
-						if(!world.isRemote)
-							world.spawnEntity(smoke);
-					}
-
-					for(int i = 0; i < afterburner * 5; i++)
-						if(afterburner > 0 && rand.nextInt(2) == 0) {
-							EntitySSmokeFX smoke = new EntitySSmokeFX(world);
-							smoke.posX = pos.getX() + 0.5 + (rand.nextGaussian() * 0.5);
-							smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-							smoke.posZ = pos.getZ() - 4.25;
-							smoke.motionX = rand.nextGaussian() * 0.3;
-							smoke.motionY = rand.nextGaussian() * 0.3;
-							smoke.motionZ = -2.5 - (rand.nextFloat() * 3.5);
-							if(!world.isRemote)
-								world.spawnEntity(smoke);
-						}
-
-					//Exhaust push
-					List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ - 12, posX + 1.5, posY + 3, posZ - 4.5));
+				//Exhaust push
+				double minX = pos.getX() + 0.5 - dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				double maxX = pos.getX() + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
+				double minZ = pos.getZ() + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				double maxZ = pos.getZ() + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
+				
+				List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				
+				for(Entity e : list) {
 					
-					for(Entity e : list) {
-						e.motionZ -= 0.5;
-						if(afterburner > 0)
-							e.setFire(3 * afterburner);
+					if(this.afterburner > 0) {
+						e.setFire(5);
+						e.attackEntityFrom(DamageSource.IN_FIRE, 3F*afterburner);
 					}
-
-					//Intake pull
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ + 4.5, posX + 1.5, posY + 3, posZ + 12));
-					
-					for(Entity e : list) {
-						e.motionZ -= 0.5;
-					}
-
-					//Intake kill
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 1.5, posY, posZ + 4.5, posX + 1.5, posY + 3, posZ + 5.5));
-					
-					for(Entity e : list) {
-						e.attackEntityFrom(ModDamageSource.turbofan, 1000);
-					}
+					e.motionX -= dir.offsetX * 0.3*(afterburner+1);
+					e.motionZ -= dir.offsetZ * 0.3*(afterburner+1);
 				}
-				if(meta == 3) {
-					if(afterburner == 0 && rand.nextInt(3) == 0) {
-						EntityTSmokeFX smoke = new EntityTSmokeFX(world);
-						smoke.posX = pos.getX() + 4.25;
-						smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-						smoke.posZ = pos.getZ() + 0.5 + (rand.nextGaussian() * 0.5);
-						smoke.motionX = 2.5 + (rand.nextFloat() * 3.5);
-						smoke.motionY = rand.nextGaussian() * 0.3;
-						smoke.motionZ = rand.nextGaussian() * 0.3;
-						if(!world.isRemote)
-							world.spawnEntity(smoke);
-					}
-
-					for(int i = 0; i < afterburner * 5; i++)
-						if(afterburner > 0 && rand.nextInt(2) == 0) {
-							EntitySSmokeFX smoke = new EntitySSmokeFX(world);
-							smoke.posX = pos.getX() + 4.25;
-							smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-							smoke.posZ = pos.getZ() + 0.5 + (rand.nextGaussian() * 0.5);
-							smoke.motionX = 2.5 + (rand.nextFloat() * 3.5);
-							smoke.motionY = rand.nextGaussian() * 0.3;
-							smoke.motionZ = rand.nextGaussian() * 0.3;
-							if(!world.isRemote)
-								world.spawnEntity(smoke);
-						}
-					
-					//Exhaust push
-					List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX + 4.5, posY, posZ - 1.5, posX + 12, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.motionX += 0.5;
-						if(afterburner > 0)
-							e.setFire(3 * afterburner);
-					}
-					
-					//Intake pull
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 12, posY, posZ - 1.5, posX - 4.5, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.motionX += 0.5;
-					}
-					
-					//Intake kill
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 5.5, posY, posZ - 1.5, posX - 4.5, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.attackEntityFrom(ModDamageSource.turbofan, 1000);
-					}
+				
+				//Intake pull
+				minX = pos.getX() + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				maxX = pos.getX() + 0.5 + dir.offsetX * 8.5 + rot.offsetX * 1.5;
+				minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				maxZ = pos.getZ() + 0.5 + dir.offsetZ * 8.5 + rot.offsetZ * 1.5;
+				
+				list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				
+				for(Entity e : list) {
+					e.motionX -= dir.offsetX * 0.2*(afterburner+1);
+					e.motionZ -= dir.offsetZ * 0.2*(afterburner+1);
 				}
-				if(meta == 2) {
-					if(afterburner == 0 && rand.nextInt(3) == 0) {
-						EntityTSmokeFX smoke = new EntityTSmokeFX(world);
-						smoke.posX = pos.getX() - 4.25;
-						smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-						smoke.posZ = pos.getZ() + 0.5 + (rand.nextGaussian() * 0.5);
-						smoke.motionX = -2.5 - (rand.nextFloat() * 3.5);
-						smoke.motionY = rand.nextGaussian() * 0.3;
-						smoke.motionZ = rand.nextGaussian() * 0.3;
-						if(!world.isRemote)
-							world.spawnEntity(smoke);
-					}
-
-					for(int i = 0; i < afterburner * 5; i++)
-						if(afterburner > 0 && rand.nextInt(2) == 0) {
-							EntitySSmokeFX smoke = new EntitySSmokeFX(world);
-							smoke.posX = pos.getX() - 4.25;
-							smoke.posY = pos.getY() + 1.5 + (rand.nextGaussian() * 0.5);
-							smoke.posZ = pos.getZ() + 0.5 + (rand.nextGaussian() * 0.5);
-							smoke.motionX = -2.5 - (rand.nextFloat() * 3.5);
-							smoke.motionY = rand.nextGaussian() * 0.3;
-							smoke.motionZ = rand.nextGaussian() * 0.3;
-							if(!world.isRemote)
-								world.spawnEntity(smoke);
-						}
-					
-					//Exhaust push
-					List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX - 12, posY, posZ - 1.5, posX - 4.5, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.motionX -= 0.5;
-						if(afterburner > 0)
-							e.setFire(3 * afterburner);
-					}
-					
-					//Intake pull
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX + 4.5, posY, posZ - 1.5, posX + 12, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.motionX -= 0.5;
-					}
-					
-					//Intake kill
-					list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-							new AxisAlignedBB(posX + 4.5, posY, posZ - 1.5, posX + 5.5, posY + 3, posZ + 1.5));
-					
-					for(Entity e : list) {
-						e.attackEntityFrom(ModDamageSource.turbofan, 1000);
-					}
+				
+				//Intake kill
+				minX = pos.getX() + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				maxX = pos.getX() + 0.5 + dir.offsetX * 3.75 + rot.offsetX * 1.5;
+				minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				maxZ = pos.getZ() + 0.5 + dir.offsetZ * 3.75 + rot.offsetZ * 1.5;
+				
+				list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+			
+				for(Entity e : list) {
+					e.attackEntityFrom(ModDamageSource.turbofan, 1000);
+					e.setInWeb();
 				}
 			}
 			if(prevFluidAmount != tank.getFluidAmount() || prevPower != power){
 				markDirty();
 			}
+		} else {
+			this.lastSpin = this.spin;
+
+			if(isRunning) {
+				if(this.momentum < (50+afterburner*50)){
+					this.momentum++;
+				} else if(this.momentum > (50+afterburner*50)){
+					this.momentum--;
+				}
+			} else {
+				if(this.momentum > 0)
+					this.momentum--;
+			}
+			this.spin += momentum / 2;
+			
+			if(this.spin >= 360) {
+				this.spin -= 360F;
+				this.lastSpin -= 360F;
+			}
 		}
 		
 		if(!world.isRemote) {
-			PacketDispatcher.wrapper.sendToAllAround(new TETurbofanPacket(pos.getX(), pos.getY(), pos.getZ(), spin, isRunning), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
+			PacketDispatcher.wrapper.sendToAllAround(new TETurbofanPacket(pos.getX(), pos.getY(), pos.getZ(), isRunning), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
@@ -417,51 +278,14 @@ public class TileEntityMachineTurbofan extends TileEntity implements ITickable, 
 		return stack.getFluid() == ModForgeFluids.kerosene;
 	}
 
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
+	protected void sendTurboPower() {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
 		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.add(2, 1, -1), getTact());
-		ffgeua(pos.add(2, 1, 1), getTact());
-		ffgeua(pos.add(1, 1, 2), getTact());
-		ffgeua(pos.add(-1, 1, 2), getTact());
-		ffgeua(pos.add(-2, 1, 1), getTact());
-		ffgeua(pos.add(-2, 1, -1), getTact());
-		ffgeua(pos.add(-1, 1, -2), getTact());
-		ffgeua(pos.add(1, 1, -2), getTact());
-	}
-
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
+		this.sendPower(world, pos.add(rot.offsetX * 2, 0, rot.offsetZ * 2), rot);
+		this.sendPower(world, pos.add(rot.offsetX * 2 - dir.offsetX, 0, rot.offsetZ * 2 - dir.offsetZ), rot);
+		this.sendPower(world, pos.add(rot.offsetX * -2, 0, rot.offsetZ * -2), rot.getOpposite());
+		this.sendPower(world, pos.add(rot.offsetX * -2 - dir.offsetX, 0, rot.offsetZ * -2 - dir.offsetZ), rot.getOpposite());
 	}
 	
 	@Override
@@ -532,4 +356,18 @@ public class TileEntityMachineTurbofan extends TileEntity implements ITickable, 
 		}
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

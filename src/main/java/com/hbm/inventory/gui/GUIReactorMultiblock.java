@@ -43,7 +43,7 @@ public class GUIReactorMultiblock extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 22, guiTop + 107, 10, 16, diFurnace.tanks[2], diFurnace.tankTypes[2]);
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 42, guiTop + 5, 4, 88, new String[] { "Core Temperature:", "   " + Math.round((diFurnace.coreHeat) * 0.00002 * 980 + 20) + "°C" });
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 48, guiTop + 5, 4, 88, new String[] { "Hull Temperature:", "   " + Math.round((diFurnace.hullHeat) * 0.00001 * 980 + 20) + "°C" });
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 115, guiTop + 17, 18, 90, new String[] { "Controll Rods: " + diFurnace.rods + "%" });
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 115, guiTop + 17, 18, 90, new String[] { "Control Rods: " + diFurnace.rods + "%" });
 		
 		String[] text = new String[] { "Coolant will move heat from the core to",
 				"the hull. Water will use that heat and",

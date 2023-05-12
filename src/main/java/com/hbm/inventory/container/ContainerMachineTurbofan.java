@@ -23,19 +23,17 @@ public class ContainerMachineTurbofan extends Container {
 		
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 17, 17));
 		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 1, 17, 53));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 107, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 98, 71));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 143, 71));
 		
-		for(int i = 0; i < 3; i++)
-		{
-			for(int j = 0; j < 9; j++)
-			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < 9; j++) {
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 121 + i * 18));
 			}
 		}
 		
-		for(int i = 0; i < 9; i++)
-		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+		for(int i = 0; i < 9; i++) {
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 179));
 		}
 	}
 	

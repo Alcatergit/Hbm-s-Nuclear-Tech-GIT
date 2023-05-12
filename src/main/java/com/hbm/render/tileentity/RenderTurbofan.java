@@ -11,61 +11,39 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class RenderTurbofan extends TileEntitySpecialRenderer<TileEntityMachineTurbofan> {
 
 	@Override
-	public void render(TileEntityMachineTurbofan te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityMachineTurbofan turbo, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GlStateManager.enableLighting();
         GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-		GL11.glRotatef(270, 0F, 1F, 0F);
-		switch(te.getBlockMetadata())
-		{
-		case 2:
-			GL11.glRotatef(0, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 3:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 5:
-			GL11.glRotatef(-90, 0F, 1F, 0F); break;
+		switch(turbo.getBlockMetadata() - 10) {
+		case 2: GL11.glRotatef(90, 0F, 1F, 0F); break;
+		case 4: GL11.glRotatef(180, 0F, 1F, 0F); break;
+		case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
+		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
 		}
-
-        bindTexture(ResourceManager.turbofan_body_tex);
+		float spin = turbo.lastSpin + (turbo.spin - turbo.lastSpin) * partialTicks; 
+		GlStateManager.disableLighting();
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+        bindTexture(ResourceManager.turbofan_tex);
         
-        ResourceManager.turbofan_body.renderAll();
-
-        GlStateManager.enableCull();
-        GL11.glPopMatrix();
-        
-        renderTileEntityAt2(te, x, y, z, partialTicks);
-    }
-    
-	public void renderTileEntityAt2(TileEntityMachineTurbofan tileEntity, double x, double y, double z, float f)
-    {
         GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5D, y + 1.5D, z + 0.5D);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-		GL11.glRotatef(270, 0F, 1F, 0F);
-		switch(tileEntity.getBlockMetadata())
-		{
-		case 2:
-			GL11.glRotatef(0, 0F, 1F, 0F); break;
-		case 4:
-			GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 3:
-			GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 5:
-			GL11.glRotatef(-90, 0F, 1F, 0F); break;
-		}
+        GL11.glTranslated(0, 1.5, 0);
+        GL11.glRotatef(spin, 0F, 0F, -1F);
+        GL11.glTranslated(0, -1.5, 0);
+        ResourceManager.turbofan.renderPart("Blades");
+		GL11.glPopMatrix();
 		
-		GL11.glRotatef(tileEntity.spin, 0F, 0F, -1F);
+		GlStateManager.enableLighting();
+        ResourceManager.turbofan.renderPart("Body");
+		if(turbo.afterburner == 0)
+			bindTexture(ResourceManager.turbofan_back_tex);
+		else
+			bindTexture(ResourceManager.turbofan_afterburner_tex);
 
-        bindTexture(ResourceManager.turbofan_blades_tex);
-        ResourceManager.turbofan_blades.renderAll();
+		ResourceManager.turbofan.renderPart("Afterburner");
+		GL11.glShadeModel(GL11.GL_FLAT);
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();
-	}
+    }
 }

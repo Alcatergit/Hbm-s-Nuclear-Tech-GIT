@@ -102,6 +102,8 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -291,7 +293,7 @@ public class ModEventHandler {
 	}
 	
 	@SubscribeEvent
-	public void mobSpawn(LivingSpawnEvent event) {
+	public void mobSpawn(LivingSpawnEvent.SpecialSpawn event) {
 		if(CompatibilityConfig.mobGear){
 			EntityLivingBase entity = event.getEntityLiving();
 			World world = event.getWorld();
@@ -731,7 +733,7 @@ public class ModEventHandler {
 							}
 							continue;
 
-						} else if(eRad >= 50 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
+						} else if(eRad >= 500 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(event.world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -741,7 +743,7 @@ public class ModEventHandler {
 							entity.setDead();
 							continue;
 
-						} else if(eRad >= 500 && entity instanceof EntityVillager) {
+						} else if(eRad >= 600 && entity instanceof EntityVillager) {
 							EntityVillager vil = (EntityVillager)entity;
 							EntityZombieVillager creep = new EntityZombieVillager(event.world);
 							creep.setProfession(vil.getProfession());
@@ -761,6 +763,21 @@ public class ModEventHandler {
 							if(!entity.isDead)
 								if(!event.world.isRemote)
 									event.world.spawnEntity(creep);
+							entity.setDead();
+							continue;
+						} else if(eRad >= 800 && entity instanceof EntityHorse) {
+							EntityHorse horsie = (EntityHorse)entity;
+							EntityZombieHorse zomhorsie = new EntityZombieHorse(event.world);
+							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							zomhorsie.setGrowingAge(horsie.getGrowingAge());
+							zomhorsie.setTemper(horsie.getTemper());
+							zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+							zomhorsie.setHorseTamed(horsie.isTame());
+							zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+							zomhorsie.makeMad();
+							if(!entity.isDead)
+								if(!event.world.isRemote)
+									event.world.spawnEntity(zomhorsie);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {

@@ -51,6 +51,28 @@ public class ItemCustomLore extends Item {
 		{
 			list.add(TextFormatting.ITALIC + "\"Sniffffffff- MHHHHHHMHHHHHHHHH\"");
 		}
+		if(this == ModItems.bismuth_tool){
+			list.add("§eRight-click a Dud while having empty cells in inventory gives you antimatter cells.");
+			list.add("§8§oMight set off the Dud tho");
+		}
+		if(this == ModItems.iv_empty) {
+			list.add("Right-click to fill");
+		}
+		if(this == ModItems.radaway) {
+			list.add("Amount: -250 RAD");
+			list.add("Speed: -25 RAD/s");
+			list.add("Duration: 10s");
+		}
+		if(this == ModItems.radaway_strong) {
+			list.add("Amount: -500 RAD");
+			list.add("Speed: -100 RAD/s");
+			list.add("Duration: 5s");
+		}
+		if(this == ModItems.radaway_flush) {
+			list.add("Amount: -1000 RAD");
+			list.add("Speed: -400 RAD/s");
+			list.add("Duration: 2.5s");
+		}
 		if(this == ModItems.ingot_schraranium)
 		{
 			if(GeneralConfig.enableBabyMode)
@@ -147,7 +169,7 @@ public class ItemCustomLore extends Item {
 		}
 		if(this == ModItems.powder_tektite)
 		{
-			list.add("Collected via Miningship from §3outer space");
+			list.add("Collected via Geralds Miningfleet from §3outer space");
 		}
 		if(this == ModItems.igniter)
 		{

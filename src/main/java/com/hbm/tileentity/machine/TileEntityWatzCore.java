@@ -9,24 +9,24 @@ import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IReactor;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCapacitor;
 import com.hbm.items.special.WatzFuel;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -43,7 +43,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityWatzCore extends TileEntity implements ITickable, IReactor, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickable, IReactor, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public final static long maxPower = 1000000000;
@@ -56,12 +56,10 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 	public int heatList;
 	public int wasteList;
 	public int powerList;
-	
+	public int age = 0;
 	Random rand = new Random();
 	
 	public ItemStackHandler inventory;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	public FluidTank tank;
 	public Fluid tankType;
 	public boolean needsUpdate;
@@ -130,9 +128,9 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 			}
 
 			if (age == 9 || age == 19) {
-				ffgeuaInit();
 				fillFluidInit(tank);
 			}
+			this.sendWatzPower();
 
 			powerMultiplier = 100;
 			heatMultiplier = 100;
@@ -589,46 +587,9 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 		}
 	}
 
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(7), getTact());
-		ffgeua(pos.down(7), getTact());
-	}
-	
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
+	public void sendWatzPower() {
+		this.sendPower(world, pos.up(7), ForgeDirection.UP);
+		this.sendPower(world, pos.down(7), ForgeDirection.DOWN);
 	}
 
 	public void fillFluidInit(FluidTank tank) {
@@ -687,4 +648,18 @@ public class TileEntityWatzCore extends TileEntity implements ITickable, IReacto
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

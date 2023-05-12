@@ -46,11 +46,11 @@ public class WasteSand extends BlockFalling implements IItemHazard {
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
+
 	public WasteSand(Material materialIn, SoundType type, String s) {
 		this(materialIn, s);
 		setSoundType(type);
 	}
-
 
 	@Override
 	public ItemHazardModule getModule() {
@@ -82,10 +82,5 @@ public class WasteSand extends BlockFalling implements IItemHazard {
 	@Override
 	public boolean canEntitySpawn(IBlockState state, Entity entityIn){
 		return ContaminationUtil.isRadImmune(entityIn);
-	}
-
-	@Override
-	public Block setSoundType(SoundType sound) {
-		return super.setSoundType(sound);
 	}
 }

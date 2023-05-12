@@ -29,6 +29,8 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityZombieHorse;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
@@ -119,7 +121,8 @@ public class ContaminationUtil {
 		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000D)) / 1000D;
 		double env = ((long)(getPlayerRads(player) * 1000D)) / 1000D;
 
-		double res = ((long)(100000000D - ContaminationUtil.calculateRadiationMod(player) * 100000000D)) / 1000000D;
+
+		double res = Library.roundFloat((1D-ContaminationUtil.calculateRadiationMod(player))*100D, 6);
 		double resKoeff = ((long)(HazmatRegistry.getResistance(player) * 100D)) / 100D;
 
 		double rec = ((long)(env* (100-res)/100D * 1000D))/ 1000D;
@@ -153,7 +156,7 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentTranslation("geiger.envRad").appendSibling(new TextComponentString(" " + envPrefix + env + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + recPrefix + rec + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRad").appendSibling(new TextComponentString(" " + radPrefix + eRad + " RAD")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + res + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + String.format("%.6f", res) + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	public static void printDosimeterData(EntityPlayer player) {
@@ -384,11 +387,13 @@ public class ContaminationUtil {
 		if(e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
 			return true;
 		
-		return 	e instanceof EntityMooshroom ||
-				e instanceof EntityZombie ||
+		return 	e instanceof EntityZombie ||
 				e instanceof EntitySkeleton ||
 				e instanceof EntityQuackos ||
 				e instanceof EntityOcelot ||
+				e instanceof EntityMooshroom ||
+				e instanceof EntityZombieHorse ||
+				e instanceof EntitySkeletonHorse ||
 				e instanceof IRadiationImmune || checkConfigEntityImmunity(e);
 	}
 	

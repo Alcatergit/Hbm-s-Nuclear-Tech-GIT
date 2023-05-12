@@ -34,28 +34,25 @@ public class ArmorHazmat extends ItemArmor {
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if(stack.getItem().equals(ModItems.hazmat_helmet) || stack.getItem().equals(ModItems.hazmat_plate) || stack.getItem().equals(ModItems.hazmat_boots)) {
+		if(stack.getItem().equals(ModItems.hazmat_plate) || stack.getItem().equals(ModItems.hazmat_boots)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1.png");
 		}
 		if(stack.getItem().equals(ModItems.hazmat_legs)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_2.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_legs)) {
-			return (RefStrings.MODID + ":textures/armor/hazmat_2.png");
-		}
-		if(stack.getItem().equals(ModItems.hazmat_paa_helmet) || stack.getItem().equals(ModItems.hazmat_paa_plate) || stack.getItem().equals(ModItems.hazmat_paa_boots)) {
+		if(stack.getItem().equals(ModItems.hazmat_paa_plate) || stack.getItem().equals(ModItems.hazmat_paa_boots)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_paa_1.png");
 		}
 		if(stack.getItem().equals(ModItems.hazmat_paa_legs)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_paa_2.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_helmet_red) || stack.getItem().equals(ModItems.hazmat_plate_red) || stack.getItem().equals(ModItems.hazmat_boots_red)) {
+		if(stack.getItem().equals(ModItems.hazmat_plate_red) || stack.getItem().equals(ModItems.hazmat_boots_red)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1_red.png");
 		}
 		if(stack.getItem().equals(ModItems.hazmat_legs_red)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_2_red.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_helmet_grey) || stack.getItem().equals(ModItems.hazmat_plate_grey) || stack.getItem().equals(ModItems.hazmat_boots_grey)) {
+		if(stack.getItem().equals(ModItems.hazmat_plate_grey) || stack.getItem().equals(ModItems.hazmat_boots_grey)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1_grey.png");
 		}
 		if(stack.getItem().equals(ModItems.hazmat_legs_grey)) {

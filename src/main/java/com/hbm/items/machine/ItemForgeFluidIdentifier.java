@@ -8,8 +8,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.config.GeneralConfig;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -103,8 +102,8 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 	public static void spreadType(World worldIn, BlockPos pos, Fluid hand, Fluid pipe, int x){
 		if(x > 0){
 			TileEntity te = worldIn.getTileEntity(pos);
-			if(te != null && te instanceof TileEntityFFFluidDuctMk2){
-				TileEntityFFFluidDuctMk2 duct = (TileEntityFFFluidDuctMk2) te;
+			if(te != null && te instanceof TileEntityFFDuctBaseMk2){
+				TileEntityFFDuctBaseMk2 duct = (TileEntityFFDuctBaseMk2) te;
 				if(duct.getType() == pipe){
 					duct.setType(hand);
 					duct.markDirty();
@@ -122,9 +121,9 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		TileEntityFFFluidDuctMk2 duct = null;
-		if(te != null && te instanceof TileEntityFFFluidDuctMk2){
-			duct = (TileEntityFFFluidDuctMk2) te;
+		TileEntityFFDuctBaseMk2 duct = null;
+		if(te != null && te instanceof TileEntityFFDuctBaseMk2){
+			duct = (TileEntityFFDuctBaseMk2) te;
 		}
 		if(duct != null){
 			if(player.isSneaking()){

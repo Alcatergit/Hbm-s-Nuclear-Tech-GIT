@@ -30,26 +30,22 @@ public class RenderRTG extends TileEntitySpecialRenderer<TileEntity> {
         //Drillgon200: This is handled by the forge model
         //ResourceManager.rtg.renderPart("Gen");
 
-        int ix = te.getPos().getX();
-        int iy = te.getPos().getY();
-        int iz = te.getPos().getZ();
-        
-        if(Library.checkCableConnectables(te.getWorld(), ix + 1, iy, iz))
+        if(Library.canConnect(te.getWorld(), te.getPos().add(1, 0, 0), Library.POS_X))
         	ResourceManager.rtg_connector.renderAll();
 
-        if(Library.checkCableConnectables(te.getWorld(), ix - 1, iy, iz)) {
+        if(Library.canConnect(te.getWorld(), te.getPos().add(-1, 0, 0), Library.NEG_X)) {
     		GL11.glRotatef(180, 0F, 1F, 0F);
     		ResourceManager.rtg_connector.renderAll();
     		GL11.glRotatef(-180, 0F, 1F, 0F);
         }
 
-        if(Library.checkCableConnectables(te.getWorld(), ix, iy, iz - 1)) {
+        if(Library.canConnect(te.getWorld(), te.getPos().add(0, 0, -1), Library.NEG_Z)) {
     		GL11.glRotatef(90, 0F, 1F, 0F);
     		ResourceManager.rtg_connector.renderAll();
     		GL11.glRotatef(-90, 0F, 1F, 0F);
         }
 
-        if(Library.checkCableConnectables(te.getWorld(), ix, iy, iz + 1)) {
+        if(Library.canConnect(te.getWorld(), te.getPos().add(0, 0, 1), Library.POS_Z)) {
     		GL11.glRotatef(-90, 0F, 1F, 0F);
     		ResourceManager.rtg_connector.renderAll();
     		GL11.glRotatef(90, 0F, 1F, 0F);

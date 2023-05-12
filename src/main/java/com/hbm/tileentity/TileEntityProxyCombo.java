@@ -1,6 +1,6 @@
 package com.hbm.tileentity;
 
-import com.hbm.interfaces.IConsumer;
+import api.hbm.energy.IEnergyUser;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -11,7 +11,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsumer {
+public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser {
 
 	TileEntity tile;
 	boolean inventory;
@@ -83,8 +83,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 		if(!power)
 			return;
 
-		if(getTile() instanceof IConsumer) {
-			((IConsumer)getTile()).setPower(i);
+		if(getTile() instanceof IEnergyUser) {
+			((IEnergyUser)getTile()).setPower(i);
 		}
 	}
 
@@ -94,8 +94,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 		if(!power)
 			return 0;
 
-		if(getTile() instanceof IConsumer) {
-			return ((IConsumer)getTile()).getPower();
+		if(getTile() instanceof IEnergyUser) {
+			return ((IEnergyUser)getTile()).getPower();
 		}
 
 		return 0;
@@ -107,8 +107,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IConsum
 		if(!power)
 			return 0;
 
-		if(getTile() instanceof IConsumer) {
-			return ((IConsumer)getTile()).getMaxPower();
+		if(getTile() instanceof IEnergyUser) {
+			return ((IEnergyUser)getTile()).getMaxPower();
 		}
 
 		return 0;

@@ -1,7 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
+import api.hbm.energy.IEnergyUser;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -64,17 +63,13 @@ public class AuxElectricityPacket implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
 				try {
-				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
+					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 
-				if (te != null && te instanceof IConsumer) {
-					
-					IConsumer gen = (IConsumer) te;
-					gen.setPower(m.charge);
-				} else if (te != null && te instanceof ISource) {
+					if (te != null && te instanceof IEnergyUser) {
 						
-					ISource gen = (ISource) te;
-					gen.setSPower(m.charge);
-				}
+						IEnergyUser gen = (IEnergyUser) te;
+						gen.setPower(m.charge);
+					}
 				} catch (Exception x) { }
 			});
 			

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.util.I18nUtil;
 import com.hbm.items.machine.ItemFFFluidDuct;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
@@ -102,18 +103,36 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable, ILoo
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		if (world.getTileEntity(pos) instanceof TileEntityFFDuctBaseMk2) {
-			TileEntityFFDuctBaseMk2 cable = (TileEntityFFDuctBaseMk2) world.getTileEntity(pos);
+			TileEntityFFDuctBaseMk2 te = (TileEntityFFDuctBaseMk2) world.getTileEntity(pos);
 
-			if (cable != null) {
-				float p = 1F / 16F;
-				float minX = (cable.connections[5] != null ? 0 : (4 * p));
-				float minY = (cable.connections[1] != null ? 0 : (4 * p));
-				float minZ = (cable.connections[2] != null ? 0 : (4 * p));
-				float maxX = 1 - (cable.connections[3] != null ? 0 : (4 * p));
-				float maxY = 1 - (cable.connections[0] != null ? 0 : (4 * p));
-				float maxZ = 1 - (cable.connections[4] != null ? 0 : (4 * p));
-
-				return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+			if (te != null) {
+				boolean pX = te.connections[3] != null;
+				boolean nX = te.connections[5] != null;
+				boolean pY = te.connections[0] != null;
+				boolean nY = te.connections[1] != null;
+				boolean pZ = te.connections[4] != null;
+				boolean nZ = te.connections[2] != null;
+				
+				int mask = 0 + (pX ? 32 : 0) + (nX ? 16 : 0) + (pY ? 8 : 0) + (nY ? 4 : 0) + (pZ ? 2 : 0) + (nZ ? 1 : 0);
+			
+				if(mask == 0) {
+					return new AxisAlignedBB(0F, 0F, 0F, 1F, 1F, 1F);
+				} else if(mask == 0b100000 || mask == 0b010000 || mask == 0b110000) {
+					return new AxisAlignedBB(0F, 0.3125F, 0.3125F, 1F, 0.6875F, 0.6875F);
+				} else if(mask == 0b001000 || mask == 0b000100 || mask == 0b001100) {
+					return new AxisAlignedBB(0.3125F, 0F, 0.3125F, 0.6875F, 1F, 0.6875F);
+				} else if(mask == 0b000010 || mask == 0b000001 || mask == 0b000011) {
+					return new AxisAlignedBB(0.3125F, 0.3125F, 0F, 0.6875F, 0.6875F, 1F);
+				} else {
+					
+					return new AxisAlignedBB(
+							nX ? 0F : 0.3125F,
+							nY ? 0F : 0.3125F,
+							nZ ? 0F : 0.3125F,
+							pX ? 1F : 0.6875F,
+							pY ? 1F : 0.6875F,
+							pZ ? 1F : 0.6875F);
+				}
 			}
 		}
 		return DUCT_BB;
@@ -214,7 +233,8 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable, ILoo
 		if(ductFluid == null){
 			text.add("§7None");
 		} else{
-			text.add(""+ductFluid.getLocalizedName(new FluidStack(ductFluid, 1)));
+			int color = ModForgeFluids.fluidColors.get(ductFluid);
+			text.add("&[" + color + "&]" +I18nUtil.resolveKey(ductFluid.getUnlocalizedName()));
 		}
 		
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);

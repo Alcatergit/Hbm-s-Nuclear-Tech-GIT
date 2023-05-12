@@ -11,8 +11,6 @@ import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
-import com.hbm.tileentity.machine.TileEntityConverterHeRf;
-import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreInjector;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
@@ -150,26 +148,7 @@ public class AuxGaugePacket implements IMessage {
 							reactor.coreHeat = m.value;
 						if(m.id == 3)
 							reactor.hullHeat = m.value;
-					} else
-					/*if (te instanceof TileEntityBomber) {
-						TileEntityBomber bomber = (TileEntityBomber)te;
-						
-						if(m.id == 0)
-							bomber.yaw = m.value;
-						if(m.id == 1)
-							bomber.pitch = m.value;
-						if(m.id == 2)
-							bomber.type = m.value;
-					} else
-					if (te instanceof TileEntityRadioRec) {
-						TileEntityRadioRec radio = (TileEntityRadioRec)te;
-						
-						if(m.id == 0)
-							radio.isOn = (m.value == 1);
-						if(m.id == 1)
-							radio.freq = ((double)m.value) / 10D;
-					} else*/
-					if(te instanceof TileEntityMachineGasCent) {
+					} else if(te instanceof TileEntityMachineGasCent) {
 						TileEntityMachineGasCent cent = (TileEntityMachineGasCent) te;
 
 						if(m.id == 0)
@@ -264,12 +243,6 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityCoreStabilizer) {
 						if(m.id == 0)
 							((TileEntityCoreStabilizer) te).beam = m.value;
-					} else if(te instanceof TileEntityConverterRfHe){
-						if(m.id == 0)
-							((TileEntityConverterRfHe) te).storage.setEnergyStored(m.value);
-					} else if(te instanceof TileEntityConverterHeRf){
-						if(m.id == 0)
-							((TileEntityConverterHeRf) te).storage.setEnergyStored(m.value);
 					} else if(te instanceof TileEntityMachineGenerator){
 						if(m.id == 0)
 							((TileEntityMachineGenerator) te).heat = m.value;

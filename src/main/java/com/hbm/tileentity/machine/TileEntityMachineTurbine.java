@@ -1,12 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
@@ -16,12 +11,13 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -37,14 +33,12 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineTurbine extends TileEntity implements ITickable, ISource, ITankPacketAcceptor, IFluidHandler {
+public class TileEntityMachineTurbine extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, ITankPacketAcceptor, IFluidHandler {
 
 	public ItemStackHandler inventory;
 
 	public long power;
 	public static final long maxPower = 1000000;
-	public int age = 0;
-	public List<IConsumer> list1 = new ArrayList<IConsumer>();
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
 	//Drillgon200: Not even used but I'm too lazy to remove them
@@ -94,10 +88,6 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			age++;
-			if(age >= 2) {
-				age = 0;
-			}
 			
 			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
 				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
@@ -118,7 +108,7 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 			power = Library.chargeItemsFromTE(inventory, 4, power, maxPower);
 
 			fillFluidInit(tanks[1]);
-			ffgeuaInit();
+			this.sendPower(world, pos);
 
 			if(inputValidForTank(0, 2))
 				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3)) {
@@ -226,61 +216,6 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 	}
 
 	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public boolean getTact() {
-		if(age == 0) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-	}
-
-	public void fillFluidInit(FluidTank tank) {
-
-		FFUtils.fillFluid(this, tank, world, pos.east(), 64000);
-		FFUtils.fillFluid(this, tank, world, pos.west(), 64000);
-		FFUtils.fillFluid(this, tank, world, pos.up(), 64000);
-		FFUtils.fillFluid(this, tank, world, pos.down(), 64000);
-		FFUtils.fillFluid(this, tank, world, pos.south(), 64000);
-		FFUtils.fillFluid(this, tank, world, pos.north(), 64000);
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list1;
-	}
-
-	@Override
-	public void clearList() {
-		this.list1.clear();
-	}
-
-	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
 		if(tags.length != 2) {
 			return;
@@ -303,6 +238,16 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 		} else {
 			return 0;
 		}
+	}
+
+	public void fillFluidInit(FluidTank tank) {
+
+		FFUtils.fillFluid(this, tank, world, pos.east(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.west(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.up(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.down(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.south(), 64000);
+		FFUtils.fillFluid(this, tank, world, pos.north(), 64000);
 	}
 
 	@Override
@@ -365,6 +310,20 @@ public class TileEntityMachineTurbine extends TileEntity implements ITickable, I
 		}
 		if(mark)
 			markDirty();
+	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
 	}
 }

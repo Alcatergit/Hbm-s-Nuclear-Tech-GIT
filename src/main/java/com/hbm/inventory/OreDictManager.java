@@ -299,7 +299,7 @@ public class OreDictManager {
 		NB															.nugget(fragment_niobium)								.ingot(ingot_niobium)		.dust(powder_niobium)	.dustSmall(powder_niobium_tiny)	.block(block_niobium);
 		BE															.nugget(nugget_beryllium)	.billet(billet_beryllium)	.ingot(ingot_beryllium)		.dust(powder_beryllium)									.block(block_beryllium)							.crystal(crystal_beryllium)								.ore(ore_beryllium);
 		B															.nugget(fragment_boron)									.ingot(ingot_boron)			.dust(powder_boron)		.dustSmall(powder_boron_tiny)	.block(block_boron);
-		ANY_BISMOID													.nugget(nugget_bismuth)									.ingot(ingot_bismuth)																.block(block_bismuth);
+		ANY_BISMOID													.nugget(nugget_bismuth)									.ingot(ingot_bismuth)		.dust(powder_bismuth)									.block(block_bismuth);
 		LA															.nugget(fragment_lanthanium)							.ingot(ingot_lanthanium)	.dust(powder_lanthanium).dustSmall(powder_lanthanium_tiny).block(block_lanthanium);
 		AC															.nugget(nugget_actinium)								.ingot(ingot_actinium)		.dust(powder_actinium)	.dustSmall(powder_actinium_tiny).block(block_actinium);
 		ZR															.nugget(nugget_zirconium)	.billet(billet_zirconium)	.ingot(ingot_zirconium)		.dust(powder_zirconium)									.block(block_zirconium)																					.ore(ore_depth_zirconium);

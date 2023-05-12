@@ -17,7 +17,6 @@ public class TETurbofanPacket implements IMessage {
 	int x;
 	int y;
 	int z;
-	int spin;
 	boolean isRunning;
 
 	public TETurbofanPacket()
@@ -25,12 +24,11 @@ public class TETurbofanPacket implements IMessage {
 		
 	}
 
-	public TETurbofanPacket(int x, int y, int z, int spin, boolean isRunning)
+	public TETurbofanPacket(int x, int y, int z, boolean isRunning)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.spin = spin;
 		this.isRunning = isRunning;
 	}
 
@@ -39,7 +37,6 @@ public class TETurbofanPacket implements IMessage {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
-		spin = buf.readInt();
 		isRunning = buf.readBoolean();
 	}
 
@@ -48,7 +45,6 @@ public class TETurbofanPacket implements IMessage {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
-		buf.writeInt(spin);
 		buf.writeBoolean(isRunning);
 	}
 
@@ -63,7 +59,6 @@ public class TETurbofanPacket implements IMessage {
 				if (te != null && te instanceof TileEntityMachineTurbofan) {
 						
 					TileEntityMachineTurbofan gen = (TileEntityMachineTurbofan) te;
-					gen.spin = m.spin;
 					gen.isRunning = m.isRunning;
 				}
 			});

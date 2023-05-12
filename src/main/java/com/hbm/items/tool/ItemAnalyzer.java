@@ -2,14 +2,13 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IFluidPipe;
-import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
-import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.network.energy.TileEntityPylonBase;
 
+import api.hbm.energy.IEnergyConnector;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,28 +78,11 @@ public class ItemAnalyzer extends Item {
 							"Slots: " + ((IInventory)te).getSizeInventory()));
 				}
 				
-				if(te instanceof IConsumer) {
+				if(te instanceof IEnergyConnector) {
 					
 					player.sendMessage(new TextComponentTranslation(
-							"Electricity: " + ((IConsumer)te).getPower() + " HE"));
-				} else if(te instanceof ISource) {
-					
-					player.sendMessage(new TextComponentTranslation(
-							"Electricity: " + ((ISource)te).getSPower() + " HE"));
+							"Electricity: " + ((IEnergyConnector)te).getPower() + " HE"));
 				}
-				
-				/*if(te instanceof IFluidContainer) {
-					
-					player.sendMessage(new TextComponentTranslation(
-							"Fluid Tanks:"));
-					
-					List<FluidTank> tanks = ((IFluidContainer)te).getTanks();
-					
-					for(int i = 0; i < tanks.size(); i++) {
-						player.sendMessage(new TextComponentTranslation(
-								" *Tank " + (i + 1) + ": " + tanks.get(i).getFill() + "mB " + I18n.format(tanks.get(i).getTankType().getUnlocalizedName())));
-					}
-				}*/
 				
 				if(te instanceof IFluidPipe) {
 					
@@ -108,16 +90,16 @@ public class ItemAnalyzer extends Item {
 							"Duct Type: " + I18n.format(((IFluidPipe)te).getType().getUnlocalizedName())));
 				}
 				
-				if(te instanceof TileEntityPylonRedWire) {
+				if(te instanceof TileEntityPylonBase) {
 					
 					player.sendMessage(new TextComponentTranslation(
 							"Connections:"));
 					
-					List<TileEntityPylonRedWire> connections = ((TileEntityPylonRedWire)te).connected;
+					List<BlockPos> connections = ((TileEntityPylonBase)te).connected;
 					
 					for(int i = 0; i < connections.size(); i++) {
 						player.sendMessage(new TextComponentTranslation(
-								" *" + connections.get(i).getPos().getX() + " / " + connections.get(i).getPos().getY() + " / " + connections.get(i).getPos().getZ()));
+								" *" + connections.get(i).getX() + " / " + connections.get(i).getY() + " / " + connections.get(i).getZ()));
 					}
 				}
 				

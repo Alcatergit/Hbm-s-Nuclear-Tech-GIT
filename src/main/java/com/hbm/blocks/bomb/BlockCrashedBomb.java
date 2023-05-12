@@ -24,6 +24,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -63,9 +64,10 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(world.isRemote)
 			return true;
-
-		if (player.getHeldItem(hand).getItem() == ModItems.defuser) {
-
+		Item tool = player.getHeldItem(hand).getItem();
+		if (tool == ModItems.defuser || tool == ModItems.defuser_desh) {
+			if(tool.getMaxDamage(player.getHeldItem(hand)) > 0)
+					player.getHeldItem(hand).damageItem(1, player);
 			world.destroyBlock(pos, false);
 
 			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModItems.egg_balefire_shard)));

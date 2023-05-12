@@ -3,14 +3,15 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEFFPacket;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityForceField extends TileEntity implements ITickable, IConsumer {
+public class TileEntityForceField extends TileEntityLoadedBase implements ITickable, IEnergyUser {
 
 	public ItemStackHandler inventory;
 	
@@ -116,7 +117,7 @@ public class TileEntityForceField extends TileEntity implements ITickable, ICons
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			
+			this.updateStandardConnections(world, pos);
 			int rStack = 0;
 			int hStack = 0;
 			radius = 16;
@@ -318,13 +319,11 @@ public class TileEntityForceField extends TileEntity implements ITickable, ICons
 	@Override
 	public void setPower(long i) {
 		power = i;
-		
 	}
 
 	@Override
 	public long getPower() {
 		return power;
-		
 	}
 
 	@Override

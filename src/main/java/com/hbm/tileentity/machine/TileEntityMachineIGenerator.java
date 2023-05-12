@@ -10,8 +10,6 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MultiblockHandlerXR;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
@@ -20,6 +18,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +37,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineIGenerator extends TileEntityMachineBase implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineIGenerator extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000;
@@ -60,9 +59,6 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	public IGenRTG[] pellets = new IGenRTG[12];
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
-	
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<>();
 	
 	public TileEntityMachineIGenerator() {
 		super(13);
@@ -86,13 +82,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	public void update() {
 		if(!world.isRemote) {
 			
-			age++;
-			if (age >= 20) {
-				age = 0;
-			}
-
-			if (age == 9 || age == 19)
-				ffgeuaInit();
+			this.sendIGenPower();
 
 			FFUtils.fillFromFluidContainer(inventory, tanks[0], 7, 8);
 			if(FFUtils.checkRestrictions(inventory.getStackInSlot(9), stack -> {
@@ -318,7 +308,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	 */
 	private void generatorAction() {
 		
-		double balanceFactor = 0.025D;
+		double balanceFactor = 0.25D;
 		
 		this.power += this.torque * balanceFactor;
 		torque -= getBrake();
@@ -412,59 +402,18 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 		ignoreNext = 5;
 	}
 	
-	@Override
-	public void ffgeuaInit() {
+	public void sendIGenPower() {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		
-		int[] rot = MultiblockHandlerXR.rotate(new int [] {1,0,2,2,8,8}, dir.toEnumFacing());
+		int[] rot = MultiblockHandlerXR.rotate(new int [] {1,0,4,0,8,8}, dir.toEnumFacing());
 		
-		boolean tact = this.getTact();
-		
-		for(int iy = 0; iy <= 1; iy++) {
-			for(int ix = -rot[4]; ix <= rot[5]; ix++) {
-				for(int iz = -rot[2]; iz <= rot[3]; iz++) {
-					
-					if(ix == -rot[4] || ix == rot[5] || iz == -rot[2] || iz == rot[3]) {
-						
-						ffgeua(new BlockPos(pos.getX() + dir.offsetX * 2 + ix, pos.getY() + iy, pos.getZ() + dir.offsetZ * 2 + iz), tact);
-					}
+		for(int ix = -rot[4]; ix <= rot[5]; ix++) {
+			for(int iz = -rot[2]; iz <= rot[3]; iz++) {
+				if(ix == -rot[4] || ix == rot[5] || iz == -rot[2] || iz == rot[3]) {
+					this.sendPower(world, pos.add(dir.offsetX * 2 + ix, -1, dir.offsetZ * 2 + iz), ForgeDirection.DOWN);
 				}
 			}
 		}
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return this.power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-	
-	@Override
-	public void clearList() {
-		this.list.clear();
 	}
 
 	@Override
@@ -580,4 +529,18 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 		return 65536.0D;
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

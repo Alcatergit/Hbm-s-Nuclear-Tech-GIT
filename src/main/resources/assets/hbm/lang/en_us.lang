@@ -266,6 +266,14 @@ item.rod_quad_rgp.name=Reactor-Grade Plutonium Quad Rod
 item.rod_quad_ac227.name=Actinium-227 Quad Rod
 item.rod_quad_ra226.name=Radium-226 Quad Rod
 
+battery.priority.high=Charge Priority: High
+battery.priority.high.desc=Emergency buffers that$always need to be full
+battery.priority.low=Charge Priority: Low
+battery.priority.low.desc=Most use-cases where surplus$energy needs to be stored without$affecting machine performance
+battery.priority.normal=Charge Priority: Normal
+battery.priority.normal.desc=Smaller power grids where$priority doesn't matter
+battery.priority.recommended=Recommended for:
+
 item.battery_sc_lead.name=Self-Charging Lead-209 Battery
 item.ingot_ac227.name=Actinium-227 Ingot
 item.ingot_gh336.name=Ghiorsium-336 Ingot
@@ -502,6 +510,9 @@ hbm.advancement.root.desc=And so the nuclear Adventure starts
 
 hbm.achievement.progress_dosimeter=Dosimeter
 hbm.achievement.progress_dosimeter.desc=Your new best Friend
+
+hbm.achievement.progress_mask=No More Coal Dust
+hbm.achievement.progress_mask.desc=Nevermind it dried
 
 hbm.achievement.progress_geiger=Geiger Counter
 hbm.achievement.progress_geiger.desc=Your upgraded best Friend
@@ -1364,6 +1375,7 @@ tile.mine_he.name=Anti-Tank Mine
 tile.mine_shrap.name=Shrapnel Mine
 tile.mine_fat.name=Fat Mine
 item.defuser.name=High-Tech Bomb Defusing Device
+item.defuser_desh.name=Desh High-Tech Bomb Defusing Device
 
 tile.crate.name=Supply Crate
 tile.crate_weapon.name=Weapon Crate
@@ -1424,6 +1436,9 @@ container.generator=Nuclear Reactor
 container.hadron=Particle Accelerator
 tile.red_wire_coated.name=Coated Red Copper Cable
 tile.cable_switch.name=Power Switch
+tile.cable_diode.name=Power Diode
+tile.cable_diode.desc=§6Limits throughput and restricts flow direction$§eUse screwdriver to increase throughput$§eUse hand drill to decrease throughput$§eUse defuser to change network priority
+tile.cable_detector.name=Redstone Power Switch
 tile.machine_deuterium.name=Deuterium Extractor
 container.machine_deuterium=Deuterium Extractor
 tile.machine_battery_potato.name=Potato Battery Block
@@ -1468,8 +1483,8 @@ container.missileAssembly=Missile Assembly Station
 tile.sat_dock.name=Cargo Landing Pad
 container.satDock=Cargo Landing Pad
 tile.book_guide.name=Hbm's Nuclear Tech Mod Manual [LEGACY]
-tile.machine_schrabidium_transmutator.name=Schrabidium Transmutation Device
-container.machine_schrabidium_transmutator=Schrabidium Transmutation Device
+tile.machine_schrabidium_transmutator.name=Nuclear Transmutation Device
+container.machine_schrabidium_transmutator=Nuclear Transmutation Device
 container.microwave=Microwave
 tile.machine_diesel.name=Diesel Generator
 container.machineDiesel=Diesel Generator
@@ -1514,6 +1529,7 @@ item.fluid_duct.name=Fluid Duct:
 item.ff_fluid_duct.name=Fluid Duct:
 container.fluidtank=Tank
 tile.machine_turbofan.name=Turbofan
+tile.machine_turbofan.desc=§eBurns Kerosene to generate Energy
 container.machineTurbofan=Turbofan
 tile.crate_iron.name=Iron Crate
 container.crateTungsten=Tungsten Crate
@@ -1554,7 +1570,9 @@ container.machineSILEX=SILEX
 container.machineFEL=FEL
 
 tile.heater_firebox.name=Firebox
+tile.heater_firebox.desc=Burns solid fuel to produce heat.
 tile.furnace_steel.name=Steel Furnace
+tile.furnace_steel.desc=Very large furnace that can provide bonus items$when smelting ores. Requires external heat source.$Heat transfer rate: ΔT*0.05 TU/t$(Δ means difference and T means temperature)
 container.heater_firebox=Firebox
 
 tile.barrel_plastic.name=Safe Barrel™
@@ -1595,6 +1613,15 @@ tile.rbmk_steam_inlet.name=RBMK ReaSim Water Inlet
 tile.rbmk_steam_outlet.name=RBMK ReaSim Steam Outlet
 
 tile.red_pylon.name=Electricity Pole
+tile.red_pylon.desc=§6Connection Type: §eSingle$§6Connection Range: §e25m
+item.wiring_red_copper.name=Cable Drum
+
+tile.red_pylon_large.name=Large Electricity Pylon
+tile.red_pylon_large.desc=§6Connection Type: §eQuadruple$§6Connection Range: §e100m$§6This pylon requires a substation!
+
+tile.substation.name=Substation
+tile.substation.desc=§6Connection Type: §eQuadruple$§6Connection Range: §e20m
+
 item.wiring_red_copper.name=Cable Drum
 
 tile.rail_highspeed.name=High Speed Rail
@@ -1752,7 +1779,7 @@ wavelengths.waveRange.drx=1916169 planck lengths
 
 tile.digamma_matter.name=Digammarium
 tile.geysir_water.name=Water Geysir
-tile.geysir_chlorine.name=Chlorgas Geysir
+tile.geysir_chlorine.name=Cloud Geysir
 tile.geysir_vapor.name=Vapor Geysir
 tile.geysir_nether.name=Magma Geysir
 tile.stone_porous.name=Porous Stone
@@ -2245,6 +2272,7 @@ item.powder_iron.name=Iron Powder
 item.powder_gold.name=Gold Powder
 item.powder_aluminium.name=Aluminium Powder
 item.powder_asbestos.name=Asbestos Powder
+item.powder_bismuth.name=Bismuth-209 Powder
 item.powder_beryllium.name=Beryllium Powder
 item.powder_copper.name=Copper Powder
 item.powder_titanium.name=Titanium Powder
@@ -2555,9 +2583,13 @@ item.canister_petroil.name=Petroil Canister
 item.canister_reoil.name=Canister of Reclaimed Industrial Oil
 item.canister_smear.name=Industrial Oil Canister
 item.gas_empty.name=Empty Gas Tank
-item.gas_full.name=Gas Tank
+item.gas_full.name=Natural Gas Tank
 item.gas_petroleum.name=Petroleum Gas Tank
 item.gas_biogas.name=Biogas Tank
+item.gas_tritium.name=Tritium Gas Tank
+item.gas_deuterium.name=Deuterium Gas Tank
+item.gas_hydrogen.name=Hydrogen Gas Tank
+item.gas_oxygen.name=Oxygen Gas Tank
 item.fluid_tank_empty.name=Empty Universal Fluid Tank
 item.fluid_tank_full.name=Universal Fluid Tank:
 item.fluid_barrel_empty.name=Empty Fluid Barrel
@@ -3167,6 +3199,10 @@ item.syringe_metal_psycho.name=Psycho
 item.syringe_metal_super.name=Super Stimpak
 item.syringe_taint.name=Watery Taint Injection
 item.med_bag.name=Doctor's Bag
+item.iv_blood.name=Blood Bag
+item.iv_empty.name=IV Bag
+item.iv_xp.name=Experience Bag
+item.iv_xp_empty.name=Empty Experience Bag
 item.radaway.name=RadAway
 item.radaway_strong.name=Strong RadAway
 item.radaway_flush.name=Elite RadAway
@@ -3608,6 +3644,7 @@ item.wand_d.name=Debug Wand
 item.analyzer.name=Analyzer
 
 item.screwdriver.name=Screwdriver
+item.screwdriver_desh.name=Desh Screwdriver
 item.overfuse.name=Singularity Screwdriver
 
 item.steel_helmet.name=Steel Helmet
@@ -3710,7 +3747,7 @@ tile.machine_transformer_dnt.name=DNT-20Hz Transformer
 tile.machine_transformer_20.name=10k-1Hz Transformer
 tile.machine_transformer_dnt_20.name=DNT-1Hz Transformer
 
-tile.vent_chlorine.name=Chlorine Vent
+tile.vent_chlorine.name=Poison Vent
 tile.vent_cloud.name=Cloud Vent
 tile.vent_pink_cloud.name=Pink Cloud Vent
 tile.vent_chlorine_seal.name=Chlorine Seal
@@ -4287,6 +4324,7 @@ item.coal_infernal.name=Infernal Coal
 item.ingot_pu_mix.name=Reactor Grade Plutonium Ingot
 item.ingot_niobium.name=Niobium Ingot
 item.hand_drill.name=Hand Drill
+item.hand_drill_desh.name=Desh Hand Drill
 item.nuclear_waste.name=Nuclear Waste
 item.nuclear_waste_pearl.name=Nuclear Waste Pearl
 item.nuclear_waste_tiny.name=Tiny Pile of Nuclear Waste

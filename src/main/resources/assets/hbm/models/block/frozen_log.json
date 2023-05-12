@@ -1,8 +1,7 @@
 {
-	"parent": "block/cube_bottom_top",
+	"parent": "block/cube_column",
 	"textures": {
-		"top": "hbm:blocks/frozen_log_top",
-		"bottom": "hbm:blocks/frozen_log_top",
-		"side": "hbm:blocks/frozen_log"
+		"end": "hbm:blocks/frozen_log_top",
+		"side": "hbm:blocks/frozen_log_side"
 	}
 }

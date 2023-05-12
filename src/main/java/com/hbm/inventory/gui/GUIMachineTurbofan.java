@@ -14,35 +14,32 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIMachineTurbofan extends GuiInfoContainer {
 	
-	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_turbofan.png");
-	private TileEntityMachineTurbofan diFurnace;
+	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/generators/gui_turbofan.png");
+	private TileEntityMachineTurbofan turbofan;
 
 	public GUIMachineTurbofan(InventoryPlayer invPlayer, TileEntityMachineTurbofan tedf) {
 		super(new ContainerMachineTurbofan(invPlayer, tedf));
-		diFurnace = tedf;
+		turbofan = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 166;
+		this.ySize = 203;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 69 - 52, 34, 52, diFurnace.tank);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152 - 9, guiTop + 69 - 52, 16, 52, diFurnace.power, TileEntityMachineTurbofan.maxPower);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 16, 34, 52, turbofan.tank);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 16, 16, 52, turbofan.power, turbofan.maxPower);
 
-		String[] text = new String[] { "Acceptable upgrades:",
-				" -Pink (afterburner)" };
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 96, guiTop + 21, 8, 8, guiLeft + 96, guiTop + 21 + 16, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String name = this.diFurnace.hasCustomInventoryName() ? this.diFurnace.getInventoryName() : I18n.format(this.diFurnace.getInventoryName());
+		String name = this.turbofan.hasCustomInventoryName() ? this.turbofan.getInventoryName() : I18n.format(this.turbofan.getInventoryName());
 		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+		this.fontRenderer.drawString(name, 43 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
@@ -53,18 +50,16 @@ public class GUIMachineTurbofan extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		if(diFurnace.power > 0) {
-			int i = (int)diFurnace.getPowerScaled(52);
+		if(turbofan.power > 0) {
+			int i = (int)turbofan.getPowerScaled(52);
 			drawTexturedModalRect(guiLeft + 152 - 9, guiTop + 69 - i, 176 + 16, 52 - i, 16, i);
 		}
 		
-		if(diFurnace.afterburner > 0) {
-			int i = diFurnace.afterburner;
-			drawTexturedModalRect(guiLeft + 107, guiTop + 53, 176, (i - 1) * 16, 16, 16);
+		if(turbofan.afterburner > 0) {
+			int a = Math.min(turbofan.afterburner, 6);
+			drawTexturedModalRect(guiLeft + 98, guiTop + 44, 176, (a - 1) * 16, 16, 16);
 		}
-
-		this.drawInfoPanel(guiLeft + 96, guiTop + 21, 8, 8, 8);
 		
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 34, 52, 53, 97);
+		FFUtils.drawLiquid(turbofan.tank, guiLeft, guiTop, zLevel, 34, 52, 35, 53+44);
 	}
 }

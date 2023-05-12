@@ -32,7 +32,7 @@ public class GUIMachineGenerator extends GuiInfoContainer {
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 88 - 52, 16, 52, diFurnace.tanks[0], diFurnace.tankTypes[0]);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 88 - 52, 16, 52, diFurnace.tanks[1], diFurnace.tankTypes[1]);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 88 - 52, 16, 52, diFurnace.power, diFurnace.powerMax);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 88 - 52, 16, 52, diFurnace.power, diFurnace.maxPower);
 
 		if(diFurnace.tanks[0].getFluidAmount() <= 0) {
 			String[] text = new String[] { "Error: Water is required for",

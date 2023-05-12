@@ -5,14 +5,15 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.WeaponConfig;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityTickingBase;
 import com.hbm.capability.HbmLivingProps;
 
+import api.hbm.energy.IEnergyUser;
 import api.hbm.entity.IRadarDetectable;
 import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import net.minecraft.entity.Entity;
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IConsumer {
+public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IEnergyUser {
 
 	public List<Entity> entList = new ArrayList();
 	public List<int[]> nearbyMissiles = new ArrayList<int[]>();
@@ -64,6 +65,9 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		
 		
 		if(!world.isRemote) {
+
+			this.updateConnectionsExcept(world, pos, ForgeDirection.UP);
+			
 			nearbyMissiles.clear();
 
 

@@ -1,13 +1,8 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.Untested;
 import com.hbm.inventory.MachineRecipes;
@@ -20,6 +15,7 @@ import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -40,12 +36,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineLargeTurbine extends TileEntityMachineBase implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineLargeTurbine extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 100000000;
 	public int age = 0;
-	public List<IConsumer> list1 = new ArrayList<>();
 	public FluidTank[] tanks;
 	public Fluid[] types = new Fluid[2];
 
@@ -74,8 +69,9 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 			}
 
 			fillFluidInit(tanks[1]);
-			ffgeuaInit();
-
+			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+			this.sendPower(world, pos.add(dir.offsetX * -4, 0, dir.offsetZ * -4), dir.getOpposite());
+			
 			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
 				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
 				if(isValidFluidForTank(0, new FluidStack(f, 1000))){
@@ -202,17 +198,6 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		return "container.machineLargeTurbine";
 	}
 
-	@Override
-	public void ffgeuaInit() {
-		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-		ffgeua(new BlockPos(pos.getX() + dir.offsetX * -4, pos.getY(), pos.getZ() + dir.offsetZ * -4), getTact());
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
 	public void fillFluidInit(FluidTank type) {
 
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
@@ -226,36 +211,6 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 10239000);
 	}
 	
-	@Override
-	public boolean getTact() {
-		if(age == 0)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list1;
-	}
-
-	@Override
-	public void clearList() {
-		this.list1.clear();
-	}
-
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
@@ -317,4 +272,18 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		return super.hasCapability(capability, facing);
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

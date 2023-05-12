@@ -27,7 +27,7 @@ public class ItemTooling extends Item {
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setFull3D();
-		this.setCreativeTab(MainRegistry.controlTab);
+		this.setCreativeTab(MainRegistry.consumableTab);
 		this.setMaxDamage(dura);
 		this.type = type;
 		
@@ -52,7 +52,9 @@ public class ItemTooling extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Right clicking fluid pipes will toggle extraction mode");
-		tooltip.add("Could be used instead of a fuse...");
+		if(type == ToolType.SCREWDRIVER){
+			tooltip.add("Right clicking fluid pipes will toggle extraction mode");
+			tooltip.add("Could be used instead of a fuse...");
+		}
 	}
 }

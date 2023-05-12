@@ -80,7 +80,7 @@ public class ArmorGasMask extends ItemArmor implements IGasMask {
 				return this.modelGas;
 			}
 		}
-		if (this == ModItems.gas_mask_m65 || this == ModItems.hazmat_helmet_red || this == ModItems.hazmat_helmet_grey || this == ModItems.gas_mask_mono) {
+		if (this == ModItems.gas_mask_m65 || this == ModItems.hazmat_helmet_red || this == ModItems.hazmat_helmet_grey || this == ModItems.gas_mask_mono || this == ModItems.hazmat_paa_helmet) {
 			if (armorSlot == EntityEquipmentSlot.HEAD) {
 				if (this.modelM65 == null) {
 					this.modelM65 = new ModelM65();
@@ -110,6 +110,9 @@ public class ArmorGasMask extends ItemArmor implements IGasMask {
 		}
 		if (stack.getItem() == ModItems.hazmat_helmet_grey) {
 			return (RefStrings.MODID + ":textures/models/ModelHazGrey.png");
+		}
+		if(stack.getItem() == ModItems.hazmat_paa_helmet) {
+			return (RefStrings.MODID + ":textures/models/ModelHazPaa.png");
 		}
 		return "hbm:textures/models/CapeUnknown.png";
 	}

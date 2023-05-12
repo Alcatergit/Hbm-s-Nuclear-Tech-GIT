@@ -6,7 +6,6 @@ import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
@@ -15,13 +14,16 @@ import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -46,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityLaunchTable extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -119,6 +121,8 @@ public class TileEntityLaunchTable extends TileEntity implements ITickable, ICon
 		if (!world.isRemote) {
 			
 			//updateTypes();
+			if(world.getTotalWorldTime() % 20 == 0)
+				this.updateConnections();
 
 			if(inputValidForTank(0, 2))
 				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 6))
@@ -175,6 +179,16 @@ public class TileEntityLaunchTable extends TileEntity implements ITickable, ICon
 					break;
 				}
 			}
+		}
+	}
+
+	private void updateConnections() {
+
+		for(int i = -4; i <= 4; i++) {
+			this.trySubscribe(world, pos.add(5, 0, i), ForgeDirection.EAST);
+			this.trySubscribe(world, pos.add(-5, 0, i), ForgeDirection.WEST);
+			this.trySubscribe(world, pos.add(i, 0, 5), ForgeDirection.SOUTH);
+			this.trySubscribe(world, pos.add(i, 0, -5), ForgeDirection.NORTH);
 		}
 	}
 	

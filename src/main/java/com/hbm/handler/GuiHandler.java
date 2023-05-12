@@ -31,8 +31,6 @@ import com.hbm.tileentity.machine.TileEntityAMSEmitter;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityBarrel;
 import com.hbm.tileentity.machine.TileEntityControlPanel;
-import com.hbm.tileentity.machine.TileEntityConverterHeRf;
-import com.hbm.tileentity.machine.TileEntityConverterRfHe;
 import com.hbm.tileentity.machine.TileEntityCore;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
@@ -47,7 +45,6 @@ import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
-import com.hbm.tileentity.machine.TileEntityFusionMultiblock;
 import com.hbm.tileentity.machine.TileEntityHadron;
 import com.hbm.tileentity.machine.TileEntityHeaterFirebox;
 import com.hbm.tileentity.machine.TileEntityITER;
@@ -212,16 +209,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_machine_battery:
 			if(entity instanceof TileEntityMachineBattery) {
 				return new ContainerMachineBattery(player.inventory, (TileEntityMachineBattery) entity);
-			}
-			return null;
-		case ModBlocks.guiID_converter_he_rf:
-			if(entity instanceof TileEntityConverterHeRf) {
-				return new ContainerConverterHeRf(player, (TileEntityConverterHeRf) entity);
-			}
-			return null;
-		case ModBlocks.guiID_converter_rf_he:
-			if(entity instanceof TileEntityConverterRfHe) {
-				return new ContainerConverterRfHe(player, (TileEntityConverterRfHe) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_turbine:
@@ -427,11 +414,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_reactor_multiblock:
 			if(entity instanceof TileEntityMachineReactorLarge) {
 				return new ContainerReactorMultiblock(player.inventory, (TileEntityMachineReactorLarge) entity);
-			}
-			return null;
-		case ModBlocks.guiID_fusion_multiblock:
-			if(entity instanceof TileEntityFusionMultiblock) {
-				return new ContainerFusionMultiblock(player.inventory, (TileEntityFusionMultiblock) entity);
 			}
 			return null;
 		case ModBlocks.guiID_watz_multiblock:
@@ -838,16 +820,6 @@ public class GuiHandler implements IGuiHandler {
 				return new GUIMachineBattery(player.inventory, (TileEntityMachineBattery) entity);
 			}
 			return null;
-		case ModBlocks.guiID_converter_he_rf:
-			if(entity instanceof TileEntityConverterHeRf) {
-				return new GUIConverterHeRf(player, (TileEntityConverterHeRf) entity);
-			}
-			return null;
-		case ModBlocks.guiID_converter_rf_he:
-			if(entity instanceof TileEntityConverterRfHe) {
-				return new GUIConverterRfHe(player, (TileEntityConverterRfHe) entity);
-			}
-			return null;
 		case ModBlocks.guiID_machine_turbine:
 			if(entity instanceof TileEntityMachineTurbine) {
 				return new GUIMachineTurbine(player.inventory, (TileEntityMachineTurbine) entity);
@@ -1051,11 +1023,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_reactor_multiblock:
 			if(entity instanceof TileEntityMachineReactorLarge) {
 				return new GUIReactorMultiblock(player.inventory, (TileEntityMachineReactorLarge) entity);
-			}
-			return null;
-		case ModBlocks.guiID_fusion_multiblock:
-			if(entity instanceof TileEntityFusionMultiblock) {
-				return new GUIFusionMultiblock(player.inventory, (TileEntityFusionMultiblock) entity);
 			}
 			return null;
 		case ModBlocks.guiID_watz_multiblock:

@@ -2,216 +2,82 @@ package com.hbm.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
 public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileEntitySpecialRenderer<T> {
-
-	public ResourceLocation texture = new ResourceLocation(RefStrings.MODID, "textures/blocks/fluid_duct.png");
-	public ResourceLocation texture_extract = new ResourceLocation(RefStrings.MODID, "textures/blocks/fluid_duct_extract.png");
-	float pixel = 1F / 16F;
-	float textureP = 1F / 32F;
 	
 	@Override
 	public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GL11.glTranslated(x, y, z);
-		GlStateManager.disableLighting();
-		if(te instanceof TileEntityFFFluidSuccMk2){
-			this.bindTexture(texture_extract);
-		} else {
-			this.bindTexture(texture);
-		}
-		drawCore(te);
-		for (int i = 0; i < te.connections.length; i++) {
-			if (te.connections[i] != null) {
-				drawConnection(te.connections[i], te.getType(), te instanceof TileEntityFFFluidSuccMk2 ? texture_extract : texture);
-			}
-		}
-		GL11.glTranslated(-x, -y, -z);
+		GL11.glPushMatrix();
 		GlStateManager.enableLighting();
-	}
-	
-	public void drawCore(TileEntity tileentity) {
-		RenderHelper.startDrawingTexturedQuads();
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 5 * textureP);
+		
 
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 5 * textureP);
-
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 5 * textureP);
-
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 5 * textureP);
-
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 5 * textureP);
-
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 11 * pixel / 2, 0 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 11 * pixel / 2, 1 - 11 * pixel / 2, 0 * textureP, 5 * textureP);
-		RenderHelper.draw();
-	}
-	
-	public void drawConnection(EnumFacing direction, Fluid type, ResourceLocation texture) {
-		RenderHelper.startDrawingTexturedQuads();
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		if (direction.equals(EnumFacing.UP)) {
-
+		boolean pX = te.connections[3] != null;
+		boolean nX = te.connections[5] != null;
+		boolean pY = te.connections[0] != null;
+		boolean nY = te.connections[1] != null;
+		boolean pZ = te.connections[4] != null;
+		boolean nZ = te.connections[2] != null;
+		
+		int mask = 0 + (pX ? 32 : 0) + (nX ? 16 : 0) + (pY ? 8 : 0) + (nY ? 4 : 0) + (pZ ? 2 : 0) + (nZ ? 1 : 0);
+		
+		GL11.glTranslated(x + 0.5F, y + 0.5F, z + 0.5F);
+		
+		if(te instanceof TileEntityFFDuctBaseMk2){
+			if(te.getType() != null)
+				FFUtils.setRGBFromHex(ModForgeFluids.fluidColors.get(te.getType()));
 		}
-		if (direction.equals(EnumFacing.DOWN)) {
-			GL11.glRotatef(180, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.NORTH)) {
-			GL11.glRotatef(270, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.SOUTH)) {
-			GL11.glRotatef(90, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.EAST)) {
-			GL11.glRotatef(270, 0, 0, 1);
-		}
-		if (direction.equals(EnumFacing.WEST)) {
-			GL11.glRotatef(90, 0, 0, 1);
-		}
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1, 1 - 11 * pixel / 2, 10 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1, 1 - 11 * pixel / 2, 10 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 0 * textureP);
-
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1, 11 * pixel / 2, 10 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1, 11 * pixel / 2, 10 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1, 11 * pixel / 2, 10 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1, 1 - 11 * pixel / 2, 10 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 0 * textureP);
-
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2, 5 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1, 1 - 11 * pixel / 2, 10 * textureP, 5 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1, 11 * pixel / 2, 10 * textureP, 0 * textureP);
-		RenderHelper.addVertexWithUV(11 * pixel / 2, 1 - 11 * pixel / 2, 11 * pixel / 2, 5 * textureP, 0 * textureP);
-		RenderHelper.draw();
-
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableCull();
-		float p = 0.01F;
-		float n = -0.01F;
-		int r = 169;
-		int g = 169;
-		int b = 169;
-		if (type == null || FFUtils.getTextureFromFluid(type) == null) {
-			RenderHelper.startDrawingColored(5);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1 - 11 * pixel / 2, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1 - 11 * pixel / 2, 11 * pixel / 2 + p, r, g, b, 255);
-
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1 - 11 * pixel / 2, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-				RenderHelper.addVertexColor(1 - 11 * pixel / 2 + n, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1 - 11 * pixel / 2, 11 * pixel / 2 + p, r, g, b, 255);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-				RenderHelper.addVertexColor(11 * pixel / 2 + p, 1 - 11 * pixel / 2, 1 - 11 * pixel / 2 + n, r, g, b, 255);
-			RenderHelper.draw();
+		if(te instanceof TileEntityFFFluidSuccMk2){
+			bindTexture(ResourceManager.pipe_neo_succ_tex);
 		} else {
-			GlStateManager.enableTexture2D();
-			TextureAtlasSprite icon = FFUtils.getTextureFromFluid(type);
-			float iconMaxU = icon.getInterpolatedU(9);
-			float iconMinU = icon.getInterpolatedU(8);
-			float iconMaxV = icon.getInterpolatedV(16);
-			float iconMinV = icon.getInterpolatedV(11);
-			RenderHelper.bindBlockTexture();
-			
-			FFUtils.setColorFromFluid(type);
-
-			RenderHelper.startDrawingTexturedQuads();
-			
-				RenderHelper.addVertexWithUV(7.5*pixel, 1, 5.5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(8.5*pixel, 1, 5.5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(8.5*pixel, 10.5*pixel, 5.5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(7.5*pixel, 10.5*pixel, 5.5*pixel, iconMaxU, iconMaxV);
-				
-				RenderHelper.addVertexWithUV(7.5*pixel, 1, 10.5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(8.5*pixel, 1, 10.5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(8.5*pixel, 10.5*pixel, 10.5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(7.5*pixel, 10.5*pixel, 10.5*pixel, iconMaxU, iconMaxV);
-				
-				RenderHelper.addVertexWithUV(10.5*pixel, 1, 7.5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(10.5*pixel, 1, 8.5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(10.5*pixel, 10.5*pixel, 8.5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(10.5*pixel, 10.5*pixel, 7.5*pixel, iconMaxU, iconMaxV);
-				
-				RenderHelper.addVertexWithUV(5.5*pixel, 1, 7.5*pixel, iconMaxU, iconMinV);
-				RenderHelper.addVertexWithUV(5.5*pixel, 1, 8.5*pixel, iconMinU, iconMinV);
-				RenderHelper.addVertexWithUV(5.5*pixel, 10.5*pixel, 8.5*pixel, iconMinU, iconMaxV);
-				RenderHelper.addVertexWithUV(5.5*pixel, 10.5*pixel, 7.5*pixel, iconMaxU, iconMaxV);
-
-			RenderHelper.draw();
-			
-			RenderHelper.resetColor();
-
-			this.bindTexture(texture);
-
+			bindTexture(ResourceManager.pipe_neo_tex);
 		}
-		GlStateManager.enableCull();
-		GlStateManager.enableTexture2D();
-
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-		if (direction.equals(EnumFacing.UP)) {
-
-		}
-		if (direction.equals(EnumFacing.DOWN)) {
-			GL11.glRotatef(-180, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.NORTH)) {
-			GL11.glRotatef(-270, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.SOUTH)) {
-			GL11.glRotatef(-90, 1, 0, 0);
-		}
-		if (direction.equals(EnumFacing.EAST)) {
-			GL11.glRotatef(-270, 0, 0, 1);
-		}
-		if (direction.equals(EnumFacing.WEST)) {
-			GL11.glRotatef(-90, 0, 0, 1);
-		}
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-	}
+		if(mask == 0) {
+			ResourceManager.pipe_neo.renderPart("pX");
+			ResourceManager.pipe_neo.renderPart("nX");
+			ResourceManager.pipe_neo.renderPart("pY");
+			ResourceManager.pipe_neo.renderPart("nY");
+			ResourceManager.pipe_neo.renderPart("pZ");
+			ResourceManager.pipe_neo.renderPart("nZ");
+		} else if(mask == 0b100000 || mask == 0b010000) {
+			ResourceManager.pipe_neo.renderPart("pX");
+			ResourceManager.pipe_neo.renderPart("nX");
+		} else if(mask == 0b001000 || mask == 0b000100) {
+			ResourceManager.pipe_neo.renderPart("pY");
+			ResourceManager.pipe_neo.renderPart("nY");
+		} else if(mask == 0b000010 || mask == 0b000001) {
+			ResourceManager.pipe_neo.renderPart("pZ");
+			ResourceManager.pipe_neo.renderPart("nZ");
+		} else {
 	
+			if(pX) ResourceManager.pipe_neo.renderPart("pX");
+			if(nX) ResourceManager.pipe_neo.renderPart("nX");
+			if(pY) ResourceManager.pipe_neo.renderPart("pY");
+			if(nY) ResourceManager.pipe_neo.renderPart("nY");
+			if(pZ) ResourceManager.pipe_neo.renderPart("nZ");
+			if(nZ) ResourceManager.pipe_neo.renderPart("pZ");
+	
+			if(!pX && !pY && !pZ) ResourceManager.pipe_neo.renderPart("ppn");
+			if(!pX && !pY && !nZ) ResourceManager.pipe_neo.renderPart("ppp");
+			if(!nX && !pY && !pZ) ResourceManager.pipe_neo.renderPart("npn");
+			if(!nX && !pY && !nZ) ResourceManager.pipe_neo.renderPart("npp");
+			if(!pX && !nY && !pZ) ResourceManager.pipe_neo.renderPart("pnn");
+			if(!pX && !nY && !nZ) ResourceManager.pipe_neo.renderPart("pnp");
+			if(!nX && !nY && !pZ) ResourceManager.pipe_neo.renderPart("nnn");
+			if(!nX && !nY && !nZ) ResourceManager.pipe_neo.renderPart("nnp");
+
+		}
+		GlStateManager.color(1, 1, 1, 1);
+		GL11.glTranslated(-x - 0.5F, -y - 0.5F, -z - 0.5F);
+		GL11.glPopMatrix();
+	}	
 }

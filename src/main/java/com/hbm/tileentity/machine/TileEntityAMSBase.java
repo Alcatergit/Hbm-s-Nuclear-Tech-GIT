@@ -8,8 +8,6 @@ import com.hbm.entity.logic.EntityNukeExplosionMK4;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.machine.ItemCatalyst;
 import com.hbm.items.special.ItemAMSCore;
@@ -39,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import scala.util.Random;
 
-public class TileEntityAMSBase extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -57,7 +55,6 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 	public boolean locked = false;
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	public int color = -1;
 	public boolean needsUpdate;
 	
@@ -165,10 +162,6 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 				{
 					age = 0;
 				}
-				
-				if(age == 9 || age == 19)
-					ffgeuaInit();
-				
 				
 				int f1 = 0, f2 = 0, f3 = 0, f4 = 0;
 				int booster = 0;
@@ -458,51 +451,6 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, ISource,
 		}*/
 		
 		return true;
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.add(-2, 0, 0), getTact());
-		ffgeua(pos.add(2, 0, 0), getTact());
-		ffgeua(pos.add(0, 0, -2), getTact());
-		ffgeua(pos.add(0, 0, 2), getTact());
-		ffgeua(pos.add(0, -1, 0), getTact());
-	}
-	
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
 	}
 	
 	@Override

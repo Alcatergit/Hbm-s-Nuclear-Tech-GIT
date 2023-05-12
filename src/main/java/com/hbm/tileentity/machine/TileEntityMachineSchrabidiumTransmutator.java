@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.config.VersatileConfig;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCapacitor;
@@ -12,6 +11,7 @@ import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power = 0;
 	public int process = 0;
@@ -102,7 +102,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			
+			this.updateStandardConnections(world, pos);
 			power = Library.chargeTEFromItems(inventory, 3, power, maxPower);
 
 			if (canProcess()) {

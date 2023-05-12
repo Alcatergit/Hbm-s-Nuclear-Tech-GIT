@@ -9,6 +9,6 @@ public interface IToolable {
 	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool);
 
 	public static enum ToolType {
-		SCREWDRIVER, HAND_DRILL
+		SCREWDRIVER, HAND_DRILL, DEFUSER
 	}
 }

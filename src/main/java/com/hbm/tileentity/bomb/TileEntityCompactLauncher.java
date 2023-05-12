@@ -6,7 +6,6 @@ import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
@@ -14,6 +13,7 @@ import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
@@ -22,7 +22,9 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -50,7 +52,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCompactLauncher extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -142,6 +144,9 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 			if(needsUpdate) {
 				needsUpdate = false;
 			}
+			if(world.getTotalWorldTime() % 20 == 0)
+				this.updateConnections();
+
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, solid, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
@@ -179,6 +184,22 @@ public class TileEntityCompactLauncher extends TileEntity implements ITickable, 
 				}
 			}
 		}
+	}
+
+	private void updateConnections() {
+		this.trySubscribe(world, pos.add(+ 2, 0, + 1), ForgeDirection.EAST);
+		this.trySubscribe(world, pos.add(+ 2, 0, + 1), ForgeDirection.EAST);
+		this.trySubscribe(world, pos.add(+ 2, 0, - 1), ForgeDirection.EAST);
+		this.trySubscribe(world, pos.add(- 2, 0, + 1), ForgeDirection.WEST);
+		this.trySubscribe(world, pos.add(- 2, 0, - 1), ForgeDirection.WEST);
+		this.trySubscribe(world, pos.add(+ 1, 0, + 2), ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.add(- 1, 0, + 2), ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.add(+ 1, 0, - 2), ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.add(- 1, 0, - 2), ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.add(+ 1, - 1, + 1), ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.add(+ 1, - 1, - 1), ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.add(- 1, - 1, + 1), ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.add(- 1, - 1, - 1), ForgeDirection.DOWN);
 	}
 
 	public boolean canLaunch() {

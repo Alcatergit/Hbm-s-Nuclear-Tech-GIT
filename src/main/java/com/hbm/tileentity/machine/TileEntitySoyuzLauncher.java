@@ -3,16 +3,17 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemSoyuz;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -20,6 +21,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,7 +41,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000;
@@ -70,6 +72,9 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+			if(world.getTotalWorldTime() % 20 == 0) {
+				this.updateConnections();
+			}
 
 			if(isValidFluidForTank(4, 0))
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 4, 5);
@@ -138,6 +143,13 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 				MainRegistry.proxy.effectNT(data);
 			}
 		}
+	}
+
+	private void updateConnections(){
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.add(0, 0, dir.offsetX * 10), rot.getOpposite());
+		this.trySubscribe(world, pos.add(0, 0, dir.offsetX * -9), rot);
 	}
 	
 	private boolean isValidFluidForTank(int slot, int tank){
@@ -427,6 +439,4 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
-
-	
 }

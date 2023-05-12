@@ -2,16 +2,17 @@ package com.hbm.tileentity.machine.oil;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.Tuple.Pair;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRefinery extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineRefinery extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -117,6 +118,7 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 			if(needsUpdate){
 				needsUpdate = false;
 			}
+			this.updateConnections();
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3], tanks[4]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
@@ -150,6 +152,17 @@ public class TileEntityMachineRefinery extends TileEntity implements ITickable, 
 
 			detectAndSendChanges();
 		}
+	}
+
+	private void updateConnections() {
+		this.trySubscribe(world, pos.add(2, 0, 1), Library.POS_X);
+		this.trySubscribe(world, pos.add(2, 0, -1), Library.POS_X);
+		this.trySubscribe(world, pos.add(-2, 0, 1), Library.NEG_X);
+		this.trySubscribe(world, pos.add(-2, 0, -1), Library.NEG_X);
+		this.trySubscribe(world, pos.add(1, 0, 2), Library.POS_Z);
+		this.trySubscribe(world, pos.add(-1, 0, 2), Library.POS_Z);
+		this.trySubscribe(world, pos.add(1, 0, -2), Library.NEG_Z);
+		this.trySubscribe(world, pos.add(-1, 0, -2), Library.NEG_Z);
 	}
 
 	private void setupTanks(FluidStack[] fluids){

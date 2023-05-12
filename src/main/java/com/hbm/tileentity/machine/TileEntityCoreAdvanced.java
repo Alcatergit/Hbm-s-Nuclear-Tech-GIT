@@ -1,12 +1,14 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IFactory;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -24,7 +26,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCoreAdvanced extends TileEntity implements ITickable, IFactory, IConsumer {
+public class TileEntityCoreAdvanced extends TileEntityLoadedBase implements ITickable, IFactory, IEnergyUser {
 
 	public int progress = 0;
 	public long power = 0;
@@ -94,9 +96,10 @@ public class TileEntityCoreAdvanced extends TileEntity implements ITickable, IFa
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public void update() {
+		this.trySubscribe(world, pos.add(0, 1, 0), ForgeDirection.UP);
 		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_advanced)
 		{
 			this.power = (int) ((IBatteryItem)inventory.getStackInSlot(22).getItem()).getCharge(inventory.getStackInSlot(22));
@@ -558,19 +561,21 @@ public class TileEntityCoreAdvanced extends TileEntity implements ITickable, IFa
 	}
 
 	@Override
+	public long getPower() {
+		return power;
+	}
+
+
+	@Override
 	public void setPower(long i) {
 		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_advanced)
 		{
 			((ItemBattery)inventory.getStackInSlot(22).getItem()).setCharge(inventory.getStackInSlot(22), (int)i);
 		}
 	}
-	@Override
-	public long getPower() {
-		return power;
-	}
+
 	@Override
 	public long getMaxPower() {
 		return maxPower;
 	}
-
 }

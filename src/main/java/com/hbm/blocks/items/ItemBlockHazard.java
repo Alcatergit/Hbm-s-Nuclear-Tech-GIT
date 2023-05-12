@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class ItemBlockHazard extends ItemBlock {
 
-	ItemHazardModule module;
+	public ItemHazardModule module;
 
 	public ItemBlockHazard(Block block) {
 		super(block);

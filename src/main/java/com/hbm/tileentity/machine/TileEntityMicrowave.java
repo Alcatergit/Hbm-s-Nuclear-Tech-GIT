@@ -1,9 +1,9 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMicrowave extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMicrowave extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 50000;
@@ -37,6 +37,7 @@ public class TileEntityMicrowave extends TileEntityMachineBase implements ITicka
 	public void update() {
 		if(!world.isRemote) {
 
+			this.updateStandardConnections(world, pos);
 			this.power = Library.chargeTEFromItems(inventory, 2, power, maxPower);
 
 			if(canProcess()) {

@@ -144,9 +144,4 @@ public class WasteEarth extends Block implements IItemHazard {
 			}
 		}
 	}
-
-	@Override
-	public Block setSoundType(SoundType sound) {
-		return super.setSoundType(sound);
-	}
 }

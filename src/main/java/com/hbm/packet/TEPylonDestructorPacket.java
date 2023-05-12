@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.network.energy.TileEntityPylonBase;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -49,10 +49,10 @@ public class TEPylonDestructorPacket implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-				if (te != null && te instanceof TileEntityPylonRedWire) {
+				if (te != null && te instanceof TileEntityPylonBase) {
 						
-					TileEntityPylonRedWire pyl = (TileEntityPylonRedWire) te;
-					pyl.connected.clear();
+					TileEntityPylonBase pyl = (TileEntityPylonBase) te;
+					pyl.disconnectAll();
 				}
 			});
 			

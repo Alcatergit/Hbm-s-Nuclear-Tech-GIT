@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 public class SatelliteHorizons extends Satellite {
 
 	boolean used = false;
+	public long lastOp;
 	
 	public SatelliteHorizons() {
 		this.satIface = Interfaces.SAT_COORD;
@@ -26,10 +27,12 @@ public class SatelliteHorizons extends Satellite {
 	
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("used", used);
+		nbt.setLong("lastOp", lastOp);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
 		used = nbt.getBoolean("used");
+		lastOp = nbt.getLong("lastOp");
 	}
 	
 	public void onCoordAction(World world, EntityPlayer player, int x, int y, int z) {

@@ -9,6 +9,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RBMKOutgasserRecipes;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.packet.FluidTankPacket;
@@ -92,6 +93,11 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 				process();
 				this.markDirty();
 			}
+		} else if(!inventory.getStackInSlot(0).isEmpty()){
+			if(type == NType.FAST)
+				flux *= 0.2D;
+			ContaminationUtil.neutronActivateItem(inventory.getStackInSlot(0), (float)(flux * 0.001), 1F);
+			this.markDirty();
 		}
 	}
 	

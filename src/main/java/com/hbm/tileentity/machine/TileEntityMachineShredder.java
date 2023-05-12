@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.Untested;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.machine.ItemBlades;
@@ -10,6 +9,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineShredder extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineShredder extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public int progress;
@@ -118,6 +118,7 @@ public class TileEntityMachineShredder extends TileEntityMachineBase implements 
 		
 		if(!world.isRemote)
 		{			
+			this.updateStandardConnections(world, pos);
 			if(hasPower() && canProcess())
 			{
 				progress++;

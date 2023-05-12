@@ -26,7 +26,11 @@ public class RenderMinerRocket extends Render<EntityMinerRocket> {
         //GL11.glRotated(180, 0, 0, 1);
         GlStateManager.disableCull();
         
-        bindTexture(ResourceManager.minerRocket_tex);
+        if(entity.getRocketType() == 1){
+			bindTexture(ResourceManager.minerRocketGerald_tex);
+        } else {
+        	bindTexture(ResourceManager.minerRocket_tex);
+        }
         
         ResourceManager.minerRocket.renderAll();
         
@@ -36,8 +40,9 @@ public class RenderMinerRocket extends Render<EntityMinerRocket> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityMinerRocket entity) {
-		return ResourceManager.minerRocket_tex;
+		if(entity.getRocketType() == 1)
+			return ResourceManager.minerRocketGerald_tex;
+		else
+			return ResourceManager.minerRocket_tex;
 	}
-
-	
 }

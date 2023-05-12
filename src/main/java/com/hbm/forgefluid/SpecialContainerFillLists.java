@@ -149,7 +149,11 @@ public class SpecialContainerFillLists {
 		EMPTY(null, new ModelResourceLocation(RefStrings.MODID + ":gas_empty", "inventory")),
 		NATURAL(ModForgeFluids.gas, new ModelResourceLocation(RefStrings.MODID + ":gas_full", "inventory")),
 		PETROLEUM(ModForgeFluids.petroleum, new ModelResourceLocation(RefStrings.MODID + ":gas_petroleum", "inventory")),
-		BIOGAS(ModForgeFluids.biogas, new ModelResourceLocation(RefStrings.MODID + ":gas_biogas", "inventory"));
+		BIOGAS(ModForgeFluids.biogas, new ModelResourceLocation(RefStrings.MODID + ":gas_biogas", "inventory")),
+		HYDROGEN(ModForgeFluids.hydrogen, new ModelResourceLocation(RefStrings.MODID + ":gas_hydrogen", "inventory")),
+		DEUTERIUM(ModForgeFluids.deuterium, new ModelResourceLocation(RefStrings.MODID + ":gas_deuterium", "inventory")),
+		TRITIUM(ModForgeFluids.tritium, new ModelResourceLocation(RefStrings.MODID + ":gas_tritium", "inventory")),
+		OXYGEN(ModForgeFluids.oxygen, new ModelResourceLocation(RefStrings.MODID + ":gas_oxygen", "inventory"));
 		
 		private Fluid fluid;
 		private Pair<ModelResourceLocation, IBakedModel> renderPair;

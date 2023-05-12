@@ -8,6 +8,7 @@ import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 
 import net.minecraft.block.material.Material;
@@ -33,6 +34,8 @@ public class SoyuzLauncher extends BlockDummyable {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if(meta == 2 || meta == 3)
+			return new TileEntityProxyCombo(false, true, true);
 		if(meta >= ForgeDirection.UNKNOWN.ordinal())
 			return new TileEntitySoyuzLauncher();
 
@@ -72,23 +75,6 @@ public class SoyuzLauncher extends BlockDummyable {
 		int o = -getOffset();
 
 		ForgeDirection dir = ForgeDirection.EAST;
-
-		/*if(i == 0)
-		{
-			dir = ForgeDirection.getOrientation(2);
-		}
-		if(i == 1)
-		{
-			dir = ForgeDirection.getOrientation(5);
-		}
-		if(i == 2)
-		{
-			dir = ForgeDirection.getOrientation(3);
-		}
-		if(i == 3)
-		{
-			dir = ForgeDirection.getOrientation(4);
-		}*/
 
 		if(!checkRequirement(world, pos.getX(), pos.getY(), pos.getZ(), dir, o)) {
 			world.setBlockToAir(pos);

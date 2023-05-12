@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -34,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import scala.util.Random;
 
-public class TileEntityAMSLimiter extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 
@@ -291,22 +290,6 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, ICons
 		return (heat * i) / maxHeat;
 	}
 
-	@Override
-	public void setPower(long i) {
-		power = i;
-		
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-		
-	}
-
-	@Override
-	public long getMaxPower() {
-		return maxPower;
-	}
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {

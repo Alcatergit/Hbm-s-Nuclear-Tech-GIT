@@ -8,7 +8,6 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockHadronCoil;
 import com.hbm.blocks.machine.BlockHadronPlating;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.HadronRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
@@ -19,6 +18,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.TileEntityHadronDiode.DiodeConfig;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +34,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityHadron extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityHadron extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 10000000;
@@ -86,8 +86,10 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 	@Override
 	public void update() {
 		if(!world.isRemote){
+
 			power = Library.chargeTEFromItems(inventory, 4, power, maxPower);
 			drawPower();
+
 			if(delay <= 0 && this.isOn && particles.size() < maxParticles && !inventory.getStackInSlot(0).isEmpty() && !inventory.getStackInSlot(1).isEmpty() && power >= maxPower * 0.75) {
 				if(!hopperMode || (inventory.getStackInSlot(0).getCount() > 1 && inventory.getStackInSlot(1).getCount() > 1)) {
 					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata());

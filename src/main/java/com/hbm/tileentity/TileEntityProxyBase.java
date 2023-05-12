@@ -8,7 +8,7 @@ import com.hbm.tileentity.machine.TileEntityHadron;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityProxyBase extends TileEntity {
+public class TileEntityProxyBase extends TileEntityLoadedBase {
 
 	public TileEntity getTE() {
 
