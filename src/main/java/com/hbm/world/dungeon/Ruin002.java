@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.DecoBlock;
-import com.hbm.blocks.network.CableSwitch;
+import com.hbm.blocks.network.energy.CableSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;

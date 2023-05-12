@@ -1,12 +1,12 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemLens;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 500000000000L;
@@ -38,6 +38,8 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 	@Override
 	public void update() {
 		if(!world.isRemote) {
+
+			this.updateStandardConnections(world, pos);
 			
 			watts = MathHelper.clamp(watts, 1, 100);
 			int demand = (int) Math.pow(watts, 5);

@@ -7,7 +7,6 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
@@ -15,6 +14,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IConsumer {
+public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 10000000000L;
@@ -60,6 +60,9 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 	public void update() {
 		updateType();
 		if(!world.isRemote) {
+
+			if(this.world.getTotalWorldTime() % 20 == 0)
+				this.updateConnections();
 
 			/// START Managing all the internal stuff ///
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
@@ -133,6 +136,18 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 	@Override
 	public void networkUnpack(NBTTagCompound nbt) {
 		this.power = nbt.getLong("power");
+	}
+
+	private void updateConnections()  {
+
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		ForgeDirection side = dir.getRotation(ForgeDirection.UP);
+		
+		for(int i = 1; i < 4; i++) {
+			for(int j = -1; j < 2; j++) {
+				this.trySubscribe(world, pos.add(side.offsetX * j + dir.offsetX * 2, i, side.offsetZ * j + dir.offsetZ * 2), j < 0 ? ForgeDirection.DOWN : ForgeDirection.UP);
+			}
+		}
 	}
 	
 	private void updateType() {

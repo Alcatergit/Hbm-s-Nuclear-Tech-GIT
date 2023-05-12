@@ -9,7 +9,6 @@ import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTeslaCrab;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -18,6 +17,7 @@ import com.hbm.packet.TETeslaPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityTesla extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityTesla extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 100000;
@@ -56,7 +56,7 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			
+			this.updateStandardConnections(world, pos);
 			this.targets.clear();
 			
 			if(world.getBlockState(pos.down()).getBlock() == ModBlocks.meteor_battery)
@@ -72,17 +72,6 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 				this.targets = zap(world, dx, dy, dz, range, null);
 			}
 			
-			/*NBTTagCompound data = new NBTTagCompound();
-			data.setShort("length", (short)targets.size());
-			int i = 0;
-			for(double[] d : this.targets) {
-				data.setDouble("x" + i, d[0]);
-				data.setDouble("y" + i, d[1]);
-				data.setDouble("z" + i, d[2]);
-				i++;
-			}
-			
-			this.networkPack(data, 100);*/
 			PacketDispatcher.wrapper.sendToAllAround(new TETeslaPacket(pos, targets), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		}
 	}

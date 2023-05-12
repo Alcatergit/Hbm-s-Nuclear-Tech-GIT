@@ -2,14 +2,12 @@ package com.hbm.blocks.gas;
 
 import java.util.Random;
 
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.util.ArmorRegistry;
-import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.config.GeneralConfig;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -33,13 +31,7 @@ public class BlockGasAsbestos extends BlockGasBase {
 	
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
-		if(entity instanceof EntityLivingBase) {
-			
-			EntityLivingBase living = (EntityLivingBase) entity;
-			
-			if(!ArmorRegistry.hasProtection(living, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-				HbmLivingProps.incrementAsbestos(living, 1);
-		}
+		ContaminationUtil.applyAsbestos(entity, 10, 5);
 	}
 	
 
@@ -60,7 +52,7 @@ public class BlockGasAsbestos extends BlockGasBase {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
-		if(!world.isRemote && rand.nextInt(50) == 0) {
+		if(!world.isRemote && (!GeneralConfig.enableAsbestos || rand.nextInt(50) == 0)) {
 			world.setBlockToAir(pos);
 			return;
 		}

@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.Library;
@@ -15,6 +14,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +31,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityMachineBoilerElectric extends TileEntityMachineBase implements ITickable, IFluidHandler, IConsumer, ITankPacketAcceptor {
+public class TileEntityMachineBoilerElectric extends TileEntityMachineBase implements ITickable, IFluidHandler, IEnergyUser, ITankPacketAcceptor {
 
 	public long power;
 	public int heat = 2000;
@@ -123,6 +123,7 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 			if(needsUpdate) {
 				needsUpdate = false;
 			}
+			this.updateStandardConnections(world, pos);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			age++;
 			if(age >= 20) {

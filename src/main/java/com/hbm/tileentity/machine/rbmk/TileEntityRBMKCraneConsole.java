@@ -132,6 +132,32 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 			}
 		}
 
+		if(isCooledDown()){
+			if(craneUp != up || craneDown != down || craneLeft != left || craneRight != right) //activating cooldown bc of change in direction
+				ticksSince = 1;
+			else if(craneUp || craneDown || craneLeft  || craneRight) //activating cooldown bc to keep going if moving
+				ticksSince = 1;
+			craneUp = up;
+			craneDown = down;
+			craneLeft = left;
+			craneRight = right;
+		}
+
+		if(!world.isRemote){
+			if(craneUp)
+				posFront += speed;
+
+			if(craneDown)
+				posFront -= speed;
+
+			if(craneLeft)
+				posLeft += speed;
+
+			if(craneRight)
+				posLeft -= speed;
+		}
+
+		//Player input for next update
 		double xCoord = pos.getX();
 		double yCoord = pos.getY();
 		double zCoord = pos.getZ();
@@ -156,33 +182,13 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		if(players.size() > 0 && !isCraneLoading()) {
 			EntityPlayer player = players.get(0);
 			IHBMData props = HbmCapability.getData(player);
-			up = props.getKeyPressed(EnumKeybind.CRANE_UP);
-			down = props.getKeyPressed(EnumKeybind.CRANE_DOWN);
-			left = props.getKeyPressed(EnumKeybind.CRANE_LEFT);
-			right = props.getKeyPressed(EnumKeybind.CRANE_RIGHT);
 
+			processInput(props.getKeyPressed(EnumKeybind.CRANE_UP),
+				props.getKeyPressed(EnumKeybind.CRANE_DOWN),
+				props.getKeyPressed(EnumKeybind.CRANE_LEFT),
+				props.getKeyPressed(EnumKeybind.CRANE_RIGHT)
+			);
 
-			if(up == down){
-				up = false;
-				down = false;
-			}else{
-				if(up){
-					tiltFront = 30;
-				}else{
-					tiltFront = -30;
-				}
-			}
-
-			if(left == right){
-				left = false;
-				right = false;
-			}else{
-				if(left){
-					tiltLeft = 30;
-				}else{
-					tiltLeft = -30;
-				}
-			}
 			if(props.getKeyPressed(EnumKeybind.CRANE_LOAD)) {
 				goesDown = true;
 			}
@@ -191,31 +197,6 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 			down = false;
 			left = false;
 			right = false;
-		}
-
-		if(isCooledDown()){
-			if(craneUp != up || craneDown != down || craneLeft != left || craneRight != right) //activating cooldown bc of change in direction
-				ticksSince = 1;
-			else if(craneUp || craneDown || craneLeft  || craneRight) //activating cooldown bc to keep going if moving
-				ticksSince = 1;
-			craneUp = up;
-			craneDown = down;
-			craneLeft = left;
-			craneRight = right;
-		}
-
-		if(!world.isRemote){
-			if(craneUp)
-				posFront += speed;
-
-			if(craneDown)
-				posFront -= speed;
-
-			if(craneLeft)
-				posLeft += speed;
-
-			if(craneRight)
-				posLeft -= speed;
 		}
 		
 		posFront = MathHelper.clamp(posFront, -spanB, spanF);
@@ -250,6 +231,34 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 				nbt.setDouble("loadedEnrichment", loadedEnrichment);
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new NBTPacket(nbt, pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
+		}
+	}
+
+	public void processInput(boolean inputUP, boolean inputDOWN, boolean inputLEFT, boolean inputRIGHT){
+		up = inputUP;
+		down = inputDOWN;
+		left = inputLEFT;
+		right = inputRIGHT;
+		if(up == down){
+			up = false;
+			down = false;
+		}else{
+			if(up){
+				tiltFront = 30;
+			}else{
+				tiltFront = -30;
+			}
+		}
+
+		if(left == right){
+			left = false;
+			right = false;
+		}else{
+			if(left){
+				tiltLeft = 30;
+			}else{
+				tiltLeft = -30;
+			}
 		}
 	}
 	
@@ -398,57 +407,139 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		return 65536.0D;
 	}
 	
-	// do some opencomputer stuff
+	// opencomputers interface
+
 	@Override
 	public String getName() {
 		return "rbmk_crane";
 	}
-
-	// opencomputers interface
 
 	@Override
 	public String getComponentName() {
 		return "rbmk_crane";
 	}
 
-	@Callback(doc = "func(x:str): move crane up,down,left,right")
-	public Object[] move(Context context, Arguments args) {
+	@Callback(doc = "moveUp(); move the crane up 1 block")
+	public Object[] moveUp(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(true, false, false, false);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
 
-		if (setUpCrane == true) {
-			String direction = args.checkString(0);
+	@Callback(doc = "moveDown(); move the crane down 1 block")
+	public Object[] moveDown(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(false, true, false, false);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
 
-			switch (direction) {
-				case "up":
-					tiltFront = 30;
-					if(!world.isRemote) posFront += speed;
-				case "down":
-					tiltFront = -30;
-					if(!world.isRemote) posFront -= speed;
-				case "left":
-					tiltLeft = 30;
-					if(!world.isRemote) posLeft += speed;				
-				case "right":
-					tiltLeft = -30;
-					if(!world.isRemote) posLeft -= speed;
+	@Callback(doc = "moveLeft(); move the crane left 1 block")
+	public Object[] moveLeft(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(false, false, true, false);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveRight(); move the crane right 1 block")
+	public Object[] moveRight(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(false, false, false, true);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveUpLeft(); move the crane up and left 1 block")
+	public Object[] moveUpLeft(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(true, false, true, false);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveUpRight(); move the crane up and right 1 block")
+	public Object[] moveUpRight(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(true, false, false, true);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveDownLeft(); move the crane down and left 1 block")
+	public Object[] moveDownLeft(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(false, true, true, false);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveDownRight(); move the crane down and right 1 block")
+	public Object[] moveDownRight(Context context, Arguments args) {
+		if(setUpCrane) {
+			if(!isCraneLoading()){
+				processInput(false, true, false, true);
+				return new Object[] {};
+			} else {
+				return new Object[] {"Crane is loading and cant be moved"};
+			}	
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "loadUnload(); starts loading/unloading of items")
+	public Object[] loadUnload(Context context, Arguments args) {
+		if (setUpCrane) {
+			if(!isCraneLoading()){
+				goesDown = true; // Robert, it goes down.
+				return new Object[] {"Loading initiated"};
+			} else {
+				return new Object[] {"Crane is already loading"};
 			}
-
-			return new Object[] {};
 		}
-		return new Object[] {"No crane :("};
+		return new Object[] {"No crane found"};
 	}
 
-	@Callback(doc = "func(): crane load/unload")
-	public Object[] load(Context context, Arguments args) {
-		if (setUpCrane == true) {
-			// Robert, it goes down.
-			goesDown = true;
-			return new Object[] {};
-		}
-		return new Object[] {"No crane :("};
-	}
-
-	@Callback(doc = "func(): get crane position")
+	@Callback(doc = "getPos(); get the (x, y) crane displacements. 0,0 is at center rbmk column and y is to the front and x is to the right")
 	public Object[] getPos(Context context, Arguments args) {
-		return new Object[] {posFront, posLeft};
+		if (setUpCrane) 
+			return new Object[] {-posLeft, posFront};
+		return new Object[] {"No crane found"};
 	}
 }

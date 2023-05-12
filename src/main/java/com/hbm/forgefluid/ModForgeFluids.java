@@ -1,6 +1,7 @@
 package com.hbm.forgefluid;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.fluid.CoriumBlock;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class ModForgeFluids {
+
+	public static HashMap<Fluid, Integer> fluidColors = new HashMap<Fluid, Integer>();
 	
 	public static Fluid spentsteam = new Fluid("spentsteam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"), null, Color.WHITE).setTemperature(40 + 273);
 	public static Fluid steam = new Fluid("steam", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/steam_flowing"), null, Color.WHITE).setTemperature(100 + 273);
@@ -108,7 +111,7 @@ public class ModForgeFluids {
 	//Block fluids
 	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(220+273);
 	public static Fluid radwater_fluid = new RadWaterFluid("radwater_fluid").setDensity(1000);
-	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
+	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(1773);
 	public static Fluid schrabidic = new SchrabidicFluid("schrabidic").setDensity(31200).setViscosity(500);
 	public static Fluid corium_fluid = new CoriumFluid().setDensity(31200).setViscosity(2000).setTemperature(3000);
 	public static Fluid volcanic_lava_fluid = new VolcanicFluid().setLuminosity(15).setDensity(3000).setViscosity(3000).setTemperature(1300);
@@ -370,5 +373,11 @@ public class ModForgeFluids {
 	@SubscribeEvent
 	public static void worldLoad(WorldEvent.Load evt) {
 		setFromRegistry();
+	}
+
+	public static void registerFluidColors(){
+		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
+			fluidColors.put(f, FFUtils.getColorFromFluid(f));
+		}
 	}
 }

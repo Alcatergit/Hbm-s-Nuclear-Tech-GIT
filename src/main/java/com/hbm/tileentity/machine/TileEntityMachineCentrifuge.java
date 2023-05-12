@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.items.ModItems;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -10,6 +9,7 @@ import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public int progress;
 	public long power;
@@ -243,6 +243,8 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		
 		if(!world.isRemote) {
 			
+			this.updateStandardConnections(world, pos);
+
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
 
 			int speed = 1;
@@ -327,18 +329,17 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	}
 
 	@Override
-	public void setPower(long i) {
-		power = i;
+	public long getPower() {
+		return power;
 	}
 
 	@Override
-	public long getPower() {
-		return power;
+	public void setPower(long i) {
+		power = i;
 	}
 
 	@Override
 	public long getMaxPower() {
 		return maxPower;
 	}
-
 }

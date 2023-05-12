@@ -1,10 +1,12 @@
 package com.hbm.tileentity.machine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -16,6 +18,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -36,7 +39,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityMachineAssembler extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineAssembler extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 2000000;
@@ -52,8 +55,6 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 	public int recipe;
 
 	private AudioWrapper audio;
-
-	Random rand = new Random();
 	
 	public TileEntityMachineAssembler() {
 
@@ -106,6 +107,8 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 	@Override
 	public void update() {
 		if(!world.isRemote) {
+
+			this.updateConnections();
 
 			this.consumption = 100;
 			this.speed = 100;
@@ -263,6 +266,35 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 				}
 			}
 
+		}
+	}
+
+	private void updateConnections() {
+		int meta = this.getBlockMetadata();
+		
+		if(meta == 5) {
+			this.trySubscribe(world, pos.add(-2, 0, 0), Library.NEG_X);
+			this.trySubscribe(world, pos.add(-2, 0, 1), Library.NEG_X);
+			this.trySubscribe(world, pos.add(3, 0, 0), Library.POS_X);
+			this.trySubscribe(world, pos.add(3, 0, 1), Library.POS_X);
+			
+		} else if(meta == 3) {
+			this.trySubscribe(world, pos.add(0, 0, -2), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(-1, 0, -2), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(0, 0, 3), Library.POS_Z);
+			this.trySubscribe(world, pos.add(-1, 0, 3), Library.POS_Z);
+			
+		} else if(meta == 4) {
+			this.trySubscribe(world, pos.add(2, 0, 0), Library.POS_X);
+			this.trySubscribe(world, pos.add(2, 0, -1), Library.POS_X);
+			this.trySubscribe(world, pos.add(-3, 0, 0), Library.NEG_X);
+			this.trySubscribe(world, pos.add(-3, 0, -1), Library.NEG_X);
+			
+		} else if(meta == 2) {
+			this.trySubscribe(world, pos.add(0, 0, 2), Library.POS_Z);
+			this.trySubscribe(world, pos.add(1, 0, 2), Library.POS_Z);
+			this.trySubscribe(world, pos.add(0, 0, -3), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(1, 0, -3), Library.NEG_Z);
 		}
 	}
 

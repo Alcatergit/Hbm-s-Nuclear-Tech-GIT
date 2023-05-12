@@ -24,7 +24,7 @@ public class PotionRecipes {
 	public static void registerPotionRecipes() {
 		addPotionRecipe(HbmPotion.radiation, ModItems.nuclear_waste, 30*20, 2*60*20, 15*20);
 		addPotionRecipe(HbmPotion.radx, ModItems.pill_iodine, 30*20, 2*60*20, 15*20);
-		addPotionRecipe(HbmPotion.radaway, ModBlocks.mush, 30*20, 2*60*20, 15*20);
+		addPotionRecipe(HbmPotion.radaway, ModBlocks.mush, 60*20, 10*60*20, 4*60*20);
 		addPotionRecipe(HbmPotion.mutation, ModItems.egg_balefire, 30*20, 2*60*20, 0);
 		addPotionRecipe(HbmPotion.taint, ModItems.syringe_taint, 30*20, 2*60*20, 15*20);
 		addPotionRecipe(HbmPotion.phosphorus, ModItems.crystal_phosphorus, 30*20, 2*60*20, 0);
@@ -34,9 +34,13 @@ public class PotionRecipes {
 		addPotionRecipe(HbmPotion.telekinesis, ModBlocks.float_bomb, 30*20, 2*60*20, 15*20);
 	}
 
-	public static void addPotionRecipe(Potion type, Object input, int normalTime, int longTime, int strongTime) {
+	public static void addPotionRecipe(Potion type, Object input, int normalTime, int longTime, int strongTime){
+		addPotionRecipe(type, input, normalTime, longTime, strongTime, 0, 0, 1);
+	}
+
+	public static void addPotionRecipe(Potion type, Object input, int normalTime, int longTime, int strongTime, int normalLvl, int longLvl, int strongLvL) {
 		String baseName = type.getRegistryName().getResourcePath();
-		PotionType normalType = addPotion(new PotionEffect(type, normalTime), baseName, baseName);
+		PotionType normalType = addPotion(new PotionEffect(type, normalTime, normalLvl), baseName, baseName);
 		
 		Ingredient brewItem = getIngredient(input);
 		PotionHelper.addMix(PotionTypes.WATER, brewItem, PotionTypes.MUNDANE);
@@ -44,11 +48,11 @@ public class PotionRecipes {
 		PotionHelper.addMix(PotionTypes.AWKWARD, brewItem, normalType);
 
 		if (strongTime > 0){
-			PotionType strongType = addPotion(new PotionEffect(type, strongTime, 1), baseName, "strong_" + baseName);
+			PotionType strongType = addPotion(new PotionEffect(type, strongTime, strongLvL), baseName, "strong_" + baseName);
 			PotionHelper.addMix(normalType, Items.GLOWSTONE_DUST, strongType);
 		}
 		if (longTime > 0){
-			PotionType longType = addPotion(new PotionEffect(type, longTime), baseName, "long_" + baseName);
+			PotionType longType = addPotion(new PotionEffect(type, longTime, longLvl), baseName, "long_" + baseName);
 			PotionHelper.addMix(normalType, Items.REDSTONE, longType);
 		}
 	}

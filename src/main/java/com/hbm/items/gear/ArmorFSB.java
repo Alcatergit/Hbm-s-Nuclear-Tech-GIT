@@ -90,20 +90,21 @@ public class ArmorFSB extends ItemArmor {
 		ModItems.ALL_ITEMS.add(this);
 	}
 	
-	public static boolean hasFSBArmor(EntityPlayer player) {
-		if(player == null)
+	public static boolean hasFSBArmor(EntityLivingBase entity) {
+		if(entity == null)
 			return false;
 
-		ItemStack plate = player.inventory.armorInventory.get(2);
+		ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
 		if(plate != null && plate.getItem() instanceof ArmorFSB) {
 
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 			boolean noHelmet = chestplate.noHelmet;
 			
-			for(int i = 0; i < (noHelmet ? 3 : 4); i++) {
-
-				ItemStack armor = player.inventory.armorInventory.get(i);
+			for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				if(noHelmet && slot == EntityEquipmentSlot.HEAD)
+					continue;
+				ItemStack armor = entity.getItemStackFromSlot(slot);
 
 				if(armor == null || !(armor.getItem() instanceof ArmorFSB))
 					return false;
@@ -121,27 +122,30 @@ public class ArmorFSB extends ItemArmor {
 		return false;
     }
 	
-	public static boolean hasFSBArmorHelmet(EntityPlayer player){
-		ItemStack plate = player.inventory.armorInventory.get(2);
+	public static boolean hasFSBArmorHelmet(EntityLivingBase entity){
+		ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
 		if(plate != null && plate.getItem() instanceof ArmorFSB) {
-			return !((ArmorFSB)plate.getItem()).noHelmet && hasFSBArmor(player);
+			return !((ArmorFSB)plate.getItem()).noHelmet && hasFSBArmor(entity);
 		}
 		return false;
 	}
 
-    public static boolean hasFSBArmorIgnoreCharge(EntityPlayer player) {
+	public static boolean hasFSBArmorIgnoreCharge(EntityLivingBase entity) {
+		if(entity == null)
+			return false;
 
-		ItemStack plate = player.inventory.armorInventory.get(2);
+		ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
 		if(plate != null && plate.getItem() instanceof ArmorFSB) {
 
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 			boolean noHelmet = chestplate.noHelmet;
-
-			for(int i = 0; i < (noHelmet ? 3 : 4); i++) {
-
-				ItemStack armor = player.inventory.armorInventory.get(i);
+			
+			for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				if(noHelmet && slot == EntityEquipmentSlot.HEAD)
+					continue;
+				ItemStack armor = entity.getItemStackFromSlot(slot);
 
 				if(armor == null || !(armor.getItem() instanceof ArmorFSB))
 					return false;
@@ -149,6 +153,7 @@ public class ArmorFSB extends ItemArmor {
 				if(((ArmorFSB)armor.getItem()).getArmorMaterial() != chestplate.getArmorMaterial())
 					return false;
 			}
+
 			return true;
 		}
 
@@ -160,17 +165,13 @@ public class ArmorFSB extends ItemArmor {
 
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)e;
+		if(ArmorFSB.hasFSBArmor(e)) {
 
-			if(ArmorFSB.hasFSBArmor(player)) {
+			ItemStack plate = e.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
-				ItemStack plate = player.inventory.armorInventory.get(2);
-
-				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
-				
-				chestplate.handleAttack(event, chestplate);
-			}
+			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+			
+			chestplate.handleAttack(event, chestplate);
 		}
     }
 
@@ -193,15 +194,11 @@ public class ArmorFSB extends ItemArmor {
 
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)e;
+		if(ArmorFSB.hasFSBArmor(e)) {
 
-			if(ArmorFSB.hasFSBArmor(player)) {
+			ArmorFSB chestplate = (ArmorFSB)e.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
 
-				ArmorFSB chestplate = (ArmorFSB)player.inventory.armorInventory.get(2).getItem();
-
-				chestplate.handleHurt(event, chestplate);
-			}
+			chestplate.handleHurt(event, chestplate);
 		}
     }
     
@@ -231,28 +228,35 @@ public class ArmorFSB extends ItemArmor {
 	public boolean isArmorEnabled(ItemStack stack) {
 		return true;
 	}
+
+	public static void handleTick(TickEvent.PlayerTickEvent event) {
+		handleTick(event.player, event.phase == Phase.START);
+	}
+
+	public static void handleTick(EntityLivingBase entity) {
+		handleTick(entity, true);
+	}
 	
-    public static void handleTick(TickEvent.PlayerTickEvent event) {
+    public static void handleTick(EntityLivingBase entity, boolean isStart) {
+		if(ArmorFSB.hasFSBArmor(entity)) {
 
-		EntityPlayer player = event.player;
-
-		if(ArmorFSB.hasFSBArmor(player)) {
-
-			ItemStack plate = player.inventory.armorInventory.get(2);
+			ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
 			ArmorFSB chestplate = (ArmorFSB) plate.getItem();
 
 			if(!chestplate.effects.isEmpty()) {
 
 				for(PotionEffect i : chestplate.effects) {
-					player.addPotionEffect(new PotionEffect(i.getPotion(), i.getDuration(), i.getAmplifier(), i.getIsAmbient(), i.doesShowParticles()));
+					entity.addPotionEffect(new PotionEffect(i.getPotion(), i.getDuration(), i.getAmplifier(), i.getIsAmbient(), i.doesShowParticles()));
 				}
 			}
 
-			if(!player.capabilities.isFlying && !player.isInWater())
-				player.motionY -= chestplate.gravity;
+			if(!entity.isInWater()){
+				if(!(entity instanceof EntityPlayer) || (entity instanceof EntityPlayer && !((EntityPlayer)entity).capabilities.isFlying))
+					entity.motionY -= chestplate.gravity;
+			}
 			
-			if(chestplate.step != null && player.world.isRemote && player.onGround && event.phase == Phase.START) {
+			if(chestplate.step != null && entity.world.isRemote && entity.onGround && isStart) {
 
 				try {
 					if(nextStepDistance == null)
@@ -260,19 +264,19 @@ public class ArmorFSB extends ItemArmor {
 					if(distanceWalkedOnStepModified == null)
 						distanceWalkedOnStepModified = ReflectionHelper.findField(Entity.class, "distanceWalkedOnStepModified", "field_82151_R");
 
-					if(player.getEntityData().getFloat("hfr_nextStepDistance") == 0) {
-						player.getEntityData().setFloat("hfr_nextStepDistance", nextStepDistance.getFloat(player));
+					if(entity.getEntityData().getFloat("hfr_nextStepDistance") == 0) {
+						entity.getEntityData().setFloat("hfr_nextStepDistance", nextStepDistance.getFloat(entity));
 					}
 
-	                int px = MathHelper.floor(player.posX);
-	                int py = MathHelper.floor(player.posY - 0.2D);
-	                int pz = MathHelper.floor(player.posZ);
-	                IBlockState block = player.world.getBlockState(new BlockPos(px, py, pz));
-					if(block.getMaterial() != Material.AIR && player.getEntityData().getFloat("hfr_nextStepDistance") <= distanceWalkedOnStepModified.getFloat(player)){
-						player.playSound(chestplate.step, 1.0F, 1.0F);
+	                int px = MathHelper.floor(entity.posX);
+	                int py = MathHelper.floor(entity.posY - 0.2D);
+	                int pz = MathHelper.floor(entity.posZ);
+	                IBlockState block = entity.world.getBlockState(new BlockPos(px, py, pz));
+					if(block.getMaterial() != Material.AIR && entity.getEntityData().getFloat("hfr_nextStepDistance") <= distanceWalkedOnStepModified.getFloat(entity)){
+						entity.playSound(chestplate.step, 1.0F, 1.0F);
 					}
 
-					player.getEntityData().setFloat("hfr_nextStepDistance", nextStepDistance.getFloat(player));
+					entity.getEntityData().setFloat("hfr_nextStepDistance", nextStepDistance.getFloat(entity));
 
 				} catch (Exception x) {
 					x.printStackTrace();
@@ -282,33 +286,33 @@ public class ArmorFSB extends ItemArmor {
     }
 	
 	
-	public static void handleJump(EntityPlayer player) {
+	public static void handleJump(EntityLivingBase entity) {
 
-		if(ArmorFSB.hasFSBArmor(player)) {
+		if(ArmorFSB.hasFSBArmor(entity)) {
 
-			ArmorFSB chestplate = (ArmorFSB) player.inventory.armorInventory.get(2).getItem();
+			ArmorFSB chestplate = (ArmorFSB) entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
 
 			if(chestplate.jump != null)
-				player.playSound(chestplate.jump, 1.0F, 1.0F);
+				entity.playSound(chestplate.jump, 1.0F, 1.0F);
 		}
 	}
 
-	public static void handleFall(EntityPlayer player) {
+	public static void handleFall(EntityLivingBase entity) {
 
-		if(ArmorFSB.hasFSBArmor(player)) {
+		if(ArmorFSB.hasFSBArmor(entity)) {
 
-			ArmorFSB chestplate = (ArmorFSB) player.inventory.armorInventory.get(2).getItem();
+			ArmorFSB chestplate = (ArmorFSB) entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
 
-			if(chestplate.hardLanding && player.fallDistance > 10) {
+			if(chestplate.hardLanding && entity.fallDistance > 10) {
 
 				// player.playSound(Block.soundTypeAnvil.func_150496_b(), 2.0F,
 				// 0.5F);
 
-				List<Entity> entities = player.world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(3, 0, 3));
+				List<Entity> entities = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(3, 0, 3));
 
 				for(Entity e : entities) {
 
-					Vec3 vec = Vec3.createVectorHelper(player.posX - e.posX, 0, player.posZ - e.posZ);
+					Vec3 vec = Vec3.createVectorHelper(entity.posX - e.posX, 0, entity.posZ - e.posZ);
 
 					if(vec.lengthVector() < 3) {
 
@@ -317,14 +321,14 @@ public class ArmorFSB extends ItemArmor {
 						e.motionY += 0.1D * intensity;
 						e.motionZ += vec.zCoord * intensity * -2;
 
-						e.attackEntityFrom(DamageSource.causePlayerDamage(player).setDamageBypassesArmor(), (float) (intensity * 10));
+						e.attackEntityFrom(DamageSource.causeIndirectDamage(e, entity).setDamageBypassesArmor(), (float) (intensity * 10));
 					}
 				}
 				// return;
 			}
 			
 			if(chestplate.fall != null)
-				player.playSound(chestplate.fall, 1.0F, 1.0F);
+				entity.playSound(chestplate.fall, 1.0F, 1.0F);
 		}
 	}
 	
@@ -339,20 +343,20 @@ public class ArmorFSB extends ItemArmor {
 	}
 	
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+	public void onUpdate(ItemStack stack, World world, Entity e, int itemSlot, boolean isSelected) {
 	//	System.out.println("regular update");
-		if(this.armorType != EntityEquipmentSlot.CHEST || !(entity instanceof EntityPlayer))
+		if(this.armorType != EntityEquipmentSlot.CHEST || !(e instanceof EntityLivingBase))
 			return;
-
-		if(!hasFSBArmor((EntityPlayer) entity))
+		EntityLivingBase entity = (EntityLivingBase)e;
+		if(!hasFSBArmor(entity))
 			return;
-		ArmorFSB fsbarmor = (ArmorFSB) ((EntityPlayer) entity).inventory.armorInventory.get(2).getItem();
+		ArmorFSB fsbarmor = (ArmorFSB) entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
 		
 		if(world.isRemote){
-			updateClient(stack, fsbarmor, world, entity, itemSlot, isSelected);
+			updateClient(stack, fsbarmor, world, e, itemSlot, isSelected);
 		}
 		
-		if(!fsbarmor.geigerSound)
+		if(!fsbarmor.geigerSound || !(entity instanceof EntityPlayer))
 			return;
 		
 		if(world.getTotalWorldTime() % 5 == 0) {

@@ -12,7 +12,6 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.items.ModItems;
@@ -24,6 +23,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.init.Items;
@@ -49,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 100000000;
@@ -319,7 +319,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 			{
 				age = 0;
 			}
-			
+			this.updateConnections();
 			if(age == 9 || age == 19)
 				fillFluidInit(amat);
 
@@ -402,6 +402,18 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		}
 	}
 	
+	private void updateConnections()  {
+		
+		this.trySubscribe(world, pos.add(3, 0, 1), Library.POS_X);
+		this.trySubscribe(world, pos.add(3, 0, -1), Library.POS_X);
+		this.trySubscribe(world, pos.add(-3, 0, 1), Library.NEG_X);
+		this.trySubscribe(world, pos.add(-3, 0, -1), Library.NEG_X);
+		this.trySubscribe(world, pos.add(1, 0, 3), Library.POS_Z);
+		this.trySubscribe(world, pos.add(-1, 0, 3), Library.POS_Z);
+		this.trySubscribe(world, pos.add(1, 0, -3), Library.NEG_Z);
+		this.trySubscribe(world, pos.add(-1, 0, -3), Library.NEG_Z);
+	}
+
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		this.isOn = data.getBoolean("isOn");

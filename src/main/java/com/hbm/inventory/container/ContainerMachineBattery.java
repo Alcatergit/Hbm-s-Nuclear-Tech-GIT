@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.tileentity.machine.TileEntityMachineFENSU;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -75,10 +76,15 @@ public class ContainerMachineBattery extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		NBTTagCompound nbt = new NBTTagCompound();
+
 		nbt.setLong("power", diFurnace.power);
-		nbt.setLong("maxPower", diFurnace.maxPower);
+		nbt.setLong("powerDelta", diFurnace.powerDelta);
 		nbt.setShort("redLow", diFurnace.redLow);
 		nbt.setShort("redHigh", diFurnace.redHigh);
+		nbt.setByte("priority", (byte)diFurnace.priority.ordinal());
+		if(diFurnace instanceof TileEntityMachineFENSU)
+			nbt.setByte("color", (byte) ((TileEntityMachineFENSU)diFurnace).color.getMetadata());
+		
 		diFurnace.networkPack(nbt, 10);
 		super.detectAndSendChanges();
 	}

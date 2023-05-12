@@ -48,6 +48,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		if(age2 >= 20)
 			age2 -= 20;
 		if(!world.isRemote) {
+			this.updateConnections();
 			int tank0Amount = tanks[0].getFluidAmount();
 			int tank1Amount = tanks[1].getFluidAmount();
 			if(age2 == 9 || age2 == 19) {
@@ -101,7 +102,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 							if(succ(pos.getX(), i, pos.getZ()) == 1) {
 
 								this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerDeposit), true);
-								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + rand.nextInt(extraGasPerDepositMax))), true);
+								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + world.rand.nextInt(extraGasPerDepositMax))), true);
 								needsUpdate = true;
 
 								ExplosionLarge.spawnOilSpills(world, pos.getX() + 0.5F, pos.getY() + 5.5F, pos.getZ() + 0.5F, 3);
@@ -148,6 +149,12 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		}
 	}
 
+	protected void updateConnections() {
+		this.trySubscribe(world, pos.add(2, 0, 0), Library.POS_X);
+		this.trySubscribe(world, pos.add(-2, 0, 0), Library.NEG_X);
+		this.trySubscribe(world, pos.add(0, 0, 2), Library.POS_Z);
+		this.trySubscribe(world, pos.add(0, 0, -2), Library.NEG_Z);
+	}
 
 	public void fillFluidInit(FluidTank tank) {
 		needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 0), 2000) || needsUpdate;

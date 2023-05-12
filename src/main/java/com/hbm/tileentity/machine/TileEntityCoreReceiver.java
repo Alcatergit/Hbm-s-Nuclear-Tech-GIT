@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ILaserable;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,15 +27,13 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITickable, ISource, IFluidHandler, ILaserable, ITankPacketAcceptor {
+public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ILaserable, ITankPacketAcceptor {
 
 	public long power;
 	public long joules;
 	//Because it get cleared after the te updates, it needs to be saved here for the container
 	public long syncJoules;
 	public FluidTank tank;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
-	public int age = 0;
 
 	public TileEntityCoreReceiver() {
 		super(0);
@@ -47,6 +45,8 @@ public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITi
 		if(!world.isRemote) {
 
 			power += joules * 5000;
+
+			this.sendPower(world, pos);
 
 			if(joules > 0) {
 
@@ -61,68 +61,12 @@ public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITi
 			syncJoules = joules;
 			
 			joules = 0;
-
-			age++;
-			if(age >= 20) {
-				age = 0;
-			}
-
-			if(age == 9 || age == 19) {
-				ffgeuaInit();
-
-				if(!getTact())
-					power = 0;
-			}
 		}
 	}
 
 	@Override
 	public String getName() {
 		return "container.dfcReceiver";
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-	}
-
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
 	}
 
 	@Override
@@ -205,4 +149,18 @@ public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITi
 		return super.getCapability(capability, facing);
 	}
 	
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return 0;
+	}
 }

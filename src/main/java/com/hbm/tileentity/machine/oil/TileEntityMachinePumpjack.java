@@ -1,15 +1,19 @@
 package com.hbm.tileentity.machine.oil;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachinePumpjack;
 import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPumpjackPacket;
+
+import net.minecraft.init.Blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -70,6 +74,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 		if(age2 >= 20)
 			age2 -= 20;
 		if(!world.isRemote) {
+			this.updateConnections();
 			int tank0Amount = tanks[0].getFluidAmount();
 			int tank1Amount = tanks[1].getFluidAmount();
 			if(age2 == 9 || age2 == 19) {
@@ -123,7 +128,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 							if(succ(pos.getX(), i, pos.getZ()) == 1) {
 
 								this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerDeposit), true);
-								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + rand.nextInt(extraGasPerDepositMax))), true);
+								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + world.rand.nextInt(extraGasPerDepositMax))), true);
 								needsUpdate = true;
 
 								break;
@@ -168,6 +173,16 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 				markDirty();
 			}
 		}
+	}
+
+	protected void updateConnections() {
+		ForgeDirection dir = ForgeDirection.getOrientation(world.getBlockState(pos).getValue(MachinePumpjack.FACING).ordinal());
+		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
+		
+		this.trySubscribe(world, pos.add(rot.offsetX * 2 + dir.offsetX * 2, 0, rot.offsetZ * 2 + dir.offsetZ * 2), dir);
+		this.trySubscribe(world, pos.add(rot.offsetX * 2 + dir.offsetX * 2, 0, rot.offsetZ * 4 - dir.offsetZ * 2), dir.getOpposite());
+		this.trySubscribe(world, pos.add(rot.offsetX * 4 - dir.offsetX * 2, 0, rot.offsetZ * 4 + dir.offsetZ * 2), dir);
+		this.trySubscribe(world, pos.add(rot.offsetX * 4 - dir.offsetX * 2, 0, rot.offsetZ * 2 - dir.offsetZ * 2), dir.getOpposite());
 	}
 
 

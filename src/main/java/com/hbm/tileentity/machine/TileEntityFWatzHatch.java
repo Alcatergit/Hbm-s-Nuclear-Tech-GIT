@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.tileentity.TileEntityLoadedBase;
+
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +13,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
+public class TileEntityFWatzHatch extends TileEntityLoadedBase implements IFluidHandler {
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
@@ -105,5 +107,4 @@ public class TileEntityFWatzHatch extends TileEntity implements IFluidHandler {
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) : super.getCapability(capability, facing);
 	}
-
 }

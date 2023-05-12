@@ -3,13 +3,11 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityDummyPort;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,11 +24,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DummyBlockMachine extends BlockContainer implements IDummy {
+public class DummyBlockMachine extends DummyOldBase {
 
 	public static boolean safeBreak = false;
-	
-	boolean isPort;
 	
 	private int id;
 	private Block drop;
@@ -42,26 +38,14 @@ public class DummyBlockMachine extends BlockContainer implements IDummy {
 	float dZ = 1;
 	public AxisAlignedBB dummy_BB = FULL_BLOCK_AABB;
 	
-	public DummyBlockMachine(Material materialIn, String s, boolean isPort) {
-		super(materialIn);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		this.setCreativeTab(null);
-		this.isPort = isPort;
-		
-		ModBlocks.ALL_BLOCKS.add(this);
+	public DummyBlockMachine(Material materialIn, String s, boolean port) {
+		super(materialIn, s, port);
 	}
 	
-	public DummyBlockMachine(Material materialIn, String s, boolean isPort, int id, Block drop) {
-		super(materialIn);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		this.setCreativeTab(null);
-		this.isPort = isPort;
+	public DummyBlockMachine(Material materialIn, String s, boolean port, int id, Block drop) {
+		super(materialIn, s, port);
 		this.id = id;
 		this.drop = drop;
-		
-		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
 	public DummyBlockMachine setBounds(float oX, float oY, float oZ, float dX, float dY, float dZ) {
@@ -78,7 +62,7 @@ public class DummyBlockMachine extends BlockContainer implements IDummy {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return isPort ? new TileEntityDummyPort() : new TileEntityDummy();
+		return port ? new TileEntityDummyPort() : new TileEntityDummy();
 	}
 	
 	@Override

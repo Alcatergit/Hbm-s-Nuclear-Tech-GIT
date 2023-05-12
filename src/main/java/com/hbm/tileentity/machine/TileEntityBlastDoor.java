@@ -48,65 +48,16 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 
 	@Override
 	public void update() {
-		if(!world.isRemote) {
-
+		if(!world.isRemote) {		
 			if(!isLocked() && world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
-
+				
 				if(!redstoned) {
 					this.tryToggle();
 				}
 				redstoned = true;
-
+				
 			} else {
 				redstoned = false;
-			}
-
-			if(state != 1) {
-				timer = 0;
-			} else {
-				timer++;
-
-				if(isOpening) {
-					if(timer >= 0) {
-						removeDummy(pos.up(1));
-					}
-					if(timer >= 20) {
-						removeDummy(pos.up(2));
-					}
-					if(timer >= 40) {
-						removeDummy(pos.up(3));
-					}
-					if(timer >= 60) {
-						removeDummy(pos.up(4));
-					}
-					if(timer >= 80) {
-						removeDummy(pos.up(5));
-					}
-				} else {
-					if(timer >= 20) {
-						placeDummy(pos.up(5));
-					}
-					if(timer >= 40) {
-						placeDummy(pos.up(4));
-					}
-					if(timer >= 60) {
-						placeDummy(pos.up(3));
-					}
-					if(timer >= 80) {
-						placeDummy(pos.up(2));
-					}
-					if(timer >= 100) {
-						placeDummy(pos.up(1));
-					}
-				}
-
-				if(timer >= 100) {
-
-					if(isOpening)
-						finishOpen();
-					else
-						finishClose();
-				}
 			}
 
 			PacketDispatcher.wrapper.sendToAllTracking(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
@@ -298,7 +249,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 			closeNeigh();
 		}
 	}
-
+  
 	public boolean placeDummy(BlockPos pos) {
 
 		if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos))
@@ -383,5 +334,4 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public World getControlWorld(){
 		return getWorld();
 	}
-
 }

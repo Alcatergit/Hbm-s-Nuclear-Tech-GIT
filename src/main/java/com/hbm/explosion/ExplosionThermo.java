@@ -89,11 +89,11 @@ public class ExplosionThermo {
 		} else if (block == Blocks.NETHERRACK) {
 			world.setBlockState(pos, Blocks.FLOWING_LAVA.getDefaultState());
 		
+		} else if (block == ModBlocks.frozen_log) {
+			world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).withSameRotationState(world.getBlockState(pos)));
+		
 		} else if(block instanceof BlockLog) {
 			world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(world.getBlockState(pos)));
-		
-		} else if (block == ModBlocks.frozen_log) {
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 		
 		} else if (block == ModBlocks.frozen_planks) {
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
@@ -145,17 +145,14 @@ public class ExplosionThermo {
 		} else if (block == Blocks.DIRT) {
 			world.setBlockState(pos, ModBlocks.frozen_dirt.getDefaultState());
 		
-		} else if (block == Blocks.LOG) {
-			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
-		
-		} else if (block == Blocks.LOG2) {
-			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
-		
 		} else if (block == Blocks.PLANKS) {
 			world.setBlockState(pos, ModBlocks.frozen_planks.getDefaultState());
 		
 		} else if (block == ModBlocks.waste_log) {
-			world.setBlockState(pos, ModBlocks.frozen_log.getDefaultState());
+			world.setBlockState(pos, ((WasteLog)ModBlocks.frozen_log).withSameRotationState(world.getBlockState(pos)));
+		
+		} else if(block instanceof BlockLog) {
+			world.setBlockState(pos, ((WasteLog)ModBlocks.frozen_log).getSameRotationState(world.getBlockState(pos)));
 		
 		} else if (block == ModBlocks.waste_planks) {
 			world.setBlockState(pos, ModBlocks.frozen_planks.getDefaultState());
@@ -298,14 +295,11 @@ public class ExplosionThermo {
 		} else if(block == ModBlocks.waste_earth){
 			world.setBlockState(pos, Blocks.NETHERRACK.getDefaultState());
 		
-		} else if(block == Blocks.LOG){
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		
-		} else if(block == Blocks.LOG2){
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
-		
 		} else if(block == ModBlocks.frozen_log){
-			world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
+			world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).withSameRotationState(world.getBlockState(pos)));
+		
+		} else if(block instanceof BlockLog){
+			world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(world.getBlockState(pos)));
 		
 		} else if(block == ModBlocks.frozen_planks){
 			world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());

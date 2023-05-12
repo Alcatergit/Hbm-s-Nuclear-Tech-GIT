@@ -143,6 +143,7 @@ public class BlockStorageCrate extends BlockContainer {
 				if(nbt.toString().length() > 6000) {
 					player.sendMessage(new TextComponentString("§cWarning: Container NBT exceeds 6kB, contents will be ejected!"));
 					InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
+					InventoryHelper.spawnItemStack(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(Item.getItemFromBlock(this)));
 					return world.setBlockToAir(pos);
 				}
 			}

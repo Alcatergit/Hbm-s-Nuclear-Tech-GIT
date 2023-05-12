@@ -13,7 +13,7 @@ import com.hbm.particle.bullet_hit.ParticleDecalFlow;
 import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
-import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.network.energy.TileEntityPylonBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -66,10 +66,10 @@ public class ItemWandD extends Item {
 			if (b == ModBlocks.block_copper)
 				MainRegistry.z--;
 			if (b == ModBlocks.red_pylon) {
-				TileEntityPylonRedWire te = (TileEntityPylonRedWire) world.getTileEntity(pos);
+				TileEntityPylonBase te = (TileEntityPylonBase) world.getTileEntity(pos);
 				for(int i = 0; i < te.connected.size(); i++)
 					if(world.isRemote)
-						player.sendMessage(new TextComponentTranslation(te.connected.get(i).getPos().getX() + " " + te.connected.get(i).getPos().getY() + " " + te.connected.get(i).getPos().getZ()));
+						player.sendMessage(new TextComponentTranslation(te.connected.get(i).getX() + " " + te.connected.get(i).getY() + " " + te.connected.get(i).getZ()));
 			}
 			
 			if(player.isSneaking()){

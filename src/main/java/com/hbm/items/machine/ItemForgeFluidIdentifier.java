@@ -7,8 +7,8 @@ import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuct;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
+import com.hbm.config.GeneralConfig;
+import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -54,13 +54,15 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
-			for (Entry<String, Fluid> set : FluidRegistry.getRegisteredFluids().entrySet()) {
-				ItemStack stack = new ItemStack(this, 1, 0);
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setString("fluidtype", set.getKey());
-				stack.setTagCompound(tag);
-				items.add(stack);
+		if(GeneralConfig.registerTanks){
+			if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
+				for (Entry<String, Fluid> set : FluidRegistry.getRegisteredFluids().entrySet()) {
+					ItemStack stack = new ItemStack(this, 1, 0);
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setString("fluidtype", set.getKey());
+					stack.setTagCompound(tag);
+					items.add(stack);
+				}
 			}
 		}
 	}
@@ -100,10 +102,11 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 	public static void spreadType(World worldIn, BlockPos pos, Fluid hand, Fluid pipe, int x){
 		if(x > 0){
 			TileEntity te = worldIn.getTileEntity(pos);
-			if(te != null && te instanceof TileEntityFFFluidDuctMk2){
-				TileEntityFFFluidDuctMk2 duct = (TileEntityFFFluidDuctMk2) te;
+			if(te != null && te instanceof TileEntityFFDuctBaseMk2){
+				TileEntityFFDuctBaseMk2 duct = (TileEntityFFDuctBaseMk2) te;
 				if(duct.getType() == pipe){
 					duct.setType(hand);
+					duct.markDirty();
 					spreadType(worldIn, pos.add(1, 0, 0), hand, pipe, x-1);
 					spreadType(worldIn, pos.add(0, 1, 0), hand, pipe, x-1);
 					spreadType(worldIn, pos.add(0, 0, 1), hand, pipe, x-1);
@@ -117,12 +120,22 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(player.isSneaking()){
-			spreadType(worldIn, pos, null, getType(player.getHeldItem(hand)), 8);
-		}else{
-			spreadType(worldIn, pos, getType(player.getHeldItem(hand)), null, 8);
+		TileEntity te = worldIn.getTileEntity(pos);
+		TileEntityFFDuctBaseMk2 duct = null;
+		if(te != null && te instanceof TileEntityFFDuctBaseMk2){
+			duct = (TileEntityFFDuctBaseMk2) te;
 		}
-
+		if(duct != null){
+			if(player.isSneaking()){
+				if(null != duct.getType()){
+					spreadType(worldIn, pos, null, duct.getType(), 256);
+				}
+			}else{
+				if(getType(player.getHeldItem(hand)) != duct.getType()){
+					spreadType(worldIn, pos, getType(player.getHeldItem(hand)), duct.getType(), 256);
+				}
+			}
+		}
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 

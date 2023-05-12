@@ -2,16 +2,18 @@ package com.hbm.tileentity.bomb;
 
 import com.hbm.config.RadiationConfig;
 import com.hbm.entity.projectile.EntityRailgunBlast;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.RailgunRotationPacket;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityRailgun extends TileEntity implements ITickable, IConsumer {
+public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable, IEnergyUser {
 
 	public ItemStackHandler inventory;
 	public ICapabilityProvider specialProvider;
@@ -142,6 +144,7 @@ public class TileEntityRailgun extends TileEntity implements ITickable, IConsume
 				if(fireDelay == 0)
 					tryFire();
 			}
+			this.updateConnectionsExcept(world, pos, ForgeDirection.UP);
 			power = Library.chargeTEFromItems(inventory, 0, power, RadiationConfig.railgunBuffer);
 			
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));

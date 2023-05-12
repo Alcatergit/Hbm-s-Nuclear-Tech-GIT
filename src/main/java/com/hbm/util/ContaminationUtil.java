@@ -6,6 +6,7 @@ import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.handler.ArmorUtil;
@@ -28,6 +29,8 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityZombieHorse;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
@@ -118,7 +121,8 @@ public class ContaminationUtil {
 		double rads = ((long)(data.getRadNumFromCoord(player.getPosition()) * 1000D)) / 1000D;
 		double env = ((long)(getPlayerRads(player) * 1000D)) / 1000D;
 
-		double res = ((long)(100000000D - ContaminationUtil.calculateRadiationMod(player) * 100000000D)) / 1000000D;
+
+		double res = Library.roundFloat((1D-ContaminationUtil.calculateRadiationMod(player))*100D, 6);
 		double resKoeff = ((long)(HazmatRegistry.getResistance(player) * 100D)) / 100D;
 
 		double rec = ((long)(env* (100-res)/100D * 1000D))/ 1000D;
@@ -152,7 +156,7 @@ public class ContaminationUtil {
 		player.sendMessage(new TextComponentTranslation("geiger.envRad").appendSibling(new TextComponentString(" " + envPrefix + env + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.recievedRad").appendSibling(new TextComponentString(" " + recPrefix + rec + " RAD/s")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 		player.sendMessage(new TextComponentTranslation("geiger.playerRad").appendSibling(new TextComponentString(" " + radPrefix + eRad + " RAD")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + res + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation("geiger.playerRes").appendSibling(new TextComponentString(" " + resPrefix + String.format("%.6f", res) + "% (" + resKoeff + ")")).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	public static void printDosimeterData(EntityPlayer player) {
@@ -383,36 +387,63 @@ public class ContaminationUtil {
 		if(e instanceof EntityLivingBase && ((EntityLivingBase)e).isPotionActive(HbmPotion.mutation))
 			return true;
 		
-		return e instanceof EntityNuclearCreeper ||
-				e instanceof EntityMooshroom ||
-				e instanceof EntityZombie ||
+		return 	e instanceof EntityZombie ||
 				e instanceof EntitySkeleton ||
 				e instanceof EntityQuackos ||
 				e instanceof EntityOcelot ||
+				e instanceof EntityMooshroom ||
+				e instanceof EntityZombieHorse ||
+				e instanceof EntitySkeletonHorse ||
 				e instanceof IRadiationImmune || checkConfigEntityImmunity(e);
 	}
 	
 	/// ASBESTOS ///
-	public static void applyAsbestos(Entity e, int i) {
+	public static void applyAsbestos(Entity e, int i, int dmg) {
 
-			if(!(e instanceof EntityLivingBase))
-				return;
-			
-			if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
-				return;
-			
-			if(e instanceof EntityPlayer && e.ticksExisted < 200)
-				return;
-			
-			EntityLivingBase entity = (EntityLivingBase)e;
-			
-			if(ArmorRegistry.hasAllProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-				ArmorUtil.damageGasMaskFilter(entity, i);
-			else
-				HbmLivingProps.incrementAsbestos(entity, i);
-		}
+		if(!GeneralConfig.enableAsbestos)
+			return;
+
+		if(!(e instanceof EntityLivingBase))
+			return;
 		
-		/// DIGAMMA ///
+		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+			return;
+		
+		if(e instanceof EntityPlayer && e.ticksExisted < 200)
+			return;
+		
+		EntityLivingBase entity = (EntityLivingBase)e;
+		
+		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
+			ArmorUtil.damageGasMaskFilter(entity, dmg);
+		else
+			HbmLivingProps.incrementAsbestos(entity, i);
+	}
+
+	/// COAL ///
+	public static void applyCoal(Entity e, int i, int dmg) {
+
+		if(!GeneralConfig.enableCoal)
+			return;
+
+		if(!(e instanceof EntityLivingBase))
+			return;
+		
+		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+			return;
+		
+		if(e instanceof EntityPlayer && e.ticksExisted < 200)
+			return;
+		
+		EntityLivingBase entity = (EntityLivingBase)e;
+		
+		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE))
+			ArmorUtil.damageGasMaskFilter(entity, dmg);
+		else
+			HbmLivingProps.incrementBlackLung(entity, i);
+	}
+		
+	/// DIGAMMA ///
 	public static void applyDigammaData(Entity e, float f) {
 
 		if(!(e instanceof EntityLivingBase))
@@ -459,18 +490,22 @@ public class ContaminationUtil {
 		EntityLivingBase entity = (EntityLivingBase)e;
 		return HbmLivingProps.getDigamma(entity);
 	}
-	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float fire3d) {
+
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d) {
+		radiate(world, x, y, z, range, rad3d, 0, 0);
+	}
+
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d, float fire3d) {
 		radiate(world, x, y, z, range, rad3d, 0, fire3d);
 	}
 
-
-	public static void radiate(World world, int x, int y, int z, double range, float rad3d, float dig3d, float fire3d) {
+	public static void radiate(World world, double x, double y, double z, double range, float rad3d, float dig3d, float fire3d) {
 		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).grow(range, range, range));
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x, y, z, x, y, z).grow(range, range, range));
 		
 		for(EntityLivingBase e : entities) {
 			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - (x + 0.5), (e.posY + e.getEyeHeight()) - (y + 0.5), e.posZ - (z + 0.5));
+			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
 			double len = vec.lengthVector();
 			vec = vec.normalize();
 			
@@ -478,9 +513,9 @@ public class ContaminationUtil {
 			
 			for(int i = 1; i < len; i++) {
 
-				int ix = (int)Math.floor(x + 0.5 + vec.xCoord * i);
-				int iy = (int)Math.floor(y + 0.5 + vec.yCoord * i);
-				int iz = (int)Math.floor(z + 0.5 + vec.zCoord * i);
+				int ix = (int)Math.floor(x + vec.xCoord * i);
+				int iy = (int)Math.floor(y + vec.yCoord * i);
+				int iz = (int)Math.floor(z + vec.zCoord * i);
 				
 				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
 			}
@@ -529,6 +564,7 @@ public class ContaminationUtil {
 		RADIATION,
 		NEUTRON,
 		ASBESTOS,
+		COAL,
 		DIGAMMA
 	}
 	
@@ -588,8 +624,9 @@ public class ContaminationUtil {
 		case MONOXIDE: entity.attackEntityFrom(ModDamageSource.monoxide, amount); break;
 		case RADIATION: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); break;
 		case NEUTRON: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); HbmLivingProps.setNeutron(entity, amount); break;
-		case ASBESTOS: HbmLivingProps.incrementAsbestos(entity, (int)amount); break;
-		case DIGAMMA: HbmLivingProps.incrementDigamma(entity, amount); break;
+		case ASBESTOS: applyAsbestos(entity, (int)amount, (int)amount); break;
+		case COAL: applyCoal(entity, (int)amount, (int)amount); break;
+		case DIGAMMA: applyDigammaData(entity, amount); break;
 		}
 		
 		return true;

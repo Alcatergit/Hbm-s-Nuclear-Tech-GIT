@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.tileentity.machine.TileEntityPylonRedWire;
+import com.hbm.tileentity.network.energy.TileEntityPylonBase;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -23,13 +23,14 @@ public class TEPylonSenderPacket implements IMessage {
 	int conX;
 	int conY;
 	int conZ;
+	boolean addOrRemove;
 
 	public TEPylonSenderPacket()
 	{
 		
 	}
 
-	public TEPylonSenderPacket(int x, int y, int z, int conX, int conY, int conZ)
+	public TEPylonSenderPacket(int x, int y, int z, int conX, int conY, int conZ, boolean addOrRemove)
 	{
 		this.x = x;
 		this.y = y;
@@ -37,6 +38,7 @@ public class TEPylonSenderPacket implements IMessage {
 		this.conX = conX;
 		this.conY = conY;
 		this.conZ = conZ;
+		this.addOrRemove = addOrRemove;
 	}
 
 	@Override
@@ -47,6 +49,7 @@ public class TEPylonSenderPacket implements IMessage {
 		conX = buf.readInt();
 		conY = buf.readInt();
 		conZ = buf.readInt();
+		addOrRemove = buf.readBoolean();
 	}
 
 	@Override
@@ -57,6 +60,7 @@ public class TEPylonSenderPacket implements IMessage {
 		buf.writeInt(conX);
 		buf.writeInt(conY);
 		buf.writeInt(conZ);
+		buf.writeBoolean(addOrRemove);
 	}
 
 	public static class Handler implements IMessageHandler<TEPylonSenderPacket, IMessage> {
@@ -68,11 +72,15 @@ public class TEPylonSenderPacket implements IMessage {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 				
 				try {
-				if (te != null && te instanceof TileEntityPylonRedWire) {
-						
-					TileEntityPylonRedWire pyl = (TileEntityPylonRedWire) te;
-					pyl.addTileEntityBasedOnCoords(new BlockPos(m.conX, m.conY, m.conZ));
-				}
+					if (te != null && te instanceof TileEntityPylonBase) {
+							
+						TileEntityPylonBase pyl = (TileEntityPylonBase) te;
+						if(m.addOrRemove){
+							pyl.addConnection(new BlockPos(m.conX, m.conY, m.conZ));
+						}else{
+							pyl.removeConnection(new BlockPos(m.conX, m.conY, m.conZ));
+						}
+					}
 				} catch(Exception x) {}
 			});
 			

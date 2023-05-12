@@ -35,6 +35,8 @@ public class GeneralConfig {
 	public static boolean enableBomberShortMode = false;
 	public static boolean enableVaults = true;
 	public static boolean enableRads = true;
+	public static boolean enableCoal = true;
+	public static boolean enableAsbestos = true;
 	public static boolean advancedRadiation = true;
 	public static boolean enableCataclysm = false;
 	public static boolean enableExtendedLogging = false;
@@ -57,6 +59,7 @@ public class GeneralConfig {
 	public static boolean nonoredict = true;
 	public static boolean jei = true;
 	public static boolean changelog = true;
+	public static boolean registerTanks = true;
 	public static boolean duckButton = true;
 	public static boolean depthEffects = true;
 	public static boolean flashlight = true;
@@ -65,6 +68,7 @@ public class GeneralConfig {
 	public static int flowingDecalAmountMax = 20;
 	public static boolean bloodFX = true;
 	public static int crucibleMaxCharges = 3;
+	public static boolean enableReEval = true;
 	
 	public static boolean enable528 = false;
 	public static boolean enable528ReasimBoilers = true;
@@ -127,11 +131,17 @@ public class GeneralConfig {
 		enableBabyMode = config.get(CATEGORY_GENERAL, "1.27_enableBabyMode", false).getBoolean(false);
 		enableReflectorCompat = config.get(CATEGORY_GENERAL, "1.24_enableReflectorCompat", false).getBoolean(false);
 		
+		enableCoal = config.get(CATEGORY_GENERAL, "1.26_enableCoalDust", true).getBoolean(true);
+		enableAsbestos = config.get(CATEGORY_GENERAL, "1.26_enableAsbestosDust", true).getBoolean(true);
+		
+		enableReEval = config.get(CATEGORY_GENERAL, "1.27_enableReEval", true, "Allows re-evaluating power networks on link remove instead of destroying and recreating").getBoolean(true);
+		
 		recipes = config.get(CATEGORY_GENERAL, "1.28_enableRecipes", true).getBoolean(true);
 		shapeless = config.get(CATEGORY_GENERAL, "1.28_enableShapeless", true).getBoolean(true);
 		oredict = config.get(CATEGORY_GENERAL, "1.28_enableOreDict", true).getBoolean(true);
 		shaped = config.get(CATEGORY_GENERAL, "1.28_enableShaped", true).getBoolean(true);
 		nonoredict = config.get(CATEGORY_GENERAL, "1.28_enableNonOreDict", true).getBoolean(true);
+		registerTanks = config.get(CATEGORY_GENERAL, "1.28_registerTanks", true).getBoolean(true);
 		
 		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
 		changelog = config.get(CATEGORY_GENERAL, "1.28_enableChangelog", true).getBoolean(true);

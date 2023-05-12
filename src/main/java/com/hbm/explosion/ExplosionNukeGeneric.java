@@ -26,14 +26,13 @@ import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.turret.TileEntityTurretBase;
+import api.hbm.energy.IEnergyUser;
 
 import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
@@ -680,16 +679,9 @@ public class ExplosionNukeGeneric {
 			Block b = world.getBlockState(pos).getBlock();
 			TileEntity te = world.getTileEntity(pos);
 			
-			if (te != null && te instanceof ISource) {
+			if (te != null && te instanceof IEnergyUser) {
 				
-				((ISource)te).setSPower(0);
-				
-				if(random.nextInt(5) < 1)
-					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
-			}
-			if (te != null && te instanceof IConsumer) {
-				
-				((IConsumer)te).setPower(0);
+				((IEnergyUser)te).setPower(0);
 				
 				if(random.nextInt(5) < 1)
 					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
@@ -705,10 +697,6 @@ public class ExplosionNukeGeneric {
 				
 				if(random.nextInt(5) <= 1)
 					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
-			}
-			if (te != null && te instanceof TileEntityTurretBase) {
-
-				((TileEntityTurretBase)te).ammo = 0;
 			}
 			if(te != null && te.hasCapability(CapabilityEnergy.ENERGY, null)){
 				IEnergyStorage handle = te.getCapability(CapabilityEnergy.ENERGY, null);

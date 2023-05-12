@@ -7,7 +7,6 @@ import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
@@ -16,11 +15,13 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
 
+import api.hbm.energy.IEnergyUser;
 import api.hbm.block.IDrillInteraction;
 import api.hbm.block.IMiningDrill;
 import net.minecraft.block.Block;
@@ -51,7 +52,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor, IMiningDrill {
+public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, IMiningDrill {
 
 	public long power;
 	public int age = 0;
@@ -108,6 +109,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			if (age == 9 || age == 19)
 				fillFluidInit();
 			
+			this.trySubscribe(world, pos.add(0, 2, 0), ForgeDirection.UP);
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 

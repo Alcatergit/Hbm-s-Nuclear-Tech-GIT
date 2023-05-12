@@ -4,25 +4,22 @@ import com.hbm.blocks.bomb.BlockCrashedBomb;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemCell;
+import com.hbm.items.special.ItemCustomLore;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemAmatExtractor extends Item {
+public class ItemAmatExtractor extends ItemCustomLore {
 
 	public ItemAmatExtractor(String s){
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		
-		ModItems.ALL_ITEMS.add(this);
+		super(s);
 	}
 	
 	@Override

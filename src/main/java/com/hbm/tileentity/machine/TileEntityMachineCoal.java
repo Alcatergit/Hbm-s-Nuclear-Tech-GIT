@@ -5,23 +5,22 @@ import java.util.List;
 
 import com.hbm.blocks.machine.MachineCoal;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -39,15 +38,14 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCoal extends TileEntity implements ITickable, ITankPacketAcceptor, ISource, IFluidHandler {
+public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITickable, ITankPacketAcceptor, IEnergyGenerator, IFluidHandler {
 
 	public ItemStackHandler inventory;
 	
 	public long power;
 	public int burnTime;
 	public static final long maxPower = 100000;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
+
 	public FluidTank tank;
 	public Fluid tankType = FluidRegistry.WATER;
 	public boolean needsUpdate = false;
@@ -98,17 +96,8 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 	
 	@Override
 	public void update() {
-		age++;
-		if(age >= 20)
-		{
-			age = 0;
-		}
-		
-		if(age == 9 || age == 19)
-			ffgeuaInit();
-		
-		if(!world.isRemote)
-		{
+		if(!world.isRemote) {
+			this.sendPower(world, pos);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			if (needsUpdate) {
 				needsUpdate = false;
@@ -235,53 +224,6 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 	}
 
 	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-	}
-	
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
-	}
-
-
-	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
 		if(tags.length != 1){
 			return;
@@ -366,4 +308,18 @@ public class TileEntityMachineCoal extends TileEntity implements ITickable, ITan
 			markDirty();
 	}
 	
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

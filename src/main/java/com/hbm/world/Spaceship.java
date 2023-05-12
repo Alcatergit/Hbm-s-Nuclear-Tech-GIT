@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.FusionHatch;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.items.ModItems;
@@ -644,7 +643,7 @@ public class Spaceship extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 4, y + -2, z + 39), Block3.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + -2, z + 39), Block3.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + -2, z + 39), Block7.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 7, y + -2, z + 39), Block8.getDefaultState().withProperty(FusionHatch.FACING, EnumFacing.NORTH), 3);
+		world.setBlockState(pos.setPos(x + 7, y + -2, z + 39), Block8.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + -2, z + 39), Block3.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 9, y + -2, z + 39), Block3.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + -2, z + 40), Blocks.AIR.getDefaultState(), 3);

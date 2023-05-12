@@ -299,7 +299,7 @@ public class OreDictManager {
 		NB															.nugget(fragment_niobium)								.ingot(ingot_niobium)		.dust(powder_niobium)	.dustSmall(powder_niobium_tiny)	.block(block_niobium);
 		BE															.nugget(nugget_beryllium)	.billet(billet_beryllium)	.ingot(ingot_beryllium)		.dust(powder_beryllium)									.block(block_beryllium)							.crystal(crystal_beryllium)								.ore(ore_beryllium);
 		B															.nugget(fragment_boron)									.ingot(ingot_boron)			.dust(powder_boron)		.dustSmall(powder_boron_tiny)	.block(block_boron);
-		ANY_BISMOID													.nugget(nugget_bismuth)									.ingot(ingot_bismuth)																.block(block_bismuth);
+		ANY_BISMOID													.nugget(nugget_bismuth)									.ingot(ingot_bismuth)		.dust(powder_bismuth)									.block(block_bismuth);
 		LA															.nugget(fragment_lanthanium)							.ingot(ingot_lanthanium)	.dust(powder_lanthanium).dustSmall(powder_lanthanium_tiny).block(block_lanthanium);
 		AC															.nugget(nugget_actinium)								.ingot(ingot_actinium)		.dust(powder_actinium)	.dustSmall(powder_actinium_tiny).block(block_actinium);
 		ZR															.nugget(nugget_zirconium)	.billet(billet_zirconium)	.ingot(ingot_zirconium)		.dust(powder_zirconium)									.block(block_zirconium)																					.ore(ore_depth_zirconium);
@@ -332,7 +332,7 @@ public class OreDictManager {
 		EUPH														.nugget(nugget_euphemium)								.ingot(ingot_euphemium)		.dust(powder_euphemium)									.block(block_euphemium)															.plate(plate_euphemium);
 		DNT															.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)	.dust(powder_dineutronium)								.block(block_dineutronium)														.plate(plate_dineutronium);
 		FIBER																												.ingot(ingot_fiberglass)															.block(block_fiberglass);
-		ASBESTOS	.asbestos(1F)																							.ingot(ingot_asbestos)		.dust(powder_asbestos)									.block(block_asbestos)																					.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos);
+		ASBESTOS	.asbestos(1F)																							.ingot(ingot_asbestos)		.dust(powder_asbestos)									.block(block_asbestos)							.crystal(crystal_asbestos)								.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos);
 		OSMIRIDIUM													.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium)	.dust(powder_osmiridium)																				.crystal(crystal_osmiridium);
 		
 		//RADIOACTIVE Fuels
@@ -425,13 +425,13 @@ public class OreDictManager {
         //if this isn't implemented when fracking tower becomes real, yell at me
 		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
-		// OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
+		OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
 		
-		// for(String name : new String[] {"fuelCoke", "coke"}) {
-		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
+		for(String name : new String[] {"fuelCoke", "coke"}) {
+			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
 		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.LIGNITE));
 		// 	OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.PETROLEUM));
-		// }
+		}
 		
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
 		OreDictionary.registerOre("oreRareEarth", ore_rare);

@@ -130,6 +130,8 @@ public class ArmorModHandler {
 		
 		NBTTagCompound nbt = armor.getTagCompound();
 		nbt.removeTag(MOD_COMPOUND_KEY);
+		if(nbt.hasNoTags())
+			armor.setTagCompound(null);
 	}
 	
 	/**

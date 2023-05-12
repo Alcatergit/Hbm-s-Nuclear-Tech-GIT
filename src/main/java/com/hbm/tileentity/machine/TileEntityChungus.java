@@ -1,21 +1,17 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.INBTPacketReceiver;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -35,15 +31,13 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityChungus extends TileEntity implements ITickable, IFluidHandler, ISource, INBTPacketReceiver {
+public class TileEntityChungus extends TileEntityLoadedBase implements ITickable, IFluidHandler, IEnergyGenerator, INBTPacketReceiver {
 
 	public long power;
 	public static final long maxPower = 100000000000L;
 	private int turnTimer;
 	public float rotor;
 	public float lastRotor;
-	
-	public List<IConsumer> list1 = new ArrayList<>();
 	
 	public FluidTank[] tanks;
 	public Fluid[] types = new Fluid[]{ ModForgeFluids.steam, ModForgeFluids.spentsteam };
@@ -88,7 +82,8 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 			
 			networkPack();
 			this.fillFluidInit(tanks[1]);
-			this.ffgeuaInit();
+			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+			this.sendPower(world, pos.add(-dir.offsetX * 11, 0, -dir.offsetZ * 11), dir.getOpposite());
 			
 		} else {
 			
@@ -103,15 +98,14 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 					this.lastRotor -= 360;
 				}
 				
-				Random rand = world.rand;
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 				ForgeDirection side = dir.getRotation(ForgeDirection.UP);
 				
 				for(int i = 0; i < 10; i++) {
 					world.spawnParticle(EnumParticleTypes.CLOUD,
-							pos.getX() + 0.5 + dir.offsetX * (rand.nextDouble() + 1.25) + rand.nextGaussian() * side.offsetX * 0.65,
-							pos.getY() + 2.5 + rand.nextGaussian() * 0.65,
-							pos.getZ() + 0.5 + dir.offsetZ * (rand.nextDouble() + 1.25) + rand.nextGaussian() * side.offsetZ * 0.65,
+							pos.getX() + 0.5 + dir.offsetX * (world.rand.nextDouble() + 1.25) + world.rand.nextGaussian() * side.offsetX * 0.65,
+							pos.getY() + 2.5 + world.rand.nextGaussian() * 0.65,
+							pos.getZ() + 0.5 + dir.offsetZ * (world.rand.nextDouble() + 1.25) + world.rand.nextGaussian() * side.offsetZ * 0.65,
 							-dir.offsetX * 0.2, 0, -dir.offsetZ * 0.2);
 				}
 			}
@@ -161,17 +155,6 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 		return nbt;
 	}
 
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-		ffgeua(new BlockPos(pos.getX() - dir.offsetX * 11, pos.getY(), pos.getZ() - dir.offsetZ * 11), getTact());
-	}
-
 	public void fillFluidInit(FluidTank tank) {
 		
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
@@ -186,26 +169,6 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 	}
 	
 	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list1;
-	}
-
-	@Override
-	public void clearList() {
-		this.list1.clear();
-	}
-	
-	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
 	}
@@ -214,11 +177,6 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
-	}
-
-	@Override
-	public boolean getTact(){
-		return world.getTotalWorldTime() % 2 == 0;
 	}
 
 	@Override
@@ -258,5 +216,20 @@ public class TileEntityChungus extends TileEntity implements ITickable, IFluidHa
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		}
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
 	}
 }

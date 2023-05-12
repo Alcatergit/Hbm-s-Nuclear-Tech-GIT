@@ -1,11 +1,13 @@
 package com.hbm.tileentity.bomb;
 
-import com.hbm.interfaces.IConsumer;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsumer {
+public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser {
 
 	public ItemStackHandler inventory;
 
@@ -85,10 +87,18 @@ public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsu
 	public void update() {
 		
 		if (!world.isRemote) {
+			this.updateConnections();
 			power = Library.chargeTEFromItems(inventory, 2, power, maxPower);
 			detectAndSendChanges();
 		}
+	}
 
+	private void updateConnections() {
+		this.trySubscribe(world, pos.add(1, 0, 0), ForgeDirection.EAST);
+		this.trySubscribe(world, pos.add(-1, 0, 0), ForgeDirection.WEST);
+		this.trySubscribe(world, pos.add(0, 0, 1), ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.add(0, 0, -1), ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.add(0, -1, 0), ForgeDirection.DOWN);
 	}
 
 	private ItemStack detectStack = ItemStack.EMPTY;
@@ -118,13 +128,11 @@ public class TileEntityLaunchPad extends TileEntity implements ITickable, IConsu
 	@Override
 	public void setPower(long i) {
 		power = i;
-
 	}
 
 	@Override
 	public long getPower() {
 		return power;
-
 	}
 
 	@Override

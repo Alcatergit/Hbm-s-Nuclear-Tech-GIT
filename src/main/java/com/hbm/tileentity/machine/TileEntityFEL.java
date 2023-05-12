@@ -7,7 +7,6 @@ import java.lang.Math;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineSILEX;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.lib.Library;
@@ -19,6 +18,7 @@ import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.util.ITickable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -40,7 +40,7 @@ import com.hbm.lib.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityFEL extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityFEL extends TileEntityMachineBase implements ITickable, IEnergyUser {
 	
 	public long power;
 	public static final long maxPower = 2000000000;
@@ -67,7 +67,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 		if(!world.isRemote) {
 			
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-			//this.trySubscribe(world, xCoord + dir.offsetX * -5, yCoord + 1, zCoord + dir.offsetZ  * -5, dir);
+			this.trySubscribe(world, pos.add(dir.offsetX * -5, 1, dir.offsetZ  * -5), dir);
 			this.power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
 			if(this.isOn && !(inventory.getStackInSlot(1).getCount() == 0)) {

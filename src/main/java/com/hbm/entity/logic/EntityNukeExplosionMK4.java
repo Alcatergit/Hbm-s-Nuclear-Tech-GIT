@@ -3,6 +3,7 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 import com.hbm.entity.logic.IChunkLoader;
+import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.main.MainRegistry;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -24,8 +25,6 @@ import com.hbm.explosion.ExplosionNukeRay;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -69,38 +68,6 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 		this.speed = speed;
 	}
 
-	private void radiate(float rads, double range) {
-		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
-		MutableBlockPos rayPos = new BlockPos.MutableBlockPos();
-		for(EntityLivingBase e : entities) {
-			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
-			double len = vec.lengthVector();
-			vec = vec.normalize();
-			
-			float res = 0;
-			
-			for(int i = 1; i < len; i++) {
-
-				int ix = (int)Math.floor(posX + vec.xCoord * i);
-				int iy = (int)Math.floor(posY + vec.yCoord * i);
-				int iz = (int)Math.floor(posZ + vec.zCoord * i);
-				
-				res += world.getBlockState(rayPos.setPos(posX+vec.xCoord * i, posY+vec.yCoord * i, posZ+vec.zCoord * i)).getBlock().getExplosionResistance(null);
-			}
-			
-			if(res < 1)
-				res = 1;
-			
-			float eRads = rads;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
-		}
-	}
-
 	@Override
 	public void onUpdate() {
 		if(radius == 0) {
@@ -116,7 +83,8 @@ public class EntityNukeExplosionMK4 extends Entity implements IChunkLoader {
 			// System.out.println(radMax);
 			float rad = radMax / 10F;
 			RadiationSavedData.incrementRad(world, this.getPosition(), rad, radMax);
-			this.radiate(radMax * 0.1F, radius);
+			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, radius*1.5, radMax * 0.1F);
+			EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius*1.5);
 		}
 
 		if(!mute) {

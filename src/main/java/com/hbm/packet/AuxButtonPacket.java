@@ -21,8 +21,8 @@ import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
 import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
 
-
 import io.netty.buffer.ByteBuf;
+import api.hbm.energy.IEnergyConnector.ConnectionPriority;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -282,6 +282,15 @@ public class AuxButtonPacket implements IMessage {
 
 						if(m.id == 1) {
 							bat.redHigh = (short) ((bat.redHigh + 1) % 4);
+							bat.markDirty();
+						}
+
+						if(m.id == 2) {
+							switch(bat.priority) {
+								case LOW: bat.priority = ConnectionPriority.NORMAL; break;
+								case NORMAL: bat.priority = ConnectionPriority.HIGH; break;
+								case HIGH: bat.priority = ConnectionPriority.LOW; break;
+							}
 							bat.markDirty();
 						}
 					}

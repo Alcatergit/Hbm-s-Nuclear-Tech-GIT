@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
 
@@ -28,22 +29,22 @@ public abstract class RenderTurretBase<T extends TileEntityTurretBaseNT> extends
 		int y = turret.getPos().getY();
 		int z = (int)(turret.getPos().getZ() + pos.z);
 
-		checkPlug(turret.getWorld(), x - 2, y, z, power, fluid, type, 0, 0, 0);
-		checkPlug(turret.getWorld(), x - 2, y, z - 1, power, fluid, type, 0, -1, 0);
+		checkPlug(turret.getWorld(), x - 2, y, z, power, fluid, type, 0, 0, 0, Library.NEG_X);
+		checkPlug(turret.getWorld(), x - 2, y, z - 1, power, fluid, type, 0, -1, 0, Library.NEG_X);
 		
-		checkPlug(turret.getWorld(), x - 1, y, z + 1, power, fluid, type, 0, -1, 90);
-		checkPlug(turret.getWorld(), x, y, z + 1, power, fluid, type, 0, 0, 90);
+		checkPlug(turret.getWorld(), x - 1, y, z + 1, power, fluid, type, 0, -1, 90, Library.POS_Z);
+		checkPlug(turret.getWorld(), x, y, z + 1, power, fluid, type, 0, 0, 90, Library.POS_Z);
 
-		checkPlug(turret.getWorld(), x + 1, y, z, power, fluid, type, 0, -1, 180);
-		checkPlug(turret.getWorld(), x + 1, y, z - 1, power, fluid, type, 0, 0, 180);
+		checkPlug(turret.getWorld(), x + 1, y, z, power, fluid, type, 0, -1, 180, Library.POS_X);
+		checkPlug(turret.getWorld(), x + 1, y, z - 1, power, fluid, type, 0, 0, 180, Library.POS_X);
 
-		checkPlug(turret.getWorld(), x, y, z - 2, power, fluid, type, 0, -1, 270);
-		checkPlug(turret.getWorld(), x - 1, y, z - 2, power, fluid, type, 0, 0, 270);
+		checkPlug(turret.getWorld(), x, y, z - 2, power, fluid, type, 0, -1, 270, Library.NEG_Z);
+		checkPlug(turret.getWorld(), x - 1, y, z - 2, power, fluid, type, 0, 0, 270, Library.NEG_Z);
 	}
 	
-	private void checkPlug(World world, int x, int y, int z, boolean power, boolean fluid, Fluid type, int ox, int oz, int rot) {
+	private void checkPlug(World world, int x, int y, int z, boolean power, boolean fluid, Fluid type, int ox, int oz, int rot, ForgeDirection dir) {
 		
-		if( (power && Library.checkCableConnectables(world, x, y, z)) ||
+		if( (power && Library.canConnect(world, new BlockPos(x, y, z), dir)) ||
 			(fluid && FFUtils.checkFluidConnectablesMk2(world, new BlockPos(x, y, z), type)) ) {
 			
 			GL11.glPushMatrix();

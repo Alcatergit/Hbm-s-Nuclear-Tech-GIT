@@ -35,6 +35,7 @@ import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.mob.EntityRADBeast;
+import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
@@ -94,12 +95,15 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -289,44 +293,118 @@ public class ModEventHandler {
 	}
 	
 	@SubscribeEvent
-	public void mobSpawn(LivingSpawnEvent event) {
+	public void mobSpawn(LivingSpawnEvent.SpecialSpawn event) {
 		if(CompatibilityConfig.mobGear){
 			EntityLivingBase entity = event.getEntityLiving();
 			World world = event.getWorld();
 
 			if(entity instanceof EntityZombie) {
-				if(rand.nextInt(64) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask_m65, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(256) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.mask_of_infamy, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(1024) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.starmetal_plate, 1, world.rand.nextInt(ModItems.starmetal_plate.getMaxDamage(ItemStack.EMPTY))));
+				int randomArmorNumber = rand.nextInt(4096);
+				int randomHandNumber = rand.nextInt(256);
+				EntityZombie zombie = (EntityZombie)entity;
+				boolean hasMainHand = !zombie.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty();
+				boolean hasOffHand = !zombie.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty();
+				boolean hasHat = !zombie.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+				boolean hasChest = !zombie.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty();
+				boolean hasLegs = !zombie.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty();
+				boolean hasFeet = !zombie.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty();
 
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.pipe_lead, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.reer_graar, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.pipe_rusty, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.crowbar, 1, world.rand.nextInt(100)));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.geiger_counter, 1));
-				if(rand.nextInt(128) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.steel_pickaxe, 1, world.rand.nextInt(300)));
-				if(rand.nextInt(512) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.stopsign));
-				if(rand.nextInt(512) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.sopsign));
-				if(rand.nextInt(512) == 0)
-					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.chernobylsign));
-			}
-			if(entity instanceof EntitySkeleton) {
-				if(rand.nextInt(16) == 0) {
-					entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask_m65, 1, world.rand.nextInt(100)));
+				if(!hasHat){
+					if(rand.nextInt(64) == 0)
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask_m65, 1, world.rand.nextInt(100)));
+					if(rand.nextInt(128) == 0)
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask, 1, world.rand.nextInt(100)));
+					if(rand.nextInt(256) == 0)
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.mask_of_infamy, 1, world.rand.nextInt(100)));
+				}
+				if(!(hasHat || hasChest || hasLegs || hasFeet)){
+					if(randomArmorNumber == 0){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.rpa_helmet, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.rpa_plate, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.rpa_legs, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.rpa_boots, 1));
+					}
 
+					else if(randomArmorNumber <= 4){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.ajr_helmet, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.ajr_plate, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.ajr_legs, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.ajr_boots, 1));
+					}
+
+					else if(randomArmorNumber <= 16){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.t45_helmet, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.t45_plate, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.t45_legs, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.t45_boots, 1));
+					}
+
+					else if(randomArmorNumber <= 32){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+					}
+
+					else if(randomArmorNumber <= 64){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.titanium_helmet, 1, world.rand.nextInt(ModItems.titanium_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.titanium_plate, 1, world.rand.nextInt(ModItems.titanium_plate.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.titanium_legs, 1, world.rand.nextInt(ModItems.titanium_legs.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.titanium_boots, 1, world.rand.nextInt(ModItems.titanium_boots.getMaxDamage(ItemStack.EMPTY))));
+					}
+
+					else if(randomArmorNumber <= 128){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.steel_helmet, 1, world.rand.nextInt(ModItems.steel_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.steel_plate, 1, world.rand.nextInt(ModItems.steel_plate.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.steel_legs, 1, world.rand.nextInt(ModItems.steel_legs.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.steel_boots, 1, world.rand.nextInt(ModItems.steel_boots.getMaxDamage(ItemStack.EMPTY))));
+					}
+				}
+
+				if(!hasMainHand){
+					if(randomHandNumber == 0)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.pipe_lead, 1, world.rand.nextInt(100)));
+					else if(randomHandNumber == 1)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.reer_graar, 1, world.rand.nextInt(100)));
+					else if(randomHandNumber == 2)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.pipe_rusty, 1, world.rand.nextInt(100)));
+					else if(randomHandNumber == 3)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.crowbar, 1, world.rand.nextInt(100)));
+					else if(randomHandNumber == 4)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.steel_pickaxe, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 5)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.bat, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 6)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.bat_nail, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 7)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.golf_club, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 8)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.titanium_sword, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 9)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.steel_sword, 1, world.rand.nextInt(300)));
+					else if(randomHandNumber == 10)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.stopsign));
+					else if(randomHandNumber == 11)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.sopsign));
+					else if(randomHandNumber == 12)
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.chernobylsign));
+				}
+
+				if(!hasOffHand){
+					if(rand.nextInt(128) == 0)
+						entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.geiger_counter, 1));
+				}
+
+			} else if(entity instanceof EntitySkeleton) {
+				EntitySkeleton skelli = (EntitySkeleton)entity;
+				boolean hasHat = !skelli.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty();
+				if(!hasHat){
+					if(rand.nextInt(16) == 0) {
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.gas_mask_m65, 1, world.rand.nextInt(100)));
+					}
+				}
+				boolean hasMainHand = !skelli.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty();
+				if(!hasMainHand){
 					if(rand.nextInt(32) == 0) {
 						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.syringe_poison));
 					}
@@ -655,7 +733,7 @@ public class ModEventHandler {
 							}
 							continue;
 
-						} else if(eRad >= 50 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
+						} else if(eRad >= 500 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(event.world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -665,8 +743,12 @@ public class ModEventHandler {
 							entity.setDead();
 							continue;
 
-						} else if(eRad >= 500 && entity instanceof EntityVillager) {
-							EntityZombie creep = new EntityZombie(event.world);
+						} else if(eRad >= 600 && entity instanceof EntityVillager) {
+							EntityVillager vil = (EntityVillager)entity;
+							EntityZombieVillager creep = new EntityZombieVillager(event.world);
+							creep.setProfession(vil.getProfession());
+							creep.setForgeProfession(vil.getProfessionForge());
+							creep.setChild(vil.isChild());
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
 							if(!entity.isDead)
@@ -681,6 +763,21 @@ public class ModEventHandler {
 							if(!entity.isDead)
 								if(!event.world.isRemote)
 									event.world.spawnEntity(creep);
+							entity.setDead();
+							continue;
+						} else if(eRad >= 800 && entity instanceof EntityHorse) {
+							EntityHorse horsie = (EntityHorse)entity;
+							EntityZombieHorse zomhorsie = new EntityZombieHorse(event.world);
+							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							zomhorsie.setGrowingAge(horsie.getGrowingAge());
+							zomhorsie.setTemper(horsie.getTemper());
+							zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+							zomhorsie.setHorseTamed(horsie.isTame());
+							zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+							zomhorsie.makeMad();
+							if(!entity.isDead)
+								if(!event.world.isRemote)
+									event.world.spawnEntity(zomhorsie);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
@@ -856,14 +953,12 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void onEntityFall(LivingFallEvent event) {
-		if(event.getEntityLiving() instanceof EntityPlayer)
-			ArmorFSB.handleFall((EntityPlayer) event.getEntityLiving());
+		ArmorFSB.handleFall(event.getEntityLiving());
 	}
 
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
-		ArmorFSB.handleTick(event);
 
 		if(!player.world.isRemote && event.phase == TickEvent.Phase.START) {
 
@@ -1082,6 +1177,7 @@ public class ModEventHandler {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event){
+		ArmorFSB.handleTick(event.getEntityLiving());
 		if(r_handInventory == null){
 			r_handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
 			r_armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
@@ -1148,9 +1244,7 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void onEntityJump(LivingJumpEvent event) {
-
-		if(event.getEntityLiving() instanceof EntityPlayer)
-			ArmorFSB.handleJump((EntityPlayer) event.getEntityLiving());
+		ArmorFSB.handleJump(event.getEntityLiving());
 	}
 
 	

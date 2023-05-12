@@ -5,23 +5,24 @@ import java.util.List;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IReactor;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.SAFERecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.world.FWatz;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +38,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityFWatzCore extends TileEntity implements ITickable, IReactor, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityFWatzCore extends TileEntityLoadedBase implements ITickable, IReactor, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public final static long maxPower = 1000000000000L;
@@ -48,8 +49,6 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 	public boolean needsUpdate;
 
 	public ItemStackHandler inventory;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 
 	private String customName;
 
@@ -125,13 +124,7 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 	public void update() {
 		if(!world.isRemote && this.isStructureValid(this.world)) {
 
-			age++;
-			if(age >= 20) {
-				age = 0;
-			}
-
-			if(age == 9 || age == 19)
-				ffgeuaInit();
+			sendSAFEPower();
 
 			if(inventory.getStackInSlot(2).getItem() == ModItems.meteorite_sword_baleful && this.isRunning()){
 				inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
@@ -163,6 +156,9 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 					if(tanks[0].getFluidAmount() <= 0) {
 						cooldown = true;
 					}
+
+					if(world.rand.nextInt(4096) == 0)
+						tryGrowCore();
 				}
 			}
 
@@ -192,6 +188,20 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 
 		}
 
+	}
+
+	private void sendSAFEPower(){
+		this.sendPower(world, pos.add(7, -1, 0), Library.POS_X);
+		this.sendPower(world, pos.add(-7, -1, 0), Library.NEG_X);
+		this.sendPower(world, pos.add(0, -1, 7), Library.POS_Z);
+		this.sendPower(world, pos.add(0, -1, -7), Library.NEG_Z);
+	}
+
+	private void tryGrowCore(){
+		ItemStack output = SAFERecipes.getOutput(inventory.getStackInSlot(2));
+		if(output != null){
+			inventory.setStackInSlot(2, output.copy());
+		}
 	}
 
 	@Override
@@ -257,49 +267,6 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 			return false;
 		return stack.getFluid() == tankTypes[tank];
 	}
-	
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.add(7, -1, 0), getTact());
-		ffgeua(pos.add(-7, -1, 0), getTact());
-		ffgeua(pos.add(0, -1, 7), getTact());
-		ffgeua(pos.add(0, -1, -7), getTact());
-	}
-
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
-	}
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
@@ -354,5 +321,16 @@ public class TileEntityFWatzCore extends TileEntity implements ITickable, IReact
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) : super.getCapability(capability, facing);
 	}
+	
+	public long getPower() {
+		return power;
+	}
 
+	public void setPower(long i) {
+		power = i;
+	}
+
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

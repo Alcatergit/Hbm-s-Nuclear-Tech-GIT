@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.text.DecimalFormat;
 
 import javax.annotation.Nullable;
 
@@ -14,28 +15,19 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.calc.UnionOfTileEntitiesAndBooleans;
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
 import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
-import com.hbm.interfaces.IConductor;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.tileentity.conductor.TileEntityCable;
-import com.hbm.tileentity.conductor.TileEntityCableSwitch;
-import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntityMachineBattery;
-import com.hbm.tileentity.machine.TileEntityMachineTransformer;
-import com.hbm.tileentity.machine.TileEntityPylonRedWire;
-import com.hbm.tileentity.machine.TileEntityWireCoated;
 import com.hbm.util.BobMathUtil;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyConnector;
+import api.hbm.energy.IEnergyConnectorBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -61,6 +53,7 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -111,8 +104,17 @@ public class Library {
 			});
 
 
+	public static final ForgeDirection POS_X = ForgeDirection.EAST;
+	public static final ForgeDirection NEG_X = ForgeDirection.WEST;
+	public static final ForgeDirection POS_Y = ForgeDirection.UP;
+	public static final ForgeDirection NEG_Y = ForgeDirection.DOWN;
+	public static final ForgeDirection POS_Z = ForgeDirection.SOUTH;
+	public static final ForgeDirection NEG_Z = ForgeDirection.NORTH;
+
 	public static final int[] powersOfTen = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
 
+	public static DecimalFormat numberformat = new DecimalFormat("#.00");
+		
 	//the old list that allowed superuser mode for the ZOMG
 	//currently unused
 	public static List<String> superuser = new ArrayList<String>();
@@ -150,24 +152,23 @@ public class Library {
 
 		if(l >= Math.pow(10, 18)) {
 			double res = l / Math.pow(10, 18);
-			result = roundFloat(res, 2) + "E";
-		}else if(l >= Math.pow(10, 15)) {
+			result = numberformat.format(roundFloat(res, 2)) + "E";
+		} else if(l >= Math.pow(10, 15)) {
 			double res = l / Math.pow(10, 15);
-			result = roundFloat(res, 2) + "P";
-		}else if(l >= Math.pow(10, 12)) {
+			result = numberformat.format(roundFloat(res, 2)) + "P";
+		} else if(l >= Math.pow(10, 12)) {
 			double res = l / Math.pow(10, 12);
-			result = roundFloat(res, 2) + "T";
-		}else if(l >= Math.pow(10, 9)) {
+			result = numberformat.format(roundFloat(res, 2)) + "T";
+		} else if(l >= Math.pow(10, 9)) {
 			double res = l / Math.pow(10, 9);
-			result = roundFloat(res, 2) + "G";
-		}else if(l >= Math.pow(10, 6)) {
+			result = numberformat.format(roundFloat(res, 2)) + "G";
+		} else if(l >= Math.pow(10, 6)) {
 			double res = l / Math.pow(10, 6);
-			result = roundFloat(res, 2) + "M";
+			result = numberformat.format(roundFloat(res, 2)) + "M";
 		}else if(l >= Math.pow(10, 3)) {
 			double res = l / Math.pow(10, 3);
-			result = roundFloat(res, 2) + "k";
-		}
-		else{
+			result = numberformat.format(roundFloat(res, 2)) + "k";
+		} else{
 			result = Long.toString(l);
 		}
 
@@ -179,11 +180,11 @@ public class Library {
 	}
 
 	public static float roundFloat(float number, int decimal){
-		return (float) (((int) (number * powersOfTen[decimal])) / (float)powersOfTen[decimal]);  
+		return (float) (Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal]);  
 	}
 
 	public static float roundFloat(double number, int decimal){
-		return (float) (((int) (number * powersOfTen[decimal])) / (float)powersOfTen[decimal]);  
+		return (float) (Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal]);  
 	}
 
 	// Drillgon200: Just realized I copied the wrong method. God dang it.
@@ -674,217 +675,50 @@ public class Library {
 		}
 	}
 
+public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirection dir /* cable's connecting side */) {
+		
+		if(world instanceof World){
+			if(((World)world).isOutsideBuildHeight(pos))
+				return false;
+		} else {
+			if(pos.getY() < 0 || pos.getY() > 255)
+				return false;
+		}
+		
+		Block b = world.getBlockState(pos).getBlock();
+		
+		if(b instanceof IEnergyConnectorBlock) {
+			IEnergyConnectorBlock con = (IEnergyConnectorBlock) b;
+			
+			if(con.canConnect(world, pos, dir.getOpposite() /* machine's connecting side */))
+				return true;
+		}
+		
+		TileEntity te = world.getTileEntity(pos);
+		
+		if(te instanceof IEnergyConnector) {
+			IEnergyConnector con = (IEnergyConnector) te;
+			
+			if(con.canConnect(dir.getOpposite() /* machine's connecting side */))
+				return true;
+		}
+		
+		return false;
+	}
+
+	//Alcater: Finally this shit is no more
+
 	//TODO: jesus christ
 	// Flut-Füll gesteuerter Energieübertragungsalgorithmus
 	// Flood fill controlled energy transmission algorithm
-	public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {
-		Block block = worldObj.getBlockState(pos).getBlock();
-		TileEntity tileentity = worldObj.getTileEntity(pos);
-
-		// Factories
-		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlockState(pos.up()).getBlock() == ModBlocks.factory_titanium_core)
-		{
-			tileentity = worldObj.getTileEntity(pos.up());
-		}
-		if(block == ModBlocks.factory_titanium_conductor && worldObj.getBlockState(pos.down()).getBlock() == ModBlocks.factory_titanium_core)
-		{
-			tileentity = worldObj.getTileEntity(pos.down());
-		}
-		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlockState(pos.up()).getBlock() == ModBlocks.factory_advanced_core)
-		{
-			tileentity = worldObj.getTileEntity(pos.up());
-		}
-		if(block == ModBlocks.factory_advanced_conductor && worldObj.getBlockState(pos.down()).getBlock() == ModBlocks.factory_advanced_core)
-		{
-			tileentity = worldObj.getTileEntity(pos.down());
-		}
-		//Derrick
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(1, 0, 0)).getBlock() == ModBlocks.machine_well)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(1, 0, 0));
-		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(-1, 0, 0)).getBlock() == ModBlocks.machine_well)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(-1, 0, 0));
-		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(0, 0, 1)).getBlock() == ModBlocks.machine_well)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(0, 0, 1));
-		}
-		if(block == ModBlocks.dummy_port_well && worldObj.getBlockState(pos.add(0, 0, -1)).getBlock() == ModBlocks.machine_well)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(0, 0, -1));
-		}
-		//Mining Drill
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(1, 0, 0)).getBlock() == ModBlocks.machine_drill)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(1, 0, 0));
-		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(-1, 0, 0)).getBlock() == ModBlocks.machine_drill)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(-1, 0, 0));
-		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(0, 0, 1)).getBlock() == ModBlocks.machine_drill)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(0, 0, 1));
-		}
-		if(block == ModBlocks.dummy_port_drill && worldObj.getBlockState(pos.add(0, 0, -1)).getBlock() == ModBlocks.machine_drill)
-		{
-			tileentity = worldObj.getTileEntity(pos.add(0, 0, -1));
-		}
-		// Assembler
-		if(block == ModBlocks.dummy_port_assembler) {
-			tileentity = worldObj.getTileEntity(((TileEntityDummy) worldObj.getTileEntity(pos)).target);
-		}
-		// Chemplant
-		if(block == ModBlocks.dummy_port_chemplant) {
-			tileentity = worldObj.getTileEntity(((TileEntityDummy) worldObj.getTileEntity(pos)).target);
-		}
-		// Refinery
-		if(block == ModBlocks.dummy_port_refinery)
-		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
-		}
-		//Pumpjack
-		if(block == ModBlocks.dummy_port_pumpjack)
-		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
-		}
-		//AMS Limiter
-		if(block == ModBlocks.dummy_port_ams_limiter)
-		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
-		}
-		//AMS Emitter
-		if(block == ModBlocks.dummy_port_ams_emitter)
-		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
-		}
-		//Launchers
-		if(block == ModBlocks.dummy_port_compact_launcher || block == ModBlocks.dummy_port_launch_table)
-		{
-			tileentity = worldObj.getTileEntity(((TileEntityDummy)worldObj.getTileEntity(pos)).target);
-		}
-
-		if(tileentity instanceof IConductor) {
-			if(tileentity instanceof TileEntityCable) {
-				if(Library.checkUnionList(((TileEntityCable) tileentity).uoteab, that)) {
-					for(int i = 0; i < ((TileEntityCable) tileentity).uoteab.size(); i++) {
-						if(((TileEntityCable) tileentity).uoteab.get(i).source == that) {
-							if(((TileEntityCable) tileentity).uoteab.get(i).ticked != newTact) {
-								((TileEntityCable) tileentity).uoteab.get(i).ticked = newTact;
-								that.ffgeua(pos.up(), that.getTact());
-								that.ffgeua(pos.down(), that.getTact());
-								that.ffgeua(pos.west(), that.getTact());
-								that.ffgeua(pos.east(), that.getTact());
-								that.ffgeua(pos.north(), that.getTact());
-								that.ffgeua(pos.south(), that.getTact());
-							}
-						}
-					}
-				} else {
-					((TileEntityCable) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
-				}
-			}
-			if(tileentity instanceof TileEntityWireCoated) {
-				if(Library.checkUnionList(((TileEntityWireCoated) tileentity).uoteab, that)) {
-					for(int i = 0; i < ((TileEntityWireCoated) tileentity).uoteab.size(); i++) {
-						if(((TileEntityWireCoated) tileentity).uoteab.get(i).source == that) {
-							if(((TileEntityWireCoated) tileentity).uoteab.get(i).ticked != newTact) {
-								((TileEntityWireCoated) tileentity).uoteab.get(i).ticked = newTact;
-								that.ffgeua(pos.up(), that.getTact());
-								that.ffgeua(pos.down(), that.getTact());
-								that.ffgeua(pos.west(), that.getTact());
-								that.ffgeua(pos.east(), that.getTact());
-								that.ffgeua(pos.north(), that.getTact());
-								that.ffgeua(pos.south(), that.getTact());
-							}
-						}
-					}
-				} else {
-					((TileEntityWireCoated) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
-				}
-			}
-			if(tileentity instanceof TileEntityCableSwitch) {
-				if(tileentity.getBlockMetadata() == 1) {
-					if(Library.checkUnionList(((TileEntityCableSwitch) tileentity).uoteab, that)) {
-						for(int i = 0; i < ((TileEntityCableSwitch) tileentity).uoteab.size(); i++) {
-							if(((TileEntityCableSwitch) tileentity).uoteab.get(i).source == that) {
-								if(((TileEntityCableSwitch) tileentity).uoteab.get(i).ticked != newTact) {
-									((TileEntityCableSwitch) tileentity).uoteab.get(i).ticked = newTact;
-									that.ffgeua(pos.up(), that.getTact());
-									that.ffgeua(pos.down(), that.getTact());
-									that.ffgeua(pos.west(), that.getTact());
-									that.ffgeua(pos.east(), that.getTact());
-									that.ffgeua(pos.north(), that.getTact());
-									that.ffgeua(pos.south(), that.getTact());
-								}
-							}
-						}
-					} else {
-						((TileEntityCableSwitch) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
-					}
-				} else {
-					((TileEntityCableSwitch) tileentity).uoteab.clear();
-				}
-			}
-			if(tileentity instanceof TileEntityPylonRedWire) {
-				if(Library.checkUnionList(((TileEntityPylonRedWire) tileentity).uoteab, that)) {
-					for(int i = 0; i < ((TileEntityPylonRedWire) tileentity).uoteab.size(); i++) {
-						if(((TileEntityPylonRedWire) tileentity).uoteab.get(i).source == that) {
-							if(((TileEntityPylonRedWire) tileentity).uoteab.get(i).ticked != newTact) {
-								((TileEntityPylonRedWire) tileentity).uoteab.get(i).ticked = newTact;
-								for(int j = 0; j < ((TileEntityPylonRedWire) tileentity).connected.size(); j++) {
-									TileEntityPylonRedWire pylon = ((TileEntityPylonRedWire) tileentity).connected.get(j);
-									if(pylon != null) {
-										that.ffgeua(pylon.getPos().east(), that.getTact());
-										that.ffgeua(pylon.getPos().west(), that.getTact());
-										that.ffgeua(pylon.getPos().up(), that.getTact());
-										that.ffgeua(pylon.getPos().down(), that.getTact());
-										that.ffgeua(pylon.getPos().south(), that.getTact());
-										that.ffgeua(pylon.getPos().north(), that.getTact());
-
-										that.ffgeua(pylon.getPos(), that.getTact());
-									}
-								}
-							}
-						}
-					}
-				} else {
-					((TileEntityPylonRedWire) tileentity).uoteab.add(new UnionOfTileEntitiesAndBooleans(that, newTact));
-				}
-			}
-		}
-
-		// TE will not be added as consumer if:
-		// -TE is the source (will not send to itself)
-		// -TE is already full
-		// -TE is a battery set to output only
-		// -TE as well as source are transformers of the same frequency
-		if(tileentity instanceof IConsumer && newTact && !(tileentity instanceof TileEntityMachineBattery && ((TileEntityMachineBattery) tileentity).conducts) && tileentity != that && ((IConsumer) tileentity).getPower() < ((IConsumer) tileentity).getMaxPower() && !(tileentity instanceof TileEntityMachineTransformer && that instanceof TileEntityMachineTransformer && ((TileEntityMachineTransformer) tileentity).delay == ((TileEntityMachineTransformer) that).delay)) {
-			that.getList().add((IConsumer) tileentity);
-		}
-
-		if(!newTact) {
-			int size = that.getList().size();
-			if(size > 0) {
-				long part = that.getSPower() / size;
-				for(IConsumer consume : that.getList()) {
-					if(consume.getPower() < consume.getMaxPower()) {
-						if(consume.getMaxPower() - consume.getPower() >= part) {
-							that.setSPower(that.getSPower() - part);
-							consume.setPower(consume.getPower() + part);
-						} else {
-							that.setSPower(that.getSPower() - (consume.getMaxPower() - consume.getPower()));
-							consume.setPower(consume.getMaxPower());
-						}
-					}
-				}
-			}
-			that.clearList();
-		}
-
-	}
+	// public static void ffgeua(MutableBlockPos pos, boolean newTact, ISource that, World worldObj) {
+		
+	// 	/*
+	// 	 * This here smoldering crater is all that remains from the old energy system.
+	// 	 * In loving memory, 2019-2023.
+	// 	 * You won't be missed.
+	// 	 */
+	// }
 
 	/**
 	 * Itemstack equality method except it accounts for possible null stacks and
@@ -897,50 +731,6 @@ public class Library {
 			return false;
 		else
 			return stackA.getMetadata() == stackB.getMetadata() && stackA.getItem() == stackB.getItem();
-	}
-	
-	public static boolean checkCableConnectables(World world, int x, int y, int z) {
-		return checkCableConnectables(world, new BlockPos(x, y, z));
-	}
-
-	public static boolean checkCableConnectables(World world, BlockPos pos) {
-		TileEntity tileentity = world.getTileEntity(pos);
-		Block b = world.getBlockState(pos).getBlock();
-		if((tileentity != null && (tileentity instanceof IConductor || tileentity instanceof IConsumer || tileentity instanceof ISource)) ||
-				 b == ModBlocks.fusion_center ||
-				 b == ModBlocks.factory_titanium_conductor ||
-				 b == ModBlocks.factory_advanced_conductor ||
-				 b == ModBlocks.watz_conductor ||
-				 b == ModBlocks.fwatz_hatch ||
-				 b == ModBlocks.dummy_port_cyclotron ||
-				 b == ModBlocks.dummy_port_well ||
-				 b == ModBlocks.dummy_port_flare ||
-				 b == ModBlocks.dummy_port_drill ||
-		b == ModBlocks.dummy_port_assembler || b == ModBlocks.dummy_port_chemplant ||
-		 b == ModBlocks.dummy_port_refinery ||
-		 b == ModBlocks.dummy_port_pumpjack ||
-		 b == ModBlocks.dummy_port_turbofan ||
-		 b == ModBlocks.dummy_port_ams_limiter ||
-		 b == ModBlocks.dummy_port_ams_emitter ||
-		 b == ModBlocks.dummy_port_ams_base ||
-		 b == ModBlocks.dummy_port_radgen ||
-		 b == ModBlocks.dummy_port_compact_launcher ||
-		 b == ModBlocks.dummy_port_launch_table
-		) {
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean checkUnionList(List<UnionOfTileEntitiesAndBooleans> list, ISource that) {
-
-		for(UnionOfTileEntitiesAndBooleans union : list) {
-			if(union.source == that) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public static boolean hasInventoryItem(InventoryPlayer inventory, Item ammo) {
@@ -995,7 +785,7 @@ public class Library {
 	////    //////  /////     //    ////    ////        ////    //  //  //  //
 	//      //  //     //     //    //      //  //      //      //  //  //  //
 	//////  //  //  /////     //    //////  //  //      //////  //////  //////
-
+	//Alcater: Huh thats interesing... You can hide from the chopper as long as you are outside 80% of its radius??
 	public static EntityLivingBase getClosestEntityForChopper(World world, double x, double y, double z, double radius) {
 		double d4 = -1.0D;
 		EntityLivingBase entityplayer = null;
@@ -1012,7 +802,7 @@ public class Library {
 						d6 = radius * 0.800000011920929D;
 					}
 
-					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d4 > d5)) {
 						d4 = d5;
 						entityplayer = entityplayer1;
 					}

@@ -1,15 +1,15 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineArcFurnace;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-import api.hbm.energy.IBatteryItem;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineArcFurnace extends TileEntityMachineBase implements ITickable, IConsumer {
+public class TileEntityMachineArcFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public int dualCookTime;
 	public long power;
@@ -172,8 +172,10 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 		boolean flag1 = false;
 		
 		
-		if(!world.isRemote)
-		{			
+		if(!world.isRemote){				
+
+			this.updateStandardConnections(world, pos);
+
 			long prevPower = power;
 			
 			if(hasPower() && canProcess())

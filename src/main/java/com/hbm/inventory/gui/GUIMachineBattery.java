@@ -1,15 +1,19 @@
 package com.hbm.inventory.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.lang.Math;
 
 import com.hbm.inventory.container.ContainerMachineBattery;
 import com.hbm.lib.RefStrings;
 import com.hbm.lib.Library;
+import com.hbm.util.I18nUtil;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
 
+import api.hbm.energy.IEnergyConnector.ConnectionPriority;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,8 +27,8 @@ public class GUIMachineBattery extends GuiInfoContainer {
 
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_battery.png");
 	private TileEntityMachineBattery battery;
-	private long prevDelta;
-	private long powerDelta;
+
+	private ConnectionPriority lastPrio = ConnectionPriority.LOW;
 
 	public GUIMachineBattery(InventoryPlayer invPlayer, TileEntityMachineBattery tedf) {
 		super(new ContainerMachineBattery(invPlayer, tedf));
@@ -32,35 +36,45 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		this.xSize = 176;
 		this.ySize = 166;
-		this.prevDelta = battery.powerDelta;
-		this.powerDelta = battery.powerDelta;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		if(battery.powerDelta == 0 && prevDelta != 0)
-			powerDelta = prevDelta;
-		else
-			powerDelta = battery.powerDelta;
 
-		String deltaText = Library.getShortNumber(Math.abs(powerDelta)) + "HE/s";
-		if(powerDelta > 0) 
+		String deltaText = Library.getShortNumber(Math.abs(battery.powerDelta)) + "HE/s";
+		if(battery.powerDelta > 0) 
 			deltaText = TextFormatting.GREEN + "+" + deltaText;
-		else if(powerDelta < 0) 
+		else if(battery.powerDelta < 0) 
 			deltaText = TextFormatting.RED + "-" + deltaText;
 		else 
 			deltaText = TextFormatting.YELLOW + "0HE/s";
 
-		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.maxPower)+"HE", deltaText};
+		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.getMaxPower())+"HE", deltaText};
 
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52, mouseX, mouseY, info);
 
+		String lang = null;
+		switch(battery.priority) {
+			case NULL: lang = "null"; break;
+			case LOW: lang = "low"; break;
+			case NORMAL: lang = "normal"; break;
+			case HIGH: lang = "high"; break;
+		}
+
+		List<String> priority = new ArrayList();
+		priority.add(I18nUtil.resolveKey("battery.priority." + lang));
+		priority.add(I18nUtil.resolveKey("battery.priority.recommended"));
+		String[] desc = I18nUtil.resolveKeyArray("battery.priority." + lang + ".desc");
+		for(String s : desc) 
+			priority.add(s);
+		
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 151, guiTop + 16, 16, 16, mouseX, mouseY, priority.toArray(new String[priority.size()]));
 
 		String[] text = new String[] { "Click the buttons on the right",
 				"to change battery behavior for",
 				"when redstone is or isn't applied." };
-		prevDelta = battery.powerDelta;
+				
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -69,16 +83,22 @@ public class GUIMachineBattery extends GuiInfoContainer {
 	protected void mouseClicked(int x, int y, int i) throws IOException {
     	super.mouseClicked(x, y, i);
 		
-    	if(guiLeft + 7 <= x && guiLeft + 7 + 18 > x && guiTop + 34 < y && guiTop + 34 + 18 >= y) {
+    	if(guiLeft + 6 <= x && guiLeft + 6 + 18 > x && guiTop + 33 < y && guiTop + 33 + 18 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(battery.getPos(), 0, 0));
     	}
 		
-    	if(guiLeft + 151 <= x && guiLeft + 151 + 18 > x && guiTop + 34 < y && guiTop + 34 + 18 >= y) {
+    	if(guiLeft + 150 <= x && guiLeft + 150 + 18 > x && guiTop + 33 < y && guiTop + 33 + 18 >= y) {
     		
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(battery.getPos(), 0, 1));
+    	}
+
+    	if(guiLeft + 151 <= x && guiLeft + 151 + 16 > x && guiTop + 16 < y && guiTop + 17 + 16 >= y) {
+    		
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    		PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(battery.getPos(), 0, 2));
     	}
 	}
 	
@@ -108,6 +128,8 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		int j = battery.redHigh;
 		drawTexturedModalRect(guiLeft + 151, guiTop + 34, 176, 52 + j * 18, 18, 18);
+
+		drawTexturedModalRect(guiLeft + 152, guiTop + 17, 194, 52 + (battery.priority.ordinal()-1) * 16, 16, 16);
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		

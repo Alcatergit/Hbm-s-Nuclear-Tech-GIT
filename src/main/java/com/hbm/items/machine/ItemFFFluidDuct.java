@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.config.GeneralConfig;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 
 import net.minecraft.client.resources.I18n;
@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -39,8 +40,10 @@ public class ItemFFFluidDuct extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-			FluidRegistry.getRegisteredFluids().values().forEach(f -> {items.add(getStackFromFluid(f));});
+		if(GeneralConfig.registerTanks){
+			if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
+				FluidRegistry.getRegisteredFluids().values().forEach(f -> {items.add(getStackFromFluid(f));});
+			}
 		}
 	}
 	
@@ -82,7 +85,7 @@ public class ItemFFFluidDuct extends Item {
             	((TileEntityFFFluidDuctMk2)world.getTileEntity(pos)).setType(getFluidFromStack(stack));;
             }
             stack.shrink(1);
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pipePlaced, SoundCategory.PLAYERS, 1.0F, 0.65F + world.rand.nextFloat() * 0.2F);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.PLAYERS, 1F, 0.8F + world.rand.nextFloat() * 0.2F);
 
             return EnumActionResult.SUCCESS;
         }

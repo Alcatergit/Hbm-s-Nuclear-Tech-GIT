@@ -3,7 +3,9 @@ package com.hbm.blocks.gas;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.potion.HbmPotion;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.capability.HbmLivingProps;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
@@ -53,7 +55,14 @@ public class BlockGasRadonTomb extends BlockGasBase {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase) {
-			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.5F);
+
+			EntityLivingBase living = (EntityLivingBase) entity;
+
+			living.removePotionEffect(HbmPotion.radaway); //get fucked
+			living.removePotionEffect(HbmPotion.radx);
+
+			ContaminationUtil.contaminate(living, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.5F);
+			HbmLivingProps.incrementAsbestos(living, 10);
 		}
 	}
 	

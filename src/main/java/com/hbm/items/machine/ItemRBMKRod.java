@@ -399,7 +399,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.funcType", this.function.title));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonGen", TextFormatting.WHITE + "x * " + xGen));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² * " + xBurn));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² / " + xBurn));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.heat", heat + "°C"));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.diffusion", diffusion + "¹/²"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmx.skinTemp", ((int)(getHullHeat(stack) * 10D) / 10D) + "m"));
@@ -419,7 +419,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.funcType", this.function.title));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.xenonGen", TextFormatting.WHITE + "x * " + xGen));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.xenonBurn", TextFormatting.WHITE + "x² * " + xBurn));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmk.xenonBurn", TextFormatting.WHITE + "x² / " + xBurn));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmk.heat", heat + "°C"));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmk.diffusion", diffusion + "¹/²"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmk.skinTemp", ((int)(getHullHeat(stack) * 10D) / 10D) + "°C"));
@@ -427,19 +427,6 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmk.melt", meltingPoint + "°C"));
 		}
 
-		/*list.add(TextFormatting.GREEN + "Depletion: " + ((int)(((yield - getYield(stack)) / yield) * 10000)) / 10000D + "%");
-		list.add(TextFormatting.DARK_PURPLE + "Xenon poison: " + ((getPoison(stack) * 100D) / 100D) + "%");
-		list.add(TextFormatting.BLUE + "Splits with: " + nType.unlocalized);
-		list.add(TextFormatting.BLUE + "Splits into: " + rType.unlocalized);
-		list.add(TextFormatting.YELLOW + "Flux function: " + TextFormatting.WHITE + "" + funcEnd + " * x" + (selfRate > 0 ? (TextFormatting.RED + " + " + selfRate) : ""));
-		list.add(TextFormatting.YELLOW + "Xenon gen function: " + TextFormatting.WHITE + "x * " + xGen);
-		list.add(TextFormatting.YELLOW + "Xenon burn function: " + TextFormatting.WHITE + "x² * " + xBurn);
-		list.add(TextFormatting.GOLD + "Heat per tick at full power: " + heat + "°C");
-		list.add(TextFormatting.GOLD + "Diffusion: " + diffusion + "°C/t");
-		list.add(TextFormatting.RED + "Skin temp: " + ((int)(getHullHeat(stack) * 10D) / 10D) + "°C");
-		list.add(TextFormatting.RED + "Core temp: " + ((int)(getCoreHeat(stack) * 10D) / 10D) + "°C");
-		list.add(TextFormatting.DARK_RED + "Melting point: " + meltingPoint + "°C");*/
-		
 		super.addInformation(stack, worldIn, list, flag);
 		updateModule(stack);
 		this.module.addInformation(stack, list, flag);

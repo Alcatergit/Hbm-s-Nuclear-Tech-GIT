@@ -3,15 +3,15 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.util.RTGUtil;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,16 +24,14 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRTG extends TileEntity implements ITickable, ISource {
+public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITickable, IEnergyGenerator {
 
 	public ItemStackHandler inventory;
 	
 	public int heat;
 	public final int heatMax = 6000;
 	public long power;
-	public final long powerMax = 1000000;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
+	public final long maxPower = 1000000;
 	
 	//private static final int[] slots_top = new int[] { 0 };
 	//private static final int[] slots_bottom = new int[] { 0 };
@@ -79,14 +77,7 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 	public void update() {
 		if(!world.isRemote)
 		{
-			age++;
-			if(age >= 20)
-			{
-				age = 0;
-			}
-			
-			if(age == 9 || age == 19)
-				ffgeuaInit();
+			this.sendPower(world, pos);
 			int[] slots = new int[inventory.getSlots()];
 			for(int i = 0; i < inventory.getSlots();i++){
 				slots[i] = i;
@@ -97,8 +88,8 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 				heat = heatMax;
 			
 			power += heat*5;
-			if(power > powerMax)
-				power = powerMax;
+			if(power > maxPower)
+				power = maxPower;
 			
 			
 			detectAndSendChanges();
@@ -126,7 +117,7 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 	}
 	
 	public long getPowerScaled(long i) {
-		return (power * i) / powerMax;
+		return (power * i) / maxPower;
 	}
 	
 	public int getHeatScaled(int i) {
@@ -161,51 +152,6 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
 		}
 	}
-	
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.up(), getTact());
-		ffgeua(pos.down(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.south(), getTact());
-	}
-	
-	@Override
-	public boolean getTact() {
-		if(age >= 0 && age < 10)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-
-	@Override
-	public long getSPower() {
-		return power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return list;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
-	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -237,4 +183,18 @@ public class TileEntityMachineRTG extends TileEntity implements ITickable, ISour
 			markDirty();
 	}
 	
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

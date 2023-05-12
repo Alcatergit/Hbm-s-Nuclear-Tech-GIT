@@ -1,14 +1,34 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IConsumer;
+import com.hbm.tileentity.TileEntityTickingBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityHadronPower extends TileEntity implements IConsumer {
+public class TileEntityHadronPower extends TileEntityTickingBase implements IEnergyUser {
 
 	public long power;
 	public static final long maxPower = 1000000000;
+
+	@Override
+	public void update() {
+		if(!world.isRemote) {
+			this.updateStandardConnections(world, pos);
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", power);
+			this.networkPack(data, 15);
+		}
+	}
+
+	public String getInventoryName(){
+		return "Hadron_Power";
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		this.power = nbt.getLong("power");
+	}
 	
 	@Override
 	public void setPower(long i) {

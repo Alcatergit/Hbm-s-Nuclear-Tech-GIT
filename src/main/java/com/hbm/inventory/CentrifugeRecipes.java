@@ -134,6 +134,12 @@ public class CentrifugeRecipes {
 				new ItemStack(ModItems.powder_lead, 1),
 				new ItemStack(ModItems.powder_gold, 1),
 				new ItemStack(Blocks.GRAVEL, 1) });
+
+		recipes.put(ASBESTOS.ore(), new ItemStack[] {
+				new ItemStack(ModItems.powder_asbestos, 1),
+				new ItemStack(ModItems.powder_asbestos, 1),
+				new ItemStack(ModItems.powder_boron_tiny, 1),
+				new ItemStack(Blocks.GRAVEL, 1) });
 		
 		recipes.put(SA326.ore(), new ItemStack[] {
 				new ItemStack(ModItems.powder_schrabidium, 1),
@@ -243,6 +249,7 @@ public class CentrifugeRecipes {
 		recipes.put(LI.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_lithium, 2), new ItemStack(ModItems.powder_lithium, 2), new ItemStack(ModItems.powder_quartz, 1), new ItemStack(ModItems.fluorite, 1) });
 		recipes.put(STAR.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_dura_steel, 3), new ItemStack(ModItems.powder_cobalt, 3), new ItemStack(ModItems.powder_astatine, 2), new ItemStack(ModItems.nugget_mercury, 5) });
 		recipes.put(CO.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_cobalt, 2), new ItemStack(ModItems.powder_iron, 3), new ItemStack(ModItems.powder_copper, 3), new ItemStack(ModItems.powder_lithium_tiny, 1) });
+		recipes.put(ASBESTOS.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_asbestos, 2), new ItemStack(ModItems.powder_asbestos, 2), new ItemStack(ModItems.powder_boron_tiny, 1), new ItemStack(Blocks.GRAVEL, 1) });
 	}
 
 	public static void addRecipe(ItemStack in, ItemStack[] outputs){

@@ -6,7 +6,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
@@ -15,6 +14,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemFusionShield;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
@@ -23,6 +23,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.saveddata.RadiationSavedData;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,7 +44,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityITER extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityITER extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000000;
@@ -92,6 +93,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 			if(age == 9 || age == 19)
 				fillFluidInit(tanks[1]);
 
+			this.updateConnections();
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
 			/// START Processing part ///
@@ -188,6 +190,11 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 				}
 			}
 		}
+	}
+
+	private void updateConnections() {
+		this.trySubscribe(world, pos.add(0, 3, 0), ForgeDirection.UP);
+		this.trySubscribe(world, pos.add(0, -3, 0), ForgeDirection.DOWN);
 	}
 	
 	private void doBreederStuff() {

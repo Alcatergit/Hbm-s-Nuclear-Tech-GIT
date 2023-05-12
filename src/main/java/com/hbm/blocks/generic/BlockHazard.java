@@ -172,7 +172,7 @@ public class BlockHazard extends Block implements IItemHazard {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
 
 		if(this.rad3d > 0){
-			ContaminationUtil.radiate(worldIn, pos.getX(), pos.getY(), pos.getZ(), 32, this.rad3d, this.module.fire * 5000);
+			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d, this.module.fire * 5000);
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 		if(this == ModBlocks.block_meteor_molten) {

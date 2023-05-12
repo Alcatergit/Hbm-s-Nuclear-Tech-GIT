@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -12,6 +11,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCMBFactory extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineCMBFactory extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power = 0;
 	public int process = 0;
@@ -192,6 +192,9 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+
+			this.updateStandardConnections(world, pos);
+
 			long prevPower = power;
 			int prevAmount = tank.getFluidAmount();
 			if (needsUpdate) {

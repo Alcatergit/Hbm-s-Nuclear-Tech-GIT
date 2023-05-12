@@ -2,18 +2,13 @@ package com.hbm.entity.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
 
+import api.hbm.energy.IEnergyUser;
 import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -22,9 +17,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class EntityEMP extends Entity implements IChunkLoader {
 
@@ -88,9 +87,7 @@ public class EntityEMP extends Entity implements IChunkLoader {
 		TileEntity te = world.getTileEntity(pos);
 		if(te == null)
 			return;
-		if (te instanceof ISource) {
-			machines.add(pos);
-		} else if (te instanceof IConsumer) {
+		if (te instanceof IEnergyUser) {
 			machines.add(pos);
 		} else if (te instanceof IEnergyProvider) {
 			machines.add(pos);
@@ -106,14 +103,9 @@ public class EntityEMP extends Entity implements IChunkLoader {
 			return;
 		boolean flag = false;
 		
-		if (te instanceof ISource) {
+		if (te instanceof IEnergyUser) {
 			
-			((ISource)te).setSPower(0);
-			flag = true;
-		}
-		if (te instanceof IConsumer) {
-			
-			((IConsumer)te).setPower(0);
+			((IEnergyUser)te).setPower(0);
 			flag = true;
 		}
 		if (te instanceof IEnergyProvider) {

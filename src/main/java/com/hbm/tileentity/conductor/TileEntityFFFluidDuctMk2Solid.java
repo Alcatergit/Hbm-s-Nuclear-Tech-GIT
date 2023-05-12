@@ -1,5 +1,5 @@
 package com.hbm.tileentity.conductor;
 
-public class TileEntityFFFluidDuctMk2Solid extends TileEntityFFFluidDuctMk2 {
+public class TileEntityFFFluidDuctMk2Solid extends TileEntityFFDuctBaseMk2 {
 
 }

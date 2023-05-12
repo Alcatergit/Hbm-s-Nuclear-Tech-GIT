@@ -10,6 +10,7 @@ import com.hbm.tileentity.machine.TileEntityFurnaceSteel;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -45,7 +46,8 @@ public class FurnaceSteel extends BlockDummyable implements ITooltipProvider {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
-		this.addStandardInfo(stack, player, list, ext);
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		this.addStandardInfo(list);
+		super.addInformation(stack, worldIn, list, flagIn);
 	}
 }

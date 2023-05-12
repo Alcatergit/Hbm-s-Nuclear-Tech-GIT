@@ -1,13 +1,18 @@
 package com.hbm.tileentity.machine.oil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.tileentity.TileEntityLoadedBase;
+
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -21,9 +26,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.*;
-
-public abstract class TileEntityOilDrillBase extends TileEntity implements ITickable, IConsumer, IFluidHandler, ITankPacketAcceptor
+public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor
 {
     public ItemStackHandler inventory;
 
@@ -43,8 +46,6 @@ public abstract class TileEntityOilDrillBase extends TileEntity implements ITick
     protected static int gasPerDepositMin = 100;
     protected static int extraGasPerDepositMax = 401;
 
-
-
     public TileEntityOilDrillBase() {
         inventory = new ItemStackHandler(6){
             @Override
@@ -62,8 +63,6 @@ public abstract class TileEntityOilDrillBase extends TileEntity implements ITick
         tankTypes[1] = ModForgeFluids.gas;
         needsUpdate = false;
     }
-
-    Random rand = new Random();
 
     private String customName;
 
@@ -117,7 +116,7 @@ public abstract class TileEntityOilDrillBase extends TileEntity implements ITick
     }
 
     List<int[]> list = new ArrayList<int[]>();
-    Set<BlockPos> processed = new HashSet<BlockPos>();
+    HashSet<BlockPos> processed = new HashSet<BlockPos>();
 
     public byte succ(int x, int y, int z) {
 
@@ -128,7 +127,7 @@ public abstract class TileEntityOilDrillBase extends TileEntity implements ITick
 
         if(!list.isEmpty()) {
 
-            int i = rand.nextInt(list.size());
+            int i = world.rand.nextInt(list.size());
             int a = list.get(i)[0];
             int b = list.get(i)[1];
             int c = list.get(i)[2];

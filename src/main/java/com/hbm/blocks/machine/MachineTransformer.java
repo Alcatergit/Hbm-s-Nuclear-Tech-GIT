@@ -12,24 +12,19 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
 
 public class MachineTransformer extends BlockContainer {
-
-	private long buffer;
-	private int delay;
 	
 	public MachineTransformer(Material materialIn, long b, int d, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
-		buffer = b;
-		delay = d;
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineTransformer(buffer, delay);
+		return new TileEntityMachineTransformer();
 	}
 	
 	@Override

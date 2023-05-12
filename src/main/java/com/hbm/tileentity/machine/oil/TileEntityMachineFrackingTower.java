@@ -64,6 +64,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
         if(age2 >= 20)
             age2 -= 20;
         if(!world.isRemote) {
+            this.updateConnections();
             int tank0Amount = tanks[0].getFluidAmount();
             int tank1Amount = tanks[1].getFluidAmount();
             int tank2Amount = tanks[2].getFluidAmount();
@@ -116,11 +117,11 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
                                 if (succNumber == 1) {
                                     this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerDeposit), true);
-                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + rand.nextInt(extraGasPerDepositMax))), true);
+                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + world.rand.nextInt(extraGasPerDepositMax))), true);
                                 }
                                 else {
                                     this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerBedrockDeposit), true);
-                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerBedrockDepositMin + rand.nextInt(extraGasPerBedrockDepositMax))), true);
+                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerBedrockDepositMin + world.rand.nextInt(extraGasPerBedrockDepositMax))), true);
                                 }
                                 needsUpdate = true;
 
@@ -168,8 +169,12 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
         }
     }
 
-
-
+    protected void updateConnections() {
+        this.trySubscribe(world, pos.add(1, 0, 0), Library.POS_X);
+        this.trySubscribe(world, pos.add(-1, 0, 0), Library.NEG_X);
+        this.trySubscribe(world, pos.add(0, 0, 1), Library.POS_Z);
+        this.trySubscribe(world, pos.add(0, 0, -1), Library.NEG_Z);
+    }
 
     public void fillFluidInit(FluidTank tank) {
         needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 0), 2000) || needsUpdate;
@@ -178,8 +183,6 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
         needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 0, -1), 2000) || needsUpdate;
 
     }
-
-
 
     public FluidStack drain(FluidStack resource, boolean doDrain) {
         if(resource == null) {

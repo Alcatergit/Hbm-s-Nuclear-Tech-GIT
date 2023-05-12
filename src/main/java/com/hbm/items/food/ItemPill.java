@@ -1,5 +1,6 @@
 package com.hbm.items.food;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -56,12 +57,28 @@ public class ItemPill extends ItemFood {
         	}
 
         	if(this == ModItems.radx) {
-        		player.addPotionEffect(new PotionEffect(HbmPotion.radx, 3 * 60 * 20, 0));
+        		player.addPotionEffect(new PotionEffect(HbmPotion.radx, 3 * 60 * 20, 3));
         	}
         	if(this == ModItems.siox) {
 				HbmLivingProps.setAsbestos(player, 0);
 				HbmLivingProps.setBlackLung(player, Math.min(HbmLivingProps.getBlackLung(player), EntityHbmProps.maxBlacklung / 5));
 			}
+
+			if(this == ModItems.pill_herbal) {
+				HbmLivingProps.setAsbestos(player, 0);
+				HbmLivingProps.setBlackLung(player, Math.min(HbmLivingProps.getBlackLung(player), EntityHbmProps.maxBlacklung / 5));
+				HbmLivingProps.incrementRadiation(player, -100F);
+				
+				player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 10 * 20, 0));
+				player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 10 * 60 * 20, 2));
+				player.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 10 * 60 * 20, 2));
+				player.addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 2));
+				
+				PotionEffect eff = new PotionEffect(HbmPotion.potionsickness, 10 * 60 * 20);
+				eff.setCurativeItems(new ArrayList());
+				player.addPotionEffect(eff);
+			}
+
         	if(this == ModItems.xanax) {
 				float digamma = HbmLivingProps.getDigamma(player);
 				HbmLivingProps.setDigamma(player, Math.max(digamma - 0.5F, 0F));
@@ -93,6 +110,10 @@ public class ItemPill extends ItemFood {
 		}
 		if(this == ModItems.siox) {
 			tooltip.add("Reverses mesothelioma with the power of Asbestos!");
+		}
+		if(this == ModItems.pill_herbal) {
+			tooltip.add("Effective treatment against lung disease and mild radiation poisoning");
+			tooltip.add("Comes with side effects");
 		}
 		if(this == ModItems.xanax) {
 			tooltip.add("Removes 500mDRX");

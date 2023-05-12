@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.Untested;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -15,6 +14,7 @@ import com.hbm.packet.TEDrillPacket;
 import com.hbm.sound.SoundLoopMachine;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import api.hbm.block.IDrillInteraction;
 import api.hbm.block.IMiningDrill;
 import net.minecraft.block.Block;
@@ -38,7 +38,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineMiningDrill extends TileEntityMachineBase implements ITickable, IConsumer, IMiningDrill {
+public class TileEntityMachineMiningDrill extends TileEntityMachineBase implements ITickable, IEnergyUser, IMiningDrill {
 
 	public long power;
 	public int warning;
@@ -101,80 +101,81 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 	@Untested
 	@Override
 	public void update() {
-		this.consumption = 100;
-		this.timer = 50;
-		this.radius = 1;
-		this.fortune = 0;
+		if(!world.isRemote) {
+			this.updateConnections();
+			this.consumption = 100;
+			this.timer = 50;
+			this.radius = 1;
+			this.fortune = 0;
 
-		for(int i = 10; i < 13; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
+			for(int i = 10; i < 13; i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
 
-			if(stack != null) {
-				if(stack.getItem() == ModItems.upgrade_effect_1) {
-					this.radius += 1;
-					this.consumption += 80;
-				}
-				if(stack.getItem() == ModItems.upgrade_effect_2) {
-					this.radius += 2;
-					this.consumption += 160;
-				}
-				if(stack.getItem() == ModItems.upgrade_effect_3) {
-					this.radius += 3;
-					this.consumption += 240;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_1) {
-					this.timer -= 15;
-					this.consumption += 300;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_2) {
-					this.timer -= 30;
-					this.consumption += 600;
-				}
-				if(stack.getItem() == ModItems.upgrade_speed_3) {
-					this.timer -= 45;
-					this.consumption += 900;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_1) {
-					this.consumption -= 30;
-					this.timer += 5;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_2) {
-					this.consumption -= 60;
-					this.timer += 10;
-				}
-				if(stack.getItem() == ModItems.upgrade_power_3) {
-					this.consumption -= 90;
-					this.timer += 15;
-				}
-				if(stack.getItem() == ModItems.upgrade_fortune_1) {
-					this.fortune += 1;
-					this.timer += 15;
-				}
-				if(stack.getItem() == ModItems.upgrade_fortune_2) {
-					this.fortune += 2;
-					this.timer += 30;
-				}
-				if(stack.getItem() == ModItems.upgrade_fortune_3) {
-					this.fortune += 3;
-					this.timer += 45;
+				if(stack != null) {
+					if(stack.getItem() == ModItems.upgrade_effect_1) {
+						this.radius += 1;
+						this.consumption += 80;
+					}
+					if(stack.getItem() == ModItems.upgrade_effect_2) {
+						this.radius += 2;
+						this.consumption += 160;
+					}
+					if(stack.getItem() == ModItems.upgrade_effect_3) {
+						this.radius += 3;
+						this.consumption += 240;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_1) {
+						this.timer -= 15;
+						this.consumption += 300;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_2) {
+						this.timer -= 30;
+						this.consumption += 600;
+					}
+					if(stack.getItem() == ModItems.upgrade_speed_3) {
+						this.timer -= 45;
+						this.consumption += 900;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_1) {
+						this.consumption -= 30;
+						this.timer += 5;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_2) {
+						this.consumption -= 60;
+						this.timer += 10;
+					}
+					if(stack.getItem() == ModItems.upgrade_power_3) {
+						this.consumption -= 90;
+						this.timer += 15;
+					}
+					if(stack.getItem() == ModItems.upgrade_fortune_1) {
+						this.fortune += 1;
+						this.timer += 15;
+					}
+					if(stack.getItem() == ModItems.upgrade_fortune_2) {
+						this.fortune += 2;
+						this.timer += 30;
+					}
+					if(stack.getItem() == ModItems.upgrade_fortune_3) {
+						this.fortune += 3;
+						this.timer += 45;
+					}
 				}
 			}
-		}
 
-		if(timer < 5)
-			timer = 5;
-		if(consumption < 40)
-			consumption = 40;
-		if(radius > 4)
-			radius = 4;
-		if(fortune > 3)
-			fortune = 3;
+			if(timer < 5)
+				timer = 5;
+			if(consumption < 40)
+				consumption = 40;
+			if(radius > 4)
+				radius = 4;
+			if(fortune > 3)
+				fortune = 3;
 
-		age++;
-		if(age >= timer)
-			age -= timer;
+			age++;
+			if(age >= timer)
+				age -= timer;
 
-		if(!world.isRemote) {
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
 			if(power >= consumption) {
@@ -327,58 +328,18 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		}
 	}
 
-/*	public boolean tryFillContainer(ICapabilityProvider cap, int slot) {
-		IItemHandlerModifiable inventory
-		int size = inventory.getSizeInventory();
-
-		for(int i = 0; i < size; i++) {
-			if(inventory.getStackInSlot(i) != null) {
-				
-				if(slots[slot] == null)
-					return false;
-				
-				ItemStack sta1 = inventory.getStackInSlot(i).copy();
-				ItemStack sta2 = slots[slot].copy();
-				if(sta1 != null && sta2 != null) {
-					sta1.setCount(1);
-					sta2.setCount(1);
-				
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).stackSize < inventory.getStackInSlot(i).getMaxStackSize()) {
-						inventory.getStackInSlot(slot).shrink(1);
-						
-						if(inventory.getStackInSlot(slot).isEmpty())
-							inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
-						
-						ItemStack sta3 = inventory.getStackInSlot(i).copy();
-						sta3.grow(1);
-						inventory.setInventorySlotContents(i, sta3);
-					
-						return true;
-					}
-				}
-			}
-		}
-		for(int i = 0; i < size; i++) {
-			
-			if(slots[slot] == null)
-				return false;
-			
-			ItemStack sta2 = slots[slot].copy();
-			if(inventory.getStackInSlot(i) == null && sta2 != null) {
-				sta2.stackSize = 1;
-				slots[slot].stackSize--;
-				
-				if(slots[slot].stackSize <= 0)
-					slots[slot] = null;
-				
-				inventory.setInventorySlotContents(i, sta2);
-					
-				return true;
-			}
-		}
+	private void updateConnections()  {
+		int meta = this.getBlockMetadata();
 		
-		return false;
-	}*/
+		if(meta == 5 || meta == 4) {
+			this.trySubscribe(world, pos.add(2, 0, 0), Library.POS_X);
+			this.trySubscribe(world, pos.add(-2, 0, 0), Library.NEG_X);
+			
+		} else if(meta == 3 || meta == 2) {
+			this.trySubscribe(world, pos.add(0, 0, 2), Library.POS_Z);
+			this.trySubscribe(world, pos.add(0, 0, -2), Library.NEG_Z);
+		}
+	}
 
 	// Unloads output into chests. Capability version.
 	public boolean tryFillContainerCap(IItemHandler inv, int slot) {

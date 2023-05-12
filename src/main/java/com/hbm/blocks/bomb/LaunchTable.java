@@ -163,11 +163,11 @@ public class LaunchTable extends BlockContainer implements IMultiBlock, IBomb {
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
-					placeDummy(world, pos.getX() + i, pos.getY(), pos.getZ(), pos, ModBlocks.dummy_port_launch_table);
+					placeDummy(world, pos.getX() + i, pos.getY(), pos.getZ(), pos, ModBlocks.dummy_plate_launch_table);
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
-					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_plate_launch_table);
+					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_port_launch_table);
 		}
 		if (e == EnumFacing.EAST) {
 			for(int i = 1; i < 12; i++)
@@ -175,15 +175,27 @@ public class LaunchTable extends BlockContainer implements IMultiBlock, IBomb {
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
+					placeDummy(world, pos.getX() + i, pos.getY(), pos.getZ(), pos, ModBlocks.dummy_port_launch_table);
+			
+			for(int i = -4; i <= 4; i++)
+				if(i != 0)
+					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_plate_launch_table);
+		}
+		if (e == EnumFacing.SOUTH) {
+			for(int i = 1; i < 12; i++)
+				world.setBlockState(pos.add(-3, i, 0), Blocks.AIR.getDefaultState());
+			
+			for(int i = -4; i <= 4; i++)
+				if(i != 0)
 					placeDummy(world, pos.getX() + i, pos.getY(), pos.getZ(), pos, ModBlocks.dummy_plate_launch_table);
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
 					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_port_launch_table);
 		}
-		if (e == EnumFacing.SOUTH) {
+		if (e == EnumFacing.WEST) {
 			for(int i = 1; i < 12; i++)
-				world.setBlockState(pos.add(-3, i, 0), Blocks.AIR.getDefaultState());
+				world.setBlockState(pos.add(0, i, -3), Blocks.AIR.getDefaultState());
 			
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
@@ -192,18 +204,6 @@ public class LaunchTable extends BlockContainer implements IMultiBlock, IBomb {
 			for(int i = -4; i <= 4; i++)
 				if(i != 0)
 					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_plate_launch_table);
-		}
-		if (e == EnumFacing.WEST) {
-			for(int i = 1; i < 12; i++)
-				world.setBlockState(pos.add(0, i, -3), Blocks.AIR.getDefaultState());
-			
-			for(int i = -4; i <= 4; i++)
-				if(i != 0)
-					placeDummy(world, pos.getX() + i, pos.getY(), pos.getZ(), pos, ModBlocks.dummy_plate_launch_table);
-			
-			for(int i = -4; i <= 4; i++)
-				if(i != 0)
-					placeDummy(world, pos.getX(), pos.getY(), pos.getZ() + i, pos, ModBlocks.dummy_port_launch_table);
 		}
 
 		for(int i = -4; i <= 4; i++)

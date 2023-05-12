@@ -1,9 +1,13 @@
 package com.hbm.tileentity.machine;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.handler.MultiblockHandler;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -11,6 +15,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.FluidTankPacket;
@@ -19,6 +24,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEChemplantPacket;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -48,12 +54,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-public class TileEntityMachineChemplant extends TileEntityMachineBase implements IConsumer, ITankPacketAcceptor, ITickable {
+public class TileEntityMachineChemplant extends TileEntityMachineBase implements IEnergyUser, ITankPacketAcceptor, ITickable {
 
 	public static final long maxPower = 2000000;
 	public long power;
@@ -68,10 +69,8 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 	public ItemStack previousTemplate = ItemStack.EMPTY;
 	//Drillgon200: Yeah I don't even know what I was doing originally
 	public ItemStack previousTemplate2 = ItemStack.EMPTY;
-	int age = 0;
 	int consumption = 100;
 	int speed = 100;
-	Random rand = new Random();
 	private long detectPower;
 	private boolean detectIsProgressing;
 	private FluidTank[] detectTanks = new FluidTank[]{null, null, null, null};
@@ -249,16 +248,12 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			int meta = world.getBlockState(pos).getValue(MachineChemplant.FACING);
 			isProgressing = false;
 
-			age++;
-			if(age >= 20) {
-				age = 0;
-			}
-
-			if(age == 9 || age == 19) {
+			if(world.getTotalWorldTime() % 10 == 0) {
 				fillFluidInit(tanks[2]);
 				fillFluidInit(tanks[3]);
 			}
 
+			this.updateConnections();
 
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			if(inputValidForTank(0, 17)) {
@@ -434,6 +429,35 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 		}
 		return false;
 
+	}
+
+	private void updateConnections() {
+		int meta = this.getBlockMetadata();
+		
+		if(meta == 5) {
+			this.trySubscribe(world, pos.add(-2, 0, 0), Library.NEG_X);
+			this.trySubscribe(world, pos.add(-2, 0, 1), Library.NEG_X);
+			this.trySubscribe(world, pos.add(3, 0, 0), Library.POS_X);
+			this.trySubscribe(world, pos.add(3, 0, 1), Library.POS_X);
+			
+		} else if(meta == 3) {
+			this.trySubscribe(world, pos.add(0, 0, -2), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(-1, 0, -2), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(0, 0, 3), Library.POS_Z);
+			this.trySubscribe(world, pos.add(-1, 0, 3), Library.POS_Z);
+			
+		} else if(meta == 4) {
+			this.trySubscribe(world, pos.add(2, 0, 0), Library.POS_X);
+			this.trySubscribe(world, pos.add(2, 0, -1), Library.POS_X);
+			this.trySubscribe(world, pos.add(-3, 0, 0), Library.NEG_X);
+			this.trySubscribe(world, pos.add(-3, 0, -1), Library.NEG_X);
+			
+		} else if(meta == 2) {
+			this.trySubscribe(world, pos.add(0, 0, 2), Library.POS_Z);
+			this.trySubscribe(world, pos.add(1, 0, 2), Library.POS_Z);
+			this.trySubscribe(world, pos.add(0, 0, -3), Library.NEG_Z);
+			this.trySubscribe(world, pos.add(1, 0, -3), Library.NEG_Z);
+		}
 	}
 
 	private boolean validateTe(TileEntity te) {
@@ -909,13 +933,11 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 	@Override
 	public long getPower() {
 		return power;
-
 	}
 
 	@Override
 	public void setPower(long i) {
 		power = i;
-
 	}
 
 	@Override

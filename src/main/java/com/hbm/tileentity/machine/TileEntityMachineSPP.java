@@ -1,26 +1,21 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.lib.Library;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMachineSPP extends TileEntity implements ITickable, ISource {
+public class TileEntityMachineSPP extends TileEntityLoadedBase implements ITickable, IEnergyGenerator {
 
 	public long power;
 	public static final long maxPower = 100000;
-	public int age = 0;
 	public int gen = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -36,16 +31,13 @@ public class TileEntityMachineSPP extends TileEntity implements ITickable, ISour
 	
 	@Override
 	public void update() {
-		age++;
-		if(age >= 20)
-			age -= 20;
-		if(age == 9 || age == 19)
-			ffgeuaInit();
-		
 		if(!world.isRemote) {
 			long prevPower = power;
-			//if(age == 1)
+			this.sendPower(world, pos);
+
+			if(world.getTotalWorldTime() % 20 == 0)
 				gen = checkStructure() * 15;
+
 			if(gen > 0)
 				power += gen;
 			if(power > maxPower)
@@ -80,58 +72,29 @@ public class TileEntityMachineSPP extends TileEntity implements ITickable, ISour
 		//   BAB
 		//   BBB
 		
-		return (world.getBlockState(new BlockPos(pos.getX() + 1, y, pos.getZ())).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX() + 1, y, pos.getZ() + 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX() + 1, y, pos.getZ() - 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX() - 1, y, pos.getZ() + 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX() - 1, y, pos.getZ())).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX() - 1, y, pos.getZ() - 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ() + 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ() - 1)).getBlock() != Blocks.AIR &&
-				world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock() == Blocks.AIR);
+		return (!world.isAirBlock(new BlockPos(pos.getX() + 1, y, pos.getZ())) &&
+				!world.isAirBlock(new BlockPos(pos.getX() + 1, y, pos.getZ() + 1)) &&
+				!world.isAirBlock(new BlockPos(pos.getX() + 1, y, pos.getZ() - 1)) &&
+				!world.isAirBlock(new BlockPos(pos.getX() - 1, y, pos.getZ() + 1)) &&
+				!world.isAirBlock(new BlockPos(pos.getX() - 1, y, pos.getZ())) &&
+				!world.isAirBlock(new BlockPos(pos.getX() - 1, y, pos.getZ() - 1)) &&
+				!world.isAirBlock(new BlockPos(pos.getX(), y, pos.getZ() + 1)) &&
+				!world.isAirBlock(new BlockPos(pos.getX(), y, pos.getZ() - 1)) &&
+				world.isAirBlock(new BlockPos(pos.getX(), y, pos.getZ())));
 	}
 
 	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
+	public long getPower() {
+		return power;
 	}
 
 	@Override
-	public void clearList() {
-		this.list.clear();
+	public void setPower(long i) {
+		power = i;
 	}
 
 	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.east(), getTact());
-		ffgeua(pos.west(), getTact());
-		ffgeua(pos.south(), getTact());
-		ffgeua(pos.north(), getTact());
-		ffgeua(pos.down(), getTact());
+	public long getMaxPower() {
+		return maxPower;
 	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public long getSPower() {
-		return this.power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return this.list;
-	}
-
 }

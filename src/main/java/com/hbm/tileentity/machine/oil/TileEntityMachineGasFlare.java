@@ -2,21 +2,20 @@ package com.hbm.tileentity.machine.oil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
-import com.hbm.interfaces.ISource;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
+import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,14 +38,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineGasFlare extends TileEntity implements ITickable, ISource, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineGasFlare extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public ItemStackHandler inventory;
 	
 	public long power;
 	public static final long maxPower = 100000;
-	public int age = 0;
-	public List<IConsumer> list = new ArrayList<IConsumer>();
 	public Fluid tankType;
 	public FluidTank tank;
 	public boolean needsUpdate;
@@ -54,7 +51,6 @@ public class TileEntityMachineGasFlare extends TileEntity implements ITickable, 
 	//private static final int[] slots_top = new int[] {1};
 	//private static final int[] slots_bottom = new int[] {2, 0};
 	//private static final int[] slots_side = new int[] {0};
-	Random rand = new Random();
 	
 	private String customName;
 	
@@ -116,13 +112,14 @@ public class TileEntityMachineGasFlare extends TileEntity implements ITickable, 
 	
 	@Override
 	public void update() {
-		age++;
-		if(age >= 20)
-			age -= 20;
-		if(age == 9 || age == 19)
-			ffgeuaInit();
 		
 		if(!world.isRemote) {
+
+			this.sendPower(world, pos.add(2, 0, 0), Library.POS_X);
+			this.sendPower(world, pos.add(-2, 0, 0), Library.NEG_X);
+			this.sendPower(world, pos.add(0, 0, 2), Library.POS_Z);
+			this.sendPower(world, pos.add(0, 0, -2), Library.NEG_Z);
+
 			long prevPower = power;
 			int prevAmount = tank.getFluidAmount();
 			if(needsUpdate) {
@@ -144,7 +141,7 @@ public class TileEntityMachineGasFlare extends TileEntity implements ITickable, 
 	    		world.spawnEntity(new EntityGasFlameFX(world, pos.getX() + 0.5F, pos.getY() + 11F, pos.getZ() + 0.5F, 0.0, 0.0, 0.0));
 				ExplosionThermo.setEntitiesOnFire(world, pos.getX(), pos.getY() + 11, pos.getZ(), 5);
 	    		
-	    		if(age % 5 == 0)
+	    		if(this.world.getTotalWorldTime() % 5 == 0)
 					this.world.playSound(null, pos.getX(), pos.getY() + 11, pos.getZ(), HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.5F, 1F);
 			}
 			
@@ -183,49 +180,6 @@ public class TileEntityMachineGasFlare extends TileEntity implements ITickable, 
 	public double getMaxRenderDistanceSquared()
 	{
 		return 65536.0D;
-	}
-
-	@Override
-	public boolean getTact() {
-		if (age >= 0 && age < 10) {
-			return true;
-		}
-
-		return false;
-	}
-
-	@Override
-	public void clearList() {
-		this.list.clear();
-	}
-
-	@Override
-	public void ffgeuaInit() {
-		ffgeua(pos.add(2, 0, 0), getTact());
-		ffgeua(pos.add(-2, 0, 0), getTact());
-		ffgeua(pos.add(0, 0, 2), getTact());
-		ffgeua(pos.add(0, 0, -2), getTact());
-		
-	}
-
-	@Override
-	public void ffgeua(BlockPos pos, boolean newTact) {
-		Library.ffgeua(new BlockPos.MutableBlockPos(pos), newTact, this, world);
-	}
-
-	@Override
-	public long getSPower() {
-		return this.power;
-	}
-
-	@Override
-	public void setSPower(long i) {
-		this.power = i;
-	}
-
-	@Override
-	public List<IConsumer> getList() {
-		return this.list;
 	}
 
 	@Override
@@ -282,4 +236,18 @@ public class TileEntityMachineGasFlare extends TileEntity implements ITickable, 
 		}
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public void setPower(long i) {
+		power = i;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
 }

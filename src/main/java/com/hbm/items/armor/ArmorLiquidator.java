@@ -1,14 +1,19 @@
 package com.hbm.items.armor;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelM65;
+import com.hbm.util.ArmorRegistry.HazardClass;
 
+import api.hbm.item.IGasMask;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
@@ -18,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -25,10 +31,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResult;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ArmorLiquidator extends ArmorFSB {
+public class ArmorLiquidator extends ArmorFSB implements IGasMask {
 
 	@SideOnly(Side.CLIENT)
 	private ModelM65 model;
@@ -85,4 +94,54 @@ public class ArmorLiquidator extends ArmorFSB {
 		GlStateManager.color(1, 1, 1, 1);
 	}
 	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
+		super.addInformation(stack, worldIn, list, flagIn);
+		if (this == ModItems.liquidator_helmet)
+			ArmorUtil.addGasMaskTooltip(stack, worldIn, list, flagIn);
+	}
+
+	@Override
+	public ArrayList<HazardClass> getBlacklist(ItemStack stack) {
+		return new ArrayList(); // full hood has no restrictions
+	}
+
+	@Override
+	public ItemStack getFilter(ItemStack stack) {
+		return ArmorUtil.getGasMaskFilter(stack);
+	}
+
+	@Override
+	public void installFilter(ItemStack stack, ItemStack filter) {
+		ArmorUtil.installGasMaskFilter(stack, filter);
+	}
+
+	@Override
+	public void damageFilter(ItemStack stack, int damage) {
+		ArmorUtil.damageGasMaskFilter(stack, damage);
+	}
+
+	@Override
+	public boolean isFilterApplicable(ItemStack stack, ItemStack filter) {
+		return true;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		if (this == ModItems.liquidator_helmet){
+			if(player.isSneaking()) {
+				ItemStack stack = player.getHeldItem(hand);
+				ItemStack filter = this.getFilter(stack);
+				
+				if(filter != null) {
+					ArmorUtil.removeFilter(stack);
+					
+					if(!player.inventory.addItemStackToInventory(filter)) {
+						player.dropItem(filter, true, false);
+					}
+				}
+			}
+		}
+		return super.onItemRightClick(world, player, hand);
+	}
 }

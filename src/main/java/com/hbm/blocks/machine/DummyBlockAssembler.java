@@ -3,13 +3,11 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IDummy;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityDummyPort;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,16 +23,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DummyBlockAssembler extends BlockContainer implements IDummy {
+public class DummyBlockAssembler extends DummyOldBase {
 
 	public static boolean safeBreak = false;
 	
-	public DummyBlockAssembler(Material materialIn, String s) {
-		super(materialIn);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		this.setCreativeTab(null);
-		ModBlocks.ALL_BLOCKS.add(this);
+	public DummyBlockAssembler(Material materialIn, String s, boolean port) {
+		super(materialIn, s, port);
 	}
 
 	@Override
@@ -47,7 +41,6 @@ public class DummyBlockAssembler extends BlockContainer implements IDummy {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
     		if(te != null && te instanceof TileEntityDummy) {
-    			//world.getBlock(a, b, c).breakBlock(world, a, b, c, block, i);
     			if(!world.isRemote)
     				world.destroyBlock(((TileEntityDummy)te).target, true);
     		}

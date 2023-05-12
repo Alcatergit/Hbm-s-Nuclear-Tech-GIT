@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.forgefluid.FFUtils;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
@@ -13,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachineFluidTank> {
@@ -70,14 +73,14 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 		}
 
 		String s = "NONE";
-		
+		Fluid type = null;
 		if(tileEntity instanceof TileEntityMachineFluidTank){
 			if(((TileEntityMachineFluidTank)tileEntity).tank.getFluid() != null){
-				s = FluidRegistry.getFluidName(((TileEntityMachineFluidTank)tileEntity).tank.getFluid()).toUpperCase();
+				type = ((TileEntityMachineFluidTank)tileEntity).tank.getFluid().getFluid();
+				s = FluidRegistry.getFluidName(type).toUpperCase();
 				if(s.substring(0, 3).equals("HBM")){
 					s = s.substring(3);
 				}
-
 			}
 		}
 		
@@ -87,12 +90,19 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 			Minecraft.getMinecraft().getResourceManager().getResource(rotTexture);
 		} catch (IOException e) {
 			//Drillgon200: Set to my really ugly unknown texture
-			rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank/tank_UNKNOWN.png");
+			//Alcater: found a way to textract the color from the fluids texture
+			rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank/tank_generic.png");
+			if(type != null){
+				Integer color = ModForgeFluids.fluidColors.get(type);
+				if(color == null)
+					color = 0xFFFFFF;
+				FFUtils.setRGBFromHex(color);
+			}
 		}
 
         bindTexture(rotTexture);
         ResourceManager.fluidtank.renderPart("Tank");
-
+        GlStateManager.color(1, 1, 1, 1);
         GL11.glPopMatrix();
     }
 }

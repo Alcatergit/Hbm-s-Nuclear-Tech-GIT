@@ -16,9 +16,11 @@ import net.minecraft.world.World;
 public class EntityMinerRocket extends Entity {
 
 	public static final DataParameter<Integer> TIMER = EntityDataManager.createKey(EntityMinerRocket.class, DataSerializers.VARINT);
+	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityMinerRocket.class, DataSerializers.BYTE);
 	
 	// 0 landing, 1 unloading, 2 lifting
 	public int timer = 0;
+	public byte type = 0;
 
 	public EntityMinerRocket(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -26,9 +28,24 @@ public class EntityMinerRocket extends Entity {
 		this.setSize(1F, 3F);
 	}
 
+	public EntityMinerRocket(World p_i1582_1_, byte type) {
+		this(p_i1582_1_);
+		this.type = type;
+	}
+
 	@Override
 	protected void entityInit() {
 		this.getDataManager().register(TIMER, 0);
+		this.getDataManager().register(TYPE, type);
+	}
+
+	public byte getRocketType(){
+		return this.getDataManager().get(TYPE);
+	}
+
+	public void setRocketType(byte value){
+		this.type = value;
+		this.getDataManager().set(TYPE, value);
 	}
 	
 	@Override

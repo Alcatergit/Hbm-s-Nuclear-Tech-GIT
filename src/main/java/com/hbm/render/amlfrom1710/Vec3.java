@@ -1,6 +1,7 @@
 package com.hbm.render.amlfrom1710;
 
 import javax.vecmath.Matrix3f;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -27,6 +28,12 @@ public class Vec3
     	this.yCoord = vec.y;
     	this.zCoord = vec.z;
 	}
+
+    public Vec3(BlockPos vec) {
+        this.xCoord = vec.getX();
+        this.yCoord = vec.getY();
+        this.zCoord = vec.getZ();
+    }
 
     public Vec3(double p_i1108_1_, double p_i1108_3_, double p_i1108_5_)
     {
@@ -309,13 +316,17 @@ public class Vec3
 	     return new Vec3(x, y, z);
 	 }
 	 
-	 public Vec3 copy(){
-		 return new Vec3(xCoord, yCoord, zCoord);
-	 }
+	public Vec3 copy(){
+		return new Vec3(xCoord, yCoord, zCoord);
+	}
 	 
-	 public Vec3d toVec3d(){
-		 return new Vec3d(xCoord, yCoord, zCoord);
-	 }
+	public Vec3d toVec3d(){
+     	return new Vec3d(xCoord, yCoord, zCoord);
+	}
+
+    public BlockPos toBlockPos(){
+        return new BlockPos(xCoord, yCoord, zCoord);
+    }
 
 	public Vec3 max(double d) {
 		return new Vec3(Math.max(xCoord, d), Math.max(yCoord, d), Math.max(zCoord, d));

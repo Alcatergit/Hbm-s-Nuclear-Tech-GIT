@@ -159,6 +159,7 @@ public class ExplosionChaos {
 	}
 
 	// Drillgon200: Descriptive method names anyone?
+	// Alcater: Ill write this down - maybe ill need it later. c stands for cloudPoisoning
 	public static void c(World world, int x, int y, int z, int bombStartStrength) {
 		float f = bombStartStrength;
 		int i;
@@ -190,12 +191,12 @@ public class ExplosionChaos {
 				if(d9 < wat) {
 
 					if(entity instanceof EntityPlayer) {
-
-						ArmorUtil.damageSuit((EntityPlayer) entity, 0, 5);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 1, 5);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 2, 5);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 3, 5);
-
+						if(!ArmorRegistry.hasProtection((EntityPlayer) entity, EntityEquipmentSlot.HEAD, HazardClass.GAS_CORROSIVE)){
+							ArmorUtil.damageSuit((EntityPlayer) entity, 0, 5);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 1, 5);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 2, 5);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 3, 5);
+						}
 					}
 
 					if(entity instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer) entity)) {
@@ -205,7 +206,11 @@ public class ExplosionChaos {
 							((EntityLivingBase) entity).removePotionEffect(HbmPotion.taint);
 							((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.mutation, 1 * 60 * 60 * 20, 0, false, true));
 						} else {
-							entity.attackEntityFrom(ModDamageSource.cloud, 3);
+							if(ArmorRegistry.hasProtection((EntityLivingBase) entity, EntityEquipmentSlot.HEAD, HazardClass.BACTERIA)){
+								ArmorUtil.damageGasMaskFilter((EntityLivingBase) entity, 1);
+							}else{
+								entity.attackEntityFrom(ModDamageSource.cloud, 3);
+							}
 						}
 					}
 				}
@@ -315,7 +320,7 @@ public class ExplosionChaos {
 			world.spawnEntity(fx);
 		}
 	}
-
+	// Alcater: pc for pinkCouldPoisoning
 	public static void pc(World world, int x, int y, int z, int bombStartStrength) {
 		float f = bombStartStrength;
 		int i;
@@ -347,15 +352,20 @@ public class ExplosionChaos {
 				if(d9 < wat) {
 
 					if(entity instanceof EntityPlayer) {
-
-						ArmorUtil.damageSuit((EntityPlayer) entity, 0, 25);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 1, 25);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 2, 25);
-						ArmorUtil.damageSuit((EntityPlayer) entity, 3, 25);
-
+						if(!ArmorRegistry.hasProtection((EntityPlayer) entity, EntityEquipmentSlot.HEAD, HazardClass.GAS_CORROSIVE)){
+							ArmorUtil.damageSuit((EntityPlayer) entity, 0, 25);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 1, 25);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 2, 25);
+							ArmorUtil.damageSuit((EntityPlayer) entity, 3, 25);
+						}
 					}
-
-					entity.attackEntityFrom(ModDamageSource.pc, 5);
+					if(entity instanceof EntityLivingBase){
+						if(ArmorRegistry.hasAllProtection((EntityLivingBase) entity, EntityEquipmentSlot.HEAD, HazardClass.BACTERIA, HazardClass.SAND)){
+							ArmorUtil.damageGasMaskFilter((EntityLivingBase) entity, 2);
+						}else{
+							entity.attackEntityFrom(ModDamageSource.pc, 5);
+						}
+					}
 				}
 			}
 		}
@@ -363,6 +373,7 @@ public class ExplosionChaos {
 		bombStartStrength = (int) f;
 	}
 
+	//Alcater: used by grenades and Chlorine seal gas blocks
 	public static void poison(World world, int x, int y, int z, int bombStartStrength) {
 		float f = bombStartStrength;
 		int i;

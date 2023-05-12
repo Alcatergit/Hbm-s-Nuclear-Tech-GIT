@@ -70,6 +70,12 @@ public class WasteLog extends BlockRotatedPillar {
 		return super.setSoundType(sound);
 	}
 
+	public IBlockState withSameRotationState(IBlockState state){
+		if(state == null)
+			return this.getDefaultState();
+		return this.getDefaultState().withProperty(super.AXIS, state.getValue(super.AXIS));
+	}
+
 	public IBlockState getSameRotationState(IBlockState state){
 		if(state == null)
 			return this.getDefaultState();

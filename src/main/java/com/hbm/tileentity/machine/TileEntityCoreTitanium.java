@@ -1,18 +1,19 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.IFactory;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
+import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -24,7 +25,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCoreTitanium extends TileEntity implements ITickable, IFactory, IConsumer {
+public class TileEntityCoreTitanium extends TileEntityLoadedBase implements ITickable, IFactory, IEnergyUser {
 
 	public int progress = 0;
 	public long power = 0;
@@ -97,6 +98,7 @@ public class TileEntityCoreTitanium extends TileEntity implements ITickable, IFa
 	
 	@Override
 	public void update() {
+		this.trySubscribe(world, pos.add(0, 1, 0), ForgeDirection.UP);
 		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_titanium)
 		{
 			this.power = (int) ((IBatteryItem)inventory.getStackInSlot(22).getItem()).getCharge(inventory.getStackInSlot(22));

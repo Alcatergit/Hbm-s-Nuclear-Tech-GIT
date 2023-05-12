@@ -3,14 +3,15 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IConsumer;
 import com.hbm.interfaces.ILaserable;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -33,7 +34,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITickable, IConsumer, IFluidHandler, ILaserable, ITankPacketAcceptor {
+public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ILaserable, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000000L;
@@ -55,6 +56,8 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 	public void update() {
 		if (!world.isRemote) {
 			
+			this.updateStandardConnections(world, pos);
+
 			watts = MathHelper.clamp(watts, 1, 100);
 			long demand = maxPower * watts / 2000;
 
@@ -158,6 +161,11 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 			
 			//this.networkPack(data, 250);
 		}
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection dir) {
+		return dir != ForgeDirection.UNKNOWN;
 	}
 
 	@Override
