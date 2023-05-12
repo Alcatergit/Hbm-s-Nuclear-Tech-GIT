@@ -544,6 +544,7 @@ import com.hbm.tileentity.machine.TileEntitySILEX;
 import com.hbm.tileentity.machine.TileEntityFEL;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
+import com.hbm.tileentity.machine.TileEntityHeatBoiler;
 import com.hbm.tileentity.machine.TileEntitySolarBoiler;
 import com.hbm.tileentity.machine.TileEntitySolarMirror;
 import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;

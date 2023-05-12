@@ -240,6 +240,7 @@ import com.hbm.inventory.DFCRecipes;
 import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.inventory.PotionRecipes;
 import com.hbm.inventory.SAFERecipes;
+import com.hbm.inventory.BoilerRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
