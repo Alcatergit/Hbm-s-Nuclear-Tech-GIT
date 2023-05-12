@@ -398,57 +398,70 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		return 65536.0D;
 	}
 	
-	// do some opencomputer stuff
+	// opencomputers interface
+
 	@Override
 	public String getName() {
 		return "rbmk_crane";
 	}
-
-	// opencomputers interface
 
 	@Override
 	public String getComponentName() {
 		return "rbmk_crane";
 	}
 
-	@Callback(doc = "func(x:str): move crane up,down,left,right")
-	public Object[] move(Context context, Arguments args) {
-
-		if (setUpCrane == true) {
-			String direction = args.checkString(0);
-
-			switch (direction) {
-				case "up":
-					tiltFront = 30;
-					if(!world.isRemote) posFront += speed;
-				case "down":
-					tiltFront = -30;
-					if(!world.isRemote) posFront -= speed;
-				case "left":
-					tiltLeft = 30;
-					if(!world.isRemote) posLeft += speed;				
-				case "right":
-					tiltLeft = -30;
-					if(!world.isRemote) posLeft -= speed;
-			}
-
+	@Callback(doc = "moveForward(); move the crane forward 1/20th of a block")
+	public Object[] moveForward(Context context, Arguments args) {
+		if (setUpCrane) {
+			tiltFront = 30;
+			if (!world.isRemote) posFront += speed;
 			return new Object[] {};
 		}
-		return new Object[] {"No crane :("};
+		return new Object[] {"No crane found"};
 	}
 
-	@Callback(doc = "func(): crane load/unload")
-	public Object[] load(Context context, Arguments args) {
-		if (setUpCrane == true) {
-			// Robert, it goes down.
-			goesDown = true;
+	@Callback(doc = "moveBackward(); move the crane backward 1/20th of a block")
+	public Object[] moveBackward(Context context, Arguments args) {
+		if (setUpCrane) {
+			tiltFront = -30;
+			if (!world.isRemote) posFront -= speed;
 			return new Object[] {};
 		}
-		return new Object[] {"No crane :("};
+		return new Object[] {"No crane found"};
 	}
 
-	@Callback(doc = "func(): get crane position")
+	@Callback(doc = "moveLeft(); move the crane left 1/20th of a block")
+	public Object[] moveLeft(Context context, Arguments args) {
+		if (setUpCrane) {
+			tiltLeft = 30;
+			if (!world.isRemote) posLeft += speed;
+			return new Object[] {};
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "moveRight(); move the crane right 1/20th of a block")
+	public Object[] moveRight(Context context, Arguments args) {
+		if (setUpCrane) {
+			tiltLeft = -30;
+			if (!world.isRemote) posLeft -= speed;
+			return new Object[] {};
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "loadUnload(); works but without animation")
+	public Object[] loadUnload(Context context, Arguments args) {
+		if (setUpCrane) {
+			goesDown = true; // Robert, it goes down.
+			return new Object[] {};
+		}
+		return new Object[] {"No crane found"};
+	}
+
+	@Callback(doc = "getPos(); get the (forward, left) crane displacements")
 	public Object[] getPos(Context context, Arguments args) {
-		return new Object[] {posFront, posLeft};
+		if (setUpCrane) return new Object[] {posFront, posLeft};
+		return new Object[] {"No crane found"};
 	}
 }
