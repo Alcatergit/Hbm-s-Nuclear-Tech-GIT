@@ -21,6 +21,9 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		RBMKColor new_color = RBMKColor.values()[color];
 		this.color = new_color;
 	}
+	public boolean isSameColor(int color) {
+		return this.color == RBMKColor.values()[color];
+	}
 
 	@Override
 	public String getName() {

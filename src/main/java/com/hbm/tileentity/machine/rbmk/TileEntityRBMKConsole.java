@@ -565,41 +565,98 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		return "rbmk_console";
 	}
 
-	@Callback(direct = true, doc = "getColumnData(x:int, y:int); retrieves data for column @(x,y)")
+	@Callback(direct = true, doc = "getColumnData(x:int, y:int); retrieves data for column @(x,y) 0,0 is in left bottom and y is up and x is right")
 	public Object[] getColumnData(Context context, Arguments args) {
 		int x = args.checkInteger(0) - 7;
-		int y = (14-args.checkInteger(1)) - 7;
+		int y = -args.checkInteger(1) + 7;
 
 		int i = (y + 7) * 15 + (x + 7);
 
 		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
-		TileEntityRBMKBase column = (TileEntityRBMKBase) te;
+		if (te instanceof TileEntityRBMKBase) {
+			TileEntityRBMKBase column = (TileEntityRBMKBase) te;
 
-		NBTTagCompound column_data = columns[i].data;
-		LinkedHashMap<String, String> data_table = new LinkedHashMap<>();
-		data_table.put("type", column.getConsoleType().name());
-		data_table.put("hullTemp", String.valueOf(column_data.getDouble("heat")));
-		data_table.put("water", String.valueOf(column_data.getDouble("water")));
-		data_table.put("steam", String.valueOf(column_data.getDouble("steam")));
-		data_table.put("moderated", String.valueOf(column_data.getBoolean("moderated")));
-		data_table.put("level", String.valueOf(column_data.getDouble("level")));
-		data_table.put("color", String.valueOf(column_data.getShort("color")));
-		data_table.put("enrichment", String.valueOf(column_data.getDouble("enrichment")));
-		data_table.put("xenon", String.valueOf(column_data.getDouble("xenon")));
-		data_table.put("coreSkinTemp", String.valueOf(column_data.getDouble("c_heat")));
-		data_table.put("coreTemp", String.valueOf(column_data.getDouble("c_coreHeat")));
-		data_table.put("coreMaxTemp", String.valueOf(column_data.getDouble("c_maxHeat")));
+			NBTTagCompound column_data = columns[i].data;
+			LinkedHashMap<String, String> data_table = new LinkedHashMap<>();
+			data_table.put("type", column.getConsoleType().name());
+			data_table.put("hullTemp", String.valueOf(column_data.getDouble("heat")));
+			data_table.put("realSimWater", String.valueOf(column_data.getDouble("water")));
+			data_table.put("realSimSteam", String.valueOf(column_data.getDouble("steam")));
+			data_table.put("moderated", String.valueOf(column_data.getBoolean("moderated")));
+			data_table.put("level", String.valueOf(column_data.getDouble("level")));
+			data_table.put("color", String.valueOf(column_data.getShort("color")));
+			data_table.put("enrichment", String.valueOf(column_data.getDouble("enrichment")));
+			data_table.put("xenon", String.valueOf(column_data.getDouble("xenon")));
+			data_table.put("coreSkinTemp", String.valueOf(column_data.getDouble("c_heat")));
+			data_table.put("coreTemp", String.valueOf(column_data.getDouble("c_coreHeat")));
+			data_table.put("coreMaxTemp", String.valueOf(column_data.getDouble("c_maxHeat")));
 
-		return new Object[] {data_table};
+			if(te instanceof TileEntityRBMKRod){
+				TileEntityRBMKRod fuelChannel = (TileEntityRBMKRod)te;
+				data_table.put("fluxSlow", String.valueOf(fuelChannel.fluxSlow));
+				data_table.put("fluxFast", String.valueOf(fuelChannel.fluxFast));
+			}
+
+			if(te instanceof TileEntityRBMKBoiler){
+				TileEntityRBMKBoiler boiler = (TileEntityRBMKBoiler)te;
+				data_table.put("water", String.valueOf(boiler.feed.getFluidAmount()));
+				data_table.put("steam", String.valueOf(boiler.steam.getFluidAmount()));
+			}
+
+			if(te instanceof TileEntityRBMKOutgasser){
+				TileEntityRBMKOutgasser irradiationChannel = (TileEntityRBMKOutgasser)te;
+				data_table.put("fluxProgress", String.valueOf(irradiationChannel.progress));
+				data_table.put("requiredFlux", String.valueOf(irradiationChannel.duration));
+			}
+
+			return new Object[] {data_table};
+		}
+		return new Object[] {"No rbmkrod found at "+(x+7)+","+(7-y)};
 	}
 
-	@Callback(doc = "setLevel(x:int, y:int, level:int); set retraction of control rod @(x,y) given 0≤level≤1")
-	public Object[] setLevel(Context context, Arguments args) {
-		int x = args.checkInteger(0) - 7;
-		int y = (14-args.checkInteger(1)) - 7;
-		double new_level = args.checkDouble(2);
+	@Callback(doc = "getRBMKPos(); retrieves position of connected center rbmk rod")
+	public Object[] getRBMKPos(Context context, Arguments args) {
+		if(!(targetX == 0 && targetY== 0 && targetZ==0)){
+			LinkedHashMap<String, Integer> data_table = new LinkedHashMap<>();
+			data_table.put("rbmkCenterX", targetX);
+			data_table.put("rbmkCenterY", targetY);
+			data_table.put("rbmkCenterZ", targetZ);
 
-		int i = (y + 7) * 15 + (x + 7);
+			return new Object[] {data_table};
+		}
+		return new Object[] {"No rbmkrod linked"};
+	}
+
+	@Callback(doc = "setLevel(level:double); set retraction of all control rods given 0≤level≤1")
+	public Object[] setLevel(Context context, Arguments args) {
+		double new_level = args.checkDouble(0);
+		boolean foundRods = false;
+		for(int i = -7; i <= 7; i++) {
+			for(int j = -7; j <= 7; j++) {
+				TileEntity te = world.getTileEntity(new BlockPos(targetX + i, targetY, targetZ + j));
+	
+				if (te instanceof TileEntityRBMKControlManual) {
+					TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+					rod.startingLevel = rod.level;
+					new_level = Math.min(1, Math.max(0, new_level));
+
+					rod.setTarget(new_level);
+					te.markDirty();
+					foundRods = true;
+				}
+			}
+		}
+		if(foundRods)
+			return new Object[] { "Controlrods set to "+(new_level*100)+"%"};
+		else
+			return new Object[] { "No controlrods found" };
+	}
+
+	@Callback(doc = "setColumnLevel(x:int, y:int, level:double); set retraction of control rod @(x,y) given 0≤level≤1")
+	public Object[] setColumnLevel(Context context, Arguments args) {
+		int x = args.checkInteger(0) - 7;
+		int y = -args.checkInteger(1) + 7;
+		double new_level = args.checkDouble(2);
 
 		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 		
@@ -610,25 +667,81 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 
 			rod.setTarget(new_level);
 			te.markDirty();
+			return new Object[] {"Controlrod at "+(x+7)+","+(7-y)+" set to "+new_level*100+"%"};
 		}	
-
-		return new Object[] {};
+		return new Object[] {"No controlrod found at "+(x+7)+","+(7-y)};
 	}
 
-	@Callback(doc = "setColor(x:int, y:int, color:int); set color of control rod @(x,y) where color is an ordinal number")
+	@Callback(doc = "setColorLevel(color:int, level:double); set retraction of control rods of color given 0≤level≤1. Color is (RED:0, YELLOW:1, GREEN:2, BLUE:3, PURPLE:4)")
+	public Object[] setColorLevel(Context context, Arguments args) {
+		int color = args.checkInteger(0);
+		double new_level = args.checkDouble(1);
+		boolean foundRods = false;
+		if(color >= 0 && color <=4){
+			for(int i = -7; i <= 7; i++) {
+				for(int j = -7; j <= 7; j++) {
+					TileEntity te = world.getTileEntity(new BlockPos(targetX + i, targetY, targetZ + j));
+
+					if (te instanceof TileEntityRBMKControlManual) {
+						TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+						if(rod.isSameColor(color)){
+							rod.startingLevel = rod.level;
+							new_level = Math.min(1, Math.max(0, new_level));
+
+							rod.setTarget(new_level);
+							te.markDirty();
+							foundRods = true;
+						}
+					}	
+				}
+			}
+			if(foundRods)
+				return new Object[] { "Color "+color+" set to "+new_level };
+			else
+				return new Object[] { "No rods for color "+color+" found" };
+		}
+		return new Object[] {"Color "+color+" does not exist"};
+	}
+
+	@Callback(doc = "setColor(x:int, y:int, color:int); set color of control rod @(x,y) where color is (RED:0, YELLOW:1, GREEN:2, BLUE:3, PURPLE:4)")
 	public Object[] setColor(Context context, Arguments args) {
 		int x = args.checkInteger(0) - 7;
-		int y = (14-args.checkInteger(1)) - 7;
+		int y = -args.checkInteger(1) + 7;
 		int new_color = args.checkInteger(2);
+		if(new_color >= 0 && new_color <=4){
+			TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 
-		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
+			if (te instanceof TileEntityRBMKControlManual) {
+				TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+				rod.setColor(new_color);
+				te.markDirty();
+				return new Object[] {"Rod at "+(x+7)+","+(7-y)+" set to color "+new_color};
+			}
+			return new Object[] {"No controlrod found at "+(x+7)+","+(7-y)};
+		}
+		return new Object[] {"Color "+new_color+" does not exist"};
+	}
 
-		if (te instanceof TileEntityRBMKControlManual) {
-			TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
-			rod.setColor(new_color);
-			te.markDirty();
-		}	
-
-		return new Object[] {};
+	@Callback(doc = "pressAZ5(); shut down EVERYTHING!!")
+	public Object[] pressAZ5(Context context, Arguments args) {
+		boolean hasRods = false;
+		for(int i = -7; i <= 7; i++) {
+			for(int j = -7; j <= 7; j++) {
+				TileEntity te = world.getTileEntity(new BlockPos(targetX + i, targetY, targetZ + j));
+		
+				if (te instanceof TileEntityRBMKControlManual) {
+					TileEntityRBMKControlManual rod = (TileEntityRBMKControlManual) te;
+					rod.startingLevel = rod.level;
+					rod.setTarget(0);
+					te.markDirty();
+					hasRods = true;
+				}	
+			}
+		}
+		if(hasRods){
+			return new Object[] { "All rods inserted" };
+		} else {
+			return new Object[] { "No rods found" };
+		}
 	}
 }
