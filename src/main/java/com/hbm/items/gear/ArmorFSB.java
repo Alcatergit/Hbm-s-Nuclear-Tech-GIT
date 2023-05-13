@@ -93,15 +93,17 @@ public class ArmorFSB extends ItemArmor {
 	public static boolean hasFSBArmor(EntityLivingBase entity) {
 		if(entity == null)
 			return false;
-
+		
 		ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-
+		
 		if(plate != null && plate.getItem() instanceof ArmorFSB) {
 
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 			boolean noHelmet = chestplate.noHelmet;
-			
+
 			for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				if(slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND)
+					continue;
 				if(noHelmet && slot == EntityEquipmentSlot.HEAD)
 					continue;
 				ItemStack armor = entity.getItemStackFromSlot(slot);
@@ -116,6 +118,7 @@ public class ArmorFSB extends ItemArmor {
 					return false;
 			}
 
+			System.out.println("PLATE APPROVED");
 			return true;
 		}
 
@@ -136,13 +139,15 @@ public class ArmorFSB extends ItemArmor {
 			return false;
 
 		ItemStack plate = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-
+		
 		if(plate != null && plate.getItem() instanceof ArmorFSB) {
 
 			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 			boolean noHelmet = chestplate.noHelmet;
 			
 			for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				if(slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND)
+					continue;
 				if(noHelmet && slot == EntityEquipmentSlot.HEAD)
 					continue;
 				ItemStack armor = entity.getItemStackFromSlot(slot);
@@ -153,7 +158,6 @@ public class ArmorFSB extends ItemArmor {
 				if(((ArmorFSB)armor.getItem()).getArmorMaterial() != chestplate.getArmorMaterial())
 					return false;
 			}
-
 			return true;
 		}
 

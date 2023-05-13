@@ -100,9 +100,11 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 			}
 		}
 
-        bindTexture(rotTexture);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		bindTexture(rotTexture);
         ResourceManager.fluidtank.renderPart("Tank");
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.color(1, 1, 1, 1);
         GL11.glPopMatrix();
     }
 }

@@ -64,7 +64,7 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 			if(col == null)
 				continue;
 
-			double kx = -0.3725D;
+			double kx = -0.37D;
 			double ky = -(i / 15) * 0.125 + 3.625;
 			double kz = -(i % 15) * 0.125 + 0.125D * 7;
 			

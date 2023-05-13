@@ -87,6 +87,7 @@ book.msword.title24=Upgrade 13: Demonic
 book.msword.page24=§lMachine = DFC§r: §4REDACTED
 
 armor.blastProtection=Damage modifier of %s against explosions
+armor.explosionImmune=Immune to explosions
 armor.cap=Hard damage cap of %s
 armor.damageModifier=Damage modifier of %s against %s
 armor.fireproof=Fireproof
