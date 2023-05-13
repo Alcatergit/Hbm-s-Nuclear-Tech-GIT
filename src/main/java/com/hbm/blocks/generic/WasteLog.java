@@ -27,6 +27,7 @@ public class WasteLog extends BlockRotatedPillar {
 		super(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.setHarvestLevel("axe", 0);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

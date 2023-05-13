@@ -64,7 +64,7 @@ public class SILEXRecipes {
 				);
 
 		dictTranslation.put(AUSTRALIUM.dust(), AUSTRALIUM.ingot());
-		recipes.put(AUSTRALIUM.ingot(), new SILEXRecipe(900, 100, EnumWavelengths.XRAY)
+		recipes.put(AUSTRALIUM.ingot(), new SILEXRecipe(900, 100, EnumWavelengths.UV)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_australium_lesser), 5))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_australium_greater), 1))
 				);

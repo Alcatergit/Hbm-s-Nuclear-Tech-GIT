@@ -7,6 +7,7 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.inventory.BoilerRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
@@ -18,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
@@ -30,7 +32,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
-public class HeatBoiler extends BlockDummyable implements ILookOverlay {
+public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltipProvider {
 
     public HeatBoiler(Material materialIn, String s) {
         super(materialIn, s);
@@ -43,7 +45,6 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay {
         if(meta >= 6) return new TileEntityProxyCombo(false, false, true);
 
         return null;
-
     }
 
     @Override
@@ -105,10 +106,21 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay {
     @Override
     protected void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
         super.fillSpace(world, x, y, z, dir, o);
+
         x = x + dir.offsetX * o;
         z = z + dir.offsetZ * o;
 
-        this.makeExtra(world, x, y + 3, z);
+        ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+
+        this.makeExtra(world, x + rot.offsetX, y, z + rot.offsetZ); //these add the side ports
+        this.makeExtra(world, x - rot.offsetX, y, z - rot.offsetZ);
+        this.makeExtra(world, x, y + 3, z); 
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+        this.addStandardInfo(list);
+        super.addInformation(stack, worldIn, list, flagIn);
     }
 
     @Override

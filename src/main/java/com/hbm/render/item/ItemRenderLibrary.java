@@ -888,12 +888,11 @@ public class ItemRenderLibrary {
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.heat_boiler), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, -2.5, 0);
+				GL11.glTranslated(0, -2.55, 0);
 				GL11.glScaled(3.05, 3.05, 3.05);
 			}
 			public void renderCommon() {
 				GL11.glScaled(1, 1, 1);
-				GL11.glRotated(90, -1, 0, 0);
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.heat_boiler_tex); ResourceManager.heat_boiler.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);

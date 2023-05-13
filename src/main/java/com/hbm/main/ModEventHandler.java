@@ -939,8 +939,10 @@ public class ModEventHandler {
 		EntityLivingBase e = event.getEntityLiving();
 
 		if(e instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
-			e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
-			event.setCanceled(true);
+			if(event.getSource() != ModDamageSource.digamma){
+				e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
+				event.setCanceled(true);
+			}
 		}
 
 		ArmorFSB.handleAttack(event);
@@ -1014,16 +1016,21 @@ public class ModEventHandler {
 		HbmLivingProps.setRadiation(event.getEntityLiving(), 0);
 		if(event.getEntity().world.isRemote)
 			return;
+		
+		if(event.getEntityLiving() instanceof EntityPlayer) {
+			if(ArmorUtil.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+				if(event.getSource() != ModDamageSource.digamma){
+					event.setCanceled(true);
+					event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
+				}
+			}
+		}
+		if(event.isCancelable() && event.isCanceled())
+			return;
 		if(GeneralConfig.enableCataclysm) {
 			EntityBurningFOEQ foeq = new EntityBurningFOEQ(event.getEntity().world);
 			foeq.setPositionAndRotation(event.getEntity().posX, 500, event.getEntity().posZ, 0.0F, 0.0F);
 			event.getEntity().world.spawnEntity(foeq);
-		}
-		if(event.getEntityLiving() instanceof EntityPlayer) {
-			if(ArmorUtil.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
-				event.setCanceled(true);
-				event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
-			}
 		}
 		if(event.getEntity().getUniqueID().toString().equals(Library.HbMinecraft)) {
 			event.getEntity().dropItem(ModItems.book_of_, 1);
@@ -1177,6 +1184,8 @@ public class ModEventHandler {
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event){
+		if(event.isCancelable() && event.isCanceled())
+			return;
 		ArmorFSB.handleTick(event.getEntityLiving());
 		if(r_handInventory == null){
 			r_handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
@@ -1244,12 +1253,16 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void onEntityJump(LivingJumpEvent event) {
+		if(event.isCancelable() && event.isCanceled())
+			return;
 		ArmorFSB.handleJump(event.getEntityLiving());
 	}
 
 	
 	@SubscribeEvent
 	public void blockBreak(BlockEvent.BreakEvent event){
+		if(event.isCancelable() && event.isCanceled())
+			return;
 		/*PacketDispatcher.wrapper.sendToAll(new PacketCreatePhysTree(e.getPos().up()));
 		Set<BlockPos> blocks = new HashSet<>();
 		BlockPos pos = e.getPos().up();

@@ -8,10 +8,14 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
+import com.hbm.main.MainRegistry;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -20,6 +24,7 @@ import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +33,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -62,6 +69,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	//private static final int[] slots_side = new int[] { 0 };
 
 	private String customName;
+	private AudioWrapper audio;
 	
 	public TileEntityMachineTurbofan() {
 		inventory = new ItemStackHandler(4){
@@ -187,35 +195,18 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 						}
 					}
 				}
-				//Exhaust push
-				double minX = pos.getX() + 0.5 - dir.offsetX * 3.5 - rot.offsetX * 1.5;
-				double maxX = pos.getX() + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
-				double minZ = pos.getZ() + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
-				double maxZ = pos.getZ() + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
 				
-				List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
-				
-				for(Entity e : list) {
-					
-					if(this.afterburner > 0) {
-						e.setFire(5);
-						e.attackEntityFrom(DamageSource.IN_FIRE, 3F*afterburner);
-					}
-					e.motionX -= dir.offsetX * 0.3*(afterburner+1);
-					e.motionZ -= dir.offsetZ * 0.3*(afterburner+1);
-				}
 				
 				//Intake pull
-				minX = pos.getX() + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
-				maxX = pos.getX() + 0.5 + dir.offsetX * 8.5 + rot.offsetX * 1.5;
-				minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
-				maxZ = pos.getZ() + 0.5 + dir.offsetZ * 8.5 + rot.offsetZ * 1.5;
+				double minX = pos.getX() + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				double maxX = pos.getX() + 0.5 + dir.offsetX * 12.5 + rot.offsetX * 1.5;
+				double minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				double maxZ = pos.getZ() + 0.5 + dir.offsetZ * 12.5 + rot.offsetZ * 1.5;
 				
-				list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				List<Entity> listIntake = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
 				
-				for(Entity e : list) {
-					e.motionX -= dir.offsetX * 0.2*(afterburner+1);
-					e.motionZ -= dir.offsetZ * 0.2*(afterburner+1);
+				for(Entity e : listIntake) {
+					e.addVelocity(-dir.offsetX * 0.3 * (afterburner+1), 0, -dir.offsetZ * 0.3 * (afterburner+1));
 				}
 				
 				//Intake kill
@@ -224,11 +215,37 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 				minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
 				maxZ = pos.getZ() + 0.5 + dir.offsetZ * 3.75 + rot.offsetZ * 1.5;
 				
-				list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				List<Entity> listKill = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
 			
-				for(Entity e : list) {
+				for(Entity e : listKill) {
 					e.attackEntityFrom(ModDamageSource.turbofan, 1000);
 					e.setInWeb();
+					if(!e.isEntityAlive() && e instanceof EntityLivingBase) {
+						NBTTagCompound vdat = new NBTTagCompound();
+						vdat.setString("type", "giblets");
+						vdat.setInteger("ent", e.getEntityId());
+						PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(vdat, e.posX, e.posY + e.height * 0.5, e.posZ), new TargetPoint(e.dimension, e.posX, e.posY + e.height * 0.5, e.posZ, 150));
+						
+						world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 2.0F, 0.95F + world.rand.nextFloat() * 0.2F);
+						
+					}
+				}
+
+				//Exhaust push
+				minX = pos.getX() + 0.5 - dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				maxX = pos.getX() + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
+				minZ = pos.getZ() + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				maxZ = pos.getZ() + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
+				
+				List<Entity> listExhaust = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				
+				for(Entity e : listExhaust) {
+					
+					if(this.afterburner > 0) {
+						e.setFire(5);
+						e.attackEntityFrom(DamageSource.IN_FIRE, 3F*afterburner);
+					}
+					e.addVelocity(-dir.offsetX * 0.5 * (afterburner+1), 0, -dir.offsetZ * 0.5 * (afterburner+1));
 				}
 			}
 			if(prevFluidAmount != tank.getFluidAmount() || prevPower != power){
@@ -253,14 +270,36 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 				this.spin -= 360F;
 				this.lastSpin -= 360F;
 			}
+
+			if(this.momentum > 0) {
+				
+				if(audio == null) {
+					audio = createAudioLoop();
+					audio.startSound();
+				}
+
+				audio.updateVolume(this.momentum);
+				audio.updatePitch(this.momentum / 150F + 0.75F);
+				
+			} else {
+				
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+					this.momentum = 0;
+				}
+			}
 		}
 		
 		if(!world.isRemote) {
 			PacketDispatcher.wrapper.sendToAllAround(new TETurbofanPacket(pos.getX(), pos.getY(), pos.getZ(), isRunning), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
-			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		}
+	}
+
+	public AudioWrapper createAudioLoop() {
+		return MainRegistry.proxy.getLoopedSound(HBMSoundHandler.turbofanOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
 	}
 	
 	protected boolean inputValidForTank(int tank, int slot){

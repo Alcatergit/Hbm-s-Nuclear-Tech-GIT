@@ -42,6 +42,7 @@ public class WasteSand extends BlockFalling implements IItemHazard {
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
+		this.setHarvestLevel("shovel", 0);
 		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -77,10 +78,22 @@ public class WasteSand extends BlockFalling implements IItemHazard {
     	
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 2 * 60 * 20, 2));
     	}
+    	if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red)) {
+    	
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 1 * 20, 49));
+    	}
 	}
 
 	@Override
 	public boolean canEntitySpawn(IBlockState state, Entity entityIn){
 		return ContaminationUtil.isRadImmune(entityIn);
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
+			return ModItems.trinitite;
+		}
+		return Item.getItemFromBlock(this);
 	}
 }

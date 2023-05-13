@@ -183,6 +183,12 @@ public class AnvilRecipes {
 				}, new AnvilOutput(new ItemStack(ModBlocks.furnace_steel))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new OreDictStack(STEEL.ingot(), 4),
+						new OreDictStack(CU.plate(), 16),
+						new ComparableStack(ModItems.plate_polymer, 8)
+				}, new AnvilOutput(new ItemStack(ModBlocks.heat_boiler))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new ComparableStack(ModBlocks.brick_concrete, 64),
 						new ComparableStack(Blocks.IRON_BARS, 128),
 						new ComparableStack(ModBlocks.machine_condenser, 5),
@@ -251,7 +257,7 @@ public class AnvilRecipes {
 				new AStack[] {new ComparableStack(ModItems.ingot_meteorite_forged, 4), new OreDictStack(DESH.ingot(), 1), new ComparableStack(ModItems.billet_yharonite, 1)},
 				new AnvilOutput(new ItemStack(ModItems.plate_armor_fau))).setTier(6));
 		constructionRecipes.add(new AnvilConstructionRecipe(
-				new AStack[] {new OreDictStack(DNT.plate(), 4), new ComparableStack(ModItems.particle_sparkticle, 1), new ComparableStack(ModItems.plate_armor_fau, 6)},
+				new AStack[] {new ComparableStack(ModItems.plate_dineutronium, 4), new ComparableStack(ModItems.particle_sparkticle, 1), new ComparableStack(ModItems.plate_armor_fau, 6)},
 				new AnvilOutput(new ItemStack(ModItems.plate_armor_dnt))).setTier(7));
 		
 		pullFromAssembler(new ComparableStack(ModItems.plate_mixed, 4), 3);

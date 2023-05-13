@@ -104,7 +104,7 @@ public class HbmLivingProps {
 
 		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {
 			entity.setAbsorptionAmount(0);
-			entity.attackEntityFrom(ModDamageSource.digamma, 5000F);
+			entity.attackEntityFrom(ModDamageSource.digamma, 5000000F);
 			entity.setHealth(0);
 			entity.onDeath(ModDamageSource.digamma);
 

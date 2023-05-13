@@ -41,6 +41,7 @@ public class WasteEarth extends Block implements IItemHazard {
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(tick);
+		this.setHarvestLevel("shovel", 0);
 		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -60,9 +61,6 @@ public class WasteEarth extends Block implements IItemHazard {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		if(this == ModBlocks.frozen_grass){
 			return Items.SNOWBALL;
-		}
-		if(this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red) {
-			return ModItems.trinitite;
 		}
 		return Item.getItemFromBlock(this);
 	}
@@ -91,10 +89,6 @@ public class WasteEarth extends Block implements IItemHazard {
     	
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 29));
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
-    	}
-    	if (entity instanceof EntityLivingBase && (this == ModBlocks.waste_trinitite || this == ModBlocks.waste_trinitite_red)) {
-    	
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 1 * 20, 49));
     	}
 	}
 	

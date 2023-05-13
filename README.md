@@ -1,14 +1,20 @@
 # <u>**HBM Nuclear Tech Mod - 1.12.2 Extended Edition**</u>
 
-This is my 1.12.2 custom version of the mod, 
-where I attempt to add features from Hbm's original 1.7.10 version and add QoL features.
-Planning to contribute to Alcater's fork.
+This is my 1.12.2 custom version of the mod
 
-which is forked from the fork made by [Alcatergit](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT)
 which is forked from the fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT)
 which is forked from the port made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)
 which is ported from the original mod made by [HBMTheBobcat](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT).
 
+
+The latest version can be found on [Curse](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-extended-edition) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
+
+If you have question or suggestions you can post them on our [NTM Extended Discord](https://discord.gg/Auq95eCEtD)
+
+### **Want to contribute?**
+
+If you want to contribute make a pull request and I'll review it as soon as possible.
+Every contribution is very much appreciated by me and the players.
 
 ### **Build Guide:**
 
@@ -21,3 +27,9 @@ Press enter.
 Now just wait for the build to finish and the new Jar file will be in `Hbm-s-Nuclear-Tech-GIT\build\libs`.
 
 
+#### Discords:
+
+Alcater#2644
+Golem#9568
+Drillgon200#0288
+The Bobcat#8817

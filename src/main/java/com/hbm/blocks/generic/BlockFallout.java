@@ -41,6 +41,7 @@ public class BlockFallout extends Block implements IItemHazard {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setSoundType(soundType);
+		this.setHarvestLevel("shovel", 0);
 		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);

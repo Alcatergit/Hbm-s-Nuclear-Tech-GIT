@@ -3008,8 +3008,8 @@ public class ModItems {
 	public static final Item pellet_antimatter = new ItemDrop("pellet_antimatter").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.cell);
 	public static final Item crystal_xen = new ItemDrop("crystal_xen").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
-	public static final Item crystal_energy = new ItemCustomLore("crystal_energy").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_coolant = new ItemHazard("pellet_coolant").addCryogenic(4).toItem().setMaxDamage(41400).setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item crystal_energy = new ItemCustomLore("crystal_energy").setCreativeTab(null).setMaxStackSize(1);
+	public static final Item pellet_coolant = new ItemHazard("pellet_coolant").addCryogenic(4).toItem().setMaxDamage(41400).setCreativeTab(null).setMaxStackSize(1);
 	
 	//Keys + locks
 	public static final Item key = new ItemKey("key").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);

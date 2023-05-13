@@ -12,22 +12,23 @@ import net.minecraftforge.fluids.FluidStack;
 @Spaghetti("everything")
 public class BoilerRecipes {
 
-    public static HashMap<Fluid, FluidStack[]> recipeFluids = new HashMap<>();
+    public static HashMap<Fluid, FluidStack> recipeFluids = new HashMap<>();
 
     public static void registerRecipes() {
-        makeRecipe(FluidRegistry.WATER, new FluidStack[]{ new FluidStack(ModForgeFluids.steam, 100) });
-        makeRecipe(ModForgeFluids.oil, new FluidStack[]{ new FluidStack(ModForgeFluids.hotoil, 100) });
-        makeRecipe(ModForgeFluids.crackoil, new FluidStack[]{ new FluidStack(ModForgeFluids.hotcrackoil, 100) });
+        //Given 100mb input how much output does it produce? for water it is 1:100
+        makeRecipe(FluidRegistry.WATER, new FluidStack(ModForgeFluids.steam, 10_000));
+        makeRecipe(ModForgeFluids.oil, new FluidStack(ModForgeFluids.hotoil, 100));
+        makeRecipe(ModForgeFluids.crackoil, new FluidStack(ModForgeFluids.hotcrackoil, 100));
 
-        // makeRecipe(new Fluid(), new FluidStack[]{ new FluidStack() });
+        // makeRecipe(new Fluid(), new FluidStack());
     }
 
-    public static void makeRecipe(Fluid inputFluid, FluidStack[] outputFluids) {
+    public static void makeRecipe(Fluid inputFluid, FluidStack outputFluids) {
         if(inputFluid != null && outputFluids != null)
             recipeFluids.put(inputFluid, outputFluids);
     }
 
-    public static FluidStack[] getOutputsFromFluid(Fluid fluid) {
+    public static FluidStack getOutputsFromFluid(Fluid fluid) {
         if (fluid == null)
             return null;
         return recipeFluids.get(fluid);

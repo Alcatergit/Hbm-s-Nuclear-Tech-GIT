@@ -62,6 +62,7 @@ public class RBMKOutgasserRecipes {
 		addRecipe(350000, AC.dust(), new ItemStack(ModItems.powder_ac227));
 		addRecipe(80000, CS.dust(), new ItemStack(ModItems.powder_cs137));
 		addRecipe(120000, AT.dust(), new ItemStack(ModItems.powder_at209));
+		addRecipe(90000, ModItems.billet_australium, new ItemStack(ModItems.billet_australium_lesser));
 		addRecipe(14000000, PB.ingot(), new ItemStack(ModItems.ingot_pb209));
 		addRecipe(12000000, PB.dust(), new ItemStack(ModItems.powder_pb209));
 		addRecipe(1800000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));

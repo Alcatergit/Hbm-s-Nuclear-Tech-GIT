@@ -18,6 +18,7 @@ public class BlockFallingBase extends BlockFalling {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
+		this.setHarvestLevel("shovel", 0);
 		this.setSoundType(type);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

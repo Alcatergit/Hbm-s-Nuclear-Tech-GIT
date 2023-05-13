@@ -803,13 +803,18 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 
-			if(b.getBlock() == ModBlocks.waste_trinitite) {
+			if(b.getBlock() == ModBlocks.waste_trinitite || b.getBlock() == ModBlocks.waste_sand) {
 				world.setBlockState(pos, Blocks.SAND.getDefaultState());
 				return;
 			}
 
 			if(b.getBlock() == ModBlocks.waste_trinitite_red) {
 				world.setBlockState(pos, Blocks.SAND.getStateFromMeta(1));
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_gravel) {
+				world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
 				return;
 			}
 

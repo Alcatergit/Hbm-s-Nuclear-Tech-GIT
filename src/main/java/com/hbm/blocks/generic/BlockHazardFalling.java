@@ -33,6 +33,7 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setSoundType(type);
+		this.setHarvestLevel("shovel", 0);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

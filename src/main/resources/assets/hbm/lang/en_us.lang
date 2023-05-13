@@ -1573,6 +1573,7 @@ tile.heater_firebox.name=Firebox
 tile.heater_firebox.desc=Burns solid fuel to produce heat.
 tile.furnace_steel.name=Steel Furnace
 tile.heat_boiler.name=Large Boiler
+tile.heat_boiler.desc=Large boiler that can boil water or heat up oil.$Requires external heat source.$Heat transfer rate: ΔT*0.01 TU/t
 tile.furnace_steel.desc=Very large furnace that can provide bonus items$when smelting ores. Requires external heat source.$Heat transfer rate: ΔT*0.05 TU/t$(Δ means difference and T means temperature)
 container.heater_firebox=Firebox
 

@@ -605,9 +605,9 @@ public class ModBlocks {
 	public static final Block waste_dirt = new WasteEarth(Material.GROUND, SoundType.GROUND, true, "waste_dirt").addRadiation(1F).toBlock().setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_gravel = new WasteSand(Material.GROUND, SoundType.GROUND, "waste_gravel").addRadiation(ItemHazard.trx*ItemHazard.nugget).toBlock().setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_sand = new WasteSand(Material.SAND, SoundType.SAND, "waste_sand").addRadiation(ItemHazard.trx*ItemHazard.nugget).toBlock().setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block waste_trinitite = new WasteEarth(Material.SAND, SoundType.SAND, false, "waste_trinitite").addRadiation(ItemHazard.trx).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_trinitite = new WasteSand(Material.SAND, SoundType.SAND, "waste_trinitite").addRadiation(ItemHazard.trx).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_sand_red = new WasteSand(Material.SAND, SoundType.SAND, "waste_sand_red").addRadiation(ItemHazard.trx*ItemHazard.nugget).toBlock().setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block waste_trinitite_red = new WasteEarth(Material.SAND, SoundType.SAND, false, "waste_trinitite_red").addRadiation(ItemHazard.trx).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_trinitite_red = new WasteSand(Material.SAND, SoundType.SAND, "waste_trinitite_red").addRadiation(ItemHazard.trx).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_log = new WasteLog(Material.WOOD, "waste_log").setSoundType(SoundType.WOOD).setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_planks = new BlockOre(Material.WOOD, "waste_planks").setSoundType(SoundType.WOOD).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_leaves = new WasteLeaves("waste_leaves").addRadiation(0.5F).toBlock().setHardness(0.3F).setResistance(0.3F).setCreativeTab(MainRegistry.resourceTab);
@@ -626,7 +626,7 @@ public class ModBlocks {
 	public static final Block sand_dirty = new BlockFallingBase(Material.SAND, "sand_dirty", SoundType.SAND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block sand_dirty_red = new BlockFallingBase(Material.SAND, "sand_dirty_red", SoundType.SAND).setHardness(0.5F).setCreativeTab(MainRegistry.resourceTab);
 
-	public static final Block stone_cracked = new BlockFallingBase(Material.ROCK, "stone_cracked", SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block stone_cracked = new BlockBase(Material.ROCK, "stone_cracked").setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
 
 	public static final Block frozen_grass = new WasteEarth(Material.GROUND, SoundType.GLASS, false, "frozen_grass").addCryogenic(3).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block frozen_log = new WasteLog(Material.WOOD, "frozen_log").setSoundType(SoundType.GLASS).setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);

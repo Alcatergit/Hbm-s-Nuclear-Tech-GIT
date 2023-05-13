@@ -3,11 +3,13 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import api.hbm.tile.IHeatSource;
 import com.hbm.inventory.BoilerRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
+import com.hbm.packet.FluidTankPacket;
 import com.hbm.tileentity.INBTPacketReceiver;
+
+import api.hbm.tile.IHeatSource;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -30,8 +32,9 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     public FluidTank[] tanks;
     public Fluid[] types = new Fluid[2];
     public int heat;
-    public static final int maxHeat = 100_000;
-    public static final double diffusion = 0.05D;
+    public static int maxHeat = 12_800_000; //the heat required to turn 64k of water into steam
+    public static int inputAmount = 100;
+    public static final double diffusion = 0.1D;
 
     public TileEntityHeatBoiler() {
         super();
@@ -40,7 +43,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
         tanks[0] = new FluidTank(FluidRegistry.WATER, 0, 64000);
         types[0] = FluidRegistry.WATER;
 
-        tanks[1] = new FluidTank(ModForgeFluids.steam, 0, 64000);
+        tanks[1] = new FluidTank(ModForgeFluids.steam, 0, 6400000);
         types[1] = ModForgeFluids.steam;
 
     }
@@ -63,29 +66,23 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             setupTanks();
             tryPullHeat();
             tryConvert();
+            
+            if(world.getTotalWorldTime() % 10 == 0)
+                fillFluidInit(tanks[1]);
+
             networkPack();
-
-            fillFluidInit(tanks[0]);
-            fillFluidInit(tanks[1]);
-
-            this.heat -= (heat - TileEntityHeatBoiler.maxHeat / 3) / 10;
         }
     }
 
-    public void fillFluidInit(FluidTank type) {
-
-        ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-        dir = dir.getRotation(ForgeDirection.UP);
-        this.fillFluid(pos.getX(), pos.getY() + 4, pos.getZ(), type);
-        this. fillFluid(pos.getX() + dir.offsetX, pos.getY(), pos.getZ() + dir.offsetZ * 2, type);
-        this.fillFluid(pos.getX() - dir.offsetX * 2, pos.getY(), pos.getZ() - dir.offsetZ * 2, type);
-        System.out.print((pos.getX() + dir.offsetX * 2) + " and " + (pos.getZ() + dir.offsetZ * 2 ) + " ");
-        System.out.print((pos.getX() - dir.offsetX * 2) + " and " + (pos.getZ() - dir.offsetZ * 2 ) + " ");
-        System.out.print(pos.getY());
+    public void fillFluidInit(FluidTank tank) {
+        ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+        fillFluid(tank, pos.add(dir.offsetX * 2, 0, dir.offsetZ * 2));
+        fillFluid(tank, pos.add(dir.offsetX * -2, 0, dir.offsetZ * -2));
+        fillFluid(tank, pos.add(0, 4, 0));
     }
 
-    public void fillFluid(int x, int y, int z, FluidTank type) {
-        FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), 64000);
+    public void fillFluid(FluidTank tank, BlockPos pos){
+        FFUtils.fillFluid(this, tank, world, pos, 640000);
     }
 
     @Override
@@ -166,6 +163,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             }
         }
         data.setTag("tanks", FFUtils.serializeTankArray(tanks));
+        data.setInteger("heat", heat);
         INBTPacketReceiver.networkPack(this, data, 25);
     }
 
@@ -179,13 +177,14 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
                 types[i] = null;
             }
         }
+        this.heat = nbt.getInteger("heat");
     }
 
     private void setupTanks() {
-        FluidStack[] fluids = BoilerRecipes.getOutputsFromFluid(types[0]);
-        if (fluids != null) {
+        FluidStack fluid = BoilerRecipes.getOutputsFromFluid(types[0]);
+        if (fluid != null) {
             setTankType(0, types[0]);
-            setTankType(1, fluids[0].getFluid());
+            setTankType(1, fluid.getFluid());
         } else {
             setTankType(0, null);
             setTankType(1, null);
@@ -193,14 +192,21 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     }
 
     private void tryConvert() {
-        FluidStack[] outputFluids = BoilerRecipes.getOutputsFromFluid(types[0]);
-        if (heat > TileEntityHeatBoiler.maxHeat / 3) {
-            if (outputFluids != null) {
-                if (tanks[0].getFluidAmount() >= 100) {
-                    tanks[0].drain(100, true);
-                    tanks[1].fill(outputFluids[0].copy(),true);
-                }
-            }
+        FluidStack outputFluids = BoilerRecipes.getOutputsFromFluid(types[0]);
+        if(outputFluids != null) {
+            int heatReq = Math.max(outputFluids.getFluid().getTemperature(), tanks[0].getFluid().getFluid().getTemperature());
+
+            int inputOps = tanks[0].getFluidAmount() / inputAmount;
+            int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / outputFluids.amount;
+            int heatOps = this.heat / Math.max(heatReq, 10);
+            
+            int ops = Math.min(inputOps, Math.min(outputOps, heatOps));
+
+            tanks[0].drain(inputAmount * ops, true);
+            FluidStack output = outputFluids.copy();
+            output.amount *= ops;
+            tanks[1].fill(output, true);
+            this.heat -= heatReq * ops;
         }
     }
     protected void tryPullHeat() {
@@ -221,8 +227,8 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
                 diff = (int) Math.ceil(diff * diffusion);
                 source.useUpHeat(diff);
                 this.heat += diff;
-                if(this.heat > TileEntityHeatBoiler.maxHeat)
-                    this.heat = TileEntityHeatBoiler.maxHeat;
+                if(this.heat > this.maxHeat)
+                    this.heat = this.maxHeat;
                 return;
             }
         }

@@ -329,8 +329,8 @@ public class OreDictManager {
 		STAR																												.ingot(ingot_starmetal)																.block(block_starmetal)							.crystal(crystal_starmetal)								.ore(ore_meteor_starmetal);
 		BIGMT																												.ingot(ingot_saturnite)																																				.plate(plate_saturnite);
 		//FERRO																												.ingot(ingot_ferrouranium);
-		EUPH														.nugget(nugget_euphemium)								.ingot(ingot_euphemium)		.dust(powder_euphemium)									.block(block_euphemium)															.plate(plate_euphemium);
-		DNT															.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)	.dust(powder_dineutronium)								.block(block_dineutronium)														.plate(plate_dineutronium);
+		EUPH														.nugget(nugget_euphemium)								.ingot(ingot_euphemium)		.dust(powder_euphemium)									.block(block_euphemium);
+		DNT															.nugget(nugget_dineutronium)							.ingot(ingot_dineutronium)	.dust(powder_dineutronium)								.block(block_dineutronium);
 		FIBER																												.ingot(ingot_fiberglass)															.block(block_fiberglass);
 		ASBESTOS	.asbestos(1F)																							.ingot(ingot_asbestos)		.dust(powder_asbestos)									.block(block_asbestos)							.crystal(crystal_asbestos)								.ore(ore_asbestos, ore_gneiss_asbestos, basalt_asbestos);
 		OSMIRIDIUM													.nugget(nugget_osmiridium)								.ingot(ingot_osmiridium)	.dust(powder_osmiridium)																				.crystal(crystal_osmiridium);
