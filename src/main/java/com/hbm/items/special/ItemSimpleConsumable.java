@@ -38,7 +38,7 @@ public class ItemSimpleConsumable extends ItemCustomLore {
 		if(!world.isRemote && this.useActionServer != null)
 			this.useActionServer.accept(stack, player);
 		
-		return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
 	@Override

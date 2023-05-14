@@ -32,6 +32,8 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public double fluxSlow;
 	public boolean hasRod;
 
+	public double fluxOut = 0;
+
 	public float fuelR;
 	public float fuelG;
 	public float fuelB;
@@ -79,7 +81,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.cherenkovB = rod.cherenkovB;
 				
 				double fluxIn = fluxFromType(rod.nType);
-				double fluxOut = rod.burn(world, inventory.getStackInSlot(0), fluxIn);
+				fluxOut = rod.burn(world, inventory.getStackInSlot(0), fluxIn);
 				NType rType = rod.rType;
 				
 				rod.updateHeat(world, inventory.getStackInSlot(0), 1.0D);
@@ -363,7 +365,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 			data.setDouble("c_coreHeat", ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0)));
 			data.setDouble("c_maxHeat", rod.meltingPoint);
 		}
-		data.setDouble("flux", this.fluxFast+this.fluxSlow);
+		data.setDouble("flux", this.fluxOut);
 		return data;
 	}
 

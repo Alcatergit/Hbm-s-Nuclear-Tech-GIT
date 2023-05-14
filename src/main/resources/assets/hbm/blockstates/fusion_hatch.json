@@ -1,8 +1,5 @@
 {
 	"variants": {
-		"facing=north": { "model": "hbm:fusion_hatch" },
-     	   	"facing=south": { "model": "hbm:fusion_hatch", "y": 180 },
-      	  	"facing=west":  { "model": "hbm:fusion_hatch", "y": 270 },
-      		"facing=east":  { "model": "hbm:fusion_hatch", "y": 90 }
+		"normal": { "model": "hbm:fusion_hatch" }
 	}
 }

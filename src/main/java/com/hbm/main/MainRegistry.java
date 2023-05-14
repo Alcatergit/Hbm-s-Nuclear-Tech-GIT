@@ -1085,9 +1085,12 @@ public class MainRegistry {
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
-		proxy.postInit(event);
+		
 		NTMCraftTweaker.applyPostInitActions();
-		ModForgeFluids.registerFluidColors();
+		if(event.getSide() == Side.CLIENT) {
+			ModForgeFluids.registerFluidColors();
+		}
+		proxy.postInit(event);
 	}
 
 	@EventHandler

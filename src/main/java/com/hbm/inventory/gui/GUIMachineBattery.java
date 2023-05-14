@@ -56,7 +56,6 @@ public class GUIMachineBattery extends GuiInfoContainer {
 
 		String lang = null;
 		switch(battery.priority) {
-			case NULL: lang = "null"; break;
 			case LOW: lang = "low"; break;
 			case NORMAL: lang = "normal"; break;
 			case HIGH: lang = "high"; break;
@@ -129,7 +128,7 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		int j = battery.redHigh;
 		drawTexturedModalRect(guiLeft + 151, guiTop + 34, 176, 52 + j * 18, 18, 18);
 
-		drawTexturedModalRect(guiLeft + 152, guiTop + 17, 194, 52 + (battery.priority.ordinal()-1) * 16, 16, 16);
+		drawTexturedModalRect(guiLeft + 152, guiTop + 17, 194, 52 + battery.priority.ordinal() * 16, 16, 16);
 
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		

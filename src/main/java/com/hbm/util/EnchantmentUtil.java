@@ -87,17 +87,9 @@ public class EnchantmentUtil {
 		}
 	}
 
-	/** Fun fact: experienceTotal lies and has no actual purpose other than misleading people! */
+	/** Fun fact: experienceTotal lies in 1.7.10 and has no actual purpose other than misleading people! */
+	/** Fun fact: experienceTotal lies no more in 1.12.2 yay */
 	public static int getTotalExperience(EntityPlayer player) {
-		int xp = 0;
-		
-		/* count only completed levels */
-		for(int i = 0; i < player.experienceLevel; i++) {
-			xp += xpBarCap(i);
-		}
-		
-		xp += xpBarCap(player.experienceLevel) * player.experience;
-		
-		return xp;
+		return player.experienceTotal;
 	}
 }

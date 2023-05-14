@@ -380,4 +380,13 @@ public class ModForgeFluids {
 			fluidColors.put(f, FFUtils.getColorFromFluid(f));
 		}
 	}
+
+	public static int getFluidColor(Fluid f){
+		if(f == null)
+			return 0;
+		Integer color = fluidColors.get(f);
+		if(color == null)
+			return 0xFFFFFF;
+		return color;
+	}
 }

@@ -20,7 +20,6 @@ public class RenderGasCent extends TileEntitySpecialRenderer<TileEntityMachineGa
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
-        GlStateManager.enableLighting();
 		switch(te.getBlockMetadata())
 		{
 		case 4:

@@ -69,7 +69,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	//private static final int[] slots_side = new int[] { 0 };
 
 	private String customName;
-	private AudioWrapper audio;
+	public AudioWrapper audio;
 	
 	public TileEntityMachineTurbofan() {
 		inventory = new ItemStackHandler(4){
@@ -300,6 +300,26 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 
 	public AudioWrapper createAudioLoop() {
 		return MainRegistry.proxy.getLoopedSound(HBMSoundHandler.turbofanOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
+	}
+
+	@Override
+	public void onChunkUnload() {
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
 	}
 	
 	protected boolean inputValidForTank(int tank, int slot){

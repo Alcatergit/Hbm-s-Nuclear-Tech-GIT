@@ -337,11 +337,6 @@ public class ShredderRecipes {
 		
 		ItemStack sta = shredderRecipes.get(new ComparableStack(stack).makeSingular());
 		
-		/*if(sta != null)
-			System.out.println(stack.getDisplayName() + " resulted " + sta.getDisplayName());
-		else
-			System.out.println(stack.getDisplayName() + " resulted null");*/
-		
 		return sta == null ? new ItemStack(ModItems.scrap) : sta;
 	}
 	

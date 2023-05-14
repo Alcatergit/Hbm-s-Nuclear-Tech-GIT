@@ -18,6 +18,9 @@ itemGroup.tabConsumable=NTM Consumables and Gear
 
 fluid.plasma_put=Plutonium-Tritium Plasma
 
+fluid.tile.water=Water
+fluid.tile.lava=Lava
+
 hazard.prot=Protects against hazards:
 hazard.noprot=Does NOT protect against:
 hazard.bacteria=Bacteria / Aerosols
@@ -1601,6 +1604,7 @@ tile.rbmk_absorber.name=RBMK Boron Neutron Absorber
 tile.rbmk_blank.name=RBMK Structural Column
 tile.rbmk_boiler.name=RBMK Steam Channel
 tile.rbmk_console.name=RBMK Console
+tile.rbmk_console.desc=§6Use Redstone port on back to set control rods$§ePowers 1-15 sets control rods to 100-0%%$§eSo 15 acts like AZ5
 tile.rbmk_control.name=RBMK Control Rods
 tile.rbmk_control_auto.name=RBMK Automatic Control Rods
 tile.rbmk_control_mod.name=RBMK Moderated Control Rods

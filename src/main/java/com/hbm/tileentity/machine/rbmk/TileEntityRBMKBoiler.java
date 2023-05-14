@@ -81,6 +81,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			if(heatProvided > 0 && feed.getFluidAmount() > 0) {
 				int waterUsed = (int)Math.floor(heatProvided / gameruleBoilerHeatConsumption);
 				waterUsed = Math.min(waterUsed, feed.getFluidAmount());
+				waterUsed = makeLossless(waterUsed, steamType);
 				int steamProduced = (int)Math.round((waterUsed * 100F) / getFactorFromSteam(steamType));
 
 				feed.drain(waterUsed, true);
@@ -93,6 +94,12 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		}
 		
 		super.update();
+	}
+
+	public int makeLossless(int water, Fluid type){ //rounds down to the lower base 10 so it stays int
+		if(type == ModForgeFluids.ultrahotsteam)
+			return ((int)(water * 0.1)) * 10;
+		return water;
 	}
 	
 	public double getHeatFromSteam(Fluid type) {

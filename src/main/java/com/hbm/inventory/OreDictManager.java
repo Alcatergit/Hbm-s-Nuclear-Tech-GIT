@@ -320,12 +320,12 @@ public class OreDictManager {
 		TCALLOY																												.ingot(ingot_tcalloy)		.dust(powder_tcalloy);
 		GRAPHITE																											.ingot(ingot_graphite)																.block(block_graphite);
 		DURA																												.ingot(ingot_dura_steel)	.dust(powder_dura_steel)								.block(block_dura_steel);
-		POLYMER																												.ingot(ingot_polymer)		.dust(powder_polymer)									.block(block_polymer)															.plate(plate_polymer);
+		POLYMER																												.ingot(ingot_polymer)		.dust(powder_polymer)									.block(block_polymer);
 		BAKELITE																											.ingot(ingot_bakelite)		.dust(powder_bakelite)									.block(block_bakelite);
 		RUBBER																												.ingot(ingot_rubber)																.block(block_rubber);
 		MAGTUNG																												.ingot(ingot_magnetized_tungsten).dust(powder_magnetized_tungsten)					.block(block_magnetized_tungsten);
 		CMB																													.ingot(ingot_combine_steel)	.dust(powder_combine_steel)								.block(block_combine_steel)														.plate(plate_combine_steel);
-		DESH														.nugget(nugget_desh)									.ingot(ingot_desh)			.dust(powder_desh)										.block(block_desh)																.plate(plate_desh);
+		DESH														.nugget(nugget_desh)									.ingot(ingot_desh)			.dust(powder_desh)										.block(block_desh);
 		STAR																												.ingot(ingot_starmetal)																.block(block_starmetal)							.crystal(crystal_starmetal)								.ore(ore_meteor_starmetal);
 		BIGMT																												.ingot(ingot_saturnite)																																				.plate(plate_saturnite);
 		//FERRO																												.ingot(ingot_ferrouranium);

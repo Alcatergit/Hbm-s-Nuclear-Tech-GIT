@@ -117,8 +117,6 @@ public class ArmorFSB extends ItemArmor {
 				if(!((ArmorFSB)armor.getItem()).isArmorEnabled(armor))
 					return false;
 			}
-
-			System.out.println("PLATE APPROVED");
 			return true;
 		}
 
@@ -348,7 +346,7 @@ public class ArmorFSB extends ItemArmor {
 	
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity e, int itemSlot, boolean isSelected) {
-	//	System.out.println("regular update");
+
 		if(this.armorType != EntityEquipmentSlot.CHEST || !(e instanceof EntityLivingBase))
 			return;
 		EntityLivingBase entity = (EntityLivingBase)e;

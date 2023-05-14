@@ -989,7 +989,7 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 
 	public static void addToInventoryOrDrop(EntityPlayer player, ItemStack stack) {
 		if(!player.inventory.addItemStackToInventory(stack)){
-			player.dropItem(stack, false, false);
+			player.dropItem(stack, false);
 		}
 	}
 

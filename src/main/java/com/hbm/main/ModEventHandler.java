@@ -299,7 +299,7 @@ public class ModEventHandler {
 			World world = event.getWorld();
 
 			if(entity instanceof EntityZombie) {
-				int randomArmorNumber = rand.nextInt(4096);
+				int randomArmorNumber = rand.nextInt(2<<16);
 				int randomHandNumber = rand.nextInt(256);
 				EntityZombie zombie = (EntityZombie)entity;
 				boolean hasMainHand = !zombie.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty();
@@ -319,41 +319,47 @@ public class ModEventHandler {
 				}
 				if(!(hasHat || hasChest || hasLegs || hasFeet)){
 					if(randomArmorNumber == 0){
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.dns_helmet, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.dns_plate, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.dns_legs, 1));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.dns_boots, 1));
+					}
+					if(randomArmorNumber <= 2<<6){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.rpa_helmet, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.rpa_plate, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.rpa_legs, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.rpa_boots, 1));
 					}
 
-					else if(randomArmorNumber <= 4){
+					else if(randomArmorNumber <= 2<<8){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.ajr_helmet, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.ajr_plate, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.ajr_legs, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.ajr_boots, 1));
 					}
 
-					else if(randomArmorNumber <= 16){
+					else if(randomArmorNumber <= 2<<10){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.t45_helmet, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.t45_plate, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.t45_legs, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.t45_boots, 1));
 					}
 
-					else if(randomArmorNumber <= 32){
+					else if(randomArmorNumber <= 2<<11){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
 					}
 
-					else if(randomArmorNumber <= 64){
+					else if(randomArmorNumber <= 2<<12){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.titanium_helmet, 1, world.rand.nextInt(ModItems.titanium_helmet.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.titanium_plate, 1, world.rand.nextInt(ModItems.titanium_plate.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.titanium_legs, 1, world.rand.nextInt(ModItems.titanium_legs.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.titanium_boots, 1, world.rand.nextInt(ModItems.titanium_boots.getMaxDamage(ItemStack.EMPTY))));
 					}
 
-					else if(randomArmorNumber <= 128){
+					else if(randomArmorNumber <= 2<<13){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.steel_helmet, 1, world.rand.nextInt(ModItems.steel_helmet.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.steel_plate, 1, world.rand.nextInt(ModItems.steel_plate.getMaxDamage(ItemStack.EMPTY))));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.steel_legs, 1, world.rand.nextInt(ModItems.steel_legs.getMaxDamage(ItemStack.EMPTY))));

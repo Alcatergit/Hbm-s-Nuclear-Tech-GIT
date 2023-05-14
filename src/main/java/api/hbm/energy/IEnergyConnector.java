@@ -115,7 +115,6 @@ public interface IEnergyConnector extends ILoadedTile {
 	}
 	
 	public enum ConnectionPriority {
-		NULL,
 		LOW,
 		NORMAL,
 		HIGH

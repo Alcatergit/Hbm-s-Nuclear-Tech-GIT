@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.items.ModItems;
 import com.hbm.potion.HbmPotion;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 
@@ -62,7 +63,7 @@ public class EntityRBMKDebris extends Entity {
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand){
-		if(!world.isRemote) {
+		if(!world.isRemote && !isDead) {
 			switch(this.getType()){
 			case BLANK:
 				if(player.inventory.addItemStackToInventory(new ItemStack(ModItems.debris_metal)))
@@ -179,11 +180,7 @@ public class EntityRBMKDebris extends Entity {
 			}
 
 			if(this.getType() == DebrisType.FUEL) {
-				List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(10, 10, 10));
-
-				for(EntityLivingBase e : entities) {
-					e.addPotionEffect(new PotionEffect(HbmPotion.radiation, 60 * 20, 9));
-				}
+				ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, 16, 100);
 			}
 
 			if(!RBMKDials.getPermaScrap(world) && this.ticksExisted > getLifetime() + this.getEntityId() % 50)
@@ -195,17 +192,17 @@ public class EntityRBMKDebris extends Entity {
 
 		switch(this.getType()){
 		case BLANK:
-			return 3 * 60 * 20;
+			return 30 * 60 * 20;
 		case ELEMENT:
-			return 3 * 60 * 20;
+			return 30 * 60 * 20;
 		case FUEL:
-			return 10 * 60 * 20;
+			return 100 * 60 * 20;
 		case GRAPHITE:
-			return 15 * 60 * 20;
+			return 150 * 60 * 20;
 		case LID:
-			return 30 * 20;
+			return 300 * 20;
 		case ROD:
-			return 60 * 20;
+			return 600 * 20;
 		default:
 			return 0;
 		}

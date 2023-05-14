@@ -92,6 +92,20 @@ public class ModelArmorBase extends ModelBiped {
         this.rightLeg.rotateAngleX = this.bipedRightLeg.rotateAngleX;
         this.rightLeg.rotateAngleY = this.bipedRightLeg.rotateAngleY;
         this.rightLeg.rotateAngleZ = this.bipedRightLeg.rotateAngleZ;
+
+        this.leftFoot.rotationPointX = this.bipedLeftLeg.rotationPointX;
+        this.leftFoot.rotationPointY = this.bipedLeftLeg.rotationPointY - 1.5F;
+        this.leftFoot.rotationPointZ = this.bipedLeftLeg.rotationPointZ;
+        this.leftFoot.rotateAngleX = this.bipedLeftLeg.rotateAngleX;
+        this.leftFoot.rotateAngleY = this.bipedLeftLeg.rotateAngleY;
+        this.leftFoot.rotateAngleZ = this.bipedLeftLeg.rotateAngleZ;
+
+        this.rightFoot.rotationPointX = this.bipedRightLeg.rotationPointX;
+        this.rightFoot.rotationPointY = this.bipedRightLeg.rotationPointY - 1.5F;
+        this.rightFoot.rotationPointZ = this.bipedRightLeg.rotationPointZ;
+        this.rightFoot.rotateAngleX = this.bipedRightLeg.rotateAngleX;
+        this.rightFoot.rotateAngleY = this.bipedRightLeg.rotateAngleY;
+        this.rightFoot.rotateAngleZ = this.bipedRightLeg.rotateAngleZ;
         
         if(entity instanceof EntityZombie || entity instanceof EntityPigZombie || entity instanceof EntitySkeleton) {
             this.leftArm.rotateAngleX -= (90 * Math.PI / 180D);

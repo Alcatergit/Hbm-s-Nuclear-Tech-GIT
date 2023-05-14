@@ -247,10 +247,10 @@ public class ItemLemon extends ItemFood {
 				this == ModItems.canned_kerosene || 
 				this == ModItems.canned_recursion || 
 				this == ModItems.canned_bark)
-        	player.inventory.addItemStackToInventory(new ItemStack(ModItems.can_key));
+        	tryAddItem(player, new ItemStack(ModItems.can_key));
 		
 		if(this == ModItems.canned_recursion && worldIn.rand.nextInt(10) > 0)
-        	player.inventory.addItemStackToInventory(new ItemStack(ModItems.canned_recursion));
+        	tryAddItem(player, new ItemStack(ModItems.canned_recursion));
 	}
 	
 	@Override
@@ -273,4 +273,9 @@ public class ItemLemon extends ItemFood {
         return sta;
 	}
 
+	public static void tryAddItem(EntityPlayer player, ItemStack stack) {
+		if(!player.inventory.addItemStackToInventory(stack)) {
+			player.dropItem(stack, false);
+		}
+	}
 }

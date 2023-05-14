@@ -1,16 +1,23 @@
 package com.hbm.blocks.machine.rbmk;
 
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.handler.BossSpawnHandler;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemGuideBook.BookType;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.NBTControlPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,11 +27,13 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class RBMKConsole extends BlockDummyable {
+public class RBMKConsole extends BlockDummyable implements ITooltipProvider {
 
 	public RBMKConsole(String s) {
 		super(Material.IRON, s);
@@ -37,6 +46,26 @@ public class RBMKConsole extends BlockDummyable {
 		if(meta >= offset)
 			return new TileEntityRBMKConsole();
 		return null;
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		super.neighborChanged(state, world, pos, blockIn, fromPos);
+		if(state.getValue(META) >= offset){
+			int power = world.isBlockIndirectlyGettingPowered(pos);
+			if(power > 0 && power <= 15){
+				TileEntityRBMKConsole console = (TileEntityRBMKConsole) world.getTileEntity(pos);
+				NBTTagCompound control = new NBTTagCompound();
+				control.setDouble("level", (15D-power)/14D);
+
+				for(int j = 0; j < console.columns.length; j++) {
+					if(console.columns[j] != null && console.columns[j].type == ColumnType.CONTROL)
+						control.setInteger("sel_" + j, j);
+				}
+				
+				PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+			}
+		}
 	}
 
 	@Override
@@ -138,5 +167,11 @@ public class RBMKConsole extends BlockDummyable {
 			return false;
 		
 		return super.checkRequirement(world, x, y, z, dir, o);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		this.addStandardInfo(list);
+		super.addInformation(stack, worldIn, list, flagIn);
 	}
 }

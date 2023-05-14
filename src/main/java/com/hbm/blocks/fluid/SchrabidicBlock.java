@@ -53,7 +53,7 @@ public class SchrabidicBlock extends BlockFluidClassic {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
 		entity.setInWeb();
 		if(entity instanceof EntityLivingBase)
-			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 1.0F);
+			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 10.0F);
 	}
 	
 	@Override

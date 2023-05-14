@@ -155,7 +155,7 @@ public class BlockFluidPipeSolid extends BlockContainer implements IToolable, IL
 		if(ductFluid == null){
 			text.add("§7None");
 		} else{
-			int color = ModForgeFluids.fluidColors.get(ductFluid);
+			int color = ModForgeFluids.getFluidColor(ductFluid);
 			text.add("&[" + color + "&]" +I18nUtil.resolveKey(ductFluid.getUnlocalizedName()));
 		}
 		

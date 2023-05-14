@@ -93,10 +93,7 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 			//Alcater: found a way to textract the color from the fluids texture
 			rotTexture = new ResourceLocation(RefStrings.MODID, "textures/models/tank/tank_generic.png");
 			if(type != null){
-				Integer color = ModForgeFluids.fluidColors.get(type);
-				if(color == null)
-					color = 0xFFFFFF;
-				FFUtils.setRGBFromHex(color);
+				FFUtils.setRGBFromHex(ModForgeFluids.getFluidColor(type));
 			}
 		}
 

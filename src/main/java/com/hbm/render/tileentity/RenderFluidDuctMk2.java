@@ -19,7 +19,7 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 	public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 		GlStateManager.enableLighting();
-		
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		boolean pX = te.connections[3] != null;
 		boolean nX = te.connections[5] != null;
@@ -33,8 +33,9 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 		GL11.glTranslated(x + 0.5F, y + 0.5F, z + 0.5F);
 		
 		if(te instanceof TileEntityFFDuctBaseMk2){
-			if(te.getType() != null)
-				FFUtils.setRGBFromHex(ModForgeFluids.fluidColors.get(te.getType()));
+			if(te.getType() != null){
+				FFUtils.setRGBFromHex(ModForgeFluids.getFluidColor(te.getType()));
+			}
 		}
 		if(te instanceof TileEntityFFFluidSuccMk2){
 			bindTexture(ResourceManager.pipe_neo_succ_tex);
@@ -76,7 +77,8 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 			if(!nX && !nY && !nZ) ResourceManager.pipe_neo.renderPart("nnp");
 
 		}
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.color(1, 1, 1, 1);
 		GL11.glTranslated(-x - 0.5F, -y - 0.5F, -z - 0.5F);
 		GL11.glPopMatrix();
 	}	
