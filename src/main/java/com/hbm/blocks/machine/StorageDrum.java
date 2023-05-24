@@ -1,17 +1,22 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.tileentity.machine.TileEntityStorageDrum;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class StorageDrum extends BlockMachineBase {
+public class StorageDrum extends BlockMachineBase implements ITooltipProvider {
 
 	public StorageDrum(Material mat, int guiID, String s) {
 		super(mat, guiID, s);
@@ -64,4 +69,9 @@ public class StorageDrum extends BlockMachineBase {
 		return new AxisAlignedBB(2 * f, 0.0F, 2 * f, 14 * f, 1.0F, 14 * f);
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		this.addStandardInfo(list);
+		super.addInformation(stack, worldIn, list, flagIn);
+	}
 }

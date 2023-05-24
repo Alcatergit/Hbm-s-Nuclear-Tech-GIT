@@ -1701,6 +1701,7 @@ tile.machine_rtg_blue.name=Convection Generator
 tile.machine_rtg_purple.name=Antimatter Annihilation Generator
 
 tile.machine_waste_drum.name=Spent Fuel Pool Drum
+tile.machine_waste_drum.desc=Needs water on at least one side. The more sides have water the faster it is.
 container.wasteDrum=Spent Fuel Pool Drum
 
 tile.machine_spp_bottom.name=ZPE Potential Generator (Bottom)
@@ -4396,6 +4397,7 @@ tile.block_lanthanium.name=Block of Lanthanium
 tile.ore_cinnebar.name=Cinnabar Ore
 tile.block_actinium.name=Block of Actinium
 tile.machine_storage_drum.name=Nuclear Waste Disposal Drum
+tile.machine_storage_drum.desc=Contents slowly decay with time. If the internal liquid and gaseous waste tanks are full then radiation will leak.
 tile.machine_condenser.name=Steam Condenser
 tile.machine_orbus.name=Heavy Magnetic Storage Tank
 tile.fraction_spacer.name=Fractioning Tower Separator

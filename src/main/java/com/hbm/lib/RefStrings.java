@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-1.9.5-I";
-	public static final String CHANGELOG = "$§dUpdated the entire energy system$$§aAdded Big Electrical Pylon$§aAdded Substation$§aAdded Power Diode$§aAdded Redstone Power Switch$§aAdded Heat Boiler$§aAdded Glowing Ones mob$§aAdded S.A.F.E. Singularity Breeding$§aAdded tiny singularities$§aAdded Gas Mask System$§aAdded Asbestos and Coal Config toggle$§aAdded Gerald Mining Ship$§aAdded IV_Bags, Desh Gear$§aAdded Zombie Horse rad conversion$§aAdded RBMK Console Redstone Control$$§bChanged the radiation engine to use any radioactive thing$§bChanged cable and pipe textures and models$§bChanged the turbofan$$§eFixed Gas Block Crash$§eFixed armor movement$§eFixed Graphite Crafting$§eFixed RBMK Fuel Rod Xenon Burn Function Spelling$§eFixed RBMK Smooth Deco spelling$§eFixed BlastDoor$§eFixed RBMK Water GUI$§eFixed Rad-X not working$§eFixed Big Reactor Leak$§eFixed Frozen Log Texture$§eFixed Villagar zombification$§eFixed 15 different bugs";
+	public static final String VERSION = "NTM-Extended-1.12.2-1.9.5-II";
+	public static final String CHANGELOG = "§aAdded Forge Energy support to power converters$§aAdded JEI support to Transmutation and Nuclear Waste Storage Drum$§aAdded pages to RBMK Guide$§aAdded look overlay to batteries$§aAdded gas mask no-filter rendering$§aAdded Crystal schraranium recipe$§aAdded missing hen silex recipes$§aAdded RBMK Guide recipe$$§bChanged RBMK Neg-Quad functions$§bChanged RBMK fuel function display$§bChanged Meteor Dungeon spawn height from 10 to 12$$§eFixed Explosion crash$§eFixed fluid pipe rendering crash$§eFixed Particle Lag for Factories$§eFixed DiFurnace recipes$§eFixed Gas mask tooltip crash$§eFixed Zombie hazmat equip$§eFixed Advancement triggering$§eFixed Solid cable and duct fps lag";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version
