@@ -1,10 +1,13 @@
 package com.hbm.blocks.machine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.hbm.lib.Library;
 import com.hbm.lib.InventoryHelper;
+import com.hbm.blocks.ILookOverlay;
+import com.hbm.lib.Library;
 import com.hbm.blocks.BlockDummyableMBB;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
@@ -25,9 +28,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class MachineFENSU extends BlockDummyableMBB {
+public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 
 	public MachineFENSU(Material materialIn, String s) {
 		super(materialIn, s);
@@ -212,5 +216,26 @@ public class MachineFENSU extends BlockDummyableMBB {
 			}
 			list.add(color+Library.getShortNumber(charge)+color2+"/9.22EHE "+color+"("+percent+"%)§r");
 		}
+	}
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+			
+		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+		
+		if(!(te instanceof TileEntityMachineFENSU))
+			return;
+
+		TileEntityMachineFENSU battery = (TileEntityMachineFENSU) te;
+		List<String> text = new ArrayList();
+		text.add("§6<> §rStored Energy: " + Library.getShortNumber(battery.power) + "/9.22EHE");
+		if(battery.powerDelta == 0)
+			text.add("§e-- §r0HE/s");
+		else if(battery.powerDelta > 0)
+			text.add("§a-> §r" + Library.getShortNumber(battery.powerDelta) + "HE/s");
+		else
+			text.add("§c<- §r" + Library.getShortNumber(-battery.powerDelta) + "HE/s");
+		text.add("&["+Library.getColorProgress((double)battery.power/(double)Long.MAX_VALUE)+"&]    "+Library.getPercentage((double)battery.power/(double)Long.MAX_VALUE)+"%");
+		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
 	}
 }

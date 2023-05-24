@@ -93,35 +93,74 @@ public class ItemGuideBook extends Item {
 		List<GuidePage> pages = new ArrayList<>();
 		pages.add(new GuidePage("book.rbmk.page1").setScale(2F).addTitle("book.rbmk.title1", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk1.png"), 90, 80, 60));
-		pages.add(new GuidePage("book.rbmk.page2").setScale(2F).addTitle("book.rbmk.title2", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk2.png"), 95, 52, 52));
+
+		pages.add(new GuidePage("book.rbmk.page_schematic").setScale(2F).addTitle("book.rbmk.title_schematic", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/schematic.png"), 95, 56, 52));
+
 		pages.add(new GuidePage("book.rbmk.page3").setScale(2F).addTitle("book.rbmk.title3", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk3.png"), 95, 88, 52));
+		pages.add(new GuidePage("book.rbmk.page10").setScale(2F).addTitle("book.rbmk.title10", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk10.png"), 95, 88, 52));
+		pages.add(new GuidePage("book.rbmk.page8").setScale(2F).addTitle("book.rbmk.title8", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk8.png"), 95, 88, 52));
+		pages.add(new GuidePage("book.rbmk.page9").setScale(2F).addTitle("book.rbmk.title9", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk9.png"), 95, 88, 52));
 		pages.add(new GuidePage("book.rbmk.page4").setScale(2F).addTitle("book.rbmk.title4", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk4.png"), 95, 88, 52));
 		pages.add(new GuidePage("book.rbmk.page5").setScale(2F).addTitle("book.rbmk.title5", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk5.png"), 95, 80, 42));
 		pages.add(new GuidePage("book.rbmk.page6").setScale(2F).addTitle("book.rbmk.title6", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk6.png"), 90, 100, 60));
+		
+		pages.add(new GuidePage("book.rbmk.page_fluxgraph").setScale(2F).addTitle("book.rbmk.title_fluxgraph", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/fluxgraph.png"), 95, 95, 47));
+		pages.add(new GuidePage("book.rbmk.page_flux").setScale(2F).addTitle("book.rbmk.title_flux", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk_flux.png"), 95, 88, 52));
+		pages.add(new GuidePage("book.rbmk.page_flux_explain").setScale(2F).addTitle("book.rbmk.title_flux_explain", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_explain.png"), 95, 95, 48));
+
+		pages.add(new GuidePage("book.rbmk.page_func_passive").setScale(2F).addTitle("book.rbmk.title_func_passive", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_passive.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_euler").setScale(2F).addTitle("book.rbmk.title_func_euler", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_euler.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_sigmoid").setScale(2F).addTitle("book.rbmk.title_func_sigmoid", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_sigmoid.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_logarithmic").setScale(2F).addTitle("book.rbmk.title_func_logarithmic", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_logarithmic.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_square_root").setScale(2F).addTitle("book.rbmk.title_func_square_root", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_square_root.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_neg_quad").setScale(2F).addTitle("book.rbmk.title_func_neg_quad", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_neg_quad.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_linear").setScale(2F).addTitle("book.rbmk.title_func_linear", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_linear.png"), 85, 95, 48));
+		pages.add(new GuidePage("book.rbmk.page_func_quadratic").setScale(2F).addTitle("book.rbmk.title_func_quadratic", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/func_quadratic.png"), 85, 95, 48));
+
+		pages.add(new GuidePage("book.rbmk.page2").setScale(2F).addTitle("book.rbmk.title2", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk2.png"), 95, 52, 52));
 		pages.add(new GuidePage("book.rbmk.page7").setScale(2F).addTitle("book.rbmk.title7", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk7.png"), 95, 52, 52));
-		pages.add(new GuidePage("book.rbmk.page8").setScale(2F).addTitle("book.rbmk.title8", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk8.png"), 95, 88, 52));
-		pages.add(new GuidePage("book.rbmk.page9").setScale(2F).addTitle("book.rbmk.title9", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk9.png"), 95, 88, 52));
-		pages.add(new GuidePage("book.rbmk.page10").setScale(2F).addTitle("book.rbmk.title10", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk10.png"), 95, 88, 52));
+		pages.add(new GuidePage("book.rbmk.page_tips").setScale(2F).addTitle("book.rbmk.title_tips", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/steamconnector.png"), 90, 18, 60));
+
 		pages.add(new GuidePage("book.rbmk.page11").setScale(2F).addTitle("book.rbmk.title11", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk11.png"), 75, 85, 72));
 		pages.add(new GuidePage("book.rbmk.page12").setScale(2F).addTitle("book.rbmk.title12", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk12.png"), 90, 80, 60));
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk12.png"), 90, 95, 48));
 		pages.add(new GuidePage("book.rbmk.page13").setScale(2F).addTitle("book.rbmk.title13", 0x800000, 1F));
 		pages.add(new GuidePage("book.rbmk.page14").setScale(2F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk13.png"), 70, 103, 78));
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk13.png"), 70, 103, 72));
 		pages.add(new GuidePage("book.rbmk.page15").setScale(2F).addTitle("book.rbmk.title15", 0x800000, 1F)
-				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk15.png"), 100, 48, 48));
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/starter_designs.png"), 95, 95, 48));
+
+		
+		pages.add(new GuidePage("book.rbmk.page_mistakes").setScale(2F).addTitle("book.rbmk.title_mistakes", 0x800000, 1F)
+				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/fluxinteractions.png"), 105, 95, 43));
+
 		pages.add(new GuidePage("book.rbmk.page16").setScale(2F).addTitle("book.rbmk.title16", 0x800000, 1F)
 				.addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/rbmk16.png"), 50, 70, 100));
+		pages.add(new GuidePage("book.rbmk.page_post_meltdown").setScale(2F).addTitle("book.rbmk.title_post_meltdown", 0x800000, 1F));
+		pages.add(new GuidePage("").setScale(2F).addImage(new ResourceLocation(RefStrings.MODID + ":textures/gui/book/meltdown.png"), 45, 75, 80));
 		return pages;
 	}
 

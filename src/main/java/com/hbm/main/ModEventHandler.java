@@ -161,7 +161,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -347,9 +346,9 @@ public class ModEventHandler {
 
 					else if(randomArmorNumber <= 2<<11){
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.hazmat_helmet, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.hazmat_plate, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.hazmat_legs, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.hazmat_boots, 1, world.rand.nextInt(ModItems.hazmat_helmet.getMaxDamage(ItemStack.EMPTY))));
 					}
 
 					else if(randomArmorNumber <= 2<<12){
@@ -416,40 +415,6 @@ public class ModEventHandler {
 					}
 				}
 			}
-		}
-	}
-
-	@SubscribeEvent
-	public void itemCrafted(ItemCraftedEvent e) {
-		EntityPlayer player = e.player;
-		Item item = e.crafting.getItem();
-
-		/*if (item == ModItems.gun_mp40) {
-			e.player.addStat(MainRegistry.achFreytag, 1);
-		}
-		if (item == ModItems.piston_selenium || item == ModItems.gun_b92) {
-			e.player.addStat(MainRegistry.achSelenium, 1);
-		}
-		if (item == ModItems.battery_potatos) {
-			e.player.addStat(MainRegistry.achPotato, 1);
-		}
-		if (item == ModItems.gun_revolver_pip) {
-			e.player.addStat(MainRegistry.achC44, 1);
-		}*/
-		if(item == Item.getItemFromBlock(ModBlocks.machine_difurnace_off)) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bobMetalworks);
-		}
-		if(item == Item.getItemFromBlock(ModBlocks.machine_assembler) && AdvancementManager.hasAdvancement(player, AdvancementManager.bobMetalworks)) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bobAssembly);
-		}
-		if(item == Item.getItemFromBlock(ModBlocks.brick_concrete) && AdvancementManager.hasAdvancement(player, AdvancementManager.bobAssembly)) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bobChemistry);
-		}
-		if(item == Item.getItemFromBlock(ModBlocks.machine_boiler_electric_off) && AdvancementManager.hasAdvancement(player, AdvancementManager.bobChemistry)) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bobOil);
-		}
-		if(item == ModItems.ingot_uranium_fuel && AdvancementManager.hasAdvancement(player, AdvancementManager.bobOil)) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bobNuclear);
 		}
 	}
 

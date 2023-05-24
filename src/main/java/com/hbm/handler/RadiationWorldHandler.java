@@ -91,10 +91,14 @@ public class RadiationWorldHandler {
 									} else if(bblock == ModBlocks.waste_leaves) {
 										if(world.rand.nextInt(8) == 0) {
 											world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
+											IBlockState state = world.getBlockState(pos);
+											world.notifyBlockUpdate(pos, state, state, 1);
 										}
 
 									} else if(bblock instanceof BlockLeaves) {
 										world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
+										IBlockState state = world.getBlockState(pos);
+										world.notifyBlockUpdate(pos, state, state, 1);
 									}
 								}
 							}
@@ -172,10 +176,14 @@ public class RadiationWorldHandler {
 						} else if(bblock == ModBlocks.waste_leaves) {
 							if(world.rand.nextInt(8) == 0) {
 								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
+								IBlockState state = world.getBlockState(pos);
+								world.notifyBlockUpdate(pos, state, state, 1);
 							}
 
 						} else if(bblock instanceof BlockLeaves) {
 							world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
+							IBlockState state = world.getBlockState(pos);
+							world.notifyBlockUpdate(pos, state, state, 1);
 						}
 					}
 				}

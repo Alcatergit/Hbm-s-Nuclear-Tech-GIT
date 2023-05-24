@@ -27,6 +27,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	public String fullName = "";			//full name of the fuel rod
 	public double reactivity;				//endpoint of the function
 	public double selfRate;					//self-inflicted flux from self-igniting fuels
+	public double archLength = 1000;		//used for arches of the function
 	public EnumBurnFunc function = EnumBurnFunc.LOG_TEN;
 	public EnumDepleteFunc depFunc = EnumDepleteFunc.GENTLE_SLOPE;
 	public double xGen = 0.5D;				//multiplier for xenon production
@@ -98,6 +99,13 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	public ItemRBMKRod setStats(double funcEnd, double selfRate) {
 		this.reactivity = funcEnd;
 		this.selfRate = selfRate;
+		return this;
+	}
+
+	public ItemRBMKRod setStats(double funcEnd, double selfRate, double archLength) {
+		this.reactivity = funcEnd;
+		this.selfRate = selfRate;
+		this.archLength = archLength;
 		return this;
 	}
 
@@ -252,11 +260,11 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		PLATEU(TextFormatting.GREEN + "SAFE / EULER"),					//(1 - e^(-x/25)) * reactivity * 100
 		SIGMOID(TextFormatting.GREEN + "SAFE / SIGMOID"),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
 		LOG_TEN(TextFormatting.YELLOW + "MEDIUM / LOGARITHMIC"),		//log10(x + 1) * reactivity * 50
-		ARCH(TextFormatting.YELLOW + "MEDIUM / NEGATIVE-QUADRATIC"),	//x-(x²/1000) * reactivity
 		SQUARE_ROOT(TextFormatting.YELLOW + "MEDIUM / SQUARE ROOT"),	//sqrt(x) * 10 * reactivity
+		ARCH(TextFormatting.GOLD + "RISKY / NEGATIVE-QUADRATIC"),		//x-(x²/archLength) * reactivity
 		LINEAR(TextFormatting.RED + "DANGEROUS / LINEAR"),				//x * reactivity
-		QUADRATIC(TextFormatting.RED + "DANGEROUS / QUADRATIC"),		//x^2 / 100 * reactivity
-		EXPERIMENTAL(TextFormatting.RED + "EXPERIMENTAL / SINE SLOPE");		//x * (sin(x) + 1)
+		QUADRATIC(TextFormatting.DARK_RED + "DANGEROUS / QUADRATIC"),		//x^2 / 100 * reactivity
+		EXPERIMENTAL(TextFormatting.WHITE + "EXPERIMENTAL / SINE SLOPE");	//x * (sin(x) + 1)
 		
 		public String title = "";
 		
@@ -275,13 +283,13 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		
 		switch(this.function) {
 		case PASSIVE: return selfRate * enrichment;
-		case LOG_TEN: return Math.log10(flux + 1) * 0.5D * reactivity;
+		case LOG_TEN: return Math.log10(flux + 1) * reactivity;
 		case PLATEU: return (1 - Math.pow(Math.E, -flux / 25D)) * reactivity;
-		case ARCH: return Math.max(flux - (flux * flux / 100000D) / 100D * reactivity, 0D);
-		case SIGMOID: return reactivity / (1 + Math.pow(Math.E, -(flux - 50D) / 10D));
-		case SQUARE_ROOT: return Math.sqrt(flux) * reactivity / 10D;
-		case LINEAR: return flux / 100D * reactivity;
-		case QUADRATIC: return flux * flux / 10000D * reactivity;
+		case ARCH: return Math.max((flux - (flux * flux / archLength)) * reactivity, 0D);
+		case SIGMOID: return reactivity / (1 + Math.pow(Math.E, -0.1D * flux + 5));
+		case SQUARE_ROOT: return Math.sqrt(flux) * reactivity; //reactivity in decipercent
+		case LINEAR: return flux * reactivity; //reactivity in percent
+		case QUADRATIC: return flux * flux * reactivity; //reactivity in percent
 		case EXPERIMENTAL: return flux * (Math.sin(flux) + 1) * reactivity;
 		}
 		
@@ -295,19 +303,19 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		switch(this.function) {
 		case PASSIVE: function = TextFormatting.RED + "" + selfRate;
 			break;
-		case LOG_TEN: function = "log10(%1$s + 1) * 0.5 * %2$s";
+		case LOG_TEN: function = "log10(%1$s + 1) * %2$s";
 			break;
-		case PLATEU: function = "(1 - e^-%1$s / 25)) * %2$s";
+		case PLATEU: function = "(1 - e^(-%1$s / 25)) * %2$s";
 			break;
-		case ARCH: function = "(%1$s - %1$s² / 10000) / 100 * %2$s [0;∞]";
+		case ARCH: function = "(%1$s - %1$s² / "+archLength+") * %2$s";
 			break;
-		case SIGMOID: function = "%2$s / (1 + e^(-(%1$s - 50) / 10)";
+		case SIGMOID: function = "%2$s / (1 + e^(-0.1 * %1$s + 5)";
 			break;
-		case SQUARE_ROOT: function = "sqrt(%1$s) * %2$s / 10";
+		case SQUARE_ROOT: function = "sqrt(%1$s) * %2$s";
 			break;
-		case LINEAR: function = "%1$s / 100 * %2$s";
+		case LINEAR: function = "%1$s * %2$s";
 			break;
-		case QUADRATIC: function = "%1$s² / 10000 * %2$s";
+		case QUADRATIC: function = "%1$s² * %2$s";
 			break;
 		case EXPERIMENTAL: function = "%1$s * (sin(%1$s) + 1) * %2$s";
 			break;

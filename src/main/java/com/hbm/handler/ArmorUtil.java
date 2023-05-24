@@ -407,6 +407,27 @@ public class ArmorUtil {
 		return false;
 	}
 
+	/**
+	 * Grabs the installed filter or the filter of the attachment, used for attachment rendering
+	 * @param mask
+	 * @param entity
+	 * @return
+	 */
+	public static ItemStack getGasMaskFilterRecursively(ItemStack mask) {
+		
+		ItemStack filter = getGasMaskFilter(mask);
+		
+		if((filter == null || filter.isEmpty()) && ArmorModHandler.hasMods(mask)) {
+			
+			ItemStack mods[] = ArmorModHandler.pryMods(mask);
+			
+			if(mods[ArmorModHandler.helmet_only] != null && mods[ArmorModHandler.helmet_only].getItem() instanceof IGasMask)
+				filter = ((IGasMask)mods[ArmorModHandler.helmet_only].getItem()).getFilter(mods[ArmorModHandler.helmet_only]);
+		}
+		
+		return filter;
+	}
+
 	public static void addGasMaskTooltip(ItemStack mask, World world, List<String> list, ITooltipFlag flagIn){
 		
 		if(mask == null || !(mask.getItem() instanceof IGasMask))

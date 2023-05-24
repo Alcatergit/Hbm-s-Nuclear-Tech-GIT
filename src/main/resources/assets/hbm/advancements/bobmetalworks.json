@@ -12,9 +12,16 @@
 	},
 	"parent": "hbm:progress_anvil",
 	"criteria": {
-		"impossible": {
-			"trigger": "minecraft:impossible"
-		}
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_difurnace_off"
+                    }
+                ]
+            }
+        }
 	},
     "rewards": {
         "experience": 25

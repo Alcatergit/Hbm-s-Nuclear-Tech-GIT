@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
 import com.hbm.lib.Library;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +15,8 @@ public class RenderCable extends TileEntitySpecialRenderer<TileEntityCableBaseNT
 	
 	@Override
 	public void render(TileEntityCableBaseNT te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		if(te.getBlockType() == ModBlocks.red_wire_coated)
+			return;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5F, y + 0.5F, z + 0.5F);
 		GlStateManager.enableLighting();

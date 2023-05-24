@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.main.ResourceManager;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
@@ -17,6 +18,8 @@ public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileE
 	
 	@Override
 	public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		if(te.getBlockType() == ModBlocks.fluid_duct_solid)
+			return;
 		GL11.glPushMatrix();
 		GlStateManager.enableLighting();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);

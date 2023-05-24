@@ -2,14 +2,13 @@ package com.hbm.tileentity.machine;
 
 import java.util.List;
 
-import com.hbm.config.VersatileConfig;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemWasteLong;
-import com.hbm.items.special.ItemWasteShort;
+
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -77,43 +76,20 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 					if(item instanceof IItemHazard && world.getTotalWorldTime() % 20 == 0) {
 						rad += ((IItemHazard)item).getModule().radiation;
 					}
-					
-					int meta = inventory.getStackInSlot(i).getItemDamage();
-					
-					if(item == ModItems.nuclear_waste_long && world.rand.nextInt(VersatileConfig.getLongDecayChance()) == 0) {
-						ItemWasteLong.WasteClass wasteClass = ItemWasteLong.WasteClass.values()[ItemWasteLong.rectify(meta)];
-						liquid += wasteClass.liquid;
-						gas += wasteClass.gas;
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_long_depleted, 1, meta));
-					
-					} else if(item == ModItems.nuclear_waste_long_tiny && world.rand.nextInt(VersatileConfig.getLongDecayChance() / 10) == 0) {
-						ItemWasteLong.WasteClass wasteClass = ItemWasteLong.WasteClass.values()[ItemWasteLong.rectify(meta)];
-						liquid += wasteClass.liquid / 10;
-						gas += wasteClass.gas / 10;
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_long_depleted_tiny, 1, meta));
-					
-					} else if(item == ModItems.nuclear_waste_short && world.rand.nextInt(VersatileConfig.getShortDecayChance()) == 0) {
-						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
-						liquid += wasteClass.liquid;
-						gas += wasteClass.gas;
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_short_depleted, 1, meta));
-					
-					} else if(item == ModItems.nuclear_waste_short_tiny && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 10) == 0) {
-						ItemWasteShort.WasteClass wasteClass = ItemWasteShort.WasteClass.values()[ItemWasteLong.rectify(meta)];
-						liquid += wasteClass.liquid / 10;
-						gas += wasteClass.gas / 10;
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nuclear_waste_short_depleted_tiny, 1, meta));
-					
-					} else if(item == ModItems.nugget_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 100) == 0) {
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 1, meta));
-					
-					} else if(item == ModItems.ingot_au198 && world.rand.nextInt(VersatileConfig.getShortDecayChance() / 1000) == 0) {
-						inventory.setStackInSlot(i, new ItemStack(ModItems.nugget_mercury, 9, meta));
-					
+
+					int[] wasteData = StorageDrumRecipes.getWaste(inventory.getStackInSlot(i));
+					if(wasteData != null){
+						if(world.rand.nextInt(wasteData[0]) == 0){
+							ItemStack outputStack = StorageDrumRecipes.getOutput(inventory.getStackInSlot(i));
+							if(outputStack != null){
+								liquid += wasteData[1];
+								gas += wasteData[2];
+								inventory.setStackInSlot(i, outputStack);
+							}
+						}
 					} else {
 						ContaminationUtil.neutronActivateItem(inventory.getStackInSlot(i), 0.0F, decayRate);
 					}
-
 				}
 			}
 
@@ -144,59 +120,14 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			
 			if(rad > 0) {
-				radiate(world, pos.getZ(), pos.getY(), pos.getX(), rad);
+				ContaminationUtil.radiate(world, pos.getZ(), pos.getY(), pos.getX(), 32, rad);
 			}
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void radiate(World world, int x, int y, int z, float rads) {
-		
-		double range = 32D;
-		
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(x + 0.5, y + 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).grow(range, range, range));
-		
-		for(EntityLivingBase e : entities) {
-			
-			Vec3 vec = Vec3.createVectorHelper(e.posX - (x + 0.5), (e.posY + e.getEyeHeight()) - (y + 0.5), e.posZ - (z + 0.5));
-			double len = vec.lengthVector();
-			vec = vec.normalize();
-			
-			float res = 0;
-			
-			for(int i = 1; i < len; i++) {
-
-				int ix = (int)Math.floor(x + 0.5 + vec.xCoord * i);
-				int iy = (int)Math.floor(y + 0.5 + vec.yCoord * i);
-				int iz = (int)Math.floor(z + 0.5 + vec.zCoord * i);
-				
-				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
-			}
-			
-			if(res < 1)
-				res = 1;
-			
-			float eRads = rads;
-			eRads /= (float)res;
-			eRads /= (float)(len * len);
-			
-			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 		}
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-		
-		Item item = itemStack.getItem();
-		
-		if(item == ModItems.nuclear_waste_long || 
-				item == ModItems.nuclear_waste_long_tiny || 
-				item == ModItems.nuclear_waste_short || 
-				item == ModItems.nuclear_waste_short_tiny || 
-				item == ModItems.nugget_au198)
-			return true;
-		
-		return false;
+		return StorageDrumRecipes.getOutput(itemStack) != null || ContaminationUtil.isContaminated(itemStack);
 	}
 
 	@Override
@@ -206,24 +137,13 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-
-		Item item = itemStack.getItem();
-		
-		if(item == ModItems.nuclear_waste_long_depleted || 
-				item == ModItems.nuclear_waste_long_depleted_tiny || 
-				item == ModItems.nuclear_waste_short_depleted || 
-				item == ModItems.nuclear_waste_short_depleted_tiny || 
-				item == ModItems.nugget_mercury)
-			return true;
-		
-		return false;
+		return !ContaminationUtil.isContaminated(itemStack) && StorageDrumRecipes.getOutput(itemStack) == null;
 	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing side) {
 		return slots_arr;
 	}
-
 
 	public void fillFluidInit(FluidTank type) {
 		fillFluid(this.pos.getX() - 1, this.pos.getY(), this.pos.getZ(), type);

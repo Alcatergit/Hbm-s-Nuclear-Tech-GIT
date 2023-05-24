@@ -64,7 +64,7 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 	@Override
 	public void addDesc(List<String> list, ItemStack stack, ItemStack armor){
 		list.add("§a  " + stack.getDisplayName() + " (gas protection)");
-		ArmorUtil.addGasMaskTooltip(stack, null, list, null);
+		ArmorUtil.addGasMaskTooltip(stack, null, list, ITooltipFlag.TooltipFlags.NORMAL);
 	}
 	
 	@Override

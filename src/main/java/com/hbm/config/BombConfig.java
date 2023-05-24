@@ -23,7 +23,7 @@ public class BombConfig {
 	public static int mk4 = 1024;
 	public static int blastSpeed = 1024;
 	public static int falloutRange = 100;
-	public static int fChunkSpeed = 20;
+	public static int fChunkSpeed = 10;
 	public static boolean evaporateWater = true;
 	public static boolean fillCraterWithWater = true;
 	public static int oceanHeight = 0;
@@ -92,7 +92,7 @@ public class BombConfig {
 		falloutRangeProp.setComment("Radius of fallout area (base radius * value in percent)");
 		falloutRange = falloutRangeProp.getInt();
 		// new explosion speed
-		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 6);
+		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 10);
 		falloutChunkSpeed.setComment("Process a Chunk every nth tick by the fallout rain");
 		fChunkSpeed = falloutChunkSpeed.getInt();
 		//Whether fallout and nuclear radiation is enabled at all

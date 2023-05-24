@@ -30,6 +30,7 @@ import com.hbm.inventory.gui.GUISILEX;
 import com.hbm.inventory.gui.GUITestDiFurnace;
 import com.hbm.inventory.gui.GUIRBMKOutgasser;
 import com.hbm.inventory.gui.GUIFWatzCore;
+import com.hbm.inventory.gui.GUIMachineSchrabidiumTransmutator;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
@@ -79,11 +80,13 @@ public class JEIConfig implements IModPlugin {
 	public static final String SILEX_GAMMA = "hbm.silexgamma";
 	public static final String SILEX_DIGAMMA = "hbm.silexdigamma";
 	public static final String WASTEDRUM = "hbm.waste_drum";
+	public static final String STORAGEDRUM = "hbm.storage_drum";
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
 	public static final String SAFE_REACTOR = "hbm.safe_reactor";
 	public static final String DFC = "hbm.dfc";
+	public static final String TRANSMUTATION = "hbm.transmutation";
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -94,6 +97,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_assembler), ASSEMBLY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_chemplant), CHEMPLANT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_cyclotron), CYCLOTRON);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_schrabidium_transmutator), TRANSMUTATION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_press), PRESS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_difurnace_off), ALLOY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_off), BOILER);
@@ -102,6 +106,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_gascent), GAS_CENT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_reactor), REACTOR);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_waste_drum), WASTEDRUM);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_storage_drum), STORAGEDRUM);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_refinery), REFINERY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_catalytic_cracker), CRACKING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fraction_tower), FRACTIONING);
@@ -131,6 +136,7 @@ public class JEIConfig implements IModPlugin {
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
 		registry.addRecipes(JeiRecipes.getCyclotronRecipes(), CYCLOTRON);
+		registry.addRecipes(JeiRecipes.getTransmutationRecipes(), TRANSMUTATION);
 		registry.addRecipes(JeiRecipes.getPressRecipes(), PRESS);
 		registry.addRecipes(JeiRecipes.getAlloyRecipes(), ALLOY);
 		registry.addRecipes(JeiRecipes.getBoilerRecipes(), BOILER);
@@ -139,6 +145,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getGasCentrifugeRecipes(), GAS_CENT);
 		registry.addRecipes(JeiRecipes.getReactorRecipes(), REACTOR);
 		registry.addRecipes(JeiRecipes.getWasteDrumRecipes(), WASTEDRUM);
+		registry.addRecipes(JeiRecipes.getStorageDrumRecipes(), STORAGEDRUM);
 		registry.addRecipes(JeiRecipes.getRefineryRecipe(), REFINERY);
 		registry.addRecipes(JeiRecipes.getCrackingRecipe(), CRACKING);
 		registry.addRecipes(JeiRecipes.getFractioningRecipe(), FRACTIONING);
@@ -186,6 +193,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIAnvil.class, 12, 50, 48-12, 66-50, ANVIL);
 		registry.addRecipeClickArea(GUIFWatzCore.class, 52, 64, 72, 19, SAFE_REACTOR);
 		registry.addRecipeClickArea(GUIRBMKOutgasser.class, 64, 53, 48, 16, RBMKOUTGASSER);
+		registry.addRecipeClickArea(GUIMachineSchrabidiumTransmutator.class, 64, 56, 66, 31, TRANSMUTATION);
 
 		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 
@@ -274,9 +282,11 @@ public class JEIConfig implements IModPlugin {
 				new CentrifugeRecipeHandler(help),
 				new GasCentrifugeRecipeHandler(help),
 				new CyclotronRecipeHandler(help),
+				new TransmutationRecipeHandler(help),
 				new CMBFurnaceRecipeHandler(help),
 				new ReactorRecipeHandler(help),
 				new WasteDrumRecipeHandler(help),
+				new StorageDrumRecipeHandler(help),
 				new FluidRecipeHandler(help),
 				new SILEXRecipeHandler(help),
 				new SILEXRadioRecipeHandler(help),

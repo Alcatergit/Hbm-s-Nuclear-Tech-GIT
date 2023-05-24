@@ -3,7 +3,6 @@ package com.hbm.blocks.machine;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.util.I18nUtil;
 import com.hbm.lib.Library;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.BlockDummyable;
@@ -158,8 +157,8 @@ public class MachineChungus extends BlockDummyable implements ILookOverlay {
 			text.add("§a-> §r" + chungus.types[0].getLocalizedName(new FluidStack(chungus.types[0], 1)) + ": " + chungus.tanks[0].getFluidAmount() + "/" + chungus.tanks[0].getCapacity() + "mB");
 		if(chungus.types[1] != null)
 			text.add("§c<- §r" + chungus.types[1].getLocalizedName(new FluidStack(chungus.types[1], 1)) + ": " + chungus.tanks[1].getFluidAmount() + "/" + chungus.tanks[1].getCapacity() + "mB");
-		text.add("§6<> §rStored Energy: " + Library.getShortNumber(chungus.power)+ "/" + Library.getShortNumber(chungus.maxPower) + "HE");
+		text.add("§6<> §rStored Energy: " + Library.getShortNumber(chungus.power) + "/" + Library.getShortNumber(chungus.maxPower) + "HE");
 
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
 	}
 }

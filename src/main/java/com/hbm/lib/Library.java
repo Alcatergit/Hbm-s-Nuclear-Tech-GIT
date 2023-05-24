@@ -113,7 +113,7 @@ public class Library {
 
 	public static final int[] powersOfTen = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
 
-	public static DecimalFormat numberformat = new DecimalFormat("#.00");
+	public static DecimalFormat numberformat = new DecimalFormat("0.00");
 		
 	//the old list that allowed superuser mode for the ZOMG
 	//currently unused
@@ -141,6 +141,16 @@ public class Library {
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
 		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c), false, true, true);
 		return pos != null && pos.typeOfHit != Type.MISS;
+	}
+
+	public static int getColorProgress(double fraction){
+		int r = (int)(255*Math.min(1, fraction*-2+2));
+		int g = (int)(255*Math.min(1, fraction*2));
+		return 65536 * r + 256 * g;
+	}
+
+	public static String getPercentage(double fraction){
+		return numberformat.format(roundFloat(fraction*100D, 2));
 	}
 
 	public static String getShortNumber(long l) {

@@ -12,9 +12,16 @@
 	},
 	"parent": "hbm:boboil",
 	"criteria": {
-		"impossible": {
-			"trigger": "minecraft:impossible"
-		}
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_uranium_fuel"
+                    }
+                ]
+            }
+        }
 	},
     "rewards": {
         "experience": 200

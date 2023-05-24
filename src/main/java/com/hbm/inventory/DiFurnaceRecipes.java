@@ -179,6 +179,18 @@ public class DiFurnaceRecipes {
 			}
 			haveTriedAllID2 = true;
 		}
+
+		for(int id2 = 0; id2 < ids2.length; id2++) {
+			OreDictStack oreStack2 = new OreDictStack(OreDictionary.getOreName(ids2[id2]));
+			if(!haveTriedAllID2){
+				outputItem = diRecipes.get(new Pair(new ComparableStack(item1), oreStack2));
+				if(outputItem != null)
+					return outputItem;
+				outputItem = diRecipes.get(new Pair(new NbtComparableStack(item1), oreStack2));
+				if(outputItem != null)
+					return outputItem;
+			}
+		}
 		return null;
 	}
 

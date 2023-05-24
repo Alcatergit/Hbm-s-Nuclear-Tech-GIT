@@ -418,7 +418,7 @@ trait.rbmk.depletion=Depletion: %s
 trait.rbmk.diffusion=Diffusion: %s
 trait.rbmk.fluxFunc=Flux function: %s
 trait.rbmk.funcType=Function type: %s
-trait.rbmk.heat=Heat per tick at full power: %s
+trait.rbmk.heat=Heat per output flux: %s
 trait.rbmk.melt=Melting point: %s
 trait.rbmk.neutron.any=All Neutrons
 trait.rbmk.neutron.fast=Fast Neutrons
@@ -436,7 +436,7 @@ trait.rbmx.depletion=Crustyness: %s
 trait.rbmx.diffusion=Flow: %s
 trait.rbmx.fluxFunc=Doom function: %s
 trait.rbmx.funcType=Function specification: %s
-trait.rbmx.heat=Crust per tick at full power: %s
+trait.rbmx.heat=Crust per emitted entropy: %s
 trait.rbmx.melt=Crush depth: %s
 trait.rbmk.neutron.any.x=All non-euclidean shapes
 trait.rbmk.neutron.fast.x=Elliptic non-euclidean shapes
@@ -685,15 +685,15 @@ hbm.achievement.fiend2=Delinquent 2: Delinquent Harder
 hbm.achievement.fiend2.desc=Be meaner.
 
 hbm.achievement.bobmetalworks=Metalworks
-hbm.achievement.bobmetalworks.desc=Vault-tec Support Level 1 (Blast Furnace via Anvil)
+hbm.achievement.bobmetalworks.desc=Vault-tec Support Level 1 (Blast Furnace)
 hbm.achievement.bobassembly=Fabrication
-hbm.achievement.bobassembly.desc=Vault-tec Support Level 2 (Assembly Machine via Anvil)
+hbm.achievement.bobassembly.desc=Vault-tec Support Level 2 (Assembly Machine)
 hbm.achievement.bobchemistry=Chemistry
-hbm.achievement.bobchemistry.desc=Vault-tec Support Level 3 (Craft Concrete Bricks)
+hbm.achievement.bobchemistry.desc=Vault-tec Support Level 3 (Concrete Bricks)
 hbm.achievement.boboil=Petroleum
-hbm.achievement.boboil.desc=Vault-tec Support Level 4 (Craft Electric Boiler)
+hbm.achievement.boboil.desc=Vault-tec Support Level 4 (Electric Boiler)
 hbm.achievement.bobnuclear=Atomic Science
-hbm.achievement.bobnuclear.desc=Vault-tec Support Level 5 (Craft Uranium Fuel)
+hbm.achievement.bobnuclear.desc=Vault-tec Support Level 5 (Uranium Fuel)
 hbm.achievement.bobhidden=Hidden Catalog
 hbm.achievement.bobhidden.desc=Kill a tainted creeper with a falling boxcar.
 
@@ -813,7 +813,7 @@ rbmk.console.rod_extraction=Monitor average control rod extraction
 rbmk.console.fuel_depletion=Monitor average fuel depletion
 rbmk.console.fuel_poison=Monitor average xenon poisoning
 rbmk.console.fuel_temp=Monitor average fuel temperature
-rbmk.console.flux=Monitor average incoming flux
+rbmk.console.flux=Monitor average emitted flux
 rbmk.control.level=Extension: %s
 rbmk.control.red=§cRed Group
 rbmk.control.yellow=§eYellow Group
@@ -822,7 +822,7 @@ rbmk.control.blue=§1Blue Group
 rbmk.control.purple=§5Purple Group
 rbmk.moderated=Moderated
 rbmk.rod.name=Rod Type:
-rbmk.rod.flux=Total incoming flux: %s
+rbmk.rod.flux=Total emitted flux: %s
 rbmk.rod.depletion=Depletion: %s
 rbmk.rod.xenon=Xenon poison: %s
 rbmk.rod.coreTemp=Core temperature: %s
@@ -974,72 +974,76 @@ tile.volcanic_lava_block.name=Volcanic Lava
 tile.corium_block.name=Liquid Corium
 tile.schrabidic_block.name=Schrabidic Acid
 
-book.rbmk.cover=My first RBMK:$Basics of$building a$reactor
+book.rbmk.cover=HOW 2 RBMK:$The Basics$of Reactor$Construction
 book.rbmk.title1=Introduction
-book.rbmk.page1=§lRBMK§r is fully modular nuclear reactor. Unlike most other reactors, there is no "core" and no size restrictions, rather behavior and efficiency of reactor depends on how it is built and how various parts interact with each other.
-book.rbmk.title2=Heat
-book.rbmk.page2=As reactor runs, it will generate §lheat§r. Heat will spread between parts, slowly decreasing in the process. The goal is to generate as much heat as possible without melting the reactor, and to transfer heat into steam passages that cool reactor and produce steam.
-book.rbmk.title3=Fuel Rod
-book.rbmk.page3=The §lfuel rod§r will capture neutron flux, causing fuel inside the rod to react, releasing neutrons in the process. Neutrons are released in all four main directions with a maximum range of 5 blocks. The amount of released neutrons depends on fuel used.
-book.rbmk.title4=Regulating Rod
-book.rbmk.page4=The §lcontrol rod§r will reduce number of neutrons passing through. Fully inserted, it will block all neutrons; when inserted halfway, it will only block half. Control rods are used to regulate activity of the reactor and shut it down.
-book.rbmk.title5=Regulating Rods - Usage
-book.rbmk.title5.scale=0.9
-book.rbmk.page5=The current bar insertion will be displayed in the center of GUI. The colored buttons on left will add the control bar to the color group, which is useful for quickly selecting grouped bars on §lRBMK§r console. The buttons on right allow you to manually insert in 25%% increments.
-book.rbmk.title6=Automatic Control Rods
-book.rbmk.page6=§LAutomatic control rods§r are almost identical to regular control rods, but they cannot be manually adjusted, instead they will adjust position of the rod based on current temperature. Which function to use and how deep to insert and at what temperature must be determined first.
-book.rbmk.title7=Steam Channel
-book.rbmk.page7=The §lsteam channel§r is only part that will actively reduce reactor heat level. If a component is above the boiling point of a given type of steam, it will try to consume as much water and produce as much steam as needed to cool below boiling point.
-book.rbmk.title8=Neutron Reflector
-book.rbmk.page8=The §lneutron reflector§r will block passage of neutrons, instead neutrons will be reflected back onto the fuel rod they came from. This is useful for using neutrons that would otherwise be wasted simply by leaving reactor.
-book.rbmk.title9=Neutron Absorber
-book.rbmk.page9=§lNeutron absorber§r simply blocks neutrons. The absorbed neutrons will not generate heat and will be effectively destroyed. This is useful for preventing fuel rods from reacting that would otherwise be within reach.
-book.rbmk.title10=Graphite Retarder
-book.rbmk.page10=§lGraphite moderator§r converts fast neutrons passing through it into slow neutrons. Most fuels are split into fast neutrons, while slow neutrons are required for fission, so use of moderators is highly recommended.
-book.rbmk.title11=Structural Column
-book.rbmk.page11=§lStructural column§r does not affect neutrons in any way and has no special application. It is recommended to fill the reactor with structured pillars where there are no other parts, since the structured pillars are capable of transferring heat.
-book.rbmk.title12=Console
-book.rbmk.page12=§lRBMK console§r allows you to control the reactor from afar. Using the §ldevice to connect the console RBMK§r on the RBMK part and then on the console will connect the reactor and the console. The console can only control 15x15 parts, for large reactors you can use multiple consoles.
-book.rbmk.title13=Using the console
-book.rbmk.page13=Clicking on parts will select and deselect them. With the colored buttons, you can quickly select all the control rods in that color group. Button "A" will select all control rods, "X" will deselect all.
-book.rbmk.page14=Entering a number between 0 and 100 in green box and then pressing button next to it will set all selected control rods to that position. Button "AZ-5" will lead to full insertion of all control rods.
-book.rbmk.title15=Fuel
-book.rbmk.page15=The §lfuel§r response depends on many factors. The main ones are §lfortification§r, §lxenon poisoning§r and number of incoming §lneutrons§r. Xenon builds up when fuel is low in neutrons and burns out during normal operation. The efficiency of neutrons depends on the type, most fuels §lare best split by§r §lslow neutrons§r.
-book.rbmk.title16=Melting
-book.rbmk.page16=§4§lAVOID.
+book.rbmk.page1=The §lRBMK§r is a fully modular nuclear reactor. Unlike most other reactors, there is no "core", and no size limitations, rather, the behavior and efficiency of the reactor comes from how it is built and how the different pieces interact with each other.
 
-#book.rbmk.cover=HOW 2 RBMK:$The Basics$of Reactor$Construction
-#book.rbmk.title1=Introduction
-#book.rbmk.page1=The §lRBMK§r is a fully modular nuclear reactor. Unlike most other reactors, there is no "core", and no size limitations, rather, the behavior and efficiency of the reactor comes from how it is built and how the different pieces interact with each other.
-#book.rbmk.title2=Heat
-#book.rbmk.page2=As the reactor operates, it will generate §lheat§r. Heat will spread between parts, slowly decreasing in the process. The goal is to produce as much heat as possible without melting the reactor, and to move that heat to a §lsteam channel§r which cools the reactor and produces steam.
-#book.rbmk.title3=Fuel Rod
-#book.rbmk.page3=The §lfuel rod§r will capture neutron flux, causing the fuel inside the fuel rod to react, giving off neutrons in the process. Neutrons are released in all four cardinal directions with a maximum range of 5 blocks. The amount of neutrons released depends on the §lfuel§r used.
-#book.rbmk.title4=Control Rod
-#book.rbmk.page4=The §lcontrol rod§r will decrease the amount of neutrons passing though it. Fully inserted, it will block all neutrons, at half insertion, it will only block half. Control rods are used to regulate the reactor's activity and to turn it off.
-#book.rbmk.title5=Control Rod - Usage
-#book.rbmk.page5=The center of the GUI will display the current rod insertion. The colored buttons on the left will add a control rod to a color group, which is useful to quickly select grouped rods from the §lRBMK console§r. The buttons on the right allow for manual insertion in increments of 25%%.
-#book.rbmk.title6=Automatic Control Rod
-#book.rbmk.page6=§lAutomatic control rods§r function nearly identical to regular control rods, but they cannot be configured manually, instead they will adjust the rod position based on the current temperature. What function to use and how deep to insert at what temperature has to be defined first.
-#book.rbmk.title7=Steam Channel
-#book.rbmk.page7=The §lsteam channel§r is the only part that will actively reduce the reactor's heat level. If the component's temperature exceeds the boiling point of the set steam type, it will try to consume as much water and produce as much steam as needed to cool back below the boiling point.
-#book.rbmk.title8=Neutron Reflector
-#book.rbmk.page8=The §lneutron reflector§r will block neutrons from passing it, instead the neutrons will be reflected back at the fuel rod they came from. This is useful for utilizing neutrons that would otherwise be wasted by simply exiting the reactor.
-#book.rbmk.title9=Neutron Absorber
-#book.rbmk.page9=The §lneutron absorber§r will simply block neutrons. Neutrons absorbed will not generate heat and be effectively voided. This is useful to prevent fuel rods from reacting that would otherwise be in range.
-#book.rbmk.title10=Graphite Moderator
-#book.rbmk.page10=The §lgraphite moderator§r will convert fast neutrons passing through it into slow neutrons. Most fuels fission into fast neutrons while needing slow neutrons to split, so using moderators is strongly recommended.
-#book.rbmk.title11=Structural Column
-#book.rbmk.page11=The §lstructural column§r will not interfere with neutrons, nor does it have special uses. It is recommended to fill the reactor with structural columns where no other parts will be, because structural columns are capable of transporting heat.
-#book.rbmk.title12=Console
-#book.rbmk.page12=The §lRBMK console§r lets you control the reactor from afar. Using the §lRBMK§r §lconsole linking device§r on an RBMK part and then the console will link the reactor to the console. The console can only manage 15x15 parts, for larger reactors you might want to use multiple consoles.
-#book.rbmk.title13=Console Usage
-#book.rbmk.page13=Clicking on the parts will select and deselect them. Using the colored buttons, you can quickly select all control rods of that color group. Button 'A' will select all control rods, 'X' will deselect all.
-#book.rbmk.page14=Entering a number 0-100 in the green box and then hitting the button next to it will set all selected control rods to this position. Button 'AZ-5' will cause all control rods to fully insert.
-#book.rbmk.title15=Fuel
-#book.rbmk.page15=The §lfuel§r's reactivity is based on multiple factors. The main ones are the §lenrichment§r, §lxenon poison§r and the amount of incoming §lneutrons§r. Xenon builds up when the fuel receives few neutrons and burns away during normal operation. The effectivity of neutrons depends on the type, most fuels §lsplit best with slow neutrons§r.
-#book.rbmk.title16=Meltdown
-#book.rbmk.page16=§4§lAvoid.
+book.rbmk.title_schematic=Overview
+book.rbmk.page_schematic=In the reactor fission creates heat which converts water into steam. That steam flows via pipes to steam turbines which generate electricity and convert the steam to a lower tier steam. Low-pressure steam flows to a condenser which converts it back to water. A tank in input/output mode acts as a backup water reservior.
+
+book.rbmk.title2=Heat
+book.rbmk.page2=As the reactor operates, it will generate §lheat§r. Heat will spread between parts, slowly decreasing in the process. The goal is to produce as much heat as possible without melting the reactor, and to move that heat to a §lsteam channel§r which cools the reactor and produces steam.
+book.rbmk.title3=Fuel Rod
+book.rbmk.page3=When nuclear fuel fissions it releases neutrons. They cause more fission when hitting another fuel rod and are released in all four cardinal directions with a maximum range of 5 blocks. The amount of heat generated depends on the amount of emitted neutrons.
+book.rbmk.title4=Control Rod
+book.rbmk.page4=The §lcontrol rod§r will decrease the amount of neutrons passing though it. Fully inserted, it will block all neutrons, at half insertion, it will only block half. Control rods are used to regulate the reactor's activity and to turn it off. Too much flux cause overheating and meltdown.
+book.rbmk.title5=Control Rod - Usage
+book.rbmk.page5=The center of the GUI will display the current rod insertion. The colored buttons on the left will add a control rod to a color group, which is useful to quickly select grouped rods from the §lRBMK console§r. The buttons on the right allow for manual insertion in increments of 25%%.
+book.rbmk.title6=Automatic Control Rod
+book.rbmk.page6=§lAutomatic control rods§r function nearly identical to regular control rods, but they cannot be configured manually, instead they will adjust the rod position based on the current temperature. What function to use and how deep to insert at what temperature has to be defined first.
+book.rbmk.title7=Steam Channel
+book.rbmk.page7=The §lsteam channel§r is the only part that will actively reduce the reactor's heat level. If the column temperature exceeds the boiling point of the steam type, it will try to consume as much water and produce as much steam as needed to cool back below the boiling point. Normal: 100 °C, Dense: 300°C, Super: 450°C, Ultra: 600°C
+book.rbmk.title8=Neutron Reflector
+book.rbmk.page8=The §lneutron reflector§r will block neutrons from passing it, instead the neutrons will be reflected back at the fuel rod they came from. This is useful for utilizing neutrons that would otherwise be wasted by simply exiting the reactor.
+book.rbmk.title9=Neutron Absorber
+book.rbmk.page9=The §lneutron absorber§r will simply block neutrons. Neutrons absorbed will not generate heat and be effectively voided. This is useful to prevent fuel rods from reacting that would otherwise be in range.
+book.rbmk.title10=Graphite Moderator
+book.rbmk.page10=The §lgraphite moderator§r will convert fast neutrons passing through it into slow neutrons. If the incoming flux speed is not the right one for the fuel then efficiency will be greatly reduced. Slowflux at fuel that needs Fastflux: -50%% effectiveness. Fastflux at fuel that needs Slowflux: -70%% effectiveness.
+book.rbmk.title11=Structural Column
+book.rbmk.page11=The §lstructural column§r will not interfere with neutrons, nor does it have special uses. It is recommended to fill the reactor with structural columns where no other parts will be, because structural columns are capable of transporting heat.
+book.rbmk.title12=Console
+book.rbmk.page12=The §lRBMK console§r lets you control the reactor from afar. Using the §lRBMK§r §lconsole linking device§r on an RBMK part and then the console will link the reactor to the console. The console can only manage 15x15 parts, for larger reactors you might want to use multiple consoles.
+book.rbmk.title13=Console Usage
+book.rbmk.page13=Clicking on the parts will select and deselect them. Using the colored buttons, you can quickly select all control rods of that color group. Button 'A' will select all control rods, 'X' will deselect all. You can change what stats are displayed by clicking on the icon. Select what rbmk columns you want to go into the stats and then hit save. This way you can f.ex. make average temperatures of fuel rods visible or show flux amounts.
+book.rbmk.page14=Entering a number 0-100 in the green box and then hitting the button next to it will set all selected control rods to this position. Button 'AZ-5' will cause all control rods to fully insert.
+book.rbmk.title15=RBMK Designing
+book.rbmk.page15=When designing a new RBMK you need to think about where flux goes. The left design has a lot of power potential but no way to stop flux and shut it down. The one on the right can be shut down and started again without needing Self-igniting rods if the corners have Self-sustaining rods as they can use the reflectors to stay active.
+book.rbmk.title16=Meltdown Criteria
+book.rbmk.page16=RBMKs explode if column temperature > 1500°C or if fuel skin temp > fuel melting point. §4§lAvoid Meltdown§r by doing these: Shut down before changing fuel rods. Think about what happens to incoming flux after removal. Remove them in order from most dangerous to least dangerous.
+
+book.rbmk.title_fluxgraph=Xenon Poison
+book.rbmk.page_fluxgraph=§l50 Flux emitted§r from the left RBMK fuel rod. The control rod lets §l80%% pass through so 40§r Flux. §5§lXenon poison §5§lblocks 75%%§r of incoming flux. 10 Flux actually reaches right RBMK fuel rod. Xenon poison comes with low flux.
+book.rbmk.title_flux=Flux
+book.rbmk.page_flux=The stream of emitted neutrons is called flux. Neutrons are what split atoms in the fuel rod which creates heat. The flux function f(x) determines how much flux is emitted and heat is produced given input flux x. Example: flux function is §lsqrt(input) * 2 = output§r. So with input of 10 flux then the output is sqrt(10) * 2 = 6.325 flux.
+
+book.rbmk.title_flux_explain=Flux Functions
+book.rbmk.page_flux_explain=Flux output * heat/flux = Heat output. For max heat you want much flux and or high heat/flux. X-axis is input flux and Y-axis is output flux. Most fuels have f(0) = 0 so at 0 input they have 0 output. They don't start on their own and need flux input to get going. You get that initial input via §4Self-igniting§r rods which are always on.
+
+book.rbmk.title_func_passive=Passive
+book.rbmk.page_func_passive=Self-Sustaining: §2Yes§r                   Reflector use: §8Irrelevant§r                Example: f(x) = 50
+book.rbmk.title_func_euler=Euler
+book.rbmk.page_func_euler=Self-Sustaining: §8No§r                   Reflector use: §2Beneficial§r                Example: f(x) = (1 - e^(-x/25)) * 20
+book.rbmk.title_func_sigmoid=Sigmoid
+book.rbmk.page_func_sigmoid=Self-Sustaining: §8No§r                   Reflector use: §2Beneficial§r               Example: f(x) = 30 / (1 + e^(-0.1x + 5))
+book.rbmk.title_func_logarithmic=Logarithmic
+book.rbmk.page_func_logarithmic=Self-Sustaining: §2Yes§r                   Reflector use: §2Beneficial§r             Example: f(x) = log10(x) * 10
+book.rbmk.title_func_square_root=Square Root
+book.rbmk.page_func_square_root=Self-Sustaining: §2Yes§r                   Reflector use: §2Beneficial§r                Example: f(x) = √x * 2
+book.rbmk.title_func_neg_quad=Negative Quadratic
+book.rbmk.page_func_neg_quad=Self-Sustaining = §6Maybe§r                   Reflector use: §6Risky§r                Example: f(x) = x - x² * 0.001
+book.rbmk.title_func_linear=Linear
+book.rbmk.page_func_linear=Self-Sustaining: §8No§r                   Reflector use: §4Dangerous§r                Example: f(x) = x * 0.5                 Place next to MEDIUM, SAFE, PASSIVE but not higher fuels.
+book.rbmk.title_func_quadratic=Quadratic
+book.rbmk.page_func_quadratic=Self-Sustaining: §8No§r                   Reflector use: §4§lInsane§r                   Example: f(x) = x² * 0.1                 Only place next to SAFE and PASSIVE fuels or absorbers.
+
+book.rbmk.title_tips=Tips
+book.rbmk.page_tips=Radiation will leak if flux gets outside of the reactor (it was not blocked or reflected) or if flux reaches a rbmk columns without a lid. Steam connectors are used for performance and accessibility of steam channels. Irradiation channels are absorbers that use incoming flux for recipes.
+
+book.rbmk.title_mistakes=Common Mistakes
+book.rbmk.page_mistakes=§lInfo§r: Empty RBMK Fuel Columns are transparent to flux. §lScenario§r: You replace the depleted fuel rod in pink. The red column has a fuel with a §4DANGEROUS§r class flux function. You take out the fuel rod of pink and the RBMK explodes. So what happened? Flux from red was no longer absorbed by pink and got reflected back. This creates a feedbackloop which made the temperature go brrr.
+
+book.rbmk.title_post_meltdown=Post Meltdown Protocol
+book.rbmk.page_post_meltdown=The RBMK exploded - what now? The 2 dangers are radiation and heat. Use blocks with high blast resistance to shield yourself from the intese radiation so you can get close and fire protection against heat. RBMKs slowly cool down and decay into regular debris. If Boron sand is next to burning or radiating rbmk debris it speeds the decay up and reduces radiation levels. Build RBMKs in underground rooms that have nuke proof blast resistance so radiation spread is limited. Block corium flow below fuel channels with blocks with high blast resistance so Corebblestone formation is hindered.
 
 chem.TEST=Test
 chem.ARSENIC=Arsenic Extraction
@@ -2502,7 +2506,7 @@ item.rbmk_pellet_ra226be.name=Ra226Be Neutron Source Pellet
 item.rbmk_pellet_thmeu.name=ThMEU Fuel Pellet
 item.rbmk_pellet_ueu.name=NU Fuel Pellet
 item.rbmk_tool.name=RBMK Console Linking Device
-item.rbmk_tool.desc=Sneak and right-click RBMK to save the position,$sneak and right-click console to link!
+item.rbmk_tool.desc=Sneak and right-click RBMK to save the position,$sneak and right-click console/crane to link!
 item.rbmk_tool.linked=Position set!
 item.rbmk_tool.set=RBMK linked!
 item.reacher.name=Tungsten Reacher

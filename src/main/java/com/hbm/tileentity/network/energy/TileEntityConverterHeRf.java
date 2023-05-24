@@ -7,11 +7,14 @@ import com.hbm.lib.ForgeDirection;
 import api.hbm.energy.IEnergyConnector;
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
-public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITickable, IEnergyConnector, IEnergyProvider {
+public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITickable, IEnergyConnector, IEnergyProvider, IEnergyStorage {
 
 	//Thanks to the great people of Fusion Warfare for helping me with the original implementation of the RF energy API
 	
@@ -25,7 +28,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 			this.updateStandardConnections(world, pos);
 		}
 	}
-
+	//RF
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
@@ -74,6 +77,16 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 				
 				toRF -= rfTransferred; //to prevent energy duping
 			}
+
+			if(entity != null && entity.hasCapability(CapabilityEnergy.ENERGY, dir.getOpposite().toEnumFacing())) {
+				IEnergyStorage storage = entity.getCapability(CapabilityEnergy.ENERGY, dir.getOpposite().toEnumFacing());
+				if(storage.canReceive()){
+					rfTransferred = storage.receiveEnergy(toRF, false);
+					totalTransferred += rfTransferred;
+					
+					toRF -= rfTransferred; //to prevent energy duping
+				}
+			}
 		}
 
 		recursionBrake = false;
@@ -102,5 +115,52 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		} else {
 			return getMaxPower();
 		}
+	}
+
+	//FE
+	@Override
+	public boolean canExtract(){
+		return true;
+	}
+
+	@Override
+	public boolean canReceive(){
+		return false;
+	}
+
+	@Override
+	public int getMaxEnergyStored(){
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public int getEnergyStored(){
+		return 0;
+	}
+
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate){
+		return maxExtract;
+	}
+
+	@Override
+	public int receiveEnergy(int maxReceive, boolean simulate){
+		return 0;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		if(capability == CapabilityEnergy.ENERGY){
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+		if(capability == CapabilityEnergy.ENERGY){
+			return (T) this;
+		}
+		return super.getCapability(capability, facing);
 	}
 }

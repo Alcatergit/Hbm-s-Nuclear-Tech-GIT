@@ -1447,9 +1447,9 @@ public class ModItems {
 	
 	public static final Item tritium_deuterium_cake = new ItemCustomLore("tritium_deuterium_cake").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
-	public static final Item pile_rod_uranium = new ItemPileRod("pile_rod_uranium").setCreativeTab(MainRegistry.controlTab);
-	public static final Item pile_rod_plutonium = new ItemPileRod("pile_rod_plutonium").setCreativeTab(MainRegistry.controlTab);
-	public static final Item pile_rod_source = new ItemPileRod("pile_rod_source").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_uranium = new ItemPileRod(ItemHazard.billet * 3 * ItemHazard.u, "pile_rod_uranium").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_plutonium = new ItemPileRod(ItemHazard.billet * 3 * ItemHazard.pu, "pile_rod_plutonium").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_source = new ItemPileRod(3 * ItemHazard.rabe, "pile_rod_source").setCreativeTab(MainRegistry.controlTab);
 	public static final Item pile_rod_boron = new ItemPileRod("pile_rod_boron").setCreativeTab(MainRegistry.controlTab);
 
 	//That's a lot of rods
@@ -2649,7 +2649,7 @@ public class ModItems {
 	public static final Item rbmk_fuel_empty = new ItemBase("rbmk_fuel_empty").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final ItemRBMKRod rbmk_fuel_ueu = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_ueu, "rbmk_fuel_ueu")
 			.setYield(100000000D)
-			.setStats(15)
+			.setStats(7.5)
 			.setFunction(EnumBurnFunc.LOG_TEN)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setHeat(0.65) //0.5 is too much of a nerf in heat; pu239 buildup justifies it being on par with MEU ig
@@ -2659,7 +2659,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_meu = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_meu, "rbmk_fuel_meu")
 			.setYield(100000000D)
-			.setStats(20)
+			.setStats(10)
 			.setFunction(EnumBurnFunc.LOG_TEN)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setHeat(0.65) //0.75 was a bit too much...
@@ -2669,7 +2669,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_heu233 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heu233, "rbmk_fuel_heu233")
 			.setYield(100000000D)
-			.setStats(27.5D)
+			.setStats(0.275D)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setHeat(1.25D)
 			.setMeltingPoint(2865)
@@ -2678,7 +2678,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_heu235 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heu235, "rbmk_fuel_heu235")
 			.setYield(100000000D)
-			.setStats(50) //Consistency with HEN; its critical mass is too high to justify a linear function
+			.setStats(5) //Consistency with HEN; its critical mass is too high to justify a linear function
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2865)
 			.setFuelColor(0.513F, 0.541F, 0.498F)
@@ -2696,7 +2696,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_lep = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_lep, "rbmk_fuel_lep")
 			.setYield(100000000D)
-			.setStats(35)
+			.setStats(17.5)
 			.setFunction(EnumBurnFunc.LOG_TEN)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setHeat(0.75D)
@@ -2706,7 +2706,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_mep = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mep, "rbmk_fuel_mep")
 			.setYield(100000000D)
-			.setStats(35, 20)
+			.setStats(3.5, 20)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.314F, 0.349F, 0.337F)
@@ -2714,7 +2714,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_hep239 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hep239, "rbmk_fuel_hep")
 			.setYield(100000000D)
-			.setStats(30)
+			.setStats(0.3)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setHeat(1.25D)
 			.setMeltingPoint(2744)
@@ -2723,7 +2723,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_hep241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hep241, "rbmk_fuel_hep241")
 			.setYield(100000000D)
-			.setStats(40)
+			.setStats(0.4)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setHeat(1.75D)
 			.setMeltingPoint(2744)
@@ -2732,36 +2732,37 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_lea = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_lea, "rbmk_fuel_lea")
 			.setYield(100000000D)
-			.setStats(60, 10)
+			.setStats(6, 10)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setHeat(1.5D)
-			.setMeltingPoint(2386)
+			.setMeltingPoint(2986)
 			.setFuelColor(0.514F, 0.467F, 0.455F)
 			.addRadiation(ItemHazard.amf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_mea = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mea, "rbmk_fuel_mea")
 			.setYield(100000000D)
-			.setStats(35, 20)
+			.setStats(0.9, 20, 600)
 			.setFunction(EnumBurnFunc.ARCH)
-			.setHeat(1.75D)
-			.setMeltingPoint(2386)
+			.setXenon(0.02D, 50D)
+			.setHeat(1.6D)
+			.setMeltingPoint(2986)
 			.setFuelColor(0.545F, 0.424F, 0.443F)
 			.addRadiation(ItemHazard.amrg * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hea241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hea241, "rbmk_fuel_hea241")
 			.setYield(100000000D)
-			.setStats(65, 15)
+			.setStats(6.5, 15)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(1.85D)
-			.setMeltingPoint(2386)
+			.setMeltingPoint(2986)
 			.setNeutronTypes(NType.FAST, NType.FAST)
 			.setFuelColor(0.545F, 0.424F, 0.443F)
 			.addRadiation(ItemHazard.am241 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hea242 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hea242, "rbmk_fuel_hea242")
 			.setYield(100000000D)
-			.setStats(45)
+			.setStats(0.45)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setHeat(2D)
 			.setMeltingPoint(2386)
@@ -2770,7 +2771,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_men = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_men, "rbmk_fuel_men")
 			.setYield(100000000D)
-			.setStats(30)
+			.setStats(3)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setHeat(0.75)
@@ -2781,7 +2782,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_hen = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hen, "rbmk_fuel_hen")
 			.setYield(100000000D)
-			.setStats(40)
+			.setStats(4)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2800)
 			.setNeutronTypes(NType.FAST, NType.FAST)
@@ -2790,7 +2791,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_mox = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mox, "rbmk_fuel_mox")
 			.setYield(100000000D)
-			.setStats(40)
+			.setStats(10)
 			.setFunction(EnumBurnFunc.LOG_TEN)
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setMeltingPoint(2815)
@@ -2799,7 +2800,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_les = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_les, "rbmk_fuel_les")
 			.setYield(100000000D)
-			.setStats(50)
+			.setStats(5)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(1.25D)
 			.setMeltingPoint(2500)
@@ -2809,7 +2810,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_mes = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mes, "rbmk_fuel_mes")
 			.setYield(100000000D)
-			.setStats(75D)
+			.setStats(0.75D, 0, 750)
 			.setFunction(EnumBurnFunc.ARCH)
 			.setHeat(1.5D)
 			.setMeltingPoint(2750)
@@ -2818,7 +2819,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_hes = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hes, "rbmk_fuel_hes")
 			.setYield(100000000D)
-			.setStats(90)
+			.setStats(0.9)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setDepletionFunction(EnumDepleteFunc.LINEAR)
 			.setHeat(1.75D)
@@ -2828,7 +2829,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_leaus = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_leaus, "rbmk_fuel_leaus")
 			.setYield(100000000D)
-			.setStats(30)
+			.setStats(0.3)
 			.setFunction(EnumBurnFunc.SIGMOID)
 			.setDepletionFunction(EnumDepleteFunc.LINEAR)
 			.setXenon(0.05D, 50D)
@@ -2839,7 +2840,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_heaus = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heaus, "rbmk_fuel_heaus")
 			.setYield(100000000D)
-			.setStats(35)
+			.setStats(3.5)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setXenon(0.05D, 50D)
 			.setHeat(2D)
@@ -2849,7 +2850,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_unobtainium = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_unobtainium, "rbmk_fuel_unobtainium")
 			.setYield(250000000D)
-			.setStats(400, 1)
+			.setStats(40, 1)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setDepletionFunction(EnumDepleteFunc.BOOSTED_SLOPE)
 			.setHeat(0.01D)
@@ -2886,7 +2887,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_pu238be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_pu238be, "rbmk_fuel_pu238be")
 			.setYield(50000000D)
-			.setStats(40, 40)
+			.setStats(4, 40)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(0.1D)
 			.setDiffusion(0.05D)
@@ -2897,29 +2898,29 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_balefire_gold = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_balefire_gold, "rbmk_fuel_balefire_gold")
 			.setYield(100000000D)
-			.setStats(50, 10)
+			.setStats(0.8, 10)
 			.setFunction(EnumBurnFunc.ARCH)
 			.setDepletionFunction(EnumDepleteFunc.LINEAR)
 			.setXenon(0.0D, 50D)
-			.setMeltingPoint(2000)
+			.setMeltingPoint(5000)
 			.setFuelColor(0.902F, 0.714F, 0.227F)
 			.setCherenkovColor(0.6F, 0F, 1F)
 			.addRadiation(ItemHazard.au198 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_flashlead = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_flashlead, "rbmk_fuel_flashlead")
 			.setYield(250000000D)
-			.setStats(40, 50)
+			.setStats(1, 50, 1500)
 			.setFunction(EnumBurnFunc.ARCH)
 			.setDepletionFunction(EnumDepleteFunc.LINEAR)
 			.setXenon(0.0D, 50D)
-			.setMeltingPoint(2050)
+			.setMeltingPoint(5050)
 			.setFuelColor(0.682F, 0.521F, 0.125F)
 			.setCherenkovColor(0.6F, 0F, 1F)
 			.addRadiation(ItemHazard.aupb * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_bismuth = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_bismuth, "rbmk_fuel_zfb_bismuth")
 			.setYield(50000000D)
-			.setStats(20)
+			.setStats(2)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setHeat(1.75D)
 			.setMeltingPoint(2744)
@@ -2928,7 +2929,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_pu241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_pu241, "rbmk_fuel_zfb_pu241")
 			.setYield(50000000D)
-			.setStats(20)
+			.setStats(2)
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2865)
 			.setFuelColor(0.462F, 0.459F, 0.384F)
@@ -2936,7 +2937,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_am_mix = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_am_mix, "rbmk_fuel_zfb_am_mix")
 			.setYield(50000000D)
-			.setStats(20)
+			.setStats(0.2)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setHeat(1.75D)
 			.setMeltingPoint(2744)
@@ -2945,7 +2946,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_balefire = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_balefire, "rbmk_fuel_balefire")
 			.setYield(100000000D)
-			.setStats(100, 35)
+			.setStats(1, 35)
 			.setFunction(EnumBurnFunc.LINEAR)
 			.setXenon(0.0D, 50D)
 			.setHeat(3D)
@@ -2956,7 +2957,7 @@ public class ModItems {
 			;
 	public static final ItemRBMKRod rbmk_fuel_drx = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_drx, "rbmk_fuel_drx")
 			.setYield(1000000D)
-			.setStats(1000, 10)
+			.setStats(0.1, 10)
 			.setFunction(EnumBurnFunc.QUADRATIC)
 			.setHeat(0.1D)
 			.setMeltingPoint(100000)

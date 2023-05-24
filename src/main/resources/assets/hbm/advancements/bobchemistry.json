@@ -12,9 +12,16 @@
 	},
 	"parent": "hbm:bobassembly",
 	"criteria": {
-		"impossible": {
-			"trigger": "minecraft:impossible"
-		}
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:brick_concrete"
+                    }
+                ]
+            }
+        }
 	},
     "rewards": {
         "experience": 100

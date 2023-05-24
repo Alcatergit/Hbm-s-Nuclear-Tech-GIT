@@ -198,11 +198,11 @@ public class CompatibilityConfig {
 		meteorShowerDuration = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.03_meteorShowerDuration", "Max duration of meteor shower in ticks - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:"+20 * 60 * 30, "-28:"+20 * 60 * 60, "-27:"+20 * 60 * 3, "-26:"+20 * 60 * 3, "-29:"+20 * 60 * 60, "-30:"+20*10, "-31:"+20 * 60 }, ":");
 		
 
-		String mobModRadComment = "Amount of radiation resistance the all mobs of that mod get. Radresistance s is calculated as s=(1-0.2^r). So a resistance value of 3.0 means that 99.2%=(1-0.2^3.0) of the radiation gets blocked. - <mod=radresistance> (String:Float)";
+		String mobModRadComment = "Amount of radiation resistance the all mobs of that mod get. Radresistance s is calculated as s=(1-0.1^r). So a resistance value of 3.0 means that 99.9%=(1-0.1^3.0) of the radiation gets blocked. - <mod=radresistance> (String:Float)";
 		mobModRadresistance = CommonConfig.createConfigHashMap(config, CATEGORY_MOB, "06.01_mobModRadresistance", mobModRadComment, "String", "Float", new String[]{ "biomesoplenty=0.5" }, "=");
 		mobModRadimmune = CommonConfig.createConfigHashSet(config, CATEGORY_MOB, "06.02_mobModRadimmune", "List of mods whose entities should all be immune to radiation. - <mob> (String)", "String", new String[]{ "srparasites" });
 
-		String mobRadComment = "Amount of radiation resistance the mob gets. Radresistance s is calculated as s=(1-0.2^r). So a resistance value of 3.0 means that 99.2%=(1-0.2^3.0) of the radiation gets blocked. - <mod:mob=radresistance> (String:Float)";
+		String mobRadComment = "Amount of radiation resistance the mob gets. Radresistance s is calculated as s=(1-0.1^r). So a resistance value of 3.0 means that 99.9%=(1-0.1^3.0) of the radiation gets blocked. - <mod:mob=radresistance> (String:Float)";
 		mobRadresistance = CommonConfig.createConfigHashMap(config, CATEGORY_MOB, "06.03_mobRadresistance", mobRadComment, "String", "Float", new String[]{ "biomesoplenty:entity.wasp=2.0" }, "=");
 		mobRadimmune = CommonConfig.createConfigHashSet(config, CATEGORY_MOB, "06.04_mobRadimmune", "List of mobs that are immune to radiation. - <mob> (String)", "String", new String[]{ "minecraft:entity.Slime", "minecraft:entity.Vex" });
 	

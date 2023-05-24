@@ -241,6 +241,8 @@ import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.inventory.PotionRecipes;
 import com.hbm.inventory.SAFERecipes;
 import com.hbm.inventory.BoilerRecipes;
+import com.hbm.inventory.StorageDrumRecipes;
+import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -614,6 +616,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityConverterRfHe.class, new ResourceLocation(RefStrings.MODID, "tileentity_converter_rf_he"));
 		GameRegistry.registerTileEntity(TileEntityMachineTurbine.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_turbine"));
 		GameRegistry.registerTileEntity(TileEntityFFFluidDuct.class, new ResourceLocation(RefStrings.MODID, "tileentity_ff_fluidduct"));
+		GameRegistry.registerTileEntity(TileEntityTurretCIWS.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_ciws"));
 		GameRegistry.registerTileEntity(TileEntityTurretCheapo.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_cheapo"));
 		GameRegistry.registerTileEntity(TileEntityTurretRocket.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_rocket"));
 		GameRegistry.registerTileEntity(TileEntityTurretLight.class, new ResourceLocation(RefStrings.MODID, "tileentity_turret_light"));
@@ -1070,6 +1073,8 @@ public class MainRegistry {
 		RBMKOutgasserRecipes.registerOverrides();
 		DFCRecipes.register();
 		SAFERecipes.registerRecipes();
+		StorageDrumRecipes.registerRecipes();
+		NuclearTransmutationRecipes.registerRecipes();
 		
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));

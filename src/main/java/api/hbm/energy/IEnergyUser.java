@@ -87,17 +87,17 @@ public interface IEnergyUser extends IEnergyConnector {
 			}
 		}
 		
-		if(particleDebug) {
-			NBTTagCompound data = new NBTTagCompound();
-			data.setString("type", "network");
-			data.setString("mode", "power");
-			double posX = pos.getX() + 0.5 + dir.offsetX * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
-			double posY = pos.getY() + 0.5 + dir.offsetY * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
-			double posZ = pos.getZ() + 0.5 + dir.offsetZ * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
-			data.setDouble("mX", dir.offsetX * (red ? 0.025 : 0.1));
-			data.setDouble("mY", dir.offsetY * (red ? 0.025 : 0.1));
-			data.setDouble("mZ", dir.offsetZ * (red ? 0.025 : 0.1));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY, posZ), new TargetPoint(world.provider.getDimension(), posX, posY, posZ, 25));
-		}
+		// if(particleDebug) {
+		// 	NBTTagCompound data = new NBTTagCompound();
+		// 	data.setString("type", "network");
+		// 	data.setString("mode", "power");
+		// 	double posX = pos.getX() + 0.5 + dir.offsetX * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
+		// 	double posY = pos.getY() + 0.5 + dir.offsetY * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
+		// 	double posZ = pos.getZ() + 0.5 + dir.offsetZ * 0.5 + world.rand.nextDouble() * 0.5 - 0.25;
+		// 	data.setDouble("mX", dir.offsetX * (red ? 0.025 : 0.1));
+		// 	data.setDouble("mY", dir.offsetY * (red ? 0.025 : 0.1));
+		// 	data.setDouble("mZ", dir.offsetZ * (red ? 0.025 : 0.1));
+		// 	PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY, posZ), new TargetPoint(world.provider.getDimension(), posX, posY, posZ, 25));
+		// }
 	}
 }

@@ -1,9 +1,12 @@
 package com.hbm.blocks.machine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ILookOverlay;
 import com.hbm.lib.Library;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -30,8 +33,9 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
-public class MachineBattery extends BlockContainer {
+public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	private long maxPower;
@@ -246,5 +250,29 @@ public class MachineBattery extends BlockContainer {
 			}
 			list.add(color+Library.getShortNumber(charge)+color2+"/"+Library.getShortNumber(this.maxPower)+"HE "+color+"("+percent+"%)§r");
 		}
+	}
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+			
+		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+		
+		if(!(te instanceof TileEntityMachineBattery))
+			return;
+
+		TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
+		List<String> text = new ArrayList();
+		text.add("§6<> §rStored Energy: " + Library.getShortNumber(battery.power) + "/" + Library.getShortNumber(getMaxPower()) + "HE");
+		if(battery.powerDelta == 0){
+			text.add("§e-- §r0HE/s");
+		}
+		else if(battery.powerDelta > 0){
+			text.add("§a-> §r" + Library.getShortNumber(battery.powerDelta) + "HE/s");
+		}
+		else{
+			text.add("§c<- §r" + Library.getShortNumber(-battery.powerDelta) + "HE/s");
+		}
+		text.add("&["+Library.getColorProgress((double)battery.power/(double)getMaxPower())+"&]    "+Library.getPercentage((double)battery.power/(double)getMaxPower())+"%");
+		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
 	}
 }

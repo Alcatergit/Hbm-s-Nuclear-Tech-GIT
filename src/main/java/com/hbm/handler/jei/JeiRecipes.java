@@ -23,6 +23,7 @@ import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.WasteDrumRecipes;
+import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.inventory.FusionRecipes;
 import com.hbm.inventory.DiFurnaceRecipes;
@@ -31,6 +32,7 @@ import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.inventory.CrackRecipes;
+import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -79,6 +81,7 @@ public class JeiRecipes {
 	private static List<GasCentRecipe> gasCentRecipes = null;
 	private static List<ReactorRecipe> reactorRecipes = null;
 	private static List<WasteDrumRecipe> wasteDrumRecipes = null;
+	private static List<StorageDrumRecipe> storageDrumRecipes = null;
 	private static List<RefineryRecipe> refineryRecipes = null;
 	private static List<CrackingRecipe> crackingRecipes = null;
 	private static List<FractioningRecipe> fractioningRecipes = null;
@@ -91,6 +94,7 @@ public class JeiRecipes {
 	private static Map<EnumWavelengths, List<SILEXRecipe>> waveSilexRecipes = new HashMap<EnumWavelengths, List<SILEXRecipe>>();
 	private static List<SmithingRecipe> smithingRecipes = null;
 	private static List<AnvilRecipe> anvilRecipes = null;
+	private static List<TransmutationRecipe> transmutationRecipes = null;
 	
 	private static List<ItemStack> batteries = null;
 	private static Map<Integer, List<ItemStack>> reactorFuelMap = new HashMap<Integer, List<ItemStack>>();
@@ -280,7 +284,41 @@ public class JeiRecipes {
 			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
+	}
+
+	public static class StorageDrumRecipe implements IRecipeWrapper {
 		
+		private final ItemStack input;
+		private final ItemStack output;
+		
+		public StorageDrumRecipe(ItemStack input, ItemStack output) {
+			this.input = input;
+			this.output = output; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+	}
+
+	public static class TransmutationRecipe implements IRecipeWrapper {
+		
+		private final List<List<ItemStack>> inputs;
+		private final ItemStack output;
+		
+		public TransmutationRecipe(List<ItemStack> inputs, ItemStack output) {
+			this.inputs = new ArrayList();
+			this.inputs.add(inputs);
+			this.output = output; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
 	}
 	
 	public static class RefineryRecipe implements IRecipeWrapper {
@@ -902,6 +940,30 @@ public class JeiRecipes {
 		}
 		
 		return wasteDrumRecipes;
+	}
+
+	public static List<StorageDrumRecipe> getStorageDrumRecipes(){
+		if(storageDrumRecipes != null)
+			return storageDrumRecipes;
+		storageDrumRecipes = new ArrayList<StorageDrumRecipe>();
+		
+		for(Map.Entry<ComparableStack, ItemStack> entry : StorageDrumRecipes.recipeOutputs.entrySet()){
+			storageDrumRecipes.add(new StorageDrumRecipe(entry.getKey().getStack(), entry.getValue()));
+		}
+		
+		return storageDrumRecipes;
+	}
+
+	public static List<TransmutationRecipe> getTransmutationRecipes(){
+		if(transmutationRecipes != null)
+			return transmutationRecipes;
+		transmutationRecipes = new ArrayList<TransmutationRecipe>();
+		
+		for(Map.Entry<AStack, ItemStack> entry : NuclearTransmutationRecipes.recipesOutput.entrySet()){
+			transmutationRecipes.add(new TransmutationRecipe(entry.getKey().getStackList(), entry.getValue()));
+		}
+		
+		return transmutationRecipes;
 	}
 	
 	public static List<ItemStack> getReactorFuels(int heat){
