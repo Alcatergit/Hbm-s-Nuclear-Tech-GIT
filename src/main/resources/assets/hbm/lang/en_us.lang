@@ -1579,11 +1579,14 @@ container.machineFEL=FEL
 
 tile.heater_firebox.name=Firebox
 tile.heater_firebox.desc=Burns solid fuel to produce heat.
+tile.heater_oven.name=Heating Oven
+tile.heater_oven.desc=Burns solid fuel to produce heat.$Accepts heat from the bottom with 50%% efficiency.
 tile.furnace_steel.name=Steel Furnace
 tile.heat_boiler.name=Large Boiler
 tile.heat_boiler.desc=Large boiler that can boil water or heat up oil.$Requires external heat source.$Heat transfer rate: ΔT*0.01 TU/t
 tile.furnace_steel.desc=Very large furnace that can provide bonus items$when smelting ores. Requires external heat source.$Heat transfer rate: ΔT*0.05 TU/t$(Δ means difference and T means temperature)
 container.heater_firebox=Firebox
+container.heaterOven=Heating Oven
 
 tile.barrel_plastic.name=Safe Barrel™
 tile.barrel_corroded.name=Corroded Barrel
@@ -4565,3 +4568,5 @@ commands.hbmrad.not_rad=Please enter new rad value!
 commands.hbmrad.not_found_player=Cannot find player %1$s!
 tile.bomb.tnt_enabled=[ Ignite On Break: Enabled ]
 tile.bomb.tnt_disabled=[ Ignite On Break: Disaabled ]
+
+item.ingot_firebrick.name=Firebrick

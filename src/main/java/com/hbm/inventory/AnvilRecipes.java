@@ -174,6 +174,12 @@ public class AnvilRecipes {
 						new OreDictStack(CU.ingot(), 8)
 				}, new AnvilOutput(new ItemStack(ModBlocks.heater_firebox))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[]{
+						new ComparableStack(ModItems.ingot_firebrick, 16),
+						new OreDictStack(STEEL.plate(), 4),
+						new OreDictStack(CU.ingot(), 8),
+				} ,new AnvilOutput(new ItemStack(ModBlocks.heater_oven))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new ComparableStack(Blocks.STONEBRICK, 16),
 						new OreDictStack(IRON.ingot(), 4),
