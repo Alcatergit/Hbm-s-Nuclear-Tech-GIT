@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:heating_oven" }
+		"normal": { "model": "hbm:heater_oven" }
 	}
 }
