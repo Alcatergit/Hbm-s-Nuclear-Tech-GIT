@@ -472,6 +472,19 @@ public class ItemRenderLibrary {
 				ResourceManager.heater_oven.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.heater_oilburner), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.heater_oilburner_tex);
+				ResourceManager.heater_oilburner.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_steel), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -1, 0);

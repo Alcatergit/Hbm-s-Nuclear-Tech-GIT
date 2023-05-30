@@ -324,6 +324,7 @@ public class ResourceManager {
 	//Firebox, and the lot
 	public static final IModelCustom heater_firebox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/firebox.obj"));
 	public static final IModelCustom heater_oven = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/heating_oven.obj"));
+	public static final IModelCustom heater_oilburner = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/oilburner.obj"));
 	public static final IModelCustom furnace_steel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/furnace_steel.obj"));
 	public static final IModelCustom heat_boiler = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/boiler.obj"));
 	//Heat-Based Machines
@@ -633,6 +634,7 @@ public class ResourceManager {
     //Firebox and the lot
 	public static final ResourceLocation heater_firebox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/firebox.png");
 	public static final ResourceLocation heater_oven_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/heating_oven.png");
+	public static final ResourceLocation heater_oilburner_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/oilburner.png");
 	public static final ResourceLocation heat_boiler_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/boiler.png");
 	public static final ResourceLocation furnace_steel_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/furnace_steel.png");
 	//Selenium Engine
