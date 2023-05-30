@@ -1,19 +1,13 @@
 package com.hbm.inventory.gui;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerFirebox;
 import com.hbm.tileentity.machine.TileEntityFireboxBase;
-//import com.hbm.tileentity.machine.TileEntityHeaterOven;
-
-
+import com.hbm.tileentity.machine.TileEntityHeaterOven;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIFirebox extends GuiInfoContainer {
 	
@@ -41,10 +35,10 @@ public class GUIFirebox extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.firebox.hasCustomInventoryName() ? this.firebox.getInventoryName() : I18n.format(this.firebox.getInventoryName());
-		
-		//int color = firebox instanceof TileEntityHeaterOven ? 0xffffff : 4210752;
-		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+
+		int color = firebox instanceof TileEntityHeaterOven ? 0xffffff : 4210752;
+
+		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, color);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
