@@ -4570,3 +4570,4 @@ tile.bomb.tnt_enabled=[ Ignite On Break: Enabled ]
 tile.bomb.tnt_disabled=[ Ignite On Break: Disaabled ]
 
 item.ingot_firebrick.name=Firebrick
+item.ball_fireclay.name=Fireclay
