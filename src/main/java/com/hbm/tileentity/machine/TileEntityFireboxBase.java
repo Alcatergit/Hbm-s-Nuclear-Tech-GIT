@@ -19,8 +19,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
-
 public abstract class TileEntityFireboxBase extends TileEntityMachineBase implements ITickable, IGUIProvider, IHeatSource {
 
 	public int maxBurnTime;

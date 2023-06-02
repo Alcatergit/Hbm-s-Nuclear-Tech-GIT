@@ -1587,15 +1587,22 @@ tile.heater_oilburner.desc=Burns fluids to produce heat.$§eUse screwdriver to i
 tile.heater_oven.name=Heating Oven
 tile.heater_oven.desc=Burns solid fuel to produce heat.$Accepts heat from the bottom with 50%% efficiency.
 tile.furnace_steel.name=Steel Furnace
+tile.furnace_iron.name=Iron Furnace
+tile.furnace_iron.desc=Larger and more efficient furnace,$does not waste fuel when idle.
+
 tile.heat_boiler.name=Large Boiler
 tile.heat_boiler.desc=Large boiler that can boil water or heat up oil.$Requires external heat source.$Heat transfer rate: ΔT*0.01 TU/t
 tile.furnace_steel.desc=Very large furnace that can provide bonus items$when smelting ores. Requires external heat source.$Heat transfer rate: ΔT*0.05 TU/t$(Δ means difference and T means temperature)
 container.heater_firebox=Firebox
 container.heaterOven=Heating Oven
 container.heaterOilburner=Fluid Burner
+container.furnaceIron=Iron Furnace
 
 tile.heater_heatex.name=Heat Exchanging Heater
 tile.heater_heatex.desc=Produces heat from hot fluids.
+
+tile.heater_electric.name=Electric Heater
+tile.heater_electric.desc=Uses energy to produce heat.$Accepts heat from the bottom with 85%% efficiency.$Can be configured with a screwdriver and hand drill.
 
 tile.barrel_plastic.name=Safe Barrel™
 tile.barrel_corroded.name=Corroded Barrel

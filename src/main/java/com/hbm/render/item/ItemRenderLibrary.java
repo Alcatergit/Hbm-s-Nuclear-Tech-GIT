@@ -471,6 +471,18 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.heater_firebox_tex);  ResourceManager.heater_firebox.renderAll();
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.heater_electric), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.heater_electric_tex);  ResourceManager.heater_electric.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.heater_oven), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -1, 0);
@@ -496,6 +508,17 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.heater_oilburner_tex);
 				ResourceManager.heater_oilburner.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_iron), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, 1, 0);
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.furnace_iron_tex);  ResourceManager.furnace_iron.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_steel), new ItemRenderBase() {
 			public void renderInventory() {

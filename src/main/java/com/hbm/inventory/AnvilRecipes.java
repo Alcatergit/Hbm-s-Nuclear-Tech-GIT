@@ -188,6 +188,14 @@ public class AnvilRecipes {
 				} ,new AnvilOutput(new ItemStack(ModBlocks.heater_oilburner))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new OreDictStack(ANY_PLASTIC.ingot(), 4),
+						new OreDictStack(CU.ingot(), 8),
+						new OreDictStack(STEEL.plate(), 8),
+						new ComparableStack(ModItems.coil_tungsten, 8),
+						new ComparableStack(ModItems.circuit_copper, 1)
+				}, new AnvilOutput(new ItemStack(ModBlocks.heater_electric))).setTier(3));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new OreDictStack(RUBBER.ingot(), 4),
 						new OreDictStack(CU.ingot(), 16),
 						new OreDictStack(STEEL.plate(), 16),

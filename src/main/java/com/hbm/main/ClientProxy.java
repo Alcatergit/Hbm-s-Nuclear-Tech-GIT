@@ -498,8 +498,10 @@ import com.hbm.tileentity.machine.TileEntityCoreReceiver;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
 import com.hbm.tileentity.machine.TileEntityDemonLamp;
 import com.hbm.tileentity.machine.TileEntityForceField;
+import com.hbm.tileentity.machine.TileEntityFurnaceIron;
 import com.hbm.tileentity.machine.TileEntityFurnaceSteel;
 import com.hbm.tileentity.machine.TileEntityHeaterOven;
+import com.hbm.tileentity.machine.TileEntityHeaterElectric;
 import com.hbm.tileentity.machine.TileEntityHeaterHeatex;
 import com.hbm.tileentity.machine.TileEntityHeaterOilburner;
 import com.hbm.tileentity.machine.TileEntityGeiger;
@@ -859,8 +861,10 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFEL.class, new RenderFEL());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterFirebox.class, new RenderFirebox());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOven.class, new RenderHeatingOven());
-    ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOilburner.class, new RenderOilburner());
-    ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterHeatex.class, new RenderHeaterHeatex());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOilburner.class, new RenderOilburner());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterElectric.class, new RenderHeaterElectric());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterHeatex.class, new RenderHeaterHeatex());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFurnaceIron.class, new RenderFurnaceIron());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFurnaceSteel.class, new RenderFurnaceSteel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		

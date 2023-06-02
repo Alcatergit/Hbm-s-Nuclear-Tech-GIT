@@ -17,6 +17,30 @@ public class ItemMachineUpgrade extends Item {
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
+
+	public int getSpeed(){
+		if(this == ModItems.upgrade_speed_1) return 1;
+		if(this == ModItems.upgrade_speed_2) return 2;
+		if(this == ModItems.upgrade_speed_3) return 3;
+		if(this == ModItems.upgrade_overdrive_1) return 4;
+		if(this == ModItems.upgrade_overdrive_2) return 6;
+		if(this == ModItems.upgrade_overdrive_3) return 8;
+		if(this == ModItems.upgrade_screm) return 10;
+		return 0;
+	}
+
+	public static int getSpeed(ItemStack stack){
+		if(stack == null || stack.isEmpty()) return 0;
+		Item upgrade = stack.getItem();
+		if(upgrade == ModItems.upgrade_speed_1) return 1;
+		if(upgrade == ModItems.upgrade_speed_2) return 2;
+		if(upgrade == ModItems.upgrade_speed_3) return 3;
+		if(upgrade == ModItems.upgrade_overdrive_1) return 4;
+		if(upgrade == ModItems.upgrade_overdrive_2) return 6;
+		if(upgrade == ModItems.upgrade_overdrive_3) return 8;
+		if(upgrade == ModItems.upgrade_screm) return 10;
+		return 0;
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
