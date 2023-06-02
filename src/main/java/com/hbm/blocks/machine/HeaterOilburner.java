@@ -5,10 +5,12 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.inventory.MachineRecipes;
+import com.hbm.items.tool.ItemTooling;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityHeaterOilburner;
 import com.hbm.util.I18nUtil;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -50,6 +52,11 @@ public class HeaterOilburner extends BlockDummyable implements ITooltipProvider,
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(playerIn.getHeldItem(hand).getItem() instanceof ItemTooling){
+            ItemTooling tool = (ItemTooling)playerIn.getHeldItem(hand).getItem();
+            if(tool.getType() == ToolType.SCREWDRIVER || tool.getType() == ToolType.HAND_DRILL)
+                return false;
+        }
         return this.standardOpenBehavior(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn, 0);
     }
 
@@ -111,7 +118,7 @@ public class HeaterOilburner extends BlockDummyable implements ITooltipProvider,
 
     @Override
     public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool) {
-        if (tool != ToolType.SCREWDRIVER)
+        if (tool != ToolType.SCREWDRIVER && tool != ToolType.HAND_DRILL)
             return false;
 
         if (world.isRemote) return true;
@@ -125,7 +132,10 @@ public class HeaterOilburner extends BlockDummyable implements ITooltipProvider,
         if (!(te instanceof TileEntityHeaterOilburner)) return false;
 
         TileEntityHeaterOilburner tile = (TileEntityHeaterOilburner) te;
-        tile.toggleSetting();
+        if(tool == ToolType.SCREWDRIVER)
+            tile.toggleSettingUp();
+        else
+            tile.toggleSettingDown();
         tile.markDirty();
 
         return true;

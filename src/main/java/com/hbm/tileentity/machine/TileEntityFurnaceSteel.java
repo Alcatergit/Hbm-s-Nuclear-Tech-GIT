@@ -42,9 +42,6 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 	private ItemStack[] lastItems = new ItemStack[3];
 	
 	public boolean wasOn = false;
-	 int xCoord = pos.getX();
-	 int yCoord = pos.getY();
-	 int zCoord = pos.getZ();
 	    
 	public TileEntityFurnaceSteel() {
 		super(6);
@@ -121,13 +118,13 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
 				ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 				
-				world.spawnParticle(EnumParticleTypes.FLAME, xCoord + 0.5 - dir.offsetX * 1.125 - rot.offsetX * 0.75, yCoord + 2.625, zCoord + 0.5 - dir.offsetZ * 1.125 - rot.offsetZ * 0.75, 0.0, 0.05, 0.0);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.5 - dir.offsetX * 1.125 - rot.offsetX * 0.75, pos.getY() + 2.625, pos.getZ() + 0.5 - dir.offsetZ * 1.125 - rot.offsetZ * 0.75, 0.0, 0.05, 0.0);
 				
 				if(world.rand.nextInt(20) == 0)
-					world.spawnParticle(EnumParticleTypes.CLOUD, xCoord + 0.5 + dir.offsetX * 0.75, yCoord + 2, zCoord + 0.5 + dir.offsetZ * 0.75, 0.0, 0.05, 0.0);
+					world.spawnParticle(EnumParticleTypes.CLOUD, pos.getX() + 0.5 + dir.offsetX * 0.75, pos.getY() + 2, pos.getZ() + 0.5 + dir.offsetZ * 0.75, 0.0, 0.05, 0.0);
 
 				if(world.rand.nextInt(15) == 0)
-					world.spawnParticle(EnumParticleTypes.LAVA, xCoord + 0.5 + dir.offsetX * 1.5 + rot.offsetX * (world.rand.nextDouble() - 0.5), yCoord + 0.75, zCoord + 0.5 + dir.offsetZ * 1.5 + rot.offsetZ * (world.rand.nextDouble() - 0.5), dir.offsetX * 0.5D, 0.05, dir.offsetZ * 0.5D);
+					world.spawnParticle(EnumParticleTypes.LAVA, pos.getX() + 0.5 + dir.offsetX * 1.5 + rot.offsetX * (world.rand.nextDouble() - 0.5), pos.getY() + 0.75, pos.getZ() + 0.5 + dir.offsetZ * 1.5 + rot.offsetZ * (world.rand.nextDouble() - 0.5), dir.offsetX * 0.5D, 0.05, dir.offsetZ * 0.5D);
 
 			}
 		}

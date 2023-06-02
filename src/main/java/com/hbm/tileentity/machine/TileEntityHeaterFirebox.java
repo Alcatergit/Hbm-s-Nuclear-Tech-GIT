@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-
 import java.io.IOException;
 
 import com.google.gson.JsonObject;
@@ -10,9 +9,6 @@ import com.hbm.inventory.gui.GUIFirebox;
 import com.hbm.lib.RefStrings;
 import com.hbm.modules.ModuleBurnTime;
 import com.hbm.tileentity.IConfigurableMachine;
-
-
-
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,7 +69,6 @@ public class TileEntityHeaterFirebox extends TileEntityFireboxBase implements IC
 	}
     @Override
 	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
-    	playersUsing++;
 		return new ContainerFirebox(player.inventory, this);
 	}
 

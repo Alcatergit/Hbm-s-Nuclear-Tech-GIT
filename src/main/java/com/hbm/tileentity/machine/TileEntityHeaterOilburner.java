@@ -196,11 +196,19 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
         return super.writeToNBT(nbt);
     }
 
-    public void toggleSetting() {
+    public void toggleSettingUp() {
         setting++;
 
-        if (setting > 10) {
+        if (setting > 100) {
             setting = 1;
+        }
+    }
+
+    public void toggleSettingDown() {
+        setting--;
+
+        if (setting < 1) {
+            setting = 100;
         }
     }
 
