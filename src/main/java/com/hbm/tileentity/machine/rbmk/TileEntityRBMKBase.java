@@ -416,7 +416,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, type);
 		debris.motionX = world.rand.nextGaussian() * 0.25D;
 		debris.motionZ = world.rand.nextGaussian() * 0.25D;
-		debris.motionY = 0.25D + world.rand.nextDouble() * 1.25D;
+		debris.motionY = 0.5D + world.rand.nextDouble() * 1.5D;
 		
 		if(type == DebrisType.LID) {
 			debris.motionX *= 0.5D;

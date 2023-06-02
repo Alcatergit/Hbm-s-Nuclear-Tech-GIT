@@ -1,10 +1,15 @@
 package com.hbm.handler;
 
-import com.hbm.config.MobConfig;
+import com.hbm.main.MainRegistry;
+import com.hbm.items.ModItems;
 import com.hbm.entity.mob.EntityFBI;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.entity.mob.EntityRADBeast;
+import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.config.MobConfig;
+import com.hbm.config.GeneralConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.EntityLiving;
@@ -13,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -127,6 +134,10 @@ public class BossSpawnHandler {
 				}
 			}
 		}
+
+		if(GeneralConfig.enableMeteorStrikes && !world.isRemote) {
+			meteorUpdate(world);
+		}
 	}
 	
 	private static void trySpawn(World world, float x, float y, float z, EntityLiving e) {
@@ -144,5 +155,77 @@ public class BossSpawnHandler {
 	public static void markFBI(EntityPlayer player) {
 		if(!player.world.isRemote)
 			player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setLong("fbiMark", player.world.getTotalWorldTime() + 20 * 60 * 20);
+	}
+	
+	public static int meteorShower = 0;
+	private static void meteorUpdate(World world) {
+		int dimID = world.provider.getDimension();
+		int dimMeteorShowerChance = parseOInt(CompatibilityConfig.meteorShowerChance.get(dimID));
+		int dimMeteorStrikeChance = parseOInt(CompatibilityConfig.meteorStrikeChance.get(dimID));
+		if(dimMeteorShowerChance > 0 && dimMeteorStrikeChance > 0){
+			if(world.rand.nextInt(meteorShower > 0 ? dimMeteorShowerChance : dimMeteorStrikeChance) == 0) {
+				if(!world.playerEntities.isEmpty()) {
+					EntityPlayer p = (EntityPlayer) world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
+					if(p != null && p.dimension == 0) {
+						boolean repell = false;
+						boolean strike = true;
+
+						ItemStack armor = p.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+						if(armor != null && ArmorModHandler.hasMods(armor)) {
+							ItemStack mod = ArmorModHandler.pryMods(armor)[ArmorModHandler.helmet_only];
+							
+							if(mod != null) {
+								if(mod.getItem() == ModItems.protection_charm) {
+									repell = true;
+								}
+								if(mod.getItem() == ModItems.meteor_charm) {
+									strike = false;
+								}
+							}
+						}
+
+						if(strike)
+							spawnMeteorAtPlayer(p, repell);
+					}
+				}
+			}
+
+			if(meteorShower > 0) {
+				meteorShower--;
+				if(meteorShower == 0 && GeneralConfig.enableDebugMode)
+					MainRegistry.logger.info("Ended meteor shower.");
+			}
+
+			if(world.rand.nextInt(dimMeteorStrikeChance * 100) == 0 && GeneralConfig.enableMeteorShowers) {
+				int dimMeteorShowerDuration = parseOInt(CompatibilityConfig.meteorShowerDuration.get(dimID));
+				meteorShower = (int) (dimMeteorShowerDuration * (0.75 + 0.25 * world.rand.nextFloat()));
+
+				if(GeneralConfig.enableDebugMode)
+					MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);
+			}
+		}
+	}
+
+	public static void spawnMeteorAtPlayer(EntityPlayer p, boolean repell) {
+		EntityMeteor meteor = new EntityMeteor(p.world);
+		meteor.posX = p.posX + p.world.rand.nextInt(201) - 100;
+		meteor.posY = 384;
+		meteor.posZ = p.posZ + p.world.rand.nextInt(201) - 100;
+		if(!repell){
+			meteor.motionX = p.world.rand.nextDouble() - 0.5;
+			meteor.motionZ = p.world.rand.nextDouble() - 0.5;
+		} else {
+			meteor.motionX = (p.world.rand.nextDouble() - 0.5) * 3;
+			meteor.motionZ = (p.world.rand.nextDouble() - 0.5) * 3;
+		}
+		meteor.motionY = -10;
+		meteor.safe = repell;
+		p.world.spawnEntity(meteor);
+	}
+
+	private static int parseOInt(Object o){
+		if(o == null)
+			return 0;
+		return (int)o;
 	}
 }

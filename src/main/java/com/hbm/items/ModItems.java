@@ -60,6 +60,7 @@ import com.hbm.items.armor.ItemModMedal;
 import com.hbm.items.armor.ItemModMilk;
 import com.hbm.items.armor.ItemModMorningGlory;
 import com.hbm.items.armor.ItemModObsidian;
+import com.hbm.items.armor.ItemModCharm;
 import com.hbm.items.armor.ItemModPads;
 import com.hbm.items.armor.ItemModPolish;
 import com.hbm.items.armor.ItemModQuartz;
@@ -464,7 +465,9 @@ public class ModItems {
 	public static final Item servo_set = new ItemModServos("servo_set").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set_desh = new ItemModServos("servo_set_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-
+	public static final Item protection_charm = new ItemModCharm("protection_charm").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setCreativeTab(MainRegistry.consumableTab);
+		
 	//Stamps
 	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 5);
 	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 5);

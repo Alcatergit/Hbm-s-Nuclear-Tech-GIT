@@ -64,7 +64,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 		if(playerIn.isSneaking())
 			return false;
 		if(!worldIn.isRemote){
-			if(playerIn.getHeldItem(hand).getItem() == ModItems.screwdriver)
+			if(playerIn.getHeldItem(hand).getItem() == ModItems.screwdriver || playerIn.getHeldItem(hand).getItem() == ModItems.screwdriver_desh)
 				playerIn.openGui(MainRegistry.instance, ModBlocks.guiID_control_panel, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		} else {
 			TileEntityControlPanel control = (TileEntityControlPanel)worldIn.getTileEntity(pos);

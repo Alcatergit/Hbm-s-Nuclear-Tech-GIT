@@ -1,7 +1,6 @@
 package com.hbm.modules;
 
 import java.util.List;
-import java.util.Random;
 
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
@@ -133,7 +132,7 @@ public class ItemHazardModule {
 			}
 		}
 
-		if(this.fire > 0 && !reacher){
+		if(this.fire > 0 && !reacher && !ArmorUtil.checkForAsbestos((EntityPlayer)entity)){
 			entity.setFire(this.fire);
 		}
 
@@ -142,16 +141,15 @@ public class ItemHazardModule {
 				EntityLivingBase livingTEntity = (EntityLivingBase) entity;
 				
 				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, 1));
 				if(this.toxic > 2){
-					Random rand = new Random();
-					int i = rand.nextInt(100);
-					if(i == 0){
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-1));
+					if(entity.world.rand.nextInt((int)(1000/this.toxic)) == 0){
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-2));
 					}
 				}
 				if(this.toxic > 4)
 					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.toxic-4)));
+				if(this.toxic > 6)
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, this.toxic));
 				if(this.toxic > 8)
 					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
 				if(this.toxic > 16)

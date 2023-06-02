@@ -571,7 +571,7 @@ public class EntityBullet extends Entity implements IProjectile {
 				}
 			}
 
-			if (this.getIsCritical()) {
+			if (world.isRemote && this.getIsCritical()) {
 				for (i = 0; i < 8; ++i) {
 					if (!this.getIsTau())
 						this.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, true, this.posX + this.motionX * i / 8.0D, this.posY + this.motionY * i / 8.0D, this.posZ + this.motionZ * i / 8.0D, 0, 0, 0/*-this.motionX, -this.motionY + 0.2D, -this.motionZ*/);
@@ -612,7 +612,7 @@ public class EntityBullet extends Entity implements IProjectile {
 			float f3 = 0.99F;
 			f1 = 0.05F;
 
-			if (this.isInWater()) {
+			if (world.isRemote && this.isInWater()) {
 				for (int l = 0; l < 4; ++l) {
 					f4 = 0.25F;
 					this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * f4, this.posY - this.motionY * f4, this.posZ - this.motionZ * f4, this.motionX, this.motionY, this.motionZ);

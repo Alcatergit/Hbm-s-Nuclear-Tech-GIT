@@ -183,6 +183,8 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	public boolean canProcess() {
 		if(!hasCoil())
 			return false;
+		if(inventory.getStackInSlot(0).isEmpty())
+			return false;
 		long recipePower = NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
 
 		if(recipePower == -1)

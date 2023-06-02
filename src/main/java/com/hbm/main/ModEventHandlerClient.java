@@ -425,19 +425,15 @@ public class ModEventHandlerClient {
 			FFIdentifierRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
 		}
-		Object object9 = evt.getModelRegistry().getObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"));
-		if(object9 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object9;
-			GunRevolverRender.INSTANCE.revolverModel = model;
-			evt.getModelRegistry().putObject(new ModelResourceLocation(ModItems.gun_revolver.getRegistryName(), "inventory"), new GunRevolverBakedModel());
-		}
 		IRegistry<ModelResourceLocation, IBakedModel> reg = evt.getModelRegistry();
 		swapModelsNoGui(ModItems.gun_revolver_nightmare, reg);
 		swapModelsNoGui(ModItems.gun_revolver_nightmare2, reg);
-		swapModelsNoGui(ModItems.gun_revolver_iron, reg);
-		swapModelsNoGui(ModItems.gun_revolver_gold, reg);
-		swapModelsNoGui(ModItems.gun_revolver_lead, reg);
-		swapModelsNoGui(ModItems.gun_revolver_schrabidium, reg);
+		swapModels(ModItems.gun_revolver, reg);
+		swapModels(ModItems.gun_revolver_iron, reg);
+		swapModels(ModItems.gun_revolver_gold, reg);
+		swapModels(ModItems.gun_revolver_lead, reg);
+		swapModels(ModItems.gun_revolver_saturnite, reg);
+		swapModels(ModItems.gun_revolver_schrabidium, reg);
 		swapModelsNoGui(ModItems.gun_revolver_cursed, reg);
 		swapModelsNoGui(ModItems.gun_revolver_pip, reg);
 		swapModelsNoGui(ModItems.gun_revolver_nopip, reg);
@@ -476,7 +472,6 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_bolt_action_saturnite, reg);
 		swapModelsNoGui(ModItems.gun_folly, reg);
 		swapModelsNoGui(ModItems.gun_dampfmaschine, reg);
-		swapModelsNoGui(ModItems.gun_revolver_saturnite, reg);
 		swapModelsNoGui(ModItems.gun_calamity, reg);
 		swapModelsNoGui(ModItems.gun_calamity_dual, reg);
 		swapModelsNoGui(ModItems.gun_minigun, reg);
@@ -730,9 +725,13 @@ public class ModEventHandlerClient {
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uu_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uu_flowing"));
 		
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_flowing"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_still"));
+		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_still"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/spentsteam_flowing"));
 		evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/pain_still"));

@@ -39,8 +39,8 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	public int soundCycle = 0;
 	public float rotation;
 	public static final long maxPower = 1000000;
-	public static final int maxFuel = 300000;
-	public static final int maxStrength = 20000;
+	public static final int maxFuel = 1000;
+	public static final int maxStrength = 10000;
 
 	///private static final int[] slots_top = new int[] { 0 };
 	///private static final int[] slots_bottom = new int[] { 0, 0 };
@@ -111,6 +111,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			sendRADGenPower();
 			int r = getRads(inventory.getStackInSlot(0));
 			if(r > 0) {
@@ -139,17 +140,20 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 				} else {
 					if(fuel + r <= maxFuel) {
 						inventory.getStackInSlot(0).shrink(1);
-						if(inventory.getStackInSlot(0).isEmpty())
-							inventory.setStackInSlot(0, ItemStack.EMPTY);
 						fuel += r;
 					}
 				}
 			}
+
+			if(fuel > maxFuel)
+				fuel = maxFuel;
 			
 			if(fuel > 0) {
 				fuel--;
 				if(strength < maxStrength){
-					strength = (int)Math.ceil(fuel / 15);
+					strength = (int)(maxStrength * fuel / maxFuel);
+				} else{
+					strength = maxStrength;
 				}
 			} else {
 				if(strength > 0)
@@ -173,7 +177,6 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 			if(strength > 1000)
 				mode = 2;
 			
-			//PacketDispatcher.wrapper.sendToAll(new TEIGeneratorPacket(xCoord, yCoord, zCoord, rotation, torque));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 		}
 	}
@@ -197,24 +200,27 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 		
 		Item item = stack.getItem();
 
-		int fuel = 0;
+		double fuel = 0;
 		
 		if(item instanceof IItemHazard){
-			fuel += (int)((IItemHazard)item).getModule().radiation;
+			fuel += ((IItemHazard)item).getModule().radiation;
 		}
 
 		if(item instanceof ItemBlockHazard){
-			fuel += (int)((ItemBlockHazard)item).getModule().radiation;
+			fuel += ((ItemBlockHazard)item).getModule().radiation;
 		}
 
 		if(stack.hasTagCompound()){
 			NBTTagCompound stackNBT = stack.getTagCompound();
 			if(stackNBT.hasKey("ntmNeutron")){
-				fuel += (int)stackNBT.getFloat("ntmNeutron");
+				fuel += stackNBT.getFloat("ntmNeutron");
 			}
 		}
 
-		return fuel;
+		if(fuel > 1)
+			return (int)Math.sqrt(fuel);
+		else
+			return 0;
 	}
 	
 	public int getFuelScaled(int i) {

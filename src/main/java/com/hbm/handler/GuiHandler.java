@@ -65,6 +65,7 @@ import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
+import com.hbm.tileentity.machine.TileEntityMachineUUCreator;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineIGenerator;
@@ -334,6 +335,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_rtg_furnace:
 			if(entity instanceof TileEntityRtgFurnace) {
 				return new ContainerRtgFurnace(player.inventory, (TileEntityRtgFurnace) entity);
+			}
+			return null;
+		case ModBlocks.guiID_uu_creator:
+			if(entity instanceof TileEntityMachineUUCreator) {
+				return new ContainerMachineUUCreator(player.inventory, (TileEntityMachineUUCreator) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_selenium:
@@ -943,6 +949,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_rtg_furnace:
 			if(entity instanceof TileEntityRtgFurnace) {
 				return new GUIRtgFurnace(player.inventory, (TileEntityRtgFurnace) entity);
+			}
+			return null;
+		case ModBlocks.guiID_uu_creator:
+			if(entity instanceof TileEntityMachineUUCreator) {
+				return new GUIMachineUUCreator(player.inventory, (TileEntityMachineUUCreator) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_selenium:

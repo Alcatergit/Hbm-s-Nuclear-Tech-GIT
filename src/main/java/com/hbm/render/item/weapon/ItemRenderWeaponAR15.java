@@ -24,20 +24,17 @@ public class ItemRenderWeaponAR15 extends TEISRBase {
 		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ar15_tex);
 		switch(type){
 		case FIRST_PERSON_LEFT_HAND:
+			GL11.glTranslated(1.95, 0.4, 0.5);
+			GL11.glScaled(0.25, 0.25, 0.25);
+			GL11.glRotated(90, 0, 1, 0);
+			GL11.glRotated(-30, 1, 0, 0);
+			break;
 		case FIRST_PERSON_RIGHT_HAND:
-			
-			if(type == TransformType.FIRST_PERSON_RIGHT_HAND){
-				GL11.glTranslated(-1, 0.5, 0.5);
-				GL11.glScaled(0.25, 0.25, 0.25);
-				GL11.glRotated(-90, 0, 1, 0);
-				GL11.glRotated(-30, 1, 0, 0);
-				GL11.glRotated(-5, 0, 1, 0);
-			} else {
-				GL11.glTranslated(1.95, 0.4, 0.5);
-				GL11.glScaled(0.25, 0.25, 0.25);
-				GL11.glRotated(90, 0, 1, 0);
-				GL11.glRotated(-30, 1, 0, 0);
-			}
+			GL11.glTranslated(-1, 0.5, 0.5);
+			GL11.glScaled(0.25, 0.25, 0.25);
+			GL11.glRotated(-90, 0, 1, 0);
+			GL11.glRotated(-30, 1, 0, 0);
+			GL11.glRotated(-5, 0, 1, 0);
 			break;
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
@@ -45,7 +42,7 @@ public class ItemRenderWeaponAR15 extends TEISRBase {
 		case FIXED:
 		case GROUND:
 			GL11.glTranslated(0.5, -0.2, -0.2);
-			GL11.glScaled(0.2, 0.2, 0.2);
+			GL11.glScaled(0.125, 0.125, 0.125);
 			GL11.glRotated(180, 0, 1, 0);
 			break;
 		case GUI:
