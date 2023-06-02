@@ -15,11 +15,14 @@ itemGroup.tabNuke=NTM Bombs
 itemGroup.tabMissile=NTM Missiles and Satellites
 itemGroup.tabWeapon=NTM Weapons and Turrets
 itemGroup.tabConsumable=NTM Consumables and Gear
-
+item.meteor_charm.name=Meteor Charm
+item.protection_charm.name=Charm of Protection
 fluid.plasma_put=Plutonium-Tritium Plasma
-
+fluid.experience=XP Juice
 fluid.tile.water=Water
 fluid.tile.lava=Lava
+tile.uu_gigafactory.name=UU-Matter Gigafactory
+container.uuCreator=UU Condenser
 
 hazard.prot=Protects against hazards:
 hazard.noprot=Does NOT protect against:
@@ -1004,7 +1007,7 @@ book.rbmk.page11=The §lstructural column§r will not interfere with neutrons, n
 book.rbmk.title12=Console
 book.rbmk.page12=The §lRBMK console§r lets you control the reactor from afar. Using the §lRBMK§r §lconsole linking device§r on an RBMK part and then the console will link the reactor to the console. The console can only manage 15x15 parts, for larger reactors you might want to use multiple consoles.
 book.rbmk.title13=Console Usage
-book.rbmk.page13=Clicking on the parts will select and deselect them. Using the colored buttons, you can quickly select all control rods of that color group. Button 'A' will select all control rods, 'X' will deselect all. You can change what stats are displayed by clicking on the icon. Select what rbmk columns you want to go into the stats and then hit save. This way you can f.ex. make average temperatures of fuel rods visible or show flux amounts.
+book.rbmk.page13=Clicking on the parts will select and deselect them. Using the colored buttons, you can quickly select all control rods of that color group. Button 'A' will select all control rods, 'X' will deselect all. You can change what stats are displayed by clicking on the icon. Select what rbmk columns you want to go into the stats and then hit save. This way you can e.g. make average temperatures of fuel rods visible or show flux amounts.
 book.rbmk.page14=Entering a number 0-100 in the green box and then hitting the button next to it will set all selected control rods to this position. Button 'AZ-5' will cause all control rods to fully insert.
 book.rbmk.title15=RBMK Designing
 book.rbmk.page15=When designing a new RBMK you need to think about where flux goes. The left design has a lot of power potential but no way to stop flux and shut it down. The one on the right can be shut down and started again without needing Self-igniting rods if the corners have Self-sustaining rods as they can use the reflectors to stay active.
@@ -1037,7 +1040,7 @@ book.rbmk.title_func_quadratic=Quadratic
 book.rbmk.page_func_quadratic=Self-Sustaining: §8No§r                   Reflector use: §4§lInsane§r                   Example: f(x) = x² * 0.1                 Only place next to SAFE and PASSIVE fuels or absorbers.
 
 book.rbmk.title_tips=Tips
-book.rbmk.page_tips=Radiation will leak if flux gets outside of the reactor (it was not blocked or reflected) or if flux reaches a rbmk columns without a lid. Steam connectors are used for performance and accessibility of steam channels. Irradiation channels are absorbers that use incoming flux for recipes.
+book.rbmk.page_tips=Radiation will leak if flux gets outside of the reactor (it was not blocked or reflected) or if flux reaches rbmk columns without a lid. Steam connectors are used for performance and accessibility of steam channels. Irradiation channels are absorbers that use incoming flux for recipes.
 
 book.rbmk.title_mistakes=Common Mistakes
 book.rbmk.page_mistakes=§lInfo§r: Empty RBMK Fuel Columns are transparent to flux. §lScenario§r: You replace the depleted fuel rod in pink. The red column has a fuel with a §4DANGEROUS§r class flux function. You take out the fuel rod of pink and the RBMK explodes. So what happened? Flux from red was no longer absorbed by pink and got reflected back. This creates a feedbackloop which made the temperature go brrr.
@@ -1356,7 +1359,7 @@ tile.railgun_plasma.name=Railgun
 container.railgun=Railgun
 tile.machine_catalytic_cracker.name=Catalytic Cracking Tower
 
-tile.control_panel0.name=[WIP]Control Panel
+tile.control_panel0.name=Control Panel
 
 item.turret_control.name=Turret Controller
 item.turret_chip.name=Turret AI-Chip

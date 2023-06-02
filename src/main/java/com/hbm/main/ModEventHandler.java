@@ -37,7 +37,6 @@ import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.mob.EntityRADBeast;
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
-import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.ArmorUtil;
@@ -176,7 +175,6 @@ public class ModEventHandler {
 	public static final ResourceLocation DATA_LOC = new ResourceLocation(RefStrings.MODID, "HBMDATA");
 
 	public static boolean showMessage = true;
-	public static int meteorShower = 0;
 	public static Random rand = new Random();
 
 	public static float decayRate = 0.999990373F; //1h halflife
@@ -573,12 +571,6 @@ public class ModEventHandler {
 		}
 	}
 
-	private int parseOInt(Object o){
-		if(o == null)
-			return 0;
-		return (int)o;
-	}
-
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		if(!MainRegistry.allPipeNetworks.isEmpty() && !event.world.isRemote) {
@@ -594,43 +586,6 @@ public class ModEventHandler {
 					itr.remove();
 				}
 
-			}
-		}
-
-		if(event.world != null && !event.world.isRemote && GeneralConfig.enableMeteorStrikes) {
-			int dimID = event.world.provider.getDimension();
-			int dimMeteorShowerChance = parseOInt(CompatibilityConfig.meteorShowerChance.get(dimID));
-			int dimMeteorStrikeChance = parseOInt(CompatibilityConfig.meteorStrikeChance.get(dimID));
-			if(dimMeteorShowerChance > 0 && dimMeteorStrikeChance > 0){
-				if(event.world.rand.nextInt(meteorShower > 0 ? dimMeteorShowerChance : dimMeteorStrikeChance) == 0) {
-					if(!event.world.playerEntities.isEmpty()) {
-						EntityPlayer p = (EntityPlayer) event.world.playerEntities.get(event.world.rand.nextInt(event.world.playerEntities.size()));
-						if(p != null && p.dimension == 0) {
-							EntityMeteor meteor = new EntityMeteor(event.world);
-							meteor.posX = p.posX + event.world.rand.nextInt(201) - 100;
-							meteor.posY = 384;
-							meteor.posZ = p.posZ + event.world.rand.nextInt(201) - 100;
-							meteor.motionX = event.world.rand.nextDouble() - 0.5;
-							meteor.motionY = -10;
-							meteor.motionZ = event.world.rand.nextDouble() - 0.5;
-							event.world.spawnEntity(meteor);
-						}
-					}
-				}
-
-				if(meteorShower > 0) {
-					meteorShower--;
-					if(meteorShower == 0 && GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("Ended meteor shower.");
-				}
-
-				if(event.world.rand.nextInt(dimMeteorStrikeChance * 100) == 0 && GeneralConfig.enableMeteorShowers) {
-					int dimMeteorShowerDuration = parseOInt(CompatibilityConfig.meteorShowerDuration.get(dimID));
-					meteorShower = (int) (dimMeteorShowerDuration * (0.75 + 0.25 * event.world.rand.nextFloat()));
-
-					if(GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("Started meteor shower! Duration: " + meteorShower);
-				}
 			}
 		}
 		

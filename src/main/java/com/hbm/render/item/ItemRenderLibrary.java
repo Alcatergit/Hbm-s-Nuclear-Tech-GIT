@@ -1247,7 +1247,18 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.orbus_tex); ResourceManager.orbus.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
-		
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.uu_gigafactory), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(2, 2, 2);
+			}
+			public void renderCommon() {
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.uu_creator_tex); ResourceManager.uu_creator.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fraction_tower), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -2.5, 0);

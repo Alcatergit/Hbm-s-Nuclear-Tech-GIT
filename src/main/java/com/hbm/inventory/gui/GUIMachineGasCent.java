@@ -29,9 +29,9 @@ public class GUIMachineGasCent extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 69 - 52, 16, 52, diFurnace.tank);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 45, guiTop + 69 - 52, 16, 52, diFurnace.tank);
 		
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 98, guiTop + 30, 6, 32, mouseX, mouseY, new String[] {String.valueOf((int)((double)diFurnace.progress / (double)TileEntityMachineGasCent.processingSpeed * 100D)) + "%"});
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 92, guiTop + 15, 28, 54, mouseX, mouseY, new String[] {String.valueOf((int)((double)diFurnace.progress / (double)TileEntityMachineGasCent.processingSpeed * 100D)) + "%"});
 		
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 51 - 34, 16, 34, diFurnace.power, TileEntityMachineGasCent.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
@@ -55,10 +55,10 @@ public class GUIMachineGasCent extends GuiInfoContainer {
 		int i = (int)diFurnace.getPowerRemainingScaled(34);
 		drawTexturedModalRect(guiLeft + 8, guiTop + 51 - i, 176, 34 - i, 16, i);
 
-		int j = (int)diFurnace.getCentrifugeProgressScaled(33);
-		drawTexturedModalRect(guiLeft + 98, guiTop + 63 - j, 192, 32 - j, 6, j);
+		int j = (int)diFurnace.getCentrifugeProgressScaled(37);
+		drawTexturedModalRect(guiLeft + 95, guiTop + 55 - j, 192, 37 - j, 22, j);
 		
 
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 53, 97);
+		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 44, 97);
 	}
 }

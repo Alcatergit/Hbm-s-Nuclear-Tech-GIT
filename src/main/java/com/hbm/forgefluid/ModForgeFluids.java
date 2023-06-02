@@ -102,11 +102,14 @@ public class ModForgeFluids {
 	public static Fluid plasma_xm = new Fluid("plasma_xm", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_xm_flowing"), null, Color.WHITE).setTemperature(45000 + 273);
 	public static Fluid plasma_put = new Fluid("plasma_put", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_put_flowing"), null, Color.WHITE).setTemperature(50000 + 273);
 	public static Fluid plasma_bf = new Fluid("plasma_bf", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/plasma_bf_flowing"), null, Color.WHITE).setTemperature(85000 + 273);
+	
+	public static Fluid uu_matter = new Fluid("ic2uu_matter", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uu_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uu_flowing"), null, Color.WHITE).setTemperature(1000000 + 273);
 
 	public static Fluid pain = new Fluid("pain", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/pain_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/pain_flowing"), null, Color.WHITE);
 	public static Fluid wastefluid = new Fluid("wastefluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastefluid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastefluid_flowing"), null, Color.WHITE);
 	public static Fluid wastegas = new Fluid("wastegas", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastegas_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/wastegas_flowing"), null, Color.WHITE);
 	public static Fluid gasoline = new Fluid("gasoline", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/gasoline_flowing"), null, Color.WHITE);
+	public static Fluid experience = new Fluid("experience", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_flowing"), null, Color.WHITE);
 	
 	//Block fluids
 	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(220+273);
@@ -239,6 +242,8 @@ public class ModForgeFluids {
 			plasma_xm = FluidRegistry.getFluid("plasma_xm");
 		if(!FluidRegistry.registerFluid(plasma_bf))
 			plasma_bf = FluidRegistry.getFluid("plasma_bf");
+		if(!FluidRegistry.registerFluid(uu_matter))
+			uu_matter = FluidRegistry.getFluid("ic2uu_matter");
 		
 		if(!FluidRegistry.registerFluid(pain))
 			pain = FluidRegistry.getFluid("pain");
@@ -248,6 +253,8 @@ public class ModForgeFluids {
 			wastegas = FluidRegistry.getFluid("wastegas");
 		if(!FluidRegistry.registerFluid(gasoline))
 			gasoline = FluidRegistry.getFluid("gasoline");
+		if(!FluidRegistry.registerFluid(experience))
+			experience = FluidRegistry.getFluid("experience");
 		
 		if(!FluidRegistry.registerFluid(toxic_fluid))
 			toxic_fluid = FluidRegistry.getFluid("toxic_fluid");
@@ -356,12 +363,13 @@ public class ModForgeFluids {
 		plasma_put = FluidRegistry.getFluid("plasma_put");
 		plasma_xm = FluidRegistry.getFluid("plasma_xm");
 		plasma_bf = FluidRegistry.getFluid("plasma_bf");
+		uu_matter = FluidRegistry.getFluid("ic2uu_matter");
 		
 		pain = FluidRegistry.getFluid("pain");
 		wastefluid = FluidRegistry.getFluid("wastefluid");
 		wastegas = FluidRegistry.getFluid("wastegas");
 		gasoline = FluidRegistry.getFluid("gasoline");
-		
+		experience = FluidRegistry.getFluid("experience");
 
 		toxic_fluid = FluidRegistry.getFluid("toxic_fluid");
 		radwater_fluid = FluidRegistry.getFluid("radwater_fluid");

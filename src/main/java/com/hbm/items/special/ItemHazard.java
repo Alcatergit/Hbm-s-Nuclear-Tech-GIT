@@ -101,6 +101,7 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 	public static final float radspice = 20_000.0F;
 	public static final float unof = 10_000.0F;
 
+	public static final float ore = 0.01F;
 	public static final float nugget = 0.1F;
 	public static final float ingot = 1.0F;
 	public static final float gem = 1.0F;

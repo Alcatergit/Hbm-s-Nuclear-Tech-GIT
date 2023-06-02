@@ -120,7 +120,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 
 		if (this instanceof TileEntityTurretCIWS && !(e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom || e instanceof EntityBomber || e instanceof EntityMIRV))
 			return false;
-		if (e instanceof EntityPlayer && players.contains((((EntityPlayer) e).getUniqueID().toString())))
+		if (e instanceof EntityPlayer && players.contains((((EntityPlayer) e).getDisplayName().getUnformattedText())))
 			return false;
 
 		if (this instanceof TileEntityTurretTau)

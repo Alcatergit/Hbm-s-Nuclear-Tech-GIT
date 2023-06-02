@@ -18,26 +18,25 @@ public class ContainerCrystallizer extends Container {
 	public ContainerCrystallizer(InventoryPlayer invPlayer, TileEntityMachineCrystallizer tedf) {
 		diFurnace = tedf;
 
-
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 8, 53));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 140, 35));
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 26, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 26, 53));
-		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 5, 98, 17));
-		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 6, 116, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 62, 45));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 152, 72));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 113, 45));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 17, 18));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 17, 54));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 5, 80, 18));
+		this.addSlotToContainer(new SlotUpgrade(tedf.inventory, 6, 98, 18));
 
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 122 + i * 18));
 			}
 		}
 
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 180));
 		}
 	}
 

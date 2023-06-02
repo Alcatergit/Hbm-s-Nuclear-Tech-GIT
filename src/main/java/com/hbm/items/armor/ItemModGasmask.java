@@ -41,6 +41,7 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		if(this == ModItems.attachment_mask)
 			list.add(TextFormatting.GREEN + "Gas protection");
@@ -62,6 +63,7 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addDesc(List<String> list, ItemStack stack, ItemStack armor){
 		list.add("§a  " + stack.getDisplayName() + " (gas protection)");
 		ArmorUtil.addGasMaskTooltip(stack, null, list, ITooltipFlag.TooltipFlags.NORMAL);

@@ -89,5 +89,4 @@ public class BlockHazardFalling extends BlockFalling implements IItemHazard {
 			world.scheduleUpdate(pos, this, this.tickRate(world));
 		}
 	}
-	
 }
