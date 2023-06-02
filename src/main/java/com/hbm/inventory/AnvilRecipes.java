@@ -174,6 +174,26 @@ public class AnvilRecipes {
 						new OreDictStack(CU.ingot(), 8)
 				}, new AnvilOutput(new ItemStack(ModBlocks.heater_firebox))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[]{
+						new ComparableStack(ModItems.ingot_firebrick, 16),
+						new OreDictStack(STEEL.plate(), 4),
+						new OreDictStack(CU.ingot(), 8),
+				} ,new AnvilOutput(new ItemStack(ModBlocks.heater_oven))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[]{
+						new ComparableStack(ModItems.tank_steel, 4),
+						new ComparableStack(ModItems.pipes_steel, 1),
+						new OreDictStack(TI.ingot(), 12),
+						new OreDictStack(CU.ingot(), 8)
+				} ,new AnvilOutput(new ItemStack(ModBlocks.heater_oilburner))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new OreDictStack(RUBBER.ingot(), 4),
+						new OreDictStack(CU.ingot(), 16),
+						new OreDictStack(STEEL.plate(), 16),
+						new ComparableStack(ModItems.pipes_steel, 1),
+				}, new AnvilOutput(new ItemStack(ModBlocks.heater_heatex))).setTier(3));
+		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new ComparableStack(Blocks.STONEBRICK, 16),
 						new OreDictStack(IRON.ingot(), 4),

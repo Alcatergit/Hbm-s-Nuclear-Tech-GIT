@@ -633,5 +633,79 @@ public class MachineRecipes {
 
 		return null;
 	}
-	
+
+	/**
+	 * FT_Flammable
+	 * @param fluid input fluid
+	 * @return How much heat energy (usually translates into HE 1:1) 1000mB hold
+	 */
+	public static int getFlameEnergy(Fluid fluid) {
+		if (ModForgeFluids.deuterium.equals(fluid)) {
+			return 5000;
+		} else if (ModForgeFluids.tritium.equals(fluid)) {
+			return 5000;
+		} else if (ModForgeFluids.oil.equals(fluid)) {
+			return 10_000;
+		} else if (ModForgeFluids.hotoil.equals(fluid)) {
+			return 10_000;
+		} else if (ModForgeFluids.heavyoil.equals(fluid)) {
+			return 50_000;
+		} else if (ModForgeFluids.smear.equals(fluid)) {
+			return 50_000;
+		} else if (ModForgeFluids.heatingoil.equals(fluid)) {
+			return 150_000;
+		} else if (ModForgeFluids.reclaimed.equals(fluid)) {
+			return 100_000;
+		} else if (ModForgeFluids.petroil.equals(fluid)) {
+			return 125_000;
+		} else if (ModForgeFluids.naphtha.equals(fluid)) {
+			return 125_000;
+		} else if (ModForgeFluids.diesel.equals(fluid)) {
+			return 200_000;
+		} else if (ModForgeFluids.lightoil.equals(fluid)) {
+			return 200_000;
+		} else if (ModForgeFluids.kerosene.equals(fluid)) {
+			return 300_000;
+		} else if (ModForgeFluids.gas.equals(fluid)) {
+			return 10_000;
+		} else if (ModForgeFluids.petroleum.equals(fluid)) {
+			return 25_000;
+		} else if (ModForgeFluids.biogas.equals(fluid)) {
+			return 25_000;
+		} else if (ModForgeFluids.biofuel.equals(fluid)) {
+			return 150_000;
+		} else if (ModForgeFluids.nitan.equals(fluid)) {
+			return 2_000_000;
+		} else if (ModForgeFluids.hydrogen.equals(fluid)) {
+			return 5_000;
+		} else if (ModForgeFluids.balefire.equals(fluid)) {
+			return 1_000_000;
+		} else if (ModForgeFluids.gasoline.equals(fluid)) {
+			return 400_000;
+		} else if (ModForgeFluids.crackoil.equals(fluid)) {
+			return 10_000;
+		} else if (ModForgeFluids.hotcrackoil.equals(fluid)) {
+			return 10_000;
+		} else if (ModForgeFluids.aromatics.equals(fluid)) {
+			return 25_000;
+		} else if (ModForgeFluids.unsaturateds.equals(fluid)) {
+			return 1_000_000;
+		}
+		return 0;
+	}
+
+	/// return: Fluid, amount required, amount produced, heat produced
+	public static Object[] getHeatexOutput(Fluid type) {
+		if (type == ModForgeFluids.steam) {
+			return new Object[] {ModForgeFluids.spentsteam, 100, 1, 200};
+		} else if (type == ModForgeFluids.hotsteam) {
+			return new Object[]{ModForgeFluids.steam, 1, 10, 2};
+		} else if (type == ModForgeFluids.superhotsteam) {
+			return new Object[]{ModForgeFluids.hotsteam, 1, 10, 18};
+		} else if (type == ModForgeFluids.ultrahotsteam) {
+			return new Object[]{ModForgeFluids.superhotsteam, 1, 10, 120};
+		}
+
+		return null;
+	}
 }

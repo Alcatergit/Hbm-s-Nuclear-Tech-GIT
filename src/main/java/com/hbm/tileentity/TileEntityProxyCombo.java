@@ -2,6 +2,7 @@ package com.hbm.tileentity;
 
 import api.hbm.energy.IEnergyUser;
 
+import api.hbm.tile.IHeatSource;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -11,20 +12,30 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser {
+public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser, IHeatSource {
 
 	TileEntity tile;
 	boolean inventory;
 	boolean power;
 	boolean fluid;
-	
+
+	boolean heat;
+
 	public TileEntityProxyCombo() {
 	}
-	
+
 	public TileEntityProxyCombo(boolean inventory, boolean power, boolean fluid) {
 		this.inventory = inventory;
 		this.power = power;
 		this.fluid = fluid;
+		this.heat = false;
+	}
+
+	public TileEntityProxyCombo(boolean inventory, boolean power, boolean fluid, boolean heat) {
+		this.inventory = inventory;
+		this.power = power;
+		this.fluid = fluid;
+		this.heat = heat;
 	}
 
 	// fewer messy recursive operations
@@ -36,7 +47,7 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 
 		return tile;
 	}
-	
+
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(tile == null) {
@@ -56,7 +67,7 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		}
 		return super.getCapability(capability, facing);
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if(tile == null) {
@@ -113,35 +124,61 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 
 		return 0;
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		inventory = compound.getBoolean("inv");
 		fluid = compound.getBoolean("flu");
 		power = compound.getBoolean("pow");
+		heat = compound.getBoolean("hea");
+
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("inv", inventory);
 		compound.setBoolean("flu", fluid);
 		compound.setBoolean("pow", power);
+		compound.setBoolean("hea", heat);
 		return super.writeToNBT(compound);
 	}
-	
+
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return writeToNBT(new NBTTagCompound());
 	}
-	
+
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
 	}
-	
+
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		this.readFromNBT(tag);
+	}
+
+	@Override
+	public int getHeatStored() {
+		if (!this.heat) {
+			return 0;
+		}
+
+		if (getTile() instanceof IHeatSource) {
+			return ((IHeatSource) getTile()).getHeatStored();
+		}
+		return 0;
+	}
+
+	@Override
+	public void useUpHeat(int heat) {
+		if (!this.heat) {
+			return;
+		}
+
+		if (getTile() instanceof IHeatSource) {
+			((IHeatSource) getTile()).useUpHeat(heat);
+		}
 	}
 }

@@ -91,22 +91,22 @@ public class TileEntityFFDuctBase extends TileEntity implements IFluidPipe, IFlu
 	}
 	
 	public void updateConnections() {
-		if(FFUtils.checkFluidConnectables(this.world, pos.up(), getNetworkTrue())) connections[0] = EnumFacing.UP;
+		if(FFUtils.checkFluidConnectables(this.world, pos.up(), getNetworkTrue(), EnumFacing.UP.getOpposite())) connections[0] = EnumFacing.UP;
 		else connections[0] = null;
-		
-		if(FFUtils.checkFluidConnectables(this.world, pos.down(), getNetworkTrue())) connections[1] = EnumFacing.DOWN;
+
+		if(FFUtils.checkFluidConnectables(this.world, pos.down(), getNetworkTrue(), EnumFacing.DOWN.getOpposite())) connections[1] = EnumFacing.DOWN;
 		else connections[1] = null;
-		
-		if(FFUtils.checkFluidConnectables(this.world, pos.north(), getNetworkTrue())) connections[2] = EnumFacing.NORTH;
+
+		if(FFUtils.checkFluidConnectables(this.world, pos.north(), getNetworkTrue(), EnumFacing.NORTH.getOpposite())) connections[2] = EnumFacing.NORTH;
 		else connections[2] = null;
-		
-		if(FFUtils.checkFluidConnectables(this.world, pos.east(), getNetworkTrue())) connections[3] = EnumFacing.EAST;
+
+		if(FFUtils.checkFluidConnectables(this.world, pos.east(), getNetworkTrue(), EnumFacing.EAST.getOpposite())) connections[3] = EnumFacing.EAST;
 		else connections[3] = null;
-		
-		if(FFUtils.checkFluidConnectables(this.world, pos.south(), getNetworkTrue())) connections[4] = EnumFacing.SOUTH;
+
+		if(FFUtils.checkFluidConnectables(this.world, pos.south(), getNetworkTrue(), EnumFacing.SOUTH.getOpposite())) connections[4] = EnumFacing.SOUTH;
 		else connections[4] = null;
-		
-		if(FFUtils.checkFluidConnectables(this.world, pos.west(), getNetworkTrue())) connections[5] = EnumFacing.WEST;
+
+		if(FFUtils.checkFluidConnectables(this.world, pos.west(), getNetworkTrue(), EnumFacing.WEST.getOpposite())) connections[5] = EnumFacing.WEST;
 		else connections[5] = null;
 	}
 	
