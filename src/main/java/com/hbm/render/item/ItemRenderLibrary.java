@@ -284,6 +284,16 @@ public class ItemRenderLibrary {
 		        ResourceManager.chemplant_spinner.renderAll();
 		        GlStateManager.enableCull();
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_chemfac), new ItemRenderBase( ) {
+			public void renderInventory() {
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			public void renderCommon() {
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.chemfac_tex); ResourceManager.chemfac.renderPart("Main");
+				GL11.glShadeModel(GL11.GL_FLAT);
+			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fluidtank), new ItemRenderBase() {
 			public void renderInventory() {

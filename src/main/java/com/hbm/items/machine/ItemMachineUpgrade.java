@@ -10,11 +10,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemMachineUpgrade extends Item {
+	public UpgradeType type;
+	public int tier = 0;
 
 	public ItemMachineUpgrade(String s) {
+		this(s, UpgradeType.SPECIAL, 0);
+	}
+
+	public ItemMachineUpgrade(String s, UpgradeType type) {
+		this(s, type, 0);
+	}
+
+	public ItemMachineUpgrade(String s, UpgradeType type, int tier) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		
+
+		this.type = type;
+		this.tier = tier;
+
 		ModItems.ALL_ITEMS.add(this);
 	}
 
@@ -41,7 +54,7 @@ public class ItemMachineUpgrade extends Item {
 		if(upgrade == ModItems.upgrade_screm) return 10;
 		return 0;
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if(this == ModItems.upgrade_speed_1)
@@ -268,6 +281,24 @@ public class ItemMachineUpgrade extends Item {
 			list.add("Mining Laser Upgrade");
 			list.add("50% chance to override worthless items with /dev/zero");
 			list.add("50% chance to move worthless items to /dev/null");
+		}
+	}
+
+	public enum UpgradeType {
+		SPEED,
+		EFFECT,
+		POWER,
+		FORTUNE,
+		AFTERBURN,
+		OVERDRIVE,
+		SPECIAL;
+
+		public boolean mutex = false;
+
+		UpgradeType() { }
+
+		UpgradeType(boolean mutex) {
+			this.mutex = mutex;
 		}
 	}
 }
