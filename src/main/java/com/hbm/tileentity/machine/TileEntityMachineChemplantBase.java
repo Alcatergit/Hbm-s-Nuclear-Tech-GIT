@@ -395,7 +395,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 							}
 						}
 
-						for (int j = 0; i < inv.getSizeInventory(); j++) {
+						for (int j = 0; j < inv.getSizeInventory(); j++) {
 							if (!inv.isItemValidForSlot(j, out)) {
 								continue;
 							}
