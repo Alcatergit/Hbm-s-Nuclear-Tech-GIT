@@ -319,6 +319,9 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 
 		if (templateStack.getItemDamage() < EnumChemistryTemplate.values().length) {
 			List<AStack> itemInputs = ChemplantRecipes.getChemInputFromTempate(templateStack);
+			if (itemInputs == null) {
+				return;
+			}
 
 			BlockPos[] positions = getInputPositions();
 			int[] indices = getSlotIndicesFromIndex(index);
