@@ -3,7 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.BoilerRecipes;
+import com.hbm.inventory.HeatRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.packet.FluidTankPacket;
@@ -33,17 +33,16 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     public Fluid[] types = new Fluid[2];
     public int heat;
     public static int maxHeat = 12_800_000; //the heat required to turn 64k of water into steam
-    public static int inputAmount = 100;
     public static final double diffusion = 0.1D;
 
     public TileEntityHeatBoiler() {
         super();
         tanks = new FluidTank[2];
 
-        tanks[0] = new FluidTank(FluidRegistry.WATER, 0, 64000);
+        tanks[0] = new FluidTank(FluidRegistry.WATER, 0, 640000);
         types[0] = FluidRegistry.WATER;
 
-        tanks[1] = new FluidTank(ModForgeFluids.steam, 0, 6400000);
+        tanks[1] = new FluidTank(ModForgeFluids.steam, 0, 64000000);
         types[1] = ModForgeFluids.steam;
 
     }
@@ -67,8 +66,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             tryPullHeat();
             tryConvert();
             
-            if(world.getTotalWorldTime() % 10 == 0)
-                fillFluidInit(tanks[1]);
+            fillFluidInit(tanks[1]);
 
             networkPack();
         }
@@ -82,7 +80,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     }
 
     public void fillFluid(FluidTank tank, BlockPos pos){
-        FFUtils.fillFluid(this, tank, world, pos, 640000);
+        FFUtils.fillFluid(this, tank, world, pos, 64000000);
     }
 
     @Override
@@ -181,10 +179,10 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     }
 
     private void setupTanks() {
-        FluidStack fluid = BoilerRecipes.getOutputsFromFluid(types[0]);
+        Fluid fluid = HeatRecipes.getBoilFluid(types[0]);
         if (fluid != null) {
             setTankType(0, types[0]);
-            setTankType(1, fluid.getFluid());
+            setTankType(1, fluid);
         } else {
             setTankType(0, null);
             setTankType(1, null);
@@ -192,20 +190,19 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     }
 
     private void tryConvert() {
-        FluidStack outputFluids = BoilerRecipes.getOutputsFromFluid(types[0]);
-        if(outputFluids != null) {
-            int heatReq = Math.max(outputFluids.getFluid().getTemperature(), tanks[0].getFluid().getFluid().getTemperature());
-
-            int inputOps = tanks[0].getFluidAmount() / inputAmount;
-            int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / outputFluids.amount;
-            int heatOps = this.heat / Math.max(heatReq, 10);
+        if(HeatRecipes.hasBoilRecipe(types[0])) {
+            Fluid hotFluid = HeatRecipes.getBoilFluid(types[0]);
+            int heatReq = HeatRecipes.getRequiredHeat(types[0]);
+            int inputAmount = HeatRecipes.getInputAmountHot(types[0]);
+            int outputAmount = HeatRecipes.getOutputAmountHot(types[0]);
             
-            int ops = Math.min(inputOps, Math.min(outputOps, heatOps));
-
+            int inputOps = tanks[0].getFluidAmount() / inputAmount;
+            int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / outputAmount;
+            int tempOps = (int) Math.floor(this.heat / heatReq);
+            int ops = Math.min(inputOps, Math.min(outputOps, tempOps));
+            
             tanks[0].drain(inputAmount * ops, true);
-            FluidStack output = outputFluids.copy();
-            output.amount *= ops;
-            tanks[1].fill(output, true);
+            tanks[1].fill(new FluidStack(types[1], outputAmount * ops), true);
             this.heat -= heatReq * ops;
         }
     }

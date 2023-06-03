@@ -542,6 +542,113 @@ public class AnvilRecipes {
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModItems.pile_rod_boron),
 				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.ingot_boron, 2)), new AnvilOutput(new ItemStack(Items.STICK, 2))}).setTier(3));
+
+		//RBMK
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_moderator), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.block_graphite, 4))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_absorber), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_boron, 8))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_reflector), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModItems.neutron_reflector, 8))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_control), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_absorber, 1)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_graphite, 2)),
+						new AnvilOutput(new ItemStack(ModItems.motor, 2))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_control_mod), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_control, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.block_graphite, 4)),
+						new AnvilOutput(new ItemStack(ModItems.nugget_bismuth, 4))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_control_auto), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_control, 1)),
+						new AnvilOutput(new ItemStack(ModItems.circuit_targeting_tier1, 2))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_rod_reasim), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_zirconium, 4)),
+						new AnvilOutput(new ItemStack(ModItems.hull_small_steel, 2))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_rod_reasim_mod), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_rod_reasim, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.block_graphite, 4)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_tcalloy, 4))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_outgasser), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.steel_grate, 6)),
+						new AnvilOutput(new ItemStack(ModItems.tank_steel, 1)),
+						new AnvilOutput(new ItemStack(Blocks.HOPPER, 1))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_storage), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.crate_steel, 2))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+					new ComparableStack(ModBlocks.rbmk_rod), new AnvilOutput[] {
+							new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+							new AnvilOutput(new ItemStack(ModItems.hull_small_steel, 2))
+					}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_rod_mod), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_rod, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.block_graphite, 4)),
+						new AnvilOutput(new ItemStack(ModItems.nugget_bismuth, 4))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_boiler), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModItems.board_copper, 6)),
+						new AnvilOutput(new ItemStack(ModItems.pipes_steel, 2))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_cooler), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModBlocks.steel_grate, 4)),
+						new AnvilOutput(new ItemStack(ModItems.plate_polymer, 4))
+				}).setTier(4));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.rbmk_heater), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModBlocks.rbmk_blank, 1)),
+						new AnvilOutput(new ItemStack(ModItems.pipes_steel, 2)),
+						new AnvilOutput(new ItemStack(ModItems.plate_polymer, 2))
+				}).setTier(4));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.machine_turbine), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.turbine_titanium, 1)),
+						new AnvilOutput(new ItemStack(ModItems.coil_copper, 2)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_steel, 4))
+						}).setTier(3));
+		
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.yellow_barrel), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.tank_steel, 1)),
+						new AnvilOutput(new ItemStack(ModItems.plate_lead, 2)),
+						new AnvilOutput(new ItemStack(ModItems.nuclear_waste, 10))
+				}).setTier(3));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.vitrified_barrel), new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.tank_steel, 1)),
+						new AnvilOutput(new ItemStack(ModItems.plate_lead, 2)),
+						new AnvilOutput(new ItemStack(ModItems.nuclear_waste_vitrified, 10))
+				}).setTier(3));
 	}
 	
 	public static void pullFromAssembler(ComparableStack result, int tier) {

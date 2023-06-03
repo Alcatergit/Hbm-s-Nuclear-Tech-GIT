@@ -64,6 +64,7 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.superhotsteam.getName(), new FluidProperties(4, 0 ,0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.ultrahotsteam.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.coolant.getName(), new FluidProperties(1, 0, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.hotcoolant.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NONE));
 		
 		fluidProperties.put(FluidRegistry.LAVA.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NOWATER));
 		

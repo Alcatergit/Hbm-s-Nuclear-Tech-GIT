@@ -342,6 +342,11 @@ public class GUIRBMKConsole extends GuiScreen {
 			case OUTGASSER: break;
 			case BREEDER: break;
 			
+			case COOLER:
+				int cryo = (int)Math.ceil(col.data.getShort("cryo") * 8 / 16000);
+				if(cryo > 0)
+					drawTexturedModalRect(guiLeft + x + 3, guiTop + y + size - cryo - 1, 123, 191 - cryo, 4, cryo);
+				break;
 			case CONTROL:
 				int color = col.data.getShort("color");
 				if(color > -1)
@@ -362,7 +367,12 @@ public class GUIRBMKConsole extends GuiScreen {
 					drawTexturedModalRect(guiLeft + x + 4, guiTop + y + size - fe - 1, 14, 191 - fe, 2, fe);
 				}
 				break;
-				
+			case HEATEX:
+				int fk = (int)Math.ceil((col.data.getInteger("inputFluidAmount")) * 8 / col.data.getDouble("inputFluidMax"));
+				drawTexturedModalRect(guiLeft + x + 1, guiTop + y + size - fk - 1, 131, 191 - fk, 3, fk);
+				int fz = (int)Math.ceil((col.data.getInteger("outputFluidAmount")) * 8 / col.data.getDouble("outputFluidMax"));
+				drawTexturedModalRect(guiLeft + x + 6, guiTop + y + size - fz - 1, 136, 191 - fz, 3, fz);
+				break;
 			case BOILER:
 				int fw = (int)Math.ceil((col.data.getInteger("water")) * 8 / col.data.getDouble("maxWater"));
 				drawTexturedModalRect(guiLeft + x + 1, guiTop + y + size - fw - 1, 41, 191 - fw, 3, fw);

@@ -27,6 +27,7 @@ import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.inventory.CyclotronRecipes;
 import com.hbm.inventory.FusionRecipes;
 import com.hbm.inventory.DiFurnaceRecipes;
+import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
 import com.hbm.inventory.MagicRecipes;
@@ -820,7 +821,7 @@ public class JeiRecipes {
 		boilerRecipes = new ArrayList<BoilerRecipe>();
 		
 		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
-			Object[] outs = MachineRecipes.getBoilerOutput(f);
+			Object[] outs = HeatRecipes.getBoilerOutput(f);
 			if(outs != null){
 				boilerRecipes.add(new BoilerRecipe(ItemFluidIcon.getStackWithQuantity(f, (Integer) outs[2]), ItemFluidIcon.getStackWithQuantity((Fluid) outs[0], (Integer) outs[1])));
 			}

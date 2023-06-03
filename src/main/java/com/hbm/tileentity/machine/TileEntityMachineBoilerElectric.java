@@ -5,7 +5,7 @@ import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.HeatRecipes;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
@@ -144,9 +144,9 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 
 			Object[] outs;
 			if(tanks[0].getFluid() != null)
-				outs = MachineRecipes.getBoilerOutput(tanks[0].getFluid().getFluid());
+				outs = HeatRecipes.getBoilerOutput(tanks[0].getFluid().getFluid());
 			else
-				outs = MachineRecipes.getBoilerOutput(null);
+				outs = HeatRecipes.getBoilerOutput(null);
 
 			if(heat > 2000) {
 				heat -= 30;

@@ -8,7 +8,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
-import com.hbm.inventory.BoilerRecipes;
+import com.hbm.inventory.HeatRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.tileentity.TileEntityProxyCombo;
@@ -84,7 +84,7 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltip
 
                 TileEntityHeatBoiler boiler = (TileEntityHeatBoiler) te;
                 Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
-                if(!BoilerRecipes.hasRecipe(type)){
+                if(!HeatRecipes.hasBoilRecipe(type)){
                     player.sendMessage(new TextComponentString("§cNo recipe found for §e"+type.getLocalizedName(new FluidStack(type, 1))));
                     return false;
                 }

@@ -1206,7 +1206,7 @@ public class ItemRenderLibrary {
 					if(i < 3)
 						tes.addTranslation(0, 1, 0);
 				}
-				if(Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_boiler)
+				if(Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_boiler && Block.getBlockFromItem(stack.getItem()) != ModBlocks.rbmk_heater)
 					ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
 				tes.draw();
 			}
@@ -1243,11 +1243,13 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_control_auto), rbmkControl);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_blank), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_boiler), rbmkControl);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_heater), rbmkControl);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_reflector), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_absorber), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_moderator), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_outgasser), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_storage), rbmkPassive);
+		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_cooler), rbmkPassive);
 		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_bat9000), new ItemRenderBase() {
 			public void renderInventory() {

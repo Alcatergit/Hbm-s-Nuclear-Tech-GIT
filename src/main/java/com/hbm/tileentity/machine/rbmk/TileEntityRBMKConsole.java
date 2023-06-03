@@ -452,7 +452,10 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			List<String> stats = new ArrayList<>();
 			stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.heat", ((int)((this.data.getDouble("heat") * 10D)) / 10D) + "°C"));
 			switch(this.type) {
-
+			case HEATEX:
+				stats.add(TextFormatting.AQUA + I18nUtil.resolveKey("rbmk.heater.fluid", this.data.getString("inputFluid"), this.data.getInteger("inputFluidAmount"), this.data.getInteger("inputFluidMax")));
+				stats.add(TextFormatting.RED + I18nUtil.resolveKey("rbmk.heater.fluid", this.data.getString("outputFluid"), this.data.getInteger("outputFluidAmount"), this.data.getInteger("outputFluidMax")));
+				break;
 			case FUEL:
 			case FUEL_SIM:
 				if(this.data.hasKey("rod_name"))
@@ -470,15 +473,17 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				stats.add(TextFormatting.WHITE + I18nUtil.resolveKey("rbmk.boiler.steam", this.data.getInteger("steam"), this.data.getInteger("maxSteam")));
 				stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.boiler.type", I18nUtil.resolveKey(FluidRegistry.getFluid(this.data.getString("type")).getUnlocalizedName())));
 				break;
+			case COOLER:
+				stats.add(TextFormatting.AQUA + I18nUtil.resolveKey("rbmk.cooler.cooling", this.data.getInteger("cooled") * 20));
+				stats.add(TextFormatting.DARK_AQUA + I18nUtil.resolveKey("rbmk.cooler.cryo", this.data.getInteger("cryo")));
+				break;
 			case CONTROL:
-				
 				if(this.data.hasKey("color")) {
 					short col = this.data.getShort("color");
 					
 					if(col >= 0 && col < RBMKColor.values().length)
 						stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.control." + RBMKColor.values()[col].name().toLowerCase()));
 				}
-				
 			case CONTROL_AUTO:
 				stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.control.level", ((int)((this.data.getDouble("level") * 100D))) + "%"));
 				break;
@@ -607,6 +612,18 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				TileEntityRBMKOutgasser irradiationChannel = (TileEntityRBMKOutgasser)te;
 				data_table.put("fluxProgress", String.valueOf(irradiationChannel.progress));
 				data_table.put("requiredFlux", String.valueOf(irradiationChannel.duration));
+			}
+
+			if(te instanceof TileEntityRBMKCooler){
+				TileEntityRBMKCooler coolingChannel = (TileEntityRBMKCooler)te;
+				data_table.put("degreesCooledPerTick", String.valueOf(coolingChannel.lastCooled));
+				data_table.put("cryogel", String.valueOf(coolingChannel.tank.getFluidAmount()));
+			}
+
+			if(te instanceof TileEntityRBMKHeater){
+				TileEntityRBMKHeater heaterChannel = (TileEntityRBMKHeater)te;
+				data_table.put("coolant", String.valueOf(heaterChannel.tanks[0].getFluidAmount()));
+				data_table.put("hotcoolant", String.valueOf(heaterChannel.tanks[1].getFluidAmount()));
 			}
 
 			return new Object[] {data_table};
