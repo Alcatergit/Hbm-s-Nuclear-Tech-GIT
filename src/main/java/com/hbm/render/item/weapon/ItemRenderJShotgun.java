@@ -148,11 +148,11 @@ public class ItemRenderJShotgun extends TEISRBase {
 			GL11.glRotated(180, 0, 1, 0);
 			break;
 		case GUI:
-			GL11.glTranslated(-0.55, 0, 0);
-			GL11.glScaled(0.4, 0.4, 0.4);
+			GL11.glTranslated(-0.75, 0, -0.2);
+			GL11.glScaled(0.45, 0.45, 0.45);
 			GL11.glRotated(180, 0, 1, 0);
 			GL11.glRotated(45, 0, 0, 1);
-			GL11.glRotated(-30, 1, 0, 0);
+			GL11.glRotated(-45, 1, 0, 0);
 			break;
 		case NONE:
 			break;

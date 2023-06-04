@@ -12,6 +12,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -24,7 +25,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -52,8 +52,8 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	public TileEntityMachineChemfac() {
 		super(77);
 
-		water = new TypedFluidTank(FluidRegistry.WATER, new FluidTank(64_000));
-		steam = new TypedFluidTank(ModForgeFluids.steam, new FluidTank(64_000));
+		water = new TypedFluidTank(ModForgeFluids.coolant, new FluidTank(6400));
+		steam = new TypedFluidTank(ModForgeFluids.hotcoolant, new FluidTank(6400));
 
 		inventory = new ItemStackHandler(77) {
 			@Override
@@ -138,8 +138,8 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 					double y = pos.getY() + 3;
 					double z = pos.getZ() + 0.5 - rot.offsetZ * 0.5;
 
-					world.spawnParticle(EnumParticleTypes.CLOUD, x + dir.offsetX * 1.5 + rand.nextGaussian() * 0.15, y, z + dir.offsetZ * 1.5 + rand.nextGaussian() * 1.5, 0.0D, 0.15D, 0.0D);
-					world.spawnParticle(EnumParticleTypes.CLOUD, x + dir.offsetX * 0.5 + rand.nextGaussian() * 0.15, y, z + dir.offsetZ * 0.5 + rand.nextGaussian() * 1.5, 0.0D, 0.15D, 0.0D);
+					world.spawnParticle(EnumParticleTypes.CLOUD, x + dir.offsetX * 1.5 + rand.nextGaussian() * 0.2, y, z + dir.offsetZ * 1.5 + rand.nextGaussian() * 0.2, 0.0D, 0.15D, 0.0D);
+					world.spawnParticle(EnumParticleTypes.CLOUD, x + dir.offsetX * -0.5 + rand.nextGaussian() * 0.2, y, z + dir.offsetZ * -0.5 + rand.nextGaussian() * 0.2, 0.0D, 0.15D, 0.0D);
 				}
 			} else {
 				rotSpeed -= 0.1;
@@ -172,7 +172,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	}
 
 	private int getWaterRequired() {
-		return 1000 / this.speed;
+		return 100 / this.speed;
 	}
 
 
@@ -185,7 +185,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	protected void process(int index) {
 		super.process(index);
 		this.water.tank.drain(getWaterRequired(), true);
-		this.steam.tank.fill(new FluidStack(ModForgeFluids.steam, getWaterRequired()), true);
+		this.steam.tank.fill(new FluidStack(ModForgeFluids.hotcoolant, getWaterRequired()), true);
 	}
 
 

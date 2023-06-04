@@ -1,15 +1,22 @@
 package com.hbm.tileentity.machine;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import api.hbm.energy.IEnergyUser;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.handler.MultiblockHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -22,6 +29,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -328,42 +339,16 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 
 			for (BlockPos pos : positions) {
 				TileEntity te = world.getTileEntity(pos);
-				if (te instanceof IInventory) {
-					IInventory inv = (IInventory) te;
-					ISidedInventory sided = inv instanceof ISidedInventory ? (ISidedInventory) inv : null;
 
-					for (AStack ingredient : itemInputs) {
-						if (!InventoryUtil.doesArrayHaveIngredients(inventory, indices[0], indices[1], ingredient)) {
-							for (int i = 0; i < inv.getSizeInventory(); ++i) {
-								ItemStack stack = inv.getStackInSlot(i);
-
-								if (ingredient.matchesRecipe(stack, true) && (sided == null || sided.canExtractItem(i, stack, EnumFacing.DOWN))) {
-									for (int j = indices[0]; j <= indices[1]; ++j) {
-										ItemStack cur = inventory.getStackInSlot(j);
-										if (!cur.isEmpty() && cur.getCount() < cur.getMaxStackSize() & InventoryUtil.doesStackDataMatch(cur, stack)) {
-											inv.decrStackSize(i, 1);
-											cur.setCount(cur.getCount() + 1);
-											return;
-										}
-									}
-
-									for (int j = indices[0]; j < indices[1]; ++j) {
-										ItemStack cur = inventory.getStackInSlot(j);
-										if (cur.isEmpty()) {
-											ItemStack stackCopy = stack.copy();
-											stackCopy.setCount(1);
-											inventory.setStackInSlot(j, stackCopy);
-											inv.decrStackSize(i, 1);
-											return;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+				if(te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
+					IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+					int[] slots;
+					slots = new int[cap.getSlots()];
+					for(int i = 0; i < slots.length; i++)
+						slots[i] = i;
+					tryFillAssemblerCap(cap, slots, null, indices[0], indices[1], itemInputs);
+				}	
 			}
-
 		}
 	}
 
@@ -373,46 +358,194 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 
 		for (BlockPos pos : positions) {
 			TileEntity te = world.getTileEntity(pos);
-
-			if (te instanceof IInventory) {
-				IInventory inv = (IInventory) te;
-
-				for (int i = indices[2]; i <= indices[3]; ++i) {
-					ItemStack out = inventory.getStackInSlot(i);
-
-					if (!out.isEmpty()) {
-						for (int j = 0; j < inv.getSizeInventory(); j++) {
-							if (!inv.isItemValidForSlot(j, out)) {
-								continue;
-							}
-
-							ItemStack target = inv.getStackInSlot(j);
-							if (InventoryUtil.doesStackDataMatch(out, target) && target.getCount() < target.getMaxStackSize() && target.getCount() < inv.getInventoryStackLimit()) {
-								inventory.extractItem(i, 1, false);
-								target.setCount(target.getCount() + 1);
-
-								return;
-							}
-						}
-
-						for (int j = 0; j < inv.getSizeInventory(); j++) {
-							if (!inv.isItemValidForSlot(j, out)) {
-								continue;
-							}
-
-							if (inv.getStackInSlot(j).isEmpty() && inv.isItemValidForSlot(j, out)) {
-								ItemStack copy = out.copy();
-								copy.setCount(1);
-								inv.setInventorySlotContents(j, copy);
-								inventory.extractItem(i, 1, false);
-
-								return;
-							}
-						}
-					}
+			if(te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
+				IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+				for(int i = indices[2]; i <= indices[3]; i++) {
+					tryFillContainerCap(cap, i);
 				}
 			}
 		}
+	}
+
+	//Unloads output into chests. Capability version.
+	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
+
+		int size = inv.getSlots();
+
+		for(int i = 0; i < size; i++) {
+			inv.getStackInSlot(i);
+			if(inv.getStackInSlot(i) != ItemStack.EMPTY) {
+
+				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+					return false;
+
+				ItemStack sta1 = inv.getStackInSlot(i).copy();
+				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+				sta1.setCount(1);
+				sta2.setCount(1);
+
+				if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
+					inventory.getStackInSlot(slot).shrink(1);
+
+					if(inventory.getStackInSlot(slot).isEmpty())
+						inventory.setStackInSlot(slot, ItemStack.EMPTY);
+
+					ItemStack sta3 = inv.getStackInSlot(i).copy();
+					sta3.setCount(1);
+					inv.insertItem(i, sta3, false);
+
+					return true;
+				}
+			}
+		}
+		for(int i = 0; i < size; i++) {
+
+			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+				return false;
+
+			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+			if(inv.getStackInSlot(i).getItem() == Items.AIR) {
+				sta2.setCount(1);
+				inventory.getStackInSlot(slot).shrink(1);
+				;
+
+				if(inventory.getStackInSlot(slot).isEmpty())
+					inventory.setStackInSlot(slot, ItemStack.EMPTY);
+
+				inv.insertItem(i, sta2, false);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean tryFillAssemblerCap(IItemHandler container, int[] allowedSlots, TileEntityMachineBase te, int minSlot, int maxSlot, List<AStack> recipeIngredients) {
+		if(allowedSlots.length < 1)
+			return false;
+
+		if(recipeIngredients == null) //No recipe template found
+			return false;
+		else {
+			Map<Integer, ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
+
+			for(int slot : allowedSlots) {
+				container.getStackInSlot(slot);
+				if(container.getStackInSlot(slot).isEmpty()) { // check next slot in chest if it is empty
+					continue;
+				} else { // found an item in chest
+					itemStackMap.put(slot, container.getStackInSlot(slot).copy());
+				}
+			}
+			if(itemStackMap.size() == 0) {
+				return false;
+			}
+
+			for(int ig = 0; ig < recipeIngredients.size(); ig++) {
+
+				AStack nextIngredient = recipeIngredients.get(ig).copy(); // getting new ingredient
+
+				int ingredientSlot = getValidSlot(nextIngredient, minSlot, maxSlot);
+
+
+				if(ingredientSlot < minSlot)
+					continue; // Ingredient filled or Assembler is full
+
+				int possibleAmount = inventory.getStackInSlot(ingredientSlot).getMaxStackSize() - inventory.getStackInSlot(ingredientSlot).getCount(); // how many items do we need to fill the stack?
+
+				if(possibleAmount == 0) { // full
+					System.out.println("This should never happen method getValidSlot broke");
+					continue;
+				}
+				// Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
+				for(Map.Entry<Integer, ItemStack> set :
+						itemStackMap.entrySet()) {
+					ItemStack stack = set.getValue();
+					int slot = set.getKey();
+					ItemStack compareStack = stack.copy();
+					compareStack.setCount(1);
+
+					if(isItemAcceptable(nextIngredient.getStack(), compareStack)) { // bingo found something
+
+						int foundCount = Math.min(stack.getCount(), possibleAmount);
+						if(te != null && !te.canExtractItem(slot, stack, foundCount))
+							continue;
+						if(foundCount > 0) {
+							possibleAmount -= foundCount;
+							container.extractItem(slot, foundCount, false);
+							inventory.getStackInSlot(ingredientSlot);
+							if(inventory.getStackInSlot(ingredientSlot).isEmpty()) {
+
+								stack.setCount(foundCount);
+								inventory.setStackInSlot(ingredientSlot, stack);
+
+							} else {
+								inventory.getStackInSlot(ingredientSlot).grow(foundCount); // transfer complete
+							}
+						} else {
+							break; // ingredientSlot filled
+						}
+					}
+				}
+
+			}
+			return true;
+		}
+	}
+
+	private int getValidSlot(AStack nextIngredient, int minSlot, int maxSlot) {
+		int firstFreeSlot = -1;
+		int stackCount = (int) Math.ceil(nextIngredient.count() / 64F);
+		int stacksFound = 0;
+
+		nextIngredient = nextIngredient.singulize();
+
+		for(int k = minSlot; k <= maxSlot; k++) { //scaning inventory if some of the ingredients allready exist
+			if(stacksFound < stackCount) {
+				ItemStack assStack = inventory.getStackInSlot(k).copy();
+				if(assStack.isEmpty()) {
+					if(firstFreeSlot < minSlot)
+						firstFreeSlot = k;
+					continue;
+				} else { // check if there are already enough filled stacks is full
+
+					assStack.setCount(1);
+					if(nextIngredient.isApplicable(assStack)) { // check if it is the right item
+
+						if(inventory.getStackInSlot(k).getCount() < assStack.getMaxStackSize()) // is that stack full?
+							return k; // found a not full slot where we already have that ingredient
+						else
+							stacksFound++;
+					}
+				}
+			} else {
+				return -1; // All required stacks are full
+			}
+		}
+		if(firstFreeSlot < minSlot) // nothing free in assembler inventory anymore
+			return -2;
+		return firstFreeSlot;
+	}
+
+	public boolean isItemAcceptable(ItemStack stack1, ItemStack stack2) {
+
+		if(stack1 != null && stack2 != null && stack1.getItem() != Items.AIR && stack1.getItem() != Items.AIR) {
+			if(Library.areItemStacksCompatible(stack1, stack2))
+				return true;
+
+			int[] ids1 = OreDictionary.getOreIDs(stack1);
+			int[] ids2 = OreDictionary.getOreIDs(stack2);
+
+			if(ids1.length > 0 && ids2.length > 0) {
+				for(int i = 0; i < ids1.length; i++)
+					for(int j = 0; j < ids2.length; j++)
+						if(ids1[i] == ids2[j])
+							return true;
+			}
+		}
+
+		return false;
 	}
 
 

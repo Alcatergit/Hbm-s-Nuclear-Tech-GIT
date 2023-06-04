@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -44,8 +43,8 @@ public class GUIChemfac extends GuiInfoContainer {
 			FFUtils.renderTankInfo(this, mouseX, mouseY, offX + 107, offY + 45 - 32, 5, 34, chemfac.tanks[i * 4 + 3].getTank(), chemfac.tanks[i * 4 + 3].getType());
 		}
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 233, guiTop + 108, 9, 54, chemfac.water.getTank(), FluidRegistry.WATER);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 242, guiTop + 108, 9, 54, chemfac.steam.getTank(), ModForgeFluids.steam);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 233, guiTop + 108, 9, 54, chemfac.water.getTank(), ModForgeFluids.coolant);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 242, guiTop + 108, 9, 54, chemfac.steam.getTank(), ModForgeFluids.hotcoolant);
 	}
 
 	@Override
