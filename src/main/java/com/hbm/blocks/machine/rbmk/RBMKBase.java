@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine.rbmk;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.items.ModItems;
@@ -7,6 +10,7 @@ import com.hbm.items.machine.ItemRBMKLid;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 
@@ -18,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -25,9 +30,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public abstract class RBMKBase extends BlockDummyable implements IToolable {
+public abstract class RBMKBase extends BlockDummyable implements IToolable, ITooltipProvider {
 
 	public static boolean dropLids = true;
 	public static boolean digamma = false;
@@ -49,6 +56,12 @@ public abstract class RBMKBase extends BlockDummyable implements IToolable {
 	public int getOffset() {
 		return 0;
 	}
+
+	@Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        this.addStandardInfo(tooltip);
+    }
 	
 	public boolean openInv(World world, int x, int y, int z, EntityPlayer player, int gui, EnumHand hand) {
 		
@@ -181,5 +194,4 @@ public abstract class RBMKBase extends BlockDummyable implements IToolable {
 		
 		return false;
 	}
-
 }

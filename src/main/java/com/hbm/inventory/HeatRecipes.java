@@ -40,7 +40,7 @@ public class HeatRecipes {
 		//Compat
 		addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
 		addBoilRecipe("oilgc", 1, "hotoil", 1, 300); //galacticraft
-		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft
+		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft & industrialforegoing
 		addBoilRecipe("petroil", 1, "fuel", 1, 100); //galacticraft
 		addBoilRecipe("refined_fuel", 1, "petroil", 1, 100); //thermalfoundation
 		addBoilRecipe("sulphuricacid", 1, "sulfuric_acid", 1, 100); //galacticraft
@@ -51,7 +51,7 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe("liquidhydrogen", 1, "hydrogen", 1, 1); //mekanism
 		addBoilRecipe("refined_biofuel", 1, "biofuel", 1, 10); //thermalfoundation
 		// addBoilAndCoolRecipe("cryotheum", 1, "pyrotheum", 1, 1000); //thermalfoundation
-
+		addBoilAndCoolRecipe("ic2coolant", 1, "", 1, "hydrogen", 1, 450); //mekanism", 1, 1); //IC2
 		setFluidsForRBMKLoader();
 	}
 
