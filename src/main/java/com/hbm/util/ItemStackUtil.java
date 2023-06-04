@@ -9,7 +9,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nonnull;
 
 public class ItemStackUtil {
 	
@@ -18,6 +21,28 @@ public class ItemStackUtil {
 			return null;
 		else
 			return stack.copy();
+	}
+
+	/**
+	 * Creates a new array that only contains the copied range.
+	 * @param inv
+	 * @param start
+	 * @param end
+	 * @return copied items
+	 */
+	@Nonnull
+	public static ItemStack[] carefulCopyArrayTruncate(@Nonnull IItemHandler inv, int start, int end) {
+		if (end < start) {
+			throw new IllegalArgumentException("end must be >= start");
+		}
+
+		int length = end - start + 1;
+		ItemStack[] copy = new ItemStack[length];
+		for (int idx = 0; idx < length; idx++) {
+			copy[idx] = carefulCopy(inv.getStackInSlot(start + idx));
+		}
+
+		return copy;
 	}
 	
 	public static ItemStack carefulCopyWithSize(ItemStack stack, int size) {

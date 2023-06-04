@@ -1,5 +1,6 @@
 package com.hbm.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.hbm.inventory.AnvilRecipes.AnvilOutput;
@@ -8,6 +9,7 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -27,7 +29,7 @@ public class InventoryUtil {
 
 		ItemStack rem = tryAddItemToExistingStack(inv, start, end, stack);
 
-		if(rem == null)
+		if(rem == null || rem.isEmpty())
 			return ItemStack.EMPTY;
 
 		boolean didAdd = tryAddItemToNewSlot(inv, start, end, rem);
@@ -85,7 +87,7 @@ public class InventoryUtil {
 
 		for(int i = start; i <= end; i++) {
 
-			if(inv[i] == null) {
+			if(inv[i] == null || inv[i].isEmpty()) {
 				inv[i] = stack;
 				return true;
 			}
@@ -323,5 +325,81 @@ public class InventoryUtil {
 				}
 			}
 		}
+	}
+
+	public static boolean doesArrayHaveIngredients(IItemHandler inv, int start, int end, List<AStack> ingredients) {
+		ItemStack[] copy = ItemStackUtil.carefulCopyArrayTruncate(inv, start, end);
+		AStack[] req = new AStack[ingredients.size()];
+		for (int idx = 0; idx < req.length; ++idx) {
+			req[idx] = ingredients.get(idx) == null ? null : ingredients.get(idx).copy();
+		}
+
+		for (AStack ingredient : req) {
+			if (ingredient == null) {
+				continue;
+			}
+
+			for (ItemStack input : copy) {
+				if (input == null || input.isEmpty()) {
+					continue;
+				}
+
+				if (ingredient.matchesRecipe(input, true)) {
+					int size = Math.min(input.getCount(), ingredient.count());
+					ingredient.setCount(ingredient.count() - size);
+					input.setCount(input.getCount() - size);
+
+					if (ingredient.count() == 0) {
+						break;
+					}
+				}
+			}
+
+			if (ingredient.count() > 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean doesArrayHaveIngredients(IItemHandler inv, int start, int end, AStack... ingredients) {
+		return doesArrayHaveIngredients(inv, start, end, Arrays.asList(ingredients));
+	}
+
+	public static boolean doesArrayHaveSpace(IItemHandler inv, int start, int end, ItemStack[] items) {
+		ItemStack[] copy = ItemStackUtil.carefulCopyArrayTruncate(inv, start, end);
+
+		for (ItemStack item : items) {
+			if (item.isEmpty()) {
+				continue;
+			}
+
+			ItemStack remainder = tryAddItemToInventory(copy, 0, copy.length - 1, item.copy());
+			if (!remainder.isEmpty()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static boolean tryConsumeAStack(IItemHandlerModifiable inv, int start, int end, AStack stack) {
+		AStack copy = stack.copy();
+		for (int i = start; i < end; ++i) {
+			ItemStack input = inv.getStackInSlot(i);
+
+			if (stack.matchesRecipe(input, true)) {
+				int size = Math.min(copy.count(), input.getCount());
+				inv.extractItem(i, size, false);
+				copy.setCount(copy.count() - size);
+
+				if (copy.count() == 0) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
