@@ -31,7 +31,7 @@ public class GUIMachinePumpjack extends GuiInfoContainer {
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 70 - 52, 34, 52, derrick.tanks[0], derrick.tankTypes[0]);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 124 - 52, 34, 52, derrick.tanks[1], derrick.tankTypes[1]);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 70 - 52, 16, 52, derrick.power, TileEntityMachinePumpjack.maxPower);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 70 - 52, 16, 52, derrick.power, derrick.getMaxPower());
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 

@@ -398,5 +398,4 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 			return super.getCapability(capability, facing);
 		}
 	}
-
 }

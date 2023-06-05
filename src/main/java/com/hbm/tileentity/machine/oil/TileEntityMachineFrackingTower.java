@@ -25,16 +25,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
-    public static long maxPower = 5000000;
-
     protected static int consumption = 5000;
     private static int solutionRequired = 10;
 
     protected static int delay = 20;
     protected static int oilPerDeposit = 1000;
-
+    protected static int gasPerDepositMin = 200;
+    
     protected static int oilPerBedrockDeposit = 100;
     protected static int gasPerBedrockDepositMin = 10;
+    protected static int extraGasPerDepositMax = 401;
     protected static int extraGasPerBedrockDepositMax = 50;
 
     protected static int destructionRange = 32;
@@ -42,16 +42,16 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
     public TileEntityMachineFrackingTower() {
         super();
-        super.maxPower = this.maxPower;
-        super.consumption = this.consumption;
-        super.delay = this.delay;
         tanks[2] = new FluidTank(64000);
         tankTypes[2] = ModForgeFluids.fracksol;
     }
 
     public String getInventoryName() { return this.hasCustomInventoryName() ? this.getCustomName() : "container.frackingTower"; }
 
-
+    @Override
+    public long getMaxPower() {
+        return 5000000L;
+    }
 
     @Override
     public void update() {
@@ -82,7 +82,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
             if(needsUpdate) {
                 needsUpdate = false;
             }
-            power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
+            power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
             if(power >= consumption && tank2Amount >= solutionRequired && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 
@@ -273,13 +273,6 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
         super.readFromNBT(compound);
     }
-
-    @Override
-    public long getPowerScaled(long i) {
-        return (power * i) / maxPower;
-    }
-
-
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {

@@ -20,9 +20,12 @@ public class ContainerDiFurnace extends Container {
 		dualPower = 0;
 		diFurnace = tedf;
 		
+		//Inputs
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 80, 18));
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 54));
+		//Fuel
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 8, 36));
+		//Output
 		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 3, 134, 36));
 		
 		for(int i = 0; i < 3; i++)

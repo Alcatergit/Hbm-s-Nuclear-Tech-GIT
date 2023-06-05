@@ -23,8 +23,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
+	
+	protected static int delay = 50;
+	protected static int consumption = 100;
 
-
+    protected static int oilPerDeposit = 500;
+    protected static int gasPerDepositMin = 100;
+    protected static int extraGasPerDepositMax = 401;
 
 	// private static final int[] slots_top = new int[] {1};
 	// private static final int[] slots_bottom = new int[] {2, 0};
@@ -34,7 +39,10 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		return this.hasCustomInventoryName() ? this.getCustomName() : "container.oilWell";
 	}
 
-
+	@Override
+    public long getMaxPower() {
+        return 100000L;
+    }
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -64,7 +72,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 			if(needsUpdate) {
 				needsUpdate = false;
 			}
-			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
+			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
 			if(power >= 100 && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 

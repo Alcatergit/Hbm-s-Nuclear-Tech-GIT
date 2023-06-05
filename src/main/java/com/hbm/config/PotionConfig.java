@@ -12,11 +12,13 @@ public class PotionConfig {
 	public static int radxID = 66;
 	public static int leadID = 67;
 	
+	public static boolean doJumpBoost = true;
 	public static int potionSickness = 0;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_POTION = "08_potion_effects";
-		Property propTaintID = config.get(CATEGORY_POTION, "8.00_taintPotionID", 62);
+		doJumpBoost = CommonConfig.createConfigBool(config, CATEGORY_POTION, "8.x_doJumpBoost", "Whether Servos and Armors should give Jumpboost", true);
+        Property propTaintID = config.get(CATEGORY_POTION, "8.00_taintPotionID", 62);
 		propTaintID.setComment("What potion ID the taint effect will have");
 		taintID = propTaintID.getInt();
 		Property propRadiationID = config.get(CATEGORY_POTION, "8.01_radiationPotionID", 63);

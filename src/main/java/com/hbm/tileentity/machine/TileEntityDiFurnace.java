@@ -23,9 +23,9 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	public static final int maxPower = 12800;
 	public static final int processingSpeed = 400;
 	
-	private static final int[] slots_top = new int[] {0};
+	private static final int[] slots_top = new int[] {0, 1};
 	private static final int[] slots_bottom = new int[] {3};
-	private static final int[] slots_side = new int[] {1};
+	private static final int[] slots_side = new int[] {2};
 	
 	public TileEntityDiFurnace() {
 		super(4);
@@ -125,9 +125,10 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if(i == 3){
+		if(i == 3)
 			return false;
-		}
+		if(i == 2)
+			return hasItemPower(stack);
 		return true;
 	}
 	
@@ -138,7 +139,9 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		return true;
+		if(slot == 3)
+			return true;
+		return false;
 	}
 	
 	public boolean isUsableByPlayer(EntityPlayer player){
@@ -174,7 +177,6 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			return true;
 		}
 		if(inventory.getStackInSlot(3).getItem() != ItemStack.EMPTY.getItem() && !inventory.getStackInSlot(3).isItemEqual(itemStack)) {
-			System.out.println(inventory.getStackInSlot(3).getItem());
 			return false;
 		}
 		
@@ -236,5 +238,4 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 		if(mark)
 			markDirty();
 	}
-
 }

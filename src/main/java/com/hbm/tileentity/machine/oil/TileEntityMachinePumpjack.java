@@ -34,6 +34,8 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 	protected static int consumption = 200;
 
 	protected static int oilPerDeposit = 650;
+    protected static int gasPerDepositMin = 110;
+    protected static int extraGasPerDepositMax = 401;
 
 	public boolean isProgressing;
 	public float rotation;
@@ -41,14 +43,16 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 
 	public TileEntityMachinePumpjack() {
 		super();
-		super.delay = this.delay;
-		super.consumption = this.consumption;
-		super.oilPerDeposit = this.oilPerDeposit;
 	}
 
 	public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.getCustomName() : "container.pumpjack";
 	}
+
+	@Override
+    public long getMaxPower() {
+        return 200000L;
+    }
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -90,7 +94,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 			if(needsUpdate) {
 				needsUpdate = false;
 			}
-			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
+			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
 			if(power >= 100 && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 

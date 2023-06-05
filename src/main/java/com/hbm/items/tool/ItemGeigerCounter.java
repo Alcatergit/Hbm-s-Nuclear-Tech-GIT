@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -30,8 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemGeigerCounter extends Item {
-
-	Random rand = new Random();
 	
 	public ItemGeigerCounter(String s) {
 		this.setUnlocalizedName(s);
@@ -51,54 +48,7 @@ public class ItemGeigerCounter extends Item {
 			if(ArmorFSB.hasFSBArmor((EntityPlayer)entity) && ((ArmorFSB)((EntityPlayer)entity).inventory.armorInventory.get(2).getItem()).geigerSound)
 				return;
 			
-			double x = ContaminationUtil.getActualPlayerRads((EntityPlayer)entity);
-			
-			if(world.getTotalWorldTime() % 5 == 0) {
-
-				if(x > 0.001) {
-					List<Integer> list = new ArrayList<Integer>();
-
-					if(x < 1){
-						list.add(0);
-					}
-					if(x < 5){
-						list.add(0);
-					}
-					if(2 < x && x < 10){
-						list.add(1);
-					}
-					if(5 < x && x < 20){
-						list.add(2);
-					}
-					if(15 < x && x < 40){
-						list.add(3);
-					}
-					if(30 < x && x < 80){
-						list.add(4);
-					}
-					if(60 < x && x < 160){
-						list.add(5);
-					}
-					if(120 < x && x < 320){
-						list.add(6);
-					}
-					if(240 < x && x < 640){
-						list.add(7);
-					}
-					if(480 < x){
-						list.add(8);
-					}
-					if(list.size() > 0){
-						int r = list.get(rand.nextInt(list.size()));
-						
-						if(r > 0){
-							world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
-						}
-					}
-				} else if(rand.nextInt(100) == 0) {
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[(rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
-				}
-			}
+			playGeiger(world, (EntityPlayer)entity);
 		}
 	}
 	
@@ -116,18 +66,55 @@ public class ItemGeigerCounter extends Item {
 		return 0;
 	}
 
-	public static int check(@Nullable EntityPlayer player, World world, BlockPos pos) {
+	public static void playGeiger(World world, EntityPlayer player){
+		double x = ContaminationUtil.getActualPlayerRads(player);
 		
-		RadiationSavedData data = RadiationSavedData.getData(world);
-		
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(pos));
-		
-		if(player != null){
-			if(ItemGunEgon.getIsFiring(player.getHeldItemMainhand())){
-				rads += 100;
+		if(world.getTotalWorldTime() % 5 == 0) {
+
+			if(x > 0.001) {
+				List<Integer> list = new ArrayList<Integer>();
+
+				if(x < 1){
+					list.add(0);
+				}
+				if(x < 5){
+					list.add(0);
+				}
+				if(2 < x && x < 10){
+					list.add(1);
+				}
+				if(5 < x && x < 20){
+					list.add(2);
+				}
+				if(15 < x && x < 40){
+					list.add(3);
+				}
+				if(30 < x && x < 80){
+					list.add(4);
+				}
+				if(60 < x && x < 160){
+					list.add(5);
+				}
+				if(120 < x && x < 320){
+					list.add(6);
+				}
+				if(240 < x && x < 640){
+					list.add(7);
+				}
+				if(480 < x){
+					list.add(8);
+				}
+				if(list.size() > 0){
+					int r = list.get(world.rand.nextInt(list.size()));
+					
+					if(r > 0){
+						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
+					}
+				}
+			} else if(world.rand.nextInt(100) == 0) {
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.geigerSounds[(world.rand.nextInt(1))], SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 		}
-		return rads;
 	}
 	
 	@Override

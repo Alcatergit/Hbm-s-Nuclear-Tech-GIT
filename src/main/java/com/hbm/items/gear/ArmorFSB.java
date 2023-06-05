@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemGeigerCounter;
+import com.hbm.config.PotionConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.ClientProxy;
 import com.hbm.packet.KeybindPacket;
@@ -33,6 +34,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -361,38 +363,7 @@ public class ArmorFSB extends ItemArmor {
 		if(!fsbarmor.geigerSound || !(entity instanceof EntityPlayer))
 			return;
 		
-		if(world.getTotalWorldTime() % 5 == 0) {
-
-			int x = check((EntityPlayer)entity, world, (int)entity.posX, (int)entity.posY, (int)entity.posZ);
-
-			if(x > 0) {
-				List<Integer> list = new ArrayList<Integer>();
-
-				if(x < 1)
-					list.add(0);
-				if(x < 5)
-					list.add(0);
-				if(x < 10)
-					list.add(1);
-				if(x > 5 && x < 15)
-					list.add(2);
-				if(x > 10 && x < 20)
-					list.add(3);
-				if(x > 15 && x < 25)
-					list.add(4);
-				if(x > 20 && x < 30)
-					list.add(5);
-				if(x > 25)
-					list.add(6);
-
-				int r = list.get(world.rand.nextInt(list.size()));
-
-				if(r > 0)
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[r-1], SoundCategory.PLAYERS, 1.0F, 1.0F);
-			} else if(world.rand.nextInt(50) == 0) {
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.geigerSounds[world.rand.nextInt(1)], SoundCategory.PLAYERS, 1.0F, 1.0F);
-			}
-		}
+		ItemGeigerCounter.playGeiger(world, (EntityPlayer)entity);
 	}
 	
 	//Drillgon200: This method is literally never called in 1.12 for some unknown reason even though it absolutely looks like it should be.
@@ -400,15 +371,6 @@ public class ArmorFSB extends ItemArmor {
 	//public void onArmorTick(World world, EntityPlayer entity, ItemStack itemStack) {
 	//	
 	//}
-	
-	public static int check(@Nullable EntityPlayer player, World world, int x, int y, int z) {
-		return ItemGeigerCounter.check(player, world, new BlockPos(x, y, z));
-		/*RadiationSavedData data = RadiationSavedData.getData(world);
-
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(new BlockPos(x, y, z)));
-
-		return rads;*/
-	}
 	
 	//For crazier stuff not possible without hooking the event
     @SideOnly(Side.CLIENT)
@@ -460,6 +422,8 @@ public class ArmorFSB extends ItemArmor {
 	}
 	
 	public ArmorFSB addEffect(PotionEffect effect) {
+		if(!PotionConfig.doJumpBoost && effect.getPotion() == MobEffects.JUMP_BOOST)
+			return this;
 		effects.add(effect);
 		return this;
 	}

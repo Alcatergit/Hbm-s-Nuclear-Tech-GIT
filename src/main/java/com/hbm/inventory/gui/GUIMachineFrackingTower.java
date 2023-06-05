@@ -32,7 +32,7 @@ public class GUIMachineFrackingTower extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 124 - 52, 34, 52, frackingTower.tanks[1], frackingTower.tankTypes[1]);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 155, guiTop + 124 - 52, 16, 52, frackingTower.tanks[2], frackingTower.tankTypes[2]);
 
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 70 - 52, 16, 52, frackingTower.power, TileEntityMachineFrackingTower.maxPower);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 70 - 52, 16, 52, frackingTower.power, frackingTower.getMaxPower());
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 

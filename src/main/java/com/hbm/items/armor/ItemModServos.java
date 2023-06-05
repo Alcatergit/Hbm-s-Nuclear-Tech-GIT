@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
+import com.hbm.config.PotionConfig;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,7 +79,7 @@ public class ItemModServos extends ItemArmorMod {
 			}
 		}
 		
-		if(item.armorType == EntityEquipmentSlot.LEGS) {
+		if(PotionConfig.doJumpBoost && item.armorType == EntityEquipmentSlot.LEGS) {
 
 			if(this == ModItems.servo_set) {
 				entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 65, 1, false, false));
