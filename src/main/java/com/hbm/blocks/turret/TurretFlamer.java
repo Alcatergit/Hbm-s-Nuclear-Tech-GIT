@@ -24,7 +24,7 @@ public class TurretFlamer extends TurretBase {
 
 	@Override
 	public boolean executeHoldAction(World world, int i, double yaw, double pitch, BlockPos pos) {
-boolean flag = false;
+		boolean flag = false;
 		
 		if(pitch < -60)
 			pitch = -60;
@@ -53,7 +53,7 @@ boolean flag = false;
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 
-				bullet.setDamage(6 + rand.nextInt(5));
+				bullet.setDamage(6 + rand.nextInt(3));
 				
 				world.spawnEntity(bullet);
 			}

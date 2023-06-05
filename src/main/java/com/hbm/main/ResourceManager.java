@@ -73,10 +73,15 @@ public class ResourceManager {
 	//FENSU
 	public static final IModelCustom fensu = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu.obj"));
 
-	//Turrets
-	public static final IModelCustom turret_heavy_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_heavy_base.obj"));
-	public static final IModelCustom turret_heavy_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_heavy_rotor.obj"));
+	//New Turrets made by Freon
+	public static final IModelCustom turret_flamethower = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turrets/freons/turret_flamethower.obj"));
+	public static final IModelCustom turret_cannon = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turrets/freons/turret_cannon.obj"));
+	public static final IModelCustom turret_tau = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turrets/freons/turret_tau.obj"));
+	public static final IModelCustom turret_mg = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turrets/freons/turret_mg.obj"));
+	public static final IModelCustom turret_rocket_launcher = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turrets/freons/turret_rocket_launcher.obj"));
+	
 
+	//Turrets
 	public static final IModelCustom turret_spitfire_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_spitfire_base.obj"));
 	public static final IModelCustom turret_spitfire_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_spitfire_rotor.obj"));
 
@@ -86,11 +91,6 @@ public class ResourceManager {
 	public static final IModelCustom turret_cheapo_base = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_cheapo_base.obj"));
 	public static final IModelCustom turret_cheapo_rotor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_cheapo_rotor.obj"));
 
-	public static final IModelCustom turret_heavy_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_heavy_gun.obj"));
-	public static final IModelCustom turret_rocket_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_rocket_gun.obj"));
-	public static final IModelCustom turret_light_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_light_gun.obj"));
-	public static final IModelCustom turret_flamer_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_flamer_gun.obj"));
-	public static final IModelCustom turret_tau_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_tau_gun.obj"));
 	public static final IModelCustom turret_spitfire_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/turret_spitfire_gun.obj"));
 	public static final IModelCustom turret_cwis_head = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/cwis_head.obj"));
 	public static final IModelCustom turret_cwis_gun = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/cwis_gun.obj"));
@@ -531,22 +531,18 @@ public class ResourceManager {
 	public static final ResourceLocation ctrl_button0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0.png");
 	public static final ResourceLocation ctrl_button0_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0_gui.png");
 	
-	////Textures TEs
+	//Textures TEs
 
 	public static final ResourceLocation universal = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");
 
-	public static final ResourceLocation turret_heavy_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_heavy_base.png");
-
-	public static final ResourceLocation turret_heavy_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_heavy_rotor.png");
-	public static final ResourceLocation turret_heavy_gun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_heavy_gun.png");
-	public static final ResourceLocation turret_light_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_light_rotor.png");
-	public static final ResourceLocation turret_light_gun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_light_gun.png");
-	public static final ResourceLocation turret_rocket_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_rocket_rotor.png");
-	public static final ResourceLocation turret_rocket_gun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_rocket_gun.png");
-	public static final ResourceLocation turret_flamer_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_flamer_rotor.png");
-	public static final ResourceLocation turret_flamer_gun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_flamer_gun.png");
-	public static final ResourceLocation turret_tau_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_tau_rotor.png");
-	public static final ResourceLocation turret_tau_gun_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turret_tau_gun.png");
+	//Freons Turrets Textures
+	public static final ResourceLocation turret_flamethower_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turrets/freons/turret_flamethower.png");
+	public static final ResourceLocation turret_cannon_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turrets/freons/turret_cannon.png");
+	public static final ResourceLocation turret_tau_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turrets/freons/turret_tau.png");
+	public static final ResourceLocation turret_mg_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turrets/freons/turret_mg.png");
+	public static final ResourceLocation turret_rocket_launcher_tex = new ResourceLocation(RefStrings.MODID, "textures/models/turrets/freons/turret_rocket_launcher.png");
+	
+	//Old turrets
 	public static final ResourceLocation turret_ciws_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/cwis_base.png");
 	public static final ResourceLocation turret_ciws_rotor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/cwis_rotor.png");
 	public static final ResourceLocation turret_ciws_head_tex = new ResourceLocation(RefStrings.MODID, "textures/models/cwis_head.png");

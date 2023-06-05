@@ -138,5 +138,4 @@ public class TurretCIWS extends TurretBase {
 		tooltip.add("Why does it not work???");
 		tooltip.add("bob pls fix");
 	}
-
 }

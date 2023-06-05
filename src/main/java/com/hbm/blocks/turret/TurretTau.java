@@ -47,15 +47,15 @@ public class TurretTau extends TurretBase {
 				EntityBullet bullet = new EntityBullet(world);
 				bullet.setIsCritical(true);
 				
-				bullet.posX = x + vector.x * 2 + 0.5;
-				bullet.posY = y + vector.y * 2 + 1;
-				bullet.posZ = z + vector.z * 2 + 0.5;
+				bullet.posX = x + vector.x * 1 + 0.5;
+				bullet.posY = y + vector.y * 1 + 1;
+				bullet.posZ = z + vector.z * 1 + 0.5;
 				
 				bullet.motionX = vector.x * 3;
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 
-				bullet.setDamage(25 + rand.nextInt(65 - 25));
+				bullet.setDamage(15 + rand.nextInt(5));
 				
 				world.spawnEntity(bullet);
 			}

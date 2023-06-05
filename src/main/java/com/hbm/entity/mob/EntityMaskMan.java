@@ -84,8 +84,6 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
         	if(!world.isRemote)
         		world.createExplosion(this, posX, posY + 4, posZ, 2.5F, true);
         }
-
-        getEntityData().setFloat("hfr_radiation", 0);
 	}
 	
 	@Override

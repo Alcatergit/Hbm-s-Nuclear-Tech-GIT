@@ -44,6 +44,9 @@ public class TurretHeavy extends TurretBase {
 			
 			vector.normalize();
 			
+			TileEntityTurretHeavy te = (TileEntityTurretHeavy)world.getTileEntity(pos);
+			te.recoil = 0.5D;
+
 			if(!world.isRemote) {
 				EntityBullet bullet = new EntityBullet(world);
 				bullet.posX = x + vector.x * 1 + 0.5;
@@ -54,7 +57,7 @@ public class TurretHeavy extends TurretBase {
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 				
-				bullet.damage = rand.nextInt(26) + 15;
+				bullet.damage = rand.nextInt(6) + 25;
 				
 				world.spawnEntity(bullet);
 				

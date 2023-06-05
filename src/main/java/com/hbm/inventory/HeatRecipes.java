@@ -51,7 +51,7 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe("liquidhydrogen", 1, "hydrogen", 1, 1); //mekanism
 		addBoilRecipe("refined_biofuel", 1, "biofuel", 1, 10); //thermalfoundation
 		// addBoilAndCoolRecipe("cryotheum", 1, "pyrotheum", 1, 1000); //thermalfoundation
-		addBoilAndCoolRecipe("ic2coolant", 1, "", 1, "hydrogen", 1, 450); //mekanism", 1, 1); //IC2
+		addBoilAndCoolRecipe("ic2coolant", 1, "hydrogen", 1, 450); //mekanism", 1, 1); //IC2
 		setFluidsForRBMKLoader();
 	}
 
