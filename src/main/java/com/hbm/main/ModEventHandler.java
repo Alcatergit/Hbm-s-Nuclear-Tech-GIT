@@ -52,6 +52,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemDigammaDiagnostic;
 import com.hbm.items.armor.ItemArmorMod;
 import com.hbm.items.armor.ItemModRevive;
 import com.hbm.items.armor.ItemModShackles;
@@ -914,7 +915,9 @@ public class ModEventHandler {
 			}
 			/// BETA HEALTH END ///
 		}
-		
+		if(!player.world.isRemote && event.phase == Phase.START){
+			ItemDigammaDiagnostic.playVoices(player.world, player);
+		}
 
 		if(player.world.isRemote && event.phase == Phase.START && !player.isInvisible() && !player.isSneaking()) {
 

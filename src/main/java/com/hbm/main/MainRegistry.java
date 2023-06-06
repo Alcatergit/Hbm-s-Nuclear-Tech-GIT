@@ -1106,6 +1106,7 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
 
 		NTMCraftTweaker.applyPostInitActions();
+		HeatRecipes.setFluidsForRBMKLoader();
 		if(event.getSide() == Side.CLIENT) {
 			ModForgeFluids.registerFluidColors();
 		}

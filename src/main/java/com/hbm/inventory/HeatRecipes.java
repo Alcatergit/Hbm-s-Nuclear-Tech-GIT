@@ -51,8 +51,7 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe("liquidhydrogen", 1, "hydrogen", 1, 1); //mekanism
 		addBoilRecipe("refined_biofuel", 1, "biofuel", 1, 10); //thermalfoundation
 		// addBoilAndCoolRecipe("cryotheum", 1, "pyrotheum", 1, 1000); //thermalfoundation
-		addBoilAndCoolRecipe("ic2coolant", 1, "hydrogen", 1, 450); //mekanism", 1, 1); //IC2
-		setFluidsForRBMKLoader();
+		addBoilAndCoolRecipe("ic2coolant", 1, "ic2hot_coolant", 1, 450); //mekanism", 1, 1); //IC2
 	}
 
 	public static void setFluidsForRBMKLoader(){
@@ -145,22 +144,42 @@ public class HeatRecipes {
 		return coolFluids.containsKey(hot);
 	}
 
-	public static void addBoilRecipe(String hot, int hotAmount, String cold, int coldAmount, int heat){
+	public static void addBoilRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
+			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
 		}
 	}
 
-	public static void addCoolRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
+	public static void addCoolRecipe(String hot, int hotAmount, String cold, int coldAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
+			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
 		}
 	}
 
-	public static void addBoilAndCoolRecipe(String hot, int hotAmount, String cold, int coldAmount, int heat){
+	public static void addBoilAndCoolRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
-			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
+			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
+			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
+		}
+	}
+
+	public static void removeBoilRecipe(String cold){
+		if(FluidRegistry.isFluidRegistered(cold)){
+			Fluid f = FluidRegistry.getFluid(cold);
+			hotFluids.remove(f);
+			requiredTU.remove(f);
+			inputAmountHot.remove(f);
+			outputAmountHot.remove(f);
+		}
+	}
+
+	public static void removeCoolRecipe(String hot){
+		if(FluidRegistry.isFluidRegistered(hot)){
+			Fluid f = FluidRegistry.getFluid(hot);
+			coolFluids.remove(f);
+			resultingTU.remove(f);
+			inputAmountCold.remove(f);
+			outputAmountCold.remove(f);
 		}
 	}
 
