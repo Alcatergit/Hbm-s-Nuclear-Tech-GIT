@@ -3318,6 +3318,7 @@ tile.machine_cyclotron.name=回旋加速器
 tile.machine_detector.name=功率检测器
 tile.machine_deuterium.name=氘提取器
 tile.machine_diesel.name=柴油发电机
+tile.machine_difurnace_ext.name=高炉风道
 tile.machine_difurnace_off.name=高炉
 tile.machine_difurnace_on.name=高炉
 tile.machine_dineutronium_battery.name=Spark蓄电池

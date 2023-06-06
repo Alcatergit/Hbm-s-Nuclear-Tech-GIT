@@ -11,6 +11,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +37,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MachineDiFurnace extends BlockContainer {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final PropertyBool EXT = PropertyBool.create("ext");
+
 	private final boolean isActive;
 	private static boolean keepInventory;
 	
@@ -45,7 +48,7 @@ public class MachineDiFurnace extends BlockContainer {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXT, false));
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
@@ -135,24 +138,26 @@ public class MachineDiFurnace extends BlockContainer {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{FACING});
+		return new BlockStateContainer(this, new IProperty[]{FACING, EXT});
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing)state.getValue(FACING)).getIndex();
+		return state.getValue(FACING).getIndex() | (state.getValue(EXT) ? 0b1000 : 0);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.getFront(meta & 0b111);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {
             enumfacing = EnumFacing.NORTH;
         }
 
-        return this.getDefaultState().withProperty(FACING, enumfacing);
+		boolean ext = (meta & 0b1000) != 0;
+
+        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(EXT, ext);
 	}
 	
 	
@@ -173,18 +178,25 @@ public class MachineDiFurnace extends BlockContainer {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 	}
 	
-	public static void updateBlockState(boolean isProcessing, World world, BlockPos pos){
+	public static void updateBlockState(boolean isProcessing, boolean ext, World world, BlockPos pos){
 		IBlockState i = world.getBlockState(pos);
 		TileEntity entity = world.getTileEntity(pos);
 		keepInventory = true;
-		
+
+		IBlockState newState = i;
 		if(isProcessing && i.getBlock() != ModBlocks.machine_difurnace_on)
 		{
-			world.setBlockState(pos, ModBlocks.machine_difurnace_on.getDefaultState().withProperty(FACING, i.getValue(FACING)), 2);
+			newState = ModBlocks.machine_difurnace_on.getDefaultState();
 		}else if (!isProcessing && i.getBlock() != ModBlocks.machine_difurnace_off){
-			world.setBlockState(pos, ModBlocks.machine_difurnace_off.getDefaultState().withProperty(FACING, i.getValue(FACING)), 2);
+			newState = ModBlocks.machine_difurnace_off.getDefaultState();
 		}
-		
+
+		newState = newState.withProperty(FACING, i.getValue(FACING)).withProperty(EXT, ext);
+
+		if (newState != i) {
+			world.setBlockState(pos, newState, 2);
+		}
+
 		keepInventory = false;
 		
 		if(entity != null) {
@@ -203,6 +215,10 @@ public class MachineDiFurnace extends BlockContainer {
 	            double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
 	            double d2 = (double)pos.getZ() + 0.5D;
 	            double d4 = rand.nextDouble() * 0.6D - 0.3D;
+
+				if (worldIn.getBlockState(pos.offset(EnumFacing.UP, 1)).getBlock() == ModBlocks.machine_difurnace_ext) {
+					d1 += 1;
+				}
 
 	            if (rand.nextDouble() < 0.1D)
 	            {
