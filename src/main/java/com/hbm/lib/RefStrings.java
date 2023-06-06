@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-1.9.5-II";
-	public static final String CHANGELOG = "§aAdded Forge Energy support to power converters$§aAdded JEI support to Transmutation and Nuclear Waste Storage Drum$§aAdded pages to RBMK Guide$§aAdded look overlay to batteries$§aAdded gas mask no-filter rendering$§aAdded Crystal schraranium recipe$§aAdded missing hen silex recipes$§aAdded RBMK Guide recipe$$§bChanged RBMK Neg-Quad functions$§bChanged RBMK fuel function display$§bChanged Meteor Dungeon spawn height from 10 to 12$$§eFixed Explosion crash$§eFixed fluid pipe rendering crash$§eFixed Particle Lag for Factories$§eFixed DiFurnace recipes$§eFixed Gas mask tooltip crash$§eFixed Zombie hazmat equip$§eFixed Advancement triggering$§eFixed Solid cable and duct fps lag";
+	public static final String VERSION = "NTM-Extended-1.12.2-1.9.6";
+	public static final String CHANGELOG = "§aAdded new small Turret Models$§aAdded Fluid Heat Exchanger$§aAdded Heating Oven$§aAdded Oil Burner$§aAdded Electric Heater$§aAdded Iron Furnace$§aAdded Chemfactory$§aAdded RBMK Emergency Freezer$§aAdded RBMK Fluid Heater$§aAdded Hot Coolant$§aAdded Meteor Charms$§aAdded THE VOICES$§aAdded UU Matter Gigafactory$§bChanged some textures$§bChanged ore radiation$§bChanged Italian Translation$§eFixed Transmutation crash$§eFixed crash when placing spitfire and tau turrets$§eFixed 30 more bugs";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version
