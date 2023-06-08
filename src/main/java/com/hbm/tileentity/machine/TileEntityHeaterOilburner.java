@@ -5,7 +5,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.container.ContainerOilburner;
 import com.hbm.inventory.gui.GUIOilburner;
 import com.hbm.items.ModItems;
@@ -59,7 +59,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
 
         tank = new FluidTank(16000);
         fluidType = ModForgeFluids.gas;
-        cacheHeat = MachineRecipes.getFlameEnergy(fluidType) / 1000;
+        cacheHeat = FluidCombustionRecipes.getFlameEnergy(fluidType);
     }
 
     @Override
@@ -118,12 +118,12 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
         Item itemId = slotId.getItem();
         if (itemId == ModItems.forge_fluid_identifier) {
             Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
-            int energy = MachineRecipes.getFlameEnergy(fluid);
+            int energy = FluidCombustionRecipes.getFlameEnergy(fluid);
 
             if (fluidType != fluid) {
                 fluidType = fluid;
                 tank.setFluid(null);
-                cacheHeat = energy / 1000;
+                cacheHeat = energy;
 
                 this.markDirty();
             }

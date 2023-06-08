@@ -4,7 +4,7 @@ import api.hbm.block.IToolable;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.items.tool.ItemTooling;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
@@ -107,9 +107,9 @@ public class HeaterOilburner extends BlockDummyable implements ITooltipProvider,
         List<String> text = new ArrayList();
         text.add("§a-> " + "§r" + heater.setting + " mB/t");
         Fluid type = heater.fluidType;
-        int energy = MachineRecipes.getFlameEnergy(type);
+        int energy = FluidCombustionRecipes.getFlameEnergy(type);
         if (energy != 0) {
-            int heat = energy * heater.setting / 1000;
+            int heat = energy * heater.setting;
             text.add("§c<-" + "§r" + String.format("%,d", heat) + " TU/t");
         }
 

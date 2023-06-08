@@ -6,20 +6,20 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 
 import net.minecraftforge.fluids.FluidRegistry;
 
 @ZenRegister
-@ZenClass("mods.ntm.BurnableFluid")
-public class BurnableFluid {
+@ZenClass("mods.ntm.FluidCombustion")
+public class FluidCombustion {
 	
 	private static class ActionAddBurnableFluid implements IAction {
 		private String inputFluid;
-		private int heatPerBucket;
-		public ActionAddBurnableFluid(String inputFluid, int heatPerBucket){
+		private int heatPerMiliBucket;
+		public ActionAddBurnableFluid(String inputFluid, int heatPerMiliBucket){
 			this.inputFluid = inputFluid;
-			this.heatPerBucket = heatPerBucket;
+			this.heatPerMiliBucket = heatPerMiliBucket;
 		}
 		@Override
 		public void apply(){
@@ -31,21 +31,25 @@ public class BurnableFluid {
 				CraftTweakerAPI.logError("ERROR Input Fluid ("+this.inputFluid+") does not exist!");
 				return;
 			}
-			if(this.heatPerBucket < 1){
-				CraftTweakerAPI.logError("ERROR Heat per bucket can not be < 1!");
+			if(this.heatPerMiliBucket < 1){
+				CraftTweakerAPI.logError("ERROR Heat per mB can not be < 1!");
 				return;
 			}
-			MachineRecipes.addBurnableFluid(this.inputFluid, this.heatPerBucket);
+			if(this.heatPerMiliBucket > 100_000){
+				CraftTweakerAPI.logError("ERROR Heat per mB can not be > 100,000!");
+				return;
+			}
+			FluidCombustionRecipes.addBurnableFluid(this.inputFluid, this.heatPerMiliBucket);
 		}
 		@Override
 		public String describe(){
-			return "Adding NTM burnable fluid (" + this.inputFluid + " -> " + this.heatPerBucket + "TU/b)";
+			return "Adding NTM fluid combustion recipe (" + this.inputFluid + " -> " + this.heatPerMiliBucket + "TU/mB)";
 		}
 	}
 
 	@ZenMethod
-	public static void addBurnableFluid(String inputFluid, int heatPerBucket) {
-		NTMCraftTweaker.postInitActions.add(new ActionAddBurnableFluid(inputFluid, heatPerBucket));
+	public static void addBurnableFluid(String inputFluid, int heatPerMiliBucket) {
+		NTMCraftTweaker.postInitActions.add(new ActionAddBurnableFluid(inputFluid, heatPerMiliBucket));
 	}
 
 	private static class ActionRemoveBurnableFluid implements IAction{
@@ -63,11 +67,11 @@ public class BurnableFluid {
 				CraftTweakerAPI.logError("ERROR Input Fluid ("+this.inputFluid+") does not exist!");
 				return;
 			}
-			MachineRecipes.removeBurnableFluid(this.inputFluid);
+			FluidCombustionRecipes.removeBurnableFluid(this.inputFluid);
 		}
 		@Override
 		public String describe(){
-			return "Removing NTM burnable fluid ("+this.inputFluid+")";
+			return "Removing NTM fluid combustion recipe for ("+this.inputFluid+")";
 		}
 	}
 
