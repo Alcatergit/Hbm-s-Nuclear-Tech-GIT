@@ -53,13 +53,8 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 		boolean flag = this.hasPower();
         boolean extension = world.getBlockState(pos.up()).getBlock() == ModBlocks.machine_difurnace_ext;
 
-		if(flag && isProcessing())
-		{
-			this.dualPower = this.dualPower - 1;
-			if(this.dualPower < 0)
-			{
-				this.dualPower = 0;
-			}
+		if(this.dualPower > 0) {
+			this.dualPower--;
 		}
 		int itemPower = DiFurnaceRecipes.getItemPower(inventory.getStackInSlot(2));
 		if (this.hasItemPower(inventory.getStackInSlot(2))
@@ -90,12 +85,6 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			if(flag && canProcess() && this.dualCookTime == 0)
 			{
 				trigger = false;
-			}
-
-			if (!inventory.getStackInSlot(2).isEmpty() && inventory.getStackInSlot(2).getItem() == ModItems.pellet_rtg) {
-				if(this.dualPower != maxPower){
-					this.dualPower = maxPower;
-				}
 			}
 			
 			if(trigger)
@@ -133,6 +122,8 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		if(slot == 0 && isItemValidForSlot(slot, itemStack)) return inventory.getStackInSlot(1).getItem() != itemStack.getItem();
+		if(slot == 1 && isItemValidForSlot(slot, itemStack)) return inventory.getStackInSlot(0).getItem() != itemStack.getItem();
 		return isItemValidForSlot(slot, itemStack);
 	}
 	

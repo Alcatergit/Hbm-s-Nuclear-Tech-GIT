@@ -1416,10 +1416,15 @@ tile.struct_launcher_core.name=Compact Launcher Core Component
 tile.struct_launcher_core_large.name=Launch Table Core Component
 tile.struct_soyuz_core.name=Soyuz Launcher Core Component
 
+desc.gui.rtg.heat=§eCurrent heat level: %s
+desc.gui.rtgBFurnace.desc=The more heat, the faster it runs$Heat going over maximum of %s will have no effect$Short-lived pellets may decay
 tile.machine_difurnace_ext.name=Blast Furnace Extension
 tile.machine_difurnace_off.name=Blast Furnace
 tile.machine_difurnace_on.name=Blast Furnace
+tile.machine_difurnace_rtg_off.name=Nuclear Blast Furnace
+tile.machine_difurnace_rtg_on.name=Nuclear Blast Furnace
 container.diFurnace=Blast Furnace
+container.diFurnaceRTG=Nuclear Blast Furnace
 tile.machine_centrifuge.name=Centrifuge
 container.centrifuge=Centrifuge
 tile.machine_gascent.name=Gas Centrifuge

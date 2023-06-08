@@ -3,6 +3,6 @@
 	"textures": {
 		"top": "hbm:blocks/machine_rtg_top",
 		"bottom": "hbm:blocks/red_wire_coated",
-		"side": "hbm:blocks/machine_rtg_furnace_base_alt"
+		"side": "hbm:blocks/machine_rtg_furnace_base"
 	}
 }

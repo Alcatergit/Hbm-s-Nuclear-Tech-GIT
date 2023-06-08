@@ -28,6 +28,7 @@ import com.hbm.inventory.gui.GUIMachineRefinery;
 import com.hbm.inventory.gui.GUIMachineShredder;
 import com.hbm.inventory.gui.GUISILEX;
 import com.hbm.inventory.gui.GUITestDiFurnace;
+import com.hbm.inventory.gui.GUIDiFurnaceRTG;
 import com.hbm.inventory.gui.GUIRBMKOutgasser;
 import com.hbm.inventory.gui.GUIFWatzCore;
 import com.hbm.inventory.gui.GUIMachineSchrabidiumTransmutator;
@@ -100,6 +101,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_schrabidium_transmutator), TRANSMUTATION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_press), PRESS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_difurnace_off), ALLOY);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_difurnace_rtg_off), ALLOY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_electric_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_rtg_off), BOILER);
@@ -180,6 +182,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachinePress.class, 80, 35, 15, 15, PRESS);
 		registry.addRecipeClickArea(GUIMachineEPress.class, 80, 35, 15, 15, PRESS);
 		registry.addRecipeClickArea(GUITestDiFurnace.class, 102, 36, 21, 14, ALLOY);
+		registry.addRecipeClickArea(GUIDiFurnaceRTG.class, 102, 36, 21, 14, ALLOY);
 		registry.addRecipeClickArea(GUIMachineBoiler.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerElectric.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerRTG.class, 61, 34, 17, 17, BOILER);

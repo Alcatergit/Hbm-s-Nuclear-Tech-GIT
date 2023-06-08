@@ -231,6 +231,35 @@ public class ContaminationUtil {
 	
 	}
 
+	public static double getStackRads(ItemStack stack) {
+		if(stack == null)
+			return 0;
+		
+		Item item = stack.getItem();
+
+		double rads = 0;
+		
+		if(item instanceof IItemHazard){
+			rads += ((IItemHazard)item).getModule().radiation;
+		}
+
+		if(item instanceof ItemBlockHazard){
+			rads += ((ItemBlockHazard)item).getModule().radiation;
+		}
+
+		if(stack.hasTagCompound()){
+			NBTTagCompound stackNBT = stack.getTagCompound();
+			if(stackNBT.hasKey(NTM_NEUTRON_NBT_KEY)){
+				rads += stackNBT.getFloat(NTM_NEUTRON_NBT_KEY);
+			}
+		}
+
+		if(rads > 1)
+			return rads;
+		else
+			return 0;
+	}
+
 	public static double getActualPlayerRads(EntityLivingBase entity) {
 		return getPlayerRads(entity) * (double)(ContaminationUtil.calculateRadiationMod(entity));
 	}
@@ -359,7 +388,7 @@ public class ContaminationUtil {
 		if(e instanceof IRadiationImmune)
 			return 0.0F;
 		if(e instanceof EntityLivingBase)
-			HbmLivingProps.getRadiation((EntityLivingBase)e);
+			return HbmLivingProps.getRadiation((EntityLivingBase)e);
 		return 0.0F;
 	}
 

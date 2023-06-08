@@ -998,11 +998,14 @@ public class ModBlocks {
 	public static final int guiID_machine_epress = 81;
 	
 	public static final Block machine_difurnace_on = new MachineDiFurnace(Material.IRON, "machine_difurnace_on", true).setHardness(5.0F).setResistance(10.0F).setLightLevel(1.0F).setCreativeTab(null);
-	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block machine_difurnace_off = new MachineDiFurnace(Material.IRON, "machine_difurnace_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);	
 	public static final int guiID_test_difurnace = 1;
-
 	public static final Block machine_difurnace_ext = new MachineDiFurnaceExtension(Material.ROCK, "machine_difurnace_ext").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-
+	
+	public static final Block machine_difurnace_rtg_on = new MachineDiFurnaceRTG(Material.IRON, "machine_difurnace_rtg_on", true).setHardness(5.0F).setResistance(10.0F).setLightLevel(2.0F).setCreativeTab(null);
+	public static final Block machine_difurnace_rtg_off = new MachineDiFurnaceRTG(Material.IRON, "machine_difurnace_rtg_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final int guiID_rtg_difurnace = 134;
+	
 	public static final Block machine_coal_off = new MachineCoal(Material.IRON, "machine_coal_off", false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_coal_on = new MachineCoal(Material.IRON, "machine_coal_on", true).setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F).setCreativeTab(null);
 	public static final int guiID_machine_coal = 22;

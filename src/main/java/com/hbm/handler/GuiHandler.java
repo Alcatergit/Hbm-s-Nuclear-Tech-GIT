@@ -43,6 +43,7 @@ import com.hbm.tileentity.machine.TileEntityCrateSteel;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
 import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
+import com.hbm.tileentity.machine.TileEntityDiFurnaceRTG;
 import com.hbm.tileentity.machine.TileEntityFWatzCore;
 import com.hbm.tileentity.machine.TileEntityForceField;
 import com.hbm.tileentity.machine.TileEntityHadron;
@@ -166,6 +167,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_test_difurnace: 
 			if(entity instanceof TileEntityDiFurnace) {
 				return new ContainerDiFurnace(player.inventory, (TileEntityDiFurnace) entity);
+			}
+			return null;
+		case ModBlocks.guiID_rtg_difurnace: 
+			if(entity instanceof TileEntityDiFurnaceRTG) {
+				return new ContainerDiFurnaceRTG(player.inventory, (TileEntityDiFurnaceRTG) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_assembler:
@@ -785,6 +791,11 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_test_difurnace:
 			if(entity instanceof TileEntityDiFurnace) {
 				return new GUITestDiFurnace(player.inventory, (TileEntityDiFurnace) entity);
+			}
+			return null;
+		case ModBlocks.guiID_rtg_difurnace:
+			if(entity instanceof TileEntityDiFurnaceRTG) {
+				return new GUIDiFurnaceRTG(player.inventory, (TileEntityDiFurnaceRTG) entity);
 			}
 			return null;
 		case ModBlocks.guiID_machine_assembler:

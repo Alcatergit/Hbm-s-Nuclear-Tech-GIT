@@ -3,8 +3,8 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.blocks.items.ItemBlockHazard;
-import com.hbm.interfaces.IItemHazard;
+
+import com.hbm.util.ContaminationUtil;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
@@ -105,7 +105,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	}
 
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i == 0 && this.getRads(stack) > 0;
+		return i == 0 && ContaminationUtil.getStackRads(stack) > 0;
 	}
 	
 	@Override
@@ -113,7 +113,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 		if (!world.isRemote) {
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			sendRADGenPower();
-			int r = getRads(inventory.getStackInSlot(0));
+			int r = (int)Math.sqrt(ContaminationUtil.getStackRads(inventory.getStackInSlot(0)));
 			if(r > 0) {
 				if(inventory.getStackInSlot(0).getItem().hasContainerItem(inventory.getStackInSlot(0))) {
 					if(inventory.getStackInSlot(1).isEmpty()) {
@@ -192,35 +192,6 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 		case 5: 
 			this.sendPower(world, pos.add(0, 0, 5), Library.POS_Z); break;
 		}
-	}
-	
-	private int getRads(ItemStack stack) {
-		if(stack == null)
-			return 0;
-		
-		Item item = stack.getItem();
-
-		double fuel = 0;
-		
-		if(item instanceof IItemHazard){
-			fuel += ((IItemHazard)item).getModule().radiation;
-		}
-
-		if(item instanceof ItemBlockHazard){
-			fuel += ((ItemBlockHazard)item).getModule().radiation;
-		}
-
-		if(stack.hasTagCompound()){
-			NBTTagCompound stackNBT = stack.getTagCompound();
-			if(stackNBT.hasKey("ntmNeutron")){
-				fuel += stackNBT.getFloat("ntmNeutron");
-			}
-		}
-
-		if(fuel > 1)
-			return (int)Math.sqrt(fuel);
-		else
-			return 0;
 	}
 	
 	public int getFuelScaled(int i) {
