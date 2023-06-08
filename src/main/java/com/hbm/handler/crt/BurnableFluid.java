@@ -44,8 +44,8 @@ public class BurnableFluid {
 	}
 
 	@ZenMethod
-	public static void addBurnableFluid(String inputFluid, int heatPerBucket){
-		CraftTweakerAPI.apply(new ActionAddBurnableFluid(inputFluid, heatPerBucket));
+	public static void addBurnableFluid(String inputFluid, int heatPerBucket) {
+		NTMCraftTweaker.postInitActions.add(new ActionAddBurnableFluid(inputFluid, heatPerBucket));
 	}
 
 	private static class ActionRemoveBurnableFluid implements IAction{
@@ -72,7 +72,7 @@ public class BurnableFluid {
 	}
 
 	@ZenMethod
-	public static void removeBurnableFluid(String inputFluid){
-		CraftTweakerAPI.apply(new ActionRemoveBurnableFluid(inputFluid));
+	public static void removeBurnableFluid(String inputFluid) {
+		NTMCraftTweaker.postInitActions.add(new ActionRemoveBurnableFluid(inputFluid));
 	}
 }
