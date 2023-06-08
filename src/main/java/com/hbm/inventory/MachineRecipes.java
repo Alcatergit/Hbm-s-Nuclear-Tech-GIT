@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.hbm.inventory.OreDictManager.*;
@@ -27,6 +28,12 @@ import net.minecraftforge.oredict.OreDictionary;
 //Alcater: on it
 @Spaghetti("everything")
 public class MachineRecipes {
+
+	/**
+	 * HashMap of fluids suitable for burning in fluid burner, where key is fluid and value is TU per bucket.
+	 */
+	public static HashMap<Fluid, Integer> burnableFluids = new HashMap<Fluid, Integer>();
+
 	public static List<Item> stamps_flat = new ArrayList<Item>() {
 		/**
 		 * I don't even know what this serial version thing is.
@@ -616,62 +623,86 @@ public class MachineRecipes {
 	}
 
 	/**
+	 * Adds default set of liquids to fuel-suitable list for fluid boiler
+	 */
+	public static void addDefaultBurnableFluids() {
+		addBurnableFluid(ModForgeFluids.deuterium, 5_000);
+		addBurnableFluid(ModForgeFluids.tritium, 5_000);
+		addBurnableFluid(ModForgeFluids.oil, 10_000);
+		addBurnableFluid(ModForgeFluids.hotoil, 10_000);
+		addBurnableFluid(ModForgeFluids.heavyoil, 50_000);
+		addBurnableFluid(ModForgeFluids.smear, 50_000);
+		addBurnableFluid(ModForgeFluids.heatingoil, 150_000);
+		addBurnableFluid(ModForgeFluids.reclaimed, 100_000);
+		addBurnableFluid(ModForgeFluids.petroil, 125_000);
+		addBurnableFluid(ModForgeFluids.naphtha, 125_000);
+		addBurnableFluid(ModForgeFluids.diesel, 200_000);
+		addBurnableFluid(ModForgeFluids.lightoil, 200_000);
+		addBurnableFluid(ModForgeFluids.kerosene, 300_000);
+		addBurnableFluid(ModForgeFluids.gas, 10_000);
+		addBurnableFluid(ModForgeFluids.petroleum, 25_000);
+		addBurnableFluid(ModForgeFluids.biogas, 25_000);
+		addBurnableFluid(ModForgeFluids.biofuel, 150_000);
+		addBurnableFluid(ModForgeFluids.nitan, 2_000_000);
+		addBurnableFluid(ModForgeFluids.hydrogen, 5_000);
+		addBurnableFluid(ModForgeFluids.balefire, 1_000_000);
+		addBurnableFluid(ModForgeFluids.gasoline, 400_000);
+		addBurnableFluid(ModForgeFluids.crackoil, 10_000);
+		addBurnableFluid(ModForgeFluids.hotcrackoil, 10_000);
+		addBurnableFluid(ModForgeFluids.aromatics, 25_000);
+		addBurnableFluid(ModForgeFluids.unsaturateds, 1_000_000);
+	}
+
+	/**
+	 * Adds a fuel fluid, with associated heat per bucket, to the fluid burner
+	 * @param fluid input fluid usable as fuel in fluid burner
+	 * @param heatPerBucket heat energy (usually translates into HE 1:1) 1000mB hold
+	 */
+	public static void addBurnableFluid(Fluid fluid, int heatPerBucket) {
+		burnableFluids.put(fluid, heatPerBucket);
+	}
+
+	/**
+	 * Adds a fuel fluid, with associated heat per bucket, to the fluid burner
+	 * @param fluidName input fluid name usable as fuel in fluid burner
+	 * @param heatPerBucket heat energy (usually translates into HE 1:1) 1000mB hold
+	 */
+	public static void addBurnableFluid(String fluidName, int heatPerBucket) {
+		if (FluidRegistry.isFluidRegistered(fluidName)) {
+			Fluid f = FluidRegistry.getFluid(fluidName);
+			addBurnableFluid(f, heatPerBucket);
+		}
+	}
+
+	/**
+	 * Removes a fuel fluid from the fluid burner
+	 * @param fluid input fluid to be removed
+	 */
+	public static void removeBurnableFluid(Fluid fluid) {
+		burnableFluids.remove(fluid);
+	}
+
+	/**
+	 * Removes a fuel fluid from the fluid burner
+	 * @param fluidName input fluid name to be removed
+	 */
+	public static void removeBurnableFluid(String fluidName) {
+		if (FluidRegistry.isFluidRegistered(fluidName)) {
+			Fluid f = FluidRegistry.getFluid(fluidName);
+			removeBurnableFluid(f);
+		}
+	}
+
+	/**
 	 * FT_Flammable
 	 * @param fluid input fluid
-	 * @return How much heat energy (usually translates into HE 1:1) 1000mB hold
+	 * @return How much heat energy (usually translates into HE 1:1) 1000mB hold; returns 0 if not burnable
 	 */
 	public static int getFlameEnergy(Fluid fluid) {
-		if (ModForgeFluids.deuterium.equals(fluid)) {
-			return 5000;
-		} else if (ModForgeFluids.tritium.equals(fluid)) {
-			return 5000;
-		} else if (ModForgeFluids.oil.equals(fluid)) {
-			return 10_000;
-		} else if (ModForgeFluids.hotoil.equals(fluid)) {
-			return 10_000;
-		} else if (ModForgeFluids.heavyoil.equals(fluid)) {
-			return 50_000;
-		} else if (ModForgeFluids.smear.equals(fluid)) {
-			return 50_000;
-		} else if (ModForgeFluids.heatingoil.equals(fluid)) {
-			return 150_000;
-		} else if (ModForgeFluids.reclaimed.equals(fluid)) {
-			return 100_000;
-		} else if (ModForgeFluids.petroil.equals(fluid)) {
-			return 125_000;
-		} else if (ModForgeFluids.naphtha.equals(fluid)) {
-			return 125_000;
-		} else if (ModForgeFluids.diesel.equals(fluid)) {
-			return 200_000;
-		} else if (ModForgeFluids.lightoil.equals(fluid)) {
-			return 200_000;
-		} else if (ModForgeFluids.kerosene.equals(fluid)) {
-			return 300_000;
-		} else if (ModForgeFluids.gas.equals(fluid)) {
-			return 10_000;
-		} else if (ModForgeFluids.petroleum.equals(fluid)) {
-			return 25_000;
-		} else if (ModForgeFluids.biogas.equals(fluid)) {
-			return 25_000;
-		} else if (ModForgeFluids.biofuel.equals(fluid)) {
-			return 150_000;
-		} else if (ModForgeFluids.nitan.equals(fluid)) {
-			return 2_000_000;
-		} else if (ModForgeFluids.hydrogen.equals(fluid)) {
-			return 5_000;
-		} else if (ModForgeFluids.balefire.equals(fluid)) {
-			return 1_000_000;
-		} else if (ModForgeFluids.gasoline.equals(fluid)) {
-			return 400_000;
-		} else if (ModForgeFluids.crackoil.equals(fluid)) {
-			return 10_000;
-		} else if (ModForgeFluids.hotcrackoil.equals(fluid)) {
-			return 10_000;
-		} else if (ModForgeFluids.aromatics.equals(fluid)) {
-			return 25_000;
-		} else if (ModForgeFluids.unsaturateds.equals(fluid)) {
-			return 1_000_000;
+		if (burnableFluids.containsKey(fluid)) {
+			return burnableFluids.get(fluid);
 		}
+
 		return 0;
 	}
 
