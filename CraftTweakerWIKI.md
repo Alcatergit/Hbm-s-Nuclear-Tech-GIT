@@ -147,3 +147,15 @@ mods.ntm.FluidHeating.removeBoilRecipe(String inputFluid);<br>
 
 mods.ntm.FluidHeating.removeCoolRecipe(String inputFluid);<br>
 ``mods.ntm.FluidHeating.removeCoolRecipe("ic2hot_coolant");``
+
+## Burnable Fluid
+
+> **inputFluid** is the input fluid name
+> **heatPerBucket** TU per 1000mB of fluid - must be > 0
+
+5000TU for 1 bucket of experience in Fluid Burner, or 5TU/t per 1mB<br>mods.ntm.BurnableFluid.addBurnableFluid(String inputFluid, int heatPerBucket);<br>
+``mods.ntm.BurnableFluid.addBurnableFluid("experience", 5000);``
+
+mods.ntm.BurnableFluid.removeBurnableFluid(String inputFluid);<br>
+``mods.ntm.BurnableFluid.removeBurnableFluid("experience");``
+

@@ -243,6 +243,7 @@ import com.hbm.inventory.SAFERecipes;
 import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.inventory.HeatRecipes;
+import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -1104,6 +1105,9 @@ public class MainRegistry {
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
+
+		// Add burnable fluids to fluid burner before crafttweaker starts, to allow later config from user
+		MachineRecipes.addDefaultBurnableFluids();
 
 		NTMCraftTweaker.applyPostInitActions();
 		HeatRecipes.setFluidsForRBMKLoader();
