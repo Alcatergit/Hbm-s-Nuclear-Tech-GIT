@@ -186,7 +186,7 @@ public class HeatRecipes {
 	// return: FluidType, amount produced, amount required, heat required (°C * 100)
 	public static Object[] getBoilerOutput(Fluid type) {
 		if(hasBoilRecipe(type)){
-			return new Object[] { getBoilFluid(type), getOutputAmountHot(type), getInputAmountHot(type), getBoilFluid(type).getTemperature() * 100 };
+			return new Object[] { getBoilFluid(type), getOutputAmountHot(type), getInputAmountHot(type), (getBoilFluid(type).getTemperature()-273) * 100 };
 		}
 		return null;
 	}
