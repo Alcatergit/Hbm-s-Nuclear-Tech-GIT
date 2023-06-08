@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.inventory.*;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -220,29 +221,6 @@ import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.MultiblockBBHandler;
 import com.hbm.handler.crt.NTMCraftTweaker;
 import com.hbm.hazard.HazardRegistry;
-import com.hbm.inventory.AnvilRecipes;
-import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.BreederRecipes;
-import com.hbm.inventory.CrackRecipes;
-import com.hbm.inventory.CentrifugeRecipes;
-import com.hbm.inventory.CrystallizerRecipes;
-import com.hbm.inventory.CyclotronRecipes;
-import com.hbm.inventory.HadronRecipes;
-import com.hbm.inventory.MagicRecipes;
-import com.hbm.inventory.OreDictManager;
-import com.hbm.inventory.RefineryRecipes;
-import com.hbm.inventory.WasteDrumRecipes;
-import com.hbm.inventory.SILEXRecipes;
-import com.hbm.inventory.ShredderRecipes;
-import com.hbm.inventory.RBMKOutgasserRecipes;
-import com.hbm.inventory.DFCRecipes;
-import com.hbm.inventory.DiFurnaceRecipes;
-import com.hbm.inventory.PotionRecipes;
-import com.hbm.inventory.SAFERecipes;
-import com.hbm.inventory.StorageDrumRecipes;
-import com.hbm.inventory.NuclearTransmutationRecipes;
-import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -1104,6 +1082,9 @@ public class MainRegistry {
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
+
+		// Add burnable fluids to fluid burner before crafttweaker starts, to allow later config from user
+		MachineRecipes.addDefaultBurnableFluids();
 
 		NTMCraftTweaker.applyPostInitActions();
 		HeatRecipes.setFluidsForRBMKLoader();
