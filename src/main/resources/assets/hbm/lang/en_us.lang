@@ -1416,6 +1416,7 @@ tile.struct_launcher_core.name=Compact Launcher Core Component
 tile.struct_launcher_core_large.name=Launch Table Core Component
 tile.struct_soyuz_core.name=Soyuz Launcher Core Component
 
+tile.machine_difurnace_ext.name=Blast Furnace Extension
 tile.machine_difurnace_off.name=Blast Furnace
 tile.machine_difurnace_on.name=Blast Furnace
 container.diFurnace=Blast Furnace

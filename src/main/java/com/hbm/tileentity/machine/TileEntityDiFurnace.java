@@ -1,14 +1,12 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -53,7 +51,8 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	@Override
 	public void update() {
 		boolean flag = this.hasPower();
-		
+        boolean extension = world.getBlockState(pos.up()).getBlock() == ModBlocks.machine_difurnace_ext;
+
 		if(flag && isProcessing())
 		{
 			this.dualPower = this.dualPower - 1;
@@ -75,8 +74,8 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			}
 		}
 		if (flag && canProcess()) {
-			dualCookTime++;
-			if (this.dualCookTime == TileEntityDiFurnace.processingSpeed) {
+			dualCookTime += extension ? 3 : 1;
+			if (this.dualCookTime >= TileEntityDiFurnace.processingSpeed) {
 				this.dualCookTime = 0;
 				this.processItem();
 			}
@@ -101,7 +100,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			
 			if(trigger)
             {
-                MachineDiFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);
+                MachineDiFurnace.updateBlockState(this.dualCookTime > 0, extension, this.world, pos);
             }
 		}
 		

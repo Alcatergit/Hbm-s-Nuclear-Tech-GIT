@@ -2,7 +2,9 @@ package com.hbm.tileentity;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.machine.BlockHadronAccess;
+import com.hbm.blocks.machine.MachineDiFurnaceExtension;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityHadron;
 
 import net.minecraft.tileentity.TileEntity;
@@ -26,7 +28,7 @@ public class TileEntityProxyBase extends TileEntityLoadedBase {
 					return te;
 			}
 		}
-		
+
 		/// this spares me the hassle of registering a new child class TE that aims at the right target ///
 		//Drillgon200: Incidentally, it's also a gateway to some very messy code, the very thing this class is supposed to prevent.
 
@@ -40,6 +42,14 @@ public class TileEntityProxyBase extends TileEntityLoadedBase {
 				if(te instanceof TileEntityHadron) {
 					return te;
 				}
+			}
+		}
+
+		if (this.getBlockType() instanceof MachineDiFurnaceExtension) {
+			TileEntity te = world.getTileEntity(pos.down());
+
+			if (te instanceof TileEntityDiFurnace) {
+				return te;
 			}
 		}
 
