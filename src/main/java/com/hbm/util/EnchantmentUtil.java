@@ -27,8 +27,4 @@ public class EnchantmentUtil {
 		if(stack.getEnchantmentTagList().tagCount() == 0)
 			stack.getTagCompound().removeTag("ench");
 	}
-
-	public static int xpBarCap(int level) {
-		return level >= 30 ? 62 + (level - 30) * 7 : (level >= 15 ? 17 + (level - 15) * 3 : 17);
-	}
 }
