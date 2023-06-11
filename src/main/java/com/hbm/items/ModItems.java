@@ -351,7 +351,6 @@ public class ModItems {
 			if(user.experienceTotal >= 100) {
 				ItemSimpleConsumable.giveSoundAndDecrement(stack, user, HBMSoundHandler.syringeUse, new ItemStack(ModItems.iv_xp));
 				EnchantmentUtil.removeExperience(user, 100);
-				user.inventory.markDirty();
 			}
 		}).setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 		
