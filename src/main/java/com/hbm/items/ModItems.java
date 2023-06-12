@@ -350,13 +350,13 @@ public class ModItems {
 	public static final Item iv_xp_empty = new ItemSimpleConsumable("iv_xp_empty").setUseActionServer((stack, user) -> {
 			if(user.experienceTotal >= 100) {
 				ItemSimpleConsumable.giveSoundAndDecrement(stack, user, HBMSoundHandler.syringeUse, new ItemStack(ModItems.iv_xp));
-				EnchantmentUtil.setExperience(user, user.experienceTotal - 100);
+				EnchantmentUtil.removeExperience(user, 100);
 			}
 		}).setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 		
 	public static final Item iv_xp = new ItemSimpleConsumable("iv_xp").setUseActionServer((stack, user) -> {
 			ItemSimpleConsumable.giveSoundAndDecrement(stack, user, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, new ItemStack(ModItems.iv_xp_empty));
-			EnchantmentUtil.addExperience(user, 100, false);
+			user.addExperience(100);
 		}).setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 		
 	public static final Item iv_empty = new ItemSimpleConsumable("iv_empty").setUseActionServer((stack, user) -> {

@@ -28,68 +28,30 @@ public class EnchantmentUtil {
 			stack.getTagCompound().removeTag("ench");
 	}
 
-	public static int xpBarCap(int level) {
-        return level >= 30 ? 62 + (level - 30) * 7 : (level >= 15 ? 17 + (level - 15) * 3 : 17);
-    }
-
-    public static int getLevelForExperience(int xp) {
-    	
-		int level = 0;
-		
-		while (true) {
-			
-			int xpCap = xpBarCap(level);
-			
-			if (xp < xpCap)
-				return level;
-			
-			xp -= xpCap;
-			level++;
-		}
-	}
-
-	public static void addExperience(EntityPlayer player, int xp, boolean silent) {
-
-		int j = Integer.MAX_VALUE - player.experienceTotal;
-
-		if(xp > j) {
-			xp = j;
+	/**
+	 * Removes an amount of experience from a player and updates their level
+	 * @param entityPlayer the player to remove experience from
+	 * @param amount the amount of experience to remove
+	 */
+	public static void removeExperience(EntityPlayer entityPlayer, float amount) {
+		if (entityPlayer.experienceTotal - amount <= 0) {
+			entityPlayer.experienceLevel = 0;
+			entityPlayer.experience = 0;
+			entityPlayer.experienceTotal = 0;
+			return;
 		}
 
-		player.experience += (float) xp / (float) player.xpBarCap();
-
-		for(player.experienceTotal += xp; player.experience >= 1.0F; player.experience /= (float) player.xpBarCap()) {
-			player.experience = (player.experience - 1.0F) * (float) player.xpBarCap();
-
-			if(silent)
-				addExperienceLevelSilent(player, 1);
-			else
-				player.addExperienceLevel(1);
+		entityPlayer.experienceTotal -= amount;
+		if (entityPlayer.experience * (float)entityPlayer.xpBarCap() < amount) {
+			amount -= entityPlayer.experience * (float)entityPlayer.xpBarCap();
+			entityPlayer.experience = 1.0f;
+			entityPlayer.experienceLevel--;
 		}
-	}
 
-	public static void setExperience(EntityPlayer player, int xp) {
-
-		player.experienceLevel = 0;
-		player.experience = 0.0F;
-		player.experienceTotal = 0;
-
-		addExperience(player, xp, true);
-	}
-
-	public static void addExperienceLevelSilent(EntityPlayer player, int level) {
-		player.experienceLevel += level;
-
-		if(player.experienceLevel < 0) {
-			player.experienceLevel = 0;
-			player.experience = 0.0F;
-			player.experienceTotal = 0;
+		while (entityPlayer.xpBarCap() < amount) {
+			amount -= entityPlayer.xpBarCap();
+			entityPlayer.experienceLevel--;
 		}
-	}
-
-	/** Fun fact: experienceTotal lies in 1.7.10 and has no actual purpose other than misleading people! */
-	/** Fun fact: experienceTotal lies no more in 1.12.2 yay */
-	public static int getTotalExperience(EntityPlayer player) {
-		return player.experienceTotal;
+		entityPlayer.experience -= amount / (float)entityPlayer.xpBarCap();
 	}
 }
