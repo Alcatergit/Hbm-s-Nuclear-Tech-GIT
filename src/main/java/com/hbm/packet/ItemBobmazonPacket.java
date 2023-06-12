@@ -65,7 +65,7 @@ public class ItemBobmazonPacket implements IMessage {
 				World world = p.world;
 
 				if(p.getHeldItemOffhand().getItem() instanceof ItemCatalog){
-					p.sendMessage(new TextComponentTranslation("[BOBMAZON] You must use your main hand!"));
+					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r You must use your main hand!"));
 					return;
 				}
 				
@@ -82,8 +82,8 @@ public class ItemBobmazonPacket implements IMessage {
 					offer = BobmazonOfferFactory.special.get(m.offer);
 				
 				if(offer == null) {
-					p.sendMessage(new TextComponentTranslation("[BOBMAZON] There appears to be a mismatch between the offer you have requested and the offers that exist."));
-					p.sendMessage(new TextComponentTranslation("[BOBMAZON] Engaging fail-safe..."));
+					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r There appears to be a mismatch between the offer you have requested and the offers that exist."));
+					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Engaging fail-safe..."));
 					p.attackEntityFrom(ModDamageSource.nuclearBlast, 1000);
 					p.motionY = 2.0D;
 					return;
@@ -109,11 +109,11 @@ public class ItemBobmazonPacket implements IMessage {
 						
 						world.spawnEntity(bob);
 					} else {
-						p.sendMessage(new TextComponentTranslation("[BOBMAZON] Not enough caps!"));
+						p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Not enough caps!"));
 					}
 					
 				} else {
-					p.sendMessage(new TextComponentTranslation("[BOBMAZON] Achievement requirement not met!"));
+					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Achievement requirement not met!"));
 				}
 			});
 			
