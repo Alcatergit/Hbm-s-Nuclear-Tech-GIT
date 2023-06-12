@@ -36,10 +36,10 @@ public class DiFurnaceRecipes {
 		addRecipe(new OreDictStack(W.ingot()), new OreDictStack(COAL.gem()), new ItemStack(ModItems.neutron_reflector, 2));
 		addRecipe(new OreDictStack(W.dust()), new OreDictStack(COAL.gem()), new ItemStack(ModItems.neutron_reflector, 2));
 
-		addRecipe(new OreDictStack(CU.ingot()), new OreDictStack(PB.ingot()), new ItemStack(ModItems.neutron_reflector, 4));
-		addRecipe(new OreDictStack(CU.dust()), new OreDictStack(PB.ingot()), new ItemStack(ModItems.neutron_reflector, 4));
-		addRecipe(new OreDictStack(CU.ingot()), new OreDictStack(PB.dust()), new ItemStack(ModItems.neutron_reflector, 4));
-		addRecipe(new OreDictStack(CU.dust()), new OreDictStack(PB.dust()), new ItemStack(ModItems.neutron_reflector, 4));
+		addRecipe(new OreDictStack(CU.ingot()), new OreDictStack(PB.ingot()), new ItemStack(ModItems.neutron_reflector, 1));
+		addRecipe(new OreDictStack(CU.dust()), new OreDictStack(PB.ingot()), new ItemStack(ModItems.neutron_reflector, 1));
+		addRecipe(new OreDictStack(CU.ingot()), new OreDictStack(PB.dust()), new ItemStack(ModItems.neutron_reflector, 1));
+		addRecipe(new OreDictStack(CU.dust()), new OreDictStack(PB.dust()), new ItemStack(ModItems.neutron_reflector, 1));
 
 		addRecipe(new OreDictStack(CU.plate()), new OreDictStack(PB.plate()), new ItemStack(ModItems.neutron_reflector, 1));
 

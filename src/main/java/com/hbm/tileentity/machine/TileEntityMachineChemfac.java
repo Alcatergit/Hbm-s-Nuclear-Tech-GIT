@@ -11,6 +11,8 @@ import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.packet.LoopedSoundPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -65,7 +67,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 			@Override
 			public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
 				super.setStackInSlot(slot, stack);
-				if (!stack.isEmpty() && slot >= 1 && slot <= 4 && stack.getItem() instanceof ItemMachineUpgrade) {
+				if(!stack.isEmpty() && slot >= 1 && slot <= 4 && stack.getItem() instanceof ItemMachineUpgrade) {
 					world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				}
 			}
@@ -77,8 +79,8 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	public void update() {
 		super.update();
 
-		if (!world.isRemote) {
-			if (world.getTotalWorldTime() % 60 == 0) {
+		if(!world.isRemote) {
+			if(world.getTotalWorldTime() % 60 == 0) {
 				this.updateConnections();
 			}
 
@@ -99,7 +101,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 			this.speed /= (overLevel + 1);
 			this.consumption *= (overLevel + 1);
 
-			if (this.speed <= 0) {
+			if(this.speed <= 0) {
 				this.speed = 1;
 			}
 
@@ -118,18 +120,19 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 			steam.writeToNBT(tankSteam);
 			data.setTag("steam", tankSteam);
 
+			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
 			this.networkPack(data, 150);
 		} else {
 			float maxSpeed = 30F;
 
-			if (isProgressing) {
+			if(isProgressing) {
 				rotSpeed += 0.1;
 
-				if (rotSpeed > maxSpeed) {
+				if(rotSpeed > maxSpeed) {
 					rotSpeed = maxSpeed;
 				}
 
-				if (rotSpeed == maxSpeed && world.getTotalWorldTime() % 5 == 0) {
+				if(rotSpeed == maxSpeed && world.getTotalWorldTime() % 5 == 0) {
 					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
 					ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 					Random rand = world.rand;
@@ -144,7 +147,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 			} else {
 				rotSpeed -= 0.1;
 
-				if (rotSpeed < 0) {
+				if(rotSpeed < 0) {
 					rotSpeed = 0;
 				}
 			}
@@ -152,7 +155,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 			prevRot = rot;
 			rot += rotSpeed;
 
-			if (rot >= 360) {
+			if(rot >= 360) {
 				rot -= 360;
 				prevRot -= 360;
 			}
@@ -198,7 +201,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	private void sendFluids() {
 		for (Pair<BlockPos, ForgeDirection> pos : getConPos()) {
 			for (TypedFluidTank tank : outTanks()) {
-				if (tank.type != null && tank.tank.getFluidAmount() > 0) {
+				if(tank.type != null && tank.tank.getFluidAmount() > 0) {
 					FFUtils.fillFluid(this, tank.tank, world, pos.getLeft(), tank.tank.getFluidAmount());
 				}
 			}
@@ -208,7 +211,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	List<Pair<BlockPos, ForgeDirection>> conPos;
 
 	protected List<Pair<BlockPos, ForgeDirection>> getConPos() {
-		if (conPos != null && !conPos.isEmpty())
+		if(conPos != null && !conPos.isEmpty())
 			return conPos;
 
 		conPos = new ArrayList<>();
@@ -264,7 +267,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public BlockPos[] getInputPositions() {
-		if (inPos != null) {
+		if(inPos != null) {
 			return inPos;
 		}
 
@@ -283,7 +286,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public BlockPos[] getOutputPositions() {
-		if (outPos != null)
+		if(outPos != null)
 			return outPos;
 
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
@@ -303,7 +306,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		if (properties == null) {
+		if(properties == null) {
 			properties = new IFluidTankProperties[tanks.length + 2];
 			for (int i = 0; i < tanks.length; i++) {
 				properties[i] = tanks[i].tank.getTankProperties()[0];
@@ -357,7 +360,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		if (bb == null) {
+		if(bb == null) {
 			bb = new AxisAlignedBB(
 					pos.getX() - 5,
 					pos.getY(),
@@ -384,7 +387,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		}
 
@@ -393,7 +396,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return true;
 		}
 

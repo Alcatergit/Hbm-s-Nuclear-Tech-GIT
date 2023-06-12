@@ -325,4 +325,18 @@ public class BobMathUtil {
 		dateOut[3] = String.valueOf(min);
 		return dateOut;
 	}
+
+	public static int interpolateColor(int colorA, int colorB, float percentB) {
+		float rA = (colorA >> 16 & 0xFF);
+		float gA = (colorA >> 8 & 0xFF);
+		float bA = (colorA & 0xFF);
+		float rB = (colorB >> 16 & 0xFF);
+		float gB = (colorB >> 8 & 0xFF);
+		float bB = (colorB & 0xFF);
+
+		float r = rA + (rB-rA) * percentB;
+		float g = gA + (gB-gA) * percentB;
+		float b = bA + (bB-bA) * percentB;
+		return (((int)r & 0xFF) << 16) | (((int)g & 0xFF) << 8) | ((int)b & 0xFF);
+	}
 }

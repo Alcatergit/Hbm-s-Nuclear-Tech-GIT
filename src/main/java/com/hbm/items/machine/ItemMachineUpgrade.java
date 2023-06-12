@@ -149,9 +149,6 @@ public class ItemMachineUpgrade extends Item {
 
 		if(this == ModItems.upgrade_power_1)
 		{
-			list.add("Mining Drill:");
-			list.add("Consumption -30 / Delay +5");
-			list.add("");
 			list.add("Assembly Machine:");
 			list.add("Consumption -20% / Delay +25%");
 			list.add("");
@@ -164,9 +161,6 @@ public class ItemMachineUpgrade extends Item {
 
 		if(this == ModItems.upgrade_power_2)
 		{
-			list.add("Mining Drill:");
-			list.add("Consumption -60 / Delay +10");
-			list.add("");
 			list.add("Assembly Machine:");
 			list.add("Consumption -60% / Delay +50%");
 			list.add("");
@@ -179,9 +173,6 @@ public class ItemMachineUpgrade extends Item {
 
 		if(this == ModItems.upgrade_power_3)
 		{
-			list.add("Mining Drill:");
-			list.add("Consumption -90 / Delay +15");
-			list.add("");
 			list.add("Assembly Machine:");
 			list.add("Consumption -80% / Delay +100%");
 			list.add("");

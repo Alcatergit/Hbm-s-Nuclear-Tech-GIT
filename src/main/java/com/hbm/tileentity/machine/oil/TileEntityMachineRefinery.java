@@ -6,7 +6,7 @@ import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-import com.hbm.tileentity.TileEntityLoadedBase;
+import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -31,12 +31,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRefinery extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineRefinery extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power = 0;
 	public int itemOutputTimer = 0;
@@ -54,13 +50,7 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 	private String customName;
 	
 	public TileEntityMachineRefinery() {
-		inventory = new ItemStackHandler(12){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
+		super(12);
 		tanks = new FluidTank[5];
 		tankTypes = new Fluid[] {ModForgeFluids.hotoil, ModForgeFluids.heavyoil, ModForgeFluids.naphtha, ModForgeFluids.lightoil, ModForgeFluids.petroleum};
 		tanks[0] = new FluidTank(64000);
@@ -70,25 +60,8 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 		tanks[4] = new FluidTank(24000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineRefinery";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this)
-		{
-			return false;
-		}else{
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=128;
-		}
+	public String getName() {
+		return "container.machineRefinery";
 	}
 	
 	@Override
@@ -96,8 +69,6 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 		
 		power = nbt.getLong("power");
 		itemOutputTimer = nbt.getInteger("itemOutputTimer");
-		if(nbt.hasKey("inventory"))
-			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		if(nbt.hasKey("tanks"))
 			FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		super.readFromNBT(nbt);
@@ -107,7 +78,6 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("power", power);
 		nbt.setInteger("itemOutputTimer", itemOutputTimer);
-		nbt.setTag("inventory", inventory.serializeNBT());
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		return super.writeToNBT(nbt);
 	}
@@ -270,6 +240,16 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 		}
 		return false;
 	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack stack, int amount) {
+		return i==2 || i==4 || i==6 || i==8 || i==10 || i==11;
+	}
 	
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
@@ -278,7 +258,6 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 	@Override
 	public void setPower(long i) {
 		power = i;
-		
 	}
 
 	@Override
@@ -376,23 +355,15 @@ public class TileEntityMachineRefinery extends TileEntityLoadedBase implements I
 			tanks[4].readFromNBT(tags[4]);
 		}
 	}
-	
+
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			return true;
-		} else {
-			return super.hasCapability(capability, facing);
-		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

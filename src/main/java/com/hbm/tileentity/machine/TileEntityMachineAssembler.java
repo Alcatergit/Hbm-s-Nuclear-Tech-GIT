@@ -443,47 +443,23 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 	}
 
 	//Unloads output into chests. Capability version.
-	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
+	public boolean tryFillContainerCap(IItemHandler chest, int slot) {
+		//Check if we have something to output
+		if(inventory.getStackInSlot(slot).isEmpty())
+			return false;
 
-		int size = inv.getSlots();
-		for(int i = 0; i < size; i++) {
-			inv.getStackInSlot(i);
-			if (inventory.getStackInSlot(slot).getItem() == Items.AIR)
+		for(int i = 0; i < chest.getSlots(); i++) {
+			
+			ItemStack outputStack = inventory.getStackInSlot(slot).copy();
+			if(outputStack.isEmpty())
 				return false;
 
-			ItemStack sta1 = inv.getStackInSlot(i).copy();
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			sta1.setCount(1);
-			sta2.setCount(1);
-
-			if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
+			ItemStack chestItem = chest.getStackInSlot(i).copy();
+			if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
 				inventory.getStackInSlot(slot).shrink(1);
 
-				if(inventory.getStackInSlot(slot).isEmpty())
-					inventory.setStackInSlot(slot, ItemStack.EMPTY);
-
-				ItemStack sta3 = inv.getStackInSlot(i).copy();
-				sta3.setCount(1);
-				inv.insertItem(i, sta3, false);
-
-				return true;
-			}
-		}
-		for(int i = 0; i < size; i++) {
-
-			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
-				return false;
-
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(inv.getStackInSlot(i).getItem() == Items.AIR) {
-				sta2.setCount(1);
-				inventory.getStackInSlot(slot).shrink(1);
-				;
-
-				if(inventory.getStackInSlot(slot).isEmpty())
-					inventory.setStackInSlot(slot, ItemStack.EMPTY);
-
-				inv.insertItem(i, sta2, false);
+				outputStack.setCount(1);
+				chest.insertItem(i, outputStack, false);
 
 				return true;
 			}
@@ -538,7 +514,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			return false;
 		else {
 			List<AStack> recipeIngredients = new ArrayList<>(AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4))); //Loading Ingredients
-			Map<Integer,ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
+			Map<Integer, ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
 
 			for(int slot : allowedSlots) {
 				container.getStackInSlot(slot);

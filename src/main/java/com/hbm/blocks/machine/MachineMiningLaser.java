@@ -7,7 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyEnergy;
-import com.hbm.tileentity.TileEntityProxyInventory;
+import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 
 import net.minecraft.block.material.Material;
@@ -37,7 +37,7 @@ public class MachineMiningLaser extends BlockDummyable {
 			return new TileEntityProxyEnergy();
 
 		if(meta >= 6)
-			return new TileEntityProxyInventory();
+			return new TileEntityProxyCombo(true, false, true);
 		return null;
 	}
 

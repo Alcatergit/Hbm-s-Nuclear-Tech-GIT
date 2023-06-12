@@ -51,6 +51,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     public int amountToCool = 1;
     public int tickDelay = 1;
+    public int heatGen;
     public int heatEnergy;
 
     public TileEntityHeaterHeatex() {
@@ -86,6 +87,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
             this.tryConvert();
 
             NBTTagCompound data = new NBTTagCompound();
+            data.setInteger("heatGen", heatGen);
             data.setInteger("heatEnergy", heatEnergy);
             data.setInteger("toCool", amountToCool);
             data.setInteger("delay", tickDelay);
@@ -109,6 +111,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     @Override
     public void networkUnpack(NBTTagCompound nbt) {
+        this.heatGen = nbt.getInteger("heatGen");
         this.heatEnergy = nbt.getInteger("heatEnergy");
         this.amountToCool = nbt.getInteger("toCool");
         this.tickDelay = nbt.getInteger("delay");
@@ -157,7 +160,8 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         tanks[0].drain(ops * amountReq, true);
         tanks[1].fill(new FluidStack(tankTypes[1], ops * amountProduced), true);
 
-        this.heatEnergy += heat * ops * 0.5D;
+        this.heatGen = (heat * ops)>>1;
+        this.heatEnergy += heatGen;
     }
 
     @Override

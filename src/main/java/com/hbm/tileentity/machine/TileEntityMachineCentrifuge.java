@@ -87,14 +87,13 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		return amount != 0 || slot != 1 || itemStack.getItem() == Items.BUCKET;
+		return slot > 1 && slot < 6;
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setShort("progressTime", (short) progress);
-		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
 	}
 	
@@ -102,8 +101,6 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public void readFromNBT(NBTTagCompound compound) {
 		power = compound.getLong("powerTime");
 		progress = compound.getShort("progressTime");
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
 	

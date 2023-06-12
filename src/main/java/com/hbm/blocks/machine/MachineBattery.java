@@ -262,7 +262,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 		TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
 		List<String> text = new ArrayList();
-		text.add("§6<> §rStored Energy: " + Library.getShortNumber(battery.power) + "/" + Library.getShortNumber(getMaxPower()) + "HE");
+		text.add(Library.getShortNumber(battery.power) + "/" + Library.getShortNumber(getMaxPower()) + " HE");
 		if(battery.powerDelta == 0){
 			text.add("§e-- §r0HE/s");
 		}

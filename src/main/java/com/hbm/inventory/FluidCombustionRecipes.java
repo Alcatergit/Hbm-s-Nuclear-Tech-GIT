@@ -16,15 +16,18 @@ public class FluidCombustionRecipes {
 		addBurnableFluid(ModForgeFluids.hydrogen, 5);
 		addBurnableFluid(ModForgeFluids.deuterium, 5);
 		addBurnableFluid(ModForgeFluids.tritium, 5);
+
 		addBurnableFluid(ModForgeFluids.oil, 10);
 		addBurnableFluid(ModForgeFluids.hotoil, 10);
 		addBurnableFluid(ModForgeFluids.crackoil, 10);
 		addBurnableFluid(ModForgeFluids.hotcrackoil, 10);
+
 		addBurnableFluid(ModForgeFluids.gas, 10);
-		addBurnableFluid(ModForgeFluids.hotcrackoil, 10);
+		addBurnableFluid(ModForgeFluids.lubricant, 20);
 		addBurnableFluid(ModForgeFluids.aromatics, 25);
 		addBurnableFluid(ModForgeFluids.petroleum, 25);
 		addBurnableFluid(ModForgeFluids.biogas, 25);
+		addBurnableFluid(ModForgeFluids.bitumen, 35);
 		addBurnableFluid(ModForgeFluids.heavyoil, 50);
 		addBurnableFluid(ModForgeFluids.smear, 50);
 		addBurnableFluid(ModForgeFluids.reclaimed, 100);
@@ -35,7 +38,8 @@ public class FluidCombustionRecipes {
 		addBurnableFluid(ModForgeFluids.diesel, 200);
 		addBurnableFluid(ModForgeFluids.lightoil, 200);
 		addBurnableFluid(ModForgeFluids.kerosene, 300);
-		addBurnableFluid(ModForgeFluids.gasoline, 400);
+		addBurnableFluid(ModForgeFluids.gasoline, 800);
+
 		addBurnableFluid(ModForgeFluids.balefire, 1_000);
 		addBurnableFluid(ModForgeFluids.unsaturateds, 1_000);
 		addBurnableFluid(ModForgeFluids.nitan, 2_000);

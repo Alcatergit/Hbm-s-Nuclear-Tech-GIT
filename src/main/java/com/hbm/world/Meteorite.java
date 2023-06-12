@@ -453,32 +453,28 @@ public class Meteorite {
 		}
 		
 		generateBox(world, rand, x, y, z, hullL);
-		ItemStack stack = sCore.get(rand.nextInt(sCore.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, sCore.size(), sCore);
 	}
 
 	public void genL1(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere7x7(world, rand, x, y, z, hull);
 		generateStar5x5(world, rand, x, y, z, op);
 		generateStar3x3(world, rand, x, y, z, ip);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 
 	public void genL2(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere7x7(world, rand, x, y, z, hull);
 		generateSphere5x5(world, rand, x, y, z, op);
 		generateStar3x3(world, rand, x, y, z, ip);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 
 	public void genL3(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere7x7(world, rand, x, y, z, hull);
 		generateSphere5x5(world, rand, x, y, z, op);
 		generateBox(world, rand, x, y, z, ip);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 
 	public void genL4(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
@@ -486,8 +482,7 @@ public class Meteorite {
 		generateSphere5x5(world, rand, x, y, z, op);
 		generateBox(world, rand, x, y, z, ip);
 		generateStar3x3(world, rand, x, y, z, this.getRandomOre(rand));
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 
 	public void genL5(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
@@ -495,225 +490,196 @@ public class Meteorite {
 		generateSphere5x5(world, rand, x, y, z, op);
 		generateStar5x5(world, rand, x, y, z, ip);
 		generateStar3x3(world, rand, x, y, z, this.getRandomOre(rand));
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 
 	public void genM1(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void genM2(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
 		generateStar3x3(world, rand, x, y, z, op);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void genM3(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
 		generateBox(world, rand, x, y, z, op);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void genM4(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
 		generateBox(world, rand, x, y, z, op);
 		generateStar3x3(world, rand, x, y, z, ip);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void genM5(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
 		generateBox(world, rand, x, y, z, ip);
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void genM6(World world, Random rand, int x, int y, int z, List<ItemStack> hull, List<ItemStack> op, List<ItemStack> ip, List<ItemStack> core) {
 		generateSphere5x5(world, rand, x, y, z, hull);
 		generateBox(world, rand, x, y, z, ip);
 		generateStar3x3(world, rand, x, y, z, this.getRandomOre(rand));
-		ItemStack stack = core.get(rand.nextInt(core.size()));
-		world.setBlockState(new BlockPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		setRandomBlock(world, new MutableBlockPos(x, y, z), rand, core.size(), core);
 	}
 	
 	public void generateSphere7x7(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int setSize = set.size();
 		for(int a = -3; a < 4; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -3; b < 4; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -3; c < 4; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
-		
+				for(int c = -3; c < 4; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -2; a < 3; a++)
 			for(int b = -2; b < 3; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -2; b < 3; b++)
-				for(int c = -2; c < 3; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -2; c < 3; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -2; a < 3; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -2; c < 3; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -2; c < 3; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 	}
 	
 	public void generateSphere5x5(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int setSize = set.size();
 		for(int a = -2; a < 3; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -2; b < 3; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -2; c < 3; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -2; c < 3; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 	}
 	
 	public void generateSphere9x9(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int setSize = set.size();
 		for(int a = -4; a < 5; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -4; b < 5; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -4; c < 5; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
-		
+				for(int c = -4; c < 5; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -1; a < 2; a++)
 			for(int b = -3; b < 4; b++)
-				for(int c = -3; c < 4; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -3; c < 4; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -3; a < 4; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -3; c < 4; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -3; c < 4; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+				
 		for(int a = -3; a < 4; a++)
 			for(int b = -3; b < 4; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
 
 		for(int a = -3; a < 4; a++)
 			for(int b = -2; b < 3; b++)
-				for(int c = -2; c < 3; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -2; c < 3; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+
 		for(int a = -2; a < 3; a++)
 			for(int b = -3; b < 4; b++)
-				for(int c = -2; c < 3; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -2; c < 3; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+
 		for(int a = -2; a < 3; a++)
 			for(int b = -2; b < 3; b++)
-				for(int c = -3; c < 4; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -3; c < 4; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+
 	}
 
 	public void generateBox(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int setSize = set.size();
 		for(int a = -1; a < 2; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+	}
+
+	public void setRandomBlock(World world, BlockPos mPos, Random rand, int setSize, List<ItemStack> set){
+		setBlock(world, mPos, set.get(rand.nextInt(setSize)));
+	}
+
+	public void setBlock(World world, BlockPos mPos, ItemStack stack){
+		if(world.getBlockState(mPos).getBlock().getExplosionResistance(null) < 3_000_000){
+			world.setBlockState(mPos, Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		}
 	}
 	
 	public void generateStar5x5(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int setSize = set.size();
 		for(int a = -1; a < 2; a++)
 			for(int b = -1; b < 2; b++)
-				for(int c = -1; c < 2; c++) {
-					ItemStack stack = set.get(rand.nextInt(set.size()));
-					world.setBlockState(mPos.setPos(x + a, y + b, z + c), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-				}
-
-		ItemStack stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x + 2, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x - 2, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y + 2, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y - 2, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y, z + 2), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y, z - 2), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+				for(int c = -1; c < 2; c++)
+					setRandomBlock(world, mPos.setPos(x + a, y + b, z + c), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x + 2, y, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x - 2, y, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y + 2, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y - 2, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y, z + 2), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y, z - 2), rand, setSize, set);
 	}
 	
 	public void generateStar3x3(World world, Random rand, int x, int y, int z, List<ItemStack> set) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
-		ItemStack stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x + 1, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x - 1, y, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y + 1, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y - 1, z), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y, z + 1), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
-		stack = set.get(rand.nextInt(set.size()));
-		world.setBlockState(mPos.setPos(x, y, z - 1), Block.getBlockFromItem(stack.getItem()).getDefaultState(), 2);
+		int setSize = set.size();
+
+		setRandomBlock(world, mPos.setPos(x, y, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x + 1, y, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x - 1, y, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y + 1, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y - 1, z), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y, z + 1), rand, setSize, set);
+		setRandomBlock(world, mPos.setPos(x, y, z - 1), rand, setSize, set);
 	}
 	
 	public List<ItemStack> getRandomOre(Random rand) {
@@ -743,5 +709,4 @@ public class Meteorite {
 		
 		return ores;
 	}
-
 }

@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.gas.BlockGasBase;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.Untested;
 import com.hbm.items.ModItems;
@@ -264,37 +265,6 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 				// world.setBlock(xCoord - 2, yCoord, zCoord, Blocks.dirt);
 			}
 
-			/*if(te != null && te instanceof TileEntityChest) {
-				TileEntityChest chest = (TileEntityChest) te;
-
-				for(int i = 1; i < 10; i++)
-					if(tryFillContainerCap(chest.getca, i))
-						break;
-			}
-
-			if(te != null && te instanceof TileEntityHopper) {
-				TileEntityHopper hopper = (TileEntityHopper) te;
-
-				for(int i = 1; i < 10; i++)
-					if(tryFillContainer(hopper, i))
-						break;
-			}
-
-			if(te != null && te instanceof TileEntityCrateIron) {
-				TileEntityCrateIron hopper = (TileEntityCrateIron) te;
-
-				for(int i = 1; i < 10; i++)
-					if(tryFillContainer(hopper, i))
-						break;
-			}
-
-			if(te != null && te instanceof TileEntityCrateSteel) {
-				TileEntityCrateSteel hopper = (TileEntityCrateSteel) te;
-
-				for(int i = 1; i < 10; i++)
-					if(tryFillContainer(hopper, i))
-						break;
-			}*/
 			if(te != null && te instanceof ICapabilityProvider){
 				ICapabilityProvider capte = (ICapabilityProvider)te;
 				if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())){
@@ -404,6 +374,7 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
 
+		if(b.getBlock() instanceof BlockGasBase) return false;
 		return (hardness < 70 && hardness >= 0) || b.getMaterial().isLiquid();
 	}
 
@@ -412,6 +383,7 @@ public class TileEntityMachineMiningDrill extends TileEntityMachineBase implemen
 		IBlockState b = world.getBlockState(pos);
 		float hardness = b.getBlockHardness(world, pos);
 
+		if(b.getBlock() instanceof BlockGasBase) return false;
 		return hardness < 70 && hardness >= 0 || b instanceof IDrillInteraction;
 	}
 

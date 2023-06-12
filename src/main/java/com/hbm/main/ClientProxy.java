@@ -504,6 +504,7 @@ import com.hbm.tileentity.machine.TileEntityHeaterOven;
 import com.hbm.tileentity.machine.TileEntityHeaterElectric;
 import com.hbm.tileentity.machine.TileEntityHeaterHeatex;
 import com.hbm.tileentity.machine.TileEntityHeaterOilburner;
+import com.hbm.tileentity.machine.TileEntityHeaterRadioThermal;
 import com.hbm.tileentity.machine.TileEntityGeiger;
 import com.hbm.tileentity.machine.TileEntityHeaterFirebox;
 import com.hbm.tileentity.machine.TileEntityITER;
@@ -867,6 +868,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterFirebox.class, new RenderFirebox());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOven.class, new RenderHeatingOven());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterOilburner.class, new RenderOilburner());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterRadioThermal.class, new RenderRadioThermal());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterElectric.class, new RenderHeaterElectric());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeaterHeatex.class, new RenderHeaterHeatex());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFurnaceIron.class, new RenderFurnaceIron());

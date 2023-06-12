@@ -63,7 +63,7 @@ public class EntityMeteor extends EntityThrowable {
     		this.setDead();
         }
         
-        if(GeneralConfig.enableMeteorTails && world.isRemote) {
+        if(GeneralConfig.enableMeteorTails && world.isRemote && world.isAreaLoaded(new BlockPos(posX, posY, posZ), 6)) {
 
     		NBTTagCompound data = new NBTTagCompound();
     		data.setString("type", "exhaust");

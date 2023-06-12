@@ -46,9 +46,10 @@ public class GUIMiningLaser extends GuiInfoContainer {
 				" -Shredder (exclusive)",
 				" -Centrifuge (exclusive)",
 				" -Crystallizer (exclusive)",
+				" -Scream (4xSpeed, 4xCylces, 20xConsumption)",
 				" -Nullifier"};
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 87, guiTop + 31, 8, 8, guiLeft + 141, guiTop + 39 + 16, text);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 124 - 52, 7, 52, laser.tank, ModForgeFluids.oil);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 123 - 52, 7, 52, laser.tank, ModForgeFluids.oil);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -92,6 +93,6 @@ public class GUIMiningLaser extends GuiInfoContainer {
 
 		this.drawInfoPanel(guiLeft + 87, guiTop + 31, 8, 8, 8);
 		
-		FFUtils.drawLiquid(laser.tank, guiLeft, guiTop, zLevel, 35, 124, 7, 52);
+		FFUtils.drawLiquid(laser.tank, guiLeft, guiTop, zLevel, 7, 52, 35, 152);
 	}
 }

@@ -54,11 +54,11 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		}
 
 		public void setType(@Nullable Fluid type) {
-			if (type == null) {
+			if(type == null) {
 				this.tank.setFluid(null);
 			}
 
-			if (this.type == type) {
+			if(this.type == type) {
 				return;
 			}
 
@@ -67,7 +67,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		}
 
 		public void writeToNBT(NBTTagCompound nbt) {
-			if (this.type != null) {
+			if(this.type != null) {
 				nbt.setString("type", this.type.getName());
 			}
 
@@ -75,7 +75,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		}
 
 		public void readFromNBT(NBTTagCompound nbt) {
-			if (nbt.hasKey("type")) {
+			if(nbt.hasKey("type")) {
 				this.type = FluidRegistry.getFluid(nbt.getString("type"));
 			}
 			this.tank.readFromNBT(nbt);
@@ -104,26 +104,26 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		maxProgress = new int[count];
 
 		tanks = new TypedFluidTank[4 * count];
-		for (int idx = 0; idx < tanks.length; ++idx) {
+		for(int idx = 0; idx < tanks.length; ++idx) {
 			tanks[idx] = new TypedFluidTank(null, new FluidTank(this.getTankCapacity()));
 		}
 	}
 
 	@Override
 	public void update() {
-		if (!world.isRemote) {
+		if(!world.isRemote) {
 			int count = this.getRecipeCount();
 
 			this.isProgressing = false;
 			this.power = Library.chargeTEFromItems(inventory, 0, this.power, this.getMaxPower());
 
-			for (int idx = 0; idx < count; ++idx) {
+			for(int idx = 0; idx < count; ++idx) {
 				loadItems(idx);
 				unloadItems(idx);
 			}
 
-			for (int i = 0; i < count; i++) {
-				if (!canProcess(i)) {
+			for(int i = 0; i < count; i++) {
+				if(!canProcess(i)) {
 					this.progress[i] = 0;
 				} else {
 					isProgressing = true;
@@ -136,11 +136,11 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	protected boolean canProcess(int index) {
 		int templateIdx = getTemplateIndex(index);
 		ItemStack templateStack = inventory.getStackInSlot(templateIdx);
-		if (templateStack.isEmpty() || templateStack.getItem() != ModItems.chemistry_template) {
+		if(templateStack.isEmpty() || templateStack.getItem() != ModItems.chemistry_template) {
 			return false;
 		}
 
-		if (templateStack.getItemDamage() >= EnumChemistryTemplate.values().length) {
+		if(templateStack.getItemDamage() >= EnumChemistryTemplate.values().length) {
 			return false;
 		}
 
@@ -151,23 +151,23 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 
 		setupTanks(fluidInputs, fluidOutputs, index);
 
-		if (this.power < this.consumption) {
+		if(this.power < this.consumption) {
 			return false;
 		}
 
-		if (!hasRequiredFluids(fluidInputs, index)) {
+		if(!hasRequiredFluids(fluidInputs, index)) {
 			return false;
 		}
 
-		if (!hasSpaceForFluids(fluidOutputs, index)) {
+		if(!hasSpaceForFluids(fluidOutputs, index)) {
 			return false;
 		}
 
-		if (!hasRequiredItems(itemInputs, index)) {
+		if(!hasRequiredItems(itemInputs, index)) {
 			return false;
 		}
 
-		if (!hasSpaceForItems(itemOutputs, index)) {
+		if(!hasSpaceForItems(itemOutputs, index)) {
 			return false;
 		}
 
@@ -175,17 +175,17 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private void setupTanks(@Nullable FluidStack[] inputs, @Nullable FluidStack[] outputs, int index) {
-		if (inputs != null) {
-			for (int i = 0; i < inputs.length; i++) {
-				if (inputs[i] != null) {
+		if(inputs != null) {
+			for(int i = 0; i < inputs.length; i++) {
+				if(inputs[i] != null) {
 					tanks[index * 4 + i].setType(inputs[i].getFluid());
 				}
 			}
 		}
 
-		if (outputs != null) {
-			for (int i = 0; i < outputs.length; i++) {
-				if (outputs[i] != null) {
+		if(outputs != null) {
+			for(int i = 0; i < outputs.length; i++) {
+				if(outputs[i] != null) {
 					tanks[index * 4 + i + 2].setType(outputs[i].getFluid());
 				}
 			}
@@ -193,13 +193,13 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private boolean hasRequiredFluids(@Nullable FluidStack[] inputs, int index) {
-		if (inputs == null) {
+		if(inputs == null) {
 			return true;
 		}
 
-		for (int i = 0; i < inputs.length; i++) {
-			if (inputs[i] != null) {
-				if (tanks[index * 4 + i].tank.getFluidAmount() < inputs[i].amount) {
+		for(int i = 0; i < inputs.length; i++) {
+			if(inputs[i] != null) {
+				if(tanks[index * 4 + i].tank.getFluidAmount() < inputs[i].amount) {
 					return false;
 				}
 			}
@@ -209,13 +209,13 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private boolean hasSpaceForFluids(@Nullable FluidStack[] inputs, int index) {
-		if (inputs == null) {
+		if(inputs == null) {
 			return true;
 		}
 
-		for (int i = 0; i < inputs.length; i++) {
-			if (inputs[i] != null) {
-				if (tanks[index * 4 + i + 2].tank.getFluidAmount() + inputs[i].amount > tanks[index * 4 + i + 2].tank.getCapacity()) {
+		for(int i = 0; i < inputs.length; i++) {
+			if(inputs[i] != null) {
+				if(tanks[index * 4 + i + 2].tank.getFluidAmount() + inputs[i].amount > tanks[index * 4 + i + 2].tank.getCapacity()) {
 					return false;
 				}
 			}
@@ -225,7 +225,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private boolean hasRequiredItems(@Nullable List<AStack> inputs, int index) {
-		if (inputs == null) {
+		if(inputs == null) {
 			return true;
 		}
 
@@ -234,7 +234,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private boolean hasSpaceForItems(@Nullable ItemStack[] outputs, int index) {
-		if (outputs == null) {
+		if(outputs == null) {
 			return true;
 		}
 
@@ -247,7 +247,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		this.power -= this.consumption;
 		this.progress[index]++;
 
-		if (inventory.getStackInSlot(0).getItem() == ModItems.meteorite_sword_machined) {
+		if(inventory.getStackInSlot(0).getItem() == ModItems.meteorite_sword_machined) {
 			inventory.setStackInSlot(0, new ItemStack(ModItems.meteorite_sword_machined));
 		}
 
@@ -261,7 +261,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 
 		this.maxProgress[index] = ChemplantRecipes.getProcessTime(templateStack) * this.speed / 100;
 
-		if (this.progress[index] >= this.maxProgress[index]) {
+		if(this.progress[index] >= this.maxProgress[index]) {
 			consumeFluids(fluidInputs, index);
 			produceFluids(fluidOutputs, index);
 			consumeItems(itemInputs, index);
@@ -272,51 +272,51 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	private void consumeFluids(@Nullable FluidStack[] inputs, int index) {
-		if (inputs == null) {
+		if(inputs == null) {
 			return;
 		}
 
-		for (int i = 0; i < inputs.length; i++) {
-			if (inputs[i] != null) {
+		for(int i = 0; i < inputs.length; i++) {
+			if(inputs[i] != null) {
 				tanks[index * 4 + i].tank.drain(inputs[i].amount, true);
 			}
 		}
 	}
 
 	private void produceFluids(@Nullable FluidStack[] outputs, int index) {
-		if (outputs == null) {
+		if(outputs == null) {
 			return;
 		}
 
-		for (int i = 0; i < outputs.length; i++) {
-			if (outputs[i] != null) {
+		for(int i = 0; i < outputs.length; i++) {
+			if(outputs[i] != null) {
 				tanks[index * 4 + i + 2].tank.fill(outputs[i], true);
 			}
 		}
 	}
 
 	private void consumeItems(@Nullable List<AStack> inputs, int index) {
-		if (inputs == null) {
+		if(inputs == null) {
 			return;
 		}
 
 		int[] indices = getSlotIndicesFromIndex(index);
 
-		for (AStack in : inputs) {
-			if (in != null)
+		for(AStack in : inputs) {
+			if(in != null)
 				InventoryUtil.tryConsumeAStack(inventory, indices[0], indices[1], in);
 		}
 	}
 
 	private void produceItems(@Nullable ItemStack[] outputs, int index) {
-		if (outputs == null) {
+		if(outputs == null) {
 			return;
 		}
 
 		int[] indices = getSlotIndicesFromIndex(index);
 
-		for (ItemStack out : outputs) {
-			if (out != null)
+		for(ItemStack out : outputs) {
+			if(out != null)
 				InventoryUtil.tryAddItemToInventory(inventory, indices[2], indices[3], out.copy());
 		}
 	}
@@ -324,20 +324,20 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	private void loadItems(int index) {
 		int templateIdx = getTemplateIndex(index);
 		ItemStack templateStack = inventory.getStackInSlot(templateIdx);
-		if (templateStack.isEmpty() || templateStack.getItem() != ModItems.chemistry_template) {
+		if(templateStack.isEmpty() || templateStack.getItem() != ModItems.chemistry_template) {
 			return;
 		}
 
-		if (templateStack.getItemDamage() < EnumChemistryTemplate.values().length) {
+		if(templateStack.getItemDamage() < EnumChemistryTemplate.values().length) {
 			List<AStack> itemInputs = ChemplantRecipes.getChemInputFromTempate(templateStack);
-			if (itemInputs == null) {
+			if(itemInputs == null) {
 				return;
 			}
 
 			BlockPos[] positions = getInputPositions();
 			int[] indices = getSlotIndicesFromIndex(index);
 
-			for (BlockPos pos : positions) {
+			for(BlockPos pos : positions) {
 				TileEntity te = world.getTileEntity(pos);
 
 				if(te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
@@ -356,7 +356,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		BlockPos[] positions = getOutputPositions();
 		int[] indices = getSlotIndicesFromIndex(index);
 
-		for (BlockPos pos : positions) {
+		for(BlockPos pos : positions) {
 			TileEntity te = world.getTileEntity(pos);
 			if(te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
 				IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
@@ -368,51 +368,23 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	//Unloads output into chests. Capability version.
-	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
+	public boolean tryFillContainerCap(IItemHandler chest, int slot) {
+		//Check if we have something to output
+		if(inventory.getStackInSlot(slot).isEmpty())
+			return false;
 
-		int size = inv.getSlots();
-
-		for(int i = 0; i < size; i++) {
-			inv.getStackInSlot(i);
-			if(inv.getStackInSlot(i) != ItemStack.EMPTY) {
-
-				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
-					return false;
-
-				ItemStack sta1 = inv.getStackInSlot(i).copy();
-				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-				sta1.setCount(1);
-				sta2.setCount(1);
-
-				if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
-					inventory.getStackInSlot(slot).shrink(1);
-
-					if(inventory.getStackInSlot(slot).isEmpty())
-						inventory.setStackInSlot(slot, ItemStack.EMPTY);
-
-					ItemStack sta3 = inv.getStackInSlot(i).copy();
-					sta3.setCount(1);
-					inv.insertItem(i, sta3, false);
-
-					return true;
-				}
-			}
-		}
-		for(int i = 0; i < size; i++) {
-
-			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+		for(int i = 0; i < chest.getSlots(); i++) {
+			
+			ItemStack outputStack = inventory.getStackInSlot(slot).copy();
+			if(outputStack.isEmpty())
 				return false;
 
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(inv.getStackInSlot(i).getItem() == Items.AIR) {
-				sta2.setCount(1);
+			ItemStack chestItem = chest.getStackInSlot(i).copy();
+			if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
 				inventory.getStackInSlot(slot).shrink(1);
-				;
 
-				if(inventory.getStackInSlot(slot).isEmpty())
-					inventory.setStackInSlot(slot, ItemStack.EMPTY);
-
-				inv.insertItem(i, sta2, false);
+				outputStack.setCount(1);
+				chest.insertItem(i, outputStack, false);
 
 				return true;
 			}
@@ -458,7 +430,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 					System.out.println("This should never happen method getValidSlot broke");
 					continue;
 				}
-				// Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
+				// Ok now we know what we are looking for(nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
 				for(Map.Entry<Integer, ItemStack> set :
 						itemStackMap.entrySet()) {
 					ItemStack stack = set.getValue();
@@ -562,8 +534,8 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	protected List<TypedFluidTank> inTanks() {
 		List<TypedFluidTank> inTanks = new ArrayList<>();
 
-		for (int i = 0; i < tanks.length; ++i) {
-			if (i % 4 < 2) {
+		for(int i = 0; i < tanks.length; ++i) {
+			if(i % 4 < 2) {
 				inTanks.add(tanks[i]);
 			}
 		}
@@ -574,8 +546,8 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	public List<TypedFluidTank> outTanks() {
 		List<TypedFluidTank> outTanks = new ArrayList<>();
 
-		for (int i = 0; i < tanks.length; ++i) {
-			if (i % 4 > 1) {
+		for(int i = 0; i < tanks.length; ++i) {
+			if(i % 4 > 1) {
 				outTanks.add(tanks[i]);
 			}
 		}
@@ -586,26 +558,25 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	@Nullable
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if (resource.amount <= 0) {
+		if(resource.amount <= 0) {
 			return null;
 		}
-
 		List<TypedFluidTank> send = new ArrayList<>();
-		for (TypedFluidTank tank : outTanks()) {
-			if (tank.type == resource.getFluid()) {
+		for(TypedFluidTank tank : outTanks()) {
+			if(tank.type == resource.getFluid()) {
 				send.add(tank);
 			}
 		}
 
-		if (send.isEmpty()) {
+		if(send.isEmpty()) {
 			return null;
 		}
 
 		int offer = 0;
 		List<Integer> weight = new ArrayList<>();
-		for (TypedFluidTank tank : send) {
+		for(TypedFluidTank tank : send) {
 			int drainWeight = tank.tank.getFluidAmount();
-			if (drainWeight < 0) {
+			if(drainWeight < 0) {
 				drainWeight = 0;
 			}
 
@@ -613,29 +584,29 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			weight.add(drainWeight);
 		}
 
-		if (offer <= 0) {
+		if(offer <= 0) {
 			return null;
 		}
 
-		if (!doDrain) {
+		if(!doDrain) {
 			return new FluidStack(resource.getFluid(), offer);
 		}
 
 		int needed = resource.amount;
-		for (int i = 0; i < send.size(); ++i) {
+		for(int i = 0; i < send.size(); ++i) {
 			TypedFluidTank tank = send.get(i);
 			int fillWeight = weight.get(i);
-			int part = resource.amount * fillWeight / offer;
+			int part = (int)(resource.amount * ((float)fillWeight / (float)offer));
 
 			FluidStack drained = tank.tank.drain(part, true);
-			if (drained != null) {
+			if(drained != null) {
 				needed -= drained.amount;
 			}
 		}
 
-		for (int i = 0; i < 100 && needed > 0; i++) {
+		for(int i = 0; i < 100 && needed > 0; i++) {
 			TypedFluidTank tank = send.get(i);
-			if (tank.tank.getFluidAmount() > 0) {
+			if(tank.tank.getFluidAmount() > 0) {
 				int total = Math.min(tank.tank.getFluidAmount(), needed);
 				tank.tank.drain(total, true);
 				needed -= total;
@@ -643,7 +614,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		}
 
 		int drained = resource.amount - needed;
-		if (drained != 0) {
+		if(drained > 0) {
 			return new FluidStack(resource.getFluid(), drained);
 		}
 
@@ -653,8 +624,8 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	@Nullable
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		for (TypedFluidTank tank : outTanks()) {
-			if (tank.type != null && tank.tank.getFluidAmount() > 0) {
+		for(TypedFluidTank tank : outTanks()) {
+			if(tank.type != null && tank.tank.getFluidAmount() > 0) {
 				return tank.tank.drain(maxDrain, doDrain);
 			}
 		}
@@ -665,29 +636,28 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		int total = resource.amount;
-		int remaining = total;
-
-		if (total <= 0) {
+		
+		if(total <= 0) {
 			return 0;
 		}
 
 		Fluid inType = resource.getFluid();
 		List<TypedFluidTank> rec = new ArrayList<>();
-		for (TypedFluidTank tank : inTanks()) {
-			if (tank.type == inType) {
+		for(TypedFluidTank tank : inTanks()) {
+			if(tank.type == inType) {
 				rec.add(tank);
 			}
 		}
 
-		if (rec.isEmpty()) {
+		if(rec.isEmpty()) {
 			return 0;
 		}
 
 		int demand = 0;
 		List<Integer> weight = new ArrayList<>();
-		for (TypedFluidTank tank : rec) {
+		for(TypedFluidTank tank : rec) {
 			int fillWeight = tank.tank.getCapacity() - tank.tank.getFluidAmount();
-			if (fillWeight < 0) {
+			if(fillWeight < 0) {
 				fillWeight = 0;
 			}
 
@@ -695,28 +665,29 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			weight.add(fillWeight);
 		}
 
-		if (demand <= 0) {
+		if(demand <= 0) {
 			return 0;
 		}
 
-		if (!doFill) {
+		if(!doFill) {
 			return demand;
 		}
 
-		for (int i = 0; i < rec.size(); ++i) {
+		int fluidUsed = 0;
+
+		for(int i = 0; i < rec.size(); ++i) {
 			TypedFluidTank tank = rec.get(i);
 			int fillWeight = weight.get(i);
-			int part = (int) (Math.min((long) total, (long) demand) * (long) fillWeight / (long) demand);
-			tank.tank.fill(new FluidStack(resource.getFluid(), part), true);
-			remaining -= part;
+			int part = (int) (Math.min(total, demand) * (float) fillWeight / (float) demand);
+			fluidUsed += tank.tank.fill(new FluidStack(resource.getFluid(), part), true);
 		}
 
-		return remaining;
+		return fluidUsed;
 	}
 
 	protected NBTTagList serializeTanks() {
 		NBTTagList tankList = new NBTTagList();
-		for (int i = 0; i < tanks.length; ++i) {
+		for(int i = 0; i < tanks.length; ++i) {
 			NBTTagCompound tank = new NBTTagCompound();
 			tanks[i].writeToNBT(tank);
 			tank.setByte("index", (byte) i);
@@ -728,7 +699,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 	}
 
 	protected void deserializeTanks(NBTTagList tankList) {
-		for (int i = 0; i < tankList.tagCount(); ++i) {
+		for(int i = 0; i < tankList.tagCount(); ++i) {
 			NBTTagCompound tank = tankList.getCompoundTagAt(i);
 			int index = tank.getByte("index");
 
@@ -753,7 +724,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 		this.power = nbt.getLong("power");
 		this.progress = nbt.getIntArray("progress");
 
-		if (progress.length == 0) {
+		if(progress.length == 0) {
 			progress = new int[getRecipeCount()];
 		}
 

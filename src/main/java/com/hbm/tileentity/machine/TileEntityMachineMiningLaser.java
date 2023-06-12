@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.gas.BlockGasBase;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -19,6 +20,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.util.InventoryUtil;
 
 import api.hbm.energy.IEnergyUser;
@@ -44,6 +46,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -125,7 +129,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			lastTargetZ = targetZ;
 
 			double clientBreakProgress = 0;
-
+			
 			if(isOn) {
 				
 				int cycles = getOverdrive();
@@ -133,6 +137,12 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 				int range = getRange();
 				int fortune = getFortune();
 				int consumption = getConsumption() * speed;
+
+				if(doesScream()){
+					cycles *= 4;
+					speed *= 4;
+					consumption *= 20;
+				}
 
 				for(int i = 0; i < cycles; i++) {
 
@@ -155,7 +165,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 						buildDam();
 						continue;
 					}
-
 					if(beam && canBreak(block, targetX, targetY, targetZ)) {
 
 						breakProgress += getBreakSpeed(speed);
@@ -169,6 +178,9 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 						}
 					}
 				}
+				if(doesScream()) {
+					world.playSound(null, targetX + 0.5, targetY + 0.5, targetZ + 0.5, HBMSoundHandler.screm, SoundCategory.BLOCKS, 20.0F, 1.0F);
+				}
 			} else {
 				targetY = pos.getY() - 2;
 				beam = false;
@@ -179,6 +191,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			this.tryFillContainer(pos.getX(), pos.getY(), pos.getZ() + 2);
 			this.tryFillContainer(pos.getX(), pos.getY(), pos.getZ() - 2);
 
+			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
 			NBTTagCompound data = new NBTTagCompound();
 			data.setLong("power", power);
 			data.setInteger("lastX", lastTargetX);
@@ -317,10 +330,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		
 		suckDrops();
 
-		if(doesScream()) {
-			world.playSound(null, targetX + 0.5, targetY + 0.5, targetZ + 0.5, HBMSoundHandler.screm, SoundCategory.BLOCKS, 2000.0F, 1.0F);
-		}
-
 		breakProgress = 0;
 	}
 
@@ -427,7 +436,14 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	}
 
 	private boolean canBreak(IBlockState block, int x, int y, int z) {
-		return block.getBlock() != Blocks.AIR && block.getBlockHardness(world, new BlockPos(x, y, z)) >= 0 && !block.getMaterial().isLiquid() && block.getBlock() != Blocks.BEDROCK;
+		Block b = block.getBlock();
+		if(b == Blocks.AIR) return false;
+		if(b == Blocks.BEDROCK) return false;
+		if(b instanceof BlockGasBase) return false;
+		float hardness = block.getBlockHardness(world, new BlockPos(x, y, z));
+		if(hardness < 0 || hardness > 3_500_000) return false;
+		if(block.getMaterial().isLiquid()) return false;
+		return true;
 	}
 
 	public int getOverdrive() {
@@ -724,4 +740,22 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		return 100;
 	}
 
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		}
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		}
+		return super.getCapability(capability, facing);
+	}
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
 }

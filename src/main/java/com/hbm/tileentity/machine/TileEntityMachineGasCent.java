@@ -15,7 +15,7 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.tileentity.TileEntityLoadedBase;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,12 +35,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineGasCent extends TileEntityLoadedBase implements ITickable, IEnergyUser, ITankPacketAcceptor, IFluidHandler {
+public class TileEntityMachineGasCent extends TileEntityMachineBase implements ITickable, IEnergyUser, ITankPacketAcceptor, IFluidHandler {
 
-	public ItemStackHandler inventory;
 	
 	public long power;
 	public int progress;
@@ -58,40 +55,12 @@ public class TileEntityMachineGasCent extends TileEntityLoadedBase implements IT
 	private String customName;
 	
 	public TileEntityMachineGasCent() {
-		inventory = new ItemStackHandler(9){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				return true;
-			}
-		};
+		super(9);
 		tank = new FluidTank(8000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.gasCentrifuge";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this)
-		{
-			return false;
-		}else{
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
-		}
+	public String getName() {
+		return "container.gasCentrifuge";
 	}
 	
 	@Override
@@ -273,6 +242,16 @@ public class TileEntityMachineGasCent extends TileEntityLoadedBase implements IT
 			return false;
 		return MachineRecipes.getFluidConsumedGasCent(stack.getFluid()) != 0;
 	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return slot > 3;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return new int[]{0, 3, 4, 5, 6, 7, 8};
+	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -336,14 +315,12 @@ public class TileEntityMachineGasCent extends TileEntityLoadedBase implements IT
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

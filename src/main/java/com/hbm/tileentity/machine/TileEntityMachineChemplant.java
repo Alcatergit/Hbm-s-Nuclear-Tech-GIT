@@ -336,7 +336,6 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				tryExchangeTemplates(te1, te2);
 			}
 
-
 			if(te1 != null && te1.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
 				IItemHandler cap = te1.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 				for(int i = 5; i <= 9; i++) {
@@ -424,8 +423,6 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				}
 
 			}
-
-
 		}
 		return false;
 
@@ -584,15 +581,12 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			return true;
 
 		//checking first slot
-		for(int i = 0; i<stacks.length; i++){
+		for(int i = 0; i < stacks.length; i++){
 			if(inventory.getStackInSlot(5+i) == ItemStack.EMPTY) { // is the slot empty?
 				continue; // ok it is empty lets check the next one
 			} else {
-				ComparableStack compareStack = new ComparableStack(stacks[i]);
-				ItemStack invCompareStack = inventory.getStackInSlot(5+i).copy();
-				compareStack.singulize();
-				invCompareStack.setCount(1);
-				if(compareStack.isApplicable(invCompareStack)){ // oof there is some item there - is it the same tho?
+				
+				if(Library.areItemStacksCompatible(stacks[i].copy(), inventory.getStackInSlot(5+i).copy(), false)){ // oof there is some item there - is it the same tho?
 					if(inventory.getStackInSlot(5+i).getCount() + stacks[i].getCount() <= inventory.getStackInSlot(5+i).getMaxStackSize()){ // ok it is the same item but is the stack full already?
 						continue;
 					}
@@ -642,119 +636,35 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 				stack.setStackInSlot(i, array.getStackInSlot(i).copy());
 			else
 				stack.setStackInSlot(i, ItemStack.EMPTY);
-		;
 
 		return stack;
 	}
 
-	/**
-	 * Unloads output into chests
-	 */
-	//Drillgon200: I don't think we need this anymore
-	/*public boolean tryFillContainer(IInventory inventory, int slot) {
-
-		int size = inventory.getSizeInventory();
-
-		for(int i = 0; i < size; i++) {
-			if(inventory.getStackInSlot(i) != null) {
-
-				if(slots[slot] == null)
-					return false;
-
-				ItemStack sta1 = inventory.getStackInSlot(i).copy();
-				ItemStack sta2 = slots[slot].copy();
-				if(sta1 != null && sta2 != null) {
-					sta1.stackSize = 1;
-					sta2.stackSize = 1;
-
-					if(ItemStack.areItemStacksEqual(sta1, sta2) && ItemStack.areItemStackTagsEqual(sta1, sta2) && inventory.getStackInSlot(i).stackSize < inventory.getStackInSlot(i).getMaxStackSize()) {
-						slots[slot].stackSize--;
-
-						if(slots[slot].stackSize <= 0)
-							slots[slot] = null;
-
-						ItemStack sta3 = inventory.getStackInSlot(i).copy();
-						sta3.stackSize++;
-						inventory.setInventorySlotContents(i, sta3);
-
-						return true;
-					}
-				}
-			}
-		}
-		for(int i = 0; i < size; i++) {
-
-			if(slots[slot] == null)
-				return false;
-
-			ItemStack sta2 = slots[slot].copy();
-			if(inventory.getStackInSlot(i) == null && sta2 != null) {
-				sta2.stackSize = 1;
-				slots[slot].stackSize--;
-
-				if(slots[slot].stackSize <= 0)
-					slots[slot] = null;
-
-				inventory.setInventorySlotContents(i, sta2);
-
-				return true;
-			}
-		}
-
-		return false;
-	}*/
-
 	//Unloads output into chests. Capability version.
-	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
+	public boolean tryFillContainerCap(IItemHandler chest, int slot) {
+		//Check if we have something to output
+		if(inventory.getStackInSlot(slot).isEmpty())
+			return false;
 
-		int size = inv.getSlots();
-
-		for(int i = 0; i < size; i++) {
-			inv.getStackInSlot(i);
-			if(inv.getStackInSlot(i) != ItemStack.EMPTY) {
-
-				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
-					return false;
-
-				ItemStack sta1 = inv.getStackInSlot(i).copy();
-				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-				sta1.setCount(1);
-				sta2.setCount(1);
-
-				if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
-					inventory.getStackInSlot(slot).shrink(1);
-
-					if(inventory.getStackInSlot(slot).isEmpty())
-						inventory.setStackInSlot(slot, ItemStack.EMPTY);
-
-					ItemStack sta3 = inv.getStackInSlot(i).copy();
-					sta3.setCount(1);
-					inv.insertItem(i, sta3, false);
-
-					return true;
-				}
-			}
-		}
-		for(int i = 0; i < size; i++) {
-
-			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+		for(int i = 0; i < chest.getSlots(); i++) {
+			
+			ItemStack outputStack = inventory.getStackInSlot(slot).copy();
+			if(outputStack.isEmpty())
 				return false;
 
-			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
-			if(inv.getStackInSlot(i).getItem() == Items.AIR) {
-				sta2.setCount(1);
+			ItemStack chestItem = chest.getStackInSlot(i).copy();
+			if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
 				inventory.getStackInSlot(slot).shrink(1);
-				;
-
 				if(inventory.getStackInSlot(slot).isEmpty())
 					inventory.setStackInSlot(slot, ItemStack.EMPTY);
 
-				inv.insertItem(i, sta2, false);
+				outputStack.setCount(1);
+				chest.insertItem(i, outputStack, false);
 
 				return true;
 			}
 		}
-
+		//Chest is full
 		return false;
 	}
 

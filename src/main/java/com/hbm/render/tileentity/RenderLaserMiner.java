@@ -25,10 +25,14 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 		GL11.glTranslated(x + 0.5, y - 1, z + 0.5);
 
 		TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser)te;
-
-		double tx = (laser.targetX - laser.lastTargetX) * partialTicks + laser.lastTargetX;
-		double ty = (laser.targetY - laser.lastTargetY) * partialTicks + laser.lastTargetY;
-		double tz = (laser.targetZ - laser.lastTargetZ) * partialTicks + laser.lastTargetZ;
+		double tx = x;
+		double ty = 0;
+		double tz = z;
+		if(laser.beam) {
+			tx = (laser.targetX - laser.lastTargetX) * partialTicks + laser.lastTargetX;
+			ty = (laser.targetY - laser.lastTargetY) * partialTicks + laser.lastTargetY;
+			tz = (laser.targetZ - laser.lastTargetZ) * partialTicks + laser.lastTargetZ;
+		}
 		double vx = tx - laser.getPos().getX();
 		double vy = ty - laser.getPos().getY() + 3;
 		double vz = tz - laser.getPos().getZ();
@@ -74,9 +78,7 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 			length = vec.lengthVector();
 			GL11.glTranslated(nVec.xCoord, nVec.yCoord - 1, nVec.zCoord);
 			int range = (int)Math.ceil(length * 0.5);
-			BeamPronter.prontBeam(vec, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xa00000, 0xa00000, (int)te.getWorld().getTotalWorldTime() * -25 % 360, range * 2, 0.075F, 3, 0.025F);
-	        BeamPronter.prontBeam(vec, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xa00000, 0xa00000, (int)te.getWorld().getTotalWorldTime() * -25 % 360 + 120, range * 2, 0.075F, 3, 0.025F);
-	        BeamPronter.prontBeam(vec, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xa00000, 0xa00000, (int)te.getWorld().getTotalWorldTime() * -25 % 360 + 240, range * 2, 0.075F, 3, 0.025F);
+			BeamPronter.prontBeam(vec, EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0xa00000, 0xFFFFFF, 0, 1, 0, 3, 0.09F);
 		}
 
 		GL11.glPopMatrix();

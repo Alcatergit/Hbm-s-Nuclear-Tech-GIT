@@ -386,7 +386,7 @@ public class InventoryUtil {
 
 	public static boolean tryConsumeAStack(IItemHandlerModifiable inv, int start, int end, AStack stack) {
 		AStack copy = stack.copy();
-		for (int i = start; i < end; ++i) {
+		for (int i = start; i <= end; ++i) {
 			ItemStack input = inv.getStackInSlot(i);
 
 			if (stack.matchesRecipe(input, true)) {

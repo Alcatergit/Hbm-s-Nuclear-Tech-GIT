@@ -31,7 +31,7 @@ public class NuclearTransmutationRecipes {
 	}
 	
 	public static ItemStack getOutput(ItemStack stack) {
-		if(stack == null)
+		if(stack == null || stack.isEmpty())
 			return null;
 		
 		ItemStack outputItem = recipesOutput.get(new ComparableStack(stack));
@@ -51,7 +51,7 @@ public class NuclearTransmutationRecipes {
 	}
 
 	public static long getEnergy(ItemStack stack) {
-		if(stack == null)
+		if(stack == null || stack.isEmpty())
 			return -1;
 
 		Long outputItem = recipesEnergy.get(new ComparableStack(stack));

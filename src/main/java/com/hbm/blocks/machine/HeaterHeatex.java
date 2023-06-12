@@ -1,5 +1,8 @@
 package com.hbm.blocks.machine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
@@ -21,9 +24,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HeaterHeatex extends BlockDummyable implements ITooltipProvider, ILookOverlay {
 
@@ -94,6 +94,7 @@ public class HeaterHeatex extends BlockDummyable implements ITooltipProvider, IL
 
         List<String> text = new ArrayList<>();
         text.add(String.format("%,d", heater.heatEnergy) + " TU");
+        text.add("§c<- §r"+String.format("%,d", heater.heatGen) + " TU/t");
         ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
     }
 }

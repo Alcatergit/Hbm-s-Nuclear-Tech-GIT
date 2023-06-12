@@ -29,6 +29,10 @@ hbmfluid.plasma_put=Plutonium-Tritium Plasma
 hbmfluid.experience=XP Juice
 container.rbmkHeater=RBMK Fluid Heater
 
+tile.heater_rt.name=Radioisotope Thermal Heater
+tile.heater_rt.desc=Produces Heat from RTG Pellets
+container.heaterRadioThermal=Radioisotope Thermal Heater
+
 hazard.prot=Protects against hazards:
 hazard.noprot=Does NOT protect against:
 hazard.bacteria=Bacteria / Aerosols

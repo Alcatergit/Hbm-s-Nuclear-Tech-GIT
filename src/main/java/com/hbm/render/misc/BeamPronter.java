@@ -27,7 +27,8 @@ public class BeamPronter {
 	
 	public static enum EnumWaveType {
 		RANDOM,
-		SPIRAL
+		SPIRAL,
+		STRAIGHT
 	}
 	
 	public static enum EnumBeamType {
@@ -35,7 +36,7 @@ public class BeamPronter {
 		LINE
 	}
 	
-	public static void prontBeam(Vec3 skeleton, EnumWaveType wave, EnumBeamType beam, int outerColor, int innerColor, int start, int segments, float size, int layers, float thickness) {
+	public static void prontBeam(Vec3 skeleton, EnumWaveType wave, EnumBeamType beam, int outerColor, int innerColor, int start, int segments, float spinRadius, int layers, float thickness) {
 
 		GL11.glPushMatrix();
 		
@@ -77,19 +78,23 @@ public class BeamPronter {
 		double lastZ = 0;
 		
 		for(int i = 0; i <= segments; i++) {
+
+			double pX = unit.xCoord * segLength * i;
+			double pY = unit.yCoord * segLength * i;
+			double pZ = unit.zCoord * segLength * i;
 			
-			Vec3 spinner = Vec3.createVectorHelper(size, 0, 0);
-			
-			if(wave == EnumWaveType.SPIRAL) {
-				spinner.rotateAroundY((float)Math.PI * (float)start / 180F);
-				spinner.rotateAroundY((float)Math.PI * 45F / 180F * i);
-			} else if(wave == EnumWaveType.RANDOM) {
-				spinner.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
+			if(wave != EnumWaveType.STRAIGHT) {
+				Vec3 spinner = Vec3.createVectorHelper(spinRadius, 0, 0);
+				if(wave == EnumWaveType.SPIRAL) {
+					spinner.rotateAroundY((float)Math.PI * (float)start / 180F);
+					spinner.rotateAroundY((float)Math.PI * 45F / 180F * i);
+				} else if(wave == EnumWaveType.RANDOM) {
+					spinner.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
+				}
+				pX += spinner.xCoord;
+				pY += spinner.yCoord;
+				pZ += spinner.zCoord;
 			}
-			
-			double pX = unit.xCoord * segLength * i + spinner.xCoord;
-			double pY = unit.yCoord * segLength * i + spinner.yCoord;
-			double pZ = unit.zCoord * segLength * i + spinner.zCoord;
 			
 			if(beam == EnumBeamType.LINE && i > 0) {
 	            tessellator.setColorOpaque_I(outerColor);
@@ -99,12 +104,12 @@ public class BeamPronter {
 			
 			if(beam == EnumBeamType.SOLID && i > 0) {
 				
-				float radius = thickness / layers;
+				float radius = thickness / (float)layers;
 
 				for(int j = 1; j <= layers; j++) {
 					
 					float inter = (float)(j - 1) / (float)(layers - 1);
-					int color = (int) (outerColor + (innerColor - outerColor) * inter);
+					int color = BobMathUtil.interpolateColor(innerColor, outerColor, inter);
 					tessellator.setColorOpaque_I(color);
 					
 					tessellator.addVertex(lastX + (radius * j), lastY, lastZ + (radius * j));
@@ -158,132 +163,9 @@ public class BeamPronter {
 	}
 	
 	//Drillgon200: Yeah, I don't know what to do about fluid colors so I'm just going butcher it and try my best to use the middle pixel of the icon
-	public static void prontBeamWithIcon(Vec3 skeleton, EnumWaveType wave, EnumBeamType beam, TextureAtlasSprite icon, int innerColor, int start, int segments, float size, int layers, float thickness) {
-		GL11.glPushMatrix();
-		
-		float u = icon.getInterpolatedU(8);
-		float v = icon.getInterpolatedV(8);
-		
-		float sYaw = (float)(Math.atan2(skeleton.xCoord, skeleton.zCoord) * 180F / Math.PI);
-        float sqrt = MathHelper.sqrt(skeleton.xCoord * skeleton.xCoord + skeleton.zCoord * skeleton.zCoord);
-		float sPitch = (float)(Math.atan2(skeleton.yCoord, (double)sqrt) * 180F / Math.PI);
+	//Alcater: I figured out a way to extract the fluid colors from the texture and save them in a HashMap at loadup. This function wont be needed anymore.
+	//public static void prontBeamWithIcon(Vec3 skeleton, EnumWaveType wave, EnumBeamType beam, TextureAtlasSprite icon, int innerColor, int start, int segments, float spinRadius, int layers, float thickness) {
 
-		GL11.glRotatef(180, 0, 1F, 0);
-		GL11.glRotatef(sYaw, 0, 1F, 0);
-		GL11.glRotatef(sPitch - 90, 1F, 0, 0);
-		
-		GL11.glPushMatrix();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableLighting();
-
-		if(beam == EnumBeamType.SOLID) {
-			GlStateManager.disableCull();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-		}
-        
-		Tessellator tessellator = Tessellator.instance;
-		
-		
-
-		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
-		Random rand = new Random(start);
-		double length = skeleton.lengthVector();
-		double segLength = length / segments;
-		double lastX = 0;
-		double lastY = 0;
-		double lastZ = 0;
-		if(beam == EnumBeamType.LINE) {
-			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_TEX);
-		} else if (beam == EnumBeamType.SOLID){
-			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		}
-		for(int i = 0; i <= segments; i++) {
-			
-			Vec3 spinner = Vec3.createVectorHelper(size, 0, 0);
-			
-			if(wave == EnumWaveType.SPIRAL) {
-				spinner.rotateAroundY((float)Math.PI * (float)start / 180F);
-				spinner.rotateAroundY((float)Math.PI * 45F / 180F * i);
-			} else if(wave == EnumWaveType.RANDOM) {
-				spinner.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
-			}
-			
-			//spinner.rotateAroundX(sPitch + (float)Math.PI * 0.5F);
-			//spinner.rotateAroundY(sYaw);
-
-			double pX = unit.xCoord * segLength * i + spinner.xCoord;
-			double pY = unit.yCoord * segLength * i + spinner.yCoord;
-			double pZ = unit.zCoord * segLength * i + spinner.zCoord;
-			
-			if(beam == EnumBeamType.LINE && i > 0) {
-	            tessellator.addVertexWithUV(pX, pY, pZ, u, v);
-	            tessellator.addVertexWithUV(lastX, lastY, lastZ, u, v);
-			}
-			
-			if(beam == EnumBeamType.SOLID && i > 0) {
-				
-				float radius = thickness / layers;
-
-				for(int j = 1; j <= layers; j++) {
-					
-					tessellator.addVertexWithUV(lastX + (radius * j), lastY, lastZ + (radius * j), u, v);
-					tessellator.addVertexWithUV(lastX + (radius * j), lastY, lastZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX + (radius * j), pY, pZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX + (radius * j), pY, pZ + (radius * j), u, v);
-					
-					tessellator.addVertexWithUV(lastX - (radius * j), lastY, lastZ + (radius * j), u, v);
-					tessellator.addVertexWithUV(lastX - (radius * j), lastY, lastZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX - (radius * j), pY, pZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX - (radius * j), pY, pZ + (radius * j), u, v);
-					
-					tessellator.addVertexWithUV(lastX + (radius * j), lastY, lastZ + (radius * j), u, v);
-					tessellator.addVertexWithUV(lastX - (radius * j), lastY, lastZ + (radius * j), u, v);
-					tessellator.addVertexWithUV(pX - (radius * j), pY, pZ + (radius * j), u, v);
-					tessellator.addVertexWithUV(pX + (radius * j), pY, pZ + (radius * j), u, v);
-					
-					tessellator.addVertexWithUV(lastX + (radius * j), lastY, lastZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(lastX - (radius * j), lastY, lastZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX - (radius * j), pY, pZ - (radius * j), u, v);
-					tessellator.addVertexWithUV(pX + (radius * j), pY, pZ - (radius * j), u, v);
-				}
-			}
-			
-			lastX = pX;
-			lastY = pY;
-			lastZ = pZ;
-			
-		}
-		tessellator.draw();
-		GlStateManager.disableTexture2D();
-		
-		if(beam == EnumBeamType.LINE) {
-			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-		} else if (beam == EnumBeamType.SOLID){
-			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		}
-		
-		if(beam == EnumBeamType.LINE) {
-            tessellator.setColorOpaque_I(innerColor);
-            tessellator.addVertex(0, 0, 0);
-            tessellator.addVertex(0, skeleton.lengthVector(), 0);
-		}
-
-		
-		
-		tessellator.draw();
-		
-		if(beam == EnumBeamType.SOLID) {
-			GlStateManager.disableBlend();
-			GlStateManager.enableTexture2D();
-		}
-		
-        GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
-		GL11.glPopMatrix();
-
-		GL11.glPopMatrix();
-	}
 	
 	public static void gluonBeam(Vec3 pos1, Vec3 pos2, float size){
 		//long l = System.nanoTime();

@@ -78,7 +78,7 @@ public class ItemCustomLore extends Item {
 			if(GeneralConfig.enableBabyMode)
 				list.add("Peer can go die, I'm not putting any retarded niko stuff in the mod.");
 			else
-				list.add("Made from uranium in a schrabidium transmutator");
+				list.add("Made from uranium in a nuclear transmutator");
 		}
 		if(this == ModItems.ingot_fiberglass)
 		{
