@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
@@ -27,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBlock{
+public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBlock {
 
 	public DoorDecl type;
 	private boolean isRadResistant;
@@ -169,8 +170,7 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 		{
 			TileEntityDoorGeneric entity = (TileEntityDoorGeneric) worldIn.getTileEntity(blockPos);
 			if(entity != null) {
-				// 0: closed, 1: opening/closing, 2:open
-				return entity.state == 0;
+				return entity.state == IDoor.DoorState.CLOSED;
 			}
 		}
 

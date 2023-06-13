@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
@@ -179,8 +180,7 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 		{
 			TileEntitySlidingBlastDoor entity = (TileEntitySlidingBlastDoor) worldIn.getTileEntity(blockPos);
 			if(entity != null) {
-				// 0: closed, 1: opening/closing, 2:open
-				return entity.state == 0;
+				return entity.state == IDoor.DoorState.CLOSED;
 			}
 		}
 

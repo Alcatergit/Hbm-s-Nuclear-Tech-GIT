@@ -22,8 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntitySiloHatch extends TileEntityLockableBase implements ITickable, IAnimatedDoor {
 
-	//0: closed, 1: open, 2: closing, 3: opening
-	public byte state = 0;
+	public DoorState state = DoorState.CLOSED;
 	public long sysTime;
 	public int timer = -1;
 	public EnumFacing facing = null;
@@ -40,16 +39,19 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 					tryClose();
 				}
 			}
-			int oldState = state;
-			if(timer < 0)
-				oldState = -1;
-			if(state < 2) {
+			DoorState oldState = state;
+			if(timer < 0) {
+				//oldState = -1; // what
+				oldState = null;
+			}
+
+			if(this.state.isStationaryState()) {
 				timer = 0;
 			} else {
 				if(facing == null)
 					facing = world.getBlockState(pos).getValue(BlockSiloHatch.FACING).getOpposite();
 				timer ++;
-				if(state == 2){
+				if(state == DoorState.CLOSING){
 					if(timer == 1){
 						BlockPos hydrolics = pos.offset(facing, 5);
 						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloclose, SoundCategory.BLOCKS, 3F, 1F);
@@ -63,9 +65,9 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 						}
 					}
 					if(timer > 100){
-						state = 0;
+						state = DoorState.CLOSED;
 					}
-				} else if(state == 3){
+				} else if(state == DoorState.OPENING){
 					if(timer == 1){
 						BlockPos hydrolics = pos.offset(facing, 5);
 						this.world.playSound(null, hydrolics.getX(), hydrolics.getY(), hydrolics.getZ(), HBMSoundHandler.siloopen, SoundCategory.BLOCKS, 4F, 1F);
@@ -79,42 +81,42 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 						}
 					}
 					if(timer > 100){
-						state = 1;
+						state = DoorState.OPEN;
 					}
 				}
 			}
 			if(oldState != state)
-				PacketDispatcher.wrapper.sendToAllTracking(new TEDoorAnimationPacket(pos, state), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+				PacketDispatcher.wrapper.sendToAllTracking(new TEDoorAnimationPacket(pos, (byte) state.ordinal()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
 	
 	public void tryToggle() {
-		if(this.state == 0) {
+		if(this.state == DoorState.CLOSED) {
 			if(!world.isRemote) {
-				this.state = 3;
+				this.state = DoorState.OPENING;
 				timer = -1;
 			}
-		} else if(this.state == 1) {
+		} else if(this.state == DoorState.OPEN) {
 			if(!world.isRemote) {
-				this.state = 2;
+				this.state = DoorState.CLOSING;
 				timer = -1;
 			}
 		}
 	}
 
 	public void tryOpen() {
-		if(this.state == 0) {
+		if(this.state == DoorState.CLOSED) {
 			if(!world.isRemote) {
-				this.state = 3;
+				this.state = DoorState.OPENING;
 				timer = -1;
 			}
 		}
 	}
 
 	public void tryClose() {
-		if(this.state == 1) {
+		if(this.state == DoorState.OPEN) {
 			if(!world.isRemote) {
-				this.state = 2;
+				this.state = DoorState.CLOSING;
 				timer = -1;
 			}
 		}
@@ -147,13 +149,13 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		state = compound.getByte("state");
+		state = DoorState.values()[compound.getByte("state")];
 		super.readFromNBT(compound);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setByte("state", state);
+		compound.setByte("state", (byte) state.ordinal());
 		return super.writeToNBT(compound);
 	}
 	
@@ -175,19 +177,19 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 
 	@Override
 	public void open() {
-		if(state == 0)
+		if(state == DoorState.CLOSED)
 			toggle();
 	}
 
 	@Override
 	public void close() {
-		if(state == 1)
+		if(state == DoorState.OPEN)
 			toggle();
 	}
 
 	@Override
 	public DoorState getState() {
-		return DoorState.values()[state];
+		return state;
 	}
 
 	@Override
@@ -196,12 +198,12 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	}
 
 	@Override
-	public void handleNewState(byte state) {
-		if(this.state != state){
-			if(this.state < 2 && state >= 2){
+	public void handleNewState(DoorState newState) {
+		if(this.state != newState){
+			if(this.state.isStationaryState() && newState.isMovingState()){
 				sysTime = System.currentTimeMillis();
 			}
-			this.state = state;
+			this.state = newState;
 		}
 	}
 	

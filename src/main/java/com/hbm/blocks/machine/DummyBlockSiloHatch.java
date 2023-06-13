@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
@@ -152,8 +153,7 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 
 				TileEntitySiloHatch entity = (TileEntitySiloHatch) worldIn.getTileEntity(((TileEntityDummy) te).target);
 				if (entity != null) {
-					// 0: closed, 1: opening/closing, 2:open
-					return entity.state == 0;
+					return entity.state == IDoor.DoorState.CLOSED;
 				}
 			}
 		}

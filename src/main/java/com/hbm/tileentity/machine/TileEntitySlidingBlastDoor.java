@@ -24,8 +24,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implements ITickable, IAnimatedDoor {
 
-	//0: closed, 1: open, 2: closing, 3: opening
-	public byte state = 0;
+	public DoorState state = DoorState.CLOSED;
 	public byte texture = 0;
 	public long sysTime;
 	private int timer = 0;
@@ -38,11 +37,11 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			if(state < 2) {
+			if(state.isStationaryState()) {
 				timer = 0;
 			} else {
 				timer ++;
-				if(state == 2){
+				if(state == DoorState.CLOSING){
 					if(timer == 2){
 						placeDummy(-2);
 						placeDummy(2);
@@ -52,9 +51,9 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 					} else if(timer == 12){
 						placeDummy(0);
 					} if(timer > 24){
-						state = 0;
+						state = DoorState.CLOSED;
 					}
-				} else if(state == 3){
+				} else if(state == DoorState.OPENING){
 					if(timer == 12){
 						removeDummy(0);
 					} else if(timer == 16){
@@ -64,24 +63,24 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 						removeDummy(-2);
 						removeDummy(2);
 					} else if(timer > 24){
-						state = 1;
+						state = DoorState.OPEN;
 					}
 				}
 			}
-			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, state, texture), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
+			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, (byte) state.ordinal(), texture), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, shouldUseBB == true ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
 	
 	public boolean tryToggle(EntityPlayer player){
-		if(this.state == 0) {
+		if(this.state == DoorState.CLOSED) {
 			if(!world.isRemote && canAccess(player)) {
-				this.state = 3;
+				this.state = DoorState.OPENING;
 			}
 			return true;
-		} else if(this.state == 1) {
+		} else if(this.state == DoorState.OPEN) {
 			if(!world.isRemote && canAccess(player)) {
-				this.state = 2;
+				this.state = DoorState.CLOSING;
 			}
 			return true;
 		}
@@ -184,7 +183,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		state = compound.getByte("state");
+		state = DoorState.values()[compound.getByte("state")];
 		sysTime = compound.getLong("sysTime");
 		timer = compound.getInteger("timer");
 		redstoned = compound.getBoolean("redstoned");
@@ -196,7 +195,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setByte("state", state);
+		compound.setByte("state", (byte) state.ordinal());
 		compound.setLong("sysTime", sysTime);
 		compound.setInteger("timer", timer);
 		compound.setBoolean("redstoned", redstoned);
@@ -224,48 +223,48 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	}
 	
 	@Override
-	public void handleNewState(byte state) {
-		if(this.state != state){
-			if(this.state == 0 && state == 3){
+	public void handleNewState(DoorState newState) {
+		if(this.state != newState){
+			if(this.state == DoorState.CLOSED && newState == DoorState.OPENING){
 				if(audio == null){
 					audio = MainRegistry.proxy.getLoopedSoundStartStop(world, HBMSoundHandler.qe_sliding_opening, null, HBMSoundHandler.qe_sliding_opened, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2, 1);
 					audio.startSound();
 				}
 			}
-			if(this.state == 1 && state == 2){
+			if(this.state == DoorState.OPEN && newState == DoorState.CLOSING){
 				if(audio == null){
 					audio = MainRegistry.proxy.getLoopedSoundStartStop(world, HBMSoundHandler.qe_sliding_opening, null, HBMSoundHandler.qe_sliding_shut, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2, 1);
 					audio.startSound();
 				}
 			}
-			if((this.state == 3 && state == 1) || (this.state == 2 && state == 0)){
+			if(this.state.isMovingState() && newState.isStationaryState()){
 				if(audio != null){
 					audio.stopSound();
 					audio = null;
 				}
 			}
-			if(this.state < 2 && state >= 2){
+			if(this.state.isStationaryState() && newState.isMovingState()){
 				sysTime = System.currentTimeMillis();
 			}
-			this.state = state;
+			this.state = newState;
 		}
 	}
 
 	@Override
 	public void open() {
-		if(state == 0)
+		if(state == DoorState.CLOSED)
 			toggle();
 	}
 
 	@Override
 	public void close() {
-		if(state == 1)
+		if(state == DoorState.OPEN)
 			toggle();
 	}
 
 	@Override
 	public DoorState getState() {
-		return DoorState.values()[state];
+		return state;
 	}
 
 	@Override
