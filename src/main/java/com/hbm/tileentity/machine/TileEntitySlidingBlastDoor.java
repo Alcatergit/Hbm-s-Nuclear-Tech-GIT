@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
@@ -71,22 +72,36 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, shouldUseBB == true ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
-	
-	public boolean tryToggle(EntityPlayer player){
-		if(this.state == DoorState.CLOSED) {
+
+	public boolean tryOpen(EntityPlayer player) {
+		if(state == DoorState.CLOSED) {
 			if(!world.isRemote && canAccess(player)) {
-				this.state = DoorState.OPENING;
-			}
-			return true;
-		} else if(this.state == DoorState.OPEN) {
-			if(!world.isRemote && canAccess(player)) {
-				this.state = DoorState.CLOSING;
+				open();
 			}
 			return true;
 		}
 		return false;
 	}
-	
+
+	public boolean tryToggle(EntityPlayer player){
+		if(state == DoorState.CLOSED) {
+			return tryOpen(player);
+		} else if(state == DoorState.OPEN) {
+			return tryClose(player);
+		}
+		return false;
+	}
+
+	public boolean tryClose(EntityPlayer player) {
+		if(state == DoorState.OPEN) {
+			if(!world.isRemote && canAccess(player)) {
+				close();
+			}
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public boolean canAccess(EntityPlayer player) {
 		if(keypadLocked && player != null)
@@ -268,8 +283,16 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	}
 
 	@Override
-	public void toggle() {
-		tryToggle(null);
+	public void toggle(){
+		if(state == DoorState.CLOSED) {
+			state = DoorState.OPENING;
+			// With door opening, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		} else if(state == DoorState.OPEN) {
+			state = DoorState.CLOSING;
+			// With door closing, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		}
 	}
 	
 	@Override

@@ -192,13 +192,13 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 		}
 		if(state == DoorState.CLOSED) {
 			if(!world.isRemote && canAccess(player)) {
-				state = DoorState.OPENING;
+				open();
 				broadcastControlEvt();
 			}
 			return true;
 		} else if(state == DoorState.OPEN) {
 			if(!world.isRemote && canAccess(player)) {
-				state = DoorState.CLOSING;
+				close();
 				broadcastControlEvt();
 			}
 			return true;
@@ -211,11 +211,8 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			return false;
 		if(state == DoorState.CLOSED) {
 			if(!world.isRemote) {
-				state = DoorState.OPENING;
+				open();
 				broadcastControlEvt();
-
-				// With door opening, mark chunk for rad update
-				RadiationSystemNT.markChunkForRebuild(world, pos);
 			}
 			return true;
 		}
@@ -238,11 +235,8 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			return false;
 		if(state == DoorState.OPEN) {
 			if(!world.isRemote) {
-				state = DoorState.CLOSING;
+				close();
 				broadcastControlEvt();
-
-				// With door closing, mark chunk for rad update
-				RadiationSystemNT.markChunkForRebuild(world, pos);
 			}
 			return true;
 		}
@@ -250,7 +244,7 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	}
 
 	@Override
-	public void open(){
+	public void open() {
 		if(state == DoorState.CLOSED)
 			toggle();
 	}
@@ -270,8 +264,12 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	public void toggle(){
 		if(state == DoorState.CLOSED) {
 			state = DoorState.OPENING;
+			// With door opening, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
 		} else if(state == DoorState.OPEN) {
 			state = DoorState.CLOSING;
+			// With door closing, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
 		}
 	}
 
