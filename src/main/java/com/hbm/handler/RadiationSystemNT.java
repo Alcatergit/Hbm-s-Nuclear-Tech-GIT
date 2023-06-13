@@ -236,9 +236,10 @@ public class RadiationSystemNT {
 				//Every second, do a full system update, which will spread around radiation and all that
 				updateRadiation();
 				//System.out.println("rad tick took: " + (System.nanoTime()-mil));
+				//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt
+				//Rebuilding chunks out of step with radiation updates causes leaking of rads when building with resistant blocks
+				rebuildDirty();
 			}
-			//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt instantly
-			rebuildDirty();
 		}
 	}
 	
