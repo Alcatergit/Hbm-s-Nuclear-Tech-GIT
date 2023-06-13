@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
@@ -165,13 +166,13 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 		if (!this.isRadResistant)
 			return false;
 
-		if (worldIn != null)
-		{
+		if (worldIn != null) {
 			TileEntity entity = worldIn.getTileEntity(blockPos);
-			if (entity instanceof IDoor)
-			{
-				// Doors should be rad resistant only when closed
-				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
+			if (entity != null) {
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					// Doors should be rad resistant only when closed
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
 			}
 		}
 

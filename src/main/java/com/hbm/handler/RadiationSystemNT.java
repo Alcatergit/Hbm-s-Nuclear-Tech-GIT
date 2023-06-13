@@ -497,9 +497,8 @@ public class RadiationSystemNT {
 						Block block = blocks.get(x, y, z).getBlock();
 						//If it's not a radiation resistant block and there isn't currently a pocket here,
 						//Do a flood fill pocket build
-						BlockPos blockPos = new BlockPos(x, y, z);
-						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), blockPos))) {
-							pockets.add(buildPocket(subChunk, chunk.getWorld(), blockPos, subChunkPos, blocks, pocketsByBlock, pockets.size()));
+						if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), new BlockPos(x, y, z).add(subChunkPos)))) {
+							pockets.add(buildPocket(subChunk, chunk.getWorld(), new BlockPos(x, y, z), subChunkPos, blocks, pocketsByBlock, pockets.size()));
 						}
 					}
 				}
@@ -611,7 +610,7 @@ public class RadiationSystemNT {
 		while(!stack.isEmpty()){
 			BlockPos pos = stack.poll();
 			Block block = chunk.get(pos.getX(), pos.getY(), pos.getZ()).getBlock();
-			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, pos))){
+			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, pos.add(subChunkWorldPos)))){
 				//If the block is radiation resistant or we've already flood filled here, continue
 				continue;
 			}

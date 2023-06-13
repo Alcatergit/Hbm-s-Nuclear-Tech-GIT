@@ -3,12 +3,14 @@ package com.hbm.blocks.machine;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.util.KeypadClient;
@@ -176,13 +178,18 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
 
-		if (worldIn != null)
-		{
+		MainRegistry.logger.info("isRadResistant");
+		if (worldIn != null) {
+			MainRegistry.logger.info("checking door @ " + blockPos);
 			TileEntity entity = worldIn.getTileEntity(blockPos);
-			if (entity instanceof IDoor)
-			{
-				// Doors should be rad resistant only when closed
-				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
+			if (entity != null) {
+				MainRegistry.logger.info("tile entity " + entity);
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					// Doors should be rad resistant only when closed
+					MainRegistry.logger.info("door state: " + (((IDoor) entity).getState() == IDoor.DoorState.CLOSED));
+					MainRegistry.logger.info("door pos: " + blockPos);
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
 			}
 		}
 

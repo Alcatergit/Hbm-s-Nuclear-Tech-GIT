@@ -3,11 +3,8 @@ package com.hbm.blocks.machine;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IDoor;
-import com.hbm.interfaces.IRadResistantBlock;
+import com.hbm.interfaces.*;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IBomb;
-import com.hbm.interfaces.IMultiBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
@@ -326,8 +323,10 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 		if (worldIn != null)
 		{
 			TileEntity entity = worldIn.getTileEntity(blockPos);
-			if (entity instanceof IDoor) {
-				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
+			if (entity != null) {
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
 			}
 		}
 

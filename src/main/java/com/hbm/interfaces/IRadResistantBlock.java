@@ -7,7 +7,7 @@ public interface IRadResistantBlock {
 
 	//Anything implementing this must override onBlockAdded and breakBlock and call RadiationSystemNT.markChunkForRebuild or it won't work
 	
-	public default boolean isRadResistant(World worldIn, BlockPos blockPos){
+	default boolean isRadResistant(World worldIn, BlockPos blockPos){
 		return true;
 	}
 }
