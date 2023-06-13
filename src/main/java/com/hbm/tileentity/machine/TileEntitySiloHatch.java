@@ -3,11 +3,13 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockSiloHatch;
 import com.hbm.blocks.machine.DummyBlockSiloHatch;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDoorAnimationPacket;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -89,25 +91,19 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 				PacketDispatcher.wrapper.sendToAllTracking(new TEDoorAnimationPacket(pos, (byte) state.ordinal()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 		}
 	}
-	
-	public void tryToggle() {
-		if(this.state == DoorState.CLOSED) {
-			if(!world.isRemote) {
-				this.state = DoorState.OPENING;
-				timer = -1;
-			}
-		} else if(this.state == DoorState.OPEN) {
-			if(!world.isRemote) {
-				this.state = DoorState.CLOSING;
-				timer = -1;
-			}
+
+	public void tryToggle(){
+		if(state == DoorState.CLOSED) {
+			tryOpen();
+		} else if(state == DoorState.OPEN) {
+			tryClose();
 		}
 	}
 
 	public void tryOpen() {
 		if(this.state == DoorState.CLOSED) {
 			if(!world.isRemote) {
-				this.state = DoorState.OPENING;
+				open();
 				timer = -1;
 			}
 		}
@@ -116,7 +112,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	public void tryClose() {
 		if(this.state == DoorState.OPEN) {
 			if(!world.isRemote) {
-				this.state = DoorState.CLOSING;
+				close();
 				timer = -1;
 			}
 		}
@@ -193,8 +189,16 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	}
 
 	@Override
-	public void toggle() {
-		tryToggle();
+	public void toggle(){
+		if(state == DoorState.CLOSED) {
+			state = DoorState.OPENING;
+			// With door opening, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		} else if(state == DoorState.OPEN) {
+			state = DoorState.CLOSING;
+			// With door closing, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		}
 	}
 
 	@Override
