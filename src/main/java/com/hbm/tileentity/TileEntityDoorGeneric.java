@@ -135,15 +135,13 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			if(state == DoorState.OPENING && openTicks == doorType.timeToOpen()) {
 				state = DoorState.OPEN;
 				broadcastControlEvt();
-
-				// With door open, mark chunk for rad update
-				RadiationSystemNT.markChunkForRebuild(world, pos);
 			}
 			if(state == DoorState.CLOSING && openTicks == 0) {
 				state = DoorState.CLOSED;
 				broadcastControlEvt();
 
-				// With door closed, mark chunk for rad update
+				// With door finally closed, mark chunk for rad update since door is now rad resistant
+				// No need to update when open as well, as opening door should update
 				RadiationSystemNT.markChunkForRebuild(world, pos);
 			}
 			PacketDispatcher.wrapper.sendToAllAround(new TEDoorAnimationPacket(pos, (byte) state.ordinal(), (byte)(shouldUseBB ? 1 : 0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));

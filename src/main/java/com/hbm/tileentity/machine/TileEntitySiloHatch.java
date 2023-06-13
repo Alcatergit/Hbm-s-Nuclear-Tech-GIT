@@ -68,6 +68,13 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 					}
 					if(timer > 100){
 						state = DoorState.CLOSED;
+
+						if (state != oldState)
+						{
+							// With door finally closed, mark chunk for rad update since door is now rad resistant
+							// No need to update when open as well, as opening door should update
+							RadiationSystemNT.markChunkForRebuild(world, pos);
+						}
 					}
 				} else if(state == DoorState.OPENING){
 					if(timer == 1){

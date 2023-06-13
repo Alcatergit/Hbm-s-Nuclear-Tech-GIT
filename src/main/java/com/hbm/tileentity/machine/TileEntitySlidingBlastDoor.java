@@ -38,6 +38,8 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	@Override
 	public void update() {
 		if(!world.isRemote) {
+			DoorState oldState = state;
+
 			if(state.isStationaryState()) {
 				timer = 0;
 			} else {
@@ -53,6 +55,13 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 						placeDummy(0);
 					} if(timer > 24){
 						state = DoorState.CLOSED;
+
+						if (state != oldState)
+						{
+							// With door finally closed, mark chunk for rad update since door is now rad resistant
+							// No need to update when open as well, as opening door should update
+							RadiationSystemNT.markChunkForRebuild(world, pos);
+						}
 					}
 				} else if(state == DoorState.OPENING){
 					if(timer == 12){
