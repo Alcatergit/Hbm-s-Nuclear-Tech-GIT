@@ -174,10 +174,6 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		if(worldIn.isRemote) {
-			return true;
-		}
-
 		// Door should be rad resistant only when closed
 		if (worldIn != null)
 		{

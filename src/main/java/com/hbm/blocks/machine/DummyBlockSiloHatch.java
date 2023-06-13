@@ -144,10 +144,6 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		if(worldIn.isRemote) {
-			return true;
-		}
-
 		// Door should be rad resistant only when closed
 		if (worldIn != null)
 		{

@@ -169,10 +169,6 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		if(worldIn.isRemote) {
-			return true;
-		}
-
 		// Door should be rad resistant only when closed
 		if (worldIn != null)
 		{

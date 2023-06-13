@@ -161,10 +161,6 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		if(worldIn.isRemote) {
-			return true;
-		}
-
 		if (!this.isRadResistant)
 			return false;
 
