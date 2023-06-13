@@ -10,7 +10,6 @@ import com.hbm.interfaces.IDummy;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityDummy;
-import com.hbm.tileentity.machine.TileEntitySiloHatch;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
 import net.minecraft.block.BlockContainer;

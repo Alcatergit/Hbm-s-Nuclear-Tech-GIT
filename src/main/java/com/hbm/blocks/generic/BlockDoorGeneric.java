@@ -9,7 +9,6 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 
-import com.hbm.tileentity.machine.TileEntityVaultDoor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;

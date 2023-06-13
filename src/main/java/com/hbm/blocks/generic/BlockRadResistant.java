@@ -3,7 +3,6 @@ package com.hbm.blocks.generic;
 import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.handler.RadiationWorldHandler;
 import com.hbm.interfaces.IRadResistantBlock;
 
 import net.minecraft.block.Block;

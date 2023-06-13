@@ -9,7 +9,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
-import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 
 import net.minecraft.client.util.ITooltipFlag;
