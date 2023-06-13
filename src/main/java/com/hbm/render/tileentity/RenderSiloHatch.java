@@ -1,5 +1,6 @@
 package com.hbm.render.tileentity;
 
+import com.hbm.interfaces.IDoor;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.animloader.AnimationWrapper;
@@ -34,8 +35,8 @@ public class RenderSiloHatch extends TileEntitySpecialRenderer<TileEntitySiloHat
 		bindTexture(ResourceManager.hatch_tex);
 		
 		long time = System.currentTimeMillis();
-        long startTime = te.state > 1 ? te.sysTime : time;
-        boolean reverse = te.state == 1 || te.state == 2;
+        long startTime = te.state.isMovingState() ? te.sysTime : time;
+        boolean reverse = te.state == IDoor.DoorState.OPEN || te.state == IDoor.DoorState.CLOSING;
         AnimationWrapper w = new AnimationWrapper(startTime, ResourceManager.silo_hatch_open);
         if(reverse){
         	w.reverse();
