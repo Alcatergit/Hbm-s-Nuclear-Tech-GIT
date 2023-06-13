@@ -54,6 +54,11 @@ public class FluidCombustionRecipes {
 		addBurnableFluid("fuel", 120);
 		addBurnableFluid("refined_biofuel", 150);
 		addBurnableFluid("pyrotheum", 1_500);
+		addBurnableFluid("ethanol", 30);
+		addBurnableFluid("plantoil", 50);
+		addBurnableFluid("acetaldehyde", 80);
+		addBurnableFluid("biodiesel", 175);
+		
 	}
 
 	public static int getFlameEnergy(Fluid f){

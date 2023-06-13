@@ -376,7 +376,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(CrystallizerRecipes.isAllowedFluid(resource.getFluid())) {
+		if(resource != null && CrystallizerRecipes.isAllowedFluid(resource.getFluid())) {
 			return tank.fill(resource, doFill);
 		}
 		return 0;
@@ -411,5 +411,4 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			tank.readFromNBT(tags[0]);
 		}
 	}
-
 }

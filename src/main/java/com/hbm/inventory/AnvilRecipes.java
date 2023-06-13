@@ -648,13 +648,13 @@ public class AnvilRecipes {
 				new ComparableStack(ModBlocks.yellow_barrel), new AnvilOutput[] {
 						new AnvilOutput(new ItemStack(ModItems.tank_steel, 1)),
 						new AnvilOutput(new ItemStack(ModItems.plate_lead, 2)),
-						new AnvilOutput(new ItemStack(ModItems.nuclear_waste, 10))
+						new AnvilOutput(new ItemStack(ModItems.nuclear_waste, 9))
 				}).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModBlocks.vitrified_barrel), new AnvilOutput[] {
 						new AnvilOutput(new ItemStack(ModItems.tank_steel, 1)),
 						new AnvilOutput(new ItemStack(ModItems.plate_lead, 2)),
-						new AnvilOutput(new ItemStack(ModItems.nuclear_waste_vitrified, 10))
+						new AnvilOutput(new ItemStack(ModItems.nuclear_waste_vitrified, 9))
 				}).setTier(3));
 	}
 	

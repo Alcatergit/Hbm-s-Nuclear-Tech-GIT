@@ -27,9 +27,9 @@ public class ItemModMedal extends ItemArmorMod {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.GOLD + "-"+minusRads*20+" RAD/s");
 		if(15/minusRads < 60)
-			list.add(TextFormatting.YELLOW + " "+15/minusRads+"s Decontamination Halflife");
+			list.add(TextFormatting.YELLOW + " "+15/minusRads+"s Item Decontamination Halflife");
 		else
-			list.add(TextFormatting.YELLOW + " "+15/(minusRads*60)+"min Decontamination Halflife");
+			list.add(TextFormatting.YELLOW + " "+15/(minusRads*60)+"min Item Decontamination Halflife");
 		super.addInformation(stack, worldIn, list, flagIn);
 	}
 

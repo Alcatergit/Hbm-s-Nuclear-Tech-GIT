@@ -145,5 +145,4 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 			}
 		}
 	}
-	
 }

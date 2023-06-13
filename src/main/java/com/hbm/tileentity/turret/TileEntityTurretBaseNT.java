@@ -311,8 +311,12 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 		
 		return null;
 	}
-	
+
 	public void spawnBullet(BulletConfiguration bullet) {
+		spawnBullet(bullet, 0);
+	}
+	
+	public void spawnBullet(BulletConfiguration bullet, float overrideDamage) {
 		
 		Vec3 pos = new Vec3(this.getTurretPos());
 		Vec3 vec = Vec3.createVectorHelper(this.getBarrelLength(), 0, 0);
@@ -321,6 +325,8 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 		
 		EntityBulletBase proj = new EntityBulletBase(world, BulletConfigSyncingUtil.getKey(bullet));
 		proj.setPositionAndRotation(pos.xCoord + vec.xCoord, pos.yCoord + vec.yCoord, pos.zCoord + vec.zCoord, 0.0F, 0.0F);
+		if(overrideDamage > 0)
+			proj.overrideDamage = overrideDamage;
 		
 		proj.shoot(vec.xCoord, vec.yCoord, vec.zCoord, bullet.velocity, bullet.spread);
 		world.spawnEntity(proj);

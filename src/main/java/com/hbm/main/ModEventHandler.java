@@ -1240,7 +1240,7 @@ public class ModEventHandler {
 				e.player.sendMessage(new TextComponentString("§ePlaying on version §7" + RefStrings.VERSION + "§e right now§r"));
 				if(HTTPHandler.changes != ""){
 					String[] lines = HTTPHandler.changes.split("\\$");
-					e.player.sendMessage(new TextComponentString("§e[New Features]§r"));//RefStrings.CHANGELOG
+					e.player.sendMessage(new TextComponentString("§6[New Features]§r"));//RefStrings.CHANGELOG
 					for(String w: lines){
 						e.player.sendMessage(new TextComponentString(w));//RefStrings.CHANGELOG
 					}

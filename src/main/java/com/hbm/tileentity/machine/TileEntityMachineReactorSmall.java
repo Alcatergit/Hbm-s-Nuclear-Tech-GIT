@@ -293,7 +293,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		world.setBlockToAir(pos);
 		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 18.0F, true);
 		ExplosionNukeGeneric.waste(world, pos.getX(), pos.getY(), pos.getZ(), 35);
-		world.setBlockState(pos, ModBlocks.corium_block.getDefaultState());
+		world.setBlockState(pos, ModBlocks.block_corium_cobble.getDefaultState());
 
 		RadiationSavedData.incrementRad(world, pos, 1000F, 2000F);
 		if(MobConfig.enableElementals) {

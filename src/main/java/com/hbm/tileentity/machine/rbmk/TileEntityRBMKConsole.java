@@ -96,8 +96,38 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				}
 			}
 		}
-		
-		
+	}
+
+	public void setupDisplays(){
+		rescan();
+		setupScreensAndGraph();
+		prepareScreenInfo();
+		prepareGraphInfo();
+		prepareNetworkPack();
+	}
+
+	public void setupScreensAndGraph(){
+		List<Integer> fuelRods = new ArrayList(); 
+		List<Integer> controlRods = new ArrayList();
+		for(int i = 0; i < columns.length; i++){
+			if(columns[i] != null){
+				switch(columns[i].type){
+				case FUEL:
+				case FUEL_SIM: fuelRods.add(i); break;
+				case CONTROL:
+				case CONTROL_AUTO: controlRods.add(i); break;
+				}
+			}
+		}
+		Integer[] fuelIndices = fuelRods.toArray(new Integer[fuelRods.size()]);
+		Integer[] controlIndices = controlRods.toArray(new Integer[controlRods.size()]);
+		screens[0] = new RBMKScreen(ScreenType.COL_TEMP, fuelIndices, null);
+		screens[1] = new RBMKScreen(ScreenType.FUEL_TEMP, fuelIndices, null);
+		screens[2] = new RBMKScreen(ScreenType.ROD_EXTRACTION, controlIndices, null);
+		screens[3] = new RBMKScreen(ScreenType.FLUX, fuelIndices, null);
+		screens[4] = new RBMKScreen(ScreenType.FUEL_DEPLETION, fuelIndices, null);
+		screens[5] = new RBMKScreen(ScreenType.FUEL_POISON, fuelIndices, null);
+		graph = new RBMKGraph(ScreenType.FLUX, fuelIndices);
 	}
 
 	private void prepareGraphInfo() {
@@ -538,6 +568,11 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		public int[] dataBuffer = new int[lookbackLength];
 		
 		public RBMKGraph() {
+			Arrays.fill(this.dataBuffer, 0); 
+		}
+		public RBMKGraph(ScreenType type, Integer[] columns) {
+			this.type = type;
+			this.columns = columns;
 			Arrays.fill(this.dataBuffer, 0); 
 		}
 		public RBMKGraph(ScreenType type, Integer[] columns, int[] dataBuffer) {
