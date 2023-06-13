@@ -8,6 +8,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.util.KeypadClient;
@@ -173,7 +174,21 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntitySlidingBlastDoor entity = (TileEntitySlidingBlastDoor) worldIn.getTileEntity(blockPos);
+			if(entity != null) {
+				// 0: closed, 1: opening/closing, 2:open
+				return entity.state == 0;
+			}
+		}
+
 		return true;
 	}
 

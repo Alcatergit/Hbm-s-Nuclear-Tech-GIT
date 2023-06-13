@@ -12,6 +12,7 @@ import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
+import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -144,7 +145,25 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntity te = worldIn.getTileEntity(blockPos);
+			if(te != null && te instanceof TileEntityDummy) {
+
+				TileEntityBlastDoor entity = (TileEntityBlastDoor) worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (entity != null) {
+					// 0: closed, 1: opening/closing, 2:open
+					return entity.state == 0;
+				}
+			}
+		}
+
 		return true;
 	}
 }

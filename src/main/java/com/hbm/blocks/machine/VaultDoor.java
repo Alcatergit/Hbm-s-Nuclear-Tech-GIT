@@ -320,7 +320,21 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos) {
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntityVaultDoor entity = (TileEntityVaultDoor) worldIn.getTileEntity(blockPos);
+			if(entity != null) {
+				// 0: closed, 1: opening/closing, 2:open
+				return entity.state == 0;
+			}
+		}
+
 		return true;
 	}
 

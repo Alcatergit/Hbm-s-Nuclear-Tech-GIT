@@ -9,6 +9,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IDummy;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
+import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 
@@ -143,7 +144,25 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntity te = worldIn.getTileEntity(blockPos);
+			if(te != null && te instanceof TileEntityDummy) {
+
+				TileEntitySiloHatch entity = (TileEntitySiloHatch) worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (entity != null) {
+					// 0: closed, 1: opening/closing, 2:open
+					return entity.state == 0;
+				}
+			}
+		}
+
 		return true;
 	}
 

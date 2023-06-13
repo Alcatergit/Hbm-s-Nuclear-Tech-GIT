@@ -9,6 +9,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
+import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.machine.TileEntitySiloHatch;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -168,7 +169,21 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntitySiloHatch entity = (TileEntitySiloHatch) worldIn.getTileEntity(blockPos);
+			if(entity != null) {
+				// 0: closed, 1: opening/closing, 2:open
+				return entity.state == 0;
+			}
+		}
+
 		return true;
 	}
 
