@@ -178,16 +178,16 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
 
-		MainRegistry.logger.info("isRadResistant");
+		//MainRegistry.logger.info("isRadResistant");
 		if (worldIn != null) {
-			MainRegistry.logger.info("checking door @ " + blockPos);
+			//MainRegistry.logger.info("checking door @ " + blockPos);
 			TileEntity entity = worldIn.getTileEntity(blockPos);
 			if (entity != null) {
-				MainRegistry.logger.info("tile entity " + entity);
+				//MainRegistry.logger.info("tile entity " + entity);
 				if (IDoor.class.isAssignableFrom(entity.getClass())) {
 					// Doors should be rad resistant only when closed
-					MainRegistry.logger.info("door state: " + (((IDoor) entity).getState() == IDoor.DoorState.CLOSED));
-					MainRegistry.logger.info("door pos: " + blockPos);
+					//MainRegistry.logger.info("door state: " + (((IDoor) entity).getState() == IDoor.DoorState.CLOSED));
+					//MainRegistry.logger.info("door pos: " + blockPos);
 					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
 				}
 			}
