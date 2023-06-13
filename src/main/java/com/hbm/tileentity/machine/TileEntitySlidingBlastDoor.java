@@ -22,6 +22,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implements ITickable, IAnimatedDoor {
 
@@ -247,6 +249,7 @@ public class TileEntitySlidingBlastDoor extends TileEntityLockableBase implement
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleNewState(DoorState newState) {
 		if(this.state != newState){
 			if(this.state == DoorState.CLOSED && newState == DoorState.OPENING){

@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
@@ -160,16 +161,17 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb, IR
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		// Door should be rad resistant only when closed
+
 		if (worldIn != null)
 		{
 			TileEntity te = worldIn.getTileEntity(blockPos);
 			if(te != null && te instanceof TileEntityDummy) {
 
-				TileEntityVaultDoor entity = (TileEntityVaultDoor) worldIn.getTileEntity(((TileEntityDummy) te).target);
-				if (entity != null) {
-					// 0: closed, 1: opening/closing, 2:open
-					return entity.state == 0;
+				TileEntity realTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (realTileEntity instanceof IDoor)
+				{
+					// Doors should be rad resistant only when closed
+					return ((IDoor)realTileEntity).getState() == IDoor.DoorState.CLOSED;
 				}
 			}
 		}

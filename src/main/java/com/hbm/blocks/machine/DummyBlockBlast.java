@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
@@ -151,10 +152,9 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 			TileEntity te = worldIn.getTileEntity(blockPos);
 			if(te != null && te instanceof TileEntityDummy) {
 
-				TileEntityBlastDoor entity = (TileEntityBlastDoor) worldIn.getTileEntity(((TileEntityDummy) te).target);
-				if (entity != null) {
-					// 0: closed, 1: opening/closing, 2:open
-					return entity.state == 0;
+				TileEntity actualTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (actualTileEntity instanceof IDoor) {
+					return ((IDoor)actualTileEntity).getState() == IDoor.DoorState.CLOSED;
 				}
 			}
 		}

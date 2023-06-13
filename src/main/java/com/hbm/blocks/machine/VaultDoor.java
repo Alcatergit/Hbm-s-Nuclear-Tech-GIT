@@ -3,6 +3,7 @@ package com.hbm.blocks.machine;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
@@ -324,10 +325,9 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 		// Door should be rad resistant only when closed
 		if (worldIn != null)
 		{
-			TileEntityVaultDoor entity = (TileEntityVaultDoor) worldIn.getTileEntity(blockPos);
-			if(entity != null) {
-				// 0: closed, 1: opening/closing, 2:open
-				return entity.state == 0;
+			TileEntity entity = worldIn.getTileEntity(blockPos);
+			if (entity instanceof IDoor) {
+				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
 			}
 		}
 

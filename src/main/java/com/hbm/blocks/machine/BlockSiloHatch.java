@@ -170,12 +170,14 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		// Door should be rad resistant only when closed
+
 		if (worldIn != null)
 		{
-			TileEntitySiloHatch entity = (TileEntitySiloHatch) worldIn.getTileEntity(blockPos);
-			if(entity != null) {
-				return entity.state == IDoor.DoorState.CLOSED;
+			TileEntity entity = worldIn.getTileEntity(blockPos);
+			if (entity instanceof IDoor)
+			{
+				// Doors should be rad resistant only when closed
+				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
 			}
 		}
 

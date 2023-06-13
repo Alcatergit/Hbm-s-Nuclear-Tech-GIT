@@ -165,12 +165,13 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 		if (!this.isRadResistant)
 			return false;
 
-		// Door should be rad resistant only when closed
 		if (worldIn != null)
 		{
-			TileEntityDoorGeneric entity = (TileEntityDoorGeneric) worldIn.getTileEntity(blockPos);
-			if(entity != null) {
-				return entity.state == IDoor.DoorState.CLOSED;
+			TileEntity entity = worldIn.getTileEntity(blockPos);
+			if (entity instanceof IDoor)
+			{
+				// Doors should be rad resistant only when closed
+				return ((IDoor)entity).getState() == IDoor.DoorState.CLOSED;
 			}
 		}
 

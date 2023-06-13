@@ -145,15 +145,17 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 
 	@Override
 	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		// Door should be rad resistant only when closed
+
 		if (worldIn != null)
 		{
 			TileEntity te = worldIn.getTileEntity(blockPos);
 			if(te != null && te instanceof TileEntityDummy) {
 
-				TileEntitySiloHatch entity = (TileEntitySiloHatch) worldIn.getTileEntity(((TileEntityDummy) te).target);
-				if (entity != null) {
-					return entity.state == IDoor.DoorState.CLOSED;
+				TileEntity realTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (realTileEntity instanceof IDoor)
+				{
+					// Doors should be rad resistant only when closed
+					return ((IDoor)realTileEntity).getState() == IDoor.DoorState.CLOSED;
 				}
 			}
 		}
