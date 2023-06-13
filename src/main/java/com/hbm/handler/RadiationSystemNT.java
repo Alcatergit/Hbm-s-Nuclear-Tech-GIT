@@ -17,6 +17,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -229,18 +230,22 @@ public class RadiationSystemNT {
 		//If we don't do advanced radiation, don't update
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
 			return;
+
 		if(e.phase == Phase.END){
 			ticks ++;
-			if(ticks % 20 == 17){
+			if(ticks % 20 == 17) {
 				//long mil = System.nanoTime();
+
 				//Every second, do a full system update, which will spread around radiation and all that
 				updateRadiation();
 				//System.out.println("rad tick took: " + (System.nanoTime()-mil));
-				//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt
-				//Rebuilding chunks out of step with radiation updates causes leaking of rads when building with resistant blocks
+
+				//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt afterward
 				rebuildDirty();
 			}
 		}
+
+
 	}
 	
 	@SubscribeEvent
@@ -431,9 +436,11 @@ public class RadiationSystemNT {
 	public static void markChunkForRebuild(World world, BlockPos pos){
 		if(!GeneralConfig.advancedRadiation)
 			return;
+
 		//I'm using this blockpos as a sub chunk pos
 		BlockPos chunkPos = new BlockPos(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
 		WorldRadiationData r = getWorldRadData(world);
+
 		//Ensures we don't run into any problems with concurrent modification
 		if(r.iteratingDirty){
 			r.dirtyChunks2.add(chunkPos);
@@ -450,8 +457,8 @@ public class RadiationSystemNT {
 			//Set the iteration flag to avoid concurrent modification
 			r.iteratingDirty = true;
 			//For each dirty sub chunk, rebuild it
-			for(BlockPos b : r.dirtyChunks){
-				rebuildChunkPockets(r.world.getChunkFromChunkCoords(b.getX(), b.getZ()), b.getY());
+			for(BlockPos subChunkPos : r.dirtyChunks) {
+				rebuildChunkPockets(r.world.getChunkFromChunkCoords(subChunkPos.getX(), subChunkPos.getZ()), subChunkPos.getY());
 			}
 			r.iteratingDirty = false;
 			//Clear the dirty chunks lists, and add any chunks that might have been marked while iterating to be dealt with next tick.
