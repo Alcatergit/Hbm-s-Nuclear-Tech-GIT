@@ -9,6 +9,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 
+import com.hbm.tileentity.machine.TileEntityVaultDoor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
@@ -160,8 +161,25 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 	}
 
 	@Override
-	public boolean isRadResistant(){
-		return this.isRadResistant;
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if(worldIn.isRemote) {
+			return true;
+		}
+
+		if (!this.isRadResistant)
+			return false;
+
+		// Door should be rad resistant only when closed
+		if (worldIn != null)
+		{
+			TileEntityDoorGeneric entity = (TileEntityDoorGeneric) worldIn.getTileEntity(blockPos);
+			if(entity != null) {
+				// 0: closed, 1: opening/closing, 2:open
+				return entity.state == 0;
+			}
+		}
+
+		return true;
 	}
 
 	@Override
