@@ -487,6 +487,67 @@ public class RadiationSystemNT {
 		}
 	}
 
+	/**
+	 * Marks a chunk to be rebuilt. This is used when a radiation resistant block is added or removed
+	 * @param world - the world to mark in
+	 * @param pos - the position to mark at
+	 */
+	public static void markChunkForRebuild(World world, BlockPos pos){
+		if(!GeneralConfig.advancedRadiation)
+			return;
+
+		//I'm using this blockpos as a sub chunk pos
+		BlockPos chunkPos = new BlockPos(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
+		WorldRadiationData r = getWorldRadData(world);
+
+		if(GeneralConfig.enableDebugMode) {
+			MainRegistry.logger.info("[Debug] Marking chunk dirty at " + chunkPos);
+		}
+
+		//Ensures we don't run into any problems with concurrent modification
+		if(r.iteratingDirty){
+			r.dirtyChunks2.add(chunkPos);
+		} else {
+			r.dirtyChunks.add(chunkPos);
+		}
+	}
+
+	/**
+	 * Rebuilds stored dirty chunks
+	 */
+	private static void rebuildDirty() {
+
+		for(WorldRadiationData r : worldMap.values()) {
+			boolean hadDirty = false;
+
+			//Set the iteration flag to avoid concurrent modification
+			r.iteratingDirty = true;
+
+			//For each dirty sub chunk, rebuild it
+			for (BlockPos dirtyChunkPos : r.dirtyChunks) {
+				if (GeneralConfig.enableDebugMode) {
+					MainRegistry.logger.info("[Debug] Rebuilding chunk pockets for dirty chunk at " + dirtyChunkPos);
+				}
+
+				rebuildChunkPockets(r.world.getChunkFromChunkCoords(dirtyChunkPos.getX(), dirtyChunkPos.getZ()), dirtyChunkPos.getY());
+				hadDirty = true;
+			}
+			r.iteratingDirty = false;
+			//Clear the dirty chunks lists, and add any chunks that might have been marked while iterating to be dealt with next tick.
+			r.dirtyChunks.clear();
+			r.dirtyChunks.addAll(r.dirtyChunks2);
+			r.dirtyChunks2.clear();
+
+			// After chunks are updated, force save data to update as well and recalc rads for chunks
+			if (hadDirty) {
+				if (GeneralConfig.enableDebugMode) {
+					MainRegistry.logger.info("[Debug] Forced update of rad save data after dirty chunk rebuild");
+				}
+				updateRadSaveData(r.world);
+			}
+		}
+	}
+
 	@SubscribeEvent
 	public static void onWorldUpdate(TickEvent.WorldTickEvent e) {
 		if(GeneralConfig.enableDebugMode) {
@@ -496,10 +557,10 @@ public class RadiationSystemNT {
 		if (e.phase == Phase.START) {
 			// Make the world stinky
 			RadiationWorldHandler.handleWorldDestruction(e.world);
-		} else {
-			// Make entities stinky
-			updateEntityContamination(e.world);
 		}
+
+		// Make entities stinky
+		updateEntityContamination(e.world);
 	}
 
 	@SubscribeEvent
@@ -523,6 +584,9 @@ public class RadiationSystemNT {
 				//System.out.println("rad tick took: " + (System.nanoTime()-mil));
 			}
 		}
+
+		//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt instantly
+		rebuildDirty();
 	}
 	
 	@SubscribeEvent
@@ -602,29 +666,7 @@ public class RadiationSystemNT {
 		}
 
 		for(WorldRadiationData w : worldMap.values()) {
-			//For each dirty sub chunk, rebuild it first
-			List<BlockPos> listDirty = new ArrayList<>(w.dirtyChunks);
-			Iterator<BlockPos> itrDirty = listDirty.iterator();
-			boolean hadDirty = !listDirty.isEmpty();
 
-			while (itrDirty.hasNext()) {
-				BlockPos dirtyChunkPos = itrDirty.next();
-				if(GeneralConfig.enableDebugMode) {
-					MainRegistry.logger.info("[Debug] Rebuilding chunk pockets for dirty chunk at " + dirtyChunkPos);
-				}
-				rebuildChunkPockets(w.world.getChunkFromChunkCoords(dirtyChunkPos.getX(), dirtyChunkPos.getZ()), dirtyChunkPos.getY());
-
-				if (w.dirtyChunks.contains(dirtyChunkPos))
-					w.dirtyChunks.remove(dirtyChunkPos);
-			}
-
-			// If some chunks needed to be updated, force save data to update as well and recalc rads for chunks
-			if (hadDirty) {
-				if(GeneralConfig.enableDebugMode) {
-					MainRegistry.logger.info("[Debug] Forced update of rad save data after dirty chunk rebuild");
-				}
-				updateRadSaveData(w.world);
-			}
 
 			//Avoid concurrent modification
 			List<RadPocket> itrActive = new ArrayList<>(w.getActivePockets());
@@ -753,28 +795,6 @@ public class RadiationSystemNT {
 		//but who knows, maybe it will, and it's nice to have debug output if it does
 		if(System.currentTimeMillis()-time > 50){
 			System.out.println("Rads took too long: " + (System.currentTimeMillis()-time));
-		}
-	}
-	
-	/**
-	 * Marks a chunk to be rebuilt. This is used when a radiation resistant block is added or removed
-	 * @param world - the world to mark in
-	 * @param pos - the position to mark at
-	 */
-	public static void markChunkForRebuild(World world, BlockPos pos){
-		if(!GeneralConfig.advancedRadiation)
-			return;
-
-		//I'm using this blockpos as a sub chunk pos
-		BlockPos chunkPos = new BlockPos(pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
-		WorldRadiationData r = getWorldRadData(world);
-
-		if(GeneralConfig.enableDebugMode) {
-			MainRegistry.logger.info("[Debug] Marking chunk dirty at " + chunkPos);
-		}
-
-		if (!r.dirtyChunks.contains(chunkPos)) {
-			r.dirtyChunks.add(chunkPos);
 		}
 	}
 	
@@ -1390,7 +1410,11 @@ public class RadiationSystemNT {
 	//For a world's radiation data, contains a bunch of chunk data blocks
 	public static class WorldRadiationData {
 		public World world;
+
+		//Keep two lists to avoid concurrent modification. If one is being iterated over, mark it dirty in the other set.
 		private Set<BlockPos> dirtyChunks = new HashSet<>();
+		private Set<BlockPos> dirtyChunks2 = new HashSet<>();
+		private boolean iteratingDirty = false;
 		
 		//Active pockets are the pockets that have radiation in them and so then need to be updated
 		private Set<RadPocket> activePockets = new HashSet<>();
