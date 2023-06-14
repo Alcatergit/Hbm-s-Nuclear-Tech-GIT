@@ -274,7 +274,7 @@ public class RadiationSystemNT {
 	 * Updates entity contamination and applies effects based on current rad levels
 	 * @param world
 	 */
-	private static void updateEntityContamination(World world) {
+	private static void updateEntityContamination(World world, boolean updateData) {
 		if(world != null && !world.isRemote && GeneralConfig.enableRads) {
 			if(GeneralConfig.enableDebugMode) {
 				MainRegistry.logger.info("[Debug] Starting entity contamination processing");
@@ -293,7 +293,7 @@ public class RadiationSystemNT {
 					data.worldObj = world;
 				}
 
-				if(world.getTotalWorldTime() % 20 == 15) { // lets not make a lag spike at tick 0 unless a chunk requires update
+				if(world.getTotalWorldTime() % 20 == 15 && updateData) { // lets not make a lag spike at tick 0 unless a chunk requires update
 					updateRadSaveData(world);
 				}
 
@@ -539,12 +539,12 @@ public class RadiationSystemNT {
 			r.dirtyChunks2.clear();
 
 			// After chunks are updated, force save data to update as well and recalc rads for chunks
-			if (hadDirty) {
-				if (GeneralConfig.enableDebugMode) {
-					MainRegistry.logger.info("[Debug] Forced update of rad save data after dirty chunk rebuild");
-				}
-				updateRadSaveData(r.world);
-			}
+			//if (hadDirty) {
+			//	if (GeneralConfig.enableDebugMode) {
+			//		MainRegistry.logger.info("[Debug] Forced update of rad save data after dirty chunk rebuild");
+			//	}
+			//	updateRadSaveData(r.world);
+			//}
 		}
 	}
 
@@ -554,13 +554,15 @@ public class RadiationSystemNT {
 			MainRegistry.logger.info("[Debug] onWorldUpdate called for RadSys tick " + ticks);
 		}
 
-		if (e.phase == Phase.START) {
+		boolean allowUpdate = (e.phase == Phase.START);
+
+		if (allowUpdate) {
 			// Make the world stinky
 			RadiationWorldHandler.handleWorldDestruction(e.world);
 		}
 
 		// Make entities stinky
-		updateEntityContamination(e.world);
+		updateEntityContamination(e.world, allowUpdate);
 	}
 
 	@SubscribeEvent
@@ -685,7 +687,7 @@ public class RadiationSystemNT {
 				p.radiation -= 0.05F;
 				p.parent.parent.chunk.markDirty();
 				if (p.radiation <= 0) {
-					//If there's no more radiation, set it to 0 and remove
+					//If there's no more radiation and is unsealed, set it to 0 and remove
 					p.radiation = 0;
 					p.accumulatedRads = 0;
 					itr.remove();
@@ -772,14 +774,15 @@ public class RadiationSystemNT {
 				}
 			}
 
-			//Remove the ones that reached 0 and set the actual radiation values to the accumulated values
+			// Remove the ones that reached 0, and set the actual radiation values to the accumulated values
+			// We don't remove sealed pockets so that dimensions with background rads can be shielded against
 			List<RadPocket> itrActiveCheck = new ArrayList<>(w.getActivePockets());
 			itr = itrActiveCheck.iterator();
 			while(itr.hasNext()){
 				RadPocket act = itr.next();
 				act.radiation = act.accumulatedRads;
 				act.accumulatedRads = 0;
-				if(act.radiation <= 0){
+				if(act.radiation <= 0) {
 					w.removeActivePocket(act);
 					itr.remove();
 				}
@@ -1140,8 +1143,8 @@ public class RadiationSystemNT {
 			float radPer = total / pockets.length;
 			for(RadPocket p : pockets){
 				p.radiation = radPer;
-				if(radPer > 0){
-					//If the pocket now has radiation, mark it as active
+				if(radPer > 0) {
+					//If the pocket now has radiation or is sealed, mark it as active
 					p.parent.parent.parent.addActivePocket(p);
 				}
 			}
