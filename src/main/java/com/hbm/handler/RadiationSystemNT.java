@@ -691,7 +691,7 @@ public class RadiationSystemNT {
 					}
 				}
 
-				// FIXME: This can cause leaks from sealed pockets to unsealed
+				// TODO: This might also cause leaks from sealed pockets to unsealed
 				if (p.radiation > 0 && amountPer > 0) {
 					//Only update other values if this one has radiation to update with
 					for (EnumFacing e : EnumFacing.VALUES) {
@@ -710,9 +710,12 @@ public class RadiationSystemNT {
 							// also add those pockets to the active pockets set
 							SubChunkRadiationStorage sc2 = getSubChunkStorage(p.parent.parent.chunk.getWorld(), nPos);
 							for (int idx : p.connectionIndices[e.ordinal()]) {
-								//Only accumulated rads get updated so the system doesn't interfere with itself while working
-								sc2.pockets[idx].accumulatedRads += p.radiation * amountPer;
-								w.addActivePocket(sc2.pockets[idx]);
+								// Don't spread to sealed pockets
+								if (!sc2.pockets[idx].isSealed()) {
+									// Only accumulated rads get updated so the system doesn't interfere with itself while working
+									sc2.pockets[idx].accumulatedRads += p.radiation * amountPer;
+									w.addActivePocket(sc2.pockets[idx]);
+								}
 							}
 						}
 					}
@@ -1050,6 +1053,20 @@ public class RadiationSystemNT {
 		public BlockPos getSubChunkPos() {
 			return parent.parent.getWorldPos(parent.yLevel);
 		}
+
+		/**
+		 * Checks if a pocket is radiation shielded against other pockets or chunks
+		 * @return if pocket is sealed
+		 */
+		public boolean isSealed() {
+			// Sealed pockets should have no connects to other chunks (-1) or other pockets
+			float count = 0;
+			for (EnumFacing e : EnumFacing.VALUES) {
+				count += this.connectionIndices[e.ordinal()].size();
+			}
+
+			return (count == 0);
+		}
 	}
 	
 	//the smaller 16*16*16 chunk
@@ -1093,10 +1110,14 @@ public class RadiationSystemNT {
 		public void setRad(SubChunkRadiationStorage other){
 			//Accumulate a total, and divide that evenly among our pockets
 			float total = 0;
-			for(RadPocket p : other.pockets){
-				total += p.radiation;
+			for(RadPocket p : other.pockets) {
+				// Sealed pockets should not attribute to total rad count
+				if (!p.isSealed()) {
+					total += p.radiation;
+				}
 			}
-			float radPer = total/pockets.length;
+
+			float radPer = total / pockets.length;
 			for(RadPocket p : pockets){
 				p.radiation = radPer;
 				if(radPer > 0){
@@ -1390,7 +1411,7 @@ public class RadiationSystemNT {
 			this.activePockets.add(radPocket);
 			if(GeneralConfig.enableDebugMode) {
 				BlockPos chunkPos = new BlockPos(radPocket.getSubChunkPos().getX() / 16, radPocket.getSubChunkPos().getY() / 16, radPocket.getSubChunkPos().getZ() / 16);
-				MainRegistry.logger.info("[Debug] Added active pocket " + radPocket.index + " (radiation: " + radPocket.radiation + ", accumulatedRads: " + radPocket.accumulatedRads + ") at " + radPocket.getSubChunkPos() + " (Chunk:" + chunkPos + ") for world " + world);
+				MainRegistry.logger.info("[Debug] Added active pocket " + radPocket.index + " (radiation: " + radPocket.radiation + ", accumulatedRads: " + radPocket.accumulatedRads + ", sealed: " + radPocket.isSealed() + ") at " + radPocket.getSubChunkPos() + " (Chunk:" + chunkPos + ") for world " + world);
 			}
 		}
 
@@ -1398,7 +1419,7 @@ public class RadiationSystemNT {
 			this.activePockets.remove(radPocket);
 			if(GeneralConfig.enableDebugMode) {
 				BlockPos chunkPos = new BlockPos(radPocket.getSubChunkPos().getX() / 16, radPocket.getSubChunkPos().getY() / 16, radPocket.getSubChunkPos().getZ() / 16);
-				MainRegistry.logger.info("[Debug] Removed active pocket " + radPocket.index + " (radiation: " + radPocket.radiation + ", accumulatedRads: " + radPocket.accumulatedRads + ") at " + radPocket.getSubChunkPos() + " (Chunk:" + chunkPos + ") for world " + world);
+				MainRegistry.logger.info("[Debug] Removed active pocket " + radPocket.index + " (radiation: " + radPocket.radiation + ", accumulatedRads: " + radPocket.accumulatedRads + ", sealed: " + radPocket.isSealed() + ") at " + radPocket.getSubChunkPos() + " (Chunk:" + chunkPos + ") for world " + world);
 
 			}
 		}
