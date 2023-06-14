@@ -7,6 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.handler.RadiationSystemNT.RadPocket;
+import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -35,7 +36,11 @@ public class RadiationWorldHandler {
 		int count = 50;//MainRegistry.worldRad;
 		int threshold = 5;//MainRegistry.worldRadThreshold;
 		
-		if(GeneralConfig.advancedRadiation){
+		if(GeneralConfig.advancedRadiation) {
+			if(GeneralConfig.enableDebugMode) {
+				MainRegistry.logger.info("[Debug] Starting world destruction processing");
+			}
+
 			Collection<RadPocket> activePockets = RadiationSystemNT.getActiveCollection(world);
 			if(activePockets.size() == 0)
 				return;
@@ -47,6 +52,7 @@ public class RadiationWorldHandler {
 						return;
 					BlockPos startPos = p.getSubChunkPos();
 					RadPocket[] pocketsByBlock = p.parent.pocketsByBlock;
+
 					for(int i = 0; i < 16; i ++){
 						for(int j = 0; j < 16; j ++){
 							for(int k = 0; k < 16; k ++){
@@ -107,6 +113,9 @@ public class RadiationWorldHandler {
 					break;
 				}
 				itr ++;
+			}
+			if(GeneralConfig.enableDebugMode) {
+				MainRegistry.logger.info("[Debug] Finished world destruction processing");
 			}
 			return;
 		}
