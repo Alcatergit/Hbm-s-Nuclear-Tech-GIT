@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.text.DecimalFormat;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,6 +30,7 @@ import com.hbm.util.BobMathUtil;
 import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyConnector;
 import api.hbm.energy.IEnergyConnectorBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -55,6 +58,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -195,6 +199,28 @@ public class Library {
 
 	public static float roundFloat(double number, int decimal){
 		return (float) (Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal]);  
+	}
+
+	public static int getColorFromItemStack(ItemStack stack){
+		ResourceLocation path = new ResourceLocation(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(stack.getItem(), stack.getMetadata()).getIconName()+".png");
+		return getColorFromResourceLocation(new ResourceLocation(path.getResourceDomain(), "textures/"+path.getResourcePath()));
+	}
+
+	public static int getColorFromResourceLocation(ResourceLocation r){
+		if(r == null) {
+			return 0;
+		}
+		try{
+			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(r).getInputStream());
+			return getRGBfromARGB(image.getRGB(image.getWidth()>>1, image.getHeight()>>1));
+		} catch(Exception e) {
+			e.printStackTrace(); 
+			return 0xFFFFFF;
+		}
+	}
+
+	public static int getRGBfromARGB(int pixel){
+		return pixel & 0x00ffffff;
 	}
 
 	// Drillgon200: Just realized I copied the wrong method. God dang it.

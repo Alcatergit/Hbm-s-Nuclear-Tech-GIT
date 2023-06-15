@@ -30,10 +30,6 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public static final int maxPower = 1000000;
 	public static final int processingSpeed = 200;
 	
-	private static final int[] slots_top = new int[] {0};
-	private static final int[] slots_bottom = new int[] {2, 3, 4, 5};
-	private static final int[] slots_side = new int[] {0, 1};
-	
 	public TileEntityMachineCentrifuge() {
 		super(8);
 	}
@@ -76,8 +72,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		int i = e.ordinal();
-		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+		return new int[]{ 0, 1, 2, 3, 4, 5};
 	}
 	
 	@Override

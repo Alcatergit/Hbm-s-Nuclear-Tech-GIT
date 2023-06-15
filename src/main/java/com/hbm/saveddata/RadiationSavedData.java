@@ -116,7 +116,7 @@ public class RadiationSavedData extends WorldSavedData {
     		return rad.radiation;
     	return 0F;
     }
-    
+
     public void updateSystem() {
     	if(GeneralConfig.advancedRadiation)
     		return;

@@ -383,6 +383,7 @@ import com.hbm.render.item.ItemRenderShim;
 import com.hbm.render.item.ItemRendererHot;
 import com.hbm.render.item.ItemRendererMachine;
 import com.hbm.render.item.ItemRendererMeteorSword;
+import com.hbm.render.item.ItemRendererBedrockOre;
 import com.hbm.render.item.weapon.GunRevolverRender;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderBFLauncher;
@@ -2421,6 +2422,19 @@ public class ClientProxy extends ServerProxy {
 		ModItems.meteorite_sword_baleful.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.0F, 1.0F, 0.0F));
 		ModItems.meteorite_sword_warped.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 1.0F, 1.0F));
 		ModItems.meteorite_sword_demonic.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.0F, 0.0F));
+		
+		ModItems.ore_bedrock.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x575757, 0.2F));
+		ModItems.ore_bedrock_centrifuged.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x676767, 0.25F));
+		ModItems.ore_bedrock_cleaned.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x8E8E5B, 0.3F));
+		ModItems.ore_bedrock_separated.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x7B7B7B, 0.35F));
+		ModItems.ore_bedrock_deepcleaned.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x9A9D76, 0.4F));
+		ModItems.ore_bedrock_purified.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x858689, 0.5F));
+		ModItems.ore_bedrock_nitrated.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x95795A, 0.6F));
+		ModItems.ore_bedrock_nitrocrystalline.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x79797F, 0.7F));
+		ModItems.ore_bedrock_seared.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0xAAACAF, 0.8F));
+		ModItems.ore_bedrock_exquisite.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x797D81, 0.9F));
+		ModItems.ore_bedrock_perfect.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x6C6E70, 1F));
+		ModItems.ore_bedrock_enriched.setTileEntityItemStackRenderer(new ItemRendererBedrockOre(0x55595D, 1F));
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			entry.getKey().setTileEntityItemStackRenderer(entry.getValue());

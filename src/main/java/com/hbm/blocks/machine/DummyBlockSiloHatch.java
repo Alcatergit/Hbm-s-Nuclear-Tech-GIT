@@ -3,10 +3,11 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IRadResistantBlock;
-import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IDummy;
+import com.hbm.interfaces.IRadResistantBlock;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityDummy;
@@ -143,7 +144,23 @@ public class DummyBlockSiloHatch extends BlockContainer implements IDummy, IBomb
 	}
 
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+
+		if (worldIn != null)
+		{
+			TileEntity te = worldIn.getTileEntity(blockPos);
+			if(te != null && te instanceof TileEntityDummy) {
+
+				TileEntity actualTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (actualTileEntity != null) {
+					if (IDoor.class.isAssignableFrom(actualTileEntity.getClass())) {
+						// Doors should be rad resistant only when closed
+						return ((IDoor) actualTileEntity).getState() == IDoor.DoorState.CLOSED;
+					}
+				}
+			}
+		}
+
 		return true;
 	}
 

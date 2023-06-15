@@ -3,6 +3,8 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.DummyBlockVault;
 import com.hbm.blocks.machine.VaultDoor;
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEVaultPacket;
@@ -19,11 +21,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityVaultDoor extends TileEntityLockableBase implements ITickable {
+public class TileEntityVaultDoor extends TileEntityLockableBase implements ITickable, IAnimatedDoor {
 
-	public boolean isOpening = false;
-	//0: closed, 1: opening/closing, 2:open
-	public int state = 0;
+	public DoorState state = DoorState.CLOSED;
 	public long sysTime;
 	private int timer = 0;
 	public int type;
@@ -80,7 +80,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 				}
 			}
 
-	    	if(isOpening && state == 1) {
+	    	if(state == DoorState.OPENING && state.isMovingState()) {
 				
 	    		if(timer == 0)
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -101,7 +101,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	    		if(timer == 115)
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	    	}
-	    	if(!isOpening && state == 1) {
+	    	if(state == DoorState.CLOSING && state.isMovingState()) {
 
 	    		if(timer == 0)
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultThudNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -124,77 +124,55 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.vaultScrapeNew, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	    	}	
 	    	
-	    	if(state != 1) {
+	    	if(state.isStationaryState()) {
 	    		timer = 0;
 	    	} else {
 	    		timer++;
 	    		
 	    		if(timer >= 120) {
 	    			
-	    			if(isOpening)
-	    				finishOpen();
-	    			else
-	    				finishClose();
+	    			if(state == DoorState.OPENING) {
+						state = DoorState.OPEN;
+					} else {
+						state = DoorState.CLOSED;
+
+						// With door finally closed, mark chunk for rad update since door is now rad resistant
+						// No need to update when open as well, as opening door should update
+						RadiationSystemNT.markChunkForRebuild(world, pos);
+					}
 	    		}
 	    	}
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 0, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), state.ordinal(), 0, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 		}
 	}
-	
-	public void open() {
-		if(state == 0) {
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
-			isOpening = true;
-			state = 1;
-			timer = 0;
-			openHatch();
+
+	public boolean tryOpen() {
+		if(state == DoorState.CLOSED) {
+			if(!world.isRemote) {
+				open();
+			}
+			return true;
 		}
+		return false;
 	}
-	
-	public void finishOpen() {
-		state = 2;
-	}
-	
-	public void close() {
-		if(state == 2) {
-	    	PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), isOpening, state, 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
-			isOpening = false;
-			state = 1;
-			timer = 0;
-			closeHatch();
+
+	public boolean tryToggle(){
+		if(state == DoorState.CLOSED && isHatchFree()) {
+			return tryOpen();
+		} else if(state == DoorState.OPEN) {
+			return tryClose();
 		}
-	}
-	
-	public void finishClose() {
-		state = 0;
-	}
-	
-	public boolean canOpen() {
-		return state == 0;
-	}
-	
-	public boolean canClose() {
-		return state == 2 && isHatchFree();
+		return false;
 	}
 
-	public void tryOpen() {
-
-		if(canOpen())
-			open();
-	}
-
-	public void tryToggle() {
-
-		if(canOpen())
-			open();
-		else if(canClose())
-			close();
-	}
-	
-	public void tryClose() {
-
-		if(canClose())
-			close();
+	public boolean tryClose() {
+		if(state == DoorState.OPEN) {
+			if(!world.isRemote) {
+				close();
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean placeDummy(int x, int y, int z){
@@ -226,7 +204,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	}
 	
 	private boolean isHatchFree() {
-
 		if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z)
 			return checkNS();
 		else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X)
@@ -236,7 +213,6 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	}
 	
 	private void closeHatch() {
-
 		if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.Z)
 			fillNS();
 		else if(world.getBlockState(pos).getValue(VaultDoor.FACING).getAxis() == Axis.X)
@@ -328,8 +304,7 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		isOpening = compound.getBoolean("isOpening");
-		state = compound.getInteger("state");
+		state = DoorState.values()[compound.getInteger("state")];
 		sysTime = compound.getLong("sysTime");
 		timer = compound.getInteger("timer");
 		type = compound.getInteger("type");
@@ -338,11 +313,54 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setBoolean("isOpening", isOpening);
-		compound.setInteger("state", state);
+		compound.setInteger("state", state.ordinal());
 		compound.setLong("sysTime", sysTime);
 		compound.setInteger("timer", timer);
 		compound.setInteger("type", type);
 		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public void open() {
+		if(state == DoorState.CLOSED)
+			toggle();
+	}
+
+	@Override
+	public void close() {
+		if(state == DoorState.OPEN)
+			toggle();
+	}
+
+	@Override
+	public DoorState getState() {
+		return state;
+	}
+
+	@Override
+	public void toggle(){
+		if(state == DoorState.CLOSED) {
+			state = DoorState.OPENING;
+			timer = 0;
+			openHatch();
+			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), state.ordinal(), 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+
+			// With door opening, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		} else if(state == DoorState.OPEN) {
+			state = DoorState.CLOSING;
+			timer = 0;
+			closeHatch();
+			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), state.ordinal(), 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
+
+			// With door closing, mark chunk for rad update
+			RadiationSystemNT.markChunkForRebuild(world, pos);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void handleNewState(DoorState state) {
+		// TODO: Move audio into this method from update method to match sliding blast door
 	}
 }

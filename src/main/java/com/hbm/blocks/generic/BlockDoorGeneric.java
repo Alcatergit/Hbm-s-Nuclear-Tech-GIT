@@ -3,6 +3,8 @@ package com.hbm.blocks.generic;
 import java.util.List;
 
 import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IAnimatedDoor;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
@@ -27,7 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBlock{
+public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBlock {
 
 	public DoorDecl type;
 	private boolean isRadResistant;
@@ -160,8 +162,21 @@ public class BlockDoorGeneric extends BlockDummyable  implements IRadResistantBl
 	}
 
 	@Override
-	public boolean isRadResistant(){
-		return this.isRadResistant;
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		if (!this.isRadResistant)
+			return false;
+
+		if (worldIn != null) {
+			TileEntity entity = worldIn.getTileEntity(blockPos);
+			if (entity != null) {
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					// Doors should be rad resistant only when closed
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override

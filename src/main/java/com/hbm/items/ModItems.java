@@ -147,6 +147,7 @@ import com.hbm.items.machine.ItemTurretChip;
 import com.hbm.items.special.ItemSimpleConsumable;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.items.special.ItemBook;
+import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemChopper;
 import com.hbm.items.special.ItemCustomLore;
@@ -1420,7 +1421,21 @@ public class ModItems {
 	public static final Item ingot_semtex = new ItemLemon(4, 5, true, "ingot_semtex").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_c4 = new ItemBase("ingot_c4").setCreativeTab(MainRegistry.partsTab);
 	public static final Item trinitite = new ItemContaminating(5F, "trinitite").setCreativeTab(MainRegistry.partsTab);
-	
+
+	//BedrockOres
+	public static final Item ore_bedrock = new ItemBedrockOre("ore_bedrock").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ore_bedrock_centrifuged = new ItemBedrockOre("ore_bedrock_centrifuged").setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_cleaned = new ItemBedrockOre("ore_bedrock_cleaned").setCreativeTab(MainRegistry.partsTab); //Acid Peroxide
+	public static final Item ore_bedrock_separated = new ItemBedrockOre("ore_bedrock_separated").setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_deepcleaned = new ItemBedrockOre("ore_bedrock_deepcleaned").setCreativeTab(MainRegistry.partsTab); //Acid Sulfuric
+	public static final Item ore_bedrock_purified = new ItemBedrockOre("ore_bedrock_purified").setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_nitrated = new ItemBedrockOre("ore_bedrock_nitrated").setCreativeTab(MainRegistry.partsTab); //Acid Nitric
+	public static final Item ore_bedrock_nitrocrystalline = new ItemBedrockOre("ore_bedrock_nitrocrystalline").setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_seared = new ItemBedrockOre("ore_bedrock_seared").setCreativeTab(MainRegistry.partsTab); //Acid Solvent
+	public static final Item ore_bedrock_exquisite = new ItemBedrockOre("ore_bedrock_exquisite").setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_perfect = new ItemBedrockOre("ore_bedrock_perfect").setCreativeTab(MainRegistry.partsTab); //Acid High Solvent
+	public static final Item ore_bedrock_enriched = new ItemBedrockOre("ore_bedrock_enriched").setCreativeTab(MainRegistry.partsTab); //Final Product
+
 	public static final Item nuclear_waste_long = new ItemWasteLong(50F, "nuclear_waste_long").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nuclear_waste_long_tiny = new ItemWasteLong(5F, "nuclear_waste_long_tiny").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nuclear_waste_short = new ItemWasteShort(300F, "nuclear_waste_short").addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);

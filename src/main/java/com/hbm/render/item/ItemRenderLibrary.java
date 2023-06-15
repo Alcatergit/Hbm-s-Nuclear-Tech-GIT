@@ -77,7 +77,10 @@ public class ItemRenderLibrary {
 				GL11.glScaled(3.8, 3.8, 3.8);
 			}
 			public void renderCommon() {
-		        bindTexture(ResourceManager.centrifuge_new_tex); ResourceManager.centrifuge.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		        bindTexture(ResourceManager.centrifuge_new_tex);
+		        ResourceManager.centrifuge.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_gascent), new ItemRenderBase() {
@@ -86,7 +89,10 @@ public class ItemRenderLibrary {
 				GL11.glScaled(3.8, 3.8, 3.8);
 			}
 			public void renderCommon() {
-		        bindTexture(ResourceManager.centrifuge_gas_tex); ResourceManager.centrifuge_gas.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		        bindTexture(ResourceManager.centrifuge_gas_tex);
+		        ResourceManager.centrifuge_gas.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.iter), new ItemRenderBase() {

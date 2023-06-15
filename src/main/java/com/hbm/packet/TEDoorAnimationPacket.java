@@ -2,6 +2,7 @@ package com.hbm.packet;
 
 import com.hbm.interfaces.IAnimatedDoor;
 
+import com.hbm.interfaces.IDoor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -65,7 +66,7 @@ public class TEDoorAnimationPacket implements IMessage {
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 				if(te instanceof IAnimatedDoor){
-					((IAnimatedDoor) te).handleNewState(m.state);
+					((IAnimatedDoor) te).handleNewState(IDoor.DoorState.values()[m.state]);
 					((IAnimatedDoor) te).setTextureState(m.texture);
 				}
 			});

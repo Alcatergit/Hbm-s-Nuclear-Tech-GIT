@@ -1,5 +1,6 @@
 package com.hbm.packet;
 
+import com.hbm.interfaces.IDoor;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
@@ -27,11 +28,10 @@ public class TEVaultPacket implements IMessage {
 
 	}
 
-	public TEVaultPacket(int x, int y, int z, boolean isOpening, int state, long sysTime, int type) {
+	public TEVaultPacket(int x, int y, int z, int state, long sysTime, int type) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.isOpening = isOpening;
 		this.state = state;
 		this.sysTime = sysTime;
 		this.type = type;
@@ -42,7 +42,6 @@ public class TEVaultPacket implements IMessage {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
-		isOpening = buf.readBoolean();
 		state = buf.readInt();
 		sysTime = buf.readLong();
 		type = buf.readInt();
@@ -53,7 +52,6 @@ public class TEVaultPacket implements IMessage {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
-		buf.writeBoolean(isOpening);
 		buf.writeInt(state);
 		buf.writeLong(sysTime);
 		buf.writeInt(type);
@@ -70,8 +68,7 @@ public class TEVaultPacket implements IMessage {
 				if (te != null && te instanceof TileEntityVaultDoor) {
 
 					TileEntityVaultDoor vault = (TileEntityVaultDoor) te;
-					vault.isOpening = m.isOpening;
-					vault.state = m.state;
+					vault.state = IDoor.DoorState.values()[m.state];
 					if(m.sysTime == 1)
 						vault.sysTime = System.currentTimeMillis();
 					vault.type = m.type;
@@ -80,8 +77,7 @@ public class TEVaultPacket implements IMessage {
 				if (te != null && te instanceof TileEntityBlastDoor) {
 
 					TileEntityBlastDoor vault = (TileEntityBlastDoor) te;
-					vault.isOpening = m.isOpening;
-					vault.state = m.state;
+					vault.state = IDoor.DoorState.values()[m.state];
 					if(m.sysTime == 1)
 						vault.sysTime = System.currentTimeMillis();
 				}
