@@ -104,7 +104,7 @@ public class DummyBlockFlare extends DummyOldBase {
     			TileEntityMachineGasFlare entity = (TileEntityMachineGasFlare) world.getTileEntity(a);
     			if(entity != null)
     			{
-    				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_flare, world, a.getX(), a.getY(), a.getZ());
+    				player.openGui(MainRegistry.instance, 0, world, a.getX(), a.getY(), a.getZ());
     			}
     		}
 			return true;

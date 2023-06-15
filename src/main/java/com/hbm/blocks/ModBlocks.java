@@ -1150,7 +1150,6 @@ public class ModBlocks {
 	public static final int guiID_machine_fracking_tower = 62;
 	
 	public static final Block machine_flare = new MachineGasFlare(Material.IRON, "machine_flare").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final int guiID_machine_flare = 44;
 	
 	public static final Block machine_drill = new MachineMiningDrill(Material.IRON, "machine_drill").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block drill_pipe = new BlockNoDrop(Material.IRON, "drill_pipe").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);

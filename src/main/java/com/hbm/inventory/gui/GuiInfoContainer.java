@@ -1,6 +1,7 @@
 package com.hbm.inventory.gui;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
@@ -22,6 +23,11 @@ public abstract class GuiInfoContainer extends GuiContainer {
 	public void drawFluidInfo(String[] text, int x, int y) {
 		this.drawHoveringText(Arrays.asList(text), x, y);
 	}
+
+	public void drawFluidInfo(List<String> text, int x, int y) {
+		this.drawHoveringText(text, x, y);
+	}
+
 	//the mojang employee who made this private on the super can explode
 	public boolean isMouseOverSlot(Slot slotIn, int mouseX, int mouseY)
     {

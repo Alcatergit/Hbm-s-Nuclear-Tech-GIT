@@ -450,6 +450,13 @@ trait.explosive=Explosive
 trait.unstable=Unstable
 trait.coal=Coal Dust
 
+trait.flammable=Combustible
+trait.flammable.desc=§eProvides §4%sTU §eper bucket.
+trait.coolable=Coolable
+trait.coolable.desc=§bProvides §4%sTU §bper bucket.
+trait.boilable=boilable
+trait.boilable.desc=§bRequires §4%sTU §bper bucket.
+
 trait.rbmk.coreTemp=Core temp: %s
 trait.rbmk.depletion=Depletion: %s
 trait.rbmk.diffusion=Diffusion: %s
@@ -4654,3 +4661,6 @@ tile.bomb.tnt_disabled=[ Ignite On Break: Disaabled ]
 
 item.ingot_firebrick.name=Firebrick
 item.ball_fireclay.name=Fireclay
+
+flare.ignition=Ignition
+flare.valve=Flow Valve

@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class FluidCombustionRecipes {
 	
 	public static HashMap<Fluid, Integer> resultingTU = new HashMap<Fluid, Integer>();
-	//for 100 mb
+	//for 1000 mb
 	public static void registerFluidCombustionRecipes() {
 		addBurnableFluid(ModForgeFluids.hydrogen, 5);
 		addBurnableFluid(ModForgeFluids.deuterium, 5);

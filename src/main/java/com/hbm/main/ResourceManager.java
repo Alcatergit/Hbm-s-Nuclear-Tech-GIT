@@ -304,7 +304,7 @@ public class ResourceManager {
 	public static final IModelCustom cracking_tower = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/machines/cracking_tower.obj"));
 
 	//Flare Stack
-	public static final IModelCustom oilflare = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/oilFlare.obj"));
+	public static final IModelCustom oilflare = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/machines/flare_stack.obj"));
 
 	//Tank
 	public static final IModelCustom fluidtank = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/fluidtank.obj"));
@@ -597,7 +597,7 @@ public class ResourceManager {
 	public static final ResourceLocation cracking_tower_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/cracking_tower.png");
 	
 	//Flare Stack
-	public static final ResourceLocation oilflare_tex = new ResourceLocation(RefStrings.MODID, "textures/models/oilFlareTexture.png");
+	public static final ResourceLocation oilflare_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/flare_stack.png");
 
 	//Tank
 	public static final ResourceLocation tank_tex = new ResourceLocation(RefStrings.MODID, "textures/models/tank.png");

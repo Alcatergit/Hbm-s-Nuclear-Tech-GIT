@@ -61,7 +61,7 @@ public class MultiblockHandler {
 	public static final int[] centDimension  = new int[] { 0, 0, 3, 0, 0, 0 };
 	public static final int[] cyclDimension  = new int[] { 1, 1, 5, 0, 1, 1 };
 	public static final int[] wellDimension  = new int[] { 1, 1, 5, 0, 1, 1 };
-	public static final int[] flareDimension  = new int[] { 1, 1, 9, 0, 1, 1 };
+	public static final int[] flareDimension  = new int[] { 1, 1, 11, 0, 1, 1 };
 	public static final int[] drillDimension  = new int[] { 1, 1, 3, 0, 1, 1 };
 	public static final int[] assemblerDimensionNorth = new int[] { 2, 1, 1, 0, 1, 2 };
 	public static final int[] assemblerDimensionEast  = new int[] { 2, 1, 1, 0, 2, 1 };
