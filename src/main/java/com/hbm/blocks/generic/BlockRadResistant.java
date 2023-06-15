@@ -37,7 +37,7 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	}
 	
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
 		return true;
 	}
 

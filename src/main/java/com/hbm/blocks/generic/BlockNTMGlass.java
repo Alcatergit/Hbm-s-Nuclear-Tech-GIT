@@ -90,9 +90,9 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	protected boolean canSilkHarvest() {
 		return false;
 	}
-	
+
 	@Override
-	public boolean isRadResistant(){
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
 		return this.isRadResistant;
 	}
 

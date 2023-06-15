@@ -1,5 +1,6 @@
 package com.hbm.render.tileentity;
 
+import com.hbm.interfaces.IDoor;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
@@ -47,11 +48,11 @@ public class RenderVaultDoor extends TileEntitySpecialRenderer<TileEntityVaultDo
 
         double[] timer;
         
-        if(te.state == 0)
+        if(te.state == IDoor.DoorState.CLOSED)
         	timer = new double[] { 0, 0, 0, 0, 0 };
-        else if(te.state == 2)
+        else if(te.state == IDoor.DoorState.OPEN)
         	timer = getAnimationFromSysTime((2000 + 800 * 5));
-        else if(te.isOpening)
+        else if(te.state == IDoor.DoorState.OPENING)
         	timer = getAnimationFromSysTime(System.currentTimeMillis() - te.sysTime);
         else
         	timer = getAnimationFromSysTime(te.sysTime + (2000 + 800 * 5) - System.currentTimeMillis());
