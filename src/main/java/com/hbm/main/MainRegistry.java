@@ -244,6 +244,7 @@ import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -1059,10 +1060,12 @@ public class MainRegistry {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		BedrockOreRegistry.registerBedrockOres();
 		ModItems.postInit();
 		ModBlocks.postInit();
 		BlockCrate.setDrops();
 		FluidTypeHandler.registerFluidProperties();
+		CraftingManager.addBedrockOreSmelting();
 		ShredderRecipes.registerShredder();
 		ShredderRecipes.registerOverrides();
 		DiFurnaceRecipes.registerRecipes();
@@ -1092,7 +1095,7 @@ public class MainRegistry {
 		NuclearTransmutationRecipes.registerRecipes();
 		HeatRecipes.registerHeatRecipes();
 		FluidCombustionRecipes.registerFluidCombustionRecipes();
-
+		
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.pink_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.kerosene, 10000));
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.red_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.diesel, 10000));
@@ -1112,6 +1115,7 @@ public class MainRegistry {
 		NTMCraftTweaker.applyPostInitActions();
 		HeatRecipes.setFluidsForRBMKLoader();
 		if(event.getSide() == Side.CLIENT) {
+			BedrockOreRegistry.registerOreColors();
 			ModForgeFluids.registerFluidColors();
 		}
 		proxy.postInit(event);

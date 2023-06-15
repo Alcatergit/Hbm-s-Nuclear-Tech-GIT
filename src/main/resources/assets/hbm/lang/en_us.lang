@@ -29,6 +29,16 @@ hbmfluid.plasma_put=Plutonium-Tritium Plasma
 hbmfluid.experience=XP Juice
 container.rbmkHeater=RBMK Fluid Heater
 
+hbmfluid.heavywater=Heavy Water
+fluid.heavywater=Heavy Water
+hbmfluid.nitric_acid=Nitric Acid
+fluid.nitric_acid=Nitric Acid
+hbmfluid.solvent=Solvent
+fluid.solvent=Solvent
+hbmfluid.radiosolvent=High-Performance Solvent
+fluid.radiosolvent=High-Performance Solvent
+
+
 tile.heater_rt.name=Radioisotope Thermal Heater
 tile.heater_rt.desc=Produces Heat from RTG Pellets
 container.heaterRadioThermal=Radioisotope Thermal Heater
@@ -132,6 +142,19 @@ key.categories.hbm.reload=Reload
 key.categories.hbm.toggleBack=Toggle Back
 key.categories.hbm.toggleHUD=Toggel Hud
 
+item.ore_bedrock.name=%s Bedrock Ore
+item.ore_bedrock_centrifuged.name=Centrifuged %s Ore
+item.ore_bedrock_cleaned.name=Cleaned %s Ore
+item.ore_bedrock_deepcleaned.name=Deep Cleaned %s Ore
+item.ore_bedrock_enriched.name=Enriched %s Ore
+item.ore_bedrock_nitrated.name=Nitrated %s Ore
+item.ore_bedrock_nitrocrystalline.name=Nitrocrystalline %s Ore
+item.ore_bedrock_purified.name=Purified %s Ore
+item.ore_bedrock_seared.name=Seared %s Ore
+item.ore_bedrock_separated.name=Separated %s Ore
+item.ore_bedrock_exquisite.name=Exquisite %s Ore
+item.ore_bedrock_perfect.name=Perfect %s Ore
+
 item.nugget_unobtainium_greater.name=Unobtainium-440 Nugget
 item.nugget_unobtainium_lesser.name=Unobtainium-439 Nugget
 
@@ -230,6 +253,9 @@ fluid.radwater_fluid=Radiated Water
 tile.rbmk_crane_console.name=RBMK Crane Console
 container.rbmkStorage=RBMK Storage
 
+chem.HEAVY_ELECTROLYSIS=Heavy Water Cryo-Electrolysis
+chem.SOLVENT=Organic Solvent Mixing
+chem.NITRIC_ACID=Nitric Acid Production
 chem.DUCRETE=Ducretisation
 chem.TNT=TNT Synthesis
 chem.C4=C-4 Synthesis

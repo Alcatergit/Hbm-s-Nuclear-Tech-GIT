@@ -39,6 +39,7 @@ public class ModForgeFluids {
 	public static Fluid coolant = new Fluid("coolant", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/coolant_flowing"), null, Color.WHITE).setTemperature(203);
 	public static Fluid hotcoolant = new Fluid("hotcoolant", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcoolant_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcoolant_flowing"), null, Color.WHITE).setTemperature(400 + 273);
 
+	public static Fluid heavywater = new Fluid("heavywater", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavywater_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavywater_flowing"), null, Color.WHITE);
 	public static Fluid deuterium = new Fluid("deuterium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_flowing"), null, Color.WHITE);
 	public static Fluid tritium = new Fluid("tritium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_flowing"), null, Color.WHITE);
 
@@ -86,6 +87,9 @@ public class ModForgeFluids {
 
 	public static Fluid acid = new Fluid("acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/acid_flowing"), null, Color.WHITE);
 	public static Fluid sulfuric_acid = new Fluid("sulfuric_acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sulfuric_acid_flowing"), null, Color.WHITE);
+	public static Fluid nitric_acid = new Fluid("nitric_acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitric_acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitric_acid_flowing"), null, Color.WHITE);
+	public static Fluid solvent = new Fluid("solvent", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/solvent_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/solvent_flowing"), null, Color.WHITE);
+	public static Fluid radiosolvent = new Fluid("radiosolvent", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radiosolvent_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radiosolvent_flowing"), null, Color.WHITE);
 	public static Fluid liquid_osmiridium = new Fluid("liquid_osmiridium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_flowing"), null, Color.WHITE).setTemperature(573);
 	public static Fluid watz = new Fluid("watz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid cryogel = new Fluid("cryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE).setTemperature(50);
@@ -136,6 +140,8 @@ public class ModForgeFluids {
 		if(!FluidRegistry.registerFluid(hotcoolant))
 			hotcoolant = FluidRegistry.getFluid("hotcoolant");
 
+		if(!FluidRegistry.registerFluid(heavywater))
+			heavywater = FluidRegistry.getFluid("heavywater");
 		if(!FluidRegistry.registerFluid(deuterium))
 			deuterium = FluidRegistry.getFluid("deuterium");
 		if(!FluidRegistry.registerFluid(tritium))
@@ -214,6 +220,12 @@ public class ModForgeFluids {
 			acid = FluidRegistry.getFluid("acid");
 		if(!FluidRegistry.registerFluid(sulfuric_acid))
 			sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
+		if(!FluidRegistry.registerFluid(nitric_acid))
+			nitric_acid = FluidRegistry.getFluid("nitric_acid");
+		if(!FluidRegistry.registerFluid(solvent))
+			solvent = FluidRegistry.getFluid("solvent");
+		if(!FluidRegistry.registerFluid(radiosolvent))
+			radiosolvent = FluidRegistry.getFluid("radiosolvent");
 		if(!FluidRegistry.registerFluid(liquid_osmiridium))
 			liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		if(!FluidRegistry.registerFluid(watz))
@@ -305,6 +317,7 @@ public class ModForgeFluids {
 		coolant = FluidRegistry.getFluid("coolant");
 		hotcoolant = FluidRegistry.getFluid("hotcoolant");
 
+		heavywater = FluidRegistry.getFluid("heavywater");
 		deuterium = FluidRegistry.getFluid("deuterium");
 		tritium = FluidRegistry.getFluid("tritium");
 
@@ -350,6 +363,9 @@ public class ModForgeFluids {
 
 		acid = FluidRegistry.getFluid("acid");
 		sulfuric_acid = FluidRegistry.getFluid("sulfuric_acid");
+		nitric_acid = FluidRegistry.getFluid("nitric_acid");
+		solvent = FluidRegistry.getFluid("solvent");
+		radiosolvent = FluidRegistry.getFluid("radiosolvent");
 		liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		watz = FluidRegistry.getFluid("watz");
 		cryogel = FluidRegistry.getFluid("cryogel");

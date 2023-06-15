@@ -68,6 +68,7 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(FluidRegistry.LAVA.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NOWATER));
 		
+		fluidProperties.put(ModForgeFluids.heavywater.getName(), new FluidProperties(1, 0 ,0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.deuterium.getName(), new FluidProperties(3, 4 ,0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.tritium.getName(), new FluidProperties(3, 4 ,0, EnumSymbol.RADIATION));
 		
@@ -115,6 +116,9 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.acid.getName(), new FluidProperties(3, 0, 3, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE));
 		fluidProperties.put(ModForgeFluids.sulfuric_acid.getName(),	new FluidProperties(3, 0, 2, EnumSymbol.ACID, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.nitric_acid.getName(),	new FluidProperties(3, 0, 2, EnumSymbol.ACID, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.solvent.getName(),	new FluidProperties(2, 3, 0, EnumSymbol.ACID, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.radiosolvent.getName(),	new FluidProperties(3, 3, 0, EnumSymbol.ACID, FluidTrait.CORROSIVE_2));
 		fluidProperties.put(ModForgeFluids.liquid_osmiridium.getName(),	new FluidProperties(5, 0, 5, EnumSymbol.ACID, FluidTrait.CORROSIVE));
 		
 

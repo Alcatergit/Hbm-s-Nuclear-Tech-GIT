@@ -219,6 +219,43 @@ public class RenderHelper {
 	public static void bindBlockTexture(){
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 	}
+
+	public static void drawScaledTexture(TextureAtlasSprite icon, int posX, int posY, int sizeX, int sizeY, float zLevel){
+		if(sizeX < 0)
+			sizeX = 0;
+		if(sizeX > 16)
+			sizeX = 16;
+		if(sizeY < 0)
+			sizeY = 0;
+		if(sizeY > 16)
+			sizeY = 16;
+		float up = icon.getInterpolatedV(16);
+		float down = icon.getInterpolatedV(16 - sizeY);
+		float left = icon.getInterpolatedU(0);
+		float right = icon.getInterpolatedU(sizeX);
+		addVertexWithUV(posX, posY + sizeY, zLevel, left, up);
+		addVertexWithUV(posX + sizeX, posY + sizeY, zLevel, right, up);
+		addVertexWithUV(posX + sizeX, posY, zLevel, right, down);
+		addVertexWithUV(posX, posY, zLevel, left, down);
+	}
+
+	public static void drawFullTexture(TextureAtlasSprite icon, double posX, double posY, double sizeX, double sizeY, double zLevel, boolean flipped){
+		float up = icon.getInterpolatedV(0);
+		float down = icon.getInterpolatedV(16);
+		float left = icon.getInterpolatedU(0);
+		float right = icon.getInterpolatedU(16);
+		if(flipped){
+			addVertexWithUV(posX + sizeX, posY + sizeY, zLevel, right, up);
+			addVertexWithUV(posX, posY + sizeY, zLevel, left, up);
+			addVertexWithUV(posX, posY, zLevel, left, down);
+			addVertexWithUV(posX + sizeX, posY, zLevel, right, down);
+		} else {
+			addVertexWithUV(posX, posY + sizeY, zLevel, left, up);
+			addVertexWithUV(posX + sizeX, posY + sizeY, zLevel, right, up);
+			addVertexWithUV(posX + sizeX, posY, zLevel, right, down);
+			addVertexWithUV(posX, posY, zLevel, left, down);
+		}
+	}
 	
 	//Drillgon200: using GLStateManager for this because it caches color values
 	public static void setColor(int color) {

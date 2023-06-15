@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.items.ModItems;
 
 import mezz.jei.api.ingredients.IIngredients;
@@ -286,6 +288,23 @@ public class ShredderRecipes {
 		for(int i = 0; i < 16; i++) {
 			ShredderRecipes.setRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i), new ItemStack(Items.CLAY_BALL, 4));
 			ShredderRecipes.setRecipe(new ItemStack(Blocks.WOOL, 1, i), new ItemStack(Items.STRING, 4));
+		}
+
+		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_separated, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta));
+			int type = ItemBedrockOre.getOutType(oreMeta);
+			if(type == 0 || type == 1)
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
 		}
 	}
 	

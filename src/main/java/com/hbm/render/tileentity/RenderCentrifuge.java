@@ -20,7 +20,7 @@ public class RenderCentrifuge extends TileEntitySpecialRenderer<TileEntityMachin
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
-        GlStateManager.enableLighting();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		switch(te.getBlockMetadata())
 		{
 		case 4:
@@ -35,7 +35,8 @@ public class RenderCentrifuge extends TileEntitySpecialRenderer<TileEntityMachin
 
 		bindTexture(ResourceManager.centrifuge_new_tex);
         ResourceManager.centrifuge.renderAll();
-
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        
         GL11.glPopMatrix();
 	}
 }

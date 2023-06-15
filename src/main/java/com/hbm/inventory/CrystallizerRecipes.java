@@ -13,6 +13,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.special.ItemBedrockOre;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -103,6 +104,14 @@ public class CrystallizerRecipes {
 			ItemStack qItem = quartz.get(0).copy();
 			qItem.setCount(6);
 			addRecipe("oreCertusQuartz", new FluidStack(ModForgeFluids.acid, 500), qItem);
+		}
+
+		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_separated, 1, oreMeta), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_purified, 1, oreMeta), new FluidStack(ModForgeFluids.nitric_acid, 500), new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new FluidStack(ModForgeFluids.solvent, 500), new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.radiosolvent, 500), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
 		}
 	}
 

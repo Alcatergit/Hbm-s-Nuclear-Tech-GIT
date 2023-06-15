@@ -1,8 +1,5 @@
 package com.hbm.forgefluid;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-
 import com.google.common.base.Predicate;
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
@@ -128,30 +125,10 @@ public class FFUtils {
 			for(int j = 0; j < sizeX; j += 16) {
 				int drawX = Math.min(16, sizeX - j);
 				int drawY = Math.min(16, level - i);
-				drawScaledTexture(liquidIcon, guiLeft + offsetX + j, guiTop + offsetY - i + (16 - drawY), drawX, drawY, zLevel);
+				RenderHelper.drawScaledTexture(liquidIcon, guiLeft + offsetX + j, guiTop + offsetY - i + (16 - drawY), drawX, drawY, zLevel);
 			}
 		}
 		RenderHelper.draw();
-	}
-
-	private static void drawScaledTexture(TextureAtlasSprite icon, int posX, int posY, int sizeX, int sizeY, float zLevel){
-		if(sizeX < 0)
-			sizeX = 0;
-		if(sizeX > 16)
-			sizeX = 16;
-		if(sizeY < 0)
-			sizeY = 0;
-		if(sizeY > 16)
-			sizeY = 16;
-		float up = icon.getInterpolatedV(16);
-		float down = icon.getInterpolatedV(16 - sizeY);
-		float left = icon.getInterpolatedU(0);
-		float right = icon.getInterpolatedU(sizeX);
-		RenderHelper.addVertexWithUV(posX, posY + sizeY, zLevel, left, up);
-		RenderHelper.addVertexWithUV(posX + sizeX, posY + sizeY, zLevel, right, up);
-		RenderHelper.addVertexWithUV(posX + sizeX, posY, zLevel, right, down);
-		RenderHelper.addVertexWithUV(posX, posY, zLevel, left, down);
-
 	}
 
 	/**
@@ -750,20 +727,7 @@ public class FFUtils {
 	}
 
 	public static int getColorFromFluid(Fluid f){
-		if(f == null) {
-			return 0;
-		}
-		try{
-			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(f.getStill().getResourceDomain(), "textures/"+f.getStill().getResourcePath()+".png")).getInputStream());
-			return getRGBfromARGB(image.getRGB(image.getWidth()>>1, image.getHeight()>>1));
-		} catch(Exception e) {
-			e.printStackTrace(); 
-			return 0xFFFFFF;
-		}
-	}
-
-	public static int getRGBfromARGB(int pixel){
-		return pixel & 0x00ffffff;
+		return Library.getColorFromResourceLocation(new ResourceLocation(f.getStill().getResourceDomain(), "textures/"+f.getStill().getResourcePath()+".png"));
 	}
 
 	public static void setColorFromFluid(Fluid f){

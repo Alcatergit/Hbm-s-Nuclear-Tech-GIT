@@ -301,12 +301,12 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 				cycles += 6;
 		}
 
-		return Math.min(cycles, 4);
+		return Math.min(cycles, 7);
 	}
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
-		return slot == 0;
+		return slot == 0 && CrystallizerRecipes.getOutputItem(itemStack) != null;
 	}
 	
 	@Override
