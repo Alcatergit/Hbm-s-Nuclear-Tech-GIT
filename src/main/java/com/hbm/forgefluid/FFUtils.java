@@ -195,9 +195,8 @@ public class FFUtils {
 	}
 
 	private static void renderFluidInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, Fluid fluid, int amount, int capacity) {
-		List<String> texts = new ArrayList<>();
-
 		if (x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
+			List<String> texts = new ArrayList<>();
 			if (fluid != null) {
 				texts.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
 				texts.add(amount + "/" + capacity + "mB");
@@ -233,10 +232,12 @@ public class FFUtils {
 							TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
 							TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display more info");
 				}
-				gui.drawFluidInfo(texts, mouseX, mouseY);
 			} else {
-				gui.drawFluidInfo(new String[]{net.minecraft.client.resources.I18n.format("None"), amount + "/" + capacity + "mB"}, mouseX, mouseY);
+				texts.add(I18n.format("None"));
+				texts.add(amount + "/" + capacity + "mB");
 			}
+
+			gui.drawFluidInfo(texts, mouseX, mouseY);
 		}
 	}
 
