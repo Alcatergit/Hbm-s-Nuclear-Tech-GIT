@@ -4635,3 +4635,6 @@ tile.bomb.tnt_disabled=[ Ignite On Break: Disaabled ]
 
 item.ingot_firebrick.name=Firebrick
 item.ball_fireclay.name=Fireclay
+
+flare.ignition=Ignition
+flare.valve=Flow Valve
