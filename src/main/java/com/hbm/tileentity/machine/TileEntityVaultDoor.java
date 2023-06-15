@@ -341,14 +341,16 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	public void toggle(){
 		if(state == DoorState.CLOSED) {
 			state = DoorState.OPENING;
-			closeHatch();
+			timer = 0;
+			openHatch();
 			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), state.ordinal(), 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 
 			// With door opening, mark chunk for rad update
 			RadiationSystemNT.markChunkForRebuild(world, pos);
 		} else if(state == DoorState.OPEN) {
 			state = DoorState.CLOSING;
-			openHatch();
+			timer = 0;
+			closeHatch();
 			PacketDispatcher.wrapper.sendToAllAround(new TEVaultPacket(pos.getX(), pos.getY(), pos.getZ(), state.ordinal(), 1, type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 300));
 
 			// With door closing, mark chunk for rad update
@@ -361,5 +363,4 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	public void handleNewState(DoorState state) {
 		// TODO: Move audio into this method from update method to match sliding blast door
 	}
-
 }

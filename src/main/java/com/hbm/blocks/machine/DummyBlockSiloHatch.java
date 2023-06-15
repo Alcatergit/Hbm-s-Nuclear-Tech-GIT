@@ -3,7 +3,10 @@ package com.hbm.blocks.machine;
 import java.util.Random;
 
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.*;
+import com.hbm.interfaces.IDoor;
+import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.IDummy;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;

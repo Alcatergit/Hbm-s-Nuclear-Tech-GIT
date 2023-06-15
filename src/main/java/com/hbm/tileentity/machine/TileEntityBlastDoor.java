@@ -262,6 +262,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		if(state == DoorState.CLOSED) {
 			if(!world.isRemote) {
 				open();
+				openNeigh();
 			}
 			return true;
 		}
@@ -281,6 +282,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 		if(state == DoorState.OPEN) {
 			if(!world.isRemote) {
 				close();
+				closeNeigh();
 			}
 			return true;
 		}
