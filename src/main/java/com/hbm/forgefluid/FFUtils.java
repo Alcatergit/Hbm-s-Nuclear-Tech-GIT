@@ -2,12 +2,16 @@ package com.hbm.forgefluid;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.IFluidVisualConnectable;
 import com.hbm.interfaces.IItemFluidHandler;
+import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.JetpackBase;
@@ -19,10 +23,12 @@ import com.hbm.lib.Library;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
+import com.hbm.util.BobMathUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +50,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 
@@ -176,35 +183,59 @@ public class FFUtils {
 	 *            - the tank to render info of
 	 */
 	public static void renderTankInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, FluidTank fluidTank){
-		if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
-			if(fluidTank.getFluid() != null) {
-				Fluid fluid = fluidTank.getFluid().getFluid();
-				if(fluid.getTemperature() == 300) {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
-				} else {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + (fluid.getTemperature()-273) + "°C" }, mouseX, mouseY);
-				}
-			} else {
-				gui.drawFluidInfo(new String[] { net.minecraft.client.resources.I18n.format("None"), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
-			}
-		}
+		renderTankInfo(gui, mouseX, mouseY, x, y, width, height, fluidTank, null);
 	}
 
 	public static void renderTankInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, FluidTank fluidTank, Fluid fluid){
 		if(fluidTank.getFluid() != null) {
-			renderTankInfo(gui, mouseX, mouseY, x, y, width, height, fluidTank);
-			return;
+			renderFluidInfo(gui, mouseX, mouseY, x, y, width, height, fluidTank.getFluid().getFluid(), fluidTank.getFluidAmount(), fluidTank.getCapacity());
+		} else {
+			renderFluidInfo(gui, mouseX, mouseY, x, y, width, height, fluid, 0, fluidTank.getCapacity());
 		}
-		if(x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
-			if(fluid != null) {
-				if(fluid.getTemperature() == 300) {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
-				} else {
-					gui.drawFluidInfo(new String[] { "" + (fluid.getLocalizedName(new FluidStack(fluid, 1))), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB", TextFormatting.RED + "" + (fluid.getTemperature()-273) + "°C" }, mouseX, mouseY);
+	}
+
+	private static void renderFluidInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, Fluid fluid, int amount, int capacity) {
+		List<String> texts = new ArrayList<>();
+
+		if (x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
+			if (fluid != null) {
+				texts.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
+				texts.add(amount + "/" + capacity + "mB");
+
+				if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+					if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
+						String energy = Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L);
+						texts.add(String.format("%s[%s]", TextFormatting.YELLOW, I18n.format("trait.flammable")));
+						texts.add(I18n.format("trait.flammable.desc", energy));
+					}
+
+					if (HeatRecipes.hasCoolRecipe(fluid)) {
+						int heat = HeatRecipes.getResultingHeat(fluid);
+						texts.add(String.format("%s[%s]", TextFormatting.AQUA, I18n.format("trait.coolable")));
+						texts.add(I18n.format("trait.coolable.desc", heat));
+					}
+
+					if (HeatRecipes.hasBoilRecipe(fluid)) {
+						int heat = HeatRecipes.getRequiredHeat(fluid);
+						texts.add(String.format("%s[%s]", TextFormatting.AQUA, I18n.format("trait.boilable")));
+						texts.add(I18n.format("trait.boilable.desc", heat));
+					}
 				}
 
+				if (fluid.getTemperature() > 300 ) {
+					texts.add(String.format("%s%d°C", TextFormatting.RED, fluid.getTemperature() - 273));
+				} else if (fluid.getTemperature() < 300) {
+					texts.add(String.format("%s%d°C", TextFormatting.BLUE, fluid.getTemperature() - 273));
+				}
+
+				if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+					texts.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
+							TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
+							TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display more info");
+				}
+				gui.drawFluidInfo(texts, mouseX, mouseY);
 			} else {
-				gui.drawFluidInfo(new String[] { net.minecraft.client.resources.I18n.format("None"), fluidTank.getFluidAmount() + "/" + fluidTank.getCapacity() + "mB" }, mouseX, mouseY);
+				gui.drawFluidInfo(new String[]{net.minecraft.client.resources.I18n.format("None"), amount + "/" + capacity + "mB"}, mouseX, mouseY);
 			}
 		}
 	}
