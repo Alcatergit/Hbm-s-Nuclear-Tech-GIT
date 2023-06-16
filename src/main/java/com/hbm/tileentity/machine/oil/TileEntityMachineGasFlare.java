@@ -49,7 +49,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileEntityMachineGasFlare extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGUIProvider, IControlReceiver {
 	public long power;
-	public static final long maxPower = 100000;
+	public static final long maxPower = 1000000;
 	public Fluid tankType;
 	public FluidTank tank;
 	public boolean isOn = false;
