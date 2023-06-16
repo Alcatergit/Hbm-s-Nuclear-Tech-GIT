@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine.oil;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.MachineConfig;
 import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -25,21 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
-    protected static int consumption = 5000;
-    private static int solutionRequired = 10;
-
-    protected static int delay = 20;
-    protected static int oilPerDeposit = 1000;
-    protected static int gasPerDepositMin = 200;
-    
-    protected static int oilPerBedrockDeposit = 100;
-    protected static int gasPerBedrockDepositMin = 10;
-    protected static int extraGasPerDepositMax = 401;
-    protected static int extraGasPerBedrockDepositMax = 50;
-
-    protected static int destructionRange = 32;
-
-
     public TileEntityMachineFrackingTower() {
         super();
         tanks[2] = new FluidTank(64000);
@@ -55,7 +41,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
     @Override
     public void update() {
-        int timer = delay;
+        int timer = MachineConfig.delayPerOperationFrackingTower;
 
         age++;
         age2++;
@@ -84,7 +70,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
             }
             power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
-            if(power >= consumption && tank2Amount >= solutionRequired && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
+            if(power >= MachineConfig.powerConsumptionPerOperationFrackingTower && tank2Amount >= MachineConfig.solutionConsumptionPerOperationFrackingTower && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 
                 // operation start
 
@@ -116,17 +102,26 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
                             if(succNumber != 0) {
 
                                 if (succNumber == 1) {
-                                    this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerDeposit), true);
-                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + world.rand.nextInt(extraGasPerDepositMax))), true);
-                                }
-                                else {
-                                    this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerBedrockDeposit), true);
-                                    this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerBedrockDepositMin + world.rand.nextInt(extraGasPerBedrockDepositMax))), true);
+                                    int oilCollected = MachineConfig.oilPerDepositBlockMinFrackingTower + ((MachineConfig.oilPerDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+                                    int gasCollected = MachineConfig.gasPerDepositBlockMinFrackingTower + ((MachineConfig.gasPerDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+
+                                    this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
+                                    this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
+                                } else {
+                                    int oilCollected = MachineConfig.oilPerBedrockDepositBlockMinFrackingTower + ((MachineConfig.oilPerBedrockDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+                                    int gasCollected = MachineConfig.gasPerBedrockDepositBlockMinFrackingTower + ((MachineConfig.gasPerBedrockDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+
+                                    this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
+                                    this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
                                 }
                                 needsUpdate = true;
 
-                                tanks[2].drain(solutionRequired, true);
-                                OilSpot.generateOilSpot(world, pos.getX(), pos.getZ(), destructionRange, 10);
+                                tanks[2].drain(MachineConfig.solutionConsumptionPerOperationFrackingTower, true);
+
+                                int destructionRangeInBlocks = MachineConfig.worldDestructionRangeFrackingTower;
+                                if (destructionRangeInBlocks > 0) {
+                                    OilSpot.generateOilSpot(world, pos.getX(), pos.getZ(), destructionRangeInBlocks, 10);
+                                }
 
                                 break;
                             } else {
@@ -144,7 +139,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
                 // operation end
 
-                power -= consumption;
+                power -= MachineConfig.solutionConsumptionPerOperationFrackingTower;
             } else {
                 warning = 1;
             }
