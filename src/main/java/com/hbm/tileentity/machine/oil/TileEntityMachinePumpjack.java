@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine.oil;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachinePumpjack;
+import com.hbm.config.MachineConfig;
 import com.hbm.entity.particle.EntityGasFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
@@ -29,13 +30,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
-
-	protected static int delay = 25;
-	protected static int consumption = 200;
-
-	protected static int oilPerDeposit = 650;
-    protected static int gasPerDepositMin = 110;
-    protected static int extraGasPerDepositMax = 401;
 
 	public boolean isProgressing;
 	public float rotation;
@@ -69,7 +63,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
-		int timer = delay;
+		int timer = MachineConfig.delayPerOperationPumpjack;
 		prevRotation = rotation;
 		age++;
 		age2++;
@@ -96,7 +90,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 			}
 			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
-			if(power >= 100 && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
+			if(power >= MachineConfig.powerConsumptionPerOperationPumpjack && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 
 				// operation start
 
@@ -131,8 +125,11 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 						} else if(this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
 							if(succ(pos.getX(), i, pos.getZ()) == 1) {
 
-								this.tanks[0].fill(new FluidStack(tankTypes[0], oilPerDeposit), true);
-								this.tanks[1].fill(new FluidStack(tankTypes[1], (gasPerDepositMin + world.rand.nextInt(extraGasPerDepositMax))), true);
+								int oilCollected = MachineConfig.oilPerDepositBlockMinPumpjack + ((MachineConfig.oilPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraPumpjack) : 0);
+								int gasCollected = MachineConfig.gasPerDepositBlockMinPumpjack + ((MachineConfig.gasPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraPumpjack) : 0);
+
+								this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
+								this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
 								needsUpdate = true;
 
 								break;
@@ -151,7 +148,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 
 				// operation end
 
-				power -= consumption;
+				power -= MachineConfig.powerConsumptionPerOperationPumpjack;
 			} else {
 				warning = 1;
 			}
