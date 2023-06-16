@@ -6,8 +6,8 @@ public class MachineConfig {
 
 	public static int delayPerOperationDerrick = 50;
 	public static int powerConsumptionPerOperationDerrick = 100;
-	public static int oilPerDepositBlockMinDerrick = 500;
 
+	public static int oilPerDepositBlockMinDerrick = 500;
 	public static int oilPerDepositBlockMaxExtraDerrick = 0;
 	public static int gasPerDepositBlockMinDerrick = 100;
 	public static int gasPerDepositBlockMaxExtraDerrick = 401;
