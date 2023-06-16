@@ -36,7 +36,7 @@ public class MachineConfig {
 	public static int gasPerBedrockDepositBlockMinFrackingTower = 10;
 	public static int gasPerBedrockDepositBlockMaxExtraFrackingTower = 50;
 
-	private static String generateConfigName(int idx, String fieldName) {
+	private static String generateConfigName(final int idx, final String fieldName) {
 		return String.format("9.%02d_%s", idx, fieldName);
 	}
 
