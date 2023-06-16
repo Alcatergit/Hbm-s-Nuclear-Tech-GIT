@@ -126,7 +126,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 							if(succ(pos.getX(), i, pos.getZ()) == 1) {
 
 								int oilCollected = MachineConfig.oilPerDepositBlockMinPumpjack + ((MachineConfig.oilPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraPumpjack) : 0);
-								int gasCollected = MachineConfig.gasPerDepositBlockMinPumpjack + ((MachineConfig.gasPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraPumpjack) : 0);
+								int gasCollected = MachineConfig.gasPerDepositBlockMinPumpjack + ((MachineConfig.gasPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraPumpjack) : 0);
 
 								this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
 								this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);

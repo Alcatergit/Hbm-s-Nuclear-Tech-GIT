@@ -104,7 +104,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 							if(succ(pos.getX(), i, pos.getZ()) == 1) {
 
 								int oilCollected = MachineConfig.oilPerDepositBlockMinDerrick + ((MachineConfig.oilPerDepositBlockMaxExtraDerrick > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraDerrick) : 0);
-								int gasCollected = MachineConfig.gasPerDepositBlockMinDerrick + ((MachineConfig.gasPerDepositBlockMaxExtraDerrick > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraDerrick) : 0);
+								int gasCollected = MachineConfig.gasPerDepositBlockMinDerrick + ((MachineConfig.gasPerDepositBlockMaxExtraDerrick > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraDerrick) : 0);
 
 								this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
 								this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);

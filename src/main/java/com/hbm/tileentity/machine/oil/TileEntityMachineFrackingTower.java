@@ -103,13 +103,13 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
                                 if (succNumber == 1) {
                                     int oilCollected = MachineConfig.oilPerDepositBlockMinFrackingTower + ((MachineConfig.oilPerDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
-                                    int gasCollected = MachineConfig.gasPerDepositBlockMinFrackingTower + ((MachineConfig.gasPerDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+                                    int gasCollected = MachineConfig.gasPerDepositBlockMinFrackingTower + ((MachineConfig.gasPerDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraFrackingTower) : 0);
 
                                     this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
                                     this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
                                 } else {
                                     int oilCollected = MachineConfig.oilPerBedrockDepositBlockMinFrackingTower + ((MachineConfig.oilPerBedrockDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
-                                    int gasCollected = MachineConfig.gasPerBedrockDepositBlockMinFrackingTower + ((MachineConfig.gasPerBedrockDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraFrackingTower) : 0);
+                                    int gasCollected = MachineConfig.gasPerBedrockDepositBlockMinFrackingTower + ((MachineConfig.gasPerBedrockDepositBlockMaxExtraFrackingTower > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraFrackingTower) : 0);
 
                                     this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
                                     this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
