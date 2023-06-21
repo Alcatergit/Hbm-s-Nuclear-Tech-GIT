@@ -6,11 +6,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockStorageCrate;
 import com.hbm.blocks.machine.PinkCloudBroadcaster;
 import com.hbm.blocks.machine.SoyuzCapsule;
+import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.tileentity.machine.TileEntitySafe;
 import com.hbm.tileentity.machine.TileEntitySoyuzCapsule;
 import com.hbm.world.Antenna;
@@ -105,6 +107,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			DepthDeposit.generateConditionOverworld(world, i, 0, 3, j, 5, 0.6D, ModBlocks.cluster_depth_tungsten, rand, 32);
 			DepthDeposit.generateConditionOverworld(world, i, 0, 3, j, 5, 0.8D, ModBlocks.ore_depth_cinnebar, rand, 16);
 			DepthDeposit.generateConditionOverworld(world, i, 0, 3, j, 5, 0.8D, ModBlocks.ore_depth_zirconium, rand, 16);
+			DepthDeposit.generateConditionOverworld(world, i, 0, 3, j, 5, 0.8D, ModBlocks.ore_depth_borax, rand, 16);
 		}
 		if(dimID == -1){
 			DepthDeposit.generateConditionNether(world, i, 0, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_neodymium, rand, 16);
@@ -257,6 +260,34 @@ public class HbmWorldGen implements IWorldGenerator {
 		}
 	}
 
+	private void generateBedrockOre(World world, Random rand, int i, int j, int dimID){
+		int dimBedrockOreFreq = parseInt(CompatibilityConfig.bedrockOreSpawn.get(dimID));
+		if (dimBedrockOreFreq > 0 && rand.nextInt(dimBedrockOreFreq) == 0) {
+			String oreName = BedrockOreRegistry.rollOreName(rand);
+			if(oreName == null) return;
+			int sqrsize = 2;
+			for(int v = sqrsize; v >= -sqrsize; v--) {
+				for(int w = sqrsize; w >= -sqrsize; w--) {
+					for(int y = 6; y >= 0; y--) {
+						if(rand.nextInt(4) == 0) continue;
+						placeBedrockOre(world, new BlockPos(i+8+w, y, j+8+v), oreName);
+					}
+				}
+			}
+		}
+	}
+	
+	private void placeBedrockOre(World world, BlockPos orePos, String oreName){
+		if(!isBedrock(world, orePos)) return;
+		world.setBlockState(orePos, ModBlocks.ore_bedrock_block.getDefaultState());
+		TileEntityBedrockOre bedrockOre = (TileEntityBedrockOre)world.getTileEntity(orePos);
+		bedrockOre.setOre(oreName);
+	}
+
+	private boolean isBedrock(World world, BlockPos bPos){
+		return world.getBlockState(bPos).getBlock().isReplaceableOreGen(world.getBlockState(bPos), world, bPos, BlockMatcher.forBlock(Blocks.BEDROCK));
+	}
+
 	private void generateBedrockOil(World world, Random rand, int i, int j, int dimID){
 		int dimBedrockOilFreq = parseInt(CompatibilityConfig.bedrockOilSpawn.get(dimID));
 		if (dimBedrockOilFreq > 0 && rand.nextInt(dimBedrockOilFreq) == 0) {
@@ -266,7 +297,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			for (int v = 5; v >= -5; v--) {
 				for (int w = 5; w >= -5; w--) {
 					for (int y = 6; y >= 0; y--) {
-						if (world.getBlockState(new BlockPos(randPosX + w, y, randPosZ + v)).getBlock().isReplaceableOreGen(world.getBlockState(new BlockPos(randPosX + w, y, randPosZ + v)), world, new BlockPos(randPosX + w, y, randPosZ + v), BlockMatcher.forBlock(Blocks.BEDROCK))) {
+						if (isBedrock(world, new BlockPos(randPosX + w, y, randPosZ + v))) {
 							world.setBlockState(new BlockPos(randPosX + w, y, randPosZ + v), ModBlocks.ore_bedrock_oil.getDefaultState());
 						}
 					}
@@ -376,6 +407,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			if(biome.getTempCategory() == Biome.TempCategory.WARM && biome.getTempCategory() != Biome.TempCategory.OCEAN)
 				generateSellafieldPool(world, rand, i, j, dimID);
 			generateBedrockOil(world, rand, i, j, dimID);
+			generateBedrockOre(world, rand, i, j, dimID);
 			generateSellafieldBlocks(world, rand, i, j, dimID);
 			
 			if (GeneralConfig.enableMines){

@@ -24,6 +24,15 @@ public class BlockBase extends Block {
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
+
+	public BlockBase(Material m, SoundType sound, String s){
+		super(m);
+		this.setUnlocalizedName(s);
+		this.setRegistryName(s);
+		this.setSoundType(sound);
+		this.setCreativeTab(MainRegistry.controlTab);
+		ModBlocks.ALL_BLOCKS.add(this);
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {

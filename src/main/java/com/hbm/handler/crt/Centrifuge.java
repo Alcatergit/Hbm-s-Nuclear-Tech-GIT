@@ -59,7 +59,7 @@ public class Centrifuge {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack output, IItemStack[] inputs){
-		CraftTweakerAPI.apply(new ActionAddRecipe(output, inputs));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs));
 	}
 
 

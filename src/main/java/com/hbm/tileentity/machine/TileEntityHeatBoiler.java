@@ -206,6 +206,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             this.heat -= heatReq * ops;
         }
     }
+    
     protected void tryPullHeat() {
 
         if(this.heat >= TileEntityHeatBoiler.maxHeat) return;

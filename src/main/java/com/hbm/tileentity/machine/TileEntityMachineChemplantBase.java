@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import api.hbm.energy.IEnergyUser;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
@@ -343,10 +345,16 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 				if(te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
 					IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
 					int[] slots;
-					slots = new int[cap.getSlots()];
-					for(int i = 0; i < slots.length; i++)
-						slots[i] = i;
-					tryFillAssemblerCap(cap, slots, null, indices[0], indices[1], itemInputs);
+					if(te instanceof TileEntityMachineBase) {
+						ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
+						slots = ((TileEntityMachineBase) te).getAccessibleSlotsFromSide(dir.toEnumFacing());
+						tryFillAssemblerCap(cap, slots, (TileEntityMachineBase) te, indices[0], indices[1], itemInputs);
+					} else {
+						slots = new int[cap.getSlots()];
+						for(int i = 0; i < slots.length; i++)
+							slots[i] = i;
+						tryFillAssemblerCap(cap, slots, null, indices[0], indices[1], itemInputs);
+					}
 				}	
 			}
 		}

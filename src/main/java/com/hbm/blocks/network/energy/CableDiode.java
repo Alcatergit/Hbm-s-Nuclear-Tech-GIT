@@ -194,16 +194,12 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 
 		@Override
 		public SPacketUpdateTileEntity getUpdatePacket(){
-			NBTTagCompound nbt = new NBTTagCompound();
-			this.writeToNBT(nbt);
-			return new SPacketUpdateTileEntity(this.getPos(), 0, nbt);
+			return new SPacketUpdateTileEntity(this.getPos(), 0, this.writeToNBT(new NBTTagCompound()));
 		}
 
 		@Override
-		public NBTTagCompound getUpdateTag(){
-			NBTTagCompound nbt = new NBTTagCompound();
-			this.writeToNBT(nbt);
-			return nbt;
+		public NBTTagCompound getUpdateTag() {
+			return this.writeToNBT(new NBTTagCompound());
 		}
 		
 		@Override

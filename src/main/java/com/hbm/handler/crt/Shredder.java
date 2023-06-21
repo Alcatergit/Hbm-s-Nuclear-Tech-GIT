@@ -46,7 +46,7 @@ public class Shredder {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack input, IItemStack output){
-		CraftTweakerAPI.apply(new ActionAddRecipe(input, output));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(input, output));
 	}
 
 

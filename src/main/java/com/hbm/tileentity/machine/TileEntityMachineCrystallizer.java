@@ -311,14 +311,12 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		return slot == 2;
+		return slot == 2 || slot == 4;
 	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing face) {
-		int side = face.getIndex();
-
-		return side == 0 ? new int[] { 2 } : new int[] { 0, 2 };
+		return new int[] { 0, 2, 4 };
 	}
 
 	@Override

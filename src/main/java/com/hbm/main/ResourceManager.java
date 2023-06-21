@@ -235,6 +235,9 @@ public class ResourceManager {
 	//Laser Miner
 	public static final IModelCustom mining_laser = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/mining_laser.obj"));
 
+	//Excavator
+	public static final IModelCustom excavator = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/excavator.obj"));
+
 	//Crystallizer
 	public static final IModelCustom crystallizer = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/crystallizer.obj"));
 
@@ -695,6 +698,9 @@ public class ResourceManager {
 	public static final ResourceLocation mining_laser_pivot_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_laser_pivot.png");
 	public static final ResourceLocation mining_laser_laser_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_laser_laser.png");
 
+	//Excavator
+	public static final ResourceLocation excavator_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/excavator.png");
+	
 	//Crystallizer
 	public static final ResourceLocation crystallizer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/crystallizer.png");
 	public static final ResourceLocation crystallizer_spinner_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/crystallizer_spinner.png");

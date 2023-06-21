@@ -109,7 +109,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 						case UV: entity.setFire(10); ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 0.025F); break;
 						case XRAY: ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 1F); break;
 						case GAMMA: 
-							ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 100);
+							ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, 1000);
 							if(Math.random() < 0.01){
 								entity.addPotionEffect(new PotionEffect(Potion.getPotionById(3), 1800, 4, false, false));
 								entity.addPotionEffect(new PotionEffect(Potion.getPotionById(5), 1800, 6, false, false));

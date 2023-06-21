@@ -98,7 +98,7 @@ public class SILEX {
 
 	@ZenMethod
 	public static void addRecipe(int wavelength, int solution, int consumption, IItemStack input, IItemStack[] outputItems, int[] outputWeights){
-		CraftTweakerAPI.apply(new ActionAddRecipe(wavelength, solution, consumption, input, outputItems, outputWeights));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(wavelength, solution, consumption, input, outputItems, outputWeights));
 	}
 
 

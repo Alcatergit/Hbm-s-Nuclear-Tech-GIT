@@ -73,7 +73,7 @@ public class FluidHeating {
 
 	@ZenMethod
 	public static void addBoilRecipe(String inputFluid, int inputAmount, String outputFluid, int outputAmount, int heatCapacity){
-		CraftTweakerAPI.apply(new ActionAddBoilRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
+		NTMCraftTweaker.postInitActions.add(new ActionAddBoilRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
 	}
 
 	//
@@ -130,7 +130,7 @@ public class FluidHeating {
 
 	@ZenMethod
 	public static void addCoolRecipe(String inputFluid, int inputAmount, String outputFluid, int outputAmount, int heatCapacity){
-		CraftTweakerAPI.apply(new ActionAddCoolRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
+		NTMCraftTweaker.postInitActions.add(new ActionAddCoolRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
 	}
 
 	private static class ActionAddBoilAndCoolRecipe implements IAction{
@@ -186,7 +186,7 @@ public class FluidHeating {
 
 	@ZenMethod
 	public static void addBoilAndCoolRecipe(String inputFluid, int inputAmount, String outputFluid, int outputAmount, int heatCapacity){
-		CraftTweakerAPI.apply(new ActionAddBoilAndCoolRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
+		NTMCraftTweaker.postInitActions.add(new ActionAddBoilAndCoolRecipe(inputFluid, inputAmount, outputFluid, outputAmount, heatCapacity));
 	}
 
 	private static class ActionRemoveBoilRecipe implements IAction{
@@ -214,7 +214,7 @@ public class FluidHeating {
 
 	@ZenMethod
 	public static void removeBoilRecipe(String inputFluid){
-		CraftTweakerAPI.apply(new ActionRemoveBoilRecipe(inputFluid));
+		NTMCraftTweaker.postInitActions.add(new ActionRemoveBoilRecipe(inputFluid));
 	}
 
 	private static class ActionRemoveCoolRecipe implements IAction{
@@ -242,7 +242,7 @@ public class FluidHeating {
 
 	@ZenMethod
 	public static void removeCoolRecipe(String inputFluid){
-		CraftTweakerAPI.apply(new ActionRemoveCoolRecipe(inputFluid));
+		NTMCraftTweaker.postInitActions.add(new ActionRemoveCoolRecipe(inputFluid));
 	}
 
 	//TEMPLATE

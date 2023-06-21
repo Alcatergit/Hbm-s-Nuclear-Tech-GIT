@@ -252,31 +252,33 @@ public class CentrifugeRecipes {
 		recipes.put(CO.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_cobalt, 2), new ItemStack(ModItems.powder_iron, 3), new ItemStack(ModItems.powder_copper, 3), new ItemStack(ModItems.powder_lithium_tiny, 1) });
 		recipes.put(ASBESTOS.crystal(), new ItemStack[] { new ItemStack(ModItems.powder_asbestos, 2), new ItemStack(ModItems.powder_asbestos, 2), new ItemStack(ModItems.powder_boron_tiny, 1), new ItemStack(Blocks.GRAVEL, 1) });
 
-		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
-			recipes.put(new ComparableStack(ModItems.ore_bedrock, 1, oreMeta), new ItemStack[] { 
+		for(Entry<Integer, String> entry : BedrockOreRegistry.oreIndexes.entrySet()) {
+			int oreMeta = entry.getKey();
+			String oreName = entry.getValue();
+ 			recipes.put(new ComparableStack(ModItems.ore_bedrock, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), 
-				new ItemStack(Blocks.GRAVEL, 1), 
+				new ItemStack(Blocks.GRAVEL, 1),
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_separated, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_separated, 1, oreMeta), 
-				new ItemStack(Blocks.GRAVEL, 1), 
+				new ItemStack(Blocks.GRAVEL, 1),
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), 
-				new ItemStack(Blocks.GRAVEL, 1), 
+				getNugget(oreName),
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), 
-				new ItemStack(Blocks.GRAVEL, 1), 
+				getNugget(oreName), 
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_seared, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), 
-				new ItemStack(Blocks.GRAVEL, 1), 
+				getNugget(oreName),
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_perfect, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), 
@@ -289,6 +291,18 @@ public class CentrifugeRecipes {
 				ItemBedrockOre.getOut(oreMeta, 1), 
 				new ItemStack(Blocks.GRAVEL, 1) });
 		}
+	}
+
+	public static ItemStack getNugget(String oreName){
+		if(oreName.equals("oreLead") || oreName.equals("oreCopper")) return new ItemStack(ModItems.nugget_cadmium, 1);
+		if(oreName.equals("oreGold") || oreName.equals("oreTungsten")) return new ItemStack(ModItems.nugget_bismuth, 1);
+		if(oreName.equals("oreUranium")) return new ItemStack(ModItems.nugget_ra226, 1);
+		if(oreName.equals("oreThorium")) return new ItemStack(ModItems.nugget_technetium, 1);
+		if(oreName.equals("oreStarmetal")) return new ItemStack(ModItems.powder_meteorite_tiny, 1);
+		if(oreName.equals("oreRedstone")) return new ItemStack(ModItems.nugget_mercury, 1);
+		if(oreName.equals("oreRedPhosphorus")) return new ItemStack(ModItems.nugget_arsenic, 1);
+		if(oreName.equals("oreNeodymium")) return new ItemStack(ModItems.nugget_tantalium, 1);
+		return new ItemStack(Blocks.GRAVEL, 1);
 	}
 
 	public static void addRecipe(ItemStack in, ItemStack[] outputs){

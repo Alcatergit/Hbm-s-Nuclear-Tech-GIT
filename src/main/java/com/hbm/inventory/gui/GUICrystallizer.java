@@ -37,8 +37,8 @@ public class GUICrystallizer extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 18, 16, 52, acidomatic.power, TileEntityMachineCrystallizer.maxPower);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 17, 16, 52, acidomatic.tank);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 17, 16, 52, acidomatic.power, TileEntityMachineCrystallizer.maxPower);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 17, 16, 70, acidomatic.tank);
 		String[] text = new String[] { "Acceptable upgrades:",
 				" -Speed (stacks to level 3)",
 				" -Effectiveness (stacks to level 3)",
@@ -62,6 +62,6 @@ public class GUICrystallizer extends GuiInfoContainer {
 
 		this.drawInfoPanel(guiLeft + 117, guiTop + 22, 8, 8, 8);
 
-		FFUtils.drawLiquid(acidomatic.tank, guiLeft, guiTop, zLevel, 16, 52, 35, 98);
+		FFUtils.drawLiquid(acidomatic.tank, guiLeft, guiTop, zLevel, 16, 70, 35, 116);
 	}
 }

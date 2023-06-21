@@ -64,6 +64,7 @@ public class ItemSurveyScanner extends Item {
 	public int getLevel(IBlockState state, int i) {
 		Block b = state.getBlock();
 		if(i == 0) {
+			if(b == ModBlocks.ore_bedrock_block) return 1000;
 			ItemStack stack = new ItemStack(b, 1, b.getMetaFromState(state));
 			if(stack.isEmpty())
 				return 0;

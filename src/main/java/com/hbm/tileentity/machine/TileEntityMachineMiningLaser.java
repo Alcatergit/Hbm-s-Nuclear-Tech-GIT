@@ -224,14 +224,16 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	
 	private void buildDam() {
 
-		if(world.getBlockState(new BlockPos(targetX + 1, targetY, targetZ)).getMaterial().isLiquid())
-			world.setBlockState(new BlockPos(targetX + 1, targetY, targetZ), ModBlocks.barricade.getDefaultState());
-		if(world.getBlockState(new BlockPos(targetX - 1, targetY, targetZ)).getMaterial().isLiquid())
-			world.setBlockState(new BlockPos(targetX - 1, targetY, targetZ), ModBlocks.barricade.getDefaultState());
-		if(world.getBlockState(new BlockPos(targetX, targetY, targetZ + 1)).getMaterial().isLiquid())
-			world.setBlockState(new BlockPos(targetX, targetY, targetZ + 1), ModBlocks.barricade.getDefaultState());
-		if(world.getBlockState(new BlockPos(targetX, targetY, targetZ - 1)).getMaterial().isLiquid())
-			world.setBlockState(new BlockPos(targetX, targetY, targetZ - 1), ModBlocks.barricade.getDefaultState());
+		placeBags(new BlockPos(targetX + 1, targetY, targetZ));
+		placeBags(new BlockPos(targetX - 1, targetY, targetZ));
+		placeBags(new BlockPos(targetX, targetY, targetZ + 1));
+		placeBags(new BlockPos(targetX, targetY, targetZ - 1));
+	}
+
+	private void placeBags(BlockPos wallPos){
+		IBlockState bState = world.getBlockState(wallPos);
+		if(bState.getBlock().isReplaceable(world, wallPos) && bState.getMaterial().isLiquid())
+			world.setBlockState(wallPos, ModBlocks.barricade.getDefaultState());
 	}
 	
 	private void tryFillContainer(int x, int y, int z) {

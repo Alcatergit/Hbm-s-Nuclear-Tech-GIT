@@ -82,7 +82,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 
 					for(int i = pos.getY() - 1; i > pos.getY() - 1 - 100; i--) {
 
-						if(i <= 5) {
+						if(i <= 0) {
 							// Code 2: The drilling ended
 							warning = 2;
 							break;

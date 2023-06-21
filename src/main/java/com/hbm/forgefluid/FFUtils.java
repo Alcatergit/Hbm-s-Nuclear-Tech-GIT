@@ -174,44 +174,68 @@ public class FFUtils {
 		}
 	}
 
+	public static void addFluidInfo(Fluid fluid, List<String> texts){
+		int temp = fluid.getTemperature()-273;
+		String tempColor = "";
+		if(temp < -130) {
+			tempColor = "§3";
+		} else if(temp < 0) {
+			tempColor = "§b";
+		} else if(temp < 50) {
+			tempColor = "§e";
+		} else if(temp < 300) {
+			tempColor = "§6";
+		} else if(temp < 1000) {
+			tempColor = "§c";
+		} else if(temp < 3000) {
+			tempColor = "§4";
+		} else if(temp < 10000) {
+			tempColor = "§d";
+		}
+		texts.add(String.format("%s%d°C", tempColor, temp));
+		boolean hasInfo = false;
+		boolean isKeyPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+		if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
+			if(isKeyPressed){
+				String energy = Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L);
+				texts.add(String.format("§6[%s]", I18n.format("trait.flammable")));
+				texts.add(" "+I18n.format("trait.flammable.desc", energy));
+			}
+			hasInfo = true;
+		}
+
+		if (HeatRecipes.hasCoolRecipe(fluid)) {
+			if(isKeyPressed){
+				String heat = Library.getShortNumber(HeatRecipes.getResultingHeat(fluid) * 1000 / HeatRecipes.getInputAmountCold(fluid));
+				texts.add(String.format("§4[%s]", I18n.format("trait.coolable")));
+				texts.add(" "+I18n.format("trait.coolable.desc", heat));
+			}
+			hasInfo = true;
+		}
+
+		if (HeatRecipes.hasBoilRecipe(fluid)) {
+			if(isKeyPressed){
+				String heat = Library.getShortNumber(HeatRecipes.getRequiredHeat(fluid) * 1000 / HeatRecipes.getInputAmountHot(fluid));
+				texts.add(String.format("§3[%s]", I18n.format("trait.boilable")));
+				texts.add(" "+I18n.format("trait.boilable.desc", heat));
+			}
+			hasInfo = true;
+		}
+
+		if (hasInfo && !isKeyPressed) {
+			texts.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
+					TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
+					TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display more info");
+		}
+	}
+
 	private static void renderFluidInfo(GuiInfoContainer gui, int mouseX, int mouseY, int x, int y, int width, int height, Fluid fluid, int amount, int capacity) {
 		if (x <= mouseX && x + width > mouseX && y < mouseY && y + height >= mouseY) {
 			List<String> texts = new ArrayList<>();
 			if (fluid != null) {
 				texts.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
 				texts.add(amount + "/" + capacity + "mB");
-
-				if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-					if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
-						String energy = Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L);
-						texts.add(String.format("%s[%s]", TextFormatting.YELLOW, I18n.format("trait.flammable")));
-						texts.add(I18n.format("trait.flammable.desc", energy));
-					}
-
-					if (HeatRecipes.hasCoolRecipe(fluid)) {
-						int heat = HeatRecipes.getResultingHeat(fluid);
-						texts.add(String.format("%s[%s]", TextFormatting.AQUA, I18n.format("trait.coolable")));
-						texts.add(I18n.format("trait.coolable.desc", heat));
-					}
-
-					if (HeatRecipes.hasBoilRecipe(fluid)) {
-						int heat = HeatRecipes.getRequiredHeat(fluid);
-						texts.add(String.format("%s[%s]", TextFormatting.AQUA, I18n.format("trait.boilable")));
-						texts.add(I18n.format("trait.boilable.desc", heat));
-					}
-				}
-
-				if (fluid.getTemperature() > 300 ) {
-					texts.add(String.format("%s%d°C", TextFormatting.RED, fluid.getTemperature() - 273));
-				} else if (fluid.getTemperature() < 300) {
-					texts.add(String.format("%s%d°C", TextFormatting.BLUE, fluid.getTemperature() - 273));
-				}
-
-				if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-					texts.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
-							TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
-							TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display more info");
-				}
+				addFluidInfo(fluid, texts);
 			} else {
 				texts.add(I18n.format("None"));
 				texts.add(amount + "/" + capacity + "mB");

@@ -38,8 +38,10 @@ public class RenderChemplant extends TileEntitySpecialRenderer<TileEntityMachine
 	        GL11.glTranslated(0.5D, 0.0D, -0.5D); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.chemplant_body_tex);
 		ResourceManager.chemplant_body.renderAll();
+		GL11.glShadeModel(GL11.GL_FLAT);
 
         GL11.glPopMatrix();
         

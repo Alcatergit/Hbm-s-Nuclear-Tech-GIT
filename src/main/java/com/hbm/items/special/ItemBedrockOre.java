@@ -11,10 +11,13 @@ import com.hbm.lib.RefStrings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,13 +54,11 @@ public class ItemBedrockOre extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.format(this.getUnlocalizedName() + ".name", getOreTag(stack).substring(3).replaceAll("([A-Z])", " $1").trim());
+		return I18n.format(this.getUnlocalizedName() + ".name", BedrockOreRegistry.getOreName(getOreTag(stack)));
 	}
 
 	public static int getColor(ItemStack stack){
-		Integer i = BedrockOreRegistry.oreColors.get(getOreTag(stack));
-		if(i != 0) return i;
-		return 0;
+		return BedrockOreRegistry.getOreColor(getOreTag(stack));
 	}
 
 	public static int getOutType(int oreMeta){
@@ -66,5 +67,18 @@ public class ItemBedrockOre extends Item {
 		if(oreResult.startsWith("dust")) return 1;
 		if(oreResult.startsWith("ingot")) return 2;
 		return -1;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		if(stack.getItem() == ModItems.ore_bedrock){
+			String oreName = BedrockOreRegistry.oreIndexes.get(stack.getMetadata());
+			int tier = BedrockOreRegistry.getOreTier(oreName);
+			list.add("§6Tier: "+tier);
+			FluidStack req = BedrockOreRegistry.getFluidRequirement(tier);
+			list.add("§eRequired: " + req.amount + "mB " + req.getFluid().getLocalizedName(req));
+		}
+		super.addInformation(stack, world, list, flagIn);
 	}
 }

@@ -119,15 +119,18 @@ public class ItemHazardModule {
 
 		
 
-		if(this.cryogenic > 0 && !reacher && entity instanceof EntityPlayer && !ArmorUtil.checkForHazmat((EntityPlayer)entity)){
+		if(this.cryogenic > 0 && !reacher){
 			if(entity instanceof EntityLivingBase){
 				EntityLivingBase livingCEntity = (EntityLivingBase) entity;
-				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.cryogenic-1));
-				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.cryogenic-1)));
-				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.cryogenic-1));
-				if(this.cryogenic > 4){
-					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, this.cryogenic-3));
-					entity.extinguish();
+				boolean isProtected = entity instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer)entity);
+				if(!isProtected){
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.cryogenic-1));
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.cryogenic-1)));
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.cryogenic-1));
+					if(this.cryogenic > 4){
+						livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, this.cryogenic-3));
+						entity.extinguish();
+					}
 				}
 			}
 		}
@@ -136,24 +139,40 @@ public class ItemHazardModule {
 			entity.setFire(this.fire);
 		}
 
-		if(this.toxic > 0 && entity instanceof EntityPlayer && !ArmorUtil.checkForHazmat((EntityPlayer)entity)){
+		if(this.toxic > 0){
 			if(entity instanceof EntityLivingBase){
 				EntityLivingBase livingTEntity = (EntityLivingBase) entity;
-				
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
-				if(this.toxic > 2){
-					if(entity.world.rand.nextInt((int)(1000/this.toxic)) == 0){
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-2));
+				boolean hasToxFilter = false;
+				boolean hasHazmat = false;
+				if(entity instanceof EntityPlayer){
+					if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
+						ArmorUtil.damageGasMaskFilter(livingTEntity, this.toxic);
+						hasToxFilter = true;
+					} else {
+						hasToxFilter = false;
+					}
+					hasHazmat = ArmorUtil.checkForHazmat((EntityPlayer)entity);
+				}
+
+				if(!hasToxFilter){
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
+					
+					if(this.toxic > 2)
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.toxic-4)));
+					if(this.toxic > 4)
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, this.toxic));
+					if(this.toxic > 6){
+						if(entity.world.rand.nextInt((int)(2000/this.toxic)) == 0){
+							livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-4));
+						}
 					}
 				}
-				if(this.toxic > 4)
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.toxic-4)));
-				if(this.toxic > 6)
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, this.toxic));
-				if(this.toxic > 8)
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
-				if(this.toxic > 16)
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 100, this.toxic-16));
+				if(!hasHazmat || !hasToxFilter){
+					if(this.toxic > 8)
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
+					if(this.toxic > 16)
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 100, this.toxic-16));
+				}
 			}
 		}
 

@@ -35,8 +35,13 @@ public class RenderFrackingTower extends TileEntitySpecialRenderer<TileEntityMac
 
         GlStateManager.translate(0, 0.5, 0);
 
-        GlStateManager.enableCull();
+        bindTexture(ResourceManager.pipe_neo_tex);
+        ResourceManager.pipe_neo.renderPart("pX");
+        ResourceManager.pipe_neo.renderPart("nX");
+        ResourceManager.pipe_neo.renderPart("pZ");
+        ResourceManager.pipe_neo.renderPart("nZ");
 
+        GlStateManager.enableCull();
         GlStateManager.popMatrix();
 
 

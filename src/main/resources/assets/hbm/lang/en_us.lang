@@ -4,6 +4,31 @@ key.jetpack_hover=Toggle Jetpack Hover Mode
 key.jetpack_hud=Toggle Jetpack HUD mode
 key.fsb_flashlight=Toggle FSB Flashlights
 
+item.drillbit_desh.name=Desh Drillbit
+item.drillbit_desh_diamond.name=Desh Drillbit (Diamond-Tipped)
+item.drillbit_ferro.name=Ferrouranium Drillbit
+item.drillbit_ferro_diamond.name=Ferrouranium Drillbit (Diamond-Tipped)
+item.drillbit_hss.name=High-Speed Steel Drillbit
+item.drillbit_hss_diamond.name=High-Speed Steel Drillbit (Diamond-Tipped)
+item.drillbit_steel.name=Steel Drillbit
+item.drillbit_steel_diamond.name=Steel Drillbit (Diamond-Tipped)
+item.drillbit_tcalloy.name=Technetium Steel Drillbit
+item.drillbit_tcalloy_diamond.name=Technetium Steel Drillbit (Diamond-Tipped)
+item.solid_fuel_presto.name=Presto Log
+item.solid_fuel_presto_triplet.name=Boosted Presto Logs
+
+tile.ore_bedrock_block.name=Bedrock Ore
+item.ingot_cadmium.name=Cadmium Ingot
+item.nugget_cadmium.name=Cadmium Nugget
+item.powder_cadmium.name=Cadmium Powder
+tile.block_cadmium.name=Block of Cadmium
+item.euphemium_capacitor.name=Euphemium Capacitor
+item.ingot_cdalloy.name=Cadmium Steel Ingot
+item.powder_cdalloy.name=Cadmium Steel Powder
+item.powder_borax.name=Borax Powder
+tile.ore_depth_borax.name=Depth Borax Ore
+
+item.ingot_ferrouranium.name=Ferrouranium Ingot
 itemGroup.tabTest=Nuclear Tech Mod Test Tab
 itemGroup.tabParts=NTM Resources and Parts
 itemGroup.tabControl=NTM Machine Items and Fuel
@@ -28,6 +53,7 @@ container.uuCreator=UU Condenser
 hbmfluid.plasma_put=Plutonium-Tritium Plasma
 hbmfluid.experience=XP Juice
 container.rbmkHeater=RBMK Fluid Heater
+tile.machine_excavator.name=Excavator
 
 hbmfluid.heavywater=Heavy Water
 fluid.heavywater=Heavy Water
@@ -255,6 +281,7 @@ container.rbmkStorage=RBMK Storage
 
 chem.HEAVY_ELECTROLYSIS=Heavy Water Cryo-Electrolysis
 chem.SOLVENT=Organic Solvent Mixing
+chem.RADIOSOLVENT=High-Performance Solvent Mixing
 chem.NITRIC_ACID=Nitric Acid Production
 chem.DUCRETE=Ducretisation
 chem.TNT=TNT Synthesis
@@ -450,12 +477,12 @@ trait.explosive=Explosive
 trait.unstable=Unstable
 trait.coal=Coal Dust
 
-trait.flammable=Combustible
-trait.flammable.desc=§eProvides §4%sTU §eper bucket.
+trait.flammable=Flamable
+trait.flammable.desc=§eProvides §6%sTU §eper bucket.
 trait.coolable=Coolable
-trait.coolable.desc=§bProvides §4%sTU §bper bucket.
-trait.boilable=boilable
-trait.boilable.desc=§bRequires §4%sTU §bper bucket.
+trait.coolable.desc=§cProvides §4%sTU §cper bucket.
+trait.boilable=Heatable
+trait.boilable.desc=§bRequires §3%sTU §bper bucket.
 
 trait.rbmk.coreTemp=Core temp: %s
 trait.rbmk.depletion=Depletion: %s

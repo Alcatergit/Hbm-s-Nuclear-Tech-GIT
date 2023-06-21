@@ -53,7 +53,7 @@ public class BlastFurnace {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack input1, IItemStack input2, IItemStack output){
-		CraftTweakerAPI.apply(new ActionAddRecipe(input1, input2, output));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(input1, input2, output));
 	}
 
 
@@ -117,7 +117,7 @@ public class BlastFurnace {
 
 	@ZenMethod
 	public static void addFuel(IItemStack input, int heatLvl){
-		CraftTweakerAPI.apply(new ActionAddFuel(input, heatLvl));
+		NTMCraftTweaker.postInitActions.add(new ActionAddFuel(input, heatLvl));
 	}
 
 	public static class ActionRemoveFuel implements IAction{

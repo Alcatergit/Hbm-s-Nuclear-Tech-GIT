@@ -52,7 +52,7 @@ public class IrradiationChannel {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack input, IItemStack output, int flux){
-		CraftTweakerAPI.apply(new ActionAddRecipe(input, output, flux));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(input, output, flux));
 	}
 
 

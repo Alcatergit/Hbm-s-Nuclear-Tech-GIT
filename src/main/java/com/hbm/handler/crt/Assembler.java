@@ -68,7 +68,7 @@ public class Assembler {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack output, IItemStack[] inputs, int duration){
-		CraftTweakerAPI.apply(new ActionAddRecipe(output, inputs, duration));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, duration));
 	}
 
 

@@ -52,7 +52,7 @@ public class DFC {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack input, IItemStack output, long spark){
-		CraftTweakerAPI.apply(new ActionAddRecipe(input, output, spark));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(input, output, spark));
 	}
 
 

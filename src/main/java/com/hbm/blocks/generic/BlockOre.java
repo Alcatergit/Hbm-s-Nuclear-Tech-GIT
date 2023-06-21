@@ -33,21 +33,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockOre extends Block implements IItemHazard {
-
+	
 	ItemHazardModule module;
 
-	public BlockOre(Material materialIn, String name) {
+	public BlockOre(Material materialIn, String name, int harvestLvl) {
 		super(materialIn);
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
+		this.setHarvestLevel("pickaxe", harvestLvl);
 		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
-	public BlockOre(Material mat, SoundType sound, String name){
-		this(mat, name);
+	public BlockOre(Material mat, SoundType sound, String name, int harvestLvl){
+		this(mat, name, harvestLvl);
 		super.setSoundType(sound);
 	}
 
@@ -186,7 +187,7 @@ public class BlockOre extends Block implements IItemHazard {
 		if(this == ModBlocks.ore_cobalt || this == ModBlocks.ore_nether_cobalt) {
 			return ModItems.fragment_cobalt;
 		}
-		return Item.getItemFromBlock(this);
+		return super.getItemDropped(state, rand, fortune);
 	}
 	
 	@Override
@@ -220,7 +221,7 @@ public class BlockOre extends Block implements IItemHazard {
 		if(this == ModBlocks.ore_nether_cobalt) {
 			return 5 + rand.nextInt(8);
 		}
-		return 1;
+		return super.quantityDropped(state, fortune, rand);
 	}
 	
 	@Override

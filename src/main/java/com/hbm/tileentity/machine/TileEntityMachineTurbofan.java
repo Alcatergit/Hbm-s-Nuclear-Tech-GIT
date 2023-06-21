@@ -260,6 +260,43 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 				} else if(this.momentum > (50+afterburner*50)){
 					this.momentum--;
 				}
+
+				/*
+				* All movement related stuff has to be repeated on the client, but only for the client's player
+				* Otherwise this could lead to desync since the motion is never sent form the server
+				*/
+
+				//Intake pull
+				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
+				ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+				
+				double minX = pos.getX() + 0.5 + dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				double maxX = pos.getX() + 0.5 + dir.offsetX * 12.5 + rot.offsetX * 1.5;
+				double minZ = pos.getZ() + 0.5 + dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				double maxZ = pos.getZ() + 0.5 + dir.offsetZ * 12.5 + rot.offsetZ * 1.5;
+				
+				List<EntityPlayer> listIntake = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				
+				for(EntityPlayer e : listIntake) {
+					if(e == MainRegistry.proxy.me()) {
+						e.addVelocity(-dir.offsetX * 0.3 * (afterburner+1), 0, -dir.offsetZ * 0.3 * (afterburner+1));
+					}
+				}
+
+				//Exhaust push
+				minX = pos.getX() + 0.5 - dir.offsetX * 3.5 - rot.offsetX * 1.5;
+				maxX = pos.getX() + 0.5 - dir.offsetX * 19.5 + rot.offsetX * 1.5;
+				minZ = pos.getZ() + 0.5 - dir.offsetZ * 3.5 - rot.offsetZ * 1.5;
+				maxZ = pos.getZ() + 0.5 - dir.offsetZ * 19.5 + rot.offsetZ * 1.5;
+				
+				List<EntityPlayer> listExhaust = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(Math.min(minX, maxX), pos.getY(), Math.min(minZ, maxZ), Math.max(minX, maxX), pos.getY() + 3, Math.max(minZ, maxZ)));
+				
+				for(EntityPlayer e : listExhaust) {
+					if(e == MainRegistry.proxy.me()) {
+						e.addVelocity(-dir.offsetX * 0.5 * (afterburner+1), 0, -dir.offsetZ * 0.5 * (afterburner+1));
+					}
+				}
+
 			} else {
 				if(this.momentum > 0)
 					this.momentum--;

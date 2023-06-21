@@ -11,6 +11,9 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatLaserPacket;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.BedrockOreRegistry;
+import com.hbm.render.RenderHelper;
 import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
 import com.hbm.saveddata.satellites.Satellite.Interfaces;
 
@@ -23,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -137,7 +141,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 	
 	private void progresScan() {
 		
-		if(lastMilli + 25 < System.currentTimeMillis()) {
+		if(lastMilli + 15 < System.currentTimeMillis()) {
 			lastMilli = System.currentTimeMillis();
 			scanPos++;
 		}
@@ -170,7 +174,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 			int x = this.x + i;
 			int z = this.z + scanPos - 100;
 			
-			for(int j = 255; j >= 0; j--) {
+			for(int j = (int)player.posY; j >= 0; j--) {
 				IBlockState state = world.getBlockState(new BlockPos(x, j, z));
 				int c = getColorFromBlock(new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state)));
 				
@@ -186,68 +190,18 @@ public class GUIScreenSatInterface extends GuiScreen {
 	
 	private int getColorFromBlock(ItemStack stack) {
 		
-		if(stack == null || stack.getItem() == null || stack.isEmpty()/* || stack.getItemDamage() < 0*/)
+		if(stack == null || stack.getItem() == null || stack.isEmpty())
 			return 0;
 
-		if(MachineRecipes.mODE(stack, "oreCoal"))
-			return 0x333333;
-		if(MachineRecipes.mODE(stack, "oreIron"))
-			return 0xb2aa92;
-		if(MachineRecipes.mODE(stack, "oreGold"))
-			return 0xffe460;
-		if(MachineRecipes.mODE(stack, "oreSilver"))
-			return 0xe5e5e5;
-		if(MachineRecipes.mODE(stack, "oreDiamond"))
-			return 0x6ed5ef;
-		if(MachineRecipes.mODE(stack, "oreEmerald"))
-			return 0x6cf756;
-		if(MachineRecipes.mODE(stack, "oreLapis"))
-			return 0x092f7a;
-		if(MachineRecipes.mODE(stack, "oreRedstone"))
-			return 0xe50000;
-		if(MachineRecipes.mODE(stack, "oreTin"))
-			return 0xa09797;
-		if(MachineRecipes.mODE(stack, "oreCopper"))
-			return 0xd16208;
-		if(MachineRecipes.mODE(stack, "oreLead"))
-			return 0x384b68;
-		if(MachineRecipes.mODE(stack, "oreAluminum"))
-			return 0xdbdbdb;
-		if(MachineRecipes.mODE(stack, "oreTungsten"))
-			return 0x333333;
-		if(MachineRecipes.mODE(stack, "oreTitanium"))
-			return 0xDDDDDD;
-		if(MachineRecipes.mODE(stack, "oreUranium"))
-			return 0x3e4f3c;
-		if(MachineRecipes.mODE(stack, "oreBeryllium"))
-			return 0x8e8d7d;
-		if(MachineRecipes.mODE(stack, "oreSulfur"))
-			return 0x9b9309;
-		if(MachineRecipes.mODE(stack, "oreSalpeter") || MachineRecipes.mODE(stack, "oreNiter"))
-			return 0xa5a09d;
-		if(MachineRecipes.mODE(stack, "oreFluorite"))
-			return 0xffffff;
-		if(MachineRecipes.mODE(stack, "oreSchrabidium"))
-			return 0x1cffff;
-		if(MachineRecipes.mODE(stack, "oreRareEarth"))
-			return 0xffcc99;
-		
-		return isOre(stack) ? 0xBA00AF : 0x000000;
-	}
-	
-	private static boolean isOre(ItemStack stack) {
-		
-		int[] ids = OreDictionary.getOreIDs(new ItemStack(stack.getItem(), 1, stack.getItemDamage()));
-		
-		for(int i = 0; i < ids.length; i++) {
-			
-			String s = OreDictionary.getOreName(ids[i]);
-			
-			if(s.length() > 3 && s.substring(0, 3).equals("ore"))
-				return true;
+		int color = 0;
+		for(int id : OreDictionary.getOreIDs(stack)){
+			color = BedrockOreRegistry.getOreScanColor(OreDictionary.getOreName(id));
+			if(color != 0) return color;
 		}
-		
-		return false;
+
+		if(Block.getBlockFromItem(stack.getItem()) == ModBlocks.ore_bedrock_block)
+			return 0xF84800;
+		return 0;
 	}
 	
 	private void drawRadar() {
@@ -286,10 +240,8 @@ public class GUIScreenSatInterface extends GuiScreen {
 	private void prontMap() {
 		for(int x = 0; x < 200; x++) {
 			for(int z = 0; z < 200; z++) {
-				if(map[x][z] != 0) {
-					GL11.glColor3ub((byte)((map[x][z] & 0xFF0000) >> 16), (byte)((map[x][z] & 0x00FF00) >> 8), (byte)(map[x][z] & 0x0000FF));
-					drawTexturedModalRect(guiLeft + 8 + x, guiTop + 8 + z, 216, 216, 1, 1);
-				}
+				RenderHelper.setColor(map[x][z]);
+				drawTexturedModalRect(guiLeft + 8 + x, guiTop + 8 + z, 216, 216, 1, 1);
 			}
 		}
 		

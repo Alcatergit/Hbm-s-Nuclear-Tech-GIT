@@ -50,7 +50,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 				return true;
 			break;
 		case 2:
-			if(stack.getItem() == ModItems.redcoil_capacitor)
+			if(stack.getItem() == ModItems.redcoil_capacitor || stack.getItem() == ModItems.euphemium_capacitor)
 				return true;
 			break;
 		case 3:
@@ -177,7 +177,11 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	}
 
 	public boolean hasCoil(){
-		return inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor && ItemCapacitor.getDura(inventory.getStackInSlot(2)) > 0;
+		if(inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor && ItemCapacitor.getDura(inventory.getStackInSlot(2)) > 0)
+			return true;
+		if(inventory.getStackInSlot(2).getItem() == ModItems.euphemium_capacitor)
+			return true;
+		return false;
 	}
 
 	public boolean canProcess() {
@@ -222,7 +226,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			} else {
 				inventory.getStackInSlot(1).grow(1);
 			}
-			if(!inventory.getStackInSlot(2).isEmpty()) {
+			if(!inventory.getStackInSlot(2).isEmpty() && inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor) {
 				ItemCapacitor.setDura(inventory.getStackInSlot(2), ItemCapacitor.getDura(inventory.getStackInSlot(2)) - 1);
 			}
 
@@ -246,5 +250,4 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	public long getMaxPower() {
 		return maxPower;
 	}
-
 }
