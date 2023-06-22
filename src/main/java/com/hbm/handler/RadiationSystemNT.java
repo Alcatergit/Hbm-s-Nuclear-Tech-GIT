@@ -68,10 +68,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-import static com.hbm.main.ModEventHandler.minRadRate;
-
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class RadiationSystemNT {
+
+	public static float minRadRate = 0.000005F;
 
 	/**Per world radiation storage data*/
 	private static Map<World, WorldRadiationData> worldMap = new HashMap<>();

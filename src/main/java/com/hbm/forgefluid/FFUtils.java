@@ -176,23 +176,25 @@ public class FFUtils {
 
 	public static void addFluidInfo(Fluid fluid, List<String> texts){
 		int temp = fluid.getTemperature()-273;
-		String tempColor = "";
-		if(temp < -130) {
-			tempColor = "§3";
-		} else if(temp < 0) {
-			tempColor = "§b";
-		} else if(temp < 50) {
-			tempColor = "§e";
-		} else if(temp < 300) {
-			tempColor = "§6";
-		} else if(temp < 1000) {
-			tempColor = "§c";
-		} else if(temp < 3000) {
-			tempColor = "§4";
-		} else if(temp < 10000) {
-			tempColor = "§d";
+		if(temp != 27){
+			String tempColor = "";
+			if(temp < -130) {
+				tempColor = "§3";
+			} else if(temp < 0) {
+				tempColor = "§b";
+			} else if(temp < 50) {
+				tempColor = "§e";
+			} else if(temp < 300) {
+				tempColor = "§6";
+			} else if(temp < 1000) {
+				tempColor = "§c";
+			} else if(temp < 3000) {
+				tempColor = "§4";
+			} else if(temp < 10000) {
+				tempColor = "§d";
+			}
+			texts.add(String.format("%s%d°C", tempColor, temp));
 		}
-		texts.add(String.format("%s%d°C", tempColor, temp));
 		boolean hasInfo = false;
 		boolean isKeyPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
 		if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {

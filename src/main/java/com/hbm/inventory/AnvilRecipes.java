@@ -265,7 +265,28 @@ public class AnvilRecipes {
 						new ComparableStack(Items.FEATHER, 24)
 				},
 				new AnvilOutput(new ItemStack(ModItems.wings_limp))).setTier(2));
-
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new OreDictStack(S.dust(), 8),
+						new OreDictStack(STEEL.plate(), 4),
+						new OreDictStack(AL.plate(), 2),
+						new ComparableStack(ModItems.hull_small_steel, 4),
+						new ComparableStack(ModItems.board_copper, 1),
+						new ComparableStack(ModItems.turbine_titanium, 1),
+						new ComparableStack(ModItems.circuit_aluminium, 1)
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.machine_deuterium_extractor))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new ComparableStack(ModItems.deuterium_filter, 2),
+						new ComparableStack(ModItems.hull_big_steel, 5),
+						new ComparableStack(ModBlocks.concrete_smooth, 8),
+						new ComparableStack(ModBlocks.concrete_asbestos, 4),
+						new ComparableStack(ModBlocks.steel_scaffold, 16),
+						new ComparableStack(ModBlocks.deco_pipe_quad, 12),
+						new OreDictStack(S.dust(), 32),
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.machine_deuterium_tower))).setTier(4));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {new OreDictStack(DESH.ingot(), 4), new OreDictStack(POLYMER.dust(), 2), new OreDictStack(DURA.ingot(), 1)},
 				new AnvilOutput(new ItemStack(ModItems.plate_desh, 4))).setTier(3));
@@ -426,6 +447,10 @@ public class AnvilRecipes {
 	}
 	
 	public static void registerConstructionRecycling() {
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new ComparableStack(ModBlocks.solar_mirror),
+				new AnvilOutput[] {new AnvilOutput(new ItemStack(ModItems.ingot_steel, 1)), new AnvilOutput(new ItemStack(ModItems.plate_aluminium, 1))}).setTier(3));
+
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModBlocks.barrel_tcalloy),
 				new AnvilOutput[] {

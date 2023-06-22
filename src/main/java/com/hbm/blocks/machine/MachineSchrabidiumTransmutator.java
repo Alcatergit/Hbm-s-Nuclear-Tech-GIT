@@ -59,5 +59,4 @@ public class MachineSchrabidiumTransmutator extends BlockContainer {
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
 }

@@ -180,9 +180,7 @@ public class ModEventHandler {
 	public static boolean showMessage = true;
 	public static Random rand = new Random();
 
-	public static float decayRate = 0.999990373F; //1h halflife
-	public static float minRadRate = 0.000005F;
-
+	
 	@SubscribeEvent
 	public void soundRegistering(RegistryEvent.Register<SoundEvent> evt) {
 

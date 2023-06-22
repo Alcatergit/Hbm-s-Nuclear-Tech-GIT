@@ -731,6 +731,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityForceField.class, new ResourceLocation(RefStrings.MODID, "tileentity_force_field"));
 		GameRegistry.registerTileEntity(TileEntityMachineRadar.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_radar"));
 		GameRegistry.registerTileEntity(TileEntityDecoPoleSatelliteReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_pole_satellite_receiver"));
+		GameRegistry.registerTileEntity(TileEntityDeuteriumExtractor.class, new ResourceLocation(RefStrings.MODID, "tileentity_deuterium_extractor"));
+		GameRegistry.registerTileEntity(TileEntityDeuteriumTower.class, new ResourceLocation(RefStrings.MODID, "tileentity_deuterium_tower"));
 		GameRegistry.registerTileEntity(TileEntityGeysir.class, new ResourceLocation(RefStrings.MODID, "tileentity_geyser"));
 		GameRegistry.registerTileEntity(TileEntityObjTester.class, new ResourceLocation(RefStrings.MODID, "tileentity_obj_tester"));
 		GameRegistry.registerTileEntity(TileEntityDecoBlockAlt.class, new ResourceLocation(RefStrings.MODID, "tileentity_deco_block_alt"));

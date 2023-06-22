@@ -60,7 +60,7 @@ public class JetpackBreak extends JetpackBase {
 
 		} else {
 
-			if(getFuel(stack) > 0 && (props.getKeyPressed(EnumKeybind.JETPACK) || (!player.onGround && !player.isSneaking())) && props.isJetpackActive()) {
+			if(getFuel(stack) > 0 && (props.isJetpackActive() || (!player.onGround && !player.isSneaking() && props.getEnableBackpack()))) {
 
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "jetpack");
@@ -70,7 +70,7 @@ public class JetpackBreak extends JetpackBase {
 		}
 		if(getFuel(stack) > 0) {
 
-			if(props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
+			if(props.isJetpackActive()) {
 				player.fallDistance = 0;
 
 				if(player.motionY < 0.4D)
@@ -79,21 +79,21 @@ public class JetpackBreak extends JetpackBase {
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.flamethrowerShoot, SoundCategory.PLAYERS, 0.25F, 1.5F);
 				this.useUpFuel(player, stack, 5);
 
-			} else if(!player.isSneaking() && !player.onGround) {
+			} else if(!player.isSneaking() && !player.onGround && props.getEnableBackpack()) {
 				player.fallDistance = 0;
 
 				if(player.motionY < -1)
 					player.motionY += 0.2D;
+
 				else if(player.motionY < -0.1)
 					player.motionY += 0.1D;
+				
 				else if(player.motionY < 0)
 					player.motionY = 0;
 
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.flamethrowerShoot, SoundCategory.PLAYERS, 0.25F, 1.5F);
 				this.useUpFuel(player, stack, 10);
 			}
-
 		}
 	}
-
 }

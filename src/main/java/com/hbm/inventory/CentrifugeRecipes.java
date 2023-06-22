@@ -268,7 +268,7 @@ public class CentrifugeRecipes {
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), 
 				new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), 
-				getNugget(oreName),
+				new ItemStack(Blocks.GRAVEL, 1),
 				new ItemStack(Blocks.GRAVEL, 1) });
 			recipes.put(new ComparableStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), new ItemStack[] { 
 				new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), 

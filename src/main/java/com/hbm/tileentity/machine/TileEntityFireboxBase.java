@@ -111,7 +111,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 				double x = pos.getX() + 0.5 + dir.offsetX;
 				double y = pos.getY() + 0.25;
 				double z = pos.getZ() + 0.5 + dir.offsetZ;
-				world.spawnParticle(EnumParticleTypes.FLAME, wasOn, x + world.rand.nextDouble() * 0.5 - 0.25, y + world.rand.nextDouble() * 0.25, z + world.rand.nextDouble() * 0.5 - 0.25, 0, 0, 0, null);
+				world.spawnParticle(EnumParticleTypes.FLAME, wasOn, x + world.rand.nextDouble() * 0.5 - 0.25, y + world.rand.nextDouble() * 0.25, z + world.rand.nextDouble() * 0.5 - 0.25, 0, 0, 0);
 			}
 		}
 	}

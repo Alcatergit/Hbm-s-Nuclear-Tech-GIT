@@ -19,7 +19,6 @@ public class TileEntitySolarMirror extends TileEntityTickingBase {
 	public int tZ;
 	public boolean isOn;
 
-	public float sunPower = 0;
 	public static int maxTU = 1000;
 	
 	@Override
@@ -38,8 +37,8 @@ public class TileEntitySolarMirror extends TileEntityTickingBase {
 				isOn = false;
 				return;
 			}
-			sunPower = getBrightness(world);
-			int sunHeat = (int)(maxTU * sunPower);
+
+			int sunHeat = (int)(maxTU * getBrightness(world));
 
 			if(sunHeat <= 0 || !world.canSeeSky(pos.up())){
 				isOn = false;
@@ -74,7 +73,6 @@ public class TileEntitySolarMirror extends TileEntityTickingBase {
 		data.setInteger("posX", tX);
 		data.setInteger("posY", tY);
 		data.setInteger("posZ", tZ);
-		data.setFloat("sun", sunPower);
 		data.setBoolean("isOn", isOn);
 		this.networkPack(data, 200);
 	}
@@ -84,7 +82,6 @@ public class TileEntitySolarMirror extends TileEntityTickingBase {
 		tX = nbt.getInteger("posX");
 		tY = nbt.getInteger("posY");
 		tZ = nbt.getInteger("posZ");
-		sunPower = nbt.getFloat("sun");
 		isOn = nbt.getBoolean("isOn");
 	}
 	

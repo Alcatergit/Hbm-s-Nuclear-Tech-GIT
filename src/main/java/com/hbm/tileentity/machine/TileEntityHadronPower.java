@@ -21,8 +21,9 @@ public class TileEntityHadronPower extends TileEntityTickingBase implements IEne
 		}
 	}
 
+	@Override
 	public String getInventoryName(){
-		return "Hadron_Power";
+		return "Hadron Power Thing";
 	}
 
 	@Override

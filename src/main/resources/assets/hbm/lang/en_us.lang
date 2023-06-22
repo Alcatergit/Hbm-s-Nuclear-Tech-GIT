@@ -17,6 +17,10 @@ item.drillbit_tcalloy_diamond.name=Technetium Steel Drillbit (Diamond-Tipped)
 item.solid_fuel_presto.name=Presto Log
 item.solid_fuel_presto_triplet.name=Boosted Presto Logs
 
+item.deuterium_filter.name=Deuterium Filter
+tile.machine_deuterium_extractor.name=Deuterium Extractor
+tile.machine_deuterium_tower.name=Deuterium Extraction Tower
+
 tile.ore_bedrock_block.name=Bedrock Ore
 item.ingot_cadmium.name=Cadmium Ingot
 item.nugget_cadmium.name=Cadmium Nugget
@@ -476,6 +480,11 @@ trait.hydro=Hydroexplosive
 trait.explosive=Explosive
 trait.unstable=Unstable
 trait.coal=Coal Dust
+trait.contaminating=Contaminating Drop
+
+trait.contaminating.radius=Radius: %sm
+trait.cleanroom=Clean
+trait.cleanroom.desc=Dropped contaminating items do not disappear
 
 trait.flammable=Flamable
 trait.flammable.desc=§eProvides §6%sTU §eper bucket.
@@ -1657,6 +1666,7 @@ tile.machine_mining_laser.name=Mining Laser
 container.miningLaser=Mining Laser
 tile.barricade.name=Sand Bags
 tile.machine_solar_boiler.name=Solar Tower Boiler
+tile.machine_solar_boiler.desc=Uses sunlight from Heliostat Mirrors to heat fluids.
 tile.solar_mirror.name=Heliostat Mirror
 container.machineSILEX=SILEX
 container.machineFEL=FEL

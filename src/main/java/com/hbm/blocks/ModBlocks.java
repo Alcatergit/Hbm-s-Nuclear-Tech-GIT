@@ -99,6 +99,7 @@ import com.hbm.blocks.generic.BlockGenericStairs;
 import com.hbm.blocks.generic.BlockPipe;
 import com.hbm.blocks.generic.BlockPlasma;
 import com.hbm.blocks.generic.BlockPorous;
+import com.hbm.blocks.generic.BlockClean;
 import com.hbm.blocks.generic.BlockRadResistant;
 import com.hbm.blocks.generic.BlockRadResistantHazard;
 import com.hbm.blocks.generic.BlockRailing;
@@ -284,8 +285,8 @@ public class ModBlocks {
 	public static final Block ducrete = new BlockRadResistant(Material.ROCK, "ducrete").setCreativeTab(MainRegistry.blockTab).setHardness(20.0F).setResistance(8000.0F);
 	public static final Block ducrete_brick = new BlockRadResistant(Material.ROCK, "ducrete_brick").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(12000.0F);
 	public static final Block ducrete_reinforced = new BlockRadResistant(Material.ROCK, "ducrete_reinforced").setCreativeTab(MainRegistry.blockTab).setHardness(20.0F).setResistance(24000.0F);
-	public static final Block tile_lab = new BlockBase(Material.ROCK, "tile_lab").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
-	public static final Block tile_lab_cracked = new BlockBase(Material.ROCK, "tile_lab_cracked").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
+	public static final Block tile_lab = new BlockClean(Material.ROCK, "tile_lab").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
+	public static final Block tile_lab_cracked = new BlockClean(Material.ROCK, "tile_lab_cracked").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
 	public static final Block tile_lab_broken = new BlockOutgas(Material.ROCK, true, 40, true, "tile_lab_broken").addAsbestos(6).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(20.0F);
 
 	//stairs
@@ -554,8 +555,8 @@ public class ModBlocks {
 	public static final Block deco_lead = new BlockBase(Material.IRON, "deco_lead").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block deco_beryllium = new BlockBase(Material.IRON, "deco_beryllium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block deco_asbestos = new BlockOutgas(Material.IRON, true, 40, true, "deco_asbestos").addAsbestos(2).toBlock().setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
-	public static final Block deco_rbmk = new BlockBase(Material.IRON, "deco_rbmk").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
-	public static final Block deco_rbmk_smooth = new BlockBase(Material.IRON, "deco_rbmk_smooth").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block deco_rbmk = new BlockClean(Material.IRON, "deco_rbmk").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block deco_rbmk_smooth = new BlockClean(Material.IRON, "deco_rbmk_smooth").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 		
 	
 	public static final Block spinny_light = new BlockSpinnyLight(Material.IRON, "spinny_light").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(5.0F);
@@ -667,7 +668,7 @@ public class ModBlocks {
 	public static final Block block_polymer = new BlockBeaconable(Material.ROCK, "block_polymer").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(3.0F).setResistance(10.0F);
 	public static final Block block_bakelite = new BlockBeaconable(Material.ROCK, "block_bakelite").setCreativeTab(MainRegistry.blockTab).setHardness(3.0F).setResistance(10.0F);
 	public static final Block block_rubber = new BlockBeaconable(Material.ROCK, "block_rubber").setCreativeTab(MainRegistry.blockTab).setHardness(3.0F).setResistance(10.0F);
-	public static final Block block_asbestos = new BlockOutgas(Material.ROCK, true, 20, true, "block_asbestos").addAsbestos(50).toBlock().setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
+	public static final Block block_asbestos = new BlockOutgas(Material.ROCK, true, 4, true, "block_asbestos").addAsbestos(50).toBlock().setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab);
 	public static final Block block_cobalt = new BlockBase(Material.IRON, "block_cobalt").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_lithium = new BlockLithium(Material.IRON, "block_lithium").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_zirconium = new BlockBeaconable(Material.IRON, "block_zirconium").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
@@ -1094,6 +1095,9 @@ public class ModBlocks {
 	public static final Block machine_tower_small = new MachineTowerSmall(Material.IRON, "machine_tower_small").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_tower_large = new MachineTowerLarge(Material.IRON, "machine_tower_large").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	
+	public static final Block machine_deuterium_extractor = new MachineDeuteriumExtractor(Material.IRON, "machine_deuterium_extractor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block machine_deuterium_tower = new DeuteriumTower(Material.IRON, "machine_deuterium_tower").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
+
 	public static final int guiID_anvil = 125;
 	public static final Block anvil_iron = new NTMAnvil(Material.IRON, 1, "anvil_iron").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_lead = new NTMAnvil(Material.IRON, 1, "anvil_lead").setCreativeTab(MainRegistry.machineTab);

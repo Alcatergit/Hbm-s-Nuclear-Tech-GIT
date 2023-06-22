@@ -14,6 +14,11 @@ public class DirPos extends Object {
         this.dir = dir;
     }
 
+    public DirPos(BlockPos pos, ForgeDirection dir) {
+        this.pos = pos;
+        this.dir = dir;
+    }
+
     public DirPos(TileEntity te, ForgeDirection dir) {
         this.pos = te.getPos();
         this.dir = dir;

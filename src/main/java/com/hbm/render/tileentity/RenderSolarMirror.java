@@ -52,52 +52,51 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
         ResourceManager.solar_mirror.renderPart("Mirror");
 
         if(mirror.isOn) {
-			float min = 0.005F * mirror.sunPower;
-	        float max = 0.02F * mirror.sunPower;
-	        if(mirror.sunPower > 0){
-		        Tessellator tess = Tessellator.getInstance();
-		        BufferBuilder buf = tess.getBuffer();
-		        GlStateManager.disableTexture2D();
-		        GlStateManager.disableLighting();
-		        GlStateManager.disableCull();
-		        GlStateManager.enableBlend();
-		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-				GlStateManager.depthMask(false);
+			float min = 0.008F;
+	        float max = 0.008F;
+
+	        Tessellator tess = Tessellator.getInstance();
+	        BufferBuilder buf = tess.getBuffer();
+	        GlStateManager.disableTexture2D();
+	        GlStateManager.disableLighting();
+	        GlStateManager.disableCull();
+	        GlStateManager.enableBlend();
+	        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+	        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+			GlStateManager.depthMask(false);
 
 
-		        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		        buf.pos(0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
-		        buf.pos(0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+	        buf.pos(0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
 
-		        buf.pos(-0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
-		        buf.pos(-0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(-0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(-0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
 
-		        buf.pos(0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
-		        buf.pos(0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, 1.0625, 0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(0.5, dist, 0.5).color(1F, 1F, 1F, min).endVertex();
 
-		        buf.pos(0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
-		        buf.pos(-0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
-		        buf.pos(0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
-		        tess.draw();
+	        buf.pos(0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, 1.0625, -0.5).color(1F, 1F, 1F, max).endVertex();
+	        buf.pos(-0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
+	        buf.pos(0.5, dist, -0.5).color(1F, 1F, 1F, min).endVertex();
+	        tess.draw();
 
-		        GlStateManager.depthMask(true);
-		        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		        GlStateManager.shadeModel(GL11.GL_FLAT);
-		        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		        GlStateManager.disableBlend();
-		        GlStateManager.enableCull();
-		        GlStateManager.enableLighting();
-		        GlStateManager.enableTexture2D();
-		    }
+	        GlStateManager.depthMask(true);
+	        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+	        GlStateManager.shadeModel(GL11.GL_FLAT);
+	        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+	        GlStateManager.disableBlend();
+	        GlStateManager.enableCull();
+	        GlStateManager.enableLighting();
+	        GlStateManager.enableTexture2D();
         }
 
         GL11.glPopMatrix();
