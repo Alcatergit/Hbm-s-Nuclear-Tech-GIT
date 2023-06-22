@@ -200,6 +200,11 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		
 		return outFlux;
 	}
+
+	public static double getMeltdownFactor(double meltdownPercent){
+		if(meltdownPercent == 0) return 1;
+		return 1D - 0.3D * (meltdownPercent/100D);
+	}
 	
 	/**
 	 * Heat up the core based on the outFlux, then move some heat to the hull
@@ -209,13 +214,19 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		
 		double coreHeat = getCoreHeat(stack);
 		double hullHeat = getHullHeat(stack);
+		double meltdownPercent = getMeltdownPercent(stack);
 		
+		if(hullHeat > this.meltingPoint) {
+			meltdownPercent += 0.05D * hullHeat/this.meltingPoint;
+			setMeltdownPercent(stack, meltdownPercent);
+		}
+
 		if(coreHeat > hullHeat) {
 			
 			double mid = (coreHeat - hullHeat) / 2D;
-			
-			coreHeat -= mid * this.diffusion * RBMKDials.getFuelDiffusionMod(world) * mod;
-			hullHeat += mid * this.diffusion * RBMKDials.getFuelDiffusionMod(world) * mod;
+			double heatTransfer = mid * this.diffusion * RBMKDials.getFuelDiffusionMod(world) * mod;
+			coreHeat -= heatTransfer * getMeltdownFactor(meltdownPercent);
+			hullHeat += heatTransfer;
 			
 			setCoreHeat(stack, coreHeat);
 			setHullHeat(stack, hullHeat);
@@ -230,11 +241,12 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	public double provideHeat(World world, ItemStack stack, double heat, double mod) {
 		
 		double hullHeat = getHullHeat(stack);
-		
+
 		//metldown! the hull melts so the entire structure stops making sense
-		//hull and core heats are instantly equalized into 33% of their sum each,
-		//the rest is sent to the component which is always fatal
-		if(hullHeat > this.meltingPoint) {
+		//hull and fuel core heat, fuel skin heat are instantly averaged,
+		//that average is sent to the component which is always fatal
+		if(getMeltdownPercent(stack) >= 100) {
+			setMeltdownPercent(stack, 100);
 			double coreHeat = getCoreHeat(stack);
 			double avg = (heat + hullHeat + coreHeat) / 3D;
 			setCoreHeat(stack, avg);
@@ -413,6 +425,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmx.skinTemp", ((int)(getHullHeat(stack) * 10D) / 10D) + "m"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmx.coreTemp", ((int)(getCoreHeat(stack) * 10D) / 10D) + "m"));
 			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmx.melt", meltingPoint + "m"));
+			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmx.meltdown", ((int)(getMeltdownPercent(stack) * 1000D) / 1000D) + "%"));
 			
 		} else {
 
@@ -433,6 +446,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmk.skinTemp", ((int)(getHullHeat(stack) * 10D) / 10D) + "°C"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmk.coreTemp", ((int)(getCoreHeat(stack) * 10D) / 10D) + "°C"));
 			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmk.melt", meltingPoint + "°C"));
+			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmk.meltdown", ((int)(getMeltdownPercent(stack) * 1000D) / 1000D) + "%"));
 		}
 
 		super.addInformation(stack, worldIn, list, flag);
@@ -489,6 +503,14 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		}
 		
 		return 0;
+	}
+
+	public static void setMeltdownPercent(ItemStack stack, double meltdownPercent){
+		setDouble(stack, "meltdown", meltdownPercent);
+	}
+
+	public static double getMeltdownPercent(ItemStack stack){
+		return getDouble(stack, "meltdown");
 	}
 	
 	public static void setPoison(ItemStack stack, double xenon) {
@@ -550,5 +572,6 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		setYield(stack, ((ItemRBMKRod)stack.getItem()).yield);
 		setCoreHeat(stack, 20.0D);
 		setHullHeat(stack, 20.0D);
+		setMeltdownPercent(stack, 0D);
 	}
 }

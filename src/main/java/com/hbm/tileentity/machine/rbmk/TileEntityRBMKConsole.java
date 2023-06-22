@@ -495,8 +495,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				stats.add(TextFormatting.GREEN + I18nUtil.resolveKey("rbmk.rod.flux", (int)this.data.getDouble("flux")));
 				stats.add(TextFormatting.DARK_GREEN + I18nUtil.resolveKey("rbmk.rod.depletion", ((int)(((1D - this.data.getDouble("enrichment")) * 100000)) / 1000D) + "%"));
 				stats.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("rbmk.rod.xenon", ((int)(((this.data.getDouble("xenon")) * 1000D)) / 1000D) + "%"));
-				stats.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("rbmk.rod.coreTemp", ((int)((this.data.getDouble("c_coreHeat") * 10D)) / 10D) + "°C"));
 				stats.add(TextFormatting.RED + I18nUtil.resolveKey("rbmk.rod.skinTemp", ((int)((this.data.getDouble("c_heat") * 10D)) / 10D) + "°C", ((int)((this.data.getDouble("c_maxHeat") * 10D)) / 10D) + "°C"));
+				stats.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("rbmk.rod.coreTemp", ((int)((this.data.getDouble("c_coreHeat") * 10D)) / 10D) + "°C"));
+				stats.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmk.meltdown", ((int)(((this.data.getDouble("meltdown")) * 1000D)) / 1000D) + "%"));
 				break;
 			case BOILER:
 				stats.add(TextFormatting.BLUE + I18nUtil.resolveKey("rbmk.boiler.water", this.data.getInteger("water"), this.data.getInteger("maxWater")));
@@ -585,11 +586,11 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	public static enum ScreenType {
 		NONE(0 * 18),
 		COL_TEMP(1 * 18),
-		ROD_EXTRACTION(2 * 18),
-		FUEL_DEPLETION(3 * 18),
-		FUEL_POISON(4 * 18),
 		FUEL_TEMP(5 * 18),
-		FLUX(6 * 18);
+		ROD_EXTRACTION(2 * 18),
+		FLUX(6 * 18),
+		FUEL_DEPLETION(3 * 18),
+		FUEL_POISON(4 * 18);
 		
 		public int offset;
 		

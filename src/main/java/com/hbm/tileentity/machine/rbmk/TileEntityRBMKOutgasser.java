@@ -229,11 +229,6 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_) {
-		return new int[] {0, 1};
-	}
-
-	@Override
 	public void recievePacket(NBTTagCompound[] tags){
 		if(tags.length == 1){
 			gas.readFromNBT(tags[0]);

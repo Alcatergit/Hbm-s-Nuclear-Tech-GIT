@@ -57,7 +57,7 @@ public class BlockHadronPower extends BlockContainer implements ILookOverlay {
 		
 		List<String> text = new ArrayList();
 		text.add(Library.getShortNumber(extractor.power) + "/" + Library.getShortNumber(extractor.getMaxPower()) + " HE");
-		
+		text.add("&["+Library.getColorProgress((double)extractor.power/(double)extractor.getMaxPower())+"&]    "+Library.getPercentage((double)extractor.power/(double)extractor.getMaxPower())+"%");
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 }

@@ -95,6 +95,11 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				
 				if(!this.hasLid()) {
 					RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F), Float.MAX_VALUE);
+				} else{
+					double meltdownPercent = rod.getMeltdownPercent(inventory.getStackInSlot(0));
+					if(meltdownPercent > 0){
+						RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F * (meltdownPercent/100)), Float.MAX_VALUE);
+					}
 				}
 				
 				super.update();
@@ -116,6 +121,13 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				super.update();
 			}
 		}
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(itemStack.getItem() instanceof ItemRBMKRod)
+			return !(ItemRBMKRod.getMeltdownPercent(itemStack) > 0);
+		return true;
 	}
 	
 	/**
@@ -364,6 +376,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 			data.setDouble("c_heat", ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0)));
 			data.setDouble("c_coreHeat", ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0)));
 			data.setDouble("c_maxHeat", rod.meltingPoint);
+			data.setDouble("meltdown", ItemRBMKRod.getMeltdownPercent(inventory.getStackInSlot(0)));
 		}
 		data.setDouble("flux", this.fluxOut);
 		return data;
@@ -394,10 +407,5 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public void unload() {
 		inventory.setStackInSlot(0, ItemStack.EMPTY);
 		this.markDirty();
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		return new int[] {0};
 	}
 }

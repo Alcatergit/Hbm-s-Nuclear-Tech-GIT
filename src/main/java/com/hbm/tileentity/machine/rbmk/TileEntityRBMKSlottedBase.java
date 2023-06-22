@@ -20,9 +20,28 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 	public TileEntityRBMKSlottedBase(int scount) {
 		inventory = new ItemStackHandler(scount){
 			@Override
-			protected void onContentsChanged(int slot){
+			protected void onContentsChanged(int slot) {
 				markDirty();
 				super.onContentsChanged(slot);
+			}
+			
+			@Override
+			public boolean isItemValid(int slot, ItemStack itemStack) {
+				return isItemValidForSlot(slot, itemStack);
+			}
+
+			@Override
+			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+				if(canInsertItem(slot, stack, stack.getCount()))
+					return super.insertItem(slot, stack, simulate);
+				return ItemStack.EMPTY;
+			}
+
+			@Override
+			public ItemStack extractItem(int slot, int amount, boolean simulate) {
+				if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
+					return super.extractItem(slot, amount, simulate);
+				return ItemStack.EMPTY;
 			}
 		};
 	}
@@ -73,36 +92,14 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 		return true;
 	}
 	
-	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		return new int[] {};
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null) || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null){
-			if(facing == null)
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, getAccessibleSlotsFromSide(facing)){
-				@Override
-				public ItemStack extractItem(int slot, int amount, boolean simulate) {
-					if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
-						return super.extractItem(slot, amount, simulate);
-					return ItemStack.EMPTY;
-				}
-				
-				@Override
-				public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-					if(canInsertItem(slot, stack, stack.getCount()))
-						return super.insertItem(slot, stack, simulate);
-					return stack;
-				}
-			});
-		}
-		return super.getCapability(capability, facing);
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : 
+			super.getCapability(capability, facing);
 	}
 }
