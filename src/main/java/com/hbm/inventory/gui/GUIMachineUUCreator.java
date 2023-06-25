@@ -83,7 +83,6 @@ public class GUIMachineUUCreator extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 79, guiTop + 60, 176, 60, 18, 18);
 		int i = uu_creator.getPowerScaled(60);
 		drawTexturedModalRect(guiLeft + 19, guiTop + 83 - i, 176, 60 - i, 16, i);
-		int j = uu_creator.getFluidScaled(60);
-		drawTexturedModalRect(guiLeft + 141, guiTop + 83 - j, 192, 60 - j, 16, j);
+		FFUtils.drawLogLiquid(uu_creator.tank, guiLeft, guiTop, zLevel, 16, 60, 141, 111);
 	}
 }

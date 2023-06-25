@@ -28,6 +28,7 @@ import com.hbm.config.ToolConfig;
 import com.hbm.config.WeaponConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.WorldConfig;
+import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.creativetabs.ResourceTab;
 import com.hbm.creativetabs.BlockTab;
 import com.hbm.creativetabs.ConsumableTab;
@@ -224,6 +225,7 @@ import com.hbm.hazard.HazardRegistry;
 import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.MixerRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.CrackRecipes;
 import com.hbm.inventory.CentrifugeRecipes;
@@ -608,6 +610,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityTestRender.class, new ResourceLocation(RefStrings.MODID, "tileentity_testrenderer"));
 		GameRegistry.registerTileEntity(TileEntityMachineChemplant.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_chemplant"));
 		GameRegistry.registerTileEntity(TileEntityMachineChemfac.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_chemfac"));
+		GameRegistry.registerTileEntity(TileEntityMachineMixer.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_mixer"));
 		GameRegistry.registerTileEntity(TileEntityDummyPort.class, new ResourceLocation(RefStrings.MODID, "tileentity_dummy_port"));
 		GameRegistry.registerTileEntity(TileEntityNukeMan.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_man"));
 		GameRegistry.registerTileEntity(TileEntityNukeFleija.class, new ResourceLocation(RefStrings.MODID, "tileentity_nuke_fleija"));
@@ -1044,6 +1047,7 @@ public class MainRegistry {
 		config.save();
 		reloadCompatConfig();
 		WorldConfig.loadFromCompatibilityConfig();
+		BedrockOreJsonConfig.init();
 	}
 
 	public static void reloadCompatConfig() {
@@ -1081,6 +1085,8 @@ public class MainRegistry {
 		BreederRecipes.registerRecipes();
 		AssemblerRecipes.loadRecipes();
 		ChemplantRecipes.registerRecipes();
+		MixerRecipes.copyChemplantRecipes();
+		MixerRecipes.registerRecipes();
 		CrackRecipes.registerRecipes();
 		ExplosionNukeGeneric.loadSoliniumFromFile();
 		CyclotronRecipes.register();

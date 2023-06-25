@@ -51,19 +51,21 @@ public class RBMKConsole extends BlockDummyable implements ITooltipProvider {
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		super.neighborChanged(state, world, pos, blockIn, fromPos);
-		if(state.getValue(META) >= offset){
-			int power = world.isBlockIndirectlyGettingPowered(pos);
-			if(power > 0 && power <= 15){
-				TileEntityRBMKConsole console = (TileEntityRBMKConsole) world.getTileEntity(pos);
-				NBTTagCompound control = new NBTTagCompound();
-				control.setDouble("level", (15D-power)/14D);
+		if(!world.isRemote){
+			if(state.getValue(META) >= offset){
+				int power = world.isBlockIndirectlyGettingPowered(pos);
+				if(power > 0 && power <= 15){
+					TileEntityRBMKConsole console = (TileEntityRBMKConsole) world.getTileEntity(pos);
+					NBTTagCompound control = new NBTTagCompound();
+					control.setDouble("level", (15D-power)/14D);
 
-				for(int j = 0; j < console.columns.length; j++) {
-					if(console.columns[j] != null && console.columns[j].type == ColumnType.CONTROL)
-						control.setInteger("sel_" + j, j);
+					for(int j = 0; j < console.columns.length; j++) {
+						if(console.columns[j] != null && console.columns[j].type == ColumnType.CONTROL)
+							control.setInteger("sel_" + j, j);
+					}
+
+					console.receiveControl(control);
 				}
-				
-				PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
 			}
 		}
 	}

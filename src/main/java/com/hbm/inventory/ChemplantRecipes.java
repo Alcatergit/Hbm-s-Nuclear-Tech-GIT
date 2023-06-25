@@ -103,7 +103,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.BP_BIOGAS, new AStack[] { new ComparableStack(ModItems.biomass, 16) }, null, null, new FluidStack[]{ new FluidStack(ModForgeFluids.biogas, 4000) }, 200);
 		
-		makeRecipe(EnumChemistryTemplate.BP_BIOFUEL, null, new FluidStack[]{ new FluidStack(ModForgeFluids.biogas, 2000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.biofuel, 1000) }, 100);
+		makeRecipe(EnumChemistryTemplate.BP_BIOFUEL, null, new FluidStack[]{ new FluidStack(ModForgeFluids.biogas, 1500), new FluidStack(ModForgeFluids.ethanol, 250) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.biofuel, 1000) }, 100);
 		
 		makeRecipe(EnumChemistryTemplate.OIL_SAND, new AStack[] { new ComparableStack(ModBlocks.ore_oil_sand, 16), new OreDictStack(KEY_OIL_TAR, 1) }, null, new AStack[] { new ComparableStack(Blocks.SAND, 16) }, new FluidStack[]{ new FluidStack(ModForgeFluids.bitumen, 1000) }, 200);
 		
@@ -143,7 +143,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.RUBBER, new AStack[] { new OreDictStack(S.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.unsaturateds, 500) }, new AStack[] { new ComparableStack(ModItems.ingot_rubber, 1) }, null, 100);
 		
-		makeRecipe(EnumChemistryTemplate.DYNAMITE, new AStack[] { new ComparableStack(Items.SUGAR), new OreDictStack(KNO.dust()), new OreDictStack("sand") }, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 1000) }, new AStack[] { new ComparableStack(ModItems.ball_dynamite, 2) }, null, 50);
+		makeRecipe(EnumChemistryTemplate.DYNAMITE, new AStack[] { new ComparableStack(Items.SUGAR), new OreDictStack(KNO.dust()), new OreDictStack(KEY_SAND) }, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 1000) }, new AStack[] { new ComparableStack(ModItems.ball_dynamite, 2) }, null, 50);
 		
 		makeRecipe(EnumChemistryTemplate.TNT, new AStack[] { new OreDictStack(KNO.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.aromatics, 500) }, new AStack[] { new ComparableStack(ModItems.ball_tnt, 4) }, null, 150);
 

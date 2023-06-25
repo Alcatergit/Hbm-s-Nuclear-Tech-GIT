@@ -83,6 +83,14 @@ public class FFUtils {
 	 *            - where the starting y of the rectangle should be on screen
 	 */
 	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY){
+		drawLiquid(tank, guiLeft, guiTop, zLevel, sizeX, sizeY, offsetX, offsetY, false);
+	}
+
+	public static void drawLogLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY){
+		drawLiquid(tank, guiLeft, guiTop, zLevel, sizeX, sizeY, offsetX, offsetY, true);
+	}
+
+	public static void drawLiquid(FluidTank tank, int guiLeft, int guiTop, float zLevel, int sizeX, int sizeY, int offsetX, int offsetY, boolean log){
 		// This is retarded, but it would be too much of a pain to fix it
 		offsetY -= 44;
 		RenderHelper.bindBlockTexture();
@@ -91,7 +99,14 @@ public class FFUtils {
 			TextureAtlasSprite liquidIcon = getTextureFromFluid(tank.getFluid().getFluid());
 
 			if(liquidIcon != null) {
-				int level = (int)(((double)tank.getFluidAmount() / (double)tank.getCapacity()) * sizeY);
+				int level = 0;
+				if(log){
+					if(tank.getFluidAmount() > 0){
+						level = (int)(sizeY * (Math.log(tank.getFluidAmount()) / Math.log(tank.getCapacity())));
+					}
+				} else{
+					level = (int)(((double)tank.getFluidAmount() / (double)tank.getCapacity()) * sizeY);
+				}
 
 				drawFull(tank.getFluid().getFluid(), guiLeft, guiTop, zLevel, liquidIcon, level, sizeX, offsetX, offsetY, sizeY);
 			}
@@ -182,7 +197,7 @@ public class FFUtils {
 				tempColor = "§3";
 			} else if(temp < 0) {
 				tempColor = "§b";
-			} else if(temp < 50) {
+			} else if(temp < 100) {
 				tempColor = "§e";
 			} else if(temp < 300) {
 				tempColor = "§6";
@@ -190,17 +205,38 @@ public class FFUtils {
 				tempColor = "§c";
 			} else if(temp < 3000) {
 				tempColor = "§4";
-			} else if(temp < 10000) {
+			} else if(temp < 20000) {
+				tempColor = "§5";
+			} else {
 				tempColor = "§d";
 			}
 			texts.add(String.format("%s%d°C", tempColor, temp));
 		}
 		boolean hasInfo = false;
 		boolean isKeyPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+
+		if (FluidTypeHandler.isAntimatter(fluid)) {
+			if(isKeyPressed){
+				texts.add("§4["+I18n.format("trait.antimatter")+"]");
+			}
+			hasInfo = true;
+		}
+
+		if (FluidTypeHandler.isCorrosivePlastic(fluid)) {
+			if (FluidTypeHandler.isCorrosiveIron(fluid)) {
+				if(isKeyPressed){
+					texts.add("§2["+I18n.format("trait.corrosiveIron")+"]");
+				}
+			} else if(isKeyPressed){
+				texts.add("§a["+I18n.format("trait.corrosivePlastic")+"]");
+			}
+			hasInfo = true;
+		}
+
 		if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
 			if(isKeyPressed){
 				String energy = Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L);
-				texts.add(String.format("§6[%s]", I18n.format("trait.flammable")));
+				texts.add("§6["+I18n.format("trait.flammable")+"]");
 				texts.add(" "+I18n.format("trait.flammable.desc", energy));
 			}
 			hasInfo = true;
@@ -209,7 +245,7 @@ public class FFUtils {
 		if (HeatRecipes.hasCoolRecipe(fluid)) {
 			if(isKeyPressed){
 				String heat = Library.getShortNumber(HeatRecipes.getResultingHeat(fluid) * 1000 / HeatRecipes.getInputAmountCold(fluid));
-				texts.add(String.format("§4[%s]", I18n.format("trait.coolable")));
+				texts.add("§4["+I18n.format("trait.coolable")+"]");
 				texts.add(" "+I18n.format("trait.coolable.desc", heat));
 			}
 			hasInfo = true;
@@ -218,7 +254,7 @@ public class FFUtils {
 		if (HeatRecipes.hasBoilRecipe(fluid)) {
 			if(isKeyPressed){
 				String heat = Library.getShortNumber(HeatRecipes.getRequiredHeat(fluid) * 1000 / HeatRecipes.getInputAmountHot(fluid));
-				texts.add(String.format("§3[%s]", I18n.format("trait.boilable")));
+				texts.add("§3["+I18n.format("trait.boilable")+"]");
 				texts.add(" "+I18n.format("trait.boilable.desc", heat));
 			}
 			hasInfo = true;
@@ -245,6 +281,13 @@ public class FFUtils {
 
 			gui.drawFluidInfo(texts, mouseX, mouseY);
 		}
+	}
+
+	public static boolean hasEnoughFluid(FluidTank t, FluidStack f){
+		if(f == null || f.amount == 0) return true;
+		if(t == null || t.getFluid() == null) return false;
+		if(t.getFluid().isFluidEqual(f) && t.getFluidAmount() >= f.amount) return true;
+		return false;
 	}
 
 	/**

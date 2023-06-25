@@ -22,8 +22,6 @@ public class ContainerFWatzCore extends Container {
 		diFurnace = tedf;
 		//battery input
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 130, 90));
-		// fuse
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 30, 90));
 		//S.A.F.E. Core
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 80, 45));
 		//Fluid Input Slots

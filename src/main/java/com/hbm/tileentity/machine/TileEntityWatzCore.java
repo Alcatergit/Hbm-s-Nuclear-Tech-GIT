@@ -9,7 +9,6 @@ import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IReactor;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCapacitor;
@@ -43,7 +42,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickable, IReactor, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public final static long maxPower = 1000000000;
@@ -194,7 +193,6 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 		}
 	}
 
-	@Override
 	public boolean isStructureValid(World world) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		int x = pos.getX();
@@ -468,34 +466,12 @@ public class TileEntityWatzCore extends TileEntityLoadedBase implements ITickabl
 		return true;
 	}
 
-	@Override
-	public boolean isCoatingValid(World world) {
-		return true;
-	}
-
-	@Override
 	public boolean hasFuse() {
 		return inventory.getStackInSlot(38).getItem() == ModItems.titanium_filter && ItemCapacitor.getDura(inventory.getStackInSlot(38)) > 0;
 	}
 
-	@Override
-	public int getWaterScaled(int i) {
-		return 0;
-	}
-
-	@Override
-	public int getCoolantScaled(int i) {
-		return 0;
-	}
-
-	@Override
 	public long getPowerScaled(long i) {
 		return (power/100 * i) / (maxPower/100);
-	}
-
-	@Override
-	public int getHeatScaled(int i) {
-		return 0;
 	}
 	
 	public void surveyPellet(ItemStack stack) {

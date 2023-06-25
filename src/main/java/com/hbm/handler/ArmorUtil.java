@@ -43,7 +43,8 @@ public class ArmorUtil {
 		ArmorRegistry.registerHazard(ModItems.ashglasses, HazardClass.LIGHT, HazardClass.SAND);
 
 		ArmorRegistry.registerHazard(ModItems.attachment_mask, HazardClass.SAND);
-
+		ArmorRegistry.registerHazard(ModItems.spider_milk, HazardClass.LIGHT);
+		
 		ArmorRegistry.registerHazard(ModItems.asbestos_helmet, HazardClass.SAND, HazardClass.LIGHT);
 		ArmorRegistry.registerHazard(ModItems.hazmat_helmet, HazardClass.SAND);
 		ArmorRegistry.registerHazard(ModItems.hazmat_helmet_red, HazardClass.SAND);

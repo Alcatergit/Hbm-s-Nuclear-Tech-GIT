@@ -45,7 +45,7 @@ public class ContainerDiFurnaceRTG extends Container {
 		return bFurnace.isUseableByPlayer(player);
 	}
 
-		@Override
+	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
 		ItemStack var3 = ItemStack.EMPTY;

@@ -85,6 +85,7 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(ModItems.powder_semtex_mix), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_semtex));
 		addRecipe(new ComparableStack(ModItems.powder_desh_ready), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.ingot_desh));
 		addRecipe(new ComparableStack(ModItems.powder_meteorite), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(ModItems.fragment_meteorite, 1));
+		addRecipe(CD.dust(), new FluidStack(ModForgeFluids.fishoil, 250), new ItemStack(ModItems.ingot_rubber));
 		addRecipe(new ComparableStack(ModItems.powder_impure_osmiridium), new FluidStack(ModForgeFluids.schrabidic, 1000), new ItemStack(ModItems.crystal_osmiridium, 1));
 		addRecipe(new ComparableStack(ModItems.meteorite_sword_treated), new FluidStack(ModForgeFluids.sulfuric_acid, 8000), new ItemStack(ModItems.meteorite_sword_etched, 1));
 		
@@ -99,6 +100,10 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.solid_fuel));
 		addRecipe(new ComparableStack(ModItems.fallout), new FluidStack(ModForgeFluids.corium_fluid, 500), new ItemStack(ModItems.powder_balefire));
 		
+		addRecipe(KEY_SAND, new FluidStack(ModForgeFluids.colloid, 1000), new ItemStack(Blocks.CLAY));
+		addRecipe(new ComparableStack(ModBlocks.sand_quartz), new FluidStack(ModForgeFluids.nitroglycerin, 1000), new ItemStack(ModItems.ball_dynamite, 16));
+		addRecipe(NETHERQUARTZ.dust(), new FluidStack(ModForgeFluids.nitroglycerin, 250), new ItemStack(ModItems.ball_dynamite, 4));
+
 		List<ItemStack> quartz = OreDictionary.getOres("crystalCertusQuartz");
 		
 		if(quartz != null && !quartz.isEmpty()) {

@@ -81,7 +81,10 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 				if(power >= demand) {
 					power -= demand;
 					long add = watts * 100;
-					joules += add;
+					if(add > Long.MAX_VALUE-joules)
+						joules = Long.MAX_VALUE;
+					else
+						joules += add;
 				}
 				prev = joules;
 				
@@ -109,7 +112,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 						}
 						
 						if(te instanceof TileEntityCore) {
-							out = ((TileEntityCore)te).burn(out);
+							out = Math.max(0, ((TileEntityCore)te).burn(out));
 							continue;
 						}
 						
@@ -200,7 +203,10 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 	public void addEnergy(long energy, EnumFacing dir) {
 		//do not accept lasers from the front
 		if(dir.getOpposite().ordinal() != this.getBlockMetadata()){
-			joules += energy;
+			if(Long.MAX_VALUE - joules < energy)
+				joules = Long.MAX_VALUE;
+			else
+				joules += energy;
 		}
 	}
 

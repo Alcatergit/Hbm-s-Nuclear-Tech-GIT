@@ -2,6 +2,7 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotUpgrade;
 import com.hbm.tileentity.machine.TileEntityMachineChemfac;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -61,8 +62,37 @@ public class ContainerChemfac extends Container {
 	}
 
 	@Override
-	@Nonnull
-	public ItemStack transferStackInSlot(@Nonnull EntityPlayer playerIn, int index) {
-		return ItemStack.EMPTY;
-	}
+    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
+    {
+		ItemStack var3 = ItemStack.EMPTY;
+		Slot var4 = (Slot) this.inventorySlots.get(par2);
+		
+		if (var4 != null && var4.getHasStack())
+		{
+			ItemStack var5 = var4.getStack();
+			var3 = var5.copy();
+			
+            if (par2 <= 3) {
+				if (!this.mergeItemStack(var5, 4, this.inventorySlots.size(), true))
+				{
+					return ItemStack.EMPTY;
+				}
+			}
+			else if (!this.mergeItemStack(var5, 0, 3, false))
+			{
+				return ItemStack.EMPTY;
+			}
+			
+			if (var5.getCount() == 0)
+			{
+				var4.putStack(ItemStack.EMPTY);
+			}
+			else
+			{
+				var4.onSlotChanged();
+			}
+		}
+		
+		return var3;
+    }
 }

@@ -81,7 +81,8 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 		EntityPlayer player = event.getEntityPlayer();
 
 		modelM65.isSneak = model.isSneak;
-		
+		modelM65.isChild = false;
+
 		float interp = event.getPartialRenderTick();
 		float yawHead = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * interp;
 		float yawWrapped = MathHelper.wrapDegrees(yawHead+180);

@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -54,12 +55,8 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 				
 				if(te instanceof TileEntityCore) {
 					
-					TileEntityCore core = (TileEntityCore)te;
+					fillDFC((TileEntityCore)te);
 					
-					if(tanks[0].drain(core.tanks[0].fill(tanks[0].getFluid(), true), true) != null)
-						core.markDirty();
-					if(tanks[1].drain(core.tanks[1].fill(tanks[1].getFluid(), true), true) != null)
-						core.markDirty();
 					beam = i;
 					break;
 				}
@@ -73,6 +70,42 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 			PacketDispatcher.wrapper.sendToAllTracking(new FluidTankPacket(pos, tanks), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, beam, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
 		}
+	}
+
+	public void fillDFC(TileEntityCore core){
+		Fluid tank0 = null;
+		Fluid tank1 = null;
+		Fluid dfcTank0 = null;
+		Fluid dfcTank1 = null;
+
+		if(tanks[0].getFluid() != null)
+			tank0 = tanks[0].getFluid().getFluid();
+		if(tanks[1].getFluid() != null)
+			tank1 = tanks[1].getFluid().getFluid();
+
+		if(tank0 == null && tank1 == null) return;
+
+		if(core.tanks[0].getFluid() != null)
+			dfcTank0 = core.tanks[0].getFluid().getFluid();
+		if(core.tanks[1].getFluid() != null)
+			dfcTank1 = core.tanks[1].getFluid().getFluid();
+		
+
+		if((tank0 == dfcTank0 || dfcTank0 == null) && tank0 != dfcTank1)
+			if(tanks[0].drain(core.tanks[0].fill(tanks[0].getFluid(), true), true) != null)
+				core.markDirty();
+
+		if((tank1 == dfcTank1 || dfcTank1 == null) && tank1 != dfcTank0)
+			if(tanks[1].drain(core.tanks[1].fill(tanks[1].getFluid(), true), true) != null)
+				core.markDirty();
+
+		if((tank0 == dfcTank1 || dfcTank1 == null) && tank0 != dfcTank0)
+			if(tanks[0].drain(core.tanks[1].fill(tanks[0].getFluid(), true), true) != null)
+				core.markDirty();
+
+		if((tank1 == dfcTank0 || dfcTank0 == null) && tank1 != dfcTank1)
+			if(tanks[1].drain(core.tanks[0].fill(tanks[1].getFluid(), true), true) != null)
+				core.markDirty();
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.lib.Library;
+import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.util.WeightedRandomObject;
 
 import net.minecraft.init.Items;
@@ -23,15 +24,15 @@ import net.minecraftforge.fluids.FluidStack;
 @Spaghetti("everything")
 public class BedrockOreRegistry {
 
-	public static HashMap<Integer, String> oreIndexes = new HashMap<>();
-	public static HashMap<String, Integer> oreToIndexes = new HashMap<>();
+	public static HashMap<Integer, String> oreIndexes = new HashMap();
+	public static HashMap<String, Integer> oreToIndexes = new HashMap();
 
-	public static HashMap<String, String> oreResults = new HashMap<>();
-	public static HashMap<String, Integer> oreColors = new HashMap<>();
-	public static HashMap<String, String> oreNames = new HashMap<>();
-	public static HashMap<String, Integer> oreTiers = new HashMap<>();
+	public static HashMap<String, String> oreResults = new HashMap();
+	public static HashMap<String, Integer> oreColors = new HashMap();
+	public static HashMap<String, String> oreNames = new HashMap();
+	public static HashMap<String, Integer> oreTiers = new HashMap();
 	
-	public static List<WeightedRandomObject> oreCasino = new ArrayList();
+	public static HashMap<Integer, List<WeightedRandomObject>> oreCasino = new HashMap();
 
 	public static void registerBedrockOres(){
 		collectBedrockOres();
@@ -110,13 +111,21 @@ public class BedrockOreRegistry {
 	}
 
 	public static void fillOreCasino(){
-		for(String oreName : oreResults.keySet()){
-			oreCasino.add(new WeightedRandomObject(oreName, getTierWeight(getOreTier(oreName))));
+		for(Integer dimID : BedrockOreJsonConfig.dimOres.keySet()){
+
+			List<WeightedRandomObject> oreWeights = new ArrayList();
+			for(String oreName : oreResults.keySet()){
+
+				if(BedrockOreJsonConfig.isOreAllowed(dimID, oreName))
+					oreWeights.add(new WeightedRandomObject(oreName, getTierWeight(getOreTier(oreName))));
+			}
+			oreCasino.put(dimID, oreWeights);
 		}
 	}
 
-	public static String rollOreName(Random rand){
-		return WeightedRandom.getRandomItem(rand, oreCasino).asString();
+	public static String rollOreName(int dimID, Random rand){
+		if(oreCasino.get(dimID).isEmpty()) return null;
+		return WeightedRandom.getRandomItem(rand, oreCasino.get(dimID)).asString();
 	}
 
 	public static int getDirectOreTier(String oreName){

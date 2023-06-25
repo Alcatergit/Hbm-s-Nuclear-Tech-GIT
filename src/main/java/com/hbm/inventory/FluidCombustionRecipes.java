@@ -23,6 +23,7 @@ public class FluidCombustionRecipes {
 		addBurnableFluid(ModForgeFluids.hotcrackoil, 10);
 
 		addBurnableFluid(ModForgeFluids.gas, 10);
+		addBurnableFluid(ModForgeFluids.fishoil, 15);
 		addBurnableFluid(ModForgeFluids.lubricant, 20);
 		addBurnableFluid(ModForgeFluids.aromatics, 25);
 		addBurnableFluid(ModForgeFluids.petroleum, 25);
@@ -30,6 +31,7 @@ public class FluidCombustionRecipes {
 		addBurnableFluid(ModForgeFluids.bitumen, 35);
 		addBurnableFluid(ModForgeFluids.heavyoil, 50);
 		addBurnableFluid(ModForgeFluids.smear, 50);
+		addBurnableFluid(ModForgeFluids.ethanol, 75);
 		addBurnableFluid(ModForgeFluids.reclaimed, 100);
 		addBurnableFluid(ModForgeFluids.petroil, 125);
 		addBurnableFluid(ModForgeFluids.naphtha, 125);

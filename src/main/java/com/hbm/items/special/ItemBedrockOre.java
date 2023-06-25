@@ -7,15 +7,22 @@ import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.main.MainRegistry;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,5 +87,20 @@ public class ItemBedrockOre extends Item {
 			list.add("§eRequired: " + req.amount + "mB " + req.getFluid().getLocalizedName(req));
 		}
 		super.addInformation(stack, world, list, flagIn);
+	}
+
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(player.capabilities.isCreativeMode){
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te instanceof TileEntityBedrockOre){
+				ItemStack bedrockOreItem = player.getHeldItem(hand);
+				if(bedrockOreItem != null && bedrockOreItem.getItem() == ModItems.ore_bedrock){
+					((TileEntityBedrockOre)te).setOre(getOreTag(bedrockOreItem));
+				}
+			}
+		}
+		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 }

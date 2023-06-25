@@ -9,6 +9,7 @@ import com.hbm.blocks.machine.SoyuzCapsule;
 import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
@@ -261,9 +262,10 @@ public class HbmWorldGen implements IWorldGenerator {
 	}
 
 	private void generateBedrockOre(World world, Random rand, int i, int j, int dimID){
-		int dimBedrockOreFreq = parseInt(CompatibilityConfig.bedrockOreSpawn.get(dimID));
+		int dimBedrockOreFreq = parseInt(BedrockOreJsonConfig.dimOreRarity.get(dimID));
 		if (dimBedrockOreFreq > 0 && rand.nextInt(dimBedrockOreFreq) == 0) {
-			String oreName = BedrockOreRegistry.rollOreName(rand);
+			
+			String oreName = BedrockOreRegistry.rollOreName(dimID, rand);
 			if(oreName == null) return;
 			int sqrsize = 2;
 			for(int v = sqrsize; v >= -sqrsize; v--) {

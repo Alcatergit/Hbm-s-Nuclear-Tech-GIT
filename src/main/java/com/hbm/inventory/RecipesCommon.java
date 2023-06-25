@@ -477,6 +477,4 @@ public class RecipesCommon {
 			return "OreDictStack: name, " + name + ", stacksize, " + stacksize;
 		}
 	}
-
-
 }

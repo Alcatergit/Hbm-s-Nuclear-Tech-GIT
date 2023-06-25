@@ -124,7 +124,22 @@ public class ItemRenderLibrary {
 		        bindTexture(ResourceManager.iter_solenoid); ResourceManager.iter.renderPart("Solenoid");
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
-
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_mixer), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -5, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glDisable(GL11.GL_CULL_FACE);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		        bindTexture(ResourceManager.mixer_tex);
+				ResourceManager.mixer.renderPart("Main");
+				ResourceManager.mixer.renderPart("Mixer");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+				GL11.glEnable(GL11.GL_CULL_FACE);
+			}});
+		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_press), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);

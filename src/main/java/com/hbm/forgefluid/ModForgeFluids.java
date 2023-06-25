@@ -76,6 +76,11 @@ public class ModForgeFluids {
 	public static Fluid biogas = new Fluid("biogas", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biogas_flowing"), null, Color.WHITE);
 	public static Fluid biofuel = new Fluid("biofuel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/biofuel_flowing"), null, Color.WHITE);
 
+	public static Fluid ethanol = new Fluid("ethanol", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ethanol_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/ethanol_flowing"), null, Color.WHITE);
+	public static Fluid fishoil = new Fluid("fishoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/fishoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/fishoil_flowing"), null, Color.WHITE);
+	public static Fluid sunfloweroil = new Fluid("sunfloweroil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sunfloweroil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/sunfloweroil_flowing"), null, Color.WHITE);
+	public static Fluid colloid = new Fluid("colloid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/colloid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/colloid_flowing"), null, Color.WHITE);
+
 	public static Fluid nitan = new Fluid("nitan", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitan_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitan_flowing"), null, Color.WHITE);
 
 	public static Fluid uf6 = new Fluid("uf6", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uf6_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/uf6_flowing"), null, Color.WHITE);
@@ -90,6 +95,8 @@ public class ModForgeFluids {
 	public static Fluid nitric_acid = new Fluid("nitric_acid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitric_acid_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitric_acid_flowing"), null, Color.WHITE);
 	public static Fluid solvent = new Fluid("solvent", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/solvent_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/solvent_flowing"), null, Color.WHITE);
 	public static Fluid radiosolvent = new Fluid("radiosolvent", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radiosolvent_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/radiosolvent_flowing"), null, Color.WHITE);
+	public static Fluid nitroglycerin = new Fluid("nitroglycerin", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitroglycerin_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/nitroglycerin_flowing"), null, Color.WHITE);
+	
 	public static Fluid liquid_osmiridium = new Fluid("liquid_osmiridium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/liquid_osmiridium_flowing"), null, Color.WHITE).setTemperature(573);
 	public static Fluid watz = new Fluid("watz", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/watz_flowing"), null, Color.WHITE).setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid cryogel = new Fluid("cryogel", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/cryogel_flowing"), null, Color.WHITE).setTemperature(50);
@@ -201,6 +208,15 @@ public class ModForgeFluids {
 		if(!FluidRegistry.registerFluid(biofuel))
 			biofuel = FluidRegistry.getFluid("biofuel");
 
+		if(!FluidRegistry.registerFluid(ethanol))
+			ethanol = FluidRegistry.getFluid("ethanol");
+		if(!FluidRegistry.registerFluid(fishoil))
+			fishoil = FluidRegistry.getFluid("fishoil");
+		if(!FluidRegistry.registerFluid(sunfloweroil))
+			sunfloweroil = FluidRegistry.getFluid("sunfloweroil");
+		if(!FluidRegistry.registerFluid(colloid))
+			colloid = FluidRegistry.getFluid("colloid");
+
 		if(!FluidRegistry.registerFluid(nitan))
 			nitan = FluidRegistry.getFluid("nitan");
 
@@ -226,6 +242,8 @@ public class ModForgeFluids {
 			solvent = FluidRegistry.getFluid("solvent");
 		if(!FluidRegistry.registerFluid(radiosolvent))
 			radiosolvent = FluidRegistry.getFluid("radiosolvent");
+		if(!FluidRegistry.registerFluid(nitroglycerin))
+			nitroglycerin = FluidRegistry.getFluid("nitroglycerin");
 		if(!FluidRegistry.registerFluid(liquid_osmiridium))
 			liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		if(!FluidRegistry.registerFluid(watz))
@@ -352,6 +370,11 @@ public class ModForgeFluids {
 		biogas = FluidRegistry.getFluid("biogas");
 		biofuel = FluidRegistry.getFluid("biofuel");
 
+		ethanol = FluidRegistry.getFluid("ethanol");
+		fishoil = FluidRegistry.getFluid("fishoil");
+		sunfloweroil = FluidRegistry.getFluid("sunfloweroil");
+		colloid = FluidRegistry.getFluid("colloid");
+
 		nitan = FluidRegistry.getFluid("nitan");
 
 		uf6 = FluidRegistry.getFluid("uf6");
@@ -366,6 +389,7 @@ public class ModForgeFluids {
 		nitric_acid = FluidRegistry.getFluid("nitric_acid");
 		solvent = FluidRegistry.getFluid("solvent");
 		radiosolvent = FluidRegistry.getFluid("radiosolvent");
+		nitroglycerin = FluidRegistry.getFluid("nitroglycerin");
 		liquid_osmiridium = FluidRegistry.getFluid("liquid_osmiridium");
 		watz = FluidRegistry.getFluid("watz");
 		cryogel = FluidRegistry.getFluid("cryogel");

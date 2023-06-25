@@ -12,6 +12,7 @@ import com.hbm.inventory.gui.GUIAnvil;
 import com.hbm.inventory.gui.GUIBook;
 import com.hbm.inventory.gui.GUICrystallizer;
 import com.hbm.inventory.gui.GUIHadron;
+import com.hbm.inventory.gui.GUIMixer;
 import com.hbm.inventory.gui.GUIMachineAssembler;
 import com.hbm.inventory.gui.GUIMachineBoiler;
 import com.hbm.inventory.gui.GUIMachineBoilerElectric;
@@ -54,6 +55,7 @@ public class JEIConfig implements IModPlugin {
 
 	public static final String ASSEMBLY = "hbm.assembly";
 	public static final String CHEMPLANT = "hbm.chemplant";
+	public static final String MIXER = "hbm.mixer";
 	public static final String CYCLOTRON = "hbm.cyclotron";
 	public static final String PRESS = "hbm.press";
 	public static final String ALLOY = "hbm.alloy";
@@ -97,6 +99,7 @@ public class JEIConfig implements IModPlugin {
 
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_assembler), ASSEMBLY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_chemplant), CHEMPLANT);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_mixer), MIXER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_cyclotron), CYCLOTRON);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_schrabidium_transmutator), TRANSMUTATION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_press), PRESS);
@@ -142,6 +145,7 @@ public class JEIConfig implements IModPlugin {
 
 		// registry.addRecipes(ItemAssemblyTemplate.recipes, ASSEMBLY);
 		registry.addRecipes(JeiRecipes.getChemistryRecipes(), CHEMPLANT);
+		registry.addRecipes(JeiRecipes.getMixerRecipes(), MIXER);
 		registry.addRecipes(JeiRecipes.getCyclotronRecipes(), CYCLOTRON);
 		registry.addRecipes(JeiRecipes.getTransmutationRecipes(), TRANSMUTATION);
 		registry.addRecipes(JeiRecipes.getPressRecipes(), PRESS);
@@ -179,6 +183,7 @@ public class JEIConfig implements IModPlugin {
 
 		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
+		registry.addRecipeClickArea(GUIMixer.class, 62, 36, 52, 44, MIXER);
 		registry.addRecipeClickArea(GUIMachineCyclotron.class, 50, 24, 40, 40, CYCLOTRON);
 		registry.addRecipeClickArea(GUIMachinePress.class, 80, 35, 15, 15, PRESS);
 		registry.addRecipeClickArea(GUIMachineEPress.class, 80, 35, 15, 15, PRESS);
@@ -282,6 +287,7 @@ public class JEIConfig implements IModPlugin {
 				new ShredderRecipeHandler(help),
 				new AssemblerRecipeHandler(help),
 				new ChemplantRecipeHandler(help),
+				new MixerRecipeHandler(help),
 				new BoilerRecipeHandler(help),
 				new RefineryRecipeHandler(help),
 				new CrackingRecipeHandler(help),

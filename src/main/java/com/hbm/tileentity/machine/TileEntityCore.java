@@ -143,27 +143,33 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	
 	private void radiation() {
 		
-		double scale = 2;
+		double scale = (int)Math.log(heat) * 1.25 + 0.5;
 		
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - 10 + 0.5, pos.getY() - 10 + 0.5 + 6, pos.getZ() - 10 + 0.5, pos.getX() + 10 + 0.5, pos.getY() + 10 + 0.5 + 6, pos.getZ() + 10 + 0.5));
+		int range = (int)(scale * 4);
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - range + 0.5, pos.getY() - range + 0.5, pos.getZ() - range + 0.5, pos.getX() + range + 0.5, pos.getY() + range + 0.5, pos.getZ() + range + 0.5));
 		
 		for(Entity e : list) {
-			if(!(e instanceof EntityPlayer && (ArmorUtil.checkForHazmat((EntityPlayer)e) || ((EntityPlayer)e).capabilities.isCreativeMode))){
+			boolean isPlayer = e instanceof EntityPlayer;
+			if(!(isPlayer && ArmorUtil.checkForHazmat((EntityPlayer)e))){
 				if(!(Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ))){
-					e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
+					if(!isPlayer || (isPlayer && !((EntityPlayer)e).capabilities.isCreativeMode))
+						e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
 					e.setFire(3);
 				}
 			}
-			if(e instanceof EntityPlayer){
+			if(isPlayer){
 				AdvancementManager.grantAchievement(((EntityPlayer) e), AdvancementManager.progress_dfc);
 			}
 		}
 
-		List<Entity> list2 = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - scale + 0.5, pos.getY() - scale + 0.5 + 6, pos.getZ() - scale + 0.5, pos.getX() + scale + 0.5, pos.getY() + scale + 0.5 + 6, pos.getZ() + scale + 0.5));
+		List<Entity> list2 = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - scale + 0.5, pos.getY() - scale + 0.5, pos.getZ() - scale + 0.5, pos.getX() + scale + 0.5, pos.getY() + scale + 0.5, pos.getZ() + scale + 0.5));
 		
 		for(Entity e : list2) {
-			if(!(e instanceof EntityPlayer && (ArmorUtil.checkForHaz2((EntityPlayer)e) || ((EntityPlayer)e).capabilities.isCreativeMode))){
-				e.attackEntityFrom(ModDamageSource.amsCore, this.heat * 1000);
+			boolean isPlayer = e instanceof EntityPlayer;
+			if(!(isPlayer && ArmorUtil.checkForHaz2((EntityPlayer)e))){
+				if(!isPlayer || (isPlayer && !((EntityPlayer)e).capabilities.isCreativeMode))
+					e.attackEntityFrom(ModDamageSource.amsCore, this.heat * 1000);
+				e.setFire(3);
 			}
 		}
 	}
@@ -220,8 +226,9 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 
 		tanks[0].drain(demand, true);
 		tanks[1].drain(demand, true);
-		
-		return (long) Math.abs((powerMod * joules * getCorePower() * getFuelEfficiency(f1) * getFuelEfficiency(f2)) + powerAbs);
+		if(heat == 0)
+			heat = 1;
+		return (long) Math.max(0, (powerMod * joules * getCorePower() * getFuelEfficiency(f1) * getFuelEfficiency(f2)) + powerAbs);
 	}
 	
 	public float getFuelEfficiency(Fluid type) {
@@ -306,5 +313,4 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		return super.writeToNBT(compound);
 	}
-
 }

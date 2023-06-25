@@ -17,6 +17,10 @@ item.drillbit_tcalloy_diamond.name=Technetium Steel Drillbit (Diamond-Tipped)
 item.solid_fuel_presto.name=Presto Log
 item.solid_fuel_presto_triplet.name=Boosted Presto Logs
 
+container.machineMixer=Industrial Mixer
+container.machineUUMixer=Industrial UU Mixer
+tile.machine_mixer.name=Industrial Mixer
+
 item.deuterium_filter.name=Deuterium Filter
 tile.machine_deuterium_extractor.name=Deuterium Extractor
 tile.machine_deuterium_tower.name=Deuterium Extraction Tower
@@ -492,6 +496,10 @@ trait.coolable=Coolable
 trait.coolable.desc=§cProvides §4%sTU §cper bucket.
 trait.boilable=Heatable
 trait.boilable.desc=§bRequires §3%sTU §bper bucket.
+trait.hotfluid=Hot
+trait.antimatter=Annihilating
+trait.corrosivePlastic=Corrosive
+trait.corrosiveIron=Strongly Corrosive
 
 trait.rbmk.coreTemp=Core temp: %s
 trait.rbmk.depletion=Depletion: %s
@@ -1215,7 +1223,11 @@ chem.GNEISS_GAS=Gas Shale Lab Fracking
 chem.GASOLINE=Gasoline Production
 chem.FRACKSOL=Fracking Solution Production
 
-hbmfluid.fracksol=Fracking Solution
+fluid.colloid=Colloid
+fluid.ethanol=Ethanol
+fluid.fishoil=Fish Oil
+fluid.sunfloweroil=Sunflower Seed Oil
+fluid.nitroglycerin=Nitroglycerin
 fluid.fracksol=Fracking Solution
 container.frackingTower=Hydraulic Fracking Tower
 item.canister_fracksol.name=Fracking Solution Canister
@@ -1535,7 +1547,7 @@ container.armorTable=Armor Modification Table
 tile.machine_generator.name=Nuclear Reactor (Old)
 container.generator=Nuclear Reactor
 container.hadron=Particle Accelerator
-tile.red_wire_coated.name=Coated Red Copper Cable
+tile.red_wire_coated.name=Red Copper Cable Block
 tile.cable_switch.name=Power Switch
 tile.cable_diode.name=Power Diode
 tile.cable_diode.desc=§6Limits throughput and restricts flow direction$§eUse screwdriver to increase throughput$§eUse hand drill to decrease throughput$§eUse defuser to change network priority
@@ -1832,7 +1844,7 @@ tile.machine_rtg_blue.name=Convection Generator
 tile.machine_rtg_purple.name=Antimatter Annihilation Generator
 
 tile.machine_waste_drum.name=Spent Fuel Pool Drum
-tile.machine_waste_drum.desc=Needs water on at least one side. The more sides have water the faster it is.
+tile.machine_waste_drum.desc=Cools down spent fuel. Needs water on at least one side. The more sides have water the faster it is.
 container.wasteDrum=Spent Fuel Pool Drum
 
 tile.machine_spp_bottom.name=ZPE Potential Generator (Bottom)

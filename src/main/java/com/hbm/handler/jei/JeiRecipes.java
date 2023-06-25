@@ -20,6 +20,7 @@ import com.hbm.inventory.AnvilRecipes.OverlayType;
 import com.hbm.inventory.AnvilSmithingRecipe;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.MixerRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.WasteDrumRecipes;
@@ -74,6 +75,7 @@ import net.minecraft.util.text.TextFormatting;
 public class JeiRecipes {
 
 	private static List<ChemRecipe> chemRecipes = null;
+	private static List<MixerRecipe> mixerRecipes = null;
 	private static List<CyclotronRecipe> cyclotronRecipes = null;
 	private static List<PressRecipe> pressRecipes = null;
 	private static List<AlloyFurnaceRecipe> alloyFurnaceRecipes = null;
@@ -122,7 +124,31 @@ public class JeiRecipes {
 			ingredients.setInputLists(VanillaTypes.ITEM, in);
 			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
+	}
+
+	public static class MixerRecipe implements IRecipeWrapper {
 		
+		private final List<List<ItemStack>> inputs;
+		private final ItemStack output;
+		
+		public MixerRecipe(List<AStack> inputs, ItemStack output) {
+			List<List<ItemStack>> list = new ArrayList<>(inputs.size());
+			for(AStack s : inputs)
+				list.add(s.getStackList());
+			this.inputs = list;
+			this.output = output; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			List<List<ItemStack>> in = Library.copyItemStackListList(inputs); // list of inputs and their list of possible items
+			ingredients.setInputLists(VanillaTypes.ITEM, in);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+
+		public int getInputSize(){
+			return inputs.size();
+		}
 	}
 	
 	public static class CyclotronRecipe implements IRecipeWrapper {
@@ -677,6 +703,32 @@ public class JeiRecipes {
         }
 		
 		return chemRecipes;
+	}
+
+	public static List<MixerRecipe> getMixerRecipes() {
+		if(mixerRecipes != null)
+			return mixerRecipes;
+		mixerRecipes = new ArrayList<MixerRecipe>();
+		
+        for(Fluid f : MixerRecipes.recipesDurations.keySet()){
+
+        	List<AStack> inputs = new ArrayList<AStack>(3);
+
+        	AStack inputItem = MixerRecipes.getInputItem(f);
+        	FluidStack[] inputFluids = MixerRecipes.getInputFluidStacks(f);
+        	if(inputItem != null)
+        		inputs.add(inputItem);
+        	if(inputFluids != null){
+        		if(inputFluids.length >= 1) inputs.add(new NbtComparableStack(ItemFluidIcon.getStackWithQuantity(inputFluids[0].getFluid(), inputFluids[0].amount)));
+        		if(inputFluids.length == 2) inputs.add(new NbtComparableStack(ItemFluidIcon.getStackWithQuantity(inputFluids[1].getFluid(), inputFluids[1].amount)));
+        	}
+
+        	ItemStack output = ItemFluidIcon.getStackWithQuantity(f, MixerRecipes.getFluidOutputAmount(f));
+        	
+        	mixerRecipes.add(new MixerRecipe(inputs, output));
+        }
+		
+		return mixerRecipes;
 	}
 	
 	public static List<CyclotronRecipe> getCyclotronRecipes() {

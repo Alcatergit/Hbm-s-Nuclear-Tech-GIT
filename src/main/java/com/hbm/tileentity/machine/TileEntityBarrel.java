@@ -84,13 +84,13 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		}
 		
 		//for when you fill hot or corrosive liquids into a plastic tank
-		if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosive(f) || FluidTypeHandler.isHot(f))) {
+		if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosivePlastic(f) || FluidTypeHandler.isHot(f))) {
 			world.destroyBlock(pos, false);
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 		
 		//for when you fill corrosive liquid into an iron tank
-		if((b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosive(f)) || (b == ModBlocks.barrel_steel && FluidTypeHandler.isCorrosive2(f))) {
+		if((b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosivePlastic(f)) || (b == ModBlocks.barrel_steel && FluidTypeHandler.isCorrosiveIron(f))) {
 			
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			world.setBlockState(pos, ModBlocks.barrel_corroded.getDefaultState());
@@ -221,5 +221,4 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		
 		return false;
 	}
-
 }

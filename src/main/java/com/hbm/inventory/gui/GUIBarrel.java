@@ -36,7 +36,7 @@ public class GUIBarrel extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, f);
 
 		//tank.tank.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52, tank.tank);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 68 - 52, 34, 52, tank.tank);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
