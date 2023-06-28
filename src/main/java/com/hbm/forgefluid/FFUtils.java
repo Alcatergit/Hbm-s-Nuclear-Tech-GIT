@@ -260,6 +260,17 @@ public class FFUtils {
 			hasInfo = true;
 		}
 
+		float dfcEff = FluidTypeHandler.getDFCEfficiency(fluid);
+
+		if(dfcEff >= 1){
+			if(isKeyPressed){
+				texts.add("§5["+I18n.format("trait.dfcFuel")+"]");
+				dfcEff = (dfcEff-1F);
+				texts.add(" "+I18n.format("trait.dfcFuel.desc", dfcEff >= 0 ? "+"+Library.getPercentage(dfcEff) : Library.getPercentage(dfcEff)));
+			}
+			hasInfo = true;
+		}
+
 		if (hasInfo && !isKeyPressed) {
 			texts.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
 					TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +

@@ -38,12 +38,11 @@ public class BlockGasRadonDense extends BlockGasBase {
 		
 		EntityLivingBase entityLiving = (EntityLivingBase) entity;
 		
-		if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)) {
-			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
-		} else {
+		if(ArmorRegistry.hasProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.RAD_GAS)) {
+			ArmorUtil.damageGasMaskFilter(entityLiving, 2);
 			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F);
-			entityLiving.addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 0));
-			HbmLivingProps.incrementAsbestos(entityLiving, 5);
+		} else {
+			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.5F);
 		}
 	}
 	

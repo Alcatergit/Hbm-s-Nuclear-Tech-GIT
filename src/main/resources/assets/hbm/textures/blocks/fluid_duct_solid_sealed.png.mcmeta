@@ -1,0 +1,9 @@
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "CTM",
+		"textures": [
+			"hbm:blocks/fluid_duct_solid_sealed_ctm"
+		]
+	}
+}

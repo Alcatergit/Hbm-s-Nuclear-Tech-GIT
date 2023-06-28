@@ -21,7 +21,10 @@ public class UpgradeManager {
 			if (item instanceof ItemMachineUpgrade) {
 				ItemMachineUpgrade upgrade = (ItemMachineUpgrade) item;
 				if (!upgrade.type.mutex) {
-					upgrades.compute(upgrade.type, (type, level) -> level == null ? upgrade.tier : level + upgrade.tier);
+					if(upgrade.type == UpgradeType.SPEED)
+						upgrades.compute(upgrade.type, (type, level) -> level == null ? upgrade.getSpeed() : level + upgrade.getSpeed());
+					else
+						upgrades.compute(upgrade.type, (type, level) -> level == null ? upgrade.tier : level + upgrade.tier);
 				} else {
 					if (mutexType == null || mutexType.ordinal() < upgrade.type.ordinal()) {
 						mutexType = upgrade.type;

@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:machine_boiler_electric_off"
+                        "item": "hbm:oil_tar"
                     }
                 ]
             }

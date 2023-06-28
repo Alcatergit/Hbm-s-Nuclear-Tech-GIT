@@ -1,6 +1,9 @@
 package com.hbm.config;
 
+import java.util.HashSet;
+
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.Fluid;
 
 public class MachineConfig {
 
@@ -35,6 +38,15 @@ public class MachineConfig {
 	public static int oilPerBedrockDepositBlockMaxExtraFrackingTower = 0;
 	public static int gasPerBedrockDepositBlockMinFrackingTower = 10;
 	public static int gasPerBedrockDepositBlockMaxExtraFrackingTower = 50;
+
+	public static boolean uuMixerFluidListIsWhitelist = false;
+	public static HashSet blacklistedMixerFluids;
+
+	public static boolean isFluidAllowed(Fluid f){
+		boolean isInList = blacklistedMixerFluids.contains(f.getName());
+		if(uuMixerFluidListIsWhitelist) return isInList;
+		return !isInList;
+	}
 
 	private static String generateConfigName(final int idx, final String fieldName) {
 		return String.format("9.%02d_%s", idx, fieldName);
@@ -77,5 +89,7 @@ public class MachineConfig {
 		gasPerBedrockDepositBlockMinFrackingTower = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(22, "gasPerBedrockDepositBlockMinFrackingTower"), "Controls how much natrual gas at minimum is extracted per bedrock deposit block for Fracking towers", 10);
 		gasPerBedrockDepositBlockMaxExtraFrackingTower = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(23, "gasPerBedrockDepositBlockMaxExtraFrackingTower"), "Controls how much extra natrual gas can be extracted per bedrock deposit block for Fracking towers", 50);
 
+		uuMixerFluidListIsWhitelist = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(24, "uuMixerFluidListIsWhitelist"), "If true then the follwing list of fluids is a whitelist. Otherwise it is a Blacklist", false);
+		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(25, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium" });
 	}
 }

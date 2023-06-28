@@ -43,9 +43,9 @@ public class ModForgeFluids {
 	public static Fluid deuterium = new Fluid("deuterium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/deuterium_flowing"), null, Color.WHITE);
 	public static Fluid tritium = new Fluid("tritium", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/tritium_flowing"), null, Color.WHITE);
 
-	public static Fluid oil = new Fluid("oil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_flowing"), null, Color.WHITE).setTemperature(20+273);
+	public static Fluid oil = new Fluid("oil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/oil_flowing"), null, Color.WHITE);
 	public static Fluid hotoil = new Fluid("hotoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotoil_flowing"), null, Color.WHITE).setTemperature(350+273);
-	public static Fluid crackoil = new Fluid("crackoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_flowing"), null, Color.WHITE).setTemperature(20+273);
+	public static Fluid crackoil = new Fluid("crackoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/crackoil_flowing"), null, Color.WHITE);
 	public static Fluid hotcrackoil = new Fluid("hotcrackoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcrackoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/hotcrackoil_flowing"), null, Color.WHITE).setTemperature(350+273);
 
 	public static Fluid heavyoil = new Fluid("heavyoil", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/heavyoil_flowing"), null, Color.WHITE);

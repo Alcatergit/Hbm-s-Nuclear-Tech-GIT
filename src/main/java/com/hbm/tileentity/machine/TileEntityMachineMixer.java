@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.config.MachineConfig;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMixer;
@@ -54,7 +55,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	public boolean uuMixer = false;
 	public static final int uuConsumption = 1_000_000;
 	public static final long uuMaxPower = 200_000_000;
-	public static final int uuMattermbPerOutputmb = 10;
+	public static final int uuMattermbPerOutputmb = 100;
 	
 	public FluidTank[] tanks;
 	private final UpgradeManager upgradeManager = new UpgradeManager();
@@ -174,7 +175,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
         if(itemId == ModItems.forge_fluid_identifier) {
             Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
 
-            if(outputFluid != fluid && (uuMixer || MixerRecipes.hasMixerRecipe(fluid))) {
+            if(outputFluid != fluid && ((uuMixer && MachineConfig.isFluidAllowed(fluid)) || MixerRecipes.hasMixerRecipe(fluid))) {
                 outputFluid = fluid;
                 tanks[2].setFluid(new FluidStack(fluid, 0));
 
@@ -188,7 +189,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	    	if(tanks[0].getCapacity() != 2_000_000_000){
 		    	tanks[0] = FFUtils.changeTankSize(tanks[0], 2_000_000_000);
 		    	tanks[1] = FFUtils.changeTankSize(tanks[1], 2_000_000_000);
-		    	tanks[2] = FFUtils.changeTankSize(tanks[2], 2_000_000_000);
+		    	tanks[2] = FFUtils.changeTankSize(tanks[2], 2_000_000_000/uuMattermbPerOutputmb);
 		    	this.markDirty();
 		    }
 	    } else {

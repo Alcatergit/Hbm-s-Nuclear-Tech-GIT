@@ -63,21 +63,21 @@ public class ItemModBathwater extends ItemArmorMod {
 	public void modDamage(LivingHurtEvent event, ItemStack armor) {
 		
 		if(!event.getEntityLiving().world.isRemote) {
-			
+
 			if(event.getSource() instanceof EntityDamageSource) {
 				
-				Entity attacker = ((EntityDamageSource)event.getSource()).getImmediateSource();
+				Entity attacker = ((EntityDamageSource)event.getSource()).getTrueSource();
 				
 				if(attacker instanceof EntityLivingBase) {
 					
 					if(this == ModItems.bathwater)
 						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
 					
-					if(this == ModItems.bathwater_mk2)
+					else if(this == ModItems.bathwater_mk2)
 						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(MobEffects.WITHER, 200, 4));
 
-					if(this == ModItems.bathwater_mk3)
-						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(HbmPotion.radiation, 200, 99));
+					else if(this == ModItems.bathwater_mk3)
+						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(HbmPotion.radiation, 300, 99));
 				}
 			}
 		}

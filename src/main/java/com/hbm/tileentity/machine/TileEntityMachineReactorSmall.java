@@ -307,22 +307,22 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 	@SuppressWarnings("deprecation")
 	private boolean isContained() {
-		boolean side1 = blocksRad(pos.add(1, 1, 0)) || blocksRad(pos.add(2, 1, 0)) || blocksRad(pos.add(3, 1, 0));
+		boolean side1 = blocksRad(pos.add(1, 1, 0));
 		if(!side1){
 			return false;
 		}
 
-		boolean side2 = blocksRad(pos.add(-1, 1, 0)) || blocksRad(pos.add(-2, 1, 0)) || blocksRad(pos.add(-3, 1, 0));
+		boolean side2 = blocksRad(pos.add(-1, 1, 0));
 		if(!side2){
 			return false;
 		}
 
-		boolean side3 = blocksRad(pos.add(0, 1, 1)) || blocksRad(pos.add(0, 1, 2)) || blocksRad(pos.add(0, 1, 3));
+		boolean side3 = blocksRad(pos.add(0, 1, 1));
 		if(!side3){
 			return false;
 		}
 
-		boolean side4 = blocksRad(pos.add(0, 1, -1)) || blocksRad(pos.add(0, 1, -2)) || blocksRad(pos.add(0, 1, -3));
+		boolean side4 = blocksRad(pos.add(0, 1, -1));
 		if(!side4){
 			return false;
 		}
@@ -336,7 +336,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		Block b = world.getBlockState(pos).getBlock();
 
 		if(b instanceof IRadResistantBlock)
-			return true;
+			return ((IRadResistantBlock)b).isRadResistant(world, pos);
 
 		if(b == Blocks.FLOWING_WATER || b == Blocks.WATER)
 			return true;

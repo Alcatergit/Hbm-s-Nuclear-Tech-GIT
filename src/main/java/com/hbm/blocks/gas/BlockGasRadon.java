@@ -31,11 +31,11 @@ public class BlockGasRadon extends BlockGasBase {
 		
 		EntityLivingBase entityLiving = (EntityLivingBase) entity;
 		
-		if(ArmorRegistry.hasAllProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)) {
+		if(ArmorRegistry.hasProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.RAD_GAS)) {
 			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.05F);
 		} else {
 			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.05F);
-			HbmLivingProps.incrementAsbestos(entityLiving, 1); 
 		}
 	}
 	

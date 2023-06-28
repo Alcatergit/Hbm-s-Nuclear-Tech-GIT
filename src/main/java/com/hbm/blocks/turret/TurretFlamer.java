@@ -53,7 +53,7 @@ public class TurretFlamer extends TurretBase {
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 
-				bullet.setDamage(6 + rand.nextInt(3));
+				bullet.setDamage(2 + rand.nextInt(3));
 				
 				world.spawnEntity(bullet);
 			}

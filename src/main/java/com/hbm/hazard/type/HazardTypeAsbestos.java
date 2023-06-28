@@ -21,10 +21,10 @@ public class HazardTypeAsbestos extends HazardTypeBase {
 	@Override
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
 		
-		if(!ArmorRegistry.hasProtection(target, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-			HbmLivingProps.incrementAsbestos(target, (int) Math.min(level, 10));
-		else
+		if(ArmorRegistry.hasProtection(target, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
 			ArmorUtil.damageGasMaskFilter(target, (int) level);
+		else
+			HbmLivingProps.incrementAsbestos(target, (int) Math.min(level, 10));
 	}
 
 	@Override

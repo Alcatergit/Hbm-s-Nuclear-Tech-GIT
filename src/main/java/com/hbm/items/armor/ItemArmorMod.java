@@ -2,6 +2,7 @@ package com.hbm.items.armor;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
@@ -9,6 +10,7 @@ import com.hbm.items.special.ItemCustomLore;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -81,4 +83,14 @@ public class ItemArmorMod extends ItemCustomLore {
 	
 	@SideOnly(Side.CLIENT)
 	public void modRender(RenderPlayerEvent.Pre event, ItemStack armor) { }
+
+	public void offset(EntityPlayer player, EntityPlayer me, float interp){
+		float px = (float)(player.prevPosX + (player.posX - player.prevPosX) * interp);
+		float py = (float)(player.prevPosY + (player.posY - player.prevPosY) * interp);
+		float pz = (float)(player.prevPosZ + (player.posZ - player.prevPosZ) * interp);
+		float mx = (float)(me.prevPosX + (me.posX - me.prevPosX) * interp);
+		float my = (float)(me.prevPosY + (me.posY - me.prevPosY) * interp);
+		float mz = (float)(me.prevPosZ + (me.posZ - me.prevPosZ) * interp);
+		GL11.glTranslatef(mx-px, my-py, pz-mz);
+	}
 }

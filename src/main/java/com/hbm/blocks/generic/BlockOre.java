@@ -83,13 +83,14 @@ public class BlockOre extends Block implements IItemHazard {
 		}
 		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare)
 		{
-			switch(rand.nextInt(6)) {
+			switch(rand.nextInt(7)) {
 			case 0: return ModItems.fragment_boron;
 			case 1: return ModItems.fragment_cerium;
 			case 2: return ModItems.fragment_cobalt;
 			case 3: return ModItems.fragment_lanthanium;
 			case 4: return ModItems.fragment_neodymium;
 			case 5: return ModItems.fragment_niobium;
+			case 6: if(rand.nextInt(3) == 0) return ModItems.fragment_actinium;
 			}
 		}
 		if(this == ModBlocks.block_meteor)

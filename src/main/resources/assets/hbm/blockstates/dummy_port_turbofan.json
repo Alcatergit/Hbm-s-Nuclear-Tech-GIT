@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:dummy_port_turbofan" },
+		"inventory": { "model": "hbm:dummy_port_turbofan" }
+	}
+}

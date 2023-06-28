@@ -32,9 +32,11 @@ public class ItemFluidIcon extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTab())
-			for(Fluid f : FluidRegistry.getRegisteredFluids().values())
+		if(tab == this.getCreativeTab()){
+			for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
 				items.add(getStack(f));
+			}
+		}
 	}
 	
 	@Override

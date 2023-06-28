@@ -55,7 +55,7 @@ public class TurretTau extends TurretBase {
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 
-				bullet.setDamage(15 + rand.nextInt(5));
+				bullet.setDamage(10 + rand.nextInt(5));
 				
 				world.spawnEntity(bullet);
 			}

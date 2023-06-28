@@ -3,6 +3,9 @@ package com.hbm.items.armor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
+import com.hbm.main.MainRegistry;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.render.model.ModelBackTesla;
 import com.hbm.tileentity.machine.TileEntityTesla;
@@ -65,8 +68,16 @@ public class ItemModTesla extends ItemArmorMod {
 		float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset)*interp;
 		float yawWrapped = MathHelper.wrapDegrees(yaw+180);
 		float pitch = player.rotationPitch;
-		
-		modelTesla.render(event.getEntityPlayer(), 0.0F, 0.0F, 0, yawWrapped, pitch, 0.0625F);
-	}
 
+		EntityPlayer me = MainRegistry.proxy.me();
+		boolean isMe = player == me;
+		if(!isMe){
+			GL11.glPushMatrix();
+			offset(player, me, interp);
+		}
+		modelTesla.render(event.getEntityPlayer(), 0.0F, 0.0F, 0, yawWrapped, pitch, 0.0625F);
+		if(!isMe){
+			GL11.glPopMatrix();
+		}
+	}
 }

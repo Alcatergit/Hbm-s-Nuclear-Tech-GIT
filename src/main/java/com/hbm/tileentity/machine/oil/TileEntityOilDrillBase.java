@@ -40,7 +40,11 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
     public boolean needsUpdate;
 
     public TileEntityOilDrillBase() {
-        inventory = new ItemStackHandler(6){
+        this(6);
+    }
+
+    public TileEntityOilDrillBase(int slots) {
+        inventory = new ItemStackHandler(slots){
             @Override
             protected void onContentsChanged(int slot) {
                 markDirty();

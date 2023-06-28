@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:machine_difurnace_off"
+                        "item": "hbm:ingot_red_copper"
                     }
                 ]
             }

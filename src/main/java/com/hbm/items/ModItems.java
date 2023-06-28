@@ -402,12 +402,13 @@ public class ModItems {
 	public static final Item gun_kit_1 = new ItemSyringe("gun_kit_1").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gun_kit_2 = new ItemSyringe("gun_kit_2").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item euphemium_kit = new ItemStarterKit("euphemium_kit").setMaxStackSize(1).setCreativeTab(null);
-	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(null);
-	public static final Item gas_mask_filter_rag = new ItemFilter("gas_mask_filter_rag", 40000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item gas_mask_filter_piss = new ItemFilter("gas_mask_filter_piss", 40000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item gas_mask_filter_mono = new ItemFilter("gas_mask_filter_mono", 80000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item gas_mask_filter = new ItemFilter("gas_mask_filter", 120000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item gas_mask_filter_combo = new ItemFilter("gas_mask_filter_combo", 160000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gas_mask_filter_rag = new ItemFilter("gas_mask_filter_rag", 4000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_piss = new ItemFilter("gas_mask_filter_piss", 4000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_mono = new ItemFilter("gas_mask_filter_mono", 12000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter = new ItemFilter("gas_mask_filter", 18000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_combo = new ItemFilter("gas_mask_filter_combo", 24000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item gas_mask_filter_radon = new ItemFilter("gas_mask_filter_radon", 32000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item attachment_mask = new ItemModGasmask("attachment_mask").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item attachment_mask_mono = new ItemModGasmask("attachment_mask_mono").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
@@ -638,7 +639,7 @@ public class ModItems {
 	public static final Item upgrade_shredder = new ItemMachineUpgrade("upgrade_shredder").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_centrifuge = new ItemMachineUpgrade("upgrade_centrifuge").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_crystallizer = new ItemMachineUpgrade("upgrade_crystallizer").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item upgrade_nullifier = new ItemMachineUpgrade("upgrade_nullifier").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item upgrade_nullifier = new ItemMachineUpgrade("upgrade_nullifier", UpgradeType.NULLIFIER, 1).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item upgrade_screm = new ItemMachineUpgrade("upgrade_screm", UpgradeType.SCREAM, 1).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	
@@ -768,19 +769,19 @@ public class ModItems {
 	public static final Item starmetal_boots = new ArmorFSB(MainRegistry.aMatStarmetal, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", "starmetal_boots").cloneStats((ArmorFSB) starmetal_helmet);
 	
 	public static final Item cmb_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_helmet").setCap(5F).setMod(0.4F).setThreshold(5F)
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 2))
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 30, 2))
+			.addEffect(new PotionEffect(MobEffects.HASTE, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
 			.setFireproof(true);
 	public static final Item cmb_plate = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_plate").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
 	public static final Item cmb_legs = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/cmb_2.png", "cmb_legs").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
 	public static final Item cmb_boots = new ArmorFSB(MainRegistry.enumArmorMaterialCmb, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/cmb_1.png", "cmb_boots").cloneStats((ArmorFSB) cmb_helmet).setMaxStackSize(1);
 
 	public static final Item schrabidium_helmet = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_helmet").setCap(4F).setMod(0.1F)
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 2))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 2))
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 2))
+			.addEffect(new PotionEffect(MobEffects.HASTE, 30, 2))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 2))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 1))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 30, 2))
 			.setFireproof(true);
 	public static final Item schrabidium_plate = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_plate").cloneStats((ArmorFSB) schrabidium_helmet).setMaxStackSize(1);
 	public static final Item schrabidium_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/schrabidium_2.png", "schrabidium_legs").cloneStats((ArmorFSB) schrabidium_helmet).setCap(4F).setMod(0.1F).setMaxStackSize(1);
@@ -790,8 +791,8 @@ public class ModItems {
 	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, 1000000, 10000, 1000, 5, "t45_helmet").setCap(20F).setMod(0.5F)
 			.setFireproof(true)
 			.enableVATS(true)
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 30, 1))
 			.setBlastProtection(0.5F)
 			.addResistance("fall", 0).setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item t45_plate = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.CHEST, 1000000, 10000, 1000, 5, "t45_plate").cloneStats((ArmorFSB) t45_helmet).setCreativeTab(CreativeTabs.COMBAT);
@@ -803,8 +804,8 @@ public class ModItems {
 			.enableVATS(true)
 			.enableFlashlight(new Vec3d(-0.18, 0.2, 0.9))
 			.setHasGeigerSound(true)
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
 			.setBlastProtection(0.25F)
 			.setStep(HBMSoundHandler.iron)
 			.setJump(HBMSoundHandler.ironJump)
@@ -820,8 +821,8 @@ public class ModItems {
 			.enableFlashlight(new Vec3d(-0.18, 0.2, 0.9))
 			.setHasGeigerSound(true)
 			.setHasHardLanding(true)
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 0))
 			.setBlastProtection(0.25F)
 			.setStep(HBMSoundHandler.iron)
 			.setJump(HBMSoundHandler.ironJump)
@@ -833,9 +834,9 @@ public class ModItems {
 	public static final Item ajro_boots = new ArmorAJRO(MainRegistry.aMatAJR, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 2500000, 10000, 2000, 25, "ajro_boots").cloneStats((ArmorFSB) ajro_helmet);
 
 	public static final Item hev_helmet = new ArmorHEV(MainRegistry.aMatHEV, 7, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 5000000, 10000, 2500, 100, "hev_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
-			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 30, 1))
+			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0))
 			.enableFlashlight(new Vec3d(0, -0.1, 0.8))
 			.setBlastProtection(0.25F)
 			.setMod(0.2F)
@@ -852,10 +853,10 @@ public class ModItems {
 			.enableVATS(true)
 			.enableThermalSight(true)
 			.setHasGeigerSound(true)
-			.addEffect(new PotionEffect(MobEffects.SPEED, 20, 1))
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.SATURATION, 20, 0))
-			.addEffect(new PotionEffect(HbmPotion.radx, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.SPEED, 30, 1))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.SATURATION, 30, 0))
+			.addEffect(new PotionEffect(HbmPotion.radx, 30, 0))
 			.setBlastProtection(0.5F)
 			//.setGravity(0.02D)
 			.setStep(HBMSoundHandler.iron)
@@ -872,9 +873,9 @@ public class ModItems {
 			.enableVATS(true)
 			.setHasGeigerSound(true)
 			.setHasHardLanding(true)
-			.addEffect(new PotionEffect(HbmPotion.radx, 20, 0))
-			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 3))
-			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 20, 0))
+			.addEffect(new PotionEffect(HbmPotion.radx, 30, 0))
+			.addEffect(new PotionEffect(MobEffects.STRENGTH, 30, 3))
+			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0))
 			.setBlastProtection(0.25F)
 			.setMod(0.1F)
 			.setThreshold(20.0F)
@@ -888,8 +889,8 @@ public class ModItems {
 	public static final Item rpa_boots = new ArmorRPA(MainRegistry.aMatRPA, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/starmetal_1.png", 50000000, 100000, 20000, 500, "RPA_boots").cloneStats((ArmorFSB) rpa_helmet);
 
 	public static final Item fau_helmet = new ArmorDigamma(MainRegistry.aMatFau, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 100000000, 100000, 25000, 1000, "fau_helmet").setMod(0.25F).setCap(4.0F).setThreshold(2.0F)
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 1))
-			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 1))
+			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0))
 			.setBlastProtection(0.05F)
 			.setMod(0.05F)
 			.setHasGeigerSound(true)
@@ -907,9 +908,9 @@ public class ModItems {
 	
 	public static final Item dns_helmet = new ArmorDNT(MainRegistry.aMatDNS, -1, EntityEquipmentSlot.HEAD, RefStrings.MODID + ":textures/armor/starmetal_1.png", 1000000000, 1000000, 100000, 10000, "dns_helmet")
 			.addEffect(new PotionEffect(MobEffects.STRENGTH, 20, 9))
-			.addEffect(new PotionEffect(MobEffects.HASTE, 20, 7))
-			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20, 2))
-			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 20, 0))
+			.addEffect(new PotionEffect(MobEffects.HASTE, 30, 7))
+			.addEffect(new PotionEffect(MobEffects.JUMP_BOOST, 30, 2))
+			.addEffect(new PotionEffect(MobEffects.WATER_BREATHING, 30, 0))
 			.setHasGeigerSound(true)
 			.enableVATS(true)
 			.enableThermalSight(true)
@@ -1031,7 +1032,7 @@ public class ModItems {
 	public static final Item gun_fatman = new ItemGunBase(GunFatmanFactory.getFatmanConfig(), "gun_fatman").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_proto = new ItemGunBase(GunFatmanFactory.getProtoConfig(), "gun_proto").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_mirv = new ItemGunBase(GunFatmanFactory.getMIRVConfig(), "gun_mirv").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_bf = new ItemGunBase(GunFatmanFactory.getBELConfig(), "gun_bf").setCreativeTab(null);
+	public static final Item gun_bf = new ItemGunBase(GunFatmanFactory.getBELConfig(), "gun_bf").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item gun_zomg = new ItemGunBase(GunEnergyFactory.getZOMGConfig(), "gun_zomg").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_xvl1456 = new ItemGunGauss(GunGaussFactory.getXVLConfig(), GunGaussFactory.getChargedConfig(), "gun_xvl1456").setCreativeTab(MainRegistry.weaponTab);
@@ -2447,7 +2448,7 @@ public class ModItems {
 	public static final Item ammo_mirv_low = new ItemAmmo("ammo_mirv_low").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_mirv_high = new ItemAmmo("ammo_mirv_high").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_mirv_safe = new ItemAmmo("ammo_mirv_safe").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item ammo_mirv_special = new ItemAmmo("ammo_mirv_special").setCreativeTab(null);
+	public static final Item ammo_mirv_special = new ItemAmmo("ammo_mirv_special").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item ammo_fuel = new ItemAmmo("ammo_fuel").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
 	public static final Item ammo_fuel_napalm = new ItemAmmo("ammo_fuel_napalm").setCreativeTab(MainRegistry.weaponTab).setMaxStackSize(1);
@@ -2597,7 +2598,7 @@ public class ModItems {
 	public static final Item grenade_poison = new ItemGrenade(4, "grenade_poison").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_gas = new ItemGrenade(4, "grenade_gas").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_cloud = new ItemGrenade(-1, "grenade_cloud").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item grenade_pink_cloud = new ItemGrenade(-1, "grenade_pink_cloud").setCreativeTab(null);
+	public static final Item grenade_pink_cloud = new ItemGrenade(-1, "grenade_pink_cloud").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_smart = new ItemGrenade(-1, "grenade_smart").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_mirv = new ItemGrenade(1, "grenade_mirv").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item grenade_breach = new ItemGrenade(-1, "grenade_breach").setCreativeTab(MainRegistry.weaponTab);
@@ -3063,16 +3064,16 @@ public class ModItems {
 	
 	//Keys + locks
 	public static final Item key = new ItemKey("key").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item key_red = new ItemCustomLore("key_red").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item key_red = new ItemCustomLore("key_red").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item key_kit = new ItemCounterfitKeys("key_kit").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item key_fake = new ItemKey("key_fake").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item pin = new ItemCustomLore("pin").setMaxStackSize(8).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item padlock_rusty = new ItemLock(1, "padlock_rusty").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item padlock = new ItemLock(0.1, "padlock").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item padlock_reinforced = new ItemLock(0.02, "padlock_reinforced").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item padlock_unbreakable = new ItemLock(0, "padlock_unbreakable").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item padlock_unbreakable = new ItemLock(0, "padlock_unbreakable").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
-	public static final Item mech_key = new ItemCustomLore("mech_key").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item mech_key = new ItemCustomLore("mech_key").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 
 	//AMS Catalysts
 	public static final Item ams_catalyst_blank = new ItemBase("ams_catalyst_blank").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
@@ -3101,7 +3102,7 @@ public class ModItems {
 	public static final Item ams_core_sing = new ItemAMSCore(500, 0.8F, 1.5F, "ams_core_sing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_wormhole = new ItemAMSCore(650, 1.5F, 0.8F, "ams_core_wormhole").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_eyeofharmony = new ItemAMSCore(800, 1.5F, 2.0F, "ams_core_eyeofharmony").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item ams_core_thingy = new ItemAMSCore(2500, 0.7F, 0.7F, "ams_core_thingy").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item ams_core_thingy = new ItemAMSCore(2500, 0.7F, 0.7F, "ams_core_thingy").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item ams_muzzle = new ItemCustomLore("ams_muzzle").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	
@@ -3347,7 +3348,7 @@ public class ModItems {
 	public static final Item mp_fuselage_10_long_kerosene_insulation = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_insulation").setRarity(Rarity.COMMON).setTitle("Orange Insulation").setHealth(35F);
 	public static final Item mp_fuselage_10_long_kerosene_sleek = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_sleek").setRarity(Rarity.RARE).setTitle("IF-R&D").setHealth(40F);
 	public static final Item mp_fuselage_10_long_kerosene_metal = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_metal").setRarity(Rarity.UNCOMMON).setAuthor("Hoboy").setHealth(35F);
-	public static final Item mp_fuselage_10_long_kerosene_dash = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_dash").setRarity(Rarity.EPIC).setAuthor("Sam").setTitle("Dash").setWittyText("I wash my hands of it.").setCreativeTab(null);
+	public static final Item mp_fuselage_10_long_kerosene_dash = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_dash").setRarity(Rarity.EPIC).setAuthor("Sam").setTitle("Dash").setWittyText("I wash my hands of it.");
 	public static final Item mp_fuselage_10_long_kerosene_taint = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_taint").setRarity(Rarity.UNCOMMON).setAuthor("Sam").setTitle("Tainted");
 	public static final Item mp_fuselage_10_long_kerosene_vap = ((ItemMissile) mp_fuselage_10_long_kerosene).copy("mp_fuselage_10_long_kerosene_vap").setRarity(Rarity.EPIC).setAuthor("VT-6/24").setTitle("Minty Contrail").setWittyText("Upper rivet!");
 
@@ -3376,7 +3377,7 @@ public class ModItems {
 	public static final Item mp_fuselage_15_kerosene_blackjack = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_blackjack").setRarity(Rarity.LEGENDARY).setTitle("Queen Whiskey").setHealth(100F);
 	public static final Item mp_fuselage_15_kerosene_lambda = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_lambda").setRarity(Rarity.RARE).setAuthor("VT-6/24").setTitle("Lambda Complex").setHealth(75F).setWittyText("MAGNIFICENT MICROWAVE CASSEROLE");
 	public static final Item mp_fuselage_15_kerosene_minuteman = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_minuteman").setRarity(Rarity.UNCOMMON).setAuthor("Spexta").setTitle("MX 1702");
-	public static final Item mp_fuselage_15_kerosene_pip = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_pip").setRarity(Rarity.EPIC).setAuthor("The Doctor").setTitle("LittlePip").setWittyText("31!").setCreativeTab(null);
+	public static final Item mp_fuselage_15_kerosene_pip = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_pip").setRarity(Rarity.EPIC).setAuthor("The Doctor").setTitle("LittlePip").setWittyText("31!");
 	public static final Item mp_fuselage_15_kerosene_taint = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_taint").setRarity(Rarity.UNCOMMON).setAuthor("Sam").setTitle("Tainted").setWittyText("DUN-DUN!");
 	public static final Item mp_fuselage_15_kerosene_yuck = ((ItemMissile) mp_fuselage_15_kerosene).copy("mp_fuselage_15_kerosene_yuck").setRarity(Rarity.EPIC).setAuthor("Hoboy").setTitle("Flesh").setWittyText("Note: Never clean DNA vials with your own spit.").setHealth(60F);
 
@@ -3452,7 +3453,7 @@ public class ModItems {
 	public static final Item record_lc = new ItemModRecord("lc", HBMSoundHandler.lambdaCore, "record_lc").setCreativeTab(CreativeTabs.MISC);
 	public static final Item record_ss = new ItemModRecord("ss", HBMSoundHandler.sectorSweep, "record_ss").setCreativeTab(CreativeTabs.MISC);
 	public static final Item record_vc = new ItemModRecord("vc", HBMSoundHandler.vortalCombat, "record_vc").setCreativeTab(CreativeTabs.MISC);
-	public static final Item record_glass = new ItemModRecord("glass", HBMSoundHandler.glass, "record_glass").setCreativeTab(null);
+	public static final Item record_glass = new ItemModRecord("glass", HBMSoundHandler.glass, "record_glass").setCreativeTab(CreativeTabs.MISC);
 	
 	//Weird items
 	public static final Item flame_pony = new ItemCustomLore("flame_pony").setCreativeTab(MainRegistry.partsTab);
@@ -3461,15 +3462,15 @@ public class ModItems {
 	public static final Item flame_opinion = new ItemCustomLore("flame_opinion").setCreativeTab(MainRegistry.partsTab);
 	public static final Item polaroid = new ItemPolaroid("polaroid").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item glitch = new ItemGlitch("glitch").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item burnt_bark = new ItemCustomLore("burnt_bark").setCreativeTab(null);
+	public static final Item burnt_bark = new ItemCustomLore("burnt_bark").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item letter = new ItemStarterKit("letter").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item book_secret = new ItemCustomLore("book_secret").setCreativeTab(MainRegistry.polaroidID == 11 ? MainRegistry.consumableTab : null);
 	//Drillgon200: Shaking my head... just had to put "FOE" right on it.
-	public static final Item book_of_ = new ItemBook("book_of_").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item book_of_ = new ItemBook("book_of_").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item crystal_horn = new ItemCustomLore("crystal_horn").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_charred = new ItemCustomLore("crystal_charred").setCreativeTab(MainRegistry.partsTab);
-	public static final Item watch = new ItemCustomLore("watch").setCreativeTab(null).setMaxStackSize(1);
-	public static final Item apple_euphemium = new ItemAppleEuphemium(20, 100, false, "apple_euphemium").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item watch = new ItemCustomLore("watch").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
+	public static final Item apple_euphemium = new ItemAppleEuphemium(20, 100, false, "apple_euphemium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	
 	public static final Item wand = new ItemWand("wand_k").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item wand_s = new ItemWandS("wand_s").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -3629,7 +3630,7 @@ public class ModItems {
 	
 	public static final Item undefined = new ItemCustomLore("undefined").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item mysteryshovel = new ItemMS("mysteryshovel").setFull3D().setMaxStackSize(1);
+	public static final Item mysteryshovel = new ItemMS("mysteryshovel").setFull3D().setMaxStackSize(1).setCreativeTab(CreativeTabs.TOOLS);
 	public static final Item memory = new ItemBattery(Long.MAX_VALUE / 100L, 100000000000000L, 100000000000000L, "memory").setMaxStackSize(1).setCreativeTab(null);
 	
 	public static void preInit(){

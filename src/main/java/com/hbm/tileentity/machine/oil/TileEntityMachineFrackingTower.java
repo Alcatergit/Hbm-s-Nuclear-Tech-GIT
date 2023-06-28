@@ -7,10 +7,13 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
+import com.hbm.inventory.UpgradeManager;
+import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.world.feature.OilSpot;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,14 +23,17 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
+    private final UpgradeManager upgradeManager = new UpgradeManager();
+
     public TileEntityMachineFrackingTower() {
-        super();
+        super(9);
         tanks[2] = new FluidTank(64000);
         tankTypes[2] = ModForgeFluids.fracksol;
     }
@@ -39,17 +45,42 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
         return 5000000L;
     }
 
+    public int speedLevel = 0;
+    public int energyLevel = 0;
+    public int overLevel = 0;
+
+    public int getPowerReqEff() {
+        int req = MachineConfig.powerConsumptionPerOperationFrackingTower;
+        return (req + (this.speedLevel * req / 4) - (this.energyLevel * req / 4)) * this.overLevel;
+    }
+    
+    public int getDelayEff() {
+        int delay = MachineConfig.delayPerOperationFrackingTower;
+        return Math.max((delay - (this.speedLevel * delay / 4) + (this.energyLevel * delay / 10)) / this.overLevel, 1);
+    }
+
     @Override
     public void update() {
-        int timer = MachineConfig.delayPerOperationFrackingTower;
-
-        age++;
-        age2++;
-        if(age >= timer)
-            age -= timer;
-        if(age2 >= 20)
-            age2 -= 20;
+       
         if(!world.isRemote) {
+            if(inventory.getSlots() < 9){
+                inventory.setSize(9);
+            }
+
+            upgradeManager.eval(inventory, 6, 8);
+            this.speedLevel = Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3);
+            this.energyLevel = Math.min(upgradeManager.getLevel(UpgradeType.POWER), 3);
+            this.overLevel = Math.min(upgradeManager.getLevel(UpgradeType.OVERDRIVE), 3) + 1;
+
+            int timer = getDelayEff();
+
+            age++;
+            age2++;
+            if(age >= timer)
+                age = 0;
+            if(age2 >= 20)
+                age2 -= 20;
+
             this.updateConnections();
             int tank0Amount = tanks[0].getFluidAmount();
             int tank1Amount = tanks[1].getFluidAmount();
@@ -70,7 +101,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
             }
             power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 
-            if(power >= MachineConfig.powerConsumptionPerOperationFrackingTower && tank2Amount >= MachineConfig.solutionConsumptionPerOperationFrackingTower && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
+            if(power >= getPowerReqEff() && tank2Amount >= MachineConfig.solutionConsumptionPerOperationFrackingTower && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
 
                 // operation start
 
@@ -139,7 +170,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
                 // operation end
 
-                power -= MachineConfig.solutionConsumptionPerOperationFrackingTower;
+                power -= getPowerReqEff();
             } else {
                 warning = 1;
             }
@@ -172,10 +203,10 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
     }
 
     public void fillFluidInit(FluidTank tank) {
-        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 0), 2000) || needsUpdate;
-        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 0), 2000) || needsUpdate;
-        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 0, 1), 2000) || needsUpdate;
-        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 0, -1), 2000) || needsUpdate;
+        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 0), 16000) || needsUpdate;
+        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 0), 16000) || needsUpdate;
+        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 0, 1), 16000) || needsUpdate;
+        needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(0, 0, -1), 16000) || needsUpdate;
 
     }
 

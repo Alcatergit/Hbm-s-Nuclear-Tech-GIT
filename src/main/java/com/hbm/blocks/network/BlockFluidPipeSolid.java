@@ -128,7 +128,7 @@ public class BlockFluidPipeSolid extends BlockContainer implements IToolable, IL
 			}
 			
 			boolean extracts = state.getValue(BlockFluidPipeSolid.EXTRACTS);
-			world.setBlockState(pos, ModBlocks.fluid_duct_solid.getDefaultState().withProperty(BlockFluidPipeSolid.EXTRACTS, !extracts));
+			world.setBlockState(pos, this.getDefaultState().withProperty(BlockFluidPipeSolid.EXTRACTS, !extracts));
 			
 			te = world.getTileEntity(pos);
 			if(te instanceof TileEntityFFDuctBaseMk2){

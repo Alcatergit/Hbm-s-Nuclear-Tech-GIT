@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:brick_concrete"
+                        "item": "hbm:ingot_rubber"
                     }
                 ]
             }

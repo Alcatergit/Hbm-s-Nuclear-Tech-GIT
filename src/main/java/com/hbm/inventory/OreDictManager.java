@@ -201,6 +201,8 @@ public class OreDictManager {
 	public static final DictFrame HEMATITE = new DictFrame("Hematite");
 	public static final DictFrame MALACHITE = new DictFrame("Malachite");
 	public static final DictFrame SLAG = new DictFrame("Slag");
+	public static final DictFrame INFERNAL = new DictFrame("InfernalCoal");
+	
 	/*
 	 * HAZARDS, MISC
 	 */
@@ -318,7 +320,8 @@ public class OreDictManager {
 		S																																				.dust(sulfur)											.block(block_sulfur)							.crystal(crystal_sulfur)								.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur);
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
-	
+		INFERNAL																																																							.gem(coal_infernal)															.ore(ore_nether_coal);
+
 		//Compounds
 		MINGRADE																											.ingot(ingot_red_copper)	.dust(powder_red_copper)								.block(block_red_copper);
 		ALLOY																												.ingot(ingot_advanced_alloy).dust(powder_advanced_alloy)							.block(block_advanced_alloy)													.plate(plate_advanced_alloy);

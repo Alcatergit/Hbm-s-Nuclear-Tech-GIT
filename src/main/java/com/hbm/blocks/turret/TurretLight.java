@@ -62,7 +62,7 @@ public class TurretLight extends TurretBase {
 				bullet.motionY = vector.y * 3;
 				bullet.motionZ = vector.z * 3;
 				
-				bullet.damage = rand.nextInt(3) + 5;
+				bullet.damage = rand.nextInt(2) + 2;
 				
 				world.spawnEntity(bullet);
 			}

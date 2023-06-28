@@ -146,7 +146,7 @@ public class ItemHazardModule {
 				boolean hasHazmat = false;
 				if(entity instanceof EntityPlayer){
 					if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
-						ArmorUtil.damageGasMaskFilter(livingTEntity, this.toxic);
+						ArmorUtil.damageGasMaskFilter(livingTEntity, Math.max(1, this.toxic>>2));
 						hasToxFilter = true;
 					} else {
 						hasToxFilter = false;
@@ -177,11 +177,11 @@ public class ItemHazardModule {
 		}
 
 		if(this.asbestos > 0 && GeneralConfig.enableAsbestos) {
-			ContaminationUtil.applyAsbestos(entity, (int) (this.asbestos * mod), this.asbestos); 
+			ContaminationUtil.applyAsbestos(entity, (int) (this.asbestos * mod), 1, (int)(1000/(this.asbestos * mod))); 
 		}
 
 		if(this.coal > 0 && GeneralConfig.enableCoal) {
-			ContaminationUtil.applyCoal(entity, (int) (this.coal * mod), this.coal); 
+			ContaminationUtil.applyCoal(entity, (int) (this.coal * mod), 1, (int)(1000/(this.coal * mod))); 
 		}
 
 		if(this.hydro && currentItem) {

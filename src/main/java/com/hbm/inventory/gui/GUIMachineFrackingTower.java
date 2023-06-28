@@ -62,9 +62,9 @@ public class GUIMachineFrackingTower extends GuiInfoContainer {
 
 		int l = frackingTower.warning2;
 		if(l == 1)
-			drawTexturedModalRect(guiLeft + 43, guiTop + 89, 212, 52, 18, 18);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 80, 212, 52, 18, 18);
 		if(l == 2)
-			drawTexturedModalRect(guiLeft + 43, guiTop + 89, 230, 52, 18, 18);
+			drawTexturedModalRect(guiLeft + 43, guiTop + 80, 230, 52, 18, 18);
 
 		FFUtils.drawLiquid(frackingTower.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 80, 98);
 		FFUtils.drawLiquid(frackingTower.tanks[1], guiLeft, guiTop, zLevel, 34, 52, 80, 152);

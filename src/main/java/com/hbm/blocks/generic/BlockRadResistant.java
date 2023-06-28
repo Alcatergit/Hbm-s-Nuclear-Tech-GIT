@@ -1,6 +1,7 @@
 package com.hbm.blocks.generic;
 
 import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadResistantBlock;
@@ -49,8 +50,8 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
-		float hardness = this.getExplosionResistance(null);
 		tooltip.add("§2[Radiation Shielding]§r");
+		float hardness = this.getExplosionResistance(null);
 		if(hardness > 50){
 			tooltip.add("§6Blast Resistance: "+hardness+"§r");
 		}

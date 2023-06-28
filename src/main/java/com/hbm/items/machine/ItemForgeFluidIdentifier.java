@@ -10,6 +10,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.config.GeneralConfig;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.util.I18nUtil;
+import com.hbm.forgefluid.FluidTypeHandler;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -57,6 +58,7 @@ public class ItemForgeFluidIdentifier extends Item implements IHasCustomModel {
 		if(GeneralConfig.registerTanks){
 			if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
 				for (Entry<String, Fluid> set : FluidRegistry.getRegisteredFluids().entrySet()) {
+					if(FluidTypeHandler.noID(set.getValue())) continue;
 					ItemStack stack = new ItemStack(this, 1, 0);
 					NBTTagCompound tag = new NBTTagCompound();
 					tag.setString("fluidtype", set.getKey());

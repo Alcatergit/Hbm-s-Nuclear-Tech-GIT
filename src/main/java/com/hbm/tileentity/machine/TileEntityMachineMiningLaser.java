@@ -1,9 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import java.util.List;
-import java.util.Set;
 
-import com.google.common.collect.Sets;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.gas.BlockGasBase;
 import com.hbm.forgefluid.FFUtils;
@@ -31,7 +29,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -335,19 +332,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		breakProgress = 0;
 	}
 
-	private static final Set<Item> bad = Sets.newHashSet(new Item[] {
-			Item.getItemFromBlock(Blocks.DIRT),
-			Item.getItemFromBlock(Blocks.STONE),
-			Item.getItemFromBlock(Blocks.COBBLESTONE),
-			Item.getItemFromBlock(Blocks.SAND),
-			Item.getItemFromBlock(Blocks.SANDSTONE),
-			Item.getItemFromBlock(Blocks.GRAVEL),
-			Item.getItemFromBlock(ModBlocks.stone_gneiss),
-			Items.FLINT,
-			Items.SNOWBALL,
-			Items.WHEAT_SEEDS
-			});
-
 	//hahahahahahahaha he said "suck"
 	private void suckDrops() {
 
@@ -366,7 +350,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 		for(EntityItem item : items) {
 
-			if(nullifier && bad.contains(item.getItem().getItem())) {
+			if(nullifier && ItemMachineUpgrade.scrapItems.contains(item.getItem().getItem())) {
 				item.setDead();
 				continue;
 			}

@@ -111,7 +111,8 @@ public class ArmorRegistry {
 		NERVE_AGENT("hazard.nerveAgent"),				//aggressive nerve agent, also attacks skin (poison vent)
 		GAS_CORROSIVE("hazard.corrosive"),				//corrosive substance, also attacks skin (cloud gas particles)
 		SAND("hazard.sand"),							//blinding sand particles
-		LIGHT("hazard.light");							//blinding light (blinding)
+		LIGHT("hazard.light"),							//blinding light (blinding)
+		RAD_GAS("hazard.radGas");						//radon and wastegases
 		
 		public final String lang;
 		

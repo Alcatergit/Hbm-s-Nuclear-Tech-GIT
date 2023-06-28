@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:machine_assembler"
+                        "item": "hbm:circuit_copper"
                     }
                 ]
             }

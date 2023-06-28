@@ -112,9 +112,9 @@ public class TurretCIWS extends TurretBase {
 					if(ent instanceof EntityLivingBase){
 						ent.hurtResistantTime = 0;
 						((EntityLivingBase) ent).hurtTime = 0;
-						ent.attackEntityFrom(ModDamageSource.shrapnel, 10.0F);
+						ent.attackEntityFrom(ModDamageSource.shrapnel, 2.0F);
 					} else {
-						ent.attackEntityFrom(ModDamageSource.shrapnel, 10.0F);
+						ent.attackEntityFrom(ModDamageSource.shrapnel, 2.0F);
 					}
 				}
 			}

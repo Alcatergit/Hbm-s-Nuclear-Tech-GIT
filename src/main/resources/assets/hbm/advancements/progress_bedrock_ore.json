@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ore_bedrock"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_bedrock_ore"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_bedrock_ore.desc"
+		}
+	},
+	"parent": "hbm:progress_oexcavator",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ore_bedrock"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}

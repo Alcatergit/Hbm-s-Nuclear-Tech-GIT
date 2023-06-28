@@ -1,10 +1,15 @@
 package com.hbm.items.machine;
 
+import java.util.Set;
 import java.util.List;
 
 import com.hbm.items.ModItems;
+import com.hbm.blocks.ModBlocks;
 
+import com.google.common.collect.Sets;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -272,11 +277,28 @@ public class ItemMachineUpgrade extends Item {
 		
 		if(this == ModItems.upgrade_nullifier)
 		{
-			list.add("Mining Laser Upgrade");
+			list.add("Mining Upgrade");
 			list.add(" 50% chance to override worthless items with /dev/zero");
 			list.add(" 50% chance to move worthless items to /dev/null");
 		}
 	}
+
+	public static final Set<Item> scrapItems = Sets.newHashSet(new Item[] {
+			Item.getItemFromBlock(Blocks.GRASS),
+			Item.getItemFromBlock(Blocks.DIRT),
+			Item.getItemFromBlock(Blocks.STONE),
+			Item.getItemFromBlock(Blocks.COBBLESTONE),
+			Item.getItemFromBlock(Blocks.SAND),
+			Item.getItemFromBlock(Blocks.SANDSTONE),
+			Item.getItemFromBlock(Blocks.GRAVEL),
+			Item.getItemFromBlock(Blocks.NETHERRACK),
+			Item.getItemFromBlock(Blocks.END_STONE),
+			Item.getItemFromBlock(ModBlocks.stone_gneiss),
+			Items.FLINT,
+			Items.SNOWBALL,
+			Items.WHEAT_SEEDS,
+			Items.STICK
+			});
 
 	public enum UpgradeType {
 		SPEED,
@@ -285,6 +307,7 @@ public class ItemMachineUpgrade extends Item {
 		FORTUNE,
 		AFTERBURN,
 		OVERDRIVE,
+		NULLIFIER,
 		SCREAM,
 		SPECIAL;
 

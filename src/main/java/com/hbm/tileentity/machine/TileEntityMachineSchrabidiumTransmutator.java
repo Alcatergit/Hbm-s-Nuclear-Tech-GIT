@@ -24,7 +24,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 
 	public long power = 0;
 	public int process = 0;
-	public static final long maxPower = 5000000;
+	public static final long maxPower = 50000000;
 	public static final int processSpeed = 600;
 
 	private AudioWrapper audio;
@@ -187,7 +187,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	public boolean canProcess() {
 		if(!hasCoil())
 			return false;
-		if(inventory.getStackInSlot(0).isEmpty() || inventory.getStackInSlot(0) == null)
+		if(inventory.getStackInSlot(0) == null || inventory.getStackInSlot(0).isEmpty())
 			return false;
 		long recipePower = NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
 
@@ -198,7 +198,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			return false;
 
 		ItemStack outputItem = NuclearTransmutationRecipes.getOutput(inventory.getStackInSlot(0));
-		if(inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == outputItem.getItem()
+		if(inventory.getStackInSlot(1) == null || inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == outputItem.getItem()
 			&& inventory.getStackInSlot(1).getCount() < inventory.getStackInSlot(1).getMaxStackSize())) {
 			return true;
 		}
@@ -218,8 +218,6 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			if(power < 0)
 				power = 0;
 			process = 0;
-
-			inventory.getStackInSlot(0).shrink(1);
 			
 			if(inventory.getStackInSlot(1).isEmpty()) {
 				inventory.setStackInSlot(1, NuclearTransmutationRecipes.getOutput(inventory.getStackInSlot(0)).copy());
@@ -229,6 +227,10 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			if(!inventory.getStackInSlot(2).isEmpty() && inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor) {
 				ItemCapacitor.setDura(inventory.getStackInSlot(2), ItemCapacitor.getDura(inventory.getStackInSlot(2)) - 1);
 			}
+
+			inventory.getStackInSlot(0).shrink(1);
+			if(inventory.getStackInSlot(0).getCount() == 0)
+				inventory.setStackInSlot(0, ItemStack.EMPTY);
 
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.BLOCKS, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 		}

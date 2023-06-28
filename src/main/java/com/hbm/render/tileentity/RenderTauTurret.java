@@ -56,17 +56,17 @@ public class RenderTauTurret extends TileEntitySpecialRenderer<TileEntityTurretT
 	public void renderTileEntityAt3(TileEntity tileEntity, double x, double y, double z, float f, double yaw, double pitch)
     {
         GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5D, y + 0.75D, z + 0.5D);
+        GL11.glTranslated(x + 0.5D, y + 0.95D, z + 0.5D);
         GlStateManager.enableLighting();
         GL11.glDisable(GL11.GL_CULL_FACE);
 		
 		GL11.glRotated(yaw + 180, 0F, -1F, 0F);
 		GL11.glRotated(pitch, 1F, 0F, 0F);
-		GL11.glTranslated(0, -0.75D, 0);
+		GL11.glTranslated(0, -0.95D, 0);
 
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		this.bindTexture(ResourceManager.turret_tau_tex);
-        ResourceManager.turret_tau.renderPart("turret");
+        ResourceManager.turret_tau.renderPart("gun");
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
 		GL11.glPopMatrix();

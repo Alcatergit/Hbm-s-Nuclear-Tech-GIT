@@ -9,6 +9,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.forgefluid.FluidTypeHandler;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -62,6 +63,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 				empty.setTagCompound(new NBTTagCompound());
 				items.add(empty);
 				for (Entry<String, Fluid> entry : FluidRegistry.getRegisteredFluids().entrySet()) {
+					if(FluidTypeHandler.noContainer(entry.getValue())) continue;
 					ItemStack stack = new ItemStack(this, 1, 0);
 					stack.setTagCompound(new NBTTagCompound());
 					stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,

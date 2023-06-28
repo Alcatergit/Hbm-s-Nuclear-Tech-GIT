@@ -90,6 +90,7 @@ hazard.neverProtects=Will never protect against:
 hazard.particleCoarse=Airborne Particles
 hazard.particleFine=Particulates
 hazard.sand=Eye Irritants
+hazard.radGas=Radioactive Gas
 
 adjective.little=Low
 adjective.medium=Medium
@@ -194,6 +195,7 @@ item.nugget_unobtainium_lesser.name=Unobtainium-439 Nugget
 
 tile.waste_leaves.name=Waste Leaves
 tile.fluid_duct_solid.name=Sealed Fluid Duct
+tile.fluid_duct_solid_sealed.name=Rad Sealed Fluid Duct
 tile.field_disturber.name=High Energy Field Jammer
 
 tile.radio_torch_sender.name=Redstone-over-Radio Sender
@@ -501,6 +503,9 @@ trait.antimatter=Annihilating
 trait.corrosivePlastic=Corrosive
 trait.corrosiveIron=Strongly Corrosive
 
+trait.dfcFuel=DFC Fuel
+trait.dfcFuel.desc=§dPower Output §5%s%%
+
 trait.rbmk.coreTemp=Core temp: %s
 trait.rbmk.depletion=Depletion: %s
 trait.rbmk.diffusion=Diffusion: %s
@@ -608,6 +613,15 @@ hbm.achievement.progress_dosimeter.desc=Your new best Friend
 hbm.achievement.progress_mask=No More Coal Dust
 hbm.achievement.progress_mask.desc=Nevermind it dried
 
+hbm.achievement.progress_omega_filter=One For All
+hbm.achievement.progress_omega_filter.desc=Nothing can stop me now
+
+hbm.achievement.progress_excavator=Big Boy Drill
+hbm.achievement.progress_excavator.desc=The gateway to riches
+
+hbm.achievement.progress_bedrock_ore=INFINITE ORES
+hbm.achievement.progress_bedrock_ore.desc=Maybe i will find a Unobtainium spot
+
 hbm.achievement.progress_geiger=Geiger Counter
 hbm.achievement.progress_geiger.desc=Your upgraded best Friend
 
@@ -684,7 +698,7 @@ hbm.achievement.progress_dfc=Turning on a Sun
 hbm.achievement.progress_dfc.desc=A stellar campfire
 
 hbm.achievement.progress_creative=Certified DFC Professional
-hbm.achievement.progress_creative.desc=You are now kompetent in DFC
+hbm.achievement.progress_creative.desc=You are now competent in DFC
 
 hbm.achievement.progress_schrabidium=Island of Stability
 hbm.achievement.progress_schrabidium.desc=Regardless, I wouldn't look at it for too long.
@@ -775,15 +789,15 @@ hbm.achievement.fiend2=Delinquent 2: Delinquent Harder
 hbm.achievement.fiend2.desc=Be meaner.
 
 hbm.achievement.bobmetalworks=Metalworks
-hbm.achievement.bobmetalworks.desc=Vault-tec Support Level 1 (Blast Furnace)
+hbm.achievement.bobmetalworks.desc=Vault-tec Support Level 1 (Minecraft Grade Copper)
 hbm.achievement.bobassembly=Fabrication
-hbm.achievement.bobassembly.desc=Vault-tec Support Level 2 (Assembly Machine)
+hbm.achievement.bobassembly.desc=Vault-tec Support Level 2 (Enhanced Circuit)
 hbm.achievement.bobchemistry=Chemistry
-hbm.achievement.bobchemistry.desc=Vault-tec Support Level 3 (Concrete Bricks)
+hbm.achievement.bobchemistry.desc=Vault-tec Support Level 3 (Rubber)
 hbm.achievement.boboil=Petroleum
-hbm.achievement.boboil.desc=Vault-tec Support Level 4 (Electric Boiler)
+hbm.achievement.boboil.desc=Vault-tec Support Level 4 (Oil Tar)
 hbm.achievement.bobnuclear=Atomic Science
-hbm.achievement.bobnuclear.desc=Vault-tec Support Level 5 (Uranium Fuel)
+hbm.achievement.bobnuclear.desc=Vault-tec Support Level 5 (Pu-241 Ingot)
 hbm.achievement.bobhidden=Hidden Catalog
 hbm.achievement.bobhidden.desc=Kill a tainted creeper with a falling boxcar.
 
@@ -1548,6 +1562,7 @@ tile.machine_generator.name=Nuclear Reactor (Old)
 container.generator=Nuclear Reactor
 container.hadron=Particle Accelerator
 tile.red_wire_coated.name=Red Copper Cable Block
+tile.red_wire_sealed.name=Rad Sealed Red Copper Cable Block
 tile.cable_switch.name=Power Switch
 tile.cable_diode.name=Power Diode
 tile.cable_diode.desc=§6Limits throughput and restricts flow direction$§eUse screwdriver to increase throughput$§eUse hand drill to decrease throughput$§eUse defuser to change network priority
@@ -3371,6 +3386,7 @@ item.med_schiziphrenia.name=Schizophrenia Medication
 item.gas_mask_filter.name=Gas Mask Filter
 item.gas_mask_filter_mono.name=Catalytic Mask Filter
 item.gas_mask_filter_combo.name=Gas Mask Combo Filter
+item.gas_mask_filter_radon.name=Gas Mask Omega Filter
 item.gas_mask_filter_piss.name=Advanced Makeshift Gas Mask Filter
 item.gas_mask_filter_rag.name=Makeshift Gas Mask Filter
 item.gas_mask_mono.name=Half Mask
@@ -4202,9 +4218,11 @@ item.reactor_sensor.name=Reactor Remote Sensor
 item.oil_detector.name=Oil Reservoir Detector
 item.oil_detector.desc1=Right-click to scan for oil.
 item.oil_detector.desc2=Detector will only find larger deposits.
-item.oil_detector.bullseye=Oil deposit directly below!
-item.oil_detector.detected=Oil detected nearby.
-item.oil_detector.noOil=No oil detected.
+item.oil_detector.bullseyeBedrock=Bedrock Oil deposit directly below
+item.oil_detector.detectedBedrock=Bedrock Oil detected nearby
+item.oil_detector.bullseye=Oil deposit directly below
+item.oil_detector.detected=Oil detected nearby
+item.oil_detector.noOil=No Oil detected
 item.geiger_counter.name=Handheld Geiger Counter
 tile.geiger.name=Geiger Counter
 item.dosimeter.name=Dosimeter

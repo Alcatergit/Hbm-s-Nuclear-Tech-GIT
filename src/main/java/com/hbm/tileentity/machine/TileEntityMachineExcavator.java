@@ -1,7 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -19,6 +17,7 @@ import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemDrillbit;
 import com.hbm.items.machine.ItemDrillbit.EnumDrillType;
+import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.Library;
 import com.hbm.lib.DirPos;
@@ -76,6 +75,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	public boolean enableWalling = false;
 	public boolean enableVeinMiner = false;
 	public boolean enableSilkTouch = false;
+	public boolean hasNullifier = false;
 	
 	protected int ticksWorked = 0;
 	protected int targetDepth = 0; //0 is the first block below null position
@@ -120,9 +120,10 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		
 		//needs to happen on client too for GUI rendering
 		upgradeManager.eval(inventory, 2, 3);
-		int speedLevel = Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3);
+		int speedLevel = Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 10);
 		int powerLevel = Math.min(upgradeManager.getLevel(UpgradeType.POWER), 3);
-		
+		hasNullifier =  upgradeManager.getLevel(UpgradeType.NULLIFIER) > 0;
+
 		consumption = baseConsumption * (1 + speedLevel);
 		consumption /= (1 + powerLevel);
 		
@@ -452,36 +453,50 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		NonNullList<ItemStack> items = NonNullList.create();
   		b.getDrops(items, world, drillPos, bState, this.getFortuneLevel());
 		
-		if(this.canSilkTouch()) {
-			
-			ItemStack result = new ItemStack(Item.getItemFromBlock(b), 1, b.getMetaFromState(bState));
+		if(b == ModBlocks.barricade){
+			items.clear();
+		} else {
+			if(this.canSilkTouch()) {
 				
-			if(result != null && !result.isEmpty()) {
-				items.clear();
-				items.add(result.copy());
-			}
-		}
-		
-		if(this.enableCrusher) {
-			
-			NonNullList<ItemStack> list = NonNullList.create();
-  		
-			for(ItemStack stack : items) {
-				ItemStack crushed = ShredderRecipes.getShredderResult(stack).copy();
-				
-				if(crushed.getItem() == ModItems.scrap || crushed.getItem() == ModItems.dust) {
-					list.add(stack);
-				} else {
-					crushed.setCount(crushed.getCount() * stack.getCount());
-					list.add(crushed);
+				ItemStack result = new ItemStack(Item.getItemFromBlock(b), 1, b.getMetaFromState(bState));
+					
+				if(result != null && !result.isEmpty()) {
+					items.clear();
+					items.add(result.copy());
 				}
 			}
 			
-			items = list;
+			if(this.enableCrusher) {
+				
+				NonNullList<ItemStack> list = NonNullList.create();
+	  		
+				for(ItemStack stack : items) {
+					ItemStack crushed = ShredderRecipes.getShredderResult(stack).copy();
+					
+					if(crushed.getItem() == ModItems.scrap || crushed.getItem() == ModItems.dust) {
+						list.add(stack);
+					} else {
+						crushed.setCount(crushed.getCount() * stack.getCount());
+						list.add(crushed);
+					}
+				}
+				
+				items = list;
+			}
+
+			if(this.hasNullifier){
+				
+				NonNullList<ItemStack> goodList = NonNullList.create();
+
+	  			for(ItemStack stack : items) {
+	  				if(!ItemMachineUpgrade.scrapItems.contains(stack.getItem())){
+	  					goodList.add(stack);
+	  				}
+	  			}
+
+	  			items = goodList;
+			}
 		}
-		
-		if(b == ModBlocks.barricade)
-			items.clear();
 		
 		for(ItemStack item : items) {
 			world.spawnEntity(new EntityItem(world, drillPos.getX() + 0.5, drillPos.getY() + 0.5, drillPos.getZ() + 0.5, item));

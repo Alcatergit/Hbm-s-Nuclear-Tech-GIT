@@ -437,7 +437,12 @@ public class ContaminationUtil {
 	}
 	
 	/// ASBESTOS ///
+
 	public static void applyAsbestos(Entity e, int i, int dmg) {
+		applyAsbestos(e, i, dmg, 1);
+	}
+
+	public static void applyAsbestos(Entity e, int i, int dmg, int chance) {
 
 		if(!GeneralConfig.enableAsbestos)
 			return;
@@ -453,14 +458,27 @@ public class ContaminationUtil {
 		
 		EntityLivingBase entity = (EntityLivingBase)e;
 		
-		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-			ArmorUtil.damageGasMaskFilter(entity, dmg);
-		else
+		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)){
+			if(chance > 1){
+				if(entity.world.rand.nextInt(chance) == 0){
+					ArmorUtil.damageGasMaskFilter(entity, 1);
+				}
+			}
+			else{
+				ArmorUtil.damageGasMaskFilter(entity, dmg);
+			}
+		}
+		else{
 			HbmLivingProps.incrementAsbestos(entity, i);
+		}
+	}
+
+	public static void applyCoal(Entity e, int i, int dmg) {
+		applyCoal(e, i, dmg, 1);
 	}
 
 	/// COAL ///
-	public static void applyCoal(Entity e, int i, int dmg) {
+	public static void applyCoal(Entity e, int i, int dmg, int chance) {
 
 		if(!GeneralConfig.enableCoal)
 			return;
@@ -476,10 +494,19 @@ public class ContaminationUtil {
 		
 		EntityLivingBase entity = (EntityLivingBase)e;
 		
-		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE))
-			ArmorUtil.damageGasMaskFilter(entity, dmg);
-		else
+		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE)){
+			if(chance > 1){
+				if(entity.world.rand.nextInt(chance) == 0){
+					ArmorUtil.damageGasMaskFilter(entity, 1);
+				}
+			}
+			else{
+				ArmorUtil.damageGasMaskFilter(entity, dmg);
+			}
+		}
+		else{
 			HbmLivingProps.incrementBlackLung(entity, i);
+		}
 	}
 		
 	/// DIGAMMA ///
@@ -602,8 +629,6 @@ public class ContaminationUtil {
 		MONOXIDE,
 		RADIATION,
 		NEUTRON,
-		ASBESTOS,
-		COAL,
 		DIGAMMA
 	}
 	
@@ -663,8 +688,6 @@ public class ContaminationUtil {
 		case MONOXIDE: entity.attackEntityFrom(ModDamageSource.monoxide, amount); break;
 		case RADIATION: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); break;
 		case NEUTRON: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); HbmLivingProps.setNeutron(entity, amount); break;
-		case ASBESTOS: applyAsbestos(entity, (int)amount, (int)amount); break;
-		case COAL: applyCoal(entity, (int)amount, (int)amount); break;
 		case DIGAMMA: applyDigammaData(entity, amount); break;
 		}
 		

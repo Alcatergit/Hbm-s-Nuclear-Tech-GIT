@@ -19,7 +19,7 @@ public class ModelBackTesla extends ModelArmorBase {
 	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 		setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 		this.body.rotateAngleY += (float)Math.toRadians(par5);
-		
+
 		GL11.glPushMatrix();
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		
@@ -29,5 +29,4 @@ public class ModelBackTesla extends ModelArmorBase {
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glPopMatrix();
 	}
-
 }

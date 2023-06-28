@@ -106,6 +106,7 @@ import com.hbm.blocks.generic.BlockRailing;
 import com.hbm.blocks.generic.BlockRotatablePillar;
 import com.hbm.blocks.generic.BlockSmolder;
 import com.hbm.blocks.generic.BlockStorageCrate;
+import com.hbm.blocks.generic.BlockStorageCrateRadResistant;
 import com.hbm.blocks.generic.BlockVent;
 import com.hbm.blocks.generic.BlockWriting;
 import com.hbm.blocks.generic.DecoBlock;
@@ -155,6 +156,7 @@ import com.hbm.blocks.network.BlockConveyor;
 import com.hbm.blocks.network.BlockFluidDuct;
 import com.hbm.blocks.network.BlockFluidPipeMk2;
 import com.hbm.blocks.network.BlockFluidPipeSolid;
+import com.hbm.blocks.network.BlockFluidPipeSolidRadResistant;
 import com.hbm.blocks.network.RadioTorchSender;
 import com.hbm.blocks.network.RadioTorchReceiver;
 import com.hbm.blocks.network.energy.BlockCable;
@@ -166,6 +168,7 @@ import com.hbm.blocks.network.energy.PylonRedWire;
 import com.hbm.blocks.network.energy.PylonLarge;
 import com.hbm.blocks.network.energy.Substation;
 import com.hbm.blocks.network.energy.WireCoated;
+import com.hbm.blocks.network.energy.WireCoatedRadResistant;
 import com.hbm.blocks.network.energy.BlockConverterRfHe;
 import com.hbm.blocks.network.energy.BlockConverterHeRf;
 import com.hbm.blocks.test.KeypadTest;
@@ -789,6 +792,7 @@ public class ModBlocks {
 	//Cables
 	public static final Block red_cable = new BlockCable(Material.IRON, "red_cable").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block red_wire_coated = new WireCoated(Material.IRON, "red_wire_coated").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block red_wire_sealed = new WireCoatedRadResistant(Material.IRON, "red_wire_sealed").setHardness(15.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block cable_switch = new CableSwitch(Material.IRON, "cable_switch").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block cable_detector = new CableDetector(Material.IRON, "cable_detector").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_detector = new PowerDetector(Material.IRON, "machine_detector").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -932,7 +936,7 @@ public class ModBlocks {
 	public static final Block crate_iron = new BlockStorageCrate(Material.IRON, "crate_iron").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block crate_steel = new BlockStorageCrate(Material.IRON, "crate_steel").setHardness(5.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block crate_desh = new BlockStorageCrate(Material.IRON, "crate_desh").setSoundType(SoundType.METAL).setHardness(7.5F).setResistance(300.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block crate_tungsten = new BlockStorageCrate(Material.IRON, "crate_tungsten").setSoundType(SoundType.METAL).setHardness(7.5F).setResistance(3000.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block crate_tungsten = new BlockStorageCrateRadResistant(Material.IRON, "crate_tungsten").setSoundType(SoundType.METAL).setHardness(15F).setResistance(10000.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block crate_can = new BlockCanCrate(Material.WOOD, "crate_can").setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(2.5F).setCreativeTab(MainRegistry.consumableTab);
 	public static final Block crate_jungle = new BlockJungleCrate(Material.ROCK, "crate_jungle").setSoundType(SoundType.STONE).setHardness(1.0F).setResistance(2.5F).setCreativeTab(MainRegistry.consumableTab);
 	public static final Block crate_ammo = new BlockAmmoCrate(Material.IRON, "crate_ammo").setSoundType(SoundType.METAL).setHardness(1.0F).setResistance(2.5F).setCreativeTab(MainRegistry.consumableTab);
@@ -1429,6 +1433,7 @@ public class ModBlocks {
 
 	public static final Block fluid_duct_mk2 = new BlockFluidPipeMk2(Material.IRON, "fluid_duct_mk2").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.templateTab);
 	public static final Block fluid_duct_solid = new BlockFluidPipeSolid(Material.IRON, "fluid_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.templateTab);
+	public static final Block fluid_duct_solid_sealed = new BlockFluidPipeSolidRadResistant(Material.IRON, "fluid_duct_solid_sealed").setHardness(15.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.templateTab);
 	
 	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(0.0F).setResistance(2.0F).setCreativeTab(null);
 	public static final Block chain = new BlockChain(Material.IRON, "dungeon_chain").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);

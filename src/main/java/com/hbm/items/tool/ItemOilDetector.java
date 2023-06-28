@@ -15,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.text.Style;
@@ -36,68 +37,59 @@ public class ItemOilDetector extends Item {
 		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc1"));
 		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc2"));
 	}
+
+	public static boolean isOil(World world, BlockPos b){
+		return world.getBlockState(b).getBlock() == ModBlocks.ore_oil;
+	}
+
+	public static boolean isBedrockOil(World world, BlockPos b){
+		return world.getBlockState(b).getBlock() == ModBlocks.ore_bedrock_oil;
+	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		boolean bedrockoil = false;
 		boolean oil = false;
-		boolean direct = false;
 		int x = (int)player.posX;
 		int y = (int)player.posY;
 		int z = (int)player.posZ;
-
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x, i, z)).getBlock() == ModBlocks.ore_oil)
-				direct = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x + 5, i, z)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x - 5, i, z)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x, i, z + 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x, i, z - 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
+		boolean directoil = false;
+		for(int ly = y + 15; ly > 0; ly--){
+			directoil |= isOil(world, mPos.setPos(x, ly, z));
+			if(directoil) break;
+		}
+		boolean directBedrock = isBedrockOil(world, new BlockPos(x, 0, z));
 		
-		for(int i =  y + 15; i > 10; i--)
-			if(world.getBlockState(mPos.setPos(x + 10, i, z)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 10; i--)
-			if(world.getBlockState(mPos.setPos(x - 10, i, z)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 10; i--)
-			if(world.getBlockState(mPos.setPos(x, i, z + 10)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 10; i--)
-			if(world.getBlockState(mPos.setPos(x, i, z - 10)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
+		int range = 25;
+		int samples = 50;
 
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x + 5, i, z + 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x - 5, i, z + 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x + 5, i, z - 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		for(int i =  y + 15; i > 5; i--)
-			if(world.getBlockState(mPos.setPos(x - 5, i, z - 5)).getBlock() == ModBlocks.ore_oil)
-				oil = true;
-		
-		if(direct)
-			oil = true;
+		int lx = 0;
+		int lz = 0;
+		for(int i = 0; i < samples; i++){
+			if(oil || bedrockoil) break;
+			lx = (int)MathHelper.clamp(world.rand.nextGaussian() * range/2F, -range, range);
+			lz = (int)MathHelper.clamp(world.rand.nextGaussian() * range/2F, -range, range);
+			for(int ly = y + 15; ly > 0; ly--){
+				oil |= isOil(world, mPos.setPos(x + lx, ly, z + lz));
+				if(oil) break;
+			}
+			bedrockoil |= isBedrockOil(world, mPos.setPos(x + lx, 0, z + lz));
+		}
 		
 		if(!world.isRemote) {
 			
-			if(direct) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseye").setStyle(new Style().setColor(TextFormatting.DARK_GREEN)));
+			if(directBedrock) {
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseyeBedrock").setStyle(new Style().setColor(TextFormatting.DARK_GREEN)));
+			} else if(directoil) {
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseye").setStyle(new Style().setColor(TextFormatting.GREEN)));
+			
+			} else if(bedrockoil) {
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detectedBedrock").setStyle(new Style().setColor(TextFormatting.GOLD)));
 			} else if(oil) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detected").setStyle(new Style().setColor(TextFormatting.GOLD)));
+				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detected").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+			
 			} else {
 				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".noOil").setStyle(new Style().setColor(TextFormatting.RED)));
 			}
