@@ -2867,6 +2867,12 @@ public class CraftingManager {
 
 	public static void addBedrockOreSmelting(){
 		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
+			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
 			GameRegistry.addSmelting(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, ItemBedrockOre.getOutType(oreMeta) == 2 ? 2 : 1), 2F);
 		}
 	}

@@ -454,6 +454,7 @@ public class ModBlocks {
 	public static final Block ore_nether_schrabidium = new BlockOre(Material.ROCK, "ore_nether_schrabidium", 3).addRadiation(ItemHazard.ore * ItemHazard.sa326).addBlinding().toBlock().setHardness(15.0F).setResistance(600.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block stone_depth_nether = new BlockDepth("stone_depth_nether").setCreativeTab(MainRegistry.resourceTab);
 	public static final Block ore_depth_nether_neodymium = new BlockDepthOre("ore_depth_nether_neodymium").setCreativeTab(MainRegistry.resourceTab);
+	public static final Block ore_depth_nether_nitan = new BlockDepthOre("ore_depth_nether_nitan").setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block block_meteor = new BlockOre(Material.ROCK, "block_meteor", 3).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_cobble = new BlockOre(Material.ROCK, "block_meteor_cobble", 2).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
@@ -659,7 +660,15 @@ public class ModBlocks {
 	public static final Block sellafield_2 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_2").addRadiation(20.0F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block sellafield_3 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_3").addRadiation(40.0F).addFire(2).toBlock().setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block sellafield_4 = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_4").addRadiation(80.0F).addFire(10).toBlock().setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block sellafield_core = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_core").addRadiation(4000.0F).addFire(15).toBlock().setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block sellafield_core = new BlockHazard(Material.ROCK, SoundType.STONE, "sellafield_core").addRadiation(2000.0F).addFire(15).toBlock().setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.resourceTab);
+	
+	public static final Block baleonitite_slaked = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_slaked").addRadiation(25F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_0 = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_0").addRadiation(50.0F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_1 = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_1").addRadiation(100.0F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_2 = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_2").addRadiation(200.0F).toBlock().setHardness(5.0F).setResistance(6F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_3 = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_3").addRadiation(400.0F).addFire(2).toBlock().setHardness(5.0F).setResistance(7F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_4 = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_4").addRadiation(800.0F).addFire(10).toBlock().setHardness(5.0F).setResistance(8F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block baleonitite_core = new BlockHazard(Material.ROCK, SoundType.STONE, "baleonitite_core").addRadiation(4000.0F).addFire(15).toBlock().setHardness(10.0F).setResistance(9F).setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block geysir_water = new BlockGeysir(Material.ROCK, "geysir_water").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block geysir_chlorine = new BlockGeysir(Material.ROCK, "geysir_chlorine").setSoundType(SoundType.STONE).setHardness(5.0F).setCreativeTab(MainRegistry.resourceTab);

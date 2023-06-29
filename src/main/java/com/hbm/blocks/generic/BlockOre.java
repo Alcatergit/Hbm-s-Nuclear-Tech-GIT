@@ -90,7 +90,7 @@ public class BlockOre extends Block implements IItemHazard {
 			case 3: return ModItems.fragment_lanthanium;
 			case 4: return ModItems.fragment_neodymium;
 			case 5: return ModItems.fragment_niobium;
-			case 6: if(rand.nextInt(3) == 0) return ModItems.fragment_actinium;
+			case 6: return ModItems.fragment_actinium;
 			}
 		}
 		if(this == ModBlocks.block_meteor)

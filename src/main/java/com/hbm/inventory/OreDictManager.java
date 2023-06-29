@@ -135,6 +135,8 @@ public class OreDictManager {
 	/*
 	 * STABLE
 	 */
+	public static final DictFrame RAREEARTH = new DictFrame("RareEarth");
+	public static final DictFrame NITANIUM = new DictFrame("Nitanium");
 	/** TITANIUM */ 
 	public static final DictFrame TI = new DictFrame("Titanium");
 	/** COPPER */ 
@@ -321,6 +323,8 @@ public class OreDictManager {
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
 		INFERNAL																																																							.gem(coal_infernal)															.ore(ore_nether_coal);
+		RAREEARTH																																		.dust(powder_desh_mix)																																			.ore(ore_rare, ore_gneiss_rare);
+		NITANIUM																																		.dust(powder_nitan_mix)																																			.ore(ore_depth_nether_nitan);
 
 		//Compounds
 		MINGRADE																											.ingot(ingot_red_copper)	.dust(powder_red_copper)								.block(block_red_copper);
@@ -444,8 +448,6 @@ public class OreDictManager {
 		}
 		
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
-		OreDictionary.registerOre("oreRareEarth", ore_rare);
-		OreDictionary.registerOre("oreRareEarth", ore_gneiss_rare);
 
 		OreDictionary.registerOre("logWood", pink_log);
 		OreDictionary.registerOre("logWoodPink", pink_log);

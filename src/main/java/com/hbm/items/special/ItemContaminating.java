@@ -40,7 +40,9 @@ public class ItemContaminating extends ItemHazard {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem){
 		if(entityItem != null && !entityItem.world.isRemote && entityItem.onGround) {
-			if(isCleanGround(new BlockPos(entityItem.posX, entityItem.posY, entityItem.posZ), entityItem.world)) return false;
+			if(isCleanGround(new BlockPos(entityItem.posX, entityItem.posY, entityItem.posZ), entityItem.world)){
+				return false;
+			}
 			if(falloutBallRadius > 1){
 				EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(entityItem.world);
 				falloutBall.posX = entityItem.posX;
@@ -56,7 +58,12 @@ public class ItemContaminating extends ItemHazard {
 	}
 
 	public static boolean isCleanGround(BlockPos pos, World world){
-		return world.getBlockState(pos.down()).getBlock() instanceof BlockClean;
+		Block b = world.getBlockState(pos.down()).getBlock();
+		boolean isClean = b instanceof BlockClean;
+		if(isClean){
+			BlockClean.getUsed(b, pos.down(), world);
+		}
+		return isClean;
 	}
 	
 	@Override

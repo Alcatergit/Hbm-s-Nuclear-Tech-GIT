@@ -113,6 +113,8 @@ public class HbmWorldGen implements IWorldGenerator {
 		if(dimID == -1){
 			DepthDeposit.generateConditionNether(world, i, 0, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_neodymium, rand, 16);
 			DepthDeposit.generateConditionNether(world, i, 125, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_neodymium, rand, 16);
+			DepthDeposit.generateConditionNether(world, i, 0, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_nitan, rand, 16);
+			DepthDeposit.generateConditionNether(world, i, 125, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_nitan, rand, 16);
 			//Smoldering Rock
 			for(int k = 0; k < 30; k++){
 				int x = i + rand.nextInt(16);

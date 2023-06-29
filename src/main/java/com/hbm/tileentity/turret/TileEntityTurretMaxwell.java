@@ -65,12 +65,12 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 
 	@Override
 	public long getMaxPower() {
-		return 10000000;
+		return 100_000_000;
 	}
 
 	@Override
 	public long getConsumption() {
-		return 10000 - this.blueLevel * 300;
+		return 1_000_000 - this.blueLevel * 6000 + this.redLevel * 6000 + this.blackLevel * 60000 + this.pinkLevel * 12000;
 	}
 
 	@Override

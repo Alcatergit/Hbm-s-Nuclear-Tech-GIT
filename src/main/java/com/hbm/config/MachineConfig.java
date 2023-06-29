@@ -39,6 +39,7 @@ public class MachineConfig {
 	public static int gasPerBedrockDepositBlockMinFrackingTower = 10;
 	public static int gasPerBedrockDepositBlockMaxExtraFrackingTower = 50;
 
+	public static int uuMixerFluidRatio = 100;
 	public static boolean uuMixerFluidListIsWhitelist = false;
 	public static HashSet blacklistedMixerFluids;
 
@@ -89,7 +90,8 @@ public class MachineConfig {
 		gasPerBedrockDepositBlockMinFrackingTower = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(22, "gasPerBedrockDepositBlockMinFrackingTower"), "Controls how much natrual gas at minimum is extracted per bedrock deposit block for Fracking towers", 10);
 		gasPerBedrockDepositBlockMaxExtraFrackingTower = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(23, "gasPerBedrockDepositBlockMaxExtraFrackingTower"), "Controls how much extra natrual gas can be extracted per bedrock deposit block for Fracking towers", 50);
 
-		uuMixerFluidListIsWhitelist = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(24, "uuMixerFluidListIsWhitelist"), "If true then the follwing list of fluids is a whitelist. Otherwise it is a Blacklist", false);
-		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(25, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium" });
+		uuMixerFluidRatio = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(24, "uuMixerFluidRatio"), "How much mB of UU-Matter is used per mB of output fluid", 100);
+		uuMixerFluidListIsWhitelist = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(25, "uuMixerFluidListIsWhitelist"), "If true then the follwing list of fluids is a whitelist. Otherwise it is a Blacklist", false);
+		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(26, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium" });
 	}
 }

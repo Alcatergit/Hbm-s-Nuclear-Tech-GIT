@@ -31,6 +31,9 @@ public class TileEntityTurretChekhov extends TileEntityTurretBaseNT {
 		configs.add(BulletConfigSyncingUtil.BMG50_STAR);
 		configs.add(BulletConfigSyncingUtil.BMG50_PHOSPHORUS);
 		configs.add(BulletConfigSyncingUtil.BMG50_SLEEK);
+		configs.add(BulletConfigSyncingUtil.BMG50_FLECHETTE_NORMAL);
+		configs.add(BulletConfigSyncingUtil.BMG50_FLECHETTE_AM);
+		configs.add(BulletConfigSyncingUtil.BMG50_FLECHETTE_PO);
 		configs.add(BulletConfigSyncingUtil.CHL_BMG50);
 	}
 

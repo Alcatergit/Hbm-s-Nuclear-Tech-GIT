@@ -9,4 +9,9 @@ public class GUITurretChekhov extends GUITurretBase {
 	public GUITurretChekhov(InventoryPlayer invPlayer, TileEntityTurretBaseNT tedf) {
 		super(invPlayer, tedf);
 	}
+
+	@Override
+	public int getTurretFontColor(){
+		return 0x373737;
+	}
 }

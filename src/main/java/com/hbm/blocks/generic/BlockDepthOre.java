@@ -34,6 +34,9 @@ public class BlockDepthOre extends BlockDepth {
 		if(this == ModBlocks.ore_depth_nether_neodymium) {
 			return ModItems.fragment_neodymium;
 		}
+		if(this == ModBlocks.ore_depth_nether_nitan) {
+			return ModItems.powder_nitan_mix;
+		}
 		
 		return super.getItemDropped(state, rand, fortune);
 	}
@@ -49,6 +52,9 @@ public class BlockDepthOre extends BlockDepth {
 		}
 		if(this == ModBlocks.ore_depth_nether_neodymium) {
 			return 2 + rand.nextInt(2);
+		}
+		if(this == ModBlocks.ore_depth_nether_nitan) {
+			return 1;
 		}
 		
 		return super.quantityDropped(rand);

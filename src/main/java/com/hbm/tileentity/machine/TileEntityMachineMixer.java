@@ -55,7 +55,6 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	public boolean uuMixer = false;
 	public static final int uuConsumption = 1_000_000;
 	public static final long uuMaxPower = 200_000_000;
-	public static final int uuMattermbPerOutputmb = 100;
 	
 	public FluidTank[] tanks;
 	private final UpgradeManager upgradeManager = new UpgradeManager();
@@ -189,7 +188,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	    	if(tanks[0].getCapacity() != 2_000_000_000){
 		    	tanks[0] = FFUtils.changeTankSize(tanks[0], 2_000_000_000);
 		    	tanks[1] = FFUtils.changeTankSize(tanks[1], 2_000_000_000);
-		    	tanks[2] = FFUtils.changeTankSize(tanks[2], 2_000_000_000/uuMattermbPerOutputmb);
+		    	tanks[2] = FFUtils.changeTankSize(tanks[2], 2_000_000_000/MachineConfig.uuMixerFluidRatio);
 		    	this.markDirty();
 		    }
 	    } else {
@@ -257,7 +256,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 		//Mixing uu matter?
 		if(uuMixer){
 			this.processTime = 200;
-			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.uu_matter, uuMattermbPerOutputmb))){
+			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.uu_matter, MachineConfig.uuMixerFluidRatio))){
 				return true;
 			}
 			return false;
@@ -289,8 +288,8 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	protected void process() {
 
 		if(uuMixer){
-			int mbProduction = Math.min(tanks[2].getCapacity()-tanks[2].getFluidAmount(), tanks[0].getFluidAmount()/uuMattermbPerOutputmb);
-			tanks[0].drain(mbProduction * uuMattermbPerOutputmb, true);
+			int mbProduction = Math.min(tanks[2].getCapacity()-tanks[2].getFluidAmount(), tanks[0].getFluidAmount()/MachineConfig.uuMixerFluidRatio);
+			tanks[0].drain(mbProduction * MachineConfig.uuMixerFluidRatio, true);
 			tanks[2].fill(new FluidStack(outputFluid, mbProduction), true);
 			this.markDirty();
 			return;

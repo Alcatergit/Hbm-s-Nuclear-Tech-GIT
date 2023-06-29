@@ -62,8 +62,8 @@ public class TileEntityTurretJeremy extends TileEntityTurretBaseNT {
 		return 80D;
 	}
 
-	int timer;
-	int reload;
+	public int timer;
+	public int reload;
 
 	@Override
 	public void update(){
@@ -101,7 +101,7 @@ public class TileEntityTurretJeremy extends TileEntityTurretBaseNT {
 				data.setString("mode", "largeexplode");
 				data.setFloat("size", 0F);
 				data.setByte("count", (byte)5);
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.xCoord + vec.xCoord, pos.yCoord + vec.zCoord, pos.zCoord + vec.zCoord), new TargetPoint(world.provider.getDimension(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), 50));
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.xCoord + vec.xCoord, pos.yCoord + vec.yCoord, pos.zCoord + vec.zCoord), new TargetPoint(world.provider.getDimension(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), 50));
 			}
 		}
 	}

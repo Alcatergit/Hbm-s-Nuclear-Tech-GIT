@@ -226,51 +226,98 @@ public class BlockHazard extends Block implements IItemHazard {
 		if (entity instanceof EntityLivingBase && this == ModBlocks.frozen_dirt)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 2 * 60 * 20, 2));
+    		return;
     	}
 		if (entity instanceof EntityLivingBase && this == ModBlocks.block_trinitite)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 2));
+    		return;
     	}
+
 		if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_0)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 0));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_1)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 25 * 20, 1));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_2)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 3));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_3)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 7));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_4)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 10 * 20, 15));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.sellafield_core)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 5 * 20, 79));
+    		return;
     	}
+
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_0)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 1));
+    		return;
+    	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_1)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 25 * 20, 2));
+    		return;
+    	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_2)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 20 * 20, 7));
+    		return;
+    	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_3)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 15));
+    		return;
+    	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_4)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 10 * 20, 31));
+    		return;
+    	}
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.baleonitite_core)
+    	{
+    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 5 * 20, 159));
+    		return;
+    	}
+
     	if (entity instanceof EntityLivingBase && this == ModBlocks.block_waste)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 30 * 20, 49));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_ooze)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 15 * 20, 9));
+    		return;
     	}
     	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic)
     	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
+    		return;
     	}
-    	if(this == ModBlocks.block_meteor_molten || this == ModBlocks.block_au198)
+    	if(this == ModBlocks.block_meteor_molten || this == ModBlocks.block_au198){
         	entity.setFire(5);
-        if(this == ModBlocks.brick_jungle_lava)
+        	return;
+    	}
+        if(this == ModBlocks.brick_jungle_lava){
         	entity.setFire(10);
+        }
 	}
 
 	@Override

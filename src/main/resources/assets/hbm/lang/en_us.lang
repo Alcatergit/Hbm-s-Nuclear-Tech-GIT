@@ -4,6 +4,14 @@ key.jetpack_hover=Toggle Jetpack Hover Mode
 key.jetpack_hud=Toggle Jetpack HUD mode
 key.fsb_flashlight=Toggle FSB Flashlights
 
+turret.animals=Target Passive: %s
+turret.machines=Target Machines: %s
+turret.mobs=Target Mobs: %s
+turret.none=None
+turret.off=OFF
+turret.on=ON
+turret.players=Target Players: %s
+
 item.drillbit_desh.name=Desh Drillbit
 item.drillbit_desh_diamond.name=Desh Drillbit (Diamond-Tipped)
 item.drillbit_ferro.name=Ferrouranium Drillbit
@@ -3785,6 +3793,14 @@ tile.sellafield_3.name=Blazing Sellafite
 tile.sellafield_4.name=Infernal Sellafite
 tile.sellafield_core.name=Sellafite-Corium
 
+tile.baleonitite_slaked.name=Slaked Baleonitite
+tile.baleonitite_0.name=Baleonitite
+tile.baleonitite_1.name=Hot Baleonitite
+tile.baleonitite_2.name=Boiling Baleonitite
+tile.baleonitite_3.name=Blazing Baleonitite
+tile.baleonitite_4.name=Infernal Baleonitite
+tile.baleonitite_core.name=Baleonitite-Corium
+
 item.warhead_generic_small.name=Small Warhead
 item.warhead_generic_medium.name=Medium Warhead
 item.warhead_generic_large.name=Large Warhead
@@ -4549,6 +4565,7 @@ tile.ore_cobalt.name=Cobalt Ore
 tile.ore_coltan.name=Coltan Ore
 tile.ore_depth_cinnebar.name=Depth Cinnabar Ore
 tile.ore_depth_nether_neodymium.name=Nether Depth Neodymium Ore
+tile.ore_depth_nether_nitan.name=Nether Depth Nitanium Ore
 tile.ore_depth_zirconium.name=Depth Zirconium Ore
 tile.block_boron.name=Block of Boron
 tile.block_bismuth.name=Block of Bismuth-209

@@ -1780,10 +1780,7 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void preRenderLiving(RenderLivingEvent.Pre<AbstractClientPlayer> event) {
-		//Mouse.isButtonDown(button)
-		//ForgeRegistries.ENTITIES.getKey(value);
-		//EntityMaskMan ent;
-		//EntityRegistry.getEntry(ent.getClass());
+
 		if(specialDeathEffectEntities.contains(event.getEntity())){
 			event.setCanceled(true);
 		}

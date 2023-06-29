@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class RenderNuclearCreeper extends RenderLiving<EntityNuclearCreeper> {
-	    private static final ResourceLocation creeperTextures = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper.png");
-	    /** The creeper model. */
+    private static final ResourceLocation creeperTextures = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper.png");
+    /** The creeper model. */
 	public RenderNuclearCreeper(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCreeper(), 0.5F);
 	}

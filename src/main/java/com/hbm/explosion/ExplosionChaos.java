@@ -722,7 +722,7 @@ public class ExplosionChaos {
 					if(ZZ < r22 + world.rand.nextInt(r22 / 2)) {
 						pos.setPos(X, Y, Z);						
 						Block block =world.getBlockState(pos).getBlock();
-						if(block.getExplosionResistance(null) > 999) continue;
+						if(block.getExplosionResistance(null) > 0.1F) continue;
 						if(block != Blocks.BEDROCK && world.getBlockState(pos).getBlock() != ModBlocks.statue_elb
 													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_g
 													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_w

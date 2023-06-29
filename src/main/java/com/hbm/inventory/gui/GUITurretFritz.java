@@ -35,4 +35,8 @@ public class GUITurretFritz extends GUITurretBase {
 	protected ResourceLocation getTexture() {
 		return texture;
 	}
+
+	@Override
+	public void drawAmmo(int mouseX, int mouseY){
+	}
 }

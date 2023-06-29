@@ -17,4 +17,9 @@ public class GUITurretHoward extends GUITurretBase {
 	protected ResourceLocation getTexture() {
 		return texture;
 	}
+
+	@Override
+	public int getTurretFontColor(){
+		return 0x04141C;
+	}
 }

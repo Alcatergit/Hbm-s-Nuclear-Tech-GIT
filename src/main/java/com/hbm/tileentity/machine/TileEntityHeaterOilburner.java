@@ -53,7 +53,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
 
     public int heatEnergy = 0;
 
-    public static final int maxHeatEnergy = 100_000;
+    public static final int maxHeatEnergy = 1_000_000;
 
     public TileEntityHeaterOilburner() {
         super(3);

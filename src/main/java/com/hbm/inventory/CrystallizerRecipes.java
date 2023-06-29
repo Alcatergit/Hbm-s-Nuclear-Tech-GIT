@@ -60,7 +60,7 @@ public class CrystallizerRecipes {
 		addRecipe(SA326.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_schrabidium));
 		addRecipe(LI.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_lithium));
 		addRecipe(STAR.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_starmetal));
-		addRecipe("oreRareEarth", new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_rare));
+		addRecipe(RAREEARTH.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_rare));
 		addRecipe(CO.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_cobalt));
 		addRecipe(CINNABAR.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_cinnebar));
 		addRecipe(ASBESTOS.ore(), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.crystal_asbestos));

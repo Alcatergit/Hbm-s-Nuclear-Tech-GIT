@@ -129,17 +129,17 @@ public class ExplosionBalefire {
 				if(b == ModBlocks.block_schrabidium_cluster)
 					worldObj.setBlockState(new BlockPos(pX, y, pZ), ModBlocks.block_euphemium_cluster.getStateFromMeta(b.getMetaFromState(worldObj.getBlockState(new BlockPos(pX, y, pZ)))), 3);
 			}
-			int startDepth = (int)(6 - 6 * dist / radius);
+			int startDepth = (int)(6 * dist / radius);
 			for(int i = 0; i <= startDepth; i++) {
 				if(worldObj.getBlockState(new BlockPos(pX, depth-i, pZ)).getBlock() == Blocks.STONE){
 					switch(startDepth-i){
-						case 6: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_core.getDefaultState()); break;
-						case 5: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_4.getDefaultState()); break;
-						case 4: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_3.getDefaultState()); break;
-						case 3: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_2.getDefaultState()); break;
-						case 2: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_1.getDefaultState()); break;
-						case 1: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_0.getDefaultState()); break;
-						case 0: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.sellafield_slaked.getDefaultState()); break;
+						case 6: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_core.getDefaultState()); break;
+						case 5: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_4.getDefaultState()); break;
+						case 4: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_3.getDefaultState()); break;
+						case 3: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_2.getDefaultState()); break;
+						case 2: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_1.getDefaultState()); break;
+						case 1: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_0.getDefaultState()); break;
+						case 0: worldObj.setBlockState(new BlockPos(pX, depth-i, pZ), ModBlocks.baleonitite_slaked.getDefaultState()); break;
 					}
 				}
 			}

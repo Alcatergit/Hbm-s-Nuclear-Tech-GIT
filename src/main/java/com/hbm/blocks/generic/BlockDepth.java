@@ -19,6 +19,7 @@ public class BlockDepth extends Block {
 		super(Material.ROCK);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.setHarvestLevel("pickaxe", 3);
 		this.setBlockUnbreakable();
 		this.setResistance(10.0F);
 

@@ -237,7 +237,7 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 	public void onDeath(DamageSource p_70645_1_){
 		super.onDeath(p_70645_1_);
 
-		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
+		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(10, 10, 10));
 
 		for(EntityPlayer player : players) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
