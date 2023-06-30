@@ -232,6 +232,11 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.drillbit_ferro),
 				new OreDictStack(DIAMOND.dust(), 64)
 			}, 100);
+		makeRecipe(new ComparableStack(ModItems.drillbit_dnt), new AStack[] {
+				new ComparableStack(ModItems.ingot_dineutronium, 32),
+				new OreDictStack(GH336.ingot(), 24),
+				new ComparableStack(ModItems.ingot_chainsteel, 8),
+			}, 2000);
 		makeRecipe(new ComparableStack(ModItems.telepad, 1), new AStack[] { new OreDictStack(ANY_PLASTIC.ingot(), 12), new OreDictStack(SA326.plate(), 2), new OreDictStack(CMB.plate(), 4), new OreDictStack(STEEL.plate(), 2), new ComparableStack(ModItems.wire_gold, 6), new ComparableStack(ModItems.circuit_schrabidium, 1), }, 300);
 		makeRecipe(new ComparableStack(ModItems.entanglement_kit, 1), new AStack[] { new ComparableStack(ModItems.coil_magnetized_tungsten, 6), new OreDictStack(PB.plate(), 16), new OreDictStack(OreDictManager.getReflector(), 4), new ComparableStack(ModItems.singularity_counter_resonant, 1), new ComparableStack(ModItems.singularity_super_heated, 1), new ComparableStack(ModItems.powder_power, 4), }, 200);
 		makeRecipe(new ComparableStack(ModItems.dysfunctional_reactor, 1), new AStack[] { new OreDictStack(STEEL.plate(), 15), new OreDictStack(PB.ingot(), 5), new ComparableStack(ModItems.rod_quad_empty, 10), new OreDictStack(KEY_BROWN, 3), }, 200);

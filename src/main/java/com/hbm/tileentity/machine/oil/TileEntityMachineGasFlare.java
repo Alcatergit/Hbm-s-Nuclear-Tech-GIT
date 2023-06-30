@@ -21,6 +21,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -190,10 +191,6 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 		if (itemId == ModItems.forge_fluid_identifier) {
 			Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
 			int energy = FluidCombustionRecipes.getFlameEnergy(fluid);
-
-			if (energy == 0) {
-				return;
-			}
 
 			if (tankType != fluid) {
 				tankType = fluid;

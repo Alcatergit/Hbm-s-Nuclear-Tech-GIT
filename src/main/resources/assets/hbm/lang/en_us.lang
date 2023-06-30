@@ -12,6 +12,8 @@ turret.off=OFF
 turret.on=ON
 turret.players=Target Players: %s
 
+item.drillbit_dnt.name=Dineutronium Drillbit
+item.drillbit_dnt_diamond.name=Dineutronium Drillbit (Diamond-Tipped)
 item.drillbit_desh.name=Desh Drillbit
 item.drillbit_desh_diamond.name=Desh Drillbit (Diamond-Tipped)
 item.drillbit_ferro.name=Ferrouranium Drillbit

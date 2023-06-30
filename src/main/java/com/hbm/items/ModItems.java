@@ -1661,6 +1661,8 @@ public class ModItems {
 	public static final Item drillbit_tcalloy_diamond = new ItemDrillbit(EnumDrillType.TCALLOY_DIAMOND, "drillbit_tcalloy_diamond").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item drillbit_ferro = new ItemDrillbit(EnumDrillType.FERRO, "drillbit_ferro").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item drillbit_ferro_diamond = new ItemDrillbit(EnumDrillType.FERRO_DIAMOND, "drillbit_ferro_diamond").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item drillbit_dnt = new ItemDrillbit(EnumDrillType.DNT, "drillbit_dnt").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item drillbit_dnt_diamond = new ItemDrillbit(EnumDrillType.DNT_DIAMOND, "drillbit_dnt_diamond").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
 	//Generic Items
 	public static final Item pellet_coal = new ItemFuelHazard("pellet_coal", 320, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);

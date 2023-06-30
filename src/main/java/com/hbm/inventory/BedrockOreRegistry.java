@@ -80,7 +80,7 @@ public class BedrockOreRegistry {
 
 	public static int getOreIndex(String ore){
 		Integer x = oreToIndexes.get(ore);
-		if(x == null) return 0;
+		if(x == null) return -1;
 		return x;
 	}
 
@@ -96,7 +96,8 @@ public class BedrockOreRegistry {
 		if(tier == 3) return new FluidStack(ModForgeFluids.nitric_acid, 5000);
 		if(tier == 4) return new FluidStack(ModForgeFluids.radiosolvent, 4000);
 		if(tier == 5) return new FluidStack(ModForgeFluids.schrabidic, 2000);
-		if(tier == 6) return new FluidStack(ModForgeFluids.liquid_osmiridium, 1500);
+		if(tier == 6) return new FluidStack(ModForgeFluids.uu_matter, 1500);
+		if(tier > 6) return new FluidStack(ModForgeFluids.liquid_osmiridium, 1000);
 		return new FluidStack(ModForgeFluids.solvent, 1500);
 	}
 

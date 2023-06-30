@@ -2622,7 +2622,7 @@ public class CraftingManager {
 		addShapelessAuto(new ItemStack(ModItems.ball_fireclay, 4), new Object[] { Items.CLAY_BALL, Items.CLAY_BALL, Items.CLAY_BALL, AL.ore()});
 
 		add1To9Pair(ModBlocks.block_semtex, ModItems.ingot_semtex);
-		
+
 		if(!GeneralConfig.enable528) {
 			addRecipeAuto(new ItemStack(ModBlocks.struct_launcher_core, 1), new Object[] { "SCS", "SIS", "BEB", 'S', ModBlocks.steel_scaffold, 'I', Blocks.IRON_BARS, 'C', ModItems.circuit_targeting_tier3, 'B', ModBlocks.struct_launcher, 'E', ModBlocks.machine_battery });
 			addRecipeAuto(new ItemStack(ModBlocks.struct_launcher_core_large, 1), new Object[] { "SIS", "ICI", "BEB", 'S', ModItems.circuit_red_copper, 'I', Blocks.IRON_BARS, 'C', ModItems.circuit_targeting_tier4, 'B', ModBlocks.struct_launcher, 'E', ModBlocks.machine_battery });
@@ -2674,6 +2674,8 @@ public class CraftingManager {
 
 			addRecipeAuto(new ItemStack(ModItems.book_of_), new Object[] { "BGB", "GAG", "BGB", 'B', ModItems.egg_balefire_shard, 'G', GOLD.ingot(), 'A', Items.BOOK });
 		}
+
+		addShapelessAuto(new ItemStack(ModItems.drillbit_dnt_diamond, 1), new Object[] { ModItems.drillbit_dnt, new ItemStack(ModItems.ore_bedrock, 1, 3) });
 	}
 
 	public static void addSmelting(){

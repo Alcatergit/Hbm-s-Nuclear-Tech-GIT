@@ -44,7 +44,9 @@ public class ItemDrillbit extends Item {
 		TCALLOY			(2.0D, 4, 1, true, true),
 		TCALLOY_DIAMOND	(2.0D, 4, 4, true, true),
 		FERRO			(2.5D, 5, 1, true, true),
-		FERRO_DIAMOND	(2.5D, 5, 4, true, true);
+		FERRO_DIAMOND	(2.5D, 5, 4, true, true),
+		DNT				(4.0D, 6000, 1, true, true),
+		DNT_DIAMOND		(4.0D, 6000, 5, true, true);
 		
 		public double speed;
 		public int tier;
