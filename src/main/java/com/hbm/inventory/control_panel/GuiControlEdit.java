@@ -5,6 +5,9 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
+import com.hbm.inventory.control_panel.controls.configs.SubElementDisplaySevenSeg;
+import com.hbm.main.MainRegistry;
+import net.minecraft.client.gui.GuiSlider;
 import org.lwjgl.input.Mouse;
 
 import com.hbm.lib.RefStrings;
@@ -37,6 +40,9 @@ public class GuiControlEdit extends GuiContainer {
 	public SubElementLinker linker;
 	public SubElementEventEditor eventEditor;
 	public SubElementNodeEditor nodeEditor;
+	public SubElementPanelResize panelResize;
+	public SubElementItemConfig itemConfig;
+	public SubElementGlobalVars globalVars;
 
 	public Control currentEditControl;
 	
@@ -58,10 +64,14 @@ public class GuiControlEdit extends GuiContainer {
 		linker.onClose();
 		eventEditor.onClose();
 		nodeEditor.onClose();
+		panelResize.onClose();
+		itemConfig.onClose();
+		globalVars.onClose();
 		NBTTagCompound tag = new NBTTagCompound();
 		control.panel.writeToNBT(tag);
 		tag.setString("full_set", "");
 		PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(tag, control.getPos()));
+		control.updateTransform();
 	}
 	
 	@Override
@@ -78,12 +88,18 @@ public class GuiControlEdit extends GuiContainer {
 		linker = new SubElementLinker(this);
 		eventEditor = new SubElementEventEditor(this);
 		nodeEditor = new SubElementNodeEditor(this);
+		panelResize = new SubElementPanelResize(this);
+		itemConfig = new SubElementItemConfig(this);
+		globalVars = new SubElementGlobalVars(this);
 		placement.initGui();
 		choice.initGui();
 		linker.initGui();
 		eventEditor.initGui();
 		nodeEditor.initGui();
-		
+		panelResize.initGui();
+		itemConfig.initGui();
+		globalVars.initGui();
+
 		subElementStack.addFirst(placement);
 		placement.enableButtons(true);
 	}
@@ -96,7 +112,7 @@ public class GuiControlEdit extends GuiContainer {
 	public <T extends GuiButton> T addButton(T buttonIn) {
 		return super.addButton(buttonIn);
 	}
-	
+
 	public int currentButtonId(){
 		return this.buttonList.size();
 	}

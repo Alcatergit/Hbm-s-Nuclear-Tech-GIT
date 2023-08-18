@@ -47,7 +47,7 @@ minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -115,8 +115,8 @@ dependencies {
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei_1.12.2:${version_jei}:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:${version_jei}")
-	
+//    runtimeOnly fg.deobf("mezz.jei:jei_1.12.2:${version_jei}")
+
 	//compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
@@ -156,3 +156,14 @@ publishing {
         }
     }
 }
+
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
+}
+
+sourceSets.all {
+    it.output.resourcesDir = it.output.classesDirs.getFiles().iterator().next()
+}
+
+sourceSets.main.resources { srcDir 'src/main/resources' }
+

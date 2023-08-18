@@ -105,6 +105,9 @@ public abstract class Node {
 		case "math":
 			node = new NodeMath(0, 0);
 			break;
+		case "boolean":
+			node = new NodeBoolean(0, 0);
+			break;
 		case "setVar":
 			int ctrlIdx2 = tag.getInteger("controlIdx");
 			node = new NodeSetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx2));

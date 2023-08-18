@@ -2,6 +2,7 @@ package com.hbm.blocks.generic;
 
 import java.util.Random;
 
+import net.minecraft.item.ItemBlock;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -41,6 +42,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+
+import javax.annotation.Nonnull;
 
 public class BlockControlPanel extends BlockContainer implements ICustomSelectionBox {
 
@@ -53,7 +58,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityControlPanel();
@@ -78,23 +83,20 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 		}
 		return true;
 	}
-	
+
+	@Nonnull
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		switch(state.getValue(FACING)){
-		case WEST:
-			return new AxisAlignedBB(0.5, 0, 0, 1, 0.3, 1);
-		case EAST:
-			return new AxisAlignedBB(0, 0, 0, 0.5, 0.3, 1);
-		case NORTH:
-			return new AxisAlignedBB(0, 0, 0.5, 1, 0.3, 1);
-		case SOUTH:
-			return new AxisAlignedBB(0, 0, 0, 1, 0.3, 0.5);
-		default:
-			return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+		TileEntity te = source.getTileEntity(pos);
+		if (te instanceof TileEntityControlPanel) {
+			AxisAlignedBB ret = ((TileEntityControlPanel) te).getBoundingBox(state.getValue(FACING));
+			if (ret != null) {
+				return ret;
+			}
 		}
+		return super.getBoundingBox(state, source, pos);
 	}
-	
+
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face){
 		return BlockFaceShape.UNDEFINED;
@@ -113,6 +115,11 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Items.AIR;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
 	}
 	
 	@Override
@@ -152,7 +159,9 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 			control.panel.transform.store(ClientProxy.AUX_GL_BUFFER);
 			ClientProxy.AUX_GL_BUFFER.rewind();
 			GL11.glMultMatrix(ClientProxy.AUX_GL_BUFFER);
-			RenderGlobal.drawSelectionBoundingBox(ctrl.getBoundingBox(), 0, 0, 0, 0.4F);
+			if (ctrl.getBoundingBox() != null)
+				// offset to bury bottom lines
+				RenderGlobal.drawSelectionBoundingBox(ctrl.getBoundingBox().offset(0, -.01F, 0), 0, 0, 0, 0.4F);
 			GL11.glPopMatrix();
 			return true;
 		}
@@ -173,10 +182,10 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
-            enumfacing = EnumFacing.NORTH;
-        }
+//        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+//        {
+//            enumfacing = EnumFacing.NORTH;
+//        }
 
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}

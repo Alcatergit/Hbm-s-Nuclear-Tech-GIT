@@ -1,5 +1,8 @@
 package com.hbm.inventory.control_panel;
 
+import com.hbm.main.MainRegistry;
+import net.minecraft.nbt.NBTTagCompound;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -28,15 +31,19 @@ public class SubElementPlacement extends SubElement {
 	public float ogPosY;
 	public Control selectedControl;
 	public boolean controlGrabbed = false;
-	
+
 	public GuiButton deleteElement;
 	public GuiButton newElement;
+	public GuiButton panelResize;
+	public GuiButton btn_globalVars;
 	private boolean gridGrabbed = false;
 	protected float gridX = 0;
 	protected float gridY = 0;
 	protected float gridScale = 0.1F;
 	private float prevMouseX;
 	private float prevMouseY;
+
+	private int ctrl_index = 0; // code elsewhere is sensitive to control[] indices; so i go around it
 	
 	public SubElementPlacement(GuiControlEdit gui){
 		super(gui);
@@ -46,8 +53,10 @@ public class SubElementPlacement extends SubElement {
 	protected void initGui() {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		newElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-76, 20, 20, "+"));
-		deleteElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-98, 20, 20, "-"));
+		newElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-71, 20, 20, "+"));
+		deleteElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-93, 20, 20, "-"));
+		panelResize = gui.addButton(new GuiButton(gui.currentButtonId(), cX+22, cY-93, 80, 20, "Resize"));
+		btn_globalVars = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+30, cY-93, 95, 20, "Global Variables"));
 		float[] cGrid = convertToGridSpace(cX+10, cY+20);
 		gridX = -cGrid[0];
 		gridY = cGrid[1];
@@ -69,7 +78,7 @@ public class SubElementPlacement extends SubElement {
 		prevMouseX = gui.mouseX;
 		prevMouseY = gui.mouseY;
 	}
-	
+
 	@Override
 	protected void drawScreen() {
 		float dWheel = Mouse.getDWheel();
@@ -96,10 +105,12 @@ public class SubElementPlacement extends SubElement {
 			}
 		}
 		if((prevMouseX != gui.mouseX || prevMouseY != gui.mouseY) && controlGrabbed){
+			ctrl_index = gui.control.panel.controls.indexOf(selectedControl);
 			gui.control.panel.controls.remove(selectedControl);
 			gui.currentEditControl = selectedControl;
 			selectedControl = null;
 			controlGrabbed = false;
+			gui.control.markDirty();
 		}
 		prevMouseX = gui.mouseX;
 		prevMouseY = gui.mouseY;
@@ -114,16 +125,26 @@ public class SubElementPlacement extends SubElement {
 		GL11.glScissor(minX, minY, Math.max(maxX-minX, 0), Math.max(maxY-minY, 0));
 		
 		gui.mc.getTextureManager().bindTexture(grid);
-		//float x = gridX/gui.getXSize();
-		//float y = -gridY/gui.getYSize();
-		//RenderHelper.drawGuiRectColor(gui.getGuiLeft(), gui.getGuiTop(), x, y, gui.getXSize(), gui.getYSize(), gridScale+x, gridScale+y, 0.2F, 0.2F, 0.2F, 1);
-		float[] box = gui.control.panel.getBox();
+
+		float baseSizeX = (1-(gui.control.panel.b_off+gui.control.panel.d_off));
+		float baseSizeY = (1-(gui.control.panel.a_off+gui.control.panel.c_off));
+		float panel_hyp = (float) (baseSizeY/Math.cos(Math.abs(gui.control.panel.angle)));
+
+		float[] box = gui.control.getBox();
 		float[] pos1 = convertFromGridSpace(box[0]-0.03125F, box[1]-0.03125F);
 		float[] pos2 = convertFromGridSpace(box[2]+0.03125F, box[3]+0.03125F);
-		float uScale = gui.control.panel.width/4;
-		float vScale = gui.control.panel.height/4;
+
+		float uScale = (baseSizeX*10)/4;
+		float vScale = (panel_hyp*10)/4;
 		RenderHelper.drawGuiRect(pos1[0], pos1[1], 0, 0, pos2[0]-pos1[0], pos2[1]-pos1[1], uScale+0.015625F, vScale+0.015625F);
-		
+
+		// bottom,right lines to close the grid, cus somehow scaling the grid looks worse
+		GlStateManager.disableTexture2D();
+		GlStateManager.color(.4F, .4F, .4F, 1);
+		RenderHelper.drawGuiRect(pos1[0], pos2[1]-(1/(gridScale*15)), 0, 0, pos2[0]-pos1[0], 1/(gridScale*15), uScale+0.015625F, 0.015625F);
+		RenderHelper.drawGuiRect(pos2[0]-(1/(gridScale*15)), pos1[1], 0, 0, 1/(gridScale*15), pos2[1]-pos1[1], 0.015625F, vScale+0.015625F);
+		GlStateManager.enableTexture2D();
+
 		GL11.glPushMatrix();
 		
 		float spX = gui.getGuiLeft();
@@ -174,7 +195,7 @@ public class SubElementPlacement extends SubElement {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(c.getGuiTexture());
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float[] box = c.getBox();
-		float rgb = c == selectedControl ? 1 : 0.9F;
+		float rgb = c == selectedControl ? 1 : 0.8F;
 		buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb, rgb, rgb, 1).endVertex();
 		buf.pos(box[0], box[3], 0).tex(0, 1).color(rgb, rgb, rgb, 1).endVertex();
 		buf.pos(box[2], box[3], 0).tex(1, 1).color(rgb, rgb, rgb, 1).endVertex();
@@ -195,15 +216,26 @@ public class SubElementPlacement extends SubElement {
 		newElement.visible = enable;
 		deleteElement.enabled = enable;
 		deleteElement.visible = enable;
+		panelResize.enabled = enable;
+		panelResize.visible = enable;
+		btn_globalVars.enabled = enable;
+		btn_globalVars.visible = enable;
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if(button == newElement){
 			gui.pushElement(gui.choice);
-		} else if(button == deleteElement){
+		}
+		else if(button == deleteElement){
 			gui.control.panel.controls.remove(selectedControl);
 			selectedControl = null;
+		}
+		else if (button == panelResize) {
+			gui.pushElement(gui.panelResize);
+		}
+		else if (button == btn_globalVars) {
+			gui.pushElement(gui.globalVars);
 		}
 	}
 	
@@ -215,7 +247,7 @@ public class SubElementPlacement extends SubElement {
 				return false;
 			}
 		}
-		if(!RenderHelper.boxContainsOther(gui.control.panel.getBox(), gui.currentEditControl.getBox()))
+		if(!RenderHelper.boxContainsOther(gui.control.getBox(), gui.currentEditControl.getBox()))
 			return false;
 		return true;
 	}
@@ -225,7 +257,7 @@ public class SubElementPlacement extends SubElement {
 		float gridMX = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
 		float gridMY = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
 		if(button == 0){
-			if(gui.currentEditControl != null){
+			if(gui.currentEditControl != null) { //? this happens when exiting component creation.
 				float prevX = gui.currentEditControl.posX;
 				float prevY = gui.currentEditControl.posY;
 				if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
@@ -233,14 +265,13 @@ public class SubElementPlacement extends SubElement {
 					gui.currentEditControl.posY = (float)Math.round(gui.currentEditControl.posY*4F)*0.25F;
 				}
 				if(canPlace()){
-					
 					gui.control.panel.controls.add(gui.currentEditControl);
 					gui.currentEditControl = null;
 				} else {
 					gui.currentEditControl.posX = prevX;
 					gui.currentEditControl.posY = prevY;
 				}
-			} else {
+			} else { //? happens when u click an already placed component
 				for(Control c : gui.control.panel.controls){
 					if(RenderHelper.intersects2DBox(gridMX, gridMY, c.getBox())){
 						selectedControl = c;
@@ -270,7 +301,7 @@ public class SubElementPlacement extends SubElement {
 					gui.currentEditControl.posX = (float)Math.round(gui.currentEditControl.posX*4F)*0.25F;
 					gui.currentEditControl.posY = (float)Math.round(gui.currentEditControl.posY*4F)*0.25F;
 				}
-				gui.control.panel.controls.add(gui.currentEditControl);
+				gui.control.panel.controls.add(ctrl_index, gui.currentEditControl);
 				gui.currentEditControl = null;
 			}
 			controlGrabbed = false;

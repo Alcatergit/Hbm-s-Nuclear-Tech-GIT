@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.hbm.inventory.control_panel.controls.ControlType;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.nbt.NBTBase;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,14 +37,28 @@ public abstract class Control {
 	public Map<String, DataValue> varsPrev = new HashMap<>();
 	//A set of the custom variables the user is allowed to remove
 	public Set<String> customVarNames = new HashSet<>();
+	// map of (static) initial configurations for a control e.g. color, size
+	public Map<String, DataValue> config_map = new HashMap<>();
 	public float posX;
 	public float posY;
-	
+
+
 	public Control(String name, ControlPanel panel){
 		this.name = name;
 		this.panel = panel;
 	}
-	
+
+	public abstract ControlType getControlType();
+
+	public abstract float[] getSize();
+
+	public Map<String, DataValue> getConfigs() {
+		return config_map;
+	}
+	public void applyConfigs(Map<String, DataValue> configs) {
+		config_map = configs;
+	}
+
 	public void renderBatched(){};
 	public void render(){};
 	public List<String> getOutEvents(){return Collections.emptyList();};
@@ -51,9 +67,21 @@ public abstract class Control {
 	public abstract IModelCustom getModel();
 	@SideOnly(Side.CLIENT)
 	public abstract ResourceLocation getGuiTexture();
-	public abstract AxisAlignedBB getBoundingBox();
-	public abstract float[] getBox();
+
+	public AxisAlignedBB getBoundingBox() {
+		float width = getSize()[0];
+		float length = getSize()[1];
+		return new AxisAlignedBB(-width/2, 0, -length/2, width/2, 1, length/2).offset(posX+Math.abs(1-width/2), 0, posY+Math.abs(1-length)/2);
+	}
+
+	public float[] getBox() {
+		float width = getSize()[0];
+		float length = getSize()[1];
+		return new float[] {posX, posY, posX + width, posY + length};
+	}
+
 	public abstract Control newControl(ControlPanel panel);
+	// used as control registry reference, parent control types list their children/variants here
 
 	public void receiveEvent(ControlEvent evt){
 		NodeSystem sys = receiveNodeMap.get(evt.name);
@@ -110,6 +138,13 @@ public abstract class Control {
 		
 		tag.setFloat("posX", posX);
 		tag.setFloat("posY", posY);
+
+		NBTTagCompound configs = new NBTTagCompound();
+		for (Entry<String, DataValue> e : config_map.entrySet()) {
+			configs.setTag(e.getKey(), e.getValue().writeToNBT());
+		}
+		tag.setTag("configs", configs);
+
 		return tag;
 	}
 	
@@ -154,5 +189,11 @@ public abstract class Control {
 		
 		this.posX = tag.getFloat("posX");
 		this.posY = tag.getFloat("posY");
+
+		NBTTagCompound configs = tag.getCompoundTag("configs");
+		for (String e : configs.getKeySet()) {
+			config_map.put(e, DataValue.newFromNBT(configs.getTag(e)));
+		}
 	}
+
 }

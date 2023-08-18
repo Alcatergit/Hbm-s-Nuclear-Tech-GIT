@@ -23,11 +23,15 @@ public class SubElementItemChoice extends SubElement {
 		int cY = gui.height/2;
 		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-75, cY+92, 20, 20, "<"));
 		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+75, cY+92, 20, 20, ">"));
-		List<Control> controls = ControlRegistry.getAllControls();
-		for(int i = 0; i < controls.size(); i ++){
-			int offset = (i%7)*25;
-			buttons.add(gui.addButton(new GuiButton(i+1000, cX-70, cY-90 + offset, 160, 20, controls.get(i).name)));
-		}
+//		List<Control> controls = ControlRegistry.getAllControls();
+//		for(int i = 0; i < controls.size(); i ++){
+//			int offset = (i%7)*25;
+//			buttons.add(gui.addButton(new GuiButton(i+1000, cX-70, cY-90 + offset, 160, 20, controls.get(i).name)));
+//		}
+
+		buttons.add(gui.addButton(new GuiButton(1000, cX-70, (cY-90) + (0%7)*25, 160, 20, "Button")));
+		buttons.add(gui.addButton(new GuiButton(1001, cX-70, (cY-90) + (1%7)*25, 160, 20, "Display")));
+
 		numPages = (buttons.size()+6)/7;
 		super.initGui();
 	}
@@ -38,7 +42,7 @@ public class SubElementItemChoice extends SubElement {
 		int cY = gui.height/2;
 		String text = currentPage + "/" + numPages;
 		gui.getFontRenderer().drawString(text, cX, cY+100, 0xFF777777, false);
-		text = "Select item to add";
+		text = "Select Control Type";
 		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2, cY-110, 0xFF777777, false);
 	}
 	
@@ -55,7 +59,7 @@ public class SubElementItemChoice extends SubElement {
 			buttons.get(i).enabled = true;
 		}
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button){
 		if(button == pageLeft){
@@ -65,11 +69,19 @@ public class SubElementItemChoice extends SubElement {
 			currentPage = Math.min(numPages, currentPage + 1);
 			recalculateVisibleButtons();
 		} else {
-			switch(button.id){
-			case 1000:
-				gui.currentEditControl = ControlRegistry.getNew("button", gui.control.panel);
-				gui.pushElement(gui.linker);
-				break;
+			switch (button.id) {
+				case 1000:
+					gui.currentEditControl = ControlRegistry.getNew("button_hazard", gui.control.panel);
+					gui.pushElement(gui.linker);
+					break;
+				case 1001:
+					gui.currentEditControl = ControlRegistry.getNew("display_7seg", gui.control.panel);
+					gui.pushElement(gui.itemConfig);
+					break;
+//				case 1002:
+//					gui.currentEditControl = ControlRegistry.getNew("indicatorLamp", gui.control.panel);
+//					gui.pushElement(gui.itemConfig);
+//					break;
 			}
 		}
 	}

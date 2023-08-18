@@ -535,17 +535,21 @@ public class ResourceManager {
 	public static final IModelCustom stopsign = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/weapons/stopsign.obj"));
 	public static final IModelCustom gavel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/gavel.obj"));
 	public static final IModelCustom crucible = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/crucible.obj"));
-	
-	
-	//Control panel
-	public static final IModelCustom control_panel0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/control0.obj"));
-	public static final IModelCustom ctrl_button0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button0.obj"));
-	public static final ResourceLocation control_panel0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/control0.png");
-	public static final ResourceLocation ctrl_button0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0.png");
-	public static final ResourceLocation ctrl_button0_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button0_gui.png");
-	
-	//Textures TEs
 
+	// Control panel
+	public static final IModelCustom control_panel0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/control0.obj"));
+	public static final ResourceLocation control_panel0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/control0.png");
+
+	// Control panel controls
+	public static final IModelCustom ctrl_button2 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button2.obj"));
+	public static final IModelCustom ctrl_display0 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/display0.obj"));
+
+	public static final ResourceLocation ctrl_button2_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button2.png");
+	public static final ResourceLocation ctrl_display0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/display0.png");
+
+	public static final ResourceLocation ctrl_button2_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button2_gui.png");
+
+	//Textures TEs
 	public static final ResourceLocation universal = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");
 
 	//Freons Turrets Textures

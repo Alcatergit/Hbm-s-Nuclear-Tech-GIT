@@ -54,8 +54,8 @@ public class SubElementLinker extends SubElement {
 		int cY = gui.height/2;
 		String text = currentPage + "/" + numPages;
 		gui.getFontRenderer().drawString(text, cX+4, cY-6, 0xFF777777, false);
-		text = "Creating links for new " + gui.currentEditControl.name;
-		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2 + 10, cY-110, 0xFF777777, false);
+		text = "Create Links";
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text)/2F + 10, cY-110, 0xFF777777, false);
 	}
 	
 	@Override

@@ -5,18 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hbm.inventory.control_panel.nodes.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import com.hbm.inventory.control_panel.nodes.Node;
-import com.hbm.inventory.control_panel.nodes.NodeCancelEvent;
-import com.hbm.inventory.control_panel.nodes.NodeEventBroadcast;
-import com.hbm.inventory.control_panel.nodes.NodeGetVar;
-import com.hbm.inventory.control_panel.nodes.NodeInput;
-import com.hbm.inventory.control_panel.nodes.NodeMath;
-import com.hbm.inventory.control_panel.nodes.NodeSetVar;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
 import com.hbm.render.RenderHelper;
@@ -121,6 +115,24 @@ public class SubElementNodeEditor extends SubElement {
 					});
 					list.addItems("Math Node");
 					return list;
+				} else if(s.endsWith("Boolean")){
+					ItemList list = new ItemList(0, 0, 32, s2 -> {
+						final float x = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
+						final float y = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
+						Node node = null;
+						if(s2.equals("Boolean Node")){
+							node = new NodeBoolean(x, y);
+						}
+						if(node != null){
+							addMenu.close();
+							addMenu = null;
+							currentSystem.addNode(node);
+							currentSystem.activeNode = node;
+						}
+						return null;
+					});
+					list.addItems("Boolean Node");
+					return list;
 				} else if(s.endsWith("Output")){
 					ItemList list = new ItemList(0, 0, 32, s2 -> {
 						final float x = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
@@ -152,7 +164,7 @@ public class SubElementNodeEditor extends SubElement {
 				}
 				return null;
 			});
-			addMenu.addItems("{expandable}Input", "{expandable}Output", "{expandable}Math", "{expandable}Logic");
+			addMenu.addItems("{expandable}Input", "{expandable}Output", "{expandable}Math", "{expandable}Boolean", "{expandable}Logic");
 		}
 		if(code == Keyboard.KEY_DELETE || code == Keyboard.KEY_X){
 			List<Node> selected = new ArrayList<>(currentSystem.selectedNodes);
