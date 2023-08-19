@@ -11,7 +11,7 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.tileentity.TileEntityLoadedBase;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyGenerator;
@@ -36,11 +36,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITickable, ITankPacketAcceptor, IEnergyGenerator, IFluidHandler {
-
-	public ItemStackHandler inventory;
+public class TileEntityMachineCoal extends TileEntityMachineBase implements ITickable, ITankPacketAcceptor, IEnergyGenerator, IFluidHandler {
 	
 	public long power;
 	public int burnTime;
@@ -53,45 +50,41 @@ public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITick
 	String customName = null;
 	
 	public TileEntityMachineCoal() {
-		this.inventory = new ItemStackHandler(4){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
-				if(slot == 0)
-					return isValidFluid(FluidUtil.getFluidContained(stack));
-				if(slot == 2)
-					if(stack.getItem() instanceof IBatteryItem)
-						return true;
-				if(slot == 1)
-					if(TileEntityFurnace.getItemBurnTime(stack) > 0)
-						return true;
-				
-				return false;
-			}
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(this.isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				return ItemStack.EMPTY;
-			}
-		};
+		super(4);
 		tank = new FluidTank(5000);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.machineCoal";
+	public String getName() {
+		return "container.machineCoal";
 	}
 
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return new int[]{ 0, 1, 2, 3 };
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack) {
+		if(i == 0)
+			return isValidFluid(FluidUtil.getFluidContained(stack));
+		if(i == 1)
+			if(TileEntityFurnace.getItemBurnTime(stack) > 0)
+				return true;
+		if(i == 2)
+			return (stack.getItem() instanceof IBatteryItem);
+		return true;
 	}
 	
-	public void setCustomName(String name) {
-		this.customName = name;
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+		return isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		if(slot == 3)
+			return true;
+		return false;
 	}
 	
 	@Override
@@ -120,8 +113,6 @@ public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITick
             {
                 MachineCoal.updateBlockState(this.burnTime > 0, this.world, this.pos);
             }
-			
-			
 			
 			generate();
 			detectAndSendChanges();
@@ -175,7 +166,7 @@ public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITick
 	}
 	
 	protected boolean inputValidForTank(int tank, int slot){
-		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY){
+		if(inventory.getStackInSlot(slot) != null && !inventory.getStackInSlot(slot).isEmpty()){
 			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
 				return true;	
 			}
@@ -243,14 +234,15 @@ public class TileEntityMachineCoal extends TileEntityLoadedBase implements ITick
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) :
-			capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) :
-				super.getCapability(capability, facing);
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		}
+		return super.getCapability(capability, facing);
 	}
 
 	@Override

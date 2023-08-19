@@ -90,12 +90,12 @@ public class GunDefabricator extends Item {
 		if(MainRegistry.polaroidID == 11)
 			list.add("Did you set your alarm for volcano day?");
 		else
-			list.add("BAD WOLF");
+			list.add("§4§lBAD WOLF");
 		list.add("");
-		list.add("Ammo: Defabricator Energy Cell");
+		list.add("Ammo: §cDefabricator Energy Cell");
 		list.add("Damage: 40 - 120");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 	}
 	
 	@Override

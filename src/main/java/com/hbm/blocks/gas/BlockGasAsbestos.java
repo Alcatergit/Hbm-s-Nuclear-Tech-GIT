@@ -52,7 +52,7 @@ public class BlockGasAsbestos extends BlockGasBase {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
-		if(!world.isRemote && (!GeneralConfig.enableAsbestos || rand.nextInt(50) == 0)) {
+		if(!world.isRemote && (!GeneralConfig.enableAsbestos || rand.nextInt(10) == 0)) {
 			world.setBlockToAir(pos);
 			return;
 		}

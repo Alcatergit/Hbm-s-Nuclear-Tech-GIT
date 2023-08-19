@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.util.EnumHand;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -29,15 +30,18 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockOre extends Block implements IItemHazard {
 	
 	ItemHazardModule module;
+	public static int xp;
 
-	public BlockOre(Material materialIn, String name, int harvestLvl) {
+	public BlockOre(Material materialIn, String name, int harvestLvl, int xp) {
 		super(materialIn);
+		this.xp = xp;
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);
@@ -45,6 +49,10 @@ public class BlockOre extends Block implements IItemHazard {
 		this.setHarvestLevel("pickaxe", harvestLvl);
 		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	public BlockOre(Material materialIn, String name, int harvestLvl) {
+		this(materialIn, name, harvestLvl, 2);
 	}
 	
 	public BlockOre(Material mat, SoundType sound, String name, int harvestLvl){
@@ -55,6 +63,11 @@ public class BlockOre extends Block implements IItemHazard {
 	@Override
 	public ItemHazardModule getModule() {
 		return module;
+	}
+
+	@Override
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune){
+		return xp;
 	}
 	
 	@Override
@@ -107,7 +120,7 @@ public class BlockOre extends Block implements IItemHazard {
 		}
 		if(this == ModBlocks.block_meteor_treasure)
 		{
-			switch(rand.nextInt(37)) {
+			switch(rand.nextInt(35)) {
 			case 0: return ModItems.coil_advanced_alloy;
 			case 1: return ModItems.plate_advanced_alloy;
 			case 2: return ModItems.powder_desh_mix;
@@ -143,8 +156,6 @@ public class BlockOre extends Block implements IItemHazard {
 			case 32: return ModItems.gun_mirv_ammo;
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
-			case 35: return ModItems.glitch;
-			case 36: return ModItems.nugget_radspice;
 			}
 		}
 		if(this == ModBlocks.deco_aluminium)
@@ -251,6 +262,18 @@ public class BlockOre extends Block implements IItemHazard {
 			tooltip.add("You weren't supposed to mine that.");
 			tooltip.add("Come on, get a derrick you doofus.");
 		}
+	}
+
+	@Override
+	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
+		if(entity instanceof EntityLivingBase)
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+		if(entity instanceof EntityLivingBase)
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 	}
 
 	@Override

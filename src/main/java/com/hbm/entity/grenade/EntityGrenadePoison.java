@@ -1,6 +1,6 @@
 package com.hbm.entity.grenade;
 
-import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.explosion.ExplosionChaos;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
 
@@ -34,8 +34,8 @@ public class EntityGrenadePoison extends EntityGrenadeBouncyBase
         if (!this.world.isRemote)
         {
             this.setDead();
-            this.world.createExplosion(this, this.posX, this.posY, this.posZ, 2.0F, true);
-            ExplosionNukeGeneric.wasteNoSchrab(this.world, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 10);
+            ExplosionChaos.poison(world, (int)posX, (int)posY, (int)posZ, 15);
+            ExplosionChaos.spawnChlorine(world, posX, posY, posZ, 50, 1.5, 0);
         }
     }
 

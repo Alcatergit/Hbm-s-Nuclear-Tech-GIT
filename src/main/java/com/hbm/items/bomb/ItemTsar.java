@@ -19,7 +19,7 @@ public class ItemTsar extends ItemHazard {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
-		list.add("Tsar Bomba");
+		list.add(" Tsar Bomba");
 		super.addInformation(stack, world, list, flagIn);
 	}
 

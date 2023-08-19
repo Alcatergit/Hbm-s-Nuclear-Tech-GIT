@@ -9,6 +9,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.EntityDamageUtil;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,7 +71,7 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 
 	@Override
 	public long getConsumption() {
-		return 1_000_000 - this.blueLevel * 6000 + this.redLevel * 6000 + this.blackLevel * 60000 + this.pinkLevel * 12000;
+		return 50_000 - this.blueLevel * 1_600 + this.redLevel * 10_000 + this.blackLevel * 100_000 + this.pinkLevel * 12_000 + this.greenLevel * 1_600;
 	}
 
 	@Override
@@ -151,8 +152,9 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 		long demand = this.getConsumption() * 10;
 		
 		if(this.target != null && this.getPower() >= demand) {
-
-			EntityDamageUtil.attackEntityFromIgnoreIFrame(this.target, ModDamageSource.shrapnel, (this.blackLevel * 10 + this.redLevel + 1F) * 0.25F);
+			if(this.target instanceof EntityPlayer && (((EntityPlayer)this.target).capabilities.isCreativeMode || ((EntityPlayer)this.target).isSpectator()))
+				return;
+			EntityDamageUtil.attackEntityFromIgnoreIFrame(this.target, ModDamageSource.gluon, (Math.max(0, this.blackLevel * 10 + this.redLevel - this.blueLevel>>1) + 1F) * 0.25F);
 			
 			if(pinkLevel > 0)
 				this.target.setFire(this.pinkLevel * 3);

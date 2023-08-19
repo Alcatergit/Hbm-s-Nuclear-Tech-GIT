@@ -102,6 +102,9 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(ModItems.battery_advanced, 0, 1, 1, 3),
 			new WeightedRandomChestContentFrom1710(ModItems.battery_advanced_cell, 0, 1, 1, 2),
 			new WeightedRandomChestContentFrom1710(ModItems.battery_schrabidium, 0, 1, 1, 1),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_10, 0, 1, 1, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_15, 0, 1, 1, 2),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_misc, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.syringe_awesome, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.crate_caller, 0, 1, 1, 3),
 			new WeightedRandomChestContentFrom1710(ModItems.fusion_core, 0, 1, 1, 4),
@@ -209,6 +212,9 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(ModItems.fuel_tank_small, 0, 1, 1, 2),
 			new WeightedRandomChestContentFrom1710(ModItems.warhead_mirvlet, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.warhead_nuclear, 0, 1, 1, 1),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_10, 0, 1, 1, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_15, 0, 1, 1, 2),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_misc, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ItemBombCaller.getStack(EnumCallerType.CARPET), 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ItemBombCaller.getStack(EnumCallerType.ORANGE), 1, 1, 1) };
 
@@ -308,6 +314,9 @@ public class HbmChestContents {
 			new WeightedRandomChestContentFrom1710(ModItems.weaponized_starblaster_cell, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.warhead_mirv, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ItemBattery.getFullBattery(ModItems.battery_schrabidium_cell), 1, 1, 1),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_10, 0, 1, 1, 3),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_15, 0, 1, 1, 2),
+			new WeightedRandomChestContentFrom1710(ModItems.loot_misc, 0, 1, 1, 1),
 			new WeightedRandomChestContentFrom1710(ModItems.powder_nitan_mix, 0, 16, 32, 1) };
 	
 	/**

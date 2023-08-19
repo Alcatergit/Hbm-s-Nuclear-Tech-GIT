@@ -4,11 +4,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerCoreAdvanced;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GUICoreAdvanced extends GuiInfoContainer {
@@ -16,7 +17,7 @@ public class GUICoreAdvanced extends GuiInfoContainer {
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/factory_advanced.png");
 	private TileEntityCoreAdvanced diFurnace;
 
-	public GUICoreAdvanced(EntityPlayer invPlayer, TileEntityCoreAdvanced tedf) {
+	public GUICoreAdvanced(InventoryPlayer invPlayer, TileEntityCoreAdvanced tedf) {
 		super(new ContainerCoreAdvanced(invPlayer, tedf));
 		diFurnace = tedf;
 		
@@ -28,20 +29,27 @@ public class GUICoreAdvanced extends GuiInfoContainer {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.diFurnace.hasCustomInventoryName() ? this.diFurnace.getInventoryName() : I18n.format(this.diFurnace.getInventoryName());
 		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 0x222222);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 0x222222);
+		String thing = "0 HE/s";
+		if(diFurnace.power < diFurnace.getMaxPower())
+			thing = Library.getShortNumber(diFurnace.progressStep * TileEntityCoreAdvanced.powerPerStep * 20) + " HE/s";
+			this.fontRenderer.drawString(thing, this.xSize-60-this.fontRenderer.getStringWidth(thing), 41, 0x222222);
+
+		this.fontRenderer.drawString("Speed:", 60, 95, 0x222222);
+		this.fontRenderer.drawString(diFurnace.progressStep+"", this.xSize-60-this.fontRenderer.getStringWidth(diFurnace.progressStep+""), 95, 0x222222);
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 		
-		String[] text = new String[] { "Basically just a larger furnace with a queue." };
+		String[] text = new String[] { "Basically just a larger furnace with a queue and extreme speed.", "Use a factory cluster to keep the current speed." };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
-		String[] text1 = new String[] { "Requires an advanced factory energy cluster as",
-				"an energy buffer, even if external power is used!" };
+		String[] text1 = new String[] { "Max production: 80/s at 16M HE/s and speed 400" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 71, 52, 16, diFurnace.power, diFurnace.getMaxPower());
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 

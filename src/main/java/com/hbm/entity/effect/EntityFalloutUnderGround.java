@@ -204,7 +204,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
 				return;
 
-			} else if(bblock == Blocks.BEDROCK){
+			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
 				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 				return;
 			

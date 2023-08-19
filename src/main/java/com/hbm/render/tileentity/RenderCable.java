@@ -15,7 +15,7 @@ public class RenderCable extends TileEntitySpecialRenderer<TileEntityCableBaseNT
 	
 	@Override
 	public void render(TileEntityCableBaseNT te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		if(te.getBlockType() == ModBlocks.red_wire_coated)
+		if(te.getBlockType() == ModBlocks.red_wire_coated || te.getBlockType() == ModBlocks.red_wire_sealed)
 			return;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5F, y + 0.5F, z + 0.5F);

@@ -132,18 +132,16 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 		
 		if(outputFluids != null) {
 			
-			for(int i = 0; i < 2; i++) {
-				if(tanks[0].getFluidAmount() >= 100 && tanks[1].getFluidAmount() >= 200 && hasSpace(outputFluids)) {
-					tanks[0].drain(100, true);
-					tanks[1].drain(200, true);
-					if(outputFluids.length == 2){
-						tanks[2].fill(outputFluids[0].copy(), true);
-						tanks[3].fill(outputFluids[1].copy(), true);
-						tanks[4].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
-					} else {
-						tanks[2].fill(outputFluids[0].copy(), true);
-						tanks[3].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
-					}
+			while(tanks[0].getFluidAmount() >= 100 && tanks[1].getFluidAmount() >= 200 && hasSpace(outputFluids)) {
+				tanks[0].drain(100, true);
+				tanks[1].drain(200, true);
+				if(outputFluids.length == 2){
+					tanks[2].fill(outputFluids[0].copy(), true);
+					tanks[3].fill(outputFluids[1].copy(), true);
+					tanks[4].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
+				} else {
+					tanks[2].fill(outputFluids[0].copy(), true);
+					tanks[3].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
 				}
 			}
 		}

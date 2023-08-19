@@ -10,11 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class RenderSILEX extends TileEntitySpecialRenderer<TileEntitySILEX> {
-
-	@Override
-	public boolean isGlobalRenderer(TileEntitySILEX te){
-		return true;
-	}
 	
 	@Override
 	public void render(TileEntitySILEX te, double x, double y, double z, float partialTicks, int destroyStage, float alpha){

@@ -21,6 +21,6 @@ public class ItemN2 extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add("Used in:");
-		tooltip.add("N² Mine");
+		tooltip.add(" N² Mine");
 	}
 }

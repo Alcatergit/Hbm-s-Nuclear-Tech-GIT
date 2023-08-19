@@ -88,17 +88,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.heat += rod.provideHeat(world, inventory.getStackInSlot(0), heat, 1.0D);
 				
 				
-				if(this.heat > this.maxHeat()) {
-					this.meltdown();
-					return;
-				}
-				
 				if(!this.hasLid()) {
-					RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F), Float.MAX_VALUE);
+					RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F), (float) ((this.fluxFast + this.fluxSlow) * 10F));
 				} else{
 					double meltdownPercent = rod.getMeltdownPercent(inventory.getStackInSlot(0));
 					if(meltdownPercent > 0){
-						RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F * (meltdownPercent/100)), Float.MAX_VALUE);
+						RadiationSavedData.incrementRad(world, pos, (float) ((this.fluxFast + this.fluxSlow) * 0.05F * meltdownPercent * 0.01D), (float) ((this.fluxFast + this.fluxSlow) * meltdownPercent * 0.1D));
 					}
 				}
 				
@@ -106,9 +101,15 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				//for spreading, we want the buffered flux to be 0 because we want to know exactly how much gets reflected back
 				this.fluxFast = 0;
 				this.fluxSlow = 0;
+
+				if(this.heat > this.maxHeat()) {
+					this.meltdown();
+					return;
+				}
 				
-				if(fluxOut > 0)
-					spreadFlux(rType, fluxOut);
+				if(fluxOut > 0){
+					spreadFlux(this.isModerated() ? NType.SLOW : rType, fluxOut);
+				}
 				
 				hasRod = true;
 			} else {
@@ -249,7 +250,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		}
 		
 		if(hits > 0)
-			RadiationSavedData.incrementRad(world, pos, (float) (flux * 0.05F * hits / (float)limit), Float.MAX_VALUE);
+			RadiationSavedData.incrementRad(world, pos, (float) (flux * 0.05F * hits / (float)limit), (float) (flux * 0.05F * hits / (float)limit) * 10F);
 		
 		return 0;
 	}

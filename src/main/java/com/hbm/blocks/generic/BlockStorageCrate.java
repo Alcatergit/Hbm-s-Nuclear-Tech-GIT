@@ -9,6 +9,7 @@ import com.hbm.items.tool.ItemLock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.config.MachineConfig;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
@@ -140,8 +141,8 @@ public class BlockStorageCrate extends BlockContainer {
 			if(!nbt.hasNoTags()) {
 				drop.setTagCompound(nbt);
 								
-				if(nbt.toString().length() > 6000) {
-					player.sendMessage(new TextComponentString("§cWarning: Container NBT exceeds 6kB, contents will be ejected!"));
+				if(nbt.toString().length() > MachineConfig.crateByteSize * 1000) {
+					player.sendMessage(new TextComponentString("§cWarning: Container NBT exceeds "+MachineConfig.crateByteSize+"kB, contents will be ejected!"));
 					InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
 					InventoryHelper.spawnItemStack(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(Item.getItemFromBlock(this)));
 					return world.setBlockToAir(pos);

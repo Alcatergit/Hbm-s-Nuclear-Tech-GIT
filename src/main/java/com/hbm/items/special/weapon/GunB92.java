@@ -223,7 +223,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 		list.add("");
 		list.add("\"It's nerf or nothing!\"");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 
 		// Yeah attribute modifiers don't work too well for this. Not sure why
 		// this even needs to be here, but oh well.

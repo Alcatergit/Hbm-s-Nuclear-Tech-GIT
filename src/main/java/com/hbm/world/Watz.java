@@ -4,25 +4,25 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class Watz extends WorldGenerator {
+public class Watz {
 
-	public static String[][] array = new String[][] {
+	public static String[][] watz = new String[][] {
 		{
-			"SSSSSSS",
-			"SSSSSSS",
+			"  SSS  ",
+			" SSSSS ",
 			"SSSSSSS",
 			"SSSISSS",
 			"SSSSSSS",
-			"SSSSSSS",
-			"SSSSSSS"
+			" SSSSS ",
+			"  SSS  "
 		},
 		{
 			"  CCC  ",
@@ -124,672 +124,112 @@ public class Watz extends WorldGenerator {
 			"  CCC  "
 		},
 		{
-			"SSSSSSS",
-			"SSSSSSS",
+			"  SSS  ",
+			" SSSSS ",
 			"SSSSSSS",
 			"SSSISSS",
 			"SSSSSSS",
-			"SSSSSSS",
-			"SSSSSSS"
+			" SSSSS ",
+			"  SSS  "
 		}
 	};
-	
-	@Override
-	public boolean generate(World worldIn, Random rand, BlockPos position) {
-		int i = rand.nextInt(1);
 
-		if(i == 0)
-		{
-		    generate_r0(worldIn, rand, new BlockPos.MutableBlockPos(position));
-		}
-
-       return true;
-	}
-
-	public boolean generate_r0(World world, Random rand, MutableBlockPos pos)
-	{
+	public boolean generateReactor(World world, Random rand, BlockPos pos) {
+		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		int x = pos.getX() - 3;
 		int y = pos.getY();
 		int z = pos.getZ() - 3;
-		
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 0, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 1, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 1, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 1, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 1, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 1, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 1, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 1, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 2, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 2, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 2, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 2, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 2, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 3, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 3, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 3, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 3, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 4, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 4, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 4, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 4, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 5, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 5, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 5, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 5, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 5, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 5, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 5, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 0), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[2]), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 3), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[4]), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 3), ModBlocks.watz_core.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 3), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[5]), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 6, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 6, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 6, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 6, z + 6), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[3]), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 6, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 6, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 6, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 7, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 7, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 7, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 7, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 7, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 7, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 7, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 8, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 8, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 8, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 8, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 8, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 8, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 8, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 9, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 9, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 9, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 9, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 9, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 9, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 9, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 10, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 10, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 10, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 10, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 10, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 10, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 10, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 0), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 0), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 1), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 1), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 1), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 1), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 2), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 2), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 2), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 2), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 3), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 3), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 3), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 4), ModBlocks.watz_cooler.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 4), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 4), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 4), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 5), ModBlocks.watz_control.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 5), ModBlocks.watz_element.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 5), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 5), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 11, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 11, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 11, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 11, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 11, z + 6), ModBlocks.reinforced_brick.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 11, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 11, z + 6), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 0), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 1), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 2), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 3), ModBlocks.watz_conductor.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 3), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 4), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 5), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 0, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 1, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 2, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 3, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 4, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 12, z + 6), ModBlocks.watz_end.getDefaultState(), 3);
-		return true;
 
+		for(int i = 0; i < 7; i++) {
+			for(int j = 0; j < 13; j++) {
+				for(int k = 0; k < 7; k++) {
+					String c = watz[j][i].substring(k, k + 1);
+					Block b = Blocks.AIR;
+
+					if(c.equals("W"))
+						b = ModBlocks.watz_element;
+					else if(c.equals("R"))
+						b = ModBlocks.watz_control;
+					else if(c.equals("S"))
+						b = ModBlocks.watz_end;
+					else if(c.equals("K"))
+						b = ModBlocks.watz_cooler;
+					else if(c.equals("I"))
+						b = ModBlocks.watz_conductor;
+					else if(c.equals("C"))
+						b = ModBlocks.reinforced_brick;
+					else if(c.equals("#"))
+						b = ModBlocks.watz_core;
+					
+					world.setBlockState(mPos.setPos(x + i, y + j, z + k), b.getDefaultState());
+				}
+			}
+		}
+		world.setBlockState(mPos.setPos(x + 3, y + 6, z + 0), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[2]), 3);
+		world.setBlockState(mPos.setPos(x + 0, y + 6, z + 3), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[4]), 3);
+		world.setBlockState(mPos.setPos(x + 3, y + 6, z + 6), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[3]), 3);
+		world.setBlockState(mPos.setPos(x + 6, y + 6, z + 3), ModBlocks.watz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.values()[5]), 3);
+		return true;
+	}
+
+	public static boolean checkHull(World world, BlockPos pos) {
+		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+		int x = pos.getX() - 3;
+		int y = pos.getY() - 6;
+		int z = pos.getZ() - 3;
+		
+		boolean flag = true;
+		
+		for(int i = 0; i < 7; i++) {
+			for(int j = 0; j < 13; j++) {
+				for(int k = 0; k < 7; k++) {
+					String c = watz[j][i].substring(k, k + 1);
+					Block b = Blocks.AIR;
+					boolean flag2 = false;
+
+					if(c.equals("W")){
+						b = ModBlocks.watz_element;
+						flag2 = true;
+					}
+					else if(c.equals("R")){
+						b = ModBlocks.watz_control;
+						flag2 = true;
+					}
+					else if(c.equals("S")){
+						b = ModBlocks.watz_end;
+						flag2 = true;
+					}
+					else if(c.equals("K")){
+						b = ModBlocks.watz_cooler;
+						flag2 = true;
+					}
+					else if(c.equals("I")){
+						b = ModBlocks.watz_conductor;
+						flag2 = true;
+					}
+					else if(c.equals("C")){
+						b = ModBlocks.reinforced_brick;
+						flag2 = true;
+					}
+					else if(c.equals("A")){
+						b = ModBlocks.watz_hatch;
+						flag2 = true;
+					}
+					else if(c.equals("#")){
+						b = ModBlocks.watz_core;
+						flag2 = true;
+					}
+
+					
+					if(flag2){
+						if(world.getBlockState(mPos.setPos(x + i, y + j, z + k)).getBlock() != b){
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		return flag;
 	}
 }

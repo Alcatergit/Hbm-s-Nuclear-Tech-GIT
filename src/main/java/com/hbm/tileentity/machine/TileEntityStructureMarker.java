@@ -14,14 +14,14 @@ public class TileEntityStructureMarker extends TileEntity implements ITickable {
 	// 0: Factory
 	// 1: Nuclear Reactor
 	// 2: Reactor with Coat
-	// 5: Watz Power Plant
-	// 6: Singularity-Anti-Fusion-Experiment
+	// 3: Watz Power Plant
+	// 4: Singularity-Anti-Fusion-Experiment
 	public int type = 0;
 
 	@Override
 	public void update() {
-		if(this.type > 6)
-			type -= 7;
+		if(this.type > 4)
+			type = 0;
 
 		if(!world.isRemote)
 			PacketDispatcher.wrapper.sendToAllAround(new TEStructurePacket(pos.getX(), pos.getY(), pos.getZ(), type), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 80));

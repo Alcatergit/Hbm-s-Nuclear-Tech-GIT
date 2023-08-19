@@ -87,7 +87,7 @@ public class GunCryolator extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add("Ice to meet you!");
 		list.add("");
-		list.add("Ammo: Cryolator Ammo");
+		list.add("Ammo: §bCryolator Ammo");
 		list.add("Damage: 5");
 	}
 	

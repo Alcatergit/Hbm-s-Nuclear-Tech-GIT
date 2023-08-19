@@ -90,14 +90,17 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 		if(core.tanks[1].getFluid() != null)
 			dfcTank1 = core.tanks[1].getFluid().getFluid();
 		
-
 		if((tank0 == dfcTank0 || dfcTank0 == null) && tank0 != dfcTank1)
-			if(tanks[0].drain(core.tanks[0].fill(tanks[0].getFluid(), true), true) != null)
+			if(tanks[0].drain(core.tanks[0].fill(tanks[0].getFluid(), true), true) != null){
+				dfcTank0 = tank0;
 				core.markDirty();
+			}
 
 		if((tank1 == dfcTank1 || dfcTank1 == null) && tank1 != dfcTank0)
-			if(tanks[1].drain(core.tanks[1].fill(tanks[1].getFluid(), true), true) != null)
+			if(tanks[1].drain(core.tanks[1].fill(tanks[1].getFluid(), true), true) != null){
+				dfcTank1 = tank1;
 				core.markDirty();
+			}
 
 		if((tank0 == dfcTank1 || dfcTank1 == null) && tank0 != dfcTank0)
 			if(tanks[0].drain(core.tanks[1].fill(tanks[0].getFluid(), true), true) != null)

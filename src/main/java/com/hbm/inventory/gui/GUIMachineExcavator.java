@@ -39,7 +39,7 @@ public class GUIMachineExcavator extends GuiInfoContainer {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 7, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Main On/Off Lever" });
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 31, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Silktouch" });
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 55, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Shred ores" });
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Veign mining" });
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Vein mining" });
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 103, guiTop + 16, 18, 18, mouseX, mouseY, new String[] { "Construct walls" });
 		
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 220, guiTop + 17, 16, 52, drill.getPower(), drill.maxPower);

@@ -67,7 +67,7 @@ public class GeneralConfig {
 	public static boolean bulletHoleNormalMapping = true;
 	public static int flowingDecalAmountMax = 20;
 	public static boolean bloodFX = true;
-	public static int crucibleMaxCharges = 3;
+	public static int crucibleMaxCharges = 16;
 	public static boolean enableReEval = true;
 	
 	public static boolean enable528 = false;
@@ -177,10 +177,10 @@ public class GeneralConfig {
 			flashlightVolumetric = false;
 		}
 		
-		crucibleMaxCharges = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.33_crucible_max_charges", "How many times you can use the crucible before recharge", 3);
+		crucibleMaxCharges = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.33_crucible_max_charges", "How many times you can use the crucible before recharge", 16);
 		
 		if(crucibleMaxCharges <= 0){
-			crucibleMaxCharges = 3;
+			crucibleMaxCharges = 16;
 		}
 
 		enableWelcomeMessage = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.34_enableWelcomeMessage", "Enables the welcome message which appears in the chat when you load into the game", true);

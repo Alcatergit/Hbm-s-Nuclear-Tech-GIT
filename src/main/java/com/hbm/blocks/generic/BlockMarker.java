@@ -52,17 +52,17 @@ public class BlockMarker extends BlockContainer {
 		if(world.isRemote)
 		{
 			int i = ((TileEntityStructureMarker)world.getTileEntity(pos)).type + 1;
-			if(i > 6)
-				i -= 7;
+			if(i > 4)
+				i = 0;
 			if(i == 0)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Factory"));
 			if(i == 1)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor"));
 			if(i == 2)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor with Concrete Casing"));
-			if(i == 5)
+			if(i == 3)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Watz Power Plant"));
-			if(i == 6)
+			if(i == 4)
 		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Singularity-Anti-Fusion-Experiment"));
 			return true;
 		} else if(!player.isSneaking())

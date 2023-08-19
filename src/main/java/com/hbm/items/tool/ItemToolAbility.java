@@ -290,9 +290,9 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     			if(ability != null) {
     				
     				if(getCurrentAbility(stack) == ability)
-    					list.add(" >" + TextFormatting.GOLD + ability.getFullName());
+    					list.add(" §e§l>" + ability.getFullName());
     				else
-    					list.add("  " + TextFormatting.GOLD + ability.getFullName());
+    					list.add("  §6" + ability.getFullName());
     			}
     		}
 
@@ -409,5 +409,4 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 	public boolean canBreakRock(World world, EntityPlayer player, ItemStack tool, IBlockState block, BlockPos pos){
 		return canOperate(tool) && this.rockBreaker;
 	}
-
 }

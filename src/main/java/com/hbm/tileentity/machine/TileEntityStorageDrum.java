@@ -84,7 +84,7 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 							if(outputStack != null){
 								liquid += wasteData[1];
 								gas += wasteData[2];
-								inventory.setStackInSlot(i, outputStack);
+								inventory.setStackInSlot(i, outputStack.copy());
 							}
 						}
 					} else {

@@ -161,7 +161,7 @@ public class GunEnergyFactory {
 		config.hasSights = false;
 		config.reloadDuration = 20;
 		config.firingDuration = 0;
-		config.ammoCap = 40;
+		config.ammoCap = 10;
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.NONE;
@@ -182,16 +182,7 @@ public class GunEnergyFactory {
 						));
 
 		config.config = new ArrayList<Integer>();
-		config.config.add(BulletConfigSyncingUtil.R556_NORMAL);
-		config.config.add(BulletConfigSyncingUtil.R556_GOLD);
-		config.config.add(BulletConfigSyncingUtil.R556_TRACER);
-		config.config.add(BulletConfigSyncingUtil.R556_PHOSPHORUS);
-		config.config.add(BulletConfigSyncingUtil.R556_AP);
-		config.config.add(BulletConfigSyncingUtil.R556_DU);
 		config.config.add(BulletConfigSyncingUtil.R556_STAR);
-		config.config.add(BulletConfigSyncingUtil.CHL_R556);
-		config.config.add(BulletConfigSyncingUtil.R556_SLEEK);
-		config.config.add(BulletConfigSyncingUtil.R556_K);
 
 		return config;
 

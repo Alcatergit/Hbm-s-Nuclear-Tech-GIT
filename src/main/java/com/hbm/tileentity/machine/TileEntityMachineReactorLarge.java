@@ -563,7 +563,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			if(world.getBlockState(mPos.setPos(x + 2, y, z)).getBlock() == ModBlocks.reactor_inserter && world.getBlockState(mPos.setPos(x + 2, y, z)).getValue(BlockHorizontal.FACING) == EnumFacing.EAST)
 				tryInsertFrom(mPos.setPos(x + 3, y, z));
 
-			PacketDispatcher.wrapper.sendToAllAround(new LargeReactorPacket(pos, rods, coreHeat, hullHeat, fuel, waste, type.getID()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+			PacketDispatcher.wrapper.sendToAllAround(new LargeReactorPacket(pos, rods, coreHeat, hullHeat, fuel, maxFuel, waste, maxWaste, type.getID()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 		}
 	}
 	
@@ -698,7 +698,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 							int cont = getFuelContent(chest.getStackInSlot(i), getFuelType(chest.getStackInSlot(i).getItem())) * fuelMult;
 							if(cont > 0 && fuel + cont <= maxFuel) {
 								
-								Item container =  chest.getStackInSlot(i).getItem().getContainerItem();
+								Item container = chest.getStackInSlot(i).getItem().getContainerItem();
 								
 								type = getFuelType(chest.getStackInSlot(i).getItem());
 								chest.getStackInSlot(i).shrink(1);

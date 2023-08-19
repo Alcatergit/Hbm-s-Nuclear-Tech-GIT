@@ -2,7 +2,7 @@
 	"parent": "block/cube_bottom_top",
 	"textures": {
 		"top": "hbm:blocks/machine_transformer_top",
-		"bottom": "hbm:blocks/machine_transformer_top",
+		"bottom": "hbm:blocks/machine_transformer_bottom",
 		"side": "hbm:blocks/machine_transformer"
 	}
 }

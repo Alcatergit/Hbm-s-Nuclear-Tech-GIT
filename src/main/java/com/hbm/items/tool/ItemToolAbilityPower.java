@@ -80,11 +80,21 @@ public class ItemToolAbilityPower extends ItemToolAbility implements IBatteryIte
     	return 0;
     }
     
+    public static String getColor(long a, long b){
+        float fraction = 100F * a/b;
+        if(fraction > 75)
+            return "§a";
+        if(fraction > 25)
+            return "§e";
+        return "§c";
+    }
+    
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-    	list.add("Charge: " + Library.getShortNumber(getCharge(stack)) + " / " + Library.getShortNumber(maxPower));
-    	super.addInformation(stack, worldIn, list, flagIn);
+        long power = getCharge(stack);
+        list.add("Charge: " + getColor(power, maxPower) + Library.getShortNumber(power) + " §2/ " + Library.getShortNumber(maxPower));
+        super.addInformation(stack, worldIn, list, flagIn);
     }
     
     @Override

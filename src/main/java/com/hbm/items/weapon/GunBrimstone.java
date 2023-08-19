@@ -79,7 +79,7 @@ public class GunBrimstone extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("[LEGENDARY WEAPON]");
+		tooltip.add("§d§l[LEGENDARY WEAPON]");
 	}
 	
 	@Override

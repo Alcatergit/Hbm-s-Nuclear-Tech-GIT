@@ -142,9 +142,9 @@ public class GunSpark extends Item {
 		list.add("'magic does not compute'");
 		list.add("'aeiou'");
 		list.add("");
-		list.add("Ammo: Electromagnetic Cartridge");
+		list.add("Ammo: §bElectromagnetic Cartridge");
 		list.add("Projectiles explode on impact.");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 	}
 }

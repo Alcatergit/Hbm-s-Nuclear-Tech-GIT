@@ -75,5 +75,4 @@ public class BlockDeconRad extends BlockContainer {
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-
 }

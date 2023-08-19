@@ -93,11 +93,11 @@ public class GunEuthanasia extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add("Say hello to my little syringe gun!");
 		list.add("");
-		list.add("Ammo: Syringe");
+		list.add("Ammo: §5Syringe");
 		list.add("Damage: 1 - 4");
 		list.add("Syringes have a 20% chance to instakill the enemy.");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 	}
 	
 	@Override

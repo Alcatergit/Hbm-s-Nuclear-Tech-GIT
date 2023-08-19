@@ -34,7 +34,7 @@ public class ItemRenderWeaponFFColt extends TEISRBase {
 		
 		case FIRST_PERSON_LEFT_HAND:
 
-			GL11.glTranslated(1, 0.5, 0);
+			GL11.glTranslated(1, 0.5, 0.3);
 			GL11.glScaled(s0, s0, s0);
 			GL11.glRotated(100, 0, -1, 0);
 			GL11.glRotated(25, 1, 0, 0);
@@ -43,7 +43,7 @@ public class ItemRenderWeaponFFColt extends TEISRBase {
 
 		case FIRST_PERSON_RIGHT_HAND:
 			
-			GL11.glTranslated(0, 0.5, 0);
+			GL11.glTranslated(0, 0.5, 0.3);
 			GL11.glScaled(s0, s0, s0);
 			GL11.glRotated(100, 0, 1, 0);
 			GL11.glRotated(25, 1, 0, 0);

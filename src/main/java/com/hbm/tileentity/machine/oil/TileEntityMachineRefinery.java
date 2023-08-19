@@ -24,6 +24,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -66,7 +67,9 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		
+		if(nbt.hasKey("f")) {
+            this.tankTypes[0] = FluidRegistry.getFluid(nbt.getString("f"));
+        }
 		power = nbt.getLong("power");
 		itemOutputTimer = nbt.getInteger("itemOutputTimer");
 		if(nbt.hasKey("tanks"))
@@ -76,6 +79,13 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		if(tankTypes[0] != null){
+			nbt.setString("f", tankTypes[0].getName());
+		} else {
+			if(tanks[0].getFluid() != null){
+				nbt.setString("f", tanks[0].getFluid().getFluid().getName());
+			}
+		}
 		nbt.setLong("power", power);
 		nbt.setInteger("itemOutputTimer", itemOutputTimer);
 		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
@@ -305,6 +315,11 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 		if(resource == null)
 			return 0;
 		if(tankTypes[0] != null && resource.getFluid() == tankTypes[0]) {
+			return tanks[0].fill(resource, doFill);
+		}
+		if(tanks[0].getFluidAmount() == 0 && RefineryRecipes.getRecipe(resource.getFluid()) != null){
+			tankTypes[0] = resource.getFluid();
+			this.markDirty();
 			return tanks[0].fill(resource, doFill);
 		}
 		return 0;

@@ -73,7 +73,7 @@ public class BarbedWire extends Block {
         }
 
         if(this == ModBlocks.barbed_wire_wither) {
-        	ent.attackEntityFrom(DamageSource.CACTUS, 2.0F);
+        	ent.attackEntityFrom(DamageSource.CACTUS, 3.0F);
         	
         	if(ent instanceof EntityLivingBase)
         		((EntityLivingBase)ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 5 * 20, 4));

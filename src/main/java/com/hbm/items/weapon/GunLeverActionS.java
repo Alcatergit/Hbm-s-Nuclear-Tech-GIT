@@ -156,10 +156,10 @@ public class GunLeverActionS extends Item {
 		else
 			list.add("I hate your guts, Vee.");
 		list.add("");
-		list.add("Ammo: 12x74 Buckshot");
+		list.add("Ammo: §e12x74 Buckshot");
 		list.add("Damage: Infinite");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 	}
 	
 	@Override

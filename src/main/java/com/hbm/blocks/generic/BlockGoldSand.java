@@ -9,6 +9,8 @@ import com.hbm.capability.HbmLivingProps.ContaminationEffect;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumHand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
@@ -25,14 +27,15 @@ public class BlockGoldSand extends BlockFallingBase implements IItemHazard {
 	}
 	
 	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn){
-		if(entityIn instanceof EntityLivingBase) {
-			entityIn.attackEntityFrom(DamageSource.IN_FIRE, 2F);
-			
-			if(this == ModBlocks.sand_gold198) {
-				HbmLivingProps.addCont((EntityLivingBase)entityIn, new ContaminationEffect(5F, 300, false));
-			}
-		}
+	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
+		if(entity instanceof EntityLivingBase)
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+		if(entity instanceof EntityLivingBase)
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 	}
 
 	@Override

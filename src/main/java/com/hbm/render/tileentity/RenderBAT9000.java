@@ -34,7 +34,7 @@ public class RenderBAT9000 extends TileEntitySpecialRenderer<TileEntityMachineBA
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 		GlStateManager.enableLighting();
-		GlStateManager.enableCull();
+		GlStateManager.disableCull();
 
 		bindTexture(ResourceManager.bat9000_tex);
 
@@ -118,7 +118,6 @@ public class RenderBAT9000 extends TileEntitySpecialRenderer<TileEntityMachineBA
 
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableLighting();
-			GlStateManager.enableCull();
 			
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lbx, lby);
 		}

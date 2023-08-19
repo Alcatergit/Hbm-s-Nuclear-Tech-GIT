@@ -25,7 +25,8 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
-
+        GlStateManager.disableCull();
+        
         TileEntitySolarMirror mirror = (TileEntitySolarMirror)te;
 
         bindTexture(ResourceManager.solar_mirror_tex);
@@ -59,7 +60,6 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
 	        BufferBuilder buf = tess.getBuffer();
 	        GlStateManager.disableTexture2D();
 	        GlStateManager.disableLighting();
-	        GlStateManager.disableCull();
 	        GlStateManager.enableBlend();
 	        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 	        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
@@ -94,7 +94,6 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
 	        GlStateManager.shadeModel(GL11.GL_FLAT);
 	        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	        GlStateManager.disableBlend();
-	        GlStateManager.enableCull();
 	        GlStateManager.enableLighting();
 	        GlStateManager.enableTexture2D();
         }

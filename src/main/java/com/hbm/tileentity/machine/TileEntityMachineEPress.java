@@ -1,6 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.PressRecipes;
 import com.hbm.items.machine.ItemStamp;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -107,7 +107,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 				int speed = 25;
 				
 				if(!inventory.getStackInSlot(1).isEmpty() && !inventory.getStackInSlot(2).isEmpty()) {
-					ItemStack stack = MachineRecipes.getPressResult(inventory.getStackInSlot(2).copy(), inventory.getStackInSlot(1).copy());
+					ItemStack stack = PressRecipes.getPressResult(inventory.getStackInSlot(2).copy(), inventory.getStackInSlot(1).copy());
 					if(stack != null &&
 							(inventory.getStackInSlot(3).isEmpty() ||
 							(inventory.getStackInSlot(3).getItem() == stack.getItem() &&

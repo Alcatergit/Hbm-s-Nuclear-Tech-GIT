@@ -144,6 +144,11 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable, ILoo
 	}
 
 	@Override
+	public boolean isFullBlock(IBlockState state) {
+		return false;
+	}
+
+	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}

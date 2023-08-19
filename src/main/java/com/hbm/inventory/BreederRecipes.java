@@ -188,7 +188,7 @@ public class BreederRecipes {
 		if(stack == null)
 			return null;
 		
-		ComparableStack sta = new ComparableStack(stack);
+		ComparableStack sta = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
 		return BreederRecipes.recipes.get(sta);
 	}
 	
@@ -202,7 +202,7 @@ public class BreederRecipes {
 		if(stack == null)
 			return null;
 		
-		ComparableStack sta = new ComparableStack(stack);
+		ComparableStack sta = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
 		int[] ret = BreederRecipes.fuels.get(sta);
 		
 		return ret;

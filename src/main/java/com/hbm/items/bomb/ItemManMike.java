@@ -2,6 +2,7 @@ package com.hbm.items.bomb;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemHazard;
 import com.hbm.main.MainRegistry;
 
@@ -19,9 +20,10 @@ public class ItemManMike extends ItemHazard {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add("Used in:");
-		list.add("Fat Man");
-		list.add("Ivy Mike");
-		list.add("Tsar Bomba");
+		if(this == ModItems.man_core)
+			list.add(" Fat Man");
+		list.add(" Ivy Mike");
+		list.add(" Tsar Bomba");
 		super.addInformation(stack, world, list, flagIn);
 	}
 }

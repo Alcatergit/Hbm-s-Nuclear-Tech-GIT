@@ -43,11 +43,11 @@ public class AnvilCraftPacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(AnvilCraftPacket m, MessageContext ctx) {
-			
+
 			ctx.getServerHandler().player.mcServer.addScheduledTask(() -> {
 				if(m.recipeIndex < 0 || m.recipeIndex >= AnvilRecipes.getConstruction().size()) //recipe is out of range -> bad
 					return;
-				
+
 				EntityPlayer p = ctx.getServerHandler().player;
 				
 				if(!(p.openContainer instanceof ContainerAnvil)) //player isn't even using an anvil -> bad
@@ -55,10 +55,10 @@ public class AnvilCraftPacket implements IMessage {
 				
 				ContainerAnvil anvil = (ContainerAnvil)p.openContainer;
 				AnvilConstructionRecipe recipe = AnvilRecipes.getConstruction().get(m.recipeIndex);
-				
+
 				if(!recipe.isTierValid(anvil.tier)) //player is using the wrong type of anvil -> bad
 					return;
-				
+
 				int count = m.mode == 1 ? 64 : 1;
 				
 				for(int i = 0; i < count; i++) {

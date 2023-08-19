@@ -261,6 +261,10 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		int bullets = config.bulletsMin;
 		
 		for(int k = 0; k < altConfig.roundsPerCycle; k++) {
+
+			if(!hasAmmo(stack, player, false))
+				break;
+
 			if(config.bulletsMax > config.bulletsMin)
 				bullets += world.rand.nextInt(config.bulletsMax - config.bulletsMin);
 			
@@ -268,7 +272,9 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 				spawnProjectile(world, player, stack, BulletConfigSyncingUtil.getKey(config), hand);
 			}
 			
+			useUpAmmo(player, stack, false);
 			setItemWear(stack, getItemWear(stack) + config.wear);
+			player.inventoryContainer.detectAndSendChanges();
 		}
 		
 		world.playSound(null, player.posX, player.posY, player.posZ, altConfig.firingSound, SoundCategory.PLAYERS, 1.0F, altConfig.firingPitch);
@@ -466,10 +472,10 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 			list.add("Ammo: "+ getColor(mag, mainConfig.ammoCap) + mag + " §2/ " + mainConfig.ammoCap);
 		}
 		else{
-			list.add("Ammo: Belt");
+			list.add("Ammo: §6Belt");
 		}
 
-		list.add("Ammo Type: " + I18n.format(ammo.getUnlocalizedName() + ".name"));
+		list.add("Ammo Type: §e" + I18n.format(ammo.getUnlocalizedName() + ".name"));
 
 		int dura = mainConfig.durability - getItemWear(stack);
 
@@ -487,7 +493,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		if(!mainConfig.comment.isEmpty()) {
 			list.add("");
 			for(String s : mainConfig.comment)
-				list.add(TextFormatting.ITALIC + s);
+				list.add("§6"+TextFormatting.ITALIC + s);
 		}
 
 		if(GeneralConfig.enableExtendedLogging) {

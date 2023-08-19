@@ -19,6 +19,17 @@ public class BombConfig {
 	public static int fatmanRadius = 35;
 	public static int nukaRadius = 25;
 	public static int aSchrabRadius = 20;
+	public static int riggedStarRange = 50;
+	public static int riggedStarTicks = 60 * 20;
+
+	public static int maxCustomTNTRadius = 150;
+	public static int maxCustomNukeRadius = 250;
+	public static int maxCustomHydroRadius = 400;
+	public static int maxCustomDirtyRadius = 200;
+	public static int maxCustomBaleRadius = 750;
+	public static int maxCustomSchrabRadius = 500;
+	public static int maxCustomSolRadius = 1000;
+	public static int maxCustomEuphLvl = 20;
 	
 	public static int mk4 = 1024;
 	public static int blastSpeed = 1024;
@@ -74,6 +85,46 @@ public class BombConfig {
 		Property propN2 = config.get(CATEGORY_NUKES, "3.13_n2Radius", 200);
 		propN2.setComment("Radius of the N2 mine");
 		n2Radius = propN2.getInt();
+
+		Property propRS1 = config.get(CATEGORY_NUKES, "3.14_riggedStarRadius", 50);
+		propRS1.setComment("Radius of the Rigged Star Blaster Energy Cell");
+		riggedStarRange = propRS1.getInt();
+		Property propRS2 = config.get(CATEGORY_NUKES, "3.15_riggedStarFuse", 1200);
+		propRS2.setComment("Time in ticks before the Rigged Star Blaster Energy Cell explodes after being dropped - default 60s");
+		riggedStarTicks = propRS2.getInt();
+
+		Property propTNT = config.get(CATEGORY_NUKES, "4.00_maxCustomTNTRadius", 150);
+		propTNT.setComment("Maximum TNT radius of custom nukes - default 150m");
+		maxCustomTNTRadius = propTNT.getInt();
+
+		Property propNuke = config.get(CATEGORY_NUKES, "4.01_maxCustomNukeRadius", 250);
+		propNuke.setComment("Maximum Nuke radius of custom nukes - default 250m");
+		maxCustomNukeRadius = propNuke.getInt();
+
+		Property propHydro = config.get(CATEGORY_NUKES, "4.02_maxCustomHydroRadius", 400);
+		propHydro.setComment("Maximum Thermonuclear radius of custom nukes - default 400m");
+		maxCustomHydroRadius = propHydro.getInt();
+
+		Property propDirty = config.get(CATEGORY_NUKES, "4.04_maxCustomDirtyRadius", 200);
+		propDirty.setComment("Maximum fallout additional radius that can be added to custom nukes - default 200m");
+		maxCustomDirtyRadius = propDirty.getInt();
+		
+		Property propBale = config.get(CATEGORY_NUKES, "4.03_maxCustomBaleRadius", 750);
+		propBale.setComment("Maximum balefire radius of custom nukes - default 750m");
+		maxCustomBaleRadius = propBale.getInt();
+
+		Property propSchrab = config.get(CATEGORY_NUKES, "4.05_maxCustomSchrabRadius", 500);
+		propSchrab.setComment("Maximum Antischrabidium radius of custom nukes - default 500m");
+		maxCustomSchrabRadius = propSchrab.getInt();
+
+		Property propSol = config.get(CATEGORY_NUKES, "4.06_maxCustomSolRadius", 1000);
+		propSol.setComment("Maximum Solinium radius of custom nukes - default 1000m");
+		maxCustomSolRadius = propSol.getInt();
+		
+		Property propEuph = config.get(CATEGORY_NUKES, "4.07_maxCustomEuphLvl", 20);
+		propEuph.setComment("Maximum Euphemium Lvl of custom nukes (1Lvl = 100 Rays) - default 20");
+		maxCustomEuphLvl = propEuph.getInt();
+		
 		
 		final String CATEGORY_NUKE = "06_explosions";
 		Property propLimitExplosionLifespan = config.get(CATEGORY_NUKE, "6.00_limitExplosionLifespan", 0);

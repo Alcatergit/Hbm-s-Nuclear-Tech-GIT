@@ -96,8 +96,8 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 
 			this.consumption = getConsumption();
 
-			this.consumption += speedLevel * 150;
-			this.consumption -= this.consumption * powerLevel * 0.25;
+			this.consumption *= (speedLevel+1);
+			this.consumption /= (powerLevel+1);
 			this.consumption *= (overLevel * 3 + 1);
 			
 			for(DirPos pos : getConPos()) {

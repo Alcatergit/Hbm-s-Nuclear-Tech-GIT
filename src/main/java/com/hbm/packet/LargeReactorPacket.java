@@ -15,12 +15,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class LargeReactorPacket implements IMessage {
 
-	int x, y, z, rods, coreHeat, hullHeat, fuel, waste, type;
+	int x, y, z, rods, coreHeat, hullHeat, fuel, maxFuel, waste, maxWaste, type;
 	
 	public LargeReactorPacket() {
 	}
 	
-	public LargeReactorPacket(BlockPos pos, int rods, int coreHeat, int hullHeat, int fuel, int waste, int type) {
+	public LargeReactorPacket(BlockPos pos, int rods, int coreHeat, int hullHeat, int fuel, int maxFuel, int waste, int maxWaste, int type) {
 		x = pos.getX();
 		y = pos.getY();
 		z = pos.getZ();
@@ -28,7 +28,9 @@ public class LargeReactorPacket implements IMessage {
 		this.coreHeat = coreHeat;
 		this.hullHeat = hullHeat;
 		this.fuel = fuel;
+		this.maxFuel = maxFuel;
 		this.waste = waste;
+		this.maxWaste = maxWaste;
 		this.type = type;
 	}
 	
@@ -41,7 +43,9 @@ public class LargeReactorPacket implements IMessage {
 		coreHeat = buf.readInt();
 		hullHeat = buf.readInt();
 		fuel = buf.readInt();
+		maxFuel = buf.readInt();
 		waste = buf.readInt();
+		maxWaste = buf.readInt();
 		type = buf.readInt();
 	}
 
@@ -54,7 +58,9 @@ public class LargeReactorPacket implements IMessage {
 		buf.writeInt(coreHeat);
 		buf.writeInt(hullHeat);
 		buf.writeInt(fuel);
+		buf.writeInt(maxFuel);
 		buf.writeInt(waste);
+		buf.writeInt(maxWaste);
 		buf.writeInt(type);
 	}
 
@@ -72,7 +78,9 @@ public class LargeReactorPacket implements IMessage {
 					r.coreHeat = m.coreHeat;
 					r.hullHeat = m.hullHeat;
 					r.fuel = m.fuel;
+					r.maxFuel = m.maxFuel;
 					r.waste = m.waste;
+					r.maxWaste = m.maxWaste;
 					r.type = ReactorFuelType.getEnum(m.type);
 				}
 			});

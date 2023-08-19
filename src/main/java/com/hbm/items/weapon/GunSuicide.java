@@ -119,7 +119,7 @@ public class GunSuicide extends Item {
     	list.add("I've seen things...");
 		list.add("...I shouldn't have seen.");
 		list.add("");
-		list.add("Ammo: Lead Bullets");
+		list.add("Ammo: §eLead Bullets");
 		list.add("Damage: Infinite");
     }
     

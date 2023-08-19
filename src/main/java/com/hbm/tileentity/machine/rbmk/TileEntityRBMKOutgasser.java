@@ -37,6 +37,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	public FluidTank gas;
 	public Fluid gasType;
 	public double progress = 0;
+	public double usedFlux = 0;
 	public int duration = 10000;
 
 	public TileEntityRBMKOutgasser() {
@@ -99,6 +100,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 			ContaminationUtil.neutronActivateItem(inventory.getStackInSlot(0), (float)(flux * 0.001), 1F);
 			this.markDirty();
 		}
+		this.usedFlux = flux;
 	}
 	
 	
@@ -193,8 +195,9 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		NBTTagCompound data = new NBTTagCompound();
 		data.setInteger("gas", this.gas.getFluidAmount());
 		data.setInteger("maxGas", this.gas.getCapacity());
-		data.setString("type", gasType.getName());
+		data.setDouble("usedFlux", this.usedFlux);
 		data.setDouble("progress", this.progress);
+		data.setDouble("maxProgress", this.duration);
 		return data;
 	}
 	

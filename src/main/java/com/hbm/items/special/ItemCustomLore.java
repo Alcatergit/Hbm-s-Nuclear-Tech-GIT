@@ -372,6 +372,11 @@ public class ItemCustomLore extends Item {
 				list.add(" §aRadius: "+(int)BombConfig.missileRadius*2*(1+BombConfig.falloutRange/100)+"m§r");
 			}
 		}
+
+		if(this == ModItems.factory_core_titanium || this == ModItems.factory_core_advanced)
+		{
+			list.add("Used in factories to stop the speed from changing.");
+		}
 		if(this == ModItems.undefined && world != null) {
 			
 			if(world.rand.nextInt(10) == 0) {

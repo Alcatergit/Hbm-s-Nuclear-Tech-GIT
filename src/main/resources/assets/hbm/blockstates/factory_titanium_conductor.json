@@ -1,6 +1,5 @@
 {
 	"variants": {
-		"activated=true": { "model": "hbm:factory_titanium_conductor" },
-     	   	"activated=false": { "model": "hbm:factory_titanium_conductor" }
+		"normal": { "model": "hbm:factory_titanium_conductor" }
 	}
 }

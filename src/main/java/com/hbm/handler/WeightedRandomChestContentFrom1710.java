@@ -20,20 +20,20 @@ public class WeightedRandomChestContentFrom1710 extends WeightedRandom.Item
     /** The maximum chance of item generating. */
     public int theMaximumChanceToGenerateItem;
 
-    public WeightedRandomChestContentFrom1710(Item p_i45311_1_, int p_i45311_2_, int p_i45311_3_, int p_i45311_4_, int p_i45311_5_)
+    public WeightedRandomChestContentFrom1710(Item item, int meta, int minChance, int maxChance, int weight)
     {
-        super(p_i45311_5_);
-        this.theItemId = new ItemStack(p_i45311_1_, 1, p_i45311_2_);
-        this.theMinimumChanceToGenerateItem = p_i45311_3_;
-        this.theMaximumChanceToGenerateItem = p_i45311_4_;
+        super(weight);
+        this.theItemId = new ItemStack(item, 1, meta);
+        this.theMinimumChanceToGenerateItem = minChance;
+        this.theMaximumChanceToGenerateItem = maxChance;
     }
 
-    public WeightedRandomChestContentFrom1710(ItemStack p_i1558_1_, int p_i1558_2_, int p_i1558_3_, int p_i1558_4_)
+    public WeightedRandomChestContentFrom1710(ItemStack stack, int minChance, int maxChance, int weight)
     {
-        super(p_i1558_4_);
-        this.theItemId = p_i1558_1_;
-        this.theMinimumChanceToGenerateItem = p_i1558_2_;
-        this.theMaximumChanceToGenerateItem = p_i1558_3_;
+        super(weight);
+        this.theItemId = stack;
+        this.theMinimumChanceToGenerateItem = minChance;
+        this.theMaximumChanceToGenerateItem = maxChance;
     }
 
     public static void generateChestContents(Random p_76293_0_, WeightedRandomChestContentFrom1710[] p_76293_1_, ICapabilityProvider p_76293_2_, int p_76293_3_){

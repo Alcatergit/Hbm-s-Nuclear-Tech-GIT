@@ -154,9 +154,11 @@ public class HbmWorldGen implements IWorldGenerator {
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.asbestosSpawn.get(dimID)), 4, 16, 16, ModBlocks.ore_asbestos);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.cinnebarSpawn.get(dimID)), 4, 8, 16, ModBlocks.ore_cinnebar);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.cobaltSpawn.get(dimID)), 4, 4, 8, ModBlocks.ore_cobalt);
-		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 5, 50, ModBlocks.cluster_iron);
-		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 5, 30, ModBlocks.cluster_titanium);
-		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.aluminiumClusterSpawn.get(dimID)), 6, 5, 40, ModBlocks.cluster_aluminium);
+		
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 15, 45, ModBlocks.cluster_iron);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 15, 30, ModBlocks.cluster_titanium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.aluminiumClusterSpawn.get(dimID)), 6, 15, 35, ModBlocks.cluster_aluminium);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.copperClusterSpawn.get(dimID)), 6, 15, 20, ModBlocks.cluster_copper);
 		//Special ores
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.reiiumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_reiium);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.weidaniumSpawn.get(dimID)), 2, 14, 18, ModBlocks.ore_weidanium);
@@ -412,7 +414,6 @@ public class HbmWorldGen implements IWorldGenerator {
 				generateSellafieldPool(world, rand, i, j, dimID);
 			generateBedrockOil(world, rand, i, j, dimID);
 			generateBedrockOre(world, rand, i, j, dimID);
-			generateSellafieldBlocks(world, rand, i, j, dimID);
 			
 			if (GeneralConfig.enableMines){
 				int dimMineFreq = parseInt(CompatibilityConfig.minefreq.get(dimID));
@@ -671,6 +672,8 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
+
+			generateSellafieldBlocks(world, rand, i, j, dimID);
 		}
 		
 		if(rand.nextInt(25) == 0) {

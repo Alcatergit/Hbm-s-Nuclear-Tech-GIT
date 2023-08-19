@@ -21,9 +21,10 @@ public class EntityFallingNuke extends EntityThrowable {
 	float tnt;
 	float nuke;
 	float hydro;
-	float amat;
+	float bale;
 	float dirty;
 	float schrab;
+	float sol;
 	float euph;
 	
 	public EntityFallingNuke(World worldIn) {
@@ -31,16 +32,17 @@ public class EntityFallingNuke extends EntityThrowable {
 		this.ignoreFrustumCheck = true;
 	}
 	
-	public EntityFallingNuke(World p_i1582_1_, float tnt, float nuke, float hydro, float amat, float dirty, float schrab, float euph) {
+	public EntityFallingNuke(World p_i1582_1_, float tnt, float nuke, float hydro, float bale, float dirty, float schrab, float sol, float euph) {
 		super(p_i1582_1_);
 		this.ignoreFrustumCheck = true;
 		
 		this.tnt = tnt;
 		this.nuke = nuke;
 		this.hydro = hydro;
-		this.amat = amat;
+		this.bale = bale;
 		this.dirty = dirty;
 		this.schrab = schrab;
+		this.sol = sol;
 		this.euph = euph;
         this.prevRotationYaw = this.rotationYaw = 90;
         this.prevRotationPitch = this.rotationPitch = 90;
@@ -79,7 +81,7 @@ public class EntityFallingNuke extends EntityThrowable {
         {
     		if(!this.world.isRemote)
     		{
-				NukeCustom.explodeCustom(world, posX, posY, posZ, tnt, nuke, hydro, amat, dirty, schrab, euph);
+				NukeCustom.explodeCustom(world, posX, posY, posZ, tnt, nuke, hydro, bale, dirty, schrab, sol, euph);
 	    		this.setDead();
     		}
         }

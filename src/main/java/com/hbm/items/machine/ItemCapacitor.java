@@ -27,17 +27,28 @@ public class ItemCapacitor extends Item {
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
+
+	public static String getColor(long a, long b){
+		float fraction = 100F * a/b;
+		if(fraction > 75)
+			return "§a";
+		if(fraction > 25)
+			return "§e";
+		return "§c";
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (this == ModItems.redcoil_capacitor) {
 			tooltip.add("Right-click a block to negate positive charge.");
-			tooltip.add("[Needed for Schrabidium Synthesis]");
-			tooltip.add(getDura(stack) + "/" + dura);
+			tooltip.add("§b[Needed for Schrabidium Synthesis]");
+			int itemDura = getDura(stack);
+			tooltip.add(getColor(itemDura, dura) + itemDura + " §2/ " + dura);
 		}
 		if (this == ModItems.titanium_filter) {
-			tooltip.add("[Needed for Watz Reaction]");
-			tooltip.add((getDura(stack) / 20) + "/" + (dura / 20));
+			tooltip.add("§e[Needed for Watz Reaction]");
+			int itemDura = getDura(stack);
+			tooltip.add(getColor(itemDura, dura) + itemDura/20 + " §2/ " + dura/20);
 		}
 	}
 	
