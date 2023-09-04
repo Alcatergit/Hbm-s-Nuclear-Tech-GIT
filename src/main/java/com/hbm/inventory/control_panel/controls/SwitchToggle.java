@@ -18,29 +18,29 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class ButtonHazard extends Control {
+public class SwitchToggle extends Control {
 
-    public ButtonHazard(String name, ControlPanel panel) {
+    public SwitchToggle(String name, ControlPanel panel) {
         super(name, panel);
-        vars.put("isPushed", new DataValueFloat(0));
+        vars.put("isFlipped", new DataValueFloat(0));
     }
 
     @Override
     public ControlType getControlType() {
-        return ControlType.BUTTON;
+        return ControlType.SWITCH;
     }
 
     @Override
     public float[] getSize() {
-        return new float[] {1.5F, 1.5F, 1.1F};
+        return new float[] {.5F, .5F, .68F};
     }
 
     @Override
     public void render() {
-        boolean isPushed = getVar("isPushed").getBoolean();
+        boolean isFlipped = getVar("isFlipped").getBoolean();
 
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_button2_tex);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_switch_toggle_tex);
         Tessellator tes = Tessellator.instance;
 
         IModelCustom model = getModel();
@@ -48,14 +48,32 @@ public class ButtonHazard extends Control {
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setTranslation(posX, 0, posY);
         tes.setColorRGBA_F(1, 1, 1, 1);
-        model.tessellatePart(tes, "base");
+        model.tessellatePart(tes, "ball");
         tes.draw();
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, (isPushed)?-0.09:0, posY);
+        tes.setTranslation(posX, 0, posY);
         tes.setColorRGBA_F(1, 1, 1, 1);
-        model.tessellatePart(tes, "top");
+        model.tessellatePart(tes, "nut");
         tes.draw();
+
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setTranslation(posX, 0, posY);
+        tes.setColorRGBA_F(1, 1, 1, 1);
+        model.tessellatePart(tes, "ribbed");
+        tes.draw();
+
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setColorRGBA_F(1, 1, 1, 1);
+        if (isFlipped) {
+            GlStateManager.rotate(180, 0, 1, 0);
+            tes.setTranslation(-posX, 0, -posY);
+        } else {
+            tes.setTranslation(posX, 0, posY);
+        }
+        model.tessellatePart(tes, "shaft");
+        tes.draw();
+
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
     }
@@ -63,7 +81,7 @@ public class ButtonHazard extends Control {
     @Override
     @SideOnly(Side.CLIENT)
     public IModelCustom getModel() {
-        return ResourceManager.ctrl_button2;
+        return ResourceManager.ctrl_switch_toggle;
     }
 
     @Override
@@ -73,12 +91,12 @@ public class ButtonHazard extends Control {
     }
 
     @Override
-	public List<String> getOutEvents() {
-		return Collections.singletonList("ctrl_press");
-	}
+    public List<String> getOutEvents() {
+        return Collections.singletonList("ctrl_press");
+    }
 
     @Override
     public Control newControl(ControlPanel panel) {
-        return new ButtonHazard(name, panel);
+        return new SwitchToggle(name, panel);
     }
 }

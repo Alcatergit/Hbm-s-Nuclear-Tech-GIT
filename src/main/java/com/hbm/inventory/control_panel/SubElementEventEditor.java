@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 
 public class SubElementEventEditor extends SubElement {
@@ -24,7 +25,7 @@ public class SubElementEventEditor extends SubElement {
 	public GuiButton sendPageLeft;
 	public GuiButton sendPageRight;
 	public GuiButton done;
-	
+
 	public SubElementEventEditor(GuiControlEdit gui){
 		super(gui);
 	}
@@ -160,15 +161,21 @@ public class SubElementEventEditor extends SubElement {
 				if(sys.outputNodes.isEmpty())
 					itr.remove();
 			}
-			for(IControllable c : gui.linker.linked)
-				if(!gui.currentEditControl.connectedSet.contains(c.getControlPos()))
+			for(IControllable c : gui.linker.linked) {
+				if (!gui.currentEditControl.connectedSet.contains(c.getControlPos()))
 					gui.currentEditControl.connectedSet.add(c.getControlPos());
-			
-			float[] gridMouse = gui.placement.convertToGridSpace(gui.mouseX, gui.mouseY);
+			}
+
 			gui.currentEditControl.receiveEvent(ControlEvent.newEvent("initialize"));
-			gui.currentEditControl.posX = gridMouse[0];
-			gui.currentEditControl.posY = gridMouse[1];
-			gui.placement.resetPrevPos();
+			if (!gui.isEditMode) {
+				float[] gridMouse = gui.placement.convertToGridSpace(gui.mouseX, gui.mouseY);
+				gui.currentEditControl.posX = gridMouse[0];
+				gui.currentEditControl.posY = gridMouse[1];
+				gui.placement.resetPrevPos();
+			}
+			else {
+				gui.currentEditControl = null;
+			}
 			gui.resetStack();
 		} else {
 			int i = receiveButtons.indexOf(button);

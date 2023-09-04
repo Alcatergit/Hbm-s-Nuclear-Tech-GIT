@@ -30,7 +30,8 @@ public class SubElementItemChoice extends SubElement {
 //		}
 
 		buttons.add(gui.addButton(new GuiButton(1000, cX-70, (cY-90) + (0%7)*25, 160, 20, "Button")));
-		buttons.add(gui.addButton(new GuiButton(1001, cX-70, (cY-90) + (1%7)*25, 160, 20, "Display")));
+		buttons.add(gui.addButton(new GuiButton(1001, cX-70, (cY-90) + (1%7)*25, 160, 20, "Switch")));
+		buttons.add(gui.addButton(new GuiButton(1002, cX-70, (cY-90) + (2%7)*25, 160, 20, "Display")));
 
 		numPages = (buttons.size()+6)/7;
 		super.initGui();
@@ -75,13 +76,13 @@ public class SubElementItemChoice extends SubElement {
 					gui.pushElement(gui.linker);
 					break;
 				case 1001:
+					gui.currentEditControl = ControlRegistry.getNew("switch_toggle", gui.control.panel);
+					gui.pushElement(gui.linker);
+					break;
+				case 1002:
 					gui.currentEditControl = ControlRegistry.getNew("display_7seg", gui.control.panel);
 					gui.pushElement(gui.itemConfig);
 					break;
-//				case 1002:
-//					gui.currentEditControl = ControlRegistry.getNew("indicatorLamp", gui.control.panel);
-//					gui.pushElement(gui.itemConfig);
-//					break;
 			}
 		}
 	}

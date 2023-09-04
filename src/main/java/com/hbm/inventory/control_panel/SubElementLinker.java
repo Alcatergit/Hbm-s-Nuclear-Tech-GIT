@@ -9,6 +9,7 @@ import com.hbm.inventory.control_panel.ContainerControlEdit.SlotItemHandlerDisab
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.lib.RefStrings;
 
+import com.hbm.main.MainRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.ItemStack;
@@ -45,6 +46,7 @@ public class SubElementLinker extends SubElement {
 		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-73, cY-16, 20, 20, "<"));
 		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+77, cY-16, 20, 20, ">"));
 		cont = gui.addButton(new GuiButton(gui.currentButtonId(), cX-73, cY+6, 170, 20, "Continue"));
+
 		super.initGui();
 	}
 	
@@ -118,6 +120,7 @@ public class SubElementLinker extends SubElement {
 			recalculateVisibleButtons();
 		} else if(linkedButtons.contains(button)){
 			int idx = linkedButtons.indexOf(button);
+			gui.currentEditControl.connectedSet.remove(linked.get(idx).getControlPos());
 			linked.remove(idx);
 			refreshButtons();
 		}
@@ -129,6 +132,7 @@ public class SubElementLinker extends SubElement {
 		int i = 0;
 		int cX = gui.width/2;
 		int cY = gui.height/2;
+
 		for(IControllable c : linked){
 			BlockPos pos = c.getControlPos();
 			linkedButtons.add(new ButtonHoverText(gui.currentButtonId(), cX-73, cY-90 + i*22, 170, 20, "(" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + ")", "<Click to remove>"));

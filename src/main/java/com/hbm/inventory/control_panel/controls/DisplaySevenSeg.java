@@ -1,6 +1,7 @@
 package com.hbm.inventory.control_panel.controls;
 
 import com.hbm.inventory.control_panel.*;
+import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class DisplaySevenSeg extends Control {
 
     private float[] color = new float[] {1, 1, 1};
+    private int digitCount = 1;
 
     public DisplaySevenSeg(String name, ControlPanel panel) {
         super(name, panel);
@@ -27,6 +29,7 @@ public class DisplaySevenSeg extends Control {
         config_map.put("colorR", new DataValueFloat(color[0]));
         config_map.put("colorG", new DataValueFloat(color[1]));
         config_map.put("colorB", new DataValueFloat(color[2]));
+        config_map.put("digitCount", new DataValueFloat(digitCount));
     }
 
     @Override
@@ -36,7 +39,20 @@ public class DisplaySevenSeg extends Control {
 
     @Override
     public float[] getSize() {
-        return new float[] {0.625F, 1F, 0};
+        return new float[] {.75F, 1.125F, .06F};
+    }
+
+//    @Override
+//    public float[] getBox() {
+//        return super.getBox();
+//    }
+
+    @Override
+    public float[] getBox() {
+//        super.getBox();
+        float width = getSize()[0];
+        float length = getSize()[1];
+        return new float[] {posX - (width*digitCount-((digitCount-1)*.125F)) + width, posY, posX + width, posY + length};
     }
 
     @Override
@@ -57,6 +73,10 @@ public class DisplaySevenSeg extends Control {
                     color[2] = e.getValue().getNumber();
                     break;
                 }
+                case "digitCount" : {
+                    digitCount = (int) e.getValue().getNumber();
+                    break;
+                }
             }
         }
     }
@@ -74,40 +94,54 @@ public class DisplaySevenSeg extends Control {
 
     @Override
     public void render() {
-        int value = ((int) getVar("value").getNumber() & 0xF);
-
-        byte character = chars[value];
-
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_display0_tex);
         Tessellator tes = Tessellator.instance;
 
         IModelCustom model = getModel();
 
-        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, 0, posY);
-        tes.setColorRGBA_F(1, 1, 1, 1);
-        model.tessellatePart(tes, "base");
-        tes.draw();
+        int value = (int) getVar("value").getNumber();
 
         float lX = OpenGlHelper.lastBrightnessX;
         float lY = OpenGlHelper.lastBrightnessY;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 
-        for (int i=0; i<7; i++) {
-            boolean enabled = (character & (1<<i)) != 0;
-            float cMul = (enabled)? 1 : 0.1F;
+        for (int i=0; i < digitCount; i++) {
+            byte character = chars[value % 16];
+            value = value >>> 4;
+
+            float t_off = i * getSize()[0] - i * (i>0? .125F : 0);
+
+            tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+            tes.setTranslation(posX-t_off, 0, posY);
+            tes.setColorRGBA_F(1, 1, 1, 1);
+            model.tessellatePart(tes, "base");
+            tes.draw();
 
             GlStateManager.disableTexture2D();
+
             tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-            tes.setTranslation(posX, 0, posY);
-            tes.setColorRGBA_F(color[0]*cMul, color[1]*cMul, color[2]*cMul, 1);
-            model.tessellatePart(tes, "seg_"+(6-i)); // gotta go through these segments in reverse
+            tes.setTranslation(posX-t_off, 0, posY);
+            tes.setColorRGBA_F(.31F, .31F, .31F, 1);
+            model.tessellatePart(tes, "border");
             tes.draw();
+
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+
+            for (int j = 0; j < 7; j++) {
+                boolean enabled = (character & (1 << j)) != 0;
+                float cMul = (enabled) ? 1 : 0.1F;
+
+                tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+                tes.setTranslation(posX-t_off, 0, posY);
+                tes.setColorRGBA_F(color[0] * cMul, color[1] * cMul, color[2] * cMul, 1);
+                model.tessellatePart(tes, "seg_" + (6 - j));
+                tes.draw();
+            }
+
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lX, lY);
             GlStateManager.enableTexture2D();
         }
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lX, lY);
         GlStateManager.shadeModel(GL11.GL_FLAT);
     }
 
@@ -120,7 +154,7 @@ public class DisplaySevenSeg extends Control {
     @Override
     @SideOnly(Side.CLIENT)
     public ResourceLocation getGuiTexture() {
-        return ResourceManager.ctrl_button2_gui_tex;
+        return ResourceManager.ctrl_display0_gui_tex;
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hbm.main.MainRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -137,6 +138,9 @@ public class NodeSystem {
 			dragDist += Math.sqrt(distX*distX + distY*distY);
 			for(Node n : selectedNodes){
 				n.setPosition(n.posX+(gui.mouseX-lastMouseX)*nodeEditor.gridScale, n.posY+(gui.mouseY-lastMouseY)*nodeEditor.gridScale);
+			}
+			for (Node n : nodes) {
+				n.setPosition(n.posX, n.posY); // renders the dropdowns for pre-existing nodes
 			}
 			lastMouseX = gui.mouseX;
 			lastMouseY = gui.mouseY;
@@ -275,7 +279,7 @@ public class NodeSystem {
 			activeNode = null;
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void clickReleased(float x, float y){
 		float gridMX = (gui.mouseX-gui.getGuiLeft())*nodeEditor.gridScale + gui.getGuiLeft() + nodeEditor.gridX;

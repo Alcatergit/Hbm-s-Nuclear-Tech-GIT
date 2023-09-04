@@ -156,7 +156,7 @@ public abstract class Node {
 			outputs.get(i).render(mX, mY);
 		for(int i = otherElements.size()-1; i >= 0; i --)
 			otherElements.get(i).render(mX, mY);
-		
+
 		FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 		GL11.glPushMatrix();
 		GL11.glTranslated(posX, posY, 0);

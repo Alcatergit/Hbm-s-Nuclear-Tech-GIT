@@ -75,7 +75,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 			TileEntityControlPanel control = (TileEntityControlPanel)worldIn.getTileEntity(pos);
 			Control ctrl = control.panel.getSelectedControl(playerIn.getPositionEyes(1), playerIn.getLook(1));
 			if(ctrl != null){
-				NBTTagCompound dat = ControlEvent.newEvent("ctrl_button_press").writeToNBT(new NBTTagCompound());
+				NBTTagCompound dat = ControlEvent.newEvent("ctrl_press").writeToNBT(new NBTTagCompound());
 				dat.setInteger("click_control", ctrl.panel.controls.indexOf(ctrl));
 				PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(dat, pos));
 				return true;

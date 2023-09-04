@@ -96,7 +96,7 @@ public class ControlEvent {
 		register(new ControlEvent("lever_toggle").setVar("isOn", false));
 		register(new ControlEvent("spinny_light_power").setVar("isOn", false));
 		register(new ControlEvent("siren_set_state").setVar("isOn", false));
-		register(new ControlEvent("ctrl_button_press"));
+		register(new ControlEvent("ctrl_press"));
 		register(new ControlEvent("initialize"));
 	}
 }

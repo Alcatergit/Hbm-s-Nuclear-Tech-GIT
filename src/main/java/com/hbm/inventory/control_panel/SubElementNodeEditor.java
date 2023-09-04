@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hbm.inventory.control_panel.nodes.*;
+import com.hbm.main.MainRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -26,7 +27,8 @@ public class SubElementNodeEditor extends SubElement {
 	public static ResourceLocation grid = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/grid.png");
 	
 	public GuiButton back;
-	
+	public GuiButton btn_smolGlobalVars;
+
 	public ItemList addMenu;
 	
 	private NodeSystem currentSystem;
@@ -64,6 +66,7 @@ public class SubElementNodeEditor extends SubElement {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
 		back = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-112, 20, 20, "<"));
+		btn_smolGlobalVars = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-90, 20, 20, "G"));
 		super.initGui();
 	}
 	
@@ -292,6 +295,9 @@ public class SubElementNodeEditor extends SubElement {
 			}
 			gui.popElement();
 		}
+		if (button == btn_smolGlobalVars) {
+			gui.pushElement(gui.globalVars);
+		}
 	}
 	
 	@Override
@@ -306,6 +312,8 @@ public class SubElementNodeEditor extends SubElement {
 	protected void enableButtons(boolean enable){
 		back.enabled = enable;
 		back.visible = enable;
+		btn_smolGlobalVars.enabled = enable;
+		btn_smolGlobalVars.visible = enable;
 	}
 	
 }

@@ -15,6 +15,7 @@ public class SubElementGlobalVars extends SubElement {
     public static ResourceLocation list_bg = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_var_list_bg.png");
 
     GuiButton btn_clearAll;
+    GuiButton btn_back;
     GuiButton btn_newNumber;
     GuiButton btn_newString;
     GuiButton btn_confirmNewVar;
@@ -46,7 +47,8 @@ public class SubElementGlobalVars extends SubElement {
         int cX = gui.width/2;
         int cY = gui.height/2;
 
-        btn_clearAll = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-112, 20, 20, "C"));
+        btn_back = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-112, 20, 20, "<"));
+        btn_clearAll = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-90, 20, 20, "C"));
 
         btn_prevPage = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+150, cY-90, 15, 20, "<"));
         btn_nextPage = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+195, cY-90, 15, 20, ">"));
@@ -191,6 +193,9 @@ public class SubElementGlobalVars extends SubElement {
         else if (button == btn_clearAll) {
             gui.control.panel.globalVars.clear();
         }
+        else if (button == btn_back) {
+            gui.popElement();
+        }
         else if (button == btn_confirmNewVar) {
             if (txt_newVarName.getText().isEmpty() || txt_newVarData.getText().isEmpty()) {
                 return;
@@ -221,6 +226,8 @@ public class SubElementGlobalVars extends SubElement {
     protected void enableButtons(boolean enable) {
         btn_clearAll.enabled = enable;
         btn_clearAll.visible = enable;
+        btn_back.enabled = enable;
+        btn_back.visible = enable;
         btn_nextPage.enabled = enable;
         btn_nextPage.visible = enable;
         btn_prevPage.enabled = enable;
@@ -240,6 +247,11 @@ public class SubElementGlobalVars extends SubElement {
         for (Map.Entry<String, GuiTextField> e : txts_var_data.entrySet()) {
             e.getValue().setEnabled(enable);
             e.getValue().setVisible(enable);
+        }
+
+        for (Map.Entry<String, GuiButton> b : btns_var_delete.entrySet()) {
+            b.getValue().enabled = enable;
+            b.getValue().visible = enable;
         }
     }
 

@@ -71,7 +71,11 @@ public abstract class Control {
 	public AxisAlignedBB getBoundingBox() {
 		float width = getSize()[0];
 		float length = getSize()[1];
-		return new AxisAlignedBB(-width/2, 0, -length/2, width/2, 1, length/2).offset(posX+Math.abs(1-width/2), 0, posY+Math.abs(1-length)/2);
+		float height = getSize()[2];
+		// offset to fix placement position error for controls not 1x1.
+		return new AxisAlignedBB(-width/2, 0, -length/2, width/2, height, length/2).offset(posX+((width>1?Math.abs(1-width/2):(width-1)/2)), 0, posY+((length>1)? Math.abs(1-length)/2 : (length-1)/2));
+//				.offset(posX+((width>1)?Math.abs(1-width/2):0), 0, posY+Math.abs(1-length)/2);
+//		GlStateManager.translate((width>1)? Math.abs(1-width)/2 : (width-1)/2, 0, (length>1)? Math.abs(1-length)/2 : 0);
 	}
 
 	public float[] getBox() {

@@ -17,16 +17,11 @@ public class ControlRegistry {
 	}
 	
 	public static void init(){
-//		registry.put("button", new Button("Button", null));
-//		registry.put("button_covered", new ButtonCovered("Covered Button", null));
 		registry.put("button_hazard", new ButtonHazard("Emergency Button", null));
-//		registry.put("button_covered", new ButtonCovered("Covered Button", null));
-//		registry.put("button_push", new ButtonPush("Push Button", null));
+
+		registry.put("switch_toggle", new SwitchToggle("Toggle Switch", null));
 
 		registry.put("display_7seg", new DisplaySevenSeg("7-seg Display", null));
-//		registry.put("indicatorLamp", new IndicatorLamp("Indicator Lamp", null));
-//		registry.put("toggleSwitch", new ToggleSwitch("Toggle Switch", null));
-//		registry.put("coveredToggleSwitch", new CoveredToggleSwitch("Covered Toggle Switch", null));
 
 		for(Entry<String, Control> e : registry.entrySet()){
 			classToName.put(e.getValue().getClass(), e.getKey());

@@ -3,9 +3,15 @@ package com.hbm.inventory.control_panel;
 import java.util.List;
 import java.util.Map;
 
+import com.hbm.inventory.control_panel.controls.configs.SubElementBaseConfig;
 import com.hbm.inventory.control_panel.controls.configs.SubElementDisplaySevenSeg;
+import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
 public class SubElementItemConfig extends SubElement {
 
@@ -17,7 +23,7 @@ public class SubElementItemConfig extends SubElement {
     private int curr_variant = 0;
     private int num_variants = 1;
 
-    SubElementDisplaySevenSeg config_gui;
+    SubElementBaseConfig config_gui;
     private Map<String, DataValue> configs;
 
     public SubElementItemConfig(GuiControlEdit gui) {
@@ -38,6 +44,7 @@ public class SubElementItemConfig extends SubElement {
     }
 
     Control last_control = null;
+    Map<String, DataValue> existing_configs;
 
     @Override
     protected void drawScreen() {
@@ -57,12 +64,22 @@ public class SubElementItemConfig extends SubElement {
         text_width = gui.getFontRenderer().getStringWidth(text);
         gui.getFontRenderer().drawString(text, (cX-(text_width/2F))+0, gui.getGuiTop()+30, 0xFF777777, false);
 
+        btn_prev.enabled = !gui.isEditMode;
+        btn_next.enabled = !gui.isEditMode;
+
+        if (gui.isEditMode) {
+            existing_configs = gui.currentEditControl.config_map;
+        }
+
         if (!variant.equals(last_control)) {
             switch (variants.get(curr_variant)) {
                 case "display_7seg":
-                    this.config_gui = new SubElementDisplaySevenSeg(gui, ControlRegistry.registry.get("display_7seg").getConfigs());
+                    this.config_gui = new SubElementDisplaySevenSeg(gui, (gui.isEditMode)? existing_configs : ControlRegistry.registry.get("display_7seg").getConfigs());
                     break;
+                default:
+                    this.config_gui = new SubElementBaseConfig(gui); // blank
             }
+
             this.config_gui.initGui();
             this.config_gui.enableButtons(true);
         }
@@ -79,8 +96,17 @@ public class SubElementItemConfig extends SubElement {
     protected void actionPerformed(GuiButton button) {
         if (button == btn_done) {
             configs = config_gui.getConfigs();
-            gui.currentEditControl = ControlRegistry.getNew(variants.get(curr_variant), gui.control.panel);
             gui.currentEditControl.applyConfigs(configs);
+
+            if (gui.isEditMode) {
+                World world = gui.control.getWorld();
+                for (BlockPos p : gui.currentEditControl.connectedSet) {
+                    TileEntity te = world.getTileEntity(p);
+                    gui.linker.linked.add((IControllable) te);
+                    gui.linker.refreshButtons();
+                }
+            }
+
             config_gui.enableButtons(false);
             last_control = null;
             gui.pushElement(gui.linker);

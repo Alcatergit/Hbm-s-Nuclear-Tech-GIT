@@ -65,6 +65,8 @@ public class NodeMath extends Node {
 			return evalCache[0] = new DataValueFloat(evals[0].getNumber()*evals[1].getNumber());
 		case DIV:
 			return evalCache[0] = new DataValueFloat(evals[0].getNumber()/evals[1].getNumber());
+		case MOD:
+			return evalCache[0] = new DataValueFloat(evals[0].getNumber()%evals[1].getNumber());
 		case POW:
 			return evalCache[0] = new DataValueFloat((float)Math.pow(evals[0].getNumber(), evals[1].getNumber()));
 		case LOG:
@@ -107,6 +109,7 @@ public class NodeMath extends Node {
 		case SUB:
 		case MULT:
 		case DIV:
+		case MOD:
 		case POW:
 		case LOG:
 			if(op == Operation.POW){
@@ -143,6 +146,7 @@ public class NodeMath extends Node {
 		SUB("Subtract"),
 		MULT("Multiply"),
 		DIV("Divide"),
+		MOD("Modulo"),
 		POW("Power"),
 		LOG("Logarithm"),
 		EXP("Exponent"),
