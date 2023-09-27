@@ -34,7 +34,7 @@ public class SubElementPlacement extends SubElement {
 
 	public GuiButton deleteElement;
 	public GuiButton newElement;
-	public GuiButton editElement; //TODO: rmb context menu with new, or if over control: edit, delete
+	public GuiButton editElement;
 	public GuiButton panelResize;
 	public GuiButton btn_globalVars;
 	private boolean gridGrabbed = false;
@@ -44,7 +44,7 @@ public class SubElementPlacement extends SubElement {
 	private float prevMouseX;
 	private float prevMouseY;
 
-	private int ctrl_index = 0; // code elsewhere is sensitive to control[] indices; so i go around it
+	private int ctrl_index = 0;
 	
 	public SubElementPlacement(GuiControlEdit gui){
 		super(gui);
@@ -83,6 +83,8 @@ public class SubElementPlacement extends SubElement {
 
 	@Override
 	protected void drawScreen() {
+		editElement.enabled = selectedControl != null;
+
 		float dWheel = Mouse.getDWheel();
 		float dScale = dWheel*gridScale*0.00075F;
 		
@@ -174,15 +176,17 @@ public class SubElementPlacement extends SubElement {
 			boolean ctrl = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
 			float prevX = gui.currentEditControl.posX;
 			float prevY = gui.currentEditControl.posY;
-			if(ctrl){
-				gui.currentEditControl.posX = (float)Math.round(prevX*4F)*0.25F;
-				gui.currentEditControl.posY = (float)Math.round(prevY*4F)*0.25F;
+
+			if (!ctrl) {
+				gui.currentEditControl.posX = (float) Math.round(prevX*10)*.1F;
+				gui.currentEditControl.posY = (float) Math.round(prevY*10)*.1F;
 			}
+
 			boolean canPlace = canPlace();
 			if(!canPlace)
 				GlStateManager.colorMask(true, false, false, true);
 			renderControl(gui.currentEditControl);
-			if(ctrl){
+			if (!ctrl) {
 				gui.currentEditControl.posX = prevX;
 				gui.currentEditControl.posY = prevY;
 			}
@@ -224,10 +228,14 @@ public class SubElementPlacement extends SubElement {
 			selectedControl = null;
 		}
 		else if (button == editElement) {
-			gui.currentEditControl = selectedControl;
-			gui.pushElement(gui.itemConfig);
-			gui.isEditMode = true;
-			selectedControl = null;
+			if (selectedControl != null) {
+				gui.currentEditControl = selectedControl;
+				gui.itemConfig.last_control = null;
+				gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+				gui.pushElement(gui.itemConfig);
+				gui.isEditMode = true;
+				selectedControl = null;
+			}
 		}
 		else if (button == panelResize) {
 			gui.pushElement(gui.panelResize);
@@ -255,12 +263,12 @@ public class SubElementPlacement extends SubElement {
 		float gridMX = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
 		float gridMY = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
 		if(button == 0){
-			if(gui.currentEditControl != null) { //? this happens when exiting component creation.
+			if(gui.currentEditControl != null) {
 				float prevX = gui.currentEditControl.posX;
 				float prevY = gui.currentEditControl.posY;
-				if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
-					gui.currentEditControl.posX = (float)Math.round(gui.currentEditControl.posX*4F)*0.25F;
-					gui.currentEditControl.posY = (float)Math.round(gui.currentEditControl.posY*4F)*0.25F;
+				if(!Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+					gui.currentEditControl.posX = (float) Math.round(prevX*10)*.1F;
+					gui.currentEditControl.posY = (float) Math.round(prevY*10)*.1F;
 				}
 				if(canPlace()){
 					gui.control.panel.controls.add(gui.currentEditControl);
@@ -269,7 +277,7 @@ public class SubElementPlacement extends SubElement {
 					gui.currentEditControl.posX = prevX;
 					gui.currentEditControl.posY = prevY;
 				}
-			} else { //? happens when u click an already placed component
+			} else {
 				for(Control c : gui.control.panel.controls){
 					if(RenderHelper.intersects2DBox(gridMX, gridMY, c.getBox())){
 						selectedControl = c;
@@ -295,9 +303,9 @@ public class SubElementPlacement extends SubElement {
 		}
 		if(state == 0){
 			if(canPlace()){
-				if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
-					gui.currentEditControl.posX = (float)Math.round(gui.currentEditControl.posX*4F)*0.25F;
-					gui.currentEditControl.posY = (float)Math.round(gui.currentEditControl.posY*4F)*0.25F;
+				if(!Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+					gui.currentEditControl.posX = (float)Math.round(gui.currentEditControl.posX*10)*.1F;
+					gui.currentEditControl.posY = (float)Math.round(gui.currentEditControl.posY*10)*.1F;
 				}
 				gui.control.panel.controls.add(ctrl_index, gui.currentEditControl);
 				gui.currentEditControl = null;

@@ -32,6 +32,7 @@ public class SubElementItemChoice extends SubElement {
 		buttons.add(gui.addButton(new GuiButton(1000, cX-70, (cY-90) + (0%7)*25, 160, 20, "Button")));
 		buttons.add(gui.addButton(new GuiButton(1001, cX-70, (cY-90) + (1%7)*25, 160, 20, "Switch")));
 		buttons.add(gui.addButton(new GuiButton(1002, cX-70, (cY-90) + (2%7)*25, 160, 20, "Display")));
+		buttons.add(gui.addButton(new GuiButton(1003, cX-70, (cY-90) + (3%7)*25, 160, 20, "Indicator")));
 
 		numPages = (buttons.size()+6)/7;
 		super.initGui();
@@ -72,27 +73,34 @@ public class SubElementItemChoice extends SubElement {
 		} else {
 			switch (button.id) {
 				case 1000:
-					gui.currentEditControl = ControlRegistry.getNew("button_hazard", gui.control.panel);
-					gui.pushElement(gui.linker);
+					gui.currentEditControl = ControlRegistry.getNew("button_push", gui.control.panel);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+					gui.pushElement(gui.itemConfig);
 					break;
 				case 1001:
 					gui.currentEditControl = ControlRegistry.getNew("switch_toggle", gui.control.panel);
-					gui.pushElement(gui.linker);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+					gui.pushElement(gui.itemConfig);
 					break;
 				case 1002:
 					gui.currentEditControl = ControlRegistry.getNew("display_7seg", gui.control.panel);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
 					gui.pushElement(gui.itemConfig);
+					break;
+				case 1003:
+					gui.currentEditControl = ControlRegistry.getNew("indicator_lamp", gui.control.panel);
+					gui.pushElement(gui.linker);
 					break;
 			}
 		}
 	}
 	
 	@Override
-	protected void enableButtons(boolean enable){
-		if(enable){
+	protected void enableButtons(boolean enable) {
+		if (enable) {
 			recalculateVisibleButtons();
 		} else {
-			for(GuiButton b : buttons){
+			for (GuiButton b : buttons) {
 				b.visible = false;
 				b.enabled = false;
 			}

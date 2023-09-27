@@ -1,5 +1,6 @@
 package com.hbm.inventory.control_panel;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class SubElementItemConfig extends SubElement {
     public GuiButton btn_next;
     public GuiButton btn_prev;
 
-    private List<String> variants;
+    public List<String> variants = Collections.emptyList();
     private int curr_variant = 0;
     private int num_variants = 1;
 
@@ -46,15 +47,23 @@ public class SubElementItemConfig extends SubElement {
     Control last_control = null;
     Map<String, DataValue> existing_configs;
 
+    //TODO: clean this up, make variants[] private
     @Override
     protected void drawScreen() {
         int cX = gui.width/2;
         int cY = gui.height/2;
 
-        variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
         num_variants = variants.size()-1;
 
-        Control variant = ControlRegistry.registry.get(variants.get(curr_variant));
+        if (gui.isEditMode) {
+            existing_configs = gui.currentEditControl.config_map;
+            curr_variant = variants.indexOf(ControlRegistry.getName(gui.currentEditControl.getClass()));
+        }
+        btn_prev.enabled = !gui.isEditMode;
+        btn_next.enabled = !gui.isEditMode;
+
+//        Control variant = ControlRegistry.registry.get(variants.get(curr_variant));
+        Control variant = ControlRegistry.getNew(variants.get(curr_variant), gui.control.panel);
 
         String text = variant.name;
         int text_width = gui.getFontRenderer().getStringWidth(text);
@@ -64,14 +73,7 @@ public class SubElementItemConfig extends SubElement {
         text_width = gui.getFontRenderer().getStringWidth(text);
         gui.getFontRenderer().drawString(text, (cX-(text_width/2F))+0, gui.getGuiTop()+30, 0xFF777777, false);
 
-        btn_prev.enabled = !gui.isEditMode;
-        btn_next.enabled = !gui.isEditMode;
-
-        if (gui.isEditMode) {
-            existing_configs = gui.currentEditControl.config_map;
-        }
-
-        if (!variant.equals(last_control)) {
+        if (last_control == null || !variant.name.equals(last_control.name)) {
             switch (variants.get(curr_variant)) {
                 case "display_7seg":
                     this.config_gui = new SubElementDisplaySevenSeg(gui, (gui.isEditMode)? existing_configs : ControlRegistry.registry.get("display_7seg").getConfigs());
@@ -79,9 +81,13 @@ public class SubElementItemConfig extends SubElement {
                 default:
                     this.config_gui = new SubElementBaseConfig(gui); // blank
             }
+            if (!gui.isEditMode)
+                gui.currentEditControl = variant;
 
             this.config_gui.initGui();
             this.config_gui.enableButtons(true);
+
+           variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
         }
 
         this.last_control = variant;

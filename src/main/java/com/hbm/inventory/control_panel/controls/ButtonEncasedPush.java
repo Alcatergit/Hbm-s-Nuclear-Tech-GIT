@@ -9,7 +9,6 @@ import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,29 +21,31 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SwitchToggle extends Control {
+public class ButtonEncasedPush extends Control {
 
-    public SwitchToggle(String name, ControlPanel panel) {
+    public ButtonEncasedPush(String name, ControlPanel panel) {
         super(name, panel);
-        vars.put("isOn", new DataValueFloat(0));
+        vars.put("isPushed", new DataValueFloat(0));
+        vars.put("isCoverOpen", new DataValueFloat(0));
     }
 
     @Override
     public ControlType getControlType() {
-        return ControlType.SWITCH;
+        return ControlType.BUTTON;
     }
 
     @Override
     public float[] getSize() {
-        return new float[] {1, 1, .62F};
+        return new float[] {1.5F, 1.5F, 1F};
     }
 
     @Override
     public void render() {
-        boolean isOn = getVar("isOn").getBoolean();
+        boolean isPushed = getVar("isPushed").getBoolean();
+        boolean isCoverOpen = getVar("isCoverOpen").getBoolean();
 
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_switch_toggle_tex);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_button_encased_push_tex);
         Tessellator tes = Tessellator.instance;
 
         IModelCustom model = getModel();
@@ -55,61 +56,56 @@ public class SwitchToggle extends Control {
         model.tessellatePart(tes, "base");
         tes.draw();
 
-        GlStateManager.disableTexture2D();
-        float lX = OpenGlHelper.lastBrightnessX;
-        float lY = OpenGlHelper.lastBrightnessY;
-        float onCMul = (isOn) ? 3F : .4F;
-        float offCMul = (isOn) ? .4F : 3F;
-
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (isOn)?240:lX, (isOn)?240:lY);
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, 0, posY);
-        tes.setColorRGBA_F(.031F * onCMul, .17F * onCMul, .024F * onCMul, 1);
-        model.tessellatePart(tes, "lamp_on");
+        tes.setTranslation(posX, (isPushed)?-0.09:0, posY);
+        tes.setColorRGBA_F(1, 1, 1, 1);
+        model.tessellatePart(tes, "button");
         tes.draw();
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (!isOn)?240:lX, (!isOn)?240:lY);
-        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, 0, posY);
-        tes.setColorRGBA_F(.25F * offCMul, 0.04F * offCMul, 0.04F * offCMul, 1);
-        model.tessellatePart(tes, "lamp_off");
-        tes.draw();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lX, lY);
-        GlStateManager.enableTexture2D();
-
-        Matrix4f rot_mat = new Matrix4f().rotate((float) ((isOn) ? Math.toRadians(-60) : 0), new Vector3f(1, 0, 0));
-        Matrix4f.mul(new Matrix4f().translate(new Vector3f(posX, 0, posY)), rot_mat, new Matrix4f()).store(ClientProxy.AUX_GL_BUFFER);
+        Matrix4f rot_mat = new Matrix4f().rotate((float) ((isCoverOpen) ? Math.toRadians(-75) : 0), new Vector3f(1, 0, 0));
+        Matrix4f trans_mat = new Matrix4f().translate(new Vector3f(posX, .625F, posY-.75F));
+        Matrix4f transform_mat = new Matrix4f();
+        Matrix4f.mul(trans_mat, rot_mat, transform_mat);
+        transform_mat.store(ClientProxy.AUX_GL_BUFFER);
         ClientProxy.AUX_GL_BUFFER.rewind();
         GlStateManager.multMatrix(ClientProxy.AUX_GL_BUFFER);
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setColorRGBA_F(1, 1, 1, 1);
-        model.tessellatePart(tes, "lever");
+        model.tessellatePart(tes, "cover");
         tes.draw();
 
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setColorRGBA_F(1, 1, 1, 1);
+        model.tessellatePart(tes, "cover2");
+        tes.draw();
+
+        GlStateManager.disableBlend();
         GlStateManager.shadeModel(GL11.GL_FLAT);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IModelCustom getModel() {
-        return ResourceManager.ctrl_switch_toggle;
+        return ResourceManager.ctrl_button_encased_push;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public ResourceLocation getGuiTexture() {
-        return ResourceManager.ctrl_switch_toggle_gui_tex;
+        return ResourceManager.ctrl_button_encased_push_gui_tex;
     }
 
     @Override
-    public List<String> getOutEvents() {
-        return Collections.singletonList("ctrl_press");
-    }
+	public List<String> getOutEvents() {
+		return Collections.singletonList("ctrl_press");
+	}
 
     @Override
     public Control newControl(ControlPanel panel) {
-        return new SwitchToggle(name, panel);
+        return new ButtonEncasedPush(name, panel);
     }
 }

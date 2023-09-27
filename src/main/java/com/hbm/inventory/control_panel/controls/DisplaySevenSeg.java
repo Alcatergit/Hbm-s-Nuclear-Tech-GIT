@@ -1,7 +1,6 @@
 package com.hbm.inventory.control_panel.controls;
 
 import com.hbm.inventory.control_panel.*;
-import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
@@ -42,14 +41,8 @@ public class DisplaySevenSeg extends Control {
         return new float[] {.75F, 1.125F, .06F};
     }
 
-//    @Override
-//    public float[] getBox() {
-//        return super.getBox();
-//    }
-
     @Override
     public float[] getBox() {
-//        super.getBox();
         float width = getSize()[0];
         float length = getSize()[1];
         return new float[] {posX - (width*digitCount-((digitCount-1)*.125F)) + width, posY, posX + width, posY + length};
@@ -95,7 +88,7 @@ public class DisplaySevenSeg extends Control {
     @Override
     public void render() {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_display0_tex);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_display_seven_seg_tex);
         Tessellator tes = Tessellator.instance;
 
         IModelCustom model = getModel();
@@ -148,13 +141,13 @@ public class DisplaySevenSeg extends Control {
     @Override
     @SideOnly(Side.CLIENT)
     public IModelCustom getModel() {
-        return ResourceManager.ctrl_display0;
+        return ResourceManager.ctrl_display_seven_seg;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public ResourceLocation getGuiTexture() {
-        return ResourceManager.ctrl_display0_gui_tex;
+        return ResourceManager.ctrl_display_seven_seg_gui_tex;
     }
 
     @Override

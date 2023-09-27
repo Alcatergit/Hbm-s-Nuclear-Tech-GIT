@@ -3,7 +3,9 @@ package com.hbm.inventory.control_panel.controls;
 public enum ControlType {
     BUTTON("Button"),
     SWITCH("Switch"),
-    DISPLAY("Display");
+    DISPLAY("Display"),
+    INDICATOR("Indicator"),
+    METER("Meter");
 
     public String name;
     ControlType(String name){

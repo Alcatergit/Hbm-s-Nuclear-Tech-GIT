@@ -1,12 +1,8 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.hbm.inventory.control_panel.nodes.*;
-import com.hbm.main.MainRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -32,6 +28,8 @@ public class SubElementNodeEditor extends SubElement {
 	public ItemList addMenu;
 	
 	private NodeSystem currentSystem;
+	private Deque<NodeSystem> systemHistoryStack = new ArrayDeque<>();
+
 	private ControlEvent currentEvent;
 	private List<ControlEvent> sendEvents;
 	private boolean gridGrabbed = false;
@@ -59,6 +57,18 @@ public class SubElementNodeEditor extends SubElement {
 		gridY = 0;
 		gridScale = 1;
 		this.sendEvents = sendEvents;
+	}
+
+	private void descendSubsystem(Node node) {
+		systemHistoryStack.push(currentSystem);
+		currentSystem = currentSystem.subSystems.get(node);
+
+		currentSystem.nodeEditor = this;
+		currentSystem.gui = gui;
+		currentSystem.activeNode = null;
+		currentSystem.selectedNodes = new ArrayList<>();
+		currentSystem.drag = false;
+		currentSystem.dragDist = 0;
 	}
 	
 	@Override
@@ -135,6 +145,24 @@ public class SubElementNodeEditor extends SubElement {
 						return null;
 					});
 					list.addItems("Boolean Node");
+					return list;
+				} else if(s.endsWith("Logic")){
+					ItemList list = new ItemList(0, 0, 32, s2 -> {
+						final float x = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
+						final float y = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
+						Node node = null;
+						if (s2.equals("Function")) {
+							node = new NodeLogicFunction(x, y);
+						}
+						if (node != null) {
+							addMenu.close();
+							addMenu = null;
+							currentSystem.addNode(node);
+							currentSystem.activeNode = node;
+						}
+						return null;
+					});
+					list.addItems("Function");
 					return list;
 				} else if(s.endsWith("Output")){
 					ItemList list = new ItemList(0, 0, 32, s2 -> {
@@ -267,6 +295,15 @@ public class SubElementNodeEditor extends SubElement {
 				addMenu = null;
 			}
 		} else if(button == 0){
+			// doing this here for now cus i want buttons to be able to make gui changes
+			NodeElement pressed = currentSystem.getNodeElementPressed(mouseX, mouseY);
+			if (pressed != null) {
+				switch (pressed.name) {
+					case "Edit Body": {
+						descendSubsystem(pressed.parent);
+					}
+				}
+			}
 			currentSystem.onClick(mouseX, mouseY);
 		}
 		if(button == 2){
@@ -292,6 +329,12 @@ public class SubElementNodeEditor extends SubElement {
 			if(currentSystem != null){
 				currentSystem.removeClientData();
 				currentSystem = null;
+
+				if (!systemHistoryStack.isEmpty()) {
+					currentSystem = systemHistoryStack.getFirst();
+					systemHistoryStack.pop();
+					return;
+				}
 			}
 			gui.popElement();
 		}

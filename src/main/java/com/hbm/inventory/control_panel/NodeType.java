@@ -8,7 +8,7 @@ public enum NodeType {
 	//for boolean functions: and, not, xor etc.
 	BOOLEAN(new float[]{1, 0, 1}),
 	//Intermediate nodes for logic such as for loops and if statements. Each contains child node systems, which possibly produce outputs.
-	LOGIC(new float[]{0, 0, 1}),
+	LOGIC(new float[]{.4F, .4F, 1}),
 	//The outputs that get evaluated, such as broadcasting a new event or setting an arbitrary variable
 	OUTPUT(new float[]{1, 0, 0});
 	

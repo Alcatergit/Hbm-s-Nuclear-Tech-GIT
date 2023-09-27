@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hbm.blocks.BlockControlPanelType;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.NBTControlPacket;
 import net.minecraft.block.state.IBlockState;
@@ -42,15 +43,16 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 
 	public ItemStackHandler inventory;
 	public ControlPanel panel;
+	public BlockControlPanelType panelType = BlockControlPanelType.CUSTOM_PANEL;
 
-	public TileEntityControlPanel(){
+	public TileEntityControlPanel() {
 		inventory = new ItemStackHandler(1){
 			@Override
 			protected void onContentsChanged(int slot){
 				markDirty();
 			}
 		};
-		panel = new ControlPanel(this, 0.25F, (float) (Math.toRadians(20)), 0, 0, 0.25F, 0);
+		this.panel = new ControlPanel(this, 0.25F, (float) Math.toRadians(20), 0, 0, 0.25F, 0);
 	}
 
 	@Override
@@ -166,21 +168,19 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 
 	@Override
 	public void receiveControl(NBTTagCompound data){
-		if(data.hasKey("full_set")) { //? flag to inform that this data has all required elements to update and restore nbt shit
+		if(data.hasKey("full_set")) {
 			markDirty();
-			//? remove every block associated with every component from sensitivity list
 			for(Control c : panel.controls){
 				for(BlockPos b : c.connectedSet){
 					ControlEventSystem.get(world).unsubscribeFrom(this, b);
 				}
 			}
-			this.panel.readFromNBT(data); //? remove all global vars and components, and reset them with those provided in nbt
-			for(Control c : panel.controls){ //? resubscribe all blocks associated with the new components to sensitivity list
+			this.panel.readFromNBT(data);
+			for(Control c : panel.controls){
 				for(BlockPos b : c.connectedSet){
 					ControlEventSystem.get(world).subscribeTo(this, b);
 				}
 			}
-			//? this TE block pos is the point of which all component-associated blocks are tracking for data updates
 			PacketDispatcher.wrapper.sendToAllTracking(new ControlPanelUpdatePacket(pos, data), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1));
 		} else if(data.hasKey("click_control")) {
 			ControlEvent evt = ControlEvent.readFromNBT(data);

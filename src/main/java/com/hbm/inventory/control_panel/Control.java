@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.hbm.inventory.control_panel.controls.ControlType;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.nbt.NBTBase;
@@ -85,7 +86,6 @@ public abstract class Control {
 	}
 
 	public abstract Control newControl(ControlPanel panel);
-	// used as control registry reference, parent control types list their children/variants here
 
 	public void receiveEvent(ControlEvent evt){
 		NodeSystem sys = receiveNodeMap.get(evt.name);
@@ -102,7 +102,7 @@ public abstract class Control {
 	public DataValue getGlobalVar(String name){
 		return panel.getVar(name);
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		tag.setString("name", ControlRegistry.getName(this.getClass()));
 		tag.setString("myName", name);
@@ -114,7 +114,8 @@ public abstract class Control {
 		
 		NBTTagCompound sendNodes = new NBTTagCompound();
 		for(Entry<String, NodeSystem> e : sendNodeMap.entrySet()){
-			sendNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
+			NBTTagCompound eventNodeMap = e.getValue().writeToNBT(new NBTTagCompound());
+			sendNodes.setTag(e.getKey(), eventNodeMap);
 		}
 		tag.setTag("sendNodes", sendNodes);
 		
