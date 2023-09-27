@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityChungus extends TileEntityLoadedBase implements ITickable, IFluidHandler, IEnergyGenerator, INBTPacketReceiver {
 
+	public long powerProduction = 0;
 	public long power;
 	public static final long maxPower = 100000000000L;
 	private int turnTimer;
@@ -70,7 +71,8 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 			tanks[0].drain((Integer)outs[2] * cycles, true);
 			tanks[1].fill(new FluidStack(types[1], (Integer)outs[1] * cycles), true);
 			
-			power += (Integer)outs[3] * cycles;
+			powerProduction = (Integer)outs[3] * cycles;
+			power += powerProduction;
 			
 			if(power > maxPower)
 				power = maxPower;
@@ -114,6 +116,7 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 	
 	public void networkPack() {
 		NBTTagCompound data = new NBTTagCompound();
+		data.setLong("powerP", powerProduction);
 		data.setLong("power", power);
 		data.setString("type", types[0].getName());
 		data.setInteger("operational", turnTimer);
@@ -126,6 +129,7 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
+		this.powerProduction = data.getLong("powerP");
 		this.power = data.getLong("power");
 		this.turnTimer = data.getInteger("operational");
 		if(data.hasKey("types0"))

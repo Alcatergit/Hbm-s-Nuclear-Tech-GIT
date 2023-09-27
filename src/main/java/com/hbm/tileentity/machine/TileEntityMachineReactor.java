@@ -6,8 +6,10 @@ import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,6 +19,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 	public int progress;
 	public int charge;
 	public int heat;
+	public int recipeHeat;
 	public static final int maxPower = 1000;
 	public static final int processingSpeed = 1000;
 
@@ -149,7 +152,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		
 		if(recipe == null)
 			return false;
-		
+		recipeHeat = recipe.heat;
 		if(this.heat < recipe.heat)
 			return false;
 
@@ -194,11 +197,27 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		}
 	}
 
+	public void updateReactorPower(){
+		int incomingflux = getReactorPower(pos.north()) + getReactorPower(pos.south()) + getReactorPower(pos.west()) + getReactorPower(pos.east());
+		if(incomingflux > 0 && charge < 2){
+			charge = 1;
+			heat = (incomingflux * 5) / TileEntityMachineReactorSmall.maxCoreHeat;
+		}
+	}
+
+	public int getReactorPower(BlockPos rPos){
+		TileEntity r = world.getTileEntity(rPos);
+		if(r == null || !(r instanceof TileEntityMachineReactorSmall)) return 0;
+		return ((TileEntityMachineReactorSmall)r).coreHeat;
+	}
+
 	@Override
 	public void update() {
 		if(!world.isRemote) {
 			
 			boolean markDirty = false;
+
+			updateReactorPower();
 			
 			if(charge == 0) {
 				heat = 0;
@@ -223,7 +242,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 
 			if(hasPower() && canProcess()) {
 				
-				progress++;
+				progress += heat / recipeHeat;
 
 				if(this.progress == TileEntityMachineReactor.processingSpeed) {
 					this.progress = 0;

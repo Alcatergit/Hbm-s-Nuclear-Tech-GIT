@@ -136,21 +136,21 @@ public class GunStinger extends Item {
 		if(this == ModItems.gun_stinger) {
         	list.add("Woosh, beep-beep-beep!");
 			list.add("");
-			list.add("Ammo: Stinger Rockets");
-			list.add("Projectiles target entities.");
-			list.add("Projectiles explode on impact.");
-			list.add("Alt-fire disables homing effect.");
+			list.add("Ammo: §eStinger Rockets");
+			list.add(" Projectiles target entities.");
+			list.add(" Projectiles explode on impact.");
+			list.add(" Alt-fire disables homing effect.");
         }
         if(this == ModItems.gun_skystinger) {
         	list.add("Oh, I get it, because of the...nyeees!");
         	list.add("It all makes sense now!");
 			list.add("");
-			list.add("Ammo: Stinger Rockets");
-			list.add("Projectiles target entities.");
-			list.add("Projectiles explode on impact.");
-			list.add("Alt-fire fires a second rocket for free.");
+			list.add("Ammo: §eStinger Rockets");
+			list.add(" Projectiles target entities.");
+			list.add(" Projectiles explode on impact.");
+			list.add(" Alt-fire fires a second rocket for free.");
 			list.add("");
-			list.add("[LEGENDARY WEAPON]");
+			list.add("§d§l[LEGENDARY WEAPON]");
         }
 	}
 	

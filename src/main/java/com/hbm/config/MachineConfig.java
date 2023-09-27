@@ -43,6 +43,8 @@ public class MachineConfig {
 	public static boolean uuMixerFluidListIsWhitelist = false;
 	public static HashSet blacklistedMixerFluids;
 
+	public static int crateByteSize = 8;
+
 	public static boolean isFluidAllowed(Fluid f){
 		boolean isInList = blacklistedMixerFluids.contains(f.getName());
 		if(uuMixerFluidListIsWhitelist) return isInList;
@@ -93,5 +95,7 @@ public class MachineConfig {
 		uuMixerFluidRatio = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(24, "uuMixerFluidRatio"), "How much mB of UU-Matter is used per mB of output fluid", 100);
 		uuMixerFluidListIsWhitelist = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(25, "uuMixerFluidListIsWhitelist"), "If true then the follwing list of fluids is a whitelist. Otherwise it is a Blacklist", false);
 		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(26, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium" });
+		
+		crateByteSize = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(27, "crateMaxByteSize"), "Controls how big the maximum storage size of mined crates can be. Warning going beond 32kb can cause freezing/crashes. - <kb> (int)", 8);
 	}
 }

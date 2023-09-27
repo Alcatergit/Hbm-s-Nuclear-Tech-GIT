@@ -36,9 +36,6 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 	public int heat;
 	public static final int maxHeat = 100_000;
 	public static final double diffusion = 0.05D;
-	private static final int[] slots_top = new int[] {1};
-	private static final int[] slots_bottom = new int[] {2, 0};
-	private static final int[] slots_side = new int[] {0};
 	private ItemStack[] lastItems = new ItemStack[3];
 	
 	public boolean wasOn = false;
@@ -248,8 +245,7 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		int i = e.ordinal();
-		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+		return new int[]{ 0, 1, 2, 3, 4, 5};
 	}
 	
 

@@ -39,6 +39,7 @@ public class ItemContaminating extends ItemHazard {
 	
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem){
+		boolean m = this.module.onEntityItemUpdate(entityItem);
 		if(entityItem != null && !entityItem.world.isRemote && entityItem.onGround) {
 			if(isCleanGround(new BlockPos(entityItem.posX, entityItem.posY, entityItem.posZ), entityItem.world)){
 				return false;
@@ -54,7 +55,7 @@ public class ItemContaminating extends ItemHazard {
 			entityItem.setDead();
 			return true;
 		}
-		return false;
+		return false || m;
 	}
 
 	public static boolean isCleanGround(BlockPos pos, World world){

@@ -41,10 +41,10 @@ public class GUICoreReceiver extends GuiInfoContainer {
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 
 		this.fontRenderer.drawString("Input:", 54, 22, 4210752);
-		String sparks = Library.getShortNumber(receiver.joules) + "SPK/t";
+		String sparks = Library.getShortNumber(receiver.joules) + "SPK";
 		this.fontRenderer.drawString(sparks, 161-this.fontRenderer.getStringWidth(sparks), 22, 0x4EB3DB);
 		this.fontRenderer.drawString("Output:", 54, 58, 4210752);
-		String power = Library.getShortNumber(receiver.joules * 5000) + "HE/t";
+		String power = Library.getShortNumber(receiver.joules * 100000L) + "HE/s";
 		this.fontRenderer.drawString(power, 161-this.fontRenderer.getStringWidth(power), 58, 0x4EB3DB);
 		
 		String inventory = I18n.format("container.inventory");

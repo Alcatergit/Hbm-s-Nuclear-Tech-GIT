@@ -219,7 +219,7 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 				}
 			}
 		}
-		if(type == 5) {
+		if(type == 3) {
 
 			if(meta == 1) {
 				offsetZ = 0;
@@ -244,21 +244,21 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 					for(int c = 0; c < 7; c++) {
 				
 						int texture = -1;
-						if(Watz.array[b][a].substring(c, c + 1).equals("C"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("C"))
 							texture = 0;
-						if(Watz.array[b][a].substring(c, c + 1).equals("A"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("A"))
 							texture = 1;
-						if(Watz.array[b][a].substring(c, c + 1).equals("R"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("R"))
 							texture = 2;
-						if(Watz.array[b][a].substring(c, c + 1).equals("S"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("S"))
 							texture = 3;
-						if(Watz.array[b][a].substring(c, c + 1).equals("I"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("I"))
 							texture = 4;
-						if(Watz.array[b][a].substring(c, c + 1).equals("#"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("#"))
 							texture = 5;
-						if(Watz.array[b][a].substring(c, c + 1).equals("K"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("K"))
 							texture = 6;
-						if(Watz.array[b][a].substring(c, c + 1).equals("W"))
+						if(Watz.watz[b][a].substring(c, c + 1).equals("W"))
 							texture = 7;
 						if(texture >= 0) {
 							renderSmolBlockAt(watz[texture][0], watz[texture][1], a, b, c);
@@ -267,7 +267,7 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 				}
 			}
 		}
-		if(type == 6) {
+		if(type == 4) {
 			if(meta == 1) {
 				offsetZ = 0;
 				offsetX = 28;

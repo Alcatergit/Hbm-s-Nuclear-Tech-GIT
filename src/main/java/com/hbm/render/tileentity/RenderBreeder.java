@@ -1,5 +1,6 @@
 package com.hbm.render.tileentity;
 
+import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.BlockDummyable;
@@ -34,13 +35,18 @@ public class RenderBreeder extends TileEntitySpecialRenderer<TileEntityMachineRe
 		case 5: GL11.glRotatef(270, 0F, 1F, 0F); break;
 		}
 
-		if(breeder.progress > 0)
-			for(int i = 0; i < 3; i++) {
+		if(breeder.heat > 0){
+			int seed = (int)(System.currentTimeMillis() / 125 % 10000);
+			Random rand = new Random(seed);
+			for(int i = 0; i < rand.nextInt(breeder.heat+1); i++) {
+
 				GL11.glPushMatrix();
-		        GL11.glRotatef((float) (Math.PI * i), 0F, 1F, 0F);
-				RenderSparks.renderSpark((int) ((System.currentTimeMillis() % 10000) / 100 + i), 0, 1.875, 0, 0.15F, 3, 4, 0x00ff00, 0xffffff);
+		        GL11.glRotatef(360F * rand.nextFloat(), 0F, 1F, 0F);
+		        
+				RenderSparks.renderSpark(rand.nextInt(), 0, 1.75 + 0.25 * rand.nextFloat(), 0, 0.15F, 3, 4, 0x00ff00, 0xffffff);
 				GL11.glPopMatrix();
 			}
+		}
 
 		GL11.glScaled(0.5, 0.5, 0.5);
 

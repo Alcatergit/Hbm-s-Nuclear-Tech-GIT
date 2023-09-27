@@ -147,8 +147,9 @@ public class ItemHazard extends ItemCustomLore implements IItemHazard {
 		
 		@Override
 		public boolean onEntityItemUpdate(EntityItem item){
-			super.onEntityItemUpdate(item);
-			return super.onEntityItemUpdate(item);
+			boolean m = this.module.onEntityItemUpdate(item);
+			boolean i = super.onEntityItemUpdate(item);
+			return m || i;
 		}
 		
 		/*

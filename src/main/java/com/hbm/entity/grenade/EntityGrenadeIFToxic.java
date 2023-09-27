@@ -2,7 +2,6 @@ package com.hbm.entity.grenade;
 
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
 
@@ -37,7 +36,6 @@ public class EntityGrenadeIFToxic extends EntityGrenadeBouncyBase {
     		ExplosionLarge.jolt(world, posX, posY, posZ, 3, 200, 0.25);
     		ExplosionLarge.explode(world, posX, posY, posZ, 2, true, true, true);
     		ExplosionChaos.poison(world, (int)posX, (int)posY, (int)posZ, 12);
-    		ExplosionNukeGeneric.waste(world, (int)posX, (int)posY, (int)posZ, 12);
     		ExplosionChaos.spawnChlorine(world, posX, posY, posZ, 50, 1.5, 0);
         }
     }

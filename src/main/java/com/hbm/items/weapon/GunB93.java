@@ -185,7 +185,7 @@ public class GunB93 extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("[LEGENDARY WEAPON]");
+		tooltip.add("§d§l[LEGENDARY WEAPON]");
 	}
 
 	private static int getAnim(ItemStack stack) {

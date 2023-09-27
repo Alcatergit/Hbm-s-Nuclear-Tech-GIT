@@ -164,9 +164,9 @@ public class ItemRTGPellet extends ItemHazard {
 			final String[] halfLife = BobMathUtil.ticksToDate(instance.getHalfLife());
 			final String[] timeLeft = BobMathUtil.ticksToDate(instance.getLifespan(stack));
 			final String[] maxLife = BobMathUtil.ticksToDate(instance.getMaxLifespan());
-			list.add(String.format("§aHalf life:      %sy %sd %sh %sm§r", (Object[]) halfLife));
-			list.add(String.format("Time remaining: %sy %sd %sh %sm", (Object[]) timeLeft));
-			list.add(String.format("Decay Time:     %sy %sd %sh %sm", (Object[]) maxLife));
+			list.add(String.format("§aHalf life:      %sy %sd %sh %sm %ss§r", (Object[]) halfLife));
+			list.add(String.format("Time remaining: %sy %sd %sh %sm %ss", (Object[]) timeLeft));
+			list.add(String.format("Decay Time:     %sy %sd %sh %sm %ss", (Object[]) maxLife));
 		}
 	}
 

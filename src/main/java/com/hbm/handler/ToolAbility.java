@@ -12,6 +12,9 @@ import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
+import com.hbm.blocks.generic.BlockStorageCrate;
+import com.hbm.blocks.machine.MachineBattery;
+import com.hbm.blocks.machine.MachineFENSU;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.IItemAbility;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -198,6 +201,7 @@ public abstract class ToolAbility {
 		@Override
 		public void onDig(World world, int x, int y, int z, EntityPlayer player, IBlockState block, IItemAbility tool, EnumHand hand) {
 			
+			if(isNBTThing(block.getBlock())) return;
 			//a band-aid on a gaping wound
 			if(block.getBlock() == Blocks.LIT_REDSTONE_ORE)
 				block = Blocks.REDSTONE_ORE.getDefaultState();
@@ -205,7 +209,7 @@ public abstract class ToolAbility {
 			ItemStack stack = new ItemStack(block.getBlock(), 1, block.getBlock().getMetaFromState(block));
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
 			
-			if(result != null) {
+			if(result != null && !result.isEmpty()) {
 				world.setBlockToAir(new BlockPos(x, y, z));
 				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, result.copy()));
 			}
@@ -325,6 +329,8 @@ public abstract class ToolAbility {
 			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, player.getHeldItem(hand)) > 0 || player.getHeldItem(hand).isEmpty())
 				return;
 
+			if(isNBTThing(block.getBlock())) return;
+
 			//add enchantment
 			ItemStack stack = player.getHeldItem(hand);
 
@@ -371,6 +377,8 @@ public abstract class ToolAbility {
 			//if the tool is already enchanted, do nothing
 			if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getHeldItem(hand)) > 0 || player.getHeldItem(hand) == null)
 				return;
+
+			if(isNBTThing(block.getBlock())) return;
 
 			//add enchantment
 			ItemStack stack = player.getHeldItem(hand);
@@ -526,5 +534,9 @@ public abstract class ToolAbility {
 		public String getFullName() {
 			return I18n.format(getName()) + getExtension();
 		}
+	}
+
+	public boolean isNBTThing(Block b){
+		return b instanceof BlockStorageCrate || b instanceof MachineBattery || b instanceof MachineFENSU;
 	}
 }

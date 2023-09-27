@@ -12,6 +12,9 @@ Removing of oreDict recipes is currently not supported.
 mods.ntm.Assembler.addRecipe(IItemStack output, IItemStack[] inputs, int duration);<br>
 ``mods.ntm.Assembler.addRecipe(<minecraft:beef>, [<minecraft:cooked_beef>*4, <minecraft:egg>*6], 30);``
 
+mods.ntm.Assembler.replaceRecipe(IItemStack output, IItemStack[] inputs, int duration);<br>
+``mods.ntm.Assembler.replaceRecipe(<hbm:machine_silex>, [<minecraft:glass>, <minecraft:cobblestone>], 50);``
+
 mods.ntm.Assembler.removeRecipe(IItemStack output);<br>
 ``mods.ntm.Assembler.removeRecipe(<hbm:machine_silex>);``
 

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.MachineRecipes;
+import com.hbm.inventory.PressRecipes;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCassette;
@@ -88,11 +88,11 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		this.allStacks = new ArrayList<>();
 
     	//Stamps
-		for(Item i : MachineRecipes.stamps_plate)
+		for(Item i : PressRecipes.stamps_plate)
 			allStacks.add(new ItemStack(i));
-		for(Item i : MachineRecipes.stamps_wire)
+		for(Item i : PressRecipes.stamps_wire)
 			allStacks.add(new ItemStack(i));
-		for(Item i : MachineRecipes.stamps_circuit)
+		for(Item i : PressRecipes.stamps_circuit)
 			allStacks.add(new ItemStack(i));
 		//Tracks
     	for(int i = 1; i < ItemCassette.TrackType.values().length; i++)

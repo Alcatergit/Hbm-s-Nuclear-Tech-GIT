@@ -222,6 +222,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.crystal_lithium, new ItemStack(ModItems.powder_lithium, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_starmetal, new ItemStack(ModItems.powder_dura_steel, 6));
 		ShredderRecipes.setRecipe(ModItems.crystal_cobalt, new ItemStack(ModItems.powder_cobalt, 3));
+		ShredderRecipes.setRecipe(ModItems.crystal_cinnebar, new ItemStack(ModItems.cinnebar, 3));
 		ShredderRecipes.setRecipe(ModItems.crystal_asbestos, new ItemStack(ModItems.powder_asbestos, 3));
 		
 		ShredderRecipes.setRecipe(ModBlocks.steel_poles, new ItemStack(ModItems.powder_steel_tiny, 3));
@@ -285,6 +286,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.turret_cwis_ammo, new ItemStack(Items.GUNPOWDER, 4));
 		ShredderRecipes.setRecipe(ModItems.turret_tau_ammo, new ItemStack(ModItems.powder_uranium, 4));
 		ShredderRecipes.setRecipe(ModBlocks.ore_nether_coal, new ItemStack(ModItems.coal_infernal, 2));
+		ShredderRecipes.setRecipe(ModBlocks.ore_cinnebar, new ItemStack(ModItems.cinnebar, 2));
 		
 		for(int i = 0; i < 16; i++) {
 			ShredderRecipes.setRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, i), new ItemStack(Items.CLAY_BALL, 4));
@@ -294,12 +296,12 @@ public class ShredderRecipes {
 		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
 			int type = ItemBedrockOre.getOutType(oreMeta);
 			if(type == 0 || type == 1){
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
 				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
 			}
 		}

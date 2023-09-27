@@ -8,9 +8,11 @@ import java.util.LinkedHashMap;
 
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual.RBMKColor;
 import com.hbm.util.I18nUtil;
+import com.hbm.util.BobMathUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -507,6 +509,19 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			case COOLER:
 				stats.add(TextFormatting.AQUA + I18nUtil.resolveKey("rbmk.cooler.cooling", this.data.getInteger("cooled") * 20));
 				stats.add(TextFormatting.DARK_AQUA + I18nUtil.resolveKey("rbmk.cooler.cryo", this.data.getInteger("cryo")));
+				break;
+			case OUTGASSER:
+				double flux = this.data.getDouble("usedFlux");
+				double progress = this.data.getDouble("progress");
+				double maxProgress = this.data.getDouble("maxProgress");
+				int eta = 0;
+				if(flux > 0)
+					eta = (int)((maxProgress-progress)/flux);
+
+				stats.add("§6" + I18nUtil.resolveKey("rbmk.outgasser.eta", BobMathUtil.toDate(BobMathUtil.ticksToDate(eta, 72000))));
+				stats.add(TextFormatting.AQUA + I18nUtil.resolveKey("rbmk.outgasser.flux", Library.getShortNumber((long)flux)));
+				stats.add(TextFormatting.DARK_AQUA + I18nUtil.resolveKey("rbmk.outgasser.progress", Library.getShortNumber((long)progress), Library.getShortNumber((long)maxProgress), Library.getPercentage(progress/maxProgress)));
+				stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.outgasser.gas", this.data.getInteger("gas"), this.data.getInteger("maxGas")));
 				break;
 			case CONTROL:
 				if(this.data.hasKey("color")) {

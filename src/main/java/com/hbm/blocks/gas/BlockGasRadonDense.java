@@ -71,12 +71,12 @@ public class BlockGasRadonDense extends BlockGasBase {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
 			
-			if(rand.nextInt(20) == 0) {
+			if(rand.nextInt(10) == 0) {
 				if(world.getBlockState(pos.down()).getBlock() == Blocks.GRASS)
 					world.setBlockState(pos.down(), ModBlocks.waste_earth.getDefaultState());
 			}
 	
-			if(rand.nextInt(30) == 0) {
+			if(rand.nextInt(20) == 0) {
 				world.setBlockToAir(pos);
 				
 				if(ModBlocks.fallout.canPlaceBlockAt(world, pos)) {

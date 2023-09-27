@@ -322,8 +322,8 @@ public class OreDictManager {
 		S																																				.dust(sulfur)											.block(block_sulfur)							.crystal(crystal_sulfur)								.ore(ore_sulfur, ore_nether_sulfur, basalt_sulfur, ore_meteor_sulfur);
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
-		INFERNAL																																																							.gem(coal_infernal)															.ore(ore_nether_coal);
-		RAREEARTH																																		.dust(powder_desh_mix)																																			.ore(ore_rare, ore_gneiss_rare);
+		INFERNAL																																																.block(block_coal_infernal)	.gem(coal_infernal)															.ore(ore_nether_coal);
+		RAREEARTH																																		.dust(powder_desh_mix)																					.crystal(crystal_rare)								.ore(ore_rare, ore_gneiss_rare);
 		NITANIUM																																		.dust(powder_nitan_mix)																																			.ore(ore_depth_nether_nitan);
 
 		//Compounds
@@ -405,8 +405,8 @@ public class OreDictManager {
 		ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt, ball_dynamite);
 		ANY_CONCRETE			.any(concrete, concrete_smooth, concrete_asbestos, ducrete, ducrete_smooth);
 
-		ANY_COKE																																																							.gem(fromAll(coke, EnumCokeType.class));
-		LIGNITE																																			.dust(powder_lignite)																.gem(lignite)																.ore(ore_lignite);
+		ANY_COKE																																																.block(block_coke)			.gem(fromAll(coke, EnumCokeType.class));
+		LIGNITE																																			.dust(powder_lignite)									.block(block_lignite)		.gem(lignite)																.ore(ore_lignite);
 		//COALCOKE																																																							.gem(fromOne(coke, EnumCokeType.COAL));
 		//PETCOKE																																																							.gem(fromOne(coke, EnumCokeType.PETROLEUM));
 		//LIGCOKE																																																								.gem(fromOne(coke, EnumCokeType.LIGNITE));

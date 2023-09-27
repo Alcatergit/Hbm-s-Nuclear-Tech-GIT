@@ -54,7 +54,7 @@ public class HbmPotion extends Potion {
 		bang = registerPotion(true, 1118481, "potion.hbm_bang", 3, 0);
 		mutation = registerPotion(false, 0xFF8132, "potion.hbm_mutation", 2, 0);
 		radx = registerPotion(false, 0x225900, "potion.hbm_radx", 5, 0);
-		lead = registerPotion(false, 0x767682, "potion.hbm_lead", 6, 0);
+		lead = registerPotion(true, 0x767682, "potion.hbm_lead", 6, 0);
 		radaway = registerPotion(false, 0xFFE400, "potion.hbm_radaway", 7, 0);
 		telekinesis = registerPotion(true, 0x00F3FF, "potion.hbm_telekinesis", 0, 1);
 		phosphorus = registerPotion(true, 0xFF3A00, "potion.hbm_phosphorus", 1, 1);

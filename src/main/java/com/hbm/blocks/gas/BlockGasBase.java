@@ -94,7 +94,7 @@ public abstract class BlockGasBase extends Block {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
-			if(world.rand.nextInt(4)==0){
+			if(world.rand.nextInt(2)==0){
 				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
 					tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ()));
 			}
@@ -147,5 +147,4 @@ public abstract class BlockGasBase extends Block {
 			MainRegistry.proxy.effectNT(data);
 		}
 	}
-	
 }

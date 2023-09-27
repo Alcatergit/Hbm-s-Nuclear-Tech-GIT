@@ -2,17 +2,13 @@ package com.hbm.items.machine;
 
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.items.special.ItemHazard;
 
-import net.minecraft.item.Item;
-
-public class ItemBlades extends Item {
+public class ItemBlades extends ItemHazard {
 	public ItemBlades(String s, int i){
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		this.setCreativeTab(MainRegistry.controlTab);
+		super(s);
 		this.setMaxStackSize(1);
+		this.setUnlocalizedName(s);
 		this.setMaxDamage(i);
-		ModItems.ALL_ITEMS.add(this);
 	}
-
 }

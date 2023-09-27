@@ -61,7 +61,7 @@ public class GUICoreEmitter extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		String[] output = new String[] { "Output: " + Library.getShortNumber(emitter.prev) + "SPK/t" };
+		String[] output = new String[] { "Output: " + Library.getShortNumber(emitter.prev) + "SPK" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 14, 8, 39, mouseX, mouseY, output);
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 13, guiTop + 20, 16, 52, emitter.tank, ModForgeFluids.cryogel);

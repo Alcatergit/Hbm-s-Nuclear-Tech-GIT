@@ -21,11 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachineFluidTank> {
 	
 	@Override
-	public boolean isGlobalRenderer(TileEntityMachineFluidTank te) {
-		return true;
-	}
-	
-	@Override
 	public void render(TileEntityMachineFluidTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
@@ -49,7 +44,6 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GL11.glPopMatrix();
-        GlStateManager.enableCull();
         renderTileEntityAt2(te, x, y, z, partialTicks);
 	}
 	
@@ -59,7 +53,6 @@ public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachine
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
-        GlStateManager.enableAlpha();
 		switch(tileEntity.getBlockMetadata())
 		{
 		case 2:

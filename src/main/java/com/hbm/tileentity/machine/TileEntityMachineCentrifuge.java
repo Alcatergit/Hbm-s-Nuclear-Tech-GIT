@@ -198,8 +198,10 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 				level += 2;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
 				level +=3;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_screm)
+				level +=6;
 		}
-		return Math.min(level, 3);
+		return Math.min(level, 6);
 	}
 
 	public int getPowerLvl() {

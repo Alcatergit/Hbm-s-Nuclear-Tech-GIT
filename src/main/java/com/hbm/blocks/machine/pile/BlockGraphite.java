@@ -1,7 +1,7 @@
 package com.hbm.blocks.machine.pile;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockFlammable;
+import com.hbm.blocks.generic.BlockHazardFuel;
 import com.hbm.items.ModItems;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
@@ -21,12 +21,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class BlockGraphite extends BlockFlammable implements IToolable {
+public class BlockGraphite extends BlockHazardFuel implements IToolable {
 
 	
 	
-	public BlockGraphite(Material mat, int en, int flam, String s) {
-		super(mat, en, flam, s);
+	public BlockGraphite(Material mat, String s, int en, int flam, int burntime) {
+		super(mat, s, en, flam, burntime);
 	}
 
 	@Override

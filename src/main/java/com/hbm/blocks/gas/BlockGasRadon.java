@@ -54,7 +54,7 @@ public class BlockGasRadon extends BlockGasBase {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
-		if(!world.isRemote && rand.nextInt(50) == 0) {
+		if(!world.isRemote && rand.nextInt(20) == 0) {
 			world.setBlockToAir(pos);
 			return;
 		}

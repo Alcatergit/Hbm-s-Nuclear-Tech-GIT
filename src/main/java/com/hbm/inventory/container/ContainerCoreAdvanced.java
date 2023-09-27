@@ -1,15 +1,11 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
@@ -17,14 +13,9 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerCoreAdvanced extends Container {
 	
 	private TileEntityCoreAdvanced diFurnace;
-	private int progress;
-	private int power;
-	EntityPlayerMP player;
 	
-	public ContainerCoreAdvanced(EntityPlayer player, TileEntityCoreAdvanced tedf) {
-		if(player instanceof EntityPlayerMP)
-			this.player = (EntityPlayerMP)player;
-		InventoryPlayer invPlayer = player.inventory;
+	public ContainerCoreAdvanced(InventoryPlayer invPlayer, TileEntityCoreAdvanced tedf) {
+
 		diFurnace = tedf;
 		
 		//Input Storage
@@ -77,14 +68,6 @@ public class ContainerCoreAdvanced extends Container {
 	}
 	
 	@Override
-	public void addListener(IContainerListener crafting) {
-		super.addListener(crafting);
-		crafting.sendWindowProperty(this, 0, this.diFurnace.progress);
-		if(player != null)
-			PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
-	}
-	
-	@Override
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
 		ItemStack var3 = ItemStack.EMPTY;
@@ -125,36 +108,5 @@ public class ContainerCoreAdvanced extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return diFurnace.isUseableByPlayer(player);
-	}
-	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			
-			if(this.progress != this.diFurnace.progress)
-			{
-				par1.sendWindowProperty(this, 0, this.diFurnace.progress);
-			}
-			
-		}
-		if(this.power != this.diFurnace.power)
-		{
-			PacketDispatcher.sendTo(new AuxElectricityPacket(diFurnace.getPos(), diFurnace.power), player);
-		}
-		
-		this.progress = this.diFurnace.progress;
-		this.power = (int)this.diFurnace.power;
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 0)
-		{
-			diFurnace.progress = j;
-		}
 	}
 }

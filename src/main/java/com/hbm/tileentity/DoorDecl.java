@@ -105,7 +105,7 @@ public abstract class DoorDecl {
 		
 		@Override
 		public SoundEvent getOpenSoundEnd() {
-			return HBMSoundHandler.sliding_seal_stop;
+			return HBMSoundHandler.nullMine;
 		};
 		@Override
 		public SoundEvent getOpenSoundStart() {
@@ -113,7 +113,7 @@ public abstract class DoorDecl {
 		};
 		
 		public float getSoundVolume(){
-			return 2;
+			return 1;
 		}
 		
 		@Override
@@ -140,7 +140,7 @@ public abstract class DoorDecl {
 		
 		@Override
 		public int timeToOpen() {
-			return 20;
+			return 15;
 		};
 		
 		@Override
@@ -168,6 +168,82 @@ public abstract class DoorDecl {
 		@SideOnly(Side.CLIENT)
 		public ResourceLocation getTextureForPart(String partName){
 			return ResourceManager.sliding_seal_door_tex;
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public WavefrontObjDisplayList getModel(){
+			return ResourceManager.sliding_seal_door;
+		}
+	};
+
+	public static final DoorDecl SLIDING_GATE_DOOR = new DoorDecl(){
+		
+		@Override
+		public SoundEvent getOpenSoundEnd() {
+			return HBMSoundHandler.sliding_seal_stop;
+		};
+		@Override
+		public SoundEvent getOpenSoundStart() {
+			return HBMSoundHandler.sliding_seal_open;
+		};
+		
+		public float getSoundVolume(){
+			return 3;
+		}
+		
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void getTranslation(String partName, float openTicks, boolean child, float[] trans) {
+			if(partName.startsWith("door")){
+				set(trans, 0, 0, Library.smoothstep(getNormTime(openTicks), 0, 1));
+			} else {
+				set(trans, 0, 0, 0);
+			}
+		};
+		
+		@Override
+		@SideOnly(Side.CLIENT)
+		public double[][] getClippingPlanes() {
+			return new double[][]{{0, 0, -1, 0.5001}};
+		};
+		
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void doOffsetTransform() {
+			GL11.glTranslated(0.375, 0, 0);
+		};
+		
+		@Override
+		public int timeToOpen() {
+			return 28;
+		};
+		
+		@Override
+		public AxisAlignedBB getBlockBound(BlockPos relPos, boolean open) {
+			if(open){
+				if(relPos.getY() == 0)
+					return new AxisAlignedBB(0, 0, 1-0.25, 1, 0.125, 1);
+				return super.getBlockBound(relPos, open);
+			} else {
+				return new AxisAlignedBB(0, 0, 1-0.25, 1, 1, 1);
+			}
+		};
+		
+		@Override
+		public int[][] getDoorOpenRanges(){
+			return new int[][]{{0, 0, 0, 1, 2, 2}};
+		}
+
+		@Override
+		public int[] getDimensions(){
+			return new int[]{1, 0, 0, 0, 0, 0};
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public ResourceLocation getTextureForPart(String partName){
+			return ResourceManager.sliding_gate_door_tex;
 		}
 
 		@Override

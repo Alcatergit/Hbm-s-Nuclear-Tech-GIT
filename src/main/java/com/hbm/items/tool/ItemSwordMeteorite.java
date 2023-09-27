@@ -86,7 +86,7 @@ public class ItemSwordMeteorite extends ItemSwordAbility {
     	}
 
     	if(this == ModItems.meteorite_sword_demonic) {
-    		list.add(TextFormatting.ITALIC + "This sword has met §f§ogod§7§o and the §4§odevil§r");
+    		list.add(TextFormatting.ITALIC + "This sword has met §f§oGOD§7§o and the §4§oDEVIL§r");
     		list.add(TextFormatting.ITALIC + "It was transported to §4§o§kdemoniclove§7");
     		list.add(TextFormatting.ITALIC + "and came in contact with §4§o§ktheevilandthegood§r");
     		list.add("§0[Infohazard]§r");

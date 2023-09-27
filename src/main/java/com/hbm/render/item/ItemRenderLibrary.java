@@ -1652,6 +1652,18 @@ public class ItemRenderLibrary {
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}
 		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.sliding_gate_door), new ItemRenderBase(){
+			public void renderInventory() {
+				GL11.glTranslated(0, -5, 0);
+				GL11.glScaled(7, 7, 7);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.sliding_gate_door_tex);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				ResourceManager.sliding_seal_door.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}
+		});
 		renderers.put(Item.getItemFromBlock(ModBlocks.transition_seal), new ItemRenderBase(){
 			public void renderInventory() {
 				GL11.glTranslated(0, -4.5, 0);

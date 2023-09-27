@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerWatzCore;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityWatzCore;
 
 import net.minecraft.client.Minecraft;
@@ -30,8 +31,8 @@ public class GUIWatzCore extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 106 - 18 - 70, 16, 70, diFurnace.tank, diFurnace.tankType);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 106 - 70, 16, 70 - 18, diFurnace.power, TileEntityWatzCore.maxPower);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 17, 16, 70, diFurnace.tank, diFurnace.tankType);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 17, 16, 70, diFurnace.power, TileEntityWatzCore.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -40,10 +41,10 @@ public class GUIWatzCore extends GuiInfoContainer {
 		String name = this.diFurnace.hasCustomInventoryName() ? this.diFurnace.getInventoryName() : I18n.format(this.diFurnace.getInventoryName());
 		
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory")/* + String.valueOf(diFurnace.powerList)*/, 8, this.ySize - 96 + 2 - 34, 4210752);
-		this.fontRenderer.drawString(String.valueOf(diFurnace.powerList + " HE/tick"), 8, this.ySize - 50 + 2 + 13, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2 - 34, 4210752);
+		this.fontRenderer.drawString(Library.getShortNumber(diFurnace.powerList * 20) + " HE/s", 8, this.ySize - 50 + 2 + 13, 4210752);
 		this.fontRenderer.drawString(String.valueOf(diFurnace.heatList + " heat"), 8, this.ySize - 50 + 2 + 22, 4210752);
-		this.fontRenderer.drawString(String.valueOf((diFurnace.decayMultiplier * diFurnace.heat)/100 /100 + " waste/tick"), 8, this.ySize - 50 + 2 + 31, 4210752);
+		this.fontRenderer.drawString(Library.getShortNumber((long)(diFurnace.decayMultiplier * diFurnace.heat * 0.002D)) + " mB/s", 8, this.ySize - 50 + 2 + 31, 4210752);
 		this.fontRenderer.drawString(String.valueOf(diFurnace.powerMultiplier + "% power"), 100, this.ySize - 50 + 2 + 13, 4210752);
 		this.fontRenderer.drawString(String.valueOf(diFurnace.heatMultiplier + "% heat"), 100, this.ySize - 50 + 2 + 22, 4210752);
 		this.fontRenderer.drawString(String.valueOf(diFurnace.decayMultiplier + "% decay"), 100, this.ySize - 50 + 2 + 31, 4210752);

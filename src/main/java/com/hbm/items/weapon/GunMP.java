@@ -93,10 +93,10 @@ public class GunMP extends Item {
 		list.add("whose blood is that? The former");
 		list.add("user's? The victim's? Both?");
 		list.add("");
-		list.add("Ammo: Small Propellantless Machine Gun Round");
+		list.add("Ammo: §eSmall Propellantless Machine Gun Round");
 		list.add("Damage: 100 - 150");
 		list.add("");
-		list.add("[LEGENDARY WEAPON]");
+		list.add("§d§l[LEGENDARY WEAPON]");
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.generic.BlockDoorGeneric;
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IAnimatedDoor;
+import com.hbm.interfaces.IDoor.DoorState;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.DataValueFloat;
@@ -50,9 +51,14 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 
 	// if a control panel sends a toggle from 0->1, it masters the door until toggled again.
 	private boolean toggledByPanel = false;
-	
+
+	public TileEntityDoorGeneric(){
+	}
+
 	@Override
 	public void update(){
+		if(doorType == null)
+			doorType = ((BlockDoorGeneric)this.getBlockType()).type;
 		if(state == DoorState.OPENING) {
 			openTicks++;
 			if(openTicks >= doorType.timeToOpen()) {

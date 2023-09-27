@@ -34,7 +34,7 @@ public class EnchantmentUtil {
 	 * @param amount the amount of experience to remove
 	 */
 	public static void removeExperience(EntityPlayer entityPlayer, float amount) {
-		if (entityPlayer.experienceTotal - amount <= 0) {
+		if (entityPlayer.experienceTotal < amount) {
 			entityPlayer.experienceLevel = 0;
 			entityPlayer.experience = 0;
 			entityPlayer.experienceTotal = 0;

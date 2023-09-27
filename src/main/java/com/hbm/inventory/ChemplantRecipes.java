@@ -129,7 +129,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(EnumChemistryTemplate.NITRIC_ACID, new AStack[] { new OreDictStack(KNO.dust()) }, new FluidStack[]{ new FluidStack(ModForgeFluids.sulfuric_acid, 500) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.nitric_acid, 500) }, 50);
 		
-		makeRecipe(EnumChemistryTemplate.SOLVENT, null, new FluidStack[]{ new FluidStack(ModForgeFluids.naphtha, 500), new FluidStack(ModForgeFluids.aromatics, 500) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.solvent, 1000) }, 50);
+		makeRecipe(EnumChemistryTemplate.SOLVENT, null, new FluidStack[]{ new FluidStack(ModForgeFluids.naphtha, 800), new FluidStack(ModForgeFluids.aromatics, 300) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.solvent, 1000) }, 50);
 		
 		makeRecipe(EnumChemistryTemplate.RADIOSOLVENT, null, new FluidStack[]{ new FluidStack(ModForgeFluids.solvent, 500), new FluidStack(ModForgeFluids.watz, 500) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.radiosolvent, 1000) }, 50);
 		

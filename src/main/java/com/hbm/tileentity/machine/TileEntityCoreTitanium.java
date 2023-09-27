@@ -1,13 +1,13 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IFactory;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
-import com.hbm.tileentity.TileEntityLoadedBase;
+import com.hbm.tileentity.INBTPacketReceiver;
+import com.hbm.tileentity.TileEntityMachineBase;
 
-import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -20,99 +20,54 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCoreTitanium extends TileEntityLoadedBase implements ITickable, IFactory, IEnergyUser {
+public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITickable, IEnergyUser, INBTPacketReceiver {
 
 	public int progress = 0;
+	public int progressStep = 1;
 	public long power = 0;
 	public int soundCycle = 0;
-	public final static int processTime = 200;
-	public final static int maxPower = (int)((ItemBattery)ModItems.factory_core_titanium).getMaxCharge();
-	public ItemStackHandler inventory;
-	public ICapabilityProvider dropProvider;
+	public boolean hasCluster = false;
+	public final static long powerPerStep = 200L;
+	public final static int processTime = 400;
+	public final static long maxPower = 1000000L;
 	
 	private String customName;
 	
 	public TileEntityCoreTitanium() {
-		inventory = new ItemStackHandler(23){
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-		};
-		dropProvider = new ICapabilityProvider(){
-
-			@Override
-			public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-			}
-
-			@Override
-			public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-				return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : null;
-			}
-			
-		};
+		super(23);
 	}
 	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.customName : "container.factoryTitanium";
-	}
-
-	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
-	}
-	
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-	
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this)
-		{
-			return false;
-		}else{
-			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=64;
-		}
-	}
-	
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setShort("cookTime", (short) progress);
-		compound.setTag("inventory", inventory.serializeNBT());
-		return super.writeToNBT(compound);
+	public String getName() {
+		return "container.factoryTitanium";
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		this.progress = compound.getShort("cookTime");
+		this.progress = compound.getInteger("cookTime");
+		this.progressStep = compound.getInteger("speed");
+		power = compound.getLong("power");
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		super.readFromNBT(compound);
 	}
 	
 	@Override
-	public void update() {
-		this.trySubscribe(world, pos.add(0, 1, 0), ForgeDirection.UP);
-		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_titanium)
-		{
-			this.power = (int) ((IBatteryItem)inventory.getStackInSlot(22).getItem()).getCharge(inventory.getStackInSlot(22));
-		} else {
-			this.power = 0;
-		}
-		
-		if(inventory.getStackInSlot(9).isEmpty())
-		{
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setInteger("cookTime", progress);
+		compound.setInteger("speed", this.progressStep);
+		compound.setLong("power", power);
+		compound.setTag("inventory", inventory.serializeNBT());
+		return super.writeToNBT(compound);
+	}
+
+	public void moveToSlotIfProcessable(int slot){
+		if(inventory.getStackInSlot(slot).isEmpty()) {
 			for(int i = 0; i < 9; i++)
 			{
 				if(isProcessable(inventory.getStackInSlot(i)))
 				{
-					inventory.setStackInSlot(9, inventory.getStackInSlot(i).copy());
+					inventory.setStackInSlot(slot, inventory.getStackInSlot(i).copy());
 					inventory.setStackInSlot(i, ItemStack.EMPTY);
 					break;
 				}
@@ -122,198 +77,148 @@ public class TileEntityCoreTitanium extends TileEntityLoadedBase implements ITic
 			{
 				if(!inventory.getStackInSlot(i).isEmpty())
 				{
-					if(inventory.getStackInSlot(i).getItem() == inventory.getStackInSlot(9).getItem() && inventory.getStackInSlot(i).getItemDamage() == inventory.getStackInSlot(9).getItemDamage())
+					if(Library.areItemStacksEqualIgnoreCount(inventory.getStackInSlot(i), inventory.getStackInSlot(slot)))
 					{
-						if(inventory.getStackInSlot(9).getCount() + inventory.getStackInSlot(i).getCount() <= inventory.getStackInSlot(i).getMaxStackSize())
+						if(inventory.getStackInSlot(slot).getCount() + inventory.getStackInSlot(i).getCount() <= inventory.getStackInSlot(i).getMaxStackSize())
 						{
-							inventory.getStackInSlot(9).grow(inventory.getStackInSlot(i).getCount());
+							inventory.getStackInSlot(slot).grow(inventory.getStackInSlot(i).getCount());
 							inventory.setStackInSlot(i, ItemStack.EMPTY);
 						} else {
-							int j = 64 - inventory.getStackInSlot(9).getCount();
-							inventory.getStackInSlot(9).grow(j);
+							int j = inventory.getStackInSlot(slot).getMaxStackSize() - inventory.getStackInSlot(slot).getCount();
+							inventory.getStackInSlot(slot).grow(j);
 							inventory.getStackInSlot(i).shrink(j);
 						}
 						break;
 					}
-				}
-			}
-		}
-		
-		if(inventory.getStackInSlot(10).isEmpty())
-		{
-			for(int i = 0; i < 9; i++)
-			{
-				if(isProcessable(inventory.getStackInSlot(i)))
-				{
-					inventory.setStackInSlot(10, inventory.getStackInSlot(i).copy());
-					inventory.setStackInSlot(i, ItemStack.EMPTY);
-					break;
-				}
-			}
-		} else {
-			for(int i = 0; i < 9; i++)
-			{
-				if(!inventory.getStackInSlot(i).isEmpty())
-				{
-					if(inventory.getStackInSlot(i).getItem() == inventory.getStackInSlot(10).getItem() && inventory.getStackInSlot(i).getItemDamage() == inventory.getStackInSlot(10).getItemDamage())
-					{
-						if(inventory.getStackInSlot(10).getCount() + inventory.getStackInSlot(i).getCount() <= inventory.getStackInSlot(i).getMaxStackSize())
-						{
-							inventory.getStackInSlot(10).grow(inventory.getStackInSlot(i).getCount());
-							inventory.setStackInSlot(i, ItemStack.EMPTY);
-						} else {
-							int j = 64 - inventory.getStackInSlot(10).getCount();
-							inventory.getStackInSlot(10).grow(j);
-							inventory.getStackInSlot(i).shrink(j);
-						}
-						break;
-					}
-				}
-			}
-		}
-		
-		if(this.power > 0 && (isProcessable(inventory.getStackInSlot(9)) || isProcessable(inventory.getStackInSlot(10))) && isStructureValid(world))
-		{
-			this.progress += 1;
-			((ItemBattery)inventory.getStackInSlot(22).getItem()).dischargeBattery(inventory.getStackInSlot(22), 1);
-			if(soundCycle == 0)
-	        	this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 1.0F, 0.75F);
-			soundCycle++;
-			
-			if(soundCycle >= 50)
-				soundCycle = 0;
-		} else {
-			this.progress = 0;
-		}
-		
-		if(!inventory.getStackInSlot(9).isEmpty() && !inventory.getStackInSlot(11).isEmpty() && (FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(9)).getItem() != inventory.getStackInSlot(11).getItem() || FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(9)).getItemDamage() != inventory.getStackInSlot(11).getItemDamage()))
-		{
-			this.progress = 0;
-		}
-		
-		if(!inventory.getStackInSlot(10).isEmpty() && !inventory.getStackInSlot(12).isEmpty() && (FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(10)).getItem() != inventory.getStackInSlot(12).getItem() || FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(10)).getItemDamage() != inventory.getStackInSlot(12).getItemDamage()))
-		{
-			this.progress = 0;
-		}
-		
-		if(this.progress >= TileEntityCoreTitanium.processTime)
-		{
-			if(isProcessable(inventory.getStackInSlot(9)))
-			{
-				ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(9));
-				if(inventory.getStackInSlot(11).isEmpty())
-				{
-					inventory.setStackInSlot(11, itemStack.copy());
-				}else if(inventory.getStackInSlot(11).isItemEqual(itemStack)) {
-					inventory.getStackInSlot(11).grow(itemStack.getCount());
-				}
-				if(inventory.getStackInSlot(9).isEmpty())
-				{
-					inventory.setStackInSlot(9, new ItemStack(inventory.getStackInSlot(9).getItem().setFull3D()));
-				}else{
-					inventory.getStackInSlot(9).shrink(1);
-				}
-				if(inventory.getStackInSlot(9).isEmpty())
-				{
-					inventory.setStackInSlot(9, ItemStack.EMPTY);
-				}
-			}
-			if(isProcessable(inventory.getStackInSlot(10)))
-			{
-				ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(10));
-				if(inventory.getStackInSlot(12).isEmpty())
-				{
-					inventory.setStackInSlot(12, itemStack.copy());
-				}else if(inventory.getStackInSlot(12).isItemEqual(itemStack)) {
-					inventory.getStackInSlot(12).grow(itemStack.getCount());
-				}
-				if(inventory.getStackInSlot(10).isEmpty())
-				{
-					inventory.setStackInSlot(10, new ItemStack(inventory.getStackInSlot(10).getItem()));
-				}else{
-					inventory.getStackInSlot(10).shrink(1);
-				}
-				if(inventory.getStackInSlot(10).isEmpty())
-				{
-					inventory.setStackInSlot(10, ItemStack.EMPTY);
-				}
-			}
-			
-			this.progress = 0;
-		}
-			
-		if(!inventory.getStackInSlot(11).isEmpty())
-		{
-			for(int i = 0; i < 9; i++)
-			{
-				int j = i + 13;
-				if(!inventory.getStackInSlot(j).isEmpty())
-				{
-					if(inventory.getStackInSlot(j).getItem() == inventory.getStackInSlot(11).getItem() && inventory.getStackInSlot(j).getItemDamage() == inventory.getStackInSlot(11).getItemDamage())
-					{
-						if(inventory.getStackInSlot(j).getCount() < inventory.getStackInSlot(j).getMaxStackSize())
-						{
-							if(inventory.getStackInSlot(j).getCount() + inventory.getStackInSlot(11).getCount() <= inventory.getStackInSlot(11).getMaxStackSize())
-							{
-								inventory.getStackInSlot(j).grow(inventory.getStackInSlot(11).getCount());
-								inventory.setStackInSlot(11, ItemStack.EMPTY);
-								break;
-							} else {
-								int k = inventory.getStackInSlot(j).getMaxStackSize() - inventory.getStackInSlot(j).getCount();
-								if(k < 0)
-								{
-									inventory.getStackInSlot(j).grow(k);
-									inventory.getStackInSlot(11).shrink(k);
-									break;
-								}
-							}
-						}
-					}
-				} else {
-					inventory.setStackInSlot(j, inventory.getStackInSlot(11).copy());
-					inventory.setStackInSlot(11, ItemStack.EMPTY);
-					break;
-				}
-			}
-		}
-		
-		if(!inventory.getStackInSlot(12).isEmpty())
-		{
-			for(int i = 0; i < 9; i++)
-			{
-				int j = i + 13;
-				if(!inventory.getStackInSlot(j).isEmpty())
-				{
-					if(inventory.getStackInSlot(j).getItem() == inventory.getStackInSlot(12).getItem() && inventory.getStackInSlot(j).getItemDamage() == inventory.getStackInSlot(12).getItemDamage())
-					{
-						if(inventory.getStackInSlot(j).getCount() < inventory.getStackInSlot(j).getMaxStackSize())
-						{
-							if(inventory.getStackInSlot(j).getCount() + inventory.getStackInSlot(12).getCount() <= inventory.getStackInSlot(12).getMaxStackSize())
-							{
-								inventory.getStackInSlot(j).grow(inventory.getStackInSlot(12).getCount());
-								inventory.setStackInSlot(12, ItemStack.EMPTY);
-								break;
-							} else {
-								int k = inventory.getStackInSlot(j).getMaxStackSize() - inventory.getStackInSlot(j).getCount();
-								if(k < 0)
-								{
-									inventory.getStackInSlot(j).grow(k);
-									inventory.getStackInSlot(12).shrink(k);
-									break;
-								}
-							}
-						}
-					}
-				} else {
-					inventory.setStackInSlot(j, inventory.getStackInSlot(12).copy());
-					inventory.setStackInSlot(12, ItemStack.EMPTY);
-					break;
 				}
 			}
 		}
 	}
 
+	public boolean hasSpace(int input, int output){
+		boolean isEmpty = inventory.getStackInSlot(output).isEmpty();
+		if(isEmpty) return true;
+		ItemStack outputStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(input));
+		return Library.areItemStacksEqualIgnoreCount(outputStack, inventory.getStackInSlot(output)) && inventory.getStackInSlot(output).getCount() < inventory.getStackInSlot(output).getMaxStackSize();
+	}
+
+	public boolean hasSpaceForAll(){
+		return hasSpace(9, 11) &&
+		hasSpace(10, 12);
+	}
+
+	public boolean hasSomethingToProcess(){
+		return isProcessable(inventory.getStackInSlot(9)) ||
+		isProcessable(inventory.getStackInSlot(10));
+	}
+
+	public void process(int input, int output){
+		if(isProcessable(inventory.getStackInSlot(input))) {
+			ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(input));
+
+			if(inventory.getStackInSlot(output).isEmpty()) {
+				inventory.setStackInSlot(output, itemStack.copy());
+			}else if(Library.areItemStacksEqualIgnoreCount(inventory.getStackInSlot(output), itemStack)) {
+				inventory.getStackInSlot(output).grow(itemStack.getCount());
+			}
+
+			inventory.getStackInSlot(input).shrink(1);
+			if(inventory.getStackInSlot(input).isEmpty()) {
+				inventory.setStackInSlot(input, ItemStack.EMPTY);
+			}
+		}
+	}
+
+	public void moveToOuput(int slot){
+		if(!inventory.getStackInSlot(slot).isEmpty())
+		{
+			for(int i = 0; i < 9; i++)
+			{
+				int j = i + 13;
+				if(inventory.getStackInSlot(j).isEmpty()) {
+					inventory.setStackInSlot(j, inventory.getStackInSlot(slot).copy());
+					inventory.setStackInSlot(slot, ItemStack.EMPTY);
+					return;
+				} else if(Library.areItemStacksEqualIgnoreCount(inventory.getStackInSlot(j), inventory.getStackInSlot(slot))) {
+					ItemStack stack = inventory.getStackInSlot(j);
+					int k = stack.getMaxStackSize() - stack.getCount();
+					if(k > 0) { //needs k items until stack is complete
+
+						if(stack.getCount() + inventory.getStackInSlot(slot).getCount() <= inventory.getStackInSlot(slot).getMaxStackSize()) {
+							inventory.getStackInSlot(j).grow(inventory.getStackInSlot(slot).getCount());
+							inventory.setStackInSlot(slot, ItemStack.EMPTY);
+							return;
+						} else {
+							
+							if(k < 0) {
+								inventory.getStackInSlot(j).grow(k);
+								inventory.getStackInSlot(26).shrink(k);
+								continue;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
+	public void update() {
+		if(!world.isRemote && isStructureValid(world)) {
+			this.trySubscribe(world, pos.add(0, 2, 0), ForgeDirection.UP);
+			this.trySubscribe(world, pos.add(0, -2, 0), ForgeDirection.DOWN);
+			hasCluster = inventory.getStackInSlot(22).getItem() == ModItems.factory_core_titanium;
+			
+			moveToSlotIfProcessable(9);
+			moveToSlotIfProcessable(10);
+			
+			if(this.power > this.progressStep * powerPerStep && hasSomethingToProcess() && hasSpaceForAll())
+			{
+				this.progress += this.progressStep;
+				this.power -= this.progressStep * powerPerStep;
+
+				if(soundCycle == 0)
+		        	this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 0.75F, 0.5F);
+				soundCycle++;
+				
+				if(soundCycle >= 50)
+					soundCycle = 0;
+
+			} else {
+				if(!hasCluster) {
+					if(this.progressStep > 1 && world.rand.nextInt(10) == 0)
+						this.progressStep -= 1;
+				}
+				this.progress = 0;
+			}
+			
+			if(this.progress >= TileEntityCoreTitanium.processTime){
+
+				process(9, 11);
+				process(10, 12);
+				this.progress = 0;
+				if(!hasCluster)
+					this.progressStep = Math.min(100, this.progressStep+1);
+			}
+				
+			moveToOuput(11);
+			moveToOuput(12);
+
+			NBTTagCompound data = new NBTTagCompound();
+			data.setInteger("cookTime", progress);
+			data.setInteger("speed", progressStep);
+			data.setLong("power", power);
+			this.networkPack(data, 250);
+		}
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		this.progress = nbt.getInteger("cookTime");
+		this.progressStep = nbt.getInteger("speed");
+		this.power = nbt.getLong("power");
+	}
+
 	public boolean isStructureValid(World world) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		int x = pos.getX();
@@ -352,17 +257,14 @@ public class TileEntityCoreTitanium extends TileEntityLoadedBase implements ITic
 		return false;
 	}
 
-	@Override
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
 	}
 
-	@Override
 	public int getProgressScaled(int i) {
 		return (progress * i) / processTime;
 	}
 
-	@Override
 	public boolean isProcessable(ItemStack item) {
 		if(item != null && !item.isEmpty())
 		{
@@ -374,18 +276,36 @@ public class TileEntityCoreTitanium extends TileEntityLoadedBase implements ITic
 
 	@Override
 	public void setPower(long i) {
-		if(inventory.getStackInSlot(22).getItem() == ModItems.factory_core_titanium)
-		{
-			((ItemBattery)inventory.getStackInSlot(22).getItem()).setCharge(inventory.getStackInSlot(22), (int)i);
-		}
+		this.power = i;
 	}
+
 	@Override
 	public long getPower() {
 		return power;
 	}
+
 	@Override
 	public long getMaxPower() {
 		return maxPower;
 	}
 
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack stack){
+		return slot < 11 && isProcessable(stack);
+	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 };
+	}
+	
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int amount){
+		return this.isItemValidForSlot(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return slot > 10 && slot != 22;
+	}
 }

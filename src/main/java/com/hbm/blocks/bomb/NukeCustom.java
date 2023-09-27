@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityCloudSolinium;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
@@ -93,82 +94,96 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			this.explode(world, pos);
 		}
 	}
-
-	public static final int maxTnt = 150;
-	public static final int maxNuke = 200;
-	public static final int maxHydro = 350;
-	public static final int maxAmat = 350;
-	public static final int maxSchrab = 250;
 	
-	public static void explodeCustom(World worldObj, double xCoord, double yCoord, double zCoord, float tnt, float nuke, float hydro, float amat, float dirty, float schrab, float euph) {
+	public static void explodeCustom(World world, double xCoord, double yCoord, double zCoord, float tnt, float nuke, float hydro, float bale, float dirty, float schrab, float sol, float euph) {
 		
-		dirty = Math.min(dirty, 100);
+		dirty = Math.min(dirty, BombConfig.maxCustomDirtyRadius);
 		
 		/// EUPHEMIUM ///
 		if(euph > 0) {
 			
-			EntityGrenadeZOMG zomg = new EntityGrenadeZOMG(worldObj, xCoord, yCoord, zCoord);
-			ExplosionChaos.zomg(worldObj, xCoord, yCoord, zCoord, 1000, null, zomg);
+			euph = Math.min(euph, BombConfig.maxCustomEuphLvl);
+			EntityGrenadeZOMG zomg = new EntityGrenadeZOMG(world, xCoord, yCoord, zCoord);
+			ExplosionChaos.zomg(world, xCoord, yCoord, zCoord, (int)(100 * euph), null, zomg);
+
+		// SOLINIUM ///
+		} else if(sol > 0) {
+			
+			sol += schrab / 2 + bale / 4 + hydro / 8 + nuke / 16 + tnt / 32;
+			sol = Math.min(sol, BombConfig.maxCustomSolRadius);
+
+			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(world);
+			entity.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+    		entity.destructionRange = (int) sol;
+    		entity.speed = BombConfig.blastSpeed;
+    		entity.coefficient = 1.0F;
+    		entity.waste = false;
+    		entity.extType = 1;
+    		world.spawnEntity(entity);
+    	
+    		EntityCloudSolinium cloud = new EntityCloudSolinium(world, (int)sol);
+    		cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+    		world.spawnEntity(cloud);
 			
 		// SCHRABIDIUM ///
 		} else if(schrab > 0) {
 			
-			schrab += amat / 2 + hydro / 4 + nuke / 8 + tnt / 16;
-			schrab = Math.min(schrab, maxSchrab);
+			schrab += bale / 2 + hydro / 4 + nuke / 8 + tnt / 16;
+			schrab = Math.min(schrab, BombConfig.maxCustomSchrabRadius);
 
-			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(worldObj);
+			EntityNukeExplosionMK3 entity = new EntityNukeExplosionMK3(world);
 			entity.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
     		entity.destructionRange = (int) schrab;
     		entity.speed = BombConfig.blastSpeed;
     		entity.coefficient = 1.0F;
     		entity.waste = false;
-    		worldObj.spawnEntity(entity);
+    		world.spawnEntity(entity);
     	
-    		EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int)schrab);
+    		EntityCloudFleija cloud = new EntityCloudFleija(world, (int)schrab);
     		cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-    		worldObj.spawnEntity(cloud);
+    		world.spawnEntity(cloud);
     		
     	/// ANTIMATTER ///
-		} else if(amat > 0) {
+		} else if(bale > 0) {
 
-			amat += hydro / 2 + nuke / 4 + tnt / 8;
-			amat = Math.min(amat, maxAmat);
+			bale += hydro / 2 + nuke / 4 + tnt / 8;
+			bale = Math.min(bale, BombConfig.maxCustomBaleRadius);
 
-			EntityBalefire bf = new EntityBalefire(worldObj);
+			EntityBalefire bf = new EntityBalefire(world);
     		bf.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-			bf.destructionRange = (int) amat;
-			worldObj.spawnEntity(bf);
-			worldObj.spawnEntity(EntityNukeCloudSmall.statFacBale(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, amat));
+			bf.destructionRange = (int) bale;
+			world.spawnEntity(bf);
+			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, bale));
 			
 		/// HYDROGEN ///
 		} else if(hydro > 0) {
 
 			hydro += nuke / 2 + tnt / 4;
-			hydro = Math.min(hydro, maxHydro);
+			hydro = Math.min(hydro, BombConfig.maxCustomHydroRadius);
 			dirty *= 0.25F;
 
-			worldObj.spawnEntity(EntityNukeExplosionMK4.statFac(worldObj, (int)hydro, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
-			worldObj.spawnEntity(EntityNukeCloudSmall.statFac(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, hydro));
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)hydro, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
+			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, hydro));
 			
 		/// NUCLEAR ///
 		} else if(nuke > 0) {
 			
 			nuke += tnt / 2;
-			nuke = Math.min(nuke, maxNuke);
+			nuke = Math.min(nuke, BombConfig.maxCustomNukeRadius);
 
-			worldObj.spawnEntity(EntityNukeExplosionMK4.statFac(worldObj, (int)nuke, xCoord + 0.5, yCoord + 5, zCoord + 0.5).moreFallout((int)dirty));
-			worldObj.spawnEntity(EntityNukeCloudSmall.statFac(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, nuke));
+			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)nuke, xCoord + 0.5, yCoord + 5, zCoord + 0.5).moreFallout((int)dirty));
+			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, nuke));
 			
 		/// NON-NUCLEAR ///
 		} else if(tnt >= 75) {
 
-			tnt = Math.min(tnt, maxTnt);
+			tnt = Math.min(tnt, BombConfig.maxCustomTNTRadius);
 
-			worldObj.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(worldObj, (int)tnt, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
-			worldObj.spawnEntity(EntityNukeCloudSmall.statFac(worldObj, xCoord + 0.5, yCoord + 5, zCoord + 0.5, tnt));
+			world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, (int)tnt, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
+			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, tnt));
 		} else if(tnt > 0) {
 			
-			ExplosionLarge.explode(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, tnt, true, true, true);
+			ExplosionLarge.explode(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, tnt, true, true, true);
 		}
 	}
 	
@@ -180,11 +195,11 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			
 			entity.clearSlots();
 			world.destroyBlock(pos, false);
-			NukeCustom.explodeCustom(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, entity.tnt, entity.nuke, entity.hydro, entity.amat, entity.dirty, entity.schrab, entity.euph);
+			NukeCustom.explodeCustom(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
 			
 		} else {
 			
-			EntityFallingNuke bomb = new EntityFallingNuke(world, entity.tnt, entity.nuke, entity.hydro, entity.amat, entity.dirty, entity.schrab, entity.euph);
+			EntityFallingNuke bomb = new EntityFallingNuke(world, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
 			bomb.getDataManager().set(EntityFallingNuke.FACING, world.getBlockState(pos).getValue(FACING));
 			bomb.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 			entity.clearSlots();

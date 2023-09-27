@@ -8,6 +8,7 @@ import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineExcavator;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachineExcavator> {
@@ -16,11 +17,16 @@ public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachine
 	public static final ResourceLocation gravel = new ResourceLocation("minecraft:textures/blocks/gravel.png");
 
 	@Override
+	public boolean isGlobalRenderer(TileEntityMachineExcavator te) {
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntityMachineExcavator drill, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GlStateManager.enableLighting();
+		GlStateManager.disableCull();
 		
 		switch(drill.getBlockMetadata() - BlockDummyable.offset) {
 		case 3: GL11.glRotatef(0, 0F, 1F, 0F); break;
@@ -31,7 +37,7 @@ public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachine
 
 		GL11.glTranslated(0, -3, 0);
 		
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.excavator_tex);
 		ResourceManager.excavator.renderPart("Main");
 		
@@ -63,7 +69,7 @@ public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachine
 		}
 		GL11.glPopMatrix();
 		
-		GL11.glShadeModel(GL11.GL_FLAT);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 		
 		if(drill.chuteTimer > 0) {
 			bindTexture(cobble);

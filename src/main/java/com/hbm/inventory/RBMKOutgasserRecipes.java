@@ -46,7 +46,7 @@ public class RBMKOutgasserRecipes {
 		addRecipe(360000 * ItemHazard.powder * ItemHazard.block, ModBlocks.sand_gold, new ItemStack(ModBlocks.sand_gold198));
 		addRecipe(360000 * ItemHazard.block, GOLD.block(), new ItemStack(ModBlocks.block_au198));
 		
-		addRecipe(90000, TH232.ingot(), new ItemStack(ModItems.ingot_u233));
+		addRecipe(90000, TH232.ingot(), new ItemStack(ModItems.ingot_thorium_fuel));
 		addRecipe(90000 * ItemHazard.billet, TH232.billet(), new ItemStack(ModItems.billet_thorium_fuel));
 		addRecipe(90000 * ItemHazard.nugget, TH232.nugget(), new ItemStack(ModItems.nugget_thorium_fuel));
 		addRecipe(90000 * ItemHazard.block, TH232.block(), new ItemStack(ModBlocks.block_thorium_fuel));

@@ -44,11 +44,8 @@ public class ModelArmorBase extends ModelBiped {
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            if (player.isSneaking()) {
-                this.isSneak = true;
-            } else {
-                this.isSneak = false;
-            }
+            this.isSneak = player.isSneaking();
+            this.isRiding = player.isRiding();
         }
 
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
@@ -110,6 +107,15 @@ public class ModelArmorBase extends ModelBiped {
         if(entity instanceof EntityZombie || entity instanceof EntityPigZombie || entity instanceof EntitySkeleton) {
             this.leftArm.rotateAngleX -= (90 * Math.PI / 180D);
             this.rightArm.rotateAngleX -= (90 * Math.PI / 180D);
+        }
+
+        if(this.isRiding) {
+            this.rightArm.rotateAngleX += -((float) Math.PI / 5F);
+            this.leftArm.rotateAngleX += -((float) Math.PI / 5F);
+            this.rightFoot.rotateAngleX = this.rightLeg.rotateAngleX = -((float) Math.PI * 2F / 5F);
+            this.leftFoot.rotateAngleX = this.leftLeg.rotateAngleX = -((float) Math.PI * 2F / 5F);
+            this.rightFoot.rotateAngleY = this.rightLeg.rotateAngleY = ((float) Math.PI / 10F);
+            this.leftFoot.rotateAngleY = this.leftLeg.rotateAngleY = -((float) Math.PI / 10F);
         }
 
         if (this.isSneak) {

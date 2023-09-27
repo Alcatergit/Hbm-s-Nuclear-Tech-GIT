@@ -250,7 +250,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 				chance += 0.15F;
 		}
 
-		return Math.min(chance, 0.15F);
+		return Math.min(chance, 0.3F);
 	}
 
 	public int getDuration() {
@@ -260,14 +260,16 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 		for(int i = 5; i <= 6; i++) {
 
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
-				durationMod -= 0.25F;
+				durationMod *= 0.75F;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
-				durationMod -= 0.5F;
+				durationMod *= 0.5F;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
-				durationMod -= 0.75F;
+				durationMod *= 0.25F;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_screm)
+				durationMod *= 0.1F;
 		}
 
-		return (int) (duration * Math.max(durationMod, 0.7F));
+		return (int) (duration * Math.max(durationMod, 0.1F));
 	}
 
 	public int getPowerRequired() {
@@ -282,9 +284,11 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 				consumption += 2000;
 			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
 				consumption += 3000;
+			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_screm)
+				consumption += 6000;
 		}
 
-		return (int) (demand + Math.min(consumption, 3000));
+		return (int) (demand + Math.min(consumption, 6000));
 	}
 
 	public float getCycleCount() {
@@ -301,7 +305,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 				cycles += 6;
 		}
 
-		return Math.min(cycles, 7);
+		return Math.min(cycles, 13);
 	}
 	
 	@Override

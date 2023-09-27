@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.config.GeneralConfig;
+import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
@@ -27,7 +28,7 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 	ItemHazardModule module;
 
 	public BlockOutgas(Material mat, boolean randomTick, int rate, boolean onBreak, String s) {
-		super(mat, s, -1);
+		super(mat, s, 1);
 		this.module = new ItemHazardModule();
 		this.setTickRandomly(randomTick);
 		this.randomTick = randomTick;
@@ -99,6 +100,9 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
+		if(this == ModBlocks.block_corium_cobble) RadiationSavedData.incrementRad(world, pos, 1000F, 10000F);
+		if(this == ModBlocks.ancient_scrap) RadiationSavedData.incrementRad(world, pos, 150F, 1500F);
+
 		ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(6));
 		
 		if(world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock() == Blocks.AIR) {

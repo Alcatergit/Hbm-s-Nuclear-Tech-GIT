@@ -309,21 +309,41 @@ public class BobMathUtil {
 		return (((toScale - oldMin) * newRange) / prevRange) + newMin;
 	}
 
-	public static String[] ticksToDate(long ticks) {
-		
-		int tickDay = 24000;
-		int tickYear = tickDay * 365;
-		
-		final String[] dateOut = new String[4];
+	public static String[] ticksToDate(long ticks, int tickHour) {
+		int tickDay = 24 * tickHour;
+		int tickYear = 365 * tickDay;
+		double tickMinute = tickHour / 60D;
+		double tickSecond = tickHour / 3600D;
+
+		final String[] dateOut = new String[5];
 		long year = Math.floorDiv(ticks, tickYear);
 		int day = (int) Math.floorDiv(ticks - tickYear * year, tickDay);
-		int h = (int) Math.floorDiv(ticks - tickYear * year-tickDay * day, 1000);
-		int min = (int) Math.floor((ticks - tickYear * year-tickDay * day-1000 * h)/ 16.66);
+		int h = (int) Math.floorDiv(ticks - tickYear * year-tickDay * day, tickHour);
+		int min = (int) Math.floor((ticks - tickYear * year-tickDay * day-tickHour * h) / tickMinute);
+		int s = (int) Math.floor((ticks - tickYear * year-tickDay * day-tickHour * h-min * tickMinute) / tickSecond);
 		dateOut[0] = String.valueOf(year);
 		dateOut[1] = String.valueOf(day);
 		dateOut[2] = String.valueOf(h);
 		dateOut[3] = String.valueOf(min);
+		dateOut[4] = String.valueOf(s);
 		return dateOut;
+	}
+
+	public static String[] ticksToDate(long ticks) {
+		return ticksToDate(ticks, 1000);
+	}
+
+	public static String toDate(String[] input){
+		if(!input[0].equals("0"))
+			return input[0]+ "y " + input[1]+ "d " + input[2]+ "h " + input[3]+ "m " + input[4]+ "s";
+		else if(!input[1].equals("0"))
+			return input[1]+ "d " + input[2]+ "h " + input[3]+ "m " + input[4]+ "s";
+		else if(!input[2].equals("0"))
+			return input[2]+ "h " + input[3]+ "m " + input[4]+ "s";
+		else if(!input[3].equals("0"))
+			return input[3]+ "m " + input[4]+ "s";
+		else
+			return input[4]+ "s";
 	}
 
 	public static int interpolateColor(int colorA, int colorB, float percentB) {

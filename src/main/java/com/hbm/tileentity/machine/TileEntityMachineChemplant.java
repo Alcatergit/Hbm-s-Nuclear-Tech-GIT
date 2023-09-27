@@ -338,7 +338,8 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 
 			if(te1 != null && te1.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
 				IItemHandler cap = te1.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
-				for(int i = 5; i <= 9; i++) {
+				int[] outputSlots = new int[]{ 5, 6, 7, 8, 11, 12, 19, 20 };
+				for(int i : outputSlots) {
 					tryFillContainerCap(cap, i);
 				}
 			}

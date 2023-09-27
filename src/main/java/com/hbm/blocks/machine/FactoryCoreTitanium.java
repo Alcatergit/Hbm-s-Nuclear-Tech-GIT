@@ -1,7 +1,6 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.InventoryHelper;
 import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 
 import net.minecraft.block.BlockContainer;
@@ -25,12 +24,6 @@ public class FactoryCoreTitanium extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityCoreTitanium();
-	}
-	
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, ((TileEntityCoreTitanium)worldIn.getTileEntity(pos)).dropProvider);
-		super.breakBlock(worldIn, pos, state);
 	}
 	
 	@Override

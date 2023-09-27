@@ -3,7 +3,7 @@ package com.hbm.blocks.machine.pile;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockFlammable;
+import com.hbm.blocks.generic.BlockHazardFuel;
 import com.hbm.items.ModItems;
 
 import net.minecraft.block.SoundType;
@@ -20,12 +20,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockGraphiteDrilledBase extends BlockFlammable {
+public class BlockGraphiteDrilledBase extends BlockHazardFuel {
 
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class);
 
 	public BlockGraphiteDrilledBase(String s) {
-		super(ModBlocks.block_graphite.getDefaultState().getMaterial(), ((BlockFlammable) ModBlocks.block_graphite).encouragement, ((BlockFlammable) ModBlocks.block_graphite).flammability, s);
+		super(ModBlocks.block_graphite.getDefaultState().getMaterial(), s, ((BlockHazardFuel) ModBlocks.block_graphite).encouragement, ((BlockHazardFuel) ModBlocks.block_graphite).flammability, 16000);
 		this.setCreativeTab(null);
 		this.setSoundType(SoundType.METAL);
 		this.setHardness(5.0F);
@@ -65,5 +65,4 @@ public class BlockGraphiteDrilledBase extends BlockFlammable {
 	protected BlockStateContainer createBlockState(){
 		return new BlockStateContainer(this, AXIS);
 	}
-	
 }

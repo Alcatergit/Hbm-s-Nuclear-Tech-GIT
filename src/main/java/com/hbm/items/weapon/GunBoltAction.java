@@ -43,11 +43,9 @@ public class GunBoltAction extends Item {
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 
-		if(this == ModItems.gun_bolt_action_saturnite) {
-			this.setMaxDamage(2500);
-			dmgMin = 24;
-			dmgMax = 36;
-		}
+		this.setMaxDamage(2500);
+		dmgMin = 24;
+		dmgMax = 36;
 		
 		ModItems.ALL_ITEMS.add(this);
 	}
@@ -84,8 +82,7 @@ public class GunBoltAction extends Item {
 			entityarrow1 = new EntityBullet(world, player, 3.0F, dmgMin, dmgMax, false, false, player.getHeldItemMainhand() == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 			entityarrow1.setDamage(dmgMin + rand.nextInt(dmgMax - dmgMin));
 			
-			if(this == ModItems.gun_bolt_action_saturnite)
-				entityarrow1.fire = true;
+			entityarrow1.fire = true;
 
 			stack.damageItem(1, player);
 
@@ -146,27 +143,11 @@ public class GunBoltAction extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		/*if(this == ModItems.gun_bolt_action) {
-			list.add("-Star in a movie");
-			list.add("-Have a laugh with a horse");
-			list.add("-Ride a tipping train");
-			list.add("-Lose friend to native americans");
-		}
-		if(this == ModItems.gun_bolt_action_green) {
-			list.add("Floppy disks and pink, flashy orbs.");
-		}*/
-		if(this == ModItems.gun_bolt_action_saturnite) {
-			list.add("Shiny shooter made from D-25A alloy.");
-		}
+		list.add("Shiny shooter made from D-25A alloy.");
 		list.add("");
-		list.add("Ammo: 12x74 Slug");
-		
-		if(this == ModItems.gun_bolt_action_saturnite) {
-			list.add("Damage: 24 - 36");
-			list.add("Sets enemy on fire.");
-		} else {
-			list.add("Damage: 16 - 28");
-		}
+		list.add("Ammo: §e20 Gauge Brenneke Slug");
+		list.add("Damage: 24 - 36");
+		list.add("Sets enemy on fire.");
 	}
 	
 	@Override
@@ -260,10 +241,7 @@ public class GunBoltAction extends Item {
 	@Override
 	public EnumRarity getRarity(ItemStack p_77613_1_) {
 
-		if(this == ModItems.gun_bolt_action_saturnite)
-			return EnumRarity.RARE;
-		
-		return EnumRarity.UNCOMMON;
+		return EnumRarity.RARE;
 	}
 	
 	@Override

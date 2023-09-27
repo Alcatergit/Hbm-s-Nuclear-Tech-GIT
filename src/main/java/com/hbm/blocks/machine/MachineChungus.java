@@ -154,11 +154,11 @@ public class MachineChungus extends BlockDummyable implements ILookOverlay {
 		
 		List<String> text = new ArrayList();
 		text.add(Library.getShortNumber(chungus.power) + "/" + Library.getShortNumber(chungus.maxPower) + " HE");
+		text.add("§a-> §r" + Library.getShortNumber(20 * chungus.powerProduction) + "HE/s");
 		if(chungus.types[0] != null)
 			text.add("§a-> §r" + chungus.types[0].getLocalizedName(new FluidStack(chungus.types[0], 1)) + ": " + chungus.tanks[0].getFluidAmount() + "/" + chungus.tanks[0].getCapacity() + "mB");
 		if(chungus.types[1] != null)
 			text.add("§c<- §r" + chungus.types[1].getLocalizedName(new FluidStack(chungus.types[1], 1)) + ": " + chungus.tanks[1].getFluidAmount() + "/" + chungus.tanks[1].getCapacity() + "mB");
-		
 		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
 	}
 }

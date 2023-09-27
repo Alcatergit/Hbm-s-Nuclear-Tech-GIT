@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.modules.ItemHazardModule;
+import com.hbm.blocks.generic.BlockHazardFuel;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 
 public class ItemBlockHazard extends ItemBlock {
 
+	private int burntime = 0;
 	public ItemHazardModule module;
 
 	public ItemBlockHazard(Block block) {
@@ -25,10 +27,19 @@ public class ItemBlockHazard extends ItemBlock {
 		if(block instanceof IItemHazard) {
 			this.module = ((IItemHazard)block).getModule();
 		}
+
+		if(block instanceof BlockHazardFuel) {
+			this.burntime = ((BlockHazardFuel)block).getBurnTime();
+		}
 	}
 
 	public ItemHazardModule getModule() {
 		return module;
+	}
+
+	@Override
+	public int getItemBurnTime(ItemStack itemStack) {
+		return burntime;
 	}
 	
 	@Override

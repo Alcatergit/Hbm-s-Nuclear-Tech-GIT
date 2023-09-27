@@ -55,10 +55,10 @@ public class BeamPronter {
 
         
 		if(beam == EnumBeamType.SOLID) {
-			GlStateManager.disableCull();
+			GlStateManager.depthMask(false);
 			GlStateManager.enableBlend();
-			//GlStateManager.depthMask(false);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+			GlStateManager.disableCull();
 		}
         
 		Tessellator tessellator = Tessellator.instance;
@@ -107,9 +107,13 @@ public class BeamPronter {
 				float radius = thickness / (float)layers;
 
 				for(int j = 1; j <= layers; j++) {
-					
-					float inter = (float)(j - 1) / (float)(layers - 1);
-					int color = BobMathUtil.interpolateColor(innerColor, outerColor, inter);
+					int color = 0;
+					if(layers == 1) {
+						color = outerColor;
+					} else {
+						float inter = (float)(j - 1) / (float)(layers - 1);
+						color = BobMathUtil.interpolateColor(innerColor, outerColor, inter);
+					}
 					tessellator.setColorOpaque_I(color);
 					
 					tessellator.addVertex(lastX + (radius * j), lastY, lastZ + (radius * j));
@@ -151,8 +155,8 @@ public class BeamPronter {
 		
 		if(beam == EnumBeamType.SOLID) {
 			GlStateManager.disableBlend();
+			GlStateManager.enableCull();
 			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture2D();
 		}
 		
         GlStateManager.enableLighting();
@@ -258,5 +262,4 @@ public class BeamPronter {
 		GlStateManager.enableCull();
 		GL11.glPopMatrix();
 	}
-
 }

@@ -91,16 +91,15 @@ public class CrystallizerRecipes {
 		
 		addRecipe(new ComparableStack(Items.SNOWBALL), new FluidStack(FluidRegistry.WATER, 8000), new ItemStack(Blocks.ICE, 1));
 		addRecipe(new ComparableStack(Blocks.ICE), new FluidStack(ModForgeFluids.coolant, 500), new ItemStack(Blocks.PACKED_ICE, 1));
-		addRecipe(new ComparableStack(Blocks.DIRT, 1, 1), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(Blocks.CLAY, 1));
 		addRecipe(KEY_GRAVEL, new FluidStack(FluidRegistry.LAVA, 1000), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.acid, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.sulfuric_acid, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.sulfuric_acid, 250), new ItemStack(Items.SLIME_BALL, 4));
 		addRecipe(new ComparableStack(ModItems.powder_lithium, 1), new FluidStack(ModForgeFluids.heatingoil, 4000), new ItemStack(ModItems.crystal_redstone, 1));
 		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.solid_fuel));
-		addRecipe(new ComparableStack(ModItems.fallout), new FluidStack(ModForgeFluids.corium_fluid, 500), new ItemStack(ModItems.powder_balefire));
+		addRecipe(new ComparableStack(ModItems.fallout), new FluidStack(ModForgeFluids.corium_fluid, 8000), new ItemStack(ModItems.powder_balefire));
 		
-		addRecipe(KEY_SAND, new FluidStack(ModForgeFluids.colloid, 1000), new ItemStack(Blocks.CLAY));
+		addRecipe(new ComparableStack(Blocks.DIRT), new FluidStack(ModForgeFluids.colloid, 1000), new ItemStack(Blocks.CLAY));
 		addRecipe(new ComparableStack(ModBlocks.sand_quartz), new FluidStack(ModForgeFluids.nitroglycerin, 1000), new ItemStack(ModItems.ball_dynamite, 16));
 		addRecipe(NETHERQUARTZ.dust(), new FluidStack(ModForgeFluids.nitroglycerin, 250), new ItemStack(ModItems.ball_dynamite, 4));
 
@@ -114,10 +113,10 @@ public class CrystallizerRecipes {
 
 		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), new FluidStack(ModForgeFluids.acid, 8000), new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta));
-			addRecipe(new ComparableStack(ModItems.ore_bedrock_separated, 1, oreMeta), new FluidStack(ModForgeFluids.sulfuric_acid, 4000), new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta));
-			addRecipe(new ComparableStack(ModItems.ore_bedrock_purified, 1, oreMeta), new FluidStack(ModForgeFluids.nitric_acid, 2000), new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta));
-			addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new FluidStack(ModForgeFluids.solvent, 1000), new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta));
-			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.radiosolvent, 500), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_separated, 1, oreMeta), new FluidStack(ModForgeFluids.sulfuric_acid, 500), new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_purified, 1, oreMeta), new FluidStack(ModForgeFluids.nitric_acid, 250), new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new FluidStack(ModForgeFluids.solvent, 100), new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.radiosolvent, 50), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
 		}
 	}
 

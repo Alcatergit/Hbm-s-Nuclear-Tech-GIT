@@ -868,6 +868,7 @@ public class ResourceManager {
 	public static final ResourceLocation round_airlock_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/round_airlock_door.png");
 	public static final ResourceLocation secure_access_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/secure_access_door.png");
 	public static final ResourceLocation sliding_seal_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/sliding_seal_door.png");
+	public static final ResourceLocation sliding_gate_door_tex = new ResourceLocation(RefStrings.MODID, "textures/models/doors/sliding_gate_door.png");
 	
 	//Silo hatch
 	public static final ResourceLocation hatch_tex = new ResourceLocation(RefStrings.MODID, "textures/models/hatchtexture.png");

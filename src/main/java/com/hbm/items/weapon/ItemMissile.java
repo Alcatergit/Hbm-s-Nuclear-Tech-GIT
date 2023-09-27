@@ -108,9 +108,9 @@ public class ItemMissile extends Item {
 		
 		COMMON(TextFormatting.GRAY + "Common"),
 		UNCOMMON(TextFormatting.YELLOW + "Uncommon"),
-		RARE(TextFormatting.AQUA + "Rare"),
-		EPIC(TextFormatting.LIGHT_PURPLE + "Epic"),
-		LEGENDARY(TextFormatting.DARK_GREEN + "Legendary"),
+		RARE(TextFormatting.GREEN + "Rare"),
+		EPIC(TextFormatting.AQUA + "Epic"),
+		LEGENDARY(TextFormatting.LIGHT_PURPLE + "Legendary"),
 		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK(TextFormatting.DARK_AQUA + "Strange");
 		
 		String name;
@@ -197,7 +197,7 @@ public class ItemMissile extends Item {
 			case WARHEAD:
 				list.add(TextFormatting.BOLD + "Size: " + TextFormatting.GRAY + getSize(bottom));
 				list.add(TextFormatting.BOLD + "Type: " + TextFormatting.GRAY + getWarhead((WarheadType)attributes[0]));
-				list.add(TextFormatting.BOLD + "Strength: " + TextFormatting.GRAY + (Float)attributes[1]);
+				list.add(TextFormatting.BOLD + "Strength: " + TextFormatting.RED + (Float)attributes[1]);
 				list.add(TextFormatting.BOLD + "Weight: " + TextFormatting.GRAY + (Float)attributes[2] + "t");
 				break;
 			case FUSELAGE:
@@ -222,7 +222,7 @@ public class ItemMissile extends Item {
 		}
 		
 		if(type != PartType.CHIP)
-			list.add(TextFormatting.BOLD + "Health: " + TextFormatting.GRAY + health + "HP");
+			list.add(TextFormatting.BOLD + "Health: " + TextFormatting.GREEN + health + "HP");
 		
 		if(this.rarity != null)
 			list.add(TextFormatting.BOLD + "Rarity: " + TextFormatting.GRAY + this.rarity.name);
@@ -238,11 +238,11 @@ public class ItemMissile extends Item {
 		case ANY:
 			return "Any";
 		case SIZE_10:
-			return "1.0m";
+			return "§e1.0m";
 		case SIZE_15:
-			return "1.5m";
+			return "§61.5m";
 		case SIZE_20:
-			return "2.0m";
+			return "§c2.0m";
 		default:
 			return "None";
 		}

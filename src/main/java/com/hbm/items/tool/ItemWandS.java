@@ -100,7 +100,7 @@ public class ItemWandS extends Item {
 				new ParticleAccelerator().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY()-5 : pos.getY(), pos.getZ()));
 				break;
 			case 4:
-				new Watz().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 12 : pos.getY(), pos.getZ()));
+				new Watz().generateReactor(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 12 : pos.getY(), pos.getZ()));
 				break;
 			case 5:
 				new FWatz().generateHull(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 18 : pos.getY(), pos.getZ()));

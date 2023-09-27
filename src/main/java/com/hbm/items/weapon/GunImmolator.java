@@ -119,7 +119,7 @@ public class GunImmolator extends Item {
 		list.add("sneak to shoot");
 		list.add("plasma beams!");
 		list.add("");
-		list.add("Ammo: Immolator Fuel");
+		list.add("Ammo: §cImmolator Fuel");
 		list.add("Damage: 5");
 		list.add("Secondary Damage: 25 - 45");
 	}

@@ -53,11 +53,11 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	public ItemStackHandler inventory;
 
 	public int hullHeat;
-	public final int maxHullHeat = 100000;
+	public static final int maxHullHeat = 100000;
 	public int coreHeat;
-	public final int maxCoreHeat = 50000;
+	public static final int maxCoreHeat = 50000;
 	public int rods;
-	public final int rodsMax = 100;
+	public static final int rodsMax = 100;
 	public boolean retracting = true;
 	public int age = 0;
 	public FluidTank[] tanks;

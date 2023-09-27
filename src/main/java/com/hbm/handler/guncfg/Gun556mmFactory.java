@@ -52,8 +52,8 @@ public class Gun556mmFactory {
 		config.comment.add("Why is this gun so sticky?");
 
 		config.config = new ArrayList<Integer>();
-		config.config.add(BulletConfigSyncingUtil.R556_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.R556_GOLD);
+		config.config.add(BulletConfigSyncingUtil.R556_NORMAL);
 		config.config.add(BulletConfigSyncingUtil.R556_TRACER);
 		config.config.add(BulletConfigSyncingUtil.R556_PHOSPHORUS);
 		config.config.add(BulletConfigSyncingUtil.R556_AP);
@@ -77,7 +77,7 @@ public class Gun556mmFactory {
 		config.hasSights = true;
 		config.reloadDuration = 25;
 		config.firingDuration = 0;
-		config.ammoCap = 20;
+		config.ammoCap = 30;
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_BOX;

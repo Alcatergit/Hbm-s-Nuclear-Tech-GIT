@@ -208,10 +208,10 @@ public class ItemStarterKit extends Item {
 		if(this == ModItems.man_kit)
 		{
 			player.inventory.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(ModBlocks.nuke_man), 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_explosive8, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.gadget_explosive8, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.gadget_explosive8, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.gadget_explosive8, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.gadget_explosive8, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_igniter, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.man_core, 1));
 			
@@ -281,6 +281,8 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_dirty, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_dirty, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_schrab, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_sol, 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_euph, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.custom_fall, 1));
 		}
 		

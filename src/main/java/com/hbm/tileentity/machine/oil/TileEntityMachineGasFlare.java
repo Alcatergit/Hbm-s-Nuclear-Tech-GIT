@@ -55,7 +55,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	public FluidTank tank;
 	public boolean isOn = false;
 	public boolean doesBurn = false;
-	public int cacheEnergy;
+	public int cacheEnergy = 0;
 	public boolean needsUpdate;
 
 	private final UpgradeManager upgradeManager = new UpgradeManager();
@@ -131,15 +131,19 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 				if(FFUtils.fillFromFluidContainer(inventory, tank, 1, 2))
 					needsUpdate = true;
 
+			int maxVent = 50;
 			int maxBurn = 10;
 
 			if(isOn && tank.getFluidAmount() >= 10) {
 				upgradeManager.eval(inventory, 4, 5);
 
-				int burn = Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 3);
-				int yield = Math.min(upgradeManager.getLevel(UpgradeType.EFFECT), 3);
+				int burn = Math.min(upgradeManager.getLevel(UpgradeType.SPEED), 6);
+				int yield = Math.min(upgradeManager.getLevel(UpgradeType.EFFECT), 6);
 
+				maxVent += maxVent * burn;
 				maxBurn += maxBurn * burn;
+
+				cacheEnergy = FluidCombustionRecipes.getFlameEnergy(tankType);
 
 				if (doesBurn && cacheEnergy != 0) {
 					int eject = Math.min(maxBurn, tank.getFluidAmount());
@@ -159,6 +163,9 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 
 					if(this.world.getTotalWorldTime() % 5 == 0)
 						this.world.playSound(null, pos.getX(), pos.getY() + 11, pos.getZ(), HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.5F, 1F);
+				} else {
+					tank.drain(maxVent, true);
+					needsUpdate = true;
 				}
 			}
 			

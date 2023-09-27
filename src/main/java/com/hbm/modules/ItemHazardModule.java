@@ -135,7 +135,7 @@ public class ItemHazardModule {
 			}
 		}
 
-		if(this.fire > 0 && !reacher && !ArmorUtil.checkForAsbestos((EntityPlayer)entity)){
+		if(this.fire > 0 && !reacher && (!(entity instanceof EntityPlayer) || (entity instanceof EntityPlayer && !ArmorUtil.checkForAsbestos((EntityPlayer)entity)))){
 			entity.setFire(this.fire);
 		}
 
@@ -148,13 +148,11 @@ public class ItemHazardModule {
 					if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
 						ArmorUtil.damageGasMaskFilter(livingTEntity, Math.max(1, this.toxic>>2));
 						hasToxFilter = true;
-					} else {
-						hasToxFilter = false;
 					}
 					hasHazmat = ArmorUtil.checkForHazmat((EntityPlayer)entity);
 				}
 
-				if(!hasToxFilter){
+				if(!hasToxFilter && !hasHazmat){
 					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
 					
 					if(this.toxic > 2)
@@ -167,7 +165,7 @@ public class ItemHazardModule {
 						}
 					}
 				}
-				if(!hasHazmat || !hasToxFilter){
+				if(!(hasHazmat && hasToxFilter)){
 					if(this.toxic > 8)
 						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
 					if(this.toxic > 16)
@@ -309,8 +307,7 @@ public class ItemHazardModule {
 	public boolean onEntityItemUpdate(EntityItem item) {
 		
 		if(!item.world.isRemote) {
-			
-			if(this.hydro && (item.isInWater() || item.world.getBlockState(new BlockPos((int)Math.floor(item.posX), (int)Math.floor(item.posY), (int)Math.floor(item.posZ))).getMaterial() == Material.WATER)) {
+			if(this.hydro && (item.isInWater() || item.world.isRainingAt(new BlockPos((int)item.posX, (int)item.posY, (int)item.posZ)) || item.world.getBlockState(new BlockPos((int)item.posX, (int)item.posY, (int)item.posZ)).getMaterial() == Material.WATER)) {
 
 				item.setDead();
 				item.world.newExplosion(item, item.posX, item.posY, item.posZ, 2F, true, true);

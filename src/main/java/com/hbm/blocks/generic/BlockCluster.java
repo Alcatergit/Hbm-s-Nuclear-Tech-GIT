@@ -26,7 +26,7 @@ public class BlockCluster extends Block implements IDrillInteraction {
 		super(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setHarvestLevel("pickaxe", 3);
+		this.setHarvestLevel("pickaxe", 1);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -68,6 +68,8 @@ public class BlockCluster extends Block implements IDrillInteraction {
 			return ModItems.crystal_titanium;
 		if(this == ModBlocks.cluster_aluminium)
 			return ModItems.crystal_aluminium;
+		if(this == ModBlocks.cluster_copper)
+			return ModItems.crystal_copper;
 		if(this == ModBlocks.basalt_gem)
 			return ModItems.gem_volcanic;
 		
