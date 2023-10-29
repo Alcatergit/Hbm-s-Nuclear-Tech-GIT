@@ -41,18 +41,34 @@ public class RenderControlPanel extends TileEntitySpecialRenderer<TileEntityCont
 	}
 
 	public void renderCustomPanel(TileEntityControlPanel te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GL11.glTranslated(x+0.5, y, z+0.5);
+		GL11.glTranslated(x+.5, y, z+.5);
 		GL11.glPushMatrix();
-		switch (te.getBlockMetadata()) {
+		GL11.glRotatef(-90, 0, 0, 1);
+
+		switch ((te.getBlockMetadata() & 3) + 2) {
 			case 4:
-				GL11.glRotatef(180, 0F, 1F, 0F); break;
+				GL11.glRotatef(-180, 1, 0, 0); break;
 			case 2:
-				GL11.glRotatef(90, 0F, 1F, 0F); break;
+				GL11.glRotatef(-90, 1, 0, 0); break;
 			case 5:
-				GL11.glRotatef(0, 0F, 1F, 0F); break;
+				GL11.glRotatef(-0, 1, 0, 0); break;
 			case 3:
-				GL11.glRotatef(270, 0F, 1F, 0F); break;
+				GL11.glRotatef(-270, 1, 0, 0); break;
 		}
+
+		boolean isUp = ((te.getBlockMetadata() >> 2) == 1);
+		boolean isDown = ((te.getBlockMetadata() >> 3) == 1);
+
+		if (isUp) {
+			GL11.glRotatef(-180, 1, 0, 0);
+			GL11.glRotatef(-90, 0, 0, 1);
+			GL11.glTranslated(0, -1, 0);
+		} else if (isDown) {
+			GL11.glRotatef(90, 0, 0, 1);
+		} else {
+			GL11.glTranslated(-.5, -.5, 0);
+		}
+
 		GlStateManager.enableRescaleNormal();
 //		bindTexture(ResourceManager.control_panel_custom_tex);
 
@@ -96,11 +112,16 @@ public class RenderControlPanel extends TileEntitySpecialRenderer<TileEntityCont
 			buf.pos(1 - c_off, height1, b_off).tex(1, 0).endVertex();
 			buf.pos(1 - c_off, height1, 1 - d_off).tex(0, 0).endVertex();
 			buf.pos(1 - c_off, 0, 1 - d_off).tex(0, 1).endVertex();
-			// top
+//			// top
 			buf.pos(1 - c_off, height1, b_off).tex(1, 1).endVertex();
 			buf.pos(a_off, height0, b_off).tex(1, 0).endVertex();
 			buf.pos(a_off, height0, 1 - d_off).tex(0, 0).endVertex();
 			buf.pos(1 - c_off, height1, 1 - d_off).tex(0, 1).endVertex();
+			// bottom
+			buf.pos(1 - c_off, 0, 1 - d_off).tex(0, 1).endVertex();
+			buf.pos(a_off, 0, 1 - d_off).tex(0, 0).endVertex();
+			buf.pos(a_off, 0, b_off).tex(1, 0).endVertex();
+			buf.pos(1 - c_off, 0, b_off).tex(1, 1).endVertex();
 			tess.draw();
 		}
 

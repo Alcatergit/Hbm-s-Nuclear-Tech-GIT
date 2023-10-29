@@ -6,19 +6,20 @@ import java.util.Map;
 
 import com.hbm.inventory.control_panel.controls.configs.SubElementBaseConfig;
 import com.hbm.inventory.control_panel.controls.configs.SubElementDisplaySevenSeg;
-import com.hbm.main.MainRegistry;
+import com.hbm.lib.RefStrings;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class SubElementItemConfig extends SubElement {
+    public static ResourceLocation bg_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_base.png");
 
     public GuiButton btn_done;
     public GuiButton btn_next;
     public GuiButton btn_prev;
+    public GuiButton btn_back; //TODO: del
 
     public List<String> variants = Collections.emptyList();
     private int curr_variant = 0;
@@ -37,7 +38,7 @@ public class SubElementItemConfig extends SubElement {
         int cY = gui.height/2;
         btn_prev = gui.addButton(new GuiButton(gui.currentButtonId(), cX-30, gui.getGuiTop()+24, 15, 20, "<"));
         btn_next = gui.addButton(new GuiButton(gui.currentButtonId(), cX+15, gui.getGuiTop()+24, 15, 20, ">"));
-        btn_done = gui.addButton(new GuiButton(gui.currentButtonId(), cX-74, cY+92, 170, 20, "Done"));
+        btn_done = gui.addButton(new GuiButton(gui.currentButtonId(), cX-85, cY+92, 170, 20, "Done"));
 
         this.config_gui = new SubElementDisplaySevenSeg(gui, ControlRegistry.registry.get("display_7seg").getConfigs());
         this.config_gui.initGui();
@@ -56,7 +57,7 @@ public class SubElementItemConfig extends SubElement {
         num_variants = variants.size()-1;
 
         if (gui.isEditMode) {
-            existing_configs = gui.currentEditControl.config_map;
+            existing_configs = gui.currentEditControl.configMap;
             curr_variant = variants.indexOf(ControlRegistry.getName(gui.currentEditControl.getClass()));
         }
         btn_prev.enabled = !gui.isEditMode;
@@ -67,7 +68,7 @@ public class SubElementItemConfig extends SubElement {
 
         String text = variant.name;
         int text_width = gui.getFontRenderer().getStringWidth(text);
-        gui.getFontRenderer().drawString(text, (cX-(text_width/2F))+0, gui.getGuiTop()+10, 0xFF777777, false);
+        gui.getFontRenderer().drawString(text, (cX-(text_width/2F))+0, gui.getGuiTop()+11, 0xFF777777, false);
 
         text = (curr_variant+1) + "/" + (num_variants+1);
         text_width = gui.getFontRenderer().getStringWidth(text);
@@ -81,8 +82,9 @@ public class SubElementItemConfig extends SubElement {
                 default:
                     this.config_gui = new SubElementBaseConfig(gui); // blank
             }
-            if (!gui.isEditMode)
+            if (!gui.isEditMode) {
                 gui.currentEditControl = variant;
+            }
 
             this.config_gui.initGui();
             this.config_gui.enableButtons(true);
@@ -91,6 +93,12 @@ public class SubElementItemConfig extends SubElement {
         }
 
         this.last_control = variant;
+    }
+
+    @Override
+    protected void renderBackground() {
+        gui.mc.getTextureManager().bindTexture(bg_tex);
+        gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop(), 0, 0, gui.getXSize(), gui.getYSize());
     }
 
     @Override
@@ -122,6 +130,9 @@ public class SubElementItemConfig extends SubElement {
         }
         else if (button == btn_prev) {
             curr_variant = Math.max(0, curr_variant-1);
+        }
+        else if (button == btn_back) {
+            gui.popElement();
         }
     }
 

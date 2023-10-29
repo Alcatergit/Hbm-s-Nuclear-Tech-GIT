@@ -92,6 +92,10 @@ public class NodeBoolean extends Node {
         recalcSize();
     }
 
+    public NodeBoolean setData(BoolOperation op) {
+        setOperation(op);
+        return this;
+    }
 
     public enum BoolOperation {
         AND,

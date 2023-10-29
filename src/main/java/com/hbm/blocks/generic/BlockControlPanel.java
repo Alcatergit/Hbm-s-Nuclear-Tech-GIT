@@ -18,6 +18,8 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -46,8 +48,10 @@ import javax.annotation.Nonnull;
 
 public class BlockControlPanel extends BlockContainer implements ICustomSelectionBox {
 
-	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
-	
+	public static final PropertyBool UP = PropertyBool.create("up");
+	public static final PropertyBool DOWN = PropertyBool.create("down");
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
 	public BlockControlPanel(Material materialIn, String s) {
 		super(materialIn);
 		this.setUnlocalizedName(s);
@@ -88,7 +92,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		TileEntity te = source.getTileEntity(pos);
 		if (te instanceof TileEntityControlPanel) {
-			AxisAlignedBB ret = ((TileEntityControlPanel) te).getBoundingBox(state.getValue(FACING));
+			AxisAlignedBB ret = ((TileEntityControlPanel) te).getBoundingBox(state.getValue(UP), state.getValue(DOWN), state.getValue(FACING));
 			if (ret != null) {
 				return ret;
 			}
@@ -103,7 +107,10 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		return this.getDefaultState()
+				.withProperty(FACING, placer.getHorizontalFacing().getOpposite())
+				.withProperty(UP, facing.getIndex() == 1)
+				.withProperty(DOWN, facing.getIndex() == 0);
 	}
 	
 	@Override
@@ -169,24 +176,23 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{FACING});
+		return new BlockStateContainer(this, UP, DOWN, FACING);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
+		int up = state.getValue(UP) ? 1 : 0;
+		int down = state.getValue(DOWN) ? 1 : 0;
+		int facing = state.getValue(FACING).getIndex();
+		return (up << 3) | (down << 2) | (facing - 2);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
-
-//        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-//        {
-//            enumfacing = EnumFacing.NORTH;
-//        }
-
-		return this.getDefaultState().withProperty(FACING, enumfacing);
+		return this.getDefaultState()
+				.withProperty(UP, ((meta >> 3) & 1) > 0)
+				.withProperty(DOWN, ((meta >> 2) & 1) > 0)
+				.withProperty(FACING, EnumFacing.getFront((meta & 3) + 2));
 	}
 	
 	@Override

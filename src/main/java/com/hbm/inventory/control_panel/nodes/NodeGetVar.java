@@ -88,6 +88,13 @@ public class NodeGetVar extends Node {
 		}
 	}
 
+	public NodeGetVar setData(String varName, boolean isGlobal) {
+		this.varName = varName;
+		this.global = isGlobal;
+		this.outputs.get(0).type = evaluate(0).getType();
+		return this;
+	}
+
 	@Override
 	public NodeType getType(){
 		return NodeType.INPUT;

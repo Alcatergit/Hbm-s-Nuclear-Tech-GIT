@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.hbm.inventory.control_panel.controls.ControlType;
-import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.nbt.NBTBase;
@@ -19,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +37,7 @@ public abstract class Control {
 	//A set of the custom variables the user is allowed to remove
 	public Set<String> customVarNames = new HashSet<>();
 	// map of (static) initial configurations for a control e.g. color, size
-	public Map<String, DataValue> config_map = new HashMap<>();
+	public Map<String, DataValue> configMap = new HashMap<>();
 	public float posX;
 	public float posY;
 
@@ -54,10 +52,10 @@ public abstract class Control {
 	public abstract float[] getSize();
 
 	public Map<String, DataValue> getConfigs() {
-		return config_map;
+		return configMap;
 	}
 	public void applyConfigs(Map<String, DataValue> configs) {
-		config_map = configs;
+		configMap = configs;
 	}
 
 	public void renderBatched(){};
@@ -86,6 +84,8 @@ public abstract class Control {
 	}
 
 	public abstract Control newControl(ControlPanel panel);
+
+	public abstract void populateDefaultNodes(List<ControlEvent> receiveEvents);
 
 	public void receiveEvent(ControlEvent evt){
 		NodeSystem sys = receiveNodeMap.get(evt.name);
@@ -145,7 +145,7 @@ public abstract class Control {
 		tag.setFloat("posY", posY);
 
 		NBTTagCompound configs = new NBTTagCompound();
-		for (Entry<String, DataValue> e : config_map.entrySet()) {
+		for (Entry<String, DataValue> e : configMap.entrySet()) {
 			configs.setTag(e.getKey(), e.getValue().writeToNBT());
 		}
 		tag.setTag("configs", configs);
@@ -197,8 +197,9 @@ public abstract class Control {
 
 		NBTTagCompound configs = tag.getCompoundTag("configs");
 		for (String e : configs.getKeySet()) {
-			config_map.put(e, DataValue.newFromNBT(configs.getTag(e)));
+			configMap.put(e, DataValue.newFromNBT(configs.getTag(e)));
 		}
 	}
+
 
 }

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -25,10 +26,10 @@ public class DisplaySevenSeg extends Control {
     public DisplaySevenSeg(String name, ControlPanel panel) {
         super(name, panel);
         vars.put("value", new DataValueFloat(0));
-        config_map.put("colorR", new DataValueFloat(color[0]));
-        config_map.put("colorG", new DataValueFloat(color[1]));
-        config_map.put("colorB", new DataValueFloat(color[2]));
-        config_map.put("digitCount", new DataValueFloat(digitCount));
+        configMap.put("colorR", new DataValueFloat(color[0]));
+        configMap.put("colorG", new DataValueFloat(color[1]));
+        configMap.put("colorB", new DataValueFloat(color[2]));
+        configMap.put("digitCount", new DataValueFloat(digitCount));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class DisplaySevenSeg extends Control {
     public void applyConfigs(Map<String, DataValue> configs) {
         super.applyConfigs(configs);
 
-        for (Map.Entry<String, DataValue> e : config_map.entrySet()) {
+        for (Map.Entry<String, DataValue> e : configMap.entrySet()) {
             switch (e.getKey()) {
                 case "colorR" : {
                     color[0] = e.getValue().getNumber();
@@ -68,6 +69,7 @@ public class DisplaySevenSeg extends Control {
                 }
                 case "digitCount" : {
                     digitCount = (int) e.getValue().getNumber();
+//                    posX = posX + ((digitCount-1)*getSize()[0]);
                     break;
                 }
             }
@@ -153,6 +155,10 @@ public class DisplaySevenSeg extends Control {
     @Override
     public AxisAlignedBB getBoundingBox() {
         return null;
+    }
+
+    @Override
+    public void populateDefaultNodes(List<ControlEvent> receiveEvents) {
     }
 
     @Override

@@ -24,6 +24,8 @@ public class ControlRegistry {
 		registry.put("switch_toggle", new SwitchToggle("Toggle Switch", null));
 		registry.put("switch_rotary_toggle", new SwitchRotaryToggle("Rotary Toggle Switch", null));
 
+		registry.put("slider_vertical", new SliderVertical("Vertical Slider", null));
+
 		registry.put("display_7seg", new DisplaySevenSeg("7-seg Display", null));
 
 		registry.put("indicator_lamp", new IndicatorLamp("Indicator Lamp", null));

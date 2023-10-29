@@ -1,9 +1,7 @@
 package com.hbm.inventory.control_panel.controls;
 
-import com.hbm.inventory.control_panel.Control;
-import com.hbm.inventory.control_panel.ControlPanel;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.DataValueEnum;
+import com.hbm.inventory.control_panel.*;
+import com.hbm.inventory.control_panel.nodes.*;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
@@ -27,7 +25,7 @@ public class ButtonPush extends Control {
         super(name, panel);
         vars.put("isPushed", new DataValueFloat(0));
         vars.put("isLit", new DataValueFloat(0));
-        vars.put("color", new DataValueEnum<>(EnumDyeColor.GREEN));
+        vars.put("color", new DataValueEnum<>(EnumDyeColor.RED));
     }
 
     @Override
@@ -102,6 +100,44 @@ public class ButtonPush extends Control {
     @Override
     public List<String> getOutEvents() {
         return Collections.singletonList("ctrl_press");
+    }
+
+    @Override
+    public void populateDefaultNodes(List<ControlEvent> receiveEvents) {
+        NodeSystem ctrl_press = new NodeSystem(this);
+        {
+            NodeGetVar node0 = new NodeGetVar(170, 100, this).setData("isPushed", false);
+            ctrl_press.addNode(node0);
+            NodeBoolean node1 = new NodeBoolean(230, 120).setData(NodeBoolean.BoolOperation.NOT);
+            node1.inputs.get(0).setData(node0, 0, true);
+            ctrl_press.addNode(node1);
+            NodeSetVar node2 = new NodeSetVar(290, 140, this).setData("isLit", false);
+            node2.inputs.get(0).setData(node1, 0, true);
+            ctrl_press.addNode(node2);
+            NodeSetVar node3 = new NodeSetVar(290, 90, this).setData("isPushed", false);
+            node3.inputs.get(0).setData(node1, 0, true);
+            ctrl_press.addNode(node3);
+        }
+        receiveNodeMap.put("ctrl_press", ctrl_press);
+        NodeSystem tick = new NodeSystem(this);
+        {
+            NodeGetVar node0 = new NodeGetVar(170, 100, this).setData("isPushed", false);
+            tick.addNode(node0);
+            NodeBuffer node1 = new NodeBuffer(230, 120);
+            node1.inputs.get(0).setData(node0, 0, true);
+            node1.inputs.get(1).setDefault(new DataValueFloat(10));
+            tick.addNode(node1);
+            NodeFunction node2 = new NodeFunction(290, 130);
+            NodeSystem node2_subsystem = new NodeSystem(this);
+            {
+                node2_subsystem.addNode(new NodeSetVar(290, 90, this).setData("isPushed", false));
+                node2_subsystem.addNode(new NodeSetVar(290, 140, this).setData("isLit", false));
+            }
+            node2.inputs.get(0).setData(node1, 0, true);
+            tick.subSystems.put(node2, node2_subsystem);
+            tick.addNode(node2);
+        }
+        receiveNodeMap.put("tick", tick);
     }
 
     @Override

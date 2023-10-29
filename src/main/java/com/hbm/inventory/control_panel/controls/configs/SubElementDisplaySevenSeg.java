@@ -43,11 +43,11 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         int cX = gui.width/2;
         int cY = gui.height/2;
 
-        slide_colorR = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-74, gui.getGuiTop()+70, 80, 15, TextFormatting.RED+"R ", "", 0, 100, colorR*100, false, true));
-        slide_colorG = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-74, gui.getGuiTop()+90, 80, 15, TextFormatting.GREEN+"G ", "", 0, 100, colorG*100, false, true));
-        slide_colorB = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-74, gui.getGuiTop()+110, 80, 15, TextFormatting.BLUE+"B ", "", 0, 100, colorB*100, false, true));
+        slide_colorR = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-85, gui.getGuiTop()+70, 80, 15, TextFormatting.RED+"R ", "", 0, 100, colorR*100, false, true));
+        slide_colorG = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-85, gui.getGuiTop()+90, 80, 15, TextFormatting.GREEN+"G ", "", 0, 100, colorG*100, false, true));
+        slide_colorB = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-85, gui.getGuiTop()+110, 80, 15, TextFormatting.BLUE+"B ", "", 0, 100, colorB*100, false, true));
 
-        slide_digitCount = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+40, gui.getGuiTop()+70, 50, 15, "Digits ", "", 0, 8, digitCount, false, true));
+        slide_digitCount = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+10, gui.getGuiTop()+70, 75, 15, "Digits ", "", 0, 8, digitCount, false, true));
 
         super.initGui();
     }

@@ -1449,7 +1449,7 @@ public class ModBlocks {
 	public static final int guiID_control_panel = 106;
 	public static final Block control_panel_custom = new BlockControlPanel(Material.IRON, "control_panel_custom").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 
-	public static final Block control_panel_front = new BlockControlPanelFront("control_panel_front").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
+//	public static final Block control_panel_front = new BlockControlPanelFront("control_panel_front").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 
 	//Fluids
 	public static final Material fluidtoxic = new MaterialLiquid(MapColor.YELLOW).setReplaceable();

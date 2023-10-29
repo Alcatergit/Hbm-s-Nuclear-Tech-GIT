@@ -3,7 +3,7 @@ package com.hbm.inventory.control_panel;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.hbm.inventory.control_panel.nodes.NodeLogicFunction;
+import com.hbm.inventory.control_panel.nodes.NodeFunction;
 import com.hbm.main.MainRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -54,6 +54,7 @@ public class NodeSystem {
 	private Map<String, DataValue> vars = new HashMap<>();
 
 	// an array of subsystems owned by the various nodes sharing a system layer (sublayering is then done recursively)
+	// ○|￣|_   <-- me
 	public Map<Node, NodeSystem> subSystems = new HashMap<>();
 
 	public NodeSystem(Control parent){
@@ -87,7 +88,7 @@ public class NodeSystem {
 		for (int i = 0; i < this.nodes.size(); i ++) {
 			Node node = this.nodes.get(i);
 			NBTTagCompound nodeTag = node.writeToNBT(new NBTTagCompound(), this);
-			if (node instanceof NodeLogicFunction) {
+			if (node instanceof NodeFunction) {
 				nodeTag.setTag("sub", subSystems.get(node).writeToNBT(new NBTTagCompound()));
 			}
 			nodes.setTag("node"+i, nodeTag);
@@ -116,7 +117,7 @@ public class NodeSystem {
 			if (node instanceof NodeOutput) {
 				outputNodes.add((NodeOutput) node);
 			}
-			if (node instanceof NodeLogicFunction && nodeTag.hasKey("sub")) {
+			if (node instanceof NodeFunction && nodeTag.hasKey("sub")) {
 				NodeSystem subsystem = new NodeSystem(parent);
 				subsystem.readFromNBT(nodeTag.getCompoundTag("sub"));
 				subSystems.put(node, subsystem);
@@ -200,7 +201,7 @@ public class NodeSystem {
 	public void addNode(Node n){
 		nodes.add(n);
 
-		if (n instanceof NodeLogicFunction) {
+		if (n instanceof NodeFunction && !subSystems.containsKey(n)) {
 			subSystems.put(n, new NodeSystem(parent));
 		}
 		if (n instanceof NodeOutput) {
@@ -385,7 +386,7 @@ public class NodeSystem {
 			if (n instanceof NodeInput) {
 				((NodeInput)n).setOutputFromVars(evt.vars);
 			}
-			if (n instanceof NodeLogicFunction) {
+			if (n instanceof NodeFunction) {
 				if (n.evaluate(0).getBoolean()) {
 					subSystems.get(n).receiveEvent(panel, ctrl, evt);
 				}

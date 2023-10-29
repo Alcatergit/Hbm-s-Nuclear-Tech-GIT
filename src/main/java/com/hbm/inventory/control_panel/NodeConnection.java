@@ -116,6 +116,13 @@ public class NodeConnection extends NodeElement {
 		}
 		return null;
 	}
+
+	public NodeConnection setData(Node connection, int connectionIndex, boolean drawsLine) {
+		this.connection = connection;
+		this.connectionIndex = connectionIndex;
+		this.drawsLine = drawsLine;
+		return this;
+	}
 	
 	@Override
 	public void resetOffset(){

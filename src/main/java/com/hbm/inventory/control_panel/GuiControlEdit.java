@@ -5,9 +5,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-import com.hbm.inventory.control_panel.controls.configs.SubElementDisplaySevenSeg;
-import com.hbm.main.MainRegistry;
-import net.minecraft.client.gui.GuiSlider;
 import org.lwjgl.input.Mouse;
 
 import com.hbm.lib.RefStrings;
@@ -27,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiControlEdit extends GuiContainer {
 
-	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_control.png");
+	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_placement_back.png");
 
 	public float mouseX, mouseY;
 	
@@ -42,10 +39,9 @@ public class GuiControlEdit extends GuiContainer {
 	public SubElementNodeEditor nodeEditor;
 	public SubElementPanelResize panelResize;
 	public SubElementItemConfig itemConfig;
-	public SubElementGlobalVars globalVars;
+	public SubElementVariables variables;
 
 	public Control currentEditControl;
-	public Control prevEditControl;
 
 	public ScaledResolution res;
 
@@ -55,8 +51,8 @@ public class GuiControlEdit extends GuiContainer {
 		super(new ContainerControlEdit(i, te));
 		container = (ContainerControlEdit)this.inventorySlots;
 		control = te;
-		this.xSize = 216;
-		this.ySize = 234;
+		this.xSize = 256;
+		this.ySize = 256;
 		res = new ScaledResolution(Minecraft.getMinecraft());
 	}
 	
@@ -69,7 +65,7 @@ public class GuiControlEdit extends GuiContainer {
 		nodeEditor.onClose();
 		panelResize.onClose();
 		itemConfig.onClose();
-		globalVars.onClose();
+		variables.onClose();
 		NBTTagCompound tag = new NBTTagCompound();
 		control.panel.writeToNBT(tag);
 		tag.setString("full_set", "");
@@ -94,7 +90,7 @@ public class GuiControlEdit extends GuiContainer {
 		nodeEditor = new SubElementNodeEditor(this);
 		panelResize = new SubElementPanelResize(this);
 		itemConfig = new SubElementItemConfig(this);
-		globalVars = new SubElementGlobalVars(this);
+		variables = new SubElementVariables(this);
 		placement.initGui();
 		choice.initGui();
 		linker.initGui();
@@ -102,7 +98,7 @@ public class GuiControlEdit extends GuiContainer {
 		nodeEditor.initGui();
 		panelResize.initGui();
 		itemConfig.initGui();
-		globalVars.initGui();
+		variables.initGui();
 
 		subElementStack.addFirst(placement);
 		placement.enableButtons(true);

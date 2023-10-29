@@ -25,6 +25,7 @@ public class SubElementEventEditor extends SubElement {
 	public GuiButton sendPageLeft;
 	public GuiButton sendPageRight;
 	public GuiButton done;
+	public GuiButton back;
 
 	public SubElementEventEditor(GuiControlEdit gui){
 		super(gui);
@@ -34,11 +35,12 @@ public class SubElementEventEditor extends SubElement {
 	protected void initGui(){
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		receivePageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-74, cY-29, 20, 20, "<"));
-		receivePageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+76, cY-29, 20, 20, ">"));
-		sendPageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-74, cY+70, 20, 20, "<"));
-		sendPageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+76, cY+70, 20, 20, ">"));
-		done = gui.addButton(new GuiButton(gui.currentButtonId(), cX-74, cY+92, 170, 20, "Done"));
+		receivePageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-62, cY-29, 20, 20, "<"));
+		receivePageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+88, cY-29, 20, 20, ">"));
+		sendPageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-62, cY+70, 20, 20, "<"));
+		sendPageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+88, cY+70, 20, 20, ">"));
+		done = gui.addButton(new GuiButton(gui.currentButtonId(), cX-62, cY+92, 170, 20, "Done"));
+		back = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+13, 30, 20, "Back"));
 		super.initGui();
 	}
 	
@@ -77,16 +79,22 @@ public class SubElementEventEditor extends SubElement {
 		numReceivePages = (receiveEvents.size()+2)/3;
 		for(int i = 0; i < receiveEvents.size(); i ++){
 			int offset = (i%3)*25;
-			receiveButtons.add(gui.addButton(new ButtonHoverText(i+1000, cX-74, cY-100+offset, 170, 20, receiveEvents.get(i).name, "<Click to edit>")));
+			receiveButtons.add(gui.addButton(new ButtonHoverText(i+1000, cX-62, cY-100+offset, 170, 20, receiveEvents.get(i).name, "<Click to edit>")));
 		}
 		currentReceivePage = MathHelper.clamp(currentReceivePage, 1, numReceivePages);
 		
 		numSendPages = (sendEvents.size()+2)/3;
 		for(int i = 0; i < sendEvents.size(); i ++){
 			int offset = (i%3)*25;
-			sendButtons.add(gui.addButton(new ButtonHoverText(i+2000, cX-74, cY+5+offset, 170, 20, sendEvents.get(i).name, "<Click to edit>")));
+			sendButtons.add(gui.addButton(new ButtonHoverText(i+2000, cX-62, cY+5+offset, 170, 20, sendEvents.get(i).name, "<Click to edit>")));
 		}
 		currentSendPage = MathHelper.clamp(currentSendPage, 1, numSendPages);
+	}
+
+	public void populateDefaultNodes() {
+		if (!gui.isEditMode) {
+			gui.currentEditControl.populateDefaultNodes(receiveEvents);
+		}
 	}
 	
 	private void recalculateVisibleButtons(){
@@ -121,18 +129,20 @@ public class SubElementEventEditor extends SubElement {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
 		String text = currentReceivePage + "/" + numReceivePages;
-		gui.getFontRenderer().drawString(text, cX, cY-20, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX+12, cY-21, 0xFF777777, false);
 		text = currentSendPage + "/" + numSendPages;
-		gui.getFontRenderer().drawString(text, cX, cY+82, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX+12, cY+76, 0xFF777777, false);
 		text = "Receivable Events";
-		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2 + 10, cY-110, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2F + 22, cY-112, 0xFF777777, false);
 		text = "Sendable Events";
-		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2 + 10, cY-5, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2F + 22, cY-5, 0xFF777777, false);
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button){
-		if(button == receivePageLeft){
+		if (button == back) {
+			gui.popElement();
+		} else if(button == receivePageLeft){
 			if(numReceivePages != 0){
 				currentReceivePage = Math.max(1, currentReceivePage - 1);
 				recalculateVisibleButtons();
@@ -204,6 +214,8 @@ public class SubElementEventEditor extends SubElement {
 		sendPageRight.enabled = enable;
 		done.visible = enable;
 		done.enabled = enable;
+		back.visible = enable;
+		back.enabled = enable;
 	}
 
 }

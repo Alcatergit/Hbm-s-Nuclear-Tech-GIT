@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hbm.blocks.BlockControlPanelType;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.NBTControlPacket;
 import net.minecraft.block.state.IBlockState;
@@ -68,35 +69,52 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 		}
 	}
 
+	private void rotateByMetadata(Matrix4f mat, int meta) {
+		switch ((meta & 3) + 2) {
+			case 4:
+				mat.rotate((float) Math.toRadians(180), new Vector3f(0, 1, 0));
+				break;
+			case 2:
+				mat.rotate((float) Math.toRadians(90), new Vector3f(0, 1, 0));
+				break;
+			case 3:
+				mat.rotate((float) Math.toRadians(270), new Vector3f(0, 1, 0));
+				break;
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void updateTransform() {
 		Matrix4f mat = new Matrix4f();
 
-//		full block button stars on the north-east block.
-//		first translate puts center of that button on the Y axis origin
-//		now it can be rotated
-//		then because it's still on the origin, it can be scaled seamlessly
-//		then the button is translated into the center of the panel block
+		boolean isDown = ((getBlockMetadata() >> 2) == 1);
+		boolean isUp = ((getBlockMetadata() >> 3) == 1);
 
-		mat.translate(new Vector3f(0.5F, panel.height, 0.5F));
-		switch(getBlockMetadata()){
-			case 4:
-				mat.rotate((float)Math.toRadians(180), new Vector3f(0, 1, 0));
-				break;
-			case 2:
-				mat.rotate((float)Math.toRadians(90), new Vector3f(0, 1, 0));
-				break;
-			case 5:
-				break;
-			case 3:
-				mat.rotate((float)Math.toRadians(270), new Vector3f(0, 1, 0));
-				break;
+		// ○|￣|_
+		// it works, ignore
+		if (isUp) {
+			mat.translate(new Vector3f(0.5F, panel.height, 0.5F));
+			rotateByMetadata(mat, getBlockMetadata());
+			mat.rotate(-panel.angle, new Vector3f(0, 0, 1));
+			mat.rotate((float) Math.toRadians(90), new Vector3f(0, 1, 0));
+		} else if (isDown) {
+			mat.translate(new Vector3f(0.5F, 1-panel.height, 0.5F));
+			rotateByMetadata(mat, getBlockMetadata());
+			mat.rotate((float) Math.toRadians(180), new Vector3f(1, 0, 0));
+			mat.rotate(-panel.angle, new Vector3f(0, 0, 1));
+			mat.rotate((float) Math.toRadians(90), new Vector3f(0, 1, 0));
+		} else {
+			mat.translate(new Vector3f(0.5F, 0, 0.5F));
+			rotateByMetadata(mat, getBlockMetadata());
+			mat.rotate((float) Math.toRadians(-90), new Vector3f(1, 0, 0));
+			mat.rotate((float) Math.toRadians(-90), new Vector3f(0, 0, 1));
+			mat.translate(new Vector3f(0, panel.height-0.5F, 0.5F));
+			mat.rotate((float) Math.toRadians(-180), new Vector3f(0, 1, 0));
+			mat.rotate(panel.angle, new Vector3f(1, 0, 0));
 		}
-		mat.rotate(-panel.angle, new Vector3f(0, 0, 1));
-		mat.rotate((float)Math.toRadians(90), new Vector3f(0, 1, 0));
+
 		mat.scale(new Vector3f(0.1F, 0.1F, 0.1F));
 		mat.translate(new Vector3f(0.5F, 0, 0.5F));
-
 		panel.setTransform(mat);
 	}
 
@@ -213,29 +231,36 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 		return new float[] { minX, minY, minX+baseSizeX*10, (float) (minY+panel_hyp*10)};
 	}
 
-	public AxisAlignedBB getBoundingBox(EnumFacing facing) {
+	public AxisAlignedBB getBoundingBox(boolean isUp, boolean isDown, EnumFacing facing) {
 		AxisAlignedBB defAABB = null;
 		float height1 = ControlPanel.getSlopeHeightFromZ(1-panel.c_off, panel.height, -panel.angle);
 		float height0 = ControlPanel.getSlopeHeightFromZ(panel.a_off, panel.height, -panel.angle);
 
-		//TODO: base transform.
-		switch (facing) {
-			case WEST:
-				defAABB = new AxisAlignedBB(panel.c_off, 0, panel.d_off, 1 - panel.a_off, Math.max(height0, height1), 1 - panel.b_off);
-				break;
-			case EAST:
-				defAABB = new AxisAlignedBB(panel.a_off, 0, panel.b_off, 1 - panel.c_off, Math.max(height0, height1), 1 - panel.d_off);
-				break;
-			case NORTH:
-				defAABB = new AxisAlignedBB(panel.b_off, 0, panel.c_off, 1 - panel.d_off, Math.max(height0, height1), 1 - panel.a_off);
-				break;
-			case SOUTH:
-				defAABB = new AxisAlignedBB(panel.d_off, 0, panel.a_off, 1 - panel.b_off, Math.max(height0, height1), 1 - panel.c_off);
-				break;
-//				default:
-//					defAABB = new AxisAlignedBB(panel.a_off, 0, panel.b_off, 1-panel.c_off, Math.max(height0, height1), 1-panel.d_off);
+		if (isUp) {
+			defAABB = new AxisAlignedBB(panel.d_off, 0, panel.a_off, 1 - panel.b_off, Math.max(height0, height1), 1 - panel.c_off);
+		} else if (isDown) {
+			defAABB = new AxisAlignedBB(1-panel.d_off, 1, panel.a_off, panel.b_off, 1-Math.max(height0, height1), 1-panel.c_off);
+		} else {
+			defAABB = new AxisAlignedBB(panel.d_off, 1-panel.a_off, 0, 1-panel.b_off, panel.c_off, Math.max(height0, height1));
 		}
+		defAABB = rotateAABB(defAABB, facing);
 
 		return defAABB;
 	}
+
+	public static AxisAlignedBB rotateAABB(AxisAlignedBB box, EnumFacing facing){
+		switch(facing){
+			case NORTH:
+				return new AxisAlignedBB(1-box.minX, box.minY, 1-box.maxZ, 1-box.maxX, box.maxY, 1-box.minZ);
+			case SOUTH:
+				return box;
+			case EAST:
+				return new AxisAlignedBB(box.minZ, box.minY, 1-box.minX, box.maxZ, box.maxY, 1-box.maxX);
+			case WEST:
+				return new AxisAlignedBB(1-box.minZ, box.minY, box.minX, 1-box.maxZ, box.maxY, box.maxX);
+			default:
+				return box;
+		}
+	}
+
 }

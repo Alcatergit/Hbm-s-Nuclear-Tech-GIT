@@ -19,11 +19,11 @@ import net.minecraft.util.math.MathHelper;
 
 public class SubElementNodeEditor extends SubElement {
 
-	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_control_grid.png");
+	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_placement_front.png");
 	public static ResourceLocation grid = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/grid.png");
 	
-	public GuiButton back;
-	public GuiButton btn_smolGlobalVars;
+	public GuiButton btn_back;
+	public GuiButton btn_variables;
 
 	public ItemList addMenu;
 	
@@ -75,8 +75,8 @@ public class SubElementNodeEditor extends SubElement {
 	protected void initGui(){
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		back = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-112, 20, 20, "<"));
-		btn_smolGlobalVars = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-90, 20, 20, "G"));
+		btn_back = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+13, 30, 20, "Back"));
+		btn_variables = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+54, gui.getGuiTop()+13, 58, 20, "Variables"));
 		super.initGui();
 	}
 	
@@ -152,7 +152,13 @@ public class SubElementNodeEditor extends SubElement {
 						final float y = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
 						Node node = null;
 						if (s2.equals("Function")) {
-							node = new NodeLogicFunction(x, y);
+							node = new NodeFunction(x, y);
+						}
+						else if (s2.equals("Buffer")) {
+							node = new NodeBuffer(x, y);
+						}
+						else if (s2.equals("Conditional")) {
+							node = new NodeConditional(x, y);
 						}
 						if (node != null) {
 							addMenu.close();
@@ -163,6 +169,8 @@ public class SubElementNodeEditor extends SubElement {
 						return null;
 					});
 					list.addItems("Function");
+					list.addItems("Buffer");
+					list.addItems("Conditional");
 					return list;
 				} else if(s.endsWith("Output")){
 					ItemList list = new ItemList(0, 0, 32, s2 -> {
@@ -240,10 +248,10 @@ public class SubElementNodeEditor extends SubElement {
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		int minX = (cX-78)*gui.res.getScaleFactor();
-		int minY = (cY-111)*gui.res.getScaleFactor();
-		int maxX = (cX+102)*gui.res.getScaleFactor();
-		int maxY = (cY+69)*gui.res.getScaleFactor();
+		int minX = (cX-72)*gui.res.getScaleFactor();
+		int minY = (cY-114)*gui.res.getScaleFactor();
+		int maxX = (cX+120)*gui.res.getScaleFactor();
+		int maxY = (cY+78)*gui.res.getScaleFactor();
 		//System.out.println(cY);
 		//System.out.println(Minecraft.getMinecraft().displayHeight/2);
 		GL11.glScissor(minX, minY, maxX-minX, maxY-minY);
@@ -325,7 +333,7 @@ public class SubElementNodeEditor extends SubElement {
 	
 	@Override
 	protected void actionPerformed(GuiButton button){
-		if(button == back){
+		if(button == btn_back){
 			if(currentSystem != null){
 				currentSystem.removeClientData();
 				currentSystem = null;
@@ -338,8 +346,8 @@ public class SubElementNodeEditor extends SubElement {
 			}
 			gui.popElement();
 		}
-		if (button == btn_smolGlobalVars) {
-			gui.pushElement(gui.globalVars);
+		if (button == btn_variables) {
+			gui.pushElement(gui.variables);
 		}
 	}
 	
@@ -353,10 +361,10 @@ public class SubElementNodeEditor extends SubElement {
 	
 	@Override
 	protected void enableButtons(boolean enable){
-		back.enabled = enable;
-		back.visible = enable;
-		btn_smolGlobalVars.enabled = enable;
-		btn_smolGlobalVars.visible = enable;
+		btn_back.enabled = enable;
+		btn_back.visible = enable;
+		btn_variables.enabled = enable;
+		btn_variables.visible = enable;
 	}
 	
 }

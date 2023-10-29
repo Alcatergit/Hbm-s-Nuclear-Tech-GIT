@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+
 
 public class IndicatorLamp extends Control {
 
@@ -92,6 +94,10 @@ public class IndicatorLamp extends Control {
     @Override
     public AxisAlignedBB getBoundingBox() {
         return null;
+    }
+
+    @Override
+    public void populateDefaultNodes(List<ControlEvent> receiveEvents) {
     }
 
     @Override

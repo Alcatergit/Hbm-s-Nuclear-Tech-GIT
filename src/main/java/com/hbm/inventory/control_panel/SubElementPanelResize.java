@@ -17,9 +17,12 @@ import java.util.List;
 
 // placeholder gui until i make something better
 public class SubElementPanelResize extends SubElement {
-    public static ResourceLocation black_shit = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_control_grid.png");
+
+    public static ResourceLocation bg_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_base.png");
+    public static ResourceLocation black_shit = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_resize_grid.png");
     public static ResourceLocation smol_gridz = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/resize_grids.png");
 
+    GuiButton back;
     GuiSlider a_offset;
     GuiSlider b_offset;
     GuiSlider c_offset;
@@ -36,12 +39,13 @@ public class SubElementPanelResize extends SubElement {
         int cX = gui.width/2;
         int cY = gui.height/2;
 
+        back = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+13, 30, 20, "Back"));
         a_offset = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, gui.getGuiTop()+47, 80, 15, "A ", "", 0, 100, gui.control.panel.a_off*100, false, true));
         b_offset = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, gui.getGuiTop()+47+20, 80, 15, "B ", "", 0, 100, gui.control.panel.b_off*100, false, true));
         c_offset = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, gui.getGuiTop()+47+40, 80, 15, "C ", "", 0, 100, gui.control.panel.c_off*100, false, true));
         d_offset = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, gui.getGuiTop()+47+60, 80, 15, "D ", "", 0, 100, gui.control.panel.d_off*100, false, true));
-        panel_height = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, 203, 80, 15, "Height ", "", 0, 100, gui.control.panel.height*100, false, true));
-        panel_angle = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, 223, 80, 15, "Angle ", "", -45, 45, Math.toDegrees(gui.control.panel.angle), false, true));
+        panel_height = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, 194, 80, 15, "Height ", "", 0, 100, gui.control.panel.height*100, false, true));
+        panel_angle = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+18, 214, 80, 15, "Angle ", "", -45, 45, Math.toDegrees(gui.control.panel.angle), false, true));
 
         super.initGui();
     }
@@ -91,6 +95,13 @@ public class SubElementPanelResize extends SubElement {
     }
 
     @Override
+    protected void actionPerformed(GuiButton button) {
+        if (button == back) {
+            gui.popElement();
+        }
+    }
+
+    @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         float a_off = (float) a_offset.sliderValue;
         float b_off = (float) b_offset.sliderValue;
@@ -102,8 +113,8 @@ public class SubElementPanelResize extends SubElement {
         float height0 = ControlPanel.getSlopeHeightFromZ(a_off, height, -angle);
         float height1 = ControlPanel.getSlopeHeightFromZ(1-c_off, height, -angle);
 
-        // TODO: lazy validation, clamp it fucker
-        if (((1-c_off) > a_off) && ((1-b_off) > d_off) && ((Math.max(height0, height1) <= 1)) && ((Math.min(height0, height1) >= 0))) {
+        // lazy
+        if (((1-c_off) > a_off) && ((1-b_off) > d_off) && ((Math.max(height0, height1) <= 1)) && ((Math.min(height0, height1) >= -0.01))) {
             gui.control.panel.a_off = a_off;
             gui.control.panel.b_off = b_off;
             gui.control.panel.c_off = c_off;
@@ -129,6 +140,8 @@ public class SubElementPanelResize extends SubElement {
 
     @Override
     protected void renderBackground() {
+        gui.mc.getTextureManager().bindTexture(bg_tex);
+        gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop(), 0, 0, gui.getXSize(), gui.getYSize());
         gui.mc.getTextureManager().bindTexture(black_shit);
         gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop(), 0, 0, 120, gui.getYSize());
         gui.mc.getTextureManager().bindTexture(smol_gridz);
@@ -137,6 +150,8 @@ public class SubElementPanelResize extends SubElement {
 
     @Override
     protected void enableButtons(boolean enable){
+        back.visible = enable;
+        back.enabled = enable;
         a_offset.visible = enable;
         a_offset.enabled = enable;
         b_offset.visible = enable;

@@ -3,9 +3,13 @@ package com.hbm.inventory.control_panel;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.ResourceLocation;
 
 public class SubElementItemChoice extends SubElement {
+	public static ResourceLocation bg_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_base.png");
 
 	public GuiButton pageLeft;
 	public GuiButton pageRight;
@@ -21,18 +25,19 @@ public class SubElementItemChoice extends SubElement {
 	protected void initGui(){
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-75, cY+92, 20, 20, "<"));
-		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+75, cY+92, 20, 20, ">"));
+		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-80, cY+92, 15, 20, "<"));
+		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+65, cY+92, 15, 20, ">"));
 //		List<Control> controls = ControlRegistry.getAllControls();
 //		for(int i = 0; i < controls.size(); i ++){
 //			int offset = (i%7)*25;
 //			buttons.add(gui.addButton(new GuiButton(i+1000, cX-70, cY-90 + offset, 160, 20, controls.get(i).name)));
 //		}
 
-		buttons.add(gui.addButton(new GuiButton(1000, cX-70, (cY-90) + (0%7)*25, 160, 20, "Button")));
-		buttons.add(gui.addButton(new GuiButton(1001, cX-70, (cY-90) + (1%7)*25, 160, 20, "Switch")));
-		buttons.add(gui.addButton(new GuiButton(1002, cX-70, (cY-90) + (2%7)*25, 160, 20, "Display")));
-		buttons.add(gui.addButton(new GuiButton(1003, cX-70, (cY-90) + (3%7)*25, 160, 20, "Indicator")));
+		buttons.add(gui.addButton(new GuiButton(1000, cX-80, (cY-90) + (0%7)*25, 160, 20, "Button")));
+		buttons.add(gui.addButton(new GuiButton(1001, cX-80, (cY-90) + (1%7)*25, 160, 20, "Switch")));
+		buttons.add(gui.addButton(new GuiButton(1002, cX-80, (cY-90) + (2%7)*25, 160, 20, "Display")));
+		buttons.add(gui.addButton(new GuiButton(1003, cX-80, (cY-90) + (3%7)*25, 160, 20, "Indicator")));
+		buttons.add(gui.addButton(new GuiButton(1004, cX-80, (cY-90) + (4%7)*25, 160, 20, "Slider")));
 
 		numPages = (buttons.size()+6)/7;
 		super.initGui();
@@ -43,9 +48,15 @@ public class SubElementItemChoice extends SubElement {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
 		String text = currentPage + "/" + numPages;
-		gui.getFontRenderer().drawString(text, cX, cY+100, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2F, cY+98, 0xFF777777, false);
 		text = "Select Control Type";
-		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2, cY-110, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2F, cY-110, 0xFF777777, false);
+	}
+
+	@Override
+	protected void renderBackground() {
+		gui.mc.getTextureManager().bindTexture(bg_tex);
+		gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop(), 0, 0, gui.getXSize(), gui.getYSize());
 	}
 	
 	private void recalculateVisibleButtons(){
@@ -89,6 +100,10 @@ public class SubElementItemChoice extends SubElement {
 					break;
 				case 1003:
 					gui.currentEditControl = ControlRegistry.getNew("indicator_lamp", gui.control.panel);
+					gui.pushElement(gui.linker);
+					break;
+				case 1004:
+					gui.currentEditControl = ControlRegistry.getNew("slider_vertical", gui.control.panel);
 					gui.pushElement(gui.linker);
 					break;
 			}

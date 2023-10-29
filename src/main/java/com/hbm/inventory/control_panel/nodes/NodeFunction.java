@@ -4,9 +4,9 @@ import com.hbm.inventory.control_panel.*;
 import com.hbm.inventory.control_panel.DataValue.DataType;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class NodeLogicFunction extends Node {
+public class NodeFunction extends Node {
 
-    public NodeLogicFunction(float x, float y) {
+    public NodeFunction(float x, float y) {
         super(x, y);
 
         this.inputs.add(new NodeConnection("Enable", this, inputs.size(), true, DataType.NUMBER, new DataValueFloat(0)));

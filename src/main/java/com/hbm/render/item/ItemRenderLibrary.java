@@ -1525,22 +1525,22 @@ public class ItemRenderLibrary {
 				return true;
 			}
 		});
-		renderers.put(Item.getItemFromBlock(ModBlocks.control_panel_front), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(-1, -2, 0);
-				GL11.glScaled(5, 5, 5);
-			}
-			public void renderCommon() {
-				GL11.glTranslated(1.5, .5, -1);
-				bindTexture(ResourceManager.white);
-				GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				ResourceManager.control_panel_front.renderAll();
-				GlStateManager.shadeModel(GL11.GL_FLAT);
-			}
-			public boolean doNullTransform(){
-				return true;
-			}
-		});
+//		renderers.put(Item.getItemFromBlock(ModBlocks.control_panel_front), new ItemRenderBase() {
+//			public void renderInventory() {
+//				GL11.glTranslated(-1, -2, 0);
+//				GL11.glScaled(5, 5, 5);
+//			}
+//			public void renderCommon() {
+//				GL11.glTranslated(1.5, .5, -1);
+//				bindTexture(ResourceManager.white);
+//				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+//				ResourceManager.control_panel_front.renderAll();
+//				GlStateManager.shadeModel(GL11.GL_FLAT);
+//			}
+//			public boolean doNullTransform(){
+//				return true;
+//			}
+//		});
 		renderers.put(Item.getItemFromBlock(ModBlocks.large_vehicle_door), new ItemRenderBase(){
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);

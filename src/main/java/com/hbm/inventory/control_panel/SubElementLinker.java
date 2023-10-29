@@ -9,7 +9,6 @@ import com.hbm.inventory.control_panel.ContainerControlEdit.SlotItemHandlerDisab
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.lib.RefStrings;
 
-import com.hbm.main.MainRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.ItemStack;
@@ -21,13 +20,15 @@ import net.minecraft.world.World;
 
 public class SubElementLinker extends SubElement {
 
-	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_control_add_element.png");
+	public static ResourceLocation inv_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_linker_add_element.png");
 	
 	public GuiButton clear;
 	public GuiButton accept;
 	public GuiButton pageLeft;
 	public GuiButton pageRight;
 	public GuiButton cont;
+	public GuiButton back;
+
 	public List<IControllable> linked = new ArrayList<>();
 	public List<GuiButton> linkedButtons = new ArrayList<>();
 	public int numPages = 1;
@@ -41,29 +42,32 @@ public class SubElementLinker extends SubElement {
 	protected void initGui() {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		clear = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-112, 20, 20, "C"));
-		accept = gui.addButton(new GuiButton(gui.currentButtonId(), cX-104, cY-90, 20, 20, ">"));
-		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-73, cY-16, 20, 20, "<"));
-		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+77, cY-16, 20, 20, ">"));
-		cont = gui.addButton(new GuiButton(gui.currentButtonId(), cX-73, cY+6, 170, 20, "Continue"));
+		clear = gui.addButton(new GuiButton(gui.currentButtonId(), cX-121, cY-93, 40, 20, "Clear"));
+		accept = gui.addButton(new GuiButton(gui.currentButtonId(), cX-101, cY-116, 20, 20, ">"));
+		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-60, cY-16, 20, 20, "<"));
+		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+90, cY-16, 20, 20, ">"));
+		cont = gui.addButton(new GuiButton(gui.currentButtonId(), cX-60, cY+6, 170, 20, "Continue"));
 
 		super.initGui();
 	}
 	
 	@Override
-	protected void drawScreen(){
-		int cX = gui.width/2;
-		int cY = gui.height/2;
+	protected void drawScreen() {
+		int cX = gui.width / 2;
+		int cY = gui.height / 2;
+
+		ItemStack stack = gui.container.inventorySlots.get(0).getStack();
+		accept.enabled = !stack.isEmpty() && stack.getItem() instanceof ItemMultiDetonator;
+
 		String text = currentPage + "/" + numPages;
-		gui.getFontRenderer().drawString(text, cX+4, cY-6, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX + 16, cY - 10, 0xFF777777, false);
 		text = "Create Links";
-		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text)/2F + 10, cY-110, 0xFF777777, false);
+		gui.getFontRenderer().drawString(text, cX - gui.getFontRenderer().getStringWidth(text) / 2F + 10, cY - 110, 0xFF777777, false);
 	}
 	
 	@Override
 	protected void renderBackground() {
-		gui.mc.getTextureManager().bindTexture(texture);
-
+		gui.mc.getTextureManager().bindTexture(inv_tex);
 		gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop(), 0, 0, gui.getXSize(), gui.getYSize());
 	}
 	
@@ -89,28 +93,31 @@ public class SubElementLinker extends SubElement {
 			if(!stack.isEmpty()){
 				if(stack.getItem() instanceof ItemMultiDetonator){
 					int[][] locs = ItemMultiDetonator.getLocations(stack);
-					for (int i = 0; i < locs[0].length; i++) {
-						BlockPos pos = new BlockPos(locs[0][i], locs[1][i], locs[2][i]);
-						Block b = world.getBlockState(pos).getBlock();
-						if(b instanceof BlockDummyable){
-							int[] core = ((BlockDummyable)b).findCore(world, pos.getX(), pos.getY(), pos.getZ());
-							if(core != null){
-								pos = new BlockPos(core[0], core[1], core[2]);
+					if (locs != null) {
+						for (int i = 0; i < locs[0].length; i++) {
+							BlockPos pos = new BlockPos(locs[0][i], locs[1][i], locs[2][i]);
+							Block b = world.getBlockState(pos).getBlock();
+							if (b instanceof BlockDummyable) {
+								int[] core = ((BlockDummyable) b).findCore(world, pos.getX(), pos.getY(), pos.getZ());
+								if (core != null) {
+									pos = new BlockPos(core[0], core[1], core[2]);
+								}
+							}
+							TileEntity te = world.getTileEntity(pos);
+							if (te instanceof IControllable && !linked.contains(te)) {
+								linked.add((IControllable) te);
 							}
 						}
-						TileEntity te = world.getTileEntity(pos);
-						if(te instanceof IControllable && !linked.contains(te)){
-							linked.add((IControllable)te);
-						}
+						refreshButtons();
 					}
 				}
-				refreshButtons();
 			}
 		} else if(button == clear){
 			linked.clear();
 			refreshButtons();
 		} else if(button == cont){
 			gui.eventEditor.accumulateEventTypes(linked);
+			gui.eventEditor.populateDefaultNodes();
 			gui.pushElement(gui.eventEditor);
 		} else if(button == pageLeft){
 			currentPage = Math.max(1, currentPage - 1);

@@ -1,8 +1,9 @@
 package com.hbm.inventory.control_panel.controls;
 
-import com.hbm.inventory.control_panel.Control;
-import com.hbm.inventory.control_panel.ControlPanel;
-import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.*;
+import com.hbm.inventory.control_panel.nodes.NodeBoolean;
+import com.hbm.inventory.control_panel.nodes.NodeGetVar;
+import com.hbm.inventory.control_panel.nodes.NodeSetVar;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
@@ -106,6 +107,22 @@ public class SwitchToggle extends Control {
     @Override
     public List<String> getOutEvents() {
         return Collections.singletonList("ctrl_press");
+    }
+
+    @Override
+    public void populateDefaultNodes(List<ControlEvent> receiveEvents) {
+        NodeSystem ctrl_press = new NodeSystem(this);
+        {
+            NodeGetVar node0 = new NodeGetVar(170, 100, this).setData("isOn", false);
+            ctrl_press.addNode(node0);
+            NodeBoolean node1 = new NodeBoolean(230, 120).setData(NodeBoolean.BoolOperation.NOT);
+            node1.inputs.get(0).setData(node0, 0, true);
+            ctrl_press.addNode(node1);
+            NodeSetVar node2 = new NodeSetVar(290, 140, this).setData("isOn", false);
+            node2.inputs.get(0).setData(node1, 0, true);
+            ctrl_press.addNode(node2);
+        }
+        receiveNodeMap.put("ctrl_press", ctrl_press);
     }
 
     @Override

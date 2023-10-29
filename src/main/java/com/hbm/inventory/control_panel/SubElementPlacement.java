@@ -1,8 +1,7 @@
 package com.hbm.inventory.control_panel;
 
+import com.hbm.inventory.control_panel.controls.DisplaySevenSeg;
 import com.hbm.main.MainRegistry;
-import net.minecraft.nbt.NBTTagCompound;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -10,7 +9,6 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
-import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
@@ -24,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class SubElementPlacement extends SubElement {
 
-	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_control_grid.png");
+	public static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_placement_front.png");
 	public static ResourceLocation grid = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/placement_grid.png");
 	
 	public float ogPosX;
@@ -32,11 +30,12 @@ public class SubElementPlacement extends SubElement {
 	public Control selectedControl;
 	public boolean controlGrabbed = false;
 
-	public GuiButton deleteElement;
-	public GuiButton newElement;
-	public GuiButton editElement;
-	public GuiButton panelResize;
-	public GuiButton btn_globalVars;
+	public GuiButton btn_panelResize;
+	public GuiButton btn_variables;
+	public GuiButton btn_newControl;
+	public GuiButton btn_editControl;
+	public GuiButton btn_deleteControl;
+
 	private boolean gridGrabbed = false;
 	protected float gridX = 0;
 	protected float gridY = 0;
@@ -54,11 +53,11 @@ public class SubElementPlacement extends SubElement {
 	protected void initGui() {
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		newElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-69, 20, 20, "+"));
-		deleteElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-91, 20, 20, "-"));
-		editElement = gui.addButton(new GuiButton(gui.currentButtonId(), cX-103, cY-113, 20, 20, "E"));
-		panelResize = gui.addButton(new GuiButton(gui.currentButtonId(), cX+22, cY-91, 80, 20, "Resize"));
-		btn_globalVars = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+30, cY-91, 95, 20, "Global Variables"));
+		btn_panelResize = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+13, 43, 20, "Resize"));
+		btn_variables = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+54, gui.getGuiTop()+13, 58, 20, "Variables"));
+		btn_newControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+47, 43, 20, "New"));
+		btn_editControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+69, 43, 20, "Edit"));
+		btn_deleteControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+91, 43, 20, "Delete"));
 		float[] cGrid = convertToGridSpace(cX+10, cY+20);
 		gridX = -cGrid[0];
 		gridY = cGrid[1];
@@ -83,11 +82,12 @@ public class SubElementPlacement extends SubElement {
 
 	@Override
 	protected void drawScreen() {
-		editElement.enabled = selectedControl != null;
-
 		float dWheel = Mouse.getDWheel();
 		float dScale = dWheel*gridScale*0.00075F;
-		
+
+		btn_editControl.enabled = selectedControl != null;
+		btn_deleteControl.enabled = selectedControl != null;
+
 		//Correction so we scale around mouse position
 		float prevX = (gui.mouseX-gui.getGuiLeft())*gridScale;
 		float prevY = (gui.mouseY-gui.getGuiTop())*gridScale;
@@ -103,7 +103,7 @@ public class SubElementPlacement extends SubElement {
 			if(gridGrabbed){
 				gridX -= dX;
 				gridY += dY;
-			} else if(gui.currentEditControl != null && !gui.isEditMode) {
+			} else if(!gui.isEditMode) {
 				gui.currentEditControl.posX += dX;
 				gui.currentEditControl.posY += dY;
 			}
@@ -122,10 +122,10 @@ public class SubElementPlacement extends SubElement {
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		int cX = gui.width/2;
 		int cY = gui.height/2;
-		int minX = (cX-78)*gui.res.getScaleFactor();
-		int minY = (cY-111)*gui.res.getScaleFactor();
-		int maxX = (cX+102)*gui.res.getScaleFactor();
-		int maxY = (cY+69)*gui.res.getScaleFactor();
+		int minX = (cX-72)*gui.res.getScaleFactor();
+		int minY = (cY-114)*gui.res.getScaleFactor();
+		int maxX = (cX+120)*gui.res.getScaleFactor();
+		int maxY = (cY+78)*gui.res.getScaleFactor();
 		GL11.glScissor(minX, minY, Math.max(maxX-minX, 0), Math.max(maxY-minY, 0));
 		
 		gui.mc.getTextureManager().bindTexture(grid);
@@ -194,19 +194,35 @@ public class SubElementPlacement extends SubElement {
 				GlStateManager.colorMask(true, true, true, true);
 		}
 	}
-	
+
 	public void renderControl(Control c){
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = tes.getBuffer();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(c.getGuiTexture());
-		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		float[] box = c.getBox();
-		float[] rgb = new float[] {1, (c == selectedControl)? .8F : 1F, 1F};
-		buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
-		buf.pos(box[0], box[3], 0).tex(0, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
-		buf.pos(box[2], box[3], 0).tex(1, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
-		buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
-		tes.draw();
+		if (c instanceof DisplaySevenSeg) {
+			for (int i=0; i<c.getConfigs().get("digitCount").getNumber(); i++) {
+				buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+				float[] box = c.getBox();
+				float cock = (box[2]-box[0]) / c.getConfigs().get("digitCount").getNumber();
+				box[0] += cock*i;
+				box[2] = box[0] + cock;
+				float[] rgb = new float[]{1, (c == selectedControl) ? .8F : 1F, 1F};
+				buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+				buf.pos(box[0], box[3], 0).tex(0, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+				buf.pos(box[2], box[3], 0).tex(1, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+				buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+				tes.draw();
+			}
+		} else {
+			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+			float[] box = c.getBox();
+			float[] rgb = new float[]{1, (c == selectedControl) ? .8F : 1F, 1F};
+			buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[0], box[3], 0).tex(0, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[3], 0).tex(1, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			tes.draw();
+		}
 	}
 	
 	@Override
@@ -218,16 +234,18 @@ public class SubElementPlacement extends SubElement {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		if (button == newElement) {
+		if (button == btn_panelResize) {
+			gui.pushElement(gui.panelResize);
+		}
+		else if (button == btn_variables) {
+			gui.currentEditControl = selectedControl; // allows access to a selected control's local vars
+			gui.pushElement(gui.variables);
+		}
+		else if (button == btn_newControl) {
 			gui.isEditMode = false;
 			gui.pushElement(gui.choice);
 		}
-		else if (button == deleteElement) {
-			gui.isEditMode = false;
-			gui.control.panel.controls.remove(selectedControl);
-			selectedControl = null;
-		}
-		else if (button == editElement) {
+		else if (button == btn_editControl) {
 			if (selectedControl != null) {
 				gui.currentEditControl = selectedControl;
 				gui.itemConfig.last_control = null;
@@ -237,14 +255,13 @@ public class SubElementPlacement extends SubElement {
 				selectedControl = null;
 			}
 		}
-		else if (button == panelResize) {
-			gui.pushElement(gui.panelResize);
-		}
-		else if (button == btn_globalVars) {
-			gui.pushElement(gui.globalVars);
+		else if (button == btn_deleteControl) {
+			gui.isEditMode = false;
+			gui.control.panel.controls.remove(selectedControl);
+			selectedControl = null;
 		}
 	}
-	
+
 	protected boolean canPlace(){
 		if(gui.currentEditControl == null)
 			return false;
@@ -316,16 +333,16 @@ public class SubElementPlacement extends SubElement {
 
 	@Override
 	protected void enableButtons(boolean enable) {
-		newElement.enabled = enable;
-		newElement.visible = enable;
-		deleteElement.enabled = enable;
-		deleteElement.visible = enable;
-		editElement.enabled = enable;
-		editElement.visible = enable;
-		panelResize.enabled = enable;
-		panelResize.visible = enable;
-		btn_globalVars.enabled = enable;
-		btn_globalVars.visible = enable;
+		btn_panelResize.enabled = enable;
+		btn_panelResize.visible = enable;
+		btn_variables.enabled = enable;
+		btn_variables.visible = enable;
+		btn_newControl.enabled = enable;
+		btn_newControl.visible = enable;
+		btn_editControl.enabled = enable;
+		btn_editControl.visible = enable;
+		btn_deleteControl.enabled = enable;
+		btn_deleteControl.visible = enable;
 	}
 
 	protected float[] convertToGridSpace(float x, float y){

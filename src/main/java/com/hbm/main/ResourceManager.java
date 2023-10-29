@@ -550,6 +550,7 @@ public class ResourceManager {
 	public static final IModelCustom ctrl_switch_rotary_toggle = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/switch_rotary_toggle.obj"));
 	public static final IModelCustom ctrl_display_seven_seg = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/display_seven_seg.obj"));
 	public static final IModelCustom ctrl_indicator_lamp = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/indicator_lamp0.obj"));
+	public static final IModelCustom ctrl_slider_vertical = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/slider_vertical.obj"));
 
 	public static final ResourceLocation ctrl_button_push_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_push.png");
 	public static final ResourceLocation ctrl_button_emergency_push_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_emergency_push.png");
@@ -558,6 +559,7 @@ public class ResourceManager {
 	public static final ResourceLocation ctrl_switch_rotary_toggle_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/switch_rotary_toggle.png");
 	public static final ResourceLocation ctrl_display_seven_seg_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/display_7seg.png");
 	public static final ResourceLocation ctrl_indicator_lamp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/indicator_lamp.png");
+	public static final ResourceLocation ctrl_slider_vertical_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/slider_vertical.png");
 
 	public static final ResourceLocation ctrl_button_push_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_push_gui.png");
 	public static final ResourceLocation ctrl_button_emergency_push_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_emergency_push_gui.png");
@@ -566,6 +568,7 @@ public class ResourceManager {
 	public static final ResourceLocation ctrl_switch_rotary_toggle_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/switch_rotary_toggle_gui.png");
 	public static final ResourceLocation ctrl_display_seven_seg_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/display_7seg_gui.png");
 	public static final ResourceLocation ctrl_indicator_lamp_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/indicator_lamp_gui.png");
+	public static final ResourceLocation ctrl_slider_vertical_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/slider_vertical_gui.png");
 
 	//Textures TEs
 	public static final ResourceLocation universal = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");

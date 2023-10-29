@@ -90,7 +90,12 @@ public class NodeMath extends Node {
 		}
 		return evalCache[0] = null;
 	}
-	
+
+	public NodeMath setData(Operation op) {
+		setOperation(op);
+		return this;
+	}
+
 	public void setOperation(Operation op){
 		this.op = op;
 		for(NodeConnection c : inputs){

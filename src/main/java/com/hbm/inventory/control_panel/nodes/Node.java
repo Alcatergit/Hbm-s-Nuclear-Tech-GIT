@@ -3,15 +3,10 @@ package com.hbm.inventory.control_panel.nodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.inventory.control_panel.*;
+import com.hbm.main.MainRegistry;
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.NodeConnection;
-import com.hbm.inventory.control_panel.NodeElement;
-import com.hbm.inventory.control_panel.NodeSystem;
-import com.hbm.inventory.control_panel.NodeType;
 import com.hbm.render.RenderHelper;
 
 import net.minecraft.client.Minecraft;
@@ -29,7 +24,7 @@ public abstract class Node {
 	public List<NodeElement> otherElements = new ArrayList<>();
 	public List<NodeConnection> inputs = new ArrayList<>();
 	public List<NodeConnection> outputs = new ArrayList<>();
-	
+
 	public boolean cacheValid = false;
 	public DataValue[] evalCache = null;
 	
@@ -109,7 +104,13 @@ public abstract class Node {
 			node = new NodeBoolean(0, 0);
 			break;
 		case "function":
-			node = new NodeLogicFunction(0, 0);
+			node = new NodeFunction(0, 0);
+			break;
+		case "buffer":
+			node = new NodeBuffer(0, 0);
+			break;
+		case "conditional":
+			node = new NodeConditional(0, 0);
 			break;
 		case "setVar":
 			int ctrlIdx2 = tag.getInteger("controlIdx");
@@ -188,7 +189,7 @@ public abstract class Node {
 		}
 		return false;
 	}
-	
+
 	public float[] getBoundingBox(){
 		return new float[]{posX, posY, posX+40, posY+6+size};
 	}
