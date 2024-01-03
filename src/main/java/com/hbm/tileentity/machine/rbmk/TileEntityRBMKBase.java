@@ -14,6 +14,7 @@ import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.projectile.EntityRBMKDebris;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
 import com.hbm.items.machine.ItemRBMKRod;
+import com.hbm.config.MachineConfig;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -56,7 +57,6 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public double jumpheight = 0.0D;
 	public float downwardSpeed = 0.0F;
 	public boolean falling = false;
-	public static final int jumpTemp = 1000;
 	public static final byte gravity = 5; //in blocks per s^2
 	
 	public int water;
@@ -121,14 +121,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 
 	private void jump(){
-		if(this.heat <= jumpTemp && !falling)
+		if(this.heat <= MachineConfig.rbmkJumpTemp && !falling)
 			return;
 
 		if(!falling){ // linear rise
-			if(this.heat > jumpTemp){
-				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-jumpTemp+200D))) == 0){
-					double change = (this.heat-jumpTemp)*0.0002D;
-					double heightLimit = (this.heat-jumpTemp)*0.002D;
+			if(this.heat > MachineConfig.rbmkJumpTemp){
+				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-MachineConfig.rbmkJumpTemp+200D))) == 0){
+					double change = (this.heat-MachineConfig.rbmkJumpTemp)*0.0002D;
+					double heightLimit = (this.heat-MachineConfig.rbmkJumpTemp)*0.002D;
 
 					this.jumpheight = this.jumpheight + change;
 					

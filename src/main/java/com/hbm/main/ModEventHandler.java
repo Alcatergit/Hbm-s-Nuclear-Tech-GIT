@@ -761,12 +761,6 @@ public class ModEventHandler {
 		}
 
 		if(event.getEntity().getUniqueID().toString().equals(Library.Alcater)) {
-			if(event.getSource() instanceof EntityDamageSource){
-				if(((EntityDamageSource)event.getSource()).getImmediateSource() instanceof EntityLivingBase){
-					EntityLivingBase attacker = (EntityLivingBase) ((EntityDamageSource)event.getSource()).getImmediateSource();
-					ContaminationUtil.contaminate(attacker, HazardType.RADIATION, ContaminationType.CREATIVE, 690F);
-				}
-			}
 			event.getEntity().entityDropItem(new ItemStack(ModItems.bottle_rad).setStackDisplayName("§aAlcater's §2Neo §aNuka§r"), 0.5F);
 		}
 

@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fluids.FluidStack;
@@ -39,10 +40,19 @@ public class BedrockOreRegistry {
 		fillOreCasino();
 	}
 
+	public static boolean is3DBlock(String ore){
+		boolean isBlock = false;
+		for(ItemStack item: OreDictionary.getOres(ore))
+			isBlock |= item.getItem() instanceof ItemBlock;
+			if(isBlock) return true;
+		return false;
+	}
+
 	public static void collectBedrockOres(){
 		int index = 0;
 		for(String oreName : OreDictionary.getOreNames()){
-			if(oreName.startsWith("ore")){
+			if(oreName.startsWith("ore") && is3DBlock(oreName)){
+
 				String resourceName = oreName.substring(3);
 				
 				String oreGem = "gem"+resourceName;

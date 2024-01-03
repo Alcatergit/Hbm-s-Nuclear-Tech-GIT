@@ -12,8 +12,8 @@ import com.hbm.modules.ItemHazardModule;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -34,13 +34,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockOre extends Block implements IItemHazard {
+public class BlockNTMOre extends BlockOre implements IItemHazard {
 	
 	ItemHazardModule module;
 	public static int xp;
 
-	public BlockOre(Material materialIn, String name, int harvestLvl, int xp) {
-		super(materialIn);
+	public BlockNTMOre(String name, int harvestLvl, int xp) {
+		super();
 		this.xp = xp;
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
@@ -51,12 +51,12 @@ public class BlockOre extends Block implements IItemHazard {
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
-	public BlockOre(Material materialIn, String name, int harvestLvl) {
-		this(materialIn, name, harvestLvl, 2);
+	public BlockNTMOre(String name, int harvestLvl) {
+		this(name, harvestLvl, 2);
 	}
 	
-	public BlockOre(Material mat, SoundType sound, String name, int harvestLvl){
-		this(mat, name, harvestLvl);
+	public BlockNTMOre(SoundType sound, String name, int harvestLvl){
+		this(name, harvestLvl);
 		super.setSoundType(sound);
 	}
 

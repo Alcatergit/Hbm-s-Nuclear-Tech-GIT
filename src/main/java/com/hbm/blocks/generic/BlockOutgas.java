@@ -10,7 +10,6 @@ import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -18,7 +17,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockOutgas extends BlockOre implements IItemHazard {
+public class BlockOutgas extends BlockNTMOre implements IItemHazard {
 	
 	boolean randomTick;
 	int rate;
@@ -27,8 +26,8 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 	
 	ItemHazardModule module;
 
-	public BlockOutgas(Material mat, boolean randomTick, int rate, boolean onBreak, String s) {
-		super(mat, s, 1);
+	public BlockOutgas(boolean randomTick, int rate, boolean onBreak, String s) {
+		super(s, 1);
 		this.module = new ItemHazardModule();
 		this.setTickRandomly(randomTick);
 		this.randomTick = randomTick;
@@ -37,8 +36,8 @@ public class BlockOutgas extends BlockOre implements IItemHazard {
 		this.onNeighbour = false;
 	}
 
-	public BlockOutgas(Material mat, boolean randomTick, int rate, boolean onBreak, boolean onNeighbour, String s) {
-		this(mat, randomTick, rate, onBreak, s);
+	public BlockOutgas(boolean randomTick, int rate, boolean onBreak, boolean onNeighbour, String s) {
+		this(randomTick, rate, onBreak, s);
 		this.module = new ItemHazardModule();
 		this.onNeighbour = onNeighbour;
 	}
