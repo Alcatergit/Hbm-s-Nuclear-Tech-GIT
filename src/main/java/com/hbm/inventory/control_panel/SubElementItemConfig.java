@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.hbm.inventory.control_panel.controls.configs.SubElementBaseConfig;
-import com.hbm.inventory.control_panel.controls.configs.SubElementDisplaySevenSeg;
+import com.hbm.inventory.control_panel.controls.configs.*;
 import com.hbm.lib.RefStrings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.tileentity.TileEntity;
@@ -57,13 +56,14 @@ public class SubElementItemConfig extends SubElement {
         num_variants = variants.size()-1;
 
         if (gui.isEditMode) {
-            existing_configs = gui.currentEditControl.configMap;
+            existing_configs = gui.currentEditControl.getConfigs();
             curr_variant = variants.indexOf(ControlRegistry.getName(gui.currentEditControl.getClass()));
         }
         btn_prev.enabled = !gui.isEditMode;
         btn_next.enabled = !gui.isEditMode;
 
-//        Control variant = ControlRegistry.registry.get(variants.get(curr_variant));
+        if (curr_variant > variants.size()-1)
+            curr_variant = 0;
         Control variant = ControlRegistry.getNew(variants.get(curr_variant), gui.control.panel);
 
         String text = variant.name;
@@ -75,12 +75,26 @@ public class SubElementItemConfig extends SubElement {
         gui.getFontRenderer().drawString(text, (cX-(text_width/2F))+0, gui.getGuiTop()+30, 0xFF777777, false);
 
         if (last_control == null || !variant.name.equals(last_control.name)) {
+            this.config_gui.enableButtons(false);
             switch (variants.get(curr_variant)) {
-                case "display_7seg":
-                    this.config_gui = new SubElementDisplaySevenSeg(gui, (gui.isEditMode)? existing_configs : ControlRegistry.registry.get("display_7seg").getConfigs());
+                case "display_7seg": {
+                    this.config_gui = new SubElementDisplaySevenSeg(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("display_7seg").getConfigs());
                     break;
+                }
+                case "display_text": {
+                    this.config_gui = new SubElementDisplayText(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("display_text").getConfigs());
+                    break;
+                }
+                case "knob_control": {
+                    this.config_gui = new SubElementKnobControl(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("knob_control").getConfigs());
+                    break;
+                }
+                case "label": {
+                    this.config_gui = new SubElementLabel(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("label").getConfigs());
+                    break;
+                }
                 default:
-                    this.config_gui = new SubElementBaseConfig(gui); // blank
+                    this.config_gui = new SubElementBaseConfig(gui); // blank, shows for variant selection
             }
             if (!gui.isEditMode) {
                 gui.currentEditControl = variant;
@@ -91,6 +105,7 @@ public class SubElementItemConfig extends SubElement {
 
            variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
         }
+        this.config_gui.drawScreen();
 
         this.last_control = variant;
     }
@@ -102,8 +117,23 @@ public class SubElementItemConfig extends SubElement {
     }
 
     @Override
+    protected void update() {
+        config_gui.update();
+    }
+
+    @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         config_gui.mouseReleased(mouseX, mouseY, state);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        config_gui.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        config_gui.keyTyped(typedChar, keyCode);
     }
 
     @Override
@@ -113,10 +143,12 @@ public class SubElementItemConfig extends SubElement {
             gui.currentEditControl.applyConfigs(configs);
 
             if (gui.isEditMode) {
+                gui.linker.linked.clear();
                 World world = gui.control.getWorld();
                 for (BlockPos p : gui.currentEditControl.connectedSet) {
                     TileEntity te = world.getTileEntity(p);
-                    gui.linker.linked.add((IControllable) te);
+                    if (te instanceof IControllable)
+                        gui.linker.linked.add((IControllable) te);
                     gui.linker.refreshButtons();
                 }
             }

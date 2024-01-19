@@ -26,10 +26,16 @@ public class ControlRegistry {
 
 		registry.put("slider_vertical", new SliderVertical("Vertical Slider", null));
 
+		registry.put("knob_control", new KnobControl("Control Knob", null));
+
 		registry.put("display_7seg", new DisplaySevenSeg("7-seg Display", null));
+		registry.put("display_text", new DisplayText("Text Display", null));
+
+		registry.put("dial_square", new DialSquare("Square Dial", null));
 
 		registry.put("indicator_lamp", new IndicatorLamp("Indicator Lamp", null));
 
+		registry.put("label", new Label("Label", null));
 
 		for(Entry<String, Control> e : registry.entrySet()){
 			classToName.put(e.getValue().getClass(), e.getKey());

@@ -1,12 +1,16 @@
 package com.hbm.tileentity.machine.rbmk;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.hbm.config.MobConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+import com.hbm.inventory.control_panel.ControlEvent;
+import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.ForgeDirection;
@@ -409,4 +413,36 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		inventory.setStackInSlot(0, ItemStack.EMPTY);
 		this.markDirty();
 	}
+
+	// control panel
+
+	@Override
+	public Map<String, DataValue> getQueryData() {
+		Map<String, DataValue> data = super.getQueryData();
+
+//		data.put("feed", new DataValueFloat((float) feed.getFluidAmount()));
+//		data.put("steam", new DataValueFloat((float) steam.getFluidAmount()));
+//		data.put("steamType", new DataValueString(steamType.getName()));
+
+		return data;
+	}
+
+	@Override
+	public void receiveEvent(BlockPos from, ControlEvent e) {
+	}
+
+	public void broadcastControlEvt() {
+//		ControlEventSystem.get(world).broadcastToSubscribed(this, ControlEvent.newEvent("tank_mode_switch").setVar("mode", new DataValueFloat(mode)));
+	}
+
+	@Override
+	public List<String> getInEvents() {
+		return Collections.singletonList("tank_mode_switch");
+	}
+
+	@Override
+	public List<String> getOutEvents() {
+		return Collections.singletonList("tank_mode_switch");
+	}
+
 }

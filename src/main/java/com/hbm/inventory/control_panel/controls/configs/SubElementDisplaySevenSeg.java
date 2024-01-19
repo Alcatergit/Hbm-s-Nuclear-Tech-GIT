@@ -3,6 +3,7 @@ package com.hbm.inventory.control_panel.controls.configs;
 import com.hbm.inventory.control_panel.*;
 import com.hbm.main.MainRegistry;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.util.HashMap;
@@ -14,11 +15,13 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
     private float colorG;
     private float colorB;
     private int digitCount;
+    private boolean isDecimal;
 
     GuiSlider slide_colorR;
     GuiSlider slide_colorG;
     GuiSlider slide_colorB;
-    GuiSlider slide_digitCount; //TODO: this is temp; make own gui components: int -/+, color select, etc.
+    GuiSlider slide_digitCount;
+    GuiCheckBox check_isDecimal;
 
     public SubElementDisplaySevenSeg(GuiControlEdit gui, Map<String, DataValue> map) {
         super(gui);
@@ -26,6 +29,7 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         this.colorG = map.get("colorG").getNumber();
         this.colorB = map.get("colorB").getNumber();
         this.digitCount = (int) map.get("digitCount").getNumber();
+        this.isDecimal = map.get("isDecimal").getBoolean();
     }
 
     @Override
@@ -35,6 +39,7 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         m.put("colorG", new DataValueFloat(colorG));
         m.put("colorB", new DataValueFloat(colorB));
         m.put("digitCount", new DataValueFloat(digitCount));
+        m.put("isDecimal", new DataValueFloat(isDecimal));
         return m;
     }
 
@@ -48,6 +53,7 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         slide_colorB = gui.addButton(new GuiSlider(gui.currentButtonId(), cX-85, gui.getGuiTop()+110, 80, 15, TextFormatting.BLUE+"B ", "", 0, 100, colorB*100, false, true));
 
         slide_digitCount = gui.addButton(new GuiSlider(gui.currentButtonId(), cX+10, gui.getGuiTop()+70, 75, 15, "Digits ", "", 0, 8, digitCount, false, true));
+        check_isDecimal = gui.addButton(new GuiCheckBox(gui.currentButtonId(), cX+10, gui.getGuiTop()+92, "Decimal", isDecimal));
 
         super.initGui();
     }
@@ -58,6 +64,7 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         colorG = (float) slide_colorG.sliderValue;
         colorB = (float) slide_colorB.sliderValue;
         digitCount = slide_digitCount.getValueInt();
+        isDecimal = check_isDecimal.isChecked();
     }
 
     @Override
@@ -70,5 +77,7 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         slide_colorB.enabled = enable;
         slide_digitCount.visible = enable;
         slide_digitCount.enabled = enable;
+        check_isDecimal.visible = enable;
+        check_isDecimal.enabled = enable;
     }
 }

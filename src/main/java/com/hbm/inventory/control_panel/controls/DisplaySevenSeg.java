@@ -22,6 +22,7 @@ public class DisplaySevenSeg extends Control {
 
     private float[] color = new float[] {1, 1, 1};
     private int digitCount = 1;
+    private boolean isDecimal = false;
 
     public DisplaySevenSeg(String name, ControlPanel panel) {
         super(name, panel);
@@ -30,6 +31,7 @@ public class DisplaySevenSeg extends Control {
         configMap.put("colorG", new DataValueFloat(color[1]));
         configMap.put("colorB", new DataValueFloat(color[2]));
         configMap.put("digitCount", new DataValueFloat(digitCount));
+        configMap.put("isDecimal", new DataValueFloat(0));
     }
 
     @Override
@@ -72,6 +74,10 @@ public class DisplaySevenSeg extends Control {
 //                    posX = posX + ((digitCount-1)*getSize()[0]);
                     break;
                 }
+                case "isDecimal" : {
+                    isDecimal = e.getValue().getBoolean();
+                    break;
+                }
             }
         }
     }
@@ -95,14 +101,16 @@ public class DisplaySevenSeg extends Control {
 
         IModelCustom model = getModel();
 
-        int value = (int) getVar("value").getNumber();
+        int value = Math.max(0, (int) getVar("value").getNumber()); //TODO: negative config
 
         float lX = OpenGlHelper.lastBrightnessX;
         float lY = OpenGlHelper.lastBrightnessY;
 
+        int base = (isDecimal)? 10 : 16;
+
         for (int i=0; i < digitCount; i++) {
-            byte character = chars[value % 16];
-            value = value >>> 4;
+            byte character = chars[value % base];
+            value /= base;
 
             float t_off = i * getSize()[0] - i * (i>0? .125F : 0);
 

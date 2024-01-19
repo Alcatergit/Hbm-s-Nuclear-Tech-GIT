@@ -69,20 +69,6 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 		}
 	}
 
-	private void rotateByMetadata(Matrix4f mat, int meta) {
-		switch ((meta & 3) + 2) {
-			case 4:
-				mat.rotate((float) Math.toRadians(180), new Vector3f(0, 1, 0));
-				break;
-			case 2:
-				mat.rotate((float) Math.toRadians(90), new Vector3f(0, 1, 0));
-				break;
-			case 3:
-				mat.rotate((float) Math.toRadians(270), new Vector3f(0, 1, 0));
-				break;
-		}
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void updateTransform() {
 		Matrix4f mat = new Matrix4f();
@@ -116,6 +102,20 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 		mat.scale(new Vector3f(0.1F, 0.1F, 0.1F));
 		mat.translate(new Vector3f(0.5F, 0, 0.5F));
 		panel.setTransform(mat);
+	}
+
+	private void rotateByMetadata(Matrix4f mat, int meta) {
+		switch ((meta & 3) + 2) {
+			case 4:
+				mat.rotate((float) Math.toRadians(180), new Vector3f(0, 1, 0));
+				break;
+			case 2:
+				mat.rotate((float) Math.toRadians(90), new Vector3f(0, 1, 0));
+				break;
+			case 3:
+				mat.rotate((float) Math.toRadians(270), new Vector3f(0, 1, 0));
+				break;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

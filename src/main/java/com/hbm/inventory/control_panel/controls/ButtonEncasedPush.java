@@ -8,7 +8,9 @@ import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,6 +29,7 @@ public class ButtonEncasedPush extends Control {
     public ButtonEncasedPush(String name, ControlPanel panel) {
         super(name, panel);
         vars.put("isPushed", new DataValueFloat(0));
+        vars.put("isLit", new DataValueFloat(0));
         vars.put("isCoverOpen", new DataValueFloat(0));
     }
 
@@ -42,14 +45,17 @@ public class ButtonEncasedPush extends Control {
 
     @Override
     public void render() {
-        boolean isPushed = getVar("isPushed").getBoolean();
-        boolean isCoverOpen = getVar("isCoverOpen").getBoolean();
-
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_button_encased_push_tex);
         Tessellator tes = Tessellator.instance;
-
         IModelCustom model = getModel();
+
+        boolean isPushed = getVar("isPushed").getBoolean();
+        boolean isLit = getVar("isLit").getBoolean();
+        boolean isCoverOpen = getVar("isCoverOpen").getBoolean();
+
+        float lX = OpenGlHelper.lastBrightnessX;
+        float lY = OpenGlHelper.lastBrightnessY;
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setTranslation(posX, 0, posY);
@@ -57,11 +63,31 @@ public class ButtonEncasedPush extends Control {
         model.tessellatePart(tes, "base");
         tes.draw();
 
+        if (isLit) {
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+        }
+
+        float[] color = EnumDyeColor.RED.getColorComponentValues();
+        float cMul = 0.6F;
+        if (isLit) {
+            cMul = 1;
+        }
+
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, (isPushed)?-0.09:0, posY);
-        tes.setColorRGBA_F(1, 1, 1, 1);
-        model.tessellatePart(tes, "button");
+        tes.setTranslation(posX, (isPushed)?-.1F:0, posY);
+        tes.setColorRGBA_F(color[0]*cMul, color[1]*cMul, color[2]*cMul, 1F);
+        model.tessellatePart(tes, "btn_top");
         tes.draw();
+
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setTranslation(posX, (isPushed)?-.1F:0, posY);
+        tes.setColorRGBA_F(color[0]*cMul, color[1]*cMul, color[2]*cMul, 1F);
+        model.tessellatePart(tes, "btn_top_top");
+        tes.draw();
+
+        if (isLit) {
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lX, lY);
+        }
 
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -148,6 +174,9 @@ public class ButtonEncasedPush extends Control {
                 NodeSetVar node5_2 = new NodeSetVar(290, 140, this).setData("isPushed", false);
                 node5_2.inputs.get(0).setData(node5_1, 0, true);
                 node5_subsystem.addNode(node5_2);
+                NodeSetVar node5_3 = new NodeSetVar(290, 100, this).setData("isLit", false);
+                node5_3.inputs.get(0).setDefault(new DataValueFloat(1));
+                node5_subsystem.addNode(node5_3);
             }
             node5.inputs.get(0).setData(node4, 0, true);
             ctrl_press.subSystems.put(node5, node5_subsystem);
@@ -167,6 +196,8 @@ public class ButtonEncasedPush extends Control {
             {
                 NodeSetVar node2_0 = new NodeSetVar(290, 100, this).setData("isPushed", false);
                 node2_subsystem.addNode(node2_0);
+                NodeSetVar node2_1 = new NodeSetVar(290, 140, this).setData("isLit", false);
+                node2_subsystem.addNode(node2_1);
             }
             node2.inputs.get(0).setData(node1, 0, true);
             tick.subSystems.put(node2, node2_subsystem);

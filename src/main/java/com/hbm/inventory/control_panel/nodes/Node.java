@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.inventory.control_panel.*;
 import com.hbm.main.MainRegistry;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.render.RenderHelper;
@@ -97,7 +98,11 @@ public abstract class Node {
 			int ctrlIdx = tag.getInteger("controlIdx");
 			node = new NodeGetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx));
 			break;
-		case "math":
+		case "queryBlock":
+			ctrlIdx = tag.getInteger("controlIdx");
+			node = new NodeQueryBlock(0, 0, sys.parent.panel.controls.get(ctrlIdx));
+			break;
+			case "math":
 			node = new NodeMath(0, 0);
 			break;
 		case "boolean":

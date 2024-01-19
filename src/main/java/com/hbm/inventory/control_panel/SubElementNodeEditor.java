@@ -98,6 +98,8 @@ public class SubElementNodeEditor extends SubElement {
 							node = new NodeInput(x, y, "Event Data").setVars(vars);
 						} else if(s2.equals("Get Variable")){
 							node = new NodeGetVar(x, y, gui.currentEditControl);
+						} else if (s2.equals("Query Block")) {
+							node = new NodeQueryBlock(x, y, gui.currentEditControl);
 						}
 						if(node != null){
 							addMenu.close();
@@ -109,6 +111,7 @@ public class SubElementNodeEditor extends SubElement {
 					});
 					list.addItems("Event Data");
 					list.addItems("Get Variable");
+					list.addItems("Query Block");
 					return list;
 				} else if(s.endsWith("Math")){
 					ItemList list = new ItemList(0, 0, 32, s2 -> {

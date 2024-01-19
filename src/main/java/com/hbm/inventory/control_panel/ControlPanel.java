@@ -66,7 +66,7 @@ public class ControlPanel {
 			float width = c.getSize()[0];
 			float length = c.getSize()[1];
 			GlStateManager.pushMatrix();
-				GlStateManager.translate(((width>1?Math.abs(1-width/2):(width-1)/2)), 0, ((length>1)? Math.abs(1-length)/2 : (length-1)/2));
+				GlStateManager.translate(((width>1?Math.abs(1-width)/2:(width-1)/2)), 0, ((length>1)? Math.abs(1-length)/2 : (length-1)/2));
 				c.render();
 			GlStateManager.popMatrix();
 		}

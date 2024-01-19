@@ -35,7 +35,7 @@ public class ButtonPush extends Control {
 
     @Override
     public float[] getSize() {
-        return new float[] {1, 1, .2F};
+        return new float[] {1, 1, .4F};
     }
 
     @Override
@@ -68,14 +68,21 @@ public class ButtonPush extends Control {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
         }
 
-        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, (isPushed)?-.05F:0, posY);
         float cMul = 0.6F;
         if (isLit) {
             cMul = 1;
         }
+
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setTranslation(posX, (isPushed)?-.1F:0, posY);
         tes.setColorRGBA_F(color[0]*cMul, color[1]*cMul, color[2]*cMul, 1F);
         model.tessellatePart(tes, "btn_top");
+        tes.draw();
+
+        tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        tes.setTranslation(posX, (isPushed)?-.1F:0, posY);
+        tes.setColorRGBA_F(color[0]*cMul, color[1]*cMul, color[2]*cMul, 1F);
+        model.tessellatePart(tes, "btn_top_top");
         tes.draw();
 
         if (isLit) {

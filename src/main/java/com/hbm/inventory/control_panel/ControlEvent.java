@@ -96,6 +96,10 @@ public class ControlEvent {
 		register(new ControlEvent("lever_toggle").setVar("isOn", false));
 		register(new ControlEvent("spinny_light_power").setVar("isOn", false));
 		register(new ControlEvent("siren_set_state").setVar("isOn", false));
+		register(new ControlEvent("tank_set_mode").setVar("mode", 0));
+		register(new ControlEvent("tank_mode_switch").setVar("mode", 0)); //TODO: DEL
+		register(new ControlEvent("rbmk_ctrl_set_color").setVar("color", 0));
+		register(new ControlEvent("rbmk_ctrl_set_level").setVar("level", 0));
 		register(new ControlEvent("ctrl_press").setVar("isSneaking", false));
 		register(new ControlEvent("initialize"));
 	}

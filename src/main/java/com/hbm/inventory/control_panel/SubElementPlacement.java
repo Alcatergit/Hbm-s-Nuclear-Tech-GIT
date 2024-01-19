@@ -1,7 +1,10 @@
 package com.hbm.inventory.control_panel;
 
 import com.hbm.inventory.control_panel.controls.DisplaySevenSeg;
-import com.hbm.main.MainRegistry;
+import com.hbm.inventory.control_panel.controls.DisplayText;
+import com.hbm.inventory.control_panel.controls.Label;
+import com.hbm.main.ResourceManager;
+import net.minecraft.item.EnumDyeColor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -31,6 +34,8 @@ public class SubElementPlacement extends SubElement {
 	public boolean controlGrabbed = false;
 
 	public GuiButton btn_panelResize;
+	public GuiButton btn_security;
+	public GuiButton btn_connections;
 	public GuiButton btn_variables;
 	public GuiButton btn_newControl;
 	public GuiButton btn_editControl;
@@ -55,6 +60,8 @@ public class SubElementPlacement extends SubElement {
 		int cY = gui.height/2;
 		btn_panelResize = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+13, 43, 20, "Resize"));
 		btn_variables = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+54, gui.getGuiTop()+13, 58, 20, "Variables"));
+		btn_security = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+117, gui.getGuiTop()+13, 58, 20, "Security"));
+		btn_connections = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+180, gui.getGuiTop()+13, 70, 20, "Connections"));
 		btn_newControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+47, 43, 20, "New"));
 		btn_editControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+69, 43, 20, "Edit"));
 		btn_deleteControl = gui.addButton(new GuiButton(gui.currentButtonId(), gui.getGuiLeft()+7, gui.getGuiTop()+91, 43, 20, "Delete"));
@@ -164,6 +171,8 @@ public class SubElementPlacement extends SubElement {
 		float gridMX = (gui.mouseX-gui.getGuiLeft())*gridScale + gui.getGuiLeft() + gridX;
 		float gridMY = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
 		renderItems(gridMX, gridMY);
+
+
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
@@ -199,12 +208,13 @@ public class SubElementPlacement extends SubElement {
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = tes.getBuffer();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(c.getGuiTexture());
+
 		if (c instanceof DisplaySevenSeg) {
-			for (int i=0; i<c.getConfigs().get("digitCount").getNumber(); i++) {
+			for (int i = 0; i < c.getConfigs().get("digitCount").getNumber(); i++) {
 				buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 				float[] box = c.getBox();
-				float cock = (box[2]-box[0]) / c.getConfigs().get("digitCount").getNumber();
-				box[0] += cock*i;
+				float cock = (box[2] - box[0]) / c.getConfigs().get("digitCount").getNumber();
+				box[0] += cock * i;
 				box[2] = box[0] + cock;
 				float[] rgb = new float[]{1, (c == selectedControl) ? .8F : 1F, 1F};
 				buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
@@ -213,7 +223,51 @@ public class SubElementPlacement extends SubElement {
 				buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
 				tes.draw();
 			}
-		} else {
+		}
+		else if (c instanceof Label) {
+			Label label = (Label) c;
+			String text = label.getConfigs().get("text").toString();
+			float scale = label.getConfigs().get("scale").getNumber()/500F;
+
+			int r = (int) label.getConfigs().get("colorR").getNumber()*255;
+			int g = (int) (label.getConfigs().get("colorG").getNumber()*255 * ((c == selectedControl) ? .5F : 1F));
+			int b = (int) label.getConfigs().get("colorB").getNumber()*255;
+			int rgb2 = (r << 16) | (g << 8) | b;
+
+			GL11.glPushMatrix();
+			GL11.glTranslated(c.posX, c.posY, 0);
+			GL11.glScalef(scale, scale, scale);
+			GL11.glTranslated(-c.posX, -c.posY, 0);
+			gui.getFontRenderer().drawString(text, c.posX, c.posY, rgb2, false);
+			GL11.glPopMatrix();
+		}
+		else if (c instanceof DisplayText) {
+			DisplayText thing = (DisplayText) c;
+
+			String text = thing.getVar("text").toString();
+			float scale = thing.getConfigs().get("scale").getNumber()/500F;
+
+			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.white);
+			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+			float[] box = c.getBox();
+			float[] rgb = new float[]{.2F, (c == selectedControl) ? .1F : .2F, .2F};
+			buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[0], box[3], 0).tex(0, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[3], 0).tex(1, 1).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			tes.draw();
+
+			EnumDyeColor dyeColor = thing.getVar("color").getEnum(EnumDyeColor.class);
+			int color = dyeColor.getColorValue();
+
+			GL11.glPushMatrix();
+			GL11.glTranslated(c.posX, c.posY, 0);
+			GL11.glScalef(scale, scale, scale);
+			GL11.glTranslated(-c.posX, -c.posY, 0);
+			gui.getFontRenderer().drawString(text, c.posX, c.posY, color, false);
+			GL11.glPopMatrix();
+		}
+		else {
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 			float[] box = c.getBox();
 			float[] rgb = new float[]{1, (c == selectedControl) ? .8F : 1F, 1F};
@@ -337,6 +391,10 @@ public class SubElementPlacement extends SubElement {
 		btn_panelResize.visible = enable;
 		btn_variables.enabled = enable;
 		btn_variables.visible = enable;
+		btn_security.enabled = false;
+		btn_security.visible = enable;
+		btn_connections.enabled = false;
+		btn_connections.visible = enable;
 		btn_newControl.enabled = enable;
 		btn_newControl.visible = enable;
 		btn_editControl.enabled = enable;

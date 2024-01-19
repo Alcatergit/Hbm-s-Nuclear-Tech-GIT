@@ -9,7 +9,10 @@ import com.hbm.inventory.control_panel.ContainerControlEdit.SlotItemHandlerDisab
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.lib.RefStrings;
 
+import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.machine.TileEntityDummy;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class SubElementLinker extends SubElement {
 
@@ -77,8 +81,8 @@ public class SubElementLinker extends SubElement {
 			b.enabled = false;
 		}
 		int idx = (currentPage-1)*3;
-		for(int i = idx; i < idx+3; i ++){
-			if(i >= linkedButtons.size())
+		for(int i = idx; i < idx+3; i ++) {
+			if(i >= linkedButtons.size() || i < 1) //TODO: when block gone, remove from linked
 				break;
 			linkedButtons.get(i).visible = true;
 			linkedButtons.get(i).enabled = true;
@@ -88,6 +92,7 @@ public class SubElementLinker extends SubElement {
 	@Override
 	protected void actionPerformed(GuiButton button){
 		World world = gui.control.getWorld();
+
 		if(button == accept){
 			ItemStack stack = gui.container.inventorySlots.get(0).getStack();
 			if(!stack.isEmpty()){
@@ -104,6 +109,11 @@ public class SubElementLinker extends SubElement {
 								}
 							}
 							TileEntity te = world.getTileEntity(pos);
+							if (te instanceof TileEntityDummy) {
+								BlockPos bpos = ((TileEntityDummy) te).target;
+								if (bpos != null)
+									te = world.getTileEntity(((TileEntityDummy) te).target);
+							}
 							if (te instanceof IControllable && !linked.contains(te)) {
 								linked.add((IControllable) te);
 							}
@@ -114,10 +124,15 @@ public class SubElementLinker extends SubElement {
 			}
 		} else if(button == clear){
 			linked.clear();
+			gui.currentEditControl.connectedSet.clear();
 			refreshButtons();
 		} else if(button == cont){
 			gui.eventEditor.accumulateEventTypes(linked);
 			gui.eventEditor.populateDefaultNodes();
+			for(IControllable c : gui.linker.linked) {
+				if (!gui.currentEditControl.connectedSet.contains(c.getControlPos()))
+					gui.currentEditControl.connectedSet.add(c.getControlPos());
+			}
 			gui.pushElement(gui.eventEditor);
 		} else if(button == pageLeft){
 			currentPage = Math.max(1, currentPage - 1);

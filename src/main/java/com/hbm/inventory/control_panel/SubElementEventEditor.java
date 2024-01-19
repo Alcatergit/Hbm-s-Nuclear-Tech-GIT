@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import akka.Main;
+import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
@@ -51,6 +53,17 @@ public class SubElementEventEditor extends SubElement {
 		sendButtons.clear();
 		receiveEvents.clear();
 		sendEvents.clear();
+		// these at top cus more consistent when u need to employ fuckery when getting an EventData node by indexing receivable[].
+		for(String name : gui.currentEditControl.getOutEvents()){
+			ControlEvent evt = ControlEvent.getRegisteredEvent(name);
+			if(!receiveEvents.contains(evt))
+				receiveEvents.add(ControlEvent.getRegisteredEvent(name));
+		}
+		for(String name : gui.currentEditControl.getInEvents()){
+			ControlEvent evt = ControlEvent.getRegisteredEvent(name);
+			if(!receiveEvents.contains(evt))
+				receiveEvents.add(ControlEvent.getRegisteredEvent(name));
+		}
 		for(IControllable c : list){
 			for(String name : c.getOutEvents()){
 				ControlEvent evt = ControlEvent.getRegisteredEvent(name);
@@ -62,16 +75,6 @@ public class SubElementEventEditor extends SubElement {
 				if(!sendEvents.contains(evt))
 					sendEvents.add(ControlEvent.getRegisteredEvent(name));
 			}
-		}
-		for(String name : gui.currentEditControl.getOutEvents()){
-			ControlEvent evt = ControlEvent.getRegisteredEvent(name);
-			if(!receiveEvents.contains(evt))
-				receiveEvents.add(ControlEvent.getRegisteredEvent(name));
-		}
-		for(String name : gui.currentEditControl.getInEvents()){
-			ControlEvent evt = ControlEvent.getRegisteredEvent(name);
-			if(!receiveEvents.contains(evt))
-				receiveEvents.add(ControlEvent.getRegisteredEvent(name));
 		}
 		int cX = gui.width/2;
 		int cY = gui.height/2;

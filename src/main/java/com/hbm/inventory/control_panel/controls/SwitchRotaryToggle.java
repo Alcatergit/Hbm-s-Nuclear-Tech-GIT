@@ -56,7 +56,7 @@ public class SwitchRotaryToggle extends Control {
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setColorRGBA_F(1, 1, 1, 1);
-        if (isFlipped) { // idk if there's a better way to do this...
+        if (isFlipped) {
             Matrix4f rot_mat = new Matrix4f().rotate((float) Math.toRadians(-90), new Vector3f(0, 1, 0));
             Matrix4f trans_mat = new Matrix4f().translate(new Vector3f(posX, 0, posY));
             Matrix4f transform_mat = new Matrix4f();

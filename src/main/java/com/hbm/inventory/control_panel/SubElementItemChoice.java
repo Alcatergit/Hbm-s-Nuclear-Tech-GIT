@@ -37,7 +37,10 @@ public class SubElementItemChoice extends SubElement {
 		buttons.add(gui.addButton(new GuiButton(1001, cX-80, (cY-90) + (1%7)*25, 160, 20, "Switch")));
 		buttons.add(gui.addButton(new GuiButton(1002, cX-80, (cY-90) + (2%7)*25, 160, 20, "Display")));
 		buttons.add(gui.addButton(new GuiButton(1003, cX-80, (cY-90) + (3%7)*25, 160, 20, "Indicator")));
-		buttons.add(gui.addButton(new GuiButton(1004, cX-80, (cY-90) + (4%7)*25, 160, 20, "Slider")));
+		buttons.add(gui.addButton(new GuiButton(1004, cX-80, (cY-90) + (4%7)*25, 160, 20, "Knob")));
+		buttons.add(gui.addButton(new GuiButton(1005, cX-80, (cY-90) + (5%7)*25, 160, 20, "Dial")));
+		buttons.add(gui.addButton(new GuiButton(1006, cX-80, (cY-90) + (6%7)*25, 160, 20, "Label")));
+		buttons.add(gui.addButton(new GuiButton(1007, cX-80, (cY-90) + (7%7)*25, 160, 20, "Slider")));
 
 		numPages = (buttons.size()+6)/7;
 		super.initGui();
@@ -103,6 +106,21 @@ public class SubElementItemChoice extends SubElement {
 					gui.pushElement(gui.linker);
 					break;
 				case 1004:
+					gui.currentEditControl = ControlRegistry.getNew("knob_control", gui.control.panel);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+					gui.pushElement(gui.itemConfig);
+					break;
+				case 1005:
+					gui.currentEditControl = ControlRegistry.getNew("dial_square", gui.control.panel);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+					gui.pushElement(gui.itemConfig);
+					break;
+				case 1006:
+					gui.currentEditControl = ControlRegistry.getNew("label", gui.control.panel);
+					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());
+					gui.pushElement(gui.itemConfig);
+					break;
+				case 1007:
 					gui.currentEditControl = ControlRegistry.getNew("slider_vertical", gui.control.panel);
 					gui.pushElement(gui.linker);
 					break;

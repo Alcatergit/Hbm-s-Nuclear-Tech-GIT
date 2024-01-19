@@ -4,9 +4,12 @@ public enum ControlType {
     BUTTON("Button"),
     SWITCH("Switch"),
     SLIDER("Slider"),
+    KNOB("Knob"),
+    DIAL("Dial"),
     DISPLAY("Display"),
     INDICATOR("Indicator"),
-    METER("Meter");
+    METER("Meter"),
+    LABEL("Label");
 
     public String name;
     ControlType(String name){
