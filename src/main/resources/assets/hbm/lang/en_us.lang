@@ -1485,7 +1485,7 @@ tile.railgun_plasma.name=Railgun
 container.railgun=Railgun
 tile.machine_catalytic_cracker.name=Catalytic Cracking Tower
 
-tile.control_panel0.name=Control Panel
+tile.control_panel_custom.name=Custom Control Panel [WIP]
 
 item.turret_control.name=Turret Controller
 item.turret_chip.name=Turret AI-Chip

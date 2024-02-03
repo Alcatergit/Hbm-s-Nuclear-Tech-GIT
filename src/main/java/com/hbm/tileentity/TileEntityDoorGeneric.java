@@ -49,9 +49,12 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	private AudioWrapper audio;
 	private AudioWrapper audio2;
 
+	// if a control panel sends a toggle from 0->1, it masters the door until toggled again.
+	private boolean toggledByPanel = false;
+
 	public TileEntityDoorGeneric(){
 	}
-	
+
 	@Override
 	public void update(){
 		if(doorType == null)
@@ -160,6 +163,10 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 			if(redstonePower == -1){
 				redstonePower = 0;
 			}
+
+			if (toggledByPanel) {
+				tryOpen(-1);
+			}
 		}
 	}
 
@@ -235,6 +242,8 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	}
 
 	public boolean tryClose(int passcode){
+		if (toggledByPanel)
+			return false;
 		if(isLocked() && passcode != lock)
 			return false;
 		if(state == DoorState.OPEN) {
@@ -376,9 +385,11 @@ public class TileEntityDoorGeneric extends TileEntityLockableBase implements ITi
 	}
 	
 	@Override
-	public void receiveEvent(BlockPos from, ControlEvent e){
-		if(e.name.equals("door_toggle")){
-			tryToggle((int)e.vars.get("passcode").getNumber());
+	public void receiveEvent(BlockPos from, ControlEvent e) {
+		if (e.name.equals("door_toggle")) {
+			if (!isLocked() || (isLocked() && e.vars.get("passcode").getNumber() == lock)) {
+				toggledByPanel = !toggledByPanel;
+			}
 		}
 	}
 	

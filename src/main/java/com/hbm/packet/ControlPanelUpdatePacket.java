@@ -94,9 +94,12 @@ public class ControlPanelUpdatePacket implements IMessage {
 			NBTTagCompound tag = new NBTTagCompound();
 			int i = 0;
 			for(VarUpdate u : toUpdate) {
-				buffer.writeInt(u.varListIdx);
-				buffer.writeString(u.varName);
-				tag.setTag("" + i, u.data.writeToNBT());
+				if (u != null) {
+					buffer.writeInt(u.varListIdx);
+					buffer.writeString(u.varName);
+					if (u.data != null)
+						tag.setTag("" + i, u.data.writeToNBT());
+				}
 				i++;
 			}
 			buffer.writeCompoundTag(tag);
@@ -122,9 +125,9 @@ public class ControlPanelUpdatePacket implements IMessage {
 						}
 					} else {
 						for(VarUpdate u : m.toUpdate) {
-							if(u.data != null) {
+							if(u.varName != null) {
 								if(u.varListIdx == -1){
-									if(u.varName == null){
+									if(u.data == null){
 										control.globalVars.remove(u.varName);
 									} else {
 										control.globalVars.put(u.varName, u.data);
@@ -132,7 +135,7 @@ public class ControlPanelUpdatePacket implements IMessage {
 								} else {
 									if(u.varListIdx >= control.controls.size())
 										continue;
-									if(u.varName == null){
+									if(u.data == null){
 										control.controls.get(u.varListIdx).vars.remove(u.varName);
 									} else {
 										control.controls.get(u.varListIdx).vars.put(u.varName, u.data);

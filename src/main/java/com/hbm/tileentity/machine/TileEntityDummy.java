@@ -2,6 +2,8 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IMultiBlock;
 
+import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.INBTPacketReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -59,5 +61,4 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
-	
 }

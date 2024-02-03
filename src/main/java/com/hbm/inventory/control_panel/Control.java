@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.hbm.inventory.control_panel.controls.ControlType;
 import com.hbm.render.amlfrom1710.IModelCustom;
 
 import net.minecraft.nbt.NBTBase;
@@ -35,14 +36,28 @@ public abstract class Control {
 	public Map<String, DataValue> varsPrev = new HashMap<>();
 	//A set of the custom variables the user is allowed to remove
 	public Set<String> customVarNames = new HashSet<>();
+	// map of (static) initial configurations for a control e.g. color, size
+	public Map<String, DataValue> configMap = new HashMap<>();
 	public float posX;
 	public float posY;
-	
+
+
 	public Control(String name, ControlPanel panel){
 		this.name = name;
 		this.panel = panel;
 	}
-	
+
+	public abstract ControlType getControlType();
+
+	public abstract float[] getSize();
+
+	public Map<String, DataValue> getConfigs() {
+		return configMap;
+	}
+	public void applyConfigs(Map<String, DataValue> configs) {
+		configMap = configs;
+	}
+
 	public void renderBatched(){};
 	public void render(){};
 	public List<String> getOutEvents(){return Collections.emptyList();};
@@ -51,9 +66,26 @@ public abstract class Control {
 	public abstract IModelCustom getModel();
 	@SideOnly(Side.CLIENT)
 	public abstract ResourceLocation getGuiTexture();
-	public abstract AxisAlignedBB getBoundingBox();
-	public abstract float[] getBox();
+
+	public AxisAlignedBB getBoundingBox() {
+		float width = getSize()[0];
+		float length = getSize()[1];
+		float height = getSize()[2];
+		// offset to fix placement position error for controls not 1x1.
+		return new AxisAlignedBB(-width/2, 0, -length/2, width/2, height, length/2).offset(posX+((width>1?Math.abs(1-width)/2:(width-1)/2)), 0, posY+((length>1)? Math.abs(1-length)/2 : (length-1)/2));
+//				.offset(posX+((width>1)?Math.abs(1-width/2):0), 0, posY+Math.abs(1-length)/2);
+//		GlStateManager.translate((width>1)? Math.abs(1-width)/2 : (width-1)/2, 0, (length>1)? Math.abs(1-length)/2 : 0);
+	}
+
+	public float[] getBox() {
+		float width = getSize()[0];
+		float length = getSize()[1];
+		return new float[] {posX, posY, posX + width, posY + length};
+	}
+
 	public abstract Control newControl(ControlPanel panel);
+
+	public abstract void populateDefaultNodes(List<ControlEvent> receiveEvents);
 
 	public void receiveEvent(ControlEvent evt){
 		NodeSystem sys = receiveNodeMap.get(evt.name);
@@ -70,7 +102,7 @@ public abstract class Control {
 	public DataValue getGlobalVar(String name){
 		return panel.getVar(name);
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound tag){
 		tag.setString("name", ControlRegistry.getName(this.getClass()));
 		tag.setString("myName", name);
@@ -82,15 +114,16 @@ public abstract class Control {
 		
 		NBTTagCompound sendNodes = new NBTTagCompound();
 		for(Entry<String, NodeSystem> e : sendNodeMap.entrySet()){
-			sendNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
+			NBTTagCompound eventNodeMap = e.getValue().writeToNBT(new NBTTagCompound());
+			sendNodes.setTag(e.getKey(), eventNodeMap);
 		}
-		tag.setTag("sendNodes", sendNodes);
+		tag.setTag("SN", sendNodes);
 		
 		NBTTagCompound receiveNodes = new NBTTagCompound();
 		for(Entry<String, NodeSystem> e : receiveNodeMap.entrySet()){
 			receiveNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
 		}
-		tag.setTag("receiveNodes", receiveNodes);
+		tag.setTag("RN", receiveNodes);
 		
 		NBTTagCompound customVarNames = new NBTTagCompound();
 		int i = 0;
@@ -98,7 +131,7 @@ public abstract class Control {
 			customVarNames.setString("var" + i, s);
 			i++;
 		}
-		tag.setTag("customvarnames", customVarNames);
+		tag.setTag("customvars", customVarNames);
 		
 		NBTTagCompound connectedSet = new NBTTagCompound();
 		for(i = 0; i < this.connectedSet.size(); i ++){
@@ -106,10 +139,17 @@ public abstract class Control {
 			connectedSet.setInteger("py"+i, this.connectedSet.get(i).getY());
 			connectedSet.setInteger("pz"+i, this.connectedSet.get(i).getZ());
 		}
-		tag.setTag("connectedset", connectedSet);
+		tag.setTag("conset", connectedSet);
 		
-		tag.setFloat("posX", posX);
-		tag.setFloat("posY", posY);
+		tag.setFloat("X", posX);
+		tag.setFloat("Y", posY);
+
+		NBTTagCompound configs = new NBTTagCompound();
+		for (Entry<String, DataValue> e : configMap.entrySet()) {
+			configs.setTag(e.getKey(), e.getValue().writeToNBT());
+		}
+		tag.setTag("configs", configs);
+
 		return tag;
 	}
 	
@@ -126,25 +166,25 @@ public abstract class Control {
 		sendNodeMap.clear();
 		receiveNodeMap.clear();
 		
-		NBTTagCompound sendNodes = tag.getCompoundTag("sendNodes");
+		NBTTagCompound sendNodes = tag.getCompoundTag("SN");
 		for(String s : sendNodes.getKeySet()){
 			NodeSystem sys = new NodeSystem(this);
 			sendNodeMap.put(s, sys);
 			sys.readFromNBT(sendNodes.getCompoundTag(s));
 		}
-		NBTTagCompound receiveNodes = tag.getCompoundTag("receiveNodes");
+		NBTTagCompound receiveNodes = tag.getCompoundTag("RN");
 		for(String s : receiveNodes.getKeySet()){
 			NodeSystem sys = new NodeSystem(this);
 			receiveNodeMap.put(s, sys);
 			sys.readFromNBT(receiveNodes.getCompoundTag(s));
 		}
 		
-		NBTTagCompound customVarNames = tag.getCompoundTag("customvarnames");
+		NBTTagCompound customVarNames = tag.getCompoundTag("custonvars");
 		for(int i = 0; i < customVarNames.getKeySet().size(); i ++){
 			this.customVarNames.add(customVarNames.getString("var"+i));
 		}
 		
-		NBTTagCompound connectedSet = tag.getCompoundTag("connectedset");
+		NBTTagCompound connectedSet = tag.getCompoundTag("conset");
 		for(int i = 0; i < connectedSet.getKeySet().size()/3; i ++){
 			int x = connectedSet.getInteger("px"+i);
 			int y = connectedSet.getInteger("py"+i);
@@ -152,7 +192,14 @@ public abstract class Control {
 			this.connectedSet.add(new BlockPos(x, y, z));
 		}
 		
-		this.posX = tag.getFloat("posX");
-		this.posY = tag.getFloat("posY");
+		this.posX = tag.getFloat("X");
+		this.posY = tag.getFloat("Y");
+
+		NBTTagCompound configs = tag.getCompoundTag("configs");
+		for (String e : configs.getKeySet()) {
+			configMap.put(e, DataValue.newFromNBT(configs.getTag(e)));
+		}
 	}
+
+
 }

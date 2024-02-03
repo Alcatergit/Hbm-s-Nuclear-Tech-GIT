@@ -1,11 +1,8 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.hbm.inventory.control_panel.*;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -49,7 +46,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacketReceiver, ITickable {
+public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacketReceiver, ITickable, IControllable {
 
 	public static int rbmkHeight = 4;
 	
@@ -559,4 +556,40 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 17, pos.getZ() + 1);
 	}
+
+	// control panel
+
+	@Override
+	public Map<String, DataValue> getQueryData() {
+		Map<String, DataValue> data = new HashMap<>();
+
+		data.put("heat", new DataValueFloat((float) heat));
+		data.put("RSIM_feed", new DataValueFloat(water));
+		data.put("RSIM_steam", new DataValueFloat(steam));
+
+		return data;
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		ControlEventSystem.get(world).addControllable(this);
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		ControlEventSystem.get(world).removeControllable(this);
+	}
+
+	@Override
+	public BlockPos getControlPos() {
+		return getPos();
+	}
+
+	@Override
+	public World getControlWorld() {
+		return getWorld();
+	}
+
 }
