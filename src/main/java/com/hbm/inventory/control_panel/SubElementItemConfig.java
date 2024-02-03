@@ -18,7 +18,6 @@ public class SubElementItemConfig extends SubElement {
     public GuiButton btn_done;
     public GuiButton btn_next;
     public GuiButton btn_prev;
-    public GuiButton btn_back; //TODO: del
 
     public List<String> variants = Collections.emptyList();
     private int curr_variant = 0;
@@ -76,7 +75,7 @@ public class SubElementItemConfig extends SubElement {
 
         if (last_control == null || !variant.name.equals(last_control.name)) {
             this.config_gui.enableButtons(false);
-            switch (variants.get(curr_variant)) {
+            switch (variants.get(curr_variant)) { //TODO: clean
                 case "display_7seg": {
                     this.config_gui = new SubElementDisplaySevenSeg(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("display_7seg").getConfigs());
                     break;
@@ -91,6 +90,14 @@ public class SubElementItemConfig extends SubElement {
                 }
                 case "label": {
                     this.config_gui = new SubElementLabel(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("label").getConfigs());
+                    break;
+                }
+                case "dial_square": {
+                    this.config_gui = new SubElementDialSquare(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("dial_square").getConfigs());
+                    break;
+                }
+                case "dial_large": {
+                    this.config_gui = new SubElementDialSquare(gui, (gui.isEditMode) ? existing_configs : ControlRegistry.registry.get("dial_large").getConfigs());
                     break;
                 }
                 default:
@@ -162,9 +169,6 @@ public class SubElementItemConfig extends SubElement {
         }
         else if (button == btn_prev) {
             curr_variant = Math.max(0, curr_variant-1);
-        }
-        else if (button == btn_back) {
-            gui.popElement();
         }
     }
 

@@ -42,41 +42,41 @@ public abstract class Node {
 		for(int i = 0; i < this.inputs.size(); i ++){
 			inputs.setTag("con"+i, this.inputs.get(i).writeToNBT(new NBTTagCompound(), sys));
 		}
-		tag.setTag("inputs", inputs);
+		tag.setTag("in", inputs);
 		
 		NBTTagCompound outputs = new NBTTagCompound();
 		for(int i = 0; i < this.outputs.size(); i ++){
 			outputs.setTag("con"+i, this.outputs.get(i).writeToNBT(new NBTTagCompound(), sys));
 		}
-		tag.setTag("outputs", outputs);
+		tag.setTag("out", outputs);
 		
-		tag.setInteger("type", getType().ordinal());
-		tag.setFloat("posX", posX);
-		tag.setFloat("posY", posY);
-		tag.setFloat("size", size);
+		tag.setInteger("T", getType().ordinal());
+		tag.setFloat("X", posX);
+		tag.setFloat("Y", posY);
+		tag.setFloat("S", size);
 		return tag;
 	}
 	
 	public void readFromNBT(NBTTagCompound tag, NodeSystem sys){
 		this.inputs.clear();
 		this.outputs.clear();
-		NBTTagCompound inputs = tag.getCompoundTag("inputs");
+		NBTTagCompound inputs = tag.getCompoundTag("in");
 		for(int i = 0; i < inputs.getKeySet().size(); i ++){
 			NodeConnection c = new NodeConnection(null, this, 0, false, null, new DataValueFloat(0));
 			c.readFromNBT(inputs.getCompoundTag("con"+i), sys);
 			this.inputs.add(c);
 		}
 		
-		NBTTagCompound outputs = tag.getCompoundTag("outputs");
+		NBTTagCompound outputs = tag.getCompoundTag("out");
 		for(int i = 0; i < outputs.getKeySet().size(); i ++){
 			NodeConnection c = new NodeConnection(null, this, 0, false, null, new DataValueFloat(0));
 			c.readFromNBT(outputs.getCompoundTag("con"+i), sys);
 			this.outputs.add(c);
 		}
 		
-		this.posX = tag.getFloat("posX");
-		this.posY = tag.getFloat("posY");
-		this.size = tag.getFloat("size");
+		this.posX = tag.getFloat("X");
+		this.posY = tag.getFloat("Y");
+		this.size = tag.getFloat("S");
 		cacheValid = false;
 	}
 	

@@ -32,6 +32,7 @@ public class ControlRegistry {
 		registry.put("display_text", new DisplayText("Text Display", null));
 
 		registry.put("dial_square", new DialSquare("Square Dial", null));
+		registry.put("dial_large", new DialLarge("Large Dial", null));
 
 		registry.put("indicator_lamp", new IndicatorLamp("Indicator Lamp", null));
 

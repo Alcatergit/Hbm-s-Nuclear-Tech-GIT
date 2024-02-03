@@ -2,6 +2,9 @@ package com.hbm.inventory.control_panel.controls.configs;
 
 import com.hbm.inventory.control_panel.*;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.ResourceManager;
+import com.hbm.render.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -56,6 +59,14 @@ public class SubElementDisplaySevenSeg extends SubElementBaseConfig {
         check_isDecimal = gui.addButton(new GuiCheckBox(gui.currentButtonId(), cX+10, gui.getGuiTop()+92, "Decimal", isDecimal));
 
         super.initGui();
+    }
+
+    @Override
+    public void drawScreen() {
+        GlStateManager.disableLighting();
+        gui.mc.getTextureManager().bindTexture(ResourceManager.white);
+        RenderHelper.drawGuiRectColor(gui.getGuiLeft()+20, gui.getGuiTop()+70, 0, 0, 15, 15, 1, 1, colorR, colorG, colorB, 1F);
+        GlStateManager.enableLighting();
     }
 
     @Override

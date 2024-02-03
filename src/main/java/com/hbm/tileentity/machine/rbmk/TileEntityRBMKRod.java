@@ -11,6 +11,8 @@ import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.ForgeDirection;
@@ -420,29 +422,19 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
 
-//		data.put("feed", new DataValueFloat((float) feed.getFluidAmount()));
-//		data.put("steam", new DataValueFloat((float) steam.getFluidAmount()));
-//		data.put("steamType", new DataValueString(steamType.getName()));
+		if (inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+			ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
+			data.put("rod_name", new DataValueString(rod.getUnlocalizedName()));
+			data.put("enrichment", new DataValueFloat((float) ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0))));
+			data.put("xenon", new DataValueFloat((float) ItemRBMKRod.getPoison(inventory.getStackInSlot(0))));
+			data.put("c_heat", new DataValueFloat((float) ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0))));
+			data.put("c_coreHeat", new DataValueFloat((float) ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0))));
+			data.put("c_maxHeat", new DataValueFloat((float) rod.meltingPoint));
+			data.put("meltdown", new DataValueFloat((float) ItemRBMKRod.getMeltdownPercent(inventory.getStackInSlot(0))));
+		}
+		data.put("flux", new DataValueFloat((float) this.fluxOut));
 
 		return data;
-	}
-
-	@Override
-	public void receiveEvent(BlockPos from, ControlEvent e) {
-	}
-
-	public void broadcastControlEvt() {
-//		ControlEventSystem.get(world).broadcastToSubscribed(this, ControlEvent.newEvent("tank_mode_switch").setVar("mode", new DataValueFloat(mode)));
-	}
-
-	@Override
-	public List<String> getInEvents() {
-		return Collections.singletonList("tank_mode_switch");
-	}
-
-	@Override
-	public List<String> getOutEvents() {
-		return Collections.singletonList("tank_mode_switch");
 	}
 
 }

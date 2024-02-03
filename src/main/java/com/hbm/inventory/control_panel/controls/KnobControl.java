@@ -64,7 +64,7 @@ public class KnobControl extends Control {
         Tessellator tes = Tessellator.instance;
         IModelCustom model = getModel();
 
-        int value = (int) getVar("value").getNumber(); //TODO: node to clamp the knob
+        int value = (int) getVar("value").getNumber();
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setTranslation(posX, 0, posY);
@@ -89,9 +89,6 @@ public class KnobControl extends Control {
             GL11.glNormal3f(0.0F, 0.0F, -1.0F);
             GL11.glRotatef(90, 1, 0, 0);
 
-            float lX = OpenGlHelper.lastBrightnessX;
-            float lY = OpenGlHelper.lastBrightnessY;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
             FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
             for (int i=0; i<positions; i++) {
@@ -101,7 +98,6 @@ public class KnobControl extends Control {
                 double y = r * Math.sin(angle-Math.PI/2);
                 font.drawString(Integer.toString(i), (float) (((i==10)?-6.5 : -2.5F)+x), (float) (-3F+y), 0x282828, false);
             }
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lX, lY);
         GL11.glPopMatrix();
     }
 

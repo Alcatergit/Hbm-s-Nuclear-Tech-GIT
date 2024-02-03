@@ -1,29 +1,30 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.hbm.blocks.BlockControlPanelType;
+import com.hbm.inventory.control_panel.*;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.NBTControlPacket;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.common.Optional;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.inventory.control_panel.Control;
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.inventory.control_panel.ControlPanel;
-import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.packet.ControlPanelUpdatePacket;
 import com.hbm.packet.PacketDispatcher;
 
@@ -40,7 +41,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityControlPanel extends TileEntity implements ITickable, IControllable, IControlReceiver {
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityControlPanel extends TileEntity implements ITickable, IControllable, IControlReceiver, SimpleComponent {
 
 	public ItemStackHandler inventory;
 	public ControlPanel panel;
@@ -261,6 +263,108 @@ public class TileEntityControlPanel extends TileEntity implements ITickable, ICo
 			default:
 				return box;
 		}
+	}
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "control_panel";
+	}
+
+	@Callback()
+	public Object[] listControls(Context context, Arguments args) {
+		List<String> ctrlList = new ArrayList<>();
+		for (int i=0; i < panel.controls.size(); i++) {
+			ctrlList.add(panel.controls.get(i).name + " ("+i+")");
+		}
+		return new Object[]{ctrlList};
+	}
+
+	@Callback()
+	public Object[] listGlobalVars(Context context, Arguments args) {
+		return new Object[]{panel.globalVars};
+	}
+
+	@Callback(doc = "getGlobalVar(name:str);")
+	public Object[] getGlobalVar(Context context, Arguments args) {
+		String name = args.checkString(0);
+		DataValue value = panel.getVar(name);
+		if (Objects.requireNonNull(value.getType()) == DataValue.DataType.NUMBER) {
+			return new Object[]{value.getNumber()};
+		}
+		return new Object[]{value.toString()};
+	}
+
+	@Callback(doc = "setGlobalVar(name:str, value:[bool,str,double,int]);")
+	public Object[] setGlobalVar(Context context, Arguments args) {
+		String name = args.checkString(0);
+
+		if (args.isBoolean(1))
+			panel.globalVars.put(name, new DataValueFloat(args.checkBoolean(1)));
+		else if (args.isString(1))
+			panel.globalVars.put(name, new DataValueString(args.checkString(1)));
+		else if (args.isDouble(1))
+			panel.globalVars.put(name, new DataValueFloat((float) args.checkDouble(1)));
+		else if (args.isInteger(1))
+			panel.globalVars.put(name, new DataValueFloat((float) args.checkInteger(1)));
+		else
+			return new Object[]{"ERROR: unsupported value type"};
+
+		return new Object[]{};
+	}
+
+	@Callback(doc = "listLocalVars(ID:int); list local vars for control ID.")
+	public Object[] listLocalVars(Context context, Arguments args) {
+		return new Object[]{panel.controls.get(args.checkInteger(0)).vars};
+	}
+
+	@Callback(doc = "getLocalVar(ID:int, name:str); get var for control ID.")
+	public Object[] getLocalVar(Context context, Arguments args) {
+		int index = args.checkInteger(0);
+		String name = args.checkString(1);
+		DataValue value = panel.controls.get(index).getVar(name);
+		if (Objects.requireNonNull(value.getType()) == DataValue.DataType.NUMBER) {
+			return new Object[]{value.getNumber()};
+		}
+		return new Object[]{value.toString()};
+	}
+
+	@Callback(doc = "getLocalVar(ID:int, name:str, value:[bool,str,double,int]); set var for control ID.")
+	public Object[] setLocalVar(Context context, Arguments args) {
+		int index = args.checkInteger(0);
+		String name = args.checkString(1);
+
+		if (args.isBoolean(2))
+			panel.controls.get(index).vars.put(name, new DataValueFloat(args.checkBoolean(2)));
+		else if (args.isString(2)) {
+			DataValue value = panel.controls.get(index).vars.get(name);
+			String newValue = args.checkString(2);
+
+			if (value.getType().equals(DataValue.DataType.ENUM)) {
+				if (((DataValueEnum) value).enumClass.equals(EnumDyeColor.class)) {
+					for (EnumDyeColor c : EnumDyeColor.values()) {
+						if (c.getName().equals(newValue)) {
+							panel.controls.get(index).vars.put(name, new DataValueEnum<>(EnumDyeColor.valueOf(newValue.toUpperCase())));
+							return new Object[]{};
+						}
+					}
+					return new Object[]{"ERROR: '" + newValue + "' not found for EnumDyeColor"};
+				}
+				return new Object[]{"ERROR: unsupported enum class"};
+			}
+			else {
+				panel.controls.get(index).vars.put(name, new DataValueString(newValue));
+			}
+		}
+		else if (args.isDouble(2))
+			panel.controls.get(index).vars.put(name, new DataValueFloat((float) args.checkDouble(2)));
+		else if (args.isInteger(2))
+			panel.controls.get(index).vars.put(name, new DataValueFloat(args.checkInteger(2)));
+		else
+			return new Object[]{"ERROR: unsupported value type"};
+
+		return new Object[]{};
 	}
 
 }

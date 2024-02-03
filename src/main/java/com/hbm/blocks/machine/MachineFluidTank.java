@@ -136,7 +136,6 @@ public class MachineFluidTank extends BlockContainer implements IMultiBlock {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		MainRegistry.logger.info("PLACING ON REMOTE? = " + world.isRemote);
 
 		if (i == 0) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, EnumFacing.EAST), 2);

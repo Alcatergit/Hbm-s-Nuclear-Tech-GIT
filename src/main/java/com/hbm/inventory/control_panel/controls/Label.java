@@ -99,9 +99,9 @@ public class Label extends Control {
         GL11.glRotatef(90, 1, 0, 0);
         GL11.glTranslated(0, 0, .1F);
 
-        int r = (int) color[0]*255;
-        int g = (int) color[1]*255;
-        int b = (int) color[2]*255;
+        int r = (int) (color[0]*255);
+        int g = (int) (color[1]*255);
+        int b = (int) (color[2]*255);
         int rgb = (r << 16) | (g << 8) | b;
 
         if (isLit) {

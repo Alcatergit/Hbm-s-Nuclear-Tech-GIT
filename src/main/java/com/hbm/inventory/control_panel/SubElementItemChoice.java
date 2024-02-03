@@ -27,11 +27,6 @@ public class SubElementItemChoice extends SubElement {
 		int cY = gui.height/2;
 		pageLeft = gui.addButton(new GuiButton(gui.currentButtonId(), cX-80, cY+92, 15, 20, "<"));
 		pageRight = gui.addButton(new GuiButton(gui.currentButtonId(), cX+65, cY+92, 15, 20, ">"));
-//		List<Control> controls = ControlRegistry.getAllControls();
-//		for(int i = 0; i < controls.size(); i ++){
-//			int offset = (i%7)*25;
-//			buttons.add(gui.addButton(new GuiButton(i+1000, cX-70, cY-90 + offset, 160, 20, controls.get(i).name)));
-//		}
 
 		buttons.add(gui.addButton(new GuiButton(1000, cX-80, (cY-90) + (0%7)*25, 160, 20, "Button")));
 		buttons.add(gui.addButton(new GuiButton(1001, cX-80, (cY-90) + (1%7)*25, 160, 20, "Switch")));
@@ -85,7 +80,7 @@ public class SubElementItemChoice extends SubElement {
 			currentPage = Math.min(numPages, currentPage + 1);
 			recalculateVisibleButtons();
 		} else {
-			switch (button.id) {
+			switch (button.id) { //TODO: clean
 				case 1000:
 					gui.currentEditControl = ControlRegistry.getNew("button_push", gui.control.panel);
 					gui.itemConfig.variants = ControlRegistry.getAllControlsOfType(gui.currentEditControl.getControlType());

@@ -1,5 +1,6 @@
 package com.hbm.inventory.control_panel;
 
+import com.hbm.inventory.control_panel.controls.DialLarge;
 import com.hbm.inventory.control_panel.controls.DisplaySevenSeg;
 import com.hbm.inventory.control_panel.controls.DisplayText;
 import com.hbm.inventory.control_panel.controls.Label;
@@ -172,9 +173,12 @@ public class SubElementPlacement extends SubElement {
 		float gridMY = (gui.mouseY-gui.getGuiTop())*gridScale + gui.getGuiTop() - gridY;
 		renderItems(gridMX, gridMY);
 
-
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+		if (selectedControl != null) {
+			gui.getFontRenderer().drawString("ID: " + selectedControl.panel.controls.indexOf(selectedControl), gui.getGuiLeft()+58, gui.getGuiTop()+230, 0x333333);
+		}
 	}
 	
 	public void renderItems(float mx, float my){
@@ -229,9 +233,9 @@ public class SubElementPlacement extends SubElement {
 			String text = label.getConfigs().get("text").toString();
 			float scale = label.getConfigs().get("scale").getNumber()/500F;
 
-			int r = (int) label.getConfigs().get("colorR").getNumber()*255;
+			int r = (int) (label.getConfigs().get("colorR").getNumber()*255);
 			int g = (int) (label.getConfigs().get("colorG").getNumber()*255 * ((c == selectedControl) ? .5F : 1F));
-			int b = (int) label.getConfigs().get("colorB").getNumber()*255;
+			int b = (int) (label.getConfigs().get("colorB").getNumber()*255);
 			int rgb2 = (r << 16) | (g << 8) | b;
 
 			GL11.glPushMatrix();
@@ -267,6 +271,16 @@ public class SubElementPlacement extends SubElement {
 			gui.getFontRenderer().drawString(text, c.posX, c.posY, color, false);
 			GL11.glPopMatrix();
 		}
+		else if (c instanceof DialLarge) {
+			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+			float[] box = c.getBox();
+			float[] rgb = new float[]{1, (c == selectedControl) ? .8F : 1F, 1F};
+			buf.pos(box[0], box[1], 0).tex(0, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[0], box[3], 0).tex(0, .5).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[3], 0).tex(1, .5).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			buf.pos(box[2], box[1], 0).tex(1, 0).color(rgb[0], rgb[1], rgb[2], 1).endVertex();
+			tes.draw();
+		}
 		else {
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 			float[] box = c.getBox();
@@ -293,6 +307,7 @@ public class SubElementPlacement extends SubElement {
 		}
 		else if (button == btn_variables) {
 			gui.currentEditControl = selectedControl; // allows access to a selected control's local vars
+			gui.variables.isGlobalScope = true;
 			gui.pushElement(gui.variables);
 		}
 		else if (button == btn_newControl) {

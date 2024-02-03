@@ -138,8 +138,7 @@ public class MultiblockHandler {
 			for(int b = y - i[3]; b <= y + i[2]; b++) {
 				for(int c = z - i[5]; c <= z + i[4]; c++) {
 					if(!(a == x && b == y && c == z)) {
-//						if(!world.isRemote) TODO: how bad is removing this check? .target is not synced client side with it
-							world.setBlockState(replace.setPos(a, b, c), block.getDefaultState());
+						world.setBlockState(replace.setPos(a, b, c), block.getDefaultState());
 						TileEntity te = world.getTileEntity(replace.setPos(a, b, c));
 						if(te instanceof TileEntityDummy) {
 							TileEntityDummy dummy = (TileEntityDummy)te;

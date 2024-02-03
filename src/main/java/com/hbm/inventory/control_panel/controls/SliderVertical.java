@@ -35,7 +35,7 @@ public class SliderVertical extends Control {
 
     @Override
     public float[] getSize() {
-        return new float[] {1, 2.5F, .18F};
+        return new float[] {0.8125F, 2.3125F, .31F};
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SliderVertical extends Control {
         Tessellator tes = Tessellator.instance;
         IModelCustom model = getModel();
 
-        int position = (int) Math.abs(getVar("value").getNumber()) % 5;
+        int position = (int) Math.abs(getVar("value").getNumber()) % 6;
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         tes.setTranslation(posX, 0, posY);
@@ -56,7 +56,7 @@ public class SliderVertical extends Control {
         GlStateManager.disableTexture2D();
 
         tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-        tes.setTranslation(posX, 0, posY-(.4375F*position));
+        tes.setTranslation(posX, 0, posY-(.3125F*position));
         tes.setColorRGBA_F(51/255F, 51/255F, 51/255F, 1);
         model.tessellatePart(tes, "slider");
         tes.draw();
@@ -69,7 +69,7 @@ public class SliderVertical extends Control {
         for (int i=0; i<=position; i++) {
             tes.startDrawing(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
             tes.setTranslation(posX, 0, posY);
-            tes.setColorRGBA_F(1, 1, 173/255F, 1);
+            tes.setColorRGBA_F(0, 1, 0, 1);
             model.tessellatePart(tes, "light"+i);
             tes.draw();
         }
@@ -104,59 +104,25 @@ public class SliderVertical extends Control {
             vars.put("from index", new DataValueFloat(0));
             NodeInput node0 = new NodeInput(170, 100, "Event Data").setVars(vars);
             ctrl_press.addNode(node0);
-            NodeBoolean node1 = new NodeBoolean(230, 100).setData(NodeBoolean.BoolOperation.NOT);
-            node1.inputs.get(0).setData(node0, 1, true);
+            NodeGetVar node1 = new NodeGetVar(170, 150, this).setData("value", false);
             ctrl_press.addNode(node1);
-            NodeFunction node2 = new NodeFunction(230, 140);
-            NodeSystem node2_subsystem = new NodeSystem(this);
-            {
-                NodeGetVar node2_0 = new NodeGetVar(170, 100, this).setData("value", false);
-                node2_subsystem.addNode(node2_0);
-                NodeMath node2_1 = new NodeMath(230, 120).setData(NodeMath.Operation.SUB);
-                node2_1.inputs.get(0).setData(node2_0, 0, true);
-                node2_1.inputs.get(1).setDefault(new DataValueFloat(1));
-                node2_subsystem.addNode(node2_1);
-                NodeMath node2_2 = new NodeMath(290, 80).setData(NodeMath.Operation.GEQUAL);
-                node2_2.inputs.get(0).setData(node2_1, 0, true);
-                node2_2.inputs.get(1).setDefault(new DataValueFloat(0));
-                node2_subsystem.addNode(node2_2);
-                NodeConditional node2_3 = new NodeConditional(350, 100);
-                node2_3.inputs.get(0).setData(node2_2, 0, true);
-                node2_3.inputs.get(1).setData(node2_1, 0, true);
-                node2_3.inputs.get(2).setDefault(new DataValueFloat(0));
-                node2_subsystem.addNode(node2_3);
-                NodeSetVar node2_4 = new NodeSetVar(410, 110, this).setData("value", false);
-                node2_4.inputs.get(0).setData(node2_3, 0, true);
-                node2_subsystem.addNode(node2_4);
-            }
+            NodeConditional node2 = new NodeConditional(230, 110);
             node2.inputs.get(0).setData(node0, 1, true);
-            ctrl_press.subSystems.put(node2, node2_subsystem);
+            node2.inputs.get(1).setDefault(new DataValueFloat(-1));
+            node2.inputs.get(2).setDefault(new DataValueFloat(1));
             ctrl_press.addNode(node2);
-            NodeFunction node3 = new NodeFunction(290, 120);
-            NodeSystem node3_subsystem = new NodeSystem(this);
-            {
-                NodeGetVar node3_0 = new NodeGetVar(170, 100, this).setData("value", false);
-                node3_subsystem.addNode(node3_0);
-                NodeMath node3_1 = new NodeMath(230, 120).setData(NodeMath.Operation.ADD);
-                node3_1.inputs.get(0).setData(node3_0, 0, true);
-                node3_1.inputs.get(1).setDefault(new DataValueFloat(1));
-                node3_subsystem.addNode(node3_1);
-                NodeMath node3_2 = new NodeMath(290, 80).setData(NodeMath.Operation.LEQUAL);
-                node3_2.inputs.get(0).setData(node3_1, 0, true);
-                node3_2.inputs.get(1).setDefault(new DataValueFloat(4));
-                node3_subsystem.addNode(node3_2);
-                NodeConditional node3_3 = new NodeConditional(350, 100);
-                node3_3.inputs.get(0).setData(node3_2, 0, true);
-                node3_3.inputs.get(1).setData(node3_1, 0, true);
-                node3_3.inputs.get(2).setDefault(new DataValueFloat(4));
-                node3_subsystem.addNode(node3_3);
-                NodeSetVar node3_4 = new NodeSetVar(410, 110, this).setData("value", false);
-                node3_4.inputs.get(0).setData(node3_3, 0, true);
-                node3_subsystem.addNode(node3_4);
-            }
-            node3.inputs.get(0).setData(node1, 0, true);
-            ctrl_press.subSystems.put(node3, node3_subsystem);
+            NodeMath node3 = new NodeMath(290, 130).setData(NodeMath.Operation.ADD);
+            node3.inputs.get(0).setData(node2, 0, true);
+            node3.inputs.get(1).setData(node1, 0, true);
             ctrl_press.addNode(node3);
+            NodeMath node4 = new NodeMath(350, 130).setData(NodeMath.Operation.CLAMP);
+            node4.inputs.get(0).setData(node3, 0, true);
+            node4.inputs.get(1).setDefault(new DataValueFloat(0));
+            node4.inputs.get(2).setDefault(new DataValueFloat(5));
+            ctrl_press.addNode(node4);
+            NodeSetVar node5 = new NodeSetVar(410, 110, this).setData("value", false);
+            node5.inputs.get(0).setData(node4, 0, true);
+            ctrl_press.addNode(node5);
         }
         receiveNodeMap.put("ctrl_press", ctrl_press);
     }

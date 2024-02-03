@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityDummy extends TileEntity implements ITickable, INBTPacketReceiver {
+public class TileEntityDummy extends TileEntity implements ITickable {
 
 	public BlockPos target;
 	boolean needsMark = true;
@@ -60,17 +60,5 @@ public class TileEntityDummy extends TileEntity implements ITickable, INBTPacket
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
-	}
-
-	@Override
-	public void networkUnpack(NBTTagCompound nbt) {
-		if (nbt.hasKey("tx")) {
-			int x = nbt.getInteger("tx");
-			int y = nbt.getInteger("ty");
-			int z = nbt.getInteger("tz");
-			this.target = new BlockPos(x, y, z);
-		} else {
-			this.target = null;
-		}
 	}
 }

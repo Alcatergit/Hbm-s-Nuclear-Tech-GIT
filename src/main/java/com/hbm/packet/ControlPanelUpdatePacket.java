@@ -94,10 +94,10 @@ public class ControlPanelUpdatePacket implements IMessage {
 			NBTTagCompound tag = new NBTTagCompound();
 			int i = 0;
 			for(VarUpdate u : toUpdate) {
-				if (u != null) { //me:
+				if (u != null) {
 					buffer.writeInt(u.varListIdx);
 					buffer.writeString(u.varName);
-					if (u.data != null) //me:
+					if (u.data != null)
 						tag.setTag("" + i, u.data.writeToNBT());
 				}
 				i++;

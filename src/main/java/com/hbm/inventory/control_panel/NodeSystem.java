@@ -89,17 +89,17 @@ public class NodeSystem {
 			Node node = this.nodes.get(i);
 			NBTTagCompound nodeTag = node.writeToNBT(new NBTTagCompound(), this);
 			if (node instanceof NodeFunction) {
-				nodeTag.setTag("sub", subSystems.get(node).writeToNBT(new NBTTagCompound()));
+				nodeTag.setTag("SS", subSystems.get(node).writeToNBT(new NBTTagCompound()));
 			}
-			nodes.setTag("node"+i, nodeTag);
+			nodes.setTag("n"+i, nodeTag);
 		}
-		tag.setTag("nodes", nodes);
+		tag.setTag("N", nodes);
 
 		NBTTagCompound vars = new NBTTagCompound();
 		for (Entry<String, DataValue> e : this.vars.entrySet()) {
 			vars.setTag(e.getKey(), e.getValue().writeToNBT());
 		}
-		tag.setTag("vars", vars);
+		tag.setTag("V", vars);
 
 		return tag;
 	}
@@ -109,26 +109,26 @@ public class NodeSystem {
 		this.outputNodes.clear();
 		this.subSystems.clear();
 
-		NBTTagCompound nodes = tag.getCompoundTag("nodes");
+		NBTTagCompound nodes = tag.getCompoundTag("N");
 		for (int i = 0; i < nodes.getKeySet().size(); i ++) {
-			NBTTagCompound nodeTag = nodes.getCompoundTag("node"+i);
+			NBTTagCompound nodeTag = nodes.getCompoundTag("n"+i);
 			Node node = Node.nodeFromNBT(nodeTag, this);
 
 			if (node instanceof NodeOutput) {
 				outputNodes.add((NodeOutput) node);
 			}
-			if (node instanceof NodeFunction && nodeTag.hasKey("sub")) {
+			if (node instanceof NodeFunction && nodeTag.hasKey("SS")) {
 				NodeSystem subsystem = new NodeSystem(parent);
-				subsystem.readFromNBT(nodeTag.getCompoundTag("sub"));
+				subsystem.readFromNBT(nodeTag.getCompoundTag("SS"));
 				subSystems.put(node, subsystem);
 			}
 			this.nodes.add(node);
 		}
 		for (int i = 0; i < this.nodes.size(); i ++) {
-			this.nodes.get(i).readFromNBT(nodes.getCompoundTag("node"+i), this);
+			this.nodes.get(i).readFromNBT(nodes.getCompoundTag("n"+i), this);
 		}
 
-		NBTTagCompound vars = tag.getCompoundTag("vars");
+		NBTTagCompound vars = tag.getCompoundTag("V");
 		for (String k : vars.getKeySet()) {
 			NBTBase base = vars.getTag(k);
 			DataValue val = DataValue.newFromNBT(base);

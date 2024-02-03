@@ -5,8 +5,11 @@ import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.inventory.control_panel.GuiControlEdit;
 import com.hbm.main.MainRegistry;
+import com.hbm.main.ResourceManager;
+import com.hbm.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 import org.lwjgl.input.Keyboard;
@@ -75,6 +78,11 @@ public class SubElementLabel extends SubElementBaseConfig {
 
     @Override
     protected void drawScreen() {
+        GlStateManager.disableLighting();
+        gui.mc.getTextureManager().bindTexture(ResourceManager.white);
+        RenderHelper.drawGuiRectColor(gui.getGuiLeft()+20, gui.getGuiTop()+70, 0, 0, 15, 15, 1, 1, colorR, colorG, colorB, 1F);
+        GlStateManager.enableLighting();
+
         textField.drawTextBox();
     }
 

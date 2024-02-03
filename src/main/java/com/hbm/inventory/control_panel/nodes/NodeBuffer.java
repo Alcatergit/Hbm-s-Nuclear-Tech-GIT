@@ -32,7 +32,6 @@ public class NodeBuffer extends Node {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag, NodeSystem sys) {
         tag.setString("nodeType", "buffer");
-        //TODO: why won't onGuiClosed() read the current value from here??
         tag.setInteger("internalCount", this.internalCount);
         return super.writeToNBT(tag, sys);
     }

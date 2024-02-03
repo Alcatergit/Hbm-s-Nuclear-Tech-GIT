@@ -117,13 +117,13 @@ public abstract class Control {
 			NBTTagCompound eventNodeMap = e.getValue().writeToNBT(new NBTTagCompound());
 			sendNodes.setTag(e.getKey(), eventNodeMap);
 		}
-		tag.setTag("sendNodes", sendNodes);
+		tag.setTag("SN", sendNodes);
 		
 		NBTTagCompound receiveNodes = new NBTTagCompound();
 		for(Entry<String, NodeSystem> e : receiveNodeMap.entrySet()){
 			receiveNodes.setTag(e.getKey(), e.getValue().writeToNBT(new NBTTagCompound()));
 		}
-		tag.setTag("receiveNodes", receiveNodes);
+		tag.setTag("RN", receiveNodes);
 		
 		NBTTagCompound customVarNames = new NBTTagCompound();
 		int i = 0;
@@ -131,7 +131,7 @@ public abstract class Control {
 			customVarNames.setString("var" + i, s);
 			i++;
 		}
-		tag.setTag("customvarnames", customVarNames);
+		tag.setTag("customvars", customVarNames);
 		
 		NBTTagCompound connectedSet = new NBTTagCompound();
 		for(i = 0; i < this.connectedSet.size(); i ++){
@@ -139,10 +139,10 @@ public abstract class Control {
 			connectedSet.setInteger("py"+i, this.connectedSet.get(i).getY());
 			connectedSet.setInteger("pz"+i, this.connectedSet.get(i).getZ());
 		}
-		tag.setTag("connectedset", connectedSet);
+		tag.setTag("conset", connectedSet);
 		
-		tag.setFloat("posX", posX);
-		tag.setFloat("posY", posY);
+		tag.setFloat("X", posX);
+		tag.setFloat("Y", posY);
 
 		NBTTagCompound configs = new NBTTagCompound();
 		for (Entry<String, DataValue> e : configMap.entrySet()) {
@@ -166,25 +166,25 @@ public abstract class Control {
 		sendNodeMap.clear();
 		receiveNodeMap.clear();
 		
-		NBTTagCompound sendNodes = tag.getCompoundTag("sendNodes");
+		NBTTagCompound sendNodes = tag.getCompoundTag("SN");
 		for(String s : sendNodes.getKeySet()){
 			NodeSystem sys = new NodeSystem(this);
 			sendNodeMap.put(s, sys);
 			sys.readFromNBT(sendNodes.getCompoundTag(s));
 		}
-		NBTTagCompound receiveNodes = tag.getCompoundTag("receiveNodes");
+		NBTTagCompound receiveNodes = tag.getCompoundTag("RN");
 		for(String s : receiveNodes.getKeySet()){
 			NodeSystem sys = new NodeSystem(this);
 			receiveNodeMap.put(s, sys);
 			sys.readFromNBT(receiveNodes.getCompoundTag(s));
 		}
 		
-		NBTTagCompound customVarNames = tag.getCompoundTag("customvarnames");
+		NBTTagCompound customVarNames = tag.getCompoundTag("custonvars");
 		for(int i = 0; i < customVarNames.getKeySet().size(); i ++){
 			this.customVarNames.add(customVarNames.getString("var"+i));
 		}
 		
-		NBTTagCompound connectedSet = tag.getCompoundTag("connectedset");
+		NBTTagCompound connectedSet = tag.getCompoundTag("conset");
 		for(int i = 0; i < connectedSet.getKeySet().size()/3; i ++){
 			int x = connectedSet.getInteger("px"+i);
 			int y = connectedSet.getInteger("py"+i);
@@ -192,8 +192,8 @@ public abstract class Control {
 			this.connectedSet.add(new BlockPos(x, y, z));
 		}
 		
-		this.posX = tag.getFloat("posX");
-		this.posY = tag.getFloat("posY");
+		this.posX = tag.getFloat("X");
+		this.posY = tag.getFloat("Y");
 
 		NBTTagCompound configs = tag.getCompoundTag("configs");
 		for (String e : configs.getKeySet()) {
