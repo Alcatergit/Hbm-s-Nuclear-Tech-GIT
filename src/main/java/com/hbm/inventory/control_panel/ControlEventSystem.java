@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.hbm.lib.RefStrings;
 
+import com.hbm.main.MainRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
@@ -93,8 +94,9 @@ public class ControlEventSystem {
 		if(map == null)
 			return;
 		IControllable c = map.get(pos);
-		if(c != null)
+		if(c != null) {
 			c.receiveEvent(from, evt);
+		}
 	}
 	
 	public void broadcastEvent(BlockPos from, ControlEvent evt, Collection<BlockPos> positions){

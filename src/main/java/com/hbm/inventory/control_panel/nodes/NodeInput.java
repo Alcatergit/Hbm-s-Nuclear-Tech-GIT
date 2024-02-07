@@ -2,6 +2,7 @@ package com.hbm.inventory.control_panel.nodes;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.NodeConnection;
@@ -18,7 +19,7 @@ public class NodeInput extends Node {
 		super(x, y);
 		this.name = name;
 	}
-	
+
 	@Override
 	public DataValue evaluate(int idx){
 		return outputs.get(idx).defaultValue;
@@ -59,6 +60,10 @@ public class NodeInput extends Node {
 	
 	public NodeInput setOutputFromVars(Map<String, DataValue> vars){
 		for(NodeConnection c : outputs){
+			if (Objects.equals(c.name, "from index")) {
+				c.enumSelector = null;
+				continue;
+			}
 			c.setDefault(vars.get(c.name));
 		}
 		return this;
