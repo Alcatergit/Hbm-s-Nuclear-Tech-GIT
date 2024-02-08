@@ -34,9 +34,11 @@ public class RenderNukeGadget extends TileEntitySpecialRenderer<TileEntityNukeGa
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_gadget_tex);
         ResourceManager.bomb_gadget.renderAll();
-        
+        GL11.glShadeModel(GL11.GL_FLAT);
+
         GlStateManager.enableCull();
         GL11.glPopMatrix();
 	}

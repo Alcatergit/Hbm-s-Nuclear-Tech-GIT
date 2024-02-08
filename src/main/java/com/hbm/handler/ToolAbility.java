@@ -509,8 +509,7 @@ public abstract class ToolAbility {
 			ex.addAttrib(ExAttrib.ALLDROP);
 			ex.addAttrib(ExAttrib.NOHURT);
 			ex.addAttrib(ExAttrib.NOPARTICLE);
-			ex.doExplosionA();
-			ex.doExplosionB(false);
+			ex.explode();
 
 			player.world.createExplosion(player, x + 0.5, y + 0.5, z + 0.5, 0.1F, false);
 		}

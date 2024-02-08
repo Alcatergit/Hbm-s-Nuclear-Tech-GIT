@@ -3,6 +3,7 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
@@ -39,6 +40,10 @@ public class EntityEMP extends Entity implements IChunkLoader {
 	public void onUpdate() {
 		
 		if(!world.isRemote) {
+			if(!CompatibilityConfig.isWarDim(world)){
+				this.setDead();
+				return;
+			}
 			if(machines == null) {
 				allocate();
 			} else {

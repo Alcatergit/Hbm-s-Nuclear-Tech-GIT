@@ -101,6 +101,7 @@ public class ModelT45Legs extends ModelBiped {
 			this.leftleg.rotateAngleX = this.bipedLeftLeg.rotateAngleX;
 			this.leftleg.rotateAngleY = this.bipedLeftLeg.rotateAngleY;
 			this.leftleg.rotateAngleZ = this.bipedLeftLeg.rotateAngleZ;
+			
 			this.rightleg.rotationPointX = this.bipedRightLeg.rotationPointX;
 			this.rightleg.rotationPointY = this.bipedRightLeg.rotationPointY - 1.5F;
 			this.rightleg.rotationPointZ = this.bipedRightLeg.rotationPointZ;
@@ -109,18 +110,31 @@ public class ModelT45Legs extends ModelBiped {
 			this.rightleg.rotateAngleZ = this.bipedRightLeg.rotateAngleZ;
 
 			if (this.isSneak) {
-				this.leftleg.rotationPointZ -= 0.5F;
-				this.rightleg.rotationPointZ -= 0.5F;
-				this.leftleg.rotationPointY += 0.5F;
-				this.rightleg.rotationPointY += 0.5F;
-			}
+	            this.rightleg.offsetZ = 0.25F;
+	            this.leftleg.offsetZ = 0.25F;
+
+	            this.rightleg.rotationPointY = 11F;
+	            this.leftleg.rotationPointY = 11F;
+
+	            this.rightleg.rotationPointZ = -0.0625F;
+	            this.leftleg.rotationPointZ = -0.0625F;
+
+	        } else {
+	            this.rightleg.offsetZ = 0F;
+	            this.leftleg.offsetZ = 0F;
+	        }
 		}
 
 		@Override
 		public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
-			GL11.glScalef(1.125F, 1.125F, 1.125F);
+			GL11.glScalef(1.13F, 1.13F, 1.13F);
+			if(this.isChild) {
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+				GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+			}
 			this.leftleg.render(par7);
 
 			this.rightleg.render(par7);

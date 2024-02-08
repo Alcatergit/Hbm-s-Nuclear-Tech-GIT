@@ -33,8 +33,10 @@ public class RenderMissileAB extends Render<EntityMissileAntiBallistic> {
         GL11.glRotatef(missile.prevRotationYaw + (missile.rotationYaw - missile.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(missile.prevRotationPitch + (missile.rotationPitch - missile.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
         bindTexture(ResourceManager.missileAA_tex);
-        ResourceManager.missileV2.renderAll();
+        ResourceManager.missileAB.renderAll();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
         GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}

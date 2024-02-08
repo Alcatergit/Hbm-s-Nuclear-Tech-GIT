@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
@@ -29,7 +30,6 @@ public class EntityBuilding extends EntityThrowable {
 	@Override
 	public void onUpdate() {
 
-
 		this.lastTickPosX = this.prevPosX = posX;
 		this.lastTickPosY = this.prevPosY = posY;
 		this.lastTickPosZ = this.prevPosZ = posZ;
@@ -49,27 +49,28 @@ public class EntityBuilding extends EntityThrowable {
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 4);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 3);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 3);
-    			
-    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
-    				new AxisAlignedBB(posX - 8, posY - 8, posZ - 8, posX + 8, posY + 8, posZ + 8));
-    			
-    		for(Entity e : list) {
-    			e.attackEntityFrom(ModDamageSource.building, 1000);
-    		}
-    		
-    		for(int i = 0; i < 250; i++) {
-    			
-    			Vec3 vec = Vec3.createVectorHelper(1, 0, 0);
-    			vec.rotateAroundZ((float) (-rand.nextFloat() * Math.PI / 2));
-    			vec.rotateAroundY((float) (rand.nextFloat() * Math.PI * 2));
-    			
-    			EntityRubble rubble = new EntityRubble(world, posX, posY + 3, posZ);
-    			rubble.setMetaBasedOnBlock(Blocks.BRICK_BLOCK, 0);
-    			rubble.motionX = vec.xCoord;
-    			rubble.motionY = vec.yCoord;
-    			rubble.motionZ = vec.zCoord;
-    			world.spawnEntity(rubble);
-    		}
+    		if(CompatibilityConfig.isWarDim(world)){
+	    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, 
+	    				new AxisAlignedBB(posX - 8, posY - 8, posZ - 8, posX + 8, posY + 8, posZ + 8));
+	    			
+	    		for(Entity e : list) {
+	    			e.attackEntityFrom(ModDamageSource.building, 1000);
+	    		}
+	    		
+	    		for(int i = 0; i < 250; i++) {
+	    			
+	    			Vec3 vec = Vec3.createVectorHelper(1, 0, 0);
+	    			vec.rotateAroundZ((float) (-rand.nextFloat() * Math.PI / 2));
+	    			vec.rotateAroundY((float) (rand.nextFloat() * Math.PI * 2));
+	    			
+	    			EntityRubble rubble = new EntityRubble(world, posX, posY + 3, posZ);
+	    			rubble.setMetaBasedOnBlock(Blocks.BRICK_BLOCK, 0);
+	    			rubble.motionX = vec.xCoord;
+	    			rubble.motionY = vec.yCoord;
+	    			rubble.motionZ = vec.zCoord;
+	    			world.spawnEntity(rubble);
+	    		}
+	    	}
         }
     }
 

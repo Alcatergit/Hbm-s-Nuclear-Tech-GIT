@@ -34,8 +34,8 @@ public class EntityWaterSplash extends EntityThrowable {
 		super.onUpdate();
 		
     	if(!world.isRemote) {
-    		
-    		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(posX, posY, posZ, 0), new TargetPoint(this.dimension, posX, posY, posZ, 75));
+    		if(this.ticksExisted % 4 == 0)
+    			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(posX, posY, posZ, 0), new TargetPoint(this.dimension, posX, posY, posZ, 75));
     		
 	        if(this.ticksExisted > 80) {
 	        	this.setDead();

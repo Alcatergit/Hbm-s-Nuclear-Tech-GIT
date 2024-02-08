@@ -16,7 +16,8 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class GeneralConfig {
 
-	public static boolean enableDebugMode = true;
+	public static boolean enableDebugMode = false;
+	public static boolean enableSkybox = true;
 	public static boolean enableWelcomeMessage = true;
 	public static int rfConversionRate = 1;
 	public static boolean enableMycelium = false;
@@ -26,7 +27,6 @@ public class GeneralConfig {
 	public static boolean enableMines = true;
 	public static boolean enableRad = true;
 	public static boolean enableNITAN = true;
-	public static boolean enableNukeClouds = true;
 	public static boolean enableAutoCleanup = false;
 	public static boolean enableMeteorStrikes = true;
 	public static boolean enableMeteorShowers = true;
@@ -83,6 +83,7 @@ public class GeneralConfig {
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
 		enableDebugMode = config.get(CATEGORY_GENERAL, "1.00_enableDebugMode", false).getBoolean(false);
+		enableSkybox = config.get(CATEGORY_GENERAL, "1.00_enableSkybox", true).getBoolean(true);
 		enableMycelium = config.get(CATEGORY_GENERAL, "1.01_enableMyceliumSpread", false).getBoolean(false);
 		enablePlutoniumOre = config.get(CATEGORY_GENERAL, "1.02_enablePlutoniumNetherOre", false).getBoolean(false);
 		enableDungeons = config.get(CATEGORY_GENERAL, "1.03_enableDungeonSpawn", true).getBoolean(true);
@@ -90,7 +91,6 @@ public class GeneralConfig {
 		enableMines = config.get(CATEGORY_GENERAL, "1.05_enableLandmineSpawn", true).getBoolean(true);
 		enableRad = config.get(CATEGORY_GENERAL, "1.06_enableRadHotspotSpawn", true).getBoolean(true);
 		enableNITAN = config.get(CATEGORY_GENERAL, "1.07_enableNITANChestSpawn", true).getBoolean(true);
-		enableNukeClouds = config.get(CATEGORY_GENERAL, "1.08_enableMushroomClouds", true).getBoolean(true);
 		enableAutoCleanup = config.get(CATEGORY_GENERAL, "1.09_enableAutomaticRadCleanup", false).getBoolean(false);
 		enableMeteorStrikes = config.get(CATEGORY_GENERAL, "1.10_enableMeteorStrikes", true).getBoolean(true);
 		enableMeteorShowers = config.get(CATEGORY_GENERAL, "1.11_enableMeteorShowers", true).getBoolean(true);
@@ -117,6 +117,7 @@ public class GeneralConfig {
 				useShaders = false;
 			}
 		useShaders = false;
+		useShaders2 = config.get(CATEGORY_GENERAL, "1.23_enableShaders2", false).getBoolean(false);
 		Property ssg_anim = config.get(CATEGORY_GENERAL, "1.24_ssgAnimType", true);
 		ssg_anim.setComment("Which supershotgun reload animation to use. True is Drillgon's animation, false is Bob's animation");
 		ssgAnim = ssg_anim.getBoolean();
@@ -146,7 +147,6 @@ public class GeneralConfig {
 		jei = config.get(CATEGORY_GENERAL, "1.28_enableJei", true).getBoolean(true);
 		changelog = config.get(CATEGORY_GENERAL, "1.28_enableChangelog", true).getBoolean(true);
 		duckButton = config.get(CATEGORY_GENERAL, "1.28_enableDuckButton", true).getBoolean(true);
-		useShaders2 = config.get(CATEGORY_GENERAL, "1.29_enableShaders2", false).getBoolean(false);
 		bloom = config.get(CATEGORY_GENERAL, "1.30_enableBloom", true).getBoolean(true);
 		heatDistortion = config.get(CATEGORY_GENERAL, "1.30_enableHeatDistortion", true).getBoolean(true);
 		
@@ -207,5 +207,4 @@ public class GeneralConfig {
 			enableBabyMode = false;
 		}
 	}
-
 }

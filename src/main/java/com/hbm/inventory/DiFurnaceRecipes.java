@@ -104,14 +104,23 @@ public class DiFurnaceRecipes {
 		addFuel(new OreDictStack(COAL.block()), 2000);
 		addFuel(new OreDictStack(LIGNITE.gem()), 150);
 		addFuel(new OreDictStack(LIGNITE.dust()), 150);
+		addFuel(new OreDictStack(LIGNITE.block()), 1500);
+		addFuel(new ComparableStack(ModItems.briquette_lignite), 200);
+		addFuel(new OreDictStack("gemCharcoal"), 150);
+		addFuel(new OreDictStack("blockCharcoal"), 1500);
 		addFuel(new OreDictStack("fuelCoke"), 400);
 		addFuel(new OreDictStack(ANY_COKE.gem()), 400);
+		addFuel(new OreDictStack(ANY_COKE.block()), 4000);
 		addFuel(new ComparableStack(Items.LAVA_BUCKET), 12800);
 		addFuel(new ComparableStack(Items.BLAZE_ROD), 1000);
 		addFuel(new ComparableStack(Items.BLAZE_POWDER), 300);
 		addFuel(new ComparableStack(Items.COAL, 1, 1), 200);
 		addFuel(new ComparableStack(ModItems.solid_fuel), 400);
-		addFuel(new ComparableStack(ModItems.briquette_lignite), 200);
+		addFuel(new ComparableStack(ModItems.solid_fuel_presto), 800);
+		addFuel(new ComparableStack(ModItems.solid_fuel_presto_triplet), 2400);
+		addFuel(new ComparableStack(ModBlocks.block_solid_fuel), 4000);
+		addFuel(new ComparableStack(ModBlocks.block_solid_fuel_presto), 8000);
+		addFuel(new ComparableStack(ModBlocks.block_solid_fuel_presto_triplet), 12800);
 	}
 
 	public static void addRecipe(AStack inputTop, AStack inputBottom, ItemStack output){

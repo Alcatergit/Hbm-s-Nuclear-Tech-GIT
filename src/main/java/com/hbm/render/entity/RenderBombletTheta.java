@@ -23,7 +23,7 @@ public static final IRenderFactory<EntityBombletTheta> FACTORY = (RenderManager 
 	protected RenderBombletTheta(RenderManager renderManager) {
 		super(renderManager);
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/bombletThetaTexture.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/bombletThetaTexture.png");
 	}
 	
 	@Override

@@ -3,8 +3,8 @@
 	"textures": {
 		"down": "hbm:blocks/crane_out_top",
 		"up": "hbm:blocks/crane_out_top",
-		"north": "hbm:blocks/crane_in",
-		"south": "hbm:blocks/crane_out",
+		"north": "hbm:blocks/crane_out",
+		"south": "hbm:blocks/crane_in",
 		"west": "hbm:blocks/crane_out_side_turn_right",
 		"east": "hbm:blocks/crane_out_side_turn_left",
 		"particle": "hbm:blocks/crane_out_top"

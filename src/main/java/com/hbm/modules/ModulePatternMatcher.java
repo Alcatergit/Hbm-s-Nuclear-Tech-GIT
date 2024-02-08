@@ -113,10 +113,14 @@ public class ModulePatternMatcher {
         }
     }
 
-    public boolean isValidForFilter(ItemStack filter, int index, ItemStack input) {
+    public boolean isValidForFilter(ItemStack f, int index, ItemStack i) {
 
         String mode = modes[index];
-
+        ItemStack filter = f.copy();
+        filter.setCount(1);
+        ItemStack input = i.copy();
+        input.setCount(1);
+        
         if(mode == null) {
             modes[index] = mode = MODE_EXACT;
         }

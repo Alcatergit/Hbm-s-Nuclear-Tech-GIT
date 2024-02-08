@@ -6,12 +6,14 @@ import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 
+import net.minecraft.util.DamageSource;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ItemModPads extends ItemArmorMod {
 
@@ -42,6 +44,13 @@ public class ItemModPads extends ItemArmorMod {
 			list.add(TextFormatting.DARK_PURPLE + "  " + stack.getDisplayName() + " (-" + Math.round((1F - damageMod) * 100) + "% fall dmg / passive charge)");
 		else
 			list.add(TextFormatting.DARK_PURPLE + "  " + stack.getDisplayName() + " (-" + Math.round((1F - damageMod) * 100) + "% fall dmg)");
+	}
+
+	@Override
+	public void modDamage(LivingHurtEvent event, ItemStack armor) {
+		
+		if(event.getSource() == DamageSource.FALL)
+			event.setAmount(event.getAmount() * damageMod);
 	}
 	
 	@Override

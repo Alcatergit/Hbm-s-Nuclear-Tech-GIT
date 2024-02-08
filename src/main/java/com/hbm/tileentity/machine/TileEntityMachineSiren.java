@@ -109,6 +109,24 @@ public class TileEntityMachineSiren extends TileEntity implements ITickable, ICo
 			}
 		}
 	}
+
+	@Override
+	public void onChunkUnload() {
+		if(!world.isRemote) {
+			int id = Arrays.asList(TrackType.values()).indexOf(getCurrentType());
+			PacketDispatcher.wrapper.sendToDimension(new TESirenPacket(pos.getX(), pos.getY(), pos.getZ(), id, false), world.provider.getDimension());		
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		if(!world.isRemote) {
+			int id = Arrays.asList(TrackType.values()).indexOf(getCurrentType());
+			PacketDispatcher.wrapper.sendToDimension(new TESirenPacket(pos.getX(), pos.getY(), pos.getZ(), id, false), world.provider.getDimension());		
+		}
+		ControlEventSystem.get(world).removeControllable(this);
+		super.invalidate();
+	}
 	
 	public TrackType getCurrentType() {
 		if(inventory.getStackInSlot(0).getItem() instanceof ItemCassette) {
@@ -154,11 +172,5 @@ public class TileEntityMachineSiren extends TileEntity implements ITickable, ICo
 	public void validate(){
 		super.validate();
 		ControlEventSystem.get(world).addControllable(this);
-	}
-	
-	@Override
-	public void invalidate(){
-		super.invalidate();
-		ControlEventSystem.get(world).removeControllable(this);
 	}
 }

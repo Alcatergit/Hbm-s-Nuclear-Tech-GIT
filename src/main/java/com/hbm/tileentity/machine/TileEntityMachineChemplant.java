@@ -256,11 +256,20 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			this.updateConnections();
 
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
-			if(inputValidForTank(0, 17)) {
+
+			if(inputTankEmpty(0, 17) && inventory.getStackInSlot(19).isEmpty()){
+				FFUtils.fillFluidContainer(inventory, tanks[0], 17, 19);
+				FFUtils.moveItems(inventory, 17, 19, false);
+			} if(inputValidForTank(0, 17)) {
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
 			}
-			if(inputValidForTank(1, 18))
+
+			if(inputTankEmpty(1, 18) && inventory.getStackInSlot(20).isEmpty()){
+				FFUtils.fillFluidContainer(inventory, tanks[1], 18, 20);
+				FFUtils.moveItems(inventory, 18, 20, false);
+			} else if(inputValidForTank(1, 18)){
 				FFUtils.fillFromFluidContainer(inventory, tanks[1], 18, 20);
+			}
 
 			if((tankTypes[0] == FluidRegistry.WATER && inventory.getStackInSlot(17).getItem() == ModItems.inf_water) || inventory.getStackInSlot(17).getItem() == ModItems.fluid_barrel_infinite)
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 17, 19);
@@ -525,14 +534,17 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(!inventory.getStackInSlot(slot).isEmpty() && tankTypes[tank] != null) {
 			return FFUtils.checkRestrictions(inventory.getStackInSlot(slot), f -> f.getFluid() == tankTypes[tank]);
-			/*if(FluidUtil.getFluidHandler(inventory.getStackInSlot(slot)) != null && FluidUtil.getFluidContained(inventory.getStackInSlot(slot)) != null){
-				return FluidUtil.getFluidContained(inventory.getStackInSlot(slot)).getFluid() == tankTypes[tank];
-			}
+			//Drillgon200: I really hope fluid container registry comes back.
+		}
 
-			FluidStack test = FluidContainerRegistry.getFluidFromItem(inventory.getStackInSlot(slot).getItem());
-			if(test != null && test.getFluid() == tankTypes[tank]){
-				return true;
-			}*/
+		return false;
+	}
+
+	protected boolean inputTankEmpty(int tank, int slot) {
+		if(!inventory.getStackInSlot(slot).isEmpty() && tankTypes[tank] != null) {
+			ItemStack c = inventory.getStackInSlot(slot).copy();
+			c.setCount(1);
+			return FFUtils.isEmtpyFluidTank(c);
 			//Drillgon200: I really hope fluid container registry comes back.
 		}
 

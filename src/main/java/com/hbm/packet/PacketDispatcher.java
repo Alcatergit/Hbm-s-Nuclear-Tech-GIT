@@ -14,6 +14,7 @@ public class PacketDispatcher {
 	
 	public static final void registerPackets(){
 		int i = 0;
+
 		//PressPacket
 		wrapper.registerMessage(TEPressPacket.Handler.class, TEPressPacket.class, i++, Side.CLIENT);
 		//Send chunk radiation packet to individual players
@@ -76,8 +77,6 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEControlPacket.Handler.class, TEControlPacket.class, i++, Side.CLIENT);
 		//Pumpjack rotation packet
 		wrapper.registerMessage(TEPumpjackPacket.Handler.class, TEPumpjackPacket.class, i++, Side.CLIENT);
-		//Mining drill rotation for rendering
-		wrapper.registerMessage(TEDrillPacket.Handler.class, TEDrillPacket.class, i++, Side.CLIENT);
 		//Turbofan spin for rendering
 		wrapper.registerMessage(TETurbofanPacket.Handler.class, TETurbofanPacket.class, i++, Side.CLIENT);
 		//Machine type for marker rendering
@@ -94,8 +93,6 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEFFPacket.Handler.class, TEFFPacket.class, i++, Side.CLIENT);
 		//Siren packet for looped sounds Drillgon200: Wrong descriptions, but eh, whatever.
 		wrapper.registerMessage(TERadarPacket.Handler.class, TERadarPacket.class, i++, Side.CLIENT);
-		//Siren packet for looped sounds
-		//wrapper.registerMessage(TERadarDestructorPacket.Handler.class, TERadarDestructorPacket.class, i++, Side.CLIENT);
 		//Packet for causing pipes to rebuild their connections
 		wrapper.registerMessage(PipeUpdatePacket.Handler.class, PipeUpdatePacket.class, i++, Side.CLIENT);
 		//Packet for updating entities being zapped
@@ -131,8 +128,7 @@ public class PacketDispatcher {
 		wrapper.registerMessage(PacketSpecialDeath.Handler.class, PacketSpecialDeath.class, i++, Side.CLIENT);
 		//Universal keybind packet
 		wrapper.registerMessage(KeybindPacket.Handler.class, KeybindPacket.class, i++, Side.SERVER);
-		//DELETE LATER
-		//wrapper.registerMessage(PacketCreatePhysTree.Handler.class, PacketCreatePhysTree.class, i++, Side.CLIENT);
+		wrapper.registerMessage(KeybindPacket.Handler.class, KeybindPacket.class, i-1, Side.CLIENT);
 		//To tell the server to cut a mob for the cutting swords
 		wrapper.registerMessage(PacketMobSlicer.Handler.class, PacketMobSlicer.class, i++, Side.SERVER);
 		//Sync packet for jetpack data
@@ -142,7 +138,7 @@ public class PacketDispatcher {
 		wrapper.registerMessage(NBTControlPacket.Handler.class, NBTControlPacket.class, i++, Side.SERVER);
 		wrapper.registerMessage(AnvilCraftPacket.Handler.class, AnvilCraftPacket.class, i++, Side.SERVER);
 		wrapper.registerMessage(ControlPanelUpdatePacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.CLIENT);
-//		wrapper.registerMessage(ControlPanelLinkerServerPacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.SERVER);
+// 		wrapper.registerMessage(ControlPanelLinkerServerPacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.SERVER);
 //		wrapper.registerMessage(ControlPanelLinkerClientPacket.Handler.class, ControlPanelUpdatePacket.class, i++, Side.CLIENT);
 	}
 	
@@ -150,5 +146,4 @@ public class PacketDispatcher {
 		if(player != null)
 			wrapper.sendTo(message, player);
 	}
-
 }

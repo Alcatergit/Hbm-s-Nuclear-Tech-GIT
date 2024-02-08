@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderRadiobox extends TileEntitySpecialRenderer<TileEntityRadiobox> {
 
-	private static final ResourceLocation texture7 = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/ModelRadio.png");
+	private static final ResourceLocation texture7 = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/turrets/ModelRadio.png");
 	private ModelRadio model7;
 	
 	public RenderRadiobox() {

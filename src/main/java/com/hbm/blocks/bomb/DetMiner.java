@@ -40,8 +40,7 @@ public class DetMiner extends Block implements IBomb {
 			ExplosionNT explosion = new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4);
 			explosion.atttributes.add(ExAttrib.ALLDROP);
 			explosion.atttributes.add(ExAttrib.NOHURT);
-			explosion.doExplosionA();
-			explosion.doExplosionB(false);
+			explosion.explode();
 
 			ExplosionLarge.spawnParticles(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30);
 		}

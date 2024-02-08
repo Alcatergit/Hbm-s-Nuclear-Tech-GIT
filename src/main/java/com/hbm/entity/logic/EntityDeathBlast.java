@@ -1,5 +1,6 @@
 package com.hbm.entity.logic;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IConstantRenderer;
@@ -30,29 +31,22 @@ public class EntityDeathBlast extends Entity implements IConstantRenderer {
 		if(this.ticksExisted >= maxAge && !world.isRemote) {
 			this.setDead();
 
-			/*new ExplosionNT(worldObj, null, posX, posY, posZ, 35).addAllAttrib(ExplosionNT.nukeAttribs).explode();
-			new ExplosionNT(worldObj, null, posX + 10, posY, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
-			new ExplosionNT(worldObj, null, posX - 10, posY, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
-			new ExplosionNT(worldObj, null, posX, posY, posZ + 10, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
-			new ExplosionNT(worldObj, null, posX, posY, posZ - 10, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();
-			
-			for(int k = 1; k < 6; k++)
-				new ExplosionNT(worldObj, null, posX, posY - k * 7, posZ, 20).addAllAttrib(ExplosionNT.nukeAttribs).explode();*/
-			
-			world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, 40, posX, posY, posZ).mute());
-			
-			int count = 100;
-			for(int i = 0; i < count; i++) {
+			if(CompatibilityConfig.isWarDim(world)){
+				world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 40, posX, posY, posZ).mute());
 				
-				Vec3 vec = Vec3.createVectorHelper(0.2, 0, 0);
-				vec.rotateAroundY((float)(2 * Math.PI * i / (float)count));
-				
-				EntityBulletBase laser = new EntityBulletBase(world, BulletConfigSyncingUtil.MASKMAN_BOLT);
-				laser.setPosition(posX, posY + 2, posZ);
-				laser.motionX = vec.xCoord;
-				laser.motionZ = vec.zCoord;
-				laser.motionY = -0.01;
-				world.spawnEntity(laser);
+				int count = 100;
+				for(int i = 0; i < count; i++) {
+					
+					Vec3 vec = Vec3.createVectorHelper(0.2, 0, 0);
+					vec.rotateAroundY((float)(2 * Math.PI * i / (float)count));
+					
+					EntityBulletBase laser = new EntityBulletBase(world, BulletConfigSyncingUtil.MASKMAN_BOLT);
+					laser.setPosition(posX, posY + 2, posZ);
+					laser.motionX = vec.xCoord;
+					laser.motionZ = vec.zCoord;
+					laser.motionY = -0.01;
+					world.spawnEntity(laser);
+				}
 			}
 			
 			NBTTagCompound data = new NBTTagCompound();

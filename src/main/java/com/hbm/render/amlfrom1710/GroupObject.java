@@ -50,4 +50,29 @@ public class GroupObject
             }
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    public void renderSplit(float splitHeight, float scale)
+    {
+        if (faces.size() > 0)
+        {
+            
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawing(glDrawingMode);
+            renderSplit(tessellator, splitHeight, scale);
+            tessellator.draw();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void renderSplit(Tessellator tessellator, float splitHeight, float scale)
+    {
+        if (faces.size() > 0)
+        {
+            for (Face face : faces)
+            {
+                face.addFaceForRenderSplit(tessellator, 0F, splitHeight, scale);
+            }
+        }
+    }
 }

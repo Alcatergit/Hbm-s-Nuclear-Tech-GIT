@@ -15,7 +15,7 @@ public class RenderChopperMine extends Render<EntityChopperMine> {
 
 	public static final IRenderFactory<EntityChopperMine> FACTORY = (RenderManager man) -> {return new RenderChopperMine(man);};
 	
-	public static final ResourceLocation mine_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/chopperBomb.png");
+	public static final ResourceLocation mine_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/chopperBomb.png");
 	
 	ModelChopperMine mine;
 	

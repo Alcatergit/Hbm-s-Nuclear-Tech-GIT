@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderUboinik extends TEISRBase {
 
 	protected ModelUboinik uboinik;
-	protected static ResourceLocation uboinik_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelUboinik.png");
+	protected static ResourceLocation uboinik_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelUboinik.png");
 	
 	public ItemRenderUboinik() {
 		uboinik = new ModelUboinik();

@@ -84,5 +84,4 @@ public class ArmorHazmat extends ItemArmor {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		super.renderHelmetOverlay(stack, player, resolution, partialTicks);
 	}
-
 }

@@ -85,18 +85,17 @@ public class ArmorT45 extends ArmorFSBPowered {
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (stack.getItem() == ModItems.t45_helmet) {
-			return "hbm:textures/models/T45Helmet.png";
+			return "hbm:textures/armor/T45Helmet.png";
 		}
 		if (stack.getItem() == ModItems.t45_plate) {
-			return "hbm:textures/models/T45Chest.png";
+			return "hbm:textures/armor/T45Chest.png";
 		}
 		if (stack.getItem() == ModItems.t45_legs) {
-			return "hbm:textures/models/T45Legs.png";
+			return "hbm:textures/armor/T45Legs.png";
 		}
 		if (stack.getItem() == ModItems.t45_boots) {
-			return "hbm:textures/models/T45Boots.png";
+			return "hbm:textures/armor/T45Boots.png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}
-	
 }

@@ -189,7 +189,7 @@ public class TileEntityCoreAdvanced extends TileEntityMachineBase implements ITi
 				if(soundCycle >= 50)
 					soundCycle = 0;
 			} else {
-				if(!hasCluster) {
+				if(hasCluster) {
 					if(this.progressStep > 1 && world.rand.nextInt(10) == 0)
 						this.progressStep -= 1;
 				}
@@ -202,7 +202,7 @@ public class TileEntityCoreAdvanced extends TileEntityMachineBase implements ITi
 				process(23, 25);
 				process(24, 26);
 				this.progress = 0;
-				if(!hasCluster)
+				if(hasCluster)
 					this.progressStep = Math.min(TileEntityCoreAdvanced.processTime, this.progressStep+1);
 			}
 

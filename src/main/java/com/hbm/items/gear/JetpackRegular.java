@@ -32,7 +32,7 @@ public class JetpackRegular extends JetpackBase {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "hbm:textures/models/JetPackRed.png";
+		return "hbm:textures/armor/JetPackRed.png";
 	}
 	
 	@Override
@@ -75,7 +75,5 @@ public class JetpackRegular extends JetpackBase {
 			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.flamethrowerShoot, SoundCategory.PLAYERS, 0.25F, 1.5F);
 			this.useUpFuel(player, stack, 5);
 		}
-
 	}
-
 }

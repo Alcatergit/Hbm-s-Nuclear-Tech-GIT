@@ -6,7 +6,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
-import com.hbm.tileentity.bomb.TileEntityNukeN45;
+import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
@@ -196,10 +196,6 @@ public class AuxGaugePacket implements IMessage {
 
 						if(m.id == 0)
 							boiler.heat = m.value;
-					} else if(te instanceof TileEntityNukeN45) {
-						TileEntityNukeN45 nuke = (TileEntityNukeN45) te;
-
-						nuke.primed = m.value == 1;
 					} else if(te instanceof TileEntityMachineReactorLarge) {
 						TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge) te;
 
@@ -207,8 +203,15 @@ public class AuxGaugePacket implements IMessage {
 							reactor.size = m.value;
 					} else if(te instanceof TileEntityCompactLauncher) {
 						TileEntityCompactLauncher launcher = (TileEntityCompactLauncher) te;
+						
+						if(m.id == 0)
+							launcher.solid = m.value;
+						if(m.id == 1)
+							launcher.clearingTimer = m.value;
+					} else if(te instanceof TileEntityLaunchPad) {
+						TileEntityLaunchPad launcher = (TileEntityLaunchPad) te;
 
-						launcher.solid = m.value;
+						launcher.clearingTimer = m.value;
 					} else if(te instanceof TileEntityLaunchTable) {
 						TileEntityLaunchTable launcher = (TileEntityLaunchTable) te;
 
@@ -216,6 +219,8 @@ public class AuxGaugePacket implements IMessage {
 							launcher.solid = m.value;
 						if(m.id == 1)
 							launcher.padSize = PartSize.values()[m.value];
+						if(m.id == 2)
+							launcher.clearingTimer = m.value;
 					} else if(te instanceof TileEntityRailgun) {
 
 						TileEntityRailgun gen = (TileEntityRailgun) te;

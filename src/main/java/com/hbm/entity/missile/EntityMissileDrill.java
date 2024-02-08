@@ -3,6 +3,7 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
 
@@ -13,21 +14,17 @@ public class EntityMissileDrill extends EntityMissileBaseAdvanced {
 
 	public EntityMissileDrill(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(2F, 18F);
 	}
 
 	public EntityMissileDrill(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(2F, 18F);
 	}
 
 	@Override
 	public void onImpact() {
-		for(int i = 0; i < 30; i++)
-		{
-			this.world.createExplosion(this, this.posX, this.posY - i, this.posZ, 10F, true);
-		}
-		ExplosionLarge.spawnParticles(world, this.posX, this.posY, this.posZ, 25);
-		ExplosionLarge.spawnShrapnels(world, this.posX, this.posY, this.posZ, 12);
-		ExplosionLarge.spawnRubble(world, this.posX, this.posY, this.posZ, 12);
+		ExplosionLarge.buster(world, this.posX, this.posY, this.posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), 30, 30);
 	}
 
 	@Override

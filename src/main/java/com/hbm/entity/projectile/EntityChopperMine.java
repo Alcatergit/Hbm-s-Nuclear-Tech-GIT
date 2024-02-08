@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.lib.HBMSoundHandler;
 
 import net.minecraft.block.material.Material;
@@ -76,7 +77,7 @@ public class EntityChopperMine extends Entity implements IProjectile {
 				this.posZ + this.motionZ);
 
 		if (movingobjectposition != null) {
-			vec3 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y,movingobjectposition.hitVec.z);
+			vec3 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y, movingobjectposition.hitVec.z);
 		}
 
 		Entity entity = null;
@@ -110,8 +111,8 @@ public class EntityChopperMine extends Entity implements IProjectile {
 
 		if (movingobjectposition != null && movingobjectposition.entityHit != null
 				&& movingobjectposition.entityHit instanceof EntityPlayer) {
-
-			world.createExplosion(shooter, this.posX, this.posY, this.posZ, 5F, false);
+			if(CompatibilityConfig.isWarDim(world))
+				world.createExplosion(shooter, this.posX, this.posY, this.posZ, 5F, false);
 			this.setDead();
 		}
 		
@@ -123,8 +124,9 @@ public class EntityChopperMine extends Entity implements IProjectile {
 		world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.nullMine, SoundCategory.HOSTILE, 10.0F, 1F);
 		
 		if(timer >= 100 || world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getMaterial() != Material.AIR)
-		{
-			world.createExplosion(shooter, this.posX, this.posY, this.posZ, 5F, false);
+		{	
+			if(CompatibilityConfig.isWarDim(world))
+				world.createExplosion(shooter, this.posX, this.posY, this.posZ, 5F, false);
 			this.setDead();
 		}
 
@@ -140,5 +142,4 @@ public class EntityChopperMine extends Entity implements IProjectile {
 		
 		timer++;
 	}
-
 }

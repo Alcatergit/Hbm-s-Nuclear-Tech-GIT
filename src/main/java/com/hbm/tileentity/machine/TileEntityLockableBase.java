@@ -1,8 +1,10 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.block.IToolable.ToolType;
 import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
+import com.hbm.items.tool.ItemTooling;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
@@ -95,23 +97,34 @@ public class TileEntityLockableBase extends TileEntity {
 			return tryPick(player);
 		}
 	}
+
+	public static int hasLockPickTools(EntityPlayer player){
+		ItemStack stackR = player.getHeldItemMainhand();
+		ItemStack stackL = player.getHeldItemOffhand();
+		if(stackR == null || stackL == null) return -1;
+		if(stackR.getItem() == ModItems.pin){
+			if(stackL.getItem() instanceof ItemTooling && ((ItemTooling)stackL.getItem()).getType() == ToolType.SCREWDRIVER){
+				return 1;
+			}
+		} else if(stackL.getItem() == ModItems.pin){
+			if(stackR.getItem() instanceof ItemTooling && ((ItemTooling)stackR.getItem()).getType() == ToolType.SCREWDRIVER){
+				return 2;
+			}
+		}
+		return -1;
+	}	
 	
 	public boolean tryPick(EntityPlayer player) {
 
 		boolean canPick = false;
-		ItemStack stack = player.getHeldItemMainhand();
+		int hand = hasLockPickTools(player);
 		double chanceOfSuccess = this.lockMod * 100;
 		
-		if(stack != null && stack.getItem() == ModItems.pin && Library.hasInventoryItem(player.inventory, ModItems.screwdriver)) {
-			
-			stack.shrink(1);
+		if(hand == 1) {
+			player.getHeldItemMainhand().shrink(1);
 			canPick = true;
-		}
-		
-		if(stack != null && stack.getItem() == ModItems.screwdriver && Library.hasInventoryItem(player.inventory, ModItems.pin)) {
-			
-			Library.consumeInventoryItem(player.inventory, ModItems.pin);
-			player.inventoryContainer.detectAndSendChanges();
+		} else if(hand == 2){
+			player.getHeldItemOffhand().shrink(1);
 			canPick = true;
 		}
 		

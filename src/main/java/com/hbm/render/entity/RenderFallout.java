@@ -59,6 +59,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
 	public boolean shouldRender(EntityFalloutRain livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return true;
 	}
+    
     @Override
     public void doRender(EntityFalloutRain entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GL11.glPushMatrix();
@@ -89,7 +90,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
         GL11.glPopMatrix();
     }
    
-    protected void renderRainSnow(float p_78474_1_) {
+    protected void renderRainSnow(float partialTick) {
         MutableBlockPos pos = new BlockPos.MutableBlockPos();
         float f1 = 1;
  
@@ -122,11 +123,11 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
             double d0 = entitylivingbase.lastTickPosX
-                    + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * p_78474_1_;
+                    + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * partialTick;
             double d1 = entitylivingbase.lastTickPosY
-                    + (entitylivingbase.posY - entitylivingbase.lastTickPosY) * p_78474_1_;
+                    + (entitylivingbase.posY - entitylivingbase.lastTickPosY) * partialTick;
             double d2 = entitylivingbase.lastTickPosZ
-                    + (entitylivingbase.posZ - entitylivingbase.lastTickPosZ) * p_78474_1_;
+                    + (entitylivingbase.posZ - entitylivingbase.lastTickPosZ) * partialTick;
             int k = MathHelper.floor(d1);
             byte b0 = 5;
  
@@ -135,7 +136,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             }
  
             byte b1 = -1;
-            float f5 = this.rendererUpdateCount + p_78474_1_;
+            float f5 = this.rendererUpdateCount + partialTick;
  
             if (this.mc.gameSettings.fancyGraphics) {
                 b0 = 10;
@@ -178,49 +179,6 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                             float f10;
                             double d4;
  
-                            /*
-                             * if (false) { if (b1 != 0) { if (b1 >= 0) {
-                             * tessellator.draw(); }
-                             *
-                             * b1 = 0;
-                             * this.mc.getTextureManager().bindTexture(this.
-                             * falloutTexture); tessellator.startDrawingQuads();
-                             * //System.out.println("Called!"); }
-                             *
-                             * f10 = ((float)(this.rendererUpdateCount + i1 * i1
-                             * * 3121 + i1 * 45238971 + l * l * 418711 + l *
-                             * 13761 & 31) + p_78474_1_) / 32.0F * (3.0F +
-                             * this.random.nextFloat()); double d3 =
-                             * (double)((float)i1 + 0.5F) -
-                             * entitylivingbase.posX; d4 = (double)((float)l +
-                             * 0.5F) - entitylivingbase.posZ; float f12 =
-                             * MathHelper.sqrt_double(d3 * d3 + d4 * d4) /
-                             * (float)b0; float f13 = 1.0F;
-                             * tessellator.setBrightness(worldclient.
-                             * getLightBrightnessForSkyBlocks(i1, j2, l, 0));
-                             * tessellator.setColorRGBA_F(f13, f13, f13, ((1.0F
-                             * - f12 * f12) * 0.5F + 0.5F) * f1);
-                             * tessellator.setTranslation(-d0 * 1.0D, -d1 *
-                             * 1.0D, -d2 * 1.0D);
-                             * tessellator.addVertexWithUV((double)((float)i1 -
-                             * f6) + 0.5D, (double)l1, (double)((float)l - f7) +
-                             * 0.5D, (double)(0.0F * f8), (double)((float)l1 *
-                             * f8 / 4.0F + f10 * f8));
-                             * tessellator.addVertexWithUV((double)((float)i1 +
-                             * f6) + 0.5D, (double)l1, (double)((float)l + f7) +
-                             * 0.5D, (double)(1.0F * f8), (double)((float)l1 *
-                             * f8 / 4.0F + f10 * f8));
-                             * tessellator.addVertexWithUV((double)((float)i1 +
-                             * f6) + 0.5D, (double)i2, (double)((float)l + f7) +
-                             * 0.5D, (double)(1.0F * f8), (double)((float)i2 *
-                             * f8 / 4.0F + f10 * f8));
-                             * tessellator.addVertexWithUV((double)((float)i1 -
-                             * f6) + 0.5D, (double)i2, (double)((float)l - f7) +
-                             * 0.5D, (double)(0.0F * f8), (double)((float)i2 *
-                             * f8 / 4.0F + f10 * f8));
-                             * tessellator.setTranslation(0.0D, 0.0D, 0.0D); }
-                             * else
-                             */
                             {
                                 if (b1 != 1) {
                                     if (b1 >= 0) {
@@ -231,7 +189,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                                     tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);;
                                 }
  
-                                f10 = ((this.rendererUpdateCount & 511) + p_78474_1_) / 512.0F;
+                                f10 = ((this.rendererUpdateCount & 511) + partialTick) / 512.0F;
                                 float f16 = this.random.nextFloat() + f5 * 0.01F * (float) this.random.nextGaussian();
                                 float f11 = this.random.nextFloat() + f5 * (float) this.random.nextGaussian() * 0.001F;
                                 d4 = i1 + 0.5F - entitylivingbase.posX;
@@ -262,7 +220,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             GlStateManager.enableCull();
             GlStateManager.disableBlend();
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-            // this.disableLightmap((double)p_78474_1_);
+            // this.disableLightmap((double)partialTick);
         }
     }
  

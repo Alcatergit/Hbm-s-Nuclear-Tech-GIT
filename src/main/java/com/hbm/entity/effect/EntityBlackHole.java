@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.items.ModItems;
@@ -51,7 +52,10 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+		if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
 		float size = this.dataManager.get(SIZE);
 		
 		if(!world.isRemote) {

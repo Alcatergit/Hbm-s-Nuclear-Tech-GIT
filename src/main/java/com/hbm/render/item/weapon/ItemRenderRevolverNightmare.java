@@ -17,8 +17,8 @@ public class ItemRenderRevolverNightmare extends TEISRBase {
 
 	protected ModelNightmare n1;
 	protected ModelNightmare2 n2;
-	protected ResourceLocation n1Loc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelNightmare.png");
-	protected ResourceLocation n2Loc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelNightmare2.png");
+	protected ResourceLocation n1Loc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelNightmare.png");
+	protected ResourceLocation n2Loc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelNightmare2.png");
 	
 	
 	public ItemRenderRevolverNightmare() {

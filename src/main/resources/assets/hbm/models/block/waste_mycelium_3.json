@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "top": "hbm:blocks/contamination/mycelium/waste_mycelium_top",
+        "bottom": "hbm:blocks/contamination/dirt/waste_dirt_3",
+        "side": "hbm:blocks/contamination/mycelium/waste_mycelium_side_3"
+    }
+}

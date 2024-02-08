@@ -2,18 +2,16 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
-import com.hbm.config.GeneralConfig;
-import com.hbm.entity.effect.EntityNukeCloudNoShroom;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -35,7 +33,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -94,16 +91,10 @@ public class NukeBoy extends BlockContainer implements IBomb {
 		if(!world.isRemote) {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F); // x,y,z,sound,volume,pitch
 
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.boyRadius, x + 0.5, y + 0.5, z + 0.5));
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.boyRadius, x + 0.5, y + 0.5, z + 0.5));
 
-			if(GeneralConfig.enableNukeClouds) {
-				world.spawnEntity(EntityNukeCloudSmall.statFac(world, x, y, z, BombConfig.boyRadius));
-			} else {
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudNoShroom(world, BombConfig.boyRadius);
-				entity2.posX = x;
-				entity2.posY = y - 11;
-				entity2.posZ = z;
-				world.spawnEntity(entity2);
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, x, y, z, BombConfig.boyRadius);
 			}
 		}
 		return false;
@@ -192,11 +183,11 @@ public class NukeBoy extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TextFormatting.DARK_GREEN+"["+ I18nUtil.resolveKey("trait.nuclearbomb")+"]"+"§r");
-		tooltip.add(TextFormatting.YELLOW+I18nUtil.resolveKey("desc.radius")+" "+BombConfig.boyRadius+"m§r");
+		tooltip.add("§2["+ I18nUtil.resolveKey("trait.nuclearbomb")+"]"+"§r");
+		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.boyRadius)+"§r");
 		if(!BombConfig.disableNuclear){
-			tooltip.add(TextFormatting.DARK_GREEN+"["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(TextFormatting.GREEN+I18nUtil.resolveKey("desc.radius")+" "+(int)BombConfig.boyRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.boyRadius*(1+BombConfig.falloutRange/100))+"§r");
 		}
 	}
 }

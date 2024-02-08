@@ -1,19 +1,14 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import com.google.common.collect.Lists;
-import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+import java.util.Map;
 
-import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 
@@ -126,7 +121,6 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
@@ -135,5 +129,4 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 
 		return data;
 	}
-
 }

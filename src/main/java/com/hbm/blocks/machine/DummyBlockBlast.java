@@ -13,6 +13,7 @@ import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,8 +29,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
-public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IRadResistantBlock{
+@Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
+public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IRadResistantBlock, IPartialSealableBlock {
 
 	public static boolean safeBreak = false;
 
@@ -39,6 +42,24 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	public boolean isSealed(World worldIn, BlockPos blockPos, EnumFacing direction){
+		if (worldIn != null)
+		{
+			TileEntity te = worldIn.getTileEntity(blockPos);
+			if(te != null && te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
+
+				TileEntity actualTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
+				if (actualTileEntity != null) {
+					if (IDoor.class.isAssignableFrom(actualTileEntity.getClass())) {
+						// Doors should be sealed only when closed
+						return ((IDoor) actualTileEntity).getState() == IDoor.DoorState.CLOSED;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -149,7 +170,7 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 		// Door should be rad resistant only when closed
 		if (worldIn != null) {
 			TileEntity te = worldIn.getTileEntity(blockPos);
-			if(te != null && te instanceof TileEntityDummy) {
+			if(te != null && te instanceof TileEntityDummy && ((TileEntityDummy) te).target != null) {
 
 				TileEntity actualTileEntity = worldIn.getTileEntity(((TileEntityDummy) te).target);
 				if (actualTileEntity != null) {

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -87,7 +88,7 @@ public class ItemGunGauss extends ItemGunBase {
 			RayTraceResult r = Library.rayTraceIncludeEntities(world, prevPos, direction.scale(40).add(prevPos), player);
 			if(r == null || r.typeOfHit == Type.MISS){
 				break;
-			} else if(r.typeOfHit == Type.ENTITY){
+			} else if(r.typeOfHit == Type.ENTITY && CompatibilityConfig.isWarDim(world)){
 				try {
 					if(hurtResistantTime == null)
 						hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
@@ -135,7 +136,7 @@ public class ItemGunGauss extends ItemGunBase {
 							r2 = Library.rayTraceIncludeEntities(world, vec1, vec2, player);
 						}
 						//Yeah, it's some repeated code, but the alternative was even worse and buggier.
-						if(r2 != null && r2.typeOfHit == Type.ENTITY){
+						if(r2 != null && r2.typeOfHit == Type.ENTITY && CompatibilityConfig.isWarDim(world)){
 							try {
 								if(hurtResistantTime == null)
 									hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
@@ -389,8 +390,10 @@ public class ItemGunGauss extends ItemGunBase {
 			if(c > 200) {
 				setCharge(stack, 0);
 				setItemWear(stack, mainConfig.durability);
-				player.attackEntityFrom(ModDamageSource.tauBlast, 1000);
-				world.newExplosion(player, player.posX, player.posY + player.eyeHeight, player.posZ, 5.0F, true, true);
+				if(CompatibilityConfig.isWarDim(world)){
+					player.attackEntityFrom(ModDamageSource.tauBlast, 1000);
+					world.newExplosion(player, player.posX, player.posY + player.eyeHeight, player.posZ, 5.0F, true, true);
+				}
 				return;
 			}
 			

@@ -15,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderStinger extends TEISRBase {
 
 	protected ModelStinger stinger;
-	protected static ResourceLocation stinger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelStinger.png");
-	protected static ResourceLocation skystinger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelSkyStinger.png");
+	protected static ResourceLocation stinger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelStinger.png");
+	protected static ResourceLocation skystinger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelSkyStinger.png");
 	
 	public ItemRenderStinger() {
 		stinger = new ModelStinger();

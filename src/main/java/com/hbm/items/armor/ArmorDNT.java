@@ -80,18 +80,6 @@ public class ArmorDNT extends ArmorFSBPowered {
 			player.getAttributeMap().applyAttributeModifiers(multimap);
 		}
 
-		if(!world.isRemote) {
-			
-			/// JET ///
-			if(hasFSBArmor(player) && (props.isJetpackActive() || (!player.onGround && !player.isSneaking() && props.getEnableBackpack()))) {
-
-				NBTTagCompound data = new NBTTagCompound();
-				data.setString("type", "jetpack_dns");
-				data.setInteger("player", player.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 100));
-			}
-		}
-
 		if(hasFSBArmor(player)) {
 			
 			ArmorUtil.resetFlightTime(player);
@@ -103,7 +91,8 @@ public class ArmorDNT extends ArmorFSBPowered {
 
 				player.fallDistance = 0;
 
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
+				if(world.getTotalWorldTime() % 4 == 0)
+					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 
 			} else if(!player.isSneaking() && !player.onGround && props.getEnableBackpack()) {
 				player.fallDistance = 0;
@@ -122,8 +111,8 @@ public class ArmorDNT extends ArmorFSBPowered {
 					player.motionX += player.getLookVec().x * 0.25 * player.moveForward;
 					player.motionZ += player.getLookVec().z * 0.25 * player.moveForward;
 				}
-
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
+				if(world.getTotalWorldTime() % 4 == 0)
+					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 			}
 			
 			if(player.isSneaking() && !player.onGround) {
@@ -137,18 +126,14 @@ public class ArmorDNT extends ArmorFSBPowered {
 
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) e;
-
-			if(ArmorFSB.hasFSBArmor(player)) {
+		if(ArmorFSB.hasFSBArmor(e)) {
 				
-				if(event.getSource().isExplosion()) {
-					return;
-				}
-
-				e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
-				event.setCanceled(true);
+			if(event.getSource().isExplosion()) {
+				return;
 			}
+
+			e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
+			event.setCanceled(true);
 		}
 	}
 	
@@ -157,18 +142,14 @@ public class ArmorDNT extends ArmorFSBPowered {
 
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) e;
-
-			if(ArmorFSB.hasFSBArmor(player)) {
+		if(ArmorFSB.hasFSBArmor(e)) {
 				
-				if(event.getSource().isExplosion()) {
-					event.setAmount(event.getAmount()*0.001F);
-					return;
-				}
-				
-				event.setAmount(0);
+			if(event.getSource().isExplosion()) {
+				event.setAmount(event.getAmount()*0.001F);
+				return;
 			}
+			
+			event.setAmount(0);
 		}
 	}
 

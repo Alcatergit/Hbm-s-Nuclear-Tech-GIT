@@ -35,7 +35,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	protected static final ResourceLocation objTesterModelRL = new ResourceLocation(RefStrings.MODID, "models/Sphere.obj");
 	protected IModelCustom blastModel;
-	protected ResourceLocation hole = new ResourceLocation(RefStrings.MODID, "textures/models/BlackHole.png");
+	protected ResourceLocation hole = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlackHole.png");
 	protected ResourceLocation swirl = new ResourceLocation(RefStrings.MODID, "textures/entity/bhole.png");
 	protected ResourceLocation disc = new ResourceLocation(RefStrings.MODID, "textures/entity/bholeDisc.png");
 

@@ -107,8 +107,13 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			return;
 		if(te instanceof IFluidPipeMk2) {
 			pipes.remove(te.getPos());
-		} else if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-			fillables.remove(te.getPos());
+		} else{
+			try{
+				if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+					fillables.remove(te.getPos());
+				}
+			} catch(Throwable t){
+			}
 		}
 	}
 

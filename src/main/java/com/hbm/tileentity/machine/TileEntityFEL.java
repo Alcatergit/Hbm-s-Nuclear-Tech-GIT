@@ -286,7 +286,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 		super.writeToNBT(nbt);
 		
 		nbt.setLong("power", this.power);
-		nbt.setString("mode", this.mode.toString());
+		nbt.setString("mode", this.mode.name());
 		nbt.setBoolean("isOn", this.isOn);
 		nbt.setBoolean("valid", this.missingValidSilex);
 		nbt.setInteger("distance", this.distance);

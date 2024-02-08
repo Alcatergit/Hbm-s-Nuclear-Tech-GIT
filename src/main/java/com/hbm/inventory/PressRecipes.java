@@ -12,6 +12,7 @@ import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -53,6 +54,8 @@ public class PressRecipes {
 		addRecipe(PressType.FLAT, new ComparableStack(ModItems.powder_lignite), new ItemStack(ModItems.briquette_lignite)); 
 		addRecipe(PressType.FLAT, new ComparableStack(ModItems.meteorite_sword_reforged), new ItemStack(ModItems.meteorite_sword_hardened)); 
 		addRecipe(PressType.FLAT, new OreDictStack("fuelCoke"), new ItemStack(ModItems.ingot_graphite));
+		addRecipe(PressType.FLAT, new OreDictStack("sugarcane"), new ItemStack(Items.PAPER, 2));
+		addRecipe(PressType.FLAT, new ComparableStack(Blocks.LOG, 1, 3), new ItemStack(ModItems.ball_resin, 1));
 
 		addRecipe(PressType.PLATE, new OreDictStack(IRON.ingot()), new ItemStack(ModItems.plate_iron));
 		addRecipe(PressType.PLATE, new OreDictStack(GOLD.ingot()), new ItemStack(ModItems.plate_gold));

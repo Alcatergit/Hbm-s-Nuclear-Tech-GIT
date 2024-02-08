@@ -45,7 +45,7 @@ public class ItemRenderGunAnim extends TileEntityItemStackRenderer {
 				GL11.glEnable(GL11.GL_CULL_FACE);
 
 				if(item.getItem() == ModItems.gun_b92)
-					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/ModelB92SM.png"));
+					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelB92SM.png"));
 				
 				//GL11.glRotatef(-135.0F, 0.0F, 0.0F, 1.0F);
 				//GL11.glTranslatef(-0.5F, 0.0F, -0.2F);
@@ -82,7 +82,7 @@ public class ItemRenderGunAnim extends TileEntityItemStackRenderer {
 		case GROUND:
 			GL11.glPushMatrix();
 				if(item.getItem() == ModItems.gun_b92)
-					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/ModelB92SM.png"));
+					Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelB92SM.png"));
 				
 				GL11.glScaled(0.25, 0.25, 0.25);
 				GL11.glRotated(180, 1, 0, 0);

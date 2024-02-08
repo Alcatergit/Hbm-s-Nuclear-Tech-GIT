@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPoleSatelliteReceiver extends TileEntitySpecialRenderer<TileEntityDecoPoleSatelliteReceiver> {
 
-	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/PoleSatelliteReceiver.png");
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/deco/PoleSatelliteReceiver.png");
 	
 	private ModelSatelliteReceiver model;
 	

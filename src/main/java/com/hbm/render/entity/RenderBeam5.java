@@ -88,7 +88,7 @@ public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityExplosiveBeam entity) {
-		return new ResourceLocation(RefStrings.MODID + ":textures/models/PlasmaBeam.png");
+		return new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/PlasmaBeam.png");
 	}
 
 }

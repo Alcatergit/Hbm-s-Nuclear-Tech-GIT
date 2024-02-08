@@ -2,12 +2,17 @@ package com.hbm.tileentity.bomb;
 
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.items.ModItems;
+import com.hbm.interfaces.IBomb;
+import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
 import com.hbm.tileentity.TileEntityLoadedBase;
+import net.minecraftforge.fml.common.Optional;
 
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,7 +27,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser, SimpleComponent {
 
 	public ItemStackHandler inventory;
 
@@ -33,6 +44,10 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 	// private static final int[] slots_bottom = new int[] { 0, 1, 2};
 	// private static final int[] slots_side = new int[] {0};
 	public int state = 0;
+
+	//Time missile needs to clear launchpad in ticks
+	public static final int clearingDuraction = 100;
+	public int clearingTimer = 0;
 
 	private String customName;
 
@@ -87,6 +102,7 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 	public void update() {
 		
 		if (!world.isRemote) {
+			if(clearingTimer > 0) clearingTimer--;
 			this.updateConnections();
 			power = Library.chargeTEFromItems(inventory, 2, power, maxPower);
 			detectAndSendChanges();
@@ -114,6 +130,7 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 			mark = true;
 			detectPower = power;
 		}
+		PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, clearingTimer, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 		PacketDispatcher.wrapper.sendToAllTracking(new TEMissilePacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(0)), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 1000));
 		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 		if(mark)
@@ -154,5 +171,44 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+
+	public boolean setCoords(int x, int z){
+		if(!inventory.getStackInSlot(1).isEmpty() && (inventory.getStackInSlot(1).getItem() == ModItems.designator || inventory.getStackInSlot(1).getItem() == ModItems.designator_range || inventory.getStackInSlot(1).getItem() == ModItems.designator_manual)){
+			NBTTagCompound nbt;
+			if(inventory.getStackInSlot(1).hasTagCompound())
+				nbt = inventory.getStackInSlot(1).getTagCompound();
+			else
+				nbt = new NBTTagCompound();
+			nbt.setInteger("xCoord", x);
+			nbt.setInteger("zCoord", z);
+			inventory.getStackInSlot(1).setTagCompound(nbt);
+			return true;
+		}
+		return false;
+	}
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "launchpad";
+	}
+
+	@Callback(doc = "setTarget(x:int, z:int); saves coords in target designator item - returns true if it worked")
+	public Object[] setTarget(Context context, Arguments args) {
+		int x = args.checkInteger(0);
+		int z = args.checkInteger(1);
+		
+		return new Object[] {setCoords(x, z)};
+	}
+
+	@Callback(doc = "launch(); tries to launch the rocket")
+	public Object[] launch(Context context, Arguments args) {
+		Block b = world.getBlockState(pos).getBlock();
+		if(b instanceof IBomb){
+			((IBomb)b).explode(world, pos);
+		}
+		return new Object[] {null};
 	}
 }

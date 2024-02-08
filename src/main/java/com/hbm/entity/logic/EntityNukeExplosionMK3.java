@@ -6,11 +6,13 @@ import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -25,9 +27,7 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.explosion.ExplosionFleija;
-import com.hbm.explosion.ExplosionHurtUtil;
 import com.hbm.explosion.ExplosionNukeAdvanced;
-import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionSolinium;
 import com.hbm.explosion.ExplosionDrying;
 import com.hbm.interfaces.Spaghetti;
@@ -141,9 +141,13 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
     @Override
 	public void onUpdate() {
         super.onUpdate();
-       	
         if(world.isRemote)
         	return;
+       	if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
+        
         if(!this.did)
         {
     		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
@@ -197,9 +201,9 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
         {
         	this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, true);
         	if(waste || extType != 1) {
-        		ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2);
+        		ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 1D, 0F, 0F, 0F, this.destructionRange * 2F, this.destructionRange);
         	} else {
-        		ExplosionHurtUtil.doRadiation(world, posX, posY, posZ, 15000, 250000, this.destructionRange);
+        		ContaminationUtil.radiate(world, posX, posY, posZ, this.destructionRange, 250000F);
         	}
         } else {
 			if (!did2 && waste) {

@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderMP40 extends TEISRBase {
 
 	protected ModelMP40 swordModel;
-	protected ResourceLocation mp40_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelMP40.png");
+	protected ResourceLocation mp40_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelMP40.png");
 	
 	public ItemRenderMP40() {
 		swordModel = new ModelMP40();

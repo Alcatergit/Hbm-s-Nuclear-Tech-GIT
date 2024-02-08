@@ -53,12 +53,21 @@ public class ShredderRecipes {
 						shredderRecipes.put(new ComparableStack(stack), dust);
 					}
 				}
+			} else if(name.length() > 6 && name.substring(0, 6).equals("nugget")) {
+				ItemStack dust = getTinyDustByName(name.substring(6));
+				
+				if(dust != null && dust.getItem() != ModItems.scrap) {
+
+					for(ItemStack stack : matches) {
+						shredderRecipes.put(new ComparableStack(stack), dust);
+					}
+				}
 			} else if(name.length() > 3 && name.substring(0, 3).equals("ore")) {
 				ItemStack dust = getDustByName(name.substring(3));
 				
 				if(dust != null && dust.getItem() != ModItems.scrap) {
 					
-					dust.setCount(2);;
+					dust.setCount(2);
 
 					for(ItemStack stack : matches) {
 						shredderRecipes.put(new ComparableStack(stack), dust);
@@ -69,7 +78,7 @@ public class ShredderRecipes {
 				
 				if(dust != null && dust.getItem() != ModItems.scrap) {
 					
-					dust.setCount(9);;
+					dust.setCount(9);
 
 					for(ItemStack stack : matches) {
 						shredderRecipes.put(new ComparableStack(stack), dust);
@@ -159,7 +168,7 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModItems.ingot_schrabidate, new ItemStack(ModItems.powder_schrabidate, 1));
 		ShredderRecipes.setRecipe(ModBlocks.block_schrabidate, new ItemStack(ModItems.powder_schrabidate, 9));
 		ShredderRecipes.setRecipe(ModItems.coal_infernal, new ItemStack(ModItems.powder_coal, 3));
-		ShredderRecipes.setRecipe(Items.REEDS, new ItemStack(Items.PAPER, 3));
+		ShredderRecipes.setRecipe(Items.REEDS, new ItemStack(Items.SUGAR, 2));
 		ShredderRecipes.setRecipe(Items.FERMENTED_SPIDER_EYE, new ItemStack(ModItems.powder_poison, 3));
 		ShredderRecipes.setRecipe(Items.POISONOUS_POTATO, new ItemStack(ModItems.powder_poison, 1));
 
@@ -305,11 +314,25 @@ public class ShredderRecipes {
 				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
 			}
 		}
+		setRecipe("crystalEnder", "dustEnder");
+		setRecipe("crystalFluix", "dustFluix");
+		setRecipe("crystalCertusQuartz", "dustCertusQuartz");
+		setRecipe("enderpearl", "dustEnderPearl");
 	}
 	
 	public static ItemStack getDustByName(String name) {
 		
-		List<ItemStack> matches = OreDictionary.getOres("dust" + name);
+		return getOredictByName("dust" + name);
+	}
+
+	public static ItemStack getTinyDustByName(String name) {
+		
+		return getOredictByName("dustTiny" + name);
+	}
+
+	public static ItemStack getOredictByName(String name) {
+		
+		List<ItemStack> matches = OreDictionary.getOres(name);
 		if(matches != null && !matches.isEmpty())
 			return matches.get(0).copy();
 		
@@ -329,6 +352,11 @@ public class ShredderRecipes {
 	public static void setRecipe(ItemStack in, ItemStack out) {
 		
 		shredderRecipes.put(new ComparableStack(in), out);
+	}
+
+	public static void setRecipe(String in, String out) {
+		if(OreDictionary.doesOreNameExist(in) && OreDictionary.doesOreNameExist(out)) 
+			setRecipe(getOredictByName(in), getOredictByName(out));
 	}
 
 	public static void removeRecipe(ItemStack in) {

@@ -119,6 +119,4 @@ public class HbmFluidHandlerItemStack implements IFluidHandlerItem, ICapabilityP
 	public ItemStack getContainer() {
 		return container;
 	}
-	
-
 }

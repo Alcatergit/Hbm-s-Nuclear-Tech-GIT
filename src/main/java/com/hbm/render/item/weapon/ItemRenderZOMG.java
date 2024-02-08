@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderZOMG extends TEISRBase {
 
 	protected ModelZOMG swordModel;
-	protected static ResourceLocation zomg_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelZOMG.png");
+	protected static ResourceLocation zomg_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelZOMG.png");
 	
 	public ItemRenderZOMG() {
 		swordModel = new ModelZOMG();

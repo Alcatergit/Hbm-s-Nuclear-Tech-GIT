@@ -15,10 +15,12 @@ public class EntityMissileEMP extends EntityMissileBaseAdvanced {
 
 	public EntityMissileEMP(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1F, 7F);
 	}
 
 	public EntityMissileEMP(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1F, 7F);
 	}
 
 	@Override

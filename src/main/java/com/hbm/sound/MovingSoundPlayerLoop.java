@@ -13,7 +13,7 @@ public abstract class MovingSoundPlayerLoop extends MovingSound {
 	public static List<MovingSoundPlayerLoop> globalSoundList = new ArrayList<MovingSoundPlayerLoop>();
 	public List<Entity> playerForSound = new ArrayList<Entity>();
 	public Entity player;
-	public enum EnumHbmSound { soundTauLoop, soundChopperLoop, soundCrashingLoop, soundMineLoop };
+	public enum EnumHbmSound { soundTauLoop, soundChopperLoop, soundCrashingLoop, soundMineLoop, soundRadarLoop };
 	public EnumHbmSound type;
 	public boolean init;
 

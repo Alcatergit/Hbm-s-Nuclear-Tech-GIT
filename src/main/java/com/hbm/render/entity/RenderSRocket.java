@@ -15,7 +15,7 @@ public class RenderSRocket extends Render<EntityRocketHoming> {
 
 	public static final IRenderFactory<EntityRocketHoming> FACTORY = (RenderManager man) -> {return new RenderSRocket(man);};
 	
-	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/models/ModelSRocket.png");
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/ModelSRocket.png");
 	private ModelSRocket missile;
 	
 	protected RenderSRocket(RenderManager renderManager) {
@@ -34,9 +34,9 @@ public class RenderSRocket extends Render<EntityRocketHoming> {
 		GL11.glScalef(1.5F, 1.5F, 1.5F);
 
 		if(rocket.getIsCritical())
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/ModelSVTRocket.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/ModelSVTRocket.png"));
 		else
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/ModelSRocket.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/ModelSRocket.png"));
 		missile.renderAll(0.0625F);
 		GL11.glPopMatrix();
 	}

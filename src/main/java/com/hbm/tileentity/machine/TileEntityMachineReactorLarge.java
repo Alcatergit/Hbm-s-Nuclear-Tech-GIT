@@ -778,7 +778,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			}
 		}
 		
-		world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+		world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(MobConfig.enableElementals) {
 			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(100, 100, 100));
 

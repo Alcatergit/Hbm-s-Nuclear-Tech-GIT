@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderFolly extends TEISRBase {
 
 	protected ModelFolly folly;
-	protected static ResourceLocation folly_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelFolly.png");
+	protected static ResourceLocation folly_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelFolly.png");
 	
 	public ItemRenderFolly() {
 		folly = new ModelFolly();

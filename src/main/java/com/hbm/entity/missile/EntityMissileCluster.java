@@ -13,17 +13,18 @@ public class EntityMissileCluster extends EntityMissileBaseAdvanced {
 
 	public EntityMissileCluster(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1F, 6F);
 	}
 
 	public EntityMissileCluster(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
 		this.isCluster = true;
+		this.setSize(1F, 6F);
 	}
 
 	@Override
 	public void onImpact() {
-        this.world.createExplosion(this, this.posX, this.posY, this.posZ, 5F, true);
-        ExplosionChaos.cluster(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 25, 100);
+        ExplosionChaos.cluster(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 25, 0.25);
 	}
 	
 	@Override

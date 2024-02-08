@@ -69,7 +69,6 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 		};
 	}
 
-
 	public void OnContentsChanged(int slot){
 		this.needsProcess = true;
 	}

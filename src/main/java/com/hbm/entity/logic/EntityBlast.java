@@ -2,6 +2,7 @@ package com.hbm.entity.logic;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.Library;
@@ -34,7 +35,10 @@ public class EntityBlast extends Entity {
 	public void onUpdate() {
 		
 		if(!world.isRemote) {
-			
+			if(!CompatibilityConfig.isWarDim(world)){
+				this.setDead();
+				return;
+			}
 			fire();
 			
 			if(this.ticksExisted < exCount) {
@@ -108,5 +112,4 @@ public class EntityBlast extends Entity {
 		nbt.setFloat("exSize", this.exSize);
 		nbt.setBoolean("exFire", this.exFire);
 	}
-
 }

@@ -7,9 +7,9 @@ import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.main.MainRegistry;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
@@ -24,7 +24,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,7 +62,7 @@ public class ItemBedrockOre extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.format(this.getUnlocalizedName() + ".name", I18nUtil.resolveKey("desc.item_bedrock_ore."+BedrockOreRegistry.getOreName(getOreTag(stack))));
+		return I18n.format(this.getUnlocalizedName() + ".name", BedrockOreRegistry.getOreName(getOreTag(stack)));
 	}
 
 	public static int getColor(ItemStack stack){
@@ -84,9 +83,9 @@ public class ItemBedrockOre extends Item {
 		if(stack.getItem() == ModItems.ore_bedrock){
 			String oreName = BedrockOreRegistry.oreIndexes.get(stack.getMetadata());
 			int tier = BedrockOreRegistry.getOreTier(oreName);
-			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("desc.tier")+" " +tier);
+			list.add("§6"+I18nUtil.resolveKey("desc.tier")+" "+tier);
 			FluidStack req = BedrockOreRegistry.getFluidRequirement(tier);
-			list.add(TextFormatting.YELLOW+I18nUtil.resolveKey("desc.requires")+" " + req.amount + "mB " + req.getFluid().getLocalizedName(req));
+			list.add("§e"+I18nUtil.resolveKey("desc.requires")+" " + req.amount + "mB " + req.getFluid().getLocalizedName(req));
 		}
 		super.addInformation(stack, world, list, flagIn);
 	}

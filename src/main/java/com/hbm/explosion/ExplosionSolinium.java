@@ -1,5 +1,7 @@
 package com.hbm.explosion;
 
+import com.hbm.config.CompatibilityConfig;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -74,8 +76,10 @@ public class ExplosionSolinium
 		this.nlimit = this.radius2 * 4;
 	}
 	
-	public boolean update()
-	{
+	public boolean update() {
+		if(!CompatibilityConfig.isWarDim(worldObj)){
+			return true;
+		}
 		breakColumn(this.lastposX, this.lastposZ);
 		this.shell = (int) Math.floor((Math.sqrt(n) + 1) / 2);
 		int shell2 = this.shell * 2;

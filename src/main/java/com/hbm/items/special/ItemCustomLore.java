@@ -345,33 +345,6 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("Permits passive dispersion of accumulated positive energy.");
 		}
-		if(this == ModItems.missile_micro)
-		{
-			list.add("§2[Nuclear Micro Missile]§r");
-			list.add(" §eRadius: "+BombConfig.fatmanRadius+"m§r");
-			if(!BombConfig.disableNuclear){
-				list.add("§2[Fallout]§r");
-				list.add(" §aRadius: "+(int)BombConfig.fatmanRadius*(1+BombConfig.falloutRange/100)+"m§r");
-			}
-		}
-		if(this == ModItems.missile_nuclear)
-		{
-			list.add("§2[Nuclear Missile]§r");
-			list.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
-			if(!BombConfig.disableNuclear){
-				list.add("§2[Fallout]§r");
-				list.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
-			}
-		}
-		if(this == ModItems.missile_nuclear_cluster)
-		{
-			list.add("§6[Thermonuclear Missile]§r");
-			list.add(" §eRadius: "+BombConfig.missileRadius*2+"m§r");
-			if(!BombConfig.disableNuclear){
-				list.add("§2[Fallout]§r");
-				list.add(" §aRadius: "+(int)BombConfig.missileRadius*2*(1+BombConfig.falloutRange/100)+"m§r");
-			}
-		}
 
 		if(this == ModItems.factory_core_titanium || this == ModItems.factory_core_advanced)
 		{

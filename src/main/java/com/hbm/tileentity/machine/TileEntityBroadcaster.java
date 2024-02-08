@@ -7,6 +7,7 @@ import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -31,8 +32,9 @@ public class TileEntityBroadcaster extends TileEntity implements ITickable {
 				if(d <= 25) {
 					double t = (25 - d) / 25 * 10;
 					e.attackEntityFrom(ModDamageSource.broadcast, (float) t);
-					if(e.getActivePotionEffect(MobEffects.NAUSEA) == null || e.getActivePotionEffect(MobEffects.NAUSEA).getDuration() < 100)
-						e.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 300, 0));
+					if(!(e instanceof EntityPlayer && (((EntityPlayer) e).capabilities.isCreativeMode || ((EntityPlayer) e).isSpectator())))
+						if(e.getActivePotionEffect(MobEffects.NAUSEA) == null || e.getActivePotionEffect(MobEffects.NAUSEA).getDuration() < 100)
+							e.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 300, 0));
 				}
 			}
 		}

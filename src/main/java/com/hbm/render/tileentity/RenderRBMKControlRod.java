@@ -27,26 +27,14 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 	public void render(TileEntityRBMKControl control, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
 		GL11.glPushMatrix();
 		
-		int offset = 1;
-		
-		for(int o = 1; o < 16; o++) {
-			
-			if(control.getWorld().getBlockState(new BlockPos(control.getPos().getX(), control.getPos().getY() + o, control.getPos().getZ())).getBlock() == control.getBlockType()) {
-				offset = o;
-			} else {
-				break;
-			}
-		}
-		
-		GL11.glTranslated(x + 0.5, y + offset, z + 0.5);
+		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		
 		bindTexture(((RBMKBase)control.getBlockType()).columnTexture);
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
-		for(int i = 0; i < TileEntityRBMKBase.rbmkHeight+1; i ++){
-			ResourceManager.rbmk_rods.tessellatePart(tes, "Column");
-			tes.addTranslation(0, -1, 0);
-		}
+
+		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, TileEntityRBMKBase.rbmkHeight);
+		
 		tes.draw();
 		
 		GlStateManager.enableLighting();
@@ -61,7 +49,7 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		
 		double level = control.lastLevel + (control.level - control.lastLevel) * partialTicks;
 		
-		GL11.glTranslated(0, level, 0);
+		GL11.glTranslated(0, TileEntityRBMKBase.rbmkHeight+level, 0);
 		ResourceManager.rbmk_rods.renderPart("Lid");
 
 		GL11.glPopMatrix();

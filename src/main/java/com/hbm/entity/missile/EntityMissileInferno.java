@@ -15,15 +15,17 @@ public class EntityMissileInferno extends EntityMissileBaseAdvanced {
 
 	public EntityMissileInferno(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(2F, 18F);
 	}
 
 	public EntityMissileInferno(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(2F, 18F);
 	}
 
 	@Override
 	public void onImpact() {
-		ExplosionLarge.explodeFire(world, this.posX + 0.5F, this.posY + 0.5F, this.posZ + 0.5F, 35.0F, true, true, true);
+		ExplosionLarge.explodeFire(world, this.posX + 0.5F, this.posY + 0.5F, this.posZ + 0.5F, 40.0F, true, true, true);
 		ExplosionChaos.burn(this.world, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 10);
 		ExplosionChaos.flameDeath(this.world, new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ), 25);
 	}

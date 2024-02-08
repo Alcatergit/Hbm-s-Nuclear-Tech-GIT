@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderRadioRec extends TileEntitySpecialRenderer<TileEntityRadioRec> {
 
-	private static final ResourceLocation texture8 = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/ModelRadioReceiver.png");
+	private static final ResourceLocation texture8 = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/deco/ModelRadioReceiver.png");
 	private ModelBroadcaster model6;
 	
 	public RenderRadioRec() {

@@ -50,19 +50,15 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public ConnectionPriority priority = ConnectionPriority.NORMAL;
 
 	public byte lastRedstone = 0;
-
-	private static final int[] slots_top = new int[] {0};
-	private static final int[] slots_bottom = new int[] {1, 3};
-	private static final int[] slots_side = new int[] {2};
 	
 	private String customName;
 	
 	public TileEntityMachineBattery() {
 		super(4);
 	}
-	
-	public TileEntityMachineBattery(long power) {
-		this();
+
+	public static ForgeDirection[] getSendDirections(){
+		return ForgeDirection.VALID_DIRECTIONS;
 	}
 	
 	public String getInventoryName() {
@@ -103,7 +99,6 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", this.power);
-		compound.setLong("powerDelta", this.powerDelta);
 		compound.setShort("redLow", this.redLow);
 		compound.setShort("redHigh", this.redHigh);
 		compound.setByte("priority", (byte)this.priority.ordinal());
@@ -113,7 +108,6 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		this.power = compound.getLong("power");
-		this.powerDelta = compound.getLong("powerDelta");
 		this.redLow = compound.getShort("redLow");
 		this.redHigh = compound.getShort("redHigh");
 		this.priority = ConnectionPriority.values()[compound.getByte("priority")];
@@ -124,7 +118,6 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public void writeNBT(NBTTagCompound nbt) {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setLong("power", this.power);
-		data.setLong("powerDelta", this.powerDelta);
 		data.setShort("redLow", this.redLow);
 		data.setShort("redHigh", this.redHigh);
 		data.setByte("priority", (byte)this.priority.ordinal());
@@ -135,25 +128,33 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	public void readNBT(NBTTagCompound nbt) {
 		NBTTagCompound data = nbt.getCompoundTag("NBT_PERSISTENT_KEY");
 		this.power = data.getLong("power");
-		this.powerDelta = data.getLong("powerDelta");
 		this.redLow = data.getShort("redLow");
 		this.redHigh = data.getShort("redHigh");
 		this.priority = ConnectionPriority.values()[data.getByte("priority")];
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_)
-    {
-        return p_94128_1_ == EnumFacing.DOWN ? slots_bottom : (p_94128_1_ == EnumFacing.UP ? slots_top : slots_side);
+	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_) {
+        return new int[]{ 0, 1, 2, 3};
     }
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 		if(i == 0)
-			return (stack.getItem() instanceof IBatteryItem);
+			if(stack.getItem() instanceof IBatteryItem){
+				IBatteryItem batteryItem = ((IBatteryItem)stack.getItem());
+				if(batteryItem.getCharge(stack) > 0 && batteryItem.getDischargeRate() > 0){
+					return true;
+				}
+			}
 		if(i == 2)
-			return (stack.getItem() instanceof IBatteryItem);
-		return true;
+			if(stack.getItem() instanceof IBatteryItem){
+				IBatteryItem batteryItem = ((IBatteryItem)stack.getItem());
+				if(batteryItem.getCharge(stack) < batteryItem.getMaxCharge() && batteryItem.getChargeRate() > 0){
+					return true;
+				}
+			}
+		return false;
 	}
 	
 	@Override
@@ -194,6 +195,11 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(!world.isRemote) {
 
 			long prevPower = this.power;
+
+			if(inventory.getSlots() < 3){
+				inventory = this.getNewInventory(4, 64);
+			}
+
 			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
 			
 			//////////////////////////////////////////////////////////////////////
@@ -211,18 +217,16 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			long avg = (power >> 1) + (prevPower >> 1); //had issue with getting avg of extreme long values
 			
 			this.powerDelta = avg - this.log[0];
-
 			for(int i = 1; i < this.log.length; i++) {
 				this.log[i - 1] = this.log[i];
 			}
-			
 			this.log[this.log.length-1] = avg;
 
-			this.networkPack(packNBT(avg), 20);
+			this.networkPack(packNBT(), 20);
 		}
 	}
 
-	public NBTTagCompound packNBT(long power){
+	public NBTTagCompound packNBT(){
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setLong("power", power);
 		nbt.setLong("powerDelta", powerDelta);
@@ -241,7 +245,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		Set<IEnergyConnector> consumers = new HashSet();
 		
 		//iterate over all sides
-		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+		for(ForgeDirection dir : getSendDirections()) {
 			
 			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
 			
@@ -267,7 +271,20 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(this.power > 0 && (mode == mode_buffer || mode == mode_output)) {
 			List<IEnergyConnector> con = new ArrayList();
 			con.addAll(consumers);
-			this.power = PowerNet.fairTransfer(con, this.power);
+			
+			if(PowerNet.trackingInstances == null) {
+				PowerNet.trackingInstances = new ArrayList();
+			}
+			PowerNet.trackingInstances.clear();
+			
+			nets.forEach(x -> {
+				if(x instanceof PowerNet)
+					PowerNet.trackingInstances.add((PowerNet) x);
+			});
+			
+			long toSend = Math.min(this.power, this.getMaxTransfer());
+			long powerRemaining = this.power - toSend;
+			this.power = PowerNet.fairTransferWithPrio(this.getPriority(), con, toSend) + powerRemaining;
 		}
 		
 		//resubscribe to buffered nets, if necessary
@@ -275,48 +292,9 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			nets.forEach(x -> x.subscribe(this));
 		}
 	}
-	
-	protected void transmitPower() {
-		
-		short mode = (short) this.getRelevantMode();
-		
-		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			
-			TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
-			
-			// first we make sure we're not subscribed to the network that we'll be supplying
-			if(te instanceof IEnergyConductor) {
-				IEnergyConductor con = (IEnergyConductor) te;
-				
-				if(con.getPowerNet() != null && con.getPowerNet().isSubscribed(this))
-					con.getPowerNet().unsubscribe(this);
-			}
-			
-			//then we add energy
-			if(mode == mode_buffer || mode == mode_output) {
-				if(te instanceof IEnergyConnector) {
-					IEnergyConnector con = (IEnergyConnector) te;
-					long oldPower = this.power;
-					long transfer = this.power - con.transferPower(this.power);
-					this.power = oldPower - transfer;
-				}
-			}
-			
-			//then we subscribe if possible
-			if(te instanceof IEnergyConductor) {
-				IEnergyConductor con = (IEnergyConductor) te;
-				
-				if(con.getPowerNet() != null) {
-					if(mode == mode_output || mode == mode_none) {
-						if(con.getPowerNet().isSubscribed(this)) {
-							con.getPowerNet().unsubscribe(this);
-						}
-					} else if(!con.getPowerNet().isSubscribed(this)) {
-						con.getPowerNet().subscribe(this);
-					}
-				}
-			}
-		}
+
+	public long getMaxTransfer() {
+		return this.getMaxPower() / 20;
 	}
 	
 	@Override
@@ -401,5 +379,10 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public ConnectionPriority getPriority() {
 		return this.priority;
+	}
+
+	@Override
+	public boolean isStorage() { //used for batteries
+		return true;
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "hbm:blocks/obj_tester"
+		"all": "hbm:blocks/block_steel"
 	}
 }

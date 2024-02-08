@@ -17,39 +17,25 @@ public class RenderRadar extends TileEntitySpecialRenderer<TileEntityMachineRada
 	}
 	
 	@Override
-	public void render(TileEntityMachineRadar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityMachineRadar radar, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
-        bindTexture(ResourceManager.radar_body_tex);
-        
-        ResourceManager.radar_body.renderAll();
+        bindTexture(ResourceManager.radar_base_tex);
+        ResourceManager.radar.renderPart("Base");
+
+        if(radar.power > 0)
+			GL11.glRotatef((-System.currentTimeMillis() / 10) % 360, 0F, 1F, 0F);
+		GL11.glTranslated(-0.125D, 0, 0);
+
+		bindTexture(ResourceManager.radar_dish_tex);
+		ResourceManager.radar.renderPart("Dish");
 
         GL11.glPopMatrix();
         
-        renderTileEntityAt2(te, x, y, z, partialTicks);
         GlStateManager.enableCull();
 	}
-	
-	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f)
-    {
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GlStateManager.enableLighting();
-        GlStateManager.disableCull();
-		GL11.glRotatef(180, 0F, 1F, 0F);
-		
-		TileEntityMachineRadar radar = (TileEntityMachineRadar)tileEntity;
-		
-		if(radar.power > 0)
-			GL11.glRotatef((System.currentTimeMillis() / 10) % 360, 0F, 1F, 0F);
-
-        bindTexture(ResourceManager.radar_head_tex);
-        ResourceManager.radar_head.renderAll();
-
-        GL11.glPopMatrix();
-    }
 }

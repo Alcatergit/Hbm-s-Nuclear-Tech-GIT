@@ -7,7 +7,9 @@ import com.hbm.entity.mob.ai.EntityAIMaskmanLasergun;
 import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.main.AdvancementManager;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -18,8 +20,11 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityEgg;
+import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -60,6 +65,13 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+
+		if(source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect) source).getImmediateSource() instanceof EntityEgg && rand.nextInt(10) == 0) {
+			this.experienceValue = 0;
+			this.setHealth(0);
+			return true;
+		}
+
 		if(source.isFireDamage())
     		amount = 0;
     	if(source.isMagicDamage())
@@ -68,8 +80,9 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
     		amount *= 0.25F;
     	if(source.isExplosion())
     		amount *= 0.5F;
-    	if(amount > 50)
-    		amount = 50;
+    	if(amount > 50) {
+			amount = 50 + (amount - 50) * 0.25F;
+		}
 
     	return super.attackEntityFrom(source, amount);
 	}
@@ -90,7 +103,7 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
-
+			
 		for(EntityPlayer player : players) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bossMaskman);
 		}
@@ -128,11 +141,14 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
 		if(!world.isRemote){
+
+			ItemStack mask = new ItemStack(ModItems.gas_mask_m65);
+			ArmorUtil.installGasMaskFilter(mask, new ItemStack(ModItems.gas_mask_filter_combo));
+			
+			this.entityDropItem(mask, 0F);
 			this.dropItem(ModItems.coin_maskman, 1);
-			this.dropItem(ModItems.gas_mask_m65, 1);
 			this.dropItem(ModItems.v1, 1);
 			this.dropItem(Items.SKULL, 1);
 		}
 	}
-	
 }

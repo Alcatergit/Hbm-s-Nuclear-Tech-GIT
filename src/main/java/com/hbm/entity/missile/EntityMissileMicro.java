@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.config.BombConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
@@ -17,10 +16,12 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
 
 	public EntityMissileMicro(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1F, 7F);
 	}
 
 	public EntityMissileMicro(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1F, 7F);
 	}
 
 	@Override
@@ -28,22 +29,13 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
         if (!this.world.isRemote)
         {
     	    	
-    	    this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
+    	    this.world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
     	    
-    	    if(MainRegistry.polaroidID == 11)
-    	    	if(rand.nextInt(100) >= 0)
-    	    	{
-    	    		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-    	    	} else {
-    	    		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-    	    	}
-    	    else
-    	    	if(rand.nextInt(100) == 0)
-    	    	{
-    	    		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-    	    	} else {
-    	    		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-    	    	}
+    	    if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0){
+                EntityNukeTorex.statFacBale(world, this.posX, this.posY, this.posZ, BombConfig.fatmanRadius);
+            } else {
+                EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, BombConfig.fatmanRadius);
+            }
         }
 	}
 

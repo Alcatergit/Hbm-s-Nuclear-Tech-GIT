@@ -66,7 +66,7 @@ public class JetpackBooster extends JetpackBase {
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "hbm:textures/models/JetPack.png";
+		return "hbm:textures/armor/JetPack.png";
 	}
 
 	@Override
@@ -85,7 +85,6 @@ public class JetpackBooster extends JetpackBase {
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 100));
 			}
 		}
-
 		if(getFuel(stack) > 0 && props.isJetpackActive()) {
 			if(player.motionY < 0.6D)
 				player.motionY += 0.1D;
@@ -105,5 +104,4 @@ public class JetpackBooster extends JetpackBase {
 			this.useUpFuel(player, stack, 1);
 		}
     }
-    
 }

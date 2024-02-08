@@ -30,10 +30,16 @@ public class ModelArmorAJR extends ModelArmorBase {
 
 		GL11.glPushMatrix();
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+			GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+		}
 		if(type == 0) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ajr_helmet);
-			head.render(par7);
+			head.render(par7*1.001F);
+		}
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
 		}
 		if(type == 1) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ajr_chest);

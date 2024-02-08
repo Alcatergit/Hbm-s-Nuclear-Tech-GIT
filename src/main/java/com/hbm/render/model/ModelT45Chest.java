@@ -5,8 +5,6 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -178,18 +176,6 @@ public class ModelT45Chest extends ModelBiped {
 			convertToChild(rightarm, Shape19);
 		}
 
-		/*
-		 * public void render(Entity entity, float f, float f1, float f2, float f3,
-		 * float f4, float f5) { super.render(entity, f, f1, f2, f3, f4, f5);
-		 * setRotationAngles(f, f1, f2, f3, f4, f5); Shape1.render(f5);
-		 * Shape2.render(f5); Shape3.render(f5); Shape4.render(f5);
-		 * Shape5.render(f5); Shape6.render(f5); Shape7.render(f5);
-		 * Shape8.render(f5); Shape9.render(f5); Shape10.render(f5);
-		 * Shape11.render(f5); Shape12.render(f5); Shape13.render(f5);
-		 * Shape14.render(f5); Shape15.render(f5); Shape16.render(f5);
-		 * Shape17.render(f5); Shape18.render(f5); Shape19.render(f5); }
-		 */
-
 		private void setRotation(ModelRenderer model, float x, float y, float z) {
 			model.rotateAngleX = x;
 			model.rotateAngleY = y;
@@ -205,21 +191,6 @@ public class ModelT45Chest extends ModelBiped {
 				} else {
 					this.isSneak = false;
 				}
-				
-				
-				//This is done automatically now
-				/*ItemStack itemstack = player.inventory.getCurrentItem();
-				  this.heldItemRight = itemstack != null ? 1 : 0;
-
-				if (itemstack != null && player.getItemInUseCount() > 0) {
-					EnumAction enumaction = itemstack.getItemUseAction();
-
-					if (enumaction == EnumAction.block) {
-						this.heldItemRight = 3;
-					} else if (enumaction == EnumAction.bow) {
-						this.aimedBow = true;
-					}
-				}*/
 			}
 
 			super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
@@ -242,10 +213,32 @@ public class ModelT45Chest extends ModelBiped {
 			this.rightarm.rotateAngleY = this.bipedRightArm.rotateAngleY;
 			this.rightarm.rotateAngleZ = this.bipedRightArm.rotateAngleZ;
 			
-			if(entity instanceof EntityZombie || entity instanceof EntityPigZombie || entity instanceof EntitySkeleton) {
-				this.leftarm.rotateAngleX -= (90 * Math.PI / 180D);
-				this.rightarm.rotateAngleX -= (90 * Math.PI / 180D);
-			}
+			if(entity instanceof EntityZombie) {
+	            boolean armsRaised = false;
+	            if(entity instanceof EntityZombie)
+	                armsRaised = ((EntityZombie)entity).isArmsRaised();
+
+	            this.leftarm.rotateAngleY = (float)(8 * Math.PI / 180D);
+	            this.rightarm.rotateAngleY = -(float)(8 * Math.PI / 180D);
+	            if(armsRaised){
+	                this.leftarm.rotateAngleX = -(float)(120 * Math.PI / 180D);
+	                this.rightarm.rotateAngleX = -(float)(120 * Math.PI / 180D);
+	            } else {
+	                this.leftarm.rotateAngleX = -(float)(80 * Math.PI / 180D);
+	                this.rightarm.rotateAngleX = -(float)(80 * Math.PI / 180D);
+	            }
+	        }
+
+	        if (this.isSneak) {
+	            this.chest.offsetY = 0.25F;
+	            this.rightarm.offsetY = 0.25F;
+	            this.leftarm.offsetY = 0.25F;
+
+	        } else {
+	            this.chest.offsetY = 0F;
+	            this.rightarm.offsetY = 0F;
+	            this.leftarm.offsetY = 0F;
+	        }
 		}
 
 
@@ -253,7 +246,12 @@ public class ModelT45Chest extends ModelBiped {
 		public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
-			GL11.glScalef(1.125F, 1.125F, 1.125F);
+			GL11.glScalef(1.13F, 1.13F, 1.13F);
+			if(this.isChild) {
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+				GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+			}
 			this.chest.render(par7);
 			GL11.glPopMatrix();
 			this.renderLeft(par1Entity, par2, par3, par4, par5, par6, par7);
@@ -263,7 +261,7 @@ public class ModelT45Chest extends ModelBiped {
 		public void renderLeft(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
-			GL11.glScalef(1.125F, 1.125F, 1.125F);
+			GL11.glScalef(1.13F, 1.13F, 1.13F);
 			this.leftarm.render(par7);
 			GL11.glPopMatrix();
 		}
@@ -271,7 +269,7 @@ public class ModelT45Chest extends ModelBiped {
 		public void renderRight(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
-			GL11.glScalef(1.125F, 1.125F, 1.125F);
+			GL11.glScalef(1.13F, 1.13F, 1.13F);
 			this.rightarm.render(par7);
 			GL11.glPopMatrix();
 		}

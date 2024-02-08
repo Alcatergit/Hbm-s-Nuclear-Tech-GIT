@@ -3,13 +3,13 @@ package com.hbm.entity.projectile;
 import java.util.List;
 
 import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.potion.HbmPotion;
 
@@ -101,27 +101,6 @@ public class EntityModBeam extends Entity implements IProjectile {
             this.shoot(d0, d1 + f4, d2, p_i1755_4_, p_i1755_5_);
         }
     }
-	
-	/*public EntityModBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
-		super(p_i1756_1_);
-		this.renderDistanceWeight = 10.0D;
-		this.shootingEntity = p_i1756_2_;
-
-		this.setSize(0.5F, 0.5F);
-		this.setLocationAndAngles(grenade.posX, grenade.posY + grenade.getEyeHeight(), grenade.posZ,
-				grenade.rotationYaw, grenade.rotationPitch);
-		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.posY -= 0.10000000149011612D;
-		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.setPosition(this.posX, this.posY, this.posZ);
-		this.yOffset = 0.0F;
-		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI)
-				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
-		this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI)
-				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
-		this.motionY = (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
-	}*/
 
     public EntityModBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, EnumHand hand)
     {
@@ -558,8 +537,10 @@ public class EntityModBeam extends Entity implements IProjectile {
     		} else {
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	    		
-	    		this.world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.gadgetRadius, posX, posY, posZ));
-	    		this.world.spawnEntity(EntityNukeCloudSmall.statFac(world, posX, posY, posZ, BombConfig.gadgetRadius));
+	    		this.world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.gadgetRadius, posX, posY, posZ));
+                if(BombConfig.enableNukeClouds) {
+                    EntityNukeTorex.statFac(world, posX, posY, posZ, BombConfig.gadgetRadius);
+                }
     		}
     	}
     }

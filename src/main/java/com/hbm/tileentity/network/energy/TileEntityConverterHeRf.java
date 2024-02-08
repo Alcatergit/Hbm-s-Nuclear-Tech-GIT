@@ -13,7 +13,9 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.common.Optional;
 
+@Optional.InterfaceList({@Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux")})
 public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITickable, IEnergyConnector, IEnergyProvider, IEnergyStorage {
 
 	//Thanks to the great people of Fusion Warfare for helping me with the original implementation of the RF energy API
@@ -90,9 +92,9 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		}
 
 		recursionBrake = false;
-		lastTransfer = totalTransferred / GeneralConfig.rfConversionRate;
+		lastTransfer = (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
 		
-		return power - (totalTransferred / GeneralConfig.rfConversionRate);
+		return power - (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
 	}
 	
 	@Override
@@ -102,7 +104,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 
 	@Override
 	public long getMaxPower() {
-		return Integer.MAX_VALUE / GeneralConfig.rfConversionRate;
+		return (long)(Integer.MAX_VALUE / (float)GeneralConfig.rfConversionRate);
 	}
 
 	private long lastTransfer = 0;
@@ -140,7 +142,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate){
-		return maxExtract;
+		return 0;
 	}
 
 	@Override

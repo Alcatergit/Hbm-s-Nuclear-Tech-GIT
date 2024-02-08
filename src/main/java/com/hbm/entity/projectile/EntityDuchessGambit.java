@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.HBMSoundHandler;
@@ -51,14 +52,13 @@ public class EntityDuchessGambit extends EntityThrowable {
         {
             this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F);
     		this.setDead();
-    			
-    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 5, posY - 2, posZ - 9, posX + 5, posY + 2, posZ + 9));
-    			
-    		for(Entity e : list) {
-    			e.attackEntityFrom(ModDamageSource.boat, 1000);
-    		}
-    		
-    		if(!world.isRemote) {
+    		if(!world.isRemote && CompatibilityConfig.isWarDim(world)){
+	    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 5, posY - 2, posZ - 9, posX + 5, posY + 2, posZ + 9));
+	    			
+	    		for(Entity e : list) {
+	    			e.attackEntityFrom(ModDamageSource.boat, 1000);
+	    		}
+
         		ExplosionLarge.explode(world, posX, posY, posZ - 6, 2, true, false, false);
         		ExplosionLarge.explode(world, posX, posY, posZ - 3, 2, true, false, false);
         		ExplosionLarge.explode(world, posX, posY, posZ, 2, true, false, false);

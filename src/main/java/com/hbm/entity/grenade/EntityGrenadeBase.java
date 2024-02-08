@@ -2,6 +2,7 @@ package com.hbm.entity.grenade;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
 
@@ -76,8 +77,11 @@ public abstract class EntityGrenadeBase extends EntityThrowable {
     }
 
     @Override
-	protected void onImpact(RayTraceResult p_70184_1_)
-    {
+	protected void onImpact(RayTraceResult p_70184_1_) {
+        if(!CompatibilityConfig.isWarDim(world)){
+            this.setDead();
+            return;
+        }
         if (p_70184_1_.entityHit != null)
         {
             byte b0 = 0;

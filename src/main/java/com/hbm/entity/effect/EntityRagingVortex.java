@@ -1,5 +1,7 @@
 package com.hbm.entity.effect;
 
+import com.hbm.config.CompatibilityConfig;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -20,7 +22,10 @@ public class EntityRagingVortex extends EntityBlackHole {
 	
 	@Override
 	public void onUpdate() {
-		
+		if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
 		timer++;
 		
 		if(timer <= 20)

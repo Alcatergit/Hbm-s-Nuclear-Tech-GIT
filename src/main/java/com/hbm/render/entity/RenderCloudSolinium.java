@@ -26,7 +26,7 @@ public class RenderCloudSolinium extends Render<EntityCloudSolinium> {
 	protected RenderCloudSolinium(RenderManager renderManager) {
 		super(renderManager);
 		blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-    	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/BlastSolinium.png");
+    	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlastSolinium.png");
     	scale = 0;
 	}
 	

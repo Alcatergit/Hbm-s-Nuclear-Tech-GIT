@@ -21,22 +21,10 @@ public class ParticleRadiationFog extends Particle {
 		super(worldIn, posXIn, posYIn, posZIn);
 		maxAge = 100 + rand.nextInt(40);
 		
-        this.particleRed = 1F;
-        this.particleGreen = 0.87F;
-        this.particleBlue = 0.59F;
+        this.particleRed = 0.8F;
+        this.particleGreen = 0.8F;
+        this.particleBlue = 0.8F;
         this.particleScale = 7.5F;
-        this.particleTexture = ModEventHandlerClient.fog;
-	}
-	
-	public ParticleRadiationFog(World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_, float red, float green, float blue, float scale) {
-		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
-		maxAge = 100 + rand.nextInt(40);
-
-        this.particleRed = red;
-        this.particleGreen = green;
-        this.particleBlue = blue;
-        
-        this.particleScale = scale;
         this.particleTexture = ModEventHandlerClient.fog;
 	}
 	
@@ -114,9 +102,6 @@ public class ParticleRadiationFog extends Particle {
 	
 	@Override
 	public int getBrightnessForRender(float p_189214_1_) {
-		return 240;
+		return 70;
 	}
-	
-	
-
 }

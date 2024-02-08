@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,9 +35,10 @@ public class YellowBarrel extends Block {
 	
 	@Override
 	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
-		if (!worldIn.isRemote)
-        {
-        	explode(worldIn, pos.getX(), pos.getY(), pos.getZ());
+		if (!worldIn.isRemote && worldIn instanceof WorldServer) {
+			((WorldServer)worldIn).addScheduledTask(() -> {
+        		explode(worldIn, pos.getX(), pos.getY(), pos.getZ());
+        	});
         }
 	}
 	

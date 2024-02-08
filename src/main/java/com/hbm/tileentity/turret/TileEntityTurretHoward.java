@@ -125,7 +125,7 @@ public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 	public void updateFiringTick(){
 		timer++;
 
-		if(loaded > 0 && this.tPos != null) {
+		if(loaded > 0 && this.target != null) {
 
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.howard_fire, SoundCategory.BLOCKS, 4.0F, 0.9F + world.rand.nextFloat() * 0.3F);
 			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.howard_fire, SoundCategory.BLOCKS, 4.0F, 1F + world.rand.nextFloat() * 0.3F);

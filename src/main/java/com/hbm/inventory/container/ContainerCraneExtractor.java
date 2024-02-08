@@ -21,20 +21,20 @@ public class ContainerCraneExtractor extends Container  {
         //filter
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                this.addSlotToContainer(new SlotPattern(extractor, j + i * 3, 71 + j * 18, 17 + i * 18));
+                this.addSlotToContainer(new SlotPattern(extractor.inventory, j + i * 3, 71 + j * 18, 17 + i * 18));
             }
         }
 
         //buffer
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
-                this.addSlotToContainer(new SlotItemHandler(extractor, 9 + j + i * 3, 8 + j * 18, 17 + i * 18));
+                this.addSlotToContainer(new SlotItemHandler(extractor.inventory, 9 + j + i * 3, 8 + j * 18, 17 + i * 18));
             }
         }
 
         //upgrades
-        this.addSlotToContainer(new SlotUpgrade(extractor, 18, 152, 23));
-        this.addSlotToContainer(new SlotUpgrade(extractor, 19, 152, 47));
+        this.addSlotToContainer(new SlotUpgrade(extractor.inventory, 18, 152, 23));
+        this.addSlotToContainer(new SlotUpgrade(extractor.inventory, 19, 152, 47));
 
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 9; j++) {
@@ -81,43 +81,5 @@ public class ContainerCraneExtractor extends Container  {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return extractor.isUseableByPlayer(player);
-    }
-
-
-    public ItemStack slotClick(int index, int button, ClickType mode, EntityPlayer player) {
-
-        //L/R: 0
-        //M3: 3
-        //SHIFT: 1
-        //DRAG: 5
-
-        if(index < 0 || index > 8) {
-            return super.slotClick(index, button, mode, player);
-        }
-
-        Slot slot = this.getSlot(index);
-
-        ItemStack ret = ItemStack.EMPTY;
-        ItemStack held = player.inventory.getItemStack();
-
-        if(slot.getHasStack())
-            ret = slot.getStack().copy();
-
-        if(button == 1 && mode == ClickType.PICKUP && slot.getHasStack()) {
-            extractor.nextMode(index);
-            return ret;
-
-        } else {
-            slot.putStack(held != ItemStack.EMPTY ? held.copy() : ItemStack.EMPTY);
-
-            if(slot.getHasStack()) {
-                slot.getStack().setCount(1);
-            }
-
-            slot.onSlotChanged();
-            extractor.matcher.initPatternStandard(extractor.getWorld(), slot.getStack(), index);
-
-            return ret;
-        }
     }
 }

@@ -120,6 +120,10 @@ public interface IEnergyConnector extends ILoadedTile {
 		HIGH
 	}
 
+	public default boolean isStorage() { //used for batteries
+		return false;
+	}
+
 	public default void updateStandardConnections(World world, TileEntity te) {
 		updateStandardConnections(world, te.getPos());
 	}

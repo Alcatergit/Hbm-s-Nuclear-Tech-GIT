@@ -65,8 +65,11 @@ public class Radiobox extends BlockContainer {
 		} else if(!player.isSneaking())
 		{
 			TileEntityRadiobox box = (TileEntityRadiobox)world.getTileEntity(pos);
+			boolean wasInfinite = false;
+			if(box != null)
+				wasInfinite = box.infinite;
 
-			if(player.getHeldItem(hand).getItem() == ModItems.battery_spark && !box.infinite) {
+			if(player.getHeldItem(hand).getItem() == ModItems.battery_spark && !wasInfinite) {
 				player.getHeldItem(hand).shrink(1);
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
 				box.infinite = true;
@@ -81,6 +84,7 @@ public class Radiobox extends BlockContainer {
 				world.setBlockState(pos, world.getBlockState(pos).withProperty(STATE, false));
 				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.85F);
 			}
+			((TileEntityRadiobox)world.getTileEntity(pos)).infinite = wasInfinite;
 			
 			return true;
 		} else {
@@ -94,7 +98,7 @@ public class Radiobox extends BlockContainer {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntityRadiobox box = (TileEntityRadiobox)world.getTileEntity(pos);
 
-		if(box.infinite) {
+		if(box != null && box.infinite) {
 			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ItemBattery.getEmptyBattery(ModItems.battery_spark)));
 		}
 		super.breakBlock(world, pos, state);

@@ -16,6 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WasteEarth extends Block implements IItemHazard {
 
+	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
 	ItemHazardModule module;
 	
 	public WasteEarth(Material materialIn, boolean tick, String s) {
@@ -46,11 +50,26 @@ public class WasteEarth extends Block implements IItemHazard {
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
+
 	public WasteEarth(Material materialIn, SoundType type, boolean tick, String s) {
 		this(materialIn, tick, s);
 		setSoundType(type);
 	}
-
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{META});
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(META);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(META, meta);
+	}
 
 	@Override
 	public ItemHazardModule getModule() {
@@ -128,9 +147,8 @@ public class WasteEarth extends Block implements IItemHazard {
 
 		if(this == ModBlocks.waste_earth || this == ModBlocks.waste_dirt || this == ModBlocks.waste_mycelium) {
 			
-			if(GeneralConfig.enableAutoCleanup || (world.getLightBrightness(new BlockPos(x, y + 1, z)) < 4 && world.getBlockLightOpacity(new BlockPos(x, y + 1, z)) > 2)) {
+			if(GeneralConfig.enableAutoCleanup) {
 				world.setBlockState(new BlockPos(x, y, z), Blocks.DIRT.getDefaultState());
-				
 			}
 			
 			if(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock() instanceof BlockMushroom) {

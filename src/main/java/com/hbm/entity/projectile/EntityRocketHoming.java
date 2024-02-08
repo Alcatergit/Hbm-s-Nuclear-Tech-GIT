@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionLarge;
@@ -220,40 +221,9 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
         if (this.inGround)
         {
-            /*int j = this.worldObj.getBlockMetadata(this.field_145791_d, this.field_145792_e, this.field_145789_f);
-
-            if (block == this.field_145790_g && j == this.inData)
-            {
-                ++this.ticksInGround;
-
-                if (this.ticksInGround == 1200)
-                {
-                    this.setDead();
-                }
-            }
-            else
-            {
-                this.inGround = false;
-                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
-                this.ticksInGround = 0;
-                this.ticksInAir = 0;
-            }*/
-
-
             if (!this.world.isRemote)
             {
-            	//this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.5F, true);
             	ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
-                /*EntityNukeExplosionAdvanced explosion = new EntityNukeExplosionAdvanced(this.worldObj);
-                explosion.speed = 25;
-                explosion.coefficient = 5.0F;
-                explosion.destructionRange = 20;
-                explosion.posX = this.posX;
-                explosion.posY = this.posY;
-                explosion.posZ = this.posZ;
-                this.worldObj.spawnEntityInWorld(explosion);*/
             }
         	this.setDead();
         }
@@ -318,7 +288,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {

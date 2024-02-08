@@ -13,20 +13,12 @@ import java.util.Random;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.WasteLog;
 import com.hbm.config.VersatileConfig;
-import com.hbm.entity.effect.EntityBlackHole;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.grenade.EntityGrenadeASchrab;
-import com.hbm.entity.grenade.EntityGrenadeNuclear;
-import com.hbm.entity.missile.EntityMIRV;
-import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.entity.projectile.EntityExplosiveBeam;
-import com.hbm.entity.projectile.EntityMiniMIRV;
-import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.interfaces.Spaghetti;
+import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -46,7 +38,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -66,55 +57,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 public class ExplosionNukeGeneric {
 
 	private final static Random random = new Random();
-
-	/*public static void detonateTestBomb(World world, int x, int y, int z, int bombStartStrength) {
-	int r = bombStartStrength;
-	int r2 = r * r;
-	int r22 = r2 / 2;
-	for (int xx = -r; xx < r; xx++) {
-		int X = xx + x;
-		int XX = xx * xx;
-		for (int yy = -r; yy < r; yy++) {
-			int Y = yy + y;
-			int YY = XX + yy * yy;
-			for (int zz = -r; zz < r; zz++) {
-				int Z = zz + z;
-				int ZZ = YY + zz * zz;
-				if (r22 >= 25) {
-					if (ZZ < r22 + world.rand.nextInt(r22 / 25)) {
-						if (Y >= y)
-							destruction(world, X, Y, Z);
-					}
-				} else {
-					if (ZZ < r22) {
-						if (Y >= y)
-							destruction(world, X, Y, Z);
-					}
-				}
-			}
-		}
-	}
-
-	for (int xx = -r; xx < r; xx++) {
-		int X = xx + x;
-		int XX = xx * xx;
-		for (int yy = -r; yy < r; yy++) {
-			int Y = yy + y;
-			int YY = XX + yy * yy * 50;
-			for (int zz = -r; zz < r; zz++) {
-				int Z = zz + z;
-				int ZZ = YY + zz * zz;
-				if (ZZ < r22) {
-					if (Y < y)
-						destruction(world, X, Y, Z);
-				}
-			}
-		}
-	}
-}
-*/
 	
 	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int r = bombStartStrength;
 		int r2 = r * r;
@@ -135,69 +82,6 @@ public class ExplosionNukeGeneric {
 				}
 			}
 		}
-	}
-	
-	public static void dealDamage(World world, double x, double y, double z, double radius) {
-		dealDamage(world, x, y, z, radius, 250F);
-	}
-
-	public static void dealDamage(World world, double x, double y, double z, double radius, float maxDamage) {
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(x, y, z, x, y, z).grow(radius, radius, radius));
-
-		for(Entity e : list) {
-
-			double dist = e.getDistance(x, y, z);
-
-			if(dist <= radius) {
-
-				double entX = e.posX;
-				double entY = e.posY + e.getEyeHeight();
-				double entZ = e.posZ;
-
-				if(!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
-
-					double damage = maxDamage * (radius - dist) / radius;
-					e.attackEntityFrom(ModDamageSource.nuclearBlast, (float)damage);
-					e.setFire(5);
-
-					double knockX = e.posX - x;
-					double knockY = e.posY + e.getEyeHeight() - y;
-					double knockZ = e.posZ - z;
-
-					Vec3d knock = new Vec3d(knockX, knockY, knockZ);
-					knock = knock.normalize();
-
-					e.motionX += knock.x * 0.2D;
-					e.motionY += knock.y * 0.2D;
-					e.motionZ += knock.z * 0.2D;
-				}
-			}
-		}
-
-	}
-
-	@Spaghetti("just look at it")
-	private static boolean isExplosionExempt(Entity e) {
-
-		if (e instanceof EntityOcelot ||
-				e instanceof EntityNukeCloudSmall ||
-				e instanceof EntityMIRV ||
-				e instanceof EntityMiniNuke ||
-				e instanceof EntityMiniMIRV ||
-				e instanceof EntityGrenadeASchrab ||
-				e instanceof EntityGrenadeNuclear ||
-				e instanceof EntityExplosiveBeam ||
-				e instanceof EntityBulletBase ||
-				e instanceof EntityPlayer &&
-				ArmorUtil.checkArmor((EntityPlayer) e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
-			return true;
-		}
-
-		if (e instanceof EntityPlayerMP && (((EntityPlayerMP)e).isCreative() || ((EntityPlayerMP)e).isSpectator())) {
-			return true;
-		}
-
-		return false;
 	}
 	
 	public static void succ(World world, int x, int y, int z, int radius) {
@@ -247,87 +131,6 @@ public class ExplosionNukeGeneric {
 		}
 	}
 
-	public static boolean dedify(World world, int x, int y, int z, int radius) {
-		int i;
-		int j;
-		int k;
-		double d5;
-		double d6;
-		double d7;
-		double wat = radius;
-
-		// bombStartStrength *= 2.0F;
-		i = MathHelper.floor(x - wat - 1.0D);
-		j = MathHelper.floor(x + wat + 1.0D);
-		k = MathHelper.floor(y - wat - 1.0D);
-		int i2 = MathHelper.floor(y + wat + 1.0D);
-		int l = MathHelper.floor(z - wat - 1.0D);
-		int j2 = MathHelper.floor(z + wat + 1.0D);
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
-
-		for (int i1 = 0; i1 < list.size(); ++i1) {
-			Entity entity = (Entity) list.get(i1);
-			double d4 = entity.getDistance(x, y, z) / radius;
-
-			if (d4 <= 1.0D) {
-				d5 = entity.posX - x;
-				d6 = entity.posY + entity.getEyeHeight() - y;
-				d7 = entity.posZ - z;
-				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if (d9 < wat && !(entity instanceof EntityPlayer
-								&& ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet,
-										ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
-					d5 /= d9;
-					d6 /= d9;
-					d7 /= d9;
-					// double d10 = (double)world.getBlockDensity(vec3,
-					// entity.boundingBox);
-					// if(d10 > 0) isOccupied = true;
-
-					if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.flame_pony) {
-						entity.setDead();
-						return true;
-					}
-					if(entity instanceof EntityItem && ((EntityItem)entity).getItem().getItem() == ModItems.pellet_antimatter) {
-						entity.setDead();
-						return true;
-					}
-						
-					if (!(entity instanceof EntityPlayerMP && ((EntityPlayerMP) entity).interactionManager.getGameType() == GameType.CREATIVE)) {
-						entity.attackEntityFrom(ModDamageSource.blackhole, 1000F);
-					}
-					
-					if(!(entity instanceof EntityLivingBase) && !(entity instanceof EntityPlayerMP) && !(entity instanceof EntityBlackHole)) {
-						if(random.nextInt(8) == 0)
-							entity.setDead();
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
-
-	/*public static void vapor(World world, int x, int y, int z, int bombStartStrength) {
-		int r = bombStartStrength * 2;
-		int r2 = r * r;
-		int r22 = r2 / 2;
-		for (int xx = -r; xx < r; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for (int yy = -r; yy < r; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for (int zz = -r; zz < r; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if (ZZ < r22)
-						vaporDest(world, X, Y, Z);
-				}
-			}
-		}
-	}
-*/
 	@SuppressWarnings("deprecation")
 	public static int destruction(World world, BlockPos pos) {
 		int rand;
@@ -397,6 +200,9 @@ public class ExplosionNukeGeneric {
 	}
 
 	public static void waste(World world, int x, int y, int z, int radius) {
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int r = radius;
 		int r2 = r * r;
@@ -480,7 +286,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if(b == Blocks.DIRT) {
+			else if(b == Blocks.DIRT || b == Blocks.FARMLAND) {
 				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 			}
 
@@ -497,7 +303,7 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if(b == Blocks.STONE){
-				world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+				world.setBlockState(pos, ModBlocks.sellafield_slaked.getStateFromMeta(world.rand.nextInt(4)));
 			}
 
 			else if(b == Blocks.BEDROCK){
@@ -547,6 +353,9 @@ public class ExplosionNukeGeneric {
 	}
 
 	public static void wasteNoSchrab(World world, BlockPos pos, int radius) {
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -626,7 +435,7 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if(b == Blocks.STONE){
-				world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
+				world.setBlockState(pos, ModBlocks.sellafield_slaked.getStateFromMeta(world.rand.nextInt(4)));
 			}
 
 			else if(b == Blocks.BEDROCK){
@@ -675,7 +484,9 @@ public class ExplosionNukeGeneric {
 
 	public static void emp(World world, BlockPos pos) {
 		if (!world.isRemote) {
-			
+			if(!CompatibilityConfig.isWarDim(world)){
+				return;
+			}
 			Block b = world.getBlockState(pos).getBlock();
 			TileEntity te = world.getTileEntity(pos);
 			
@@ -767,6 +578,7 @@ public class ExplosionNukeGeneric {
 	
 	public static void solinium(World world, BlockPos pos) {
 		if (!world.isRemote) {
+			
 			IBlockState b = world.getBlockState(pos);
 			Material m = b.getMaterial();
 			
@@ -803,8 +615,18 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 
+			if(b.getBlock() == ModBlocks.toxic_block) {
+				world.setBlockToAir(pos);
+				return;
+			}
+
 			if(b.getBlock() == ModBlocks.waste_trinitite || b.getBlock() == ModBlocks.waste_sand) {
 				world.setBlockState(pos, Blocks.SAND.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_terracotta) {
+				world.setBlockState(pos, Blocks.STAINED_HARDENED_CLAY.getDefaultState());
 				return;
 			}
 
@@ -813,6 +635,16 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 
+			if(b.getBlock() == ModBlocks.waste_sandstone) {
+				world.setBlockState(pos, Blocks.SANDSTONE.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_sandstone_red) {
+				world.setBlockState(pos, Blocks.RED_SANDSTONE.getDefaultState());
+				return;
+			}
+			
 			if(b.getBlock() == ModBlocks.waste_gravel) {
 				world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
 				return;

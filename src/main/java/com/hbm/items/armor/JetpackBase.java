@@ -149,7 +149,5 @@ public class JetpackBase extends ItemArmorMod {
 		}
 
 		stack.getTagCompound().setInteger("fuel", i);
-
 	}
-
 }

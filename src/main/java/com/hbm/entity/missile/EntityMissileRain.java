@@ -3,6 +3,7 @@ package com.hbm.entity.missile;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.items.ModItems;
 
@@ -13,17 +14,18 @@ public class EntityMissileRain extends EntityMissileBaseAdvanced {
 
 	public EntityMissileRain(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1F, 7F);
 	}
 
 	public EntityMissileRain(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
 		this.isCluster = true;
+		this.setSize(1F, 7F);
 	}
 
 	@Override
 	public void onImpact() {
-        this.world.createExplosion(this, this.posX, this.posY, this.posZ, 25F, true);
-        ExplosionChaos.cluster(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 100, 100);
+        ExplosionChaos.cluster(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 100, 0.25, 10);
 	}
 	
 	@Override

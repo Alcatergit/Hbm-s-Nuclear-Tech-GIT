@@ -239,6 +239,17 @@ public class WavefrontObject implements IModelCustom
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public void tessellatePartSplit(Tessellator tessellator, String partName, float splitHeight, float scale) {
+        for (GroupObject groupObject : groupObjects)
+        {
+            if (partName.equalsIgnoreCase(groupObject.name))
+            {
+                groupObject.renderSplit(tessellator, splitHeight, scale);
+            }
+        }
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void tessellatePart(Tessellator tessellator, String partName) {

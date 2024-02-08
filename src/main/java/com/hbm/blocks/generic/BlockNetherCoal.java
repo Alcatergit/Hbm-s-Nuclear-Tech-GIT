@@ -62,5 +62,4 @@ public class BlockNetherCoal extends BlockOutgas {
 			}
 		}
 	}
-	
 }

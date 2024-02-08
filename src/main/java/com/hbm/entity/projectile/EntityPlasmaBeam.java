@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.items.ModItems;
@@ -107,27 +108,6 @@ public class EntityPlasmaBeam extends Entity implements IProjectile {
             this.shoot(d0, d1 + f4, d2, p_i1755_4_, p_i1755_5_);
         }
     }
-	
-	/*public EntityPlasmaBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, int dmgMin, int dmgMax, EntityGrenadeZOMG grenade) {
-		super(p_i1756_1_);
-		if(p_i1756_1_.isRemote)
-        	setRenderDistanceWeight(10.0D);
-		this.shootingEntity = p_i1756_2_;
-
-		this.setSize(0.5F, 0.5F);
-		this.setLocationAndAngles(grenade.posX, grenade.posY + grenade.getEyeHeight(), grenade.posZ,
-				grenade.rotationYaw, grenade.rotationPitch);
-		this.posX -= MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.posY -= 0.10000000149011612D;
-		this.posZ -= MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI) * 0.16F;
-		this.setPosition(this.posX, this.posY, this.posZ);
-		this.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float) Math.PI)
-				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
-		this.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float) Math.PI)
-				* MathHelper.cos(this.rotationPitch / 180.0F * (float) Math.PI);
-		this.motionY = (-MathHelper.sin(this.rotationPitch / 180.0F * (float) Math.PI));
-		this.shoot(this.motionX, this.motionY, this.motionZ, p_i1756_3_ * 1.5F, 1.0F);
-	}*/
 
     public EntityPlasmaBeam(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_, EnumHand hand)
     {
@@ -333,7 +313,7 @@ public class EntityPlasmaBeam extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {

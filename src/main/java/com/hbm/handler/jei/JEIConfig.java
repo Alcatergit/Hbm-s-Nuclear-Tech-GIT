@@ -248,7 +248,6 @@ public class JEIConfig implements IModPlugin {
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_centrifuge));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_chemplant));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_cyclotron));
-		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_drill));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_flare));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_fluidtank));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_block_pumpjack));
@@ -262,7 +261,6 @@ public class JEIConfig implements IModPlugin {
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_assembler));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_chemplant));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_cyclotron));
-		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_drill));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_flare));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_fluidtank));
 		blacklist.addIngredientToBlacklist(new ItemStack(ModBlocks.dummy_port_pumpjack));

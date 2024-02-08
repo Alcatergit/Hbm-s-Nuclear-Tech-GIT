@@ -157,9 +157,9 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 	}
 
 	public boolean tryToggle(){
-		if(state == DoorState.CLOSED && isHatchFree()) {
+		if(state == DoorState.CLOSED) {
 			return tryOpen();
-		} else if(state == DoorState.OPEN) {
+		} else if(state == DoorState.OPEN && isHatchFree()) {
 			return tryClose();
 		}
 		return false;

@@ -17,9 +17,9 @@ public class ItemRenderMinigun extends TEISRBase {
 
 	protected ModelLacunae lacunae;
 	
-	protected static ResourceLocation minigun_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelLacunae.png");
-	protected static ResourceLocation avenger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelLacunaeAvenger.png");
-	protected static ResourceLocation lacunae_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelLacunaeReal.png");
+	protected static ResourceLocation minigun_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelLacunae.png");
+	protected static ResourceLocation avenger_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelLacunaeAvenger.png");
+	protected static ResourceLocation lacunae_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelLacunaeReal.png");
 	
 	public ItemRenderMinigun() {
 		lacunae = new ModelLacunae();

@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
@@ -12,14 +10,13 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RBMKOutgasserRecipes;
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.init.Blocks;
@@ -304,7 +301,6 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
@@ -315,5 +311,4 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 
 		return data;
 	}
-
 }

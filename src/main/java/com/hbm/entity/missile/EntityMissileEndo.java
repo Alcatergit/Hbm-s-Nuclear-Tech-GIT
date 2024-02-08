@@ -13,15 +13,16 @@ public class EntityMissileEndo extends EntityMissileBaseAdvanced {
 
 	public EntityMissileEndo(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1.25F, 10F);
 	}
 
 	public EntityMissileEndo(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1.25F, 10F);
 	}
 
 	@Override
 	public void onImpact() {
-		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 10.0F, true);
 		ExplosionThermo.freeze(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 30);
 		ExplosionThermo.freezer(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, 40);
 	}

@@ -79,7 +79,6 @@ public class AnvilRecipes {
 	 *  //////  //////  //    //  //////    //    //  //  //////  //////    //    //  //////  //    //
 	 */
 	public static void registerConstruction() {
-		registerConstructionRecipes();
 		
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(IRON.ingot()), new AnvilOutput(new ItemStack(ModItems.plate_iron))).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(GOLD.ingot()), new AnvilOutput(new ItemStack(ModItems.plate_gold))).setTier(3));
@@ -108,6 +107,7 @@ public class AnvilRecipes {
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(DIAMOND.dust()), new AnvilOutput(new ItemStack(Items.DIAMOND))).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(EMERALD.dust()), new AnvilOutput(new ItemStack(Items.EMERALD))).setTier(3));
 
+		registerConstructionRecipes();
 		registerConstructionAmmo();
 		registerConstructionUpgrades();
 		registerConstructionRecycling();
@@ -265,6 +265,15 @@ public class AnvilRecipes {
 						new ComparableStack(ModItems.coil_copper_torus, 2)
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.substation))).setTier(2));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
+						new ComparableStack(ModBlocks.steel_wall, 2),
+						new OreDictStack(REDSTONE.dust(), 4),
+						new ComparableStack(Blocks.LEVER, 2),
+						new ComparableStack(ModItems.wire_advanced_alloy, 3)
+				},
+				new AnvilOutput(new ItemStack(ModBlocks.bm_power_box))).setTier(5));
 		
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
@@ -555,7 +564,7 @@ public class AnvilRecipes {
 				new AnvilOutput[] {
 						new AnvilOutput(new ItemStack(Items.REDSTONE, 4)),
 						new AnvilOutput(new ItemStack(ModItems.ingot_polymer, 2)),
-						new AnvilOutput(new ItemStack(GeneralConfig.enable528 ? ModItems.circuit_bismuth : ModItems.ingot_asbestos, 2)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_asbestos, 2)),
 						new AnvilOutput(new ItemStack(ModItems.ingot_bismuth, 1))
 				}
 		).setTier(4));
@@ -565,7 +574,7 @@ public class AnvilRecipes {
 						new AnvilOutput(new ItemStack(Items.REDSTONE, 2)),
 						new AnvilOutput(new ItemStack(ModItems.ingot_polymer, 1)),
 						new AnvilOutput(new ItemStack(ModItems.ingot_polymer, 1), 0.5F),
-						new AnvilOutput(new ItemStack(GeneralConfig.enable528 ? ModItems.circuit_bismuth : ModItems.ingot_asbestos, 1)),
+						new AnvilOutput(new ItemStack(ModItems.ingot_asbestos, 1)),
 						new AnvilOutput(new ItemStack(ModItems.ingot_bismuth, 1), 0.75F)
 				}
 		).setTier(4));

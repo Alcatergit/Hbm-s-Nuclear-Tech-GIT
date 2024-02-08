@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ItemRenderGunSonata extends TEISRBase {
 
-	private static ResourceLocation sonata_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/ModelLeverAction.png");
+	private static ResourceLocation sonata_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/weapons/ModelLeverAction.png");
 	protected ModelLeverAction leveraction;
 
 	public ItemRenderGunSonata() {

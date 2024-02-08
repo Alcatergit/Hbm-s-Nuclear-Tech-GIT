@@ -1,8 +1,11 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
+import com.hbm.inventory.EngineRecipes.FuelGrade;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 
 import net.minecraft.block.BlockContainer;
@@ -10,6 +13,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -60,4 +66,18 @@ public class MachineDiesel extends BlockContainer {
 		return EnumBlockRenderType.MODEL;
 	}
 
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		list.add(I18n.format("trait.fuelefficiency"));
+		for(FuelGrade grade : FuelGrade.values()) {
+			Double efficiency = TileEntityMachineDiesel.fuelEfficiency.get(grade);
+
+			if(efficiency != null) {
+				int eff = (int) (efficiency * 100);
+				list.add(" "+I18n.format("trait.fuelefficiency.desc", I18n.format(grade.getGrade()), eff));
+			}
+		}
+		
+		super.addInformation(stack, worldIn, list, flagIn);
+	}
 }

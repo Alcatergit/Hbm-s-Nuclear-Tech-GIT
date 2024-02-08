@@ -1,6 +1,7 @@
 package com.hbm.tileentity.bomb;
 
-import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
@@ -122,7 +123,9 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 		bf.posZ = pos.getZ() + 0.5;
 		bf.destructionRange = (int) 250;
 		world.spawnEntity(bf);
-		world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 250F));
+		if(BombConfig.enableNukeClouds) {
+			EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 250F);
+		}
 	}
 
 	public String getMinutes() {

@@ -3,9 +3,8 @@ package com.hbm.entity.grenade;
 import java.util.Random;
 
 import com.hbm.config.BombConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
+import com.hbm.entity.effect.EntityNukeTorex;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
@@ -39,11 +38,11 @@ public class EntityGrenadeNuclear extends EntityGrenadeBouncyBase {
         {
             this.setDead();
 
-            world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)BombConfig.fatmanRadius/2, posX + 0.5, posY + 0.5, posZ + 0.5));
+            world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.nukaRadius, posX + 0.5, posY + 0.5, posZ + 0.5));
             if(rand.nextInt(100) == 0){
-                ExplosionParticleB.spawnMush(world, posX + 0.5, posY - 3, posZ + 0.5);
+                EntityNukeTorex.statFacBale(world, posX + 0.5, posY + 0.5, posZ + 0.5, BombConfig.nukaRadius);
             } else {
-                ExplosionParticle.spawnMush(world, posX + 0.5, posY - 3, posZ + 0.5);
+                EntityNukeTorex.statFac(world, posX + 0.5, posY + 0.5, posZ + 0.5, BombConfig.nukaRadius);
             }
         }
     }

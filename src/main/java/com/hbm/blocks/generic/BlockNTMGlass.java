@@ -3,11 +3,11 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadResistantBlock;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.SoundType;
@@ -17,7 +17,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock {
@@ -80,7 +79,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	
 	@Override
 	public int quantityDropped(IBlockState state, int fortune, Random random) {
-		return 0;
+		return doesDrop ? 1 : 0;
 	}
 	
 	@Override
@@ -99,14 +98,14 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
-		super.addInformation(stack, world, list, flagIn);
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
 		float hardness = this.getExplosionResistance(null);
 		if(this.isRadResistant){
-			list.add(TextFormatting.DARK_GREEN + "[" + I18nUtil.resolveKey("trait.radshield") + "]");
+			tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
 		}
 		if(hardness > 50){
-			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.blastres") + " " + hardness);
+			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
 		}
 	}
 

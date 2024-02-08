@@ -2,12 +2,12 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;

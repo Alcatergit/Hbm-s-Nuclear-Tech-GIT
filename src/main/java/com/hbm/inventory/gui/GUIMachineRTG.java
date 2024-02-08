@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerMachineRTG;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,7 @@ public class GUIMachineRTG extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, f);
 
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 69 - 52, 16, 52, rtg.power, rtg.maxPower);
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, mouseX+8, mouseY-8, new String[] {"RTG Heat " + rtg.heat + "/" + rtg.heatMax, "RTG Power " + rtg.heat*100+"HE/s"});
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, mouseX+8, mouseY-8, new String[] {"RTG Heat " + rtg.heat + "/" + rtg.heatMax, "RTG Power " + Library.getShortNumber(rtg.heat*100)+"HE/s"});
 		
 		String[] text = new String[] { "Heat to Power Conversion 1:5" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);

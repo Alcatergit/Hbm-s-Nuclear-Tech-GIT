@@ -8,6 +8,7 @@ import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderSparks;
 import com.hbm.tileentity.machine.TileEntityCore;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -58,7 +59,8 @@ public class RenderCore extends TileEntitySpecialRenderer<TileEntityCore> {
 
         GlStateManager.enableTexture2D();
         GlStateManager.enableLighting();
-        
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		
         if(core.getWorld().rand.nextInt(50) == 0) {
 			for(int i = 0; i < 3; i++) {
 				RenderSparks.renderSpark((int) System.currentTimeMillis() / 100 + i * 10000, 0, 0, 0, 1.5F, 5, 10, 0x00FFFF, 0xFFFFFF);
@@ -89,7 +91,8 @@ public class RenderCore extends TileEntitySpecialRenderer<TileEntityCore> {
         GlStateManager.enableCull();
         GlStateManager.disableLighting();
         GlStateManager.disableTexture2D();
-
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
 		ResourceManager.sphere_ruv.renderAll();
 		GL11.glScalef(2F, 2F, 2F);

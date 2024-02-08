@@ -52,7 +52,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineBattery(getMaxPower());
+		return new TileEntityMachineBattery();
 	}
 
 	public long getMaxPower() {

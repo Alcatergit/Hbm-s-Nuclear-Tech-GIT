@@ -51,7 +51,6 @@ public class GUIMachineBattery extends GuiInfoContainer {
 			deltaText = TextFormatting.YELLOW + "0HE/s";
 
 		String[] info = new String[] { Library.getShortNumber(battery.power)+"HE/"+Library.getShortNumber(battery.getMaxPower())+"HE", deltaText};
-
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52, mouseX, mouseY, info);
 
 		String lang = null;
@@ -104,7 +103,7 @@ public class GUIMachineBattery extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String name = this.battery.hasCustomInventoryName() ? this.battery.getInventoryName() : I18n.format(this.battery.getInventoryName());
-		name += (" (" + Library.getShortNumber(this.battery.power) + " HE)");
+		name += (" (" + Library.getShortNumber(battery.power) + " HE)");
 		
 		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);

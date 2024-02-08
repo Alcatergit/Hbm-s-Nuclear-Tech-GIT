@@ -73,7 +73,7 @@ public class ItemDesignatorRange extends Item {
 			
 	        if(world.isRemote)
 			{
-	        	player.sendMessage(new TextComponentTranslation(TextFormatting.GREEN + I18nUtil.resolveKey("chat.possetx") + " " + x + ", " + I18nUtil.resolveKey("chat.possetz") + " " + z));
+	        	player.sendMessage(new TextComponentTranslation(TextFormatting.GREEN + I18nUtil.resolveKey("chat.possetxz", x, z)));
 			}
 	        
         	world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);

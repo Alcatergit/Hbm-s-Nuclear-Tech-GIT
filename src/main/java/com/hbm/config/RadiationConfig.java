@@ -15,11 +15,12 @@ public class RadiationConfig {
 	public static int blocksFallCh = 100;
 	
 	//Drillgon200: Not sure why I put these here, but oh well.
-	public static int railgunDamage = 100;
+	public static int railgunDamage = 1000;
 	public static int railgunBuffer = 500000000;
 	public static int railgunUse = 250000000;
 	public static int fireDuration = 4 * 20;
 	public static boolean neutronActivation = true;
+	public static int neutronActivationThreshold = 15;
 
 	public static int geigerX = 16;
 	public static int geigerY = 2;
@@ -66,11 +67,12 @@ public class RadiationConfig {
 		fogCh = CommonConfig.setDef(RadiationConfig.fogCh, 20);
 
 		neutronActivation = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.01_itemContamination", "Whether high radiation levels should radiate items in inventory", true);
+		neutronActivationThreshold = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.01_itemContaminationThreshold", "Minimum recieved Rads/s threshold at which items get irradiated", 15);
 		
 		geigerX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.02_geigerX", "X Coordinate of the geiger counter gui (x=0 is on the right)", 16);
 		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
 		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
-		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic counter gui (y=0 is on the bottom)", 18);
+		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic gui (y=0 is on the bottom)", 18);
 	}
 
 }

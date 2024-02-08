@@ -23,7 +23,7 @@ public class RenderRADBeast extends RenderLiving<EntityRADBeast> {
 	public static final IRenderFactory<EntityRADBeast> FACTORY = man -> new RenderRADBeast(man);
 	
 	private static final ResourceLocation blazeTextures = new ResourceLocation(RefStrings.MODID, "textures/entity/radbeast.png");
-    private static final ResourceLocation mask = new ResourceLocation(RefStrings.MODID, "textures/models/ModelM65Blaze.png");
+    private static final ResourceLocation mask = new ResourceLocation(RefStrings.MODID, "textures/armor/ModelM65Blaze.png");
 	
 	public RenderRADBeast(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelBlaze(), 0.5F);

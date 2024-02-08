@@ -19,7 +19,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 
-	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/ModelPylon.png");
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/network/ModelPylon.png");
 
 	private static final float cableColorR = 0.16F;
 	private static final float cableColorG = 0.16F;

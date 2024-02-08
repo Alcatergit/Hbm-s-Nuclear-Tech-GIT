@@ -32,7 +32,7 @@ public class JetpackBreak extends JetpackBase {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "hbm:textures/models/JetPackBlue.png";
+		return "hbm:textures/armor/JetPackBlue.png";
 	}
 
 	@Override

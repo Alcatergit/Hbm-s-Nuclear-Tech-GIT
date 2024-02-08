@@ -91,10 +91,10 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 	/**
 	 * Simple integer that decides how tall the structure is.
 	 * @param world
-	 * @return [0;15]
+	 * @return [0;250]
 	 */
 	public static int getColumnHeight(World world) {
-		return MathHelper.clamp(shittyWorkaroundParseInt(world.getGameRules().getString(KEY_COLUMN_HEIGHT), 4), 1, 16) - 1;
+		return MathHelper.clamp(shittyWorkaroundParseInt(world.getGameRules().getString(KEY_COLUMN_HEIGHT), 4), 1, 250) - 1;
 	}
 	
 	/**

@@ -20,7 +20,7 @@ public class RenderBeam6 extends Render<EntityModBeam> {
 		return new RenderBeam6(man);
 	};
 
-	private static ResourceLocation beam_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/PlasmaBeam.png");
+	private static ResourceLocation beam_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/PlasmaBeam.png");
 
 	protected RenderBeam6(RenderManager renderManager) {
 		super(renderManager);

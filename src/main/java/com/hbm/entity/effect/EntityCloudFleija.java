@@ -1,5 +1,7 @@
 package com.hbm.entity.effect;
 
+import com.hbm.config.CompatibilityConfig;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,6 +51,10 @@ public class EntityCloudFleija extends Entity {
 	}
 	@Override
 	public void onUpdate() {
+		if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
 		this.age++;
         this.world.spawnEntity(new EntityLightningBolt(this.world, this.posX, this.posY + 200, this.posZ, true));
         

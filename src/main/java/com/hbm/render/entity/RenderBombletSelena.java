@@ -22,7 +22,7 @@ public class RenderBombletSelena extends Render<EntityBombletSelena> {
 	protected RenderBombletSelena(RenderManager renderManager) {
 		super(renderManager);
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/misc/universalDark.png");
 	}
 	
 	@Override

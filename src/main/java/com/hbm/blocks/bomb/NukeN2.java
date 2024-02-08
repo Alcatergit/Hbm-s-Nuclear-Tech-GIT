@@ -2,16 +2,16 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeN2;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -33,7 +33,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -100,12 +99,10 @@ public class NukeN2 extends BlockContainer implements IBomb {
 		{
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
-	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, r, x + 0.5, y + 0.5, z + 0.5));
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, r);
-			entity2.posX = x;
-			entity2.posY = y;
-			entity2.posZ = z;
-			world.spawnEntity(entity2);
+	    	world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, r, x + 0.5, y + 0.5, z + 0.5));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, x + 0.5, y + 0.5, z + 0.5, r);
+			}
     	}
     	
 		return false;
@@ -190,10 +187,10 @@ public class NukeN2 extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TextFormatting.RED+"["+ I18nUtil.resolveKey("trait.extremebomb")+"]"+"§r");
-		tooltip.add(TextFormatting.YELLOW+I18nUtil.resolveKey("desc.radius")+" "+BombConfig.n2Radius+"m§r");
+		tooltip.add("§c["+ I18nUtil.resolveKey("trait.extremebomb")+"]§r");
+		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.n2Radius)+"§r");
 		tooltip.add("");
-		tooltip.add(TextFormatting.YELLOW+I18nUtil.resolveKey("desc.chargeadds")+" "+(int)(BombConfig.n2Radius/12)+"m§r");
+		tooltip.add("§e"+I18nUtil.resolveKey("desc.chargeadds", (int)(BombConfig.n2Radius/12))+"§r");
 	}
 
 }

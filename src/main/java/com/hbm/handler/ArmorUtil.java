@@ -3,6 +3,7 @@ package com.hbm.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.potion.HbmPotion;
@@ -11,7 +12,6 @@ import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.Compat;
 
 import api.hbm.item.IGasMask;
-import com.hbm.util.I18nUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -175,7 +174,7 @@ public class ArmorUtil {
 	// Drillgon200: Is there a reason for this method? I don't know and I don't
 	// care to find out.
 	// Alcater: Looks like some kind of hazmat tier 2 check
-	public static boolean checkForHaz2(EntityPlayer player) {
+	public static boolean checkForHaz2(EntityLivingBase player) {
 	
 		if(checkArmor(player, ModItems.hazmat_paa_helmet, ModItems.hazmat_paa_plate, ModItems.hazmat_paa_legs, ModItems.hazmat_paa_boots) ||
 			checkArmor(player, ModItems.paa_helmet, ModItems.paa_plate, ModItems.paa_legs, ModItems.paa_boots) ||
@@ -193,7 +192,16 @@ public class ArmorUtil {
 		return false;
 	}
 
-	public static boolean checkForHazmat(EntityPlayer player) {
+	public static boolean checkForHazmatOnly(EntityLivingBase player) {
+		if(ArmorUtil.checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || 
+			ArmorUtil.checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || 
+			ArmorUtil.checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey)){
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean checkForHazmat(EntityLivingBase player) {
 		if(ArmorUtil.checkArmor(player, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots) || 
 			ArmorUtil.checkArmor(player, ModItems.hazmat_helmet_red, ModItems.hazmat_plate_red, ModItems.hazmat_legs_red, ModItems.hazmat_boots_red) || 
 			ArmorUtil.checkArmor(player, ModItems.hazmat_helmet_grey, ModItems.hazmat_plate_grey, ModItems.hazmat_legs_grey, ModItems.hazmat_boots_grey) || 
@@ -210,7 +218,7 @@ public class ArmorUtil {
 		return false;
 	}
 
-	public static boolean checkForAsbestos(EntityPlayer player) {
+	public static boolean checkForAsbestos(EntityLivingBase player) {
 	
 		if(ArmorUtil.checkArmor(player, ModItems.asbestos_helmet, ModItems.asbestos_plate, ModItems.asbestos_legs, ModItems.asbestos_boots)) {
 			return true;
@@ -219,8 +227,11 @@ public class ArmorUtil {
 		return false;
 	}
 
-	public static boolean checkArmor(EntityPlayer player, Item helm, Item chest, Item leg, Item shoe) {
-		if(player.inventory.armorInventory.get(0).getItem() == shoe && player.inventory.armorInventory.get(1).getItem() == leg && player.inventory.armorInventory.get(2).getItem() == chest && player.inventory.armorInventory.get(3).getItem() == helm) {
+	public static boolean checkArmor(EntityLivingBase player, Item helm, Item chest, Item leg, Item shoe) {
+		if(player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == shoe && 
+			player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() == leg && 
+			player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == chest && 
+			player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == helm) {
 			return true;
 		}
 	
@@ -443,11 +454,11 @@ public class ArmorUtil {
 		ItemStack filter = ((IGasMask)mask.getItem()).getFilter(mask);
 		
 		if(filter == null) {
-			list.add(TextFormatting.RED + I18nUtil.resolveKey("desc.nofilter"));
+			list.add("§c" + I18nUtil.resolveKey("desc.nofilter"));
 			return;
 		}
 		
-		list.add(TextFormatting.GOLD + I18nUtil.resolveKey("desc.infilter"));
+		list.add("§6" + I18nUtil.resolveKey("desc.infilter"));
 		
 		int meta = filter.getItemDamage();
 		int max = filter.getMaxDamage();

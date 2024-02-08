@@ -43,7 +43,7 @@ public class ItemRedstoneSwordRender extends TileEntityItemStackRenderer {
 						GL11.glTranslatef(0.25F, 0.0F, 0.0F);
 					}
 				}
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/ModelSwordRedstone.png"));
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelSwordRedstone.png"));
 				GL11.glRotatef(180.0F, 0.0F, 0.0F, 0.0F);
 				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 				GL11.glTranslatef(0.5F, -0.2F, -0.5F);

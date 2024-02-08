@@ -16,15 +16,17 @@ public class EntityMissileTaint extends EntityMissileBaseAdvanced {
 
 	public EntityMissileTaint(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1F, 7F);
 	}
 
 	public EntityMissileTaint(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1F, 7F);
 	}
 
 	@Override
 	public void onImpact() {
-		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 10.0F, true);
+		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 5.0F, true);
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		for (int i = 0; i < 100; i++) {
 			int a = rand.nextInt(11) + (int) this.posX - 5;

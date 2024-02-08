@@ -6,6 +6,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerCraneInserter extends Container {
     protected TileEntityCraneInserter inserter;
@@ -15,7 +16,7 @@ public class ContainerCraneInserter extends Container {
 
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 7; j++) {
-                this.addSlotToContainer(new Slot(inserter, j + i * 7, 26 + j * 18, 17 + i * 18));
+                this.addSlotToContainer(new SlotItemHandler(inserter.inventory, j + i * 7, 26 + j * 18, 17 + i * 18));
             }
         }
 

@@ -114,14 +114,22 @@ public class ModelT45Helmet extends ModelBiped {
 			this.helmet.rotationPointY = this.bipedHead.rotationPointY;
 			this.helmet.rotateAngleY = this.bipedHead.rotateAngleY;
 			this.helmet.rotateAngleX = this.bipedHead.rotateAngleX;
+
+			if (this.isSneak) {
+	            this.helmet.rotationPointY = 3.7F;
+	        }
 		}
 
 		@Override
 		public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
-			GL11.glScalef(1.125F, 1.125F, 1.125F);
+			GL11.glScalef(1.13F, 1.13F, 1.13F);
 			GL11.glScalef(1.0625F, 1.0625F, 1.0625F);
+			if(this.isChild) {
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+				GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+			}
 			this.helmet.render(par7);
 			GL11.glPopMatrix();
 		}

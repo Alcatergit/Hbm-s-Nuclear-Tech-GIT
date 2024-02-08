@@ -309,7 +309,7 @@ public class RadiationSystemNT {
 						if(entity instanceof EntityPlayer){
 							EntityPlayer player = (EntityPlayer) entity;
 							if(RadiationConfig.neutronActivation){
-								double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-0.0002D; //5Rad/s threshold
+								double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-(0.00004D * RadiationConfig.neutronActivationThreshold); //20Rad/s threshold
 								float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
 								if(neutronRads > 0){
 									ContaminationUtil.contaminate(player, ContaminationUtil.HazardType.NEUTRON, ContaminationUtil.ContaminationType.CREATIVE, neutronRads * 0.05F);

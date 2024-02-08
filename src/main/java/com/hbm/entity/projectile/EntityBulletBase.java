@@ -5,12 +5,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.RedBarrel;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
@@ -309,7 +310,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		if (movement != null) {
 
 			// handle entity collision
-			if (movement.entityHit != null) {
+			if (movement.entityHit != null && CompatibilityConfig.isWarDim(world)) {
 
 				DamageSource damagesource = null;
 
@@ -479,10 +480,6 @@ public class EntityBulletBase extends Entity implements IProjectile {
 				MainRegistry.proxy.effectNT(nbt);
 			}
 		}
-		// this.rotationPitch = this.prevRotationPitch + (this.rotationPitch -
-		// this.prevRotationPitch) * 0.2F;
-		// this.rotationYaw = this.prevRotationYaw + (this.rotationYaw -
-		// this.prevRotationYaw) * 0.2F;
 	}
 	
 	private void doHitVFX(@Nullable BlockPos pos, RayTraceResult hit){
@@ -514,14 +511,18 @@ public class EntityBulletBase extends Entity implements IProjectile {
 	private void onBlockImpact(BlockPos pos, RayTraceResult hit) {
 		if(config.bImpact != null)
 			config.bImpact.behaveBlockHit(this, pos.getX(), pos.getY(), pos.getZ());
-		if (!world.isRemote)
+		if(!world.isRemote){
 			this.setDead();
+		}
 		
 		IBlockState blockstate = world.getBlockState(pos);
 		Block block = blockstate.getBlock();
 		
 		doHitVFX(pos, hit);
 
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		if (config.incendiary > 0 && !this.world.isRemote) {
 			if (world.rand.nextInt(3) == 0 && world.getBlockState(new BlockPos((int) posX, (int) posY, (int) posZ)).getBlock() == Blocks.AIR)
 				world.setBlockState(new BlockPos((int) posX, (int) posY, (int) posZ), Blocks.FIRE.getDefaultState());
@@ -590,7 +591,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		}
 
 		if (config.nuke > 0 && !world.isRemote) {
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, config.nuke, posX, posY, posZ).mute());
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, config.nuke, posX, posY, posZ).mute());
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "muke");
 			if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0) data.setBoolean("balefire", true);
@@ -617,6 +618,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	// for when a bullet dies by hitting an entity
 	private void onEntityImpact(Entity e, RayTraceResult rt) {
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		onEntityHurt(e, rt, false);
 		onBlockImpact(new BlockPos(e), rt);
 
@@ -626,10 +630,11 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 	// for when a bullet hurts an entity, not necessarily dying
 	private void onEntityHurt(Entity e, RayTraceResult rt, boolean doVFX) {
-
 		if(doVFX)
 			doHitVFX(null, rt);
-		
+		if(!CompatibilityConfig.isWarDim(world)){
+			return;
+		}
 		if(config.bHurt != null)
 			config.bHurt.behaveEntityHurt(this, e);
 		

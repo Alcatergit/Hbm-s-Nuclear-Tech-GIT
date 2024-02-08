@@ -3,10 +3,10 @@
 	"misc.nullChopper": {"category": "player", "sounds": [{"name": "hbm:misc/null", "stream": false}]},
 	"misc.nullCrashing": {"category": "player", "sounds": [{"name": "hbm:misc/null", "stream": false}]},
 	"misc.nullMine": {"category": "player", "sounds": [{"name": "hbm:misc/null", "stream": false}]},
+    "misc.nullRadar": {"category": "player", "sounds": [{"name": "hbm:misc/null", "stream": false}]},
 
 	"block.crateBreak": {"category": "block", "sounds": ["hbm:block/cratebreak1", "hbm:block/cratebreak2", "hbm:block/cratebreak3", "hbm:block/cratebreak4", "hbm:block/cratebreak5"]},
 	"block.shutdown": {"category": "block", "sounds": [{"name": "hbm:block/shutdown", "stream": false}]},
-    "block.minerOperate": {"category": "block", "sounds": [{"name": "hbm:block/minerOperate", "stream": false}]},
     "block.assembleroperate": {"category": "block", "sounds": [{"name": "hbm:block/assemblerOperate", "stream": false}]},
     "block.fel": {"category": "block", "sounds": [{"name": "hbm:block/fel", "stream": false}]},
     "block.chemplantOperate": {"category": "block", "sounds": [{"name": "hbm:block/chemplantOperate", "stream": false}]},

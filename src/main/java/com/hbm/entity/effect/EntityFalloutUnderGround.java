@@ -4,19 +4,19 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
-import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
 
 //Chunkloading stuff
 import java.util.ArrayList;
 import java.util.List;
+
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.blocks.generic.WasteLog;
+
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -27,7 +27,10 @@ import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockGravel;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
@@ -150,16 +153,29 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
         }
 	}
 
+	private void unloadAllChunks() {
+		if(loaderTicket != null){
+			for(ChunkPos chunk : loadedChunks) {
+		        ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+		    }
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 
 		if(!world.isRemote) {
-			ContaminationUtil.radiate(world, (int)posX, (int)posY, (int)posZ, radius, (float)Math.pow(radius, 2), 0);
+			if(!CompatibilityConfig.isWarDim(world)){
+				this.done=true;
+				unloadAllChunks();
+				this.setDead();
+				return;
+			}
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			int rayCounter = 0;
 			for(int sample = currentSample; sample < this.maxSamples; sample++){
 				this.currentSample = sample;
-				if(rayCounter > BombConfig.mk4){
+				if(rayCounter > 2048){
 					break;
 				}
 				double fy = (2D * sample / (maxSamples - 1D)) - 1D;  // y goes from 1 to -1
@@ -172,6 +188,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 			if(this.currentSample >= this.maxSamples-1) {
 				this.done=true;
+				unloadAllChunks();
 				this.setDead();
 			}
 		}
@@ -187,21 +204,22 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			IBlockState b = world.getBlockState(pos);
 			Block bblock = b.getBlock();
 
-			if(bblock == Blocks.STONE) {
-				if(l > s1)
-					world.setBlockState(pos, ModBlocks.sellafield_slaked.getDefaultState());
-				else if(l > s2)
-					world.setBlockState(pos, ModBlocks.sellafield_0.getDefaultState());
-				else if(l > s3)
-					world.setBlockState(pos, ModBlocks.sellafield_1.getDefaultState());
-				else if(l > s4)
-					world.setBlockState(pos, ModBlocks.sellafield_2.getDefaultState());
-				else if(l > s5)
-					world.setBlockState(pos, ModBlocks.sellafield_3.getDefaultState());
-				else if(l > s6)
-					world.setBlockState(pos, ModBlocks.sellafield_4.getDefaultState());
-				else if(l <= s6)
-					world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			if(bblock instanceof BlockStone || bblock == Blocks.COBBLESTONE) {
+				double ranDist = l * (1D + world.rand.nextDouble()*0.1D);
+				if(ranDist > s1)
+					world.setBlockState(pos, ModBlocks.sellafield_slaked.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist > s2)
+					world.setBlockState(pos, ModBlocks.sellafield_0.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist > s3)
+					world.setBlockState(pos, ModBlocks.sellafield_1.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist > s4)
+					world.setBlockState(pos, ModBlocks.sellafield_2.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist > s5)
+					world.setBlockState(pos, ModBlocks.sellafield_3.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist > s6)
+					world.setBlockState(pos, ModBlocks.sellafield_4.getStateFromMeta(world.rand.nextInt(4)));
+				else if(ranDist <= s6)
+					world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 				return;
 
 			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
@@ -211,32 +229,31 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			} else if(bblock instanceof BlockLeaves) {
 				if(l > s1){
 					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
-				}
-				else{
+				}else{
 					world.setBlockToAir(pos);
-					world.scheduleBlockUpdate(pos, world.getBlockState(pos).getBlock(), 0, 2);
 				}
 				continue;
 
-			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS) {
-				world.setBlockState(pos.add(0, -1, 0), ModBlocks.waste_earth.getDefaultState());
-				world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
+			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass) {
+				placeBlockFromDist(l, ModBlocks.waste_earth, pos.add(0, -1, 0));
+				placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
 				continue;
 
-			} else if(bblock == Blocks.GRASS) {
-				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+			} else if(bblock instanceof BlockGrass) {
+				placeBlockFromDist(l, ModBlocks.waste_earth, pos);
 				return;
-
-			} else if(bblock == Blocks.DIRT) {
+			} else if(bblock instanceof BlockDirt) {
 				BlockDirt.DirtType meta = b.getValue(BlockDirt.VARIANT);
 				if(meta == BlockDirt.DirtType.DIRT)
-					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+					placeBlockFromDist(l, ModBlocks.waste_dirt, pos);
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
-					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+					placeBlockFromDist(l, ModBlocks.waste_gravel, pos);
 				else if(meta == BlockDirt.DirtType.PODZOL)
-					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos);
 				return;
-
+			} else if(bblock == Blocks.FARMLAND) {
+				placeBlockFromDist(l, ModBlocks.waste_dirt, pos);
+				continue;
 			} else if(bblock == Blocks.SNOW_LAYER) {
 				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
 				continue;
@@ -246,19 +263,29 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
-				world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+				placeBlockFromDist(l, ModBlocks.waste_mycelium, pos);
 				return;
 
-			} else if(bblock == Blocks.GRAVEL) {
-				world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+			} else if(bblock instanceof BlockGravel) {
+				placeBlockFromDist(l, ModBlocks.waste_gravel, pos);
 				return;
 
-			} else if(bblock == Blocks.SAND) {
+			} else if(bblock == Blocks.SANDSTONE) {
+				placeBlockFromDist(l, ModBlocks.waste_sandstone, pos);
+				return;
+			} else if(bblock == Blocks.RED_SANDSTONE) {
+				placeBlockFromDist(l, ModBlocks.waste_sandstone_red, pos);
+				return;
+			} else if(bblock == Blocks.HARDENED_CLAY || bblock == Blocks.STAINED_HARDENED_CLAY) {
+				placeBlockFromDist(l, ModBlocks.waste_terracotta, pos);
+				return;
+
+			} else if(bblock instanceof BlockSand) {
 				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
 				if(rand.nextInt(60) == 0) {
-					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
+					placeBlockFromDist(l, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red, pos);
 				} else {
-					world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
+					placeBlockFromDist(l, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand : ModBlocks.waste_sand_red, pos);
 				}
 				return;
 
@@ -301,6 +328,9 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				if(l < s0)
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				return;
+			} else if(b.getBlock() == Blocks.VINE) {
+				world.setBlockToAir(pos);
+				continue;
 
 			} else if(bblock == ModBlocks.ore_uranium) {
 				if(l <= s6){
@@ -339,7 +369,23 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 		}
 	}
 
-	
+	public void placeBlockFromDist(double dist, Block b, BlockPos pos){
+		double ranDist = dist * (1D + world.rand.nextDouble()*0.2);
+		if(ranDist > s1)
+			world.setBlockState(pos, b.getStateFromMeta(0));
+		else if(ranDist > s2)
+			world.setBlockState(pos, b.getStateFromMeta(1));
+		else if(ranDist > s3)
+			world.setBlockState(pos, b.getStateFromMeta(2));
+		else if(ranDist > s4)
+			world.setBlockState(pos, b.getStateFromMeta(3));
+		else if(ranDist > s5)
+			world.setBlockState(pos, b.getStateFromMeta(4));
+		else if(ranDist > s6)
+			world.setBlockState(pos, b.getStateFromMeta(5));
+		else if(ranDist <= s6)
+			world.setBlockState(pos, b.getStateFromMeta(6));
+	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
@@ -355,13 +401,13 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 	public void setScale(int i) {
 		this.dataManager.set(SCALE, Integer.valueOf(i));
-		s0 = 0.9 * i;
-		s1 = 0.75 * i;
-		s2 = 0.6 * i;
-		s3 = 0.4 * i;
-		s4 = 0.3 * i;
-		s5 = 0.2 * i;
-		s6 = 0.1 * i;
+		s0 = 0.84 * i;
+		s1 = 0.74 * i;
+		s2 = 0.64 * i;
+		s3 = 0.54 * i;
+		s4 = 0.44 * i;
+		s5 = 0.34 * i;
+		s6 = 0.24 * i;
 		radius = i;
 		maxSamples = (int)(Math.PI * Math.pow(i, 2));
 	}

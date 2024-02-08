@@ -40,11 +40,11 @@ public class RenderBullet extends Render<EntityBullet> {
 				1.0F, 0.0F, 0.0F);
 
 		if (rocket instanceof EntityBullet && ((EntityBullet) rocket).getIsChopper()) {
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/emplacer.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/emplacer.png"));
 		} else if (rocket instanceof EntityBullet && ((EntityBullet) rocket).getIsCritical()) {
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/tau.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/tau.png"));
 		} else if (rocket instanceof EntityBullet) {
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/bullet.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/bullet.png"));
 		}
 		miniNuke.renderAll(0.0625F);
 		
@@ -60,11 +60,11 @@ public class RenderBullet extends Render<EntityBullet> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityBullet entity) {
 		if (entity.getIsChopper()) {
-			return new ResourceLocation(RefStrings.MODID + ":textures/models/emplacer.png");
+			return new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/emplacer.png");
 		} else if (entity.getIsCritical()) {
-			return new ResourceLocation(RefStrings.MODID + ":textures/models/tau.png");
+			return new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/tau.png");
 		} else {
-			return new ResourceLocation(RefStrings.MODID + ":textures/models/bullet.png");
+			return new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/bullet.png");
 		}
 	}
 

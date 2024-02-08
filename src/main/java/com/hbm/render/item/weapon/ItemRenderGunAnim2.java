@@ -23,10 +23,10 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 	protected ModelBoltAction boltaction;
 	protected ModelB92 b92;
 	protected ModelB93 b93;
-	protected ResourceLocation leverActionLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelLeverAction.png");
-	protected ResourceLocation leverActionDark_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelLeverActionDark.png");
-	protected ResourceLocation leverBoltAction_green = new ResourceLocation(RefStrings.MODID +":textures/models/ModelBoltActionGreen.png");
-	protected ResourceLocation leverBoltAction = new ResourceLocation(RefStrings.MODID +":textures/models/ModelBoltActionDark.png");
+	protected ResourceLocation leverActionLoc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelLeverAction.png");
+	protected ResourceLocation leverActionDark_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelLeverActionDark.png");
+	protected ResourceLocation leverBoltAction_green = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelBoltActionGreen.png");
+	protected ResourceLocation leverBoltAction = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelBoltActionDark.png");
 	
 	public ItemRenderGunAnim2() {
 		leveraction = new ModelLeverAction();

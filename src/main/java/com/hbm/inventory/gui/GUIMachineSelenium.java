@@ -32,23 +32,9 @@ public class GUIMachineSelenium extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 18, 16, 52, diFurnace.tank, diFurnace.tankType);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 108, 160, 16, diFurnace.power, diFurnace.powerCap);
 		
-		String[] text = new String[] { "Accepted Fuels:",
-				"  Industrial Oil (50 HE/t)",
-				"  Heating Oil (75 HE/t)",
-				"  Diesel (225 HE/t)",
-				"  Kerosene (300 HE/t)",
-				"  Reclaimed Oil (100 HE/t)",
-				"  Petroil (125 HE/t)",
-				"  Biofuel (200 HE/t)",
-				"  NITAN Superfuel (2500 HE/t)",
-				"(These numbers are base values,",
-				"actual output is based",
-				"on piston count)" };
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
-		
 		String[] text1 = new String[] { "Fuel consumption rate:",
-				"  5 mB/t",
-				"  100 mB/s",
+				"  1 mB/t",
+				"  20 mB/s",
 				"(Consumption rate per piston)" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		
@@ -108,7 +94,6 @@ public class GUIMachineSelenium extends GuiInfoContainer {
 		if(!diFurnace.hasAcceptableFuel())
 			this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 48, 16, 16, 7);
 		
-		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
 		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 80 + 36, 98);

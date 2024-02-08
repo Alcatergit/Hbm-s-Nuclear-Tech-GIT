@@ -13,6 +13,9 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,6 +24,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class WasteGrassTall extends BlockBush {
+	
+	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
 	
 	public WasteGrassTall(Material materialIn, String s) {
 		super(materialIn);
@@ -36,10 +41,7 @@ public class WasteGrassTall extends BlockBush {
             Block block = world.getBlockState(pos.down()).getBlock();
             return block == ModBlocks.waste_earth || block == ModBlocks.waste_mycelium || block == ModBlocks.waste_dirt;
         }
-        else
-        {
-            return false;
-        }
+        return false;
 	}
 	
 	@Override
@@ -72,4 +74,19 @@ public class WasteGrassTall extends BlockBush {
     {
     	return MapColor.GRASS;
     }
+
+    @Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{META});
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(META);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(META, meta);
+	}
 }

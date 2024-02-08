@@ -94,27 +94,27 @@ public class ArmorGasMask extends ItemArmor implements IGasMask {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (stack.getItem() == ModItems.gas_mask) {
-			return (RefStrings.MODID + ":textures/models/GasMask.png");
+			return (RefStrings.MODID + ":textures/armor/GasMask.png");
 		}
 		if (stack.getItem() == ModItems.gas_mask_m65) {
-			return (RefStrings.MODID + ":textures/models/ModelM65.png");
+			return (RefStrings.MODID + ":textures/armor/ModelM65.png");
 		}
 		if (stack.getItem() == ModItems.gas_mask_mono) {
-			return (RefStrings.MODID + ":textures/models/ModelM65Mono.png");
+			return (RefStrings.MODID + ":textures/armor/ModelM65Mono.png");
 		}
 		if(stack.getItem() == ModItems.hazmat_helmet) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1.png");
 		}
 		if (stack.getItem() == ModItems.hazmat_helmet_red) {
-			return (RefStrings.MODID + ":textures/models/ModelHazRed.png");
+			return (RefStrings.MODID + ":textures/armor/ModelHazRed.png");
 		}
 		if (stack.getItem() == ModItems.hazmat_helmet_grey) {
-			return (RefStrings.MODID + ":textures/models/ModelHazGrey.png");
+			return (RefStrings.MODID + ":textures/armor/ModelHazGrey.png");
 		}
 		if(stack.getItem() == ModItems.hazmat_paa_helmet) {
-			return (RefStrings.MODID + ":textures/models/ModelHazPaa.png");
+			return (RefStrings.MODID + ":textures/armor/ModelHazPaa.png");
 		}
-		return "hbm:textures/models/CapeUnknown.png";
+		return "hbm:textures/models/capes/CapeUnknown.png";
 	}
 	
 	@SideOnly(Side.CLIENT)

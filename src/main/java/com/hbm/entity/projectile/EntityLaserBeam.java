@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.lib.ModDamageSource;
 
@@ -119,7 +120,7 @@ public class EntityLaserBeam extends Entity implements IProjectile {
 	
 	@Override
 	public void onUpdate() {
-super.onUpdate();
+        super.onUpdate();
         
         if(this.ticksExisted > 100)
         	this.setDead();
@@ -127,7 +128,6 @@ super.onUpdate();
         if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F)
         {
             this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-            //this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f) * 180.0D / Math.PI);
         }
 
         IBlockState blockstate = world.getBlockState(new BlockPos(this.field_145791_d, this.field_145792_e, this.field_145789_f));
@@ -206,7 +206,7 @@ super.onUpdate();
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {
@@ -368,5 +368,4 @@ super.onUpdate();
 		compound.setByte("pickup", (byte)this.canBePickedUp);
 		compound.setDouble("damage", this.damage);
 	}
-
 }

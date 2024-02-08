@@ -127,7 +127,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static ItemStack getFullBarrel(Fluid f, int amount){
 		ItemStack stack = new ItemStack(ModItems.fluid_barrel_full, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 16000).writeToNBT(new NBTTagCompound()));
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY, new FluidStack(f, 16000).writeToNBT(new NBTTagCompound()));
 		return stack;
 	}
 	
@@ -138,7 +138,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static ItemStack getFullTank(Fluid f, int amount){
 		ItemStack stack = new ItemStack(ModItems.fluid_tank_full, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
 		return stack;
 	}
 	
@@ -189,6 +189,4 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 			return true;
 		return false;
 	}
-
-
 }

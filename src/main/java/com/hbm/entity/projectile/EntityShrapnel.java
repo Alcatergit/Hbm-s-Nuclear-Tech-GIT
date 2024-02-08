@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
@@ -52,7 +53,11 @@ public class EntityShrapnel extends EntityThrowable {
 
     @Override
 	protected void onImpact(RayTraceResult mop)
-    {
+    {	
+    	if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
         if (mop.entityHit != null)
         {
             byte b0 = 15;

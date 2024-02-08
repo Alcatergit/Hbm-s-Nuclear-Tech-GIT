@@ -93,5 +93,4 @@ public class ContainerMachineBattery extends Container {
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return diFurnace.isUseableByPlayer(playerIn);
 	}
-
 }

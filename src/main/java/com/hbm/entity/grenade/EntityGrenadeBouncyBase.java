@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -180,6 +181,10 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 		timer++;
 
 		if (timer >= getMaxTimer() && !world.isRemote) {
+			if(!CompatibilityConfig.isWarDim(world)){
+	            this.setDead();
+	            return;
+	        }
 			explode();
 
 			String s = "null";
@@ -330,119 +335,6 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 			this.world.profiler.endSection();
 		}
 	}
-
-	/*public void onUpdate() {
-		this.lastTickPosX = this.posX;
-		this.lastTickPosY = this.posY;
-		this.lastTickPosZ = this.posZ;
-		super.onUpdate();
-	
-		// Bounce here
-		
-		boolean bounce = false;
-		Vec3d vec3 = new Vec3d(this.posX, this.posY, this.posZ);
-		Vec3d vec31 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-		RayTraceResult movingobjectposition = this.world.rayTraceBlocks(vec3, vec31, false, true, true);
-	
-		if (movingobjectposition != null) {
-			vec31 = new Vec3d(movingobjectposition.hitVec.x, movingobjectposition.hitVec.y, movingobjectposition.hitVec.z);
-	
-			float mod = 0.6F;
-			this.posX += (movingobjectposition.hitVec.x - this.posX) * mod;
-			this.posY += (movingobjectposition.hitVec.y - this.posY) * mod;
-			this.posZ += (movingobjectposition.hitVec.z - this.posZ) * mod;
-			System.out.println(movingobjectposition.hitVec.y - this.posY);
-			switch (movingobjectposition.sideHit.getAxis()) {
-			case Y:
-				motionY *= -1;
-				break;
-			case Z:
-				motionZ *= -1;
-				break;
-			case X:
-				motionX *= -1;
-				break;
-	
-			}
-	
-			bounce = true;
-	
-			Vec3d mot = new Vec3d(motionX, motionY, motionZ);
-			if (mot.lengthVector() > 0.05)
-				world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.grenadeBounce, SoundCategory.HOSTILE, 2.0F, 1.0F);
-	
-			motionX *= getBounceMod();
-			motionY *= getBounceMod();
-			motionZ *= getBounceMod();
-		}
-	
-		// Bounce here [END]
-	
-		if (!bounce) {
-			this.posX += this.motionX;
-			this.posY += this.motionY;
-			this.posZ += this.motionZ;
-			System.out.println(motionY);
-		}
-	
-		float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-		this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-	
-		for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f1) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-			;
-		}
-	
-		while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
-			this.prevRotationPitch += 360.0F;
-		}
-	
-		while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
-			this.prevRotationYaw -= 360.0F;
-		}
-	
-		while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
-			this.prevRotationYaw += 360.0F;
-		}
-	
-		this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
-		this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
-		float f2 = 0.99F;
-		
-	
-		if (this.isInWater()) {
-			for (int i = 0; i < 4; ++i) {
-				float f4 = 0.25F;
-				this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double) f4, this.posY - this.motionY * (double) f4, this.posZ - this.motionZ * (double) f4, this.motionX, this.motionY, this.motionZ);
-			}
-	
-			f2 = 0.8F;
-		}
-	
-		if (!bounce) {
-			this.motionX *= (double) f2;
-			this.motionY *= (double) f2;
-			this.motionZ *= (double) f2;
-			float f3 = this.getGravityVelocity();
-			this.motionY -= (double) f3;
-			
-		}
-		
-		this.setPosition(this.posX, this.posY, this.posZ);
-	
-		timer++;
-	
-		if (timer >= getMaxTimer() && !world.isRemote) {
-			explode();
-	
-			String s = "null";
-	
-			if (thrower != null && thrower instanceof EntityPlayer)
-				s = ((EntityPlayer) thrower).getDisplayName().getUnformattedText();
-	
-			if (MainRegistry.enableExtendedLogging)
-				MainRegistry.logger.log(Level.INFO, "[GREN] Set off grenade at " + ((int) posX) + " / " + ((int) posY) + " / " + ((int) posZ) + " by " + s + "!");
-		}
-	}*/
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {

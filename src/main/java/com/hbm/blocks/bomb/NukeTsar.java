@@ -2,16 +2,16 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -33,7 +33,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -116,38 +115,42 @@ public class NukeTsar extends BlockContainer implements IBomb {
 		if(!world.isRemote) {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.1F + 0.9F);
 
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, r, x + 0.5, y + 0.5, z + 0.5));
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, r);
-			entity2.posX = x;
-			entity2.posY = y;
-			entity2.posZ = z;
-			world.spawnEntity(entity2);
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, r, x + 0.5, y + 0.5, z + 0.5));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, x + 0.5, y + 0.5, z + 0.5, r);
+			}
 		}
 		return false;
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		TileEntityNukeTsar entity = (TileEntityNukeTsar) world.getTileEntity(pos);
+	public void explode(World worldIn, BlockPos pos) {
+		TileEntityNukeTsar entity = (TileEntityNukeTsar) worldIn.getTileEntity(pos);
 		boolean isReady = entity.isReady();
 		boolean isStage1Filled = entity.isStage1Filled();
 		boolean isStage2Filled = entity.isStage2Filled();
-		if(isStage2Filled) {
-			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+		boolean isStage3Filled = entity.isStage3Filled();
+		if(isStage3Filled) {
+			this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 			entity.clearSlots();
-			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius);
+			worldIn.setBlockToAir(pos);
+			igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius);
 		}else if(isStage1Filled) {
-			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+			this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 			entity.clearSlots();
-			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.mikeRadius);
+			worldIn.setBlockToAir(pos);
+			igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/2);
+		}else if(isStage2Filled) {
+			this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
+			entity.clearSlots();
+			worldIn.setBlockToAir(pos);
+			igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/3);
 		}else if(isReady) {
-			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+			this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
 			entity.clearSlots();
-			world.setBlockToAir(pos);
-			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
-		}
+			worldIn.setBlockToAir(pos);
+			igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.tsarRadius/5);
+		}	
 	}
 	
 	@Override
@@ -217,11 +220,11 @@ public class NukeTsar extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TextFormatting.GOLD+"["+ I18nUtil.resolveKey("trait.thermobomb")+"]"+"§r");
-		tooltip.add(TextFormatting.YELLOW+I18nUtil.resolveKey("desc.radius")+" "+BombConfig.tsarRadius+"m§r");
+		tooltip.add("§6["+ I18nUtil.resolveKey("trait.thermobomb")+"]"+"§r");
+		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.tsarRadius)+"§r");
 		if(!BombConfig.disableNuclear){
-			tooltip.add(TextFormatting.DARK_GREEN+"["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(TextFormatting.GREEN+ I18nUtil.resolveKey("desc.radius")+" "+(int)BombConfig.tsarRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.tsarRadius*(1+BombConfig.falloutRange/100))+"§r");
 		}
 	}
 }

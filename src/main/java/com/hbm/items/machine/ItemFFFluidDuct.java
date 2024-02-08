@@ -2,12 +2,12 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.config.GeneralConfig;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;

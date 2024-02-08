@@ -36,8 +36,10 @@ public class RenderNukeSolinium extends TileEntitySpecialRenderer<TileEntityNuke
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(ResourceManager.bomb_solinium_tex);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+		bindTexture(ResourceManager.bomb_solinium_tex);
         ResourceManager.bomb_solinium.renderAll();
+        GL11.glShadeModel(GL11.GL_FLAT);
         
         GlStateManager.enableCull();
         GL11.glPopMatrix();

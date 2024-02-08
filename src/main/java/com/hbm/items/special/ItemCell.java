@@ -59,7 +59,7 @@ public class ItemCell extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		if(entityItem.onGround) {
+		if(entityItem.onGround || entityItem.isBurning()) {
 			if(hasFluid(entityItem.getItem(), ModForgeFluids.aschrab) && WeaponConfig.dropCell) {
 				if(!entityItem.world.isRemote) {
 					entityItem.setDead();

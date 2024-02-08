@@ -32,4 +32,5 @@ public interface IPowerNet {
 	public List<IEnergyConnector> getSubscribers();
 	
 	public long transferPower(long power);
+	public long getTotalTransfer();
 }

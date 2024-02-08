@@ -24,7 +24,7 @@ public class ItemRenderBigSword extends TEISRBase {
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
-			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/ModelBigSwordTexture.png"));
+			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/weapons/ModelBigSwordTexture.png"));
 			if(type == TransformType.FIRST_PERSON_RIGHT_HAND){
 				GL11.glTranslated(0.2, 0.2, 0.5);
 				GL11.glRotated(135, 0, 0, 1);
@@ -41,7 +41,7 @@ public class ItemRenderBigSword extends TEISRBase {
 		case GROUND:
 		case FIXED:
 		case HEAD:
-			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/ModelBigSwordTexture.png"));
+			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/weapons/ModelBigSwordTexture.png"));
 			GL11.glScaled(1.5, 1.5, 1.5);
 			GL11.glRotatef(-180.0F, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);

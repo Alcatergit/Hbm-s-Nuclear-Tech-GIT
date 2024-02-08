@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderTestRender extends TileEntitySpecialRenderer<TileEntityTestRender> {
 
-	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID, "textures/models/modeltestrender.png");
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID, "textures/models/misc/modeltestrender.png");
 	
 	private ModelTestRender model;
 	

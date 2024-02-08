@@ -12,6 +12,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.RBMKScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager;
@@ -86,6 +87,8 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 		GL11.glTranslatef(-0.42F, 3.5F, 1.75F);
         GlStateManager.depthMask(false);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.color(1, 1, 1, 1);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
 		for(int i = 0; i < console.screens.length; i++) {
 			

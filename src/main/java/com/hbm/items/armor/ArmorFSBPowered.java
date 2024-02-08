@@ -102,14 +102,14 @@ public class ArmorFSBPowered extends ArmorFSB implements IBatteryItem {
     }
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer entity, ItemStack itemStack) {
-    	if(this.drain > 0 && ArmorFSB.hasFSBArmor(entity)) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+    	if(this.drain > 0 && ArmorFSB.hasFSBArmor(player)) {
     		long netto_drain = drain;
-    		ItemSelfcharger sc_battery = this.getHeldSCBattery(entity);
+    		ItemSelfcharger sc_battery = this.getHeldSCBattery(player);
     		if(sc_battery != null){
     			netto_drain = netto_drain - (sc_battery.getDischargeRate()/4L);
     		}
-    		this.dischargeBattery(itemStack, netto_drain);
+    		this.dischargeBattery(stack, netto_drain);
     	}
     }
 	

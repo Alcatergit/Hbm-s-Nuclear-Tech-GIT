@@ -6,9 +6,10 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
@@ -102,7 +103,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		this.fuel = (Float)fuselage.attributes[1];
 		this.consumption = (Float)thruster.attributes[1];
 
-        this.setSize(1.5F, 1.5F);
+        this.setSize(1.5F, 11F);
 	}
 	
 	@Override
@@ -177,6 +178,34 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
         }
 	}
 
+	public void clearLoadedChunks() {
+		if(!world.isRemote && loaderTicket != null && loadedChunks != null) {
+			for(ChunkPos chunk : loadedChunks) {
+				ForgeChunkManager.unforceChunk(loaderTicket, chunk);
+			}
+		}
+	}
+
+	private ChunkPos mainChunk;
+	public void loadMainChunk() {
+		if(!world.isRemote && loaderTicket != null){
+			ChunkPos currentChunk = new ChunkPos((int) Math.floor(this.posX / 16D), (int) Math.floor(this.posZ / 16D));
+			if(mainChunk == null){
+				ForgeChunkManager.forceChunk(loaderTicket, currentChunk);
+				this.mainChunk = currentChunk;
+			} else if(!mainChunk.equals(currentChunk)){
+				ForgeChunkManager.forceChunk(loaderTicket, currentChunk);
+				ForgeChunkManager.unforceChunk(loaderTicket, this.mainChunk);
+				this.mainChunk = currentChunk;
+			}
+		}
+	}
+	public void unloadMainChunk() {
+		if(!world.isRemote && loaderTicket != null && this.mainChunk != null) {
+			ForgeChunkManager.unforceChunk(loaderTicket, this.mainChunk);
+		}
+	}
+
 	@Override
 	protected void entityInit() {
 		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
@@ -240,30 +269,11 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		}
 	}
 	
-	protected void rotation() {
-        float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-
-        for (this.rotationPitch = (float)(Math.atan2(this.motionY, f2) * 180.0D / Math.PI) - 90; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
-        {
-            ;
-        }
-
-        while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
-            this.prevRotationPitch += 360.0F;
-        }
-
-        while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
-            this.prevRotationYaw -= 360.0F;
-        }
-
-        while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
-            this.prevRotationYaw += 360.0F;
-        }
-	}
-	
 	@Override
 	public void onUpdate() {
+		super.onUpdate();
+		//load own chunk
+		loadMainChunk();
 		if(this.ticksExisted < 10){
 			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
 			return;
@@ -271,12 +281,10 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		
 		this.getDataManager().set(HEALTH, this.health);
 		
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, 0, 0);
-
-		this.rotation();
+		double oldPosY = this.posY;
+		this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
+		this.prevPosY = oldPosY;
+		
 		
 		if(fuel > 0 || world.isRemote) {
 			
@@ -316,9 +324,11 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				this.setLocationAndAngles((int)this.posX, world.getHeight((int)this.posX, (int)this.posZ), (int)this.posZ, 0, 0);
 			}
 			if (!this.world.isRemote) {
-				if(this.ticksExisted > 60)
+				if(this.ticksExisted > 100)
 					onImpact();
 			}
+			this.clearLoadedChunks();
+			unloadMainChunk();
 			this.setDead();
 			return;
 		}
@@ -421,18 +431,15 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		case CLUSTER:
 			break;
 		case BUSTER:
-			ExplosionLarge.buster(world, posX, posY, posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), strength, strength * 4);
+			ExplosionLarge.buster(world, posX, posY, posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), strength, strength);
 			break;
 		case NUCLEAR:
 		case TX:
 		case MIRV:
-	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) strength, posX, posY, posZ));
-	    	
-			EntityNukeCloudSmall nuke = new EntityNukeCloudSmall(world, strength);
-			nuke.posX = posX;
-			nuke.posY = posY;
-			nuke.posZ = posZ;
-			world.spawnEntity(nuke);
+	    	world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int) strength, posX, posY, posZ));
+	    	if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, posX, posY, posZ, strength);
+			}
 			break;
 		case VOLCANO:
 			ExplosionLarge.buster(world, posX, posY, posZ, Vec3.createVectorHelper(motionX, motionY, motionZ), strength, strength * 2);
@@ -452,16 +459,16 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			bf.posZ = this.posZ;
 			bf.destructionRange = (int) strength;
 			world.spawnEntity(bf);
-			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, posX, posY + 5, posZ, strength));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, posX, posY, posZ, strength);
+			}
 			break;
 		case N2:
-	    	world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, (int) strength, posX, posY, posZ));
+	    	world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int) strength, posX, posY, posZ));
 
-			EntityNukeCloudSmall n2 = new EntityNukeCloudSmall(world, strength);
-			n2.posX = posX;
-			n2.posY = posY;
-			n2.posZ = posZ;
-			world.spawnEntity(n2);
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, posX, posY, posZ, strength);
+			}
 			break;
 		case TAINT:
             int r = (int) strength;

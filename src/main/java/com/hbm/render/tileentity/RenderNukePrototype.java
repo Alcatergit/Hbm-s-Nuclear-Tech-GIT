@@ -34,8 +34,10 @@ public class RenderNukePrototype extends TileEntitySpecialRenderer<TileEntityNuk
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_prototype_tex);
         ResourceManager.bomb_prototype.renderAll();
+        GL11.glShadeModel(GL11.GL_FLAT);
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();

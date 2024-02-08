@@ -50,7 +50,10 @@ public class MachineCharger extends BlockContainer implements ITooltipProvider, 
 	@Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-    	tooltip.add("§aMax Chargerate: "+Library.getShortNumber(20 * maxThroughput)+"HE/s");
+    	if(maxThroughput == Long.MAX_VALUE / 20L)
+    		tooltip.add("§aMax Chargerate: Infinite HE/s");
+    	else
+    		tooltip.add("§aMax Chargerate: "+Library.getShortNumber(20 * maxThroughput)+"HE/s");
         this.addStandardInfo(tooltip);
         super.addInformation(stack, player, tooltip, advanced);
     }

@@ -85,7 +85,7 @@ public class ItemDrop extends Item {
 				entityItem.setDead();
 			}
 
-			if(entityItem.onGround) {
+			if(entityItem.onGround || entityItem.isBurning()) {
 
 				if(stack.getItem() != null && stack.getItem() == ModItems.pellet_antimatter && WeaponConfig.dropCell) {
 					if(!entityItem.world.isRemote) {

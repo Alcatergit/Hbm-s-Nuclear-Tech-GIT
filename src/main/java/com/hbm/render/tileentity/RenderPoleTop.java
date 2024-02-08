@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPoleTop extends TileEntitySpecialRenderer<TileEntityDecoPoleTop> {
 
-	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/PoleTop.png");
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":" + "textures/models/deco/PoleTop.png");
 	
 	private ModelPoleTop model;
 	

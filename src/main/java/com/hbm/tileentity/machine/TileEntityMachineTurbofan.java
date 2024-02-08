@@ -5,10 +5,10 @@ import java.util.List;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
+import com.hbm.inventory.EngineRecipes;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.ModDamageSource;
@@ -126,24 +126,16 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			int nrg = 1250;
-			int cnsp = 1;
 			
 			afterburner = 0;
 			if(!inventory.getStackInSlot(2).isEmpty()) {
 				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_1) {
-					nrg *= 2;
-					cnsp *= 2.5;
 					afterburner = 1;
 				}
 				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_2) {
-					nrg *= 3;
-					cnsp *= 5;
 					afterburner = 2;
 				}
 				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_3) {
-					nrg *= 4;
-					cnsp *= 7.5;
 					afterburner = 3;
 				}
 			}
@@ -153,6 +145,16 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 			if (needsUpdate) {
 				needsUpdate = false;
 			}
+
+			long burnValue = 0;
+			int amount = 1 + this.afterburner;
+			
+			if(tank.getFluid() != null && EngineRecipes.isAero(tank.getFluid().getFluid())) {
+				burnValue = EngineRecipes.getEnergy(tank.getFluid().getFluid()) / 1_000;
+			}
+			
+			int amountToBurn = Math.min(amount, tank.getFluidAmount());
+			
 			this.sendTurboPower();
 
 			power = Library.chargeItemsFromTE(inventory, 3, power, maxPower);
@@ -165,11 +167,11 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 			
 			isRunning = false;
 				
-			if(tank.getFluidAmount() >= cnsp) {
-				tank.drain(cnsp, true);
+			if(amountToBurn > 0) {
+				tank.drain(amountToBurn, true);
 				needsUpdate = true;
-				power += nrg;
-
+				power += burnValue * amountToBurn * (1 + Math.min(this.afterburner / 3D, 4));
+				
 				isRunning = true;
 				
 				if(power > maxPower)
@@ -371,7 +373,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.kerosene;
+		return EngineRecipes.isAero(stack.getFluid());
 	}
 
 	protected void sendTurboPower() {

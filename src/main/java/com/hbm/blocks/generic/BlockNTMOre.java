@@ -67,7 +67,9 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune){
-		return xp;
+		if(this.getItemDropped(state, RANDOM, fortune) != Item.getItemFromBlock(this))
+			return xp;
+		return 0;
 	}
 	
 	@Override

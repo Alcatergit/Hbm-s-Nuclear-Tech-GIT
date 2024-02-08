@@ -74,8 +74,7 @@ public class ExplosionDrying
 		this.nlimit = this.radius2 * 4;
 	}
 	
-	public boolean update()
-	{
+	public boolean update(){
 		breakColumn(this.lastposX, this.lastposZ);
 		this.shell = (int) Math.floor((Math.sqrt(n) + 1) / 2);
 		int shell2 = this.shell * 2;

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -135,7 +136,7 @@ public class ItemGunEgon extends ItemGunBase {
 			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+1);
 			Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
-			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase){
+			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && CompatibilityConfig.isWarDim(world)){
 				EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
 				if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
 					return;

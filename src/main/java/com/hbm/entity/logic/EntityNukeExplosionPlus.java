@@ -1,9 +1,10 @@
 package com.hbm.entity.logic;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.explosion.ExplosionFleija;
 import com.hbm.explosion.ExplosionNukeAdvanced;
-import com.hbm.explosion.ExplosionNukeGeneric;
+import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
@@ -34,7 +35,10 @@ public class EntityNukeExplosionPlus extends Entity {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-    	
+    	if(!CompatibilityConfig.isWarDim(world)){
+			this.setDead();
+			return;
+		}
         if(!this.did)
         {
         	if(this.waste)
@@ -73,7 +77,7 @@ public class EntityNukeExplosionPlus extends Entity {
         if(!flag)
         {
         	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.HOSTILE, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	ExplosionNukeGeneric.dealDamage(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2);
+        	ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2, this.destructionRange * 10, 0, this.destructionRange * 2, this.destructionRange * 3);
         } else {
 			if (!did2 && waste) {
 				EntityFalloutRain fallout = new EntityFalloutRain(this.world, (this.wasteRange) * 10);

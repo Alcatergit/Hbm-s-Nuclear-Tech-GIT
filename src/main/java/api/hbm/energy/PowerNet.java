@@ -21,6 +21,9 @@ public class PowerNet implements IPowerNet {
 	private HashMap<Integer, Integer> proxies = new HashMap();
 	private List<IEnergyConnector> subscribers = new ArrayList();
 
+	public static List<PowerNet> trackingInstances = null;
+	protected long totalTransfer = 0;
+
 	@Override
 	public void joinNetworks(IPowerNet network) {
 		
@@ -119,18 +122,27 @@ public class PowerNet implements IPowerNet {
 	public boolean isValid() {
 		return this.valid;
 	}
+
+	@Override
+	public long getTotalTransfer() {
+		return this.totalTransfer;
+	}
 	
 	public long lastCleanup = System.currentTimeMillis();
 	
 	@Override
 	public long transferPower(long power) {
 		
-		/*if(lastCleanup + 45 < System.currentTimeMillis()) {
-			cleanup(this.subscribers);
-			lastCleanup = System.currentTimeMillis();
-		}*/
-		
-		return fairTransfer(this.subscribers, power);
+		List<PowerNet> cache = new ArrayList();
+		if(trackingInstances != null && !trackingInstances.isEmpty()) {
+			cache.addAll(trackingInstances);
+		}
+
+		trackingInstances = new ArrayList();
+		trackingInstances.add(this);
+		long result = fairTransfer(this.subscribers, power);
+		trackingInstances.addAll(cache);
+		return result;
 	}
 	
 	public static void cleanup(List<IEnergyConnector> subscribers) {
@@ -139,8 +151,14 @@ public class PowerNet implements IPowerNet {
 			x == null || !(x instanceof TileEntity) || ((TileEntity)x).isInvalid() || !x.isLoaded()
 		);
 	}
-	
-	public static long fairTransfer(List<IEnergyConnector> subscribers, long power) {
+
+	public static boolean shouldSend(ConnectionPriority senderPrio, ConnectionPriority p, IEnergyConnector x){
+		return (x.getPriority() == p) && (!x.isStorage() || (senderPrio.compareTo(p) <= 0));
+	}
+
+	public static long fairTransferWithPrio(ConnectionPriority senderPrio, List<IEnergyConnector> subscribers, long power) {
+		
+		if(power <= 0) return 0;
 		
 		if(subscribers.isEmpty())
 			return power;
@@ -148,6 +166,79 @@ public class PowerNet implements IPowerNet {
 		cleanup(subscribers);
 		
 		ConnectionPriority[] priorities = new ConnectionPriority[] {ConnectionPriority.HIGH, ConnectionPriority.NORMAL, ConnectionPriority.LOW};
+		
+		long totalTransfer = 0;
+		
+		for(ConnectionPriority p : priorities) {
+			
+			List<IEnergyConnector> subList = new ArrayList();
+			subscribers.forEach(x -> {
+				if(shouldSend(senderPrio, p, x)) {
+					subList.add(x);
+				}
+			});
+			
+			if(subList.isEmpty())
+				continue;
+			
+			List<Long> weight = new ArrayList();
+			long totalReq = 0;
+			
+			for(IEnergyConnector con : subList) {
+				long req = con.getTransferWeight();
+				weight.add(req);
+				totalReq += req;
+			}
+			
+			if(totalReq == 0)
+				continue;
+			
+			long totalGiven = 0;
+			
+			for(int i = 0; i < subList.size(); i++) {
+				IEnergyConnector con = subList.get(i);
+				long req = weight.get(i);
+				double fraction = (double)req / (double)totalReq;
+				
+				long given = (long) Math.floor(fraction * power);
+				
+				totalGiven += (given - con.transferPower(given));
+
+				if(con instanceof TileEntity) {
+					TileEntity tile = (TileEntity) con;
+					tile.getWorld().markChunkDirty(tile.getPos(), tile);
+				}
+			}
+			
+			power -= totalGiven;
+			totalTransfer += totalGiven;
+		}
+
+		if(trackingInstances != null) {
+			
+			for(int i = 0; i < trackingInstances.size(); i++) {
+				PowerNet net = trackingInstances.get(i);
+				net.totalTransfer += totalTransfer;
+			}
+			
+			trackingInstances.clear();
+		}
+		
+		return power;
+	}
+
+	public static long fairTransfer(List<IEnergyConnector> subscribers, long power) {
+		
+		if(power <= 0) return 0;
+		
+		if(subscribers.isEmpty())
+			return power;
+		
+		cleanup(subscribers);
+		
+		ConnectionPriority[] priorities = new ConnectionPriority[] {ConnectionPriority.HIGH, ConnectionPriority.NORMAL, ConnectionPriority.LOW};
+		
+		long totalTransfer = 0;
 		
 		for(ConnectionPriority p : priorities) {
 			
@@ -183,9 +274,25 @@ public class PowerNet implements IPowerNet {
 				long given = (long) Math.floor(fraction * power);
 				
 				totalGiven += (given - con.transferPower(given));
+
+				if(con instanceof TileEntity) {
+					TileEntity tile = (TileEntity) con;
+					tile.getWorld().markChunkDirty(tile.getPos(), tile);
+				}
 			}
 			
 			power -= totalGiven;
+			totalTransfer += totalGiven;
+		}
+
+		if(trackingInstances != null) {
+			
+			for(int i = 0; i < trackingInstances.size(); i++) {
+				PowerNet net = trackingInstances.get(i);
+				net.totalTransfer += totalTransfer;
+			}
+			
+			trackingInstances.clear();
 		}
 		
 		return power;

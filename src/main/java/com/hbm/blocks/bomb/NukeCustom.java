@@ -2,15 +2,16 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudSolinium;
 import com.hbm.entity.effect.EntityCloudFleija;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.projectile.EntityFallingNuke;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
@@ -19,7 +20,6 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -39,7 +39,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -155,7 +154,9 @@ public class NukeCustom extends BlockContainer implements IBomb {
     		bf.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 			bf.destructionRange = (int) bale;
 			world.spawnEntity(bf);
-			world.spawnEntity(EntityNukeCloudSmall.statFacBale(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, bale));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFacBale(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, bale);
+			}
 			
 		/// HYDROGEN ///
 		} else if(hydro > 0) {
@@ -164,8 +165,10 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			hydro = Math.min(hydro, BombConfig.maxCustomHydroRadius);
 			dirty *= 0.25F;
 
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)hydro, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
-			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, hydro));
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)hydro, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, hydro);
+			}
 			
 		/// NUCLEAR ///
 		} else if(nuke > 0) {
@@ -173,16 +176,20 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			nuke += tnt / 2;
 			nuke = Math.min(nuke, BombConfig.maxCustomNukeRadius);
 
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)nuke, xCoord + 0.5, yCoord + 5, zCoord + 0.5).moreFallout((int)dirty));
-			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, nuke));
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)nuke, xCoord + 0.5, yCoord + 5, zCoord + 0.5).moreFallout((int)dirty));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, nuke);
+			}
 			
 		/// NON-NUCLEAR ///
 		} else if(tnt >= 75) {
 
 			tnt = Math.min(tnt, BombConfig.maxCustomTNTRadius);
 
-			world.spawnEntity(EntityNukeExplosionMK4.statFacNoRad(world, (int)tnt, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
-			world.spawnEntity(EntityNukeCloudSmall.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, tnt));
+			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)tnt, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, tnt);
+			}
 		} else if(tnt > 0) {
 			
 			ExplosionLarge.explode(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, tnt, true, true, true);
@@ -273,6 +280,6 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TextFormatting.LIGHT_PURPLE+"["+ I18nUtil.resolveKey("trait.modularbomb")+"]"+"§r");
+		tooltip.add("§d["+ I18nUtil.resolveKey("trait.modularbomb")+"]§r");
 	}
 }

@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.entity.logic.EntityTomBlast;
 import com.hbm.interfaces.IConstantRenderer;
@@ -39,12 +40,14 @@ public class EntityTom extends EntityThrowable implements IConstantRenderer {
         if(this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getBlock() != Blocks.AIR)
         {
     		if(!this.world.isRemote) {
-    			EntityTomBlast tom = new EntityTomBlast(world);
-    			tom.posX = posX;
-    			tom.posY = posY;
-    			tom.posZ = posZ;
-    			tom.destructionRange = 500;
-    			world.spawnEntity(tom);
+    			if(CompatibilityConfig.isWarDim(world)){
+	    			EntityTomBlast tom = new EntityTomBlast(world);
+	    			tom.posX = posX;
+	    			tom.posY = posY;
+	    			tom.posZ = posZ;
+	    			tom.destructionRange = 500;
+	    			world.spawnEntity(tom);
+	    		}
     			
     			EntityCloudTom cloud = new EntityCloudTom(world, 500);
     			cloud.setLocationAndAngles(posX, posY, posZ, 0, 0);

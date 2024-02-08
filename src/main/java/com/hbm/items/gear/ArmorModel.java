@@ -76,27 +76,6 @@ public class ArmorModel extends ItemArmor {
 		if (this == ModItems.cape_schrabidium) {
 			return armorType == EntityEquipmentSlot.CHEST;
 		}
-		/*if (this == ModItems.cape_hbm) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_dafnik) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_lpkukin) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_vertice) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_codered_) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_ayy) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}
-		if (this == ModItems.cape_nostalgia) {
-			return armorType == EntityEquipmentSlot.CHEST;
-		}*/
 		if (this == ModItems.hat) {
 			return armorType == EntityEquipmentSlot.HEAD;
 		}
@@ -122,14 +101,6 @@ public class ArmorModel extends ItemArmor {
 				return this.modelCloak;
 			}
 		}
-		/*if (this == ModItems.cape_hbm || this == ModItems.cape_dafnik || this == ModItems.cape_lpkukin || this == ModItems.cape_vertice || this == ModItems.cape_codered_ || this == ModItems.cape_ayy || this == ModItems.cape_nostalgia) {
-			if (armorSlot == 1) {
-				if (this.modelCloak == null) {
-					this.modelCloak = new ModelCloak();
-				}
-				return this.modelCloak;
-			}
-		}*/
 		if (this == ModItems.hat) {
 			if (armorSlot == EntityEquipmentSlot.HEAD) {
 				if (this.modelHat == null) {
@@ -144,7 +115,7 @@ public class ArmorModel extends ItemArmor {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		if (stack.getItem() == ModItems.goggles) {
-			return "hbm:textures/models/Goggles.png";
+			return "hbm:textures/armor/Goggles.png";
 		}
 		if (stack.getItem() == ModItems.mask_damp) {
 			return "hbm:textures/armor/rag_damp.png";
@@ -152,43 +123,16 @@ public class ArmorModel extends ItemArmor {
 		if (stack.getItem() == ModItems.mask_piss) {
 			return "hbm:textures/armor/rag_piss.png";
 		}
-		// if (stack.getItem() == ModItems.cape_test) {
-		// 	return "hbm:textures/models/TestCape.png";
-		// }
 		if (stack.getItem() == ModItems.cape_radiation) {
-			return "hbm:textures/models/CapeRadiation.png";
+			return "hbm:textures/models/capes/CapeRadiation.png";
 		}
 		if (stack.getItem() == ModItems.cape_gasmask) {
-			return "hbm:textures/models/CapeGasMask.png";
+			return "hbm:textures/models/capes/CapeGasMask.png";
 		}
 		if (stack.getItem() == ModItems.cape_schrabidium) {
-			return "hbm:textures/models/CapeSchrabidium.png";
+			return "hbm:textures/models/capes/CapeSchrabidium.png";
 		}
-		/*if (stack.getItem() == ModItems.cape_hbm && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.HbMinecraft)) {
-			if(MainRegistry.polaroidID == 11)
-				return "hbm:textures/models/CapeHbm.png";
-			else
-				return "hbm:textures/models/CapeHbm2.png";
-		}
-		if (stack.getItem() == ModItems.cape_dafnik && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.Dafnik)) {
-			return "hbm:textures/models/CapeDafnik.png";
-		}
-		if (stack.getItem() == ModItems.cape_lpkukin && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.LPkukin)) {
-			return "hbm:textures/models/CapeShield.png";
-		}
-		if (stack.getItem() == ModItems.cape_vertice && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.LordVertice)) {
-			return "hbm:textures/models/CapeVertice_2.png";
-		}
-		if (stack.getItem() == ModItems.cape_codered_ && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.CodeRed_)) {
-			return "hbm:textures/models/CapeRed.png";
-		}
-		if (stack.getItem() == ModItems.cape_ayy && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.dxmaster769)) {
-			return "hbm:textures/models/CapeAyy.png";
-		}
-		if (stack.getItem() == ModItems.cape_nostalgia && entity instanceof EntityPlayer && ((EntityPlayer)entity).getUniqueID().toString().equals(Library.nostalgia)) {
-			return "hbm:textures/models/CapeNostalgia.png";
-		}*/
-		return "hbm:textures/models/CapeUnknown.png";
+		return "hbm:textures/models/capes/CapeUnknown.png";
 	}
 	
 	@SideOnly(Side.CLIENT)

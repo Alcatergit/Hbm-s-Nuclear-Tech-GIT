@@ -3,6 +3,7 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityBombletZeta;
@@ -97,123 +98,115 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 	
 	@Override
 	public void onUpdate() {
-		//super.onUpdate();
 
-				this.lastTickPosX = this.prevPosX = posX;
-				this.lastTickPosY = this.prevPosY = posY;
-				this.lastTickPosZ = this.prevPosZ = posZ;
+		this.lastTickPosX = this.prevPosX = posX;
+		this.lastTickPosY = this.prevPosY = posY;
+		this.lastTickPosZ = this.prevPosZ = posZ;
 
-				this.setPosition(posX + motionX, posY + motionY, posZ + motionZ);
+		this.setPosition(posX + motionX, posY + motionY, posZ + motionZ);
+		
+		if(!world.isRemote) {
+			
+			this.getDataManager().set(HEALTH, health);
+			
+			if(health > 0)
+				PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
+		} else {
+			health = this.getDataManager().get(HEALTH);
+		}
+		
+		this.rotation();
+		
+		if(this.health <= 0) {
+			motionY -= 0.025;
+			if(!CompatibilityConfig.isWarDim(world)){
+				this.setDead();
+				return;
+			}	
+        	for(int i = 0; i < 10; i++)
+        		this.world.spawnEntity(new EntityGasFlameFX(this.world, this.posX + rand.nextGaussian() * 0.5 - motionX * 2, this.posY + rand.nextGaussian() * 0.5 - motionY * 2, this.posZ + rand.nextGaussian() * 0.5 - motionZ * 2, 0.0, 0.1, 0.0));
+			
+			if(world.getBlockState(new BlockPos((int)posX, (int)posY, (int)posZ)).isNormalCube() && !world.isRemote) {
+				this.setDead();
 				
-				if(!world.isRemote) {
-					
-					this.getDataManager().set(HEALTH, health);
-					
-					if(health > 0)
-						PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
+				ExplosionLarge.explodeFire(world, posX, posY, posZ, 25, true, false, true);
+		    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.planeCrash, SoundCategory.HOSTILE, 10.0F, 1.0F, true);
+				
+				return;
+			}
+		}
+		
+		if(this.ticksExisted > timer)
+			this.setDead();
+		
+		if(!world.isRemote && this.health > 0 && this.ticksExisted > bombStart && this.ticksExisted < bombStop && this.ticksExisted % bombRate == 0) {
+			if(!CompatibilityConfig.isWarDim(world)){
+				return;
+			}
+			if(type == 3) {
+
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.HOSTILE, 5.0F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F, true);
+				ExplosionChaos.spawnChlorine(world, this.posX, this.posY - 1F, this.posZ, 10, 0.5, 3);
+				
+			} else if(type == 5) {
+				
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	EntityRocketHoming rocket = new EntityRocketHoming(world);
+	        	rocket.setIsCritical(true);
+	        	//rocket.motionX = motionX;
+	        	//rocket.motionZ = motionZ;
+	        	rocket.motionY = -1;
+	        	rocket.shootingEntity = this;
+	        	rocket.homingRadius = 50;
+	        	rocket.homingMod = 5;
+				
+	        	rocket.posX = posX + rand.nextDouble() - 0.5;
+	        	rocket.posY = posY - rand.nextDouble();
+	        	rocket.posZ = posZ + rand.nextDouble() - 0.5;
+	        	
+				world.spawnEntity(rocket);
+	        	
+			} else if(type == 6) {
+				
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	EntityBoxcar rocket = new EntityBoxcar(world);
+				
+	        	rocket.posX = posX + rand.nextDouble() - 0.5;
+	        	rocket.posY = posY - rand.nextDouble();
+	        	rocket.posZ = posZ + rand.nextDouble() - 0.5;
+	        	
+				world.spawnEntity(rocket);
+	        	
+			} else if(type == 7) {
+
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.HOSTILE, 5.0F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F, true);
+				ExplosionChaos.spawnChlorine(world, this.posX, world.getHeight((int)this.posX, (int)this.posZ) + 2, this.posZ, 10, 1, 2);
+				
+			} else {
+				
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.bombWhistle, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	
+				EntityBombletZeta zeta = new EntityBombletZeta(world);
+				
+				zeta.rotation();
+				
+				zeta.type = type;
+				
+				zeta.posX = posX + rand.nextDouble() - 0.5;
+				zeta.posY = posY - rand.nextDouble();
+				zeta.posZ = posZ + rand.nextDouble() - 0.5;
+				
+				if(type == 0) {
+					zeta.motionX = motionX + rand.nextGaussian() * 0.15;
+					zeta.motionZ = motionZ + rand.nextGaussian() * 0.15;
 				} else {
-					health = this.getDataManager().get(HEALTH);
+					zeta.motionX = motionX;
+					zeta.motionZ = motionZ;
 				}
 				
-				this.rotation();
-				
-				if(this.health <= 0) {
-					motionY -= 0.025;
-					
-		        	for(int i = 0; i < 10; i++)
-		        		this.world.spawnEntity(new EntityGasFlameFX(this.world, this.posX + rand.nextGaussian() * 0.5 - motionX * 2, this.posY + rand.nextGaussian() * 0.5 - motionY * 2, this.posZ + rand.nextGaussian() * 0.5 - motionZ * 2, 0.0, 0.1, 0.0));
-					
-					if(world.getBlockState(new BlockPos((int)posX, (int)posY, (int)posZ)).isNormalCube() && !world.isRemote) {
-						this.setDead();
-						
-						/*worldObj.setBlock((int)posX, (int)posY, (int)posZ, ModBlocks.bomber);
-						TileEntityBomber te = (TileEntityBomber)worldObj.getTileEntity((int)posX, (int)posY, (int)posZ);
-
-						if(te != null) {
-							te.yaw = (int)(this.rotationYaw);
-							te.pitch = (int)(this.rotationPitch);
-							
-							te.type = this.getDataWatcher().getWatchableObjectByte(16);
-						}*/
-						
-						ExplosionLarge.explodeFire(world, posX, posY, posZ, 25, true, false, true);
-				    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.planeCrash, SoundCategory.HOSTILE, 10.0F, 1.0F, true);
-						
-						return;
-					}
-				}
-				
-				if(this.ticksExisted > timer)
-					this.setDead();
-				
-				if(!world.isRemote && this.health > 0 && this.ticksExisted > bombStart && this.ticksExisted < bombStop && this.ticksExisted % bombRate == 0) {
-					
-					if(type == 3) {
-
-			        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.HOSTILE, 5.0F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F, true);
-						ExplosionChaos.spawnChlorine(world, this.posX, this.posY - 1F, this.posZ, 10, 0.5, 3);
-						
-					} else if(type == 5) {
-						
-			        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
-			        	EntityRocketHoming rocket = new EntityRocketHoming(world);
-			        	rocket.setIsCritical(true);
-			        	//rocket.motionX = motionX;
-			        	//rocket.motionZ = motionZ;
-			        	rocket.motionY = -1;
-			        	rocket.shootingEntity = this;
-			        	rocket.homingRadius = 50;
-			        	rocket.homingMod = 5;
-						
-			        	rocket.posX = posX + rand.nextDouble() - 0.5;
-			        	rocket.posY = posY - rand.nextDouble();
-			        	rocket.posZ = posZ + rand.nextDouble() - 0.5;
-			        	
-						world.spawnEntity(rocket);
-			        	
-					} else if(type == 6) {
-						
-			        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
-			        	EntityBoxcar rocket = new EntityBoxcar(world);
-						
-			        	rocket.posX = posX + rand.nextDouble() - 0.5;
-			        	rocket.posY = posY - rand.nextDouble();
-			        	rocket.posZ = posZ + rand.nextDouble() - 0.5;
-			        	
-						world.spawnEntity(rocket);
-			        	
-					} else if(type == 7) {
-
-			        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.HOSTILE, 5.0F, 2.6F + (rand.nextFloat() - rand.nextFloat()) * 0.8F, true);
-						ExplosionChaos.spawnChlorine(world, this.posX, world.getHeight((int)this.posX, (int)this.posZ) + 2, this.posZ, 10, 1, 2);
-						
-					} else {
-						
-			        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.bombWhistle, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
-			        	
-						EntityBombletZeta zeta = new EntityBombletZeta(world);
-						/*zeta.prevRotationYaw = zeta.rotationYaw = this.rotationYaw;
-						zeta.prevRotationPitch = zeta.rotationPitch = this.rotationPitch;*/
-						
-						zeta.rotation();
-						
-						zeta.type = type;
-						
-						zeta.posX = posX + rand.nextDouble() - 0.5;
-						zeta.posY = posY - rand.nextDouble();
-						zeta.posZ = posZ + rand.nextDouble() - 0.5;
-						
-						if(type == 0) {
-							zeta.motionX = motionX + rand.nextGaussian() * 0.15;
-							zeta.motionZ = motionZ + rand.nextGaussian() * 0.15;
-						} else {
-							zeta.motionX = motionX;
-							zeta.motionZ = motionZ;
-						}
-						
-						world.spawnEntity(zeta);
-					}
-				}
+				world.spawnEntity(zeta);
+			}
+		}
 	}
 	
 	public void fac(World world, double x, double y, double z) {

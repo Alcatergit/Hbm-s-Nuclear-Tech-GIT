@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -324,7 +324,7 @@ public class GunNPCFactory {
 
 				bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, HBMSoundHandler.ufoBlast, SoundCategory.HOSTILE, 5.0F, 0.9F + bullet.world.rand.nextFloat() * 0.2F);
 				bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.HOSTILE, 5.0F, 0.5F);
-				ExplosionNukeGeneric.dealDamage(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 10, 50);
+				ContaminationUtil.radiate(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 50, 0, 0, 500);
 				
 				for(int i = 0; i < 3; i++) {
 					NBTTagCompound data = new NBTTagCompound();

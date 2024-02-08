@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.items.ModItems;
@@ -324,7 +325,7 @@ public class EntityDischarge extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {

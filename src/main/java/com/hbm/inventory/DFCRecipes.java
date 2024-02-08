@@ -83,8 +83,7 @@ public class DFCRecipes {
 		DFCRecipes.setRecipe(420000000000L, U238.nugget(), new ItemStack(ModItems.nugget_u238m2));
 		DFCRecipes.setRecipe(690000000000L, ModItems.gun_uboinik, new ItemStack(ModItems.gun_supershotgun));
 		
-		DFCRecipes.setRecipe(1000000000000L, ModItems.undefined, new ItemStack(ModItems.glitch));
-		DFCRecipes.setRecipe(12000000000000L, ModItems.battery_spark_cell_power, new ItemStack(ModItems.battery_creative));
+		DFCRecipes.setRecipe(8000000000000L, ModItems.undefined, new ItemStack(ModItems.glitch));
 		DFCRecipes.setRecipe(69000000000000L, Items.WRITABLE_BOOK, new ItemStack(ModItems.book_of_));
 	}
 

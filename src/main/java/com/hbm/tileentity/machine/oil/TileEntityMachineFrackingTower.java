@@ -113,7 +113,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
                     // drill is jammed
                     // warning 2, yellow: drill has reached max depth
 
-                    for(int i = pos.getY() - 1; i > pos.getY() - 1 - 100; i--) {
+                    for(int i = pos.getY() - 1; i > pos.getY() - 1 - 250; i--) {
 
                         Block b = world.getBlockState(new BlockPos(pos.getX(), i, pos.getZ())).getBlock();
                         if(b == ModBlocks.oil_pipe)

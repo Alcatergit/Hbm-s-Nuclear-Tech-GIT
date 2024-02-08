@@ -7,6 +7,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemMissile;
@@ -22,8 +23,10 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
 import com.hbm.tileentity.TileEntityLoadedBase;
+import net.minecraftforge.fml.common.Optional;
 
 import api.hbm.energy.IEnergyUser;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -48,7 +51,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, SimpleComponent {
 
 	public ItemStackHandler inventory;
 
@@ -66,6 +75,9 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 
 	//private static final int[] access = new int[] { 0 };
 
+	public static final int clearingDuraction = 100;
+	public int clearingTimer = 0;
+	
 	private String customName;
 	
 	public TileEntityLaunchTable() {
@@ -120,6 +132,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 		updateTypes();
 		if (!world.isRemote) {
 			
+			if(clearingTimer > 0) clearingTimer--;
 			//updateTypes();
 			if(world.getTotalWorldTime() % 20 == 0)
 				this.updateConnections();
@@ -144,6 +157,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, solid, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, padSize.ordinal(), 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
+			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, clearingTimer, 2), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tanks[0], tanks[1]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			
 			MissileStruct multipart = getStruct(inventory.getStackInSlot(0));
@@ -194,7 +208,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 	
 	public boolean canLaunch() {
 		
-		if(power >= maxPower * 0.75 && isMissileValid() && hasDesignator() && hasFuel())
+		if(power >= maxPower * 0.75 && isMissileValid() && hasDesignator() && hasFuel() && clearingTimer == 0)
 			return true;
 		
 		return false;
@@ -211,7 +225,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 		world.spawnEntity(missile);
 		
 		subtractFuel();
-		
+		clearingTimer = clearingDuraction;
 		inventory.setStackInSlot(0, ItemStack.EMPTY);
 	}
 	
@@ -513,5 +527,42 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 		}
 	}
 
+	public boolean setCoords(int x, int z){
+		if(!inventory.getStackInSlot(1).isEmpty() && (inventory.getStackInSlot(1).getItem() == ModItems.designator || inventory.getStackInSlot(1).getItem() == ModItems.designator_range || inventory.getStackInSlot(1).getItem() == ModItems.designator_manual)){
+			NBTTagCompound nbt;
+			if(inventory.getStackInSlot(1).hasTagCompound())
+				nbt = inventory.getStackInSlot(1).getTagCompound();
+			else
+				nbt = new NBTTagCompound();
+			nbt.setInteger("xCoord", x);
+			nbt.setInteger("zCoord", z);
+			inventory.getStackInSlot(1).setTagCompound(nbt);
+			return true;
+		}
+		return false;
+	}
 
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "launchtable";
+	}
+
+	@Callback(doc = "setTarget(x:int, z:int); saves coords in target designator item - returns true if it worked")
+	public Object[] setTarget(Context context, Arguments args) {
+		int x = args.checkInteger(0);
+		int z = args.checkInteger(1);
+		
+		return new Object[] {setCoords(x, z)};
+	}
+
+	@Callback(doc = "launch(); tries to launch the rocket")
+	public Object[] launch(Context context, Arguments args) {
+		Block b = world.getBlockState(pos).getBlock();
+		if(b instanceof IBomb){
+			((IBomb)b).explode(world, pos);
+		}
+		return new Object[] {null};
+	}
 }

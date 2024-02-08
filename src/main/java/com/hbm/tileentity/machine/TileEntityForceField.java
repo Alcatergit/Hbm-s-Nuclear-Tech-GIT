@@ -13,6 +13,7 @@ import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -36,7 +37,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 	public int blink = 0;
 	public float radius = 16;
 	public boolean isOn = false;
-	public int color = 0x0000FF;
+	public int color = 0x00C6FF;
 	public final int baseCon = 1000;
 	public final int radCon = 500;
 	public final int shCon = 250;
@@ -141,7 +142,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 				blink--;
 				color = 0xFF0000;
 			} else {
-				color = 0x00FF00;
+				color = 0x00C6FF;
 			}
 		}
 		
@@ -149,7 +150,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 			cooldown--;
 		} else {
 			if(health < maxHealth)
-				health += maxHealth / 100;
+				health += maxHealth / 50;
 			
 			if(health > maxHealth)
 				health = maxHealth;
@@ -188,7 +189,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 		health -= ouch;
 		
 		if(ouch >= (this.maxHealth / 250))
-		blink = 5;
+			blink = 5;
 		
 		if(health <= 0) {
 			health = 0;
@@ -211,7 +212,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 		
 		for(Entity entity : list) {
 			
-			if(!(entity instanceof EntityPlayer)) {
+			if(!(entity instanceof EntityPlayer) && !(entity instanceof EntityItem)) {
 				
 				double dist = Math.sqrt(Math.pow(pos.getX() + 0.5 - entity.posX, 2) + Math.pow(pos.getY() + 0.5 - entity.posY, 2) + Math.pow(pos.getZ() + 0.5 - entity.posZ, 2));
 				

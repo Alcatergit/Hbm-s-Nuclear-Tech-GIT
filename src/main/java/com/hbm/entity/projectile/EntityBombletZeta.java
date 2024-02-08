@@ -1,13 +1,12 @@
 package com.hbm.entity.projectile;
 
 import com.hbm.config.BombConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.entity.effect.EntityNukeTorex;
 
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -76,12 +75,11 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
     				ExplosionChaos.spawnChlorine(world, this.posX + 0.5F - motionX, this.posY + 0.5F - motionY, this.posZ + 0.5F - motionZ, 75, 2, 0);
     			}
     			if(type == 4) {
-    				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ).mute());
+    				world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ).mute());
     				
-    				NBTTagCompound data = new NBTTagCompound();
-    				data.setString("type", "muke");
-    				if(rand.nextInt(100) == 0) data.setBoolean("balefire", true);
-    				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
+    				if(BombConfig.enableNukeClouds) {
+						EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, (int) (BombConfig.fatmanRadius * 1.5));
+					}
     				world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
     			}
     		}

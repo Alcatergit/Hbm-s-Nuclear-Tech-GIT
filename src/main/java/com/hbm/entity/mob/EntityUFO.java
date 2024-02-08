@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
@@ -17,6 +16,8 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
@@ -51,7 +52,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 	public static final DataParameter<Boolean> BEAM = EntityDataManager.createKey(EntityUFO.class, DataSerializers.BOOLEAN);
 	public static final DataParameter<BlockPos> WAYPOINT = EntityDataManager.createKey(EntityUFO.class, DataSerializers.BLOCK_POS);
 	
-	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS));
+	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS));
 	
 	public int courseChangeCooldown;
 	public int scanCooldown;
@@ -313,11 +314,10 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 		}
 		
 		if(this.deathTime == 19 && !world.isRemote) {
-			world.newExplosion(this, posX, posY, posZ, 10F, true, true);
-			ExplosionNukeSmall.explode(world, posX, posY, posZ, ExplosionNukeSmall.medium);
-			
+			EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, 25);
+			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 25, posX + 0.5, posY + 0.5, posZ + 0.5));
+            
 			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(200, 200, 200));
-
 			for(EntityPlayer player : players) {
 				AdvancementManager.grantAchievement(player, AdvancementManager.bossUFO);
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_ufo));

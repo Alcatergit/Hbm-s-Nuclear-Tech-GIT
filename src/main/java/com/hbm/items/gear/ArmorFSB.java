@@ -67,9 +67,11 @@ public class ArmorFSB extends ItemArmor {
 	public List<PotionEffect> effects = new ArrayList<PotionEffect>();
 	public HashMap<String, Float> resistance = new HashMap<String, Float>();
 	public float blastProtection = -1;
+	public float projectileProtection = -1;
 	public float damageCap = -1;
 	public float damageMod = -1;
 	public float damageThreshold = 0;
+	public float protectionYield = 50F;
 	public boolean fireproof = false;
 	public boolean noHelmet = false;
 	public boolean vats = false;
@@ -207,26 +209,38 @@ public class ArmorFSB extends ItemArmor {
     }
     
     public void handleHurt(LivingHurtEvent event, ArmorFSB chestplate){
-    	if(event.getAmount() < 100){
-			if(!event.getSource().isUnblockable())
-				event.setAmount(event.getAmount()-chestplate.damageThreshold);
-			
-			if(chestplate.damageMod != -1) {
-				event.setAmount(event.getAmount()*chestplate.damageMod);
-			}
 
-			if(chestplate.resistance.get(event.getSource().getDamageType()) != null) {
-				event.setAmount(event.getAmount()*chestplate.resistance.get(event.getSource().getDamageType()));
-			}
+    	//store any damage above the yield
+		float overFlow = Math.max(0, event.getAmount() - chestplate.protectionYield);
+		//reduce the damage to the yield cap if it exceeds the yield
+		event.setAmount(Math.min(event.getAmount(), chestplate.protectionYield));
 
-			if(chestplate.blastProtection != -1 && event.getSource().isExplosion()) {
-				event.setAmount(event.getAmount()*chestplate.blastProtection);
-			}
 
-			if(chestplate.damageCap != -1) {
-				event.setAmount(Math.min(event.getAmount(), chestplate.damageCap));
-			}
+    	if(!event.getSource().isUnblockable())
+			event.setAmount(event.getAmount()-chestplate.damageThreshold);
+		
+		if(chestplate.damageMod != -1) {
+			event.setAmount(event.getAmount()*chestplate.damageMod);
 		}
+
+		if(chestplate.resistance.get(event.getSource().getDamageType()) != null) {
+			event.setAmount(event.getAmount()*chestplate.resistance.get(event.getSource().getDamageType()));
+		}
+
+		if(chestplate.blastProtection != -1 && event.getSource().isExplosion()) {
+			event.setAmount(event.getAmount()*chestplate.blastProtection);
+		}
+
+		if(chestplate.projectileProtection != -1 && event.getSource().isProjectile()) {
+			event.setAmount(event.getAmount()*chestplate.projectileProtection);
+		}
+
+		if(chestplate.damageCap != -1) {
+			event.setAmount(Math.min(event.getAmount(), chestplate.damageCap));
+		}
+
+		//add back anything that was above the protection yield before
+		event.setAmount(event.getAmount()+overFlow);
     }
 	
 	public boolean isArmorEnabled(ItemStack stack) {
@@ -260,7 +274,7 @@ public class ArmorFSB extends ItemArmor {
 					entity.motionY -= chestplate.gravity;
 			}
 			
-			if(chestplate.step != null && entity.world.isRemote && entity.onGround && isStart) {
+			if(chestplate.step != null && entity.world.isRemote && entity.onGround && isStart && !entity.isSneaking()) {
 
 				try {
 					if(nextStepDistance == null)
@@ -309,9 +323,6 @@ public class ArmorFSB extends ItemArmor {
 
 			if(chestplate.hardLanding && entity.fallDistance > 10) {
 
-				// player.playSound(Block.soundTypeAnvil.func_150496_b(), 2.0F,
-				// 0.5F);
-
 				List<Entity> entities = entity.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(3, 0, 3));
 
 				for(Entity e : entities) {
@@ -331,8 +342,9 @@ public class ArmorFSB extends ItemArmor {
 				// return;
 			}
 			
-			if(chestplate.fall != null)
+			if(chestplate.fall != null && entity.fallDistance > 0.25 && !entity.isSneaking()){
 				entity.playSound(chestplate.fall, 1.0F, 1.0F);
+			}
 		}
 	}
 	
@@ -400,9 +412,19 @@ public class ArmorFSB extends ItemArmor {
 		this.gravity = gravity;
 		return this;
 	}
+
+	public ArmorFSB setProtectionLevel(float damageYield) {
+		this.protectionYield = damageYield;
+		return this;
+	}
 	
 	public ArmorFSB setBlastProtection(float blastProtection) {
 		this.blastProtection = blastProtection;
+		return this;
+	}
+
+	public ArmorFSB setProjectileProtection(float projectileProtection) {
+		this.projectileProtection = projectileProtection;
 		return this;
 	}
 
@@ -480,13 +502,15 @@ public class ArmorFSB extends ItemArmor {
 		this.damageCap = original.damageCap;
 		this.damageMod = original.damageMod;
 		this.damageThreshold = original.damageThreshold;
-		this.fireproof = original.fireproof;
+		this.protectionYield = original.protectionYield;
 		this.blastProtection = original.blastProtection;
+		this.projectileProtection = original.projectileProtection;
+		this.fireproof = original.fireproof;
 		this.noHelmet = original.noHelmet;
 		this.vats = original.vats;
+		this.thermal = original.thermal;
 		this.geigerSound = original.geigerSound;
 		this.customGeiger = original.customGeiger;
-		this.thermal = original.thermal;
 		this.hardLanding = original.hardLanding;
 		this.gravity = original.gravity;
 		this.step = original.step;
@@ -527,6 +551,10 @@ public class ArmorFSB extends ItemArmor {
     	if(blastProtection != -1) {
     		list.add(TextFormatting.YELLOW + "  " + I18nUtil.resolveKey("armor.blastProtection", blastProtection));
     	}
+
+    	if(projectileProtection != -1) {
+			list.add(TextFormatting.YELLOW + "  " + I18nUtil.resolveKey("armor.projectileProtection", projectileProtection));
+		}
     	
     	if(damageCap != -1) {
     		list.add(TextFormatting.YELLOW + "  " + I18nUtil.resolveKey("armor.cap", damageCap));
@@ -565,8 +593,12 @@ public class ArmorFSB extends ItemArmor {
 		}
     	
     	if(gravity != 0) {
-    		list.add(TextFormatting.BLUE + "  " + I18nUtil.resolveKey("armor.gravity", gravity));
+    		list.add(TextFormatting.DARK_AQUA + "  " + I18nUtil.resolveKey("armor.gravity", gravity));
     	}
+
+    	if(protectionYield > 0F) {
+			list.add(TextFormatting.GREEN + "  " + I18nUtil.resolveKey("armor.yield", protectionYield));
+		}
 	}
 	
 	@Override

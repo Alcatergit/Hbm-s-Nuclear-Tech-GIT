@@ -3,6 +3,7 @@ package com.hbm.entity.projectile;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.blocks.generic.RedBarrel;
@@ -394,7 +395,7 @@ public class EntityBullet extends Entity implements IProjectile {
 			float f2;
 			float f4;
 
-			if (movingobjectposition != null) {
+			if (movingobjectposition != null && CompatibilityConfig.isWarDim(world)) {
 				if (movingobjectposition.entityHit != null) {
 					// TODO: Remove test feature in release version
 					if (!(movingobjectposition.entityHit instanceof EntityItemFrame) || movingobjectposition.entityHit instanceof EntityItemFrame && (((EntityItemFrame) movingobjectposition.entityHit).getDisplayedItem() == null || ((EntityItemFrame) movingobjectposition.entityHit).getDisplayedItem() != null && ((EntityItemFrame) movingobjectposition.entityHit).getDisplayedItem().getItem() != ModItems.flame_pony)) {
@@ -840,5 +841,4 @@ public class EntityBullet extends Entity implements IProjectile {
 		d0 = d0 * 64.0D * getRenderDistanceWeight();
 		return distance < d0 * d0;
 	}
-
 }

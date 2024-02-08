@@ -32,9 +32,11 @@ public class RenderNukeN2 extends TileEntitySpecialRenderer<TileEntityNukeN2> {
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
-        bindTexture(ResourceManager.n2_tex);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+		bindTexture(ResourceManager.n2_tex);
         ResourceManager.n2.renderAll();
-        
+        GL11.glShadeModel(GL11.GL_FLAT);
+
         GlStateManager.enableCull();
         GL11.glPopMatrix();
 	}

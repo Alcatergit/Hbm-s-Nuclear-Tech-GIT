@@ -29,10 +29,16 @@ public class ModelArmorHEV extends ModelArmorBase {
 		setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 
 		GL11.glPushMatrix();
-
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+			GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+		}
 		if(type == 0) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.hev_helmet);
-			head.render(par7);
+			head.render(par7*1.15F);
+		}
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
 		}
 		if(type == 1) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.hev_chest);

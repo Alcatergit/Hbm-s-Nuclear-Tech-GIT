@@ -2,14 +2,16 @@ package com.hbm.items.special;
 
 import java.util.List;
 
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,21 +38,38 @@ public class ItemUnstable extends Item {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-		if(stack.getItemDamage() != 0)
-			return;
 
 		this.setTimer(stack, this.getTimer(stack) + 1);
 
 		if(this.getTimer(stack) == timer && !world.isRemote) {
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, radius, entity.posX, entity.posY, entity.posZ));
-			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, radius);
-			entity2.posX = entity.posX;
-			entity2.posY = entity.posY;
-			entity2.posZ = entity.posZ;
-			world.spawnEntity(entity2);
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, radius, entity.posX, entity.posY, entity.posZ));
+
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, entity.posX, entity.posY, entity.posZ, radius);
+			}
 			world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.oldExplosion, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			entity.attackEntityFrom(ModDamageSource.nuclearBlast, 10000);
 		}
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem itemEntity) {
+		World world = itemEntity.world;
+
+		this.setTimer(itemEntity.getItem(), this.getTimer(itemEntity.getItem()) + 1);
+
+		if(this.getTimer(itemEntity.getItem()) == timer && !world.isRemote) {
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, radius, itemEntity.posX, itemEntity.posY, itemEntity.posZ));
+
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, itemEntity.posX, itemEntity.posY, itemEntity.posZ, radius);
+			}
+			world.playSound(null, itemEntity.posX, itemEntity.posY, itemEntity.posZ, HBMSoundHandler.oldExplosion, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			itemEntity.attackEntityFrom(ModDamageSource.nuclearBlast, 10000);
+			itemEntity.setDead();
+			return true;
+		}
+		return false;
 	}
 
 	private void setTimer(ItemStack stack, int time) {

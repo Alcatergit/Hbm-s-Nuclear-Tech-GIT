@@ -3,8 +3,8 @@ package com.hbm.blocks;
 import java.util.List;
 
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

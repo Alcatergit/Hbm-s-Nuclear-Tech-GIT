@@ -76,7 +76,8 @@ public class HbmWorldGen implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		try{
 			generateOres(world, rand, chunkX * 16, chunkZ * 16);
-			generateStructures(world, rand, chunkX * 16, chunkZ * 16);
+			if(world.getWorldInfo().isMapFeaturesEnabled())
+				generateStructures(world, rand, chunkX * 16, chunkZ * 16);
 		} catch(final Throwable t){
 			System.out.println("NTM Worldgen Error "+t);
 			t.printStackTrace();
@@ -128,8 +129,8 @@ public class HbmWorldGen implements IWorldGenerator {
 		}
 
 		//Gneiss
-		DungeonToolbox.generateOre(world, rand, i, j, 25, 6, 30, 10, ModBlocks.ore_gneiss_iron, ModBlocks.stone_gneiss);
-		DungeonToolbox.generateOre(world, rand, i, j, 10, 6, 30, 10, ModBlocks.ore_gneiss_gold, ModBlocks.stone_gneiss);
+		DungeonToolbox.generateOre(world, rand, i, j, dimID == 0 ? 25: 0, 6, 30, 10, ModBlocks.ore_gneiss_iron, ModBlocks.stone_gneiss);
+		DungeonToolbox.generateOre(world, rand, i, j, dimID == 0 ? 10 : 0, 6, 30, 10, ModBlocks.ore_gneiss_gold, ModBlocks.stone_gneiss);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.uraniumSpawn.get(dimID)) * 3, 6, 30, 10, ModBlocks.ore_gneiss_uranium, ModBlocks.stone_gneiss);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.copperSpawn.get(dimID)) * 3, 6, 30, 10, ModBlocks.ore_gneiss_copper, ModBlocks.stone_gneiss);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.asbestosSpawn.get(dimID)) * 3, 6, 30, 10, ModBlocks.ore_gneiss_asbestos, ModBlocks.stone_gneiss);
@@ -178,25 +179,11 @@ public class HbmWorldGen implements IWorldGenerator {
 		//End ores
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.endTixiteSpawn.get(dimID)), 6, 0, 127, ModBlocks.ore_tikite, Blocks.END_STONE);
 	
-		if(dimID == 0){
+		if(dimID == 0 && GeneralConfig.enable528){
 			Random colRand = new Random(world.getSeed() + 5);
 			int colX = (int) (colRand.nextGaussian() * 1500);
 			int colZ = (int) (colRand.nextGaussian() * 1500);
 			int colRange = 750;
-			
-			if((GeneralConfig.enable528BedrockSpawn || GeneralConfig.enable528BedrockDeposit) && rand.nextInt(GeneralConfig.bedrockRate) != 0) {
-				int x = i + rand.nextInt(16);
-				int z = j + rand.nextInt(16);
-				
-				if(GeneralConfig.enable528BedrockSpawn || (GeneralConfig.enable528BedrockDeposit && x <= colX + colRange && x >= colX - colRange && z <= colZ + colRange && z >= colZ - colRange)) {
-					
-					for(int y = 6; y >= 0; y--) {
-						if(world.getBlockState(new BlockPos(x, y, z)).getBlock().isReplaceableOreGen(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z), BlockMatcher.forBlock(Blocks.BEDROCK))) {
-							world.setBlockState(new BlockPos(x, y, z), ModBlocks.ore_bedrock_coltan.getDefaultState());
-						}
-					}
-				}
-			}
 			
 			if(GeneralConfig.enable528ColtanDeposit) {
 				for (int k = 0; k < 2; k++) {
@@ -215,15 +202,9 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 		}
-		//Australium
-		for (int k = 0; k < rand.nextInt(4); k++) {
-			int randPosX = i + rand.nextInt(16);
-			int randPosY = rand.nextInt(15) + 15;
-			int randPosZ = j + rand.nextInt(16);
-
-			if(randPosX <= -350 && randPosX >= -450 && randPosZ <= -350 && randPosZ >= -450)
-				(new WorldGenMinable(ModBlocks.ore_australium.getDefaultState(), 50)).generate(world, rand, new BlockPos(randPosX, randPosY, randPosZ));
-		}
+		
+		generateBedrockOil(world, rand, i, j, dimID);
+		generateBedrockOre(world, rand, i, j, dimID);
 	}
 	
 	/**
@@ -329,45 +310,8 @@ public class HbmWorldGen implements IWorldGenerator {
 			new Sellafield().generate(world, x, z, r, r * 0.35D);
 
 			if (GeneralConfig.enableDebugMode)
-				MainRegistry.logger.info("[Debug] Successfully spawned raditation hotspot at " + x + " " + z);
+				MainRegistry.logger.info("[Debug] Successfully spawned raditation hotspot at x=" + x + " z=" + z);
 		}	
-	}
-
-	private void generateSellafieldBlocks(World world, Random rand, int i, int j, int dimID){
-		if (GeneralConfig.enableRad) {
-			int dimRadMineFreq = parseInt(CompatibilityConfig.radminefreq.get(dimID));
-			if(dimRadMineFreq > 0 && rand.nextInt(dimRadMineFreq) == 0){
-				int x = i + rand.nextInt(16);
-				int z = j + rand.nextInt(16);
-				int y = world.getHeight(x, z);
-
-
-				if (world.getBlockState(new BlockPos(x, y-1, z)).isSideSolid(world, new BlockPos(x, y-1, z), EnumFacing.UP)) {
-					int radi = rand.nextInt(128);
-					if(radi > 64){
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_0.getDefaultState());
-					}
-					else if(radi > 32){
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_1.getDefaultState());
-					}
-					else if(radi > 16){
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_2.getDefaultState());
-					}
-					else if(radi > 8){
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_3.getDefaultState());
-					}
-					else if(radi > 2){
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_4.getDefaultState());
-					}
-					else{
-						world.setBlockState(new BlockPos(x, y, z), ModBlocks.sellafield_core.getDefaultState());
-					}
-
-					if (GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned small raditation hotspot at " + x + " " + y + " " + z);			
-				}
-			}
-		}
 	}
 
 	private void generateStructures(World world, Random rand, int i, int j) {
@@ -382,7 +326,7 @@ public class HbmWorldGen implements IWorldGenerator {
 			if (biome.getDefaultTemperature() >= 1F && biome.getRainfall() > 1F) {
 				generateAStructure(world, rand, i, j, new Radio01(), parseInt(CompatibilityConfig.radioStructure.get(dimID)));
 			}
-			if (biome.getDefaultTemperature() <= 1F) {
+			if (biome.getDefaultTemperature() <= 0.5F) {
 				generateAStructure(world, rand, i, j, new Antenna(), parseInt(CompatibilityConfig.antennaStructure.get(dimID)));
 			}
 			if (!biome.canRain() && biome.getDefaultTemperature() >= 2F) {
@@ -412,8 +356,6 @@ public class HbmWorldGen implements IWorldGenerator {
 			generateAStructure(world, rand, i, j, new Dud(), parseInt(CompatibilityConfig.dudStructure.get(dimID)));
 			if(biome.getTempCategory() == Biome.TempCategory.WARM && biome.getTempCategory() != Biome.TempCategory.OCEAN)
 				generateSellafieldPool(world, rand, i, j, dimID);
-			generateBedrockOil(world, rand, i, j, dimID);
-			generateBedrockOre(world, rand, i, j, dimID);
 			
 			if (GeneralConfig.enableMines){
 				int dimMineFreq = parseInt(CompatibilityConfig.minefreq.get(dimID));
@@ -426,7 +368,7 @@ public class HbmWorldGen implements IWorldGenerator {
 						world.setBlockState(new BlockPos(x, y, z), ModBlocks.mine_ap.getDefaultState());
 
 						if (GeneralConfig.enableDebugMode)
-							MainRegistry.logger.info("[Debug] Successfully spawned landmine at " + x + " " + y + " " + z);
+							MainRegistry.logger.info("[Debug] Successfully spawned landmine at x=" + x + " y=" + y + " z=" + z);
 					}
 				}
 			}
@@ -441,7 +383,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					world.setBlockState(new BlockPos(x, y, z), ModBlocks.broadcaster_pc.getDefaultState().withProperty(PinkCloudBroadcaster.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
 
 					if (GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at " + x + " " + (y) + " " + z);
+						MainRegistry.logger.info("[Debug] Successfully spawned corrupted broadcaster at x=" + x + " y=" + y + " z=" + z);
 				}
 			}
 
@@ -515,7 +457,7 @@ public class HbmWorldGen implements IWorldGenerator {
 						}
 		
 						if(GeneralConfig.enableDebugMode)
-							MainRegistry.logger.info("[Debug] Successfully spawned capsule at " + x + " " + z);
+							MainRegistry.logger.info("[Debug] Successfully spawned capsule at x=" + x + " z=" + z);
 					}
 				}
 			}
@@ -532,7 +474,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 				if(GeneralConfig.enableDebugMode && done)
-					MainRegistry.logger.info("[Debug] Successfully spawned pink tree at " + x + " " + z);
+					MainRegistry.logger.info("[Debug] Successfully spawned pink tree at x=" + x + " z=" + z);
 			}
 			if(GeneralConfig.enableVaults){
 				int dimVaultFreq = parseInt(CompatibilityConfig.vaultfreq.get(dimID));
@@ -583,7 +525,7 @@ public class HbmWorldGen implements IWorldGenerator {
 							}
 
 							if (GeneralConfig.enableDebugMode)
-								MainRegistry.logger.info("[Debug] Successfully spawned safe at " + x + " " + (y + 1) + " " + z);
+								MainRegistry.logger.info("[Debug] Successfully spawned safe at x=" + x + " y=" + (y + 1) + " z=" + z);
 						}
 					}
 				}
@@ -596,13 +538,20 @@ public class HbmWorldGen implements IWorldGenerator {
 				CellularDungeonFactory.meteor.generate(world, x, 12, z, rand);
 				
 				if(GeneralConfig.enableDebugMode)
-					MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at " + x + " 10 " + z);
+					MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at x=" + x + " y=10 z=" + z);
 				
 				int y = world.getHeight(x, z);
+				int columnY = y;
+				for(int y1 = y+1; y1 > 1; y1--){
+					if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z))){
+						columnY = y1+1;
+						break;
+					}
+				}
 				
 				for(int f = 0; f < 3; f++)
-					world.setBlockState(new BlockPos(x, y + f, z), ModBlocks.meteor_pillar.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
-				world.setBlockState(new BlockPos(x, y + 3, z), ModBlocks.meteor_brick_chiseled.getDefaultState());
+					world.setBlockState(new BlockPos(x, columnY + f, z), ModBlocks.meteor_pillar.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
+				world.setBlockState(new BlockPos(x, columnY + 3, z), ModBlocks.meteor_brick_chiseled.getDefaultState());
 				
 				for(int f = 0; f < 10; f++) {
 
@@ -621,7 +570,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				}
 			}
 			
-			if(biome.isHighHumidity() && biome.getTempCategory() == Biome.TempCategory.WARM){
+			if(biome.isHighHumidity() && biome.getDefaultTemperature() < 1.2 && biome.getDefaultTemperature() > 0.8){
 				int dimJungleStructure = parseInt(CompatibilityConfig.jungleStructure.get(dimID));
 				if(dimJungleStructure > 0 && rand.nextInt(dimJungleStructure) == 0) {
 					int x = i + rand.nextInt(16);
@@ -632,13 +581,20 @@ public class HbmWorldGen implements IWorldGenerator {
 					CellularDungeonFactory.jungle.generate(world, x, 28, z, world.rand);
 
 					if(GeneralConfig.enableDebugMode)
-						MainRegistry.logger.info("[Debug] Successfully spawned jungle dungeon at " + x + " 10 " + z);
+						MainRegistry.logger.info("[Debug] Successfully spawned jungle dungeon at x=" + x + " y=10 z=" + z);
 
 					int y = world.getHeight(x, z);
+					int columnY = y;
+					for(int y1 = y+1; y1 > 1; y1--){
+						if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z))){
+							columnY = y1+1;
+							break;
+						}
+					}
 
 					for(int f = 0; f < 3; f++)
-						world.setBlockState(new BlockPos(x, y + f, z), ModBlocks.deco_titanium.getDefaultState());
-					world.setBlockState(new BlockPos(x, y + 3, z), Blocks.REDSTONE_BLOCK.getDefaultState());
+						world.setBlockState(new BlockPos(x, columnY + f, z), ModBlocks.deco_titanium.getDefaultState());
+					world.setBlockState(new BlockPos(x, columnY + 3, z), Blocks.REDSTONE_BLOCK.getDefaultState());
 				}
 			}
 			if(biome.getTempCategory() == Biome.TempCategory.COLD){
@@ -672,8 +628,6 @@ public class HbmWorldGen implements IWorldGenerator {
 					}
 				}
 			}
-
-			generateSellafieldBlocks(world, rand, i, j, dimID);
 		}
 		
 		if(rand.nextInt(25) == 0) {

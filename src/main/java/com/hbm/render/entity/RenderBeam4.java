@@ -17,7 +17,7 @@ public class RenderBeam4 extends Render<EntitySparkBeam> {
 
 	public static final IRenderFactory<EntitySparkBeam> FACTORY = (RenderManager man) -> {return new RenderBeam4(man);};
 	
-	private ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/models/PlasmaBeam.png");
+	private ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/PlasmaBeam.png");
 	
 	protected RenderBeam4(RenderManager renderManager) {
 		super(renderManager);

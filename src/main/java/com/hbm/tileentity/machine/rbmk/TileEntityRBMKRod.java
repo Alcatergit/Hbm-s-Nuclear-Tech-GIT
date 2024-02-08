@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -9,14 +8,13 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
 
@@ -436,5 +434,4 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 
 		return data;
 	}
-
 }

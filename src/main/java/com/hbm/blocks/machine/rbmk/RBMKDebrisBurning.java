@@ -5,6 +5,7 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 
@@ -42,6 +43,8 @@ public class RBMKDebrisBurning extends RBMKDebris {
 			}
 
 			ForgeDirection dir = ForgeDirection.getOrientation(world.rand.nextInt(6));
+			
+			ContaminationUtil.radiate(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 0, 0, 50);
 						
 			//Foam helps stop the fire; Boron smothers it. 1.66% chance every 100-120 seconds for one side
 			int chance = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock() == ModBlocks.sand_boron ? 10 : 100;

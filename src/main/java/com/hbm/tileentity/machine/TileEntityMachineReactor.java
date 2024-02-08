@@ -244,7 +244,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 				
 				progress += heat / recipeHeat;
 
-				if(this.progress == TileEntityMachineReactor.processingSpeed) {
+				if(this.progress >= TileEntityMachineReactor.processingSpeed) {
 					this.progress = 0;
 					this.charge--;
 					this.processItem();

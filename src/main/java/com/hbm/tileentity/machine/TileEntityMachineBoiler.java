@@ -219,8 +219,7 @@ public class TileEntityMachineBoiler extends TileEntityMachineBase implements IT
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == ModForgeFluids.oil || stack.getFluid() == ModForgeFluids.crackoil
-				|| stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam;
+		return HeatRecipes.hasBoilRecipe(stack.getFluid());
 	}
 
 	@Override

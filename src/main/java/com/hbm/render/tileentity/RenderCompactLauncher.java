@@ -30,7 +30,7 @@ public class RenderCompactLauncher extends TileEntitySpecialRenderer<TileEntityC
 		
 		/// DRAW MISSILE START
 		GL11.glPushMatrix();
-		if(launcher.load != null) {
+		if(launcher.load != null && launcher.clearingTimer == 0) {
 			//ItemStack custom = launcher.getStackInSlot(0);
 			
 			//missile = ItemCustomMissile.getMultipart(custom);

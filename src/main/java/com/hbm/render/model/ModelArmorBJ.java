@@ -31,12 +31,17 @@ public class ModelArmorBJ extends ModelArmorBase {
 		setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 		body.copyTo(jetpack);
 		GL11.glPushMatrix();
-
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+			GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+		}
 		if(type == 0) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.bj_eyepatch);
-			head.render(par7);
+			head.render(par7*1.001F);
 		}
-
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+		}
 		if(type == 1 || type == 5) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.bj_chest);
 			body.render(par7);

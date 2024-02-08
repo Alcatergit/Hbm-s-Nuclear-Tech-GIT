@@ -1,6 +1,7 @@
 package com.hbm.tileentity.network;
 
 import com.hbm.tileentity.TileEntityMachineBase;
+
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +28,7 @@ public abstract class TileEntityCraneBase extends TileEntityMachineBase implemen
     // for extra stability in case the screwdriver action doesn't get synced to
     // other clients
     private EnumFacing cachedOutputOverride = null;
+
     @Override
     public void update() {
         if(hasWorld() && world.isRemote) {

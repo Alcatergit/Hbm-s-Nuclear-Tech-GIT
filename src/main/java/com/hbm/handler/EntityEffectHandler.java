@@ -29,6 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -123,25 +124,35 @@ public class EntityEffectHandler {
 				return;
 			
 			Random rand = new Random(entity.getEntityId());
+			int r600 = rand.nextInt(600);
+			int r1200 = rand.nextInt(1200);
 			
-			if(HbmLivingProps.getRadiation(entity) > 600 && (world.getTotalWorldTime() + rand.nextInt(600)) % 600 == 0) {
+			if(HbmLivingProps.getRadiation(entity) > 600 && (world.getTotalWorldTime() + r600) % 600 < 20 && canVomit(entity)) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setString("type", "bloodvomit");
+				nbt.setString("type", "vomit");
+				nbt.setString("mode", "blood");
+				nbt.setInteger("count", 25);
 				nbt.setInteger("entity", entity.getEntityId());
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 				
-				world.playSound(null, ix, iy, iz, HBMSoundHandler.vomit, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-				entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 60, 19));
-			} else if(HbmLivingProps.getRadiation(entity) > 200 && (world.getTotalWorldTime() + rand.nextInt(1200)) % 1200 == 0) {
+				if((world.getTotalWorldTime() + r600) % 600 == 1) {
+					world.playSound(null, ix, iy, iz, HBMSoundHandler.vomit, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+					entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 60, 19));
+				}
+
+			} else if(HbmLivingProps.getRadiation(entity) > 200 && (world.getTotalWorldTime() + r1200) % 1200 < 20 && canVomit(entity)) {
 				
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setString("type", "vomit");
+				nbt.setString("mode", "normal");
+				nbt.setInteger("count", 15);
 				nbt.setInteger("entity", entity.getEntityId());
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 				
-				world.playSound(null, ix, iy, iz, HBMSoundHandler.vomit, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-				entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 60, 19));
-			
+				if((world.getTotalWorldTime() + r1200) % 1200 == 1) {
+					world.playSound(null, ix, iy, iz, HBMSoundHandler.vomit, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+					entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 60, 19));
+				}
 			}
 			
 			if(HbmLivingProps.getRadiation(entity) > 900 && (world.getTotalWorldTime() + rand.nextInt(10)) % 10 == 0) {
@@ -282,7 +293,7 @@ public class EntityEffectHandler {
 					entity.attackEntityFrom(ModDamageSource.mku, 2F);
 				}
 				
-				if(contagion < 30 * minute && (contagion + entity.getEntityId()) % 200 < 20) {
+				if(contagion < 30 * minute && (contagion + entity.getEntityId()) % 200 < 20 && canVomit(entity)) {
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setString("type", "vomit");
 					nbt.setString("mode", "blood");
@@ -384,5 +395,10 @@ public class EntityEffectHandler {
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 			}
 		}
+	}
+
+	private static boolean canVomit(Entity e) {
+		if(e.isCreatureType(EnumCreatureType.WATER_CREATURE, false)) return false;
+		return true;
 	}
 }

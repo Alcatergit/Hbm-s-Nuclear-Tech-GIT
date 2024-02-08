@@ -37,60 +37,13 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 		}
 	}
 
-	@Override
-	protected void transmitPower() {
-		
-		short mode = (short) this.getRelevantMode();
-		
-		ForgeDirection dir = ForgeDirection.DOWN;
-			
-		TileEntity te = world.getTileEntity(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
-			
-		// first we make sure we're not subscribed to the network that we'll be supplying
-		if(te instanceof IEnergyConductor) {
-			IEnergyConductor con = (IEnergyConductor) te;
-
-			if(con.getPowerNet() != null && con.getPowerNet().isSubscribed(this))
-				con.getPowerNet().unsubscribe(this);
-		}
-
-		//then we add energy
-		if(mode == mode_buffer || mode == mode_output) {
-			if(te instanceof IEnergyConnector) {
-				IEnergyConnector con = (IEnergyConnector) te;
-				
-				long max = maxTransfer;
-				long toTransfer = Math.min(max, this.power);
-				long remainder = this.power - toTransfer;
-				this.power = toTransfer;
-				
-				long oldPower = this.power;
-				long transfer = this.power - con.transferPower(this.power);
-				this.power = oldPower - transfer;
-				
-				power += remainder;
-			}
-		}
-
-		//then we subscribe if possible
-		if(te instanceof IEnergyConductor) {
-			IEnergyConductor con = (IEnergyConductor) te;
-			
-			if(con.getPowerNet() != null) {
-				if(mode == mode_output || mode == mode_none) {
-					if(con.getPowerNet().isSubscribed(this)) {
-						con.getPowerNet().unsubscribe(this);
-					}
-				} else if(!con.getPowerNet().isSubscribed(this)) {
-					con.getPowerNet().subscribe(this);
-				}
-			}
-		}
+	public static ForgeDirection[] getSendDirections(){
+		return new ForgeDirection[]{ForgeDirection.DOWN};
 	}
 
 	@Override
-	public NBTTagCompound packNBT(long avg){
-		NBTTagCompound nbt = super.packNBT(avg);
+	public NBTTagCompound packNBT(){
+		NBTTagCompound nbt = super.packNBT();
 		nbt.setByte("color", (byte) this.color.getMetadata());
 		return nbt;
 	}

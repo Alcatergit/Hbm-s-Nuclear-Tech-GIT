@@ -13,15 +13,17 @@ public class EntityMissileGeneric extends EntityMissileBaseAdvanced {
 
 	public EntityMissileGeneric(World worldIn) {
 		super(worldIn);
+		this.setSize(1F, 6F);
 	}
 	
 	public EntityMissileGeneric(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1F, 6F);
 	}
 
 	@Override
 	public void onImpact() {
-		ExplosionLarge.explode(world, posX, posY, posZ, 10.0F, true, true, true);
+		ExplosionLarge.explode(world, posX, posY, posZ, 15.0F, true, true, true);
 	}
 
 	@Override

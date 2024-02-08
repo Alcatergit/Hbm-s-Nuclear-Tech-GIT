@@ -5,8 +5,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.google.common.collect.Multimap;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
@@ -140,12 +141,10 @@ public class WeaponSpecial extends ItemSword {
 			
 			if(attacker.fallDistance >= 20 && !((EntityPlayer)attacker).capabilities.isCreativeMode) {
 				if(!world.isRemote) {
-					world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 100, target.posX, target.posY, target.posZ));
-					EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, 100F);
-					entity2.posX = target.posX;
-					entity2.posY = target.posY;
-					entity2.posZ = target.posZ;
-					world.spawnEntity(entity2);
+					world.spawnEntity(EntityNukeExplosionMK5.statFac(world, 100, target.posX, target.posY, target.posZ));
+					if(BombConfig.enableNukeClouds) {
+						EntityNukeTorex.statFac(world, target.posX, target.posY, target.posZ, 100);
+					}
 				}
 			}
 		}

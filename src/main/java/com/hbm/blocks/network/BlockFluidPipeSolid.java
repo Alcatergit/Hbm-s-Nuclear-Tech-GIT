@@ -27,7 +27,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -154,7 +153,7 @@ public class BlockFluidPipeSolid extends BlockContainer implements IToolable, IL
 		
 		List<String> text = new ArrayList();
 		if(ductFluid == null){
-			text.add(TextFormatting.GRAY + I18nUtil.resolveKey("desc.none"));
+			text.add("§7" + I18nUtil.resolveKey("desc.none"));
 		} else{
 			int color = ModForgeFluids.getFluidColor(ductFluid);
 			text.add("&[" + color + "&]" +I18nUtil.resolveKey(ductFluid.getUnlocalizedName()));

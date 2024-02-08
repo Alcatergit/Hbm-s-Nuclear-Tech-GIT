@@ -9,7 +9,7 @@ import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.render.amlfrom1710.WavefrontObject;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
@@ -72,13 +72,11 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
-		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder buf = tess.getBuffer();
 		if(!(control.getBlockType() instanceof RBMKBase))
 			return;
 
 		RBMKBase block = (RBMKBase)control.getBlockType();
-		IModelCustom columnModel = ResourceManager.rbmk_reflector;
+		WavefrontObject columnModel = ResourceManager.rbmk_reflector;
 		if(block == ModBlocks.rbmk_boiler || block == ModBlocks.rbmk_heater)
 			columnModel = ResourceManager.rbmk_rods;
 		else if(block instanceof RBMKRod)
@@ -88,32 +86,13 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
 		boolean doJump = control.jumpheight > 0;
-		for(int i = 0; i < TileEntityRBMKBase.rbmkHeight+1; i ++){
-			if(doJump && i == TileEntityRBMKBase.rbmkHeight){
-				tes.addTranslation(0, (float)control.jumpheight, 0);
-			}
-			columnModel.tessellatePart(tes, "Column");
-			tes.addTranslation(0, 1, 0);
-		}
+		
+		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight+TileEntityRBMKBase.rbmkHeight);
+			
 		tes.draw();
 		
 		
-		int offset = 1;
-		
-		for(int o = 1; o < 16; o++) {
-			
-			if(control.getWorld().getBlockState(new BlockPos(control.getPos().getX(), control.getPos().getY() + o, control.getPos().getZ())).getBlock() == control.getBlockType()) {
-				offset = o;
-				
-				int meta = control.getWorld().getBlockState(new BlockPos(control.getPos().getX(), control.getPos().getY() + o, control.getPos().getZ())).getValue(BlockDummyable.META);
-				
-				if(meta > 5 && meta < 12)
-					break;
-				
-			} else {
-				break;
-			}
-		}
+		int offset = TileEntityRBMKBase.rbmkHeight;
 		
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
@@ -151,16 +130,19 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			GlStateManager.color(fuelR, fuelG, fuelB, 1);
 			bindTexture(texture_rods);
 			
-			for(int j = 0; j <= offset; j++) {
-				ResourceManager.rbmk_element.renderPart("Rods");
-				GL11.glTranslated(0, 1, 0);
-			}
+			com.hbm.render.amlfrom1710.Tessellator tesss = com.hbm.render.amlfrom1710.Tessellator.instance;
+			tes.startDrawing(GL11.GL_TRIANGLES);
+			
+			ResourceManager.rbmk_element.tessellatePartSplit(tesss, "Rods", 0.5F, offset);
+			tesss.draw();
 			GlStateManager.color(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
 		
 		if(cherenkov) {
 			
+			Tessellator tess = Tessellator.getInstance();
+			BufferBuilder buf = tess.getBuffer();
 			GL11.glTranslated(0, 0.75, 0);
 
 			GlStateManager.disableCull();

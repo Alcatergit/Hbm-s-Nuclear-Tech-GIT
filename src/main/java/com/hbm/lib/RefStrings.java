@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-1.9.8";
-	public static final String CHANGELOG = "§§aAdded Custom Nuke Solinium, Euphemium Rod$§aAdded configurable max values to the custom nuke$§aAdded Chargers and DNT Drill$§aAdded Radresistant 2x1 Door$§aAdded neoveline, coke, lignite, solid fuel, and presto log blocks$§aAdded deco block uncrafting$§aAdded more colors to item tooltips$§bChanged ammo clips to be craftable$§bChanged factory speed and mechanics$§bChanged gas to disappear faster$§bChanged bedrock ore recipe balance$§bChanged laser rendering$§eFixed tool abilities break batteries and crates$§eFixed factory connection issue$§eFixed fiberglass recipe$§eFixed RBMK Melting down below 1.5 k°C";
+	public static final String VERSION = "NTM-Extended-1.12.2-2.0.0";
+	public static final String CHANGELOG = "§§aAdded more Control panel mechanics$§aAdded Conveyors and Extractor/Inserter$§aAdded Torex Nuke$§aAdded Mk5 Nuke processing$§aAdded scortched nuke craters$§aAdded N² and Balefire charge$§aAdded Launchpad cooldown$§aAdded 7 Blockstates per waste block$§aAdded Galacticraft sealing to all big doors$§aAdded 1.7 Fuel system$§aAdded cable gauge$§aAdded peace dimension config$§aAdded hazmat potion resistance$§aAdded pocket radar$§aAdded Bauble support to rad counters$§bChanged RBMK render to be 4x faster but have stretched side texture$§bChanged Nuke and Missile models$§bChanged Batteries to only send to higher tier then themselves$§bChanged Radar and Forcefuel model$§bChanged Xenon-135 production 6x$§cRemoved N45 Mine$§cRemoved Old Drill$§cRemoved bad recipes$§eFixed crash when moving from reloaded$§eFixed Jetpack and hud sync$§eFixed Jungle dungeon spawning$§eFixed Door locking";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version

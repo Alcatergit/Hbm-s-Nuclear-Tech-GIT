@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "hbm:blocks/contamination/red_sand/waste_red_sand_5"
+    }
+}

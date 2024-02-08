@@ -62,17 +62,17 @@ public class ToxicBlock extends BlockFluidClassic {
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos) {
 		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 		if(reactToBlocks(world, pos.east()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.west()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.up()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.down()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.south()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.north()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getDefaultState());
+			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 	}
 	
 	public boolean reactToBlocks(World world, BlockPos pos) {

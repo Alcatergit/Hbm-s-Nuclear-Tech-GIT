@@ -34,8 +34,10 @@ public class RenderNukeTsar extends TileEntitySpecialRenderer<TileEntityNukeTsar
 			GL11.glRotatef(-90, 0F, 1F, 0F); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_tsar_tex);
         ResourceManager.bomb_tsar.renderAll();
+        GL11.glShadeModel(GL11.GL_FLAT);
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();

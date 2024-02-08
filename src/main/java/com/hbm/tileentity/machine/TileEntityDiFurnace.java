@@ -57,8 +57,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			this.dualPower--;
 		}
 		int itemPower = DiFurnaceRecipes.getItemPower(inventory.getStackInSlot(2));
-		if (this.hasItemPower(inventory.getStackInSlot(2))
-				&& this.dualPower <= (TileEntityDiFurnace.maxPower - itemPower)) {
+		if (this.hasItemPower(inventory.getStackInSlot(2)) && this.dualPower <= (TileEntityDiFurnace.maxPower - itemPower)) {
 			this.dualPower += itemPower;
 			if (!inventory.getStackInSlot(2).isEmpty()) {
 				ItemStack copy = inventory.getStackInSlot(2).copy();

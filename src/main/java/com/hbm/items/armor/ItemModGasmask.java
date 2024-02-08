@@ -57,7 +57,7 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 		List<HazardClass> haz = getBlacklist(stack);
 		
 		if(!haz.isEmpty()) {
-			list.add(TextFormatting.RED + I18nUtil.resolveKey("hazard.neverProtects"));
+			list.add("§c"+I18nUtil.resolveKey("hazard.neverProtects"));
 			
 			for(HazardClass clazz : haz) {
 				list.add("§4 -" + I18nUtil.resolveKey(clazz.lang));

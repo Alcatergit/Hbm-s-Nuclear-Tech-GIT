@@ -65,8 +65,6 @@ public class MachineForceField extends BlockContainer {
 	
 				if(te.color == 0xFF0000)
 					world.spawnParticle(EnumParticleTypes.LAVA, f + f4, f1, f2 + f5, 0.0D, 0.0D, 0.0D);
-				else
-					world.spawnParticle(EnumParticleTypes.REDSTONE, f + f4, f1, f2 + f5, 0.0D, 0.0D, 0.0D);
 			}
 		} else if(te.cooldown > 0) {
 			for(int i = 0; i < 4; i++) {

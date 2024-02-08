@@ -124,7 +124,7 @@ public class ModForgeFluids {
 	public static Fluid experience = new Fluid("experience", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/experience_flowing"), null, Color.WHITE);
 	
 	//Block fluids
-	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setLuminosity(15).setTemperature(220+273);
+	public static Fluid toxic_fluid = new ToxicFluid("toxic_fluid").setDensity(2500).setViscosity(2000).setTemperature(70+273);
 	public static Fluid radwater_fluid = new RadWaterFluid("radwater_fluid").setDensity(1000);
 	public static Fluid mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(1773);
 	public static Fluid schrabidic = new SchrabidicFluid("schrabidic").setDensity(31200).setViscosity(500);

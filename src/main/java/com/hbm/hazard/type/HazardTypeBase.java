@@ -17,7 +17,7 @@ public abstract class HazardTypeBase {
 	 * Does the thing. Called by HazardEntry.applyHazard
 	 * @param target the holder
 	 * @param level the final level after calculating all the modifiers
-	 * @param stack the stack that is being updated
+	 * @param the stack that is being updated
 	 */
 	public abstract void onUpdate(EntityLivingBase target, float level, ItemStack stack);
 

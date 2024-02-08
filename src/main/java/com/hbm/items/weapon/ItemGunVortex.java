@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -67,18 +68,18 @@ public class ItemGunVortex extends ItemGunBase {
 		List<Entity> entsOnBeam = Library.rayTraceEntitiesOnLine(player, 100, 1).getRight();
 		
 		for(Entity e : entsOnBeam){
-			if(!(e instanceof EntityLivingBase))
-				continue;
-			float dmg = 30;
-			try {
-				if (ItemGunBase.hurtResistantTime == null)
-					ItemGunBase.hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
-				ItemGunBase.hurtResistantTime.setInt(e, 0);
-			} catch (Exception x){
-				x.printStackTrace();
-			}
+			if((e instanceof EntityLivingBase) && CompatibilityConfig.isWarDim(world)){
+				float dmg = 30;
+				try {
+					if (ItemGunBase.hurtResistantTime == null)
+						ItemGunBase.hurtResistantTime = ReflectionHelper.findField(Entity.class, "hurtResistantTime", "field_70172_ad");
+					ItemGunBase.hurtResistantTime.setInt(e, 0);
+				} catch (Exception x){
+					x.printStackTrace();
+				}
 
-			e.attackEntityFrom(ModDamageSource.radiation, dmg);
+				e.attackEntityFrom(ModDamageSource.radiation, dmg);
+			}
 		}
 		
 		if(this.mainConfig.animations.containsKey(AnimType.CYCLE) && player instanceof EntityPlayerMP)

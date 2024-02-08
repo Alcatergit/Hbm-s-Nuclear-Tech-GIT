@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
@@ -40,14 +41,14 @@ public class ItemContaminating extends ItemHazard {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem){
 		boolean m = this.module.onEntityItemUpdate(entityItem);
-		if(entityItem != null && !entityItem.world.isRemote && entityItem.onGround) {
+		if(entityItem != null && !entityItem.world.isRemote && (entityItem.onGround || entityItem.isBurning()) && CompatibilityConfig.isWarDim(entityItem.world)) {
 			if(isCleanGround(new BlockPos(entityItem.posX, entityItem.posY, entityItem.posZ), entityItem.world)){
 				return false;
 			}
 			if(falloutBallRadius > 1){
 				EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(entityItem.world);
 				falloutBall.posX = entityItem.posX;
-				falloutBall.posY = entityItem.posY;
+				falloutBall.posY = entityItem.posY+0.5F;
 				falloutBall.posZ = entityItem.posZ;
 				falloutBall.setScale(falloutBallRadius);
 				entityItem.world.spawnEntity(falloutBall);

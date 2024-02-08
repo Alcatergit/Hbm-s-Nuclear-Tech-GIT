@@ -2,14 +2,17 @@ package com.hbm.blocks.machine;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 
-import com.hbm.util.I18nUtil;
+import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -26,11 +29,12 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
-public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock {
+@Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
+public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock, IPartialSealableBlock, IRadResistantBlock {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -40,6 +44,33 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock {
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	public boolean isSealed(World world, BlockPos blockPos, EnumFacing direction){
+		if(world != null) {
+			TileEntity entity = world.getTileEntity(blockPos);
+			if (entity != null) {
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					// Doors should be rad sealed when closed
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isRadResistant(World worldIn, BlockPos blockPos) {
+		// Door should be rad resistant only when closed
+		if (worldIn != null) {
+			TileEntity entity = worldIn.getTileEntity(blockPos);
+			if (entity != null) {
+				if (IDoor.class.isAssignableFrom(entity.getClass())) {
+					return ((IDoor) entity).getState() == IDoor.DoorState.CLOSED;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -150,11 +181,11 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		float hardness = this.getExplosionResistance(null);
-		list.add(TextFormatting.DARK_GREEN + "[" + I18nUtil.resolveKey("trait.radshield") + "]");
+		tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
 		if(hardness > 50){
-			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.blastres") + " " + hardness);
+			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
 		}
 	}
 }

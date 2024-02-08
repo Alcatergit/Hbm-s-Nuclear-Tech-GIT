@@ -16,15 +16,15 @@ public class RenderFallingNuke extends Render<EntityFallingNuke> {
 
 	public static final IRenderFactory<EntityFallingNuke> FACTORY = (RenderManager man) -> {return new RenderFallingNuke(man);};
 	
-	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/LilBoy1.obj");
+	private static final ResourceLocation objTesterModelRL = new ResourceLocation(/*"/assets/" + */RefStrings.MODID, "models/bombs/LilBoy.obj");
 	private IModelCustom boyModel;
     private ResourceLocation boyTexture;
-    private static final ResourceLocation gadget_rl = new ResourceLocation(RefStrings.MODID +":textures/models/TheGadget3_.png");
+    private static final ResourceLocation gadget_rl = new ResourceLocation(RefStrings.MODID +":textures/models/bombs/gadget.png");
 	
 	protected RenderFallingNuke(RenderManager renderManager) {
 		super(renderManager);
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/CustomNuke.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/CustomNuke.png");
 	}
 
 	@Override

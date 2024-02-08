@@ -124,11 +124,11 @@ public class ItemHazardModule {
 				EntityLivingBase livingCEntity = (EntityLivingBase) entity;
 				boolean isProtected = entity instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer)entity);
 				if(!isProtected){
-					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.cryogenic-1));
-					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.cryogenic-1)));
-					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.cryogenic-1));
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 110, this.cryogenic-1));
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 110, Math.min(4, this.cryogenic-1)));
+					livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 110, this.cryogenic-1));
 					if(this.cryogenic > 4){
-						livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 100, this.cryogenic-3));
+						livingCEntity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 110, this.cryogenic-3));
 						entity.extinguish();
 					}
 				}
@@ -146,30 +146,30 @@ public class ItemHazardModule {
 				boolean hasHazmat = false;
 				if(entity instanceof EntityPlayer){
 					if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
-						ArmorUtil.damageGasMaskFilter(livingTEntity, Math.max(1, this.toxic>>2));
+						ArmorUtil.damageGasMaskFilter(livingTEntity, 1);
 						hasToxFilter = true;
 					}
 					hasHazmat = ArmorUtil.checkForHazmat((EntityPlayer)entity);
 				}
 
 				if(!hasToxFilter && !hasHazmat){
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 100, this.toxic-1));
+					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 110, this.toxic-1));
 					
 					if(this.toxic > 2)
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, Math.min(4, this.toxic-4)));
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 110, Math.min(4, this.toxic-4)));
 					if(this.toxic > 4)
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 100, this.toxic));
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 110, this.toxic));
 					if(this.toxic > 6){
 						if(entity.world.rand.nextInt((int)(2000/this.toxic)) == 0){
-							livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, this.toxic-4));
+							livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 110, this.toxic-4));
 						}
 					}
 				}
 				if(!(hasHazmat && hasToxFilter)){
 					if(this.toxic > 8)
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, this.toxic-8));
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 110, this.toxic-8));
 					if(this.toxic > 16)
-						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 100, this.toxic-16));
+						livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 110, this.toxic-16));
 				}
 			}
 		}
@@ -209,16 +209,14 @@ public class ItemHazardModule {
 		}
 
 		if(this.blinding && !ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.LIGHT)) {
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 110, 0));
 		}
 	}
 
 	public static float getNewValue(float radiation){
-		if(radiation < 1000){
+		if(radiation < 1000000){
 			return radiation;
-		} else if (radiation<1000000){
-			return radiation * 0.001F;
-		}else if(radiation < 1000000000){
+		} else if(radiation < 1000000000){
 			return radiation * 0.000001F;
 		} else{
 			return radiation * 0.000000001F;
@@ -228,15 +226,12 @@ public class ItemHazardModule {
 	public static String getSuffix(float radiation){
 		if(radiation < 1000){
 			return "";
-		} else if(radiation < 1000000){
-			return I18nUtil.resolveKey("desc.thd");
-		}else if(radiation < 1000000000){
+		} else if(radiation < 1000000000){
 			return I18nUtil.resolveKey("desc.mil");
 		} else{
 			return I18nUtil.resolveKey("desc.bil");
 		}
 	}
-
 	
 	public void addInformation(ItemStack stack, List<String> list, ITooltipFlag flagIn) {
 		
@@ -247,7 +242,7 @@ public class ItemHazardModule {
 			
 			if(stack.getCount() > 1) {
 				float stackRad = radiation * tempMod * stack.getCount();
-				list.add(TextFormatting.YELLOW + (I18nUtil.resolveKey("desc.stack") + " " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + " " + I18nUtil.resolveKey("desc.rads")));
+				list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.stack")+" " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + " " + I18nUtil.resolveKey("desc.rads"));
 			}
 		}
 		
@@ -296,7 +291,7 @@ public class ItemHazardModule {
 			list.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.digamma") + "]");
 			list.add(TextFormatting.DARK_RED + "" + Library.roundFloat(digamma * tempMod * 1000F, 2) + " " + I18nUtil.resolveKey("desc.digammaed"));
 			if(stack.getCount() > 1) {
-				list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("desc.stack") + " " + Library.roundFloat(digamma * tempMod * stack.getCount() * 1000F, 2) + " " + I18nUtil.resolveKey("desc.digamma;ed"));
+				list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("desc.stack") + " " + Library.roundFloat(digamma * tempMod * stack.getCount() * 1000F, 2) + " " + I18nUtil.resolveKey("desc.digammaed"));
 			}
 		}
 		

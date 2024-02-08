@@ -31,10 +31,16 @@ public class ModelArmorAJRO extends ModelArmorBase {
 		
 		GL11.glPushMatrix();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
+			GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+		}
 		if(type == 3) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ajro_helmet);
-			head.render(par7);
+			head.render(par7*1.001F);
+		}
+		if(this.isChild) {
+			GL11.glScalef(0.75F, 0.75F, 0.75F);
 		}
 		if(type == 2) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ajro_chest);

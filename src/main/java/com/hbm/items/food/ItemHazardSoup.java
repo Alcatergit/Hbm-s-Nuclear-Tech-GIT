@@ -3,7 +3,8 @@ package com.hbm.items.food;
 import java.util.List;
 
 import com.hbm.items.ModItems;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.interfaces.IItemHazard;
 import com.hbm.modules.ItemHazardModule;
@@ -78,7 +79,9 @@ public class ItemHazardSoup extends ItemSoup implements IItemHazard {
 			bf.posZ = player.posZ;
 			bf.destructionRange = (int) 25;
 			worldIn.spawnEntity(bf);
-			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 25));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, 25);
+			}
 		}
 		if(stack.getItem() == ModItems.balefire_and_ham){
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 5 * 20, 0));
@@ -91,7 +94,9 @@ public class ItemHazardSoup extends ItemSoup implements IItemHazard {
 			bf.posZ = player.posZ;
 			bf.destructionRange = (int) 50;
 			worldIn.spawnEntity(bf);
-			worldIn.spawnEntity(EntityNukeCloudSmall.statFacBale(worldIn, player.posX, player.posY, player.posZ, 50));
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, 50);
+			}
 		}
 	}
 }

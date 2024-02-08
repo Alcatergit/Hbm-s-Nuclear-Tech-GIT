@@ -1,24 +1,20 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.hbm.blocks.machine.rbmk.RBMKControl;
 import com.hbm.interfaces.IControlReceiver;
+import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.util.math.BlockPos;
 import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.main.MainRegistry;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver {
 
@@ -144,7 +140,6 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
@@ -177,5 +172,4 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		events.add("rbmk_ctrl_set_color");
 		return events;
 	}
-
 }

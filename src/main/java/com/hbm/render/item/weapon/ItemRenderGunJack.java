@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderGunJack extends TEISRBase {
 
 	protected ModelJack jack;
-	protected ResourceLocation jack_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelJack.png");
+	protected ResourceLocation jack_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelJack.png");
 	
 	public ItemRenderGunJack() {
 		jack = new ModelJack();

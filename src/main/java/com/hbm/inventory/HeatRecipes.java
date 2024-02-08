@@ -39,6 +39,7 @@ public class HeatRecipes {
 
 		//Compat
 		addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
+		addBoilRecipe("oil_medium", 1, "hotoil", 1, 300);
 		addBoilRecipe("oilgc", 1, "hotoil", 1, 300); //galacticraft
 		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft & industrialforegoing
 		addBoilRecipe("petroil", 1, "fuel", 1, 100); //galacticraft

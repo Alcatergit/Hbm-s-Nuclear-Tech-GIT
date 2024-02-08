@@ -38,11 +38,12 @@ public class RenderNukeBoy extends TileEntitySpecialRenderer<TileEntityNukeBoy> 
 	        GL11.glTranslated(-2.0D, 0.0D, 0.0D); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_boy_tex);
         ResourceManager.bomb_boy.renderAll();
-        
-        GlStateManager.enableCull();
+        GL11.glShadeModel(GL11.GL_FLAT);
 
+        GlStateManager.enableCull();
         GL11.glPopMatrix();
 	}
 }

@@ -60,7 +60,6 @@ public class WorldConfig {
 	public static int capsuleStructure = 100;
 	public static int broadcaster = 5000;
 	public static int minefreq = 64;
-	public static int radminefreq = 128;
 	public static int radfreq = 5000;
 	public static int vaultfreq = 2500;
 	public static int arcticStructure = 500;
@@ -131,7 +130,6 @@ public class WorldConfig {
 		barrelStructure = convertToInt(CompatibilityConfig.barrelStructure.get(0));
 		broadcaster = convertToInt(CompatibilityConfig.broadcaster.get(0));
 		minefreq = convertToInt(CompatibilityConfig.minefreq.get(0));
-		radminefreq = convertToInt(CompatibilityConfig.radminefreq.get(0));
 		radfreq = convertToInt(CompatibilityConfig.radfreq.get(0));
 		vaultfreq = convertToInt(CompatibilityConfig.vaultfreq.get(0));
 		geyserWater = convertToInt(CompatibilityConfig.geyserWater.get(0));

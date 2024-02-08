@@ -1,7 +1,6 @@
 package com.hbm.blocks.generic;
 
 import java.util.Random;
-import java.util.List;
 import java.util.ArrayList;
 
 import com.hbm.blocks.ModBlocks;
@@ -12,7 +11,7 @@ import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -30,14 +29,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WasteLeaves extends BlockLeaves implements IItemHazard {
+public class WasteLeaves extends BlockOldLeaf implements IItemHazard {
 
 	ItemHazardModule module;
 
 	public WasteLeaves(String s) {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, Boolean.valueOf(false)).withProperty(DECAYABLE, Boolean.valueOf(false)));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK).withProperty(CHECK_DECAY, Boolean.valueOf(false)).withProperty(DECAYABLE, Boolean.valueOf(false)));
 		this.setTickRandomly(false);
 		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -45,7 +44,7 @@ public class WasteLeaves extends BlockLeaves implements IItemHazard {
 
 	@Override
 	protected BlockStateContainer createBlockState(){
-		return new BlockStateContainer(this, CHECK_DECAY, DECAYABLE);
+		return new BlockStateContainer(this, VARIANT, CHECK_DECAY, DECAYABLE);
 	}
 
 	@Override
@@ -68,9 +67,22 @@ public class WasteLeaves extends BlockLeaves implements IItemHazard {
         return this.getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
     }
 
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
+    	return;
+    }
+
 	@Override
 	public ItemHazardModule getModule() {
 		return module;
+	}
+
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
+		if(RANDOM.nextInt(4) == 0)
+			drops.add(new ItemStack(Item.getItemFromBlock(Blocks.DEADBUSH)));
+		if(RANDOM.nextInt(3) == 0)
+			drops.add(new ItemStack(Items.STICK));
 	}
 
 	@Override
@@ -80,14 +92,30 @@ public class WasteLeaves extends BlockLeaves implements IItemHazard {
 		return null;
 	}
 
-	public BlockPlanks.EnumType getWoodType(int meta){
-		return null;
-	}
-
-	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune){
-		List<ItemStack> output = new ArrayList<ItemStack>();
+	public NonNullList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune){
+		NonNullList<ItemStack> output = NonNullList.create();
 		output.add(new ItemStack(ModBlocks.waste_leaves, fortune+1));
 		return output;
+	}
+
+	@Override
+	protected int getSaplingDropChance(IBlockState state){
+		return 0;
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune){
+		return;
+	}
+
+	@Override
+	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance){
+		return;
+	}
+
+	@Override
+	public BlockPlanks.EnumType getWoodType(int meta){
+		return BlockPlanks.EnumType.OAK;
 	}
 
 	@Override

@@ -50,6 +50,13 @@ public class ItemLemon extends ItemFood {
 			list.add("Ipecac in a different bottle!");
 		}
 		
+		if(this == ModItems.med_schizophrenia) {
+			list.add("Makes the voices go away. Just for a while.");
+			list.add("");
+			list.add("...");
+			list.add("Better not take it.");
+		}
+		
 		if(this == ModItems.loops) {
 			list.add("Brøther, may I have some lööps?");
 		}

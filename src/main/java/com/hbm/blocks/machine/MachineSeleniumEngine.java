@@ -1,8 +1,11 @@
 package com.hbm.blocks.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
+import com.hbm.inventory.EngineRecipes.FuelGrade;
 import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 
 import net.minecraft.block.BlockContainer;
@@ -14,6 +17,8 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -136,5 +141,19 @@ public class MachineSeleniumEngine extends BlockContainer {
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
+		list.add(I18n.format("trait.fuelefficiency"));
+		for(FuelGrade grade : FuelGrade.values()) {
+			Double efficiency = TileEntityMachineSeleniumEngine.fuelEfficiency.get(grade);
+
+			if(efficiency != null) {
+				int eff = (int) (efficiency * 100);
+				list.add(" "+I18n.format("trait.fuelefficiency.desc", I18n.format(grade.getGrade()), eff));
+			}
+		}
+		super.addInformation(stack, worldIn, list, flagIn);
 	}
 }

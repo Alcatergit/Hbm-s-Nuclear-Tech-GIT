@@ -1,8 +1,13 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.Map;
 
-import com.hbm.inventory.control_panel.*;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -19,6 +24,10 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.main.AdvancementManager;
+import com.hbm.inventory.control_panel.IControllable;
+import com.hbm.inventory.control_panel.ControlEventSystem;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.util.I18nUtil;
@@ -97,7 +106,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 	
 	public int trackingRange() {
-		return 25;
+		return 150;
 	}
 	
 	@Override
@@ -123,7 +132,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 		if(!falling){ // linear rise
 			if(this.heat > MachineConfig.rbmkJumpTemp){
-				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-MachineConfig.rbmkJumpTemp+200D))) == 0){
+				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-MachineConfig.rbmkJumpTemp+200D))+1) == 0){
 					double change = (this.heat-MachineConfig.rbmkJumpTemp)*0.0002D;
 					double heightLimit = (this.heat-MachineConfig.rbmkJumpTemp)*0.002D;
 
@@ -410,7 +419,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	
 	protected void spawnDebris(DebrisType type) {
 
-		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, type);
+		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + TileEntityRBMKBase.rbmkHeight, pos.getZ() + 0.5D, type);
 		debris.motionX = world.rand.nextGaussian() * 0.25D;
 		debris.motionZ = world.rand.nextGaussian() * 0.25D;
 		debris.motionY = 0.5D + world.rand.nextDouble() * 1.5D;
@@ -496,10 +505,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		NBTTagCompound data = new NBTTagCompound();
 		data.setString("type", "rbmkmush");
 		data.setFloat("scale", smallDim);
-		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + 3, avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + 3, avgZ + 0.5, 250));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight, avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight, avgZ + 0.5, 250));
 		MainRegistry.proxy.effectNT(data);
 		
-		world.playSound(null, avgX + 0.5, pos.getY() + 1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
+		world.playSound(null, avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight>>1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
 		
 		List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - 50 + 0.5, pos.getY() - 50 + 0.5, pos.getZ() - 50 + 0.5, pos.getX() + 50 + 0.5, pos.getY() + 50 + 0.5, pos.getZ() + 50 + 0.5));
 		
@@ -511,7 +520,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			EntitySpear spear = new EntitySpear(world);
 			spear.posX = avgX + 0.5;
 			spear.posZ = avgZ + 0.5;
-			spear.posY = pos.getY() + 100;
+			spear.posY = pos.getY() + TileEntityRBMKBase.rbmkHeight + 100;
 			world.spawnEntity(spear);
 		}
 		
@@ -554,11 +563,16 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 17, pos.getZ() + 1);
+		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + TileEntityRBMKBase.rbmkHeight + 10, pos.getZ() + 1);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = new HashMap<>();
@@ -591,5 +605,4 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public World getControlWorld() {
 		return getWorld();
 	}
-
 }

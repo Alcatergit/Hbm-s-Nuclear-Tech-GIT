@@ -18,9 +18,9 @@ public class ItemRenderRpg extends TEISRBase {
 	protected ModelGustav swordModel;
 	protected ModelPanzerschreck panz;
 	
-	protected static ResourceLocation gustav_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelGustav.png");
-	protected static ResourceLocation karl_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelGustavYellow.png");
-	protected static ResourceLocation panzer_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPanzerschreck.png");
+	protected static ResourceLocation gustav_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelGustav.png");
+	protected static ResourceLocation karl_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelGustavYellow.png");
+	protected static ResourceLocation panzer_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelPanzerschreck.png");
 	
 	public ItemRenderRpg() {
 		swordModel = new ModelGustav();

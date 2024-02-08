@@ -3,16 +3,13 @@ package com.hbm.entity.mob;
 import java.util.List;
 
 import com.hbm.interfaces.IRadiationImmune;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.mob.ai.EntityAINuclearCreeperSwell;
-import com.hbm.explosion.ExplosionNukeGeneric;
-import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
@@ -365,20 +362,19 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 			boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
 			if(this.getPowered()) {
-
-				NBTTagCompound data = new NBTTagCompound();
-				data.setString("type", "muke");
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
-				world.playSound(null, posX, posY + 0.5, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
-
+				EntityNukeTorex.statFac(world, posX, posY, posZ, 70);
 				if(flag) {
-					world.spawnEntity(EntityNukeExplosionMK4.statFac(world, 50, posX, posY, posZ).mute());
+					world.spawnEntity(EntityNukeExplosionMK5.statFac(world, 70, posX, posY, posZ));
 				} else {
-					ExplosionNukeGeneric.dealDamage(world, posX, posY + 0.5, posZ, 100);
+					ContaminationUtil.radiate(world, posX, posY + 0.5, posZ, 70, 1000, 0, 100, 500);
 				}
 			} else {
-
-				ExplosionNukeSmall.explode(world, posX, posY + 0.5, posZ, ExplosionNukeSmall.medium);
+				EntityNukeTorex.statFac(world, posX, posY, posZ, 20);
+				if(flag) {
+					world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 20, posX, posY, posZ));
+				} else {
+					ContaminationUtil.radiate(world, posX, posY + 0.5, posZ, 20, 1000, 0, 100, 500);
+				}
 			}
 
 			this.setDead();

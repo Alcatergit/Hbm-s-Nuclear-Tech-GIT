@@ -1,10 +1,12 @@
 package com.hbm.items.tool;
 
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -26,47 +28,42 @@ public class ItemLock extends ItemKeyPin {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(getPins(stack) != 0) {
-			TileEntity te = world.getTileEntity(pos);
-
-			if(te != null && te instanceof TileEntityLockableBase) {
-				TileEntityLockableBase tile = (TileEntityLockableBase) te;
-
-				if (!tile.isLocked() && tile.canLock(player, hand, facing)) {
-					tile.setPins(getPins(stack));
-					tile.lock();
-					tile.setMod(this.lockMod);
-					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
-					stack.shrink(1);
-					return EnumActionResult.SUCCESS;
-				}
-
-				return EnumActionResult.FAIL;
+		if(!world.isRemote && getPins(stack) != 0) {
+			TileEntity thing;
+			Block b = world.getBlockState(pos).getBlock();
+			
+			if(b instanceof BlockDummyable){
+				int[] cpos = ((BlockDummyable)b).findCore(world, pos.getX(), pos.getY(), pos.getZ());
+				if(cpos == null)
+					return EnumActionResult.FAIL;
+				thing = world.getTileEntity(new BlockPos(cpos[0], cpos[1], cpos[2]));
+			} else {
+				thing = world.getTileEntity(pos);
 			}
-			if(te != null && te instanceof TileEntityDummy) {
-				
-				TileEntityDummy dummy = (TileEntityDummy)te;
-				TileEntity target = world.getTileEntity(dummy.target);
+			
+			if(thing != null && thing instanceof TileEntityDummy && ((TileEntityDummy)thing).target != null){
+				thing = world.getTileEntity(((TileEntityDummy)thing).target);
+			}
 
-				if(target != null && target instanceof TileEntityLockableBase) {
-					TileEntityLockableBase tile = (TileEntityLockableBase)target;
-					
-					if(tile.isLocked())
-						return EnumActionResult.FAIL;
-					
-					tile.setPins(getPins(stack));
-					tile.lock();
-					tile.setMod(lockMod);
 
-		        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
-					stack.shrink(1);
-					
-					return EnumActionResult.SUCCESS;
+			if(thing != null && thing instanceof TileEntityLockableBase) {
+				TileEntityLockableBase lockTe = (TileEntityLockableBase) thing;
+
+				if(lockTe != null && lockTe instanceof TileEntityLockableBase) {
+					if(!lockTe.isLocked() && lockTe.canLock(player, hand, facing)) {
+						lockTe.setPins(getPins(stack));
+						lockTe.lock();
+						lockTe.setMod(this.lockMod);
+						world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						stack.shrink(1);
+						return EnumActionResult.SUCCESS;
+					}
+
+					return EnumActionResult.FAIL;
 				}
 			}
 		}
 		
 		return EnumActionResult.PASS;
 	}
-	
 }

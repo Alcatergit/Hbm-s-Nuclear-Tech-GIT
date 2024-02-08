@@ -1,6 +1,8 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
@@ -8,11 +10,12 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.control_panel.*;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -304,7 +307,6 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
@@ -315,5 +317,4 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 
 		return data;
 	}
-
 }

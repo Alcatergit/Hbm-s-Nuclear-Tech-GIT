@@ -18,7 +18,7 @@ public class RenderBeam extends Render<EntityPlasmaBeam> {
 
 	public static final IRenderFactory<EntityPlasmaBeam> FACTORY = (RenderManager man) -> {return new RenderBeam(man);};
 	
-	protected ResourceLocation beam_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/PlasmaBeam.png");
+	protected ResourceLocation beam_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/PlasmaBeam.png");
 	
 	protected RenderBeam(RenderManager renderManager) {
 		super(renderManager);

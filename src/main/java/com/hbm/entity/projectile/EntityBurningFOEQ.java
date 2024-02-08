@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.interfaces.IConstantRenderer;
@@ -27,14 +28,6 @@ public class EntityBurningFOEQ extends EntityThrowable implements IConstantRende
 		this.lastTickPosY = this.prevPosY = posY;
 		this.lastTickPosZ = this.prevPosZ = posZ;
 		this.setPosition(posX + this.motionX, posY + this.motionY, posZ + this.motionZ);
-		
-		/*this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		
-		this.posX += this.motionX;
-		this.posY += this.motionY;
-		this.posZ += this.motionZ;*/
         
 		if(motionY > -4)
 			motionY -= 0.1;
@@ -43,19 +36,13 @@ public class EntityBurningFOEQ extends EntityThrowable implements IConstantRende
         
         if(this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getBlock() != Blocks.AIR)
         {
-    		if(!this.world.isRemote) {
+    		if(!this.world.isRemote && CompatibilityConfig.isWarDim(world)) {
     			for(int i = 0; i < 25; i++)
     				ExplosionLarge.explode(world, this.posX + 0.5F + rand.nextGaussian() * 5, this.posY + 0.5F + rand.nextGaussian() * 5, this.posZ + 0.5F + rand.nextGaussian() * 5, 10.0F, rand.nextBoolean(), false, false);
     			ExplosionNukeGeneric.waste(world, (int)this.posX, (int)this.posY, (int)this.posZ, 35);
     		}
     		this.setDead();
         }
-        
-        //if(!this.worldObj.isRemote) {
-        //	Vec3 vec = Vec3.createVectorHelper(motionX, motionY, motionZ);
-        //	vec.normalize();
-        //	worldObj.spawnEntityInWorld(new EntityDSmokeFX(worldObj, posX/* - vec.xCoord * 30*/ + rand.nextGaussian() * 0.5, posY/* - vec.yCoord * 30*/ + rand.nextGaussian() * 0.5, posZ/* - vec.zCoord * 30*/ + rand.nextGaussian() * 0.5, 0, 0, 0));
-        //}
 	}
 	
 	public void rotation() {

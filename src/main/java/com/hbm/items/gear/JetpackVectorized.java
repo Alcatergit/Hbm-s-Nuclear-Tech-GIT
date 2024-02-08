@@ -34,7 +34,7 @@ public class JetpackVectorized extends JetpackBase {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "hbm:textures/models/JetPackGreen.png";
+		return "hbm:textures/armor/JetPackGreen.png";
 	}
 
 	@Override
@@ -71,7 +71,6 @@ public class JetpackVectorized extends JetpackBase {
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.getDimension(), player.posX, player.posY, player.posZ, 100));
 			}
 		}
-
 		if(getFuel(stack) > 0 && props.getKeyPressed(EnumKeybind.JETPACK) && props.isJetpackActive()) {
 
 			if(player.motionY < 0.4D)

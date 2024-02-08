@@ -1,5 +1,6 @@
 package com.hbm.render.model;
 
+import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.render.loader.ModelRendererObj;
 
 import net.minecraft.client.model.ModelBiped;
@@ -7,8 +8,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
@@ -41,17 +40,19 @@ public class ModelArmorBase extends ModelBiped {
 	}
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+    public void setRotationAngles(float walkCycle, float walkAmplitude, float idleCycle, float headYaw, float headPitch, float scale, Entity entity) {
+
+        super.setRotationAngles(walkCycle, walkAmplitude, idleCycle, headYaw, headPitch, scale, entity);
+
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             this.isSneak = player.isSneaking();
-            this.isRiding = player.isRiding();
         }
-
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
         this.head.rotationPointX = this.bipedHead.rotationPointX;
         this.head.rotationPointY = this.bipedHead.rotationPointY;
+        this.head.rotationPointY = this.bipedHead.rotationPointY;
+        this.head.rotateAngleY = this.bipedHead.rotateAngleY;
         this.head.rotateAngleY = this.bipedHead.rotateAngleY;
         this.head.rotateAngleX = this.bipedHead.rotateAngleX;
 
@@ -77,52 +78,75 @@ public class ModelArmorBase extends ModelBiped {
         this.rightArm.rotateAngleZ = this.bipedRightArm.rotateAngleZ;
 
         this.leftLeg.rotationPointX = this.bipedLeftLeg.rotationPointX;
-        this.leftLeg.rotationPointY = this.bipedLeftLeg.rotationPointY - 1.5F;
+        this.leftLeg.rotationPointY = this.bipedLeftLeg.rotationPointY;
         this.leftLeg.rotationPointZ = this.bipedLeftLeg.rotationPointZ;
         this.leftLeg.rotateAngleX = this.bipedLeftLeg.rotateAngleX;
         this.leftLeg.rotateAngleY = this.bipedLeftLeg.rotateAngleY;
         this.leftLeg.rotateAngleZ = this.bipedLeftLeg.rotateAngleZ;
 
         this.rightLeg.rotationPointX = this.bipedRightLeg.rotationPointX;
-        this.rightLeg.rotationPointY = this.bipedRightLeg.rotationPointY - 1.5F;
+        this.rightLeg.rotationPointY = this.bipedRightLeg.rotationPointY;
         this.rightLeg.rotationPointZ = this.bipedRightLeg.rotationPointZ;
         this.rightLeg.rotateAngleX = this.bipedRightLeg.rotateAngleX;
         this.rightLeg.rotateAngleY = this.bipedRightLeg.rotateAngleY;
         this.rightLeg.rotateAngleZ = this.bipedRightLeg.rotateAngleZ;
 
         this.leftFoot.rotationPointX = this.bipedLeftLeg.rotationPointX;
-        this.leftFoot.rotationPointY = this.bipedLeftLeg.rotationPointY - 1.5F;
+        this.leftFoot.rotationPointY = this.bipedLeftLeg.rotationPointY;
         this.leftFoot.rotationPointZ = this.bipedLeftLeg.rotationPointZ;
         this.leftFoot.rotateAngleX = this.bipedLeftLeg.rotateAngleX;
         this.leftFoot.rotateAngleY = this.bipedLeftLeg.rotateAngleY;
         this.leftFoot.rotateAngleZ = this.bipedLeftLeg.rotateAngleZ;
 
         this.rightFoot.rotationPointX = this.bipedRightLeg.rotationPointX;
-        this.rightFoot.rotationPointY = this.bipedRightLeg.rotationPointY - 1.5F;
+        this.rightFoot.rotationPointY = this.bipedRightLeg.rotationPointY;
         this.rightFoot.rotationPointZ = this.bipedRightLeg.rotationPointZ;
         this.rightFoot.rotateAngleX = this.bipedRightLeg.rotateAngleX;
         this.rightFoot.rotateAngleY = this.bipedRightLeg.rotateAngleY;
         this.rightFoot.rotateAngleZ = this.bipedRightLeg.rotateAngleZ;
         
-        if(entity instanceof EntityZombie || entity instanceof EntityPigZombie || entity instanceof EntitySkeleton) {
-            this.leftArm.rotateAngleX -= (90 * Math.PI / 180D);
-            this.rightArm.rotateAngleX -= (90 * Math.PI / 180D);
-        }
+        if(entity instanceof EntityZombie) {
+            boolean armsRaised = false;
+            if(entity instanceof EntityZombie)
+                armsRaised = ((EntityZombie)entity).isArmsRaised();
 
-        if(this.isRiding) {
-            this.rightArm.rotateAngleX += -((float) Math.PI / 5F);
-            this.leftArm.rotateAngleX += -((float) Math.PI / 5F);
-            this.rightFoot.rotateAngleX = this.rightLeg.rotateAngleX = -((float) Math.PI * 2F / 5F);
-            this.leftFoot.rotateAngleX = this.leftLeg.rotateAngleX = -((float) Math.PI * 2F / 5F);
-            this.rightFoot.rotateAngleY = this.rightLeg.rotateAngleY = ((float) Math.PI / 10F);
-            this.leftFoot.rotateAngleY = this.leftLeg.rotateAngleY = -((float) Math.PI / 10F);
+            this.leftArm.rotateAngleY = (float)(8 * Math.PI / 180D);
+            this.rightArm.rotateAngleY = -(float)(8 * Math.PI / 180D);
+            if(armsRaised){
+                this.leftArm.rotateAngleX = -(float)(120 * Math.PI / 180D);
+                this.rightArm.rotateAngleX = -(float)(120 * Math.PI / 180D);
+            } else {
+                this.leftArm.rotateAngleX = -(float)(80 * Math.PI / 180D);
+                this.rightArm.rotateAngleX = -(float)(80 * Math.PI / 180D);
+            }
         }
 
         if (this.isSneak) {
-            this.leftLeg.rotationPointZ -= 0.5F;
-            this.rightLeg.rotationPointZ -= 0.5F;
-            this.leftLeg.rotationPointY += 0.5F;
-            this.rightLeg.rotationPointY += 0.5F;
+            this.head.offsetY = 4.24F;
+            this.head.rotationPointY -= 1.045F;
+            this.body.offsetY = 4F;
+            this.rightArm.offsetY = 4F;
+            this.leftArm.offsetY = 4F;
+            this.rightFoot.offsetZ = this.rightLeg.offsetZ = 4F;
+            this.leftFoot.offsetZ = this.leftLeg.offsetZ = 4F;
+
+            this.rightFoot.rotationPointY = 12F;
+            this.rightLeg.rotationPointY = 12F;
+            this.leftFoot.rotationPointY = 12F;
+            this.leftLeg.rotationPointY = 12F;
+
+            this.rightFoot.rotationPointZ = -1F;
+            this.rightLeg.rotationPointZ = -1F;
+            this.leftFoot.rotationPointZ = -1F;
+            this.leftLeg.rotationPointZ = -1F;
+
+        } else {
+            this.head.offsetY = 0F;
+            this.body.offsetY = 0F;
+            this.rightArm.offsetY = 0F;
+            this.leftArm.offsetY = 0F;
+            this.rightFoot.offsetZ = this.rightLeg.offsetZ = 0F;
+            this.leftFoot.offsetZ = this.leftLeg.offsetZ = 0F;
         }
     }
 }

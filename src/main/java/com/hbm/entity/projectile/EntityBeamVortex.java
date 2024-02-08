@@ -46,13 +46,6 @@ public class EntityBeamVortex extends EntityBeamBase {
 
 			world.spawnParticle(EnumParticleTypes.CLOUD, pos.hitVec.x, pos.hitVec.y, pos.hitVec.z, 0, 0, 0);
 			world.playSound(null, pos.hitVec.x, pos.hitVec.y, pos.hitVec.z, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.HOSTILE, 1, 1);
-
-			//List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.hitVec.x - 1, pos.hitVec.y - 1, pos.hitVec.z - 1, pos.hitVec.x + 1, pos.hitVec.y + 1, pos.hitVec.z + 1));
-
-			//for(Entity e : list)
-			//	e.attackEntityFrom(ModDamageSource.radiation, 5);
 		}
 	}
-
-	
 }

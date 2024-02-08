@@ -2,11 +2,14 @@ package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.Library;
+import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.EngineRecipes;
+import com.hbm.inventory.EngineRecipes.FuelGrade;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -37,12 +40,19 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	public long powerCap = 50000;
 	public int age = 0;
 	public FluidTank tank;
-	public Fluid tankType = ModForgeFluids.diesel;
+	public Fluid tankType;
 	public boolean needsUpdate;
 
 	private static final int[] slots_top = new int[] { 0 };
 	private static final int[] slots_bottom = new int[] { 1, 2 };
 	private static final int[] slots_side = new int[] { 2 };
+
+	public static HashMap<FuelGrade, Double> fuelEfficiency = new HashMap();
+	static {
+		fuelEfficiency.put(FuelGrade.MEDIUM,	0.5D);
+		fuelEfficiency.put(FuelGrade.HIGH,		0.75D);
+		fuelEfficiency.put(FuelGrade.AERO,		0.1D);
+	}
 
 	public TileEntityMachineDiesel() {
 		super(3);
@@ -126,18 +136,18 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 		return getHEFromFuel() > 0;
 	}
 	
-	public int getHEFromFuel() {
-		Fluid type = tankType;
-		if(type == null)
-			return 0;
-		if(type == ModForgeFluids.diesel)
-			return 500;
-		if(type == ModForgeFluids.petroil)
-			return 300;
-		if(type == ModForgeFluids.biofuel)
-			return 400;
-		if(type == ModForgeFluids.nitan)
-			return 5000;
+	public long getHEFromFuel() {
+		if(tank.getFluid() == null) return 0;
+		return getHEFromFuel(tank.getFluid().getFluid());
+	}
+	
+	public static long getHEFromFuel(Fluid type) {
+		if(EngineRecipes.hasFuelRecipe(type)) {
+			FuelGrade grade = EngineRecipes.getFuelGrade(type);
+			double efficiency = fuelEfficiency.containsKey(grade) ? fuelEfficiency.get(grade) : 0;
+			return (long) (EngineRecipes.getEnergy(type) / 1000L * efficiency);
+		}
+		
 		return 0;
 	}
 
@@ -152,7 +162,7 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 				if (soundCycle >= 5)
 					soundCycle = 0;
 
-				tank.drain(10, true);
+				tank.drain(1, true);
 				needsUpdate = true;
 				if (power + getHEFromFuel() <= powerCap) {
 					power += getHEFromFuel();
@@ -170,11 +180,11 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 		}
 		return false;
 	}
-	
+
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.diesel || stack.getFluid() == ModForgeFluids.nitan || stack.getFluid() == ModForgeFluids.petroil || stack.getFluid() == ModForgeFluids.biofuel;
+		return getHEFromFuel(stack.getFluid()) > 0;
 	}
 
 	@Override

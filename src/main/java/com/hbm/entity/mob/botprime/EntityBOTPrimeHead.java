@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
 import com.hbm.items.ModItems;
 import com.hbm.main.AdvancementManager;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -31,7 +32,7 @@ public class EntityBOTPrimeHead extends EntityBOTPrimeBase {
 	
 	//TODO: clean-room implementation of the movement behavior classes (again)
 
-	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS));
+	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS));
 	private final WormMovementHeadNT movement = new WormMovementHeadNT(this);
 	
 	public EntityBOTPrimeHead(World world) {
@@ -140,17 +141,19 @@ public class EntityBOTPrimeHead extends EntityBOTPrimeBase {
 			this.attackCounter = 0;
 		}
 	}
-	
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
 
-		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(200, 200, 200));
+	protected void onDeathUpdate() {
 
-		for(EntityPlayer player : players) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bossWorm);
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_worm));
+		if(this.deathTime == 19 && !world.isRemote) {
+
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(200, 200, 200));
+			for(EntityPlayer player : players) {
+				AdvancementManager.grantAchievement(player, AdvancementManager.bossWorm);
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_worm));
+			}
 		}
+		
+		super.onDeathUpdate();
 	}
 
 	@Override

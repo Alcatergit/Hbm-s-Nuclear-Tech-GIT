@@ -58,7 +58,8 @@ public class ItemGuideBook extends Item {
 
 		TEST("book.test.cover", 2F, statFacTest()),
 		RBMK("book.rbmk.cover", 1.5F, statFacRBMK()),
-		MSWORD("book.msword.cover", 1.5F, statFacMSword());
+		MSWORD("book.msword.cover", 1.5F, statFacMSword()),
+		HADRON("book.error.cover", 1.5F, statFacHadron());
 		
 		public List<GuidePage> pages;
 		public float titleScale;
@@ -85,6 +86,17 @@ public class ItemGuideBook extends Item {
 		pages.add(new GuidePage("test test"));
 		pages.add(new GuidePage("test test test"));
 		pages.add(new GuidePage("test test"));
+		return pages;
+	}
+
+	public static List<GuidePage> statFacHadron() {
+		
+		List<GuidePage> pages = new ArrayList();
+		
+		for(int i = 1; i <= 9; i++) {
+			pages.add(new GuidePage("book.error.page" + i).setScale(2F).addTitle("book.error.title" + i, 0x800000, 1F));
+		}
+		
 		return pages;
 	}
 	

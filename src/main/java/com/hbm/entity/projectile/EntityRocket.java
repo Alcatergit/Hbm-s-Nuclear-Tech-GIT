@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
 
@@ -53,7 +54,8 @@ public class EntityRocket extends Entity implements IProjectile {
     private double damage = 2.0D;
     /** The amount of knockback an arrow applies when it hits a mob. */
     private int knockbackStrength;
-	
+	public int explosionSize = 5;
+    
 	public EntityRocket(World worldIn) {
 		super(worldIn);
 		if(worldIn.isRemote)
@@ -209,40 +211,10 @@ public class EntityRocket extends Entity implements IProjectile {
 
         if (this.inGround)
         {
-            /*int j = this.worldObj.getBlockMetadata(this.field_145791_d, this.field_145792_e, this.field_145789_f);
-
-            if (block == this.field_145790_g && j == this.inData)
-            {
-                ++this.ticksInGround;
-
-                if (this.ticksInGround == 1200)
-                {
-                    this.setDead();
-                }
-            }
-            else
-            {
-                this.inGround = false;
-                this.motionX *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionY *= (double)(this.rand.nextFloat() * 0.2F);
-                this.motionZ *= (double)(this.rand.nextFloat() * 0.2F);
-                this.ticksInGround = 0;
-                this.ticksInAir = 0;
-            }*/
-
 
             if (!this.world.isRemote)
             {
-            	//this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.5F, true);
-            	ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
-                /*EntityNukeExplosionAdvanced explosion = new EntityNukeExplosionAdvanced(this.worldObj);
-                explosion.speed = 25;
-                explosion.coefficient = 5.0F;
-                explosion.destructionRange = 20;
-                explosion.posX = this.posX;
-                explosion.posY = this.posY;
-                explosion.posZ = this.posZ;
-                this.worldObj.spawnEntityInWorld(explosion);*/
+            	ExplosionLarge.explode(world, posX, posY, posZ, explosionSize, true, false, true);
             }
         	this.setDead();
         }
@@ -307,7 +279,7 @@ public class EntityRocket extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {
@@ -367,8 +339,7 @@ public class EntityRocket extends Entity implements IProjectile {
                         {
                             if (!this.world.isRemote)
                             {
-                            	//this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.5F, true);
-                            	ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
+                            	ExplosionLarge.explode(world, posX, posY, posZ, explosionSize, true, false, true);
                             }
                         	this.setDead();
                         }
@@ -377,8 +348,7 @@ public class EntityRocket extends Entity implements IProjectile {
                     {
                         if (!this.world.isRemote)
                         {
-                        	//this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 2.5F, true);
-                        	ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
+                        	ExplosionLarge.explode(world, posX, posY, posZ, explosionSize, true, false, true);
                         }
                     	this.setDead();
                     }

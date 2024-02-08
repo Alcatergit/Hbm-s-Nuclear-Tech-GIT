@@ -185,7 +185,7 @@ public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITi
 					soundCycle = 0;
 
 			} else {
-				if(!hasCluster) {
+				if(hasCluster) {
 					if(this.progressStep > 1 && world.rand.nextInt(10) == 0)
 						this.progressStep -= 1;
 				}
@@ -197,7 +197,7 @@ public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITi
 				process(9, 11);
 				process(10, 12);
 				this.progress = 0;
-				if(!hasCluster)
+				if(hasCluster)
 					this.progressStep = Math.min(100, this.progressStep+1);
 			}
 				

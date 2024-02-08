@@ -30,7 +30,7 @@ private TileEntityNukeTsar nukeTsar;
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 111, 102)); // Uranium coating
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 129, 102)); // Deuterium tank
 
-		//Stage 1
+		//Stage 2
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 155, 102)); // Uranium coating
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 8, 173, 102)); // Deuterium tank
 

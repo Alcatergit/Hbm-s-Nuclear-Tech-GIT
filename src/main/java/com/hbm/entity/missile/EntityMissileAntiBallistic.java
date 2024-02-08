@@ -35,28 +35,27 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 	public EntityMissileAntiBallistic(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.motionY = 0.5;
-
+		this.setSize(1F, 8F);
 		this.velocity = 0.0;
 	}
 	
 	@Override
     public void onUpdate() {
+		double oldPosY = this.posY;
 		if(this.ticksExisted < 10){
 			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
 			return;
 		} else if(this.ticksExisted < 60){
-			this.setLocationAndAngles(posX + this.motionX, posY + this.motionY, posZ + this.motionZ, 0, 0);
-			this.rotation();
-			if(this.world.isRemote) {
+			this.motionY = 0.5;
+			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
+
+		if(this.world.isRemote) {
 				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exHydrogen", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
 			}
 			return;
 		}
 
 		this.getDataManager().set(HEALTH, Integer.valueOf(this.health));
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
 		
 		if(this.velocity < 20)
 			this.velocity += 0.05;
@@ -68,9 +67,8 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 				this.motionY = targetVec[1] * velocity;
 				this.motionZ = targetVec[2] * velocity;
 			}
-			this.setLocationAndAngles(posX + this.motionX, posY + this.motionY, posZ + this.motionZ, 0, 0);
-			this.rotation();
-
+			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
+		
 			if(this.world.isRemote) {
 				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exDark", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
 			}
@@ -95,6 +93,7 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 			this.chunkZ = (int) (posZ / 16);
 			loadNeighboringChunks(this.chunkX, this.chunkZ);
 		}
+		this.prevPosY = oldPosY;
     }
 
     private double[] targetMissile() {

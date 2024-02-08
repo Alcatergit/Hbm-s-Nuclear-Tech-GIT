@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
@@ -57,15 +58,17 @@ public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 2);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 1.5);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 1);
-    			
-    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 2, posY - 2, posZ - 2, posX + 2, posY + 2, posZ + 2));
-    			
-    		for(Entity e : list) {
-    			e.attackEntityFrom(ModDamageSource.boxcar, 1000);
-    		}
-    		
-    		if(!world.isRemote)
-    			world.setBlockState(new BlockPos((int)(this.posX - 0.5), (int)(this.posY + 0.5), (int)(this.posZ - 0.5)), ModBlocks.boxcar.getDefaultState());
+    		if(CompatibilityConfig.isWarDim(world)){
+
+	    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 2, posY - 2, posZ - 2, posX + 2, posY + 2, posZ + 2));
+	    			
+	    		for(Entity e : list) {
+	    			e.attackEntityFrom(ModDamageSource.boxcar, 1000);
+	    		}
+	    		
+	    		if(!world.isRemote)
+	    			world.setBlockState(new BlockPos((int)(this.posX - 0.5), (int)(this.posY + 0.5), (int)(this.posZ - 0.5)), ModBlocks.boxcar.getDefaultState());
+	    	}
         }
 	}
 	

@@ -17,18 +17,18 @@ public class ItemRenderOverkill extends TEISRBase {
 
 	/*protected ModelJack powerJack;
 	*/protected ModelSpark sparkPlug;
-	public static ResourceLocation sparkLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelSpark.png");
+	public static ResourceLocation sparkLoc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelSpark.png");
 	/*protected ModelHP hppLaserjet;
 	protected ModelEuthanasia euthanasia;
 	protected ModelDefabricator defab;
 	protected ModelDash dasher;
 	protected ModelTwiGun rgottp;*/
 	protected ModelPip pip;
-	protected ResourceLocation pipLoc = new ResourceLocation(RefStrings.MODID + ":textures/models/ModelPip.png");
-	protected ResourceLocation noPipLoc = new ResourceLocation(RefStrings.MODID + ":textures/models/ModelPipNoScope.png");
-	protected ResourceLocation blackjackLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipGrey.png");
-	protected ResourceLocation redLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipRed.png");
-	protected ResourceLocation silverLoc = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPipSilver.png");
+	protected ResourceLocation pipLoc = new ResourceLocation(RefStrings.MODID + ":textures/models/weapons/ModelPip.png");
+	protected ResourceLocation noPipLoc = new ResourceLocation(RefStrings.MODID + ":textures/models/weapons/ModelPipNoScope.png");
+	protected ResourceLocation blackjackLoc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelPipGrey.png");
+	protected ResourceLocation redLoc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelPipRed.png");
+	protected ResourceLocation silverLoc = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelPipSilver.png");
 	/*protected ModelLacunae lacunae;
 	protected ModelFolly folly;
 	

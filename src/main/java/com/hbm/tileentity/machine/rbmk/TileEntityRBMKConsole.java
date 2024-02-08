@@ -91,6 +91,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 					columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
 					columns[index].data.setDouble("heat", rbmk.heat);
 					columns[index].data.setDouble("maxHeat", rbmk.maxHeat());
+					columns[index].data.setDouble("realSimWater", rbmk.water);
+					columns[index].data.setDouble("realSimSteam", rbmk.steam);
 					if(rbmk.isModerated()) columns[index].data.setBoolean("moderated", true); //false is the default anyway and not setting it when we don't need to reduces cruft
 					
 				} else {
@@ -636,8 +638,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			LinkedHashMap<String, Object> data_table = new LinkedHashMap<>();
 			data_table.put("type", column.getConsoleType().name());
 			data_table.put("hullTemp", column_data.getDouble("heat"));
-			data_table.put("realSimWater", column_data.getDouble("water"));
-			data_table.put("realSimSteam", column_data.getDouble("steam"));
+			data_table.put("realSimWater", column_data.getDouble("realSimWater"));
+			data_table.put("realSimSteam", column_data.getDouble("realSimSteam"));
 			data_table.put("moderated", column_data.getBoolean("moderated"));
 			data_table.put("level", column_data.getDouble("level"));
 			data_table.put("color", column_data.getShort("color"));

@@ -23,7 +23,7 @@ public class RenderBombletZeta extends Render<EntityBombletZeta> {
 	protected RenderBombletZeta(RenderManager renderManager) {
 		super(renderManager);
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/bombletZetaTexture.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/bombletZetaTexture.png");
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class RenderBombletZeta extends Render<EntityBombletZeta> {
         GL11.glRotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
         
         GL11.glScaled(0.5D, 0.5D, 0.5D);
-        bindTexture(new ResourceLocation(RefStrings.MODID, "textures/models/bombletZetaTexture.png"));
+        bindTexture(new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/bombletZetaTexture.png"));
         
         boyModel.renderAll();
 		GL11.glPopMatrix();

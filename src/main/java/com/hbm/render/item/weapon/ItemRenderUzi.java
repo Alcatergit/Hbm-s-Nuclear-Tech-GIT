@@ -21,10 +21,10 @@ public class ItemRenderUzi extends TEISRBase {
 	protected ModelUziBarrel barrel;
 	protected ModelUziSilencer silencer;
 	
-	protected static ResourceLocation uzi_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelUzi.png");
-	protected static ResourceLocation sat_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelUziSaturnite.png");
-	protected static ResourceLocation barrel_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelUziBarrel.png");
-	protected static ResourceLocation silencer_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelUziSilencer.png");
+	protected static ResourceLocation uzi_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelUzi.png");
+	protected static ResourceLocation sat_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelUziSaturnite.png");
+	protected static ResourceLocation barrel_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelUziBarrel.png");
+	protected static ResourceLocation silencer_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelUziSilencer.png");
 	
 	public ItemRenderUzi() {
 		uzi = new ModelUzi();

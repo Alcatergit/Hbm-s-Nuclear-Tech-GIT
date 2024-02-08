@@ -89,7 +89,7 @@ public class AdvancementManager {
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));
 		bossMaskman = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmaskman"));
 		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossworm"));
-		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossufo"));
+		bossUFO = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossufo"));
 	}
 	
 	public static void grantAchievement(EntityPlayerMP player, Advancement a){

@@ -74,7 +74,7 @@ public class ArmorModHandler {
 	 */
 	public static void applyMod(ItemStack armor, ItemStack mod) {
 
-		if(mod == null | mod.isEmpty()) return;
+		if(mod == null || mod.isEmpty() || armor == null || armor.isEmpty()) return;
 		
 		if(!armor.hasTagCompound())
 			armor.setTagCompound(new NBTTagCompound());

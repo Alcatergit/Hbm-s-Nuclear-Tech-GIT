@@ -1,17 +1,23 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
-import com.hbm.inventory.control_panel.*;
 import com.hbm.items.machine.ItemRBMKRod;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.NBTPacket;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.inventory.control_panel.IControllable;
+import com.hbm.inventory.control_panel.ControlEventSystem;
+import com.hbm.inventory.control_panel.ControlEvent;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
@@ -115,8 +121,8 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 				if(!world.isRemote) {
 					ControlEventSystem.get(world).broadcastToSubscribed(this, ControlEvent.newEvent("rbmk_crane_load"));
 
-					if (this.canTargetInteract()) {
-						if (inventory.getStackInSlot(0).isEmpty()) {
+					if(this.canTargetInteract()) {
+						if(inventory.getStackInSlot(0).isEmpty()) {
 							IRBMKLoadable column = getColumnAtPos();
 							inventory.setStackInSlot(0, column.provideNext());
 							column.unload();
@@ -127,6 +133,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 						this.markDirty();
 					}
 				}
+					
 			}
 		} else if(progress != 1) {
 			
@@ -208,7 +215,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		posLeft = MathHelper.clamp(posLeft, -spanR, spanL);
 		
 		if(!world.isRemote) {
-
+			
 			if(!inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
 				this.loadedHeat = ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0));
 				this.loadedEnrichment = ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0));
@@ -272,7 +279,6 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 					.setVar("up", new DataValueFloat(up)).setVar("down", new DataValueFloat(down))
 					.setVar("left", new DataValueFloat(left)).setVar("right", new DataValueFloat(right)));
 		}
-
 	}
 	
 	public boolean hasItemLoaded() {
@@ -385,7 +391,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		this.height = nbt.getInteger("height");
 		this.posFront = nbt.getDouble("posFront");
 		this.posLeft = nbt.getDouble("posLeft");
-
+		
 		if(nbt.hasKey("inventory"))
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		super.readFromNBT(nbt);
@@ -557,8 +563,8 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		return new Object[] {"No crane found"};
 	}
 
-	// control panel
 
+	// control panel
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = new HashMap<>();
@@ -623,5 +629,4 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 	public World getControlWorld() {
 		return getWorld();
 	}
-
 }

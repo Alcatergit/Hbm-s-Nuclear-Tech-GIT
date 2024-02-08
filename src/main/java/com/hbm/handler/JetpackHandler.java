@@ -294,13 +294,12 @@ public class JetpackHandler {
 					int drain = (int) Math.ceil(getDrain(tank.getFluid() == null ? null : tank.getFluid().getFluid())*info.thrust);
 					if(info.thrust < 0.0001)
 						drain = 0;
+
 					tank.drain(drain, true);
 					setTank(player, tank);
 				}
-				if(info.dirty){
-					PacketDispatcher.wrapper.sendToAllTracking(new JetpackSyncPacket(player), player);
-					info.dirty = false;
-				}
+				if(player.motionY > -0.5) player.fallDistance = 0;
+				PacketDispatcher.wrapper.sendToAllTracking(new JetpackSyncPacket(player), player);
 			}
 		}
 	}
@@ -317,6 +316,23 @@ public class JetpackHandler {
 		}
 	}
 	
+	public static void loadNBT(EntityPlayer player){
+		ItemStack stack = player.inventory.armorInventory.get(2);
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey(JETPACK_NBT)){
+			NBTTagCompound tag = stack.getTagCompound().getCompoundTag(JETPACK_NBT);
+			JetpackInfo j = new JetpackInfo(player.world.isRemote);
+			j.readFromNBT(tag);
+			put(player, j);
+			PacketDispatcher.wrapper.sendToAllTracking(new JetpackSyncPacket(player), (EntityPlayerMP) player);
+		}
+	}
+	
+	public static void worldLoad(WorldEvent.Load e){
+		for(EntityPlayer player : e.getWorld().playerEntities){
+			loadNBT(player);
+		}
+	}
+
 	public static void saveNBT(EntityPlayer player){
 		if(hasJetpack(player)){
 			JetpackInfo info = get(player);
@@ -600,13 +616,11 @@ public class JetpackHandler {
 	protected static float interpolateRotation(float prevYawOffset, float yawOffset, float partialTicks){
         float f;
 
-        for (f = yawOffset - prevYawOffset; f < -180.0F; f += 360.0F)
-        {
+        for (f = yawOffset - prevYawOffset; f < -180.0F; f += 360.0F) {
             ;
         }
 
-        while (f >= 180.0F)
-        {
+        while (f >= 180.0F) {
             f -= 360.0F;
         }
 
@@ -757,91 +771,7 @@ public class JetpackHandler {
 					j.dirty = false;
 				}
 			}
-			/*for(EntityPlayer player : p.world.playerEntities){
-				JetpackInfo j = get(player);
-				if(j != null){
-					if(player == Minecraft.getMinecraft().player){
-						if(j.failureTicks > 0)
-							j.dirty = true;
-						j.failureTicks = Math.max(0, j.failureTicks-1);
-					}
-					j.prevPrevPosX = player.prevPosX;
-					j.prevPrevPosZ = player.prevPosZ;
-					Iterator<Particle> it = j.booster_particles.iterator();
-					while(it.hasNext()){
-						Particle part = it.next();
-						part.onUpdate();
-						if(!part.isAlive())
-							it.remove();
-					}
-					it = j.distortion_particles.iterator();
-					while(it.hasNext()){
-						Particle part = it.next();
-						part.onUpdate();
-						if(!part.isAlive())
-							it.remove();
-					}
-					it = j.brightness_particles.iterator();
-					while(it.hasNext()){
-						Particle part = it.next();
-						part.onUpdate();
-						if(!part.isAlive())
-							it.remove();
-					}
-					if(jetpackActive(player) && !player.onGround ){
-						ColorGradient grad = new ColorGradient(
-								new float[]{1, 0.918F, 0.882F, 1, 0},
-								new float[]{0.887F, 1, 0, 1, 0.177F},
-								new float[]{1, 0.19F, 0, 1, 0.336F},
-								new float[]{1, 0.14F, 0, 1, 0.85F},
-								new float[]{1, 0.14F, 0, 0, 1});
-						if(j.thrust > 0.05F){
-							float thrust = j.thrust - 0.4F;
-							float speed = -1-2*thrust;
-							float scale = 4+2*thrust;
-							int numParticles = 3;
-							for(int i = 0; i < numParticles; i ++){
-								float iN = (float)i/(float)numParticles;
-								float randX = (float) (p.world.rand.nextGaussian()*0.05F);
-								float randZ = (float) (p.world.rand.nextGaussian()*0.05F);
-								j.booster_particles.add(new ParticleRocketPlasma(p.world, -1.8, iN*speed, 4, scale, grad)
-									.motion(randX-0.1F, speed, randZ));
-								randX = (float) (p.world.rand.nextGaussian()*0.05F);
-								randZ = (float) (p.world.rand.nextGaussian()*0.05F);
-								j.booster_particles.add(new ParticleRocketPlasma(p.world, 1.8, iN*speed, 4, scale, grad)
-									.motion(randX+0.1F, speed, randZ));
-							}
-							if(player.world.getWorldTime()%(2-player.world.rand.nextInt(2)) == 0){
-								j.brightness_particles.add(new ParticleFakeBrightness(p.world, 1.8, -1, 4, 20+thrust*10, 6+player.world.rand.nextInt(2))
-										.color(1, 0.6F, 0.5F, MathHelper.clamp(0.05F+thrust*0.1F, 0, 1))
-										.enableLocalSpaceCorrection());
-								j.brightness_particles.add(new ParticleFakeBrightness(p.world, -1.8, -1, 4, 20+thrust*10, 6+player.world.rand.nextInt(2))
-										.color(1, 0.6F, 0.5F, MathHelper.clamp(0.05F+thrust*0.1F, 0, 1))
-										.enableLocalSpaceCorrection());
-							}
-							if(player.world.rand.nextInt(2) == 0){
-								j.distortion_particles.add(new ParticleHeatDistortion(p.world, 1.8, -1, 4, 5+thrust, 1.5F+thrust*3, 5, player.world.rand.nextFloat()*20)
-										.motion(0.1F, speed*0.5F, 0)
-										.enableLocalSpaceCorrection());
-							}
-							if(player.world.rand.nextInt(2) == 0){
-								j.distortion_particles.add(new ParticleHeatDistortion(p.world, -1.8, -1, 4, 5+thrust, 1.5F+thrust*3, 5, player.world.rand.nextFloat()*20)
-										.motion(-0.1F, speed*0.5F, 0)
-										.enableLocalSpaceCorrection());
-							}
-						}
-					}
-					player.ignoreFrustumCheck = true;
-					
-					//SYNC
-					if(player == Minecraft.getMinecraft().player && j.dirty){
-						PacketDispatcher.wrapper.sendToServer(new JetpackSyncPacket(player));
-						j.dirty = false;
-					}
-				}
-			}*/
 		}
-		
 	}
 	
 	@SideOnly(Side.CLIENT)

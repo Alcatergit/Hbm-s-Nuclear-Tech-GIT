@@ -38,9 +38,11 @@ public class RenderNukeCustom extends TileEntitySpecialRenderer<TileEntityNukeCu
 	        GL11.glTranslated(-2.0D, 0.0D, 0.0D); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_custom_tex);
         ResourceManager.bomb_boy.renderAll();
-        
+        GL11.glShadeModel(GL11.GL_FLAT);
+
         GlStateManager.enableCull();
         GL11.glPopMatrix();
 	}

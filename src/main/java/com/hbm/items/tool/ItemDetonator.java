@@ -1,19 +1,19 @@
 package com.hbm.items.tool;
 
 import java.util.List;
-
-import com.hbm.util.I18nUtil;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.logging.log4j.Level;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -41,9 +41,9 @@ public class ItemDetonator extends Item {
 		list.add(I18nUtil.resolveKey("desc.calldet2"));
 		if(stack.getTagCompound() == null)
 		{
-			list.add("§eNo position set§r");
+			list.add("§e"+I18nUtil.resolveKey("chat.posnoset")+"§r");
 		} else {
-			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("chat.possetx") + " " + stack.getTagCompound().getInteger("x") + ", Y: " + stack.getTagCompound().getInteger("y") + ", Z: " + stack.getTagCompound().getInteger("z")+"§r");
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("chat.possetxyz", stack.getTagCompound().getInteger("x"), stack.getTagCompound().getInteger("y"), stack.getTagCompound().getInteger("z"))+"§r");
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class ItemDetonator extends Item {
 		if(stack.getTagCompound() == null)
 		{
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("§c[Error]: Position not set.§r"));
+				player.sendMessage(new TextComponentTranslation("§c"+I18nUtil.resolveKey("chat.posnoseterror")+"§r"));
 		} else {
 			 int x = stack.getTagCompound().getInteger("x");
 			 int y = stack.getTagCompound().getInteger("y");
@@ -103,7 +103,7 @@ public class ItemDetonator extends Item {
 			 } else {
 				if(world.isRemote)
 				{
-					player.sendMessage(new TextComponentTranslation("§c[Error]: Target incompatible or too far away.§r"));
+					player.sendMessage(new TextComponentTranslation("§c"+I18nUtil.resolveKey("chat.postoofarerror")+"§r"));
 				}
 			 }
 		}

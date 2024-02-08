@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.lib.ModDamageSource;
@@ -303,7 +304,7 @@ public class EntityRainbow extends Entity implements IProjectile {
 			float f2;
 			float f4;
 
-			if (movingobjectposition != null) {
+			if (movingobjectposition != null && CompatibilityConfig.isWarDim(world)) {
 				if (movingobjectposition.entityHit != null) {
 					f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 					int k = MathHelper.ceil(f2 * this.damage);

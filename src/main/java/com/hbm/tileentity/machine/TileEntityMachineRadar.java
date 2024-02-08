@@ -135,7 +135,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		entList.clear();
 		jammed = false;
 		
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0D, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 5000D, pos.getZ() + 0.5 + WeaponConfig.radarRange));
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() + 0.5 - WeaponConfig.radarRange, 0D, pos.getZ() + 0.5 - WeaponConfig.radarRange, pos.getX() + 0.5 + WeaponConfig.radarRange, 10000, pos.getZ() + 0.5 + WeaponConfig.radarRange));
 
 		for(Entity e : list) {
 			

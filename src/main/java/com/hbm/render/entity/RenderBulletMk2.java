@@ -47,9 +47,9 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ModelMIRV mirv;
 	private ModelBaleflare bf;
 
-	private ResourceLocation bullet_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/bullet.png");
-	private ResourceLocation emplacer = new ResourceLocation(RefStrings.MODID + ":textures/models/emplacer.png");
-	private ResourceLocation tau = new ResourceLocation(RefStrings.MODID + ":textures/models/tau.png");
+	private ResourceLocation bullet_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/bullet.png");
+	private ResourceLocation emplacer = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/emplacer.png");
+	private ResourceLocation tau = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/tau.png");
 	private ResourceLocation buckshot_rl = new ResourceLocation(RefStrings.MODID + ":textures/entity/buckshot.png");
 	private ResourceLocation rocket_rl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocket.png");
 	private ResourceLocation rocket_he = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketHE.png");
@@ -249,13 +249,13 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 		
 		switch(type) {
 		case 0:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/MiniNuke.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/MiniNuke.png"));
 			nuke.renderAll(0.0625F); break;
 		case 1:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/Mirv.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/Mirv.png"));
 			mirv.renderAll(0.0625F); break;
 		case 2:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/BaleFlare.png"));
+			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/BaleFlare.png"));
 			bf.renderAll(0.0625F); break;
 		}
 

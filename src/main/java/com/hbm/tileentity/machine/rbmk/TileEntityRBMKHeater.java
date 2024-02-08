@@ -1,10 +1,8 @@
 package com.hbm.tileentity.machine.rbmk;
 
+import java.util.Map;
+
 import com.hbm.blocks.ModBlocks;
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.items.ModItems;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
@@ -17,6 +15,9 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,9 +37,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements IFluidHandler, ITankPacketAcceptor {
 
@@ -268,7 +267,6 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 	}
 
 	// control panel
-
 	@Override
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
@@ -280,5 +278,4 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 
 		return data;
 	}
-
 }

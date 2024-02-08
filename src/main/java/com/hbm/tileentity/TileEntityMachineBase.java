@@ -20,7 +20,6 @@ import net.minecraftforge.items.ItemStackHandler;
 public abstract class TileEntityMachineBase extends TileEntityLoadedBase implements INBTPacketReceiver {
 
 	public ItemStackHandler inventory;
-	public ItemStack slots[];
 
 	private String customName;
 
@@ -29,7 +28,11 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	}
 
 	public TileEntityMachineBase(int scount, int slotlimit) {
-		inventory = new ItemStackHandler(scount){
+		inventory = getNewInventory(scount, slotlimit);
+	}
+
+	public ItemStackHandler getNewInventory(int scount, int slotlimit){
+		return new ItemStackHandler(scount){
 			@Override
 			protected void onContentsChanged(int slot) {
 				super.onContentsChanged(slot);
@@ -68,20 +71,6 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] {};
-	}
-
-
-	public void setInventorySlotContents(int i, ItemStack itemStack) {
-		slots[i] = itemStack;
-		if(itemStack != ItemStack.EMPTY && itemStack.getCount() > getInventoryStackLimit())
-		{
-			itemStack.setCount(getInventoryStackLimit());
-		}
-	}
-
-
-	public int getInventoryStackLimit() {
-		return 64;
 	}
 	
 	public int getGaugeScaled(int i, FluidTank tank) {
@@ -169,5 +158,4 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && inventory != null) || super.hasCapability(capability, facing);
 	}
-	
 }

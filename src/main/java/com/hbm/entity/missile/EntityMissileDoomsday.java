@@ -12,10 +12,12 @@ public class EntityMissileDoomsday extends EntityMissileBaseAdvanced {
 
 	public EntityMissileDoomsday(World p_i1582_1_) {
 		super(p_i1582_1_);
+		this.setSize(1.5F, 12F);
 	}
 	
 	public EntityMissileDoomsday(World world, float x, float y, float z, int a, int b) {
 		super(world, x, y, z, a, b);
+		this.setSize(1.5F, 12F);
 	}
 
 	@Override

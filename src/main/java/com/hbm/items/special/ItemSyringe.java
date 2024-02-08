@@ -533,32 +533,32 @@ public class ItemSyringe extends Item {
 			tooltip.add("Removes all potion effects");
 		}
 		if (this == ModItems.syringe_awesome) {
-			tooltip.add("Every good effect for 50 seconds");
+			tooltip.add("§2Every good effect for 50 seconds");
 		}
 		if (this == ModItems.syringe_metal_stimpak) {
-			tooltip.add("Heals 2.5 hearts");
+			tooltip.add("§aHeals 2.5 hearts");
 		}
 		if(this == ModItems.syringe_metal_medx) {
-			tooltip.add("Resistance III for 4 minutes");
+			tooltip.add("§dResistance III for 4 minutes");
 		}
 		if(this == ModItems.syringe_metal_psycho) {
-			tooltip.add("Resistance I for 2 minutes");
-			tooltip.add("Strength I for 2 minutes");
+			tooltip.add("§dResistance I for 2 minutes");
+			tooltip.add("§6Strength I for 2 minutes");
 		}
 		if(this == ModItems.syringe_metal_super) {
-			tooltip.add("Heals 25 hearts");
-			tooltip.add("Slowness I for 10 seconds");
+			tooltip.add("§aHeals 25 hearts");
+			tooltip.add("§bSlowness I for 10 seconds");
 		}
 		if(this == ModItems.syringe_poison) {
 			tooltip.add("Deadly");
 		}
 		if(this == ModItems.syringe_taint) {
-			tooltip.add("Tainted I for 60 seconds");
-			tooltip.add("Nausea I for 5 seconds");
+			tooltip.add("§5Tainted I for 60 seconds");
+			tooltip.add("§eNausea I for 5 seconds");
 			tooltip.add("Cloud damage + taint = ghoulified effect");
 		}
 		if(this == ModItems.med_bag) {
-			tooltip.add("Full heal, regardless of max health");
+			tooltip.add("§aFull heal, regardless of max health");
 			tooltip.add("Removes negative effects");
 		}
 		if(this == ModItems.gas_mask_filter_mono) {

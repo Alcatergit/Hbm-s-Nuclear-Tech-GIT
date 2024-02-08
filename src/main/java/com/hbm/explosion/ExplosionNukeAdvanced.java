@@ -1,5 +1,7 @@
 package com.hbm.explosion;
 
+import com.hbm.config.CompatibilityConfig;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -74,8 +76,10 @@ public class ExplosionNukeAdvanced
 		this.nlimit = this.radius2 * 4; //How many total columns should be broken (radius ^ 2 is one quadrant, there are 4 quadrants)
 	}
 	
-	public boolean update()
-	{
+	public boolean update() {
+		if(!CompatibilityConfig.isWarDim(worldObj)){
+			return true;
+		}
 		switch(this.type)
 		{
 		case 0:
@@ -107,7 +111,7 @@ public class ExplosionNukeAdvanced
 			{
 				pos.setPos(this.posX + x, this.posY + y, this.posZ + z);
 				if(y<8){//only spare blocks that are mostly below epicenter
-					y-= ExplosionNukeGeneric.destruction(this.worldObj, pos);//spare blocks below
+					y -= ExplosionNukeGeneric.destruction(this.worldObj, pos);//spare blocks below
 				}else{//don't spare blocks above epicenter
 					ExplosionNukeGeneric.destruction(this.worldObj, pos);
 				}
@@ -125,7 +129,7 @@ public class ExplosionNukeAdvanced
 			for (int y = dist; y > -dist * this.explosionCoefficient; y--)
 			{
 				pos.setPos(this.posX + x, this.posY + y, this.posZ + z);
-				y-=ExplosionNukeGeneric.vaporDest(this.worldObj, pos);
+				y -= ExplosionNukeGeneric.vaporDest(this.worldObj, pos);
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.lib.ModDamageSource;
 
 import net.minecraft.block.Block;
@@ -137,7 +138,7 @@ public class EntityMinerBeam extends Entity implements IProjectile {
 
         if (blockstate.getMaterial() != Material.AIR)
         {
-        	if(!world.isRemote) {
+        	if(!world.isRemote && CompatibilityConfig.isWarDim(world)) {
         		this.dropMinedItem(this.world, field_145791_d, field_145792_e, field_145789_f);
         	}
     		this.setDead();
@@ -208,7 +209,7 @@ public class EntityMinerBeam extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {

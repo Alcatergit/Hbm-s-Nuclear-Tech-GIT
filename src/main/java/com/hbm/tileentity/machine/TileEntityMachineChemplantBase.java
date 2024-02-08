@@ -612,7 +612,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			}
 		}
 
-		for(int i = 0; i < 100 && needed > 0; i++) {
+		for(int i = 0; i < 100 && needed > 0 && i < send.size(); i++) {
 			TypedFluidTank tank = send.get(i);
 			if(tank.tank.getFluidAmount() > 0) {
 				int total = Math.min(tank.tank.getFluidAmount(), needed);

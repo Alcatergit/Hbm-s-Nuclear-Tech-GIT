@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 public class ItemRenderEMPRay extends TEISRBase {
 
 	protected ModelEMPRay emp;
-	protected ResourceLocation emp_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelEMPRay.png");
+	protected ResourceLocation emp_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelEMPRay.png");
 	
 	public ItemRenderEMPRay() {
 		emp = new ModelEMPRay();

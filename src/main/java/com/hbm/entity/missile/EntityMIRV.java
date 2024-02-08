@@ -6,8 +6,8 @@ import java.util.List;
 import api.hbm.entity.IRadarDetectable;
 
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
@@ -83,14 +83,13 @@ public class EntityMIRV extends EntityThrowable implements IChunkLoader, IConsta
         {
     		if(!this.world.isRemote)
     		{
-    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.mirvRadius, posX, posY, posZ));
-    			EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(this.world, BombConfig.mirvRadius);
-    	    	entity2.posX = this.posX;
-    	    	entity2.posY = this.posY;
-    	    	entity2.posZ = this.posZ;
-    	    	this.world.spawnEntity(entity2);
+    	    	world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.mirvRadius, posX, posY, posZ));
+    	    	if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFac(world, posX, posY, posZ, BombConfig.mirvRadius);
+				}
     		}
     		this.setDead();
+    		ForgeChunkManager.unforceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
         }
         
         this.world.spawnEntity(new EntitySmokeFX(this.world, this.posX, this.posY, this.posZ, 0.0, 0.0, 0.0));
@@ -125,7 +124,7 @@ public class EntityMIRV extends EntityThrowable implements IChunkLoader, IConsta
 	@SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
     {
-        return distance < 5000;
+        return distance < 25000;
     }
 	
 	@Override

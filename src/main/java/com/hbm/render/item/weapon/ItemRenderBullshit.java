@@ -21,10 +21,10 @@ public class ItemRenderBullshit extends TEISRBase {
 	protected ModelPip pip;
 	protected ModelMP40 mp40;
 	protected ModelBaleflare bomb;
-	protected static ResourceLocation mp40_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelMP40.png");
-	protected static ResourceLocation spark_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelSpark.png");
-	protected static ResourceLocation pip_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelPip.png");
-	protected static ResourceLocation bomb_rl = new ResourceLocation(RefStrings.MODID +":textures/models/BaleFlare.png");
+	protected static ResourceLocation mp40_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelMP40.png");
+	protected static ResourceLocation spark_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelSpark.png");
+	protected static ResourceLocation pip_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelPip.png");
+	protected static ResourceLocation bomb_rl = new ResourceLocation(RefStrings.MODID +":textures/models/projectiles/BaleFlare.png");
 	
 	public ItemRenderBullshit() {
 		sparkPlug = new ModelSpark();

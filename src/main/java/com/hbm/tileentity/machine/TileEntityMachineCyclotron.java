@@ -7,7 +7,7 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.logic.EntityBalefire;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
@@ -453,7 +453,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		int rand = world.rand.nextInt(10);
 
 		if(rand < 2) {
-			world.spawnEntity(EntityNukeExplosionMK4.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5).mute());
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5).mute());
 			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "muke");

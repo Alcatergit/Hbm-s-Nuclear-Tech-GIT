@@ -45,7 +45,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 
 public class TileEntityMachineGasFlare extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGUIProvider, IControlReceiver {
@@ -192,7 +191,16 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 		this.tankType = FluidRegistry.getFluid(nbt.getString("tankType"));
 	}
 
+	@Override
+	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+		return new int[] {0, 1, 2, 3, 4, 5};
+	}
+
 	void setupTanks() {
+		if(inventory.getSlots() < 5){
+			inventory = this.getNewInventory(6, 64);
+		}
+
 		ItemStack slotId = inventory.getStackInSlot(3);
 		Item itemId = slotId.getItem();
 		if (itemId == ModItems.forge_fluid_identifier) {
@@ -269,9 +277,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return true;
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return true;
 		} else {
 			return super.hasCapability(capability, facing);
@@ -280,9 +286,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		} else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		} else {
 			return super.getCapability(capability, facing);

@@ -26,7 +26,7 @@ public class RenderCloudFleija extends Render<EntityCloudFleija> {
 	protected RenderCloudFleija(RenderManager renderManager) {
 		super(renderManager);
 		blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-    	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/BlastFleija.png");
+    	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlastFleija.png");
     	scale = 0;
 	}
 	

@@ -1,7 +1,7 @@
 {
 	"display": {
 		"icon": {
-			"item": "hbm:battery_creative"
+			"item": "hbm:battery_sc_electronium"
 		},
 		"title": {
 			"translate": "hbm.achievement.progress_creative"
@@ -18,7 +18,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:battery_creative"
+                        "item": "hbm:battery_sc_electronium"
                     }
                 ]
             }

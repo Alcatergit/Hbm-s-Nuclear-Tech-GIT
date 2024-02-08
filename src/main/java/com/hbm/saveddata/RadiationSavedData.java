@@ -142,10 +142,6 @@ public class RadiationSavedData extends WorldSavedData {
 					int z = struct.chunkY * 16 + worldObj.rand.nextInt(16);
 					int y = worldObj.getHeight(x, z) + worldObj.rand.nextInt(5);
 					
-					//EntityFogFX fog = new EntityFogFX(worldObj);
-					//fog.setPosition(x, y, z);
-					//System.out.println(x + " " + y + " " + z);
-					//worldObj.spawnEntity(fog);
 					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(x, y, z, 3), new TargetPoint(worldObj.provider.getDimension(), x, y, z, 100));
 				}
     			

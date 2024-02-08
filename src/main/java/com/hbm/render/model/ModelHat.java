@@ -32,7 +32,7 @@ public class ModelHat extends ModelArmorBase {
 
 		if(type == 0) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.hat);
-			head.render(par7);
+			head.render(par7*1.001F);
 		}
 
 		GL11.glPopMatrix();

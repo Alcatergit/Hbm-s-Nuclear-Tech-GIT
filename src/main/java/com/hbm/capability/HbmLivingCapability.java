@@ -89,7 +89,7 @@ public class HbmLivingCapability {
 
 		@Override
 		public void setNeutrons(float neutrons) {
-			this.neutrons = MathHelper.clamp(neutrons, 0, 2500);
+			this.neutrons = Math.max(neutrons, 0);
 		}
 		
 		@Override

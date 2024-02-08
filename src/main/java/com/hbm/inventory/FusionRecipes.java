@@ -18,7 +18,7 @@ public class FusionRecipes {
 		} else if(plasma == ModForgeFluids.plasma_xm){
 			return 2400;
 		} else if(plasma == ModForgeFluids.plasma_put){
-			return 1600;
+			return 2400;
 		} else if(plasma == ModForgeFluids.plasma_bf){
 			return 150;
 		}
@@ -35,7 +35,7 @@ public class FusionRecipes {
 		} else if(plasma == ModForgeFluids.plasma_xm){
 			return new ItemStack(ModItems.powder_chlorophyte);
 		} else if(plasma == ModForgeFluids.plasma_put){
-			return new ItemStack(ModItems.powder_xe135_tiny);
+			return new ItemStack(ModItems.powder_xe135);
 		} else if(plasma == ModForgeFluids.plasma_bf){
 			return new ItemStack(ModItems.powder_balefire);
 		}

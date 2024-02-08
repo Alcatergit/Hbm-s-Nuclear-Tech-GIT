@@ -156,7 +156,7 @@ public class BombMulti extends BlockContainer implements IBomb {
         		
         		if(this.clusterCount > 0)
         		{
-                	ExplosionChaos.cluster(world, x, y, z, this.clusterCount, 1);
+                	ExplosionChaos.cluster(world, x, y, z, this.clusterCount, 0.5);
         		}
         		
         		if(this.fireRadius > 0)

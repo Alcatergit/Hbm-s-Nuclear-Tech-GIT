@@ -67,9 +67,11 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 			if (target != null) {
 
 				Vec3d turret = new Vec3d(target.posX - (pos.getX() + 0.5), target.posY + target.getEyeHeight() - (pos.getY() + 1), target.posZ - (pos.getZ() + 0.5));
-				if (this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretSpitfire || this instanceof TileEntityTurretCheapo) {
-					Vec3d targetPos = target.getEntityBoundingBox().getCenter();
-					turret = new Vec3d(targetPos.x - (pos.getX() + 0.5), targetPos.y - (pos.getY() + 1.5), targetPos.z - (pos.getZ() + 0.5));
+				if (this instanceof TileEntityTurretCIWS || this instanceof TileEntityTurretSpitfire || this instanceof TileEntityTurretCheapo && target.getEntityBoundingBox() != null) {
+					try{
+						Vec3d targetPos = target.getEntityBoundingBox().getCenter();
+						turret = new Vec3d(targetPos.x - (pos.getX() + 0.5), targetPos.y - (pos.getY() + 1.5), targetPos.z - (pos.getZ() + 0.5));
+					} catch(Throwable t){}
 				}
 
 				oldRotationPitch = rotationPitch;

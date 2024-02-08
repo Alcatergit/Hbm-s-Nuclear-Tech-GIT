@@ -2,10 +2,10 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.BombConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -252,23 +252,14 @@ public class EntityMiniNuke extends Entity implements IProjectile {
         {
             if (!this.world.isRemote)
             {
-    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
     	    	
         	    //Perma-baleflare mode if the polaroid's glitched
-        	    if(MainRegistry.polaroidID == 11)
-        	    	if(rand.nextInt(100) >= 0)	//edited
-        	    	{
-        	    		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-        	    	} else {
-        	    		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-        	    	}
-        	    else
-        	    	if(rand.nextInt(100) == 0)	//original
-        	    	{
-        	    		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-        	    	} else {
-        	    		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-        	    	}
+        	    world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
+                if(rand.nextInt(100) == 0 || MainRegistry.polaroidID == 11){
+                    EntityNukeTorex.statFacBale(world, posX, posY, posZ, BombConfig.fatmanRadius);
+                } else {
+                    EntityNukeTorex.statFac(world, posX, posY, posZ, BombConfig.fatmanRadius);
+                }
             }
         	this.setDead();
         }
@@ -333,7 +324,7 @@ public class EntityMiniNuke extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {
@@ -393,14 +384,12 @@ public class EntityMiniNuke extends Entity implements IProjectile {
                         {
                             if (!this.world.isRemote)
                             {
-                    	    	world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
-                    	    	
-                            	if(rand.nextInt(100) == 0)
-                            	{
-                            		ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-                            	} else {
-                            		ExplosionParticle.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
-                            	}
+                    	    	world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.fatmanRadius, posX, posY, posZ));
+                                if(rand.nextInt(100) == 0 || MainRegistry.polaroidID == 11){
+                                    EntityNukeTorex.statFacBale(world, posX, posY, posZ, BombConfig.fatmanRadius);
+                                } else {
+                                    EntityNukeTorex.statFac(world, posX, posY, posZ, BombConfig.fatmanRadius);
+                                }
                             }
                         	this.setDead();
                         }

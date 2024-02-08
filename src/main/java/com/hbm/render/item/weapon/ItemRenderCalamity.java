@@ -20,9 +20,9 @@ public class ItemRenderCalamity extends TEISRBase {
 	protected ModelCalStock stock;
 	protected ModelCalDualStock saddle;
 	
-	protected ResourceLocation dualStock_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelCalDualStock.png");
-	protected ResourceLocation barrel_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelCalBarrel.png");
-	protected ResourceLocation stock_rl = new ResourceLocation(RefStrings.MODID +":textures/models/ModelCalStock.png");
+	protected ResourceLocation dualStock_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelCalDualStock.png");
+	protected ResourceLocation barrel_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelCalBarrel.png");
+	protected ResourceLocation stock_rl = new ResourceLocation(RefStrings.MODID +":textures/models/weapons/ModelCalStock.png");
 	
 	public ItemRenderCalamity() {
 		barrel = new ModelCalBarrel();

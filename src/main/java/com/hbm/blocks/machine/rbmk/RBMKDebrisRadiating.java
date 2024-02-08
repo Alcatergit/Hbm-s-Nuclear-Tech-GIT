@@ -49,7 +49,7 @@ public class RBMKDebrisRadiating extends RBMKDebrisBurning {
 			//Boron sand helps stop the fission reaction; 0.66% chance every 20-40 ticks for one side
 			int chance = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock() == ModBlocks.sand_boron ? 25 : 1000;
 			
-			ContaminationUtil.radiate(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 100F * chance, 40F * chance);
+			ContaminationUtil.radiate(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 100F * chance, 0, 40F * chance);
 			
 			if(rand.nextInt(5) == 0) {
 				NBTTagCompound data = new NBTTagCompound();

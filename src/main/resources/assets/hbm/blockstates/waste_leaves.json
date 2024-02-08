@@ -1,8 +1,8 @@
 {
 	"variants": {
-		"check_decay=false,decayable=false": { "model": "hbm:waste_leaves" },
-		"check_decay=false,decayable=true": { "model": "hbm:waste_leaves" },
-		"check_decay=true,decayable=false": { "model": "hbm:waste_leaves" },
-		"check_decay=true,decayable=true": { "model": "hbm:waste_leaves" }
+		"check_decay=false,decayable=false,variant=oak": { "model": "hbm:waste_leaves" },
+		"check_decay=false,decayable=true,variant=oak": { "model": "hbm:waste_leaves" },
+		"check_decay=true,decayable=false,variant=oak": { "model": "hbm:waste_leaves" },
+		"check_decay=true,decayable=true,variant=oak": { "model": "hbm:waste_leaves" }
 	}
 }

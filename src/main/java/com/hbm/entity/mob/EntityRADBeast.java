@@ -60,7 +60,6 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     @Override
     public void onDeath(DamageSource cause) {
-    	super.onDeath(cause);
     	if(this.getMaxHealth() > 150) {
 	        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
 
@@ -68,6 +67,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 	        	AdvancementManager.grantAchievement(player, AdvancementManager.achMeltdown);
 	        }
         }
+        super.onDeath(cause);
     }
     
     @Override

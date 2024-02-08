@@ -31,15 +31,16 @@ public class BombConfig {
 	public static int maxCustomSolRadius = 1000;
 	public static int maxCustomEuphLvl = 20;
 	
-	public static int mk4 = 1024;
+	public static int mk5 = 30;
 	public static int blastSpeed = 1024;
+	public static int nukeTickSpacing = 4;
 	public static int falloutRange = 100;
-	public static int fChunkSpeed = 10;
-	public static boolean evaporateWater = true;
-	public static boolean fillCraterWithWater = true;
-	public static int oceanHeight = 0;
+	public static int fChunkSpeed = 5;
+	public static int falloutMS = 30;
+	public static boolean spawnFire = false;
 	public static int limitExplosionLifespan = 0;
-	public static boolean disableNuclear;
+	public static boolean disableNuclear = false;
+	public static boolean enableNukeClouds = true;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKES = "03_nukes";
@@ -135,21 +136,34 @@ public class BombConfig {
 		propBlastSpeed.setComment("Base speed of MK3 system (old and schrabidium) detonations (Blocks / tick)");
 		blastSpeed = propBlastSpeed.getInt();
 		// fallout range
-		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_blastSpeedNew", 1024);
-		propFalloutRange.setComment("Base speed of MK4 system (new) detonations (Blocks / tick)");
-		mk4 = propFalloutRange.getInt();
+		Property propTickRange = config.get(CATEGORY_NUKE, "6.02_mk5TickSpacing", 4);
+		propTickRange.setComment("Do mk5 chunk processing ever nth tick");
+		nukeTickSpacing = propTickRange.getInt();
+		// fallout range
+		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_mk5BlastTime", 30);
+		propFalloutRange.setComment("Maximum amount of milliseconds per tick allocated for mk5 chunk processing");
+		mk5 = propFalloutRange.getInt();
 		// fallout speed
 		Property falloutRangeProp = config.get(CATEGORY_NUKE, "6.03_falloutRange", 100);
 		falloutRangeProp.setComment("Radius of fallout area (base radius * value in percent)");
 		falloutRange = falloutRangeProp.getInt();
-		// new explosion speed
-		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 10);
+		// fallout speed
+		Property falloutChunkSpeed = config.get(CATEGORY_NUKE, "6.04_falloutChunkSpeed", 5);
 		falloutChunkSpeed.setComment("Process a Chunk every nth tick by the fallout rain");
 		fChunkSpeed = falloutChunkSpeed.getInt();
+		// new explosion speed
+		Property falloutMSProp = config.get(CATEGORY_NUKE, "6.04_falloutTime", 30);
+		falloutMSProp.setComment("Maximum amount of milliseconds per tick allocated for fallout chunk processing");
+		falloutMS = falloutMSProp.getInt();
+		Property spawnFireP = config.get(CATEGORY_NUKE, "6.05_falloutFireSpawn", false);
+		spawnFireP.setComment("Weither to spawn fire after the nuke. Is off to increase TPS");
+		spawnFire = spawnFireP.getBoolean();
 		//Whether fallout and nuclear radiation is enabled at all
 		Property disableNuclearP = config.get(CATEGORY_NUKE, "6.06_disableNuclear", false);
 		disableNuclearP.setComment("Disable the nuclear part of nukes");
 		disableNuclear = disableNuclearP.getBoolean();
-	}
 
+		enableNukeClouds = config.get(CATEGORY_NUKE, "6.07_enableMushroomClouds", true).getBoolean(true);
+		
+	}
 }

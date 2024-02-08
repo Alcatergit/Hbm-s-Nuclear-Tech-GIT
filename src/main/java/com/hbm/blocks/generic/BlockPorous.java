@@ -24,7 +24,7 @@ public class BlockPorous extends Block {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setHardness(1.5F); //stone tier
-		this.setResistance(300.0F); //ha
+		this.setResistance(30.0F); //ha
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

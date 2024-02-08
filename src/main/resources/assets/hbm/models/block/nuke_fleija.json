@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "hbm:blocks/nuke_fleija"
+		"all": "hbm:blocks/block_steel"
 	}
 }

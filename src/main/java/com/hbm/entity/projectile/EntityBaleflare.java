@@ -2,10 +2,11 @@ package com.hbm.entity.projectile;
 
 import java.util.List;
 
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.logic.EntityBalefire;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.particle.EntitySSmokeFX;
-import com.hbm.explosion.ExplosionParticleB;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -267,8 +268,7 @@ public class EntityBaleflare extends Entity implements IProjectile {
             			bf.posZ = this.posZ;
             			bf.destructionRange = BombConfig.fatmanRadius;
             			world.spawnEntity(bf);
-                	    
-                    	ExplosionParticleB.spawnMush(this.world, (int)this.posX, (int)this.posY - 3, (int)this.posZ);
+                	    EntityNukeTorex.statFacBale(world, this.posX, this.posY, this.posZ, BombConfig.fatmanRadius);
                     }
                     this.setDead();
                 }
@@ -344,7 +344,7 @@ public class EntityBaleflare extends Entity implements IProjectile {
             float f2;
             float f4;
 
-            if (movingobjectposition != null)
+            if (movingobjectposition != null && CompatibilityConfig.isWarDim(world))
             {
                 if (movingobjectposition.entityHit != null)
                 {

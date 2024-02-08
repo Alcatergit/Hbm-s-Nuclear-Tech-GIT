@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityNukeCloudSmall;
-import com.hbm.entity.logic.EntityNukeExplosionMK4;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
+import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IBomb;
 
@@ -58,21 +59,40 @@ public class DetCord extends Block implements IBomb {
 				world.createExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.5F, true);
 			}
 			if(this == ModBlocks.det_charge) {
-				ExplosionLarge.explode(world, pos.getX(), pos.getY(), pos.getZ(), 15, true, false, false);
+				ExplosionLarge.explode(world, pos.getX(), pos.getY(), pos.getZ(), 20, true, false, false);
+			}
+			if(this == ModBlocks.det_n2) {
+				world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)(BombConfig.n2Radius/12) * 5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, (int)(BombConfig.n2Radius/12) * 5);
+				}
 			}
 			if(this == ModBlocks.det_nuke) {
-				world.spawnEntity(EntityNukeExplosionMK4.statFac(world, BombConfig.missileRadius, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
-				EntityNukeCloudSmall entity2 = new EntityNukeCloudSmall(world, BombConfig.missileRadius);
-				entity2.posX = pos.getX();
-				entity2.posY = pos.getY();
-				entity2.posZ = pos.getZ();
-				world.spawnEntity(entity2);
+				world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.missileRadius, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, BombConfig.missileRadius);
+				}
+			}
+			if(this == ModBlocks.det_bale) {
+				EntityBalefire bf = new EntityBalefire(world);
+				bf.posX = pos.getX() + 0.5;
+				bf.posY = pos.getY() + 0.5;
+				bf.posZ = pos.getZ() + 0.5;
+				bf.destructionRange = (int) 130;
+				world.spawnEntity(bf);
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 130F);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		if(this == ModBlocks.det_n2){
+			tooltip.add("§c[Extreme Bomb]§r");
+			tooltip.add(" §eRadius: "+((int)(BombConfig.n2Radius/12) * 5)+"m§r");
+		}
 		if(this == ModBlocks.det_nuke){
 			tooltip.add("§2[Nuclear Bomb]§r");
 			tooltip.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
@@ -80,6 +100,10 @@ public class DetCord extends Block implements IBomb {
 				tooltip.add("§2[Fallout]§r");
 				tooltip.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
 			}
+		}
+		if(this == ModBlocks.det_bale){
+			tooltip.add("§a[Balefire Bomb]§r");
+			tooltip.add(" §eRadius: 130m§r");
 		}
 	}
 }

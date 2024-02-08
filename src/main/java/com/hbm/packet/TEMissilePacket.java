@@ -86,7 +86,8 @@ public class TEMissilePacket implements IMessage {
 				type = 25;
 			if(stack.getItem() == ModItems.missile_volcano)
 				type = 26;
-			
+			if(stack.getItem() == ModItems.missile_n2)
+				type = 27;
 		}
 	}
 
@@ -125,6 +126,5 @@ public class TEMissilePacket implements IMessage {
 			});
 			return null;
 		}
-		
 	}
 }

@@ -28,12 +28,11 @@ public class WeaponizedCell extends Item {
 	
 	@Override
 	public boolean onEntityItemUpdate(EntityItem item) {
-		World world = item.world ;
+		World world = item.world;
     	
     	if(item.ticksExisted > BombConfig.riggedStarTicks || item.isBurning()) {
 			
 	    	if(!world.isRemote && WeaponConfig.dropStar) {
-	    		
 	    		
 	    		world.playSound(null, item.posX, item.posY, item.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, BombConfig.riggedStarRange, world.rand.nextFloat() * 0.1F + 0.9F);
 

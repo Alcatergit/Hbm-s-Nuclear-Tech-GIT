@@ -22,6 +22,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemRBMKRod extends Item implements IItemHazard {
+
+	public static final double xe135HalflifeMulPerTick = 0.9999241662036941; // 0.5^(1/9140) for a 9.14h halflife
 	
 	public ItemRBMKPellet pellet;
 	public String fullName = "";			//full name of the fuel rod
@@ -173,7 +175,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 		
 		inFlux += selfRate;
 		
-		double xenon = getPoison(stack);
+		double xenon = getPoison(stack) * xe135HalflifeMulPerTick;
 		xenon -= xenonBurnFunc(inFlux);
 		
 		inFlux *= (1D - getPoisonLevel(stack));

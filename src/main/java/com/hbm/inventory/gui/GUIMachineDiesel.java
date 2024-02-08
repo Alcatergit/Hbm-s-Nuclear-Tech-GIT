@@ -32,16 +32,9 @@ public class GUIMachineDiesel extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 69 - 52, 16, 52, diFurnace.tank, diFurnace.tankType);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 69 - 52, 16, 52, diFurnace.power, diFurnace.powerCap);
 
-		String[] text = new String[] { "Accepted Fuels:",
-				"  Diesel (500 HE/t)",
-				"  Petroil (300 HE/t)",
-				"  Biofuel (400 HE/t)",
-				"  NITAN Superfuel (5000 HE/t)" };
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
-		
 		String[] text1 = new String[] { "Fuel consumption rate:",
-				"  10 mB/t",
-				"  200 mB/s",
+				"  1 mB/t",
+				"  20 mB/s",
 				"(Consumption rate is constant)" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		
@@ -79,24 +72,11 @@ public class GUIMachineDiesel extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 43 + 18 * 4, guiTop + 34, 208, 0, 18, 18);
 		}
 
-		this.drawInfoPanel(guiLeft - 16, guiTop + 36, 16, 16, 2);
 		this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 16, 16, 16, 3);
 		
 		if(!diFurnace.hasAcceptableFuel())
 			this.drawInfoPanel(guiLeft - 16, guiTop + 36 + 32, 16, 16, 6);
 		
-		//diFurnace.tank.renderTank(this, guiLeft + 80, guiTop + 69, diFurnace.tank.getTankType().textureX() * FluidTank.x, diFurnace.tank.getTankType().textureY() * FluidTank.y, 16, 52);
 		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, this.zLevel, 16, 52, 80, 97);
-		/*Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.missileNuclear_tex);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft + 88, guiTop + 110, 50);
-		GL11.glRotatef(System.currentTimeMillis() / 10 % 360, 0, -1, 0);
-		GL11.glTranslatef(60, 0, 0);
-		GL11.glScalef(16, 16, 16);
-		GL11.glRotatef(90, 1, 0, 0);
-		GL11.glRotatef(-90, 0, 0, 1);
-		GL11.glScalef(-1, -1, -1);
-		ResourceManager.missileNuclear.renderAll();
-		GL11.glPopMatrix();*/
 	}
 }

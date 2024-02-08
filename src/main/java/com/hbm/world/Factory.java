@@ -715,13 +715,13 @@ public class Factory extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 3, y + 0, z + 20), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 20), Blocks.IRON_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 0, z + 20), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, EnumFacing.WEST), 3);
-		world.setBlockState(pos.setPos(x + 7, y + 0, z + 20), Blocks.ANVIL.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 7, y + 0, z + 20), ModBlocks.anvil_steel.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 14, y + 0, z + 20), Blocks.STONEBRICK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 0, z + 21), Blocks.STONEBRICK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 0, z + 21), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 0, z + 21), Blocks.IRON_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 0, z + 21), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, EnumFacing.WEST), 3);
-		world.setBlockState(pos.setPos(x + 7, y + 0, z + 21), Blocks.ANVIL.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 7, y + 0, z + 21), ModBlocks.anvil_steel.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 14, y + 0, z + 21), Blocks.STONEBRICK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 0, z + 22), Blocks.STONEBRICK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 0, z + 22), Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, EnumFacing.EAST), 3);

@@ -12,6 +12,7 @@ import com.hbm.interfaces.IFluidVisualConnectable;
 import com.hbm.interfaces.IItemFluidHandler;
 import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.HeatRecipes;
+import com.hbm.inventory.EngineRecipes;
 import com.hbm.inventory.gui.GuiInfoContainer;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.JetpackBase;
@@ -235,9 +236,17 @@ public class FFUtils {
 
 		if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
 			if(isKeyPressed){
-				String energy = Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L);
 				texts.add("§6["+I18n.format("trait.flammable")+"]");
-				texts.add(" "+I18n.format("trait.flammable.desc", energy));
+				texts.add(" "+I18n.format("trait.flammable.desc", Library.getShortNumber(FluidCombustionRecipes.getFlameEnergy(fluid) * 1000L)));
+			}
+			hasInfo = true;
+		}
+		if (EngineRecipes.hasFuelRecipe(fluid)) {
+			if(isKeyPressed){
+				texts.add("§c["+I18n.format("trait.combustable")+"]");
+				
+				texts.add(" "+I18n.format("trait.combustable.desc", Library.getShortNumber(EngineRecipes.getEnergy(fluid))));
+				texts.add(" "+I18n.format("trait.combustable.desc2", I18n.format(EngineRecipes.getFuelGrade(fluid).getGrade())));
 			}
 			hasInfo = true;
 		}
@@ -337,10 +346,14 @@ public class FFUtils {
 					return false;
 				}
 			}
-			IFluidHandler tef = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-			if(tef != null && tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), false) > 0) {
-				tank.drain(tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), true), true);
-				return true;
+			try{
+				IFluidHandler tef = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+				if(tef != null && tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), false) > 0) {
+					tank.drain(tef.fill(new FluidStack(tank.getFluid(), Math.min(maxDrain, tank.getFluidAmount())), true), true);
+					return true;
+				}
+			} catch(Throwable t){
+				return false;
 			}
 		}
 		return false;
@@ -359,7 +372,7 @@ public class FFUtils {
 	 *            - the output slot.
 	 * @return true if something was actually filled
 	 */
-	public static boolean fillFromFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){
+	public static boolean fillFromFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){ // fills fluid from item into tank
 		if(slots == null || tank == null || slots.getSlots() < slot1 || slots.getSlots() < slot2 || slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
@@ -518,6 +531,10 @@ public class FFUtils {
 		return false;
 	}
 
+	public static boolean isEmtpyFluidTank(ItemStack stack){
+		return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && FluidUtil.getFluidContained(stack) == null;
+	}
+
 	/**
 	 * Fills a tank from a fluid handler item.
 	 * 
@@ -530,7 +547,7 @@ public class FFUtils {
 	 * @param slot2
 	 *            - the output slot
 	 */
-	public static boolean fillFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){
+	public static boolean fillFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){ //fills fluid from tank into item
 		if(slots == null || tank == null || tank.getFluid() == null || slots.getSlots() < slot1 || slots.getSlots() < slot2 || slots.getStackInSlot(slot1) == null || slots.getStackInSlot(slot1).isEmpty()) {
 			return false;
 		}
@@ -580,12 +597,15 @@ public class FFUtils {
 	}
 
 	// Ah yes, hacky special methods to make stacks drain.
-	private static boolean trySpecialFillFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){
+	private static boolean trySpecialFillFluidContainer(IItemHandlerModifiable slots, FluidTank tank, int slot1, int slot2){ //drains tank into item
 		ItemStack in = slots.getStackInSlot(slot1);
 		ItemStack out = slots.getStackInSlot(slot2);
 
+		ItemStack in1 = in.copy();
+		in1.setCount(1);
+
 		// Fluid Tank override
-		if(tank.getFluid() != null && in.getItem() == ModItems.fluid_tank_full && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemFluidTank.isEmptyTank(in) && ((ItemFluidTank.isFullTank(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+		if(tank.getFluid() != null && in.getItem() == ModItems.fluid_tank_full && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemFluidTank.isEmptyTank(in1) && ((ItemFluidTank.isFullTank(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
 			FluidStack f = tank.drain(1000, true);
 			if(f == null)
 				return false;
@@ -600,7 +620,7 @@ public class FFUtils {
 		}
 
 		// Fluid barrel override
-		if(tank.getFluid() != null && in.getItem() == ModItems.fluid_barrel_full && tank.drain(16000, false) != null && tank.drain(16000, false).amount == 16000 && ItemFluidTank.isEmptyBarrel(in) && ((ItemFluidTank.isFullBarrel(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+		if(tank.getFluid() != null && in.getItem() == ModItems.fluid_barrel_full && tank.drain(16000, false) != null && tank.drain(16000, false).amount == 16000 && ItemFluidTank.isEmptyBarrel(in1) && ((ItemFluidTank.isFullBarrel(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
 			FluidStack f = tank.drain(16000, true);
 			if(f == null)
 				return false;
@@ -615,7 +635,7 @@ public class FFUtils {
 		}
 
 		// Canister override
-		if(tank.getFluid() != null && in.getItem() == ModItems.canister_generic && SpecialContainerFillLists.EnumCanister.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemFluidCanister.isEmptyCanister(in) && ((ItemFluidCanister.isFullCanister(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+		if(tank.getFluid() != null && in.getItem() == ModItems.canister_generic && SpecialContainerFillLists.EnumCanister.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemFluidCanister.isEmptyCanister(in1) && ((ItemFluidCanister.isFullCanister(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
 			FluidStack f = tank.drain(1000, true);
 			if(f == null)
 				return false;
@@ -630,7 +650,7 @@ public class FFUtils {
 		}
 
 		// Gas canister override
-		if(tank.getFluid() != null && in.getItem() == ModItems.gas_canister && SpecialContainerFillLists.EnumGasCanister.contains(tank.getFluid().getFluid()) && tank.drain(4000, false) != null && tank.drain(4000, false).amount == 4000 && ItemGasCanister.isEmptyCanister(in) && ((ItemGasCanister.isFullCanister(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+		if(tank.getFluid() != null && in.getItem() == ModItems.gas_canister && SpecialContainerFillLists.EnumGasCanister.contains(tank.getFluid().getFluid()) && tank.drain(4000, false) != null && tank.drain(4000, false).amount == 4000 && ItemGasCanister.isEmptyCanister(in1) && ((ItemGasCanister.isFullCanister(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
 			FluidStack f = tank.drain(4000, true);
 			if(f == null)
 				return false;
@@ -646,7 +666,7 @@ public class FFUtils {
 
 		
 		// Cell override
-		if(tank.getFluid() != null && in.getItem() == ModItems.cell && SpecialContainerFillLists.EnumCell.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemCell.isEmptyCell(in) && ((ItemCell.isFullCell(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+		if(tank.getFluid() != null && in.getItem() == ModItems.cell && SpecialContainerFillLists.EnumCell.contains(tank.getFluid().getFluid()) && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemCell.isEmptyCell(in1) && ((ItemCell.isFullCell(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
 			FluidStack f = tank.drain(1000, true);
 			if(f == null)
 				return false;
@@ -663,7 +683,7 @@ public class FFUtils {
 		// Rod override (extra messy because I don't feel like restarting
 		// minecraft to make a helper method)
 		if(in.getItem() == ModItems.rod_empty) {
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 1000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 1000 && out.isEmpty()) {
 				tank.drain(1000, true);
 
 				in.shrink(1);
@@ -674,7 +694,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 1000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 1000 && out.isEmpty()) {
 				tank.drain(1000, true);
 
 				in.shrink(1);
@@ -685,7 +705,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 1000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 1000 && out.isEmpty()) {
 				tank.drain(1000, true);
 
 				in.shrink(1);
@@ -698,7 +718,7 @@ public class FFUtils {
 			}
 		}
 		if(in.getItem() == ModItems.rod_dual_empty) {
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 2000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 2000 && out.isEmpty()) {
 				tank.drain(2000, true);
 
 				in.shrink(1);
@@ -709,7 +729,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 2000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 2000 && out.isEmpty()) {
 				tank.drain(2000, true);
 
 				in.shrink(1);
@@ -720,7 +740,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 2000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 2000 && out.isEmpty()) {
 				tank.drain(2000, true);
 
 				in.shrink(1);
@@ -733,7 +753,7 @@ public class FFUtils {
 			}
 		}
 		if(in.getItem() == ModItems.rod_quad_empty) {
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 4000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.coolant && tank.getFluid().amount >= 4000 && out.isEmpty()) {
 				tank.drain(4000, true);
 
 				in.shrink(1);
@@ -744,7 +764,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 4000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == ModForgeFluids.tritium && tank.getFluid().amount >= 4000 && out.isEmpty()) {
 				tank.drain(4000, true);
 
 				in.shrink(1);
@@ -755,7 +775,7 @@ public class FFUtils {
 				}
 				return true;
 			}
-			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 4000 && (out.isEmpty() || in.getCount() == 1)) {
+			if(tank.getFluid() != null && tank.getFluid().getFluid() == FluidRegistry.WATER && tank.getFluid().amount >= 4000 && out.isEmpty()) {
 				tank.drain(4000, true);
 
 				in.shrink(1);
@@ -801,7 +821,7 @@ public class FFUtils {
 		return false;
 	}
 
-	private static boolean moveItems(IItemHandlerModifiable slots, int in, int out, boolean shouldUseContainerItem){
+	public static boolean moveItems(IItemHandlerModifiable slots, int in, int out, boolean shouldUseContainerItem){
 		if(slots.getStackInSlot(in) != null && !slots.getStackInSlot(in).isEmpty()) {
 			if(shouldUseContainerItem && slots.getStackInSlot(in).getItem().hasContainerItem(slots.getStackInSlot(in))) {
 				slots.setStackInSlot(in, slots.getStackInSlot(in).getItem().getContainerItem(slots.getStackInSlot(in)));

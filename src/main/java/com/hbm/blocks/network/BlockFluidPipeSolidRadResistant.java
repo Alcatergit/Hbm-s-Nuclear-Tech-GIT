@@ -11,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class BlockFluidPipeSolidRadResistant extends BlockFluidPipeSolid implements IRadResistantBlock {
@@ -40,10 +39,10 @@ public class BlockFluidPipeSolidRadResistant extends BlockFluidPipeSolid impleme
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
-		tooltip.add(TextFormatting.DARK_GREEN + "[" + I18nUtil.resolveKey("trait.radshield") + "]");
+		tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
 		float hardness = this.getExplosionResistance(null);
 		if(hardness > 50){
-			tooltip.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.blastres") + " " + hardness);
+			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
 		}
 	}
 }

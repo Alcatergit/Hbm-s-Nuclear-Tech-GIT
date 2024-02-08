@@ -71,7 +71,7 @@ public static BulletConfiguration getShellConfig() {
 
 			@Override
 			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
-				BulletConfigFactory.nuclearExplosion(bullet, x, y, z, 1);
+				BulletConfigFactory.nuclearExplosion(bullet, x, y, z, 25);
 			}
 		};
 		

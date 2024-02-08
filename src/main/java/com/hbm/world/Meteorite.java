@@ -8,10 +8,9 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK3;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.explosion.ExplosionParticle;
-import com.hbm.explosion.ExplosionParticleB;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -119,31 +118,12 @@ public class Meteorite {
 				return;
 			case 11:
 				//Atomic meteorite
-	    		EntityNukeExplosionMK3 entity0 = new EntityNukeExplosionMK3(world);
-	    		entity0.posX = x + 0.5D;
-	    	    entity0.posY = y + 0.5D;
-	    	    entity0.posZ = z + 0.5D;
-	    		if(!EntityNukeExplosionMK3.isJammed(world, entity0)){
-		    	    entity0.destructionRange = BombConfig.fatmanRadius;
-		    	    entity0.speed = BombConfig.blastSpeed;
-		    	    entity0.coefficient = 10.0F;
-		    	    	
-		    	    world.spawnEntity(entity0);
-		    	    if(MainRegistry.polaroidID == 11)
-		    	    	if(rand.nextInt(100) >= 0)
-		    	    	{
-		    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
-		    	    	} else {
-		    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
-		    	    	}
-		    	    else
-		    	    	if(rand.nextInt(100) == 0)
-		    	    	{
-		    	    		ExplosionParticleB.spawnMush(world, x, y - 3, z);
-		    	    	} else {
-		    	    		ExplosionParticle.spawnMush(world, x, y - 3, z);
-		    	    	}
-		    	}
+				world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.fatmanRadius, x + 0.5, y + 0.5, z + 0.5));
+	            if(rand.nextInt(100) == 0 || MainRegistry.polaroidID == 11){
+	                EntityNukeTorex.statFacBale(world, x + 0.5, y + 0.5, z + 0.5, BombConfig.fatmanRadius);
+	            } else {
+	                EntityNukeTorex.statFac(world, x + 0.5, y + 0.5, z + 0.5, BombConfig.fatmanRadius);
+	            }
 				return;
 			case 12:
 				//Star Blaster

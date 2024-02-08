@@ -27,5 +27,4 @@ public class TurretFritz extends TurretBaseNT {
 	public void openGUI(World world, EntityPlayer player, int x, int y, int z){
 		player.openGui(MainRegistry.instance, ModBlocks.guiID_fritz, world, x, y, z);
 	}
-
 }
