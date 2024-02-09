@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.RedBarrel;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
@@ -592,10 +594,15 @@ public class EntityBulletBase extends Entity implements IProjectile {
 
 		if (config.nuke > 0 && !world.isRemote) {
 			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, config.nuke, posX, posY, posZ).mute());
-			NBTTagCompound data = new NBTTagCompound();
-			data.setString("type", "muke");
-			if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0) data.setBoolean("balefire", true);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY + 0.5, posZ), new TargetPoint(dimension, posX, posY, posZ, 250));
+			
+			if(BombConfig.enableNukeClouds) {
+				if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0){
+					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+				}
+				else{
+					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+				}
+			}
 			world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
 		}
 

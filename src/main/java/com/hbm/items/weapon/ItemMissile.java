@@ -107,12 +107,12 @@ public class ItemMissile extends Item {
 	
 	public enum Rarity {
 		
-		COMMON(TextFormatting.GRAY + I18nUtil.resolveKey("rarity.common")),
-		UNCOMMON(TextFormatting.YELLOW + I18nUtil.resolveKey("rarity.uncommon")),
-		RARE(TextFormatting.GREEN + I18nUtil.resolveKey("rarity.rare")),
-		EPIC(TextFormatting.AQUA + I18nUtil.resolveKey("rarity.epic")),
-		LEGENDARY(TextFormatting.LIGHT_PURPLE + I18nUtil.resolveKey("rarity.legendary")),
-		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK(TextFormatting.DARK_AQUA + I18nUtil.resolveKey("rarity.strange"));
+		COMMON("rarity.common"),
+		UNCOMMON("rarity.uncommon"),
+		RARE("rarity.rare"),
+		EPIC("rarity.epic"),
+		LEGENDARY("rarity.legendary"),
+		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK("rarity.strange");
 		
 		String name;
 		
@@ -226,7 +226,7 @@ public class ItemMissile extends Item {
 			list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.health") + " " + TextFormatting.GREEN + health + "HP");
 		
 		if(this.rarity != null)
-			list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.rarity") + " " + TextFormatting.GRAY + this.rarity.name);
+			list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.rarity") + " " + TextFormatting.GRAY + I18nUtil.resolveKey(this.rarity.name));
 		if(author != null)
 			list.add(TextFormatting.WHITE + "  " + I18nUtil.resolveKey("desc.author") + " " + author);
 		if(witty != null)

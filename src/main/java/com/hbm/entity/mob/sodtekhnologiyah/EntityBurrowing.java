@@ -1,12 +1,13 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
+import com.hbm.interfaces.IRadiationImmune;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.MoverType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class EntityBurrowing extends EntityCreature {
+public abstract class EntityBurrowing extends EntityCreature implements IRadiationImmune {
 
 	protected float dragInAir;
 	protected float dragInGround;

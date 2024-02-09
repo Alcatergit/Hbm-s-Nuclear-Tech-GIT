@@ -3254,7 +3254,6 @@ public class ModItems {
 	public static final Item missile_nuclear = new ItemMissileStandard("missile_nuclear").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_nuclear_cluster = new ItemMissileStandard("missile_nuclear_cluster").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_volcano = new ItemMissileStandard("missile_volcano").setCreativeTab(MainRegistry.missileTab);
-	public static final Item missile_emp_strong = new ItemMissileStandard("missile_emp_strong").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_endo = new ItemMissileStandard("missile_endo").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_exo = new ItemMissileStandard("missile_exo").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_doomsday = new ItemMissileStandard("missile_doomsday").setCreativeTab(MainRegistry.missileTab);
@@ -3263,6 +3262,7 @@ public class ModItems {
 	public static final Item missile_bhole = new ItemMissileStandard("missile_bhole").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_schrabidium = new ItemMissileStandard("missile_schrabidium").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_emp = new ItemMissileStandard("missile_emp").setCreativeTab(MainRegistry.missileTab);
+	public static final Item missile_emp_strong = new ItemMissileStandard("missile_emp_strong").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_anti_ballistic = new ItemMissileStandard("missile_anti_ballistic").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_carrier = new ItemMissileStandard("missile_carrier").setCreativeTab(MainRegistry.missileTab);
 	public static final Item missile_soyuz_lander = new ItemCustomLore("missile_soyuz_lander").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab);

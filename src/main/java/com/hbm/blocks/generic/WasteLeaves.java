@@ -16,6 +16,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -129,9 +130,14 @@ public class WasteLeaves extends BlockOldLeaf implements IItemHazard {
 		return Blocks.LEAVES.isOpaqueCube(state);
 	}
 
-	 @Override
+	@Override
   	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		this.leavesFancy = !Blocks.LEAVES.isOpaqueCube(blockState);
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+	}
+
+	@Override
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
+		return;
 	}
 }

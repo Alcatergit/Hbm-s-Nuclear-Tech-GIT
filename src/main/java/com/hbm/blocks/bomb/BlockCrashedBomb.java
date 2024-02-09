@@ -2,14 +2,13 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.bomb.TileEntityCrashedBomb;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,14 +24,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -147,8 +144,8 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add("§a[Balefire Bomb]§r");
-		tooltip.add(" §eRadius: "+(int) (BombConfig.fatmanRadius * 1.25)+"m§r");
+		tooltip.add("§a["+ I18nUtil.resolveKey("trait.balefirebomb")+"]"+"§r");
+		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int) (BombConfig.fatmanRadius * 1.25))+"§r");
 	}
 
 	@Override
@@ -162,12 +159,10 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb {
 			bf.posZ = pos.getZ();
 			bf.destructionRange = (int) (BombConfig.fatmanRadius * 1.25);
 			world.spawnEntity(bf);
-			NBTTagCompound data = new NBTTagCompound();
-			data.setString("type", "muke");
-			data.setBoolean("balefire", true);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
+
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, (int) (BombConfig.fatmanRadius * 1.25));
+			}
         }
 	}
-
 }

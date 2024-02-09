@@ -224,7 +224,7 @@ public class ItemHazardModule {
 	}
 
 	public static String getSuffix(float radiation){
-		if(radiation < 1000){
+		if(radiation < 1000000){
 			return "";
 		} else if(radiation < 1000000000){
 			return I18nUtil.resolveKey("desc.mil");

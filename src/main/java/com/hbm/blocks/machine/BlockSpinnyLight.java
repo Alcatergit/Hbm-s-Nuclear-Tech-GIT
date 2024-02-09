@@ -169,15 +169,19 @@ public class BlockSpinnyLight extends BlockContainer {
 			if(state.getValue(POWERED) == false){
 				TileEntity te = world.getTileEntity(pos);
 				world.setBlockState(pos, state.withProperty(POWERED, true));
-				te.validate();
-				world.setTileEntity(pos, te);
+				if(te != null){
+					te.validate();
+					world.setTileEntity(pos, te);
+				}
 			}
 		} else {
 			if(state.getValue(POWERED) == true){
 				TileEntity te = world.getTileEntity(pos);
 				world.setBlockState(pos, state.withProperty(POWERED, false));
-				te.validate();
-				world.setTileEntity(pos, te);
+				if(te != null){
+					te.validate();
+					world.setTileEntity(pos, te);
+				}
 			}
 		}
 	}

@@ -270,15 +270,15 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	}
 	
 	public static enum EnumBurnFunc {
-		PASSIVE(TextFormatting.DARK_GREEN + I18nUtil.resolveKey("trait.rbmx.safe1")),			//const, no reactivity
-		PLATEU(TextFormatting.GREEN + I18nUtil.resolveKey("trait.rbmx.safe2")),					//(1 - e^(-x/25)) * reactivity * 100
-		SIGMOID(TextFormatting.GREEN + I18nUtil.resolveKey("trait.rbmx.safe3")),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
-		LOG_TEN(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.medium1")),		//log10(x + 1) * reactivity * 50
-		SQUARE_ROOT(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.medium2")),	//sqrt(x) * 10 * reactivity
-		ARCH(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.risky")),		//x-(x²/archLength) * reactivity
-		LINEAR(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmx.dangerous1")),				//x * reactivity
-		QUADRATIC(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmx.dangerous2")),		//x^2 / 100 * reactivity
-		EXPERIMENTAL(TextFormatting.WHITE + I18nUtil.resolveKey("trait.rbmx.experimental"));	//x * (sin(x) + 1)
+		PASSIVE("trait.rbmx.flux.passive"),				//const, no reactivity
+		PLATEU("trait.rbmx.flux.euler"),				//(1 - e^(-x/25)) * reactivity * 100
+		SIGMOID("trait.rbmx.flux.sigmoid"),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
+		LOG_TEN("trait.rbmx.flux.logten"),				//log10(x + 1) * reactivity * 50
+		SQUARE_ROOT("trait.rbmx.flux.squrt"),			//sqrt(x) * 10 * reactivity
+		ARCH("trait.rbmx.flux.arch"),					//x-(x²/archLength) * reactivity
+		LINEAR("trait.rbmx.flux.linear"),				//x * reactivity
+		QUADRATIC("trait.rbmx.flux.quadratic"),			//x^2 / 100 * reactivity
+		EXPERIMENTAL("trait.rbmx.flux.experimental");	//x * (sin(x) + 1)
 		
 		public String title = "";
 		
@@ -419,7 +419,7 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmx.splitsWith", I18nUtil.resolveKey(nType.unlocalized + ".x")));
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmx.splitsInto", I18nUtil.resolveKey(rType.unlocalized + ".x")));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.funcType", this.function.title));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.funcType", I18nUtil.resolveKey(this.function.title)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonGen", TextFormatting.WHITE + "x * " + xGen));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² / " + xBurn));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.heat", heat + "°C"));

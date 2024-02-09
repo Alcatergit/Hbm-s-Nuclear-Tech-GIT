@@ -23,7 +23,7 @@ public class RenderMirv extends Render<EntityMIRV> {
 	protected RenderMirv(RenderManager renderManager) {
 		super(renderManager);
 		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
-		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/TheGadget3_.png");
+		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/misc/universaldark.png");
 	}
 
 	@Override
