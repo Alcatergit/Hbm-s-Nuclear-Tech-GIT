@@ -50,10 +50,10 @@ public class HazardTypeRadiation extends HazardTypeBase {
 		
 		list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
 		String rad = "" + (Math.floor(level* 1000) / 1000);
-		list.add(TextFormatting.YELLOW + (rad + " RAD/s"));
+		list.add(TextFormatting.YELLOW + rad + " " + I18nUtil.resolveKey("desc.rads"));
 		
 		if(stack.getCount() > 1) {
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.stack")+" " + ((Math.floor(level * 1000 * stack.getCount()) / 1000) + " RAD/s"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.stack")+" " + (Math.floor(level * 1000 * stack.getCount()) / 1000) + " " + I18nUtil.resolveKey("desc.rads"));
 		}
 	}
 
