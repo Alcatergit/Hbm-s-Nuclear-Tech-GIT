@@ -52,7 +52,7 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 	public void drawExtras(Minecraft minecraft){
 		if(currentDrawHack != null){
 			if(currentDrawHack.tierUpper == -1){
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier") + " " + currentDrawHack.tierLower, 84, 40, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier", currentDrawHack.tierLower), 84, 40, 0x40404040);
 			} else {
 				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.mintier") + " " + currentDrawHack.tierLower, 74, 40, 0x40404040);
 				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.maxtier") + " " + currentDrawHack.tierUpper, 73, 50, 0x40404040);

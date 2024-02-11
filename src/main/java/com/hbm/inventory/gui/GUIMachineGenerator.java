@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -35,13 +36,12 @@ public class GUIMachineGenerator extends GuiInfoContainer {
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 88 - 52, 16, 52, diFurnace.power, diFurnace.maxPower);
 
 		if(diFurnace.tanks[0].getFluidAmount() <= 0) {
-			String[] text = new String[] { "Error: Water is required for",
-					"the reactor to function properly!" };
+			String[] text = I18nUtil.resolveKeyArray("desc.guimachinegen1");
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		}
 
 		if(diFurnace.tanks[1].getFluidAmount() <= 0) {
-			String[] text1 = new String[] { "Use of coolant is advised." };
+			String[] text1 = I18nUtil.resolveKeyArray("desc.guimachinegen2");
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		}
 		super.renderHoveredToolTip(mouseX, mouseY);

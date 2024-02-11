@@ -2,6 +2,7 @@ package com.hbm.inventory.gui;
 
 import java.io.IOException;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -42,17 +43,22 @@ public class GUIMachineLaunchTable extends GuiInfoContainer {
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 36, 16, 34, launcher.tanks[0], launcher.tankTypes[0]);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 36, 16, 34, launcher.tanks[1], launcher.tankTypes[1]);
-		
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 52, 16, 52, new String[] { "Solid Fuel: " + launcher.solid + "l" });
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 113, 34, 6, launcher.power, TileEntityLaunchTable.maxPower);
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 7, guiTop + 98, 18, 18, new String[] { "Size 10 & 10/15" });
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 25, guiTop + 98, 18, 18, new String[] { "Size 15 & 15/20" });
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 43, guiTop + 98, 18, 18, new String[] { "Size 20" });
 
-		String[] text = new String[] { "Acepts custom missiles", "of all sizes, as long as the", "correct size setting is selected." };
+		String [] text2 = I18nUtil.resolveKeyArray("desc.guimacheltable1");
+		String [] text3 = I18nUtil.resolveKeyArray("desc.guimacheltable2");
+		String [] text4 = I18nUtil.resolveKeyArray("desc.guimacheltable3");
+		String [] text5 = I18nUtil.resolveKeyArray("desc.solidfuellaunch", launcher.solid);
+		
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 52, 16, 52, text5);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 113, 34, 6, launcher.power, TileEntityLaunchTable.maxPower);
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 7, guiTop + 98, 18, 18, text2);
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 25, guiTop + 98, 18, 18, text3);
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 43, guiTop + 98, 18, 18, text4);
+
+		String[] text = I18nUtil.resolveKeyArray("desc.guimacheltable4");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
-		String[] text1 = new String[] { "Detonator can only trigger center block." };
+		String[] text1 = I18nUtil.resolveKeyArray("desc.guimachcomplauncher2");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

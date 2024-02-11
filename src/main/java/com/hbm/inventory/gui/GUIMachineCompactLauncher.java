@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -35,14 +36,15 @@ public class GUIMachineCompactLauncher extends GuiInfoContainer {
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 36, 16, 34, launcher.tanks[0], launcher.tankTypes[0]);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 36, 16, 34, launcher.tanks[1], launcher.tankTypes[1]);
+		String[] text2 = I18nUtil.resolveKeyArray("desc.solidfuellaunch", launcher.solid);
 		
-		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 52, 16, 52, new String[] { "Solid Fuel: " + launcher.solid + "l" });
+		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 88 - 52, 16, 52, text2);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 113, 34, 6, launcher.power, TileEntityCompactLauncher.maxPower);
 
-		String[] text = new String[] { "Only accepts custom missiles", "of size 10 and 10/15." };
+		String[] text = I18nUtil.resolveKeyArray("desc.guimachcomplauncher1");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
-		String[] text1 = new String[] { "Detonator can only trigger center block." };
+		String[] text1 = I18nUtil.resolveKeyArray("desc.guimachcomplauncher2");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

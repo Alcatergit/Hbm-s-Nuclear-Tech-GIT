@@ -2,6 +2,7 @@ package com.hbm.inventory.gui;
 
 import java.io.IOException;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -41,10 +42,7 @@ public class GUIMachineCyclotron extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 72, 7, 52, cyclotron.coolant, ModForgeFluids.coolant);
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 90, 7, 34, cyclotron.amat, ModForgeFluids.amat);
 
-		String[] text = new String[] { "Acceptable upgrades:",
-				" -Speed (stacks to level 3)",
-				" -Effectiveness (stacks to level 3)",
-				" -Power Saving (stacks to level 3)"};
+		String[] text = I18nUtil.resolveKeyArray("desc.guiacceptupgrades2");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 21, guiTop + 75, 8, 8, mouseX, mouseY, text);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

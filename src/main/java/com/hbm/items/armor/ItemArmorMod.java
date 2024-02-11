@@ -2,6 +2,7 @@ package com.hbm.items.armor;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
@@ -41,32 +42,32 @@ public class ItemArmorMod extends ItemCustomLore {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, list, flagIn);
-		list.add(TextFormatting.DARK_PURPLE + "Applicable to:");
+		list.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("desc.applicable"));
 		
 		if(helmet && chestplate && leggings && boots) {
-			list.add("  All");
+			list.add("  " + I18nUtil.resolveKey("desc.applicableall"));
 		} else {
 
 			if(helmet)
-				list.add("  Helmets");
+				list.add("  " + I18nUtil.resolveKey("desc.applicableh"));
 			if(chestplate)
-				list.add("  Chestplates");
+				list.add("  " + I18nUtil.resolveKey("desc.applicablec"));
 			if(leggings)
-				list.add("  Leggings");
+				list.add("  " + I18nUtil.resolveKey("desc.applicablel"));
 			if(boots)
-				list.add("  Boots");
+				list.add("  " + I18nUtil.resolveKey("desc.applicableb"));
 		}
-		list.add(TextFormatting.DARK_PURPLE + "Slot:");
+		list.add(TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("desc.applicableslot"));
 		
 		switch(this.type) {
-		case ArmorModHandler.helmet_only: list.add("  Helmet"); break;
-		case ArmorModHandler.plate_only: list.add("  Chestplate"); break;
-		case ArmorModHandler.legs_only: list.add("  Leggings"); break;
-		case ArmorModHandler.boots_only: list.add("  Boots"); break;
-		case ArmorModHandler.servos: list.add("  Servos"); break;
-		case ArmorModHandler.cladding: list.add("  Cladding"); break;
-		case ArmorModHandler.kevlar: list.add("  Insert"); break;
-		case ArmorModHandler.extra: list.add("  Special"); break;
+		case ArmorModHandler.helmet_only: list.add("  " + I18nUtil.resolveKey("desc.applicableh1")); break;
+		case ArmorModHandler.plate_only: list.add("  " + I18nUtil.resolveKey("desc.applicablec1")); break;
+		case ArmorModHandler.legs_only: list.add("  " + I18nUtil.resolveKey("desc.applicablel1")); break;
+		case ArmorModHandler.boots_only: list.add("  " + I18nUtil.resolveKey("desc.applicableb1")); break;
+		case ArmorModHandler.servos: list.add("  " + I18nUtil.resolveKey("desc.applicableservo")); break;
+		case ArmorModHandler.cladding: list.add("  " + I18nUtil.resolveKey("desc.applicablecladding")); break;
+		case ArmorModHandler.kevlar: list.add("  " + I18nUtil.resolveKey("desc.applicableinsert")); break;
+		case ArmorModHandler.extra: list.add("  " + I18nUtil.resolveKey("desc.applicableextra")); break;
 		}
 	}
 	

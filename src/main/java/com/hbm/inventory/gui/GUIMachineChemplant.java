@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -46,10 +47,7 @@ public class GUIMachineChemplant extends GuiInfoContainer {
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		}
 
-		String[] text = new String[] { "Acceptable upgrades:",
-				" -Red (speed)",
-				" -Blue (energy saving)",
-				"Max upgrade level is 3"};
+		String[] text = I18nUtil.resolveKeyArray("desc.guiacceptupgrades1");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 105, guiTop + 40, 8, 8, guiLeft + 105, guiTop + 40 + 16, text);
 	}
 

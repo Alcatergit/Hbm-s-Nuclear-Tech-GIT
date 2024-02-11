@@ -270,15 +270,15 @@ public class ItemRBMKRod extends Item implements IItemHazard {
 	}
 	
 	public static enum EnumBurnFunc {
-		PASSIVE("trait.rbmx.flux.passive"),				//const, no reactivity
-		PLATEU("trait.rbmx.flux.euler"),				//(1 - e^(-x/25)) * reactivity * 100
-		SIGMOID("trait.rbmx.flux.sigmoid"),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
-		LOG_TEN("trait.rbmx.flux.logten"),				//log10(x + 1) * reactivity * 50
-		SQUARE_ROOT("trait.rbmx.flux.squrt"),			//sqrt(x) * 10 * reactivity
-		ARCH("trait.rbmx.flux.arch"),					//x-(x²/archLength) * reactivity
-		LINEAR("trait.rbmx.flux.linear"),				//x * reactivity
-		QUADRATIC("trait.rbmx.flux.quadratic"),			//x^2 / 100 * reactivity
-		EXPERIMENTAL("trait.rbmx.flux.experimental");	//x * (sin(x) + 1)
+		PASSIVE("§2SAFE / PASSIVE"),				//const, no reactivity
+		PLATEU("§aSAFE / EULER"),				//(1 - e^(-x/25)) * reactivity * 100
+		SIGMOID("§aSAFE / SIGMOID"),				//100 / (1 + e^(-(x - 50) / 10)) <- tiny amount of reactivity at x=0 !
+		LOG_TEN("§eMEDIUM / LOGARITHMIC"),				//log10(x + 1) * reactivity * 50
+		SQUARE_ROOT("§eMEDIUM / SQUARE ROOT"),			//sqrt(x) * 10 * reactivity
+		ARCH("§6RISKY / NEGATIVE-QUADRATIC"),					//x-(x²/archLength) * reactivity
+		LINEAR("§cDANGEROUS / LINEAR"),				//x * reactivity
+		QUADRATIC("§4DANGEROUS / QUADRATIC"),			//x^2 / 100 * reactivity
+		EXPERIMENTAL("§fEXPERIMENTAL / SINE SLOPE");	//x * (sin(x) + 1)
 		
 		public String title = "";
 		
