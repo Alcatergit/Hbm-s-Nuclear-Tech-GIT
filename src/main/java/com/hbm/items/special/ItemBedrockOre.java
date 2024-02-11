@@ -83,9 +83,9 @@ public class ItemBedrockOre extends Item {
 		if(stack.getItem() == ModItems.ore_bedrock){
 			String oreName = BedrockOreRegistry.oreIndexes.get(stack.getMetadata());
 			int tier = BedrockOreRegistry.getOreTier(oreName);
-			list.add("§6"+I18nUtil.resolveKey("desc.tier")+" "+tier);
+			list.add("§6"+I18nUtil.resolveKey("desc.tier", tier));
 			FluidStack req = BedrockOreRegistry.getFluidRequirement(tier);
-			list.add("§e"+I18nUtil.resolveKey("desc.requires")+" " + req.amount + "mB " + req.getFluid().getLocalizedName(req));
+			list.add("§e"+I18nUtil.resolveKey("desc.requires", req.amount, req.getFluid().getLocalizedName(req)));
 		}
 		super.addInformation(stack, world, list, flagIn);
 	}

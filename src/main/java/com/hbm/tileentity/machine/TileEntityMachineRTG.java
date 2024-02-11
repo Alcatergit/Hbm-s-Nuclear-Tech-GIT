@@ -57,7 +57,7 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				if(isItemValid(slot, stack))
 					return super.insertItem(slot, stack, simulate);
-				return ItemStack.EMPTY;
+				return stack;
 			}
 
 			public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {

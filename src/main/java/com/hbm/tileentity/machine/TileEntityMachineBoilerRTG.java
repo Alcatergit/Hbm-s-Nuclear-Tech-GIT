@@ -293,7 +293,4 @@ public class TileEntityMachineBoilerRTG extends TileEntityMachineBase implements
 		if(mark)
 			markDirty();
 	}
-
-	
-
 }

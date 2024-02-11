@@ -36,8 +36,8 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 	@SideOnly(Side.CLIENT)
 	private ModelM65 modelM65;
 	
-	private ResourceLocation tex = new ResourceLocation("hbm:textures/models/ModelM65.png");
-	private ResourceLocation tex_mono = new ResourceLocation("hbm:textures/models/ModelM65Mono.png");
+	private ResourceLocation tex = new ResourceLocation("hbm:textures/armor/ModelM65.png");
+	private ResourceLocation tex_mono = new ResourceLocation("hbm:textures/armor/ModelM65Mono.png");
 	
 	public ItemModGasmask(String s) {
 		super(ArmorModHandler.helmet_only, true, false, false, false, s);

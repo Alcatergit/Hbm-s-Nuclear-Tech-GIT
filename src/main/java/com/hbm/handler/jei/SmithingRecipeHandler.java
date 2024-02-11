@@ -49,7 +49,7 @@ public class SmithingRecipeHandler implements IRecipeCategory<SmithingRecipe> {
 	@Override
 	public void drawExtras(Minecraft minecraft){
 		if(currentDrawHack != null){
-			minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier") + " " + currentDrawHack.tier, 30, -12, 0x40404040);
+			minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier", currentDrawHack.tier), 30, -12, 0x40404040);
 		}
 	}
 

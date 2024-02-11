@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -100,8 +102,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
                 outputStack.setCount(fillAmount);
 
                 ItemStack rest = chest.insertItem(i, outputStack, true);
-                if(fillAmount-rest.getCount() > 0 && fillAmount > 0){
-                    stack.shrink(fillAmount-rest.getCount());
+                if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
+                    stack.shrink(outputStack.getCount());
                     chest.insertItem(i, outputStack, false);
                     return true;
                 }

@@ -348,7 +348,7 @@ public class ItemCustomLore extends Item {
 
 		if(this == ModItems.factory_core_titanium || this == ModItems.factory_core_advanced)
 		{
-			list.add("Used in factories to stop the speed from changing.");
+			list.add("Used in factories to make the speed change");
 		}
 		if(this == ModItems.undefined && world != null) {
 			

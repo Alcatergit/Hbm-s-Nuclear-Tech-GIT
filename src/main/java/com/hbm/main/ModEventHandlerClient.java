@@ -1996,9 +1996,7 @@ public class ModEventHandlerClient {
 				}
 			} else {
 				
-				list.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
-						TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
-						TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display protection info");
+				list.add(I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
 			}
 		}
 
