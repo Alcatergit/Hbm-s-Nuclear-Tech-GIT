@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
@@ -22,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class ItemMultiDetonator extends Item {
@@ -37,19 +38,19 @@ public class ItemMultiDetonator extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.add("Shift right-click block to add position,");
-		list.add("Right-click to detonate!");
-		list.add("Shift right-click in the air to clear postitions.");
+		list.add(I18nUtil.resolveKey("desc.callmultdet1"));
+		list.add(I18nUtil.resolveKey("desc.calldet2"));
+		list.add(I18nUtil.resolveKey("desc.callmultdet2"));
 		
 		if(stack.getTagCompound() == null || getLocations(stack) == null)
 		{
-			list.add("§eNo positions set§r");
+			list.add("§e"+I18nUtil.resolveKey("chat.posnoset")+"§r");
 		} else {
 			
 			int[][] locs = getLocations(stack);
 			
 			for(int i = 0; i < locs[0].length; i++) {
-				list.add("§aPos "+(i+1)+" set to " + locs[0][i] + ", " + locs[1][i] + ", " + locs[2][i]);
+				list.add("§a" + I18nUtil.resolveKey("chat.possetaxyz", (i+1), locs[0][i], locs[1][i], locs[2][i]));
 			}
 		}
 	}
@@ -68,7 +69,7 @@ public class ItemMultiDetonator extends Item {
 			
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation("§a[Position added]§r"));
+				player.sendMessage(new TextComponentString("§a["+I18nUtil.resolveKey("chat.posadd")+"]§r"));
 			}
 			
 	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.AMBIENT, 2.0F, 1.0F);
@@ -85,7 +86,7 @@ public class ItemMultiDetonator extends Item {
 		if(stack.getTagCompound() == null || getLocations(stack) == null)
 		{
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("§c[Error]: Position not set.§r"));
+				player.sendMessage(new TextComponentString("§c"+I18nUtil.resolveKey("chat.posnoseterror")+"§r"));
 			
 		} else {
 			
@@ -114,7 +115,7 @@ public class ItemMultiDetonator extends Item {
 				}
 				
 				if (world.isRemote) {
-					player.sendMessage(new TextComponentTranslation("§2[Detonated] (" + succ + "/" + locs[0].length + ")§r"));
+					player.sendMessage(new TextComponentString("§2"+I18nUtil.resolveKey("chat.detonatedmulti", succ, locs[0].length)));
 				}
 			} else {
 
@@ -126,7 +127,7 @@ public class ItemMultiDetonator extends Item {
 				
 				if(world.isRemote)
 				{
-					player.sendMessage(new TextComponentTranslation("§eAll positions removed.§r"));
+					player.sendMessage(new TextComponentString("§e"+I18nUtil.resolveKey("chat.removdedallpos")));
 				}
 			}
 		}

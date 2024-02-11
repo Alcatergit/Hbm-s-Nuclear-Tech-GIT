@@ -52,8 +52,7 @@ public class RadioRec extends BlockContainer {
 			return true;
 		} else if(!player.isSneaking())
 		{
-			//FMLNetworkHandler.openGui(player, MainRegistry.instance, ModBlocks.guiID_radiorec, world, x, y, z);
-			player.sendMessage(new TextComponentTranslation("It's a broken radio, it doesn't do anything. What did you expect, a plasma TV?"));
+			player.sendMessage(new TextComponentTranslation("chat.brokenradio"));
 			return true;
 		} else {
 			//return true;

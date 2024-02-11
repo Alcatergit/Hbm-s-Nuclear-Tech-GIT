@@ -2,6 +2,7 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
@@ -55,7 +56,7 @@ public class ItemWiring extends Item {
 				stack.getTagCompound().setInteger("z", pos.getZ());
 
 				if (world.isRemote)
-					player.sendMessage(new TextComponentTranslation("§6[Cable] §eStart set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()));
+					player.sendMessage(new TextComponentTranslation("chat.wiring.start", pos.getX(), pos.getY(), pos.getZ()));
 			} else {
 				if (stack.hasTagCompound()) {
 					int x1 = stack.getTagCompound().getInteger("x");
@@ -68,11 +69,11 @@ public class ItemWiring extends Item {
 						if (world.isRemote){
 							BlockPos vector = newPos.subtract(pos);
 							int distance = (int)MathHelper.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
-							player.sendMessage(new TextComponentTranslation("§6[Cable] §eDistance is too long "+distance+"/"+thisPylon.getMaxWireLength()+"m"));
+							player.sendMessage(new TextComponentTranslation("chat.wiring.tofar", distance, thisPylon.getMaxWireLength()));
 						}
 					} else if(pos == newPos){
 						if (world.isRemote)
-							player.sendMessage(new TextComponentTranslation("§6[Cable] §eIt cant connect it to itself"));
+							player.sendMessage(new TextComponentTranslation("chat.wiring.noself"));
 					} else{
 						Block a = world.getBlockState(newPos).getBlock();
 						BlockPos coreB = newPos;
@@ -93,11 +94,11 @@ public class ItemWiring extends Item {
 								targetPylon.addConnection(thisPylon.getPos());
 
 								if (world.isRemote)
-									player.sendMessage(new TextComponentTranslation("§6[Cable] §eCables Connected"));
+									player.sendMessage(new TextComponentTranslation("chat.wiring.connected="));
 							}else{
 								if(thisPylon.getConnectionType() != targetPylon.getConnectionType()){
 									if (world.isRemote)
-										player.sendMessage(new TextComponentTranslation("§6[Cable] §eCables have different types"));
+										player.sendMessage(new TextComponentTranslation("chat.wiring.notcompatible"));
 								}
 							}
 						}
@@ -109,7 +110,7 @@ public class ItemWiring extends Item {
 				if(stack.hasTagCompound()) {
 					stack.setTagCompound(null);
 					if (world.isRemote)
-						player.sendMessage(new TextComponentTranslation("§6[Cable] §ePylon position cleared"));
+						player.sendMessage(new TextComponentTranslation("chat.wiring.cleared"));
 				}
 			} else {
 				if(stack.hasTagCompound() && world.isRemote) {
@@ -120,7 +121,7 @@ public class ItemWiring extends Item {
 					BlockPos vector = new BlockPos(x1, y1, z1).subtract(pos);
 					int distance = (int)MathHelper.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
 					
-					player.sendMessage(new TextComponentTranslation("§6[Cable] §ePylon distance: "+distance+"m"));
+					player.sendMessage(new TextComponentTranslation("chat.wiring.measure", distance));
 				}
 			}
 		}
@@ -134,12 +135,12 @@ public class ItemWiring extends Item {
 			int x1 = stack.getTagCompound().getInteger("x");
 			int y1 = stack.getTagCompound().getInteger("y");
 			int z1 = stack.getTagCompound().getInteger("z");
-			tooltip.add("§6Start Pole: "+x1+", "+y1+", "+z1);
+			tooltip.add(I18nUtil.resolveKey("desc.wiring.start", x1, y1, z1));
 		} else {
-			tooltip.add("§eRight-click poles to connect");
-			tooltip.add("§eRight-click any block to show distance");
-			tooltip.add("§eShift-Right-click to set start pole");
-			tooltip.add("§eShift-Right-click any block to clear start pole");
+			tooltip.add(I18nUtil.resolveKey("desc.wiring.1"));
+			tooltip.add(I18nUtil.resolveKey("desc.wiring.2"));
+			tooltip.add(I18nUtil.resolveKey("desc.wiring.3"));
+			tooltip.add(I18nUtil.resolveKey("desc.wiring.4"));
 			
 		}
 	}

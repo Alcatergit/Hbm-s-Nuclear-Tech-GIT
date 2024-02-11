@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
@@ -20,7 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class ItemLaserDetonator extends Item {
@@ -35,7 +36,7 @@ public class ItemLaserDetonator extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.add("Aim & click to detonate!");
+		list.add(I18nUtil.resolveKey("item.detonator_laser.desc"));
 	}
 	
 	@Override
@@ -50,11 +51,11 @@ public class ItemLaserDetonator extends Item {
 	    		if(GeneralConfig.enableExtendedLogging)
 	    			MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + pos.getX() + " / " + pos.getY() + " / " + pos.getZ() + " by " + player.getDisplayName() + "!");
 	    		
-	    		player.sendMessage(new TextComponentTranslation("§2[Detonated]§r"));
+	    		player.sendMessage(new TextComponentString("§2["+I18nUtil.resolveKey("chat.detonated")+"]"+"§r"));
 	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
 	        	
 	    	} else {
-	    		player.sendMessage(new TextComponentTranslation("§cTarget can not be detonated.§r"));
+	    		player.sendMessage(new TextComponentString("§c"+I18nUtil.resolveKey("chat.posbadrror")+"§r"));
 	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.AMBIENT, 1.0F, 1.0F);
 	    	}
 		}

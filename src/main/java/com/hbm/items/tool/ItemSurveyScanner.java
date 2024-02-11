@@ -2,6 +2,7 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
@@ -40,9 +41,9 @@ public class ItemSurveyScanner extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Right click to perform scan.");
-		tooltip.add("Shift click to change mode.");
-		tooltip.add("Current mode: " + (getMode(stack) == 0 ? "§3Resources§r" : "§6Structures§r"));
+		tooltip.add(I18nUtil.resolveKey("desc.surveyscanner.1"));
+		tooltip.add(I18nUtil.resolveKey("desc.surveyscanner.2"));
+		tooltip.add(I18nUtil.resolveKey("desc.surveyscanner.3", (getMode(stack) == 0 ? I18nUtil.resolveKey("desc.surveyscanner.resources") : I18nUtil.resolveKey("desc.surveyscanner.structures"))));
 	}
 	
 	public int getMode(ItemStack stack) {
@@ -102,7 +103,7 @@ public class ItemSurveyScanner extends Item {
 
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation(mode == 0 ? "§6[Scanner]§e Mode switched to §6Structures§r" : "§3[Scanner]§b Mode switched to §3Resources§r"));
+				player.sendMessage(new TextComponentTranslation(mode == 0 ? "chat.surveyscanner.switchto.structures" : "chat.surveyscanner.switchto.resources"));
 			}
 			
 		} else {
@@ -130,7 +131,7 @@ public class ItemSurveyScanner extends Item {
 	    	
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation(mode == 0 ? ("§3[Scanner]§b Ore Level: §3" + level) : ("§6[Scanner]§e Structure Level: §6" + level)));
+				player.sendMessage(new TextComponentTranslation(mode == 0 ? "chat.surveyscanner.level.resources" : "chat.surveyscanner.level.structures", level));
 			}
 		}
 		
@@ -141,6 +142,7 @@ public class ItemSurveyScanner extends Item {
 	
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		//Alcater: o_o DAMN an Easteregg
 		if(world.getBlockState(pos).getBlock() == ModBlocks.block_beryllium && Library.hasInventoryItem(player.inventory, ModItems.entanglement_kit)) {
     		player.changeDimension(1);
     		return EnumActionResult.SUCCESS;

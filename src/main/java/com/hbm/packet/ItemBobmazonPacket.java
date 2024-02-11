@@ -64,26 +64,23 @@ public class ItemBobmazonPacket implements IMessage {
 			p.getServer().addScheduledTask(() -> {
 				World world = p.world;
 
-				if(p.getHeldItemOffhand().getItem() instanceof ItemCatalog){
-					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r You must use your main hand!"));
-					return;
-				}
-				
+				Item mainHand = p.getHeldItemMainhand().getItem();
+				Item offHand = p.getHeldItemOffhand().getItem();
 				Offer offer = null;
-				if(p.getHeldItemMainhand().getItem() == ModItems.bobmazon_materials)
+				if(mainHand == ModItems.bobmazon_materials || offHand == ModItems.bobmazon_materials)
 					offer = BobmazonOfferFactory.materials.get(m.offer);
-				if(p.getHeldItemMainhand().getItem() == ModItems.bobmazon_machines)
+				if(mainHand == ModItems.bobmazon_machines || offHand == ModItems.bobmazon_machines)
 					offer = BobmazonOfferFactory.machines.get(m.offer);
-				if(p.getHeldItemMainhand().getItem() == ModItems.bobmazon_weapons)
+				if(mainHand == ModItems.bobmazon_weapons || offHand == ModItems.bobmazon_weapons)
 					offer = BobmazonOfferFactory.weapons.get(m.offer);
-				if(p.getHeldItemMainhand().getItem() == ModItems.bobmazon_tools)
+				if(mainHand == ModItems.bobmazon_tools || offHand == ModItems.bobmazon_tools)
 					offer = BobmazonOfferFactory.tools.get(m.offer);
-				if(p.getHeldItemMainhand().getItem() == ModItems.bobmazon_hidden)
+				if(mainHand == ModItems.bobmazon_hidden || offHand == ModItems.bobmazon_hidden)
 					offer = BobmazonOfferFactory.special.get(m.offer);
 				
 				if(offer == null) {
-					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r There appears to be a mismatch between the offer you have requested and the offers that exist."));
-					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Engaging fail-safe..."));
+					p.sendMessage(new TextComponentTranslation("chat.bobmazon.failsafe.1"));
+					p.sendMessage(new TextComponentTranslation("chat.bobmazon.failsafe.2"));
 					p.attackEntityFrom(ModDamageSource.nuclearBlast, 1000);
 					p.motionY = 2.0D;
 					return;
@@ -109,11 +106,11 @@ public class ItemBobmazonPacket implements IMessage {
 						
 						world.spawnEntity(bob);
 					} else {
-						p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Not enough caps!"));
+						p.sendMessage(new TextComponentTranslation("chat.bobmazon.broke"));
 					}
 					
 				} else {
-					p.sendMessage(new TextComponentTranslation("§3§l[Vault-tec]§r Achievement requirement not met!"));
+					p.sendMessage(new TextComponentTranslation("chat.bobmazon.noob"));
 				}
 			});
 			

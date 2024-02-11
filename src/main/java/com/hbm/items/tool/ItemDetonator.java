@@ -43,7 +43,7 @@ public class ItemDetonator extends Item {
 		{
 			list.add("§e"+I18nUtil.resolveKey("chat.posnoset")+"§r");
 		} else {
-			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("chat.possetxyz", stack.getTagCompound().getInteger("x"), stack.getTagCompound().getInteger("y"), stack.getTagCompound().getInteger("z"))+"§r");
+			list.add("§a" + I18nUtil.resolveKey("chat.possetxyz", stack.getTagCompound().getInteger("x"), stack.getTagCompound().getInteger("y"), stack.getTagCompound().getInteger("z"))+"§r");
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class ItemDetonator extends Item {
 			
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("chat.posset") + "]"+"§r"));
+				player.sendMessage(new TextComponentTranslation("§2[" + I18nUtil.resolveKey("chat.posset") + "]"+"§r"));
 			}
 			
 	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.AMBIENT, 1.0F, 1.0F);
@@ -98,7 +98,7 @@ public class ItemDetonator extends Item {
 				}
 				if(world.isRemote)
 				{
-		    		player.sendMessage(new TextComponentTranslation(TextFormatting.DARK_GREEN+"["+I18nUtil.resolveKey("chat.detonated")+"]"+"§r"));
+		    		player.sendMessage(new TextComponentTranslation("§2["+I18nUtil.resolveKey("chat.detonated")+"]"+"§r"));
 				}
 			 } else {
 				if(world.isRemote)

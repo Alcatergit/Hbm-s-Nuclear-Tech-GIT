@@ -41,7 +41,7 @@ public class BlockCanCrate extends Block {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(worldIn.isRemote)
 		{
-			playerIn.sendMessage(new TextComponentTranslation("The one crate you are allowed to smash!"));
+			playerIn.sendMessage(new TextComponentTranslation("chat.crate.cansmash"));
 		}
 		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}

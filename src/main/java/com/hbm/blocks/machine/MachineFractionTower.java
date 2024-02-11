@@ -75,7 +75,7 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 				
 				if(player.getHeldItem(hand).isEmpty()) {
 					if(world.isRemote){
-						player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "=== FRACTIONING TOWER Y:" + pos[1] + " ==="));
+						player.sendMessage(new TextComponentTranslation("chat.fractioning.y", pos[1]));
 
 						for(int i = 0; i < frac.tanks.length; i++)
 							player.sendMessage(new TextComponentTranslation(frac.types[i].getUnlocalizedName()).appendSibling(new TextComponentString(": " + frac.tanks[i].getFluidAmount() + "/" + frac.tanks[i].getCapacity() + "mB")));
@@ -84,13 +84,13 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 					
 					if(world.getTileEntity(new BlockPos(pos[0], pos[1] - 3, pos[2])) instanceof TileEntityMachineFractionTower) {
 						if(world.isRemote){
-							player.sendMessage(new TextComponentString(TextFormatting.RED + "You can only change the type in the bottom segment!"));
+							player.sendMessage(new TextComponentTranslation("chat.fractioning.onlybottom"));
 						}
 					} else {
 						Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
 						if(RefineryRecipes.getFractions(type) == null){
 							if(world.isRemote){
-								player.sendMessage(new TextComponentString("§cNo recipe found for §e"+type.getLocalizedName(new FluidStack(type, 1))));
+								player.sendMessage(new TextComponentTranslation("chat.fractioning.norecipe", type.getLocalizedName(new FluidStack(type, 1))));
 							}
 							return false;
 						}
@@ -98,7 +98,7 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 						frac.setTankType(0, type);
 						frac.markDirty();
 						if(world.isRemote){
-							player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Changed type to §a" + I18n.format(type.getUnlocalizedName())));
+							player.sendMessage(new TextComponentTranslation("chat.fractioning.changedto", I18n.format(type.getUnlocalizedName())));
 						}
 					}
 				}

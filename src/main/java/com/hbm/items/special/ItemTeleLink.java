@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityMachineTeleporter;
@@ -46,7 +47,7 @@ public class ItemTeleLink extends Item {
 				te.markDirty();
 
 				if (world.isRemote)
-					player.sendMessage(new TextComponentTranslation("§a[TeleLink] Teleporter has been successfully linked to ["+ x1+", "+y1+", "+z1+"]"));
+					player.sendMessage(new TextComponentTranslation("chat.telelink.linked", x1, y1, z1));
 
 				stack.setTagCompound(null);
 			}
@@ -64,7 +65,7 @@ public class ItemTeleLink extends Item {
 			stack.getTagCompound().setInteger("z", z);
 
 			if (world.isRemote){
-				player.sendMessage(new TextComponentTranslation("§a[TeleLink] Set target coordinates to [" + x + ", " + y + ", " + z + "]"));
+				player.sendMessage(new TextComponentTranslation("chat.telelink.set", x, y, z));
 			}
 		}
 
@@ -74,11 +75,11 @@ public class ItemTeleLink extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
-			tooltip.add("§aPos set to " + stack.getTagCompound().getInteger("x") + ", " + stack.getTagCompound().getInteger("y") + ", " + stack.getTagCompound().getInteger("z")+"§r");
+			tooltip.add("§a"+I18nUtil.resolveKey("chat.possetxyz", stack.getTagCompound().getInteger("x"), stack.getTagCompound().getInteger("y"), stack.getTagCompound().getInteger("z")));
 		} else {
-			tooltip.add("Right-Click to select target position.");
-			tooltip.add("Then Shift-Right-Click a teleporter.");
-			tooltip.add("§eNo position set§r");
+			tooltip.add(I18nUtil.resolveKey("item.linker.desc1"));
+			tooltip.add(I18nUtil.resolveKey("item.linker.desc2"));
+			tooltip.add("§e"+I18nUtil.resolveKey("chat.posnoset"));
 		}
 	}
 }
