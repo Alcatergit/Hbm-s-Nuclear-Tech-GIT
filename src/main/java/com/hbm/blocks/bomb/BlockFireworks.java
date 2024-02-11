@@ -2,6 +2,7 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.bomb.TileEntityFireworks;
@@ -92,11 +93,11 @@ public class BlockFireworks extends BlockContainer {
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add("Activate via redstone");
-		tooltip.add("§6Rightclick block with§r");
-		tooltip.add(" - gunpowder/sulfur -> charges");
-		tooltip.add(" - dye -> color");
-		tooltip.add(" - nametag -> message");
+		tooltip.add(I18nUtil.resolveKey("desc.fireworks.1"));
+		tooltip.add(I18nUtil.resolveKey("desc.fireworks.2"));
+		tooltip.add(" "+I18nUtil.resolveKey("desc.fireworks.3"));
+		tooltip.add(" "+I18nUtil.resolveKey("desc.fireworks.4"));
+		tooltip.add(" "+I18nUtil.resolveKey("desc.fireworks.5"));
 
 	}
 }

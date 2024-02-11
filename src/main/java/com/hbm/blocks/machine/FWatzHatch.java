@@ -70,10 +70,10 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 					{
 						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() + 6);
 					} else {
-						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
+						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
 					}
 				} else {
-					player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Core not found!"));
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
 				}
 			}
 			if(e == EnumFacing.SOUTH)
@@ -84,10 +84,10 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 					{
 						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() - 6);
 					} else {
-						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
+						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
 					}
 				} else {
-					player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Core not found!"));
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
 				}
 			}
 			if(e == EnumFacing.WEST)
@@ -98,10 +98,10 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 					{
 						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() + 6, pos.getY() + 1, pos.getZ());
 					} else {
-						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
+						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
 					}
 				} else {
-					player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Core not found!"));
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
 				}
 			}
 			if(e == EnumFacing.EAST)
@@ -112,10 +112,10 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 					{
 						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() - 6, pos.getY() + 1, pos.getZ());
 					} else {
-						player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Structure not valid!"));
+						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
 					}
 				} else {
-					player.sendMessage(new TextComponentTranslation("[Fusionary Watz Plant] Error: Reactor Core not found!"));
+					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
 				}
 			}
 			return true;

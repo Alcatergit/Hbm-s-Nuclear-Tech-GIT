@@ -67,7 +67,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
-import com.hbm.util.I18nUtil;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.packet.AssemblerRecipeSyncPacket;
@@ -1018,12 +1017,12 @@ public class ModEventHandler {
 			PacketDispatcher.sendTo(new KeybindPacket(EnumKeybind.TOGGLE_HEAD, props.getEnableHUD()), playerMP);
 			
 			if (GeneralConfig.enableWelcomeMessage) {
-				e.player.sendMessage(new TextComponentTranslation(TextFormatting.DARK_AQUA + I18nUtil.resolveKey("chat.welcome")+"§r"));
+				e.player.sendMessage(new TextComponentTranslation("chat.welcome"));
 			}
 
 			if(HTTPHandler.newVersion && GeneralConfig.changelog) {
-				e.player.sendMessage(new TextComponentString(TextFormatting.GREEN + I18nUtil.resolveKey("chat.newver", HTTPHandler.versionNumber)+"§r"));
-				e.player.sendMessage(new TextComponentString(TextFormatting.YELLOW + I18nUtil.resolveKey("chat.curver", RefStrings.VERSION)+"§r"));
+				e.player.sendMessage(new TextComponentTranslation("chat.newver", HTTPHandler.versionNumber));
+				e.player.sendMessage(new TextComponentTranslation("chat.curver", RefStrings.VERSION));
 
 				if(HTTPHandler.changes != ""){
 					String[] lines = HTTPHandler.changes.split("\\$");
@@ -1039,7 +1038,7 @@ public class ModEventHandler {
 			}
 			if(GeneralConfig.duckButton){
 				if(e.player instanceof EntityPlayerMP && !e.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("hasDucked")){
-	        		PacketDispatcher.sendTo(new PlayerInformPacket(I18nUtil.resolveKey("chat.duck")), (EntityPlayerMP)e.player);
+	        		PacketDispatcher.sendTo(new PlayerInformPacket("chat.duck"), (EntityPlayerMP)e.player);
 				}
 	        }
 		}

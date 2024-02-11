@@ -37,7 +37,7 @@ public class MachineRadar extends BlockContainer {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(pos.getY() < WeaponConfig.radarAltitude) {
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("[Radar] Error: Radar altitude not sufficient."));
+				player.sendMessage(new TextComponentTranslation("chat.radar.tolow"));
 			return true;
 		}
 		

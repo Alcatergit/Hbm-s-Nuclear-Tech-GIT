@@ -593,6 +593,7 @@ import com.hbm.tileentity.turret.TileEntityTurretSpitfire;
 import com.hbm.tileentity.turret.TileEntityTurretTau;
 import com.hbm.tileentity.turret.TileEntityTurretTauon;
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
@@ -2433,6 +2434,8 @@ public class ClientProxy extends ServerProxy {
 	
 	@Override
 	public void displayTooltip(String msg) {
+		if(msg.startsWith("chat."))
+			msg = I18nUtil.resolveKey(msg);
 		Minecraft.getMinecraft().ingameGUI.setOverlayMessage(msg, false);
 	}
 	

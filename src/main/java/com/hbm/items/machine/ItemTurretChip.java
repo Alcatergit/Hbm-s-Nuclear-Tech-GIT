@@ -41,7 +41,7 @@ public class ItemTurretChip extends ItemTurretBiometry {
 			}
 	        if(world.isRemote)
 			{
-	        	player.sendMessage(new TextComponentTranslation("Transferred turret ownership!"));
+	        	player.sendMessage(new TextComponentTranslation("chat.turret.ownertransfer"));
 			}
 			world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
         	

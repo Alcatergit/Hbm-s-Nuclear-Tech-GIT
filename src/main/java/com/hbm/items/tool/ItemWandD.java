@@ -32,7 +32,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -69,7 +69,7 @@ public class ItemWandD extends Item {
 				TileEntityPylonBase te = (TileEntityPylonBase) world.getTileEntity(pos);
 				for(int i = 0; i < te.connected.size(); i++)
 					if(world.isRemote)
-						player.sendMessage(new TextComponentTranslation(te.connected.get(i).getX() + " " + te.connected.get(i).getY() + " " + te.connected.get(i).getZ()));
+						player.sendMessage(new TextComponentString(te.connected.get(i).getX() + " " + te.connected.get(i).getY() + " " + te.connected.get(i).getZ()));
 			}
 			
 			if(player.isSneaking()){
@@ -156,7 +156,7 @@ public class ItemWandD extends Item {
 		if(player.isSneaking())
 		{
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
+				player.sendMessage(new TextComponentString(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
 		} else {
 			if(!world.isRemote){
 				RayTraceResult r = Library.rayTraceIncludeEntities(player, 50, 1);

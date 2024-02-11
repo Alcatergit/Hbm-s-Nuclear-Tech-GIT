@@ -263,24 +263,116 @@ chat.blacklist=is blacklisted!
 chat.callas=Called in airstrike!
 chat.callsp=Called in supply drop!
 chat.curver=§ePlaying on version §7%s§e right now§r
-chat.curver1=Playing on version
-chat.curver2=right now
 chat.detonated=Detonated
+chat.detonatedmulti=[Detonated] (%s/%s)
 chat.duck=Press O to duck!
 chat.newfeat=New Features
 chat.newver=§aNew§e version §3%s§e is available§r
-chat.newver1=New
-chat.newver2=version
-chat.newver3=is available
 chat.posnoset=No position set
 chat.posnoseterror=[Error]: Position not set.
+chat.posadd=Position added
 chat.posset=Position set
-chat.possetx=Position set to X:
 chat.possetxyz=Pos set to %s, %s, %s
 chat.possetxz=Pos set to %s, %s
-chat.possetz=Z:
+chat.possetaxyz=Pos %s set to %s, %s, %s
 chat.postoofarerror=[Error]: Target incompatible or too far away.
-chat.welcome=Welcome back
+chat.posbadrror=[Error]: Target can not be detonated.
+chat.removdedallpos=All positions removed.
+chat.welcome=§3Welcome back
+
+chat.telelink.linked=§a[TeleLink] Teleporter has been successfully linked to [%s, %s, %s]
+chat.telelink.set=§a[TeleLink] Set target coordinates to [%s, %s, %s]
+
+chat.structuremarker.factory=[Structure Marker] Set template: Factory
+chat.structuremarker.nuclear=[Structure Marker] Set template: Nuclear Reactor
+chat.structuremarker.nuclearc=[Structure Marker] Set template: Nuclear Reactor with Concrete Casing
+chat.structuremarker.watz=[Structure Marker] Set template: Watz Power Plant
+chat.structuremarker.safe=[Structure Marker] Set template: Singularity-Anti-Fusion-Experiment
+
+chat.structurewand.set.factory=Set Structure: Titanium Factory
+chat.structurewand.set.factoryadvanced=Set Structure: Advanced Factory
+chat.structurewand.set.nuclear=Set Structure: Nuclear Reactor
+chat.structurewand.set.hadron=Set Structure: Particle Accelerator
+chat.structurewand.set.watz=Set Structure: Watz Power Plant
+chat.structurewand.set.safe=Set Structure: Singularity-Anti-Fusion-Experiment Reactor
+
+chat.constructionwand.filled=Selection filled!
+chat.constructionwand.setblock=Set block 
+
+chat.factory.structurebad=[Basic Factory] Error: Factory Structure not valid!
+chat.factory.corebad=[Basic Factory] Error: Factory Core not found!
+chat.factoryadvanced.structurebad=[Advanced Factory] Error: Factory Structure not valid!
+chat.factoryadvanced.corebad=[Advanced Factory] Error: Factory Core not found!
+
+chat.watz.structurebad=[Watz Power Plant] Error: Reactor Structure not valid!
+chat.watz.corebad=[Watz Power Plant] Error: Reactor Core not found!
+chat.bigreactor.structurebad=[Nuclear Reactor] Error: Reactor Structure not valid!
+chat.bigreactor.corebad=[Nuclear Reactor Error: Reactor Core not found!
+chat.fwatz.structurebad=[S.A.F.E.] Error: Reactor Structure not valid!
+chat.fwatz.corebad=[S.A.F.E.] Error: Reactor Core not found!
+
+chat.letter.open=You rip the letter in half; nothing happens.
+chat.letter.a20=Error: null reference @ com.hbm.items.ItemStarterKit.class, please report this to the modder!
+
+chat.brokenradio=It's a broken radio, it doesn't do anything. What did you expect, a plasma TV?
+
+chat.radar.tolow=[Radar] Error: Radar altitude not sufficient.
+
+chat.meteorremote.watchhead=Watch your head!
+
+chat.surveyscanner.switchto.resources=§3[Scanner]§b Mode switched to §3Resources§r
+chat.surveyscanner.switchto.structures=§6[Scanner]§e Mode switched to §6Structures§r
+
+chat.surveyscanner.level.resources=§3[Scanner]§b Ore Level: §3%s
+chat.surveyscanner.level.structures=§6[Scanner]§e Structure Level: §6%s
+
+chat.fractioning.y=§e=== FRACTIONING TOWER Y:%s ===
+chat.fractioning.onlybottom=§cYou can only change the type in the bottom segment!
+chat.fractioning.norecipe=§cNo recipe found for §e%s
+chat.fractioning.changedto=§eChanged type to §a%s
+
+chat.bobmazon.failsafe.1=§6§l[Bobmazon]§r There appears to be a mismatch between the offer you have requested and the offers that exist.
+chat.bobmazon.failsafe.2=§6§l[Bobmazon]§r Engaging fail-safe...
+chat.bobmazon.broke=§6§l[Bobmazon]§r Not enough caps!
+chat.bobmazon.noob=§6§l[Bobmazon]§r Achievement requirement not met!
+
+chat.turret.ownertransfer=Transferred turret ownership!
+
+chat.crate.cansmash=The one crate you are allowed to smash!
+chat.crate.needcrowbar=I'll need a crate opening device to get the loot, smashing the whole thing won't work...
+
+chat.turretcontrol.linked=Turret Linked!
+
+chat.gerald.detonated=§eHorizons has been activated.
+
+chat.wiring.start=§6[Cable] §eStart set to %s, %s, %s
+chat.wiring.tofar=§6[Cable] §eDistance is too long %s/%sm
+chat.wiring.noself=§6[Cable] §eIt cant connect it to itself
+chat.wiring.connected=§6[Cable] §eCables Connected
+chat.wiring.notcompatible=§6[Cable] §eCables have different types
+chat.wiring.cleared=§6[Cable] §ePylon position cleared
+chat.wiring.measure=§6[Cable] §ePylon distance: %sm
+
+chat.glitch.0=Sorry nothing.
+chat.glitch.1=Prometheus was punished by the gods by giving the gift of knowledge to man. He was cast into the bowels of the earth and pecked by birds.
+chat.glitch.8=Oh, and by the way: The polaroid shifts reality. Things can be different if the polaroid is broken.
+chat.glitch.13a=Have some free stuff. You'll need it for that one cryptic achievement.
+chat.glitch.13b=§4Sororicide
+chat.glitch.16=v yvxr lbhe nggvghqr!
+chat.glitch.17=89% of magic tricks are not magic. Technically, they are sorcery.
+chat.glitch.18=Here ya go.
+chat.glitch.19=Ë
+chat.glitch.20=Good day, I am text
+chat.glitch.21=73616d706c652074657874!
+chat.glitch.22=Budget cuts, no effect for you.
+chat.glitch.23=oof
+chat.glitch.24=Tank!
+chat.glitch.25=More devastating than a falling boxcar!
+chat.glitch.26=Ha!
+chat.glitch.28=Watch your head!
+chat.glitch.29=Bam!
+chat.glitch.30=It's dangerous to go alone, take this!
+
 chem.ALGE=Biomass Photosynthesis
 chem.ARSENIC=Arsenic Extraction
 chem.ASPHALT=Asphalt Production
@@ -570,6 +662,36 @@ death.attack.taint=%1$s died from flux tumors.
 death.attack.tau=%1$s was riddled by %2$s using negatively charged tauons.
 death.attack.tauBlast=%1$s charged the XVL1456 for too long and was blown into pieces.
 death.attack.teleporter=%1$s was teleported into nothingness.
+
+desc.wiring.start=§6Start Pole: %s, %s, %s
+desc.wiring.1=§eRight-click poles to connect
+desc.wiring.2=§eRight-click any block to show distance
+desc.wiring.3=§eShift-Right-click to set start pole
+desc.wiring.4=§eShift-Right-click any block to clear start pole
+
+desc.contructionwand.1="Destruction brings creation"
+desc.contructionwand.2=(Set positions with right click,
+desc.contructionwand.3=set block with shift-right click!)
+desc.contructionwand.pos=Pos: %s, %s, %s
+desc.contructionwand.posnoset=Positions not set!
+desc.contructionwand.blocksaved=Block saved: %s
+
+desc.turrectcontrol=Linked to:
+desc.turrectcontrol.noconnect=Please select a turret.
+
+desc.structurewand.1="Instant structures for everyone!"
+desc.structurewand.2=(Cycle with shift-right click,
+desc.structurewand.3=spawn structures with right click!)
+desc.structurewand.factory=Structure: Titanium Factory
+desc.structurewand.factoryadvanced=Structure: Advanced Factory
+desc.structurewand.nuclear=Structure: Nuclear Reactor
+desc.structurewand.hadron=Structure: Particle Accelerator
+desc.structurewand.watz=Structure: Watz Power Plant
+desc.structurewand.safe=Structure: Singularity-Anti-Fusion-Experiment Reactor
+
+desc.kit.armor=Armor will be displaced by hazmat suit.
+desc.kit.inventory=Please empty inventory before opening!
+
 desc.airstrike=Aim & click to call an airstrike!
 desc.any=Any
 desc.author=by
@@ -578,6 +700,8 @@ desc.botsize=Bottom size:
 desc.breakgame=Don't use this, it may break your game
 desc.calldet1=Shift right-click to set position,
 desc.calldet2=right-click to detonate!
+desc.callmultdet1=Shift right-click block to add position,
+desc.callmultdet2=Shift right-click in the air to clear postitions.
 desc.callsp=Right click to request supply drop!
 desc.chargeadds=Each Charge Adds:
 desc.choosetarget1=Please select a target by clicking on block next to you.
@@ -718,6 +842,40 @@ desc.varwin=Variant: Window
 desc.veinminer=Vein miner
 desc.weight=Weight:
 desc.wildcard=Item matches
+
+desc.glitch=It's a gamble!
+desc.glitch.1=Click-click-click!
+desc.glitch.2=Creek!
+desc.glitch.3=Bzzzt!
+desc.glitch.4=TS staring off into space.
+desc.glitch.5=BANG!!
+desc.glitch.6=Woop!
+desc.glitch.7=Poow!
+desc.glitch.8=Pft!
+desc.glitch.9=GF fgnevat bss vagb fcnpr.
+desc.glitch.10=Backup memory #8 on 1.44 million bytes.
+desc.glitch.11=PTANG!
+desc.glitch.12=Bzzt-zrrt!
+desc.glitch.13=Clang, click-brrthththrtrtrtrtrtr!
+desc.glitch.14=KABLAM!
+desc.glitch.15=PLENG!
+desc.glitch.16=Wheeeeeeee-
+desc.glitch.17=Thump.
+desc.glitch.18=BANG! Choo-chooo! B A N G ! ! !
+
+
+desc.fireworks.1=Activate via redstone
+desc.fireworks.2=§6Rightclick block with§r
+desc.fireworks.3=- gunpowder/sulfur -> charges
+desc.fireworks.4=- dye -> color
+desc.fireworks.5=- nametag -> message
+
+desc.surveyscanner.1=Right click to perform scan.
+desc.surveyscanner.2=Shift click to change mode.
+desc.surveyscanner.3=Current mode: %s
+desc.surveyscanner.resources=§3Resources§r
+desc.surveyscanner.structures=§6Structures§r
+
 digamma.playerDigamma=Player contamination:
 digamma.playerHealth=Player depletion:
 digamma.title=DIGAMMA DIAGNOSTIC
@@ -1830,6 +1988,7 @@ item.detonator.name=Detonator
 item.detonator_de.name=Dead Man's Explosive
 item.detonator_deadman.name=Dead Man's Detonator
 item.detonator_laser.name=Laser Detonator
+item.detonator_laser.desc=Aim & click to detonate!
 item.detonator_multi.name=Multi Detonator
 item.deuterium_filter.name=Deuterium Filter
 item.diamond_gavel.name=Diamond Gavel
@@ -2347,6 +2506,8 @@ item.levitation_unit.name=Gravity Manipulator
 item.lignite.name=Lignite
 item.limiter.name=Generator Limiter
 item.linker.name=Telelinker
+item.linker.desc1=Right-Click to select target position.
+item.linker.desc2=Then Shift-Right-Click a teleporter.
 item.liquidator_boots.name=Liquidator Suit Boots
 item.liquidator_helmet.name=Liquidator Suit Helmet
 item.liquidator_legs.name=Liquidator Suit Leggins
@@ -2395,6 +2556,7 @@ item.mese_gavel.name=Mese Gavel
 item.mese_pickaxe.name=Mese Pickaxe
 item.meteor_charm.name=Meteor Charm
 item.meteor_remote.name=Meteorite Remote
+item.meteor_remote.desc=Right click to summon a meteorite!
 item.meteorite_sword.name=Meteorite Sword
 item.meteorite_sword_alloyed.name=Meteorite Sword (Alloyed)
 item.meteorite_sword_baleful.name=§aMeteorite Sword (Baleful)

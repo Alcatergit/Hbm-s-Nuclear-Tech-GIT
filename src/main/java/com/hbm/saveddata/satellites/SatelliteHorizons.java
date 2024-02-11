@@ -54,7 +54,7 @@ public class SatelliteHorizons extends Satellite {
 		
 		//not necessary but JUST to make sure
 		if(!world.isRemote) {
-			FMLCommonHandler.instance().getMinecraftServerInstance().sendMessage(new TextComponentTranslation(TextFormatting.RED + "Horizons has been activated."));
+			FMLCommonHandler.instance().getMinecraftServerInstance().sendMessage(new TextComponentTranslation("chat.gerald.detonated"));
 		}
 	}
 }

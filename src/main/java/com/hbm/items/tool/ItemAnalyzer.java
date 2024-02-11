@@ -19,7 +19,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class ItemAnalyzer extends Item {
@@ -37,11 +37,11 @@ public class ItemAnalyzer extends Item {
 		TileEntity te = world.getTileEntity(pos);
 		
 		if(world.isRemote) {
-			player.sendMessage(new TextComponentTranslation(
+			player.sendMessage(new TextComponentString(
 					"Block: " + I18n.format(block.getUnlocalizedName() + ".name") + " (" + block.getUnlocalizedName() + ")"
 					));
 			
-			player.sendMessage(new TextComponentTranslation(
+			player.sendMessage(new TextComponentString(
 					"Meta: " + block.getMetaFromState(world.getBlockState(pos))
 					));
 		}
@@ -49,13 +49,13 @@ public class ItemAnalyzer extends Item {
 		if(!world.isRemote) {
 			
 			if(te == null) {
-				player.sendMessage(new TextComponentTranslation(
+				player.sendMessage(new TextComponentString(
 						"Tile Entity: none"));
 			} else {
 				
 				if(te instanceof TileEntityDummy) {
 
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Dummy Block, references TE at " + ((TileEntityDummy)te).target.getX() + " / " + ((TileEntityDummy)te).target.getY() + " / " + ((TileEntityDummy)te).target.getZ()));
 					
 					te = world.getTileEntity(((TileEntityDummy)te).target);
@@ -69,56 +69,56 @@ public class ItemAnalyzer extends Item {
 				String post = parts[parts.length - 1];
 				String name = post.split("@")[0];
 
-				player.sendMessage(new TextComponentTranslation(
+				player.sendMessage(new TextComponentString(
 						"Tile Entity: " + name));
 				
 				if(te instanceof IInventory) {
 					
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Slots: " + ((IInventory)te).getSizeInventory()));
 				}
 				
 				if(te instanceof IEnergyConnector) {
 					
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Electricity: " + ((IEnergyConnector)te).getPower() + " HE"));
 				}
 				
 				if(te instanceof IFluidPipe) {
 					
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Duct Type: " + I18n.format(((IFluidPipe)te).getType().getUnlocalizedName())));
 				}
 				
 				if(te instanceof TileEntityPylonBase) {
 					
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Connections:"));
 					
 					List<BlockPos> connections = ((TileEntityPylonBase)te).connected;
 					
 					for(int i = 0; i < connections.size(); i++) {
-						player.sendMessage(new TextComponentTranslation(
+						player.sendMessage(new TextComponentString(
 								" *" + connections.get(i).getX() + " / " + connections.get(i).getY() + " / " + connections.get(i).getZ()));
 					}
 				}
 				
 				if(te instanceof TileEntityLockableBase) {
 					
-					player.sendMessage(new TextComponentTranslation(
+					player.sendMessage(new TextComponentString(
 							"Locked: " + ((TileEntityLockableBase)te).isLocked()));
 					
 					if(((TileEntityLockableBase)te).isLocked()) {
 
-						//player.sendMessage(new TextComponentTranslation(
+						//player.sendMessage(new TextComponentString(
 						//		"Pins: " + ((TileEntityLockableBase)te).getPins()));
-						player.sendMessage(new TextComponentTranslation(
+						player.sendMessage(new TextComponentString(
 								"Pick Chance: " + (((TileEntityLockableBase)te).getMod() * 100D) + "%"));
 					}
 				}
 			}
 
-			player.sendMessage(new TextComponentTranslation(
+			player.sendMessage(new TextComponentString(
 					"----------------------------"
 					));
 		}

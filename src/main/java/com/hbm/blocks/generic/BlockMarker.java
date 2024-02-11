@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMarker extends BlockContainer {
 
-	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4000000059604645D, 0.0D, 0.4000000059604645D, 0.6000000238418579D, 0.6000000238418579D, 0.6000000238418579D);
+	protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.6D, 0.6D);
 	public static final PropertyDirection FACING = BlockTorch.FACING;
 	
 	public BlockMarker(Material materialIn, String s) {
@@ -55,15 +55,15 @@ public class BlockMarker extends BlockContainer {
 			if(i > 4)
 				i = 0;
 			if(i == 0)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Factory"));
+		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.factory"));
 			if(i == 1)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor"));
+		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclear"));
 			if(i == 2)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Nuclear Reactor with Concrete Casing"));
+		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclearc"));
 			if(i == 3)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Watz Power Plant"));
+		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.watz"));
 			if(i == 4)
-		        player.sendMessage(new TextComponentTranslation("[Structure Marker] Set template: Singularity-Anti-Fusion-Experiment"));
+		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.safe"));
 			return true;
 		} else if(!player.isSneaking())
 		{
@@ -146,22 +146,6 @@ public class BlockMarker extends BlockContainer {
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
     	return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-        /*if (this.canPlaceAt(worldIn, pos, facing))
-        {
-            return this.getDefaultState().withProperty(FACING, facing);
-        }
-        else
-        {
-            for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
-            {
-                if (this.canPlaceAt(worldIn, pos, enumfacing))
-                {
-                    return this.getDefaultState().withProperty(FACING, enumfacing);
-                }
-            }
-
-            return this.getDefaultState();
-        }*/
     }
 
     /**

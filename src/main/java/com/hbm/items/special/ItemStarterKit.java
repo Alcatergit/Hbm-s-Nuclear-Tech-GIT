@@ -2,6 +2,7 @@ package com.hbm.items.special;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
@@ -449,14 +450,14 @@ public class ItemStarterKit extends Item {
 		if(this == ModItems.letter && world.isRemote)
 		{
 			if(player.getUniqueID().toString().equals(Library.a20)) {
-				player.sendMessage(new TextComponentTranslation("Error: null reference @ com.hbm.items.ItemStarterKit.class, please report this to the modder!"));
+				player.sendMessage(new TextComponentTranslation("chat.letter.a20"));
 			} else {
-				player.sendMessage(new TextComponentTranslation("You rip the letter in half; nothing happens."));
+				player.sendMessage(new TextComponentTranslation("chat.letter.open"));
 			}
 		}
 		
 		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.itemUnpack, SoundCategory.PLAYERS, 1.0F, 1.0F);
-		stack.shrink(1);;
+		stack.shrink(1);
 		return super.onItemRightClick(world, player, hand);
 	}
 	
@@ -474,7 +475,7 @@ public class ItemStarterKit extends Item {
     			this == ModItems.missile_kit ||
     			this == ModItems.t45_kit ||
     			this == ModItems.multi_kit) {
-			tooltip.add("Please empty inventory before opening!");
+			tooltip.add(I18nUtil.resolveKey("desc.kit.inventory"));
     	}
 		if(this == ModItems.nuke_starter_kit ||
     			this == ModItems.nuke_advanced_kit ||
@@ -489,7 +490,7 @@ public class ItemStarterKit extends Item {
     			this == ModItems.hazmat_kit || 
     			this == ModItems.hazmat_red_kit || 
     			this == ModItems.hazmat_grey_kit) {
-			tooltip.add("Armor will be displaced by hazmat suit.");
+			tooltip.add(I18nUtil.resolveKey("desc.kit.armor"));
     	}
 	}
 }

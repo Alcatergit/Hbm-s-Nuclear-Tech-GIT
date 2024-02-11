@@ -64,7 +64,7 @@ public class BlockCrate extends BlockFalling {
     	} else {
 			if(world.isRemote)
 			{
-				player.sendMessage(new TextComponentTranslation("I'll need a crate opening device to get the loot, smashing the whole thing won't work..."));
+				player.sendMessage(new TextComponentTranslation("chat.crate.needcrowbar"));
 			}
     	}
     	

@@ -2,6 +2,7 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import com.hbm.blocks.turret.TurretBase;
 import com.hbm.blocks.turret.TurretBaseNT;
 import com.hbm.items.ModItems;
@@ -87,12 +88,12 @@ public class ItemTurretControl extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
-			list.add("Linked to:");
+			list.add(I18nUtil.resolveKey("desc.turrectcontrol"));
 			list.add("X: " + String.valueOf(stack.getTagCompound().getInteger("xCoord")));
 			list.add("Y: " + String.valueOf(stack.getTagCompound().getInteger("yCoord")));
 			list.add("Z: " + String.valueOf(stack.getTagCompound().getInteger("zCoord")));
 		} else {
-			list.add("Please select a turret.");
+			list.add(I18nUtil.resolveKey("desc.turrectcontrol.noconnect"));
 		}
 	}
 
@@ -131,7 +132,7 @@ public class ItemTurretControl extends Item {
 				stack.getTagCompound().setInteger("zCoord", z);
 			}
 			if (worldIn.isRemote) {
-				player.sendMessage(new TextComponentTranslation("Turret Linked!"));
+				player.sendMessage(new TextComponentTranslation("chat.turretcontrol.linked"));
 			}
 
 			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
