@@ -29,10 +29,10 @@ public class HazardTypeDigamma extends HazardTypeBase {
 		
 		float d = (float)(Math.floor(level * 10000F)) / 10F;
 		list.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.digamma") + "]");
-		list.add(TextFormatting.DARK_RED + "" + d + "mDRX/s");
+		list.add(TextFormatting.DARK_RED + "" + d + I18nUtil.resolveKey("desc.digammaed"));
 		
 		if(stack.getCount() > 1) {
-			list.add(TextFormatting.DARK_RED + "Stack: " + ((Math.floor(level * 10000F * stack.getCount()) / 10F) + "mDRX/s"));
+			list.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("desc.stack")+" " + (Math.floor(level * 10000F * stack.getCount()) / 10F) + I18nUtil.resolveKey("desc.digammaed"));
 		}
 	}
 

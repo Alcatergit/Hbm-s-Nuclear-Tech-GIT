@@ -69,9 +69,7 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 151, guiTop + 16, 16, 16, mouseX, mouseY, priority.toArray(new String[priority.size()]));
 
-		String[] text = new String[] { "Click the buttons on the right",
-				"to change battery behavior for",
-				"when redstone is or isn't applied." };
+		String[] text = I18nUtil.resolveKeyArray("desc.guimachbattery");
 				
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		super.renderHoveredToolTip(mouseX, mouseY);

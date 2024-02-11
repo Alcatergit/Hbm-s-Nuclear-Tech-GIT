@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerMachineAssembler;
@@ -34,14 +35,11 @@ public class GUIMachineAssembler extends GuiInfoContainer {
 		
 		if(assembler.inventory.getStackInSlot(4).getItem() == Items.AIR || assembler.inventory.getStackInSlot(4).getItem()!= ModItems.assembly_template) {
 
-			String[] text = new String[] { "Error: This machine requires an assembly template!" };
-			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
+			String[] text1 = I18nUtil.resolveKeyArray("desc.guimachassembler");
+			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		}
 
-		String[] text = new String[] { "Acceptable upgrades:",
-				" -Red (speed)",
-				" -Blue (energy saving)",
-				"Max upgrade level is 3"};
+		String[] text = I18nUtil.resolveKeyArray("desc.guiacceptupgrades1");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 141, guiTop + 40, 8, 8, guiLeft + 141, guiTop + 40 + 16, text);
 	}
 

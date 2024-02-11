@@ -9,6 +9,7 @@ import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -33,9 +34,9 @@ public class ItemModKnife extends ItemArmorMod {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
-		list.add(TextFormatting.RED + "Pain.");
+		list.add(TextFormatting.RED + I18nUtil.resolveKey("desc.knifeinjector1"));
 		list.add("");
-		list.add(TextFormatting.RED + "Hurts, doesn't it?");
+		list.add(TextFormatting.RED + I18nUtil.resolveKey("desc.knifeinjector2"));
 		
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);

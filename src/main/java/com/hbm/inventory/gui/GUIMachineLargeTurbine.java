@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -35,7 +36,7 @@ public class GUIMachineLargeTurbine extends GuiInfoContainer {
 
 		if(turbine.types[1] == null) {
 
-			String[] text2 = new String[] { "Error: Invalid fluid!" };
+			String[] text2 = I18nUtil.resolveKeyArray("desc.errorfluid");
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 32, 16, 16, guiLeft - 8, guiTop + 36 + 16 + 32, text2);
 		}
 

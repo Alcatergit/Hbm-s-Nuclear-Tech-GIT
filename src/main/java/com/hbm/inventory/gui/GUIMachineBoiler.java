@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -40,15 +41,10 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 84, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) dud.heat / 100D)) + "°C" });
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) dud.burnTime / 20D))) + "s" });
 
-		String[] text = new String[] { "Heat produced:", 
-		"  0.5°C/t or 10°C/s", 
-		"Heat consumed:", 
-		"  0.15°C/t or 3.0°C/s (base)", 
-		"  0.25°C/t or 5.0°C/s (once boiling point is reached)", 
-		"  0.40°C/t or 8.0°C/s (for every subsequent multiple of boiling point)"};
+		String[] text = I18nUtil.resolveKeyArray("desc.guimachboiler");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 
-		String[] text1 = new String[] { "Boiling rate:", "  Base rate * amount of full multiples", "  of boiling points reached" };
+		String[] text1 = I18nUtil.resolveKeyArray("desc.guimachboiler1");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 
 		/*	if (diFurnace.tanks[1].getFluid() == null) {

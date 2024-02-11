@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -224,7 +225,7 @@ public class GUIAnvil extends GuiContainer {
 
 		List<String> list = new ArrayList<>();
 		
-		list.add(TextFormatting.YELLOW + "Inputs:");
+		list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("info.template_in_p"));
 		
 		for(AStack stack : recipe.input) {
 			if(stack instanceof ComparableStack)  {
@@ -246,7 +247,7 @@ public class GUIAnvil extends GuiContainer {
 		}
 
 		list.add("");
-		list.add(TextFormatting.YELLOW + "Outputs:");
+		list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("info.template_out_p"));
 		
 		for(AnvilOutput stack : recipe.output) {
 			list.add(">" + stack.stack.getCount() + "x " + stack.stack.getDisplayName() + (stack.chance != 1F ? (" (" + (stack.chance * 100) + "%)" ) : ""));

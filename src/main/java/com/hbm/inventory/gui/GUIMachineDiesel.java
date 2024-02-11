@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.forgefluid.FFUtils;
@@ -32,16 +33,12 @@ public class GUIMachineDiesel extends GuiInfoContainer {
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 69 - 52, 16, 52, diFurnace.tank, diFurnace.tankType);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 69 - 52, 16, 52, diFurnace.power, diFurnace.powerCap);
 
-		String[] text1 = new String[] { "Fuel consumption rate:",
-				"  1 mB/t",
-				"  20 mB/s",
-				"(Consumption rate is constant)" };
+		String[] text1 = I18nUtil.resolveKeyArray("desc.guimachinediesel1");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 		
 		if(!diFurnace.hasAcceptableFuel()) {
 			
-			String[] text2 = new String[] { "Error: The currently set fuel type",
-					"is not supported by this engine!" };
+			String[] text2 = I18nUtil.resolveKeyArray("desc.guimachinediesel2");
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 32, 16, 16, guiLeft - 8, guiTop + 36 + 16 + 32, text2);
 		}
 		super.renderHoveredToolTip(mouseX, mouseY);

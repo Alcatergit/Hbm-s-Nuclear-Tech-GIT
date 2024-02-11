@@ -70,13 +70,13 @@ public class ItemMachineUpgrade extends Item {
 			list.add(" "+I18nUtil.resolveKey("desc.upgradesp11"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade2"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp12"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp12","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade3"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp13"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp13","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade4"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp14"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp14","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade5"));
 			list.add(" "+I18nUtil.resolveKey("desc.upgradesp15"));
@@ -85,16 +85,16 @@ public class ItemMachineUpgrade extends Item {
 		if(this == ModItems.upgrade_speed_2)
 		{
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade1"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp21"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp21","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade2"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp22"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp22","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade3"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp23"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp23","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade4"));
-			list.add(" "+I18nUtil.resolveKey("desc.upgradesp24"));
+			list.add(" "+I18nUtil.resolveKey("desc.upgradesp24","%"));
 			list.add("");
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade5"));
 			list.add(" "+I18nUtil.resolveKey("desc.upgradesp25"));
