@@ -15,6 +15,7 @@ import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -182,6 +183,6 @@ public class ItemWandD extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Used for debugging purposes.");
+		tooltip.add(I18nUtil.resolveKey("desc.debugwand"));
 	}
 }

@@ -691,6 +691,8 @@ desc.structurewand.hadron=Structure: Particle Accelerator
 desc.structurewand.watz=Structure: Watz Power Plant
 desc.structurewand.safe=Structure: Singularity-Anti-Fusion-Experiment Reactor
 
+desc.debugwand=Used for debugging purposes.
+
 desc.kit.armor=Armor will be displaced by hazmat suit.
 desc.kit.inventory=Please empty inventory before opening!
 
@@ -781,9 +783,9 @@ desc.knifeinjector1=Pain.
 desc.knifeinjector2=Hurts, doesn't it?
 desc.lasts=Lasts
 desc.machine_press=Press
-desc.maxtier=Max Tier:
+desc.maxtier=Max Tier: %s
 desc.mil=M
-desc.mintier=Min Tier:
+desc.mintier=Min Tier: %s
 desc.na=N/A
 desc.nofilter=No filter installed!
 desc.none=None
@@ -814,7 +816,7 @@ desc.templfolder3=Press Stamps: Flat Stamp
 desc.templfolder4=Siren Tracks: Insulator + Steel Plate
 desc.teslacoils=Provides infinite charge to tesla coils
 desc.ticks=ticks
-desc.tier=Tier: %
+desc.tier=Tier: %s
 desc.topsize=Top size:
 desc.type=Type:
 desc.unfluidid=Universal fluid identifier for:
@@ -4977,3 +4979,66 @@ weapon.ability.phosphorus=Phosphorus Tip
 weapon.ability.radiation=Radioactive Blade
 weapon.ability.stun=Stunning
 weapon.ability.vampire=Vampire
+
+
+desc.spinnylight=Change color by right clicking with dye
+desc.canisterdiesel=All hail the spout!
+desc.cansiterinfinite=§aOutput: %s b/s
+desc.fusioncore1=Charges all worn armor pieces by %s HE
+desc.fusioncore2=Requires full electric set to be worn
+desc.keypin1=§aPin configuration: (%s)§r
+desc.keypin2=§cPins not set§r
+desc.keypin3=§ePins can neither be changed, nor copied.§r
+
+trait.legendaryweap=§d§l[LEGENDARY WEAPON]
+
+desc.hemissile=HE Missile %s
+desc.icmissile=IC Missile %s
+desc.clmissile=CL Missile %s
+desc.bumissile=BU Missile %s
+desc.n2missile=Extreme Missile
+desc.numissile=Nuclear Missile
+desc.tumissile=Thermonuclear Missile
+desc.tecmissile=Tectonic Missile
+desc.empmissile=EMP Missile
+desc.numicromissile=Nuclear Micro Missile
+desc.thermalmissile=Thermal Missile
+desc.cmmmmissile=Cluster Missile Missile Missile
+desc.esmissile=Evil Slime Missile
+desc.sinmissile=Singularity Missile
+desc.schrabmissile=Schrabidium Missile
+desc.abmissile=AB Missile
+desc.abmissile1=Only targets other missiles
+
+desc.count=Count: %s
+desc.depth=Depth: %sm
+desc.maxradius=Max radius: %sm
+desc.capacity=Capacity: %smB
+desc.usedin=Used in:
+desc.radamount=Amount: %s RAD
+desc.radspeed=Speed: %s RAD/s
+desc.duration=Duration: %ss
+
+desc.cannothot=Cannot store hot fluids
+desc.cannotcor=Cannot store corrosive fluids
+desc.cannotcor1=Cannot store corrosive fluids properly
+desc.cannotam=Cannot store antimatter
+desc.canam=Can store antimatter
+desc.canhot=Can store hot fluids
+desc.cancor=Can store corrosive fluids
+desc.canhighcor=Can store highly corrosive fluids
+desc.cannothighcor=Cannot store highly corrosive fluids properly
+desc.leaky=Leaky
+
+desc.infinitehe=∞ HE/s
+
+desc.guimachlaunchpadt11=First Slot:$  -Missile (no custom ones!)$  -Carrier Rocket
+desc.guimachlaunchpadt12=Second Slot:$  -Target designator for missiles$  -Satellite payload for the carrier rocket
+
+desc.flamepony=Yellow horse beats blue horse, that's a proven fact!
+desc.flameconspiracy=Steel beams can't melt jet fuel!
+desc.flamepolitics=Donald Duck will build the wall!
+desc.flameopinion=Well, I like it...
+desc.ivempty=Right-click to fill
+desc.screwdriver1=Right clicking fluid pipes will toggle extraction mode
+desc.screwdriver2=Could be used instead of a fuse...

@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.deco.TileEntitySpinnyLight;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDirectional;
@@ -89,7 +90,7 @@ public class BlockSpinnyLight extends BlockContainer {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
-		tooltip.add("Change color by right clicking with dye");
+		tooltip.add(I18nUtil.resolveKey("desc.spinnylight"));
 	}
 	
 	@Override

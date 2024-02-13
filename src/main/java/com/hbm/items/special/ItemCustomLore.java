@@ -56,22 +56,22 @@ public class ItemCustomLore extends Item {
 			list.add("§8§oMight set off the Dud tho");
 		}
 		if(this == ModItems.iv_empty) {
-			list.add("Right-click to fill");
+			list.add(I18nUtil.resolveKey("desc.ivempty"));
 		}
 		if(this == ModItems.radaway) {
-			list.add("Amount: -250 RAD");
-			list.add("Speed: -25 RAD/s");
-			list.add("Duration: 10s");
+			list.add(I18nUtil.resolveKey("desc.radamount", -250));
+			list.add(I18nUtil.resolveKey("desc.radspeed", -25));
+			list.add(I18nUtil.resolveKey("desc.duration", 10));
 		}
 		if(this == ModItems.radaway_strong) {
-			list.add("Amount: -500 RAD");
-			list.add("Speed: -100 RAD/s");
-			list.add("Duration: 5s");
+			list.add(I18nUtil.resolveKey("desc.radamount", -500));
+			list.add(I18nUtil.resolveKey("desc.radspeed", -100));
+			list.add(I18nUtil.resolveKey("desc.duration", 5));
 		}
 		if(this == ModItems.radaway_flush) {
-			list.add("Amount: -1000 RAD");
-			list.add("Speed: -400 RAD/s");
-			list.add("Duration: 2.5s");
+			list.add(I18nUtil.resolveKey("desc.radamount", -1000));
+			list.add(I18nUtil.resolveKey("desc.radspeed", -400));
+			list.add(I18nUtil.resolveKey("desc.duration", 2.5));
 		}
 		if(this == ModItems.ingot_schraranium)
 		{
@@ -232,20 +232,20 @@ public class ItemCustomLore extends Item {
 
 		if(this == ModItems.flame_pony) {
 			// list.add("Blue horse beats yellow horse, look it up!");
-			list.add("Yellow horse beats blue horse, that's a proven fact!");
+			list.add(I18nUtil.resolveKey("desc.flamepony"));
 		}
 		
 		if(this == ModItems.flame_conspiracy)
 		{
-			list.add("Steel beams can't melt jet fuel!");
+			list.add(I18nUtil.resolveKey("desc.flameconspiracy"));
 		}
 		if(this == ModItems.flame_politics)
 		{
-			list.add("Donald Duck will build the wall!");
+			list.add(I18nUtil.resolveKey("desc.flamepolitics"));
 		}
 		if(this == ModItems.flame_opinion)
 		{
-			list.add("Well, I like it...");
+			list.add(I18nUtil.resolveKey("desc.flameopinion"));
 		}
 
 		if(this == ModItems.ingot_neptunium) {

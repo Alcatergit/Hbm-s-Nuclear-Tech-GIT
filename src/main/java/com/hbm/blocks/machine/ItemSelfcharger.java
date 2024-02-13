@@ -6,6 +6,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 
 import api.hbm.energy.IBatteryItem;
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,7 @@ public class ItemSelfcharger extends Item implements IBatteryItem {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
 		if(charge == Long.MAX_VALUE)
-			tooltip.add(TextFormatting.YELLOW + "Infinite HE/s");
+			tooltip.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.infinitehe"));
 		else
 			tooltip.add(TextFormatting.YELLOW + "" + Library.getShortNumber(charge*20) + "HE/s");
 	}

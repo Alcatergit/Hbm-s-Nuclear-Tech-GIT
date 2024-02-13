@@ -54,8 +54,8 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 			if(currentDrawHack.tierUpper == -1){
 				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier", currentDrawHack.tierLower), 84, 40, 0x40404040);
 			} else {
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.mintier") + " " + currentDrawHack.tierLower, 74, 40, 0x40404040);
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.maxtier") + " " + currentDrawHack.tierUpper, 73, 50, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.mintier", currentDrawHack.tierLower), 74, 40, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.maxtier", currentDrawHack.tierUpper), 73, 50, 0x40404040);
 			}
 			GL11.glPushMatrix();
 			GL11.glScaled(0.5, 0.5, 1);

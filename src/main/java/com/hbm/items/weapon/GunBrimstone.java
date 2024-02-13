@@ -7,6 +7,7 @@ import com.hbm.entity.projectile.EntityLaser;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -79,7 +80,7 @@ public class GunBrimstone extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("§d§l[LEGENDARY WEAPON]");
+		tooltip.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override
