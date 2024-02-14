@@ -209,7 +209,7 @@ public class CentrifugeRecipes {
 				new ItemStack(Blocks.GRAVEL, 1) });
 
 		recipes.put(new ComparableStack(ModItems.powder_tektite), new ItemStack[] {
-				new ItemStack(ModItems.powder_paleogenite_tiny, 1),
+				new ItemStack(ModItems.powder_paleogenite_tiny, 2),
 				new ItemStack(ModItems.powder_meteorite_tiny, 1),
 				new ItemStack(ModItems.powder_meteorite_tiny, 1),
 				new ItemStack(ModItems.dust, 6) });
