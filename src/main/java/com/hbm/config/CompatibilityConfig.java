@@ -325,7 +325,8 @@ public class CompatibilityConfig {
 
 		String mobModRadComment = "Amount of radiation resistance all the mobs of that mod get. Radresistance s is calculated as s=(1-0.1^r). So a resistance value of 3.0 means that 99.9%=(1-0.1^3.0) of the radiation gets blocked. - <mod=radresistance> (String:Float)";
 		mobModRadresistance = CommonConfig.createConfigHashMap(config, CATEGORY_MOB, "06.01_mob_Mod_Radresistance", mobModRadComment, "String", "Float", new String[]{ 
-			"srparasites=0.2" 
+			"srparasites=0.2",
+			"thaumcraft=0.75",
 		}, "=");
 		
 
@@ -357,13 +358,22 @@ public class CompatibilityConfig {
 			"minecraft:ender_dragon=9.0", 
 			"pvj:pvj_snail=9.1", 
 			"pvj:pvj_firefly=10.0", 
-			"pvj:pvj_fly=11.0" 
+			"pvj:pvj_fly=11.0",
+			"mysticalworld:entity_hell_sprout=2.0",
+			"mysticalworld:entity_lava_cat=2.0",
+			"thaumcraft:taintseed=1.2",
+			"thaumcraft:taintseedprime=4.0"
 		}, "=");
 		mobModRadimmune = CommonConfig.createConfigHashSet(config, CATEGORY_MOB, "06.03_mob_Mod_Radimmune", "List of mods whose entities should all be immune to radiation. - <mod> (String)", "String", new String[]{
 			"biomesoplenty",
 			"galacticraftcore", 
 			"galacticraftplanets", 
-			"extraplanets" 
+			"extraplanets",
+			"thaumicaugmentation",
+                        "enderskills",
+                        "thaumadditions",
+			"cyberware",
+			"rewired"
 		});
 		mobRadimmune = CommonConfig.createConfigHashSet(config, CATEGORY_MOB, "06.04_mob_Radimmune", "List of mobs that are immune to radiation. - <mod:mobitentifier> (String)", "String", new String[]{ 
 			"minecraft:magma_cube", 
@@ -385,7 +395,36 @@ public class CompatibilityConfig {
 			"techguns:skeletonsoldier",
 			"techguns:supermutantbasic",
 			"techguns:supermutantelite",
-			"techguns:supermutantheavy"
+			"techguns:supermutantheavy",
+			"deepmoblearning:glitch",
+			"divinefavor:entity.ping",
+			"divinefavor:entity.rope_barrier",
+			"divinefavor:entity.rope_explosive",
+			"divinefavor:entity.rope_glowing",
+			"divinefavor:entity.rope_guide",
+			"divinefavor:entity.rope_inert",
+			"divinefavor:entity.rope_luminous",
+			"divinefavor:entity.rope_teleporting",
+			"divinefavor:entity.spell_arrow",
+			"divinefavor:entity.spooky",
+			"divinefavor:entity.stoneball",
+			"embers:ancient_golem",
+			"embers:ember_light",
+			"embers:ember_packet",
+			"embers:ember_projectile",
+			"embers:magma_projectile",
+			"thaumcraft:eldritchwarden",
+			"thaumcraft:eldritchguardian",
+			"thaumcraft:cultistportalgreater",
+			"thaumcraft:cultistportallesser",
+			"thaumcraft:eldritchgolem",
+			"thaumcraft:arcanebore",
+			"thaumcraft:fluxrift",
+			"thaumcraft:golem",
+			"thaumcraft:mindspider",
+			"thaumcraft:spellbat",
+			"thaumcraft:turretadvanced",
+			"thaumcraft:turretbasic"
 		});
 	
 		mobGear = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.05_mobGear", "If true then mobs will be given gear (armor/weapons/gasmasks) from this mod when spawned", true);
