@@ -9,6 +9,7 @@ import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -104,7 +105,7 @@ public class GunDampfmaschine extends Item {
 		list.add("Ammo: §6orang");
 		list.add("Damage: aaaaaaaaa");
 		list.add("");
-		list.add("§d§l[LEGENDARY WEAPON]");
+		list.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override

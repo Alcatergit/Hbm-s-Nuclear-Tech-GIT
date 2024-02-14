@@ -25,6 +25,7 @@ import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -281,9 +282,7 @@ public class FFUtils {
 		}
 
 		if (hasInfo && !isKeyPressed) {
-			texts.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC +"Hold <" +
-					TextFormatting.YELLOW + "" + TextFormatting.ITALIC + "LSHIFT" +
-					TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "> to display more info");
+			texts.add(I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
 		}
 	}
 
@@ -295,7 +294,7 @@ public class FFUtils {
 				texts.add(amount + "/" + capacity + "mB");
 				addFluidInfo(fluid, texts);
 			} else {
-				texts.add(I18n.format("None"));
+				texts.add(I18nUtil.resolveKey("desc.none"));
 				texts.add(amount + "/" + capacity + "mB");
 			}
 

@@ -8,6 +8,7 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityBarrel;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -48,47 +49,47 @@ public class BlockFluidBarrel extends BlockContainer {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag advanced) {
 		if(this == ModBlocks.barrel_plastic) {
-			list.add(TextFormatting.AQUA + "Capacity: 12,000mB");
-			list.add(TextFormatting.YELLOW + "Cannot store hot fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "12,000"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothot"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotcor"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
 		}
 		
 		if(this == ModBlocks.barrel_corroded) {
-			list.add(TextFormatting.AQUA + "Capacity: 6,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
-			list.add(TextFormatting.RED + "Leaky");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "6,000"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.RED + I18nUtil.resolveKey("desc.leaky"));
 		}
 		
 		if(this == ModBlocks.barrel_iron) {
-			list.add(TextFormatting.AQUA + "Capacity: 8,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store corrosive fluids properly");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "8,000"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotcor1"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
 		}
 		
 		if(this == ModBlocks.barrel_steel) {
-			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store highly corrosive fluids properly");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "16,000"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.cancor"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothighcor"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
 		}
 		
 		if(this == ModBlocks.barrel_antimatter) {
-			list.add(TextFormatting.AQUA + "Capacity: 16,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
-			list.add(TextFormatting.GREEN + "Can store antimatter");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "16,000"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canam"));
 		}
 		
 		if(this == ModBlocks.barrel_tcalloy) {
-			list.add(TextFormatting.AQUA + "Capacity: 24,000mB");
-			list.add(TextFormatting.GREEN + "Can store hot fluids");
-			list.add(TextFormatting.GREEN + "Can store highly corrosive fluids");
-			list.add(TextFormatting.YELLOW + "Cannot store antimatter");
+			list.add(TextFormatting.AQUA + I18nUtil.resolveKey("desc.capacity", "24,000"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
 		}
 	}
 	

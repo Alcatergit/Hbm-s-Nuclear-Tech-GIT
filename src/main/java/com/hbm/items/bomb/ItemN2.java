@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.items.ModItems;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ public class ItemN2 extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Used in:");
-		tooltip.add(" N² Mine");
+		tooltip.add(I18nUtil.resolveKey("desc.usedin"));
+		tooltip.add(" "+ I18nUtil.resolveKey("tile.nuke_n2.name"));
 	}
 }

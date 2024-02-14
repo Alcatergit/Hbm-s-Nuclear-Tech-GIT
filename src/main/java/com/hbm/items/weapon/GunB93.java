@@ -10,6 +10,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -185,7 +186,7 @@ public class GunB93 extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("§d§l[LEGENDARY WEAPON]");
+		tooltip.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 
 	private static int getAnim(ItemStack stack) {

@@ -10,6 +10,7 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -95,7 +96,7 @@ public class GunDefabricator extends Item {
 		list.add("Ammo: §cDefabricator Energy Cell");
 		list.add("Damage: 40 - 120");
 		list.add("");
-		list.add("§d§l[LEGENDARY WEAPON]");
+		list.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -228,7 +229,7 @@ public class GunZOMG extends Item {
 		list.add("Energy Damage: 10000 - 100000");
 		list.add("Energy projectiles destroy blocks.");
 		list.add("");
-		list.add("§d§l[LEGENDARY WEAPON]");
+		list.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override

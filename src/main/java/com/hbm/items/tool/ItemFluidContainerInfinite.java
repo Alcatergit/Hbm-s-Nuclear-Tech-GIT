@@ -5,6 +5,7 @@ import java.util.List;
 import com.hbm.forgefluid.HbmFluidHandlerItemStackInf;
 import com.hbm.items.ModItems;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +33,6 @@ public class ItemFluidContainerInfinite extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn){
 		super.addInformation(stack, world, list, flagIn);
-		list.add("§aOutput: "+(int)(maxDrain * 0.02F)+"b/s");
+		list.add(I18nUtil.resolveKey("desc.canisterinfinite", maxDrain * 0.02F));
 	}
 }

@@ -9,6 +9,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -129,7 +130,7 @@ public class GunJack extends Item {
 		list.add("Damage: 12 - 24");
 		list.add("Projectiles: 24 - 48");
 		list.add("");
-		list.add("§d§l[LEGENDARY WEAPON]");
+		list.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override

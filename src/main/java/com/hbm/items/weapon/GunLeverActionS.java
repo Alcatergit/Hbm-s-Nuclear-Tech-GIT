@@ -10,6 +10,7 @@ import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -159,7 +160,7 @@ public class GunLeverActionS extends Item {
 		list.add("Ammo: §e12x74 Buckshot");
 		list.add("Damage: Infinite");
 		list.add("");
-		list.add("§d§l[LEGENDARY WEAPON]");
+		list.add(I18nUtil.resolveKey("trait.legendaryweap"));
 	}
 	
 	@Override
