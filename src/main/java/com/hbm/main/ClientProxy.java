@@ -21,7 +21,6 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.DigammaMatter;
 import com.hbm.blocks.generic.BMPowerBox;
-import com.hbm.blocks.generic.BlockFallout;
 import com.hbm.blocks.generic.BlockModDoor;
 import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.blocks.generic.TrappedBrick;
@@ -1059,7 +1058,7 @@ public class ClientProxy extends ServerProxy {
 		ModelLoader.setCustomStateMapper(ModBlocks.bm_power_box, new StateMap.Builder().ignore(BMPowerBox.FACING, BMPowerBox.IS_ON).build());
 		//Drillgon200: This can't be efficient, but eh.
 		for(Block b : ModBlocks.ALL_BLOCKS){
-			if(b instanceof BlockDummyable || b instanceof RBMKDebrisRadiating || b instanceof DigammaMatter || b instanceof BlockFallout)
+			if(b instanceof BlockDummyable || b instanceof RBMKDebrisRadiating || b instanceof DigammaMatter)
 				ModelLoader.setCustomStateMapper(b, new StateMap.Builder().ignore(BlockDummyable.META).build());
 		}
 	}
@@ -2249,11 +2248,11 @@ public class ClientProxy extends ServerProxy {
 		
 		ModItems.redstone_sword.setTileEntityItemStackRenderer(ItemRedstoneSwordRender.INSTANCE);
 		ModItems.assembly_template.setTileEntityItemStackRenderer(AssemblyTemplateRender.INSTANCE);
+		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
 		ModItems.gun_b92.setTileEntityItemStackRenderer(ItemRenderGunAnim.INSTANCE);
 		ModItems.fluid_tank_full.setTileEntityItemStackRenderer(FluidTankRender.INSTANCE);
 		ModItems.fluid_barrel_full.setTileEntityItemStackRenderer(FluidBarrelRender.INSTANCE);
 		ModItems.canister_generic.setTileEntityItemStackRenderer(FluidCanisterRender.INSTANCE);
-		ModItems.chemistry_template.setTileEntityItemStackRenderer(ChemTemplateRender.INSTANCE);
 		ModItems.forge_fluid_identifier.setTileEntityItemStackRenderer(FFIdentifierRender.INSTANCE);
 		ModItems.gun_revolver_nightmare.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());
 		ModItems.gun_revolver_nightmare2.setTileEntityItemStackRenderer(new ItemRenderRevolverNightmare());

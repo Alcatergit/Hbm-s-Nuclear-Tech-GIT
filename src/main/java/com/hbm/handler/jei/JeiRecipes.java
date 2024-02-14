@@ -40,7 +40,7 @@ import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
+import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemChemistryTemplate;
@@ -660,7 +660,7 @@ public class JeiRecipes {
 			return chemRecipes;
 		chemRecipes = new ArrayList<ChemRecipe>();
 		
-        for (int i = 0; i < EnumChemistryTemplate.values().length; ++i) {
+       for (int i: ChemplantRecipes.recipeNames.keySet()){
 
         	List<AStack> inputs = new ArrayList<AStack>(7);
         	for(int j = 0; j < 7; j ++)

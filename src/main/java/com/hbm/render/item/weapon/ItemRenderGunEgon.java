@@ -45,7 +45,7 @@ public class ItemRenderGunEgon extends TEISRBase {
 				GL11.glRotated(170, 0, 1, 0);
 				GL11.glRotated(180, 1, 0, 0);
 			}
-			float time = Minecraft.getMinecraft().world.getWorldTime() + MainRegistry.proxy.partialTicks();
+			float time = Minecraft.getMinecraft().world.getTotalWorldTime() + MainRegistry.proxy.partialTicks();
 			float fade = entity instanceof EntityPlayer ? ItemGunEgon.getFirstPersonAnimFade((EntityPlayer) entity) : 0;
 			float[] offset = getOffset(time);
 			float[] jitter = getJitter(time);

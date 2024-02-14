@@ -10,6 +10,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemCustomLore;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -94,4 +95,29 @@ public class ItemArmorMod extends ItemCustomLore {
 		float mz = (float)(me.prevPosZ + (me.posZ - me.prevPosZ) * interp);
 		GL11.glTranslatef(mx-px, my-py, pz-mz);
 	}
+
+	public void copyRot(ModelBiped model, ModelBiped body){
+	 	model.bipedHead.rotationPointX = body.bipedHead.rotationPointX;
+        model.bipedHead.rotationPointY = body.bipedHead.rotationPointY;
+        model.bipedHead.rotationPointY = body.bipedHead.rotationPointY;
+        model.bipedHead.rotateAngleY = body.bipedHead.rotateAngleY;
+        model.bipedHead.rotateAngleY = body.bipedHead.rotateAngleY;
+        model.bipedHead.rotateAngleX = body.bipedHead.rotateAngleX;
+        model.bipedHead.offsetX = body.bipedHead.offsetX;
+        model.bipedHead.offsetY = body.bipedHead.offsetY;
+        model.bipedHead.offsetZ = body.bipedHead.offsetZ;
+
+        model.bipedBody.rotationPointX = body.bipedBody.rotationPointX;
+        model.bipedBody.rotationPointY = body.bipedBody.rotationPointY;
+        model.bipedBody.rotationPointZ = body.bipedBody.rotationPointZ;
+        model.bipedBody.rotateAngleX = body.bipedBody.rotateAngleX;
+        model.bipedBody.rotateAngleY = body.bipedBody.rotateAngleY;
+        model.bipedBody.rotateAngleZ = body.bipedBody.rotateAngleZ;
+        model.bipedBody.offsetX = body.bipedBody.offsetX;
+        model.bipedBody.offsetY = body.bipedBody.offsetY;
+        model.bipedBody.offsetZ = body.bipedBody.offsetZ;
+
+        model.isSneak = body.isSneak;
+		model.isChild = body.isChild;
+    }
 }

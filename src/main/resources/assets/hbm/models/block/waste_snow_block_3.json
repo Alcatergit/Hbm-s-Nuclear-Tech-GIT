@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "hbm:blocks/contamination/snow/waste_snow_3"
+    }
+}

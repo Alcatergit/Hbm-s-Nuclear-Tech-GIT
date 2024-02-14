@@ -254,9 +254,9 @@ public static GunConfiguration getBaseConfig() {
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
 		bullet.ammo = ModItems.gun_revolver_schrabidium_ammo;
-		bullet.dmgMin = 10000;
-		bullet.dmgMax = 100000;
-		bullet.instakill = true;
+		bullet.dmgMin = 1000000;
+		bullet.dmgMax = 10000000;
+		// bullet.instakill = true;
 		
 		return bullet;
 	}

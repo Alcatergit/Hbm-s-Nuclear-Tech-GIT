@@ -19,6 +19,20 @@ mods.ntm.Assembler.removeRecipe(IItemStack output);<br>
 ``mods.ntm.Assembler.removeRecipe(<hbm:machine_silex>);``
 
 
+## Chemplant
+
+> **duration** must be > 0
+
+mods.ntm.Chemplant.addChemplantRecipe(int index, String name, IItemStack[] inputItems, String[] inputFluids, int[] inputFluidAmounts, IItemStack[] outputItems, String[] outputFluids, int[] outputFluidAmounts, int duration);<br>
+``mods.ntm.Chemplant.addChemplantRecipe(371, "NTM_BEEF", null, ["coolant"], [500], [<minecraft:snowball>], ["water", "petroleum"], [1000, 2000], 50);``
+
+
+> **index** must be > 0 and is the item meta value
+
+mods.ntm.Chemplant.removeChemplantRecipe(int index);<br>
+``mods.ntm.Chemplant.removeChemplantRecipe(370);``
+
+
 ## Blast Furnace
 
 mods.ntm.BlastFurnace.addRecipe(IItemStack input1, IItemStack input2, IItemStack output);<br>

@@ -814,7 +814,7 @@ desc.templfolder3=Press Stamps: Flat Stamp
 desc.templfolder4=Siren Tracks: Insulator + Steel Plate
 desc.teslacoils=Provides infinite charge to tesla coils
 desc.ticks=ticks
-desc.tier=Tier: %
+desc.tier=Tier: %s
 desc.topsize=Top size:
 desc.type=Type:
 desc.unfluidid=Universal fluid identifier for:
@@ -4219,6 +4219,12 @@ tile.factory_titanium_core.name=Basic Factory Core Component
 tile.factory_titanium_furnace.name=Basic Factory Access Hatch
 tile.factory_titanium_hull.name=Basic Factory Casing
 tile.fallout.name=Fallout
+
+tile.waste_snow.name=Contaminated Snow
+tile.waste_snow_block.name=Contaminated Block of Snow
+tile.waste_ice.name=Contaminated Ice
+
+
 tile.fence_metal.name=Chainlink Fence
 tile.field_disturber.name=High Energy Field Jammer
 tile.fire_digamma.name=Lingering Digamma

@@ -74,9 +74,6 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		if(this == ModBlocks.waste_planks) {
-			return Items.COAL;
-		}
 		if(this == ModBlocks.ore_asbestos || this == ModBlocks.ore_gneiss_asbestos || this == ModBlocks.basalt_asbestos)
 		{
 			return ModItems.ingot_asbestos;
@@ -240,7 +237,7 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 	
 	@Override
 	public int damageDropped(IBlockState state) {
-		return this == ModBlocks.waste_planks ? 1 : 0;
+		return 0;
 	}
 	
 	

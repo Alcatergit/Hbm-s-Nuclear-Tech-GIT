@@ -165,7 +165,7 @@ public class NodeConnection extends NodeElement {
 		GL11.glTranslated(-x, -y, 0);
 		if(isTyping){
 			String s = builder.toString();
-			font.drawString(s + (Minecraft.getMinecraft().world.getWorldTime()%20 > 10 ? "_" : ""), x+(isInput ? 16 : -font.getStringWidth(name)-1), y+1F, 0xFFAFAFAF, false);
+			font.drawString(s + (Minecraft.getMinecraft().world.getTotalWorldTime()%20 > 10 ? "_" : ""), x+(isInput ? 16 : -font.getStringWidth(name)-1), y+1F, 0xFFAFAFAF, false);
 		} else {
 			int hex = isInput ? 0xFFAFAFAF : 0xFF2F2F2F;
 			font.drawString(name, x+(isInput ? 16 : -font.getStringWidth(name)-1), y+1F, hex, false);

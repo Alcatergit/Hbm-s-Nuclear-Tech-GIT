@@ -30,8 +30,15 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.Optional;
 
-public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser, SimpleComponent {
 
 	public long[] log = new long[20];
 	public long power = 0;
@@ -318,13 +325,11 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public void setPower(long i) {
 		power = i;
-		
 	}
 
 	@Override
 	public long getPower() {
 		return power;
-		
 	}
 
 	private long bufferedMax = 0;
@@ -384,5 +389,47 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public boolean isStorage() { //used for batteries
 		return true;
+	}
+
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "battery";
+	}
+
+	@Callback(doc = "getPower(); returns the current power level - long")
+	public Object[] getPower(Context context, Arguments args) {
+		return new Object[] {power};
+	}
+
+	@Callback(doc = "getMaxPower(); returns the maximum power level - long")
+	public Object[] getMaxPower(Context context, Arguments args) {
+		return new Object[] {getMaxPower()};
+	}
+
+	@Callback(doc = "getChargePercent(); returns the charge in percent - double")
+	public Object[] getChargePercent(Context context, Arguments args) {
+		return new Object[] {100D * getPower()/(double)getMaxPower()};
+	}
+
+	@Callback(doc = "getPowerDelta(); returns the in/out power flow - long")
+	public Object[] getPowerDelta(Context context, Arguments args) {
+		return new Object[] {powerDelta};
+	}
+
+	@Callback(doc = "getPriority(); returns the priority (1:low, 2:normal, 3:high) - int")
+	public Object[] getPriority(Context context, Arguments args) {
+		return new Object[] {1+getPriority().ordinal()};
+	}
+
+	@Callback(doc = "setPriority(int prio); sets the priority (1:low, 2:normal, 3:high)")
+	public Object[] setPriority(Context context, Arguments args) {
+		int prio = args.checkInteger(0);
+		if(prio == 1) priority = ConnectionPriority.LOW;
+		if(prio == 2) priority = ConnectionPriority.NORMAL;
+		if(prio == 3) priority = ConnectionPriority.HIGH;
+		return new Object[] {null};
 	}
 }

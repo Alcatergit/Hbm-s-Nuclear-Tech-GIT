@@ -68,7 +68,7 @@ import com.hbm.blocks.generic.BlockCrate;
 import com.hbm.blocks.generic.BlockDepth;
 import com.hbm.blocks.generic.BlockDepthOre;
 import com.hbm.blocks.generic.BlockDoorGeneric;
-import com.hbm.blocks.generic.BlockFallout;
+import com.hbm.blocks.generic.BlockPowder;
 import com.hbm.blocks.generic.BlockGeysir;
 import com.hbm.blocks.generic.BlockGlyph;
 import com.hbm.blocks.generic.BlockGoldSand;
@@ -634,7 +634,7 @@ public class ModBlocks {
 	public static final Block waste_terracotta = new BlockHazardMeta(Material.ROCK, SoundType.STONE, "waste_terracotta").addRadiation(ItemHazard.trx*ItemHazard.nugget).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(4.0F).setResistance(8.0F);
 	
 	public static final Block waste_log = new WasteLog(Material.WOOD, SoundType.WOOD, "waste_log").addCoal(2).toBlock().setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block waste_planks = new BlockNTMOre(SoundType.WOOD, "waste_planks", 0).addCoal(1).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_planks = new BlockHazardFuel(Material.WOOD, "waste_planks", 5, 5, 1600).addCoal(1).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_leaves = new WasteLeaves("waste_leaves").addRadiation(0.15F).toBlock().setHardness(0.3F).setResistance(0.3F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_grass_tall = new WasteGrassTall(Material.PLANTS, "waste_grass_tall").setCreativeTab(MainRegistry.resourceTab);
 	
@@ -657,7 +657,10 @@ public class ModBlocks {
 	public static final Block frozen_log = new WasteLog(Material.WOOD, SoundType.GLASS, "frozen_log").addCryogenic(2).toBlock().setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block frozen_planks = new BlockHazard(Material.WOOD, SoundType.GLASS, "frozen_planks").addCryogenic(2).toBlock().setTickRandomly(false).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(2.5F);
 	public static final Block frozen_dirt = new BlockHazard(Material.GROUND, SoundType.GLASS, "frozen_dirt").addCryogenic(1).toBlock().setTickRandomly(false).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F).setResistance(2.5F);
-	public static final Block fallout = new BlockFallout(Material.SNOW, SoundType.GROUND, "fallout").addRadiation(ItemHazard.fo * 2).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.1F).setLightOpacity(0);
+	public static final Block waste_snow = new BlockPowder(Material.SNOW, SoundType.SNOW, "waste_snow").addRadiation(ItemHazard.fo * 0.1F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.1F).setLightOpacity(0);
+	public static final Block waste_snow_block = new BlockHazardMeta(Material.SNOW, SoundType.SNOW, "waste_snow_block").addRadiation(ItemHazard.fo * ItemHazard.block * 0.1F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.2F);
+	public static final Block waste_ice = new BlockNTMGlass(Material.ICE, BlockRenderLayer.TRANSLUCENT, "waste_ice").setSoundType(SoundType.GLASS).addRadiation(ItemHazard.fo * ItemHazard.block * 0.2F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.2F);
+	public static final Block fallout = new BlockPowder(Material.SNOW, SoundType.SNOW, "fallout").addRadiation(ItemHazard.fo * 2).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.1F).setLightOpacity(0);
 	public static final Block block_fallout = new BlockHazardFalling(SoundType.GROUND, "block_fallout").addRadiation(ItemHazard.fo * ItemHazard.block).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.2F);
 	
 	public static final Block block_boron = new BlockRadResistant(Material.IRON, "block_boron").setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
@@ -913,9 +916,9 @@ public class ModBlocks {
 	//Drillgon200: hee hoo ultrakill
 	public static final Block sand_gold = new BlockGoldSand(Material.SAND, "sand_gold", SoundType.SAND).setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
 	public static final Block sand_gold198 = new BlockGoldSand(Material.SAND, "sand_gold198", SoundType.SAND).addRadiation(ItemHazard.au198 * ItemHazard.block * ItemHazard.powder).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(0.5F);
-	public static final Block glass_uranium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_uranium").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
-	public static final Block glass_trinitite = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_trinitite").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
-	public static final Block glass_polonium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_polonium").setSoundType(SoundType.GLASS).setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
+	public static final Block glass_uranium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_uranium").setSoundType(SoundType.GLASS).addRadiation(ItemHazard.u * ItemHazard.nugget).toBlock().setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
+	public static final Block glass_trinitite = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_trinitite").setSoundType(SoundType.GLASS).addRadiation(ItemHazard.trx * ItemHazard.nugget).toBlock().setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
+	public static final Block glass_polonium = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_polonium").setSoundType(SoundType.GLASS).addRadiation(ItemHazard.po210 * ItemHazard.nugget).toBlock().setLightLevel(5F/15F).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
 	public static final Block glass_boron = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.CUTOUT_MIPPED, true, true, "glass_boron").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
 	public static final Block glass_lead = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.CUTOUT_MIPPED, true, true, "glass_lead").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(0.3F);
 	public static final Block glass_ash = new BlockNTMGlass(Material.GLASS, BlockRenderLayer.TRANSLUCENT, "glass_ash").setSoundType(SoundType.GLASS).setCreativeTab(MainRegistry.blockTab).setHardness(3F);
@@ -1145,6 +1148,12 @@ public class ModBlocks {
 	public static final Block anvil_dnt = new NTMAnvil(Material.IRON, 7, "anvil_dnt").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_osmiridium = new NTMAnvil(Material.IRON, 8, "anvil_osmiridium").setCreativeTab(MainRegistry.machineTab);
 	public static final Block anvil_murky = new NTMAnvil(Material.IRON, 1916169, "anvil_murky").setCreativeTab(MainRegistry.machineTab);
+	
+	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
+	// public static final Block conveyor_double = new BlockConveyorDouble(Material.IRON, "conveyor_double").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block conveyor_express = new BlockConveyorExpress(Material.IRON, "conveyor_express").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block crane_ejector = new CraneExtractor(Material.IRON, "crane_ejector").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block crane_inserter = new CraneInserter(Material.IRON, "crane_inserter").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
 	
 	//The usual machines
 	public static final Block machine_nuke_furnace_off = new MachineNukeFurnace(false, "machine_nuke_furnace_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -1458,11 +1467,6 @@ public class ModBlocks {
 	public static final Block fluid_duct_solid = new BlockFluidPipeSolid(Material.IRON, "fluid_duct_solid").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.templateTab);
 	public static final Block fluid_duct_solid_sealed = new BlockFluidPipeSolidRadResistant(Material.IRON, "fluid_duct_solid_sealed").setHardness(15.0F).setResistance(10000.0F).setCreativeTab(MainRegistry.templateTab);
 	
-	public static final Block conveyor = new BlockConveyor(Material.IRON, "conveyor").setHardness(0.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
-	// public static final Block conveyor_double = new BlockConveyorDouble(Material.IRON, "conveyor_double").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block conveyor_express = new BlockConveyorExpress(Material.IRON, "conveyor_express").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block crane_ejector = new CraneExtractor(Material.IRON, "crane_ejector").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block crane_inserter = new CraneInserter(Material.IRON, "crane_inserter").setHardness(3.0F).setResistance(2.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block chain = new BlockChain(Material.IRON, "dungeon_chain").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 	
 	public static final Block ladder_sturdy = new BlockNTMLadder("ladder_sturdy").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);

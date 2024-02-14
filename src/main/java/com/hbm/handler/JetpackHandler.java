@@ -743,7 +743,7 @@ public class JetpackHandler {
 							j.booster_particles.add(new ParticleRocketPlasma(p.world, 1.8, iN*speed, 4, scale, grad)
 								.motion(randX+0.1F, speed, randZ));
 						}
-						if(player.world.getWorldTime()%(2-player.world.rand.nextInt(2)) == 0){
+						if(player.world.getTotalWorldTime()%(2-player.world.rand.nextInt(2)) == 0){
 							j.brightness_particles.add(new ParticleFakeBrightness(p.world, 1.8, -1, 4, 20+thrust*10, 6+player.world.rand.nextInt(2))
 									.color(color[0], color[1], color[2], MathHelper.clamp(0.05F+thrust*0.1F, 0, 1))
 									.enableLocalSpaceCorrection());

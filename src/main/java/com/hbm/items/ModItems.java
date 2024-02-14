@@ -1702,8 +1702,8 @@ public class ModItems {
 	public static final Item biomass = new ItemFuel("biomass", 20).setCreativeTab(MainRegistry.partsTab);
 	public static final Item biomass_compressed = new ItemFuel("biomass_compressed", 800).setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_resin = new ItemFuel("ball_resin", 80).setCreativeTab(MainRegistry.partsTab);
-	public static final Item cordite = new ItemHazard("cordite").addExplosive(2).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ballistite = new ItemHazard("ballistite").addExplosive(1).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item cordite = new ItemHazard("cordite").addExplosive(2).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ballistite = new ItemHazard("ballistite").addExplosive(1).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_dynamite = new ItemHazard("ball_dynamite").addExplosive(2).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_tnt = new ItemHazard("ball_tnt").addExplosive(3).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_fireclay = new ItemBase("ball_fireclay").setCreativeTab(MainRegistry.partsTab);

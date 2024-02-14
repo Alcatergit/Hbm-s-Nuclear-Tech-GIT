@@ -8,6 +8,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.capability.HbmLivingProps.ContaminationEffect;
 import com.hbm.interfaces.IItemHazard;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.items.ModItems;
 import com.hbm.modules.ItemHazardModule;
 import com.hbm.potion.HbmPotion;
@@ -30,13 +31,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockFallout extends Block implements IItemHazard {
+public class BlockPowder extends Block implements IItemHazard {
 	
-	public static final PropertyInteger META = BlockDummyable.META;
+	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 6);
 	
 	ItemHazardModule module;
 
-	public BlockFallout(Material mat, SoundType soundType, String s) {
+	public BlockPowder(Material mat, SoundType soundType, String s) {
 		super(mat);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
@@ -67,10 +68,17 @@ public class BlockFallout extends Block implements IItemHazard {
 		return false;
 	}
 	
+	@Override
+	public boolean canEntitySpawn(IBlockState state, Entity entityIn){
+		return ContaminationUtil.isRadImmune(entityIn);
+	}
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune){
-		return ModItems.fallout;
+		if(this == ModBlocks.fallout){
+			return ModItems.fallout;
+		}
+		return Item.getItemFromBlock(this);
 	}
 	
 	@Override
@@ -90,24 +98,15 @@ public class BlockFallout extends Block implements IItemHazard {
 	}
 	
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-
 		if(!world.isRemote) {
-			//player.addPotionEffect(new PotionEffect(HbmPotion.radiation.id, 15 * 20, 1));
 			HbmLivingProps.addCont(player, new ContaminationEffect(1F, 200, false));
 		}
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		this.func_150155_m(worldIn, pos.getX(), pos.getY(), pos.getZ());
-	}
-	
-	private boolean func_150155_m(World world, int x, int y, int z) {
-		if(!this.canPlaceBlockAt(world, new BlockPos(x, y, z))) {
-			world.setBlockToAir(new BlockPos(x, y, z));
-			return false;
-		} else {
-			return true;
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
+		if(!this.canPlaceBlockAt(world, pos)) {
+			world.setBlockToAir(pos);
 		}
 	}
 

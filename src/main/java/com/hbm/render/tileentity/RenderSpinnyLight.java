@@ -38,7 +38,7 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 			}
 		}
 		boolean powered = (te.getBlockMetadata() & 8) > 0;
-		float time = powered ? (te.getWorld().getWorldTime()-te.timeAdded)%10000+partialTicks : 0;
+		float time = powered ? (te.getWorld().getTotalWorldTime()-te.timeAdded)%10000+partialTicks : 0;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x+0.5, y+0.5, z+0.5);
 		switch(te.getBlockMetadata()&7){

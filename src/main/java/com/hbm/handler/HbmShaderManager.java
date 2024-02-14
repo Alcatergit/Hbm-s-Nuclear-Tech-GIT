@@ -55,7 +55,7 @@ public class HbmShaderManager {
 	private static final int INFO_LOG_LENGTH = arbShaders ? ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB : GL20.GL_INFO_LOG_LENGTH;
 
 	public static final Uniform WORLD_TIME = Uniform.createUniform("worldTime", () -> {
-		return Minecraft.getMinecraft().world.getWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks();
+		return Minecraft.getMinecraft().world.getTotalWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks();
 	});
 	public static final Uniform TIME = Uniform.createUniform("time", () -> {
 		return System.currentTimeMillis()/1000F;
@@ -420,7 +420,7 @@ public class HbmShaderManager {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL20.glUniform1i(GL20.glGetUniformLocation(bfg_worm, "noise"), 2);
 		GL20.glUniform1i(GL20.glGetUniformLocation(bfg_worm, "bigNoise"), 3);
-		float worldTime = Minecraft.getMinecraft().world.getWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks() + offset;
+		float worldTime = Minecraft.getMinecraft().world.getTotalWorldTime() + Minecraft.getMinecraft().getRenderPartialTicks() + offset;
 		GL20.glUniform1f(GL20.glGetUniformLocation(bfg_worm, "worldTime"), worldTime/4);
 	}
 

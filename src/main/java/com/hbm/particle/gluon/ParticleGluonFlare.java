@@ -93,7 +93,7 @@ public class ParticleGluonFlare extends Particle {
         float f6 = (float)(this.posY - interpPosY);
         float f7 = (float)(this.posZ - interpPosZ);
         if(player != null){
-        	float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+partialTicks);
+        	float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
 			Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
         	RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, partialTicks);
         	Vec3d pos = null;

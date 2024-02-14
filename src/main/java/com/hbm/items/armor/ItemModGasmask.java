@@ -78,17 +78,14 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 		if(this.modelM65 == null) {
 			this.modelM65 = new ModelM65();
 		}
-		
 		RenderPlayer renderer = event.getRenderer();
 		ModelBiped model = renderer.getMainModel();
 		EntityPlayer player = event.getEntityPlayer();
 
-		modelM65.isSneak = model.isSneak;
-		modelM65.isChild = false;
+		copyRot(modelM65, model);
 
 		float interp = event.getPartialRenderTick();
-		float yawHead = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * interp;
-		float yawWrapped = MathHelper.wrapDegrees(yawHead+180);
+		float yawWrapped = MathHelper.wrapDegrees(player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * interp + 180);
 		float pitch = player.rotationPitch;
 
 		if(this == ModItems.attachment_mask)
@@ -102,7 +99,8 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 			GL11.glPushMatrix();
 			offset(player, me, interp);
 		}
-		modelM65.render(event.getEntityPlayer(), 0.0F, 0.0F, 0, yawWrapped, pitch, 0.0625F);
+		if(model.isSneak) GL11.glTranslatef(0, -0.1875F, 0);
+		modelM65.render(player, 0F, 0F, 0, yawWrapped, pitch, 0.0625F);
 		if(!isMe){
 			GL11.glPopMatrix();
 		}

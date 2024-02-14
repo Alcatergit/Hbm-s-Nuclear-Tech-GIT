@@ -30,6 +30,9 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockGravel;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.BlockIce;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -329,7 +332,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			Material bmaterial = b.getMaterial();
 			lastReachedStone = reachedStone;
 
-			if(bblock.isCollidable() && contactHeight == 420)
+			if(bblock != Blocks.AIR && contactHeight == 420)
 				contactHeight = Math.min(y+1, 255);
 			
 			if(reachedStone && bmaterial != Material.AIR){
@@ -355,6 +358,10 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				break;
 			}
 
+			if(y == contactHeight-1 && bblock != ModBlocks.fallout && Math.abs(rand.nextGaussian() * (dist * dist) / (s0 * s0)) < 0.05 && rand.nextDouble() < 0.05 && ModBlocks.fallout.canPlaceBlockAt(world, pos.add(0, 1, 0))) {
+				placeBlockFromDist(dist, ModBlocks.fallout, pos.add(0, 1, 0));
+			}
+
 			if(spawnFire && dist < s2 && bblock.isFlammable(world, pos, EnumFacing.UP) && world.isAirBlock(pos.add(0, 1, 0))) {
 				world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
 			}
@@ -368,9 +375,8 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			if(bblock instanceof BlockLeaves) {
 				if(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F)))){
-					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
-				}
-				else {
+					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+				} else {
 					world.setBlockToAir(pos);
 				}
 				continue;
@@ -431,13 +437,18 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			} else if(bblock == Blocks.FARMLAND) {
 				placeBlockFromDist(dist, ModBlocks.waste_dirt, pos);
 				continue;
-			} else if(bblock == Blocks.SNOW_LAYER) {
-				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+			} else if(bblock instanceof BlockSnow) {
+				placeBlockFromDist(dist, ModBlocks.waste_snow, pos);
 				continue;
 
-			} else if(bblock == Blocks.SNOW) {
-				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			} else if(bblock instanceof BlockSnowBlock) {
+				placeBlockFromDist(dist, ModBlocks.waste_snow_block, pos);
 				continue;
+
+			} else if(bblock instanceof BlockIce) {
+				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
+				continue;
+
 			} else if(bblock instanceof BlockBush) {
 				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS){
 					placeBlockFromDist(dist, ModBlocks.waste_earth, pos.add(0, -1, 0));
@@ -511,7 +522,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				continue;
 			}
 
-			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log) {
+			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
 				if(dist < s0)
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				continue;

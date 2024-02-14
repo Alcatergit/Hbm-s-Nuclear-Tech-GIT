@@ -33,6 +33,9 @@ import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockIce;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -290,14 +293,18 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 			}
 
-			else if(b == Blocks.SNOW_LAYER) {
-				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
-			} 
-
-			else if(b == Blocks.SNOW) {
-				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			else if(b instanceof BlockSnow) {
+				world.setBlockState(pos, ModBlocks.waste_snow.getDefaultState());
 			}
 
+			else if(b instanceof BlockSnowBlock) {
+				world.setBlockState(pos, ModBlocks.waste_snow_block.getDefaultState());
+			} 
+
+			else if(b instanceof BlockIce) {
+				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
+			}
+			
 			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {
 				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
 			}
@@ -422,12 +429,16 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 			}
 
-			else if(b == Blocks.SNOW_LAYER) {
-				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+			else if(b instanceof BlockSnow) {
+				world.setBlockState(pos, ModBlocks.waste_snow.getDefaultState());
+			} 
+			
+			else if(b instanceof BlockSnowBlock) {
+				world.setBlockState(pos, ModBlocks.waste_snow_block.getDefaultState());
 			} 
 
-			else if(b == Blocks.SNOW) {
-				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			else if(b instanceof BlockIce) {
+				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 			}
 
 			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {

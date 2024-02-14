@@ -89,6 +89,10 @@ public class ModelGoggles extends ModelBiped {
 		this.google.rotationPointY = this.bipedHead.rotationPointY;
 		this.google.rotateAngleY = this.bipedHead.rotateAngleY;
 		this.google.rotateAngleX = this.bipedHead.rotateAngleX;
+
+		if(this.isSneak) {
+            this.google.rotationPointY = 3.73F;
+        }
 	}
 
 	@Override

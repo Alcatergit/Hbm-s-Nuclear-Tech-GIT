@@ -436,8 +436,6 @@ public class MainRegistry {
 	public static int generalOverride = 0;
 	public static int polaroidID = 1;
 	
-	public static final int schrabFromUraniumChance = 100;
-	
 	public static int x;
 	public static int y;
 	public static int z;
@@ -1063,10 +1061,10 @@ public class MainRegistry {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		BedrockOreRegistry.registerBedrockOres();
 		ModItems.postInit();
 		ModBlocks.postInit();
 		BlockCrate.setDrops();
+		BedrockOreRegistry.registerBedrockOres();
 		FluidTypeHandler.registerFluidProperties();
 		CraftingManager.addBedrockOreSmelting();
 		ShredderRecipes.registerShredder();
@@ -1121,6 +1119,7 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new SchistStratum()); //DecorateBiomeEvent.Pre
 		
 		NTMCraftTweaker.applyPostInitActions();
+		AssemblerRecipes.generateList();
 		HeatRecipes.setFluidsForRBMKLoader();
 		if(event.getSide() == Side.CLIENT) {
 			BedrockOreRegistry.registerOreColors();

@@ -34,7 +34,7 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				if(canInsertItem(slot, stack, stack.getCount()))
 					return super.insertItem(slot, stack, simulate);
-				return ItemStack.EMPTY;
+				return stack;
 			}
 
 			@Override

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -44,7 +43,7 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
-        String s1 = ("" + I18n.format("chem." + EnumChemistryTemplate.getEnum(stack.getItemDamage()).name())).trim();
+        String s1 = ("" + I18n.format("chem." + ChemplantRecipes.getName(stack))).trim();
 
         if (s1 != null) {
             s = s + " " + s1;
@@ -56,9 +55,9 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-			for (int i = 0; i < EnumChemistryTemplate.values().length; ++i) {
-		            list.add(new ItemStack(this, 1, i));
-		        }
+			for (int i: ChemplantRecipes.recipeNames.keySet()){
+	            list.add(new ItemStack(this, 1, i));
+	        }
 		}
 	}
 	
@@ -129,5 +128,4 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	public ModelResourceLocation getResourceLocation() {
 		return chemModel;
 	}
-	
 }

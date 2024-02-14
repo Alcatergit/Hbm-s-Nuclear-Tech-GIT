@@ -129,7 +129,7 @@ public class AssemblerRecipes {
 	 * Generates an ordered list of outputs, used by the template item to
 	 * generate subitems
 	 */
-	private static void generateList() {
+	public static void generateList() {
 
 		List<ComparableStack> list = new ArrayList<>(recipes.keySet());
 		Collections.sort(list);
@@ -429,6 +429,7 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.tank_steel, 3),
 				new OreDictStack(ANY_PLASTIC.ingot(), 4),
 				new OreDictStack(NB.ingot(), 2),
+				new OreDictStack(LA.ingot(), 1),
 				new ComparableStack(ModItems.catalyst_clay, 12),
 				}, 300);
 		makeRecipe(new ComparableStack(ModBlocks.machine_flare, 1), new AStack[] { new ComparableStack(ModBlocks.steel_scaffold, 28), new ComparableStack(ModItems.tank_steel, 2), new ComparableStack(ModItems.pipes_steel, 2), new ComparableStack(ModItems.hull_small_steel, 1), new ComparableStack(ModItems.thermo_element, 3), }, 200);
@@ -1066,6 +1067,7 @@ public class AssemblerRecipes {
 		}
 		recipes.remove(out);
 		time.remove(out);
+		recipeList.remove(out);
 	}
 
 	public static void loadRecipesFromConfig() {

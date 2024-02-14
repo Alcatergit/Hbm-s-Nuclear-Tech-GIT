@@ -37,6 +37,9 @@ public class ExplosionNukeRayBatched {
 	double gspX;
 	double gspY;
 
+	private static final int maxY = 255;
+	private static final int minY = 0;
+
 	public boolean isAusf3Complete = false;
 
 	public ExplosionNukeRayBatched(World world, int x, int y, int z, int strength, int radius) {
@@ -98,6 +101,7 @@ public class ExplosionNukeRayBatched {
 			FloatTriplet lastPos = null;
 			HashSet<ChunkPos> chunkCoords = new HashSet();
 
+			//Finding the end of the ray
 			for(int r = 0; r < radius+1; r ++) {
 
 				float x0 = (float) (posX + (vec.xCoord * r));
@@ -107,6 +111,13 @@ public class ExplosionNukeRayBatched {
 				int iX = (int) Math.floor(x0);
 				int iY = (int) Math.floor(y0);
 				int iZ = (int) Math.floor(z0);
+
+				if(iY < minY || iY > maxY){
+					if(isContained) {
+						isContained = false;
+					}
+					break;
+				}
 
 				pos.setPos(iX, iY, iZ);
 				IBlockState blockState = world.getBlockState(pos);

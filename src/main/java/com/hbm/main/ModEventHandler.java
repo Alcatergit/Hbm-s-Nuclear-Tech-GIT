@@ -102,7 +102,9 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.EntityZombieVillager;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
@@ -305,6 +307,10 @@ public class ModEventHandler {
 				e.player.inventoryContainer.detectAndSendChanges();
 		}
 	}
+
+	public boolean canWear(Entity entity){
+		return entity instanceof EntityZombie || entity instanceof EntitySkeleton || entity instanceof EntityVillager || entity instanceof EntityIronGolem;
+	}
 	
 	@SubscribeEvent
 	public void mobSpawn(LivingSpawnEvent.SpecialSpawn event) {
@@ -312,7 +318,7 @@ public class ModEventHandler {
 			EntityLivingBase entity = event.getEntityLiving();
 			World world = event.getWorld();
 
-			if(entity instanceof EntityLiving) {
+			if(entity instanceof EntityLiving && canWear(entity)) {
 				int randomArmorNumber = rand.nextInt(2<<16);
 				int randomHandNumber = rand.nextInt(256);
 				EntityLiving mob = (EntityLiving)entity;

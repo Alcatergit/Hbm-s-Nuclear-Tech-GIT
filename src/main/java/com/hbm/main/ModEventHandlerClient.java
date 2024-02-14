@@ -58,7 +58,6 @@ import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemRBMKPellet;
@@ -139,6 +138,7 @@ import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
+import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil;
@@ -313,15 +313,19 @@ public class ModEventHandlerClient {
 			return;
 
 		//Drillgon200: I hate myself for making this
+		if(item == ModItems.chemistry_template){
+			ChemplantRecipes.registerRecipes();
+		}
+
 		if(item == ModItems.chemistry_icon) {
-			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + EnumChemistryTemplate.getEnum(i).getName().toLowerCase(), "inventory"));
+			for(int i: ChemplantRecipes.recipeNames.keySet()){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + ChemplantRecipes.getName(i).toLowerCase(), "inventory"));
 			}
 		} else if(item == ModItems.chemistry_template) {
-			for(int i = 0; i < EnumChemistryTemplate.values().length; i++) {
+			for(int i: ChemplantRecipes.recipeNames.keySet()){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
-		} else 	if(item == ModItems.siren_track) {
+		} else if(item == ModItems.siren_track) {
 			for(int i = 0; i < TrackType.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
@@ -1478,7 +1482,7 @@ public class ModEventHandlerClient {
 			//GLUON GUN//
 			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && ItemGunEgon.activeTicks > 0 && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
 				GL11.glPushMatrix();
-				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+partialTicks);
+				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
 				Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
 				RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, partialTicks);
 				Vec3d pos = player.getPositionEyes(partialTicks);
@@ -1487,7 +1491,7 @@ public class ModEventHandlerClient {
 				} else {
 					hitPos = r.hitVec.add(look.scale(-0.1));
 				}
-				float[] offset = ItemRenderGunEgon.getOffset(player.world.getWorldTime()+partialTicks);
+				float[] offset = ItemRenderGunEgon.getOffset(player.world.getTotalWorldTime()+partialTicks);
 				//I'll at least attempt to make it look consistent at different fovs
 				float fovDiff = (currentFOV-70)*0.0002F;
 				Vec3d start = new Vec3d(-0.18+offset[0]*0.075F-fovDiff, -0.2+offset[1]*0.1F, 0.35-fovDiff*30);
@@ -1535,7 +1539,7 @@ public class ModEventHandlerClient {
 				ItemGunEgon.activeTrailParticles.remove(player);
 				continue;
 			}
-			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+partialTicks);
+			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
 			Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, partialTicks);
 			if(r != null && r.hitVec != null && r.typeOfHit == Type.BLOCK){
@@ -1805,7 +1809,7 @@ public class ModEventHandlerClient {
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){
 			GL11.glPushMatrix();
 			float partialTicks = event.getPartialRenderTick();
-			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+partialTicks);
+			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
 			Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, event.getPartialRenderTick());
 			Vec3d pos = player.getPositionEyes(event.getPartialRenderTick());

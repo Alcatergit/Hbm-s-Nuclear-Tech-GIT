@@ -30,8 +30,11 @@ public class RenderLandmine extends TileEntitySpecialRenderer<TileEntityLandmine
         	ResourceManager.mine_ap.renderAll();
 		}
 		if(block == ModBlocks.mine_he) {
-			bindTexture(ResourceManager.mine_he_tex);
-        	ResourceManager.mine_he.renderAll();
+			GL11.glRotatef(-90, 0F, 1F, 0F);
+			GL11.glShadeModel(GL11.GL_SMOOTH);
+			bindTexture(ResourceManager.mine_marelet_tex);
+			ResourceManager.mine_marelet.renderAll();
+			GL11.glShadeModel(GL11.GL_FLAT);
 		}
 		if(block == ModBlocks.mine_shrap) {
 			bindTexture(ResourceManager.mine_shrap_tex);

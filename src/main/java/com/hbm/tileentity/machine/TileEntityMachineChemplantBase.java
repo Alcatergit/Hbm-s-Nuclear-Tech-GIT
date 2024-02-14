@@ -7,7 +7,6 @@ import java.util.Map;
 import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -142,7 +141,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			return false;
 		}
 
-		if(templateStack.getItemDamage() >= EnumChemistryTemplate.values().length) {
+		if(!ChemplantRecipes.hasRecipe(templateStack)) {
 			return false;
 		}
 
@@ -330,7 +329,7 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			return;
 		}
 
-		if(templateStack.getItemDamage() < EnumChemistryTemplate.values().length) {
+		if(ChemplantRecipes.hasRecipe(templateStack)) {
 			List<AStack> itemInputs = ChemplantRecipes.getChemInputFromTempate(templateStack);
 			if(itemInputs == null) {
 				return;

@@ -38,7 +38,8 @@ public class ItemUnstable extends Item {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-
+		if(stack.getItemDamage() != 0)
+    		return;
 		this.setTimer(stack, this.getTimer(stack) + 1);
 
 		if(this.getTimer(stack) == timer && !world.isRemote) {
@@ -54,6 +55,8 @@ public class ItemUnstable extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem itemEntity) {
+		if(itemEntity.getItem().getItemDamage() != 0)
+    		return false;
 		World world = itemEntity.world;
 
 		this.setTimer(itemEntity.getItem(), this.getTimer(itemEntity.getItem()) + 1);

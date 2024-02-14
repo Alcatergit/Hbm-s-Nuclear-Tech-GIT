@@ -25,7 +25,7 @@ public class TileEntitySpinnyLight extends TileEntity implements IControllable {
 	
 	@Override
 	public void onLoad() {
-		timeAdded = world.getWorldTime();
+		timeAdded = world.getTotalWorldTime();
 	}
 	
 	@Override

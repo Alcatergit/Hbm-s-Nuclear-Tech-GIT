@@ -18,11 +18,16 @@ public class SlotPattern extends SlotItemHandler {
 
     @Override
     public boolean canTakeStack(EntityPlayer player) {
-        return false;
+        return true;
     }
 
     @Override
     public int getSlotStackLimit() {
+        return 1;
+    }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack) {
         return 1;
     }
 
@@ -33,9 +38,8 @@ public class SlotPattern extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null && stack.getCount() == 1;
+        return stack != null;
     }
-
 
     @Override
     @SideOnly(Side.CLIENT)

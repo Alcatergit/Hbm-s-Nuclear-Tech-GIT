@@ -10,7 +10,7 @@ import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.inventory.ChemplantRecipes.EnumChemistryTemplate;
+import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.lib.RefStrings;
@@ -113,9 +113,9 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 			allStacks.add(stack);
 		}
     	//Chemistry Templates
-    	for(int i = 0; i < EnumChemistryTemplate.values().length; i++)
+    	for (int i: ChemplantRecipes.recipeNames.keySet()){
 			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
-
+		}
 		search(null);
     }
     

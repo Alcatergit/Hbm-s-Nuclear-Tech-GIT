@@ -14,8 +14,15 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
-public class TileEntityRadSensor extends TileEntity implements ITickable {
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+
+@Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
+public class TileEntityRadSensor extends TileEntity implements ITickable, SimpleComponent {
 
 	public float chunkRads = 0;
 	public float recievedDose = 0;
@@ -151,5 +158,28 @@ public class TileEntityRadSensor extends TileEntity implements ITickable {
 			lastRedstoneOutput = redstoneOutput;
 			lastComparatorOutput = comparatorOutput;
 		}
+	}
+
+	// opencomputers interface
+
+	@Override
+	public String getComponentName() {
+		return "radsensor";
+	}
+
+	@Callback(doc = "getRads(); returns the measured chunk radiation - float")
+	public Object[] getRads(Context context, Arguments args) {
+		return new Object[] {chunkRads};
+	}
+
+	@Callback(doc = "getDose(); returns the measured chunk radiation dose - float")
+	public Object[] getDose(Context context, Arguments args) {
+		return new Object[] {recievedDose};
+	}
+
+	@Callback(doc = "resetDose(); resets the radiation dose")
+	public Object[] resetDose(Context context, Arguments args) {
+		recievedDose = 0;
+		return new Object[] {null};
 	}
 }

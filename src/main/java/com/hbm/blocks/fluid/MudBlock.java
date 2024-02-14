@@ -63,24 +63,24 @@ public class MudBlock extends BlockFluidClassic {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
 		reactToBlocks2(world, pos.east());
 		reactToBlocks2(world, pos.west());
 		reactToBlocks2(world, pos.up());
 		reactToBlocks2(world, pos.down());
 		reactToBlocks2(world, pos.south());
 		reactToBlocks2(world, pos.north());
+		super.updateTick(world, pos, state, rand);
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos) {
-		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 		reactToBlocks(world, pos.east());
 		reactToBlocks(world, pos.west());
 		reactToBlocks(world, pos.up());
 		reactToBlocks(world, pos.down());
 		reactToBlocks(world, pos.south());
 		reactToBlocks(world, pos.north());
+		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 	}
 	
 	public void reactToBlocks(World world, BlockPos pos) {

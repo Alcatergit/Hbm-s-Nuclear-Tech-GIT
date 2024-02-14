@@ -15,6 +15,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockIce;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -90,11 +93,14 @@ public class RadiationWorldHandler {
 									} else if(bblock == Blocks.MYCELIUM) {
 										world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 
-									} else if(bblock == Blocks.SNOW_LAYER) {
-										world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+									} else if(bblock instanceof BlockSnow) {
+										world.setBlockState(pos, ModBlocks.waste_snow.getDefaultState());
 
-									} else if(bblock == Blocks.SNOW) {
-										world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+									} else if(bblock instanceof BlockSnowBlock) {
+										world.setBlockState(pos, ModBlocks.waste_snow_block.getDefaultState());
+
+									} else if(bblock instanceof BlockIce) {
+										world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 
 									} else if(bblock instanceof BlockBush) {
 										world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());
@@ -184,11 +190,14 @@ public class RadiationWorldHandler {
 						} else if(bblock == Blocks.MYCELIUM) {
 							world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 
-						} else if(bblock == Blocks.SNOW_LAYER) {
-							world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+						} else if(bblock instanceof BlockSnow) {
+							world.setBlockState(pos, ModBlocks.waste_snow.getDefaultState());
 
-						} else if(bblock == Blocks.SNOW) {
-							world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+						} else if(bblock instanceof BlockSnowBlock) {
+							world.setBlockState(pos, ModBlocks.waste_snow_block.getDefaultState());
+
+						} else if(bblock instanceof BlockIce) {
+							world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 
 						} else if(bblock instanceof BlockBush) {
 							world.setBlockState(pos, ModBlocks.waste_grass_tall.getDefaultState());

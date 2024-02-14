@@ -20,4 +20,3 @@ public class NTMCraftTweaker {
 		}
 	}
 }
-//NTMCraftTweaker.postInitActions.add(IAction);

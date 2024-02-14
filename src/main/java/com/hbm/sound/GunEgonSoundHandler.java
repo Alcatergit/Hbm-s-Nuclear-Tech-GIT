@@ -41,10 +41,10 @@ public class GunEgonSoundHandler {
 			} else if(ticks == 8){
 				Minecraft.getMinecraft().getSoundHandler().playSound(loop);
 			}
-			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+1);
+			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+1);
 			Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
-			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && player.world.getWorldTime() % 2 == 0){
+			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && player.world.getTotalWorldTime() % 2 == 0){
 				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecordSoundRecord(HBMSoundHandler.gluonHit, (float)player.posX, (float)player.posY, (float)player.posZ));
 			}
 			ticks ++;

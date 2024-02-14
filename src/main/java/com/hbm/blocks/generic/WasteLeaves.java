@@ -73,6 +73,11 @@ public class WasteLeaves extends BlockOldLeaf implements IItemHazard {
     	return;
     }
 
+    @Override
+    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random){
+    	return;
+    }
+
 	@Override
 	public ItemHazardModule getModule() {
 		return module;

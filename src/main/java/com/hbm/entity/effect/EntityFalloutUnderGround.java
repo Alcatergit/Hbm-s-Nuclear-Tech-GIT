@@ -29,6 +29,9 @@ import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockGravel;
+import net.minecraft.block.BlockIce;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.BlockLog;
@@ -198,6 +201,9 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 	private void stompRadRay(MutableBlockPos pos, double directionX, double directionY, double directionZ) {
 		for(int l = 0; l < radius; l++) {
 			pos.setPos(posX+directionX*l, posY+directionY*l, posZ+directionZ*l);
+
+			if(pos.getY() < 0 || pos.getY() > 255) return;
+
 			if(world.isAirBlock(pos))
 				continue;
 
@@ -254,12 +260,16 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			} else if(bblock == Blocks.FARMLAND) {
 				placeBlockFromDist(l, ModBlocks.waste_dirt, pos);
 				continue;
-			} else if(bblock == Blocks.SNOW_LAYER) {
-				world.setBlockState(pos, ModBlocks.fallout.getDefaultState());
+			} else if(bblock instanceof BlockSnow) {
+				placeBlockFromDist(l, ModBlocks.waste_snow, pos);
 				continue;
 
-			} else if(bblock == Blocks.SNOW) {
-				world.setBlockState(pos, ModBlocks.block_fallout.getDefaultState());
+			} else if(bblock instanceof BlockSnowBlock) {
+				placeBlockFromDist(l, ModBlocks.waste_snow_block, pos);
+				continue;
+
+			} else if(bblock instanceof BlockIce) {
+				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
@@ -324,7 +334,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 					world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(b));
 				return;
 
-			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log) {
+			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
 				if(l < s0)
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				return;

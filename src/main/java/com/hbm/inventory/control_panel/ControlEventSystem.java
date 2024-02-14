@@ -141,7 +141,7 @@ public class ControlEventSystem {
 		if(systems.containsKey(evt.world)){
 			ControlEventSystem s = systems.get(evt.world);
 			for(IControllable c : s.tickables){
-				c.receiveEvent(c.getControlPos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getWorldTime()));
+				c.receiveEvent(c.getControlPos(), ControlEvent.newEvent("tick").setVar("time", evt.world.getTotalWorldTime()));
 			}
 		}
 	}

@@ -89,6 +89,10 @@ public class ModelGasMask extends ModelBiped {
 		this.mask.rotationPointY = this.bipedHead.rotationPointY;
 		this.mask.rotateAngleY = this.bipedHead.rotateAngleY;
 		this.mask.rotateAngleX = this.bipedHead.rotateAngleX;
+
+		if (this.isSneak) {
+            this.mask.rotationPointY = 3.73F;
+        }
 	}
 
 	@Override

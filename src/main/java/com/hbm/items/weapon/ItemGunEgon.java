@@ -66,7 +66,7 @@ public class ItemGunEgon extends ItemGunBase {
 		if(player == Minecraft.getMinecraft().player){
 			if(m1 && Library.countInventoryItem(player.inventory, getBeltType(player, stack, true)) >= 2){
 				activeTicks = Math.min(activeTicks + 1, 5);
-				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+1);
+				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+1);
 				Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 				RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
 				if(r != null && r.hitVec != null && r.typeOfHit != Type.MISS && r.sideHit != null){
@@ -82,7 +82,7 @@ public class ItemGunEgon extends ItemGunBase {
 				
 				Random rand = world.rand;
 				float partialTicks = MainRegistry.proxy.partialTicks();
-				float[] offset = ItemRenderGunEgon.getOffset(player.world.getWorldTime()+partialTicks);
+				float[] offset = ItemRenderGunEgon.getOffset(player.world.getTotalWorldTime()+partialTicks);
 				float fovDiff = (ModEventHandlerClient.currentFOV-70)*0.0002F;
 				Vec3d start = new Vec3d(-0.18+offset[0]*0.075F-fovDiff, -0.2+offset[1]*0.1F, 0.5-fovDiff*30);
 				start = start.rotatePitch((float) Math.toRadians(-(player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch) * partialTicks)));
@@ -99,10 +99,10 @@ public class ItemGunEgon extends ItemGunBase {
 				}
 				
 				
-				if(Minecraft.getMinecraft().world.getWorldTime() % 2 == 0){
+				if(Minecraft.getMinecraft().world.getTotalWorldTime() % 2 == 0){
 					ModEventHandlerClient.firstPersonAuxParticles.add(new ParticleGluonMuzzleSmoke(world, 0, 0, 4.1, 0, ResourceManager.gluon_muzzle_smoke, 10, 50, 9).color(0.2F, 0.4F+world.rand.nextFloat()*0.5F, 1F, 3F).lifetime(10));
 				}
-				if(Minecraft.getMinecraft().world.getWorldTime() % 4 == 0){
+				if(Minecraft.getMinecraft().world.getTotalWorldTime() % 4 == 0){
 					ModEventHandlerClient.firstPersonAuxParticles.add(new ParticleGluonMuzzleSmoke(world, 0, 0, 4, 1, ResourceManager.gluon_muzzle_glow, 30, 50, -1).color(0.2F, 0.4F+world.rand.nextFloat()*0.5F, 1F, 2F).lifetime(16));
 				}
 				
@@ -129,11 +129,11 @@ public class ItemGunEgon extends ItemGunBase {
 			return;
 		if(getIsMouseDown(stack) && Library.countInventoryItem(player.inventory, getBeltType(player, stack, true)) >= 2){
 			setIsFiring(stack, true);
-			if(world.getWorldTime() % 5 == 0){
+			if(world.getTotalWorldTime() % 5 == 0){
 				Library.consumeInventoryItem(player.inventory, getBeltType(player, stack, true));
 				Library.consumeInventoryItem(player.inventory, getBeltType(player, stack, true));
 			}
-			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getWorldTime()+1);
+			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+1);
 			Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
 			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && CompatibilityConfig.isWarDim(world)){
