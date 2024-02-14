@@ -40,7 +40,7 @@ public class TileEntityHeaterRadioThermal extends TileEntityMachineBase implemen
             
             this.tryPullHeat();
 
-            this.heatGen = RTGUtil.updateRTGs(inventory, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+            this.heatGen = RTGUtil.updateRTGs(inventory, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}) * 10;
             this.heatEnergy += heatGen;
             if(heatEnergy > maxHeatEnergy) this.heatEnergy = maxHeatEnergy;
             NBTTagCompound data = new NBTTagCompound();
