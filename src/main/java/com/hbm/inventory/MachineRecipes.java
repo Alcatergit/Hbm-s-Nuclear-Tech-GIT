@@ -137,7 +137,7 @@ public class MachineRecipes {
 		else if(fluid == ModForgeFluids.nitan)
 			return 500;
 		else if(fluid == ModForgeFluids.liquid_osmiridium)
-			return 2000;
+			return 1000; //whose idea was 2000 heck nah
 		else
 			return 0;
 	}

@@ -121,7 +121,7 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 					}
 				}
 				if(sat != null && sat instanceof SatelliteHorizons) {
-
+					delay = 10 * 30 * 1000; //5min due to tektite rarity, was right a few commits ago
 					SatelliteHorizons gerald = (SatelliteHorizons)sat;
 
 					if(gerald.lastOp + delay < System.currentTimeMillis()) {
