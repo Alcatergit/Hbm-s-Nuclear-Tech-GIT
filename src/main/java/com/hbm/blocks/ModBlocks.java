@@ -465,8 +465,8 @@ public class ModBlocks {
 	public static final Block ore_depth_nether_nitan = new BlockDepthOre("ore_depth_nether_nitan").setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block block_meteor = new BlockNTMOre("block_meteor", 3).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
-	public static final Block block_meteor_cobble = new BlockNTMOre("block_meteor_cobble", 2).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
-	public static final Block block_meteor_broken = new BlockNTMOre("block_meteor_broken", 1).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
+	public static final Block block_meteor_cobble = new BlockNTMOre("block_meteor_cobble", 2, 0).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
+	public static final Block block_meteor_broken = new BlockNTMOre("block_meteor_broken", 1, 0).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_molten = new BlockHazard(Material.ROCK, "block_meteor_molten").addFire(3).toBlock().setTickRandomly(true).setLightLevel(0.75F).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block block_meteor_treasure = new BlockNTMOre("block_meteor_treasure", 3).setCreativeTab(MainRegistry.resourceTab).setHardness(15.0F).setResistance(900.0F);
 	public static final Block ore_meteor_uranium = new BlockNTMOre("ore_meteor_uranium", 2, 30).addRadiation(0.25F).toBlock().setCreativeTab(MainRegistry.resourceTab).setHardness(5.0F).setResistance(10.0F);

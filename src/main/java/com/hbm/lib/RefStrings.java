@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-2.0.0";
-	public static final String CHANGELOG = "§aAdded more Control panel mechanics$§aAdded Conveyors and Extractor/Inserter$§aAdded Torex Nuke$§aAdded Mk5 Nuke processing$§aAdded scortched nuke craters$§aAdded N² and Balefire charge$§aAdded Launchpad cooldown$§aAdded 7 Blockstates per waste block$§aAdded Galacticraft sealing to all big doors$§aAdded 1.7 Fuel system$§aAdded cable gauge$§aAdded peace dimension config$§aAdded hazmat potion resistance$§aAdded pocket radar$§aAdded Bauble support to rad counters$§bChanged RBMK render to be 4x faster but have stretched side texture$§bChanged Nuke and Missile models$§bChanged Batteries to only send to higher tier then themselves$§bChanged Radar and Forcefuel model$§bChanged Xenon-135 production 6x$§cRemoved N45 Mine$§cRemoved Old Drill$§cRemoved bad recipes$§eFixed crash when moving from reloaded$§eFixed Jetpack and hud sync$§eFixed Jungle dungeon spawning$§eFixed Door locking";
+	public static final String VERSION = "NTM-Extended-1.12.2-2.0.1";
+	public static final String CHANGELOG = "§aAdded Emissive textures$§aAdded contaminated snow and ice$§aAdded chemplant CT support$§aAdded OC support to radsensor/battery$§bChanged Nuke calculations to be faster$§bChanged Fallout to only spawn from nukes$§cRemoved lanthanium from fracturing tower recipe$§eFixed Osmiridium balance$§eFixed translation issues$§eFixed missing textures$§eFixed gas masks$§eFixed server crash$§eFixed IO for RBMK$§eFixed armor on mobs$§eFixed RF crash$§eFixed spinning lights";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version

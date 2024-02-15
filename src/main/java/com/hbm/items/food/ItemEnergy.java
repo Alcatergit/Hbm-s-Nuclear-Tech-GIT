@@ -289,12 +289,24 @@ public class ItemEnergy extends Item {
 		return EnumAction.DRINK;
 	}
 
+	public static boolean hasOpener(EntityPlayer player){
+		ItemStack stackR = player.getHeldItemMainhand();
+		ItemStack stackL = player.getHeldItemOffhand();
+		if(stackR == null || stackL == null) return false;
+		if(stackR.getItem() == ModItems.bottle_opener || stackL.getItem() == ModItems.bottle_opener){
+			return true;
+		}
+		return false;
+	}	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
 		if(!(this == ModItems.can_creature || this == ModItems.can_mrsugar || this == ModItems.can_overcharge || this == ModItems.can_redbomb || this == ModItems.can_smart || this == ModItems.chocolate_milk || 
 				this == ModItems.can_luna || this == ModItems.can_bepis || this == ModItems.can_breen))
-			if(!Library.hasInventoryItem(player.inventory, ModItems.bottle_opener))
+			
+			if(!hasOpener(player))
 				return ActionResult.<ItemStack> newResult(EnumActionResult.PASS, player.getHeldItem(hand));
+
 		player.setActiveHand(hand);
 		return ActionResult.<ItemStack> newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
