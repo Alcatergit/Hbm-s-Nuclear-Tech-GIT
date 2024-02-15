@@ -91,6 +91,8 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
             data.setInteger("heatEnergy", heatEnergy);
             data.setInteger("toCool", amountToCool);
             data.setInteger("delay", tickDelay);
+            data.setString("tankTypes0", tankTypes[0].getName());
+            data.setString("tankTypes1", tankTypes[1].getName());
             data.setTag("tanks", FFUtils.serializeTankArray(tanks));
             INBTPacketReceiver.networkPack(this, data, 25);
 
@@ -116,6 +118,8 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         this.amountToCool = nbt.getInteger("toCool");
         this.tickDelay = nbt.getInteger("delay");
 
+        if(nbt.hasKey("tankTypes0")) tankTypes[0] = FluidRegistry.getFluid(nbt.getString("tankTypes0"));
+        if(nbt.hasKey("tankTypes1")) tankTypes[1] = FluidRegistry.getFluid(nbt.getString("tankTypes1"));
         if (nbt.hasKey("tanks")) {
             FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
         }
@@ -141,10 +145,10 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     }
 
     protected void tryConvert() {
-        if (tickDelay < 1) tickDelay = 1;
-        if (world.getTotalWorldTime() % tickDelay != 0) return;
+        if(tickDelay < 1) tickDelay = 1;
+        if(world.getTotalWorldTime() % tickDelay != 0) return;
 
-        if (!HeatRecipes.hasCoolRecipe(tankTypes[0])) {
+        if(!HeatRecipes.hasCoolRecipe(tankTypes[0])) {
             return;
         }
 

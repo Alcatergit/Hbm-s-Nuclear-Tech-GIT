@@ -95,13 +95,14 @@ public class EntityBalefire extends Entity implements IChunkLoader {
         	}
         }
         
-    	if(!mute && rand.nextInt(5) == 0)
-        	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	
         if(!flag)
         {
-        	if(!mute)
-        		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+        	if(this.destructionRange > 15){
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, this.destructionRange * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
+			}else{
+				if(rand.nextInt(5) == 0)
+					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, this.destructionRange * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
+			}
         	ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange*2D, this.destructionRange*2000F, 0F, this.destructionRange*100F, this.destructionRange*500F);
         }
         

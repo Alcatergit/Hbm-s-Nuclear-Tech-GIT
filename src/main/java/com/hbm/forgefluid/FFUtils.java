@@ -563,7 +563,7 @@ public class FFUtils {
 				return false;
 			}
 			if(stack == null || stack.getFluid() == tank.getFluid().getFluid()) {
-				tank.drain(ifhi.fill(new FluidStack(tank.getFluid(), Math.min(6000, tank.getFluidAmount())), true), true);
+				tank.drain(ifhi.fill(new FluidStack(tank.getFluid(), Math.min(16000, tank.getFluidAmount())), true), true);
 				returnValue = true;
 			}
 			slots.setStackInSlot(slot1, ifhi.getContainer());
@@ -573,6 +573,7 @@ public class FFUtils {
 			}
 			return returnValue;
 		}
+
 		ItemStack stack = slots.getStackInSlot(slot1);
 		if(stack.getItem() instanceof IItemFluidHandler) {
 			boolean returnValue = false;
@@ -583,7 +584,7 @@ public class FFUtils {
 				return false;
 			}
 			if(contained == null || contained.getFluid() == tank.getFluid().getFluid()) {
-				tank.drain(handler.fill(stack, new FluidStack(tank.getFluid(), Math.min(6000, tank.getFluidAmount())), true), true);
+				tank.drain(handler.fill(stack, new FluidStack(tank.getFluid(), Math.min(16000, tank.getFluidAmount())), true), true);
 				returnValue = true;
 			}
 			contained = handler.drain(stack, Integer.MAX_VALUE, false);

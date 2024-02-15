@@ -48,7 +48,7 @@ public class RedstoneSword extends ItemSword implements IHasCustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
-		list.add("§5§lVery first NTM Item");
+		list.add("§5§lVery First NTM Item");
 	}
 
 	

@@ -37,27 +37,27 @@ public class ModelArmorRPA extends ModelArmorBase {
         }
         if(type == 3) {
             Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.rpa_helmet);
-            head.render(par7*1.001F);
+            head.render(par7*1.05F);
         }
         if(this.isChild) {
             GL11.glScalef(0.75F, 0.75F, 0.75F);
         }
         if(type == 2) {
             Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.rpa_chest);
-            body.render(par7);
+            body.render(par7*1.05F);
             Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.rpa_arm);
-            leftArm.render(par7);
-            rightArm.render(par7);
+            leftArm.render(par7*1.05F);
+            rightArm.render(par7*1.05F);
         }
         if(type == 1) {
             Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.rpa_leg);
-            leftLeg.render(par7);
-            rightLeg.render(par7);
+            leftLeg.render(par7*1.05F);
+            rightLeg.render(par7*1.05F);
         }
         if(type == 0) {
             Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.rpa_leg);
-            leftFoot.render(par7);
-            rightFoot.render(par7);
+            leftFoot.render(par7*1.05F);
+            rightFoot.render(par7*1.05F);
         }
 
         GlStateManager.shadeModel(GL11.GL_FLAT);

@@ -109,7 +109,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		};
 		tanks = new FluidTank[3];
 		tankTypes = new Fluid[3];
-		tanks[0] = new FluidTank(128000);
+		tanks[0] = new FluidTank(512000);
 		tankTypes[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(64000);
 		tankTypes[1] = ModForgeFluids.coolant;
@@ -416,11 +416,11 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 				
 				if (age == 9 || age == 19)
 					fillFluidInit(tanks[2]);
-				
-				PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, size, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tanks[0], tanks[1], tanks[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
-				PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{tankTypes[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			}
+
+			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, size, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tanks[0], tanks[1], tanks[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{tankTypes[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 		
 			maxWaste = maxFuel = fuelBase * getSize();
 			
@@ -533,9 +533,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			if (rods > 0 && coreHeat > 0 && age == 5) {
 
 				float rad = (float)coreHeat / (float)maxCoreHeat * 50F;
-				//System.out.println(rad);
 				rad *= checkHull();
-				//System.out.println(rad);
 				
 				RadiationSavedData.incrementRad(world, pos, rad, 50 * 4);
 			}
@@ -723,25 +721,29 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		
 		double statSteMaFiFiLe = 32000;
 		
-		double steam = (((double)hullHeat / (double)maxHullHeat) * (/*(double)tanks[2].getMaxFill()*/statSteMaFiFiLe / 50D)) * size;
+		int waterConsumption = (int)((((double)hullHeat / (double)maxHullHeat) * (statSteMaFiFiLe / 50D)) * size);
 		
-		double water = steam;
-		
+		int steamMul = 1;
 		if(tankTypes[2] == ModForgeFluids.steam){
-			water /= 100D;
+			steamMul = 100;
 		} else if(tankTypes[2] == ModForgeFluids.hotsteam){
-			water /= 10;
+			steamMul = 10;
 		} else if(tankTypes[2] == ModForgeFluids.superhotsteam){
-			
+			steamMul = 1;
 		}
 
-		if(tanks[0].getFluidAmount() > 0){
-			if(tanks[0].getFluidAmount() < water){
-				steam = steam * tanks[0].getFluidAmount()/water;
-				water = tanks[0].getFluidAmount();
+		int steamProduction = waterConsumption * steamMul;
+
+		int waterFill = tanks[0].getFluidAmount();
+
+		if(waterFill > 0){
+			if(waterFill < waterConsumption){
+				waterConsumption = waterFill;
+				steamProduction = waterConsumption * steamMul;
 			}
-			tanks[0].drain((int)Math.ceil(water), true);
-			tanks[2].fill(new FluidStack(tankTypes[2], (int)Math.floor(steam)), true);
+
+			tanks[0].drain(waterConsumption, true);
+			tanks[2].fill(new FluidStack(tankTypes[2], steamProduction), true);
 		}
 		
 	}

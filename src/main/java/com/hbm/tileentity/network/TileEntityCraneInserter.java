@@ -75,12 +75,7 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
         if(inventory.getStackInSlot(slot).isEmpty())
             return false;
 
-        for(int i = 0; i < chest.getSlots(); i++) {
-            
-            return tryInsertItemCap(chest, inventory.getStackInSlot(slot));
-        }
-
-        return false;
+        return tryInsertItemCap(chest, inventory.getStackInSlot(slot));
     }
 
     //Unloads output into chests. Capability version.

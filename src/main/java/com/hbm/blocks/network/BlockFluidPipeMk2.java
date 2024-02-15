@@ -13,6 +13,7 @@ import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
 import api.hbm.block.IToolable;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -171,6 +172,11 @@ public class BlockFluidPipeMk2 extends BlockContainer implements IToolable, ILoo
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face){
+		return BlockFaceShape.CENTER;
 	}
 	
 	@Override

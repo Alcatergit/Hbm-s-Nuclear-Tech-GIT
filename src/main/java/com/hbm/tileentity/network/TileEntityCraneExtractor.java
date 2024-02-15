@@ -39,7 +39,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
     private int tickCounter = 0;
     public ModulePatternMatcher matcher;
 
-    public static int[] allowed_slots = {9, 10, 11, 12, 13, 14, 15, 16,17};
+    public static int[] allowed_slots = {9, 10, 11, 12, 13, 14, 15, 16, 17};
 
     public TileEntityCraneExtractor() {
         super(20);
@@ -146,6 +146,8 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                                 int toSend = Math.min(amount, stack.getCount());
                                 ItemStack cStack = stack.copy();
                                 stack.shrink(toSend);
+                                if(stack.getCount() == 0)
+                                    inventory.setStackInSlot(index, ItemStack.EMPTY);
                                 cStack.setCount(toSend);
 
                                 EntityMovingItem moving = new EntityMovingItem(world);
@@ -229,12 +231,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-        return i > 8 && i < 20;
-    }
-
-    @Override
-    public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-        return i > 8 && i < 20;
+        return i > 8 && i < 18;
     }
 
     @Override
@@ -277,5 +274,20 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
         if(data.hasKey("isWhitelist")) {
             this.isWhitelist = !this.isWhitelist;
         }
+    }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+        return allowed_slots;
+    }
+    
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+        return this.isItemValidForSlot(slot, itemStack);
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+        return false;
     }
 }

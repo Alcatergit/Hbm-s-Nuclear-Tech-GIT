@@ -373,10 +373,10 @@ public class ModEventHandler {
 					}
 
 					else if(randomArmorNumber < 2<<12){ //1:16
-						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.alloy_helmet, 1, world.rand.nextInt(ModItems.alloy_helmet.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.alloy_plate, 1, world.rand.nextInt(ModItems.alloy_plate.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.alloy_legs, 1, world.rand.nextInt(ModItems.alloy_legs.getMaxDamage(ItemStack.EMPTY))));
-						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.alloy_boots, 1, world.rand.nextInt(ModItems.alloy_boots.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.titanium_helmet, 1, world.rand.nextInt(ModItems.titanium_helmet.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.titanium_plate, 1, world.rand.nextInt(ModItems.titanium_plate.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.titanium_legs, 1, world.rand.nextInt(ModItems.titanium_legs.getMaxDamage(ItemStack.EMPTY))));
+						entity.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.titanium_boots, 1, world.rand.nextInt(ModItems.titanium_boots.getMaxDamage(ItemStack.EMPTY))));
 					}
 
 					else if(randomArmorNumber < 2<<13){ //1:8
@@ -405,7 +405,7 @@ public class ModEventHandler {
 					else if(randomHandNumber == 7)
 						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.golf_club, 1, world.rand.nextInt(300)));
 					else if(randomHandNumber == 8)
-						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.alloy_sword, 1, world.rand.nextInt(300)));
+						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.titanium_sword, 1, world.rand.nextInt(300)));
 					else if(randomHandNumber == 9)
 						entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.steel_sword, 1, world.rand.nextInt(300)));
 					else if(randomHandNumber == 10)

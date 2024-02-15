@@ -45,9 +45,9 @@ public class Balefire extends BlockFire {
 			b != ModBlocks.baleonitite_3 && 
 			b != ModBlocks.baleonitite_4 && 
 			b != ModBlocks.baleonitite_core){
-			return super.getEncouragement(b);
+			return 20000;
 		}
-		return 30;
+		return super.getEncouragement(b);
 	}
 
 	@Override 
@@ -58,9 +58,9 @@ public class Balefire extends BlockFire {
 			b != ModBlocks.baleonitite_3 && 
 			b != ModBlocks.baleonitite_4 && 
 			b != ModBlocks.baleonitite_core){
-			return super.getEncouragement(b);
+			return 20000;
 		}
-		return 30;
+		return super.getEncouragement(b);
 	}
 
 	@Override

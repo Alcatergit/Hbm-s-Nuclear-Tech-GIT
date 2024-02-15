@@ -66,11 +66,11 @@ public class RenderNTMSkybox extends IRenderHandler { //why an abstract class us
 		GlStateManager.color(brightness, brightness, brightness, 1.0F);
 		
 		GL11.glPushMatrix();
+		GL11.glScalef(0.9999F, 0.9999F, 0.9999F);
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(140.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(-40.0F, 0.0F, 0.0F, 1.0F);
-		
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(digammaStar);
 		
 		float digamma = HbmLivingProps.getDigamma(Minecraft.getMinecraft().player);

@@ -70,7 +70,7 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
 		if (this == ModItems.canister_generic && f != null && f.getFluid() == ModForgeFluids.diesel) {
-			tooltip.add(I18nUtil.resolveKey("desc.cansiterdiesel"));
+			tooltip.add(I18nUtil.resolveKey("desc.canisterdiesel"));
 		}
 		String s = (f == null ? "0" : f.amount) + "/" + cap + " mB";
 		if(stack.getCount() > 1)

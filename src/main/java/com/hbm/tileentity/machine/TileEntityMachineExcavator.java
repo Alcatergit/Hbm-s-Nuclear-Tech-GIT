@@ -586,17 +586,51 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		if(te == null || !te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.toEnumFacing()))
 			return;
 		IItemHandler h = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.toEnumFacing());
-		if(!(h instanceof IItemHandlerModifiable))
-			return;
-		
-		IItemHandlerModifiable inv = (IItemHandlerModifiable)h;
 		for(int i = 5; i < 14; i++) {
 			if(!inventory.getStackInSlot(i).isEmpty() || inventory.getStackInSlot(i).getCount() <= 0) {
-				int prev = inventory.getStackInSlot(i).getCount();
-				inventory.setStackInSlot(i, InventoryUtil.tryAddItemToInventory(inv, 0, inv.getSlots() - 1, inventory.getStackInSlot(i)));
+				tryFillContainerCap(h, i);
 			}
 		}
 	}
+
+	//Unloads output into chests. Capability version.
+    public boolean tryFillContainerCap(IItemHandler chest, int slot) {
+        //Check if we have something to output
+        if(inventory.getStackInSlot(slot).isEmpty())
+            return false;
+
+        return tryInsertItemCap(chest, inventory.getStackInSlot(slot));
+    }
+
+	//Unloads output into chests. Capability version.
+    public boolean tryInsertItemCap(IItemHandler chest, ItemStack stack) {
+        //Check if we have something to output
+        if(stack.isEmpty())
+            return false;
+
+        for(int i = 0; i < chest.getSlots(); i++) {
+            
+            ItemStack outputStack = stack.copy();
+            if(outputStack.isEmpty())
+                return false;
+
+            ItemStack chestItem = chest.getStackInSlot(i).copy();
+            if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
+                int fillAmount = Math.min(chestItem.getMaxStackSize()-chestItem.getCount(), outputStack.getCount());
+                
+                outputStack.setCount(fillAmount);
+
+                ItemStack rest = chest.insertItem(i, outputStack, true);
+                if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
+                    stack.shrink(outputStack.getCount());
+                    chest.insertItem(i, outputStack, false);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 	
 	/* pulls up an AABB around the drillbit and tries to either conveyor output or buffer collected items */
 	protected void tryCollect(int radius) {
