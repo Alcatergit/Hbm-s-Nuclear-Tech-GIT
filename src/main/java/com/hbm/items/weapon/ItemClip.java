@@ -245,11 +245,11 @@ public class ItemClip extends Item {
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_skystinger))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_stinger_ammo, 2));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_fatman))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_fatman_ammo, 2));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_nuke, 2));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_proto))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_fatman_ammo, 8));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_nuke, 8));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_mirv))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_mirv_ammo, 1));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_mirv, 1));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_bf))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_bf_ammo, 1));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_mp40))
