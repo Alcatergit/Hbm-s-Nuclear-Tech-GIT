@@ -11,7 +11,6 @@ import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockWallSign;
@@ -806,7 +805,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 3, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 6, y + 2, z + 0), Blocks.ANVIL.getDefaultState().withProperty(BlockAnvil.FACING, EnumFacing.EAST), 3);
+		world.setBlockState(pos.setPos(x + 6, y + 2, z + 0), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 9, y + 2, z + 0), ModBlocks.barbed_wire.getDefaultState(), 3);
@@ -851,7 +850,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 6, y + 2, z + 7), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 2, z + 7), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 2, z + 7), Block2.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 10, y + 2, z + 7), Blocks.ANVIL.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 10, y + 2, z + 7), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 2, z + 8), ModBlocks.barbed_wire.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 2, z + 8), ModBlocks.fence_metal.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 2, z + 8), ModBlocks.fence_metal.getDefaultState(), 3);
@@ -859,7 +858,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 6, y + 2, z + 8), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 2, z + 8), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 2, z + 8), Block2.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 10, y + 2, z + 8), Blocks.ANVIL.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 10, y + 2, z + 8), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 0, y + 2, z + 9), ModBlocks.barbed_wire.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 2, z + 9), Blocks.BRICK_BLOCK.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 5, y + 2, z + 9), Blocks.BRICK_BLOCK.getDefaultState(), 3);
@@ -901,7 +900,7 @@ public class Relay extends WorldGenerator
 		world.setBlockState(pos.setPos(x + 2, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 3, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 4, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 5, y + 2, z + 15), Blocks.ANVIL.getDefaultState().withProperty(BlockAnvil.FACING, EnumFacing.WEST), 3);
+		world.setBlockState(pos.setPos(x + 5, y + 2, z + 15), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 6, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 7, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 8, y + 2, z + 15), ModBlocks.barbed_wire.getDefaultState(), 3);
