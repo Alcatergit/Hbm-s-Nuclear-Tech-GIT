@@ -128,7 +128,8 @@ public class RBMKOutgasserRecipes {
 
 		addRecipe(1800000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));
 		addRecipe(32000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
-		addRecipe(3000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
+		addRecipe(300000, ModItems.scrap, new ItemStack(ModItems.fallout));
+		addRecipe(3000000, ModBlocks.block_scrap, new ItemStack(ModBlocks.block_fallout));
 		addRecipe(2000, Blocks.STONE, new ItemStack(ModBlocks.sellafield_slaked));
 		addRecipe(4000, ModBlocks.sellafield_slaked, new ItemStack(ModBlocks.sellafield_0));
 		addRecipe(8000, ModBlocks.sellafield_0, new ItemStack(ModBlocks.sellafield_1));

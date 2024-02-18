@@ -131,7 +131,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				double x = posX + rand.nextGaussian() * range;
 				double z = posZ + rand.nextGaussian() * range;
 				Cloudlet cloud = new Cloudlet(x, lastSpawnY, z, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime);
-				cloud.setScale(2F + age * 0.0025F * (float) s, 2F + age * 0.0025F * 6F * (float) (cs * s));
+				cloud.setScale((float) (Math.sqrt(s) * 3 + age * 0.0025 * s), (float) (Math.sqrt(s) * 3 + age * 0.0025 * 6 * cs * s));
 				cloudlets.add(cloud);
 			}
 
@@ -146,7 +146,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				int shockLife = Math.max(400 - age * 20, 50);
 				
 				for(int i = 0; i < cloudCount; i++) {
-					Vec3 vec = Vec3.createVectorHelper((age + rand.nextDouble() * 2)*1.5, 0, 0);
+					Vec3 vec = Vec3.createVectorHelper((age + rand.nextDouble() * 2) * 1.5, 0, 0);
 					float rot = (float) (Math.PI * 2 * rand.nextDouble());
 					vec.rotateAroundY(rot);
 					this.cloudlets.add(new Cloudlet(vec.xCoord + posX, world.getHeight((int) (vec.xCoord + posX) + 1, (int) (vec.zCoord + posZ)), vec.zCoord + posZ, rot, 0, shockLife, TorexType.SHOCK)
