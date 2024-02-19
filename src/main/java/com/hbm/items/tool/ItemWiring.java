@@ -94,7 +94,7 @@ public class ItemWiring extends Item {
 								targetPylon.addConnection(thisPylon.getPos());
 
 								if (world.isRemote)
-									player.sendMessage(new TextComponentTranslation("chat.wiring.connected="));
+									player.sendMessage(new TextComponentTranslation("chat.wiring.connected"));
 							}else{
 								if(thisPylon.getConnectionType() != targetPylon.getConnectionType()){
 									if (world.isRemote)
