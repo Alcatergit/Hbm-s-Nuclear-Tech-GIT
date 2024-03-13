@@ -5,9 +5,11 @@ import static com.hbm.inventory.OreDictManager.IRON;
 import static com.hbm.inventory.OreDictManager.STEEL;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
@@ -16,6 +18,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 
+import crafttweaker.CraftTweakerAPI;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -462,7 +465,7 @@ public class AnvilRecipes {
 		pullFromAssembler(new ComparableStack(ModItems.upgrade_nullifier), 4);
 		pullFromAssembler(new ComparableStack(ModItems.upgrade_screm), 4);
 	}
-	
+
 	public static void registerConstructionRecycling() {
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModBlocks.solar_mirror),
@@ -716,7 +719,28 @@ public class AnvilRecipes {
 	public static List<AnvilConstructionRecipe> getConstruction() {
 		return constructionRecipes;
 	}
-	
+
+	public static boolean removeConstructionRecipe(ItemStack[] outputs) {
+		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
+			// check length same
+			if(constructionRecipe.output.size() != outputs.length) continue;
+			// check outputs same
+			boolean same = true;
+			for(int i = 0; i < outputs.length; i++) {
+				if(!areItemStacksEqual(constructionRecipe.output.get(i).stack,outputs[i])){
+					same = false;
+					break;
+				}
+			}
+			if(same){
+				CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
+				constructionRecipes.remove(constructionRecipe);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static class AnvilConstructionRecipe {
 		public List<AStack> input = new ArrayList<>();
 		public List<AnvilOutput> output = new ArrayList<>();
