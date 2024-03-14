@@ -721,24 +721,47 @@ public class AnvilRecipes {
 	}
 
 	public static boolean removeConstructionRecipe(ItemStack[] outputs) {
+		start:
 		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
 			// check length same
 			if(constructionRecipe.output.size() != outputs.length) continue;
 			// check outputs same
-			boolean same = true;
 			for(int i = 0; i < outputs.length; i++) {
 				if(!areItemStacksEqual(constructionRecipe.output.get(i).stack,outputs[i])){
-					same = false;
-					break;
+					continue start;
 				}
 			}
-			if(same){
-				CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
-				constructionRecipes.remove(constructionRecipe);
-				return true;
-			}
+			CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
+			constructionRecipes.remove(constructionRecipe);
+			return true;
+
 		}
 		return false;
+	}
+
+	public static boolean removeConstructionRecipeByInput(ItemStack[] inputs) {
+		start:
+		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
+			// check length same
+			if(constructionRecipe.input.size() != inputs.length) continue;
+			// check outputs same
+			for(int i = 0; i < inputs.length; i++) {
+				if(!areItemStacksEqual(constructionRecipe.input.get(i).getStack(),inputs[i])){
+					continue start;
+				}
+			}
+			CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
+			constructionRecipes.remove(constructionRecipe);
+		}
+		return false;
+	}
+
+	public static void addConstructionRecipe(AStack[] inputs, ItemStack[] output, int tier) {
+		AnvilOutput[] anvilOutputs = new AnvilOutput[output.length];
+		for(int i = 0; i < output.length; i++) {
+			anvilOutputs[i] = new AnvilOutput(output[i]);
+		}
+		constructionRecipes.add(new AnvilConstructionRecipe(inputs, anvilOutputs).setTier(tier));
 	}
 
 	public static class AnvilConstructionRecipe {
