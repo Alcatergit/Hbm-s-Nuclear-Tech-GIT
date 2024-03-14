@@ -92,7 +92,7 @@ public class Assembler {
 	}
 
 	@ZenMethod
-	public static void replaceRecipe(IItemStack output, IItemStack[] inputs, int duration){
+	public static void replaceRecipe(IItemStack output, IIngredient[] inputs, int duration){
 		NTMCraftTweaker.postInitActions.add(new ActionRemoveRecipe(output));
 		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, duration));
 	}
