@@ -739,19 +739,20 @@ public class AnvilRecipes {
 		return false;
 	}
 
-	public static boolean removeConstructionRecipeByInput(ItemStack[] inputs) {
+	public static boolean removeConstructionRecipeByInput(AStack[] inputs) {
 		start:
 		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
 			// check length same
 			if(constructionRecipe.input.size() != inputs.length) continue;
 			// check outputs same
 			for(int i = 0; i < inputs.length; i++) {
-				if(!areItemStacksEqual(constructionRecipe.input.get(i).getStack(),inputs[i])){
+				if(!inputs[i].equals(constructionRecipe.input.get(i))){
 					continue start;
 				}
 			}
 			CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
 			constructionRecipes.remove(constructionRecipe);
+			return true;
 		}
 		return false;
 	}

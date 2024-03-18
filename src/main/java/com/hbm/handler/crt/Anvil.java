@@ -23,7 +23,7 @@ import java.util.Arrays;
 @ZenClass("mods.ntm.Anvil")
 public class Anvil {
 	private static class ActionAddRecipe implements IAction {
-		private IIngredient[] inputs;
+		private RecipesCommon.AStack[] inputs;
 
 		private ItemStack[] output;
 
@@ -31,7 +31,7 @@ public class Anvil {
 
 		public ActionAddRecipe(IItemStack[] output, IIngredient[] inputs, int tier) {
 			this.output = CraftTweakerMC.getItemStacks(output);
-			this.inputs = inputs;
+			this.inputs = NTMCraftTweaker.IIngredientsToAStack(inputs);
 			this.tier = tier;
 		}
 
@@ -41,28 +41,7 @@ public class Anvil {
 		 */
 		@Override
 		public void apply() {
-			RecipesCommon.AStack[] compInputs = new RecipesCommon.AStack[this.inputs.length];
-			for(int i = 0; i < this.inputs.length; i++){
-				if(this.inputs[i] instanceof IOreDictEntry){
-					compInputs[i] = new RecipesCommon.OreDictStack(((IOreDictEntry) this.inputs[i]).getName());
-					continue;
-				}
-
-				if(this.inputs[i] instanceof IngredientStack){
-					IIngredient  ingredient = (IIngredient) this.inputs[i].getInternal();
-					if(ingredient instanceof IOreDictEntry){
-						compInputs[i] = new RecipesCommon.OreDictStack(((IOreDictEntry) ingredient).getName(), this.inputs[i].getAmount());
-						continue;
-					}
-				}
-				if(this.inputs[i] instanceof IItemStack){
-					compInputs[i] = new RecipesCommon.ComparableStack(CraftTweakerMC.getItemStack((IItemStack) this.inputs[i]));
-					continue;
-				}
-				CraftTweakerAPI.logError("ERROR  Input "+this.inputs[i].toString());
-				return;
-			}
-			AnvilRecipes.addConstructionRecipe(compInputs, this.output, this.tier);
+			AnvilRecipes.addConstructionRecipe(this.inputs, this.output, this.tier);
 		}
 
 		/**
@@ -78,20 +57,20 @@ public class Anvil {
 		 */
 		@Override
 		public String describe() {
-			return "add anvil Recipe";
+			return "add anvil Recipe for " + Arrays.toString(this.output) + " with inputs " + Arrays.toString(this.inputs) + " with tier " + this.tier;
 		}
 	}
 
 	public static class ActionRemoveRecipe implements IAction{
-		private ItemStack[] output;
-		private ItemStack[] inputs;
+		private ItemStack[]  output;
+		private RecipesCommon.AStack[] inputs;
 
 		public ActionRemoveRecipe(IItemStack[] output){
 			this.output = CraftTweakerMC.getItemStacks(output);
 		}
 
-		public ActionRemoveRecipe(IItemStack[] input, IItemStack[] output){
-			this.inputs = CraftTweakerMC.getItemStacks(input);
+		public ActionRemoveRecipe(IIngredient[] input, IItemStack[] output){
+			this.inputs = NTMCraftTweaker.IIngredientsToAStack(input);
 			this.output = CraftTweakerMC.getItemStacks(output);
 		}
 		@Override
@@ -129,7 +108,7 @@ public class Anvil {
 	}
 
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IItemStack inputs, int tier){
+	public static void addRecipe(IItemStack output, IIngredient inputs, int tier){
 		CraftTweakerAPI.apply(new ActionAddRecipe(new IItemStack[]{output}, new IIngredient[]{inputs}, tier));
 	}
 
@@ -140,8 +119,15 @@ public class Anvil {
 	}
 
 	@ZenMethod
-	public static void removeRecipeByInput(IItemStack[] input){
+	public static void removeRecipeByInput(IIngredient[] input){
 		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(input));
 		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(input, null));
 	}
+
+	@ZenMethod
+	public static void replaceRecipe(IItemStack[] oldRecipe, IIngredient inputs, int tier){
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(oldRecipe));
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionAddRecipe(oldRecipe, new IIngredient[]{inputs}, tier));
+	}
+
 }
