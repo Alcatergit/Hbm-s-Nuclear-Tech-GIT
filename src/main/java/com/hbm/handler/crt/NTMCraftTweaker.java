@@ -38,12 +38,12 @@ public class NTMCraftTweaker {
 			return new RecipesCommon.OreDictStack(((IOreDictEntry) ingredient).getName());
 		}
 		if(ingredient instanceof IngredientStack){
-			IIngredient  ingredient2 = (IIngredient) ((IngredientStack) ingredient).getInternal();
+			IIngredient  ingredient2 = (IIngredient) ingredient.getInternal();
 			if(ingredient2 instanceof IItemStack){
 				return new RecipesCommon.ComparableStack(CraftTweakerMC.getItemStack((IItemStack) ingredient2));
 			}
 			if(ingredient2 instanceof IOreDictEntry){
-				return new RecipesCommon.OreDictStack(((IOreDictEntry) ingredient2).getName());
+				return new RecipesCommon.OreDictStack(((IOreDictEntry) ingredient2).getName(), ingredient.getAmount());
 			}
 		}
 		CraftTweakerAPI.logError("ERROR: Unknown ingredient type: " + ingredient.getClass().getName());
