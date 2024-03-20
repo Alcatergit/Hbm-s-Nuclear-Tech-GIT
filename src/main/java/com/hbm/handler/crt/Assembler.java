@@ -57,27 +57,7 @@ public class Assembler {
 				CraftTweakerAPI.logError("ERROR Assembler recipe duraction must be >=1 not "+this.duration+"!");
 				return;
 			}
-			RecipesCommon.AStack[] compInputs = new RecipesCommon.AStack[this.inputs.length];
-			for(int i = 0; i < this.inputs.length; i++){
-				if(this.inputs[i] instanceof IOreDictEntry ){
-					compInputs[i] = new RecipesCommon.OreDictStack(((IOreDictEntry) this.inputs[i]).getName());
-				    continue;
-				}
-
-				if(this.inputs[i] instanceof IngredientStack){
-					IIngredient  ingredient = (IIngredient) this.inputs[i].getInternal();
-					if(ingredient instanceof IOreDictEntry){
-						compInputs[i] = new RecipesCommon.OreDictStack(((IOreDictEntry) ingredient).getName(), this.inputs[i].getAmount());
-						continue;
-					}
-				}
-				if(this.inputs[i] instanceof IItemStack){
-					compInputs[i] = new ComparableStack(CraftTweakerMC.getItemStack((IItemStack) this.inputs[i]));
-					continue;
-				}
-				CraftTweakerAPI.logError("ERROR Assembler Input "+this.inputs[i].toString() + " class "+this.inputs[i].getClass());
-				return;
-			}
+			RecipesCommon.AStack[] compInputs = NTMCraftTweaker.IIngredientsToAStack(this.inputs);
 			AssemblerRecipes.makeRecipe(new ComparableStack(this.output), compInputs, this.duration);
 		}
 		@Override

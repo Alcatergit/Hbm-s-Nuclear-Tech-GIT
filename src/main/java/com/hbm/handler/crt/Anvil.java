@@ -93,23 +93,23 @@ public class Anvil {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack[] output, IIngredient[] inputs, int tier){
-		CraftTweakerAPI.apply(new ActionAddRecipe(output, inputs, tier));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, tier));
 	}
 
 	@ZenMethod
 	public static void addRecipe(IItemStack[] output, IIngredient inputs, int tier){
 		// inputs to array
-		CraftTweakerAPI.apply(new ActionAddRecipe(output, new IIngredient[]{inputs}, tier));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, new IIngredient[]{inputs}, tier));
 	}
 
 	@ZenMethod
 	public static void addRecipe(IItemStack output,  IIngredient[] inputs, int tier){
-		CraftTweakerAPI.apply(new ActionAddRecipe(new IItemStack[]{output}, inputs, tier));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(new IItemStack[]{output}, inputs, tier));
 	}
 
 	@ZenMethod
 	public static void addRecipe(IItemStack output, IIngredient inputs, int tier){
-		CraftTweakerAPI.apply(new ActionAddRecipe(new IItemStack[]{output}, new IIngredient[]{inputs}, tier));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(new IItemStack[]{output}, new IIngredient[]{inputs}, tier));
 	}
 
 	@ZenMethod

@@ -21,7 +21,7 @@ public class Press {
 
 	@ZenMethod
 	public static void addRecipe(IItemStack output, IIngredient inputs, int type) {
-		CraftTweakerAPI.apply(new ActionAddRecipe(output, inputs, type));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, type));
 	}
 
 	@Nullable
