@@ -1,5 +1,6 @@
 package com.hbm.handler.crt;
 
+import com.hbm.inventory.RecipesCommon;
 import crafttweaker.IAction;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.minecraft.CraftTweakerMC;
@@ -12,8 +13,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.DiFurnaceRecipes;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 @ZenRegister
@@ -21,21 +20,21 @@ import net.minecraft.item.ItemStack;
 public class BlastFurnace {
 	
 	private static class ActionAddRecipe implements IAction{
-		private ItemStack input1;
-		private ItemStack input2;
+		private RecipesCommon.AStack input1;
+		private RecipesCommon.AStack input2;
 		private ItemStack output;
-		public ActionAddRecipe(IItemStack input1, IItemStack input2, IItemStack output){
-			this.input1 = CraftTweakerMC.getItemStack(input1);
-			this.input2 = CraftTweakerMC.getItemStack(input2);
+		public ActionAddRecipe(IIngredient input1, IIngredient input2, IItemStack output){
+			this.input1 = NTMCraftTweaker.IIngredientToAStack(input1);
+			this.input2 =  NTMCraftTweaker.IIngredientToAStack(input2);
 			this.output = CraftTweakerMC.getItemStack(output);
 		}
 		@Override
 		public void apply(){
-			if(this.input1 == null || this.input1.isEmpty()){
+			if(this.input1 == null){
 				CraftTweakerAPI.logError("ERROR Blast Furnace input 1 item can not be an empty/air stack!");
 				return;
 			}
-			if(this.input2 == null || this.input2.isEmpty()){
+			if(this.input2 == null){
 				CraftTweakerAPI.logError("ERROR Blast Furnace input 2 item can not be an empty/air stack!");
 				return;
 			}
@@ -43,7 +42,7 @@ public class BlastFurnace {
 				CraftTweakerAPI.logError("ERROR Blast Furnace recipe output item can not be an empty/air stack!");
 				return;
 			}
-			DiFurnaceRecipes.addRecipe(new ComparableStack(this.input1), new ComparableStack(this.input2), this.output);
+			DiFurnaceRecipes.addRecipe(this.input1, this.input2, this.output);
 		}
 		@Override
 		public String describe(){
@@ -62,12 +61,23 @@ public class BlastFurnace {
 		private ItemStack input1;
 		private ItemStack input2;
 
+		private ItemStack output;
+
 		public ActionRemoveRecipe(IItemStack input1, IItemStack input2){
 			this.input1 = CraftTweakerMC.getItemStack(input1);
 			this.input2 = CraftTweakerMC.getItemStack(input2);
 		}
+
+		public ActionRemoveRecipe(IItemStack output){
+			this.output = CraftTweakerMC.getItemStack(output);
+		}
 		@Override
 		public void apply(){
+			if(this.output != null && !this.output.isEmpty()){
+				DiFurnaceRecipes.removeRecipe(this.output);
+				return;
+			}
+
 			if(this.input1 == null || this.input1.isEmpty()){
 				CraftTweakerAPI.logError("ERROR Blast Furnace input 1 item can not be an empty/air stack!");
 				return;
@@ -89,11 +99,22 @@ public class BlastFurnace {
 		NTMCraftTweaker.postInitActions.add(new ActionRemoveRecipe(input1, input2));
 	}
 
+	@ZenMethod
+	public static void removeRecipe(IItemStack output){
+		NTMCraftTweaker.postInitActions.add(new ActionRemoveRecipe(output));
+	}
+
+	@ZenMethod
+	public static void replaceRecipe(IItemStack  output,IIngredient input1, IIngredient input2){
+		NTMCraftTweaker.postInitActions.add(new ActionRemoveRecipe(output));
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(input1, input2, output));
+	}
+
 	public static class ActionAddFuel implements IAction{
 		private ItemStack input;
 		private int heatLvl = 0;
 
-		public ActionAddFuel(IItemStack input, int heatLvl){
+		public ActionAddFuel(IIngredient input, int heatLvl){
 			this.input = CraftTweakerMC.getItemStack(input);
 			this.heatLvl = heatLvl;
 		}
@@ -116,7 +137,7 @@ public class BlastFurnace {
 	}
 
 	@ZenMethod
-	public static void addFuel(IItemStack input, int heatLvl){
+	public static void addFuel(IIngredient input, int heatLvl){
 		NTMCraftTweaker.postInitActions.add(new ActionAddFuel(input, heatLvl));
 	}
 

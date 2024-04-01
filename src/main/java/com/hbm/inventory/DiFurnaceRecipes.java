@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.HashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.util.Tuple.Pair;
@@ -133,6 +135,9 @@ public class DiFurnaceRecipes {
 		diRecipes.remove(new Pair(inputBottom, inputTop));
 	}
 
+	public static void removeRecipe(ItemStack output){
+		diRecipes.values().removeIf(value -> areItemStacksEqual(value,output));;
+	}
 	public static void addFuel(AStack fuel, int power){
 		diFuels.put(fuel, power);
 	}

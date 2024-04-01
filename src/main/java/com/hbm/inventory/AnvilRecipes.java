@@ -5,9 +5,11 @@ import static com.hbm.inventory.OreDictManager.IRON;
 import static com.hbm.inventory.OreDictManager.STEEL;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
@@ -16,6 +18,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 
+import crafttweaker.CraftTweakerAPI;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -477,7 +480,7 @@ public class AnvilRecipes {
 		pullFromAssembler(new ComparableStack(ModItems.upgrade_nullifier), 4);
 		pullFromAssembler(new ComparableStack(ModItems.upgrade_screm), 4);
 	}
-	
+
 	public static void registerConstructionRecycling() {
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new ComparableStack(ModBlocks.solar_mirror),
@@ -731,7 +734,52 @@ public class AnvilRecipes {
 	public static List<AnvilConstructionRecipe> getConstruction() {
 		return constructionRecipes;
 	}
-	
+
+	public static boolean removeConstructionRecipe(ItemStack[] outputs) {
+		start:
+		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
+			// check length same
+			if(constructionRecipe.output.size() != outputs.length) continue;
+			// check outputs same
+			for(int i = 0; i < outputs.length; i++) {
+				if(!areItemStacksEqual(constructionRecipe.output.get(i).stack,outputs[i])){
+					continue start;
+				}
+			}
+			CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
+			constructionRecipes.remove(constructionRecipe);
+			return true;
+
+		}
+		return false;
+	}
+
+	public static boolean removeConstructionRecipeByInput(AStack[] inputs) {
+		start:
+		for(AnvilConstructionRecipe constructionRecipe : constructionRecipes) {
+			// check length same
+			if(constructionRecipe.input.size() != inputs.length) continue;
+			// check outputs same
+			for(int i = 0; i < inputs.length; i++) {
+				if(!inputs[i].equals(constructionRecipe.input.get(i))){
+					continue start;
+				}
+			}
+			CraftTweakerAPI.logInfo("remove anvil recipe"+ constructionRecipe );
+			constructionRecipes.remove(constructionRecipe);
+			return true;
+		}
+		return false;
+	}
+
+	public static void addConstructionRecipe(AStack[] inputs, ItemStack[] output, int tier) {
+		AnvilOutput[] anvilOutputs = new AnvilOutput[output.length];
+		for(int i = 0; i < output.length; i++) {
+			anvilOutputs[i] = new AnvilOutput(output[i]);
+		}
+		constructionRecipes.add(new AnvilConstructionRecipe(inputs, anvilOutputs).setTier(tier));
+	}
+
 	public static class AnvilConstructionRecipe {
 		public List<AStack> input = new ArrayList<>();
 		public List<AnvilOutput> output = new ArrayList<>();

@@ -1,33 +1,35 @@
 package com.hbm.handler.crt;
 
+import com.hbm.inventory.RecipesCommon;
 import crafttweaker.IAction;
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IngredientStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.oredict.IOreDictEntry;
+import crafttweaker.api.oredict.IngredientOreDict;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
 
 @ZenRegister
 @ZenClass("mods.ntm.Assembler")
 public class Assembler {
 	
 	private static class ActionAddRecipe implements IAction{
-		private ItemStack[] inputs;
+		private IIngredient[] inputs;
 		private ItemStack output;
 		private int duration = 0;
-		public ActionAddRecipe(IItemStack output, IItemStack[] inputs, int duration){
-			this.inputs = new ItemStack[inputs.length];
-			for(int i = 0; i < inputs.length; i++)
-				this.inputs[i] = CraftTweakerMC.getItemStack(inputs[i]);
+		public ActionAddRecipe(IItemStack output, IIngredient[] inputs, int duration){
+			this.inputs = inputs;
 			this.output = CraftTweakerMC.getItemStack(output);
 			this.duration = duration;
 		}
@@ -41,8 +43,8 @@ public class Assembler {
 				CraftTweakerAPI.logError("ERROR Assembler recipe input item count must be <=12 not "+this.inputs.length+"!");
 				return;
 			}
-			for(ItemStack i: this.inputs){
-				if(i == null || i.isEmpty()){
+			for(IIngredient i: this.inputs){
+				if(i == null ){
 					CraftTweakerAPI.logError("ERROR Assembler recipe input items can not include an empty/air stack!");
 					return;
 				}
@@ -55,24 +57,22 @@ public class Assembler {
 				CraftTweakerAPI.logError("ERROR Assembler recipe duraction must be >=1 not "+this.duration+"!");
 				return;
 			}
-			ComparableStack[] compInputs = new ComparableStack[this.inputs.length];
-			for(int i = 0; i < this.inputs.length; i++)
-				compInputs[i] = new ComparableStack(this.inputs[i]);
+			RecipesCommon.AStack[] compInputs = NTMCraftTweaker.IIngredientsToAStack(this.inputs);
 			AssemblerRecipes.makeRecipe(new ComparableStack(this.output), compInputs, this.duration);
 		}
 		@Override
 		public String describe(){
-			return "Adding NTM assembler recipe ("+this.inputs+" + "+this.duration+" ticks -> "+this.output+")";
+			return "Adding NTM assembler recipe ("+ Arrays.toString(this.inputs) +" + "+this.duration+" ticks -> "+this.output+")";
 		}
 	}
 
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IItemStack[] inputs, int duration){
+	public static void addRecipe(IItemStack output, IIngredient[] inputs, int duration){
 		CraftTweakerAPI.apply(new ActionAddRecipe(output, inputs, duration));
 	}
 
 	@ZenMethod
-	public static void replaceRecipe(IItemStack output, IItemStack[] inputs, int duration){
+	public static void replaceRecipe(IItemStack output, IIngredient[] inputs, int duration){
 		NTMCraftTweaker.postInitActions.add(new ActionRemoveRecipe(output));
 		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, duration));
 	}
