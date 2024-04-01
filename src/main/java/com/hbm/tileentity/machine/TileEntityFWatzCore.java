@@ -141,8 +141,15 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 
 			sendSAFEPower();
 
-			if(inventory.getStackInSlot(2).getItem() == ModItems.meteorite_sword_baleful && this.isRunning()){
-				inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
+			if(this.isRunning()){
+				ItemStack stack = inventory.getStackInSlot(2);
+				if(stack.getItem() == ModItems.meteorite_sword_baleful){
+					inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
+				} else if(stack.hasTagCompound()){
+					NBTTagCompound nbt = stack.getTagCompound();
+					if(nbt.getBoolean("ntmContagion")) nbt.removeTag("ntmContagion");
+					if(nbt.hasNoTags()) stack.setTagCompound(null);
+				}
 			}
 
 			if(this.isOn && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore) {

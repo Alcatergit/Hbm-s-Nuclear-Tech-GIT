@@ -13,6 +13,7 @@ import com.hbm.saveddata.satellites.SatelliteMiner;
 import com.hbm.saveddata.satellites.SatelliteHorizons;
 import com.hbm.saveddata.satellites.SatelliteSavedData;
 import com.hbm.util.WeightedRandomObject;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,36 +31,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineSatDock extends TileEntity implements ITickable {
+public class TileEntityMachineSatDock extends TileEntityMachineBase implements ITickable {
 
-	public ItemStackHandler inventory;
-
-	//private static final int[] access = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-
-	private String customName;
+	private static final int[] access = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 
 	public TileEntityMachineSatDock(){
-		inventory = new ItemStackHandler(16){
-			@Override
-			protected void onContentsChanged(int slot){
-				super.onContentsChanged(slot);
-				markDirty();
-			}
-		};
+		super(16);
 	}
 
-	public String getInventoryName(){
-		return this.hasCustomInventoryName() ? this.customName : "container.satDock";
-	}
-
-	public boolean hasCustomInventoryName(){
-		return this.customName != null && this.customName.length() > 0;
-	}
-
-	public void setCustomName(String name){
-		this.customName = name;
+	@Override
+	public String getName() {
+		return "container.satDock";
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player){
@@ -68,19 +51,6 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 		} else {
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64;
 		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound){
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		super.readFromNBT(compound);
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound){
-		compound.setTag("inventory", inventory.serializeNBT());
-		return super.writeToNBT(compound);
 	}
 
 	SatelliteSavedData data = null;
@@ -272,14 +242,14 @@ public class TileEntityMachineSatDock extends TileEntity implements ITickable {
 	public double getMaxRenderDistanceSquared(){
 		return 65536.0D;
 	}
-
+	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	public int[] getAccessibleSlotsFromSide(EnumFacing e){
+		return access;
 	}
-
+	
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+		return slot != 15;
 	}
 }

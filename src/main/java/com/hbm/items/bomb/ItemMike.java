@@ -2,6 +2,7 @@ package com.hbm.items.bomb;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemHazard;
 import com.hbm.main.MainRegistry;
 
@@ -21,7 +22,8 @@ public class ItemMike extends ItemHazard {
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18nUtil.resolveKey("desc.usedin"));
 		list.add(" "+ I18nUtil.resolveKey("tile.nuke_mike.name"));
-		list.add(" "+ I18nUtil.resolveKey("tile.nuke_tsar.name"));
+		if(this != ModItems.mike_cooling_unit)
+			list.add(" "+ I18nUtil.resolveKey("tile.nuke_tsar.name"));
 		super.addInformation(stack, world, list, flagIn);
 	}
 }

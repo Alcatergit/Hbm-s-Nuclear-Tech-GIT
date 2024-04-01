@@ -338,7 +338,7 @@ public class ModEventHandler {
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.mask_of_infamy, 1, world.rand.nextInt(100)));
 				}
 				if(!(hasHat || hasChest || hasLegs || hasFeet)){
-					if(randomArmorNumber < 2<<1){ //1:16384
+					if(randomArmorNumber < 2){ //1:32768
 						entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.dns_helmet, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.dns_plate, 1));
 						entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.dns_legs, 1));

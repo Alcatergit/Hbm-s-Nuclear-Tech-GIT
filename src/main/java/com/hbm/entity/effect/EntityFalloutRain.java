@@ -58,6 +58,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	public boolean done = false;
 	public boolean doFallout = false;
 	public boolean doFlood = false;
+	public boolean doDrop = false;
 	public int waterLevel = 0;
 	public boolean spawnFire = false;
 
@@ -325,11 +326,15 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		int contactHeight = 420;
 		int lastGapHeight = 420;
 		boolean gapFound = false;
+
+		IBlockState b;
+		Block bblock;
+		Material bmaterial;
 		for(int y = 255; y >= 0; y--) {
 			pos.setY(y);
-			IBlockState b = world.getBlockState(pos);
-			Block bblock = b.getBlock();
-			Material bmaterial = b.getMaterial();
+			b = world.getBlockState(pos);
+			bblock = b.getBlock();
+			bmaterial = b.getMaterial();
 			lastReachedStone = reachedStone;
 
 			if(bblock != Blocks.AIR && contactHeight == 420)
@@ -354,7 +359,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+				if(world.isAirBlock(pos.add(0, 1, 0))) world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 				break;
 			}
 
@@ -450,7 +455,10 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				continue;
 
 			} else if(bblock instanceof BlockBush) {
-				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.GRASS){
+				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockDirt || world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.FARMLAND){
+					placeBlockFromDist(dist, ModBlocks.waste_dirt, pos.add(0, -1, 0));
+					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
+				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass){
 					placeBlockFromDist(dist, ModBlocks.waste_earth, pos.add(0, -1, 0));
 					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
 				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.MYCELIUM){
@@ -592,7 +600,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				break;
 				// this piece stops the "stomp" from reaching below ground
 			} 
-			else if(bblock.getExplosionResistance(null) > 200){
+			else if(bblock.getExplosionResistance(null) > 300){
 				break;
 			}
 		}
@@ -689,7 +697,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			gapData = doNoFallout(pos, dist);
 
 		if(dist < fallingRadius){
-			if(gapData != null && gapData[0] == 1)
+			if(doDrop && gapData != null && gapData[0] == 1)
 				letFall(world, pos, gapData[1], gapData[2]);
 			if(doFlood)
 				flood(pos);
@@ -755,6 +763,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		this.s5 = 0.2D * i;
 		this.s6 = 0.1D * i;
 		this.fallingRadius = craterRadius;
+		this.doDrop = this.fallingRadius > 20;
 	}
 
 	public int getScale() {

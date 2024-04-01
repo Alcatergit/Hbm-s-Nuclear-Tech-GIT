@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public long power;
-	public static final long maxPower = 500000000000L;
+	public static final long maxPower = 10000000000000L;
 	public int watts;
 	public int beam;
 	public boolean isOn;
@@ -42,7 +42,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 			this.updateStandardConnections(world, pos);
 			
 			watts = MathHelper.clamp(watts, 1, 100);
-			int demand = (int) Math.pow(watts, 5);
+			long demand = (long) Math.pow(watts, 6);
 			isOn = false;
 
 			beam = 0;
@@ -67,7 +67,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 					if(te instanceof TileEntityCore) {
 						
 						TileEntityCore core = (TileEntityCore)te;
-						core.field = core.field + (int)(watts * lens.fieldMod);
+						core.field += (int)(watts * lens.fieldMod);
 						this.power -= (long)(demand * lens.drainMod);
 						beam = i;
 						

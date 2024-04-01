@@ -333,6 +333,10 @@ public class BobMathUtil {
 		return ticksToDate(ticks, 1000);
 	}
 
+	public static String ticksToDateString(long ticks, int tickHour) {
+		return toDate(ticksToDate(ticks, tickHour));
+	}
+
 	public static String toDate(String[] input){
 		if(!input[0].equals("0"))
 			return input[0]+ "y " + input[1]+ "d " + input[2]+ "h " + input[3]+ "m " + input[4]+ "s";

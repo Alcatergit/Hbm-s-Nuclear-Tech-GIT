@@ -589,7 +589,7 @@ public class JeiRecipes {
 			FontRenderer fontRenderer = minecraft.fontRenderer;
 
 			int output_size = this.outputs.size();
-			int sep = output_size > 4 ? 3 : 2;
+			int sep = output_size > 6 ? 4 : output_size > 4 ? 3 : 2;
 			for(int i = 0; i < output_size; i ++){
 				double chance = this.chances.get(i);
 				if(i < sep) {

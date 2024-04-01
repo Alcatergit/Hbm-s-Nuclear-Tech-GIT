@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.hbm.items.ModItems;
-import com.hbm.packet.AuxLongPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
@@ -200,7 +198,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-
+			if(this.power > getMaxPower()) this.power = getMaxPower();
 			long prevPower = this.power;
 
 			if(inventory.getSlots() < 3){

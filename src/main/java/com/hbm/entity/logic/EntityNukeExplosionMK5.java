@@ -75,6 +75,8 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 
 	@Override
 	public void onUpdate() {
+		if(world.isRemote) return;
+
 		if(strength == 0 || !CompatibilityConfig.isWarDim(world)) {
 			this.clearLoadedChunks();
 			this.unloadMainChunk();
@@ -87,13 +89,14 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 		float rads = 0;
 		
 		//radiate until there is fallout rain
-		if(!world.isRemote && fallout && falloutRain == null) {
-			rads = 0.2F * (float)Math.pow(radius, 3) * (float)Math.pow(0.5, this.ticksExisted*0.025);
+		if(fallout && falloutRain == null) {
+			rads = (float)(Math.pow(radius, 4) * (float)Math.pow(0.5, this.ticksExisted*0.125) + strength);
 			if(ticksExisted == 42)
 				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
 		}
-
-		ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, radius * 2, rads, 0F, (float)Math.pow(radius, 3) * (float)Math.pow(0.5, this.ticksExisted*0.0125), (float)Math.pow(radius, 3) * 0.01F, this.ticksExisted * 1.5F);
+		
+		if(ticksExisted < 2400 && ticksExisted % 10 == 0)
+			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, Math.min(1000, radius * 2), rads, 0F, 10F * (float)Math.pow(radius, 3) * (float)Math.pow(0.5, this.ticksExisted*0.0125), (float)Math.pow(radius, 3) * 0.1F, this.ticksExisted * 1.5F);
 
 		//make some noise
 		if(!mute) {
@@ -112,18 +115,11 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 
 		//Calculating crater
 		if(!explosion.isAusf3Complete) {
-			explosion.collectTip(speed * 10);
+			explosion.collectTip(BombConfig.mk5);
 
 		//Excecuting destruction
 		} else if(explosion.perChunk.size() > 0) {
-			if(nukeTickNumber >= BombConfig.nukeTickSpacing){
-				long start = System.currentTimeMillis();
-				while(explosion.perChunk.size() > 0 && System.currentTimeMillis() < start + BombConfig.mk5){
-					explosion.processChunk();
-				}
-				nukeTickNumber = 0;
-			}
-			nukeTickNumber++;
+			explosion.processChunk(BombConfig.mk5);
 		
 		} else {
 			boolean craterReady = true;

@@ -32,7 +32,7 @@ public class GUIRailgun extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		super.renderHoveredToolTip(mouseX, mouseY);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 53, 162, 18, this.railgun.getPower(), this.railgun.getMaxPower());
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 51, 160, 16, this.railgun.getPower(), this.railgun.getMaxPower());
 	}
 
 	@Override

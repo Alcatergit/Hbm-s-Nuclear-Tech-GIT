@@ -19,7 +19,7 @@ public class TomPronter {
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		GL11.glRotatef(180F, 1F, 0F, 0F);
-		GL11.glScalef(1F, 2F, 1F);
+		GL11.glScalef(2F, 4F, 2F);
 		
 		TextureManager tex = Minecraft.getMinecraft().getTextureManager();
 		

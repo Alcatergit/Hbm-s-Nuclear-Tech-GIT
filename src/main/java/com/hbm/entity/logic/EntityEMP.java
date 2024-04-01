@@ -2,6 +2,7 @@ package com.hbm.entity.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.NoClassDefFoundError;
 
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
@@ -92,11 +93,16 @@ public class EntityEMP extends Entity implements IChunkLoader {
 		TileEntity te = world.getTileEntity(pos);
 		if(te == null)
 			return;
-		if (te instanceof IEnergyUser) {
+		if(te instanceof IEnergyUser) {
 			machines.add(pos);
-		} else if (te instanceof IEnergyProvider) {
-			machines.add(pos);
-		} else if(te.hasCapability(CapabilityEnergy.ENERGY, null)){
+		} else {
+			try{
+				if(te instanceof IEnergyProvider) {
+					machines.add(pos);
+				}
+			} catch(NoClassDefFoundError e){}
+		}
+		if(te.hasCapability(CapabilityEnergy.ENERGY, null)){
 			machines.add(pos);
 		}
 	}
@@ -113,16 +119,18 @@ public class EntityEMP extends Entity implements IChunkLoader {
 			((IEnergyUser)te).setPower(0);
 			flag = true;
 		}
-		if (te instanceof IEnergyProvider) {
+		try{
+			if (te instanceof IEnergyProvider) {
 
-			((IEnergyProvider)te).extractEnergy(EnumFacing.UP, ((IEnergyProvider)te).getEnergyStored(EnumFacing.UP), false);
-			((IEnergyProvider)te).extractEnergy(EnumFacing.DOWN, ((IEnergyProvider)te).getEnergyStored(EnumFacing.DOWN), false);
-			((IEnergyProvider)te).extractEnergy(EnumFacing.NORTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.NORTH), false);
-			((IEnergyProvider)te).extractEnergy(EnumFacing.SOUTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.SOUTH), false);
-			((IEnergyProvider)te).extractEnergy(EnumFacing.EAST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.EAST), false);
-			((IEnergyProvider)te).extractEnergy(EnumFacing.WEST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.WEST), false);
-			flag = true;
-		}
+				((IEnergyProvider)te).extractEnergy(EnumFacing.UP, ((IEnergyProvider)te).getEnergyStored(EnumFacing.UP), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.DOWN, ((IEnergyProvider)te).getEnergyStored(EnumFacing.DOWN), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.NORTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.NORTH), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.SOUTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.SOUTH), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.EAST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.EAST), false);
+				((IEnergyProvider)te).extractEnergy(EnumFacing.WEST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.WEST), false);
+				flag = true;
+			}
+		} catch(NoClassDefFoundError e){}
 		if(te != null && te.hasCapability(CapabilityEnergy.ENERGY, null)){
 			IEnergyStorage handle = te.getCapability(CapabilityEnergy.ENERGY, null);
 			handle.extractEnergy(handle.getEnergyStored(), false);

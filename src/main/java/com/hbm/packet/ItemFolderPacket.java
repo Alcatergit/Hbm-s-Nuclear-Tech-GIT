@@ -100,7 +100,7 @@ public class ItemFolderPacket implements IMessage {
 					}
 				}
 				if(stack.getItem() instanceof ItemCassette) {
-					if(Library.hasInventoryItem(p.inventory, ModItems.plate_polymer) && Library.hasInventoryItem(p.inventory, ModItems.plate_steel)) {
+					if(Library.hasInventoryItem(p.inventory, ModItems.plate_polymer) && Library.hasInventoryOreDict(p.inventory, "plateSteel")) {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_polymer);
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_steel);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))

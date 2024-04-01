@@ -26,7 +26,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleTexture = ModEventHandlerClient.contrail;
-		maxAge = 400 + rand.nextInt(50);
+		maxAge = 100 + rand.nextInt(20);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.scale = 1F;
@@ -36,7 +36,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn, float red, float green, float blue, float scale) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleTexture = ModEventHandlerClient.contrail;
-		maxAge = 600 + rand.nextInt(50);
+		maxAge = 100 + rand.nextInt(20);
 
 		this.lowRed = red;
 		this.lowGreen = green;
@@ -75,7 +75,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.particleAlpha = 1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2);
+		this.particleAlpha = 1F - ((float) this.age / (float) this.maxAge);
 
 		this.age++;
 
@@ -121,7 +121,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		float x = (float) ((this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX));
 		float y = (float) ((this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY));
 		float z = (float) ((this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ));
-		this.particleScale = (1-particleAlpha)*3F + 0.5F * this.scale;
+		this.particleScale = (1-particleAlpha * particleAlpha)*4F * this.scale + 0.25F;
 		for(int ii = 0; ii < 6; ii++){
 			
 			buf.putFloat(x+vals[ii*4]);
@@ -160,7 +160,7 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 	
 	@Override
 	public int getBrightnessForRender(float p_189214_1_) {
-		return 240;
+		return (int)(240 * particleAlpha);
 	}
 
 	public int getFXLayer() {

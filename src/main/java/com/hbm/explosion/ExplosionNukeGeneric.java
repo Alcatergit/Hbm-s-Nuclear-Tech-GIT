@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.lang.NoClassDefFoundError;
 
 import org.apache.logging.log4j.Level;
 
@@ -508,18 +509,20 @@ public class ExplosionNukeGeneric {
 				if(random.nextInt(5) < 1)
 					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 			}
-			if (te != null && te instanceof IEnergyProvider) {
+			try{
+				if (te != null && te instanceof IEnergyProvider) {
 
-				((IEnergyProvider)te).extractEnergy(EnumFacing.UP, ((IEnergyProvider)te).getEnergyStored(EnumFacing.UP), false);
-				((IEnergyProvider)te).extractEnergy(EnumFacing.DOWN, ((IEnergyProvider)te).getEnergyStored(EnumFacing.DOWN), false);
-				((IEnergyProvider)te).extractEnergy(EnumFacing.NORTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.NORTH), false);
-				((IEnergyProvider)te).extractEnergy(EnumFacing.SOUTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.SOUTH), false);
-				((IEnergyProvider)te).extractEnergy(EnumFacing.EAST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.EAST), false);
-				((IEnergyProvider)te).extractEnergy(EnumFacing.WEST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.WEST), false);
-				
-				if(random.nextInt(5) <= 1)
-					world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
-			}
+					((IEnergyProvider)te).extractEnergy(EnumFacing.UP, ((IEnergyProvider)te).getEnergyStored(EnumFacing.UP), false);
+					((IEnergyProvider)te).extractEnergy(EnumFacing.DOWN, ((IEnergyProvider)te).getEnergyStored(EnumFacing.DOWN), false);
+					((IEnergyProvider)te).extractEnergy(EnumFacing.NORTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.NORTH), false);
+					((IEnergyProvider)te).extractEnergy(EnumFacing.SOUTH, ((IEnergyProvider)te).getEnergyStored(EnumFacing.SOUTH), false);
+					((IEnergyProvider)te).extractEnergy(EnumFacing.EAST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.EAST), false);
+					((IEnergyProvider)te).extractEnergy(EnumFacing.WEST, ((IEnergyProvider)te).getEnergyStored(EnumFacing.WEST), false);
+					
+					if(random.nextInt(5) <= 1)
+						world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
+				}
+			} catch(NoClassDefFoundError e){}
 			if(te != null && te.hasCapability(CapabilityEnergy.ENERGY, null)){
 				IEnergyStorage handle = te.getCapability(CapabilityEnergy.ENERGY, null);
 				handle.extractEnergy(handle.getEnergyStored(), false);

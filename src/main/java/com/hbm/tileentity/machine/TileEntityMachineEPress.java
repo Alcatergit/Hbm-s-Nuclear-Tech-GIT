@@ -58,7 +58,9 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 		if(i == 0 && stack.getItem() instanceof IBatteryItem)
 			return true;
 		
-		return i == 2;
+		if(!(stack.getItem() instanceof ItemStamp) && i == 2)
+			return true;
+		return false;
 	}
 	
 	@Override

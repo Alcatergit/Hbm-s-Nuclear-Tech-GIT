@@ -17,19 +17,19 @@ public class ParticleContrail extends Particle {
 
 	private TextureManager theRenderEngine;
 	public boolean doFlames = false;
-	protected static float flameRed;
-	protected static float flameGreen;
-	protected static float flameBlue;
-	protected static float lowRed;
-	protected static float lowGreen;
-	protected static float lowBlue;
+	public float flameRed;
+	public float flameGreen;
+	public float flameBlue;
+	public float lowRed;
+	public float lowGreen;
+	public float lowBlue;
 	private int age = 0;
 	private int maxAge;
 
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 300 + rand.nextInt(50);
+		maxAge = 100 + rand.nextInt(20);
 
 		this.particleRed = this.particleGreen = this.particleBlue = 0;
 		this.particleScale = 1F;
@@ -38,7 +38,7 @@ public class ParticleContrail extends Particle {
 	public ParticleContrail(TextureManager manage, World worldIn, double posXIn, double posYIn, double posZIn, float red, float green, float blue, float scale) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		theRenderEngine = manage;
-		maxAge = 300 + rand.nextInt(50);
+		maxAge = 100 + rand.nextInt(20);
 
 		this.lowRed = red;
 		this.lowGreen = green;
@@ -66,16 +66,16 @@ public class ParticleContrail extends Particle {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		this.setAlphaF(1F - (float)Math.pow((float) this.age / (float) this.maxAge, 2));
+		this.setAlphaF(1F - ((float) this.age / (float) this.maxAge));
 
 		this.age++;
 
 		if (this.age == this.maxAge) {
 			this.setExpired();
 		}
-		this.motionX *= 0.8;
-		this.motionY *= 0.8;
-		this.motionZ *= 0.8;
+		this.motionX *= 0.91;
+		this.motionY *= 0.91;
+		this.motionZ *= 0.91;
 		
         this.move(this.motionX, this.motionY, this.motionZ);
 	}
@@ -93,19 +93,19 @@ public class ParticleContrail extends Particle {
 		float pColor = 0;
 		if(index == 0){
 			if(doFlames){
-				pColor = clampGood(this.flameRed - (this.flameRed-this.lowRed)*(1-particleAlpha)*50F, this.flameRed, this.lowRed);
+				pColor = clampGood(this.flameRed - (this.flameRed-this.lowRed)*(1-particleAlpha)*5F, this.flameRed, this.lowRed);
 			} else {
 				pColor = this.lowRed;
 			}
 		} else if(index == 1){
 			if(doFlames){
-				pColor = clampGood(this.flameGreen - (this.flameGreen-this.lowGreen)*(1-particleAlpha)*50F, this.flameGreen, this.lowGreen);
+				pColor = clampGood(this.flameGreen - (this.flameGreen-this.lowGreen)*(1-particleAlpha)*5F, this.flameGreen, this.lowGreen);
 			} else {
 				pColor = this.lowGreen;
 			}
 		} else if(index == 2){
 			if(doFlames){
-				pColor = clampGood(this.flameBlue - (this.flameBlue-this.lowBlue)*(1-particleAlpha)*50F, this.flameBlue, this.lowBlue);
+				pColor = clampGood(this.flameBlue - (this.flameBlue-this.lowBlue)*(1-particleAlpha)*5F, this.flameBlue, this.lowBlue);
 			} else {
 				pColor = this.lowBlue;
 			}
@@ -122,7 +122,7 @@ public class ParticleContrail extends Particle {
 		float f1 = f + 0.0624375F;
 		float f2 = (float) this.particleTextureIndexY / 16.0F;
 		float f3 = f2 + 0.0624375F;
-		float f4 = (1-particleAlpha)*3F + 0.5F * this.particleScale;
+		float f4 = 0.25F + 3F * this.particleScale * (1-particleAlpha * particleAlpha);
 
 		if (this.particleTexture != null) {
 			f = this.particleTexture.getMinU();
@@ -166,7 +166,7 @@ public class ParticleContrail extends Particle {
 
 	@Override
 	public int getBrightnessForRender(float p_189214_1_) {
-		return 240;
+		return (int)(240 * particleAlpha);
 	}
 
 	public int getFXLayer() {

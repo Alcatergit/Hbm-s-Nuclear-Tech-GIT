@@ -56,7 +56,7 @@ public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 		guiItemStacks.init(0, true, 13, 31);
 		
 		int rec_size = recipeWrapper.outputs.size();
-		int sep = rec_size > 4 ? 3 : 2;
+		int sep = rec_size > 6 ? 4 : rec_size > 4 ? 3 : 2;
 		for(int i = 0; i < rec_size; i ++){
 			if(i < sep) {
 				guiItemStacks.init(i+1, false, 72, 28 + i * 18 - 9 * ((Math.min(rec_size, sep) + 1) / 2));
@@ -67,5 +67,4 @@ public class SILEXRecipeHandler implements IRecipeCategory<SILEXRecipe> {
 		
 		guiItemStacks.set(ingredients);
 	}
-
 }

@@ -32,12 +32,11 @@ public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITi
 	public final static int processTime = 400;
 	public final static long maxPower = 1000000L;
 	
-	private String customName;
-	
 	public TileEntityCoreTitanium() {
 		super(23);
 	}
 	
+	@Override
 	public String getName() {
 		return "container.factoryTitanium";
 	}

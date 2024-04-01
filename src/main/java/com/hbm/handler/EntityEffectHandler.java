@@ -19,6 +19,7 @@ import com.hbm.packet.ExtPropPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
@@ -39,6 +40,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -223,15 +225,14 @@ public class EntityEffectHandler {
 					stack = player.inventory.armorInventory.get(rand.nextInt(4));
 				}
 				
-				//only affect unstackables (e.g. tools and armor) so that the NBT tag's stack restrictions isn't noticeable
-				if(stack != null && stack.getMaxStackSize() == 1) {
+				if(stack != null && !ArmorUtil.checkForHazmatOnly(player) && !ArmorRegistry.hasProtection(player, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
 					
 					if(contagion > 0) {
 						
 						if(!stack.hasTagCompound())
 							stack.setTagCompound(new NBTTagCompound());
-						
-						stack.getTagCompound().setBoolean("ntmContagion", true);
+						if(!stack.getTagCompound().getBoolean("ntmContagion"))
+							stack.getTagCompound().setBoolean("ntmContagion", true);
 						
 					} else {
 						
@@ -256,7 +257,7 @@ public class EntityEffectHandler {
 						
 						if(ent instanceof EntityLivingBase) {
 							EntityLivingBase living = (EntityLivingBase) ent;
-							if(HbmLivingProps.getContagion(living) <= 0) {
+							if(HbmLivingProps.getContagion(living) <= 0 && !ArmorUtil.checkForHazmatOnly(living) && !ArmorRegistry.hasProtection(living, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
 								HbmLivingProps.setContagion(living, 3 * hour);
 							}
 						}
@@ -274,12 +275,12 @@ public class EntityEffectHandler {
 				
 				//one hour in, add rare and subtle screen fuckery
 				if(contagion < 2 * hour && rand.nextInt(1000) == 0) {
-					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 20, 0));
+					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 0));
 				}
 				
 				//two hours in, give 'em the full blast
 				if(contagion < 1 * hour && rand.nextInt(100) == 0) {
-					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 60, 0));
+					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 0));
 					entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 300, 4));
 				}
 				
@@ -287,12 +288,8 @@ public class EntityEffectHandler {
 				if(contagion < 30 * minute && rand.nextInt(400) == 0) {
 					entity.attackEntityFrom(ModDamageSource.mku, 1F);
 				}
-				
-				//T-5 minutes, take damage every 5 seconds
-				if(contagion < 5 * minute && rand.nextInt(100) == 0) {
-					entity.attackEntityFrom(ModDamageSource.mku, 2F);
-				}
-				
+
+				//T-30 minutes, start vomiting
 				if(contagion < 30 * minute && (contagion + entity.getEntityId()) % 200 < 20 && canVomit(entity)) {
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setString("type", "vomit");
@@ -305,9 +302,14 @@ public class EntityEffectHandler {
 						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.vomit, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				}
 				
+				//T-5 minutes, take damage every 5 seconds
+				if(contagion < 5 * minute && rand.nextInt(100) == 0) {
+					entity.attackEntityFrom(ModDamageSource.mku, 2F);
+				}
+
 				//end of contagion, drop dead
 				if(contagion == 0) {
-					entity.attackEntityFrom(ModDamageSource.mku, 1000F);
+					entity.attackEntityFrom(ModDamageSource.mku, 100000F);
 				}
 			}
 		}

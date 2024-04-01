@@ -989,7 +989,7 @@ public class ExplosionChaos {
 		}
 
 		else if(bblock == ModBlocks.waste_trinitite_red && random.nextInt(3) == 0) {
-			world.setBlockState(pos, Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND), 2);
+			world.setBlockState(pos, Blocks.SAND.getDefaultState().withProperty(BlockSand.VARIANT, BlockSand.EnumType.RED_SAND));
 		}
 
 		else if(bblock == ModBlocks.waste_log && random.nextInt(3) != 0) {

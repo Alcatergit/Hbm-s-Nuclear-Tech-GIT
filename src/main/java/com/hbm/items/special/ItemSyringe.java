@@ -311,6 +311,13 @@ public class ItemSyringe extends Item {
             	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.vice, SoundCategory.PLAYERS, 1.0F, 1.0F);
             }
 		}
+		if(this == ModItems.syringe_mkunicorn) {
+			if(!world.isRemote) {
+				HbmLivingProps.setContagion(player, 3 * 60 * 60 * 20);
+				player.getHeldItem(hand).shrink(1);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.vice, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			}
+		}
 		
 		return ActionResult.<ItemStack> newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	}

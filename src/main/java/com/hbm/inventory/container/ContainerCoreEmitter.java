@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.inventory.gui.GUICoreEmitter;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.AuxLongPacket;
@@ -8,6 +9,7 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -48,7 +50,7 @@ public class ContainerCoreEmitter extends Container {
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
 		PacketDispatcher.sendTo(new AuxElectricityPacket(nukeBoy.getPos(), nukeBoy.power), player);
-		PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 0), player);
+		PacketDispatcher.sendTo(new AuxGaugePacket(nukeBoy.getPos(), nukeBoy.watts, 1), player);
 		PacketDispatcher.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
 		listener.sendWindowProperty(this, 3, nukeBoy.isOn ? 1 : 0);
 		PacketDispatcher.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
@@ -92,6 +94,11 @@ public class ContainerCoreEmitter extends Container {
 	public void updateProgressBar(int id, int data) {
 		if(id == 3)
 			nukeBoy.isOn = data > 0 ? true : false;
+		if(id == 1){
+			if(Minecraft.getMinecraft().currentScreen instanceof GUICoreEmitter){
+				((GUICoreEmitter)Minecraft.getMinecraft().currentScreen).syncTextField(watts);
+			}
+		}
 		super.updateProgressBar(id, data);
 	}
 

@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class EntityMissileBaseAdvanced extends Entity implements IChunkLoader, IConstantRenderer, IRadarDetectable {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileBaseAdvanced.class, DataSerializers.VARINT);
+	public static final double particleSpeed = 1.75D;
 
 	int chunkX = 0;
 	int chunkZ = 0;
@@ -269,7 +270,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 			v = v.normalize();
 			for(int i = 0; i < velocity; i++){
 				//PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacket(posX, posY, posZ, 2), new TargetPoint(world.provider.getDimension(), posX, posY, posZ, 300));
-				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, "exDark", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+				MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, "exDark", new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
 			}
 		}
 

@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerCrateTungsten;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
 
 import net.minecraft.client.Minecraft;
@@ -31,6 +32,8 @@ public class GUICrateTungsten extends GuiContainer {
 		String title = I18n.format("container.crateTungsten");
 		this.fontRenderer.drawString(title, this.xSize / 2 - this.fontRenderer.getStringWidth(title) / 2, 6, diFurnace.heatTimer == 0 ? 0xA0A0A0 : 0xFFCA53);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, diFurnace.heatTimer == 0 ? 0xA0A0A0 : 0xFFCA53);
+		String sparks = Library.getShortNumber(diFurnace.joules) + "SPK";
+		this.fontRenderer.drawString(sparks, this.xSize - 8 -this.fontRenderer.getStringWidth(sparks), this.ySize - 96 + 2, diFurnace.heatTimer == 0 ? 0xA0A0A0 : 0xFFCA53);
 	}
 	
 	@Override

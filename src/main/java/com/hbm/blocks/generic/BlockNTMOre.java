@@ -93,17 +93,8 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 		if(this == ModBlocks.ore_lignite){
 			return ModItems.lignite;
 		}
-		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare)
-		{
-			switch(rand.nextInt(7)) {
-			case 0: return ModItems.fragment_boron;
-			case 1: return ModItems.fragment_cerium;
-			case 2: return ModItems.fragment_cobalt;
-			case 3: return ModItems.fragment_lanthanium;
-			case 4: return ModItems.fragment_neodymium;
-			case 5: return ModItems.fragment_niobium;
-			case 6: return ModItems.fragment_actinium;
-			}
+		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare){	
+			return ModItems.rare_earth_chunk;
 		}
 		if(this == ModBlocks.block_meteor)
 		{
@@ -151,8 +142,8 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 			case 28: return ModItems.pellet_rtg_weak;
 			case 29: return ModItems.rtg_unit;
 			case 30: return ModItems.gun_spark_ammo;
-			case 31: return ModItems.gun_fatman_ammo;
-			case 32: return ModItems.gun_mirv_ammo;
+			case 31: return ModItems.ammo_nuke;
+			case 32: return ModItems.ammo_mirv;
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
 			}
@@ -214,9 +205,6 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 		}
 		if(this == ModBlocks.ore_fluorite){
 			return 2 + rand.nextInt(3) * fortune;
-		}
-		if(this == ModBlocks.ore_rare || this == ModBlocks.ore_gneiss_rare){
-			return 4 + rand.nextInt(8);
 		}
 		if(this == ModBlocks.block_meteor_broken)
 		{

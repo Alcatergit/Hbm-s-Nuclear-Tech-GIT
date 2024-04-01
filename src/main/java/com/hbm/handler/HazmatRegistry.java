@@ -112,8 +112,8 @@ public class HazmatRegistry {
 		double dns = 6D; // 99.9999%
 		double security = 0.01D; // 2.3%
 		double star = 0.25D; // 44%
-		double cmb = 0.5D; // 68%
-		double schrab = 1D; // 90.0%
+		double cmb = 1.3D; // 95%
+		double schrab = 3D; // 99.9%
 		double euph = 10D; // 99.99999999%
 
 		HazmatRegistry.registerHazmat(ModItems.hazmat_helmet, fixRounding(hazYellow * helmet));

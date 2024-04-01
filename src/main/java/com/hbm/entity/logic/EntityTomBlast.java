@@ -3,6 +3,7 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
@@ -29,7 +30,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 	public int age = 0;
 	public int destructionRange = 0;
 	public ExplosionTom exp;
-	public int speed = 1;
 	public boolean did = false;
 	private Ticket loaderTicket;
 	
@@ -54,16 +54,17 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
         	this.did = true;
         }
         
-        speed += 1;	//increase speed to keep up with expansion
-        
-        boolean flag = false;
-        for(int i = 0; i < this.speed; i++)
-        {
+        long start = System.currentTimeMillis();
+		boolean flag = false;
+		int columnsProcessed = 0;
+		while(!(columnsProcessed % 32 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5)) {
         	flag = exp.update();
         	
         	if(flag) {
         		this.setDead();
+        		break;
         	}
+        	columnsProcessed++;
         }
         
     	if(rand.nextInt(5) == 0)
@@ -133,7 +134,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		age = nbt.getInteger("age");
 		destructionRange = nbt.getInteger("destructionRange");
-		speed = nbt.getInteger("speed");
 		did = nbt.getBoolean("did");
     	
 		exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
@@ -146,7 +146,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("age", age);
 		nbt.setInteger("destructionRange", destructionRange);
-		nbt.setInteger("speed", speed);
 		nbt.setBoolean("did", did);
     	
 		if(exp != null)

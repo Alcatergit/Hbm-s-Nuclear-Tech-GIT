@@ -2063,6 +2063,12 @@ public class ModEventHandlerClient {
 				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(ItemHazardModule.getNewValue(activationRads), 3) + ItemHazardModule.getSuffix(activationRads) + " RAD/s"));
 			}
 		}
+
+		//MKU
+		if(stack.hasTagCompound()){
+			if(stack.getTagCompound().getBoolean("ntmContagion"))
+				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");
+		}
 	}
 	
 	private static final ResourceLocation poster = new ResourceLocation(RefStrings.MODID + ":textures/models/misc/poster.png");

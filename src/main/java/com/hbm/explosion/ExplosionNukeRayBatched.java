@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Iterator;
+import java.util.Objects;
 
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -20,7 +22,7 @@ import net.minecraft.world.World;
 
 public class ExplosionNukeRayBatched {
 
-	public HashMap<ChunkPos, List<FloatTriplet>> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
+	public HashMap<ChunkPos, HashSet<IntTriplet>> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
 	public List<ChunkPos> orderedChunks = new ArrayList();
 	private CoordComparator comparator = new CoordComparator();
 	public boolean isContained = true;
@@ -83,59 +85,69 @@ public class ExplosionNukeRayBatched {
 		return Vec3.createVectorHelper(dx, dy, dz);
 	}
 
-	public void collectTip(int count) {
+	public void addPos(int x, int y, int z){
+		HashSet<IntTriplet> triplets = perChunk.get(new ChunkPos(x >> 4, z >> 4));
+				
+		if(triplets == null) {
+			triplets = new HashSet();
+			perChunk.put(new ChunkPos(x >> 4, z >> 4), triplets); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
+		}
+				
+		triplets.add(new IntTriplet(x, y, z));
+	}
+
+	public void collectTip(int time) {
 		if(!CompatibilityConfig.isWarDim(world)){
 			isAusf3Complete = true;
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int rayProcessed = 0;
-		double fac = 1;
+		long raysProcessed = 0;
+		long start = System.currentTimeMillis();
+
+
+		IBlockState blockState;
+		Block b;
+		int iX, iY, iZ, radius;
+		float rayStrength;
+		Vec3 vec;
+
 		while (this.gspNumMax >= this.gspNum){
 			// Get Cartesian coordinates for spherical coordinates
-			Vec3 vec = this.getSpherical2cartesian();
+			vec = this.getSpherical2cartesian();
 
-			int radius = (int)Math.ceil(this.radius);
-			float rayStrength = strength * 0.3F;
-
-			FloatTriplet lastPos = null;
-			HashSet<ChunkPos> chunkCoords = new HashSet();
+			radius = (int)Math.ceil(this.radius);
+			rayStrength = strength * 0.3F;
 
 			//Finding the end of the ray
 			for(int r = 0; r < radius+1; r ++) {
 
-				float x0 = (float) (posX + (vec.xCoord * r));
-				float y0 = (float) (posY + (vec.yCoord * r));
-				float z0 = (float) (posZ + (vec.zCoord * r));
-
-				int iX = (int) Math.floor(x0);
-				int iY = (int) Math.floor(y0);
-				int iZ = (int) Math.floor(z0);
-
+				iY = (int) Math.floor(posY + (vec.yCoord * r));
+				
 				if(iY < minY || iY > maxY){
-					if(isContained) {
-						isContained = false;
-					}
+					isContained = false;
 					break;
 				}
 
+				iX = (int) Math.floor(posX + (vec.xCoord * r));
+				iZ = (int) Math.floor(posZ + (vec.zCoord * r));
+
+
 				pos.setPos(iX, iY, iZ);
-				IBlockState blockState = world.getBlockState(pos);
-				if(blockState.getBlock().getExplosionResistance(null) >= 2_000_000)
+				blockState = world.getBlockState(pos);
+				b = blockState.getBlock();
+				if(b.getExplosionResistance(null) >= 2_000_000)
 					break;
 
-				fac = 3 * ((double) r) / ((double) radius);
-				rayStrength -= Math.pow(getNukeResistance(blockState)+1, fac)-1;
+				rayStrength -= Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1;
 
-				//save block positions in to-destroy-list until rayStrength is 0 
+				//save block positions in to-destroy-hashset until rayStrength is 0 
 				if(rayStrength > 0){
-					lastPos = new FloatTriplet(x0, y0, z0);
-					if(blockState.getBlock() != Blocks.AIR) {
+					if(b != Blocks.AIR) {
 						//all-air chunks don't need to be buffered at all
-						ChunkPos chunkPos = new ChunkPos(iX >> 4, iZ >> 4);
-						chunkCoords.add(chunkPos);
+						addPos(iX, iY, iZ);
 					}
-					if(isContained && r == radius) {
+					if(r >= radius) {
 						isContained = false;
 					}
 				} else {
@@ -143,23 +155,11 @@ public class ExplosionNukeRayBatched {
 				}
 			}
 			
-			//saving the ray endpoints per chunk
-			for(ChunkPos cPos : chunkCoords) {
-				List<FloatTriplet> triplets = perChunk.get(cPos);
-				
-				if(triplets == null) {
-					triplets = new ArrayList();
-					perChunk.put(cPos, triplets); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
-				}
-				
-				triplets.add(lastPos);
-			}
-			
 			// Raise one generalized spiral points
 			this.generateGspUp();
-
-			rayProcessed++;
-			if(rayProcessed >= count) {
+			raysProcessed++;
+			if(raysProcessed % 50 == 0 && System.currentTimeMillis()+1 > start + time) {
+				// System.out.println("NTM C "+raysProcessed+" "+Math.round(1000D * 100D*gspNum/(double)gspNumMax)/1000D+"% "+gspNum+"/"+gspNumMax+" "+(System.currentTimeMillis()-start)+"ms");
 				return;
 			}
 		} 
@@ -170,13 +170,13 @@ public class ExplosionNukeRayBatched {
 		isAusf3Complete = true;
 	}
 	
-	public static float getNukeResistance(IBlockState blockState) {
+	public static float getNukeResistance(IBlockState blockState, Block b) {
 		if(blockState.getMaterial().isLiquid()){
 			return 0.1F;
 		} else {
-			if(blockState.getBlock() == Blocks.SANDSTONE) return 4F;
-			if(blockState.getBlock() == Blocks.OBSIDIAN) return 18F;
-			return blockState.getBlock().getExplosionResistance(null);
+			if(b == Blocks.SANDSTONE) return 4F;
+			if(b == Blocks.OBSIDIAN) return 18F;
+			return b.getExplosionResistance(null);
 		}
 	}
 	
@@ -196,73 +196,82 @@ public class ExplosionNukeRayBatched {
 		}
 	}
 
-	public void processChunk() {
+	public void processChunk(int time){
+		long start = System.currentTimeMillis();
+		while(System.currentTimeMillis() < start + time){
+			processChunkBlocks(start, time);
+		}
+	}
+
+	HashSet<IntTriplet> positions = new HashSet();
+	ChunkPos chunk;
+
+	public void processChunkBlocks(long start, int time){
 		if(!CompatibilityConfig.isWarDim(world)){
 			this.perChunk.clear();
 		}
 		if(this.perChunk.isEmpty()) return;
-		
-		ChunkPos coord = orderedChunks.get(0);
-		List<FloatTriplet> list = perChunk.get(coord);
-		HashSet<BlockPos> toRem = new HashSet();
+		int i = 0;
 
-		int chunkX = coord.getXStart() >> 4;
-		int chunkZ = coord.getZStart() >> 4;
+		if(positions.size() == 0)
+			chunk = orderedChunks.get(0);
+			positions = perChunk.get(chunk);
 		
-		int enter = (int) (Math.min(
-				Math.abs(posX - (chunkX << 4)),
-				Math.abs(posZ - (chunkZ << 4))
-			)) - 16; //jump ahead to cut back on NOPs
-		
-		enter = Math.max(enter, 0);
-		
-		for(FloatTriplet triplet : list) {
-			float x = triplet.xCoord;
-			float y = triplet.yCoord;
-			float z = triplet.zCoord;
-			Vec3 vec = Vec3.createVectorHelper(x - this.posX, y - this.posY, z - this.posZ);
-			double vLen = vec.lengthVector();
-			double pX = vec.xCoord / vLen;
-			double pY = vec.yCoord / vLen;
-			double pZ = vec.zCoord / vLen;
-			
-			boolean inChunk = false;
-			for(int i = enter; i < vLen; i++) {
-				int x0 = (int) Math.floor(posX + pX * i);
-				int y0 = (int) Math.floor(posY + pY * i);
-				int z0 = (int) Math.floor(posZ + pZ * i);
-				
-				if(x0 >> 4 != chunkX || z0 >> 4 != chunkZ) {
-					if(inChunk) {
-						break;
-					} else {
-						continue;
-					}
-				}
-				
-				inChunk = true;
-				if(world.getBlockState(new BlockPos(x0, y0, z0)).getBlock() != Blocks.AIR) {
-					toRem.add(new BlockPos(x0, y0, z0));
-				}
+		List<IntTriplet> done = new ArrayList<IntTriplet>();
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		for(IntTriplet coord : positions) {
+			pos.setPos(coord.xCoord, coord.yCoord, coord.zCoord);
+			world.setBlockToAir(pos);
+			done.add(coord);
+			i++;
+			if(i % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+				// System.out.println("NTM B "+Math.round(1000D * 100D*i/(double)positions.size())/1000D+"% "+i+"/"+positions.size()+" "+(System.currentTimeMillis()-start)+"ms");
+				break;
 			}
 		}
-		for(BlockPos pos : toRem) {
-			world.setBlockToAir(pos);
+		positions.removeAll(done);
+
+		if(positions.size() == 0){
+			perChunk.remove(chunk);
+			orderedChunks.remove(0);
 		}
-		
-		perChunk.remove(coord);
-		orderedChunks.remove(0);
 	}
 	
-	public class FloatTriplet {
-		public float xCoord;
-		public float yCoord;
-		public float zCoord;
+	public class IntTriplet {
+		public final int xCoord;
+		public final int yCoord;
+		public final int zCoord;
+		private final int hashCode;
+
 		
-		public FloatTriplet(float x, float y, float z) {
-			xCoord = x;
-			yCoord = y;
-			zCoord = z;
+		public IntTriplet(int x, int y, int z) {
+			this.xCoord = x;
+			this.yCoord = y;
+			this.zCoord = z;
+			this.hashCode = Objects.hash(x, y, z);
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (!(obj instanceof IntTriplet))
+				return false;
+			IntTriplet other = (IntTriplet) obj;
+			if (xCoord != other.xCoord)
+				return false;
+			if (yCoord != other.yCoord)
+				return false;
+			if (zCoord != other.zCoord)
+				return false;
+			return true;
+		}
+
+		@Override
+	    public int hashCode() {
+	        return this.hashCode;
+	    }
 	}
 }

@@ -63,7 +63,7 @@ public class GunProtoMirv extends Item {
 		boolean f1 = false;
 				
 		for(int i = 0; i < 8; i++) {
-			if (flag || Library.hasInventoryItem(player.inventory, ModItems.gun_fatman_ammo)) {
+			if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_nuke)) {
 				
 				f1 = true;
 				
@@ -91,7 +91,7 @@ public class GunProtoMirv extends Item {
 				stack.damageItem(1, player);
 	
 				if (!flag) {
-					Library.consumeInventoryItem(player.inventory, ModItems.gun_fatman_ammo);
+					Library.consumeInventoryItem(player.inventory, ModItems.ammo_nuke);
 				}
 	
 				if (!worldIn.isRemote) {

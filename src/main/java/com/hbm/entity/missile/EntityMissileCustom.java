@@ -49,7 +49,8 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileCustom.class, DataSerializers.VARINT);
 	public static final DataParameter<MissileStruct> TEMPLATE = EntityDataManager.createKey(EntityMissileCustom.class, MissileStruct.SERIALIZER);
-	
+	public static final double particleSpeed = 1.75D;
+
 	int chunkX = 0;
 	int chunkZ = 0;
 
@@ -380,13 +381,9 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	}
 
 	private void spawnRocketExhaust(){
-		Vec3 v = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
-		v = v.normalize();
-		
-		String smoke = "exDark";
-		
 		FuelType type = (FuelType)template.fuselage.attributes[0];
 		
+		String smoke = "exDark";
 		switch(type) {
 		case BALEFIRE:
 			smoke = "exBalefire";
@@ -401,10 +398,12 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			smoke = "exSolid";
 			break;
 		case XENON:
-			break;
+			return;
 		}
+		Vec3 v = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ).normalize();
+		
 		for(int i = 0; i < 2; i++){
-			MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+			MainRegistry.proxy.spawnParticle(posX - v.xCoord * i, posY - v.yCoord * i, posZ - v.zCoord * i, smoke, new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
 		}
 	}
 		

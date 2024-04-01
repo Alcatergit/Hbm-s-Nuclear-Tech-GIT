@@ -38,6 +38,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	public int heat;
 	public int color;
 	public FluidTank[] tanks;
+	public int overload = 0;
 	
 	public TileEntityCore() {
 		super(3);
@@ -74,7 +75,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 				exp.speed = 25;
 				exp.coefficient = 1.0F;
 				exp.waste = false;
-				if(!EntityNukeExplosionMK3.isJammed(this.world, exp)){
+				if(overload >= 60 && !EntityNukeExplosionMK3.isJammed(this.world, exp)){
 					world.spawnEntity(exp);
 		    		
 		    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, size);
@@ -83,6 +84,9 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		    		cloud.posZ = pos.getZ();
 		    		world.spawnEntity(cloud);
 		    	}
+		    	overload++;
+			} else {
+				if(overload > 0) overload = 0;
 			}
 			
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst){

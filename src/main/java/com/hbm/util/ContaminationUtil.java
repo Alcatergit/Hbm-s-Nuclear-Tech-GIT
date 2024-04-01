@@ -29,6 +29,7 @@ import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.util.BobMathUtil;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -235,13 +236,16 @@ public class ContaminationUtil {
 		float playerAsbestos = 100F-((int)(10000F * HbmLivingProps.getAsbestos(player) / EntityHbmProps.maxAsbestos))/100F;
 		float playerBlacklung = 100F-((int)(10000F * HbmLivingProps.getBlackLung(player) / EntityHbmProps.maxBlacklung))/100F;
 		float playerTotal = (playerAsbestos * playerBlacklung/100F);
-		
+		int contagion = HbmLivingProps.getContagion(player);
 
 		player.sendMessage(new TextComponentString("===== L ").appendSibling(new TextComponentTranslation("lung_scanner.title")).appendSibling(new TextComponentString(" L =====")).setStyle(new Style().setColor(TextFormatting.WHITE)));
 		player.sendMessage(new TextComponentTranslation("lung_scanner.player_asbestos_health").setStyle(new Style().setColor(TextFormatting.WHITE)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerAsbestos/100D)+" %6.2f", playerAsbestos)+" %")));
 		player.sendMessage(new TextComponentTranslation("lung_scanner.player_coal_health").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerBlacklung/100D)+" %6.2f", playerBlacklung)+" %")));
 		player.sendMessage(new TextComponentTranslation("lung_scanner.player_total_health").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(String.format(getTextColorLung(playerTotal/100D)+" %6.2f", playerTotal)+" %")));
-	
+		player.sendMessage(new TextComponentTranslation("lung_scanner.player_mku").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentTranslation(contagion > 0 ? "lung_scanner.pos" : "lung_scanner.neg" )));
+		if(contagion > 0){
+			player.sendMessage(new TextComponentTranslation("lung_scanner.player_mku_duration").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TextComponentString(" §c"+BobMathUtil.ticksToDateString(contagion, 72000))));
+		}
 	}
 
 	public static double getStackRads(ItemStack stack) {
@@ -594,6 +598,7 @@ public class ContaminationUtil {
 
 			if(len > range) continue;
 			vec = vec.normalize();
+			double dmgLen = Math.max(len, range * 0.05D);
 			
 			float res = 0;
 			
@@ -610,20 +615,20 @@ public class ContaminationUtil {
 				res = 1;
 			if(isLiving && rad3d > 0){
 				float eRads = rad3d;
-				eRads /= (float)(len * len * Math.sqrt(res));
+				eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
 				
 				contaminate((EntityLivingBase)e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 			}
 			if(isLiving && dig3d > 0){
 				float eDig = dig3d;
-				eDig /= (float)(len * len * len);
+				eDig /= (float)(dmgLen * dmgLen * dmgLen);
 				
 				contaminate((EntityLivingBase)e, HazardType.DIGAMMA, ContaminationType.DIGAMMA, eDig);
 			}
 			
 			if(fire3d > 0.025) {
 				float fireDmg = fire3d;
-				fireDmg /= (float)(len * len * res * res);
+				fireDmg /= (float)(dmgLen * dmgLen * dmgLen * res * res);
 				if(fireDmg > 0.025){
 					if(fireDmg > 0.1 && e instanceof EntityPlayer) {
 						EntityPlayer p = (EntityPlayer) e;
@@ -643,13 +648,16 @@ public class ContaminationUtil {
 
 			if(len < blastRange && blast3d > 0.025) {
 				float blastDmg = blast3d;
-				blastDmg /= (float)(len * res * res);
+				blastDmg /= (float)(dmgLen * dmgLen * dmgLen);
 				if(blastDmg > 0.025){
-					e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
+					if(rad3d > 0)
+						e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
+					else
+						e.attackEntityFrom(ModDamageSource.blast, blastDmg);
 				}
-				e.motionX += vec.xCoord * 0.015D * blastDmg;
-				e.motionY += vec.yCoord * 0.015D * blastDmg;
-				e.motionZ += vec.zCoord * 0.015D * blastDmg;
+				e.motionX += vec.xCoord * 0.005D * blastDmg;
+				e.motionY += vec.yCoord * 0.005D * blastDmg;
+				e.motionZ += vec.zCoord * 0.005D * blastDmg;
 			}
 		}
 	}

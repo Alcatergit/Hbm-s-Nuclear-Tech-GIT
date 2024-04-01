@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class BlockGasFlammable extends BlockGasBase {
 
@@ -43,7 +44,9 @@ public class BlockGasFlammable extends BlockGasBase {
 				IBlockState b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ));
 				
 				if(isFireSource(b)) {
-					combust(world, pos.getX(), pos.getY(), pos.getZ());
+					((WorldServer)world).addScheduledTask(() -> {
+						combust(world, pos.getX(), pos.getY(), pos.getZ());
+					});
 					return;
 				}
 			}

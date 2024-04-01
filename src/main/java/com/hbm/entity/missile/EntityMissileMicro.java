@@ -54,7 +54,7 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
 
 	@Override
 	public ItemStack getDebrisRareDrop() {
-		return new ItemStack(ModItems.gun_fatman_ammo, 1);
+		return new ItemStack(ModItems.ammo_nuke, 1);
 	}
 
 	@Override

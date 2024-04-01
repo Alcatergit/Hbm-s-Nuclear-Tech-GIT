@@ -89,9 +89,10 @@ public class RenderCoreComponent extends TileEntitySpecialRenderer<TileEntityMac
 	        int range = ((TileEntityCoreEmitter)tileEntity).beam;
 	        
 	        if(range > 0) {
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0x401500, 0x7F7F7F, 0, 1, 0F, 2, 0.125F);
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x7F7F7F, (int)tileEntity.getWorld().getTotalWorldTime() % 1000, range * 2, 0.125F, 2, 0.0625F);
-		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x5B1D00, 0x7F7F7F, (int)tileEntity.getWorld().getTotalWorldTime() % 1000 + 1, range * 2, 0.125F, 2, 0.0625F);
+	        	float width = (float)Math.max(1, Math.log10(((TileEntityCoreEmitter)tileEntity).prev) - 6) / 8F;
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0x401500, 0x7F7F7F, 0, 1, 0F, 2, width);
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x401500, 0x7F7F7F, (int)tileEntity.getWorld().getTotalWorldTime() % 1000, (int)(0.3F * range/width), width * 0.75F, 2, width * 0.5F);
+		        BeamPronter.prontBeam(Vec3.createVectorHelper(0, 0, range), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x5B1D00, 0x7F7F7F, (int)tileEntity.getWorld().getTotalWorldTime() % 1000 + 1, (int)(0.3F * range/width), width * 0.75F, 2, width * 0.5F);
 	        }
         }
 

@@ -45,7 +45,7 @@ public class EntityTom extends EntityThrowable implements IConstantRenderer {
 	    			tom.posX = posX;
 	    			tom.posY = posY;
 	    			tom.posZ = posZ;
-	    			tom.destructionRange = 500;
+	    			tom.destructionRange = 600;
 	    			world.spawnEntity(tom);
 	    		}
     			

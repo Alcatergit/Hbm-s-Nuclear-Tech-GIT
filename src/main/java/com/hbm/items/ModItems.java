@@ -478,30 +478,30 @@ public class ModItems {
 	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setCreativeTab(MainRegistry.consumableTab);
 		
 	//Stamps
-	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 5);
-	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 5);
-	public static final Item stamp_stone_wire = new ItemStamp("stamp_stone_wire", 5);
-	public static final Item stamp_stone_circuit = new ItemStamp("stamp_stone_circuit", 5);
-	public static final Item stamp_iron_flat = new ItemStamp("stamp_iron_flat", 25);
-	public static final Item stamp_iron_plate = new ItemStamp("stamp_iron_plate", 25);
-	public static final Item stamp_iron_wire = new ItemStamp("stamp_iron_wire", 25);
-	public static final Item stamp_iron_circuit = new ItemStamp("stamp_iron_circuit", 25);
-	public static final Item stamp_steel_flat = new ItemStamp("stamp_steel_flat", 50);
-	public static final Item stamp_steel_plate = new ItemStamp("stamp_steel_plate", 50);
-	public static final Item stamp_steel_wire = new ItemStamp("stamp_steel_wire", 50);
-	public static final Item stamp_steel_circuit = new ItemStamp("stamp_steel_circuit", 50);
-	public static final Item stamp_titanium_flat = new ItemStamp("stamp_titanium_flat", 65);
-	public static final Item stamp_titanium_plate = new ItemStamp("stamp_titanium_plate", 65);
-	public static final Item stamp_titanium_wire = new ItemStamp("stamp_titanium_wire", 65);
-	public static final Item stamp_titanium_circuit = new ItemStamp("stamp_titanium_circuit", 65);
-	public static final Item stamp_obsidian_flat = new ItemStamp("stamp_obsidian_flat", 100);
-	public static final Item stamp_obsidian_plate = new ItemStamp("stamp_obsidian_plate", 100);
-	public static final Item stamp_obsidian_wire = new ItemStamp("stamp_obsidian_wire", 100);
-	public static final Item stamp_obsidian_circuit = new ItemStamp("stamp_obsidian_circuit", 100);
-	public static final Item stamp_schrabidium_flat = new ItemStamp("stamp_schrabidium_flat", 1024);
-	public static final Item stamp_schrabidium_plate = new ItemStamp("stamp_schrabidium_plate", 1024);
-	public static final Item stamp_schrabidium_wire = new ItemStamp("stamp_schrabidium_wire", 1024);
-	public static final Item stamp_schrabidium_circuit = new ItemStamp("stamp_schrabidium_circuit", 1024);
+	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 16);
+	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 16);
+	public static final Item stamp_stone_wire = new ItemStamp("stamp_stone_wire", 16);
+	public static final Item stamp_stone_circuit = new ItemStamp("stamp_stone_circuit", 16);
+	public static final Item stamp_iron_flat = new ItemStamp("stamp_iron_flat", 64);
+	public static final Item stamp_iron_plate = new ItemStamp("stamp_iron_plate", 64);
+	public static final Item stamp_iron_wire = new ItemStamp("stamp_iron_wire", 64);
+	public static final Item stamp_iron_circuit = new ItemStamp("stamp_iron_circuit", 128);
+	public static final Item stamp_steel_flat = new ItemStamp("stamp_steel_flat", 128);
+	public static final Item stamp_steel_plate = new ItemStamp("stamp_steel_plate", 128);
+	public static final Item stamp_steel_wire = new ItemStamp("stamp_steel_wire", 128);
+	public static final Item stamp_steel_circuit = new ItemStamp("stamp_steel_circuit", 128);
+	public static final Item stamp_titanium_flat = new ItemStamp("stamp_titanium_flat", 96);
+	public static final Item stamp_titanium_plate = new ItemStamp("stamp_titanium_plate", 96);
+	public static final Item stamp_titanium_wire = new ItemStamp("stamp_titanium_wire", 96);
+	public static final Item stamp_titanium_circuit = new ItemStamp("stamp_titanium_circuit", 96);
+	public static final Item stamp_obsidian_flat = new ItemStamp("stamp_obsidian_flat", 128);
+	public static final Item stamp_obsidian_plate = new ItemStamp("stamp_obsidian_plate", 128);
+	public static final Item stamp_obsidian_wire = new ItemStamp("stamp_obsidian_wire", 128);
+	public static final Item stamp_obsidian_circuit = new ItemStamp("stamp_obsidian_circuit", 128);
+	public static final Item stamp_schrabidium_flat = new ItemStamp("stamp_schrabidium_flat", 4096);
+	public static final Item stamp_schrabidium_plate = new ItemStamp("stamp_schrabidium_plate", 4096);
+	public static final Item stamp_schrabidium_wire = new ItemStamp("stamp_schrabidium_wire", 4096);
+	public static final Item stamp_schrabidium_circuit = new ItemStamp("stamp_schrabidium_circuit", 4096);
 	public static final Item stamp_desh_flat = new ItemStamp("stamp_desh_flat", 0);
 	public static final Item stamp_desh_plate = new ItemStamp("stamp_desh_plate", 0);
 	public static final Item stamp_desh_wire = new ItemStamp("stamp_desh_wire", 0);
@@ -515,14 +515,14 @@ public class ModItems {
 	public static final Item stamp_9 = new ItemStamp("stamp_9", 512);
 	public static final Item stamp_50 = new ItemStamp("stamp_50", 512);
 	
-	public static final Item blades_aluminum = new ItemBlades("blades_aluminum", 20);
-	public static final Item blades_gold = new ItemBlades("blades_gold", 25);
-	public static final Item blades_iron = new ItemBlades("blades_iron", 35);
-	public static final Item blades_steel = new ItemBlades("blades_steel", 50);
-	public static final Item blades_titanium = new ItemBlades("blades_titanium", 64);
-	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 96);
-	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 256);
-	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 512).addRadiation(ItemHazard.sa326 * 3F).toItem();
+	public static final Item blades_aluminum = new ItemBlades("blades_aluminum", 24);
+	public static final Item blades_gold = new ItemBlades("blades_gold", 32);
+	public static final Item blades_iron = new ItemBlades("blades_iron", 64);
+	public static final Item blades_steel = new ItemBlades("blades_steel", 128);
+	public static final Item blades_titanium = new ItemBlades("blades_titanium", 96);
+	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 256);
+	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 1024);
+	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 4096).addRadiation(ItemHazard.sa326 * 3F).toItem();
 	public static final Item blades_desh = new ItemBlades("blades_desh", 0).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
 	public static final Item fuse = new ItemCustomLore("fuse").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
@@ -1326,7 +1326,7 @@ public class ModItems {
 	public static final Item nugget_unobtainium_greater = new ItemHazard(1000, "nugget_unobtainium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_daffergon = new ItemCustomLore("nugget_daffergon").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item nugget_mercury = new ItemHazard("nugget_mercury").addToxic(2).toItem().setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_mercury = new ItemHazard("nugget_mercury").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
 	public static final Item bottle_mercury = new ItemHazard("bottle_mercury").addToxic(6).toItem().setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
 
 	
@@ -1796,6 +1796,7 @@ public class ModItems {
 	public static final Item lignite = new ItemFuelHazard("lignite", 1200, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
 	
 	//Fragments
+	public static final Item rare_earth_chunk = new ItemBase("rare_earth_chunk").setCreativeTab(MainRegistry.partsTab);
 	public static final Item fragment_neodymium = new ItemBase("fragment_neodymium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item fragment_cobalt = new ItemBase("fragment_cobalt").setCreativeTab(MainRegistry.partsTab);
 	public static final Item fragment_niobium = new ItemBase("fragment_niobium").setCreativeTab(MainRegistry.partsTab);
@@ -2556,8 +2557,6 @@ public class ModItems {
 	public static final Item ammo_50ae_star = new ItemAmmo("ammo_50ae_star").setCreativeTab(MainRegistry.weaponTab);
 	
 	public static final Item gun_b92_ammo = new GunB92Cell("gun_b92_ammo").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_fatman_ammo = new ItemBase("gun_fatman_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_mirv_ammo = new ItemBase("gun_mirv_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_bf_ammo = new ItemBase("gun_bf_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_xvl1456_ammo = new ItemHazard(0.25F, "gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
@@ -3134,7 +3133,7 @@ public class ModItems {
 	public static final Item ams_lens = new ItemLens(500000000L, 1.0F, 1.0F, "ams_lens").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_focus_limiter = new ItemLens(2500000000L, 0.8F, 0.5F, "ams_focus_limiter").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_focus_booster = new ItemLens(100000000L, 1.5F, 1.75F, "ams_focus_booster").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item ams_focus_omega = new ItemLens(1000000000L, 5.0F, 4.0F, "ams_focus_omega").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item ams_focus_omega = new ItemLens(1000000000L, 5.0F, 10.0F, "ams_focus_omega").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_sing = new ItemAMSCore(500, 0.8F, 1.5F, "ams_core_sing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_wormhole = new ItemAMSCore(650, 1.5F, 0.8F, "ams_core_wormhole").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item ams_core_eyeofharmony = new ItemAMSCore(800, 1.5F, 2.0F, "ams_core_eyeofharmony").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);

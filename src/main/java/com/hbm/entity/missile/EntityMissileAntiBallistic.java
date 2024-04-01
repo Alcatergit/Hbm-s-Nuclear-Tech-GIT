@@ -29,6 +29,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
+	
+	public static final double particleSpeed = 1.75D;
 
 	private static final double steps = 5;
 
@@ -50,7 +52,7 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
 
 		if(this.world.isRemote) {
-				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exHydrogen", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exHydrogen", new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
 			}
 			return;
 		}
@@ -70,7 +72,7 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
 		
 			if(this.world.isRemote) {
-				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exDark", new float[]{(float)(this.motionX * -3D), (float)(this.motionY * -3D), (float)(this.motionZ * -3D)});
+				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exDark", new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
 			}
 			explodeIfNearTarget();
 

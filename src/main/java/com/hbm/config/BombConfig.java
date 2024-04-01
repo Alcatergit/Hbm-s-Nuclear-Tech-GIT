@@ -31,12 +31,11 @@ public class BombConfig {
 	public static int maxCustomSolRadius = 1000;
 	public static int maxCustomEuphLvl = 20;
 	
-	public static int mk5 = 30;
+	public static int mk5 = 40;
 	public static int blastSpeed = 1024;
-	public static int nukeTickSpacing = 4;
 	public static int falloutRange = 100;
 	public static int fChunkSpeed = 5;
-	public static int falloutMS = 30;
+	public static int falloutMS = 40;
 	public static boolean spawnFire = false;
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear = false;
@@ -135,10 +134,6 @@ public class BombConfig {
 		Property propBlastSpeed = config.get(CATEGORY_NUKE, "6.01_blastSpeed", 1024);
 		propBlastSpeed.setComment("Base speed of MK3 system (old and schrabidium) detonations (Blocks / tick)");
 		blastSpeed = propBlastSpeed.getInt();
-		// fallout range
-		Property propTickRange = config.get(CATEGORY_NUKE, "6.02_mk5TickSpacing", 4);
-		propTickRange.setComment("Do mk5 chunk processing ever nth tick");
-		nukeTickSpacing = propTickRange.getInt();
 		// fallout range
 		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_mk5BlastTime", 30);
 		propFalloutRange.setComment("Maximum amount of milliseconds per tick allocated for mk5 chunk processing");

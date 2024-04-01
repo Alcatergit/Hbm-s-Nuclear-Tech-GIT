@@ -82,11 +82,7 @@ public class RadiationWorldHandler {
 										world.setBlockState(pos, ModBlocks.waste_terracotta.getDefaultState());
 									} else if(bblock == Blocks.SAND) {
 										BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-										if(world.rand.nextInt(60) == 0) {
-											world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite.getDefaultState() : ModBlocks.waste_trinitite_red.getDefaultState());
-										} else {
-											world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
-										}
+										world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
 									} else if(bblock == Blocks.GRAVEL) {
 										world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 
@@ -107,15 +103,11 @@ public class RadiationWorldHandler {
 									
 									} else if(bblock == ModBlocks.waste_leaves) {
 										if(world.rand.nextInt(8) == 0) {
-											world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
-											IBlockState state = world.getBlockState(pos);
-											world.notifyBlockUpdate(pos, state, state, 1);
+											world.setBlockToAir(pos);
 										}
 
 									} else if(bblock instanceof BlockLeaves) {
-										world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
-										IBlockState state = world.getBlockState(pos);
-										world.notifyBlockUpdate(pos, state, state, 1);
+										world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
 									}
 								}
 							}
@@ -204,15 +196,11 @@ public class RadiationWorldHandler {
 						
 						} else if(bblock == ModBlocks.waste_leaves) {
 							if(world.rand.nextInt(8) == 0) {
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
-								IBlockState state = world.getBlockState(pos);
-								world.notifyBlockUpdate(pos, state, state, 1);
+								world.setBlockToAir(pos);
 							}
 
 						} else if(bblock instanceof BlockLeaves) {
-							world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState(), 1);
-							IBlockState state = world.getBlockState(pos);
-							world.notifyBlockUpdate(pos, state, state, 1);
+							world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
 						}
 					}
 				}

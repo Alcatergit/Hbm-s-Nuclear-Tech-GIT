@@ -371,29 +371,29 @@ public class AssemblerRecipes {
 		//Batteries
 		makeRecipe(new ComparableStack(ModBlocks.machine_battery, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 4), new OreDictStack(S.dust(), 12), new OreDictStack(PB.dust(), 12), new OreDictStack(MINGRADE.ingot(), 2), new ComparableStack(ModItems.wire_red_copper, 4), }, 200);
 		makeRecipe(new ComparableStack(ModBlocks.machine_lithium_battery, 1), new AStack[] { 
-			new OreDictStack(ANY_PLASTIC.ingot(), 6), 
+			new OreDictStack(POLYMER.ingot(), 6), 
 			new OreDictStack(CO.dust(), 12), 
 			new OreDictStack(LI.dust(), 12), 
 			new OreDictStack(ALLOY.ingot(), 3), 
 			new ComparableStack(ModItems.wire_red_copper, 4), }, 300);
-		makeRecipe(new ComparableStack(ModBlocks.machine_saturnite_battery, 1), new AStack[] { 
-			new OreDictStack(BIGMT.ingot(), 8), 
-			new OreDictStack(DURA.dust(), 12), 
-			new OreDictStack(ZR.dust(), 12), 
-			new OreDictStack(PU238.ingot(), 4), 
-			new OreDictStack(TC99.nugget(), 2), }, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_desh_battery, 1), new AStack[] { 
 			new OreDictStack(DESH.ingot(), 12), 
 			new OreDictStack(BAKELITE.dust(), 12), 
 			new OreDictStack(P_RED.dust(), 12), 
 			new OreDictStack(GRAPHITE.ingot(), 6), 
-			new OreDictStack(ANY_BISMOID.nugget(), 2), }, 600);
+			new OreDictStack(RA226.nugget(), 2), }, 400);
+		makeRecipe(new ComparableStack(ModBlocks.machine_saturnite_battery, 1), new AStack[] { 
+			new OreDictStack(BIGMT.ingot(), 8), 
+			new OreDictStack(DURA.dust(), 12), 
+			new OreDictStack(ZR.dust(), 12), 
+			new OreDictStack(PU238.ingot(), 4), 
+			new OreDictStack(TC99.nugget(), 2), }, 600);
 		makeRecipe(new ComparableStack(ModBlocks.machine_schrabidium_battery, 1), new AStack[] { 
 			new OreDictStack(SA326.ingot(), 16), 
 			new OreDictStack(SA326.dust(), 12), 
 			new OreDictStack(NP237.dust(), 12), 
 			new OreDictStack(REIIUM.ingot(), 8), 
-			new ComparableStack(ModItems.wire_schrabidium, 4), }, 800);
+			new OreDictStack(ANY_BISMOID.nugget(), 2), }, 800);
 		makeRecipe(new ComparableStack(ModBlocks.machine_euphemium_battery, 1), new AStack[] { 
 			new OreDictStack(EUPH.ingot(), 24), 
 			new OreDictStack(XE135.dust(), 16), 
@@ -512,8 +512,6 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModItems.missile_exo, 1), new AStack[] { new ComparableStack(ModItems.warhead_thermo_exo, 1), new ComparableStack(ModItems.fuel_tank_large, 1), new ComparableStack(ModItems.thruster_large, 1), new OreDictStack(TI.plate(), 14), new OreDictStack(STEEL.plate(), 20), new OreDictStack(AL.plate(), 12), new ComparableStack(ModItems.circuit_targeting_tier4, 1), }, 350);
 		
 		makeRecipe(new ComparableStack(ModItems.gun_defabricator, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 2), new OreDictStack(ANY_PLASTIC.ingot(), 8), new OreDictStack(IRON.plate(), 5), new ComparableStack(ModItems.mechanism_special, 3), new ComparableStack(Items.DIAMOND, 1), new ComparableStack(ModItems.plate_dalekanium, 3), }, 200);
-		makeRecipe(new ComparableStack(ModItems.gun_fatman_ammo, 1), new AStack[] { new OreDictStack(STEEL.plate(), 3), new OreDictStack(IRON.plate(), 1), new OreDictStack(PU239.nugget(), 3), }, 40);
-		makeRecipe(new ComparableStack(ModItems.gun_mirv_ammo, 1), new AStack[] { new OreDictStack(STEEL.plate(), 20), new OreDictStack(IRON.plate(), 10), new OreDictStack(PU239.nugget(), 24), }, 100);
 		makeRecipe(new ComparableStack(ModItems.gun_osipr_ammo, 24), new AStack[] { new OreDictStack(STEEL.plate(), 2), new ComparableStack(Items.REDSTONE, 1), new ComparableStack(Items.GLOWSTONE_DUST, 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.gun_osipr_ammo2, 1), new AStack[] { new OreDictStack(CMB.plate(), 4), new ComparableStack(Items.REDSTONE, 7), new ComparableStack(ModItems.powder_power, 3), }, 200);
 		
@@ -658,13 +656,12 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.circuit_red_copper, 8),
 				new OreDictStack(KEY_CIRCUIT_BISMUTH, 1)
 			}, 600);
-		makeRecipe(new ComparableStack(ModBlocks.machine_large_turbine, 1), new AStack[] { new ComparableStack(ModItems.hull_big_steel, 1), new OreDictStack(STEEL.plate(), 12), new ComparableStack(ModItems.turbine_titanium, 3), new ComparableStack(ModItems.rotor_steel, 2), new ComparableStack(ModItems.generator_steel, 2), new ComparableStack(ModItems.bolt_compound, 3), new ComparableStack(ModItems.pipes_steel, 1), new ComparableStack(ModItems.circuit_aluminium, 1), }, 20);
+		makeRecipe(new ComparableStack(ModBlocks.machine_large_turbine, 1), new AStack[] { new ComparableStack(ModItems.hull_big_steel, 1), new OreDictStack(STEEL.plate(), 12), new ComparableStack(ModItems.turbine_titanium, 3), new ComparableStack(ModItems.rotor_steel, 2), new ComparableStack(ModItems.generator_steel, 2), new ComparableStack(ModItems.bolt_compound, 3), new ComparableStack(ModItems.pipes_steel, 1), new ComparableStack(ModItems.circuit_aluminium, 1), }, 300);
 
 		makeRecipe(new ComparableStack(ModItems.pellet_chlorophyte, 2), new AStack[] { new ComparableStack(ModItems.powder_chlorophyte, 1), new OreDictStack(PB.nugget(), 12), }, 50);
 		makeRecipe(new ComparableStack(ModItems.pellet_mercury, 2), new AStack[] { new ComparableStack(ModItems.nugget_mercury, 1), new OreDictStack(PB.nugget(), 12), }, 50);
 		makeRecipe(new ComparableStack(ModItems.pellet_meteorite, 2), new AStack[] { new ComparableStack(ModItems.powder_meteorite, 1), new OreDictStack(PB.nugget(), 12), }, 50);
 		makeRecipe(new ComparableStack(ModItems.pellet_canister, 2), new AStack[] { new OreDictStack(IRON.ingot(), 3), }, 50);
-		makeRecipe(new ComparableStack(ModItems.pellet_rtg_polonium, 1), new AStack[] { new OreDictStack(PO210.nugget(), 5), new OreDictStack(IRON.plate(), 2), }, 50);
 		makeRecipe(new ComparableStack(ModItems.mp_warhead_15_balefire, 1), new AStack[] {new ComparableStack(ModItems.seg_15, 1), new OreDictStack(OreDictManager.getReflector(), 16), new ComparableStack(ModItems.powder_magic, 6), new ComparableStack(ModItems.egg_balefire_shard, 4), new OreDictStack(ANY_HIGHEXPLOSIVE.ingot(), 8), new ComparableStack(ModItems.circuit_targeting_tier4, 1), }, 60);
 		
 		makeRecipe(new ComparableStack(ModBlocks.machine_cyclotron, 1), new AStack[] { 

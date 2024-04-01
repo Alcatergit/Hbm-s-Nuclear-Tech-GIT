@@ -106,6 +106,21 @@ public class AnvilRecipes {
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(LAPIS.dust()), new AnvilOutput(new ItemStack(Items.DYE, 1, 4))).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(DIAMOND.dust()), new AnvilOutput(new ItemStack(Items.DIAMOND))).setTier(3));
 		constructionRecipes.add(new AnvilConstructionRecipe(new OreDictStack(EMERALD.dust()), new AnvilOutput(new ItemStack(Items.EMERALD))).setTier(3));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new OreDictStack(RAREEARTH.gem()),
+				new AnvilOutput[] {
+						new AnvilOutput(new ItemStack(ModItems.fragment_boron)),
+						new AnvilOutput(new ItemStack(ModItems.fragment_boron), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cobalt)),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cobalt), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_neodymium), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_niobium), 0.5F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_cerium), 0.4F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_lanthanium), 0.3F),
+						new AnvilOutput(new ItemStack(ModItems.fragment_actinium), 0.3F)
+						
+				}
+		).setTier(2));
 
 		registerConstructionRecipes();
 		registerConstructionAmmo();

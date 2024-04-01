@@ -1,10 +1,13 @@
 package com.hbm.explosion;
 
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
 public class ExplosionTom
@@ -16,7 +19,7 @@ public class ExplosionTom
 	public int lastposZ = 0;
 	public int radius;
 	public int radius2;
-	public World worldObj;
+	public World world;
 	private int n = 1;
 	private int nlimit;
 	private int shell;
@@ -59,7 +62,7 @@ public class ExplosionTom
 		this.posY = y;
 		this.posZ = z;
 		
-		this.worldObj = world;
+		this.world = world;
 		
 		this.radius = rad;
 		this.radius2 = this.radius * this.radius;
@@ -68,7 +71,7 @@ public class ExplosionTom
 	}
 	
 	public boolean update() {
-		if(!CompatibilityConfig.isWarDim(worldObj)){
+		if(!CompatibilityConfig.isWarDim(world)){
 			return true;
 		}
 		breakColumn(this.lastposX, this.lastposZ);
@@ -82,36 +85,81 @@ public class ExplosionTom
 		return this.n > this.nlimit;
 	}
 
-	private void breakColumn(int x, int z)
-	{
+	private void breakColumn(int x, int z) {
 		int dist = this.radius2 - (x * x + z * z);
-		
-		if (dist > 0)
-		{
+
+		if(dist > 0) {
 			int pX = posX + x;
 			int pZ = posZ + z;
-			
+			double X = Math.pow((this.posX - pX), 2);
+			double Z = Math.pow((this.posZ - pZ), 2);
+			double distance = Math.sqrt(X + Z); // Distance calculations used for crater rim stuff
+
 			int y = 256;
-			
+			int terrain = 61;
+
+			double cA = (terrain - Math.pow(Math.E, -Math.pow(Math.sqrt(x * x + z * z), 2) / 40000) * 13) + world.rand.nextInt(2); // Basic crater bowl shape
+			double cB = cA + Math.pow(Math.E, -Math.pow(Math.sqrt(x * x + z * z) - 200, 2) / 400) * 13 ;// Crater peak ring
+			int craterFloor = (int) (cB + Math.pow(Math.E, -Math.pow(Math.sqrt(x * x + z * z) - 500, 2) / 2000) * 37); // Crater rim
+			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			for(int i = 256; i > 0; i--) {
-				if(worldObj.getBlockState(new BlockPos(pX, i, pZ)).getBlock() != Blocks.AIR) {
+				if(i == craterFloor || !world.isAirBlock(pos.setPos(pX, i, pZ))) {
 					y = i;
 					break;
 				}
 			}
-			
-			int height = 70;
-			int offset = 10;
-			//int threshold = height - (int) ((float)dist * (float)height / (float)this.radius2) - 1 + worldObj.rand.nextInt(2);
-			int threshold = (int) ((float)Math.sqrt(x * x + z * z) * (float)(height + offset) / (float)this.radius) + worldObj.rand.nextInt(2) - offset;
-			
+			int height = terrain - 14;
+			int offset = 20;
+			int threshold = (int) ((float) Math.sqrt(x * x + z * z) * (float) (height + offset) / (float) this.radius) + world.rand.nextInt(2) - offset;
+
+			Material m;
 			while(y > threshold) {
-				
+
 				if(y == 0)
 					break;
-				
-				worldObj.setBlockToAir(new BlockPos(pX, y, pZ));
-				
+				if(y <= craterFloor) {
+					pos.setPos(pX, y, pZ);
+					if(craterFloor-y < 12){
+						if(world.rand.nextInt(499) < 1) {
+							world.setBlockState(pos, ModBlocks.ore_tektite_osmiridium.getDefaultState());
+						} else {
+							world.setBlockState(pos, ModBlocks.tektite.getDefaultState());
+						}
+					} else {
+						world.setBlockState(pos, ModBlocks.basalt_smooth.getDefaultState());
+					}
+
+				} else if(distance < 500){
+					if(y > terrain + 1) {
+						for(int i = -2; i < 3; i++) {
+							for(int j = -2; j < 3; j++) {
+								for(int k = -2; k < 3; k++) {
+									pos.setPos(pX + i, y + j, pZ + k);
+									m = world.getBlockState(pos).getMaterial();
+									if(m == Material.WATER || m == Material.ICE || m == Material.SNOW || m.getCanBurn()) {
+										world.setBlockToAir(pos);
+										world.setBlockToAir(pos.setPos(pX, y, pZ));
+									}
+								}
+							}
+						}
+						world.setBlockToAir(pos.setPos(pX, y, pZ));
+					} else {
+						for(int i = -2; i < 3; i++) {
+							for(int j = -2; j < 3; j++) {
+								for(int k = -2; k < 3; k++) {
+									pos.setPos(pX + i, y + j, pZ + k);
+									m = world.getBlockState(pos).getMaterial();
+									if(m == Material.WATER || m == Material.ICE || world.isAirBlock(pos.setPos(pX + i, y, pZ + k))) {
+										world.setBlockState(pos.setPos(pX + i, y, pZ + k), Blocks.LAVA.getDefaultState());
+										world.setBlockState(pos.setPos(pX, y, pZ), Blocks.LAVA.getDefaultState());
+									}
+								}
+							}
+						}
+						world.setBlockState(pos.setPos(pX, y, pZ), Blocks.LAVA.getDefaultState());
+					}
+				}
 				y--;
 			}
 		}

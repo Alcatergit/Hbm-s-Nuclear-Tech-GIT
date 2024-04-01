@@ -237,7 +237,9 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 		if(TileEntityFurnace.getItemBurnTime(stack) > 0 && i == 0)
 			return true;
 		
-		return i == 2;
+		if(!(stack.getItem() instanceof ItemStamp) && i == 2)
+			return true;
+		return false;
 	}
 
 	private int detectProgress;

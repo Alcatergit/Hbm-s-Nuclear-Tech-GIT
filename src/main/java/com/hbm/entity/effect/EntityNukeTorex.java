@@ -22,13 +22,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	public static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.FLOAT);
-	public static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	
 	public static final int firstCondenseHeight = 130;
 	public static final int secondCondenseHeight = 170;
 	public static final int blastWaveHeadstart = 5;
-	public static final int maxCloudlets = 18_000;
+	public static final int maxCloudlets = 20_000;
 
 	//Nuke colors
 	public static final double nr1 = 2.5;
@@ -54,28 +53,23 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public double lastSpawnY = -1;
 	public ArrayList<Cloudlet> cloudlets = new ArrayList();
 	public int maxAge = 1000;
-	public int age;
 	public float humidity = -1;
 
 	public EntityNukeTorex(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(20F, 40F);
-		this.dataManager.set(AGE, 0);
 		this.isImmuneToFire = true;
 		this.ignoreFrustumCheck = true;
 	}
 
 	@Override
 	protected void entityInit() {
-		this.dataManager.register(AGE, 0);
 		this.dataManager.register(SCALE, 1.0F);
 		this.dataManager.register(TYPE, Byte.valueOf((byte) 0));
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		if (nbt.hasKey("age"))
-			this.dataManager.set(AGE, nbt.getInteger("age"));
 		if (nbt.hasKey("scale"))
 			setScale(nbt.getFloat("scale"));
 		if (nbt.hasKey("type"))
@@ -84,7 +78,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("age", this.dataManager.get(AGE));
 		nbt.setFloat("scale", this.dataManager.get(SCALE));
 		nbt.setByte("type", this.dataManager.get(TYPE));
 	}
@@ -97,13 +90,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	public void onUpdate() {
-		age = this.getAge();
-		double s = this.getScale();
-		double cs = 1.5;
-		
 		if(world.isRemote) {
 			
-			if(age == 1) this.setScale((float) s);
+			double s = this.getScale();
+			double cs = 1.5;
+			if(this.ticksExisted == 1) this.setScale((float) s);
 			
 			if(humidity == -1) humidity = world.getBiome(this.getPosition()).getRainfall();
 			
@@ -123,78 +114,76 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
 			double simSpeed = getSimulationSpeed();
-			int toSpawn = (int) Math.ceil(10 * simSpeed * simSpeed * Math.min(1, maxCloudlets/(double)cloudlets.size()));
-			int lifetime = Math.min((age * age) + 200, maxAge - age + 200);
+			int lifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
+			int toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime))));
 			
 
 			for(int i = 0; i < toSpawn; i++) {
 				double x = posX + rand.nextGaussian() * range;
 				double z = posZ + rand.nextGaussian() * range;
 				Cloudlet cloud = new Cloudlet(x, lastSpawnY, z, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime);
-				cloud.setScale((float) (Math.sqrt(s) * 3 + age * 0.0025 * s), (float) (Math.sqrt(s) * 3 + age * 0.0025 * 6 * cs * s));
+				cloud.setScale((float) (Math.sqrt(s) * 3 + this.ticksExisted * 0.0025 * s), (float) (Math.sqrt(s) * 3 + this.ticksExisted * 0.0025 * 6 * cs * s));
 				cloudlets.add(cloud);
 			}
 
-			if(age < 120 * s){
+			if(this.ticksExisted < 120 * s){
 				world.setLastLightningBolt(2);
 			}
 			
 			// spawn shock clouds
-			if(age < 150) {
+			if(this.ticksExisted < 150) {
 				
-				int cloudCount = Math.min(age * 2, 100);
-				int shockLife = Math.max(400 - age * 20, 50);
+				int cloudCount = Math.min(this.ticksExisted * 2, 100);
+				int shockLife = Math.max(400 - this.ticksExisted * 20, 50);
 				
 				for(int i = 0; i < cloudCount; i++) {
-					Vec3 vec = Vec3.createVectorHelper((age + rand.nextDouble() * 2) * 1.5, 0, 0);
+					Vec3 vec = Vec3.createVectorHelper((this.ticksExisted + rand.nextDouble() * 2) * 1.5, 0, 0);
 					float rot = (float) (Math.PI * 2 * rand.nextDouble());
 					vec.rotateAroundY(rot);
 					this.cloudlets.add(new Cloudlet(vec.xCoord + posX, world.getHeight((int) (vec.xCoord + posX) + 1, (int) (vec.zCoord + posZ)), vec.zCoord + posZ, rot, 0, shockLife, TorexType.SHOCK)
-							.setScale((float)s * 5F, (float)s * 2F).setMotion(MathHelper.clamp(0.25 * age - 5, 0, 1)));
+							.setScale((float)s * 5F, (float)s * 2F).setMotion(MathHelper.clamp(0.25 * this.ticksExisted - 5, 0, 1)));
 				}
 			}
 			
 			// spawn ring clouds
-			if(age < 200) {
+			if(this.ticksExisted < 200) {
 				lifetime *= s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
-					cloud.setScale(1F + age * 0.0025F * (float) (cs * s), 1F + age * 0.0025F * 5F * (float) (cs * s));
+					cloud.setScale(1F + this.ticksExisted * 0.0025F * (float) (cs * s), 1F + this.ticksExisted * 0.0025F * 5F * (float) (cs * s));
 					cloudlets.add(cloud);
 				}
 			}
 
-			if(this.humidity > 0){
+			if(this.humidity > 0 && this.ticksExisted < 220){
 				// spawn lower condensation clouds
-				spawnCondensationClouds(age, this.humidity, firstCondenseHeight, 80, 4, s, cs);
+				spawnCondensationClouds(this.ticksExisted, this.humidity, firstCondenseHeight, 80, 4, s, cs);
 
 				// spawn upper condensation clouds
-				spawnCondensationClouds(age, this.humidity, secondCondenseHeight, 80, 2, s, cs);
+				spawnCondensationClouds(this.ticksExisted, this.humidity, secondCondenseHeight, 80, 2, s, cs);
 			}
 
+			cloudlets.removeIf(x -> x.isDead);
 			for(Cloudlet cloud : cloudlets) {
 				cloud.update();
 			}
-
+			
 			coreHeight += 0.15/* * s*/;
 			torusWidth += 0.05/* * s*/;
 			rollerSize = torusWidth * 0.35;
 			convectionHeight = coreHeight + rollerSize;
 			
-			int maxHeat = (int) (50 * s);
-			heat = maxHeat - Math.pow((maxHeat * age) / maxAge, 0.6);
-			
-			cloudlets.removeIf(x -> x.isDead);
+			int maxHeat = (int) (50 * s * s);
+			heat = maxHeat - Math.pow((maxHeat * this.ticksExisted) / maxAge, 0.6);
 		}
 		
-		if(!world.isRemote && age > maxAge) {
+		if(!world.isRemote && this.ticksExisted > maxAge) {
 			this.setDead();
 		}
-		setAge(age+1);
 	}
 
 	public void spawnCondensationClouds(int age, float humidity, int height, int count, int spreadAngle, double s, double cs){
-		if((posY + age) > height && age < 220) {
+		if((posY + age) > height) {
 			
 			for(int i = 0; i < (int)(5 * humidity * count/(double)spreadAngle); i++) {
 				for(int j = 1; j < spreadAngle; j++) {
@@ -208,10 +197,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				}
 			}
 		}
-	}
-
-	public void setAge(int age) {
-		this.dataManager.set(AGE, age);
 	}
 	
 	public EntityNukeTorex setScale(float scale) {
@@ -230,10 +215,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		return this;
 	}
 
-	public int getAge() {
-		return this.dataManager.get(AGE);
-	}
-
 	public double getScale() {
 		return this.dataManager.get(SCALE);
 	}
@@ -245,7 +226,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public double getSimulationSpeed() {
 		
 		int simSlow = maxAge / 4;
-		int life = getAge();
+		int life = this.ticksExisted;
 		
 		if(life > maxAge) {
 			return 0D;
@@ -261,7 +242,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public float getAlpha() {
 		
 		int fadeOut = maxAge * 3 / 4;
-		int life = getAge();
+		int life = this.ticksExisted;
 		
 		if(life > fadeOut) {
 			float fac = (float)(life - fadeOut) / (float)(maxAge - fadeOut);

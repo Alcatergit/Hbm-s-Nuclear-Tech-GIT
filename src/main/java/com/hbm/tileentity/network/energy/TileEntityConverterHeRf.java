@@ -132,7 +132,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		if(lastTransfer > 0) {
 			return lastTransfer * 2;
 		} else {
-			return getMaxPower();
+			return 10000;
 		}
 	}
 

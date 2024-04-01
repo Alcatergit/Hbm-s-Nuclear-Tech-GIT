@@ -67,10 +67,9 @@ public class EntityMinerRocket extends Entity {
 			this.getDataManager().set(TIMER, 1);
 			motionY = 0;
 			posY = (int)posY;
-		} else if(world.getBlockState(new BlockPos((int)(posX - 0.5), (int)(posY + 1), (int)(posZ - 0.5))).getMaterial() != Material.AIR && !world.isRemote && this.getDataManager().get(TIMER) != 1) {
+		} else if(!world.isRemote && !world.isAirBlock(new BlockPos((int)(posX - 0.5), (int)(posY + 1), (int)(posZ - 0.5))) && this.getDataManager().get(TIMER) != 1) {
 			this.setDead();
 			ExplosionLarge.explodeFire(world, posX - 0.5, posY, posZ - 0.5, 10F, true, false, true);
-			//worldObj.setBlock((int)(posX - 0.5), (int)(posY + 0.5), (int)(posZ - 0.5), Blocks.dirt);
 		}
 		
 		if(this.getDataManager().get(TIMER) == 1) {

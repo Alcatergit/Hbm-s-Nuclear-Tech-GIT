@@ -34,7 +34,8 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 
 	public int heatTimer = 0;
 	public int age = 0;
-
+	public long joules = 0;
+	
 	public TileEntityCrateTungsten() {
 		inventory = new ItemStackHandler(27){
 			@Override
@@ -94,12 +95,14 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 	public void networkPack() {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setInteger("timer", this.heatTimer);
+		data.setLong("spk", this.joules);
 		INBTPacketReceiver.networkPack(this, data, 150);
 	}
 
 	@Override
 	public void networkUnpack(NBTTagCompound data) {
 		this.heatTimer = data.getInteger("timer");
+		this.joules = data.getLong("spk");
 	}
 
 	@Override
@@ -114,9 +117,10 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
 
 			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
+			int count = inventory.getStackInSlot(i).getCount();
 			requiredEnergy *= 0.9D;
 			if(requiredEnergy > -1 && energy > requiredEnergy){
-				if(0.0001D > rand.nextDouble()*((double)requiredEnergy/(double)energy)){
+				if(0.001D > count * rand.nextDouble() * ((double)requiredEnergy/(double)energy)){
 					result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
 				}
 			}
@@ -133,6 +137,7 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 				}
 			}
 		}
+		joules = energy;
 	}
 	
 	@Override

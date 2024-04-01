@@ -23,6 +23,7 @@ public class BlockBase extends Block {
 		super(m);
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
+		this.setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -32,6 +33,7 @@ public class BlockBase extends Block {
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 		this.setSoundType(sound);
+		this.setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

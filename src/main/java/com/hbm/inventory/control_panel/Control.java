@@ -179,7 +179,7 @@ public abstract class Control {
 			sys.readFromNBT(receiveNodes.getCompoundTag(s));
 		}
 		
-		NBTTagCompound customVarNames = tag.getCompoundTag("custonvars");
+		NBTTagCompound customVarNames = tag.getCompoundTag("customvars");
 		for(int i = 0; i < customVarNames.getKeySet().size(); i ++){
 			this.customVarNames.add(customVarNames.getString("var"+i));
 		}

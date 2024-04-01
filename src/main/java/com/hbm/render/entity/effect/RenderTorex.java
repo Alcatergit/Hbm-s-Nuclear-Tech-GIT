@@ -62,10 +62,10 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		cloudletWrapper(cloud, partialTicks);
 
-		if(cloud.age < flareDuration+1)
+		if(cloud.ticksExisted < flareDuration+1)
 			flareWrapper(cloud, partialTicks, flareDuration);
 		
-		if(cloud.age < flashDuration+1)
+		if(cloud.ticksExisted < flashDuration+1)
 			flashWrapper(cloud, partialTicks, flashDuration);
 
 		if(fog)
@@ -75,11 +75,11 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 	}
 
 	private void doScreenShake(EntityNukeTorex cloud, double x, double y, double z, float amplitude){
-		if(cloud.age > 300) return;
+		if(cloud.ticksExisted > 300) return;
 		EntityPlayer player = MainRegistry.proxy.me();
 
 		double dist = player.getDistance(cloud);
-		double shockwaveDistance = dist - cloud.age * 1.5;
+		double shockwaveDistance = dist - cloud.ticksExisted * 1.5;
 		if(shockwaveDistance > 10 || shockwaveDistance < 0) return;
 		
 		int duration = ((int)(amplitude * Math.min(1, (amplitude * amplitude)/(dist * dist))));
@@ -161,7 +161,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		
-		double age = Math.min(cloud.age + partialTicks, flareDuration);
+		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
 		
 		Random rand = new Random(cloud.getEntityId());

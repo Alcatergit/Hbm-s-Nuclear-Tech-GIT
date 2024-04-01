@@ -99,6 +99,7 @@ public class OreDictManager {
 	public static final DictFrame GOLD = new DictFrame("Gold");
 	public static final DictFrame LAPIS = new DictFrame("Lapis");
 	public static final DictFrame REDSTONE = new DictFrame("Redstone");
+	public static final DictFrame QUARTZ = new DictFrame("Quartz");
 	public static final DictFrame NETHERQUARTZ = new DictFrame("NetherQuartz");
 	public static final DictFrame DIAMOND = new DictFrame("Diamond");
 	public static final DictFrame EMERALD = new DictFrame("Emerald");
@@ -295,13 +296,14 @@ public class OreDictManager {
 		GOLD 																																			.dust(powder_gold)																						.crystal(crystal_gold)		.plate(plate_gold)			.ore(ore_gneiss_gold);
 		LAPIS																																			.dust(powder_lapis)																						.crystal(crystal_lapis);
 		REDSTONE																																																												.crystal(crystal_redstone);
+		QUARTZ																																			.dust(powder_quartz)																.gem(Items.QUARTZ);
 		NETHERQUARTZ																																	.dust(powder_quartz)																.gem(Items.QUARTZ);
 		DIAMOND																																			.dust(powder_diamond)																					.crystal(crystal_diamond)								.ore(gravel_diamond);
 		EMERALD																																			.dust(powder_emerald);
 		
 		//Raw Elements
 		TI																													.ingot(ingot_titanium)		.dust(powder_titanium)									.block(block_titanium)							.crystal(crystal_titanium)		.plate(plate_titanium)	.ore(ore_titanium, cluster_titanium, cluster_depth_titanium, ore_meteor_titanium);
-		CU																													.ingot(ingot_copper)		.dust(powder_copper)									.block(block_copper)							.crystal(crystal_copper)		.plate(plate_copper)	.ore(ore_copper, ore_gneiss_copper, ore_meteor_copper);
+		CU																													.ingot(ingot_copper)		.dust(powder_copper)									.block(block_copper)							.crystal(crystal_copper)		.plate(plate_copper)	.ore(ore_copper, cluster_copper, ore_gneiss_copper, ore_meteor_copper);
 		W																													.ingot(ingot_tungsten)		.dust(powder_tungsten)									.block(block_tungsten)							.crystal(crystal_tungsten)								.ore(ore_tungsten, cluster_depth_tungsten, ore_nether_tungsten, ore_meteor_tungsten)	.oreNether(ore_nether_tungsten);
 		AL																													.ingot(ingot_aluminium)		.dust(powder_aluminium)									.block(block_aluminium)							.crystal(crystal_aluminium)		.plate(plate_aluminium)	.ore(ore_aluminium, cluster_aluminium, ore_meteor_aluminium);
 		PB															.nugget(nugget_lead)									.ingot(ingot_lead)			.dust(powder_lead)										.block(block_lead)								.crystal(crystal_lead)			.plate(plate_lead)		.ore(ore_lead, ore_meteor_lead);
@@ -326,7 +328,7 @@ public class OreDictManager {
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
 		INFERNAL																																																.block(block_coal_infernal)	.gem(coal_infernal)															.ore(ore_nether_coal);
-		RAREEARTH																																		.dust(powder_desh_mix)																					.crystal(crystal_rare)								.ore(ore_rare, ore_gneiss_rare);
+		RAREEARTH																																		.dust(powder_desh_mix)																.gem(rare_earth_chunk).crystal(crystal_rare)								.ore(ore_rare, ore_gneiss_rare);
 		NITANIUM																																		.dust(powder_nitan_mix)																																			.ore(ore_depth_nether_nitan);
 
 		//Compounds

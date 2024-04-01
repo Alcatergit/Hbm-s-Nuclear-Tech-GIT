@@ -176,9 +176,10 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			}
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			int rayCounter = 0;
+			long start = System.currentTimeMillis();
 			for(int sample = currentSample; sample < this.maxSamples; sample++){
 				this.currentSample = sample;
-				if(rayCounter > 2048){
+				if(rayCounter % 50 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5){
 					break;
 				}
 				double fy = (2D * sample / (maxSamples - 1D)) - 1D;  // y goes from 1 to -1
@@ -229,7 +230,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+				if(world.isAirBlock(pos.add(0, 1, 0))) world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
 				return;
 			
 			} else if(bblock instanceof BlockLeaves) {
@@ -240,8 +241,12 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				}
 				continue;
 
-			} else if(bblock instanceof BlockBush && world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass) {
-				placeBlockFromDist(l, ModBlocks.waste_earth, pos.add(0, -1, 0));
+			} else if(bblock instanceof BlockBush){
+				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass) {
+					placeBlockFromDist(l, ModBlocks.waste_earth, pos.add(0, -1, 0));
+				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.FARMLAND) {
+					placeBlockFromDist(l, ModBlocks.waste_dirt, pos.add(0, -1, 0));
+				}
 				placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
 				continue;
 

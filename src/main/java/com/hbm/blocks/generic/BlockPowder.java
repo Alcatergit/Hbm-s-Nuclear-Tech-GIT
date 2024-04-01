@@ -78,7 +78,7 @@ public class BlockPowder extends Block implements IItemHazard {
 		if(this == ModBlocks.fallout){
 			return ModItems.fallout;
 		}
-		return Item.getItemFromBlock(this);
+		return null;
 	}
 	
 	@Override
@@ -91,15 +91,7 @@ public class BlockPowder extends Block implements IItemHazard {
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity){
 		if(!world.isRemote && entity instanceof EntityLivingBase) {
-			PotionEffect effect = new PotionEffect(HbmPotion.radiation, 2 * 60 * 20, 14);
-			effect.setCurativeItems(new ArrayList<>());
-			((EntityLivingBase) entity).addPotionEffect(effect);
-		}
-	}
-	
-	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-		if(!world.isRemote) {
-			HbmLivingProps.addCont(player, new ContaminationEffect(1F, 200, false));
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.radiation, 2 * 60 * 20, 14));
 		}
 	}
 

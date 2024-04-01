@@ -3,13 +3,13 @@ package com.hbm.entity.projectile;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.config.RadiationConfig;
-import com.hbm.entity.logic.EntityBlast;
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -96,10 +96,11 @@ public class EntityRailgunBlast extends Entity implements IChunkLoader {
 
 			if(!this.world.isRemote) {
 				this.setLocationAndAngles(movingobjectposition.getBlockPos().getX(), movingobjectposition.getBlockPos().getY(), movingobjectposition.getBlockPos().getZ(), 0, 0);
-
-				EntityTNTPrimed scapegoat = new EntityTNTPrimed(world);
-				world.newExplosion(scapegoat, posX, posY, posZ, 12F, false, true);
-				world.spawnEntity(EntityBlast.statFac(world, posX, posY, posZ, 45, RadiationConfig.railgunDamage, 12, 5, false));
+				
+				world.spawnEntity(EntityNukeExplosionMK5.statFac(world, BombConfig.missileRadius>>1, posX, posY, posZ));
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFac(world, posX, posY, posZ, BombConfig.missileRadius>>1);
+				}
 			}
 			this.setDead();
 			return;

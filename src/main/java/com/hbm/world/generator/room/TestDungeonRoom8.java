@@ -17,6 +17,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class TestDungeonRoom8 extends CellularDungeonRoom {
@@ -42,12 +44,14 @@ public class TestDungeonRoom8 extends CellularDungeonRoom {
 		int i = world.rand.nextInt(8);
 		
 		switch(i) {
-		case 0: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.meteor_brick_chiseled.getDefaultState(), 3); break;
+		case 0: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.meteor_brick_chiseled.getDefaultState(), 3); 
+			world.setBlockState(new BlockPos(x + parent.width / 2, y + 1, z + parent.width / 2), ModBlocks.block_coltan.getDefaultState(), 3); 
+			break;
 		case 1: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.ntm_dirt.getDefaultState(), 3); break;
 		case 2: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_starmetal.getDefaultState(), 3); break;
 		case 3: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.statue_elb_f.getDefaultState(), 3); break;
 		case 4: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.crate_red.getDefaultState(), 3); break;
-		case 5: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.balefire.getDefaultState(), 3); break;
+		case 5: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_schrabidium_cluster.getStateFromMeta(0), 3); break;
 		case 6: world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.block_meteor.getDefaultState(), 3); break;
 		case 7:
 			world.setBlockState(new BlockPos(x + parent.width / 2, y + 2, z + parent.width / 2), ModBlocks.safe.getDefaultState(), 3);
@@ -64,64 +68,47 @@ public class TestDungeonRoom8 extends CellularDungeonRoom {
 			}
 			break;
 		}
-		
-		/*world.setBlockState(new BlockPos(x + parent.width / 2, y, z + parent.width / 2, Blocks.mob_spawner, 0, 2);
-        TileEntityMobSpawner tileentitymobspawner2 = (TileEntityMobSpawner)world.getTileEntity(x + parent.width / 2, y, z + parent.width / 2);
-
-        if (tileentitymobspawner2 != null)
-        {
-            tileentitymobspawner2.func_145881_a().setEntityName("entity_cyber_crab");
-        }*/
 	}
 	
 	private static String[] bookIodine = new String[] {
-			"alright you will not believe this, but old man weathervane finally managed to show up again since he left two weeks ago",
-			"and what's more surprising is the fact that he actually decided to spill the beans on what they were doing in the canyon:",
-			"apparently the morons form R&D discovered a compound that is mostly inorganic, pretty much like a toxin in nature, but get",
-			"this: the dying cells will reproduce said toxin and excete it through the skin, creating an aerosol that is highly contageous.",
-			"it's just like a virus, but not a virus. the composition is weird, you can mix it in any household bottle but you do have to",
-			"get the order right. the doc told me that the first ingredient which is just powdered iodine crystals goes into slot #"
+			"Alright you will not believe this, but old man weathervane finally managed to show up again since he left two weeks ago and what's more surprising is the fact that he actually decided to spill the beans on what they were doing in the canyon:",
+			"Apparently the morons form R&D discovered a compound that is mostly inorganic, pretty much like a toxin in nature, but get this: The dying cells will reproduce said toxin and excete it through the skin, creating an aerosol that is highly contageous.",
+			"It's just like a virus, but not a virus. The composition is weird, you can mix it in any household bottle but you do have to get the order right. The doc told me that the first ingredient which is just §4powdered iodine§r crystals goes into slot §4"
 	};
 	private static String[] bookPhosphorous = new String[] {
-			"heyo, it's me again. i assume you got my last memo, the doc wasn't too happy about it. i'll have to do this quick, the",
-			"dunderheads from R&D are currently moaning again, probably over money. again. anyway, doc weathervane found that the second",
-			"ingredient is red phosphorous, whihc has to be mixed into slot #"
+			"Heyo, it's me again. I assume you got my last memo, the doc wasn't too happy about it. I'll have to do this quick, the dunderheads from R&D are currently moaning again, probably over money. Again. Anyway, doc weathervane found that the second",
+			"Ingredient is §4red phosphorous powder§r, which has to be mixed into slot §4"
 	};
 	private static String[] bookDust = new String[] {
-			"the doc was furious when he found out that the R&D dorks kept the one remaining sample, ranting about gross negligence this",
-			"and a doomsday scenario that. i told him to chill for a minute, getting all worked up isn't good for his blood pressure, not",
-			"that he has much blood left to begin with. one of the R&D morons slipped some more info into last week's circular, they call their",
-			"little concoction \"MKU\" whatever that means, and that it contains actual household lint. can you believe that? one of the most",
-			"dangerous inventions of theirs and it contains dust. strangely they also mentioned that it goes into slot #"
+			"The doc was furious when he found out that the R&D dorks kept the one remaining sample, ranting about gross negligence this and a doomsday scenario that. I told him to chill for a minute, getting all worked up isn't good for his blood pressure, not",
+			"that he has much blood left to begin with. One of the R&D morons slipped some more info into last week's circular, they call their little concoction \"§6§lMKU§r\" whatever that means, and that it contains actual household lint. Can you believe that?",
+			"One of the most dangerous inventions of theirs and it contains §4dust§r. Strangely they also mentioned that it goes into slot §4"
 	};
 	private static String[] bookMercury = new String[] {
-			"well that settles that. not counting the vomitting blood part, the toxicological report mostly resembles that of mercury",
-			"poisoning. why? because our little mix also contains mercury! i just wonder where all that stuff comes from when being",
-			"replicated by the body? whatever, the mercury goes into slot #"
+			"Well that settles that. Not counting the vomitting blood part, the toxicological report mostly resembles that of mercury poisoning. Why? because our little mix also contains mercury! I just wonder where all that stuff comes from when being replicated by the body?", 
+			"Whatever, the §4mercury drop§r goes into slot §4"
 	};
 	private static String[] bookFlower = new String[] {
-			"remember when i mentioned in my first memo that the compound is mostly anorganic? well guess what, the old man shared the fourth",
-			"ingredient: ipomoea nil, a genus of flower. morning glory! it might be due to its low sulfur content, whatever might be the case,",
-			"it does not work with other flowers. the morning glory goes into slot #"
+			"Remember when i mentioned in my first memo that the compound is mostly anorganic? Well guess what, the old man shared the fourth ingredient: Ipomoea nil, a genus of flower. Morning glory! It might be due to its low sulfur content, whatever might be the case,",
+			"it does not work with other flowers. The §4morning glory§r goes into slot §4"
 	};
 	private static String[] bookSyringe = new String[] {
-			"a little addendum to my fifth message, obviously you have to store this MKU stuff in a container. the R&D nuts used regular",
-			"metal syringes that they got from medical. surplus ware i presume, they got thousands of needles just lying around. the metal",
-			"syringe goes into slot #"
+			"A little addendum to my fifth message, obviously you have to store this MKU stuff in a container. The R&D nuts used regular metal syringes that they got from medical. Surplus ware i presume, they got thousands of needles just lying around.", 
+			"The §4metal syringe§r goes into slot §4"
 	};
 	
 	public static ItemStack genetateMKU(World world) {
-		
+		int r = world.rand.nextInt(6);
+
 		ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
 		book.setTagCompound(new NBTTagCompound());
 		book.getTagCompound().setString("author", "Dave");
-		book.getTagCompound().setString("title", "Note");
+		book.getTagCompound().setString("title", "§6§lMKU§e Note "+(r+1));
 		NBTTagList nbt = new NBTTagList();
 		
-		String[] pages = generatePages(world);
-
+		String[] pages = generatePages(r, world);
 		for(String s : pages) {
-			nbt.appendTag(new NBTTagString(s));
+			nbt.appendTag(new NBTTagString(ITextComponent.Serializer.componentToJson(new TextComponentString(s))));
 		}
 		
 		book.getTagCompound().setTag("pages", nbt);
@@ -130,11 +117,10 @@ public class TestDungeonRoom8 extends CellularDungeonRoom {
 	}
 
 	
-	public static String[] generatePages(World world) {
+	public static String[] generatePages(int r, World world) {
 		
 		String[] orig;
-		Item ingred;
-		int r = world.rand.nextInt(6);
+		Item ingred;	
 
 		if(r == 0) {
 			orig = bookIodine;

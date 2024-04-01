@@ -146,8 +146,7 @@ public class ArmorModHandler {
 		if(!armor.hasTagCompound())
 			return false;
 		
-		NBTTagCompound nbt = armor.getTagCompound();
-		return nbt.hasKey(MOD_COMPOUND_KEY);
+		return armor.getTagCompound().hasKey(MOD_COMPOUND_KEY);
 	}
 	
 	public static ItemStack[] pryMods(ItemStack armor) {
