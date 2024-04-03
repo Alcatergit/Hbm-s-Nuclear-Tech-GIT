@@ -1,5 +1,6 @@
 package com.hbm.inventory;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class CyclotronRecipes {
 
-	private static HashMap<Object, ItemStack> lithium = new HashMap<>();
-	private static HashMap<Object, ItemStack> beryllium = new HashMap<>();
-	private static HashMap<Object, ItemStack> carbon = new HashMap<>();
-	private static HashMap<Object, ItemStack> copper = new HashMap<>();
-	private static HashMap<Object, ItemStack> plutonium = new HashMap<>();
+	private static LinkedHashMap<Object, ItemStack> lithium = new LinkedHashMap<>();
+	private static LinkedHashMap<Object, ItemStack> beryllium = new LinkedHashMap<>();
+	private static LinkedHashMap<Object, ItemStack> carbon = new LinkedHashMap<>();
+	private static LinkedHashMap<Object, ItemStack> copper = new LinkedHashMap<>();
+	private static LinkedHashMap<Object, ItemStack> plutonium = new LinkedHashMap<>();
 	private static HashMap<Object, Integer> liAmat = new HashMap<>();
 	private static HashMap<Object, Integer> beAmat = new HashMap<>();
 	private static HashMap<Object, Integer> caAmat = new HashMap<>();
@@ -154,7 +155,7 @@ public class CyclotronRecipes {
 	
 	public static Map<ItemStack[], ItemStack> getRecipes() {
 
-		Map<ItemStack[], ItemStack> recipes = new HashMap<>();
+		Map<ItemStack[], ItemStack> recipes = new LinkedHashMap<>();
 
 		addRecipes(recipes, lithium, ModItems.part_lithium);
 		addRecipes(recipes, beryllium, ModItems.part_beryllium);

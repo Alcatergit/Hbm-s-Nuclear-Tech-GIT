@@ -2,7 +2,7 @@ package com.hbm.inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class CentrifugeRecipes {
 
-	private static HashMap<Object, ItemStack[]> recipes = new HashMap<Object, ItemStack[]>();
+	private static LinkedHashMap<Object, ItemStack[]> recipes = new LinkedHashMap<Object, ItemStack[]>();
 	private static List<CentrifugeRecipe> centrifugeRecipes = null;
 	
 	public static void register() {

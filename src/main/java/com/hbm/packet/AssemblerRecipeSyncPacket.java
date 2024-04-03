@@ -3,6 +3,7 @@ package com.hbm.packet;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -209,7 +210,7 @@ public class AssemblerRecipeSyncPacket implements IMessage {
 				AssemblerRecipes.backupRecipeList = AssemblerRecipes.recipeList;
 				AssemblerRecipes.backupHidden = AssemblerRecipes.hidden;
 				
-				AssemblerRecipes.recipes = new HashMap<>(m.recipes.size());
+				AssemblerRecipes.recipes = new LinkedHashMap<>(m.recipes.size());
 				AssemblerRecipes.time = new HashMap<>(m.recipes.size());
 				AssemblerRecipes.recipeList = new ArrayList<>(m.recipes.size());
 				AssemblerRecipes.hidden = m.hidden;

@@ -23,6 +23,7 @@ import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.MixerRecipes;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
+import com.hbm.inventory.RBMKFuelRecipes;
 import com.hbm.inventory.WasteDrumRecipes;
 import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.inventory.CyclotronRecipes;
@@ -86,6 +87,7 @@ public class JeiRecipes {
 	private static List<ReactorRecipe> reactorRecipes = null;
 	private static List<WasteDrumRecipe> wasteDrumRecipes = null;
 	private static List<StorageDrumRecipe> storageDrumRecipes = null;
+	private static List<RBMKFuelRecipe> rbmkFuelRecipes = null;
 	private static List<RefineryRecipe> refineryRecipes = null;
 	private static List<CrackingRecipe> crackingRecipes = null;
 	private static List<FractioningRecipe> fractioningRecipes = null;
@@ -345,6 +347,23 @@ public class JeiRecipes {
 		@Override
 		public void getIngredients(IIngredients ingredients) {
 			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+	}
+
+	public static class RBMKFuelRecipe implements IRecipeWrapper {
+		
+		private final ItemStack input;
+		private final ItemStack output;
+		
+		public RBMKFuelRecipe(ItemStack input, ItemStack output) {
+			this.input = input;
+			this.output = output; 
+		}
+		
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 	}
@@ -660,7 +679,7 @@ public class JeiRecipes {
 			return chemRecipes;
 		chemRecipes = new ArrayList<ChemRecipe>();
 		
-       for (int i: ChemplantRecipes.recipeNames.keySet()){
+       for(int i: ChemplantRecipes.recipeNames.keySet()){
 
         	List<AStack> inputs = new ArrayList<AStack>(7);
         	for(int j = 0; j < 7; j ++)
@@ -769,6 +788,17 @@ public class JeiRecipes {
 			alloyFurnaceRecipes.add(new AlloyFurnaceRecipe(pairEntry.getKey().getKey(), pairEntry.getKey().getValue(), pairEntry.getValue()));
 		}
 		return alloyFurnaceRecipes;
+	}
+
+	public static List<RBMKFuelRecipe> getRBMKFuelRecipes() {
+		if(rbmkFuelRecipes != null)
+			return rbmkFuelRecipes;
+		rbmkFuelRecipes = new ArrayList<RBMKFuelRecipe>();
+
+		for(Map.Entry<ItemStack, ItemStack> pairEntry : RBMKFuelRecipes.recipes.entrySet()){
+			rbmkFuelRecipes.add(new RBMKFuelRecipe(pairEntry.getKey(), pairEntry.getValue()));
+		}
+		return rbmkFuelRecipes;
 	}
 	
 	public static List<ItemStack> getAlloyFuels() {

@@ -1,7 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ShredderRecipes {
 
-	public static HashMap<ComparableStack, ItemStack> shredderRecipes = new HashMap<ComparableStack, ItemStack>();
+	public static LinkedHashMap<ComparableStack, ItemStack> shredderRecipes = new LinkedHashMap<ComparableStack, ItemStack>();
 	public static List<ShredderRecipe> jeiShredderRecipes = null;
 	
 	public static void registerShredder() {

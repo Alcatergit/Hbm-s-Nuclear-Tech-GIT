@@ -109,6 +109,7 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 			
 			if(e instanceof EntityCyberCrab) {
 				ret.add(new double[] {e.posX, e.posY + e.height / 2, e.posZ});
+				e.heal(0.1F);
 				continue;
 			}
 			

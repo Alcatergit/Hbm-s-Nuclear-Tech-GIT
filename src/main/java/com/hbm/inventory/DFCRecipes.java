@@ -1,7 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -26,7 +26,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class DFCRecipes {
 
-	public static HashMap<ComparableStack, Object[]> dfcRecipes = new HashMap<ComparableStack, Object[]>();
+	public static LinkedHashMap<ComparableStack, Object[]> dfcRecipes = new LinkedHashMap<ComparableStack, Object[]>();
 	public static List<DFCRecipe> jeiDFCRecipes = null;
 	
 	public static void register() {

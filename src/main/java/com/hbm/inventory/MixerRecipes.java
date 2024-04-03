@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.hbm.items.ModItems;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -20,7 +21,7 @@ public class MixerRecipes {
 
 	public static HashMap<Fluid, FluidStack[]> recipesFluidInputs = new HashMap();
 	public static HashMap<Fluid, Integer> recipesFluidOutputAmount = new HashMap();
-	public static HashMap<Fluid, Integer> recipesDurations = new HashMap();
+	public static LinkedHashMap<Fluid, Integer> recipesDurations = new LinkedHashMap();
 	public static HashMap<Fluid, AStack> recipesItemInputs = new HashMap();
 	
 	public static void copyChemplantRecipes() {

@@ -237,6 +237,7 @@ import com.hbm.inventory.WasteDrumRecipes;
 import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
+import com.hbm.inventory.RBMKFuelRecipes;
 import com.hbm.inventory.DFCRecipes;
 import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.inventory.PotionRecipes;
@@ -1091,6 +1092,7 @@ public class MainRegistry {
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
 		RBMKOutgasserRecipes.registerOverrides();
+		RBMKFuelRecipes.registerRecipes();
 		DFCRecipes.register();
 		SAFERecipes.registerRecipes();
 		StorageDrumRecipes.registerRecipes();

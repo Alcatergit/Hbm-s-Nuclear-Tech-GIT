@@ -3,7 +3,7 @@ package com.hbm.inventory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
 import static net.minecraft.item.ItemStack.areItemStacksEqual;
@@ -31,8 +31,8 @@ import net.minecraftforge.oredict.OreDictionary;
 @Spaghetti("everything")
 public class DiFurnaceRecipes {
 
-	public static HashMap<Pair<AStack, AStack>, ItemStack> diRecipes = new HashMap<Pair<AStack, AStack>, ItemStack>();
-	public static HashMap<AStack, Integer> diFuels = new HashMap<AStack, Integer>();
+	public static LinkedHashMap<Pair<AStack, AStack>, ItemStack> diRecipes = new LinkedHashMap<Pair<AStack, AStack>, ItemStack>();
+	public static LinkedHashMap<AStack, Integer> diFuels = new LinkedHashMap<AStack, Integer>();
 
 	public static void registerRecipes(){
 		addRecipe(new OreDictStack(W.ingot()), new OreDictStack(COAL.gem()), new ItemStack(ModItems.neutron_reflector, 2));

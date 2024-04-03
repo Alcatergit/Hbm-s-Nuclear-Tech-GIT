@@ -1,5 +1,6 @@
 package com.hbm.inventory;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 
 public class WasteDrumRecipes {
 
-	public static HashMap<Item, ItemStack> recipes = new HashMap<>();
+	public static LinkedHashMap<Item, ItemStack> recipes = new LinkedHashMap<>();
 	private static HashSet<Item> outputs = new HashSet<>();
 	
 	public static void registerRecipes() {

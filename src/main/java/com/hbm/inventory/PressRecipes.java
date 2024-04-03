@@ -1,7 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.hbm.inventory.OreDictManager.*;
@@ -35,7 +35,7 @@ public class PressRecipes {
 		FIVEZERO;
 	}
 
-	public static HashMap<Pair<PressType, AStack>, ItemStack> pressRecipes = new HashMap<Pair<PressType, AStack>, ItemStack>();
+	public static LinkedHashMap<Pair<PressType, AStack>, ItemStack> pressRecipes = new LinkedHashMap<Pair<PressType, AStack>, ItemStack>();
 
 	public static void addRecipe(PressType stamp, AStack input, ItemStack output){
 		if(!input.getStackList().isEmpty())

@@ -3,6 +3,7 @@ package com.hbm.inventory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
 import com.google.common.collect.Lists;
@@ -38,7 +39,7 @@ public class ChemplantRecipes {
 	public static HashMap<Integer, AStack[]> recipeItemOutputs = new HashMap<>();
 	public static HashMap<Integer, FluidStack[]> recipeFluidOutputs = new HashMap<>();
 	public static HashMap<Integer, Integer> recipeDurations = new HashMap<>();
-	public static HashMap<Integer, String> recipeNames = new HashMap<>();
+	public static LinkedHashMap<Integer, String> recipeNames = new LinkedHashMap<>();
 
 	public static void registerRecipes() {
 		if(MachineConfig.chemplantKeepOilProcessing){

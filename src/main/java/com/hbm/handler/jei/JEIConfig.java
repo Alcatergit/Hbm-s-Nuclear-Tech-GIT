@@ -46,6 +46,7 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -87,6 +88,7 @@ public class JEIConfig implements IModPlugin {
 	public static final String SMITHING = "hbm.smithing";
 	public static final String ANVIL = "hbm.anvil";
 	public static final String RBMKOUTGASSER = "hbm.rbmk_outgasser";
+	public static final String RBMKFUEL = "hbm.rbmkfueluncrafting";
 	public static final String SAFE_REACTOR = "hbm.safe_reactor";
 	public static final String DFC = "hbm.dfc";
 	public static final String TRANSMUTATION = "hbm.transmutation";
@@ -140,6 +142,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_iron), SMITHING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.anvil_steel), ANVIL);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.rbmk_outgasser), RBMKOUTGASSER);
+		registry.addRecipeCatalyst(new ItemStack(Blocks.CRAFTING_TABLE), RBMKFUEL);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.fwatz_core), SAFE_REACTOR);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.crate_tungsten), DFC);
 		
@@ -178,6 +181,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getSmithingRecipes(), SMITHING);
 		registry.addRecipes(JeiRecipes.getAnvilRecipes(), ANVIL);
 		registry.addRecipes(RBMKOutgasserRecipes.getRBMKOutgasserRecipes(), RBMKOUTGASSER);
+		registry.addRecipes(JeiRecipes.getRBMKFuelRecipes(), RBMKFUEL);
 		registry.addRecipes(JeiRecipes.getSAFERecipes(), SAFE_REACTOR);
 		registry.addRecipes(DFCRecipes.getDFCRecipes(), DFC);
 
@@ -310,6 +314,7 @@ public class JEIConfig implements IModPlugin {
 				new SILEXGammaRecipeHandler(help),
 				new SILEXDigammaRecipeHandler(help),
 				new RBMKOutgasserRecipeHandler(help),
+				new RBMKFuelRecipeHandler(help),
 				new FusionRecipeHandler(help),
 				new HadronRecipeHandler(help),
 				new SAFERecipeHandler(help),

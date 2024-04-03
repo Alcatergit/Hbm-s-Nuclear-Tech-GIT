@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -33,7 +34,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class CrystallizerRecipes {
 
 	//'Object' is either a ComparableStack or the String for the ore dict
-	private static HashMap<Object, ItemStack> itemOutputRecipes = new HashMap<Object, ItemStack>();
+	private static LinkedHashMap<Object, ItemStack> itemOutputRecipes = new LinkedHashMap<Object, ItemStack>();
 	private static HashMap<Object, FluidStack> fluidInputRecipes = new HashMap<Object, FluidStack>();
 	private static HashSet<Fluid> allowedFluids = new HashSet<Fluid>();
 	private static List<CrystallizerRecipe> jeiCrystalRecipes = null;

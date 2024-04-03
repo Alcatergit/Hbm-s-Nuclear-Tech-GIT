@@ -114,7 +114,7 @@ public class EntityCyberCrab extends EntityMob implements IRangedAttackMob, IRad
 		EntityBullet bullet = new EntityBullet(world, this, target, 1.6F, 2);
 		bullet.setIsCritical(true);
 		bullet.setTau(true);
-		bullet.damage = 3;
+		bullet.damage = 2;
         this.world.spawnEntity(bullet);
         this.playSound(HBMSoundHandler.sawShoot, 1.0F, 2.0F);
 	}

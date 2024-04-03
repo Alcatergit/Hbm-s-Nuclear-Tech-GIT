@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -53,13 +54,13 @@ public class AssemblerRecipes {
 	private static final Gson gson = new Gson();
 	private static IForgeRegistry<Item> itemRegistry;
 	private static IForgeRegistry<Block> blockRegistry;
-	public static HashMap<ComparableStack, AStack[]> recipes = new HashMap<>();
+	public static LinkedHashMap<ComparableStack, AStack[]> recipes = new LinkedHashMap<>();
 	public static HashMap<ComparableStack, Integer> time = new HashMap<>();
 	public static List<ComparableStack> recipeList = new ArrayList<>();
 	public static HashSet<ComparableStack> hidden = new HashSet<>();
 	
 	//Backup client recipes
-	public static HashMap<ComparableStack, AStack[]> backupRecipes;
+	public static LinkedHashMap<ComparableStack, AStack[]> backupRecipes;
 	public static HashMap<ComparableStack, Integer> backupTime;
 	public static List<ComparableStack> backupRecipeList;
 	public static HashSet<ComparableStack> backupHidden = new HashSet<>();

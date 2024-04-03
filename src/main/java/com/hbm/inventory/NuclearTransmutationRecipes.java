@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.hbm.items.ModItems;
 import com.hbm.blocks.ModBlocks;
@@ -15,7 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class NuclearTransmutationRecipes {
 
-	public static HashMap<AStack, ItemStack> recipesOutput = new HashMap<>();
+	public static LinkedHashMap<AStack, ItemStack> recipesOutput = new LinkedHashMap<>();
 	public static HashMap<AStack, Long> recipesEnergy = new HashMap<>();
 	
 	public static void registerRecipes() {

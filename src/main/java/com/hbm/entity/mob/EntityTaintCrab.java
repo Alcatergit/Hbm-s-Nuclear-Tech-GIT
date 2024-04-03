@@ -52,7 +52,7 @@ public class EntityTaintCrab extends EntityCyberCrab {
 		
 		for(EntityLivingBase e : targets) {
 			if(!(e instanceof EntityCyberCrab))
-				e.addPotionEffect(new PotionEffect(HbmPotion.radiation, 10, 15));
+				e.addPotionEffect(new PotionEffect(HbmPotion.taint, 30));
 		}
     	
         super.onLivingUpdate();

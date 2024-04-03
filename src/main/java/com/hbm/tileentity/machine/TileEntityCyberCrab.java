@@ -13,17 +13,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class TileEntityCyberCrab extends TileEntity implements ITickable {
 
-	int age = 0;
-
 	@Override
 	public void update() {
 		if(!this.world.isRemote) {
 
-			age++;
-			if(age > 200 && world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
-				List<Entity> entities = this.world.getEntitiesWithinAABB(EntityCyberCrab.class, new AxisAlignedBB(pos.getX() - 5, pos.getY() - 2, pos.getZ() - 5, pos.getX() + 6, pos.getY() + 4, pos.getZ() + 6));
+			if(world.rand.nextInt(400) == 0 && world.isAreaLoaded(pos, 5) && world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
+				List<Entity> entities = this.world.getEntitiesWithinAABB(EntityCyberCrab.class, new AxisAlignedBB(pos.getX() - 5, pos.getY() - 1, pos.getZ() - 5, pos.getX() + 5, pos.getY() + 3, pos.getZ() + 5));
 
-				if(entities.size() < 5) {
+				if(entities.size() < 7) {
 
 					EntityCyberCrab crab;
 
@@ -35,10 +32,7 @@ public class TileEntityCyberCrab extends TileEntity implements ITickable {
 					crab.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 					world.spawnEntity(crab);
 				}
-
-				age = 0;
 			}
 		}
 	}
-
 }

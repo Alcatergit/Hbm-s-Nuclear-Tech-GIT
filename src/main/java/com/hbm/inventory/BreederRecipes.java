@@ -1,7 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +16,8 @@ import net.minecraft.util.text.TextFormatting;
 
 public class BreederRecipes {
 
-	private static HashMap<ComparableStack, BreederRecipe> recipes = new HashMap<>();
-	private static HashMap<ComparableStack, int[]> fuels = new HashMap<>();
+	private static LinkedHashMap<ComparableStack, BreederRecipe> recipes = new LinkedHashMap<>();
+	private static LinkedHashMap<ComparableStack, int[]> fuels = new LinkedHashMap<>();
 	//for the int array: [0] => level (1-4) [1] => amount of operations
 	
 	public static void registerRecipes() {
@@ -158,9 +158,9 @@ public class BreederRecipes {
 		fuels.remove(input);
 	}
 	
-	public static HashMap<ItemStack, BreederRecipe> getAllRecipes() {
+	public static LinkedHashMap<ItemStack, BreederRecipe> getAllRecipes() {
 		
-		HashMap<ItemStack, BreederRecipe> map = new HashMap<>();
+		LinkedHashMap<ItemStack, BreederRecipe> map = new LinkedHashMap<>();
 		
 		for(Map.Entry<ComparableStack, BreederRecipe> recipe : recipes.entrySet()) {
 			map.put(recipe.getKey().toStack(), recipe.getValue());

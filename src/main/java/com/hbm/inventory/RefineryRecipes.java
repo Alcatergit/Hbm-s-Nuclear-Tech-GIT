@@ -1,5 +1,6 @@
 package com.hbm.inventory;
 
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.Map;
 import com.hbm.util.Tuple.Pair;
@@ -26,7 +27,7 @@ public class RefineryRecipes {
 	
 	public static Map<Fluid, Quartet<Fluid, Fluid, Integer, Integer>> fractions = new HashMap<>();
 
-	public static HashMap<Fluid, Pair<FluidStack[], ItemStack>> refineryRecipesMap = new HashMap<>();
+	public static LinkedHashMap<Fluid, Pair<FluidStack[], ItemStack>> refineryRecipesMap = new LinkedHashMap<>();
 	
 	public static void registerRefineryRecipes() {
 		refineryRecipesMap.put(ModForgeFluids.hotoil, new Pair(new FluidStack[]{ 
