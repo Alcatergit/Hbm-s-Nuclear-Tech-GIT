@@ -113,15 +113,15 @@ public class Anvil {
 	}
 
 	@ZenMethod
-	public static void removeRecipe(IItemStack[] output){
-		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(output));
-		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(output));
+	public static void removeRecipe(IItemStack[] outputs){
+		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(outputs));
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(outputs));
 	}
 
 	@ZenMethod
-	public static void removeRecipeByInput(IIngredient[] input){
-		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(input));
-		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(input, null));
+	public static void removeRecipeByInput(IIngredient[] inputs){
+		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(inputs));
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(inputs, null));
 	}
 
 	@ZenMethod

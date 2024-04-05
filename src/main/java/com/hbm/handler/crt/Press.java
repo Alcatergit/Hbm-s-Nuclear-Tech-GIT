@@ -20,8 +20,8 @@ import java.util.Arrays;
 public class Press {
 
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IIngredient inputs, int type) {
-		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, type));
+	public static void addRecipe(IItemStack output, IIngredient input, int type) {
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, input, type));
 	}
 
 	@Nullable
@@ -34,15 +34,15 @@ public class Press {
 	}
 	private static class ActionAddRecipe implements IAction {
 
-		private RecipesCommon.AStack inputs;
+		private RecipesCommon.AStack input;
 
 		private ItemStack output;
 
 		private int type;
 
-		public ActionAddRecipe(IItemStack output, IIngredient inputs, int type) {
+		public ActionAddRecipe(IItemStack output, IIngredient input, int type) {
 			this.output = CraftTweakerMC.getItemStack(output);
-			this.inputs = NTMCraftTweaker.IIngredientToAStack(inputs);
+			this.input = NTMCraftTweaker.IIngredientToAStack(input);
 			this.type = type;
 		}
 
@@ -57,16 +57,16 @@ public class Press {
 				CraftTweakerAPI.logError("Invalid press output" );
 				return;
 			}
-			if(this.inputs == null) {
-				CraftTweakerAPI.logError("Invalid press inputs" );
+			if(this.input == null) {
+				CraftTweakerAPI.logError("Invalid press input" );
 				return;
 			}
-			PressRecipes.addRecipe(toType(this.type), this.inputs, this.output);
+			PressRecipes.addRecipe(toType(this.type), this.input, this.output);
 		}
 
 		@Override
 		public String describe() {
-			return "Adding NTM Press recipe ("+ this.inputs +" -> "+this.output+")";
+			return "Adding NTM Press recipe ("+ this.input +" -> "+this.output+")";
 		}
 	}
 }

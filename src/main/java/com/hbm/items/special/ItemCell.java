@@ -119,29 +119,6 @@ public class ItemCell extends Item {
 			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 10F / 20F);
 		}
 	}
-	
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote && ItemCell.isEmptyCell(stack) && world.getBlockState(pos).getBlock() instanceof BlockCrashedBomb) {
-			Random rand = new Random();
-			int i = rand.nextInt(100);
-			if(i == 0) {
-				if(!world.isRemote) {
-					((BlockCrashedBomb) world.getBlockState(pos).getBlock()).explode(world, pos);
-				}
-			} else if(i < 90) {
-				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
-					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.amat, 1000), true);
-			} else {
-				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
-					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.aschrab, 1000), true);
-			}
-			ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.CREATIVE, 50.0F);
-			return EnumActionResult.SUCCESS;
-		}
-		return EnumActionResult.PASS;
-	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

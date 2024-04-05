@@ -1,9 +1,38 @@
 
 
+
 # **HBM Nuclear Tech Mod - 1.12.2 Extended Edition**
 
 # CraftTweaker Integration
 Removing of oreDict recipes is currently not supported.
+
+
+## Anvil
+
+> **tier** must be > 0
+
+mods.ntm.Anvil.addRecipe(IItemStack[] outputs, IIngredient[] inputs, int tier);<br>
+``mods.ntm.Anvil.addRecipe(<minecraft:beef>, [<minecraft:cooked_beef>*4, <minecraft:egg>*6], 3);``
+
+mods.ntm.Anvil.addRecipe(IItemStack[] outputs, IIngredient input, int tier);<br>
+``mods.ntm.Anvil.addRecipe([<minecraft:beef>, <minecraft:cooked_beef>*4], <minecraft:egg>*6, 4);``
+
+mods.ntm.Anvil.addRecipe(IItemStack output, IIngredient[] inputs, int tier);<br>
+``mods.ntm.Anvil.addRecipe(<minecraft:beef>, [<minecraft:cooked_beef>*4, <minecraft:egg>*6], 6);``
+
+mods.ntm.Anvil.addRecipe(IItemStack output, IIngredient input, int tier);<br>
+``mods.ntm.Anvil.addRecipe(<minecraft:beef>, <minecraft:cooked_beef>, 5);``
+
+
+mods.ntm.Anvil.replaceRecipe(IItemStack output, IIngredient[] inputs, int tier);<br>
+``mods.ntm.Anvil.replaceRecipe(<hbm:machine_silex>, [<minecraft:glass>, <minecraft:cobblestone>], 4);``
+
+mods.ntm.Anvil.removeRecipe(IItemStack[] outputs);<br>
+``mods.ntm.Anvil.removeRecipe([<hbm:machine_silex>]);``
+
+mods.ntm.Anvil.removeRecipeByInput(IIngredient[] inputs);<br>
+``mods.ntm.Anvil.removeRecipeByInput([<minecraft:cooked_beef>]);``
+
 
 ## Assembler
 
@@ -103,6 +132,21 @@ mods.ntm.IrradiationChannel.addRecipe(IItemStack input, IItemStack output, int r
 mods.ntm.IrradiationChannel.removeRecipe(IItemStack input);<br>
 ``mods.ntm.IrradiationChannel.removeRecipe(<hbm:ingot_strontium>);``
 
+## Press
+
+> **type** must be 1-8
+ - 1: Flat,  
+ - 2: Plate,  
+ - 3: Wire,  
+ - 4: Circuit,  
+ - 5: .357mm,  
+ - 6: .44mm,    
+ - 7: 9mm,  
+ - 8: .50mm
+
+mods.ntm.Press.addRecipe(IItemStack input, IIngredient output, int type);<br>
+``mods.ntm.Press.addRecipe(<minecraft:cooked_beef>, <minecraft:beef>);``
+
 
 ## SILEX
 
@@ -132,6 +176,7 @@ mods.ntm.SILEX.addRecipe(int wavelengthNr, int fluidAmount, int fluidConsumption
 mods.ntm.SILEX.removeRecipe(IItemStack input);<br>
 ``mods.ntm.SILEX.removeRecipe(<hbm:waste_dirt>);``
 
+
 ## Shredder
 mods.ntm.Shredder.addRecipe(IItemStack input, IItemStack output);<br>
 ``mods.ntm.Shredder.addRecipe(<minecraft:beef>, <minecraft:cooked_beef>);``
@@ -139,9 +184,11 @@ mods.ntm.Shredder.addRecipe(IItemStack input, IItemStack output);<br>
 mods.ntm.Shredder.removeRecipe(IItemStack input);<br>
 ``mods.ntm.Shredder.removeRecipe(<minecraft:tnt>);``
 
+
 ## Waste Drum
 mods.ntm.WasteDrum.addRecipe(IItemStack input, IItemStack output);<br>
 ``mods.ntm.WasteDrum.addRecipe(<minecraft:cooked_beef>, <minecraft:beef>);``
+
 
 ## Fluid Heat Recipes
 
@@ -164,6 +211,7 @@ mods.ntm.FluidHeating.removeBoilRecipe(String inputFluid);<br>
 
 mods.ntm.FluidHeating.removeCoolRecipe(String inputFluid);<br>
 ``mods.ntm.FluidHeating.removeCoolRecipe("ic2hot_coolant");``
+
 
 ## Fluid Combustion
 

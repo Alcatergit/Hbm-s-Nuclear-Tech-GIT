@@ -32,14 +32,14 @@ public class TileEntityRBMKRodReaSim extends TileEntityRBMKRod {
 			for(int j = 1; j <= range; j++) {
 				
 				//skip if the position is on the rod itself
-				if((int)Math.floor(dir.xCoord * j) == 0 && (int)Math.floor(dir.zCoord * j) == 0)
+				if((int)Math.floor(0.5D + dir.xCoord * j) == 0 && (int)Math.floor(0.5D + dir.zCoord * j) == 0)
 					continue;
 				
 				//skip if the current position is equal to the last position
-				if((int)Math.floor(dir.xCoord * j) == (int)Math.floor(dir.xCoord * (j - 1)) && (int)Math.floor(dir.zCoord * j) == (int)Math.floor(dir.zCoord * (j - 1)))
+				if((int)Math.floor(0.5D + dir.xCoord * j) == (int)Math.floor(0.5D + dir.xCoord * (j - 1)) && (int)Math.floor(0.5D + dir.zCoord * j) == (int)Math.floor(0.5D + dir.zCoord * (j - 1)))
 					continue;
 				
-				flux = runInteraction(pos.getX() + (int)Math.floor(dir.xCoord * j), pos.getY(), pos.getZ() + (int)Math.floor(dir.zCoord * j), flux);
+				flux = runInteraction(pos.getX() + (int)Math.floor(0.5D + dir.xCoord * j), pos.getY(), pos.getZ() + (int)Math.floor(0.5D + dir.zCoord * j), flux);
 				
 				if(flux <= 0)
 					break;

@@ -543,7 +543,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				int y = world.getHeight(x, z);
 				int columnY = y;
 				for(int y1 = y+1; y1 > 1; y1--){
-					if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z))){
+					if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z)) && world.getBlockState(new BlockPos(x, y1, z)).getBlock().isOpaqueCube(world.getBlockState(new BlockPos(x, y1, z)))){
 						columnY = y1+1;
 						break;
 					}
@@ -586,7 +586,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					int y = world.getHeight(x, z);
 					int columnY = y;
 					for(int y1 = y+1; y1 > 1; y1--){
-						if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z))){
+						if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z)) && world.getBlockState(new BlockPos(x, y1, z)).getBlock().isOpaqueCube(world.getBlockState(new BlockPos(x, y1, z)))){
 							columnY = y1+1;
 							break;
 						}

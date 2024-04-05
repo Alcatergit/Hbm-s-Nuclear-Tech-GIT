@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -63,38 +64,25 @@ public class ToxicBlock extends BlockFluidClassic {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if(reactToBlocks(world, pos.east()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+			world.setBlockState(pos.east(), ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.west()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+			world.setBlockState(pos.west(), ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.up()))
 			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.down()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+			world.setBlockState(pos.down(), ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.south()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+			world.setBlockState(pos.south(), ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
 		if(reactToBlocks(world, pos.north()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+			world.setBlockState(pos.north(), ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+
+		if(world.rand.nextInt(15) == 0) RadiationSavedData.incrementRad(world, pos, 300F, 3000F);
+
 		super.updateTick(world, pos, state, rand);
 	}
 	
-	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos) {
-		if(reactToBlocks(world, pos.east()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		if(reactToBlocks(world, pos.west()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		if(reactToBlocks(world, pos.up()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		if(reactToBlocks(world, pos.down()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		if(reactToBlocks(world, pos.south()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		if(reactToBlocks(world, pos.north()))
-			world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
-		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
-	}
-	
 	public boolean reactToBlocks(World world, BlockPos pos) {
+		if(!world.isBlockLoaded(pos)) return false;
 		if(world.getBlockState(pos).getMaterial() != ModBlocks.fluidtoxic) {
 			if(world.getBlockState(pos).getMaterial().isLiquid()) {
 				return true;

@@ -35,17 +35,12 @@ public class TileEntityMachineAmgen extends TileEntityLoadedBase implements ITic
 		if(!world.isRemote) {
 			long prevPower = power;
 
-			Block block = world.getBlockState(pos).getBlock();
-			
-			if(block == ModBlocks.machine_amgen) {
-				RadiationSavedData data = RadiationSavedData.getData(world);
-				float rad = data.getRadNumFromCoord(pos);
-				
-				power += rad;
+			if(this.getBlockType() == ModBlocks.machine_amgen) {
+				power += RadiationSavedData.getData(world).getRadNumFromCoord(pos);
 				
 				RadiationSavedData.decrementRad(world, pos, 5F);
 				
-			} else if(block == ModBlocks.machine_geo) {
+			} else {
 				
 				Block b = world.getBlockState(pos.down()).getBlock();
 				if(b == ModBlocks.geysir_water) {
