@@ -20,6 +20,15 @@ public class GUICraneBoxer extends GuiInfoContainer {
     private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crane_boxer.png");
     private TileEntityCraneBoxer boxer;
 
+    private String[] modeDesc = new String[] { 
+        "desc.conveyor.boxer.mode1",
+        "desc.conveyor.boxer.mode2",
+        "desc.conveyor.boxer.mode4",
+        "desc.conveyor.boxer.mode8",
+        "desc.conveyor.boxer.mode16",
+        "desc.conveyor.boxer.modeR"
+    };
+
     public GUICraneBoxer(InventoryPlayer invPlayer, TileEntityCraneBoxer tedf) {
         super(new ContainerCraneBoxer(invPlayer, tedf));
         boxer = tedf;
@@ -46,6 +55,14 @@ public class GUICraneBoxer extends GuiInfoContainer {
             data.setBoolean("toggle", true);
             PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, boxer.getPos()));
         }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float f) {
+        super.drawScreen(mouseX, mouseY, f);
+
+        this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 148, guiTop + 31, 22, 22, mouseX, mouseY, new String[] { I18n.format(modeDesc[boxer.mode]) });
+        super.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override

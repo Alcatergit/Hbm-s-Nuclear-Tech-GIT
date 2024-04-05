@@ -30,10 +30,12 @@ import net.minecraftforge.items.IItemHandler;
 public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIProvider, IControlReceiver {
 
     public static byte mode = 0;
-    public static final byte MODE_4 = 0;
-    public static final byte MODE_8 = 1;
-    public static final byte MODE_16 = 2;
-    public static final byte MODE_REDSTONE = 3;
+    public static final byte MODE_1 = 0;
+    public static final byte MODE_2 = 1;
+    public static final byte MODE_4 = 2;
+    public static final byte MODE_8 = 3;
+    public static final byte MODE_16 = 4;
+    public static final byte MODE_REDSTONE = 5;
     private int tickCounter = 0;
 
     public static int[] allowed_slots = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -110,9 +112,11 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
 
             if(mode != MODE_REDSTONE && tickCounter%10==0) {
                 tickCounter = 0;
-                int pack = 1;
+                int pack = 0;
 
                 switch(mode) {
+                    case MODE_1: pack = 1; break;
+                    case MODE_2: pack = 2; break;
                     case MODE_4: pack = 4; break;
                     case MODE_8: pack = 8; break;
                     case MODE_16: pack = 16; break;
@@ -274,7 +278,7 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
     @Override
     public void receiveControl(NBTTagCompound data) {
         if(data.hasKey("toggle")) {
-            mode = (byte) ((mode + 1) % 4);
+            mode = (byte) ((mode + 1) % 6);
         }
     }
 }

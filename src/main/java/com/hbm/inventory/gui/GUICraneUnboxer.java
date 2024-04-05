@@ -27,11 +27,7 @@ public class GUICraneUnboxer extends GuiInfoContainer {
     @Override
     public void drawScreen(int x, int y, float interp) {
         super.drawScreen(x, y, interp);
-    }
-
-    @Override
-    protected void mouseClicked(int x, int y, int i) throws IOException {
-        super.mouseClicked(x, y, i);
+        super.renderHoveredToolTip(x, y);
     }
 
     @Override
