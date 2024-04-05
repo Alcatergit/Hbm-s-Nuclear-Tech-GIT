@@ -2,11 +2,14 @@ package com.hbm.blocks.network;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.InventoryHelper;
 import com.hbm.tileentity.network.TileEntityCraneBase;
 import com.hbm.tileentity.network.TileEntityCraneExtractor;
+import com.hbm.tileentity.network.TileEntityCraneInserter;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -32,7 +35,11 @@ public class CraneExtractor extends BlockCraneBase {
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        this.dropContents(world, pos, state, 9, 20);
+        TileEntity tileentity = world.getTileEntity(pos);
+
+        if(tileentity instanceof TileEntityCraneExtractor) {
+            InventoryHelper.dropInventoryItems(world, pos, (TileEntityCraneExtractor) tileentity);
+        }
         super.breakBlock(world, pos, state);
     }
 

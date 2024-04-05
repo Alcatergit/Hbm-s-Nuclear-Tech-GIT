@@ -41,14 +41,6 @@ public class EntityMovingItem extends EntityMovingConveyorObject implements ICon
         return true;
     }
 
-	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if(!world.isRemote && player.inventory.addItemStackToInventory(this.getItemStack().copy())) {
-			this.setDead();
-		}
-		return false;
-	}
-
     public boolean attackEntityFrom(DamageSource source, float amount) {
 
     	if(!world.isRemote) {

@@ -1,17 +1,13 @@
 package com.hbm.blocks.network;
 
-import api.hbm.block.IBlockSideRotation;
-import api.hbm.block.IToolable;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.items.tool.ItemTooling;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.network.TileEntityCraneBase;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +22,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -69,26 +64,6 @@ public abstract class BlockCraneBase extends BlockContainer implements ITooltipP
         }
 
         super.breakBlock(worldIn, pos, state);
-    }
-
-    public static EnumFacing getInputSide(IBlockAccess world, BlockPos pos) {
-        return EnumFacing.values()[world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos))];
-    }
-
-    protected final EnumFacing getOutputSideOverride(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileEntityCraneBase)) return EnumFacing.NORTH; // Replace with a default EnumFacing, if necessary
-        TileEntityCraneBase craneTileEntity = (TileEntityCraneBase) te;
-
-        return craneTileEntity.getOutputOverride();
-    }
-
-    public EnumFacing getOutputSide(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileEntityCraneBase)) return EnumFacing.NORTH; // Replace with a default EnumFacing, if necessary
-        TileEntityCraneBase craneTileEntity = (TileEntityCraneBase) te;
-
-        return craneTileEntity.getOutputSide();
     }
 
     private final Random rand = new Random();

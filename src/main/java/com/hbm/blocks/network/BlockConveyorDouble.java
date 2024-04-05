@@ -16,7 +16,7 @@ public class BlockConveyorDouble extends BlockConveyor {
     @Override
     public Vec3d getClosestSnappingPosition(World world, BlockPos pos, Vec3d itemPos) {
 
-        EnumFacing dir = this.getTravelDirection(world, pos);
+        EnumFacing dir = this.getTravelDirection(world, pos, itemPos);
 
         double posX = MathHelper.clamp(itemPos.x, pos.getX(), pos.getX() + 1);
         double posZ = MathHelper.clamp(itemPos.z, pos.getZ(), pos.getZ() + 1);

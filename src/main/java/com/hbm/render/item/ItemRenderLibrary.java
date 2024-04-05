@@ -378,6 +378,27 @@ public class ItemRenderLibrary {
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
+		renderers.put(Item.getItemFromBlock(ModBlocks.conveyor_chute), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, 0, 0);
+				GL11.glScaled(2.5, 2.5, 2.5);
+			}
+			public void renderCommon() {
+				GL11.glScaled(1, 1, 1);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.cvr1_tex); ResourceManager.conveyor_chute.renderPart("r3"); ResourceManager.conveyor_chute.renderPart("r4");
+				ResourceManager.conveyor_chute.renderPart("r1");
+				ResourceManager.conveyor_chute.renderPart("r2");
+				bindTexture(ResourceManager.cvr2_tex);
+				ResourceManager.conveyor_chute.renderPart("cvr1");
+				ResourceManager.conveyor_chute.renderPart("cvr2");
+				bindTexture(ResourceManager.cvr3_tex); bindTexture(ResourceManager.cvr2_tex); ResourceManager.conveyor_chute.renderPart("cvr");
+				bindTexture(ResourceManager.cvr4_tex); ResourceManager.conveyor_chute.renderPart("o1"); ResourceManager.conveyor_chute.renderPart("o2");
+				ResourceManager.conveyor_chute.renderPart("o3");
+				ResourceManager.conveyor_chute.renderPart("o4");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_catalytic_cracker), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3.5, 0);

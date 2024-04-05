@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.entity.item.EntityMovingPackage;
+import com.hbm.tileentity.network.*;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -344,10 +346,6 @@ import com.hbm.tileentity.turret.TileEntityTurretRocket;
 import com.hbm.tileentity.turret.TileEntityTurretSpitfire;
 import com.hbm.tileentity.turret.TileEntityTurretTau;
 import com.hbm.tileentity.turret.TileEntityTurretTauon;
-import com.hbm.tileentity.network.TileEntityRadioTorchSender;
-import com.hbm.tileentity.network.TileEntityRadioTorchReceiver;
-import com.hbm.tileentity.network.TileEntityCraneExtractor;
-import com.hbm.tileentity.network.TileEntityCraneInserter;
 import com.hbm.world.feature.SchistStratum;
 import com.hbm.world.generator.CellularDungeonFactory;
 
@@ -835,6 +833,11 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityRadioTorchReceiver.class, new ResourceLocation(RefStrings.MODID, "tileentity_radio_torch_receiver"));
 		GameRegistry.registerTileEntity(TileEntityCraneExtractor.class, new ResourceLocation(RefStrings.MODID, "tileentity_craneejector"));
 		GameRegistry.registerTileEntity(TileEntityCraneInserter.class, new ResourceLocation(RefStrings.MODID, "tileentity_craneinserter"));
+		GameRegistry.registerTileEntity(TileEntityCraneSplitter.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranesplitter"));
+		GameRegistry.registerTileEntity(TileEntityCraneBoxer.class, new ResourceLocation(RefStrings.MODID, "tileentity_craneboxer"));
+		GameRegistry.registerTileEntity(TileEntityCraneUnboxer.class, new ResourceLocation(RefStrings.MODID, "tileentity_craneunboxer"));
+		GameRegistry.registerTileEntity(TileEntityCraneRouter.class, new ResourceLocation(RefStrings.MODID, "tileentity_cranerouter"));
+		GameRegistry.registerTileEntity(TileEntityConveyorChute.class, new ResourceLocation(RefStrings.MODID, "tileentity_conveyorchute"));
 		
 		int i = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_nuke_mk5"), EntityNukeExplosionMK5.class, "entity_nuke_mk5", i++, MainRegistry.instance, 1000, 1, true);
@@ -992,6 +995,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_soyuz"), EntitySoyuz.class, "entity_soyuz", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_laser"), EntityLaser.class, "entity_laser", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_c_item"), EntityMovingItem.class, "entity_c_item", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_c_package"), EntityMovingPackage.class, "entity_c_package", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_moonstone_blast"), EntityCloudTom.class, "entity_moonstone_blast", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_mask_man"), EntityMaskMan.class, "entity_mask_man", i++, MainRegistry.instance, 1000, 1, true, 0x78786F, 0x3E3E32);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_balls_o_tron"), EntityBOTPrimeHead.class, "entity_balls_o_tron", i++, MainRegistry.instance, 1000, 1, true, 0x434343, 0xA0A0A0);

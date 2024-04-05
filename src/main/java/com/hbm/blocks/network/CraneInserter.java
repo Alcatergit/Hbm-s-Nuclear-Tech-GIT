@@ -1,9 +1,12 @@
 package com.hbm.blocks.network;
 
 import api.hbm.block.IConveyorItem;
+import api.hbm.block.IConveyorPackage;
 import api.hbm.block.IEnterableBlock;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.InventoryHelper;
+import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.network.TileEntityCraneBase;
 import com.hbm.tileentity.network.TileEntityCraneInserter;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -62,8 +65,20 @@ public class CraneInserter extends BlockCraneBase implements IEnterableBlock {
     }
 
     @Override
+    public boolean canPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) {
+        return false;
+    }
+
+    @Override
+    public void onPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { }
+
+    @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        this.dropContents(world, pos, state, 9, 20);
+        TileEntity tileentity = world.getTileEntity(pos);
+
+        if(tileentity instanceof TileEntityCraneInserter) {
+            InventoryHelper.dropInventoryItems(world, pos, (TileEntityCraneInserter) tileentity);
+        }
         super.breakBlock(world, pos, state);
     }
 
