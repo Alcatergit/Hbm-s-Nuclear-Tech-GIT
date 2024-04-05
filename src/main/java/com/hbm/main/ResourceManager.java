@@ -232,6 +232,11 @@ public class ResourceManager {
 	//Pipe
 	public static final IModelCustom pipe_neo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/pipe_neo.obj"));
 
+	//Conveyor blocks/cranes
+	public static final IModelCustom conveyor_chute = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/conveyor_chute.obj"));
+
+	public static final IModelCustom crane_splitter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/crane_splitter.obj"));
+
 	//Laser Miner
 	public static final IModelCustom mining_laser = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/mining_laser.obj"));
 
@@ -570,6 +575,16 @@ public class ResourceManager {
 	public static final ResourceLocation ctrl_knob_control_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/knob_control_gui.png");
 	public static final ResourceLocation ctrl_dial_square_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/dial_square_gui.png");
 	public static final ResourceLocation ctrl_dial_large_gui_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/dial_large_gui.png");
+
+	//Textures for conveyors/cranes custom models
+
+	public static final ResourceLocation cvr1_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/grate_top.png");
+	public static final ResourceLocation cvr2_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/conveyor.png");
+	public static final ResourceLocation cvr3_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/conveyor_side.png");
+	public static final ResourceLocation cvr4_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/concrete.png");
+
+	public static final ResourceLocation splitter_tex = new ResourceLocation(RefStrings.MODID, "textures/models/network/splitter.png");
+
 
 	//Textures TEs
 

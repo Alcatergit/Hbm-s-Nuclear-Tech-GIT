@@ -46,7 +46,7 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 	@Override
 	public Vec3d getTravelLocation(World world, int x, int y, int z, Vec3d itemPos, double speed) {
 		BlockPos pos = new BlockPos(x, y, z);
-		EnumFacing dir = this.getTravelDirection(world, pos);
+		EnumFacing dir = this.getTravelDirection(world, pos, itemPos);
 		Vec3d snap = this.getClosestSnappingPosition(world, pos, itemPos);
 		Vec3d dest = new Vec3d(
 				snap.x - dir.getFrontOffsetX() * speed,
@@ -65,13 +65,13 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 	}
 
 
-	public EnumFacing getTravelDirection(World world, BlockPos pos) {
+	public EnumFacing getTravelDirection(World world, BlockPos pos, Vec3d itemPos) {
 		return EnumFacing.getFront(world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)));
 	}
 
 	@Override
 	public Vec3d getClosestSnappingPosition(World world, BlockPos pos, Vec3d itemPos) {
-		EnumFacing dir = this.getTravelDirection(world, pos);
+		EnumFacing dir = this.getTravelDirection(world, pos, itemPos);
 
 		double posX = MathHelper.clamp(itemPos.x, pos.getX(), pos.getX() + 1);
 		double posZ = MathHelper.clamp(itemPos.z, pos.getZ(), pos.getZ() + 1);

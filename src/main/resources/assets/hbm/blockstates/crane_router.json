@@ -1,0 +1,8 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+        "model": "hbm:crane_router"
+	},
+	"variants": {
+	}
+}
