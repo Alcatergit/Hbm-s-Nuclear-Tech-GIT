@@ -7,8 +7,8 @@ import com.hbm.inventory.container.ContainerCraneBoxer;
 import com.hbm.inventory.gui.GUICraneBoxer;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -29,7 +29,7 @@ import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIProvider, IControlReceiver {
 
-    public static byte mode = 0;
+    public byte mode = 0;
     public static final byte MODE_1 = 0;
     public static final byte MODE_2 = 1;
     public static final byte MODE_4 = 2;
@@ -67,8 +67,7 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
                 tickCounter = 0;
                 EnumFacing outputSide = getOutputSide();
                 BlockPos outputPos = pos.offset(outputSide);
-                IBlockState outputState = world.getBlockState(outputPos);
-                Block outputBlock = outputState.getBlock();
+                Block outputBlock = world.getBlockState(outputPos).getBlock();
                 IConveyorBelt belt = null;
 
                 if (outputBlock instanceof IConveyorBelt) {
@@ -133,9 +132,7 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
                 }
 
                 EnumFacing outputSide = getOutputSide();
-                BlockPos outputPos = pos.offset(outputSide);
-                IBlockState blockState = world.getBlockState(pos.offset(outputSide));
-                Block b = blockState.getBlock();
+                Block b = world.getBlockState(pos.offset(outputSide)).getBlock();
                 IConveyorBelt belt = null;
 
                 if(b instanceof IConveyorBelt) {
@@ -159,8 +156,8 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
                     }
 
                     EntityMovingPackage moving = new EntityMovingPackage(world);
-                    Vec3d pos = new Vec3d(xCoord + 0.5 + outputSide.getDirectionVec().getX() * 0.55, yCoord + 0.5 + outputSide.getDirectionVec().getY() * 0.55, zCoord + 0.5 + outputSide.getDirectionVec().getZ() * 0.55);
-                    Vec3d snap = belt.getClosestSnappingPosition(world, outputPos, pos);
+                    Vec3d posV = new Vec3d(xCoord + 0.5 + outputSide.getDirectionVec().getX() * 0.55, yCoord + 0.5 + outputSide.getDirectionVec().getY() * 0.55, zCoord + 0.5 + outputSide.getDirectionVec().getZ() * 0.55);
+                    Vec3d snap = belt.getClosestSnappingPosition(world, pos.offset(outputSide), posV);
                     moving.setPosition(snap.x, snap.y, snap.z);
                     moving.setItemStacks(box);
                     world.spawnEntity(moving);
@@ -263,7 +260,7 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        mode = nbt.getByte("mode");
+        this.mode = nbt.getByte("mode");
         this.lastRedstone = nbt.getBoolean("lastRedstone");
     }
 
@@ -280,5 +277,10 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
         if(data.hasKey("toggle")) {
             mode = (byte) ((mode + 1) % 6);
         }
+    }
+
+    @Override
+    public void networkUnpack(NBTTagCompound nbt) { 
+        this.mode = nbt.getByte("mode");
     }
 }
