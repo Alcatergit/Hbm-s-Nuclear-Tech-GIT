@@ -1454,6 +1454,15 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_outgasser), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_storage), rbmkPassive);
 		renderers.put(Item.getItemFromBlock(ModBlocks.rbmk_cooler), rbmkPassive);
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.crane_splitter), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(3.25D, 1.125D, 0D);
+				GL11.glScaled(6.5, 6.5, 6.5);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.splitter_tex); ResourceManager.crane_splitter.renderAll();
+			}});
 		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_bat9000), new ItemRenderBase() {
 			public void renderInventory() {

@@ -59,7 +59,7 @@ public class GUICraneRouter extends GuiInfoContainer {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 3; k++) {
                 int buttonX = guiLeft + 7 + j * 222;
-                int buttonY = guiTop + 16 + k * 26;
+                int buttonY = guiTop + 15 + k * 26;
 
                 if (buttonX <= mouseX && mouseX < buttonX + 18 && buttonY < mouseY && mouseY <= buttonY + 18) {
                     String[] text = new String[2];
@@ -113,12 +113,13 @@ public class GUICraneRouter extends GuiInfoContainer {
                 }
             }
         }
+        super.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
         String name = this.router.hasCustomInventoryName() ? this.router.getInventoryName() : I18n.format(this.router.getInventoryName());
-        this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+        this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 5, 4210752);
         this.fontRenderer.drawString(I18n.format("container.inventory"), 8 + 39, this.ySize - 96 + 2, 4210752);
     }
 
@@ -127,8 +128,8 @@ public class GUICraneRouter extends GuiInfoContainer {
         super.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-        drawTexturedModalRect(guiLeft + 39, guiTop + 93, 39, 93, 176, 108);
+        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, 93);
+        drawTexturedModalRect(guiLeft + 39, guiTop + 101, 39, 101, 176, 100);
 
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 3; k++) {
@@ -146,6 +147,4 @@ public class GUICraneRouter extends GuiInfoContainer {
             }
         }
     }
-
-
 }

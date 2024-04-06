@@ -7,6 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.tileentity.network.TileEntityCraneBase;
 import com.hbm.tileentity.network.TileEntityCraneUnboxer;
+
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -54,9 +55,10 @@ public class CraneUnboxer extends BlockCraneBase implements IEnterableBlock {
         if (te instanceof TileEntityCraneUnboxer) {
 
             for (ItemStack stack : entity.getItemStacks()) {
+                if(stack == null || stack.isEmpty()) continue;
                 worked = ((TileEntityCraneUnboxer)te).tryFillTeDirect(stack);
 
-                if (!stack.isEmpty() && stack.getCount() > 0 || !worked) {
+                if (stack.getCount() > 0 || !worked) {
                     EntityItem drop = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack.copy());
                     world.spawnEntity(drop);
                 }

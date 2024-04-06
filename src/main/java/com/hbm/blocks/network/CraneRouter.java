@@ -4,19 +4,24 @@ import api.hbm.block.IConveyorBelt;
 import api.hbm.block.IConveyorItem;
 import api.hbm.block.IConveyorPackage;
 import api.hbm.block.IEnterableBlock;
+import com.hbm.items.tool.ItemTooling;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.main.MainRegistry;
 import com.hbm.entity.item.EntityMovingItem;
 import com.hbm.modules.ModulePatternMatcher;
-import com.hbm.tileentity.network.TileEntityCraneBase;
 import com.hbm.tileentity.network.TileEntityCraneRouter;
-import com.hbm.tileentity.network.TileEntityCraneUnboxer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -42,6 +47,34 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
     }
 
     @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(playerIn.getHeldItem(hand).getItem() instanceof ItemTooling) {
+            return false;
+        } else if(worldIn.isRemote) {
+            return true;
+        } else if(!playerIn.isSneaking()) {
+            playerIn.openGui(MainRegistry.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    private static EnumFacing[] customEnumOrder = new EnumFacing[]{
+        EnumFacing.NORTH,
+        EnumFacing.UP,
+        EnumFacing.EAST,
+        EnumFacing.SOUTH,
+        EnumFacing.DOWN,
+        EnumFacing.WEST
+    };
+
+    @Override
     public void onItemEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorItem entity) {
         TileEntityCraneRouter router = (TileEntityCraneRouter) world.getTileEntity(new BlockPos(x, y, z));
         ItemStack stack = entity.getItemStack();
@@ -49,10 +82,10 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
         List<EnumFacing> validDirs = new ArrayList<>();
 
         //check filters for all sides
-        for(EnumFacing side : EnumFacing.VALUES) {
+        for(int i = 0; i<6; i++) {
 
-            ModulePatternMatcher matcher = router.patterns[side.getIndex()];
-            int mode = router.modes[side.getIndex()];
+            ModulePatternMatcher matcher = router.patterns[i];
+            int mode = router.modes[i];
 
             //if the side is disabled or wildcard, skip
             if(mode == router.MODE_NONE || mode == router.MODE_WILDCARD)
@@ -61,7 +94,7 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
             boolean matchesFilter = false;
 
             for(int slot = 0; slot < 5; slot++) {
-                ItemStack filter = router.inventory.getStackInSlot(side.getIndex() * 5 + slot);
+                ItemStack filter = router.inventory.getStackInSlot(i * 5 + slot);
 
                 if(filter.isEmpty())
                     continue;
@@ -75,15 +108,15 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
 
             //add dir if matches with whitelist on or doesn't match with blacklist on
             if((mode == router.MODE_WHITELIST && matchesFilter) || (mode == router.MODE_BLACKLIST && !matchesFilter)) {
-                validDirs.add(side);
+                validDirs.add(customEnumOrder[i]);
             }
         }
 
         //if no valid dirs have yet been found, use wildcard
         if(validDirs.isEmpty()) {
-            for(EnumFacing side : EnumFacing.VALUES) {
-                if(router.modes[side.getIndex()] == router.MODE_WILDCARD) {
-                    validDirs.add(side);
+            for(int i = 0; i<6; i++) {
+                if(router.modes[i] == router.MODE_WILDCARD) {
+                    validDirs.add(customEnumOrder[i]);
                 }
             }
         }

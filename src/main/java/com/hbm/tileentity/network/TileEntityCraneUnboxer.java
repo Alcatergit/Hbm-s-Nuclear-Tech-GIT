@@ -7,6 +7,7 @@ import com.hbm.inventory.gui.GUICraneUnboxer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -109,33 +110,8 @@ public class TileEntityCraneUnboxer extends TileEntityCraneBase implements IGUIP
         }
     }
 
-    public void tryFillTe(){
-        EnumFacing outputSide = getOutputSide();
-        TileEntity te = world.getTileEntity(pos.offset(outputSide));
-
-        int meta = this.getBlockMetadata();
-        if(te != null){
-            ICapabilityProvider capte = te;
-            if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
-
-                for(int i = 0; i < inventory.getSlots(); i++) {
-                    tryFillContainerCap(cap, i);
-                }
-            }
-        }
-    }
-
     public boolean tryFillTeDirect(ItemStack stack){
         return tryInsertItemCap(inventory, stack);
-    }
-
-    public boolean tryFillContainerCap(IItemHandler chest, int slot) {
-        //Check if we have something to output
-        if(inventory.getStackInSlot(slot).isEmpty())
-            return false;
-
-        return tryInsertItemCap(chest, inventory.getStackInSlot(slot));
     }
 
     public boolean tryInsertItemCap(IItemHandler chest, ItemStack stack) {
@@ -143,11 +119,11 @@ public class TileEntityCraneUnboxer extends TileEntityCraneBase implements IGUIP
         if(stack.isEmpty())
             return false;
 
-        for(int i = 0; i < chest.getSlots(); i++) {
+        for(int i: allowed_slots) {
 
             ItemStack outputStack = stack.copy();
-            if(outputStack.isEmpty())
-                return false;
+            if(outputStack.isEmpty() || outputStack.getCount() == 0)
+                return true;
 
             ItemStack chestItem = chest.getStackInSlot(i).copy();
             if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
@@ -159,7 +135,6 @@ public class TileEntityCraneUnboxer extends TileEntityCraneBase implements IGUIP
                 if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
                     stack.shrink(outputStack.getCount());
                     chest.insertItem(i, outputStack, false);
-                    return true;
                 }
             }
         }

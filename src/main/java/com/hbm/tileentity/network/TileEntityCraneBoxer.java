@@ -207,8 +207,8 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
         for(int i = 0; i < chest.getSlots(); i++) {
 
             ItemStack outputStack = stack.copy();
-            if(outputStack.isEmpty())
-                return false;
+            if(outputStack.isEmpty() || outputStack.getCount() == 0)
+                return true;
 
             ItemStack chestItem = chest.getStackInSlot(i).copy();
             if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
@@ -220,7 +220,6 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
                 if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
                     stack.shrink(outputStack.getCount());
                     chest.insertItem(i, outputStack, false);
-                    return true;
                 }
             }
         }

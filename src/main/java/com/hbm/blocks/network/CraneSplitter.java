@@ -4,13 +4,16 @@ import api.hbm.block.IConveyorBelt;
 import api.hbm.block.IConveyorItem;
 import api.hbm.block.IConveyorPackage;
 import api.hbm.block.IEnterableBlock;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.item.EntityMovingItem;
+import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -65,16 +68,30 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
         return new ItemStack(ModBlocks.crane_splitter);
     }
 
-    @Override public boolean canItemEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorItem entity) { return getTravelDirection(world, new BlockPos(x, y, z), null) == dir; }
+    private EnumFacing getCustomMap(int meta){
+        switch(meta){
+            case 4: return EnumFacing.NORTH;
+            case 2: return EnumFacing.EAST;
+            case 5: return EnumFacing.SOUTH;
+            case 3: return EnumFacing.WEST;
+
+            case 13: return EnumFacing.NORTH;
+            case 14: return EnumFacing.EAST;
+            case 12: return EnumFacing.SOUTH;
+            case 15: return EnumFacing.WEST;
+            default: return EnumFacing.NORTH;
+        }
+    }
+
+    @Override 
+    public boolean canItemEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorItem entity) { 
+        return getTravelDirection(world, new BlockPos(x, y, z), null) == dir; 
+    }
 
     public EnumFacing getTravelDirection(World world, BlockPos pos, Vec3d itemPos) {
         Block block = world.getBlockState(pos).getBlock();
         int meta = block.getMetaFromState(world.getBlockState(pos));
-        if (meta >= 12) {
-            return EnumFacing.getHorizontal(meta - offset);
-        }
-        System.out.println(EnumFacing.getHorizontal(meta).getOpposite());
-        return EnumFacing.getHorizontal(meta).getOpposite();
+        return getCustomMap(meta).getOpposite();
     }
 
     @Override
@@ -82,8 +99,33 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
         return true;
     }
 
-    @Override public boolean canPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { return false; }
-    @Override public void onPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { }
+    @Override 
+    public boolean canPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { return true; }
+    
+    @Override 
+    public void onPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) {
+        if (entity == null) {
+            return;
+        }
+        BlockPos pos = new BlockPos(x, y, z);
+        int[] core = this.findCore(world, pos.getX(), pos.getY(), pos.getZ());
+        if (core == null) return;
+        pos = new BlockPos(core[0], core[1], core[2]);
+        TileEntity tile = world.getTileEntity(pos);
+        if (!(tile instanceof TileEntityCraneSplitter)) return;
+        TileEntityCraneSplitter splitter = (TileEntityCraneSplitter) tile;
+
+        boolean pos1 = splitter.getPosition();
+        EnumFacing rot = getCustomMap(splitter.getBlockMetadata()).rotateY().rotateY().rotateY();
+
+        if(pos1){
+            this.spawnMovingBox(world, pos.getX(), pos.getY(), pos.getZ(), entity.getItemStacks());
+        } else {
+            this.spawnMovingBox(world, pos.getX() + rot.getFrontOffsetX(), pos.getY(), pos.getZ() + rot.getFrontOffsetZ(), entity.getItemStacks());
+        }
+        splitter.setPosition(!pos1);
+    }
+
     @Override
     public Vec3d getTravelLocation(World world, int x, int y, int z, Vec3d itemPos, double speed) {
         BlockPos pos = new BlockPos(x, y, z);
@@ -126,6 +168,9 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
     }
     @Override
     public void onItemEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorItem entity) {
+        if (entity == null || entity.getItemStack() == ItemStack.EMPTY || entity.getItemStack().getCount() <= 0) {
+            return;
+        }
         BlockPos pos = new BlockPos(x, y, z);
         int[] core = this.findCore(world, pos.getX(), pos.getY(), pos.getZ());
         if (core == null) return;
@@ -133,20 +178,29 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
         TileEntity tile = world.getTileEntity(pos);
         if (!(tile instanceof TileEntityCraneSplitter)) return;
         TileEntityCraneSplitter splitter = (TileEntityCraneSplitter) tile;
+
         boolean pos1 = splitter.getPosition();
         ItemStack stack = entity.getItemStack();
-        EnumFacing rot = EnumFacing.getHorizontal(splitter.getBlockMetadata() - offset).getOpposite();
+        EnumFacing rot = getCustomMap(splitter.getBlockMetadata()).rotateY().rotateY().rotateY();
 
         if (stack.getCount() % 2 == 0) {
-            stack.setCount(stack.getCount() / 2);
+            stack.setCount(stack.getCount()>>1);
             this.spawnMovingItem(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
             this.spawnMovingItem(world, pos.getX() + rot.getFrontOffsetX(), pos.getY(), pos.getZ() + rot.getFrontOffsetZ(), stack.copy());
         } else {
-            int baseSize = stack.getCount() / 2;
-            stack.setCount(baseSize + (pos1 ? 0 : 1));
-            this.spawnMovingItem(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
-            stack.setCount(baseSize + (pos1 ? 1 : 0));
-            this.spawnMovingItem(world, pos.getX() + rot.getFrontOffsetX(), pos.getY(), pos.getZ() + rot.getFrontOffsetZ(), stack.copy());
+            int baseSize = stack.getCount()>>1;
+            if(baseSize == 0){
+                if(pos1){
+                    this.spawnMovingItem(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
+                } else {
+                    this.spawnMovingItem(world, pos.getX() + rot.getFrontOffsetX(), pos.getY(), pos.getZ() + rot.getFrontOffsetZ(), stack.copy());
+                }
+            } else {
+                stack.setCount(baseSize + (pos1 ? 0 : 1));
+                this.spawnMovingItem(world, pos.getX(), pos.getY(), pos.getZ(), stack.copy());
+                stack.setCount(baseSize + (pos1 ? 1 : 0));
+                this.spawnMovingItem(world, pos.getX() + rot.getFrontOffsetX(), pos.getY(), pos.getZ() + rot.getFrontOffsetZ(), stack.copy());
+            }
             splitter.setPosition(!pos1);
         }
     }
@@ -162,6 +216,19 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
         Vec3d snap = this.getClosestSnappingPosition(worldIn, pos1, itemPos);
         moving.setPosition(snap.x, snap.y, snap.z);
         moving.setItemStack(stack);
+        worldIn.spawnEntity(moving);
+    }
+
+    private void spawnMovingBox(World worldIn, int x, int y, int z, ItemStack[] stacks) {
+        BlockPos pos1 = new BlockPos(x, y, z);
+        int xCoord = pos1.getX();
+        int yCoord = pos1.getY();
+        int zCoord = pos1.getZ();
+        EntityMovingPackage moving = new EntityMovingPackage(worldIn);
+        Vec3d itemPos = new Vec3d(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+        Vec3d snap = this.getClosestSnappingPosition(worldIn, pos1, itemPos);
+        moving.setPosition(snap.x, snap.y, snap.z);
+        moving.setItemStacks(stacks);
         worldIn.spawnEntity(moving);
     }
 
@@ -199,5 +266,4 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
     public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
         MultiblockHandlerXR.fillSpace(world, x, y, z, getDimensions(), this, dir);
     }
-
 }
