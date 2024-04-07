@@ -2,19 +2,14 @@ package com.hbm.render.tileentity;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.machine.oil.TileEntityMachineFrackingTower;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+
 import org.lwjgl.opengl.GL11;
 
 public class RenderCraneSplitter extends TileEntitySpecialRenderer<TileEntityCraneSplitter> {
-
-    @Override
-    public boolean isGlobalRenderer(TileEntityCraneSplitter te)
-    {
-        return true;
-    }
 
     @Override
     public void render(TileEntityCraneSplitter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

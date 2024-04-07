@@ -18,11 +18,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -155,7 +159,7 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState() {
+	public BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{FACING});
 	}
 	
@@ -225,5 +229,4 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
-
 }

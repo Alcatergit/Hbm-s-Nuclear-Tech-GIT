@@ -2,12 +2,19 @@ package com.hbm.blocks.network;
 
 import api.hbm.block.IConveyorBelt;
 import api.hbm.block.IEnterableBlock;
-import com.hbm.tileentity.network.TileEntityConveyorChute;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,6 +24,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockConveyorChute extends BlockConveyor {
+    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2); //Bottom 0, Middle 1, Input 2
+    
     public BlockConveyorChute(Material materialIn, String s) {
         super(materialIn, s);
     }
@@ -40,16 +49,10 @@ public class BlockConveyorChute extends BlockConveyor {
         }
     }
 
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityConveyorChute();
-    }
-
     @Override
     public Vec3d getTravelLocation(World world, int x, int y, int z, Vec3d itemPos, double speed) {
         BlockPos pos = new BlockPos(x, y, z);
-        BlockPos belowPos = pos.down();
-        IBlockState belowState = world.getBlockState(belowPos);
-        Block belowBlock = belowState.getBlock();
+        Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
         if (belowBlock instanceof IConveyorBelt || belowBlock instanceof IEnterableBlock) {
             speed *= 5.0;
@@ -62,9 +65,7 @@ public class BlockConveyorChute extends BlockConveyor {
 
     @Override
     public EnumFacing getTravelDirection(World world, BlockPos pos, Vec3d itemPos) {
-        BlockPos belowPos = pos.down();
-        IBlockState belowState = world.getBlockState(belowPos);
-        Block belowBlock = belowState.getBlock();
+        Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
         if (belowBlock instanceof IConveyorBelt || belowBlock instanceof IEnterableBlock || itemPos.y > pos.getY() + 0.25) {
             return EnumFacing.UP;
@@ -74,8 +75,26 @@ public class BlockConveyorChute extends BlockConveyor {
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, getUpdatedType(worldIn, pos)));
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
+        world.setBlockState(pos, state.withProperty(TYPE, getUpdatedType(world, pos)));
+    }
+
+    private int getUpdatedType(World world, BlockPos pos){
+        boolean hasChuteBelow = world.getBlockState(pos.down()).getBlock() instanceof BlockConveyorChute;
+        boolean hasInputBelt = false;
+        Block inputBlock = world.getBlockState(pos.offset(world.getBlockState(pos).getValue(FACING), 1)).getBlock();
+        if (inputBlock instanceof IConveyorBelt || inputBlock instanceof IEnterableBlock) {
+            hasInputBelt = true;
+        }
+        if(hasChuteBelow){
+            return hasInputBelt ? 2 : 1;
+        }
+        return 0;
     }
 
     @Override
@@ -89,12 +108,37 @@ public class BlockConveyorChute extends BlockConveyor {
     }
 
     @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+        return false;
+    }
+
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return FULL_BLOCK_AABB;
     }
 
     @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return true;
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{FACING, TYPE});
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing)state.getValue(FACING)).getIndex() - 2 + (state.getValue(TYPE)<<2);
+    }
+    
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing enumfacing = EnumFacing.getFront((meta+2) % 4);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+            enumfacing = EnumFacing.NORTH;
+        }
+        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(TYPE, meta>>2);
     }
 }

@@ -1,0 +1,7 @@
+# Made in Blockbench 4.9.4
+newmtl m_83a97e8b-c320-4a69-c4d1-c8b66dcef1da
+map_Kd hbm:blocks/concrete
+newmtl m_2057a387-3539-489f-b6e6-3e66a1280801
+map_Kd hbm:blocks/grate_top
+newmtl none
+map_Kd hbm:blocks/concrete

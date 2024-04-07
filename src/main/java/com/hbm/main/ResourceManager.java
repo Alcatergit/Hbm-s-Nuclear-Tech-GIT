@@ -233,8 +233,6 @@ public class ResourceManager {
 	public static final IModelCustom pipe_neo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/pipe_neo.obj"));
 
 	//Conveyor blocks/cranes
-	public static final IModelCustom conveyor_chute = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/conveyor_chute.obj"));
-
 	public static final IModelCustom crane_splitter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/crane_splitter.obj"));
 
 	//Laser Miner
