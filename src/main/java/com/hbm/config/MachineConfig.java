@@ -99,7 +99,7 @@ public class MachineConfig {
 
 		uuMixerFluidRatio = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(24, "uuMixerFluidRatio"), "How much mB of UU-Matter is used per mB of output fluid", 100);
 		uuMixerFluidListIsWhitelist = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(25, "uuMixerFluidListIsWhitelist"), "If true then the follwing list of fluids is a whitelist. Otherwise it is a Blacklist", false);
-		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(26, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium" });
+		blacklistedMixerFluids = CommonConfig.createConfigHashSet(config, CATEGORY_MACHINE, generateConfigName(26, "blacklistedUUMixerFluids"), "List of fluids that can not be made by UU Mixer. - <fluid> (String)", "String", new String[]{ "liquid_osmiridium", "experience" });
 		
 		crateByteSize = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(27, "crateMaxByteSize"), "Controls how big the maximum storage size of mined crates can be. Warning going beond 32kb can cause freezing/crashes. - <kb> (int)", 8);
 		rbmkJumpTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(28, "rbmkJumpTemp"), "Controls at which rbmk column temperature the lid jumping begins. Can not be < 20°C. Set to > 1500°C to turn off. Default is 1250°C - <temp> (int)", 1250);

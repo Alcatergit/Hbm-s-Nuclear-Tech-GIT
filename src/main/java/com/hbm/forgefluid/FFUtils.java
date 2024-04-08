@@ -487,8 +487,8 @@ public class FFUtils {
 
 		//Mercury override
 		//Oh god, these overrides are getting worse and worse, but it would take a large amount of effort to make the code good
-		if(in.getItem() == ModItems.nugget_mercury && tank.fill(new FluidStack(ModForgeFluids.mercury, 100), false) == 100){
-			tank.fill(new FluidStack(ModForgeFluids.mercury, 100), true);
+		if(in.getItem() == ModItems.nugget_mercury && tank.fill(new FluidStack(ModForgeFluids.mercury, 125), false) == 125){
+			tank.fill(new FluidStack(ModForgeFluids.mercury, 125), true);
 			in.shrink(1);
 			return true;
 		}

@@ -86,7 +86,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		recursionBrake = true;
 		
 		// we have to limit the transfer amount because otherwise FEnSUs would overflow the RF output, twice
-		int toRF = (int) Math.min(Integer.MAX_VALUE, power);
+		int toRF = (int) Math.min(Integer.MAX_VALUE, power*GeneralConfig.conversionRateHeToRF);
 		int transfer = 0;
 		int totalTransferred = 0;
 		boolean skipRF = false;
@@ -109,9 +109,9 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		}
 
 		recursionBrake = false;
-		lastTransfer = (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
+		lastTransfer = (long)(totalTransferred / GeneralConfig.conversionRateHeToRF);
 		
-		return power - (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
+		return power - (long)(totalTransferred / GeneralConfig.conversionRateHeToRF);
 	}
 	
 	@Override
@@ -121,7 +121,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 
 	@Override
 	public long getMaxPower() {
-		return (long)(Integer.MAX_VALUE / (float)GeneralConfig.rfConversionRate);
+		return (long)(Integer.MAX_VALUE / GeneralConfig.conversionRateHeToRF);
 	}
 
 	private long lastTransfer = 0;

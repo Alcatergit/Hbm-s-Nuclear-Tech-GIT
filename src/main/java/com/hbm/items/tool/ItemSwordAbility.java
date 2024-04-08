@@ -40,17 +40,23 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 	private EnumRarity rarity = EnumRarity.COMMON;
 	//was there a reason for this to be private?
 	protected float damage;
+	protected double attackSpeed;
 	protected double movement;
 	private List<WeaponAbility> hitAbility = new ArrayList<>();
 
-	public ItemSwordAbility(float damage, double movement, ToolMaterial material, String s) {
+	public ItemSwordAbility(float damage, double attackSpeed, double movement, ToolMaterial material, String s) {
 		super(material);
 		this.damage = damage;
 		this.movement = movement;
+		this.attackSpeed = attackSpeed;
 		this.setUnlocalizedName(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
+	}
+
+	public ItemSwordAbility(float damage, double movement, ToolMaterial material, String s) {
+		this(damage, -2.4, movement, material, s);
 	}
 
 	public ItemSwordAbility addHitAbility(WeaponAbility weaponAbility) {
@@ -91,7 +97,8 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		Multimap<String, AttributeModifier> map = HashMultimap.<String, AttributeModifier> create();
 		if(slot == EntityEquipmentSlot.MAINHAND) {
 			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Tool modifier", movement, 1));
-			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", (double) this.damage, 0));
+			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double) this.damage, 0));
+			map.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, 0));
 		}
 		return map;
 	}

@@ -60,14 +60,14 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 		
 		recursionBrake = true;
 		
-		long capacity = (long)(maxReceive / (float)GeneralConfig.rfConversionRate);
+		long capacity = (long)(maxReceive / GeneralConfig.conversionRateHeToRF);
 		subBuffer = capacity;
 		
 		this.sendPower(world, pos);
 		
 		recursionBrake = false;
 		
-		return (int) ((capacity - subBuffer) * GeneralConfig.rfConversionRate);
+		return (int) ((capacity - subBuffer) * GeneralConfig.conversionRateHeToRF);
 	}
 
 	//FE
@@ -106,14 +106,14 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 		
 		recursionBrake = true;
 		
-		long capacity = (long)(maxReceive / (float)GeneralConfig.rfConversionRate);
+		long capacity = (long)(maxReceive / GeneralConfig.conversionRateHeToRF);
 		subBuffer = capacity;
 		
 		this.sendPower(world, pos);
 		
 		recursionBrake = false;
 		
-		return (int) ((capacity - subBuffer) * GeneralConfig.rfConversionRate);
+		return (int) ((capacity - subBuffer) * GeneralConfig.conversionRateHeToRF);
 	}
 
 	@Override

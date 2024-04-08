@@ -18,13 +18,17 @@ public class ItemSwordAbilityPower extends ItemSwordAbility implements IBatteryI
 	public long chargeRate;
 	public long consumption;
 	
-	public ItemSwordAbilityPower(float damage, double movement, ToolMaterial material, long maxPower, long chargeRate, long consumption, String s) {
-		super(damage, movement, material, s);
+	public ItemSwordAbilityPower(float damage, double attackSpeed, double movement, ToolMaterial material, long maxPower, long chargeRate, long consumption, String s) {
+		super(damage, attackSpeed, movement, material, s);
 		this.maxPower = maxPower;
 		this.chargeRate = chargeRate;
 		this.consumption = consumption;
 		this.setMaxDamage(1);
 	}
+
+    public ItemSwordAbilityPower(float damage, double movement, ToolMaterial material, long maxPower, long chargeRate, long consumption, String s) {
+        this(damage, -2.4, movement, material, maxPower, chargeRate, consumption, s);
+    }
 	
 	@Override
 	public void chargeBattery(ItemStack stack, long i) {

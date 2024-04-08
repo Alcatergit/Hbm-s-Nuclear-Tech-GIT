@@ -55,7 +55,7 @@ public class ItemModInsert extends ItemArmorMod implements IItemHazard {
 		if(this == ModItems.insert_polonium)
 			list.add(TextFormatting.DARK_RED + "+100 RAD/s");
 		
-		list.add((stack.getMaxDamage() - stack.getItemDamage()) + "/" + stack.getMaxDamage() + "HP");
+		list.add("Durability: "+(stack.getMaxDamage() - stack.getItemDamage()) + "/" + stack.getMaxDamage());
 		
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);

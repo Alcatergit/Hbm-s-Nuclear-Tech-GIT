@@ -75,6 +75,13 @@ public class CommonConfig {
 	    return prop.getInt();
 	}
 
+	public static double createConfigDouble(Configuration config, String category, String name, String comment, double def) {
+	
+	    Property prop = config.get(category, name, def);
+	    prop.setComment(comment);
+	    return prop.getDouble();
+	}
+
 	public static int setDefZero(int value, int def) {
 
 		if(value < 0) {

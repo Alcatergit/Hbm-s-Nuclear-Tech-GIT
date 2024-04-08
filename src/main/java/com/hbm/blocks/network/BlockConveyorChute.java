@@ -34,9 +34,7 @@ public class BlockConveyorChute extends BlockConveyor {
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
 
-        BlockPos belowPos = pos.down();
-        IBlockState belowState = world.getBlockState(belowPos);
-        Block belowBlock = belowState.getBlock();
+        Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
         if (belowBlock instanceof IConveyorBelt || belowBlock instanceof IEnterableBlock) {
             entity.motionX *= 5.0;
