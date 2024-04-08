@@ -1,0 +1,18 @@
+# Made in Blockbench 4.9.4
+newmtl m_concrete
+map_Kd hbm:blocks/concrete
+newmtl m_conveyor
+map_Kd hbm:blocks/conveyor
+newmtl m_conveyor_side
+map_Kd hbm:blocks/conveyor_side
+newmtl m_conveyor_double
+map_Kd hbm:blocks/conveyor_double
+newmtl m_conveyor_triple
+map_Kd hbm:blocks/conveyor_triple
+newmtl m_conveyor_express
+map_Kd hbm:blocks/conveyor_express
+newmtl m_titanium
+map_Kd hbm:blocks/block_titanium
+newmtl m_grate_top
+map_Kd hbm:blocks/grate_top
+newmtl none

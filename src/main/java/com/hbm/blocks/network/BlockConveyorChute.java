@@ -79,7 +79,7 @@ public class BlockConveyorChute extends BlockConveyor {
         world.setBlockState(pos, state.withProperty(TYPE, getUpdatedType(world, pos)));
     }
 
-    private int getUpdatedType(World world, BlockPos pos){
+    public int getUpdatedType(World world, BlockPos pos){
         boolean hasChuteBelow = world.getBlockState(pos.down()).getBlock() instanceof BlockConveyorChute;
         boolean hasInputBelt = false;
         Block inputBlock = world.getBlockState(pos.offset(world.getBlockState(pos).getValue(FACING), 1)).getBlock();

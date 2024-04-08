@@ -2,24 +2,15 @@ package com.hbm.blocks.network;
 
 import api.hbm.block.IConveyorBelt;
 import api.hbm.block.IEnterableBlock;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockConveyorLift extends BlockConveyor {
-    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2); //Bottom 0, Middle 1, Output 2
+public class BlockConveyorLift extends BlockConveyorChute {
 
     public BlockConveyorLift(Material materialIn, String s) {
         super(materialIn, s);
@@ -52,69 +43,16 @@ public class BlockConveyorLift extends BlockConveyor {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, getUpdatedType(worldIn, pos)));
-    }
-
-    @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
-        world.setBlockState(pos, state.withProperty(TYPE, getUpdatedType(world, pos)));
-    }
-
-    private int getUpdatedType(World world, BlockPos pos){
-        boolean hasLiftBelow = world.getBlockState(pos.down()).getBlock() instanceof BlockConveyorLift;
-        boolean hasLiftAbove = world.getBlockState(pos.up()).getBlock() instanceof BlockConveyorLift;
-        if(hasLiftBelow && !hasLiftAbove){
-            return 2;
+    public int getUpdatedType(World world, BlockPos pos){
+        boolean hasChuteBelow = world.getBlockState(pos.down()).getBlock() instanceof BlockConveyorChute;
+        boolean hasInputBelt = false;
+        Block inputBlock = world.getBlockState(pos.offset(world.getBlockState(pos).getValue(FACING).getOpposite(), 1)).getBlock();
+        if (inputBlock instanceof IConveyorBelt || inputBlock instanceof IEnterableBlock) {
+            hasInputBelt = true;
         }
-        if(hasLiftBelow && hasLiftAbove){
-            return 1;
+        if(hasChuteBelow){
+            return hasInputBelt ? 2 : 1;
         }
         return 0;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
-        return false;
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return FULL_BLOCK_AABB;
-    }
-
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{FACING, TYPE});
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getValue(FACING)).getIndex() - 2 + (state.getValue(TYPE)<<2);
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront((meta+2) % 4);
-
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
-            enumfacing = EnumFacing.NORTH;
-        }
-        return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(TYPE, meta>>2);
     }
 }

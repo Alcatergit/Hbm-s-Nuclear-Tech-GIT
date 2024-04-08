@@ -447,6 +447,7 @@ commands.hbmrad.not_rad=Please enter new rad value!
 commands.hbmrad.player_success=Successfully cleared radiation for all online players!
 commands.hbmrad.rad_not_int=New rad value is not a number!
 commands.hbmrad.removeall=Removed all loaded radiation for dimension %1$s.
+tile.conveyor_chute.name=Conveyor Chute
 tile.crane_splitter.name=Conveyor Splitter
 tile.crane_boxer.name=Conveyor Boxer
 tile.crane_unboxer.name=Conveyor Unboxer

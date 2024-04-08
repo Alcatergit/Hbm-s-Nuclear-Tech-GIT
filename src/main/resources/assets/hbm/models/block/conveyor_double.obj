@@ -1,5 +1,5 @@
 # Made in Blockbench 4.9.4
-mtllib conveyor_double.mtl
+mtllib conveyor_material.mtl
 
 o conveyor
 v 1 0.25 0
@@ -40,10 +40,10 @@ vn 0 1 0
 vn 0 -1 0
 vn 0 0 1
 vn 0 0 -1
-usemtl m_8ae45ee9-7dc9-1968-9aec-477e5a7eb8e0
+usemtl m_conveyor_side
 f 1/1/1 2/2/1 3/3/1 4/4/1
 f 5/5/2 6/6/2 7/7/2 8/8/2
-usemtl m_c2b3747c-1669-c0a3-df9d-1b27f06e98f5
+usemtl m_conveyor_double
 f 6/9/3 2/10/3 1/11/3 7/12/3
 f 4/13/4 3/14/4 5/15/4 8/16/4
 f 3/17/5 2/18/5 6/19/5 5/20/5
