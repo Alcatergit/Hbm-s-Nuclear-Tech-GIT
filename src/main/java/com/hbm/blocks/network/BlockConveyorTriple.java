@@ -7,9 +7,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class BlockConveyorDouble extends BlockConveyor {
+public class BlockConveyorTriple extends BlockConveyor {
 
-    public BlockConveyorDouble(Material materialIn, String s) {
+    public BlockConveyorTriple(Material materialIn, String s) {
         super(materialIn, s);
     }
 
@@ -26,11 +26,11 @@ public class BlockConveyorDouble extends BlockConveyor {
 
         if(dir.getAxis() == EnumFacing.Axis.X) {
             xCenter = posX;
-            zCenter += posZ > zCenter ? 0.25 : -0.25;
+            zCenter += (posZ > zCenter + 0.15 ? 0.3125 : posZ < zCenter - 0.15 ? -0.3125 : 0);
         }
         if(dir.getAxis() == EnumFacing.Axis.Z) {
             zCenter = posZ;
-            xCenter += posX > xCenter ? 0.25 : -0.25;
+            xCenter += (posX > xCenter + 0.15 ? 0.3125 : posX < xCenter - 0.15 ? -0.3125 : 0);
         }
 
         return new Vec3d(xCenter, pos.getY() + 0.25, zCenter);
