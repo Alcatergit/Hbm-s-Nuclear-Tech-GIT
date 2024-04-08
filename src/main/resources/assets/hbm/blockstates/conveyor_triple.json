@@ -2,7 +2,7 @@
 	"forge_marker": 1,
 	"defaults": {
 		"textures": {},
-		"model": "hbm:conveyor.obj"
+		"model": "hbm:conveyor_triple.obj"
 	},
 	"variants": {
 		"facing": {

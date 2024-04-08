@@ -106,14 +106,8 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 		this.damage = damage;
 		this.movement = movement;
 		this.toolType = type;
-		if(type == EnumToolType.MINER){
-			this.setHarvestLevel("shovel", material.getHarvestLevel());
-			this.setHarvestLevel("pickaxe", material.getHarvestLevel());
-			this.setHarvestLevel("axe", material.getHarvestLevel());
-		} else {
-			this.setHarvestLevel(type.toString().toLowerCase(), material.getHarvestLevel());
-		}
-
+		this.setHarvestLevel(type.toString().toLowerCase(), material.getHarvestLevel());
+		
 		ModItems.ALL_ITEMS.add(this);
 	}
 	
@@ -318,7 +312,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     	}
 
     	if(this.rockBreaker){
-    		list.add("§5["+I18nUtil.resolveKey("trait.unmineable")+"]§d " + I18nUtil.resolveKey("tool.ability.canmine"));
+    		list.add(I18nUtil.resolveKey("trait.unmineable"));
     	}
     }
     
@@ -357,14 +351,10 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     	while(getCurrentAbility(stack) != null && !getCurrentAbility(stack).isAllowed()) {
 
     		player.sendMessage(
-				new TextComponentString("[")
-				.appendSibling(new TextComponentTranslation("chat.ability"))
-				.appendSibling(new TextComponentString(" "))
-				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName(), new Object[0]))
-				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + " ")
-				.appendSibling(new TextComponentTranslation("chat.blacklist"))
-				.appendSibling(new TextComponentString("]")))
-				.setStyle(new Style().setColor(TextFormatting.RED)));
+    				new TextComponentString("["+I18nUtil.resolveKey("chat.ability")+" ")
+    				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName(), new Object[0]))
+    				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + " " + I18nUtil.resolveKey("chat.blacklist") +"]"))
+    				.setStyle(new Style().setColor(TextFormatting.RED)));
 
         	i++;
         	setAbility(stack, i % this.breakAbility.size());
@@ -372,17 +362,12 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     	
     	if(getCurrentAbility(stack) != null) {
     		player.sendMessage(
-				new TextComponentString("[")
-				.appendSibling(new TextComponentTranslation("chat.abilenabled"))
-				.appendSibling(new TextComponentString(" "))
-				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName()))
-				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + "]"))
-				.setStyle(new Style().setColor(TextFormatting.YELLOW)));
+    				new TextComponentString("[" + I18nUtil.resolveKey("chat.abilenabled") + " ")
+    				.appendSibling(new TextComponentTranslation(getCurrentAbility(stack).getName()))
+    				.appendSibling(new TextComponentString(getCurrentAbility(stack).getExtension() + "]"))
+    				.setStyle(new Style().setColor(TextFormatting.YELLOW)));
     	} else {
-    		player.sendMessage(new TextComponentString("[")
-    			.appendSibling(new TextComponentTranslation("chat.abildisabled"))
-    			.appendSibling(new TextComponentString("]"))
-    			.setStyle(new Style().setColor(TextFormatting.GOLD)));
+    		player.sendMessage(new TextComponentString(TextFormatting.GOLD + "[" + I18nUtil.resolveKey("chat.abildisabled") + "]"));
     	}
 
     	//Drillgon200: I hope "random.orb" referred to the experience orb sound
