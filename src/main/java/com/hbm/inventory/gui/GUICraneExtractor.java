@@ -36,8 +36,7 @@ public class GUICraneExtractor extends GuiInfoContainer {
     @Override
     public void drawScreen(int x, int y, float interp) {
         super.drawScreen(x, y, interp);
-        this.renderHoveredToolTip(x, y);
-
+        
         if(this.mc.player.getHeldItemMainhand().isEmpty()) {
             for(int i = 0; i < 9; ++i) {
                 Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
@@ -56,6 +55,7 @@ public class GUICraneExtractor extends GuiInfoContainer {
                 }
             }
         }
+        this.renderHoveredToolTip(x, y);
     }
 
     @Override

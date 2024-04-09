@@ -6,6 +6,7 @@ import com.hbm.packet.NBTControlPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.network.TileEntityCraneGrabber;
 import com.hbm.util.I18nUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
@@ -54,6 +55,7 @@ public class GUICraneGrabber extends GuiInfoContainer {
                 }
             }
         }
+        this.renderHoveredToolTip(x, y);
     }
 
     @Override

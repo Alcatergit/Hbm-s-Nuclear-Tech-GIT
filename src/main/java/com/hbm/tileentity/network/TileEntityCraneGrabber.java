@@ -9,6 +9,7 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.modules.ModulePatternMatcher;
 import com.hbm.tileentity.IGUIProvider;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,7 +55,7 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
 
             int delay = 20;
 
-            if(inventory.getStackInSlot(10) != null && inventory.getStackInSlot(10) != ItemStack.EMPTY){
+            if(inventory.getStackInSlot(10) != null && inventory.getStackInSlot(10).isEmpty()){
                 if(inventory.getStackInSlot(10).getItem() == ModItems.upgrade_ejector_1) {
                     delay = 10;
                 } else if(inventory.getStackInSlot(10).getItem() == ModItems.upgrade_ejector_2){
@@ -66,8 +67,8 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
 
             if(tickCounter >= delay && !this.world.isBlockPowered(pos)) {
                 tickCounter = 0;
-
-                if(inventory.getStackInSlot(9)!= null && inventory.getStackInSlot(9) != ItemStack.EMPTY){
+                amount = 1;
+                if(inventory.getStackInSlot(9) != null && !inventory.getStackInSlot(9).isEmpty()){
                     if(inventory.getStackInSlot(9).getItem() == ModItems.upgrade_stack_1) {
                         amount = 4;
                     } else if(inventory.getStackInSlot(9).getItem() == ModItems.upgrade_stack_2){
@@ -82,20 +83,27 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
                 Block b = world.getBlockState(pos.offset(inputSide)).getBlock();
                 if(b == ModBlocks.conveyor_double) reach = 0.5D;
                 if(b == ModBlocks.conveyor_triple) reach = 0.33D;
-                double x = pos.offset(inputSide).getX() * reach;
-                double y = pos.offset(inputSide).getY() * reach;
-                double z = pos.offset(inputSide).getZ() * reach;
+                double x = (pos.offset(inputSide).getX()-pos.getX()) * reach + pos.getX();
+                double y = (pos.offset(inputSide).getY()-pos.getY()) * reach + pos.getY();
+                double z = (pos.offset(inputSide).getZ()-pos.getZ()) * reach + pos.getZ();
                 List<EntityMovingItem> items = world.getEntitiesWithinAABB(EntityMovingItem.class, new AxisAlignedBB(x + 0.1875D, y + 0.1875D, z + 0.1875D, x + 0.8125D, y + 0.8125D, z + 0.8125D));
                 for(EntityMovingItem item : items){
-                    ItemStack stack = item.getItemStack();
+                    ItemStack stack = item.getItemStack().copy();
                     boolean match = this.matchesFilter(stack);
                     if(this.isWhitelist && !match || !this.isWhitelist && match){
                         continue;
                     }
-                    tryFillTe();
-                } // I probably should've taken this bunch of code into tryInsertItemCap instead of update and it'd work without any buffers (with a bit of adjustments)
-
-
+                    int count = stack.getCount();
+                    int toAdd = Math.min(count, amount);
+                    stack.setCount(toAdd);
+                    tryFillTe(stack);
+                    if(count - toAdd + stack.getCount() <= 0){
+                        item.setDead();
+                    } else {
+                        stack.setCount(count - toAdd + stack.getCount());
+                        item.setItemStack(stack);
+                    }
+                }
             }
 
 
@@ -106,29 +114,18 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
         }
     }
 
-    public void tryFillTe(){
+    public boolean tryFillTe(ItemStack stack){
         EnumFacing outputSide = getOutputSide();
         TileEntity te = world.getTileEntity(pos.offset(outputSide));
-            if (te != null) {
-                System.out.println("5");
-                ICapabilityProvider capte = te;
-                if (capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                    IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
+        if (te != null) {
+            ICapabilityProvider capte = te;
+            if (capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
+                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
 
-                    for (int i = 0; i < inventory.getSlots(); i++) {
-                        tryFillContainerCap(cap, i);
-                    }
-                }
+                return tryInsertItemCap(cap, stack);
             }
-    }
-
-    //Unloads output into chests. Capability version.
-    public boolean tryFillContainerCap(IItemHandler chest, int slot) {
-        //Check if we have something to output
-        if(inventory.getStackInSlot(slot).isEmpty())
-            return false;
-
-        return tryInsertItemCap(chest, inventory.getStackInSlot(slot));
+        }
+        return false;
     }
 
     //Unloads output into chests. Capability version.
@@ -181,7 +178,6 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
 
     @Override
     public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
-
         return new ContainerCraneGrabber(player.inventory, this);
     }
 
@@ -220,5 +216,4 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
             this.isWhitelist = !this.isWhitelist;
         }
     }
-
 }
