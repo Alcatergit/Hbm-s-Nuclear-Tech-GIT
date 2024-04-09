@@ -122,18 +122,14 @@ public class BlockConveyorChute extends BlockConveyor {
         return new BlockStateContainer(this, new IProperty[]{FACING, TYPE});
     }
 
-    @Override
+    @Override //0-3 NSEW (T0) 4-7 NSEW (T1) 8-11 NSEW (T2)
     public int getMetaFromState(IBlockState state) {
         return ((EnumFacing)state.getValue(FACING)).getIndex() - 2 + (state.getValue(TYPE)<<2);
     }
     
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront((meta+2) % 4);
-
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
-            enumfacing = EnumFacing.NORTH;
-        }
+        EnumFacing enumfacing = EnumFacing.values()[((meta % 4)+2)];
         return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(TYPE, meta>>2);
     }
 }

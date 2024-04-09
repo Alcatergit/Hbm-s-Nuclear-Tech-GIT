@@ -800,7 +800,7 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nuclear_waste_tiny), 32))
 				);
 		
-		recipes.put(new ComparableStack(ModItems.fallout, 1), new SILEXRecipe(900, 100, EnumWavelengths.UV)
+		recipes.put(new ComparableStack(ModItems.fallout, 1), new SILEXRecipe(50, 100, EnumWavelengths.UV)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.dust), 90))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_co60), 2))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.powder_sr90_tiny), 3))
