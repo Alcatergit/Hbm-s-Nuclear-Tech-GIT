@@ -33,6 +33,6 @@ public class BlockConveyorDouble extends BlockConveyor {
             xCenter += posX > xCenter ? 0.25 : -0.25;
         }
 
-        return new Vec3d(posX, pos.getY() + 0.25, posZ);
+        return new Vec3d(xCenter, pos.getY() + 0.25, zCenter);
     }
 }
