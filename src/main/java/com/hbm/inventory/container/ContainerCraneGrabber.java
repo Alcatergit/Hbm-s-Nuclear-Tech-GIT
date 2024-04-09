@@ -3,8 +3,10 @@ package com.hbm.inventory.container;
 import com.hbm.inventory.SlotPattern;
 import com.hbm.inventory.SlotUpgrade;
 import com.hbm.tileentity.network.TileEntityCraneGrabber;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -33,6 +35,38 @@ public class ContainerCraneGrabber extends Container {
 
         for (int i = 0; i < 9; i++) {
             this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 161));
+        }
+    }
+
+    @Override
+    public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
+        if (slotId < 0 || slotId >= 9) {
+            return super.slotClick(slotId, dragType, clickTypeIn, player);
+        }
+
+        Slot slot = this.inventorySlots.get(slotId);
+
+        ItemStack ret = ItemStack.EMPTY;
+        ItemStack held = player.inventory.getItemStack();
+
+        if (slot.getHasStack()) {
+            ret = slot.getStack().copy();
+        }
+
+        if (clickTypeIn == ClickType.PICKUP && dragType == 1 && slot.getHasStack()) {
+            grabber.nextMode(slotId);
+            return ret;
+        } else {
+            slot.putStack(held.isEmpty() ? ItemStack.EMPTY : held.copy());
+
+            if (slot.getHasStack()) {
+                slot.getStack().setCount(1);
+            }
+
+            slot.onSlotChanged();
+            grabber.initPattern(slot.getStack(), slotId);
+
+            return ret;
         }
     }
 

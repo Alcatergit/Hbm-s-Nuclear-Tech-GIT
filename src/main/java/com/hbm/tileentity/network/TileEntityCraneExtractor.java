@@ -229,6 +229,10 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
         this.matcher.nextMode(world, inventory.getStackInSlot(i), i);
     }
 
+    public void initPattern(ItemStack stack, int index) {
+        this.matcher.initPatternSmart(world, stack, index);
+    }
+
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
         return i > 8 && i < 18;

@@ -176,6 +176,14 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
         return false;
     }
 
+    public void nextMode(int i) {
+        this.matcher.nextMode(world, inventory.getStackInSlot(i), i);
+    }
+
+    public void initPattern(ItemStack stack, int index) {
+        this.matcher.initPatternSmart(world, stack, index);
+    }
+
     @Override
     public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerCraneGrabber(player.inventory, this);
