@@ -31,7 +31,7 @@ public class RenderMissileRain extends Render<EntityMissileRain> {
 		y = renderPos[1];
 		z = renderPos[2];
 		GL11.glTranslated(x, y, z);
-        GL11.glScalef(1F, RenderLaunchPadTier1.h_3, 1F);
+        GL11.glScalef(RenderLaunchPadTier1.h_3, RenderLaunchPadTier1.h_3, RenderLaunchPadTier1.h_3);
         GL11.glRotatef(missile.prevRotationYaw + (missile.rotationYaw - missile.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(missile.prevRotationPitch + (missile.rotationPitch - missile.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
 

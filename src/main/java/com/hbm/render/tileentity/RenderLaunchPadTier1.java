@@ -12,7 +12,7 @@ public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLa
 
 	public static final float h_1 = 1F;
 	public static final float h_2 = 1F;
-	public static final float h_3 = 1F;
+	public static final float h_3 = 0.8F;
 
 	public static final float w_2 = 1F;
 	
@@ -80,22 +80,22 @@ public class RenderLaunchPadTier1 extends TileEntitySpecialRenderer<TileEntityLa
 				ResourceManager.missileStrong.renderAll();
 			}
 			if (state == 10) {
-				GL11.glScalef(1.0F, h_3, 1.0F);
+				GL11.glScalef(h_3, h_3, h_3);
 				bindTexture(ResourceManager.missileHuge_HE_tex);
 				ResourceManager.missileHuge.renderAll();
 			}
 			if (state == 11) {
-				GL11.glScalef(1.0F, h_3, 1.0F);
+				GL11.glScalef(h_3, h_3, h_3);
 				bindTexture(ResourceManager.missileHuge_IN_tex);
 				ResourceManager.missileHuge.renderAll();
 			}
 			if (state == 12) {
-				GL11.glScalef(1.0F, h_3, 1.0F);
+				GL11.glScalef(h_3, h_3, h_3);
 				bindTexture(ResourceManager.missileHuge_CL_tex);
 				ResourceManager.missileHuge.renderAll();
 			}
 			if (state == 13) {
-				GL11.glScalef(1.0F, h_3, 1.0F);
+				GL11.glScalef(h_3, h_3, h_3);
 				bindTexture(ResourceManager.missileHuge_BU_tex);
 				ResourceManager.missileHuge.renderAll();
 			}

@@ -837,7 +837,7 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.mechanism_launcher_1, 1),
 				new ComparableStack(ModBlocks.barrel_steel, 1)
 			}, 200);
-		makeRecipe(new ComparableStack(ModItems.gun_egon, 1), new AStack[] {new ComparableStack(ModItems.mechanism_special, 4), new OreDictStack(STEEL.plate(), 16), new OreDictStack(PB.plate(), 24), new ComparableStack(ModItems.coil_advanced_torus, 32), new ComparableStack(ModItems.circuit_targeting_tier6, 4), new ComparableStack(ModItems.plate_polymer, 8), new ComparableStack(ModBlocks.machine_desh_battery, 2), new ComparableStack(ModBlocks.machine_waste_drum, 1), new ComparableStack(ModItems.wire_copper, 8)}, 256);
+		makeRecipe(new ComparableStack(ModItems.gun_egon, 1), new AStack[] {new ComparableStack(ModItems.mechanism_special, 4), new OreDictStack(STEEL.plate(), 16), new OreDictStack(PB.plate(), 24), new ComparableStack(ModItems.coil_advanced_torus, 32), new ComparableStack(ModItems.circuit_targeting_tier6, 4), new ComparableStack(ModItems.plate_polymer, 8), new ComparableStack(ModBlocks.machine_schrabidium_battery, 2), new ComparableStack(ModBlocks.machine_waste_drum, 1), new ComparableStack(ModItems.wire_copper, 8)}, 256);
 		makeRecipe(new ComparableStack(ModBlocks.silo_hatch, 1), new AStack[]{new ComparableStack(ModItems.motor, 8), new OreDictStack(STEEL.ingot(), 32), new ComparableStack(ModItems.hull_big_steel, 8), new ComparableStack(ModItems.plate_polymer, 4), new ComparableStack(ModItems.pipes_steel, 2), new OreDictStack(REDSTONE.dust(), 4), }, 300);
 		
 		makeRecipe(new ComparableStack(ModItems.sat_gerald, 1), new AStack[] {

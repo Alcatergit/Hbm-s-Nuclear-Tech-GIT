@@ -117,6 +117,8 @@ public class DiFurnaceRecipes {
 		addFuel(new ComparableStack(Items.BLAZE_ROD), 1000);
 		addFuel(new ComparableStack(Items.BLAZE_POWDER), 300);
 		addFuel(new ComparableStack(Items.COAL, 1, 1), 200);
+		addFuel(new OreDictStack(INFERNAL.gem()), 300);
+		addFuel(new OreDictStack(INFERNAL.block()), 3000);
 		addFuel(new ComparableStack(ModItems.solid_fuel), 400);
 		addFuel(new ComparableStack(ModItems.solid_fuel_presto), 800);
 		addFuel(new ComparableStack(ModItems.solid_fuel_presto_triplet), 2400);

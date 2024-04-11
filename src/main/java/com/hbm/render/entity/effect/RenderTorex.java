@@ -81,7 +81,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		double dist = player.getDistance(cloud);
 		double shockwaveDistance = dist - cloud.ticksExisted * 1.5;
 		if(shockwaveDistance > 10 || shockwaveDistance < 0) return;
-		
+		amplitude = Math.min(amplitude, 125);
 		int duration = ((int)(amplitude * Math.min(1, (amplitude * amplitude)/(dist * dist))));
 		int swingTimer = duration<<1;
 		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude * 10F, 0.8F + cloud.world.rand.nextFloat() * 0.2F);

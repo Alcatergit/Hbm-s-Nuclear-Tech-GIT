@@ -1,6 +1,7 @@
 package com.hbm.inventory.gui;
 
 import org.lwjgl.opengl.GL11;
+import java.math.BigDecimal;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -44,7 +45,7 @@ public class GUICoreReceiver extends GuiInfoContainer {
 		String sparks = Library.getShortNumber(receiver.joules) + "SPK";
 		this.fontRenderer.drawString(sparks, 161-this.fontRenderer.getStringWidth(sparks), 22, 0x4EB3DB);
 		this.fontRenderer.drawString("Output:", 54, 58, 4210752);
-		String power = Library.getShortNumber(receiver.joules * 100000L) + "HE/s";
+		String power = Library.getShortNumber(new BigDecimal(receiver.joules).multiply(new BigDecimal(100000))) + "HE/s";
 		this.fontRenderer.drawString(power, 161-this.fontRenderer.getStringWidth(power), 58, 0x4EB3DB);
 		
 		String inventory = I18n.format("container.inventory");

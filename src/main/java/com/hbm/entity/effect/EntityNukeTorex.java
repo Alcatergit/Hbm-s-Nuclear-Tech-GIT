@@ -150,7 +150,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				lifetime *= s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
-					cloud.setScale(1F + this.ticksExisted * 0.0025F * (float) (cs * s), 1F + this.ticksExisted * 0.0025F * 5F * (float) (cs * s));
+					cloud.setScale((float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * s), (float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * 6 * cs * s));
 					cloudlets.add(cloud);
 				}
 			}

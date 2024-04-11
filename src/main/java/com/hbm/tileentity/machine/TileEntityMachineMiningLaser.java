@@ -704,13 +704,14 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
 		tank.readFromNBT(compound.getCompoundTag("tank"));
 		isOn = compound.getBoolean("isOn");
 		power = compound.getLong("power");
 		targetX = compound.getInteger("x");
-		targetY = compound.getInteger("y");
 		targetZ = compound.getInteger("z");
-		super.readFromNBT(compound);
+		targetY = pos.getY() - 2;
+		beam = false;
 	}
 	
 	@Override
@@ -719,7 +720,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		compound.setBoolean("isOn", isOn);
 		compound.setLong("power", power);
 		compound.setInteger("x", targetX);
-		compound.setInteger("y", targetY);
 		compound.setInteger("z", targetZ);
 		return super.writeToNBT(compound);
 	}

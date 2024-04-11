@@ -424,7 +424,8 @@ public class CompatibilityConfig {
 			"thaumcraft:mindspider",
 			"thaumcraft:spellbat",
 			"thaumcraft:turretadvanced",
-			"thaumcraft:turretbasic"
+			"thaumcraft:turretbasic",
+			"tombstone:ghostly_shape"
 		});
 	
 		mobGear = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.05_mobGear", "If true then mobs will be given gear (armor/weapons/gasmasks) from this mod when spawned", true);

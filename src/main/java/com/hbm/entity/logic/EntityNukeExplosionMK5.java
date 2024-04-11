@@ -86,7 +86,8 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 		//load own chunk
 		loadMainChunk();
 		
-		float rads = 0;
+		float rads, fire, blast;
+		rads = fire = blast = 0;
 		
 		//radiate until there is fallout rain
 		if(fallout && falloutRain == null) {
@@ -95,16 +96,19 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
 		}
 		
-		if(ticksExisted < 2400 && ticksExisted % 10 == 0)
-			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, Math.min(1000, radius * 2), rads, 0F, 10F * (float)Math.pow(radius, 3) * (float)Math.pow(0.5, this.ticksExisted*0.0125), (float)Math.pow(radius, 3) * 0.1F, this.ticksExisted * 1.5F);
-
+		if(ticksExisted < 2400 && ticksExisted % 10 == 0){
+			fire = (fallout ? 10F: 2F) * (float)Math.pow(radius, 3) * (float)Math.pow(0.5, this.ticksExisted*0.025);
+			blast = (float)Math.pow(radius, 3) * 0.2F;
+			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, Math.min(1000, radius * 2), rads, 0F, fire, blast, this.ticksExisted * 1.5F);
+		}
 		//make some noise
 		if(!mute) {
-			if(this.radius > 15){
+			if(this.radius > 30){
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, this.radius * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
-			}else{
 				if(rand.nextInt(5) == 0)
 					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, this.radius * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
+			}else{
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, Math.max(2F, this.radius * 0.1F), 0.8F + this.rand.nextFloat() * 0.2F);
 			}
 		}
 

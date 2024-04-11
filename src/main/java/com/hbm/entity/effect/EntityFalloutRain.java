@@ -359,16 +359,16 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			}
 
 			if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				if(world.isAirBlock(pos.add(0, 1, 0))) world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(), ModBlocks.toxic_block.getDefaultState());
 				break;
 			}
 
-			if(y == contactHeight-1 && bblock != ModBlocks.fallout && Math.abs(rand.nextGaussian() * (dist * dist) / (s0 * s0)) < 0.05 && rand.nextDouble() < 0.05 && ModBlocks.fallout.canPlaceBlockAt(world, pos.add(0, 1, 0))) {
-				placeBlockFromDist(dist, ModBlocks.fallout, pos.add(0, 1, 0));
+			if(y == contactHeight-1 && bblock != ModBlocks.fallout && Math.abs(rand.nextGaussian() * (dist * dist) / (s0 * s0)) < 0.05 && rand.nextDouble() < 0.05 && ModBlocks.fallout.canPlaceBlockAt(world, pos.up())) {
+				placeBlockFromDist(dist, ModBlocks.fallout, pos.up());
 			}
 
-			if(spawnFire && dist < s2 && bblock.isFlammable(world, pos, EnumFacing.UP) && world.isAirBlock(pos.add(0, 1, 0))) {
-				world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
+			if(spawnFire && dist < s2 && bblock.isFlammable(world, pos, EnumFacing.UP) && world.isAirBlock(pos.up())) {
+				world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
 			}
 
 			if(bblock == ModBlocks.waste_leaves){
@@ -455,14 +455,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				continue;
 
 			} else if(bblock instanceof BlockBush) {
-				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockDirt || world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.FARMLAND){
-					placeBlockFromDist(dist, ModBlocks.waste_dirt, pos.add(0, -1, 0));
+				if(world.getBlockState(pos.down()).getBlock() == Blocks.FARMLAND){
+					placeBlockFromDist(dist, ModBlocks.waste_dirt, pos.down());
 					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
-				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass){
-					placeBlockFromDist(dist, ModBlocks.waste_earth, pos.add(0, -1, 0));
+				} else if(world.getBlockState(pos.down()).getBlock() instanceof BlockGrass){
+					placeBlockFromDist(dist, ModBlocks.waste_earth, pos.down());
 					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
-				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.MYCELIUM){
-					placeBlockFromDist(dist, ModBlocks.waste_mycelium, pos.add(0, -1, 0));
+				} else if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM){
+					placeBlockFromDist(dist, ModBlocks.waste_mycelium, pos.down());
 					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				}
 				continue;

@@ -71,37 +71,6 @@ public class ContainerCraneGrabber extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-        ItemStack var3 = ItemStack.EMPTY;
-        Slot var4 = (Slot) this.inventorySlots.get(slot);
-
-        if(var4 != null && var4.getHasStack()) {
-            ItemStack var5 = var4.getStack();
-            var3 = var5.copy();
-
-            if(slot < 9) { //filters
-                return ItemStack.EMPTY;
-            }
-
-            if(slot <= this.inventorySlots.size() - 1) {
-                if(!this.mergeItemStack(var5, this.inventorySlots.size(), this.inventorySlots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-
-            if (var5.isEmpty())
-            {
-                var4.putStack(ItemStack.EMPTY);
-            }
-            else {
-                var4.onSlotChanged();
-            }
-        }
-
-        return var3;
-    }
-
-    @Override
     public boolean canInteractWith(EntityPlayer player) {
         return grabber.isUseableByPlayer(player);
     }

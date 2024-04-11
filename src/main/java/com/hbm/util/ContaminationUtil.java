@@ -628,7 +628,7 @@ public class ContaminationUtil {
 			
 			if(fire3d > 0.025) {
 				float fireDmg = fire3d;
-				fireDmg /= (float)(dmgLen * dmgLen * dmgLen * res * res);
+				fireDmg /= (float)(dmgLen * dmgLen * res * res);
 				if(fireDmg > 0.025){
 					if(fireDmg > 0.1 && e instanceof EntityPlayer) {
 						EntityPlayer p = (EntityPlayer) e;
@@ -648,7 +648,7 @@ public class ContaminationUtil {
 
 			if(len < blastRange && blast3d > 0.025) {
 				float blastDmg = blast3d;
-				blastDmg /= (float)(dmgLen * dmgLen * dmgLen);
+				blastDmg /= (float)(dmgLen * dmgLen * res);
 				if(blastDmg > 0.025){
 					if(rad3d > 0)
 						e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);

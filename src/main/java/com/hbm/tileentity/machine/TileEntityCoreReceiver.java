@@ -44,7 +44,7 @@ public class TileEntityCoreReceiver extends TileEntityMachineBase implements ITi
 	public void update() {
 		if(!world.isRemote) {
 
-			if(Long.MAX_VALUE-power < joules * 5000L)
+			if((Long.MAX_VALUE-power) / 5000L < joules)
 				power = Long.MAX_VALUE;
 			else
 				power += joules * 5000L;

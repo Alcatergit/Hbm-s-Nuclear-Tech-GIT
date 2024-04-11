@@ -1,6 +1,7 @@
 package com.hbm.modules;
 
 import com.hbm.util.ItemStackUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -24,7 +25,7 @@ public class ModulePatternMatcher {
 
         if(world.isRemote) return;
 
-        if(stack == null) {
+        if(stack == null || stack.isEmpty()) {
             modes[i] = null;
             return;
         }
@@ -60,7 +61,7 @@ public class ModulePatternMatcher {
 
         if(world.isRemote) return;
 
-        if(stack == null) {
+        if(stack == null || stack.isEmpty()) {
             modes[i] = null;
             return;
         }

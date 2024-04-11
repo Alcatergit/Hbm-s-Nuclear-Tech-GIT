@@ -37,12 +37,10 @@ public class RenderGrenade extends Render<Entity> {
 
         if(grenade instanceof EntityGrenadeMk2) {
 	        GL11.glRotatef(90, 0F, 1F, 0F);
-	        GL11.glScaled(0.125, 0.125, 0.125);
 			ResourceManager.grenade_frag.renderAll();
         }
         if(grenade instanceof EntityGrenadeASchrab) {
 	        GL11.glRotatef(90, 0F, 1F, 0F);
-	        GL11.glScaled(0.125, 0.125, 0.125);
 			ResourceManager.grenade_aschrab.renderAll();
         }
         GlStateManager.shadeModel(GL11.GL_FLAT);

@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.awt.image.BufferedImage;
 
@@ -162,32 +165,44 @@ public class Library {
 	}
 
 	public static String getShortNumber(long l) {
-		boolean negative = l < 0;
-		if(negative){
-			l = l * -1;
-		}
-		String result = "";
+		return getShortNumber(new BigDecimal(l));
+	}
 
-		if(l >= Math.pow(10, 18)) {
-			double res = l / Math.pow(10, 18);
-			result = numberformat.format(roundFloat(res, 2)) + "E";
-		} else if(l >= Math.pow(10, 15)) {
-			double res = l / Math.pow(10, 15);
-			result = numberformat.format(roundFloat(res, 2)) + "P";
-		} else if(l >= Math.pow(10, 12)) {
-			double res = l / Math.pow(10, 12);
-			result = numberformat.format(roundFloat(res, 2)) + "T";
-		} else if(l >= Math.pow(10, 9)) {
-			double res = l / Math.pow(10, 9);
-			result = numberformat.format(roundFloat(res, 2)) + "G";
-		} else if(l >= Math.pow(10, 6)) {
-			double res = l / Math.pow(10, 6);
-			result = numberformat.format(roundFloat(res, 2)) + "M";
-		}else if(l >= Math.pow(10, 3)) {
-			double res = l / Math.pow(10, 3);
-			result = numberformat.format(roundFloat(res, 2)) + "k";
-		} else{
-			result = Long.toString(l);
+	public static Map<Integer, String> numbersMap = null;
+	
+
+	public static void initNumbers(){
+		numbersMap = new TreeMap<>();
+		numbersMap.put(3, "k");
+		numbersMap.put(6, "M");
+		numbersMap.put(9, "G");
+		numbersMap.put(12, "T");
+		numbersMap.put(15, "P");
+		numbersMap.put(18, "E");
+		numbersMap.put(21, "Z");
+		numbersMap.put(24, "Y");
+		numbersMap.put(27, "R");
+		numbersMap.put(30, "Q");
+	}
+	
+	public static String getShortNumber(BigDecimal l) {
+		if(numbersMap == null) initNumbers();
+
+		boolean negative = l.signum() < 0;
+		if(negative){
+			l = l.negate();
+		}
+
+		String result = l.toPlainString();
+		BigDecimal c = null;
+		for(Map.Entry<Integer, String> num : numbersMap.entrySet()){
+			c = new BigDecimal("1E"+num.getKey());
+			if(l.compareTo(c) > 0){
+				double res = l.divide(c).doubleValue();
+				result = numberformat.format(roundFloat(res, 2)) + num.getValue();
+			} else {
+				break;
+			}
 		}
 
 		if (negative){

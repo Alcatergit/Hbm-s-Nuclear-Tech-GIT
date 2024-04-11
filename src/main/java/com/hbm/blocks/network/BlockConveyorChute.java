@@ -34,9 +34,9 @@ public class BlockConveyorChute extends BlockConveyor {
         Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
         if (belowBlock instanceof IConveyorBelt || belowBlock instanceof IEnterableBlock) {
-            entity.motionX *= 5.0;
-            entity.motionY *= 5.0;
-            entity.motionZ *= 5.0;
+            entity.motionX *= 4.0;
+            entity.motionY *= 4.0;
+            entity.motionZ *= 4.0;
         } else if (entity.posY > pos.getY() + 0.25) {
             entity.motionX *= 3.0;
             entity.motionY *= 3.0;
@@ -50,7 +50,7 @@ public class BlockConveyorChute extends BlockConveyor {
         Block belowBlock = world.getBlockState(pos.down()).getBlock();
 
         if (belowBlock instanceof IConveyorBelt || belowBlock instanceof IEnterableBlock) {
-            speed *= 5.0;
+            speed *= 4.0;
         } else if (itemPos.y > pos.getY() + 0.25) {
             speed *= 3.0;
         }
@@ -71,7 +71,7 @@ public class BlockConveyorChute extends BlockConveyor {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, getUpdatedType(worldIn, pos)));
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(TYPE, getUpdatedType(worldIn, pos, placer.getHorizontalFacing().getOpposite())));
     }
 
     @Override
@@ -80,9 +80,13 @@ public class BlockConveyorChute extends BlockConveyor {
     }
 
     public int getUpdatedType(World world, BlockPos pos){
+        return getUpdatedType(world, pos, world.getBlockState(pos).getValue(FACING));
+    }
+
+    public int getUpdatedType(World world, BlockPos pos, EnumFacing side){
         boolean hasChuteBelow = world.getBlockState(pos.down()).getBlock() instanceof BlockConveyorChute;
         boolean hasInputBelt = false;
-        Block inputBlock = world.getBlockState(pos.offset(world.getBlockState(pos).getValue(FACING), 1)).getBlock();
+        Block inputBlock = world.getBlockState(pos.offset(side, 1)).getBlock();
         if (inputBlock instanceof IConveyorBelt || inputBlock instanceof IEnterableBlock) {
             hasInputBelt = true;
         }

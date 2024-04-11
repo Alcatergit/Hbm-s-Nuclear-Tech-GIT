@@ -396,6 +396,15 @@ public class ItemStarterKit extends Item {
 			
 			giveHaz(world, player, 1);
 		}
+
+		if(this == ModItems.balefire_kit)
+		{
+			player.inventory.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(ModBlocks.nuke_fstbmb), 1));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.egg_balefire, 1));
+			player.inventory.addItemStackToInventory(ItemBattery.getFullBattery(ModItems.battery_spark));
+			
+			giveHaz(world, player, 2);
+		}
 		
 		if(this == ModItems.prototype_kit)
 		{
@@ -471,6 +480,7 @@ public class ItemStarterKit extends Item {
     			this == ModItems.prototype_kit ||
     			this == ModItems.fleija_kit ||
     			this == ModItems.solinium_kit ||
+    			this == ModItems.balefire_kit ||
     			this == ModItems.grenade_kit ||
     			this == ModItems.missile_kit ||
     			this == ModItems.t45_kit ||
@@ -487,6 +497,7 @@ public class ItemStarterKit extends Item {
     			this == ModItems.prototype_kit ||
     			this == ModItems.fleija_kit ||
     			this == ModItems.solinium_kit ||
+    			this == ModItems.balefire_kit ||
     			this == ModItems.hazmat_kit || 
     			this == ModItems.hazmat_red_kit || 
     			this == ModItems.hazmat_grey_kit) {

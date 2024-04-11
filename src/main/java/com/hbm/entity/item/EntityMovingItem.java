@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -103,4 +104,10 @@ public class EntityMovingItem extends EntityMovingConveyorObject implements ICon
 		return true;
 	}
 
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target){
+		if(target.entityHit != null && target.entityHit instanceof EntityMovingItem)
+			return ((EntityMovingItem)target.entityHit).getItemStack();
+		return null;
+	}
 }

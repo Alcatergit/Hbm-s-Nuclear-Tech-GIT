@@ -230,7 +230,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				return;
 
 			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				if(world.isAirBlock(pos.add(0, 1, 0))) world.setBlockState(pos.add(0, 1, 0), ModBlocks.toxic_block.getDefaultState());
+				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(), ModBlocks.toxic_block.getDefaultState());
 				return;
 			
 			} else if(bblock instanceof BlockLeaves) {
@@ -241,13 +241,17 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				}
 				continue;
 
-			} else if(bblock instanceof BlockBush){
-				if(world.getBlockState(pos.add(0, -1, 0)).getBlock() instanceof BlockGrass) {
-					placeBlockFromDist(l, ModBlocks.waste_earth, pos.add(0, -1, 0));
-				} else if(world.getBlockState(pos.add(0, -1, 0)).getBlock() == Blocks.FARMLAND) {
-					placeBlockFromDist(l, ModBlocks.waste_dirt, pos.add(0, -1, 0));
+			} else if(bblock instanceof BlockBush) {
+				if(world.getBlockState(pos.down()).getBlock() == Blocks.FARMLAND){
+					placeBlockFromDist(l, ModBlocks.waste_dirt, pos.down());
+					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
+				} else if(world.getBlockState(pos.down()).getBlock() instanceof BlockGrass){
+					placeBlockFromDist(l, ModBlocks.waste_earth, pos.down());
+					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
+				} else if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM){
+					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos.down());
+					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				}
-				placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
 				continue;
 
 			} else if(bblock instanceof BlockGrass) {
