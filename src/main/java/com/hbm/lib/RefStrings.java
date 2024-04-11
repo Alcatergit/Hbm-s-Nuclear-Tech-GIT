@@ -3,8 +3,8 @@ package com.hbm.lib;
 public class RefStrings {
 	public static final String MODID = "hbm";
 	public static final String NAME = "Hbm's Nuclear Tech - Extended Edition";
-	public static final String VERSION = "NTM-Extended-1.12.2-2.0.1";
-	public static final String CHANGELOG = "§aAdded Emissive textures$§aAdded contaminated snow and ice$§aAdded chemplant CT support$§aAdded OC support to radsensor/battery$§bChanged Nuke calculations to be faster$§bChanged Fallout to only spawn from nukes$§cRemoved lanthanium from fracturing tower recipe$§eFixed Osmiridium balance$§eFixed translation issues$§eFixed missing textures$§eFixed gas masks$§eFixed server crash$§eFixed IO for RBMK$§eFixed armor on mobs$§eFixed RF crash$§eFixed spinning lights";
+	public static final String VERSION = "NTM-Extended-1.12.2-2.0.2";
+	public static final String CHANGELOG = "§aAdded more Conveyor stuff$§aAdded 1.7 Gerald Crater$§aAdded RBMK Fuel Uncrafting JEI Tab$§aAdded onArmor Jetpack fueling$§aAdded rare earth ore chunk$§dOptimized Nuke TPS/Speed/FPS$§bChanged Desh and Saturnite battery balance$§bChanged DFC to explode after overheating 60s even with jamming$§eFixed Meteor Dungeons$§eFixed HE-RF Converters$§eFixed MKU and 40 more bugs$§cRemoved chemplant oil processing by default";
 	//HBM's Beta Naming Convention:
 	//V T (X)
 	//V -> next release version
