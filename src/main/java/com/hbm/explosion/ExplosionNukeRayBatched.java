@@ -3,11 +3,10 @@ package com.hbm.explosion;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.List;
-import java.util.Iterator;
-import java.util.Objects;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.render.amlfrom1710.Vec3;
 
@@ -17,12 +16,13 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 public class ExplosionNukeRayBatched {
 
-	public HashMap<ChunkPos, HashSet<IntTriplet>> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
+	public HashMap<ChunkPos, boolean[]> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
 	public List<ChunkPos> orderedChunks = new ArrayList();
 	private CoordComparator comparator = new CoordComparator();
 	public boolean isContained = true;
@@ -86,14 +86,14 @@ public class ExplosionNukeRayBatched {
 	}
 
 	public void addPos(int x, int y, int z){
-		HashSet<IntTriplet> triplets = perChunk.get(new ChunkPos(x >> 4, z >> 4));
+		chunk = new ChunkPos(x >> 4, z >> 4);
+		boolean[] hitPositions = perChunk.get(chunk);
 				
-		if(triplets == null) {
-			triplets = new HashSet();
-			perChunk.put(new ChunkPos(x >> 4, z >> 4), triplets); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
+		if(hitPositions == null) {
+			hitPositions = new boolean[65536];
+			perChunk.put(chunk, hitPositions); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
 		}
-				
-		triplets.add(new IntTriplet(x, y, z));
+		hitPositions[((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart())] = true;
 	}
 
 	public void collectTip(int time) {
@@ -141,7 +141,7 @@ public class ExplosionNukeRayBatched {
 
 				rayStrength -= Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1;
 
-				//save block positions in to-destroy-hashset until rayStrength is 0 
+				//save block positions in to-destroy-boolean[] until rayStrength is 0 
 				if(rayStrength > 0){
 					if(b != Blocks.AIR) {
 						//all-air chunks don't need to be buffered at all
@@ -163,7 +163,6 @@ public class ExplosionNukeRayBatched {
 				return;
 			}
 		} 
-		
 		orderedChunks.addAll(perChunk.keySet());
 		orderedChunks.sort(comparator);
 		
@@ -203,75 +202,130 @@ public class ExplosionNukeRayBatched {
 		}
 	}
 
-	HashSet<IntTriplet> positions = new HashSet();
+	public boolean getHasHits(boolean[] hitArray, int start){
+		for(int i = start; i < 65536; i++){
+			if(hitArray[i]){
+				index = i;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	boolean[] hitArray;
 	ChunkPos chunk;
+	boolean needsNewHitArray = true;
+	int index = 0;
 
 	public void processChunkBlocks(long start, int time){
 		if(!CompatibilityConfig.isWarDim(world)){
 			this.perChunk.clear();
 		}
 		if(this.perChunk.isEmpty()) return;
-		int i = 0;
-
-		if(positions.size() == 0)
+		if(needsNewHitArray){
+			index = 0;
 			chunk = orderedChunks.get(0);
-			positions = perChunk.get(chunk);
+			hitArray = perChunk.get(chunk);
+		}
 		
-		List<IntTriplet> done = new ArrayList<IntTriplet>();
+		int chunkX = chunk.getXStart();
+		int chunkZ = chunk.getZStart();
+		
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(IntTriplet coord : positions) {
-			pos.setPos(coord.xCoord, coord.yCoord, coord.zCoord);
-			world.setBlockToAir(pos);
-			done.add(coord);
-			i++;
-			if(i % 256 == 0 && System.currentTimeMillis()+1 > start + time){
-				// System.out.println("NTM B "+Math.round(1000D * 100D*i/(double)positions.size())/1000D+"% "+i+"/"+positions.size()+" "+(System.currentTimeMillis()-start)+"ms");
-				break;
+		for(; index < 65536; index++) {
+			if(hitArray[index]){
+				pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
+				world.setBlockToAir(pos);
+
+				if(index % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+					break;
+				}
 			}
 		}
-		positions.removeAll(done);
 
-		if(positions.size() == 0){
+		if(index >= 65536 || !getHasHits(hitArray, index)){
 			perChunk.remove(chunk);
 			orderedChunks.remove(0);
+			needsNewHitArray = true;
+		} else {
+			needsNewHitArray = false;
 		}
 	}
-	
-	public class IntTriplet {
-		public final int xCoord;
-		public final int yCoord;
-		public final int zCoord;
-		private final int hashCode;
 
-		
-		public IntTriplet(int x, int y, int z) {
-			this.xCoord = x;
-			this.yCoord = y;
-			this.zCoord = z;
-			this.hashCode = Objects.hash(x, y, z);
-		}
 
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (!(obj instanceof IntTriplet))
-				return false;
-			IntTriplet other = (IntTriplet) obj;
-			if (xCoord != other.xCoord)
-				return false;
-			if (yCoord != other.yCoord)
-				return false;
-			if (zCoord != other.zCoord)
-				return false;
-			return true;
-		}
-
-		@Override
-	    public int hashCode() {
-	        return this.hashCode;
+	public static byte[] convertBoolArrayToByteArray(boolean[] boolArr) {
+	    byte[] byteArr = new byte[boolArr.length>>3];
+	    for(int i = 0; i < byteArr.length; i++){
+	    	byte b = 0;
+		    for(int k = 0; k < 8; k++) {
+		        if(boolArr[k + (i<<3)])
+		            b |= 1 << (7 - k);
+		    }
+	        byteArr[i] = b;
 	    }
+	    return byteArr;
+	}
+
+	public static boolean[] convertByteArrayToBoolArray(byte[] byteArr) {
+	    boolean[] boolArr = new boolean[byteArr.length<<3];
+	    for(int i = 0; i < byteArr.length; i++){
+	        for(int b = 0; b < 8; b++){
+	    		boolArr[b + (i<<3)] = (byteArr[i] & (byte)(128 / Math.pow(2, b))) != 0;
+	        }
+	    }
+	    return boolArr;
+	}
+	
+
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		radius = nbt.getInteger("radius");
+		strength = nbt.getInteger("strength");
+		posX = nbt.getInteger("posX");
+		posY = nbt.getInteger("posY");
+		posZ = nbt.getInteger("posZ");
+		gspNumMax = (int)(2.5 * Math.PI * Math.pow(strength, 2));
+		
+		if(nbt.hasKey("gspNum")){
+			gspNum = nbt.getInteger("gspNum");
+			isAusf3Complete = nbt.getBoolean("f3");
+			isContained = nbt.getBoolean("isContained");
+
+			int i = 0;
+			while(nbt.hasKey("chunks"+i)){
+				NBTTagCompound c = (NBTTagCompound)nbt.getTag("chunks"+i);
+				boolean[] hits = convertByteArrayToBoolArray(c.getByteArray("cB"));
+				if(perChunk.containsKey(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")))) System.out.println("NTM DUPLICATE WTF");
+				perChunk.put(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")), hits);
+				i++;
+			}
+			if(isAusf3Complete){
+				orderedChunks.addAll(perChunk.keySet());
+				orderedChunks.sort(comparator);
+			}
+		}
+	}
+
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("radius", radius);
+		nbt.setInteger("strength", strength);
+		nbt.setInteger("posX", posX);
+		nbt.setInteger("posY", posY);
+		nbt.setInteger("posZ", posZ);
+		
+		if(BombConfig.enableNukeNBTSaving){
+			nbt.setInteger("gspNum", gspNum);
+			nbt.setBoolean("f3", isAusf3Complete);
+			nbt.setBoolean("isContained", isContained);
+		
+			int i = 0;
+			for(Entry<ChunkPos, boolean[]> e : perChunk.entrySet()){
+				NBTTagCompound c = new NBTTagCompound();
+				c.setInteger("cX", e.getKey().x);
+				c.setInteger("cZ", e.getKey().z);
+				c.setByteArray("cB", convertBoolArrayToByteArray(e.getValue()));
+				nbt.setTag("chunks"+i, c.copy());
+				i++;
+			}
+		}
 	}
 }

@@ -44,7 +44,6 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 	//Strength of the blast
 	public int strength;
 	//How many rays are calculated per tick
-	public int speed;
 	public int radius;
 	
 	public boolean mute = false;
@@ -69,7 +68,6 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 	public EntityNukeExplosionMK5(World world, int strength, int speed, int radius) {
 		super(world);
 		this.strength = strength;
-		this.speed = speed;
 		this.radius = radius;
 	}
 
@@ -232,13 +230,32 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		radius = nbt.getInteger("radius");
+		strength = nbt.getInteger("strength");
+		falloutAdd = nbt.getInteger("falloutAdd");
+		fallout = nbt.getBoolean("fallout");
+		floodPlease = nbt.getBoolean("floodPlease");
+		spawnFire = nbt.getBoolean("spawnFire");
+		mute = nbt.getBoolean("mute");
+		if(explosion == null) {
+			explosion = new ExplosionNukeRayBatched(world, (int) this.posX, (int) this.posY, (int) this.posZ, this.strength, this.radius);
+		}
+		explosion.readEntityFromNBT(nbt);
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("radius", radius);
+		nbt.setInteger("strength", strength);
+		nbt.setInteger("falloutAdd", falloutAdd);
+		nbt.setBoolean("fallout", fallout);
+		nbt.setBoolean("floodPlease", floodPlease);
+		nbt.setBoolean("spawnFire", spawnFire);
+		nbt.setBoolean("mute", mute);
+		if(explosion != null) {
+			explosion.writeEntityToNBT(nbt);
+		}
 	}
 
 	public static EntityNukeExplosionMK5 statFac(World world, int r, double x, double y, double z) {
@@ -251,7 +268,6 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 		EntityNukeExplosionMK5 mk5 = new EntityNukeExplosionMK5(world);
 
 		mk5.strength = (int)(2*r);
-		mk5.speed = (int)Math.ceil(100000 / mk5.strength);
 		mk5.radius = r;
 
 		mk5.setPosition(x, y, z);

@@ -197,7 +197,7 @@ public class Library {
 		BigDecimal c = null;
 		for(Map.Entry<Integer, String> num : numbersMap.entrySet()){
 			c = new BigDecimal("1E"+num.getKey());
-			if(l.compareTo(c) > 0){
+			if(l.compareTo(c) >= 0){
 				double res = l.divide(c).doubleValue();
 				result = numberformat.format(roundFloat(res, 2)) + num.getValue();
 			} else {

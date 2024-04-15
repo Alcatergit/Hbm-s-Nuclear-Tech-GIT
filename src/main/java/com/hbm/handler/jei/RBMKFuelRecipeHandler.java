@@ -46,9 +46,9 @@ public class RBMKFuelRecipeHandler implements IRecipeCategory<RBMKFuelRecipe> {
 	public void setRecipe(IRecipeLayout recipeLayout, RBMKFuelRecipe recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(0, true, 19, 5);
+		guiItemStacks.init(0, true, 18, 4);
 		
-		guiItemStacks.init(1, false, 95, 5);
+		guiItemStacks.init(1, false, 94, 4);
 		
 		guiItemStacks.set(ingredients);
 	}

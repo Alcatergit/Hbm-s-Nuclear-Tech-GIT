@@ -40,6 +40,7 @@ public class BombConfig {
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear = false;
 	public static boolean enableNukeClouds = true;
+	public static boolean enableNukeNBTSaving = true;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKES = "03_nukes";
@@ -159,6 +160,9 @@ public class BombConfig {
 		disableNuclear = disableNuclearP.getBoolean();
 
 		enableNukeClouds = config.get(CATEGORY_NUKE, "6.07_enableMushroomClouds", true).getBoolean(true);
-		
+
+		Property enableNukeNBTSavingP = config.get(CATEGORY_NUKE, "6.08_enableNukeNBTSaving", true);
+		enableNukeNBTSavingP.setComment("If true then nukes will save the blocks they want to destroy so they can resume work rather then restart after a crash/reload. For big nukes this can take a while tho.");
+		enableNukeNBTSaving = enableNukeNBTSavingP.getBoolean();
 	}
 }
