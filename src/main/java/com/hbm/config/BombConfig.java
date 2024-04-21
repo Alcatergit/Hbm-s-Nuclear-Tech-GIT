@@ -136,7 +136,7 @@ public class BombConfig {
 		propBlastSpeed.setComment("Base speed of MK3 system (old and schrabidium) detonations (Blocks / tick)");
 		blastSpeed = propBlastSpeed.getInt();
 		// fallout range
-		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_mk5BlastTime", 30);
+		Property propFalloutRange = config.get(CATEGORY_NUKE, "6.02_mk5BlastTime", 40);
 		propFalloutRange.setComment("Maximum amount of milliseconds per tick allocated for mk5 chunk processing");
 		mk5 = propFalloutRange.getInt();
 		// fallout speed

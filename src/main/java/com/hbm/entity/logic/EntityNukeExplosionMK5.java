@@ -124,33 +124,33 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 			explosion.processChunk(BombConfig.mk5);
 		
 		} else {
-			boolean craterReady = true;
+				
 			if(fallout) {
-				//Do radial Fallout
-				if(falloutBall == null){
-					falloutBall = new EntityFalloutUnderGround(this.world);
-					falloutBall.posX = this.posX;
-					falloutBall.posY = this.posY;
-					falloutBall.posZ = this.posZ;
-					falloutBall.setScale((int) (this.radius * (BombConfig.falloutRange / 100F) + falloutAdd));
-					this.world.spawnEntity(falloutBall);
-				}
-				//Wait for falloutBall to be done
-				craterReady = falloutBall.done;
-			}
-			if(!craterReady) return;
+				EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(this.world);
+				falloutBall.posX = this.posX;
+				falloutBall.posY = this.posY;
+				falloutBall.posZ = this.posZ;
+				falloutBall.setScale((int) (this.radius * (BombConfig.falloutRange / 100F) + falloutAdd));
 
-			
-			falloutRain = new EntityFalloutRain(this.world);
-			falloutRain.doFallout = fallout && !explosion.isContained;
-			falloutRain.doFlood = floodPlease;
-			falloutRain.posX = this.posX;
-			falloutRain.posY = this.posY;
-			falloutRain.posZ = this.posZ;
-			if(spawnFire)
-				falloutRain.spawnFire = true;
-			falloutRain.setScale((int) ((this.radius * 2.5F + falloutAdd) * BombConfig.falloutRange * 0.01F), this.radius+4);
-			this.world.spawnEntity(falloutRain);
+				falloutBall.falloutRainDoFallout = fallout && !explosion.isContained;
+				falloutBall.falloutRainDoFlood = floodPlease;
+				falloutBall.falloutRainFire = spawnFire;
+				falloutBall.falloutRainRadius1 = (int) ((this.radius * 2.5F + falloutAdd) * BombConfig.falloutRange * 0.01F);
+				falloutBall.falloutRainRadius2 = this.radius+4;
+				this.world.spawnEntity(falloutBall);
+			} else {
+				EntityFalloutRain falloutRain = new EntityFalloutRain(this.world);
+				falloutRain.doFallout = false;
+				falloutRain.doFlood = floodPlease;
+				falloutRain.posX = this.posX;
+				falloutRain.posY = this.posY;
+				falloutRain.posZ = this.posZ;
+				if(spawnFire)
+					falloutRain.spawnFire = true;
+				falloutRain.setScale((int) ((this.radius * 2.5F + falloutAdd) * BombConfig.falloutRange * 0.01F), this.radius+4);
+				this.world.spawnEntity(falloutRain);
+			}
+
 			this.clearLoadedChunks();
 			unloadMainChunk();
 			this.setDead();

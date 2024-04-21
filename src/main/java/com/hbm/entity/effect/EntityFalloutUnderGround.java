@@ -5,6 +5,7 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
@@ -50,7 +51,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public class EntityFalloutUnderGround extends Entity implements IConstantRenderer, IChunkLoader {
+public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutUnderGround.class, DataSerializers.VARINT);
 	public boolean done;
 	private int maxSamples;
@@ -69,6 +70,12 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 
 	private double phi;
 
+	public int falloutRainRadius1 = 0;
+	public int falloutRainRadius2 = 0;
+	public boolean falloutRainDoFallout = false;
+	public boolean falloutRainDoFlood = false;
+	public boolean falloutRainFire = false;
+
 	public EntityFalloutUnderGround(World p_i1582_1_) {
 		super(p_i1582_1_);
 		this.setSize(4, 20);
@@ -77,22 +84,6 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 		this.phi = Math.PI * (3 - Math.sqrt(5));
 		this.done = false;
 		this.currentSample = 0;
-
-	}
-
-	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
-	}
-
-	@Override
-	public boolean isInRangeToRender3d(double x, double y, double z) {
-		return true;
-	}
-
-	@Override
-	public boolean isInRangeToRenderDist(double distance) {
-		return true;
 	}
 
 	public EntityFalloutUnderGround(World p_i1582_1_, int maxage) {
@@ -164,6 +155,7 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 		}
 	}
 
+	int age = 0;
 	@Override
 	public void onUpdate() {
 
@@ -174,31 +166,49 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 				this.setDead();
 				return;
 			}
+			age++;
+			if(age == 120){
+				System.out.println("NTM F "+currentSample+" "+Math.round(10000D * 100D*currentSample/(double)this.maxSamples)/10000D+"% "+currentSample+"/"+this.maxSamples);
+				age = 0;
+			}
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			int rayCounter = 0;
 			long start = System.currentTimeMillis();
+
+			double fy, fr, theta;
 			for(int sample = currentSample; sample < this.maxSamples; sample++){
 				this.currentSample = sample;
 				if(rayCounter % 50 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5){
 					break;
 				}
-				double fy = (2D * sample / (maxSamples - 1D)) - 1D;  // y goes from 1 to -1
-		        double fr = Math.sqrt(1D - fy * fy);  // radius at y
-		        double theta = phi * sample;  // golden angle increment
+				fy = (2D * sample / (maxSamples - 1D)) - 1D;  // y goes from 1 to -1
+		        fr = Math.sqrt(1D - fy * fy);  // radius at y
+		        theta = phi * sample;  // golden angle increment
 
 		        stompRadRay(pos, Math.cos(theta) * fr, fy, Math.sin(theta) * fr);
 		        rayCounter++;
 		    }
 
 			if(this.currentSample >= this.maxSamples-1) {
-				this.done=true;
+				if(falloutRainRadius1 > 0){
+					EntityFalloutRain falloutRain = new EntityFalloutRain(this.world);
+					falloutRain.doFallout = falloutRainDoFallout;
+					falloutRain.doFlood = falloutRainDoFlood;
+					falloutRain.posX = this.posX;
+					falloutRain.posY = this.posY;
+					falloutRain.posZ = this.posZ;
+					falloutRain.spawnFire = falloutRainFire;
+					falloutRain.setScale(falloutRainRadius1, falloutRainRadius2);
+					this.world.spawnEntity(falloutRain);
+				}
 				unloadAllChunks();
 				this.setDead();
 			}
 		}
 	}
 
-
+	IBlockState b;
+	Block bblock;
 	private void stompRadRay(MutableBlockPos pos, double directionX, double directionY, double directionZ) {
 		for(int l = 0; l < radius; l++) {
 			pos.setPos(posX+directionX*l, posY+directionY*l, posZ+directionZ*l);
@@ -208,8 +218,8 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 			if(world.isAirBlock(pos))
 				continue;
 
-			IBlockState b = world.getBlockState(pos);
-			Block bblock = b.getBlock();
+			b = world.getBlockState(pos);
+			bblock = b.getBlock();
 
 			if(bblock instanceof BlockStone || bblock == Blocks.COBBLESTONE) {
 				double ranDist = l * (1D + world.rand.nextDouble()*0.1D);
@@ -407,15 +417,25 @@ public class EntityFalloutUnderGround extends Entity implements IConstantRendere
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
-		setScale(p_70037_1_.getInteger("scale"));
-		currentSample = p_70037_1_.getInteger("currentSample");
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		setScale(nbt.getInteger("scale"));
+		currentSample = nbt.getInteger("currentSample");
+		falloutRainRadius1 = nbt.getInteger("fR1");
+		falloutRainRadius2 = nbt.getInteger("fR2");
+		falloutRainDoFallout = nbt.getBoolean("fRfallout");
+		falloutRainDoFlood = nbt.getBoolean("fRflood");
+		falloutRainFire = nbt.getBoolean("fRfire");
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-		p_70014_1_.setInteger("scale", getScale());
-		p_70014_1_.setInteger("currentSample", currentSample);
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("scale", getScale());
+		nbt.setInteger("currentSample", currentSample);
+		nbt.setInteger("fR1", falloutRainRadius1);
+		nbt.setInteger("fR2", falloutRainRadius2);
+		nbt.setBoolean("fRfallout", falloutRainDoFallout);
+		nbt.setBoolean("fRflood", falloutRainDoFlood);
+		nbt.setBoolean("fRfire", falloutRainFire);
 	}
 
 	public void setScale(int i) {

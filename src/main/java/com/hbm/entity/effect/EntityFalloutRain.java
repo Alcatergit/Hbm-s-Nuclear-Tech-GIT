@@ -8,6 +8,7 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.interfaces.IConstantRenderer;
+import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
@@ -77,6 +78,8 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	private final List<Long> chunksToProcess = new ArrayList<>();
 	private final List<Long> outerChunksToProcess = new ArrayList<>();
 	private int falloutTickNumber = 0;
+
+	public int falloutBallRadius = 0;
 
 	public EntityFalloutRain(World world) {
 		super(world);
@@ -256,9 +259,17 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			falloutTickNumber++;
 
 			if(this.isDead) {
+				if(falloutBallRadius > 0){
+					EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(this.world);
+					falloutBall.posX = this.posX;
+					falloutBall.posY = this.posY;
+					falloutBall.posZ = this.posZ;
+					falloutBall.setScale(falloutBallRadius);
+					this.world.spawnEntity(falloutBall);
+				}
 				unloadAllChunks();
 				this.done = true;
-				if(RadiationConfig.rain > 0) {
+				if(RadiationConfig.rain > 0 && doFlood) {
 					if((doFallout && getScale() > 100) || (doFlood && getScale() > 50)){
 						world.getWorldInfo().setRaining(true);
 						world.getWorldInfo().setRainTime(RadiationConfig.rain);
@@ -711,6 +722,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setScale(nbt.getInteger("scale"), nbt.getInteger("dropRadius"));
+		falloutBallRadius = nbt.getInteger("fBall");
 		if(nbt.hasKey("chunks"))
 			chunksToProcess.addAll(readChunksFromIntArray(nbt.getIntArray("chunks")));
 		if(nbt.hasKey("outerChunks"))
@@ -736,6 +748,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("scale", getScale());
+		nbt.setInteger("fBall", falloutBallRadius);
 		nbt.setInteger("dropRadius", fallingRadius);
 		nbt.setBoolean("doFallout", doFallout);
 		nbt.setBoolean("doFlood", doFlood);

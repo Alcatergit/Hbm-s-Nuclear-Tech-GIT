@@ -3,6 +3,7 @@ package com.hbm.explosion;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.BitSet;
 import java.util.Map.Entry;
 import java.util.List;
 
@@ -17,12 +18,14 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagLongArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class ExplosionNukeRayBatched {
 
-	public HashMap<ChunkPos, boolean[]> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
+	public HashMap<ChunkPos, BitSet> perChunk = new HashMap<ChunkPos, BitSet>();
 	public List<ChunkPos> orderedChunks = new ArrayList();
 	private CoordComparator comparator = new CoordComparator();
 	public boolean isContained = true;
@@ -43,6 +46,7 @@ public class ExplosionNukeRayBatched {
 	private static final int minY = 0;
 
 	public boolean isAusf3Complete = false;
+	public int rayCheckInterval = 100;
 
 	public ExplosionNukeRayBatched(World world, int x, int y, int z, int strength, int radius) {
 		this.world = world;
@@ -59,6 +63,7 @@ public class ExplosionNukeRayBatched {
 		// The beginning of the generalized spiral points
 		this.gspX = Math.PI;
 		this.gspY = 0.0;
+		this.rayCheckInterval = 10000/radius;
 	}
 
 	private void generateGspUp(){
@@ -78,24 +83,26 @@ public class ExplosionNukeRayBatched {
 	}
 
 	// Get Cartesian coordinates for spherical coordinates
+	// 90 X-Axis rotation for more efficient chunk scanning
 	private Vec3 getSpherical2cartesian(){
 		double dx = Math.sin(this.gspX) * Math.cos(this.gspY);
-		double dz = Math.sin(this.gspX) * Math.sin(this.gspY);
-		double dy = Math.cos(this.gspX);
+		double dy = Math.sin(this.gspX) * Math.sin(this.gspY);
+		double dz = Math.cos(this.gspX);
 		return Vec3.createVectorHelper(dx, dy, dz);
 	}
 
 	public void addPos(int x, int y, int z){
 		chunk = new ChunkPos(x >> 4, z >> 4);
-		boolean[] hitPositions = perChunk.get(chunk);
+		BitSet hitPositions = perChunk.get(chunk);
 				
 		if(hitPositions == null) {
-			hitPositions = new boolean[65536];
+			hitPositions = new BitSet(65536);
 			perChunk.put(chunk, hitPositions); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
 		}
-		hitPositions[((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart())] = true;
+		hitPositions.set(((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart()));
 	}
 
+	int age = 0;
 	public void collectTip(int time) {
 		if(!CompatibilityConfig.isWarDim(world)){
 			isAusf3Complete = true;
@@ -105,14 +112,17 @@ public class ExplosionNukeRayBatched {
 		long raysProcessed = 0;
 		long start = System.currentTimeMillis();
 
-
 		IBlockState blockState;
 		Block b;
 		int iX, iY, iZ, radius;
 		float rayStrength;
 		Vec3 vec;
-
-		while (this.gspNumMax >= this.gspNum){
+		age++;
+		if(age == 120){
+			System.out.println("NTM C "+raysProcessed+" "+Math.round(10000D * 100D*gspNum/(double)gspNumMax)/10000D+"% "+gspNum+"/"+gspNumMax);
+			age = 0;
+		}
+		while(this.gspNumMax >= this.gspNum){
 			// Get Cartesian coordinates for spherical coordinates
 			vec = this.getSpherical2cartesian();
 
@@ -158,8 +168,7 @@ public class ExplosionNukeRayBatched {
 			// Raise one generalized spiral points
 			this.generateGspUp();
 			raysProcessed++;
-			if(raysProcessed % 50 == 0 && System.currentTimeMillis()+1 > start + time) {
-				// System.out.println("NTM C "+raysProcessed+" "+Math.round(1000D * 100D*gspNum/(double)gspNumMax)/1000D+"% "+gspNum+"/"+gspNumMax+" "+(System.currentTimeMillis()-start)+"ms");
+			if(raysProcessed % rayCheckInterval == 0 && System.currentTimeMillis()+1 > start + time) {
 				return;
 			}
 		} 
@@ -202,17 +211,7 @@ public class ExplosionNukeRayBatched {
 		}
 	}
 
-	public boolean getHasHits(boolean[] hitArray, int start){
-		for(int i = start; i < 65536; i++){
-			if(hitArray[i]){
-				index = i;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	boolean[] hitArray;
+	BitSet hitArray;
 	ChunkPos chunk;
 	boolean needsNewHitArray = true;
 	int index = 0;
@@ -223,60 +222,34 @@ public class ExplosionNukeRayBatched {
 		}
 		if(this.perChunk.isEmpty()) return;
 		if(needsNewHitArray){
-			index = 0;
 			chunk = orderedChunks.get(0);
 			hitArray = perChunk.get(chunk);
+			index = hitArray.nextSetBit(0);
+			needsNewHitArray = false;
 		}
 		
 		int chunkX = chunk.getXStart();
 		int chunkZ = chunk.getZStart();
 		
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(; index < 65536; index++) {
-			if(hitArray[index]){
-				pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
-				world.setBlockToAir(pos);
-
-				if(index % 256 == 0 && System.currentTimeMillis()+1 > start + time){
-					break;
-				}
+		int blocksRemoved = 0;
+		while(index > -1) {
+			pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
+			world.setBlockToAir(pos);
+			index = hitArray.nextSetBit(index+1);
+			blocksRemoved++;
+			if(blocksRemoved % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+				break;
 			}
 		}
 
-		if(index >= 65536 || !getHasHits(hitArray, index)){
+		if(index < 0){
 			perChunk.remove(chunk);
 			orderedChunks.remove(0);
 			needsNewHitArray = true;
-		} else {
-			needsNewHitArray = false;
 		}
 	}
-
-
-	public static byte[] convertBoolArrayToByteArray(boolean[] boolArr) {
-	    byte[] byteArr = new byte[boolArr.length>>3];
-	    for(int i = 0; i < byteArr.length; i++){
-	    	byte b = 0;
-		    for(int k = 0; k < 8; k++) {
-		        if(boolArr[k + (i<<3)])
-		            b |= 1 << (7 - k);
-		    }
-	        byteArr[i] = b;
-	    }
-	    return byteArr;
-	}
-
-	public static boolean[] convertByteArrayToBoolArray(byte[] byteArr) {
-	    boolean[] boolArr = new boolean[byteArr.length<<3];
-	    for(int i = 0; i < byteArr.length; i++){
-	        for(int b = 0; b < 8; b++){
-	    		boolArr[b + (i<<3)] = (byteArr[i] & (byte)(128 / Math.pow(2, b))) != 0;
-	        }
-	    }
-	    return boolArr;
-	}
 	
-
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		radius = nbt.getInteger("radius");
 		strength = nbt.getInteger("strength");
@@ -284,7 +257,8 @@ public class ExplosionNukeRayBatched {
 		posY = nbt.getInteger("posY");
 		posZ = nbt.getInteger("posZ");
 		gspNumMax = (int)(2.5 * Math.PI * Math.pow(strength, 2));
-		
+		rayCheckInterval = 10000/radius;
+
 		if(nbt.hasKey("gspNum")){
 			gspNum = nbt.getInteger("gspNum");
 			isAusf3Complete = nbt.getBoolean("f3");
@@ -293,9 +267,8 @@ public class ExplosionNukeRayBatched {
 			int i = 0;
 			while(nbt.hasKey("chunks"+i)){
 				NBTTagCompound c = (NBTTagCompound)nbt.getTag("chunks"+i);
-				boolean[] hits = convertByteArrayToBoolArray(c.getByteArray("cB"));
-				if(perChunk.containsKey(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")))) System.out.println("NTM DUPLICATE WTF");
-				perChunk.put(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")), hits);
+
+				perChunk.put(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")), BitSet.valueOf(getLongArray((NBTTagLongArray)c.getTag("cB"))));
 				i++;
 			}
 			if(isAusf3Complete){
@@ -318,14 +291,19 @@ public class ExplosionNukeRayBatched {
 			nbt.setBoolean("isContained", isContained);
 		
 			int i = 0;
-			for(Entry<ChunkPos, boolean[]> e : perChunk.entrySet()){
+			for(Entry<ChunkPos, BitSet> e : perChunk.entrySet()){
 				NBTTagCompound c = new NBTTagCompound();
 				c.setInteger("cX", e.getKey().x);
 				c.setInteger("cZ", e.getKey().z);
-				c.setByteArray("cB", convertBoolArrayToByteArray(e.getValue()));
+				c.setTag("cB", new NBTTagLongArray(e.getValue().toLongArray()));
 				nbt.setTag("chunks"+i, c.copy());
 				i++;
 			}
 		}
+	}
+
+	// Who tf forgot to add a way to retrieve the long array from NBTTagLongArray??
+	public static long[] getLongArray(NBTTagLongArray nbt) {
+		return ObfuscationReflectionHelper.getPrivateValue(NBTTagLongArray.class, nbt, 0);
 	}
 }
